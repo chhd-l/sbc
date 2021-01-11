@@ -67,7 +67,7 @@ export default class List extends React.Component<any, any> {
               <div className="operation-box">
                 <AuthWrapper functionName={'f_coupon_detail'}>
                   <Link to={`/coupon-detail/${(record as any).couponId}`} style={{ marginRight: 10 }}>
-                    查看
+                    View
                   </Link>
                 </AuthWrapper>
                 <AuthWrapper functionName={'f_coupon_editor'}>
@@ -83,7 +83,7 @@ export default class List extends React.Component<any, any> {
                         })
                       }
                     >
-                      编辑 &nbsp;&nbsp;
+                      Edit &nbsp;&nbsp;
                     </a>
                   )}
 
@@ -93,12 +93,12 @@ export default class List extends React.Component<any, any> {
                       copyCoupon((record as any).couponId);
                     }}
                   >
-                    复制
+                    Copy
                   </a>
 
                   {text == 1 && (
                     <Popconfirm title="确定删除该优惠券？" onConfirm={() => deleteCoupon((record as any).couponId)} okText="确定" cancelText="取消">
-                      <a href="javascript:void(0);">删除</a>
+                      <a href="javascript:void(0);">Delete</a>
                     </Popconfirm>
                   )}
                 </AuthWrapper>

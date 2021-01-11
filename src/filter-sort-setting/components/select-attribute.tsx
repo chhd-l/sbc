@@ -7,28 +7,32 @@ import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 
 export default class SelectAttribute extends React.Component<any, any> {
-  props = {
-    refreshList: Function,
-    selectedRowKeys: Array
-  };
-  state = {
-    visible: false,
-    selectedRowKeys: [],
-    oldSelectedRowKeys: [],
-    prevPropSelectedRowKeys: [],
-    attributeList: [],
-    selectedRowList: [],
-    confirmLoading: false,
-    pagination: {
-      current: 1,
-      pageSize: 8,
-      total: 0
-    },
-    searchForm: {
-      attributeName: '',
-      attributeValue: ''
-    }
-  };
+  // props = {
+  //   refreshList: Function,
+  //   selectedRowKeys: Array
+  // };
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+      selectedRowKeys: [],
+      oldSelectedRowKeys: [],
+      prevPropSelectedRowKeys: [],
+      attributeList: [],
+      selectedRowList: [],
+      confirmLoading: false,
+      pagination: {
+        current: 1,
+        pageSize: 8,
+        total: 0
+      },
+      searchForm: {
+        attributeName: '',
+        attributeValue: ''
+      }
+    };
+  }
+
   componentDidMount() {}
 
   static getDerivedStateFromProps(props, state) {
@@ -50,7 +54,8 @@ export default class SelectAttribute extends React.Component<any, any> {
       attributeValue: searchForm.attributeValue,
       attributeStatus: true,
       pageSize: pagination.pageSize,
-      pageNum: pagination.current - 1
+      pageNum: pagination.current - 1,
+      searchType: 'filter'
     };
     webapi
       .getAttributes(params)

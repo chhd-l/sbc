@@ -31,6 +31,9 @@ class FilterSortSetting extends Component<any, any> {
     let params = {
       filterType: '0'
     };
+    this.setState({
+      loading: true
+    });
     webapi
       .findFilterList(params)
       .then((data) => {
@@ -48,10 +51,16 @@ class FilterSortSetting extends Component<any, any> {
             loading: false
           });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
@@ -60,6 +69,9 @@ class FilterSortSetting extends Component<any, any> {
     let params = {
       filterType: '1'
     };
+    this.setState({
+      loading: true
+    });
     webapi
       .findFilterList(params)
       .then((data) => {
@@ -74,15 +86,24 @@ class FilterSortSetting extends Component<any, any> {
             loading: false
           });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   findSortList = () => {
+    this.setState({
+      loading: true
+    });
     webapi
       .findSortList()
       .then((data) => {
@@ -97,16 +118,25 @@ class FilterSortSetting extends Component<any, any> {
             loading: false
           });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   //开关filter
   switchFilter = (params) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateFilter(params)
       .then((data) => {
@@ -119,16 +149,25 @@ class FilterSortSetting extends Component<any, any> {
             this.findCustomizeFilterList();
           }
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   //开关sort
   switchSort = (params) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateSort(params)
       .then((data) => {
@@ -136,10 +175,16 @@ class FilterSortSetting extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.findSortList();
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
@@ -149,6 +194,9 @@ class FilterSortSetting extends Component<any, any> {
     let params = {
       id: id
     };
+    this.setState({
+      loading: true
+    });
     webapi
       .deleteFilter(params)
       .then((data) => {
@@ -161,16 +209,25 @@ class FilterSortSetting extends Component<any, any> {
             this.findCustomizeFilterList();
           }
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   //filter排序
   updateFilterSort = (params, filterType) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateFilterSort(params)
       .then((data) => {
@@ -182,16 +239,25 @@ class FilterSortSetting extends Component<any, any> {
             this.findCustomizeFilterList();
           }
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   //filter排序
   updateSortList = (params) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateSortList(params)
       .then((data) => {
@@ -199,10 +265,16 @@ class FilterSortSetting extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.findSortList();
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };

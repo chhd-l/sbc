@@ -282,7 +282,7 @@ export default class CouponsModal extends React.Component<any, any> {
       let couponInfos = res.context.couponInfos;
       couponInfos.content.forEach((coupon) => {
         // 3.1.面值
-        coupon.denominationStr = coupon.fullBuyType == 0 ? `满0减${coupon.denomination}` : `over${coupon.fullBuyPrice}minus${coupon.denomination}`;
+        coupon.denominationStr = coupon.fullBuyType == 0 ? `over 0 minus${coupon.denomination}` : `over${coupon.fullBuyPrice}minus${coupon.denomination}`;
         // 3.2.有效期
         if (coupon.rangeDayType == 0) {
           // 按起止时间
@@ -291,7 +291,7 @@ export default class CouponsModal extends React.Component<any, any> {
           coupon.startTime = coupon.validity = `${startTime} to ${endTime}`;
         } else {
           // 按N天有效
-          coupon.validity = `领取当天${coupon.effectiveDays}日内有效`;
+          coupon.validity = `Day of collection${coupon.effectiveDays}Valid within days`;
         }
         // 3.3.优惠券分类
         coupon.cateNamesStr = coupon.cateNames.length != 0 ? coupon.cateNames.reduce((a, b) => `${a},${b}`, '').substr(1) : '其他';

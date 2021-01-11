@@ -38,12 +38,12 @@ export default class ChooseCustomer extends React.Component<any, any> {
           {chooseCustomerList &&
             chooseCustomerList.map((record) => {
               return (
-                <Col span={4} key={record.customerId}>
-                  <p style={styles.item}>
+                <Col key={record.customerId}>
+                  <p style={{ justifyContent: 'space-around', flex: 1, marginLeft: '5px' }}>
                     {/* {record.customerName}
                   &nbsp; */}
                     {record.customerAccount}
-                    <a style={{ margin: 10 }} href="javascript:void(0)" onClick={() => onDelCustomer(record.customerId)}>
+                    <a style={{ marginLeft: '5px' }} href="javascript:void(0)" onClick={() => onDelCustomer(record.customerId)}>
                       删除
                     </a>
                   </p>

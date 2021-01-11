@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history, AssetManagement } from 'qmkit';
-import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber, Tabs, Popconfirm } from 'antd';
+import { BreadCrumb, Headline, Const, AssetManagement } from 'qmkit';
+import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Spin, Tabs, Popconfirm } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
-import moment from 'moment';
-import Upload from '../navigation-update/components/upload';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const { TabPane } = Tabs;
 
 class AttributeLibrary extends Component<any, any> {
   constructor(props: any) {
@@ -84,18 +81,20 @@ class AttributeLibrary extends Component<any, any> {
     this.setState(
       {
         taggingForm: data
-      },
-      () => {
-        form.setFieldsValue({
-          taggingFillColor: this.getColour(data.taggingFillColor) ? this.getColour(data.taggingFillColor).name : '',
-          taggingFontColor: this.getColour(data.taggingFontColor) ? this.getColour(data.taggingFontColor).name : ''
-        });
       }
+      // () => {
+      //   if(data !== 'taggingType' || value !=='Image'){
+      //     form.setFieldsValue({
+      //       taggingFillColor: this.getColour(data.taggingFillColor) ? this.getColour(data.taggingFillColor).name : '',
+      //       taggingFontColor: this.getColour(data.taggingFontColor) ? this.getColour(data.taggingFontColor).name : ''
+      //     });
+      //   }
+
+      // }
     );
   };
 
   openAddPage = () => {
-    const { form } = this.props;
     let taggingForm = {
       taggingName: '',
       taggingFontColor: '',
@@ -105,19 +104,15 @@ class AttributeLibrary extends Component<any, any> {
       displayStatus: false,
       showPage: []
     };
-    this.setState(
-      {
-        modalName: 'Add new tagging',
-        visible: true,
-        taggingForm,
-        isEdit: false,
-        loading: false
-      },
-      () => form.setFieldsValue(taggingForm)
-    );
+    this.setState({
+      modalName: 'Add new tagging',
+      visible: true,
+      taggingForm,
+      isEdit: false,
+      loading: false
+    });
   };
   openEditPage = (row) => {
-    const { form } = this.props;
     row.taggingType = row.taggingType ? row.taggingType : 'Text';
     let taggingForm = {
       taggingName: row.taggingName,
@@ -141,18 +136,18 @@ class AttributeLibrary extends Component<any, any> {
         currentEditTagging: row,
         loading: false,
         images: images
-      },
-      () => {
-        form.setFieldsValue({
-          taggingName: row.taggingName,
-          taggingFillColor: this.getColour(taggingForm.taggingFillColor) ? this.getColour(taggingForm.taggingFillColor).name : '',
-          taggingFontColor: this.getColour(taggingForm.taggingFontColor) ? this.getColour(taggingForm.taggingFontColor).name : '',
-          taggingType: row.taggingType,
-          taggingImgUrl: row.taggingImgUrl,
-          displayStatus: row.displayStatus,
-          showPage: row.showPage ? row.showPage.split(',') : []
-        });
       }
+      // () => {
+      //   form.setFieldsValue({
+      //     taggingName: row.taggingName,
+      //     taggingFillColor: this.getColour(taggingForm.taggingFillColor) ? this.getColour(taggingForm.taggingFillColor).name : '',
+      //     taggingFontColor: this.getColour(taggingForm.taggingFontColor) ? this.getColour(taggingForm.taggingFontColor).name : '',
+      //     taggingType: row.taggingType,
+      //     taggingImgUrl: row.taggingImgUrl,
+      //     displayStatus: row.displayStatus,
+      //     showPage: row.showPage ? row.showPage.split(',') : []
+      //   });
+      // }
     );
   };
   handleSubmit = () => {
@@ -182,11 +177,13 @@ class AttributeLibrary extends Component<any, any> {
   };
   getTagging = () => {
     const { searchForm, pagination } = this.state;
+    this.setState({
+      loading: true
+    });
     let params = {
       taggingName: searchForm.taggingName,
       pageSize: pagination.pageSize,
-      pageNum: pagination.current - 1,
-      loading: false
+      pageNum: pagination.current - 1
     };
     webapi
       .getTagging(params)
@@ -197,10 +194,16 @@ class AttributeLibrary extends Component<any, any> {
           const taggingList = res.context.taggingList;
           this.setState({ taggingList, pagination, loading: false });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failed');
       });
   };
@@ -231,6 +234,9 @@ class AttributeLibrary extends Component<any, any> {
       });
   };
   addTagging = (params: object) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .addTagging(params)
       .then((data) => {
@@ -245,10 +251,16 @@ class AttributeLibrary extends Component<any, any> {
             () => this.getTagging()
           );
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failed');
       });
   };
@@ -258,6 +270,9 @@ class AttributeLibrary extends Component<any, any> {
     let params = {
       idList: idList
     };
+    this.setState({
+      loading: true
+    });
     webapi
       .deleteTagging(params)
       .then((data) => {
@@ -266,15 +281,24 @@ class AttributeLibrary extends Component<any, any> {
           this.getTagging();
           message.success('Operate successfully');
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message.toString() || 'Operation failed');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failed');
       });
   };
 
   updateTagging = (params) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateTagging(params)
       .then((data) => {
@@ -287,10 +311,16 @@ class AttributeLibrary extends Component<any, any> {
           this.getTagging();
           message.success('Operate successfully');
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message.toString() || 'Operation failed');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failed');
       });
   };
@@ -489,6 +519,8 @@ class AttributeLibrary extends Component<any, any> {
               width="600px"
               title={modalName}
               visible={visible}
+              confirmLoading={loading}
+              maskClosable={false}
               onCancel={() =>
                 this.setState({
                   visible: false
@@ -519,7 +551,8 @@ class AttributeLibrary extends Component<any, any> {
                         max: 50,
                         message: 'Exceed maximum length!'
                       }
-                    ]
+                    ],
+                    initialValue: taggingForm.taggingName
                   })(
                     <Input
                       style={{ width: '80%' }}
@@ -558,7 +591,8 @@ class AttributeLibrary extends Component<any, any> {
                   <div>
                     <FormItem label="Tagging font color">
                       {getFieldDecorator('taggingFontColor', {
-                        rules: [{ required: true, message: 'Tagging font color is required' }]
+                        rules: [{ required: true, message: 'Tagging font color is required' }],
+                        initialValue: this.getColour(taggingForm.taggingFontColor) ? this.getColour(taggingForm.taggingFontColor).name : ''
                       })(
                         <Select
                           style={{ width: '80%' }}
@@ -580,7 +614,8 @@ class AttributeLibrary extends Component<any, any> {
                     </FormItem>
                     <FormItem label="Tagging fill color">
                       {getFieldDecorator('taggingFillColor', {
-                        rules: [{ required: true, message: 'Tagging fill color is required' }]
+                        rules: [{ required: true, message: 'Tagging fill color is required' }],
+                        initialValue: this.getColour(taggingForm.taggingFillColor) ? this.getColour(taggingForm.taggingFillColor).name : ''
                       })(
                         <Select
                           style={{ width: '80%' }}
@@ -629,7 +664,8 @@ class AttributeLibrary extends Component<any, any> {
                 {taggingForm.displayStatus ? (
                   <FormItem label="Shop page">
                     {getFieldDecorator('showPage', {
-                      rules: [{ required: true, message: 'Please selec shop page' }]
+                      rules: [{ required: true, message: 'Please selec shop page' }],
+                      initialValue: taggingForm.showPage
                     })(
                       <Select
                         mode="multiple"

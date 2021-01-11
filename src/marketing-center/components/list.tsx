@@ -86,10 +86,10 @@ export default class List extends React.Component<any, any> {
                       <img src={images.order_01} />
                     </span>
                     <div className="info">
-                      <h5>Coupon</h5>
-                      <p>Coupon deduction Shopping more discount</p>
+                      <h5>Coupon creation</h5>
+                      <p>Create coupon meeting specific conditions</p>
                     </div>
-                    <span className="miniTags">Optimum</span>
+                    {/*<span className="miniTags">Optimum</span>*/}
                   </a>
                 </Col>
               </AuthWrapper>
@@ -136,8 +136,8 @@ export default class List extends React.Component<any, any> {
                       <img src={images.order_03} />
                     </span>
                     <div className="info">
-                      <h5>Full-count coupon</h5>
-                      <p>Coupon deduction Shopping more discount</p>
+                      <h5>Coupon distribution</h5>
+                      <p>Distribute coupon under certain conditiion, including valid period</p>
                     </div>
                   </a>
                 </Col>

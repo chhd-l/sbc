@@ -94,6 +94,7 @@ const Common = {
   },
   // 优惠券使用范围
   couponScopeType: {
+
     0: 'All products',
     1: 'Limited brand',
     2: 'Restricted category', //平台分类
@@ -107,6 +108,16 @@ const Common = {
     2: 'not effective',
     3: 'Take effect ',
     4: 'invalid'
+
+
+  },
+  // 优惠券查询类型
+  couponStatus: {
+    0: 'All',
+    1: 'In effect',
+    2: 'Not active',
+    3: 'Take effect',
+    4: 'Expired'
   },
   activityStatus: {
     1: '进行中',
@@ -131,7 +142,7 @@ const Common = {
   },
 
   spuMaxSku: 50,
-  
+
   // STG Presciber Okta Config
   REACT_APP_PRESCRIBER_CLIENT_ID: "0oaq5jv1f653OBJn80x6",
   REACT_APP_PRESCRIBER_ISSUER : "https://accountpreview.royalcanin.com/oauth2/default",

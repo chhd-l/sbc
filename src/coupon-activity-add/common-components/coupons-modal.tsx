@@ -282,13 +282,13 @@ export default class CouponsModal extends React.Component<any, any> {
       let couponInfos = res.context.couponInfos;
       couponInfos.content.forEach((coupon) => {
         // 3.1.面值
-        coupon.denominationStr = coupon.fullBuyType == 0 ? `满0减${coupon.denomination}` : `满${coupon.fullBuyPrice}减${coupon.denomination}`;
+        coupon.denominationStr = coupon.fullBuyType == 0 ? `满0减${coupon.denomination}` : `over${coupon.fullBuyPrice}minus${coupon.denomination}`;
         // 3.2.有效期
         if (coupon.rangeDayType == 0) {
           // 按起止时间
           let startTime = moment(coupon.startTime).format(Const.DAY_FORMAT).toString();
           let endTime = moment(coupon.endTime).format(Const.DAY_FORMAT).toString();
-          coupon.startTime = coupon.validity = `${startTime} 至 ${endTime}`;
+          coupon.startTime = coupon.validity = `${startTime} to ${endTime}`;
         } else {
           // 按N天有效
           coupon.validity = `领取当天${coupon.effectiveDays}日内有效`;

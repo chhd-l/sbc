@@ -107,13 +107,13 @@ export default class AppStore extends Store {
           coupon.totalCount = item.totalCount;
           coupon.couponName = couponInfo.couponName;
           // 2.2.2.面值
-          coupon.denominationStr = couponInfo.fullBuyType == 0 ? `满0减${couponInfo.denomination}` : `满${couponInfo.fullBuyPrice}减${couponInfo.denomination}`;
+          coupon.denominationStr = couponInfo.fullBuyType == 0 ? `满0减${couponInfo.denomination}` : `over${couponInfo.fullBuyPrice}minus${couponInfo.denomination}`;
           // 2.2.3.有效期
           if (couponInfo.rangeDayType == 0) {
             // 按起止时间
             let startTime = moment(couponInfo.startTime).format(Const.DAY_FORMAT).toString();
             let endTime = moment(couponInfo.endTime).format(Const.DAY_FORMAT).toString();
-            coupon.validity = `${startTime}至${endTime}`;
+            coupon.validity = `${startTime} to ${endTime}`;
           } else {
             // 按N天有效
             coupon.validity = `领取当天${couponInfo.effectiveDays}日内有效`;

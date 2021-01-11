@@ -4,7 +4,7 @@ import { Button, Col, DatePicker, Form, Input, message, Radio, Row, Select, Tree
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 
-import { Const, noop, QMMethod, ValidConst, history } from 'qmkit';
+import { Const, noop, QMMethod, ValidConst, history, cache } from 'qmkit';
 import moment from 'moment';
 import SelectedGoodsGrid from './selected-goods-grid';
 import { fromJS } from 'immutable';
@@ -349,7 +349,7 @@ export default class CouponInfoForm extends Component<any, any> {
                   )}
                 </Col>
                 <Col span={5}>
-                  <span style={styles.darkColor}>&nbsp;&nbsp;€</span>
+                  <span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                 </Col>
               </Row>
             </FormItem>
@@ -394,7 +394,7 @@ export default class CouponInfoForm extends Component<any, any> {
                         }}
                       />
                     )}
-                    <span style={styles.darkColor}>&nbsp;&nbsp;€</span>
+                    <span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                   </Radio>
                 </FormItem>
                 <FormItem>

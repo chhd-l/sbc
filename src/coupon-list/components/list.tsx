@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Relax } from 'plume2';
-import { AuthWrapper, DataGrid, noop, history } from 'qmkit';
+import { AuthWrapper, DataGrid, noop, history, cache } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Popconfirm } from 'antd';
 
@@ -45,7 +45,7 @@ export default class List extends React.Component<any, any> {
         }}
       >
         <DataGrid.Column title="Coupon name" dataIndex="couponName" key="couponName" />
-        <DataGrid.Column title="Face value(€)" dataIndex="denominationStr" key="denominationStr" />
+        <DataGrid.Column title={`Face value(${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)})`} dataIndex="denominationStr" key="denominationStr" />
         <DataGrid.Column title="Valid period" dataIndex="validity" key="validity" />
         {/* <DataGrid.Column
           title="优惠券分类"

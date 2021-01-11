@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, DatePicker, Form, Input, message, Modal, Select, Table } from 'antd';
-import { AuthWrapper, Const, DataGrid, SelectGroup } from 'qmkit';
+import { AuthWrapper, Const, DataGrid, SelectGroup, cache } from 'qmkit';
 import moment from 'moment';
 import * as webapi from './webapi';
 
@@ -171,7 +171,7 @@ export default class CouponsModal extends React.Component<any, any> {
       >
         <Column title="Coupon name" dataIndex="couponName" key="couponName" width="15%" />
 
-        <Column title="Face  value( € )" dataIndex="denominationStr" key="denominationStr" width="10%" />
+        <Column title={`Face  value( ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} )`} dataIndex="denominationStr" key="denominationStr" width="10%" />
 
         <Column title="Valid period" dataIndex="validity" key="validity" width="15%" />
 

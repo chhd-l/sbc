@@ -804,46 +804,40 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
           //商品已经选择 + 时间已经选择 => 判断  同类型的营销活动下，商品是否重复
           if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
-            webapi
-              .skuExists({
-                skuIds: selectedSkuIds,
-                marketingType,
-                startTime: marketingBean.get('beginTime'),
-                endTime: marketingBean.get('endTime'),
-                excludeId: marketingBean.get('marketingId')
-              })
-              .then(({ res }) => {
-                if (res.code == Const.SUCCESS_CODE) {
-                  // if (res.context.length > 0) {
-                  //   this.setState({ skuExists: res.context });
-                  //   message.error(`${res.context.length} items are in conflict with each other. Please delete them before saving them`);
-                  //   this.setState({ saveLoading: false });
-                  // } else {
-                  if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
-                    this.props.store.submitFullGift(marketingBean.toJS()).then((res) => this._responseThen(res));
-                  } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
-                    marketingBean = marketingBean.set(
-                      'fullDiscountLevelList',
-                      marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 10))
-                    );
-                    let obj = {
-                      firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') / 10,
-                      restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10
-                    };
+            // webapi
+            //   .skuExists({
+            //     skuIds: selectedSkuIds,
+            //     marketingType,
+            //     startTime: marketingBean.get('beginTime'),
+            //     endTime: marketingBean.get('endTime'),
+            //     excludeId: marketingBean.get('marketingId')
+            //   })
+            //   .then(({ res }) => {
+            // if (res.code == Const.SUCCESS_CODE) {
+            if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
+              this.props.store.submitFullGift(marketingBean.toJS()).then((res) => this._responseThen(res));
+            } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+              marketingBean = marketingBean.set(
+                'fullDiscountLevelList',
+                marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 10))
+              );
+              let obj = {
+                firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') / 10,
+                restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10
+              };
 
-                    marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
-                    this.props.store.submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
-                  } else {
-                    let obj = {
-                      firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
-                      restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
-                    };
-                    marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
-                    this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
-                  }
-                }
-                //}
-              });
+              marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
+              this.props.store.submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
+            } else {
+              let obj = {
+                firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
+                restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
+              };
+              marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
+              this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
+            }
+            //  }
+            // });
           }
         }
       }

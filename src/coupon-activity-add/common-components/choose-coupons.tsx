@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Form, InputNumber, Table } from 'antd';
-import { AuthWrapper, DataGrid, ValidConst } from 'qmkit';
+import { AuthWrapper, DataGrid, ValidConst, cache } from 'qmkit';
 import CouponsModal from './coupons-modal';
 
 import styled from 'styled-components';
@@ -55,7 +55,7 @@ export default class ChooseCoupons extends React.Component<any, any> {
           >
             <Column title="Coupon name" dataIndex="couponName" key="couponName" width="15%" />
 
-            <Column title="Coupon  value( € )" dataIndex="denominationStr" key="denominationStr" width="15%" />
+            <Column title={`Coupon  value( ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} )`} dataIndex="denominationStr" key="denominationStr" width="15%" />
 
             <Column
               title="Valid period"

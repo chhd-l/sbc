@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Col, message, Row } from 'antd';
 
 import { AuthWrapper, Headline, history } from 'qmkit';
+import '../index.less';
 
 const images = {
   new_01: require('../images/new/01.png'),
@@ -89,7 +90,8 @@ export default class List extends React.Component<any, any> {
                       <h5>Coupon</h5>
                       <p>Coupon deduction Shopping more discount</p>
                     </div>
-                    <span className="miniTags">Optimum</span>
+                    {/* <span className="miniTags">推荐</span> */}
+                    {/* <span className="mini-tags">Optimum</span> */}
                   </a>
                 </Col>
               </AuthWrapper>

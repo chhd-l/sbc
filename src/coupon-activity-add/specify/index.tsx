@@ -31,7 +31,7 @@ export default class CouponInfo extends Component<any, any> {
         {/* <Breadcrumb.Item>
           {source == 'marketCenter' ? '营销中心' : '优惠券活动'}
         </Breadcrumb.Item> */}
-        <Breadcrumb.Item>{id ? '编辑' : 'Create'}full-count coupon activity</Breadcrumb.Item>
+        <Breadcrumb.Item>{id ? 'Edit ' : 'Create '}full-count coupon activity</Breadcrumb.Item>
       </BreadCrumb>,
       // <Breadcrumb separator=">" key="Breadcrumb">
       //   <Breadcrumb.Item>营销</Breadcrumb.Item>
@@ -47,10 +47,8 @@ export default class CouponInfo extends Component<any, any> {
           message={
             <div>
               <p>Instructions</p>
-              <p>
-                During the activity valid coupons can be displayed on the front end. Customers can collect them at the coupon center, the activity page or product details page. Each customer can only collect one coupon at a time, and each order can only use one coupon, which can
-                be collected again after use;
-              </p>
+              <p>During the activity valid coupons can be displayed on the front end. Customers can collect them at the coupon center, the activity page or product details page.</p>
+              <p>Each customer can only collect one coupon at a time, and each order can only use one coupon, which can be collected again after use;</p>
             </div>
           }
           type="info"

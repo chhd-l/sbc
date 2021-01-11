@@ -20,6 +20,8 @@ export default class SelectAttribute extends React.Component<any, any> {
       prevPropSelectedRowKeys: [],
       attributeList: [],
       selectedRowList: [],
+      oldSelectedRowList: [],
+      prevPropSelectedRowList: [],
       confirmLoading: false,
       pagination: {
         current: 1,
@@ -41,7 +43,10 @@ export default class SelectAttribute extends React.Component<any, any> {
       return {
         oldSelectedRowKeys: props.selectedRowKeys.concat(),
         selectedRowKeys: props.selectedRowKeys.concat(),
-        prevPropSelectedRowKeys: props.selectedRowKeys.concat()
+        prevPropSelectedRowKeys: props.selectedRowKeys.concat(),
+        oldSelectedRowList: props.selectedRowList.concat(),
+        selectedRowList: props.selectedRowList.concat(),
+        prevPropSelectedRowList: props.selectedRowList.concat()
       };
     }
 

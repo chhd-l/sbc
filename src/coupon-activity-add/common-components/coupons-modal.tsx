@@ -90,7 +90,7 @@ export default class CouponsModal extends React.Component<any, any> {
 
           <FormItem>
             <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Use range" dropdownStyle={{ zIndex: 1053 }} defaultValue="Unlimited" onChange={(val) => this._onSearchParamChange({ scopeType: val })}>
-              <Option value="">不限</Option>
+              <Option value="">unlimited</Option>
               <Option value="0">{Const.couponScopeType[0]}</Option>
               <Option value="1">{Const.couponScopeType[1]}</Option>
               <Option value="3">{Const.couponScopeType[3]}</Option>
@@ -198,7 +198,7 @@ export default class CouponsModal extends React.Component<any, any> {
               <div>
                 <AuthWrapper functionName={'f_coupon_detail'}>
                   <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">
-                    详情
+                    Details
                   </a>
                 </AuthWrapper>
               </div>
@@ -305,7 +305,7 @@ export default class CouponsModal extends React.Component<any, any> {
         coupon.couponStatusStr = Const.couponStatus[coupon.couponStatus];
         //3.6 使用范围
         if (coupon.scopeType == 0) {
-          coupon.scopeNamesStr = '全部商品';
+          coupon.scopeNamesStr = 'All products';
         } else if (coupon.scopeType == 4) {
           coupon.scopeNamesStr = '部分商品';
         }

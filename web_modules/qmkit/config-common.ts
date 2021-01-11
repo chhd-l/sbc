@@ -94,11 +94,22 @@ const Common = {
   },
   // 优惠券使用范围
   couponScopeType: {
-    0: '全部商品',
-    1: 'Brands',
-    2: '限类目', //平台分类
-    3: 'Product category', //店铺分类
-    4: '部分商品'
+
+    0: 'All products',
+    1: 'Limited brand',
+    2: 'Restricted category', //平台分类
+    3: 'Limited store classification', //店铺分类
+    4: 'Some commodities'
+  },
+  // 优惠券查询类型
+  couponStatus: {
+    0: 'all',
+    1: 'in effect',
+    2: 'not effective',
+    3: 'Take effect ',
+    4: 'invalid'
+
+
   },
   // 优惠券查询类型
   couponStatus: {

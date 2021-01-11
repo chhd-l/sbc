@@ -307,7 +307,7 @@ export default class CouponsModal extends React.Component<any, any> {
         if (coupon.scopeType == 0) {
           coupon.scopeNamesStr = 'All products';
         } else if (coupon.scopeType == 4) {
-          coupon.scopeNamesStr = '部分商品';
+          coupon.scopeNamesStr = 'Some commodities';
         }
       });
       // 4.设置couponInfos

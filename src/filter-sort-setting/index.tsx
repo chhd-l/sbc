@@ -18,6 +18,7 @@ class FilterSortSetting extends Component<any, any> {
       customizedFilterList: [],
       sortByList: [],
       selectedRowKeys: [],
+      selectedRowList: [],
       loading: true
     };
   }
@@ -31,6 +32,9 @@ class FilterSortSetting extends Component<any, any> {
     let params = {
       filterType: '0'
     };
+    this.setState({
+      loading: true
+    });
     webapi
       .findFilterList(params)
       .then((data) => {
@@ -38,20 +42,34 @@ class FilterSortSetting extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           let attributeFilterList = res.context;
           let selectedRowKeys = [];
+          let selectedRowList = [];
           for (let i = 0; i < attributeFilterList.length; i++) {
             attributeFilterList[i].index = i;
             selectedRowKeys.push(attributeFilterList[i].attributeId);
+            selectedRowList.push({
+              id: attributeFilterList[i].attributeId,
+              attributeName: attributeFilterList[i].attributeName,
+              filterType: '0',
+              filterStatus: '1'
+            });
           }
           this.setState({
             attributeFilterList: attributeFilterList,
             selectedRowKeys: selectedRowKeys,
+            selectedRowList: selectedRowList,
             loading: false
           });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
@@ -60,6 +78,9 @@ class FilterSortSetting extends Component<any, any> {
     let params = {
       filterType: '1'
     };
+    this.setState({
+      loading: true
+    });
     webapi
       .findFilterList(params)
       .then((data) => {
@@ -74,15 +95,24 @@ class FilterSortSetting extends Component<any, any> {
             loading: false
           });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   findSortList = () => {
+    this.setState({
+      loading: true
+    });
     webapi
       .findSortList()
       .then((data) => {
@@ -97,16 +127,25 @@ class FilterSortSetting extends Component<any, any> {
             loading: false
           });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   //开关filter
   switchFilter = (params) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateFilter(params)
       .then((data) => {
@@ -119,16 +158,25 @@ class FilterSortSetting extends Component<any, any> {
             this.findCustomizeFilterList();
           }
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   //开关sort
   switchSort = (params) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateSort(params)
       .then((data) => {
@@ -136,10 +184,16 @@ class FilterSortSetting extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.findSortList();
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
@@ -149,6 +203,9 @@ class FilterSortSetting extends Component<any, any> {
     let params = {
       id: id
     };
+    this.setState({
+      loading: true
+    });
     webapi
       .deleteFilter(params)
       .then((data) => {
@@ -161,16 +218,25 @@ class FilterSortSetting extends Component<any, any> {
             this.findCustomizeFilterList();
           }
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   //filter排序
   updateFilterSort = (params, filterType) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateFilterSort(params)
       .then((data) => {
@@ -182,16 +248,25 @@ class FilterSortSetting extends Component<any, any> {
             this.findCustomizeFilterList();
           }
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   //filter排序
   updateSortList = (params) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateSortList(params)
       .then((data) => {
@@ -199,16 +274,22 @@ class FilterSortSetting extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.findSortList();
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
   };
 
   render() {
-    const { title, attributeFilterList, customizedFilterList, sortByList, selectedRowKeys } = this.state;
+    const { title, attributeFilterList, customizedFilterList, sortByList, selectedRowKeys, selectedRowList } = this.state;
     const description = (
       <div>
         <p>1. Filter attributes can be chosen from attributes, which are associated with product category</p>
@@ -229,7 +310,7 @@ class FilterSortSetting extends Component<any, any> {
           <div className="container-search">
             <Tabs defaultActiveKey="attributeFilter">
               <TabPane tab="Attribute filter" key="attributeFilter">
-                <SelectAttribute refreshList={this.findAttributeFilterList} selectedRowKeys={selectedRowKeys}></SelectAttribute>
+                <SelectAttribute refreshList={this.findAttributeFilterList} selectedRowKeys={selectedRowKeys} selectedRowList={selectedRowList}></SelectAttribute>
                 <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} type="filter" dataSource={attributeFilterList}></DropList>
               </TabPane>
               <TabPane tab="Customized filter" key="customizedFilter">

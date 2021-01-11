@@ -782,6 +782,7 @@ export default {
 
   subscriptionList: 'Subscription list',
   setBanner: 'Set banner',
+  addressManagement: 'Address Management',
   pc: 'PC',
   mobile: 'Mobile',
   preview: 'Preview',

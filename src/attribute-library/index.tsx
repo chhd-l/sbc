@@ -282,11 +282,13 @@ class AttributeLibrary extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           const attributeList = res.context.attributesList;
-          this.setState({
-            attributeList,
-            pagination,
-            loading: false
-          });
+          setTimeout(() => {
+            this.setState({
+              attributeList,
+              pagination,
+              loading: false
+            });
+          }, 100);
         } else {
           this.setState({
             loading: false

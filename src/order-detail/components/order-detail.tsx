@@ -342,17 +342,17 @@ export default class OrderDetailTab extends React.Component<any, any> {
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
-      {
-        title: 'Price',
-        dataIndex: 'levelPrice',
-        key: 'levelPrice',
-        render: (levelPrice) => (
-          <span>
-            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {levelPrice && levelPrice.toFixed(2)}
-          </span>
-        )
-      },
+      // {
+      //   title: 'Price',
+      //   dataIndex: 'levelPrice',
+      //   key: 'levelPrice',
+      //   render: (levelPrice) => (
+      //     <span>
+      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+      //       {levelPrice && levelPrice.toFixed(2)}
+      //     </span>
+      //   )
+      // },
       {
         title: 'Quantity',
         dataIndex: 'num',

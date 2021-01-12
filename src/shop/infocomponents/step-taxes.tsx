@@ -1,105 +1,76 @@
 import React, { Component } from 'react';
-import { Select, Button, Icon } from 'antd';
-import '../editcomponents/style.less';
-import { Relax, Action } from 'plume2';
+import { Button, Spin } from 'antd';
 import TaxesTable from '../components/taxes-table';
 import TaxesAdd from '../components/taxes-add';
-import { noop } from 'qmkit';
 
-@Relax
 export default class StepTaxes extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      listSelect: {
-        languageTypeId: '',
-        consentCategory: ''
+      loading: false,
+      dataList: [],
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0
       }
     };
   }
-
-  props: {
-    histroy?: Object;
-    relaxProps?: {
-      loading: boolean;
-      dataList: any;
-      consentLanguage: any;
-      pageChangeType: any;
-      consentListSelect: any;
-      getConsentList: Function;
-      getLanguage: Function;
-      pageChange: Function;
-      //getConsentListSelect: Function;
-      editId: any;
-      editList: any;
-    };
-  };
-
-  static relaxProps = {
-    loading: 'loading',
-    dataList: 'dataList',
-    consentLanguage: 'consentLanguage',
-    pageChangeType: 'pageChangeType',
-    consentListSelect: 'consentListSelect',
-    getConsentList: noop,
-    getLanguage: noop,
-    pageChange: noop,
-    //getConsentListSelect: noop,
-    editId: 'editId',
-    editList: 'editList'
-  };
 
   componentDidMount() {
-    const { getConsentList, getLanguage } = this.props.relaxProps;
-    getConsentList();
-    getLanguage();
-    /*getLanguage(callback=>{
-      this.setState({description:callback[0] ? callback[0].description : ''})
-    });*/
+    this.init();
   }
 
-  handleChange = (value) => {
-    const { getConsentList } = this.props.relaxProps;
-    this.setState(
-      {
-        listSelect: { ...this.state.listSelect, consentCategory: value }
-      },
-      () => {
-        getConsentList(this.state.listSelect);
-      }
-    );
+  init = () => {
+    this.getTaxList();
   };
 
-  onDescription = (e, v) => {
-    const { getConsentList } = this.props.relaxProps;
-    this.setState(
+  getTaxList = () => {
+    let taxList = [
       {
-        listSelect: { ...this.state.listSelect, languageTypeId: e }
+        id: 1955,
+        parentId: null,
+        type: '1',
+        name: '1',
+        storeId: 123456858,
+        Status: 0
       },
-      () => {
-        getConsentList(this.state.listSelect);
+      {
+        id: 1963,
+        parentId: null,
+        type: '1',
+        name: '1',
+        storeId: 123456858,
+        Status: 1
       }
-    );
+    ];
+    this.setState({
+      dataList: taxList
+    });
   };
+  openAddTaxPage = () => {};
+  openEditTaxPage = () => {};
+  openTaxSettingPage = () => {};
 
   render() {
-    const { consentLanguage, pageChange, pageChangeType, editId, editList } = this.props.relaxProps;
-
+    const { loading, dataList, pagination } = this.state;
     return (
-      <div className="consent">
-        <div className="taxes space-between">
-          <Button className="btn" type="primary" shape="round" onClick={() => pageChange('Detail', '000')}>
-            Add tax zone
-          </Button>
-          <Button className="btn" shape="round" icon="setting" onClick={() => pageChange('Detail', '000')}>
-            Tax setting
-          </Button>
+      <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <div className="consent">
+          <div className="taxes space-between">
+            <Button className="btn" type="primary" shape="round" onClick={() => this.openAddTaxPage()}>
+              Add tax zone
+            </Button>
+            <Button className="btn" shape="round" icon="setting" onClick={() => this.openTaxSettingPage()}>
+              Tax setting
+            </Button>
+          </div>
+          <div id="consent" className="consent-table">
+            <TaxesTable dataList={dataList} pagination={pagination} />
+            <TaxesAdd />
+          </div>
         </div>
-        <div id="consent" className="consent-table">
-          <TaxesTable />
-          <TaxesAdd />
-        </div>
-      </div>
+      </Spin>
     );
   }
 }

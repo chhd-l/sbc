@@ -1,12 +1,11 @@
 import React from 'react';
 import { Modal } from 'antd';
 
-export default class TaxesAdd extends React.Component<any, any> {
+export default class TaxesSetting extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false,
-      isEdit: false
+      visible: false
     };
   }
 
@@ -15,9 +14,9 @@ export default class TaxesAdd extends React.Component<any, any> {
   handleCancel = (e) => {};
 
   render() {
-    const { visible, isEdit } = this.state;
+    const { visible } = this.state;
     return (
-      <Modal maskClosable={false} title={isEdit ? 'Edit tax zone' : 'New tax zone'} visible={visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+      <Modal maskClosable={false} title="Tax Setting" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel}>
         <p>Some contents...</p>
         <p>Some contents...</p>
         <p>Some contents...</p>

@@ -20,12 +20,12 @@ const StepFourForm = Form.create()(StepFour);
 const StepFiveForm = Form.create()(StepConsent);
 
 const PAIN = {
-  '5': <StepOneForm />,
+  '0': <StepOneForm />,
   '1': <StepTwoForm />,
   '2': <StepThree />,
   '3': <StepFourForm />,
   '4': <StepFiveForm />,
-  '0': <StepTaxes />,
+  '5': <StepTaxes />,
   '6': <StepFooterConfig />
 };
 

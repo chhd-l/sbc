@@ -53,6 +53,7 @@ export default class SearchHead extends Component<any, any> {
       buyerOptions: 'buyerName',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
+      recomemderSelect: 'recommenderId',
       id: '',
       subscribeId: '',
       buyerOptionsValue: '',
@@ -60,6 +61,7 @@ export default class SearchHead extends Component<any, any> {
       receiverSelectValue: '',
       clinicSelectValue: '',
       numberSelectValue: '',
+      recomemderSelectValue: '',
       tradeState: {
         deliverStatus: '',
         payState: '',
@@ -298,6 +300,21 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderRecomemderSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          recomemderSelectValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
+                </FormItem>
+              </Col>
 
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
@@ -309,7 +326,26 @@ export default class SearchHead extends Component<any, any> {
                     style={{ textAlign: 'center' }}
                     onClick={(e) => {
                       e.preventDefault();
-                      const { buyerOptions, goodsOptions, receiverSelect, clinicSelect, numberSelect, id, subscribeId, buyerOptionsValue, goodsOptionsValue, receiverSelectValue, clinicSelectValue, numberSelectValue, tradeState, beginTime, endTime, orderCategory } = this.state;
+                      const {
+                        buyerOptions,
+                        goodsOptions,
+                        receiverSelect,
+                        clinicSelect,
+                        numberSelect,
+                        id,
+                        subscribeId,
+                        buyerOptionsValue,
+                        goodsOptionsValue,
+                        receiverSelectValue,
+                        clinicSelectValue,
+                        numberSelectValue,
+                        tradeState,
+                        beginTime,
+                        endTime,
+                        orderCategory,
+                        recomemderSelect,
+                        recomemderSelectValue
+                      } = this.state;
 
                       const ts = {} as any;
                       if (tradeState.deliverStatus) {
@@ -332,6 +368,7 @@ export default class SearchHead extends Component<any, any> {
                         [goodsOptions]: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
                         [clinicSelect]: clinicSelect === 'clinicsName' ? (clinicSelectValue ? clinicSelectValue : '') : clinicSelectValue ? clinicSelectValue : null,
+                        [recomemderSelect]: recomemderSelectValue,
                         beginTime,
                         endTime,
                         orderCategory
@@ -439,10 +476,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.clinicSelect}
         style={styles.label}
       >
-        <Option title="Prescriber name" value="clinicsName">
+        <Option title="Auditor name" value="clinicsName">
           <FormattedMessage id="clinicName" />
         </Option>
-        <Option title="Prescriber ID" value="clinicsIds">
+        <Option title="Auditor ID" value="clinicsIds">
           <FormattedMessage id="clinicID" />
         </Option>
       </Select>
@@ -464,6 +501,26 @@ export default class SearchHead extends Component<any, any> {
         </Option>
         <Option title="Subscriptio number" value="subscriptioNumber">
           <FormattedMessage id="order.subscriptioNumber" />
+        </Option>
+      </Select>
+    );
+  };
+  _renderRecomemderSelect = () => {
+    return (
+      <Select
+        onChange={(val) =>
+          this.setState({
+            recomemderSelect: val
+          })
+        }
+        value={this.state.recomemderSelect}
+        style={styles.label}
+      >
+        <Option title="Recomemder id" value="recommenderId">
+          Recomemder id
+        </Option>
+        <Option title="Recomemder name" value="recommenderName">
+          Recomemder name
         </Option>
       </Select>
     );

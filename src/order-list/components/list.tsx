@@ -194,9 +194,6 @@ export default class ListView extends React.Component<any, any> {
                         <br />
                         <FormattedMessage id="quantity" />
                       </th>
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="clinicName" />
-                      </th>
                       {/* <th style={{ width: '5%' }}>rfc</th> */}
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="order.shippingStatus" />

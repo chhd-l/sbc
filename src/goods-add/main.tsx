@@ -99,6 +99,7 @@ export default class Main extends React.Component<any, any> {
     });
     this.store.onMainTabChange(type);
   };
+  leave = () => {};
 
   render() {
     const { gid } = this.props.match.params;
@@ -205,7 +206,7 @@ export default class Main extends React.Component<any, any> {
           </Tabs>
 
           {/*页脚*/}
-          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} tabType={this.store.get('activeTabKey')} onNext={this.onNext} onPrev={this.onPrev} />
+          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} isLeave={true} tabType={this.store.get('activeTabKey')} onNext={this.onNext} onPrev={this.onPrev} />
           {/*{this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}*/}
 
           {/*品牌*/}

@@ -5,8 +5,9 @@ import { noop } from 'qmkit';
 // import { Form, Select, Input, Modal } from 'antd';
 import { IMap } from 'plume2';
 import { List, fromJS, Map } from 'immutable';
-import { Form, Icon, Input, Button, Checkbox, Modal } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Modal, Select } from 'antd';
 const FormItem = Form.Item;
+const { Option } = Select;
 const formItemLayout = {
   labelCol: {
     span: 2,
@@ -31,13 +32,16 @@ export default class NewCityModal extends Component<any, any> {
   constructor(props) {
     super(props);
   }
-  state = {};
+  state = {
+    okDisabled: false
+  };
   props: {
     form: any;
     relaxProps?: {
       isEdit: boolean;
       cityModalVisible: boolean;
       cityForm: any;
+      stateNameList: any;
       setCityModalVisible: Function;
       resetImageForm: Function;
       onCityFormChange: Function;
@@ -49,6 +53,7 @@ export default class NewCityModal extends Component<any, any> {
     isEdit: 'isEdit',
     cityModalVisible: 'cityModalVisible',
     cityForm: 'cityForm',
+    stateNameList: 'stateNameList',
     setCityModalVisible: noop,
     resetImageForm: noop,
     onCityFormChange: noop,
@@ -62,12 +67,16 @@ export default class NewCityModal extends Component<any, any> {
   }
 
   _handleModelCancel = () => {
+    this.props.form.resetFields();
     const { setCityModalVisible, onResetCityForm } = this.props.relaxProps;
     setCityModalVisible(false);
     onResetCityForm();
   };
 
   _handleSubmit = () => {
+    this.setState({
+      okDisabled: true
+    });
     this.props.form.validateFields((err) => {
       if (!err) {
         const { setCityModalVisible, onResetCityForm } = this.props.relaxProps;
@@ -121,10 +130,11 @@ export default class NewCityModal extends Component<any, any> {
     });
   };
   render() {
-    const { onCityFormChange, cityForm, cityModalVisible } = this.props.relaxProps;
+    const { onCityFormChange, cityForm, cityModalVisible, stateNameList } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     const { country, state, postCodeArr, city } = cityForm.toJS();
-    console.log(postCodeArr, 'postCodeArr-------------');
+    console.log(cityForm.toJS(), 'cityForm.toJS()-------------');
+
     return (
       <Modal
         maskClosable={false}
@@ -159,15 +169,33 @@ export default class NewCityModal extends Component<any, any> {
                 initialValue: state,
                 rules: [{ required: true, message: 'Please enter state name.' }]
               })(
-                <Input
-                  value={state}
-                  onChange={(e) =>
-                    onCityFormChange({
-                      field: 'state',
-                      value: e.target.value
-                    })
-                  }
-                />
+                // <Input
+                //   value={state}
+                //   onChange={(e) =>
+                //     onCityFormChange({
+                //       field: 'state',
+                //       value: e.target.value
+                //     })
+                //   }
+                // />
+                stateNameList.size > 0 ? (
+                  <Select
+                    // style={{ width: 160 }}
+                    defaultValue={state}
+                    onChange={(e) => {
+                      onCityFormChange({
+                        field: 'state',
+                        value: e
+                      });
+                    }}
+                  >
+                    {stateNameList.toJS().map((item: any, index) => (
+                      <Option key={index} value={item.value}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
+                ) : null
               )}
             </FormItem>
 

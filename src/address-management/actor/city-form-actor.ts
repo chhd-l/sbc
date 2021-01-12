@@ -6,7 +6,10 @@ export default class CityFormActor extends Actor {
     return {
       cityModalVisible: false,
       isEdit: false,
-      allStates: [],
+      stateNameList: [
+        { value: 'China', name: 'China' },
+        { value: 'China1', name: 'China1' }
+      ],
       cityForm: {
         country: 'United States',
         state: '',

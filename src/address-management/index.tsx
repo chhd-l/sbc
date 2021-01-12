@@ -18,7 +18,9 @@ export default class AddressManagement extends Component<any, any> {
   store: AppStore;
   state: {};
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.store.init();
+  }
   tabsOnChange = () => {};
   render() {
     return (

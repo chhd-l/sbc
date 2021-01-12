@@ -22,6 +22,22 @@ export default class AppStore extends Store {
   bindActor() {
     return [new LoadingActor(), new ListActor(), new StateFormActor(), new CityFormActor()];
   }
+  init = async () => {
+    const { res: storeInfo } = await webapi.fetchStoreInfo();
+    if (storeInfo.code == Const.SUCCESS_CODE) {
+      const { currencyId } = storeInfo.context;
+      console.log(storeInfo.context, 'storeInfo.context-----------');
+      const { res: countryInfo } = await webapi.fetchDictionaryList();
+      if (countryInfo.code == Const.SUCCESS_CODE) {
+        console.log(countryInfo.context, 'countryInfo.context-----------');
+        const currentCountry = countryInfo.context.sysDictionaryPage.content.find((item) => {
+          return item.id === currencyId;
+        });
+      }
+    } else {
+      message.error(storeInfo.message);
+    }
+  };
 
   deleteRow = async (params) => {
     this.dispatch('loading:start');

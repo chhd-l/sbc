@@ -132,8 +132,6 @@ export default class NewStateModal extends Component<any, any> {
   render() {
     const { modalVisible, onStateFormChange, stateForm } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-
-    console.log(stateForm.toJS(), 'ddddddddddddd');
     const { country, state, postCodeArr } = stateForm.toJS();
     console.log(postCodeArr, 'postCodeArr-------------');
     return (
@@ -150,16 +148,18 @@ export default class NewStateModal extends Component<any, any> {
           <Form>
             <FormItem {...formItemLayout} label="Country name">
               {getFieldDecorator('country', {
-                initialValue: country,
-                rules: [{ required: true, message: 'Please select country name.' }]
+                initialValue: country
+                // rules: [{ required: true, message: 'Please select country name.' }]
               })(
                 <Input
-                  onChange={(e) =>
-                    onStateFormChange({
-                      field: 'country',
-                      value: e.target.value
-                    })
-                  }
+                  // onChange={(e) =>
+                  //   onStateFormChange({
+                  //     field: 'country',
+                  //     value: e.target.value
+                  //   })
+                  // }
+                  value={country}
+                  disabled
                 />
               )}
             </FormItem>
@@ -169,6 +169,7 @@ export default class NewStateModal extends Component<any, any> {
                 rules: [{ required: true, message: 'Please enter state name.' }]
               })(
                 <Input
+                  value={state}
                   onChange={(e) =>
                     onStateFormChange({
                       field: 'state',

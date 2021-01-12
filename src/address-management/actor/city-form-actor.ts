@@ -6,11 +6,18 @@ export default class CityFormActor extends Actor {
     return {
       cityModalVisible: false,
       isEdit: false,
+      allStates: [],
       cityForm: {
-        country: null,
-        state: null,
-        city: null,
-        postCode: null
+        country: 'United States',
+        state: '',
+        city: '',
+        postCodeArr: [
+          {
+            id: new Date().getTime(),
+            preCode: '',
+            suffCode: ''
+          }
+        ]
       }
     };
   }
@@ -32,15 +39,21 @@ export default class CityFormActor extends Actor {
   @Action('CityFormActor:resetForm')
   resetForm(state: IMap) {
     const cityForm = {
-      country: '',
+      country: 'United States',
       state: '',
       city: '',
-      postCode: ''
+      postCodeArr: [
+        {
+          id: new Date().getTime(),
+          preCode: '',
+          suffCode: ''
+        }
+      ]
     };
     return state.set('cityForm', fromJS(cityForm));
   }
   @Action('CityFormActor:field')
   changeField(state: IMap, { field, value }) {
-    return state.setIn(['stateForm', field], value);
+    return state.setIn(['cityForm', field], value);
   }
 }

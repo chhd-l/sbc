@@ -44,7 +44,7 @@ export default class AppStore extends Store {
         // 3.1.面值
         if (coupon.fullBuyType == 0) {
           //无门槛
-          coupon.denominationStr = `满0减${coupon.denomination}`;
+          coupon.denominationStr = `over zero minus${coupon.denomination}`;
         } else {
           coupon.denominationStr = `over${coupon.fullBuyPrice}minus${coupon.denomination}`;
         }

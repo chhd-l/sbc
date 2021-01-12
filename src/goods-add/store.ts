@@ -19,6 +19,7 @@ import relatedActor from './actor/related';
 import LoadingActor from './actor/loading-actor';
 
 import {
+  getPreEditProductResource,
   getEditProductResource,
   addAll,
   addBrand,
@@ -84,19 +85,52 @@ export default class AppStore extends Store {
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
     this.dispatch('loading:start');
-    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList(), fetchFiltersTotal(), fetchTaggingTotal()]).then((results) => {
-      this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
-      this.dispatch('goodsActor: initBrandList', fromJS((results[1].res as any).context));
-      this.dispatch('formActor:check', fromJS((results[2].res as any).context));
-      this.dispatch('goodsActor:flashsaleGoods', fromJS((results[3].res as any).context).get('flashSaleGoodsVOList'));
-      this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
-      this.dispatch('goodsActor:getGoodsCate', fromJS((results[6].res as any).context.storeCateResponseVOList));
-      this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
-      this.dispatch('goodsActor:taggingTotal', fromJS((results[8].res as any).context));
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let params = {
+      flashSaleGoodsListRequest: {
+        goodsId: goodsId,
+        queryDataType: 3
+      },
+      sysDictionaryQueryRequest: {
+        storeId: loginInfo.storeId,
+        type: 'goodsDetailTab'
+      },
+      storeGoodsFilterListRequest: {
+        filterStatus: '1'
+      }
+    };
+    const { res: preEditProductResource } = await getPreEditProductResource(params);
+    this.transaction(() => {
+      this.dispatch('goodsActor: initCateList', fromJS((preEditProductResource as any).context.cateList));
+      this.dispatch('goodsActor: initBrandList', fromJS((preEditProductResource as any).context.brandList));
+      this.dispatch('formActor:check', fromJS((preEditProductResource as any).context.distributionCheck));
+      this.dispatch('goodsActor:flashsaleGoods', fromJS((preEditProductResource as any).context.flashsalegoodsList.flashSaleGoodsVOList));
+      this.dispatch('goodsActor: setGoodsDetailTab', fromJS((preEditProductResource as any).context.querySysDictionary));
+      this.dispatch('related:relatedList', fromJS((preEditProductResource as any).context.goodsRelation.relationGoods));
+      this.dispatch('goodsActor:getGoodsCate', fromJS((preEditProductResource as any).context.storeCateByCondition.storeCateResponseVOList));
+      this.dispatch('goodsActor:filtersTotal', fromJS((preEditProductResource as any).context.filtersTotal));
+      this.dispatch('goodsActor:taggingTotal', fromJS((preEditProductResource as any).context.taggingTotal));
       this.dispatch('related:goodsId', goodsId);
       this.dispatch('goodsActor:getGoodsId', goodsId);
-      // fetchFiltersTotal
     });
+
+    let resource = {
+      resource: {
+        pageNum: 0,
+        pageSize: 10,
+        resourceName: '',
+        cateIds: [292],
+        resourceType: 0
+      },
+      enterpriseCheck: { goodsId },
+      spu: goodsId,
+      storeCateByCondition: {},
+      attribute: 748
+    };
+
+    const { res: editProductResource } = await getEditProductResource(resource);
+    console.log(editProductResource, 111111111111111);
+
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
       const { res: checkResponse } = await checkEnterpriseType(goodsId);
@@ -107,24 +141,6 @@ export default class AppStore extends Store {
     } else {
       this.dispatch('formActor:enterpriseFlag', false);
     }
-
-    let parma = {
-      resource: {
-        pageNum: 0,
-        pageSize: 10,
-        resourceName: '',
-        cateIds: [292],
-        resourceType: 0
-      },
-      enterpriseCheck: {
-        goodsId: '2c91808576db27860176dba409620000'
-      },
-      spu: '2c91808576db27860176dba409620000',
-      storeCateByCondition: {},
-      attribute: 748
-    };
-    const EditProductResource: any = await getEditProductResource(parma);
-    //console.log(EditProductResource,1111111111);
 
     let userList: any;
     if (util.isThirdStore()) {

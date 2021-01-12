@@ -16,6 +16,7 @@ export default class List extends React.Component<any, any> {
       deleteCoupon: Function;
       init: Function;
       copyCoupon: Function;
+      couponExport: Function;
     };
   };
 
@@ -26,11 +27,12 @@ export default class List extends React.Component<any, any> {
     couponList: 'couponList',
     deleteCoupon: noop,
     init: noop,
-    copyCoupon: noop
+    copyCoupon: noop,
+    couponExport: noop
   };
 
   render() {
-    const { total, pageNum, pageSize, couponList, deleteCoupon, init, copyCoupon } = this.props.relaxProps;
+    const { total, pageNum, pageSize, couponList, deleteCoupon, init, copyCoupon, couponExport } = this.props.relaxProps;
     return (
       <DataGrid
         rowKey={(record) => record.couponId}
@@ -65,6 +67,16 @@ export default class List extends React.Component<any, any> {
           render={(text, record) => {
             return (
               <div className="operation-box">
+                <AuthWrapper functionName={'f_coupon_detail'}>
+                  <Link
+                    onClick={() => {
+                      couponExport((record as any).couponId);
+                    }}
+                    style={{ marginRight: 10 }}
+                  >
+                    Export
+                  </Link>
+                </AuthWrapper>
                 <AuthWrapper functionName={'f_coupon_detail'}>
                   <Link to={`/coupon-detail/${(record as any).couponId}`} style={{ marginRight: 10 }}>
                     View

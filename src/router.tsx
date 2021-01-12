@@ -44,6 +44,11 @@ const routes = [
     asyncComponent: () => import('./site-map')
   },
   {
+    path: '/address-management',
+    exact: true,
+    asyncComponent: () => import('./address-management')
+  },
+  {
     path: '/subscription-detail/:subId',
     exact: true,
     asyncComponent: () => import('./subscription-detail')

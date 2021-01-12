@@ -85,9 +85,17 @@ export const getUserList = (_customerName: any) => {
 /**
  * 获取平台客户列表
  */
+
+export const getEditProductResource = (res: any) => {
+  return Fetch('/EditProductResource', {
+    method: 'POST',
+    body: JSON.stringify(res)
+  });
+};
+
 export const getBossUserList = () => {
   return Fetch('/store/allBossCustomers', {
-    method: 'POST'
+    method: 'POST',
   });
 };
 

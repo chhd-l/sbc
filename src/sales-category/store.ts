@@ -326,7 +326,7 @@ export default class AppStore extends Store {
     }
   ) => {
     const cateList: any = await getImgCates();
-    const cateListIm = this.state().get('resCateAllList');
+    const cateListIm = this.state() && this.state().get('resCateAllList');
     if (cateId == -1 && cateList.res.length > 0) {
       const cateIdList = fromJS(cateList.res).filter((item) => item.get('isDefault') == 1);
       if (cateIdList.size > 0) {
@@ -337,7 +337,7 @@ export default class AppStore extends Store {
     const imageList: any = await fetchImages({
       pageNum,
       pageSize: 10,
-      resourceName: this.state().get('searchName'),
+      resourceName: this.state() && this.state().get('searchName'),
       cateIds: this._getCateIdsList(cateListIm, cateId),
       resourceType: 0
     });
@@ -405,7 +405,7 @@ export default class AppStore extends Store {
     let cateIdList = new Array();
     if (cateId) {
       cateIdList.push(cateId);
-      const secondCateList = cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
+      const secondCateList = cateListIm && cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
       if (secondCateList && secondCateList.size > 0) {
         cateIdList = cateIdList.concat(secondCateList.map((item) => item.get('cateId')).toJS());
         const thirdCateList = cateListIm.filter((item) => secondCateList.filter((sec) => item.get('cateParentId') == sec.get('cateId')).size > 0); //找第三层子节点
@@ -540,9 +540,9 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}',
-          metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '{name}',
-          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '{description}'
+          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '',
+          metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '',
+          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : ''
         })
       );
     } else {

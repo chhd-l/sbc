@@ -10,6 +10,7 @@ import ModalActor from './actor/modal-actor';
 import CommonActor from './actor/common-actor';
 import CompanyActor from './actor/company-actor';
 import Consent from './actor/consent';
+import Taxes from './actor/taxes';
 import * as webApi from './webapi';
 
 export default class AppStore extends Store {
@@ -20,7 +21,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new ModalActor(), new CommonActor(), new CompanyActor(), new Consent()];
+    return [new ModalActor(), new CommonActor(), new CompanyActor(), new Consent(), new Taxes()];
   }
 
   /**
@@ -681,7 +682,7 @@ export default class AppStore extends Store {
       });
     } else {
       this.dispatch('company: store: merge', { field, value });
-      if(zone) {
+      if (zone) {
         let a = zone.match(/\d+/g);
         let b = Number(a[0] + '.' + a[1]);
         if (zone.substring(4, 5) == '+') {
@@ -1146,5 +1147,9 @@ export default class AppStore extends Store {
     } else {
       message.error(res.message);
     }
+  };
+
+  onTaxesAddVisible = (param?: any) => {
+    this.dispatch('texes:taxesAddVisible', param);
   };
 }

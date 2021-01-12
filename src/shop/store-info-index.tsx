@@ -10,6 +10,8 @@ import StepThree from './infocomponents/step-signed';
 import StepFour from './infocomponents/step-footer';
 import StepConsent from './infocomponents/step-consent';
 import StepFooterConfig from './infocomponents/step-footer-config';
+import StepTaxes from './infocomponents/step-taxes';
+
 import { FormattedMessage } from 'react-intl';
 
 const StepOneForm = Form.create()(StepOne);
@@ -18,12 +20,13 @@ const StepFourForm = Form.create()(StepFour);
 const StepFiveForm = Form.create()(StepConsent);
 
 const PAIN = {
-  '0': <StepOneForm />,
+  '5': <StepOneForm />,
   '1': <StepTwoForm />,
   '2': <StepThree />,
   '3': <StepFourForm />,
   '4': <StepFiveForm />,
-  '5': <StepFooterConfig />
+  '0': <StepTaxes />,
+  '6': <StepFooterConfig />
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -52,24 +55,13 @@ export default class ShopInfo extends React.Component<any, any> {
             <Headline title={<FormattedMessage id="storeInformation" />} />
           </div>
           <div className="container">
-            <Tabs
-              onChange={(key) => this.store.setCurrentTab(key)}
-              activeKey={currentTab}
-            >
-              <Tabs.TabPane
-                tab={<FormattedMessage id="basicInformation" />}
-                key="0"
-              />
-              <Tabs.TabPane
-                tab={<FormattedMessage id="ssoSetting" />}
-                key="1"
-              />
-              <Tabs.TabPane
-                tab={<FormattedMessage id="signedInformation" />}
-                key="2"
-              />
+            <Tabs onChange={(key) => this.store.setCurrentTab(key)} activeKey={currentTab}>
+              <Tabs.TabPane tab={<FormattedMessage id="basicInformation" />} key="0" />
+              <Tabs.TabPane tab={<FormattedMessage id="ssoSetting" />} key="1" />
+              <Tabs.TabPane tab={<FormattedMessage id="signedInformation" />} key="2" />
               <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
               <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
+              <Tabs.TabPane tab="Taxes" key="5" />
               {/* <Tabs.TabPane
                 tab={<FormattedMessage id="footerConfig" />}
                 key="5"
@@ -90,15 +82,7 @@ export default class ShopInfo extends React.Component<any, any> {
               <div>
                 {this.store.state().get('pageChangeType') == 'List' ? null : (
                   <div className="bar-button">
-                    <Button
-                      type="primary"
-                      onClick={() =>
-                        this.store.consentSubmit(
-                          this.store.state().get('consentForm'),
-                          this.store.state().get('editId')
-                        )
-                      }
-                    >
+                    <Button type="primary" onClick={() => this.store.consentSubmit(this.store.state().get('consentForm'), this.store.state().get('editId'))}>
                       Submit
                     </Button>
                   </div>

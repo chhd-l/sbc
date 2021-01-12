@@ -133,10 +133,12 @@ class PeoductCategory extends Component<any, any> {
       .sort((c1, c2) => {
         return c1.sort - c2.sort;
       });
-    this.setState({
-      productCategoryList: newDataList,
-      loading: false
-    });
+    setTimeout(() => {
+      this.setState({
+        productCategoryList: newDataList,
+        loading: false
+      });
+    }, 100);
   }
 
   start = () => {

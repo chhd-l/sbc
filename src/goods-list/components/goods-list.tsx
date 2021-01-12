@@ -171,16 +171,18 @@ export default class CateList extends React.Component<any, any> {
         <Column
           // title="品牌"
           title={<FormattedMessage id="product.brand" />}
-          dataIndex="brandId"
-          key="brandId"
+          dataIndex="brandName"
+          key="brandName"
           render={(rowInfo) => {
-            return (
+            console.log(rowInfo);
+            return rowInfo != null ? rowInfo : '--';
+            /*return (
               goodsBrandList
                 .filter((v) => {
                   return v.get('brandId') == rowInfo;
                 })
                 .getIn([0, 'brandName']) || '-'
-            );
+            );*/
           }}
         />
         <Column

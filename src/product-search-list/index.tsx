@@ -290,13 +290,13 @@ export default class ProductSearchList extends React.Component<any, any> {
         render: (text, record) => text.toFixed(2) + '%'
       },
       {
-        title: 'Result No.',
+        title: 'Total # of pdt. found',
         dataIndex: 'resultNo',
         key: 'resultNo',
         width: '15%'
       },
       {
-        title: 'Result Count',
+        title: 'Avg. pdt found per search',
         dataIndex: 'resultCount',
         key: 'resultCount',
         width: '15%'
@@ -397,7 +397,7 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Result No.</strong>
+                      <strong>Total # of pdt. found</strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.resultNo}</strong>
@@ -412,7 +412,7 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Result count</strong>
+                      <strong>Avg. pdt found per search</strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.resultCount}</strong>

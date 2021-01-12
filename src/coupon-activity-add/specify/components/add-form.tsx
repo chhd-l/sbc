@@ -1,15 +1,5 @@
 import * as React from 'react';
-import {
-  Button,
-  Checkbox,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  Radio,
-  Row,
-  Spin
-} from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, Radio, Row, Spin } from 'antd';
 import PropTypes from 'prop-types';
 import { Store } from 'plume2';
 import styled from 'styled-components';
@@ -70,8 +60,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     if (this.state.joinLevel._joinLevel == joinLevel) {
       return;
     }
-    const levelList =
-      store.state().get('levelList') && store.state().get('levelList').toJS();
+    const levelList = store.state().get('levelList') && store.state().get('levelList').toJS();
     this.setState({ joinLevel: { _joinLevel: joinLevel } });
     if (joinLevel == undefined || joinLevel == null) {
       const { customerLevel } = this.state;
@@ -103,9 +92,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
         //全平台客户
         this._levelRadioChange(-2, '');
       } else {
-        util.isThirdStore()
-          ? this._levelRadioChange(0, levelList)
-          : this._levelRadioChange(-1, levelList);
+        util.isThirdStore() ? this._levelRadioChange(0, levelList) : this._levelRadioChange(-1, levelList);
         //勾选某些等级
         this._levelGroupChange(joinLevel.split(','), levelList);
       }
@@ -125,7 +112,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     return (
       <NumBox>
         <Form style={{ marginTop: 20 }}>
-          <FormItem {...formItemLayout} label="活动名称">
+          <FormItem {...formItemLayout} label="Activity name">
             {getFieldDecorator('activityName', {
               rules: [
                 {
@@ -144,31 +131,18 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 store.changeFormField({ activityName: e.target.value });
               },
               initialValue: activity.get('activityName')
-            })(
-              <Input
-                placeholder="活动名称不超过40个字"
-                style={{ width: 360 }}
-              />
-            )}
+            })(<Input placeholder="No more than ten words" style={{ width: 360 }} />)}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="发放时间">
+          <FormItem {...formItemLayout} label="Activity time">
             {getFieldDecorator('startTime', {
               rules: [
                 { required: true, message: '请选择发放时间' },
                 {
                   validator: (_rule, value, callback) => {
-                    if (
-                      value &&
-                      moment().add(-5, 'minutes').second(0).unix() >
-                        moment(value).unix()
-                    ) {
+                    if (value && moment().add(-5, 'minutes').second(0).unix() > moment(value).unix()) {
                       callback('发放时间不能早于现在');
-                    } else if (
-                      value &&
-                      moment().add('months', 3).unix() <
-                        moment(value).minute(0).second(0).unix()
-                    ) {
+                    } else if (value && moment().add('months', 3).unix() < moment(value).minute(0).second(0).unix()) {
                       callback('发放时间不能晚于三个月');
                     } else {
                       callback();
@@ -183,29 +157,22 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                   });
                 }
               },
-              initialValue: activity.get('startTime')
-                ? moment(activity.get('startTime'))
-                : null
+              initialValue: activity.get('startTime') ? moment(activity.get('startTime')) : null
             })(
               <DatePicker
-                getCalendarContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getCalendarContainer={() => document.getElementById('page-content')}
                 allowClear={false}
                 disabledDate={(current) => {
-                  return (
-                    (current && current < moment().add(-1, 'minutes')) ||
-                    (current && current > moment().add(3, 'months'))
-                  );
+                  return (current && current < moment().add(-1, 'minutes')) || (current && current > moment().add(3, 'months'));
                 }}
                 format={Const.DATE_FORMAT}
-                placeholder={'发放时间'}
+                placeholder={'Start date       ~       End date'}
                 showTime={{ format: 'HH:mm' }}
               />
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="选择优惠券" required={true}>
+          <FormItem {...formItemLayout} label="Select coupons" required={true}>
             {getFieldDecorator(
               'coupons',
               {}
@@ -222,96 +189,65 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                   store.onDelCoupon(couponId);
                   this._validCoupons(activity.get('coupons'), form);
                 }}
-                onChangeCouponTotalCount={(index, totalCount) =>
-                  store.changeCouponTotalCount(index, totalCount)
-                }
+                onChangeCouponTotalCount={(index, totalCount) => store.changeCouponTotalCount(index, totalCount)}
                 type={2}
               />
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="目标客户" required={true}>
-            {getFieldDecorator('joinLevel', {
-              // rules: [{required: true, message: '请选择目标客户'}],
-            })(
-              <div>
-                <RadioGroup
-                  value={
-                    level._specify
-                      ? -2
-                      : level._allCustomer
-                      ? -1
-                      : level._allLevel
-                      ? 0
-                      : -2
-                  }
-                  onChange={(e) => {
-                    this._levelRadioChange(e.target.value, levelList);
-                  }}
-                >
-                  <Radio value={-1}>全平台客户</Radio>
-                  {util.isThirdStore() && <Radio value={0}>店铺内客户</Radio>}
-                  <Radio value={-2}>指定客户</Radio>
-                </RadioGroup>
+          {/*<FormItem {...formItemLayout} label="Target customers" required={true}>*/}
+          {/*  {getFieldDecorator('joinLevel', {*/}
+          {/*    // rules: [{required: true, message: '请选择目标客户'}],*/}
+          {/*  })(*/}
+          {/*    <div>*/}
+          {/*      <RadioGroup*/}
+          {/*        value={level._specify ? -2 : level._allCustomer ? -1 : level._allLevel ? 0 : -2}*/}
+          {/*        onChange={(e) => {*/}
+          {/*          this._levelRadioChange(e.target.value, levelList);*/}
+          {/*        }}*/}
+          {/*      >*/}
+          {/*        <Radio value={-1}>All platform</Radio>*/}
+          {/*        {util.isThirdStore() && <Radio value={0}>店铺内客户</Radio>}*/}
+          {/*        <Radio value={-2}>Custom</Radio>*/}
+          {/*      </RadioGroup>*/}
 
-                {level._levelPropsShow && (
-                  <div>
-                    {util.isThirdStore() && (
-                      <Checkbox
-                        indeterminate={level._indeterminate}
-                        onChange={(e) =>
-                          this._allLevelChecked(e.target.checked, levelList)
-                        }
-                        checked={level._checkAll}
-                      >
-                        全部等级
-                      </Checkbox>
-                    )}
-                    <CheckboxGroup
-                      options={this._renderCheckboxOptions(levelList)}
-                      onChange={(value) =>
-                        this._levelGroupChange(value, levelList)
-                      }
-                      value={level._checkedLevelList}
-                    />
-                  </div>
-                )}
+          {/*      {level._levelPropsShow && (*/}
+          {/*        <div>*/}
+          {/*          {util.isThirdStore() && (*/}
+          {/*            <Checkbox indeterminate={level._indeterminate} onChange={(e) => this._allLevelChecked(e.target.checked, levelList)} checked={level._checkAll}>*/}
+          {/*              全部等级*/}
+          {/*            </Checkbox>*/}
+          {/*          )}*/}
+          {/*          <CheckboxGroup options={this._renderCheckboxOptions(levelList)} onChange={(value) => this._levelGroupChange(value, levelList)} value={level._checkedLevelList} />*/}
+          {/*        </div>*/}
+          {/*      )}*/}
 
-                {/* {loading && <Spin />} */}
+          {/*      /!* {loading && <Spin />} *!/*/}
 
-                {!loading && level._specify && (
-                  <ChooseCustomer
-                    chooseCustomerList={
-                      chooseCustomerList && chooseCustomerList.toJS()
-                    }
-                    selectedCustomerIds={
-                      activity.get('chooseCustomerIds') &&
-                      activity.get('chooseCustomerIds').toJS()
-                    }
-                    maxLength={1000}
-                    onDelCustomer={async (id) => {
-                      store.onDelCustomer(id);
-                      form.resetFields(['joinLevel']);
-                    }}
-                    chooseCustomerBackFun={async (customerIds, rows) => {
-                      store.chooseCustomerBackFun(customerIds, rows);
-                      form.resetFields(['joinLevel']);
-                    }}
-                  />
-                )}
-              </div>
-            )}
-          </FormItem>
+          {/*      {!loading && level._specify && (*/}
+          {/*        <ChooseCustomer*/}
+          {/*          chooseCustomerList={chooseCustomerList && chooseCustomerList.toJS()}*/}
+          {/*          selectedCustomerIds={activity.get('chooseCustomerIds') && activity.get('chooseCustomerIds').toJS()}*/}
+          {/*          maxLength={1000}*/}
+          {/*          onDelCustomer={async (id) => {*/}
+          {/*            store.onDelCustomer(id);*/}
+          {/*            form.resetFields(['joinLevel']);*/}
+          {/*          }}*/}
+          {/*          chooseCustomerBackFun={async (customerIds, rows) => {*/}
+          {/*            store.chooseCustomerBackFun(customerIds, rows);*/}
+          {/*            form.resetFields(['joinLevel']);*/}
+          {/*          }}*/}
+          {/*        />*/}
+          {/*      )}*/}
+          {/*    </div>*/}
+          {/*  )}*/}
+          {/*</FormItem>*/}
 
           <Row type="flex" justify="start">
             <Col span={3} />
             <Col span={10}>
-              <Button
-                onClick={() => this._onSave()}
-                type="primary"
-                htmlType="submit"
-              >
-                保存
+              <Button onClick={() => this._onSave()} type="primary" htmlType="submit">
+                Save
               </Button>
               &nbsp;&nbsp;
               <Button onClick={() => history.goBack()}>Back</Button>
@@ -332,18 +268,12 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     // 1.验证优惠券列表
     let errors = this._validCoupons(activity.get('coupons'), form);
     // 2.指定客户
-    let errorsCustomer = this._validCustomers(
-      activity.get('chooseCustomerIds'),
-      form
-    );
+    let errorsCustomer = this._validCustomers(activity.get('chooseCustomerIds'), form);
     // if (!activity.activityId) {
     form.resetFields(['time']);
     //强制校验创建时间
 
-    if (
-      moment().add(-5, 'minutes').second(0).unix() >=
-      moment(activity.get('startTime')).unix()
-    ) {
+    if (moment().add(-5, 'minutes').second(0).unix() >= moment(activity.get('startTime')).unix()) {
       form.setFields({
         ['startTime']: {
           errors: [new Error('发放时间不能小于当前时间')]
@@ -351,10 +281,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
       });
       errors = true;
     }
-    if (
-      moment().add('months', 3).unix() <
-      moment(activity.get('startTime')).minute(0).second(0).unix()
-    ) {
+    if (moment().add('months', 3).unix() < moment(activity.get('startTime')).minute(0).second(0).unix()) {
       form.setFields({
         ['startTime']: {
           errors: [new Error('发放时间不能晚于三个月')]
@@ -371,10 +298,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
         let joinLevel = '';
         if (level._specify) {
           joinLevel = '-2';
-        } else if (
-          level._allCustomer &&
-          (level._checkAll || util.isThirdStore())
-        ) {
+        } else if (level._allCustomer && (level._checkAll || util.isThirdStore())) {
           joinLevel = '-1';
         } else if (level._allLevel && level._checkAll) {
           joinLevel = '0';
@@ -474,10 +398,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     let { level } = this.state;
 
     // 自营全部等级+店铺等级
-    if (
-      (util.isThirdStore() && value == 0) ||
-      (!util.isThirdStore() && value == -1)
-    ) {
+    if ((util.isThirdStore() && value == 0) || (!util.isThirdStore() && value == -1)) {
       levelPropsShow = true;
       level._specify = false;
       const levelIds = customerLevel.map((level) => {
@@ -520,8 +441,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
    */
   _levelGroupChange = (checkedList, customerLevel) => {
     let { level } = this.state;
-    level._indeterminate =
-      !!checkedList.length && checkedList.length < customerLevel.length;
+    level._indeterminate = !!checkedList.length && checkedList.length < customerLevel.length;
     level._checkAll = checkedList.length === customerLevel.length;
     (level._checkedLevelList = checkedList), this.setState(level);
 

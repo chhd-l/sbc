@@ -27,7 +27,7 @@ export default class ButtonGroup extends React.Component<any, any> {
               })
             }
           >
-            创建优惠券
+            Create Coupon
           </Button>
         </AuthWrapper>
       </div>

@@ -195,53 +195,53 @@ export default class SpecifyAddForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          {/*<FormItem {...formItemLayout} label="Target customers" required={true}>*/}
-          {/*  {getFieldDecorator('joinLevel', {*/}
-          {/*    // rules: [{required: true, message: '请选择目标客户'}],*/}
-          {/*  })(*/}
-          {/*    <div>*/}
-          {/*      <RadioGroup*/}
-          {/*        value={level._specify ? -2 : level._allCustomer ? -1 : level._allLevel ? 0 : -2}*/}
-          {/*        onChange={(e) => {*/}
-          {/*          this._levelRadioChange(e.target.value, levelList);*/}
-          {/*        }}*/}
-          {/*      >*/}
-          {/*        <Radio value={-1}>All platform</Radio>*/}
-          {/*        {util.isThirdStore() && <Radio value={0}>店铺内客户</Radio>}*/}
-          {/*        <Radio value={-2}>Custom</Radio>*/}
-          {/*      </RadioGroup>*/}
+          <FormItem {...formItemLayout} label="Target customers" required={true}>
+            {getFieldDecorator('joinLevel', {
+              // rules: [{required: true, message: '请选择目标客户'}],
+            })(
+              <div>
+                <RadioGroup
+                  value={level._specify ? -2 : level._allCustomer ? -1 : level._allLevel ? 0 : -2}
+                  onChange={(e) => {
+                    this._levelRadioChange(e.target.value, levelList);
+                  }}
+                >
+                  <Radio value={-1}>All platform</Radio>
+                  {util.isThirdStore() && <Radio value={0}>店铺内客户</Radio>}
+                  <Radio value={-2}>Custom</Radio>
+                </RadioGroup>
 
-          {/*      {level._levelPropsShow && (*/}
-          {/*        <div>*/}
-          {/*          {util.isThirdStore() && (*/}
-          {/*            <Checkbox indeterminate={level._indeterminate} onChange={(e) => this._allLevelChecked(e.target.checked, levelList)} checked={level._checkAll}>*/}
-          {/*              全部等级*/}
-          {/*            </Checkbox>*/}
-          {/*          )}*/}
-          {/*          <CheckboxGroup options={this._renderCheckboxOptions(levelList)} onChange={(value) => this._levelGroupChange(value, levelList)} value={level._checkedLevelList} />*/}
-          {/*        </div>*/}
-          {/*      )}*/}
+                {level._levelPropsShow && (
+                  <div>
+                    {util.isThirdStore() && (
+                      <Checkbox indeterminate={level._indeterminate} onChange={(e) => this._allLevelChecked(e.target.checked, levelList)} checked={level._checkAll}>
+                        全部等级
+                      </Checkbox>
+                    )}
+                    <CheckboxGroup options={this._renderCheckboxOptions(levelList)} onChange={(value) => this._levelGroupChange(value, levelList)} value={level._checkedLevelList} />
+                  </div>
+                )}
 
-          {/*      /!* {loading && <Spin />} *!/*/}
+                {loading && <Spin />}
 
-          {/*      {!loading && level._specify && (*/}
-          {/*        <ChooseCustomer*/}
-          {/*          chooseCustomerList={chooseCustomerList && chooseCustomerList.toJS()}*/}
-          {/*          selectedCustomerIds={activity.get('chooseCustomerIds') && activity.get('chooseCustomerIds').toJS()}*/}
-          {/*          maxLength={1000}*/}
-          {/*          onDelCustomer={async (id) => {*/}
-          {/*            store.onDelCustomer(id);*/}
-          {/*            form.resetFields(['joinLevel']);*/}
-          {/*          }}*/}
-          {/*          chooseCustomerBackFun={async (customerIds, rows) => {*/}
-          {/*            store.chooseCustomerBackFun(customerIds, rows);*/}
-          {/*            form.resetFields(['joinLevel']);*/}
-          {/*          }}*/}
-          {/*        />*/}
-          {/*      )}*/}
-          {/*    </div>*/}
-          {/*  )}*/}
-          {/*</FormItem>*/}
+                {!loading && level._specify && (
+                  <ChooseCustomer
+                    chooseCustomerList={chooseCustomerList && chooseCustomerList.toJS()}
+                    selectedCustomerIds={activity.get('chooseCustomerIds') && activity.get('chooseCustomerIds').toJS()}
+                    maxLength={1000}
+                    onDelCustomer={async (id) => {
+                      store.onDelCustomer(id);
+                      form.resetFields(['joinLevel']);
+                    }}
+                    chooseCustomerBackFun={async (customerIds, rows) => {
+                      store.chooseCustomerBackFun(customerIds, rows);
+                      form.resetFields(['joinLevel']);
+                    }}
+                  />
+                )}
+              </div>
+            )}
+          </FormItem>
 
           <Row type="flex" justify="start">
             <Col span={3} />

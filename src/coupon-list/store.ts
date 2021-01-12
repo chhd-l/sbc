@@ -1,7 +1,7 @@
 import { IOptions, Store } from 'plume2';
 
 import { fromJS } from 'immutable';
-import { Const } from 'qmkit';
+import { Const, util } from 'qmkit';
 import { message } from 'antd';
 import moment from 'moment';
 import * as webapi from './webapi';
@@ -122,5 +122,26 @@ export default class AppStore extends Store {
     message.success('Operate successfully');
     //刷新页面
     this.init();
+  };
+
+  couponExport = async (couponId: any) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          const result = JSON.stringify({
+            couponId: couponId,
+            token: token
+          });
+          const encrypted = base64.urlEncode(result);
+          const exportHref = Const.HOST + `/coupon-info/coupon-code/export/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('请登录');
+        }
+        resolve();
+      }, 500);
+    });
   };
 }

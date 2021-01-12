@@ -89,7 +89,7 @@ export default class TaxesTable extends React.Component<any, any> {
         render: (text, row) => (
           <div>
             <Tooltip placement="top" title="Edit">
-              <a className="iconfont iconDelete"></a>
+              <a style={{ marginRight: 10 }} className="iconfont iconEdit"></a>
             </Tooltip>
 
             <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTax(row.id)} okText="Confirm" cancelText="Cancel">

@@ -9,10 +9,19 @@ export default class StepTaxes extends Component<any, any> {
     this.state = {
       loading: false,
       dataList: [],
+
       pagination: {
         current: 1,
         pageSize: 10,
         total: 0
+      },
+      addVisible: false,
+      taxForm: {
+        taxZoneName: '',
+        taxZoneDescription: '',
+        taxZoneType: '',
+        zoneIncludes: '',
+        taxRates: ''
       }
     };
   }
@@ -48,12 +57,16 @@ export default class StepTaxes extends Component<any, any> {
       dataList: taxList
     });
   };
-  openAddTaxPage = () => {};
+  openAddTaxPage = () => {
+    this.setState({
+      addVisible: true
+    });
+  };
   openEditTaxPage = () => {};
   openTaxSettingPage = () => {};
 
   render() {
-    const { loading, dataList, pagination } = this.state;
+    const { loading, dataList, pagination, addVisible, taxForm } = this.state;
     return (
       <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <div className="consent">
@@ -67,7 +80,7 @@ export default class StepTaxes extends Component<any, any> {
           </div>
           <div id="consent" className="consent-table">
             <TaxesTable dataList={dataList} pagination={pagination} />
-            <TaxesAdd />
+            <TaxesAdd visible={addVisible} isEdit={false} taxForm={taxForm} />
           </div>
         </div>
       </Spin>

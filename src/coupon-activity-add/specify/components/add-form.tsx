@@ -295,19 +295,19 @@ export default class SpecifyAddForm extends React.Component<any, any> {
       if (!errs && !errors && !errorsCustomer) {
         // 3.验证通过，保存
         const { level } = this.state;
-        let joinLevel = '';
-        if (level._specify) {
-          joinLevel = '-2';
-        } else if (level._allCustomer && (level._checkAll || util.isThirdStore())) {
-          joinLevel = '-1';
-        } else if (level._allLevel && level._checkAll) {
-          joinLevel = '0';
-        } else {
-          level._checkedLevelList.forEach((v) => {
-            joinLevel = joinLevel + v + ',';
-          });
-          joinLevel = joinLevel.substring(0, joinLevel.length - 1);
-        }
+        let joinLevel = '2';
+        // if (level._specify) {
+        //   joinLevel = '-2';
+        // } else if (level._allCustomer && (level._checkAll || util.isThirdStore())) {
+        //   joinLevel = '-1';
+        // } else if (level._allLevel && level._checkAll) {
+        //   joinLevel = '0';
+        // } else {
+        //   level._checkedLevelList.forEach((v) => {
+        //     joinLevel = joinLevel + v + ',';
+        //   });
+        //   joinLevel = joinLevel.substring(0, joinLevel.length - 1);
+        // }
         store.save(joinLevel);
       }
     });

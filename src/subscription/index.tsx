@@ -1,20 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Breadcrumb,
-  Button,
-  Form,
-  Input,
-  DatePicker,
-  Select,
-  Menu,
-  Dropdown,
-  Icon,
-  Tabs,
-  message,
-  Spin,
-  Row,
-  Col
-} from 'antd';
+import { Breadcrumb, Button, Form, Input, DatePicker, Select, Menu, Dropdown, Icon, Tabs, message, Spin, Row, Col } from 'antd';
 import './index.less';
 import { AuthWrapper, BreadCrumb, Headline, SelectGroup } from 'qmkit';
 import List from './components/list-new';
@@ -38,7 +23,7 @@ export default class SubscriptionList extends Component<any, any> {
         frequency: '',
         recipientOption: 'Receiver',
         recipient: '',
-        prescriberOption: 'Prescriber Name',
+        prescriberOption: 'Auditor Name',
         prescriber: ''
       },
       subscriptionOption: ['Subscription Number', 'Order Number'],
@@ -46,7 +31,7 @@ export default class SubscriptionList extends Component<any, any> {
       consumerOption: ['Consumer Name', 'Consumer Account'],
       productOption: ['Product Name', 'SKU Code'],
       recipientOption: ['Receiver', 'Receiver Phone'],
-      prescriberOption: ['Prescriber Name', 'Prescriber ID'],
+      prescriberOption: ['Auditor Name', 'Auditor ID'],
       frequencyList: [],
       activeKey: 'all',
       subscriptionList: [],
@@ -66,9 +51,7 @@ export default class SubscriptionList extends Component<any, any> {
   componentDidMount() {
     this.querySysDictionary('Frequency_week');
     if (sessionStorage.getItem('s2b-supplier@employee')) {
-      let employee = JSON.parse(
-        sessionStorage.getItem('s2b-supplier@employee')
-      );
+      let employee = JSON.parse(sessionStorage.getItem('s2b-supplier@employee'));
       if (employee.roleName && employee.roleName.indexOf('Prescriber') !== -1) {
         const { searchForm } = this.state;
         let prescriberList = employee.prescribers;
@@ -79,7 +62,7 @@ export default class SubscriptionList extends Component<any, any> {
             prescriberIds.push(prescriberList[i].id);
           }
         }
-        searchForm.prescriberOption = 'Prescriber ID';
+        searchForm.prescriberOption = 'Auditor ID';
         searchForm.prescriber = 'all';
         this.setState(
           {
@@ -111,49 +94,22 @@ export default class SubscriptionList extends Component<any, any> {
 
   onSearch = () => {
     const { searchForm, activeKey } = this.state;
-    let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) 
-      ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null
+    let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
     let param = {
-      orderNumber:
-        searchForm.subscriptionOption === 'Order Number'
-          ? searchForm.number
-          : '',
-      subscriptionNumber:
-        searchForm.subscriptionOption === 'Subscription Number'
-          ? searchForm.number
-          : '',
-      consumerName:
-        searchForm.consumerOption === 'Consumer Name'
-          ? searchForm.consumer
-          : '',
-      consumerAccount:
-        searchForm.consumerOption === 'Consumer Account'
-          ? searchForm.consumer
-          : '',
-      productName:
-        searchForm.productOption === 'Product Name' ? searchForm.product : '',
-      skuCode:
-        searchForm.productOption === 'SKU Code' ? searchForm.product : '',
-      recipient:
-        searchForm.recipientOption === 'Recipient' ? searchForm.recipient : '',
-      recipientPhone:
-        searchForm.recipientOption === 'Recipient Phone'
-          ? searchForm.recipient
-          : '',
+      orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
+      subscriptionNumber: searchForm.subscriptionOption === 'Subscription Number' ? searchForm.number : '',
+      consumerName: searchForm.consumerOption === 'Consumer Name' ? searchForm.consumer : '',
+      consumerAccount: searchForm.consumerOption === 'Consumer Account' ? searchForm.consumer : '',
+      productName: searchForm.productOption === 'Product Name' ? searchForm.product : '',
+      skuCode: searchForm.productOption === 'SKU Code' ? searchForm.product : '',
+      recipient: searchForm.recipientOption === 'Recipient' ? searchForm.recipient : '',
+      recipientPhone: searchForm.recipientOption === 'Recipient Phone' ? searchForm.recipient : '',
       prescriberId:
         // searchForm.prescriberOption === 'Prescriber ID'
         //   ? searchForm.prescriber
         //   : '',
-        JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds !=
-        null
-          ? prescriberType
-          : searchForm.prescriberOption === 'Prescriber ID'
-          ? searchForm.prescriber
-          : '',
-      prescriberName:
-        searchForm.prescriberOption === 'Prescriber Name'
-          ? searchForm.prescriber
-          : '',
+        JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? prescriberType : searchForm.prescriberOption === 'Auditor ID' ? searchForm.prescriber : '',
+      prescriberName: searchForm.prescriberOption === 'Auditor Name' ? searchForm.prescriber : '',
       frequency: searchForm.frequency,
       status: activeKey
     };
@@ -199,10 +155,7 @@ export default class SubscriptionList extends Component<any, any> {
             );
           }
           if (type === 'Frequency_month') {
-            let frequencyList = [
-              ...this.state.frequencyList,
-              ...res.context.sysDictionaryVOS
-            ];
+            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState({
               frequencyList: frequencyList
             });
@@ -216,8 +169,7 @@ export default class SubscriptionList extends Component<any, any> {
       });
   };
   //todo
-  _handleBatchExport = () => {
-  };
+  _handleBatchExport = () => {};
   onTabChange = (key) => {
     this.setState(
       {
@@ -269,17 +221,7 @@ export default class SubscriptionList extends Component<any, any> {
   };
 
   render() {
-    const {
-      searchForm,
-      subscriptionOption,
-      productOption,
-      consumerOption,
-      recipientOption,
-      frequencyList,
-      activeKey,
-      prescriberOption,
-      prescriberList
-    } = this.state;
+    const { searchForm, subscriptionOption, productOption, consumerOption, recipientOption, frequencyList, activeKey, prescriberOption, prescriberList } = this.state;
     const menu = (
       <Menu>
         <Menu.Item>
@@ -291,11 +233,9 @@ export default class SubscriptionList extends Component<any, any> {
         </Menu.Item>
       </Menu>
     );
-    let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) 
-      ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null
+    let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
 
-    const clinicsIds = JSON.parse(sessionStorage.getItem('s2b-employee@data')) 
-       ? JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds : null
+    const clinicsIds = JSON.parse(sessionStorage.getItem('s2b-employee@data')) ? JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds : null;
 
     return (
       <AuthWrapper functionName="f_subscription_list">
@@ -434,18 +374,8 @@ export default class SubscriptionList extends Component<any, any> {
                   {this.state.isPrescriber ? (
                     <FormItem>
                       <SelectGroup
-                        disabled={
-                          JSON.parse(
-                            sessionStorage.getItem('s2b-employee@data')
-                          ).clinicsIds
-                            ? true
-                            : false
-                        }
-                        value={
-                          clinicsIds
-                            ? prescriberType
-                            : searchForm.prescriber
-                        }
+                        disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds ? true : false}
+                        value={clinicsIds ? prescriberType : searchForm.prescriber}
                         // value={searchForm.prescriber}
                         label={<p style={styles.label}>Prescriber</p>}
                         onChange={(value) => {
@@ -578,25 +508,13 @@ export default class SubscriptionList extends Component<any, any> {
               activeKey={activeKey}
             >
               <Tabs.TabPane tab={<FormattedMessage id="all" />} key="all">
-                <List
-                  data={this.state.subscriptionList}
-                  pagination={this.state.pagination}
-                  searchParams={this.state.searchParams}
-                />
+                <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Active" key="0">
-                <List
-                  data={this.state.subscriptionList}
-                  pagination={this.state.pagination}
-                  searchParams={this.state.searchParams}
-                />
+                <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Inactive" key="2">
-                <List
-                  data={this.state.subscriptionList}
-                  pagination={this.state.pagination}
-                  searchParams={this.state.searchParams}
-                />
+                <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
               </Tabs.TabPane>
             </Tabs>
           </div>

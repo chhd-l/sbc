@@ -40,7 +40,7 @@ export default class Main extends React.Component<any, any> {
   componentDidMount() {
     const { gid } = this.props.match.params;
     this.store.init(gid);
-    this.store.setFreightList();
+    //this.store.setFreightList();
     //初始化素材
     this.store.initImg({
       pageNum: 0,

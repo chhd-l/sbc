@@ -5,8 +5,9 @@ import { noop } from 'qmkit';
 // import { Form, Select, Input, Modal } from 'antd';
 import { IMap } from 'plume2';
 import { List, fromJS, Map } from 'immutable';
-import { Form, Icon, Input, Button, Checkbox, Modal } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Modal, Select } from 'antd';
 const FormItem = Form.Item;
+const { Option } = Select;
 const formItemLayout = {
   labelCol: {
     span: 2,
@@ -31,13 +32,18 @@ export default class NewCityModal extends Component<any, any> {
   constructor(props) {
     super(props);
   }
-  state = {};
+  state = {
+    okDisabled: false,
+    confirmLoading: false,
+    codeValidateStatus: 'success'
+  };
   props: {
     form: any;
     relaxProps?: {
       isEdit: boolean;
       cityModalVisible: boolean;
       cityForm: any;
+      stateNameList: any;
       setCityModalVisible: Function;
       resetImageForm: Function;
       onCityFormChange: Function;
@@ -49,6 +55,7 @@ export default class NewCityModal extends Component<any, any> {
     isEdit: 'isEdit',
     cityModalVisible: 'cityModalVisible',
     cityForm: 'cityForm',
+    stateNameList: 'stateNameList',
     setCityModalVisible: noop,
     resetImageForm: noop,
     onCityFormChange: noop,
@@ -62,17 +69,72 @@ export default class NewCityModal extends Component<any, any> {
   }
 
   _handleModelCancel = () => {
-    const { setCityModalVisible, onResetCityForm } = this.props.relaxProps;
+    const { setCityModalVisible } = this.props.relaxProps;
     setCityModalVisible(false);
-    onResetCityForm();
   };
 
+  _validateCode = () => {
+    const { cityForm } = this.props.relaxProps;
+    const { postCodeArr } = cityForm.toJS();
+    let flag = true;
+    if (postCodeArr.length > 0) {
+      postCodeArr.forEach((item) => {
+        if ((item.preCode && !item.suffCode) || (!item.preCode && item.suffCode)) {
+          flag = false;
+        }
+      });
+    }
+    return flag;
+  };
   _handleSubmit = () => {
+    this.setState({
+      okDisabled: true
+    });
     this.props.form.validateFields((err) => {
+      if (this._validateCode()) {
+        this.setState({
+          codeValidateStatus: 'success'
+        });
+      } else {
+        this.setState({
+          codeValidateStatus: 'error'
+        });
+        return;
+      }
       if (!err) {
-        const { setCityModalVisible, onResetCityForm } = this.props.relaxProps;
-        setCityModalVisible(false);
-        onResetCityForm();
+        const { setCityModalVisible, onResetCityForm, cityForm } = this.props.relaxProps;
+        const { country, state, city, postCodeArr } = cityForm.toJS();
+        this.setState({
+          confirmLoading: true
+        });
+        let arr = [];
+        if (postCodeArr.length > 1) {
+          postCodeArr.forEach((item) => {
+            if (item.preCode && item.suffCode) {
+              arr.push(`${item.preCode}-${item.suffCode}`);
+            }
+          });
+        } else {
+          if (postCodeArr[0].preCode && postCodeArr[0].suffCode) {
+            arr.push(`${postCodeArr[0].preCode}-${postCodeArr[0].suffCode}`);
+          } else {
+            arr.push('');
+          }
+        }
+        const params = {
+          country,
+          state,
+          city,
+          postCodeArr: arr.join(';')
+        };
+        console.log(params, 'params--------');
+        setTimeout(() => {
+          this.setState({
+            confirmLoading: false
+          });
+          setCityModalVisible(false);
+        }, 4000);
+        // onResetCityForm();
       }
     });
   };
@@ -120,21 +182,23 @@ export default class NewCityModal extends Component<any, any> {
       value: fromJS(postCodeArr)
     });
   };
+
+  _afterClose = () => {
+    this.props.form.resetFields();
+    this.setState({
+      codeValidateStatus: 'success'
+    });
+    const { onResetCityForm } = this.props.relaxProps;
+    onResetCityForm();
+  };
+
   render() {
-    const { onCityFormChange, cityForm, cityModalVisible } = this.props.relaxProps;
+    const { confirmLoading, codeValidateStatus } = this.state;
+    const { onCityFormChange, cityForm, cityModalVisible, stateNameList } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     const { country, state, postCodeArr, city } = cityForm.toJS();
-    console.log(postCodeArr, 'postCodeArr-------------');
     return (
-      <Modal
-        maskClosable={false}
-        title="Add City"
-        visible={cityModalVisible}
-        width={920}
-        // confirmLoading={true}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
+      <Modal maskClosable={false} title="Add City" visible={cityModalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>
           <Form>
             <FormItem {...formItemLayout} label="Country name">
@@ -159,15 +223,33 @@ export default class NewCityModal extends Component<any, any> {
                 initialValue: state,
                 rules: [{ required: true, message: 'Please enter state name.' }]
               })(
-                <Input
-                  value={state}
-                  onChange={(e) =>
-                    onCityFormChange({
-                      field: 'state',
-                      value: e.target.value
-                    })
-                  }
-                />
+                // <Input
+                //   value={state}
+                //   onChange={(e) =>
+                //     onCityFormChange({
+                //       field: 'state',
+                //       value: e.target.value
+                //     })
+                //   }
+                // />
+                stateNameList.size > 0 ? (
+                  <Select
+                    // style={{ width: 160 }}
+                    defaultValue={state}
+                    onChange={(e) => {
+                      onCityFormChange({
+                        field: 'state',
+                        value: e
+                      });
+                    }}
+                  >
+                    {stateNameList.toJS().map((item: any, index) => (
+                      <Option key={index} value={item.value}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
+                ) : null
               )}
             </FormItem>
 
@@ -188,7 +270,7 @@ export default class NewCityModal extends Component<any, any> {
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="Code">
+            <FormItem {...formItemLayout} label="Code" validateStatus={codeValidateStatus === 'success' ? 'success' : 'error'}>
               {postCodeArr.length > 0
                 ? postCodeArr.map((item) => (
                     <div className="code-container">
@@ -200,6 +282,7 @@ export default class NewCityModal extends Component<any, any> {
                     </div>
                   ))
                 : null}
+              <span className={`${codeValidateStatus === 'success' ? 'hide' : 'codeStr'}`}>If you fill in one of them, you haveto complete the other.</span>
             </FormItem>
           </Form>
         </div>

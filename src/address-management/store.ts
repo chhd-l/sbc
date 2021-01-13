@@ -22,6 +22,36 @@ export default class AppStore extends Store {
   bindActor() {
     return [new LoadingActor(), new ListActor(), new StateFormActor(), new CityFormActor()];
   }
+  init = async () => {
+    const { res: storeInfo } = await webapi.fetchStoreInfo();
+    if (storeInfo.code == Const.SUCCESS_CODE) {
+      const { countryId } = storeInfo.context;
+      console.log(storeInfo.context, 'storeInfo.context-----------');
+      const { res: countryInfo } = await webapi.fetchDictionaryList({
+        keywords: '',
+        type: 'Country',
+        pageNum: 0,
+        pageSize: 1000
+      });
+      if (countryInfo.code == Const.SUCCESS_CODE) {
+        console.log(countryInfo.context, 'countryInfo.context-----------');
+        const currentCountry = countryInfo.context.sysDictionaryPage.content.find((item) => {
+          return item.id === countryId;
+        });
+        sessionStorage.setItem('currentCountry', JSON.stringify(currentCountry));
+        this.onStateFormChange({
+          field: 'country',
+          value: currentCountry.name
+        });
+        this.onCityFormChange({
+          field: 'country',
+          value: currentCountry.name
+        });
+      }
+    } else {
+      message.error(storeInfo.message);
+    }
+  };
 
   deleteRow = async (params) => {
     this.dispatch('loading:start');
@@ -45,17 +75,17 @@ export default class AppStore extends Store {
       'list:stateList',
       fromJS([
         {
-          country: 'United States',
+          country: 'Mexico',
           state: 'New York1',
           postCode: '12132-12122'
         },
         {
-          country: 'United States',
+          country: 'Mexico',
           state: 'New York2',
           postCode: '12132-12122;13332-122'
         },
         {
-          country: 'United States',
+          country: 'Mexico',
           state: 'New York3',
           postCode: ''
         }
@@ -77,19 +107,19 @@ export default class AppStore extends Store {
       'list:cityList',
       fromJS([
         {
-          country: 'United States',
+          country: 'Mexico',
           state: 'New York',
           city: 'New York city',
           postCode: '12132-12122'
         },
         {
-          country: 'United States',
+          country: 'Mexico',
           state: 'New York',
           city: 'New York city',
           postCode: '12132-12122;13333-2333'
         },
         {
-          country: 'United States',
+          country: 'Mexico',
           state: 'New York',
           city: 'New York city',
           postCode: ''

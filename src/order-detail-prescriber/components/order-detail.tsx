@@ -565,12 +565,38 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   </label>
                 </div>
               ) : null} */}
-              {tradePrice.discountsPrice ? (
+              {/* {tradePrice.discountsPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>
                   <strong>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '-'}
                     {(tradePrice.discountsPrice || 0).toFixed(2)}
+                  </strong>
+                </label>
+              ) : null} */}
+
+              {tradePrice.promotionDiscountPrice ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>
+                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
+                    Promotion:
+                  </span>
+                  <strong>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {(tradePrice.promotionDiscountPrice || 0).toFixed(2)}
+                  </strong>
+                </label>
+              ) : null}
+
+              {tradePrice.subscriptionDiscountPrice ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>
+                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
+                    Promotion:
+                  </span>
+                  <strong>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {(tradePrice.subscriptionDiscountPrice || 0).toFixed(2)}
                   </strong>
                 </label>
               ) : null}

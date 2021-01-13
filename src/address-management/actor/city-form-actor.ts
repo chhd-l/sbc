@@ -6,9 +6,12 @@ export default class CityFormActor extends Actor {
     return {
       cityModalVisible: false,
       isEdit: false,
-      allStates: [],
+      stateNameList: [
+        { value: 'China', name: 'China' },
+        { value: 'China1', name: 'China1' }
+      ],
       cityForm: {
-        country: 'United States',
+        country: '',
         state: '',
         city: '',
         postCodeArr: [
@@ -39,7 +42,7 @@ export default class CityFormActor extends Actor {
   @Action('CityFormActor:resetForm')
   resetForm(state: IMap) {
     const cityForm = {
-      country: 'United States',
+      country: JSON.parse(sessionStorage.getItem('currentCountry')).name,
       state: '',
       city: '',
       postCodeArr: [

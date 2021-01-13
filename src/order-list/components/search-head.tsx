@@ -53,7 +53,7 @@ export default class SearchHead extends Component<any, any> {
       buyerOptions: 'buyerName',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
-      recomemderSelect: 'recommenderId',
+      recommenderSelect: 'recommenderName',
       id: '',
       subscribeId: '',
       buyerOptionsValue: '',
@@ -61,7 +61,7 @@ export default class SearchHead extends Component<any, any> {
       receiverSelectValue: '',
       clinicSelectValue: '',
       numberSelectValue: '',
-      recomemderSelectValue: '',
+      recommenderSelectValue: '',
       tradeState: {
         deliverStatus: '',
         payState: '',
@@ -303,12 +303,12 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderRecomemderSelect()}
+                    {this._renderRecommenderSelect()}
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
                         this.setState({
-                          recomemderSelectValue: (e.target as any).value
+                          recommenderSelectValue: (e.target as any).value
                         });
                       }}
                     />
@@ -343,8 +343,8 @@ export default class SearchHead extends Component<any, any> {
                         beginTime,
                         endTime,
                         orderCategory,
-                        recomemderSelect,
-                        recomemderSelectValue
+                        recommenderSelect,
+                        recommenderSelectValue
                       } = this.state;
 
                       const ts = {} as any;
@@ -368,7 +368,7 @@ export default class SearchHead extends Component<any, any> {
                         [goodsOptions]: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
                         [clinicSelect]: clinicSelect === 'clinicsName' ? (clinicSelectValue ? clinicSelectValue : '') : clinicSelectValue ? clinicSelectValue : null,
-                        [recomemderSelect]: recomemderSelectValue,
+                        [recommenderSelect]: recommenderSelectValue,
                         beginTime,
                         endTime,
                         orderCategory
@@ -505,22 +505,22 @@ export default class SearchHead extends Component<any, any> {
       </Select>
     );
   };
-  _renderRecomemderSelect = () => {
+  _renderRecommenderSelect = () => {
     return (
       <Select
         onChange={(val) =>
           this.setState({
-            recomemderSelect: val
+            recommenderSelect: val
           })
         }
-        value={this.state.recomemderSelect}
+        value={this.state.recommenderSelect}
         style={styles.label}
       >
-        <Option title="Recomemder id" value="recommenderId">
-          Recomemder id
+        <Option title="Recommender id" value="recommenderId">
+          <FormattedMessage id="recommenderId" />
         </Option>
-        <Option title="Recomemder name" value="recommenderName">
-          Recomemder name
+        <Option title="Recommender name" value="recommenderName">
+          <FormattedMessage id="recommenderName" />
         </Option>
       </Select>
     );

@@ -5,7 +5,7 @@ export default class CommonActor extends Actor {
   defaultState() {
     return {
       //tab页签,与步骤类型不同
-      tabsStep: '5',
+      tabsStep: '0',
       // 当前步骤
       currentStep: 0,
       // 是否同意注册协议

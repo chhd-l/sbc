@@ -342,6 +342,17 @@ export default class OrderDetailTab extends React.Component<any, any> {
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
+      // {
+      //   title: 'Price',
+      //   dataIndex: 'levelPrice',
+      //   key: 'levelPrice',
+      //   render: (levelPrice) => (
+      //     <span>
+      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+      //       {levelPrice && levelPrice.toFixed(2)}
+      //     </span>
+      //   )
+      // },
       {
         title: 'Quantity',
         dataIndex: 'num',
@@ -423,9 +434,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="consumer" />}: {detail.getIn(['buyer', 'name'])}
-              </p>
-              <p style={styles.darkText}>
                 {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
               {detail.getIn(['buyer', 'customerFlag']) && (
@@ -439,6 +447,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
               )}
               <p style={styles.darkText}>
                 {<FormattedMessage id="phoneNumber" />}: {detail.getIn(['consignee', 'phone'])}
+              </p>
+              <p style={styles.darkText}>
+                {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
+              </p>
+              <p style={styles.darkText}>
+                {<FormattedMessage id="recommenderName" />}: {detail.get('recommenderName')}
               </p>
             </Col>
           </Row>

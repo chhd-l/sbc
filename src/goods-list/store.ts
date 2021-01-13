@@ -101,6 +101,7 @@ export default class AppStore extends Store {
     if (this.state().get('saleType') != '-1') {
       request.saleType = this.state().get('saleType');
     }
+    this.dispatch('info:setLoading', true);
 
     const { res, err } = (await goodsList(request)) as any;
     if (!err) {
@@ -109,6 +110,7 @@ export default class AppStore extends Store {
       });
       this.dispatch('goodsActor: init', fromJS(res.context));
       this.dispatch('goodsActor:clearSelectedSpuKeys');
+      this.dispatch('info:setLoading', false);
     }
   };
 

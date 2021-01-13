@@ -638,9 +638,11 @@ export default {
   Delete: 'Delete',
 
   customerAccount: 'Customer Account',
-  clinicName: 'Prescriber name',
-  clinicID: 'Prescriber id',
+  clinicName: 'Auditor name',
+  clinicID: 'Auditor id',
 
+  recommenderId:'Recommender id',
+  recommenderName:'Recommender name',
   deliveryCountry: 'Delivery Country',
   deliveryCity: 'Delivery City',
   deliveryAddress1: 'Delivery address1',

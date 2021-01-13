@@ -485,20 +485,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="consumer" />}: {detail.getIn(['buyer', 'name'])}
-              </p>
-              <p style={styles.darkText}>
                 {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
-              {detail.getIn(['buyer', 'customerFlag']) && (
-                <p style={styles.darkText}>
-                  {/* {(util.isThirdStore()
-                    ? 'Consumer Level:  '
-                    : 'Platform Level:  ') +
-                    detail.getIn(['buyer', 'levelName'])} */}
-                  {'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}
-                </p>
-              )}
+              {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}</p>}
+              <p style={styles.darkText}>
+                {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
+              </p>
+              <p style={styles.darkText}>
+                {<FormattedMessage id="recommenderName" />}: {detail.get('recommenderName')}
+              </p>
             </Col>
           </Row>
         </div>

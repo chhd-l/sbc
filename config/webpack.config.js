@@ -53,7 +53,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
   const isEnvProduction = envCode === 'prod';
 
   const publicPath = isEnvProduction
-    ? '/'
+    ? '/eu/'
     : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === './';
 

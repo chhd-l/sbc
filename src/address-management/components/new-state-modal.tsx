@@ -39,7 +39,10 @@ export default class NewStateModal extends Component<any, any> {
   constructor(props) {
     super(props);
   }
-  state = {};
+  state = {
+    okDisabled: false,
+    confirmLoading: false
+  };
   props: {
     form: any;
     relaxProps?: {
@@ -70,14 +73,21 @@ export default class NewStateModal extends Component<any, any> {
   }
 
   _handleModelCancel = () => {
+    this.props.form.resetFields();
     const { setStateModalVisible, onResetStateForm } = this.props.relaxProps;
     setStateModalVisible(false);
     onResetStateForm();
   };
 
   _handleSubmit = () => {
+    this.setState({
+      okDisabled: true
+    });
     this.props.form.validateFields((err) => {
       if (!err) {
+        this.setState({
+          confirmLoading: true
+        });
         const { setStateModalVisible, onResetStateForm } = this.props.relaxProps;
         setStateModalVisible(false);
         onResetStateForm();
@@ -130,36 +140,29 @@ export default class NewStateModal extends Component<any, any> {
     });
   };
   render() {
+    const { confirmLoading } = this.state;
     const { modalVisible, onStateFormChange, stateForm } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-
-    console.log(stateForm.toJS(), 'ddddddddddddd');
     const { country, state, postCodeArr } = stateForm.toJS();
     console.log(postCodeArr, 'postCodeArr-------------');
     return (
-      <Modal
-        maskClosable={false}
-        title="Add state"
-        visible={modalVisible}
-        width={920}
-        // confirmLoading={true}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
+      <Modal maskClosable={false} title="Add state" visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
         <div>
           <Form>
             <FormItem {...formItemLayout} label="Country name">
               {getFieldDecorator('country', {
-                initialValue: country,
-                rules: [{ required: true, message: 'Please select country name.' }]
+                initialValue: country
+                // rules: [{ required: true, message: 'Please select country name.' }]
               })(
                 <Input
-                  onChange={(e) =>
-                    onStateFormChange({
-                      field: 'country',
-                      value: e.target.value
-                    })
-                  }
+                  // onChange={(e) =>
+                  //   onStateFormChange({
+                  //     field: 'country',
+                  //     value: e.target.value
+                  //   })
+                  // }
+                  value={country}
+                  disabled
                 />
               )}
             </FormItem>
@@ -169,6 +172,7 @@ export default class NewStateModal extends Component<any, any> {
                 rules: [{ required: true, message: 'Please enter state name.' }]
               })(
                 <Input
+                  value={state}
                   onChange={(e) =>
                     onStateFormChange({
                       field: 'state',

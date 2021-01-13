@@ -48,3 +48,16 @@ export const uploadBanner = (params) => {
     body: JSON.stringify(params)
   });
 };
+
+export function fetchStoreInfo() {
+  return Fetch<TResult>('/store/storeInfo');
+}
+
+export function fetchDictionaryList(filterParams = {}) {
+  return Fetch<TResult>('/sysdict/pageView', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

@@ -92,7 +92,7 @@ export default class RefundList extends React.Component<any, any> {
           </ul>
         </div> */}
         <DataGrid
-          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'initial', zIndex: 999 }} alt="" /> }}
           dataSource={refundList.toJS().length > 0 ? refundList.toJS() : []}
           rowKey={(record, index) => index}
           pagination={false}

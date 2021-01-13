@@ -127,14 +127,14 @@ export default class AppStore extends Store {
     const { res } = await webapi.getStoreDashboardCollectViewstore(data);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      this.dispatch('home:tradeCustomerView', res.context.tradeCustomerView);
-      this.dispatch('home:goodsInfoTopView', res.context.goodsInfoTopView.goodsInfoTopViewItemList || []);
-      this.dispatch('home:conversionFunnelDashboardView', res.context.conversionFunnelDashboardView);
-      this.dispatch('home:prescriberTrendView', res.context.prescriberTrendView);
-      this.dispatch('home:prescriberTopView', res.context.prescriberTopView);
-      this.dispatch('home:trafficDashboardView', res.context.trafficDashboardView);
-      this.dispatch('home:transactionTrendView', res.context.transactionTrendView);
-      this.dispatch('home:trafficTrendDashboardView', res.context.trafficTrendDashboardView);
+      this.dispatch('home:tradeCustomerView', res.context?.tradeCustomerView);
+      this.dispatch('home:goodsInfoTopView', res.context?.goodsInfoTopView.goodsInfoTopViewItemList || []);
+      this.dispatch('home:conversionFunnelDashboardView', res.context?.conversionFunnelDashboardView);
+      this.dispatch('home:prescriberTrendView', res.context?.prescriberTrendView);
+      this.dispatch('home:prescriberTopView', res.context?.prescriberTopView);
+      this.dispatch('home:trafficDashboardView', res.context?.trafficDashboardView);
+      this.dispatch('home:transactionTrendView', res.context?.transactionTrendView);
+      this.dispatch('home:trafficTrendDashboardView', res.context?.trafficTrendDashboardView);
       //this.dispatch('home:searchData', getListAll.context);
     } else {
       this.dispatch('loading:end');

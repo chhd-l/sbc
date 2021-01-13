@@ -13,6 +13,7 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const CompressionPlugin = require("compression-webpack-plugin");
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const useTypeScript = fs.existsSync(paths.appTsConfig);
@@ -27,7 +28,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
   const isEnvDevelopment = envCode !== 'prod';
   const isEnvProduction = envCode === 'prod';
 
-  const publicPath = isEnvProduction ? '/eu' : isEnvDevelopment && '/';
+  const publicPath = isEnvProduction ? '/ue/' : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction
@@ -65,9 +66,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
-    devtool: isEnvProduction
-      ? shouldUseSourceMap ? 'source-map' : false
-      : isEnvDevelopment && 'eval-source-map',
+    devtool: false,
     entry: {
       vendor: [
         'plume2',
@@ -81,7 +80,6 @@ module.exports = function(webpackEnv, envCode = 'prod') {
         'react-router',
         'react-router-dom',
         'redux',
-        'antd',
         'echarts',
         'echarts-for-react',
       ],
@@ -318,6 +316,13 @@ module.exports = function(webpackEnv, envCode = 'prod') {
       ],
     },
     plugins: [
+      new CompressionPlugin({
+        filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
+        algorithm: 'gzip', // 算法
+        test: new RegExp('\\.(js|css)$'), // 压缩 js 与 css
+        threshold: 102400, // 只处理比这个值大的资源。按字节计算
+        minRatio: 0.8 // 只有压缩率比这个值小的资源才会被处理
+      }),
       new webpack.DefinePlugin({...env.stringified, __DEV__: !isEnvProduction}),
 
       new webpack.DllPlugin({

@@ -178,9 +178,9 @@ module.exports = function (webpackEnv, envCode = 'prod') {
 
       splitChunks: {
         chunks: 'async',
-        minSize: 1000000,
-        maxSize: 1000000,
-        minChunks: 2,
+        minSize: 1200000,
+        maxSize: 1200000,
+        minChunks: 1,
         name: true,
         cacheGroups: {
           vendors: {
@@ -188,7 +188,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             priority: -10
           },
           vendors: {
-            test: /[\\/]web_modules[\\/]/,
+            test: /[\\/]antd[\\/]/,
             priority: -20
           },
           default: {
@@ -418,7 +418,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
 
          }
        ),*/
-      new BundleAnalyzerPlugin(
+      /*new BundleAnalyzerPlugin(
         {
           //  可以是`server`，`static`或`disabled`。
           //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。
@@ -449,7 +449,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
           statsOptions: null,
           logLevel: 'info' // 日志级别。可以是'信息'，'警告'，'错误'或'沉默'。
         }
-      ),
+      ),*/
       new CompressionPlugin({
         filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
         algorithm: 'gzip', // 算法

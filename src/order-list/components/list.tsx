@@ -504,11 +504,11 @@ export default class ListView extends React.Component<any, any> {
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
                       <br />（{num} <FormattedMessage id="piece" />)
                     </td>
-                    <td style={{ width: '10%' }}>
+                    {/* <td style={{ width: '10%' }}>
                       <p title={v.getIn(['clinicsName', 'name'])} className="line-ellipse">
                         {v.get('clinicsName')}
                       </p>
-                    </td>
+                    </td> */}
                     {/* <td style={{ width: '5%' }}> */}
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}

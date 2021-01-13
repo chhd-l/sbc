@@ -1177,10 +1177,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   Subscription Date :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>
                 </p>
                 <p>
-                  Presciber ID : <span>{subscriptionInfo.presciberID}</span>
+                  Auditor ID : <span>{subscriptionInfo.presciberID}</span>
                 </p>
                 <p>
-                  Presciber Name : <span>{subscriptionInfo.presciberName}</span>
+                  Auditor Name : <span>{subscriptionInfo.presciberName}</span>
                 </p>
               </Col>
               <Col span={11} className="basic-info">

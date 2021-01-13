@@ -7,7 +7,7 @@ export default class StateFormActor extends Actor {
       modalVisible: false,
       isEdit: false,
       stateForm: {
-        country: 'United States',
+        country: '',
         state: '',
         postCodeArr: [
           {
@@ -37,7 +37,7 @@ export default class StateFormActor extends Actor {
   @Action('StateFormActor:resetForm')
   resetForm(state: IMap) {
     const stateForm = {
-      country: 'United States',
+      country: JSON.parse(sessionStorage.getItem('currentCountry')).name,
       state: '',
       postCodeArr: [
         {

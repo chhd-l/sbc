@@ -574,7 +574,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
                     {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:{' '}
+                    Promotion:
                   </span>
                   <strong>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -587,7 +587,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
                     {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:{' '}
+                    Promotion:
                   </span>
                   <strong>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}

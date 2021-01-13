@@ -187,7 +187,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             test: /[\\/]node_modules[\\/]/,
             priority: -10
           },
-          vendors: {
+          antd: {
             test: /[\\/]antd[\\/]/,
             priority: -20
           },
@@ -195,6 +195,12 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             minChunks: 2,
             priority: -30,
             reuseExistingChunk: true
+          },
+          styles:{
+            name:'styles',
+            test:/\.css$/,
+            chunks:'all',
+            enforce: true
           }
         }
       },

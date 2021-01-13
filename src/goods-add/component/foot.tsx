@@ -129,7 +129,7 @@ export default class Foot extends React.Component<any, any> {
         )}*/}
         {this.props.isLeave && (
           <Button type="primary" onClick={this._leavePage} style={{ marginRight: 10 }} loading={saveLoading}>
-            Leave
+            Back to list
           </Button>
         )}
       </div>

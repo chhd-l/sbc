@@ -151,27 +151,25 @@ export default class AppStore extends Store {
     this.dispatch('priceActor: setUserLevelList', fromJS(newLevelList));
     if (goodsId) {
       this.dispatch('goodsActor: isEditGoods', true);
-      this._getGoodsDetail(editProductResource, editResource.getStoreCode, editResource.storeCateByCondition);
+      await this._getGoodsDetail(editProductResource, editResource.getStoreCode, editResource.storeCateByCondition);
     } else {
       // 新增商品，可以选择平台类目
       localStorage.setItem('storeCode', editResource.getStoreCode);
       this.dispatch('goodsActor: disableCate', false);
       this.dispatch('goodsActor:randomGoodsNo', editResource.getStoreCode);
       this.dispatch('loading:end');
-      const storeGoodsTab = await getStoreGoodsTab();
-      if ((storeGoodsTab.res as any).code === Const.SUCCESS_CODE) {
-        const tabs = [];
-        (storeGoodsTab.res as any).context.forEach((info) => {
-          if (info.isDefault !== 1) {
-            tabs.push({
-              tabId: info.tabId,
-              tabName: info.tabName,
-              tabDetail: ''
-            });
-          }
-        });
-        this.dispatch('goodsActor: goodsTabs', tabs);
-      }
+      const storeGoodsTab = editResource.storeGoodsTab;
+      const tabs = [];
+      storeGoodsTab.forEach((info) => {
+        if (info.isDefault !== 1) {
+          tabs.push({
+            tabId: info.tabId,
+            tabName: info.tabName,
+            tabDetail: ''
+          });
+        }
+      });
+      this.dispatch('goodsActor: goodsTabs', tabs);
     }
   };
 
@@ -274,13 +272,12 @@ export default class AppStore extends Store {
     let resource2 = resource;
     resource2.context = resource1;
     let goodsDetail = resource2;
-    console.log(editResource, 2222222222);
     localStorage.setItem('storeCode', editResource);
     // let storeCateList: any;
     let tmpContext = goodsDetail.context;
-    let storeCateList: any = await getStoreCateList();
+    let storeCateList: any = storeCateByCondition;
     this.dispatch('loading:end');
-    this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
+    this.dispatch('goodsActor: initStoreCateList', fromJS(storeCateList.storeCateResponseVOList));
     this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue || '');
 
     // 合并多属性字段

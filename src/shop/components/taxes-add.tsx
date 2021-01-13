@@ -5,18 +5,15 @@ import _ from 'lodash';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class TaxesAdd extends React.Component<any, any> {
-  props: {
-    visible: boolean;
-    isEdit: boolean;
-  };
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
-      isEdit: this.props.isEdit,
+      isEdit: false,
       loading: false,
       fetching: false,
       taxForm: {
+        id: '',
         taxZoneName: '',
         taxZoneDescription: '',
         taxZoneType: '',
@@ -43,16 +40,21 @@ class TaxesAdd extends React.Component<any, any> {
     if (JSON.stringify(props.taxForm) !== JSON.stringify(state.taxForm) || props.visible !== state.visible) {
       return {
         visible: props.visible,
-        taxForm: props.taxForm
+        taxForm: props.taxForm,
+        isEdit: props.isEdit
       };
     }
 
     return null;
   }
 
-  handleSubmit = () => {};
+  handleSubmit = () => {
+    this.props.closeFunction();
+  };
 
-  handleCancel = () => {};
+  handleCancel = () => {
+    this.props.closeFunction();
+  };
 
   onTaxFormChange = ({ field, value }) => {
     let data = this.state.taxForm;
@@ -78,23 +80,18 @@ class TaxesAdd extends React.Component<any, any> {
     };
     return (
       <Modal
+        width={600}
         maskClosable={false}
         zIndex={1000}
         title={isEdit ? 'Edit tax zone' : 'New tax zone'}
         visible={visible}
         confirmLoading={loading}
-        onCancel={() =>
-          this.setState({
-            visible: false
-          })
-        }
+        onCancel={() => this.handleCancel()}
         footer={[
           <Button
             key="back"
             onClick={() => {
-              this.setState({
-                visible: false
-              });
+              this.handleCancel();
             }}
           >
             Cancel
@@ -188,6 +185,7 @@ class TaxesAdd extends React.Component<any, any> {
               ]
             })(
               <Select
+                style={{ width: '80%' }}
                 showSearch
                 placeholder="Select zone"
                 optionFilterProp="children"

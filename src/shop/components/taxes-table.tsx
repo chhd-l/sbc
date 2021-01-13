@@ -34,10 +34,13 @@ export default class TaxesTable extends React.Component<any, any> {
   };
 
   deleteTax = (id) => {
-    console.log(id);
+    this.props.deleteFunction(id);
   };
   handleTableChange = (pagination) => {
-    console.log(pagination);
+    this.props.tableChangeFunction(pagination);
+  };
+  openEditPage = (row) => {
+    this.props.editFunction(row);
   };
 
   render() {
@@ -52,19 +55,19 @@ export default class TaxesTable extends React.Component<any, any> {
       {
         title: 'Zone Name',
         key: 'zoneName',
-        dataIndex: 'zoneName',
+        dataIndex: 'taxZoneName',
         width: '10%'
       },
       {
         title: 'Zone Type',
         key: 'zoneType',
-        dataIndex: 'zoneType',
+        dataIndex: 'taxZoneType',
         width: '10%'
       },
       {
         title: 'Rate(range 0-1)',
         key: 'rate',
-        dataIndex: 'rate',
+        dataIndex: 'taxRates',
         width: '10%'
       },
       {
@@ -89,7 +92,7 @@ export default class TaxesTable extends React.Component<any, any> {
         render: (text, row) => (
           <div>
             <Tooltip placement="top" title="Edit">
-              <a style={{ marginRight: 10 }} className="iconfont iconEdit"></a>
+              <a style={{ marginRight: 10 }} className="iconfont iconEdit" onClick={() => this.openEditPage(row)}></a>
             </Tooltip>
 
             <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTax(row.id)} okText="Confirm" cancelText="Cancel">

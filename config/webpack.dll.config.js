@@ -13,7 +13,6 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-const CompressionPlugin = require("compression-webpack-plugin");
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const useTypeScript = fs.existsSync(paths.appTsConfig);
@@ -28,7 +27,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
   const isEnvDevelopment = envCode !== 'prod';
   const isEnvProduction = envCode === 'prod';
 
-  const publicPath = isEnvProduction ? '/eu/' : isEnvDevelopment && '/';
+  const publicPath = isEnvProduction ? '/eu' : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction
@@ -73,7 +72,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
       vendor: [
         'plume2',
         'react',
-        'immer',        
+        'immer',
         'lodash',
         'reselect',
         'react-dom',
@@ -82,6 +81,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
         'react-router',
         'react-router-dom',
         'redux',
+        'antd',
         'echarts',
         'echarts-for-react',
       ],
@@ -96,12 +96,12 @@ module.exports = function(webpackEnv, envCode = 'prod') {
       library: '[name]_library',
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
-            path
-              .relative(paths.dllBuild, info.absoluteResourcePath)
-              .replace(/\\/g, '/')
+          path
+            .relative(paths.dllBuild, info.absoluteResourcePath)
+            .replace(/\\/g, '/')
         : isEnvDevelopment &&
-            (info =>
-              path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+        (info =>
+          path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
     optimization: {
       minimize: isEnvProduction,
@@ -135,9 +135,9 @@ module.exports = function(webpackEnv, envCode = 'prod') {
             parser: safePostCssParser,
             map: shouldUseSourceMap
               ? {
-                  inline: false,
-                  annotation: true,
-                }
+                inline: false,
+                annotation: true,
+              }
               : false,
           },
         }),
@@ -318,13 +318,6 @@ module.exports = function(webpackEnv, envCode = 'prod') {
       ],
     },
     plugins: [
-      new CompressionPlugin({
-        filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
-        algorithm: 'gzip', // 算法
-        test: new RegExp('\\.(js|css)$'), // 压缩 js 与 css
-        threshold: 102400, // 只处理比这个值大的资源。按字节计算
-        minRatio: 0.8 // 只有压缩率比这个值小的资源才会被处理
-      }),
       new webpack.DefinePlugin({...env.stringified, __DEV__: !isEnvProduction}),
 
       new webpack.DllPlugin({
@@ -335,7 +328,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
          */
         path: path.join(
           __dirname,
-          '/public/javascript/dll/',
+          '../public/javascript/dll/',
           isEnvProduction?"[name]-manifest-prod.json":'[name]-manifest.json'
         ),
         /**
@@ -347,26 +340,26 @@ module.exports = function(webpackEnv, envCode = 'prod') {
       }),
 
       isEnvProduction &&
-        new MiniCssExtractPlugin({
-          filename: 'static/css/[name].[contenthash:8].css',
-          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
-        }),
+      new MiniCssExtractPlugin({
+        filename: 'static/css/[name].[contenthash:8].css',
+        chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      }),
       new ManifestPlugin({
         fileName: isEnvProduction?"asset-manifest-prod.json":'asset-manifest.json',
         publicPath: publicPath,
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       isEnvProduction &&
-        new WorkboxWebpackPlugin.GenerateSW({
-          clientsClaim: true,
-          exclude: [/\.map$/, /asset-manifest\.json$/],
-          importWorkboxFrom: 'cdn',
-          navigateFallback: publicUrl + '/index.html',
-          navigateFallbackBlacklist: [
-            new RegExp('^/_'),
-            new RegExp('/[^/]+\\.[^/]+$'),
-          ],
-        }),
+      new WorkboxWebpackPlugin.GenerateSW({
+        clientsClaim: true,
+        exclude: [/\.map$/, /asset-manifest\.json$/],
+        importWorkboxFrom: 'cdn',
+        navigateFallback: publicUrl + '/index.html',
+        navigateFallbackBlacklist: [
+          new RegExp('^/_'),
+          new RegExp('/[^/]+\\.[^/]+$'),
+        ],
+      }),
     ].filter(Boolean),
     node: {
       module: 'empty',

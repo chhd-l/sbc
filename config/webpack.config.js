@@ -16,7 +16,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
-//const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
@@ -27,6 +27,7 @@ const WebpackBar = require('webpackbar');
 const HappyPack = require('happypack');
 const os = require('os');
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+//const happyThreadPool = HappyPack.ThreadPool({ size: 20 });
 
 //prerender-spa-plugin 预渲染
 //const PrerenderSpaPlugin = require('prerender-spa-plugin')
@@ -35,7 +36,7 @@ const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 const CompressionPlugin = require("compression-webpack-plugin");
 
 //可视化分包分析工具
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -53,8 +54,8 @@ module.exports = function (webpackEnv, envCode = 'prod') {
   const isEnvProduction = envCode === 'prod';
 
   const publicPath = isEnvProduction
-    ? '/eu/'
-    : isEnvDevelopment && '/';
+    ? "/eu/"
+    : isEnvDevelopment && './';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction
@@ -179,26 +180,20 @@ module.exports = function (webpackEnv, envCode = 'prod') {
         chunks: 'async',
         minSize: 1000000,
         maxSize: 1000000,
-        minChunks: 1,
+        minChunks: 2,
         name: true,
         cacheGroups: {
           vendors: {
             test: /[\\/]node_modules[\\/]/,
             priority: -10
           },
-          antDesigns: {
-            name: 'antDesigns',
-            chunks: 'all',
-            test: /[\\/]node_modules[\\/](@ant-design|antd)[\\/]/,
-            priority: -11,
-          },
-          web_modules: {
+          vendors: {
             test: /[\\/]web_modules[\\/]/,
-            priority: -30
+            priority: -20
           },
           default: {
             minChunks: 2,
-            priority: -40,
+            priority: -30,
             reuseExistingChunk: true
           }
         }
@@ -423,38 +418,38 @@ module.exports = function (webpackEnv, envCode = 'prod') {
 
          }
        ),*/
-      // new BundleAnalyzerPlugin(
-      //   {
-      //     //  可以是`server`，`static`或`disabled`。
-      //     //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。
-      //     //  在“静态”模式下，会生成带有报告的单个HTML文件。
-      //     //  在`disabled`模式下，你可以使用这个插件来将`generateStatsFile`设置为`true`来生成Webpack Stats JSON文件。
-      //     analyzerMode: 'server',
-      //     //  将在“服务器”模式下使用的主机启动HTTP服务器。
-      //     analyzerHost: '127.0.0.1',
-      //     //  将在“服务器”模式下使用的端口启动HTTP服务器。
-      //     analyzerPort: 8000,
-      //     //  路径捆绑，将在`static`模式下生成的报告文件。
-      //     //  相对于捆绑输出目录。
-      //     reportFilename: 'report.html',
-      //     //  模块大小默认显示在报告中。
-      //     //  应该是`stat`，`parsed`或者`gzip`中的一个。
-      //     //  有关更多信息，请参见“定义”一节。
-      //     defaultSizes: 'parsed',
-      //     //  在默认浏览器中自动打开报告
-      //     openAnalyzer: true,
-      //     //  如果为true，则Webpack Stats JSON文件将在bundle输出目录中生成
-      //     generateStatsFile: false,
-      //     //  如果`generateStatsFile`为`true`，将会生成Webpack Stats JSON文件的名字。
-      //     //  相对于捆绑输出目录。
-      //     statsFilename: 'stats.json',
-      //     //  stats.toJson（）方法的选项。
-      //     //  例如，您可以使用`source：false`选项排除统计文件中模块的来源。
-      //     //  在这里查看更多选项：https：  //github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
-      //     statsOptions: null,
-      //     logLevel: 'info' // 日志级别。可以是'信息'，'警告'，'错误'或'沉默'。
-      //   }
-      // ),
+      new BundleAnalyzerPlugin(
+        {
+          //  可以是`server`，`static`或`disabled`。
+          //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。
+          //  在“静态”模式下，会生成带有报告的单个HTML文件。
+          //  在`disabled`模式下，你可以使用这个插件来将`generateStatsFile`设置为`true`来生成Webpack Stats JSON文件。
+          analyzerMode: 'server',
+          //  将在“服务器”模式下使用的主机启动HTTP服务器。
+          analyzerHost: '127.0.0.1',
+          //  将在“服务器”模式下使用的端口启动HTTP服务器。
+          analyzerPort: 8000,
+          //  路径捆绑，将在`static`模式下生成的报告文件。
+          //  相对于捆绑输出目录。
+          reportFilename: 'report.html',
+          //  模块大小默认显示在报告中。
+          //  应该是`stat`，`parsed`或者`gzip`中的一个。
+          //  有关更多信息，请参见“定义”一节。
+          defaultSizes: 'parsed',
+          //  在默认浏览器中自动打开报告
+          openAnalyzer: true,
+          //  如果为true，则Webpack Stats JSON文件将在bundle输出目录中生成
+          generateStatsFile: false,
+          //  如果`generateStatsFile`为`true`，将会生成Webpack Stats JSON文件的名字。
+          //  相对于捆绑输出目录。
+          statsFilename: 'stats.json',
+          //  stats.toJson（）方法的选项。
+          //  例如，您可以使用`source：false`选项排除统计文件中模块的来源。
+          //  在这里查看更多选项：https：  //github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
+          statsOptions: null,
+          logLevel: 'info' // 日志级别。可以是'信息'，'警告'，'错误'或'沉默'。
+        }
+      ),
       new CompressionPlugin({
         filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
         algorithm: 'gzip', // 算法

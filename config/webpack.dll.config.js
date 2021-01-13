@@ -28,7 +28,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
   const isEnvDevelopment = envCode !== 'prod';
   const isEnvProduction = envCode === 'prod';
 
-  const publicPath = isEnvProduction ? '/' : isEnvDevelopment && '/';
+  const publicPath = isEnvProduction ? '/eu/' : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction
@@ -335,7 +335,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
          */
         path: path.join(
           __dirname,
-          '../public/javascript/dll/',
+          '/public/javascript/dll/',
           isEnvProduction?"[name]-manifest-prod.json":'[name]-manifest.json'
         ),
         /**

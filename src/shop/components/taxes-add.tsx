@@ -5,6 +5,10 @@ import _ from 'lodash';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class TaxesAdd extends React.Component<any, any> {
+  props: {
+    visible: boolean;
+    isEdit: boolean;
+  };
   constructor(props) {
     super(props);
     this.state = {

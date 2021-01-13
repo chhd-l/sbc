@@ -517,10 +517,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Recomemder id" value="recommenderId">
-          Recomemder id
+          <FormattedMessage id="recommenderId" />
         </Option>
         <Option title="Recomemder name" value="recommenderName">
-          Recomemder name
+          <FormattedMessage id="recommenderName" />
         </Option>
       </Select>
     );

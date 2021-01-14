@@ -488,12 +488,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
               {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}</p>}
-              <p style={styles.darkText}>
+              {/* <p style={styles.darkText}>
                 {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
               </p>
               <p style={styles.darkText}>
                 {<FormattedMessage id="recommenderName" />}: {detail.get('recommenderName')}
-              </p>
+              </p> */}
             </Col>
           </Row>
         </div>
@@ -560,6 +560,26 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   </label>
                 </div>
               ) : null} */}
+              {/* {tradePrice.promotionDiscountPrice ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>Promotion: </span>
+                  <strong>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '-'}
+                    {(tradePrice.promotionDiscountPrice || 0).toFixed(2)}
+                  </strong>
+                </label>
+              ) : null}
+
+            {tradePrice.subscriptionDiscountPrice ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>Promotion: </span>
+                  <strong>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '-'}
+                    {(tradePrice.subscriptionDiscountPrice || 0).toFixed(2)}
+                  </strong>
+                </label>
+              ) : null} */}
+
               {tradePrice.discountsPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>

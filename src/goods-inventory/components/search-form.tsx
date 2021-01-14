@@ -36,10 +36,17 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   onEdit = () => {
-    this.setState({
-      disabledType: !this.state.disabledType,
-      editType: !this.state.editType
-    });
+    this.setState(
+      {
+        disabledType: !this.state.disabledType,
+        editType: !this.state.editType
+      },
+      () => {
+        if (this.state.disabledType) {
+          this.onRefresh();
+        }
+      }
+    );
   };
 
   onChangeNumber = (res) => {
@@ -87,9 +94,9 @@ export default class SearchForm extends React.Component<any, any> {
           <Button type="primary" icon="edit" shape="round" onClick={() => this.onEdit()}>
             {this.state.editType == true ? 'Edit' : 'Save'}
           </Button>
-          <Button type="primary" icon="sync" shape="round" onClick={() => this.onRefresh()}>
-            Refresh
-          </Button>
+          {/*<Button type="primary" icon="sync" shape="round" onClick={() => this.onRefresh()}>*/}
+          {/*  Refresh*/}
+          {/*</Button>*/}
 
           <Button onClick={() => bulkExport()}>{<FormattedMessage id="bulkExport" />}</Button>
         </div>

@@ -187,8 +187,8 @@ export default class CouponInfoForm extends Component<any, any> {
               ]
             })(
               <Input
-                placeholder="No more than ten words"
-                maxLength={'10' as any}
+                placeholder="No more than one hundred words"
+                maxLength={'100' as any}
                 onChange={(e) => {
                   fieldsValue({
                     field: 'couponName',

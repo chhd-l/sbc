@@ -28,7 +28,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
   const isEnvDevelopment = envCode !== 'prod';
   const isEnvProduction = envCode === 'prod';
 
-  const publicPath = isEnvProduction ? '/' : isEnvDevelopment && '/';
+  const publicPath = isEnvProduction ? '/eu/' : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction
@@ -66,14 +66,12 @@ module.exports = function(webpackEnv, envCode = 'prod') {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
-    devtool: isEnvProduction
-      ? shouldUseSourceMap ? 'source-map' : false
-      : isEnvDevelopment && 'eval-source-map',
+    devtool: false,
     entry: {
       vendor: [
         'plume2',
         'react',
-        'immer',        
+        'immer',
         'lodash',
         'reselect',
         'react-dom',
@@ -96,12 +94,12 @@ module.exports = function(webpackEnv, envCode = 'prod') {
       library: '[name]_library',
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
-            path
-              .relative(paths.dllBuild, info.absoluteResourcePath)
-              .replace(/\\/g, '/')
+          path
+            .relative(paths.dllBuild, info.absoluteResourcePath)
+            .replace(/\\/g, '/')
         : isEnvDevelopment &&
-            (info =>
-              path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+        (info =>
+          path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
     optimization: {
       minimize: isEnvProduction,
@@ -135,9 +133,9 @@ module.exports = function(webpackEnv, envCode = 'prod') {
             parser: safePostCssParser,
             map: shouldUseSourceMap
               ? {
-                  inline: false,
-                  annotation: true,
-                }
+                inline: false,
+                annotation: true,
+              }
               : false,
           },
         }),
@@ -347,26 +345,26 @@ module.exports = function(webpackEnv, envCode = 'prod') {
       }),
 
       isEnvProduction &&
-        new MiniCssExtractPlugin({
-          filename: 'static/css/[name].[contenthash:8].css',
-          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
-        }),
+      new MiniCssExtractPlugin({
+        filename: 'static/css/[name].[contenthash:8].css',
+        chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      }),
       new ManifestPlugin({
         fileName: isEnvProduction?"asset-manifest-prod.json":'asset-manifest.json',
         publicPath: publicPath,
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       isEnvProduction &&
-        new WorkboxWebpackPlugin.GenerateSW({
-          clientsClaim: true,
-          exclude: [/\.map$/, /asset-manifest\.json$/],
-          importWorkboxFrom: 'cdn',
-          navigateFallback: publicUrl + '/index.html',
-          navigateFallbackBlacklist: [
-            new RegExp('^/_'),
-            new RegExp('/[^/]+\\.[^/]+$'),
-          ],
-        }),
+      new WorkboxWebpackPlugin.GenerateSW({
+        clientsClaim: true,
+        exclude: [/\.map$/, /asset-manifest\.json$/],
+        importWorkboxFrom: 'cdn',
+        navigateFallback: publicUrl + '/index.html',
+        navigateFallbackBlacklist: [
+          new RegExp('^/_'),
+          new RegExp('/[^/]+\\.[^/]+$'),
+        ],
+      }),
     ].filter(Boolean),
     node: {
       module: 'empty',

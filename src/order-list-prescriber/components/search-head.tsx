@@ -53,12 +53,14 @@ export default class SearchHead extends Component<any, any> {
       buyerOptions: 'buyerName',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
+      recommenderSelect: 'recommenderName',
       id: '',
       buyerOptionsValue: '',
       goodsOptionsValue: '',
       receiverSelectValue: '',
       numberSelectValue: '',
       clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId : '',
+      recommenderSelectValue: '',
       tradeState: {
         deliverStatus: '',
         payState: '',
@@ -302,6 +304,22 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderRecommenderSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          recommenderSelectValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
+                </FormItem>
+              </Col>
+
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
                   <Button
@@ -312,7 +330,26 @@ export default class SearchHead extends Component<any, any> {
                     style={{ textAlign: 'center' }}
                     onClick={(e) => {
                       e.preventDefault();
-                      const { buyerOptions, goodsOptions, receiverSelect, clinicSelect, numberSelect, id, subscribeId, buyerOptionsValue, goodsOptionsValue, receiverSelectValue, clinicSelectValue, numberSelectValue, tradeState, beginTime, endTime, orderCategory } = this.state;
+                      const {
+                        buyerOptions,
+                        goodsOptions,
+                        receiverSelect,
+                        clinicSelect,
+                        numberSelect,
+                        id,
+                        subscribeId,
+                        buyerOptionsValue,
+                        goodsOptionsValue,
+                        receiverSelectValue,
+                        clinicSelectValue,
+                        numberSelectValue,
+                        tradeState,
+                        beginTime,
+                        endTime,
+                        orderCategory,
+                        recommenderSelect,
+                        recommenderSelectValue
+                      } = this.state;
 
                       const ts = {} as any;
                       if (tradeState.deliverStatus) {
@@ -335,6 +372,7 @@ export default class SearchHead extends Component<any, any> {
                         [goodsOptions]: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
                         clinicsIds: sessionStorage.getItem('PrescriberSelect') && JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId.split(',') : null,
+                        [recommenderSelect]: recommenderSelectValue,
                         beginTime,
                         endTime,
                         orderCategory
@@ -431,6 +469,27 @@ export default class SearchHead extends Component<any, any> {
     );
   };
 
+  _renderRecommenderSelect = () => {
+    return (
+      <Select
+        onChange={(val) =>
+          this.setState({
+            recommenderSelect: val
+          })
+        }
+        value={this.state.recommenderSelect}
+        style={styles.label}
+      >
+        <Option title="Recommender id" value="recommenderId">
+          <FormattedMessage id="recommenderId" />
+        </Option>
+        <Option title="Recommender name" value="recommenderName">
+          <FormattedMessage id="recommenderName" />
+        </Option>
+      </Select>
+    );
+  };
+
   _renderClinicSelect = () => {
     return (
       <Select
@@ -443,10 +502,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
         disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
-        <Option title="Prescriber name" value="clinicsName">
+        <Option title="Auditor name" value="clinicsName">
           <FormattedMessage id="clinicName" />
         </Option>
-        <Option title="Prescriber ID" value="clinicsIds">
+        <Option title="Auditor ID" value="clinicsIds">
           <FormattedMessage id="clinicID" />
         </Option>
       </Select>

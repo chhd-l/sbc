@@ -44,7 +44,7 @@ class RelatedProduct extends React.Component<any, any> {
   };
 
   componentDidMount() {
-    const { onRelatedList } = this.props.relaxProps;
+    //const { onRelatedList } = this.props.relaxProps;
     //onRelatedList();
   }
 
@@ -56,7 +56,7 @@ class RelatedProduct extends React.Component<any, any> {
         id="consent"
         rowKey="tabId"
         columns={this._columns}
-        dataSource={relatedList.toJS()}
+        dataSource={relatedList && relatedList.toJS()}
         onRow={(_record, index) => ({
           index,
           moveRow: this.moveRow

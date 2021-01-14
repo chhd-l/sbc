@@ -75,7 +75,6 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   onTaggingFormChange = ({ field, value }) => {
-    const { form } = this.props;
     let data = this.state.taggingForm;
     data[field] = value;
     this.setState(
@@ -113,6 +112,7 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   openEditPage = (row) => {
+    const { form } = this.props;
     row.taggingType = row.taggingType ? row.taggingType : 'Text';
     let taggingForm = {
       taggingName: row.taggingName,
@@ -136,18 +136,11 @@ class AttributeLibrary extends Component<any, any> {
         currentEditTagging: row,
         loading: false,
         images: images
+      },
+
+      () => {
+        this.setImageUrl(row.taggingImgUrl);
       }
-      // () => {
-      //   form.setFieldsValue({
-      //     taggingName: row.taggingName,
-      //     taggingFillColor: this.getColour(taggingForm.taggingFillColor) ? this.getColour(taggingForm.taggingFillColor).name : '',
-      //     taggingFontColor: this.getColour(taggingForm.taggingFontColor) ? this.getColour(taggingForm.taggingFontColor).name : '',
-      //     taggingType: row.taggingType,
-      //     taggingImgUrl: row.taggingImgUrl,
-      //     displayStatus: row.displayStatus,
-      //     showPage: row.showPage ? row.showPage.split(',') : []
-      //   });
-      // }
     );
   };
   handleSubmit = () => {

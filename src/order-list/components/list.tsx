@@ -185,6 +185,8 @@ export default class ListView extends React.Component<any, any> {
                       </th>
                       <th style={{ width: '14%' }}>
                         <FormattedMessage id="consumerName" />
+                        {/* <br />
+                        <FormattedMessage id="consumerAccount" /> */}
                       </th>
                       <th style={{ width: '17%' }}>
                         <FormattedMessage id="recipient" />
@@ -193,9 +195,6 @@ export default class ListView extends React.Component<any, any> {
                         <FormattedMessage id="amount" />
                         <br />
                         <FormattedMessage id="quantity" />
-                      </th>
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="clinicName" />
                       </th>
                       {/* <th style={{ width: '5%' }}>rfc</th> */}
                       <th style={{ width: '12%' }}>
@@ -491,6 +490,10 @@ export default class ListView extends React.Component<any, any> {
                       <p title={v.getIn(['buyer', 'name'])} className="line-ellipse">
                         {v.getIn(['buyer', 'name'])}
                       </p>
+                      {/* <br />
+                      <p title={v.getIn(['buyer', 'name'])} className="line-ellipse">
+                        {v.getIn(['buyer', 'account'])}
+                      </p> */}
                     </td>
                     <td style={{ width: '17%' }}>
                       {/*收件人姓名*/}
@@ -507,11 +510,11 @@ export default class ListView extends React.Component<any, any> {
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
                       <br />（{num} <FormattedMessage id="piece" />)
                     </td>
-                    <td style={{ width: '10%' }}>
+                    {/* <td style={{ width: '10%' }}>
                       <p title={v.getIn(['clinicsName', 'name'])} className="line-ellipse">
                         {v.get('clinicsName')}
                       </p>
-                    </td>
+                    </td> */}
                     {/* <td style={{ width: '5%' }}> */}
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}

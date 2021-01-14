@@ -485,20 +485,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="consumer" />}: {detail.getIn(['buyer', 'name'])}
-              </p>
-              <p style={styles.darkText}>
                 {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
-              {detail.getIn(['buyer', 'customerFlag']) && (
-                <p style={styles.darkText}>
-                  {/* {(util.isThirdStore()
-                    ? 'Consumer Level:  '
-                    : 'Platform Level:  ') +
-                    detail.getIn(['buyer', 'levelName'])} */}
-                  {'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}
-                </p>
-              )}
+              {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}</p>}
+              {/* <p style={styles.darkText}>
+                {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
+              </p>
+              <p style={styles.darkText}>
+                {<FormattedMessage id="recommenderName" />}: {detail.get('recommenderName')}
+              </p> */}
             </Col>
           </Row>
         </div>
@@ -565,38 +560,32 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   </label>
                 </div>
               ) : null} */}
-              {/* {tradePrice.discountsPrice ? (
+              {/* {tradePrice.promotionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>
+                  <span style={styles.name}>Promotion: </span>
                   <strong>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '-'}
-                    {(tradePrice.discountsPrice || 0).toFixed(2)}
-                  </strong>
-                </label>
-              ) : null} */}
-
-              {tradePrice.promotionDiscountPrice ? (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>
-                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:
-                  </span>
-                  <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     {(tradePrice.promotionDiscountPrice || 0).toFixed(2)}
                   </strong>
                 </label>
               ) : null}
 
-              {tradePrice.subscriptionDiscountPrice ? (
+            {tradePrice.subscriptionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>
-                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:
-                  </span>
+                  <span style={styles.name}>Promotion: </span>
                   <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '-'}
                     {(tradePrice.subscriptionDiscountPrice || 0).toFixed(2)}
+                  </strong>
+                </label>
+              ) : null} */}
+
+              {tradePrice.discountsPrice ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>
+                  <strong>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '-'}
+                    {(tradePrice.discountsPrice || 0).toFixed(2)}
                   </strong>
                 </label>
               ) : null}

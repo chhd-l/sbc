@@ -34,21 +34,20 @@ import {
   getImgCates,
   getResourceCates,
   getStoreCateList,
-  getStoreGoodsTab,
   getUserLevelList,
   save,
   toGeneralgoods,
   fetchBossCustomerList,
   fetchCustomerList,
   enterpriseToGeneralgoods,
-  getStoreCode,
   getRelatedList,
   fetchPropSort,
   fetchConsentDelete,
   fetchAdd,
   fetchproductTooltip,
   getSeo,
-  editSeo
+  editSeo,
+  getCateList
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
@@ -85,30 +84,34 @@ export default class AppStore extends Store {
         filterStatus: '1'
       }
     };
-    const { res: preEditProductResource } = await getPreEditProductResource(params);
-    if ((preEditProductResource as any).code === Const.SUCCESS_CODE) {
-      this.transaction(() => {
-        this.dispatch('goodsActor: initCateList', fromJS((preEditProductResource as any).context.cateList));
-        this.dispatch('goodsActor:getGoodsCate', fromJS((preEditProductResource as any).context.storeCateByCondition.storeCateResponseVOList));
-        this.dispatch('goodsActor: initBrandList', fromJS((preEditProductResource as any).context.brandList));
-        this.dispatch('formActor:check', fromJS((preEditProductResource as any).context.distributionCheck));
-        this.dispatch('goodsActor:flashsaleGoods', fromJS((preEditProductResource as any).context.flashsalegoodsList.flashSaleGoodsVOList));
-        this.dispatch('goodsActor: setGoodsDetailTab', fromJS((preEditProductResource as any).context.querySysDictionary));
-        this.dispatch('related:relatedList', fromJS((preEditProductResource as any).context.goodsRelation.relationGoods));
-        this.dispatch('goodsActor:filtersTotal', fromJS((preEditProductResource as any).context.filtersTotal));
-        this.dispatch('goodsActor:taggingTotal', fromJS((preEditProductResource as any).context.taggingTotal));
-        this.dispatch('related:goodsId', goodsId);
-        this.dispatch('goodsActor:getGoodsId', goodsId);
-      });
-    }
     let resource = {
       enterpriseCheck: { goodsId },
       storeCateByCondition: {}
     };
 
-    const { res: editProductResource } = await getEditProductResource(resource);
-    let editResource = (editProductResource as any).context;
+    let editResource: any;
+    let editProductResource: any;
+    await Promise.all([getPreEditProductResource(params), getEditProductResource(resource)]).then((results) => {
+      if ((results[0].res as any).code === Const.SUCCESS_CODE) {
+        this.transaction(() => {
+          this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context.cateList));
+          this.dispatch('goodsActor:getGoodsCate', fromJS((results[0].res as any).context.storeCateByCondition.storeCateResponseVOList));
+          this.dispatch('goodsActor: initBrandList', fromJS((results[0].res as any).context.brandList));
+          this.dispatch('formActor:check', fromJS((results[0].res as any).context.distributionCheck));
+          this.dispatch('goodsActor:flashsaleGoods', fromJS((results[0].res as any).context.flashsalegoodsList.flashSaleGoodsVOList));
+          this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[0].res as any).context.querySysDictionary));
+          this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods));
+          this.dispatch('goodsActor:filtersTotal', fromJS((results[0].res as any).context.filtersTotal));
+          this.dispatch('goodsActor:taggingTotal', fromJS((results[0].res as any).context.taggingTotal));
+          this.dispatch('goodsActor:resourceCates', (results[0].res as any).context.resourceCates);
+          this.dispatch('related:goodsId', goodsId);
+          this.dispatch('goodsActor:getGoodsId', goodsId);
+        });
+      }
+      editProductResource = results[1].res as any;
+    });
 
+    editResource = editProductResource.context;
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
       this.dispatch('formActor:enterpriseFlag', fromJS(editResource.enterpriseCheck).get('checkFlag'));
@@ -151,7 +154,7 @@ export default class AppStore extends Store {
     this.dispatch('priceActor: setUserLevelList', fromJS(newLevelList));
     if (goodsId) {
       this.dispatch('goodsActor: isEditGoods', true);
-      await this._getGoodsDetail(editProductResource, editResource.getStoreCode, editResource.storeCateByCondition);
+      await this._getGoodsDetail(editProductResource);
     } else {
       // 新增商品，可以选择平台类目
       localStorage.setItem('storeCode', editResource.getStoreCode);
@@ -171,6 +174,17 @@ export default class AppStore extends Store {
       });
       this.dispatch('goodsActor: goodsTabs', tabs);
     }
+    //初始化素材
+    this.initImg({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0
+    });
+    this.initVideo({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0
+    });
   };
 
   /**
@@ -183,10 +197,10 @@ export default class AppStore extends Store {
       successCount: 0
     }
   ) => {
-    const cateList: any = await getResourceCates();
+    const cateList: any = this.state().get('resourceCates');
     const cateListIm = this.state().get('resCateAllList');
-    if (cateId == -1 && cateList.res.length > 0) {
-      cateId = fromJS(cateList.res)
+    if (cateId == -1 && cateList.length > 0) {
+      cateId = fromJS(cateList)
         .find((item) => item.get('isDefault') == 1)
         .get('cateId');
     }
@@ -206,7 +220,7 @@ export default class AppStore extends Store {
         if (cateId) {
           this.selectVideoCate(cateId);
         }
-        this.dispatch('cateActor: init', fromJS(cateList.res));
+        this.dispatch('cateActor: init', fromJS(cateList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
           this.dispatch('modal: chooseVideos', fromJS(videoList.res.context).get('content').slice(0, successCount));
@@ -229,10 +243,10 @@ export default class AppStore extends Store {
       successCount: 0
     }
   ) => {
-    const cateList: any = await getImgCates();
+    const cateList: any = this.state().get('resourceCates');
     const cateListIm = this.state().get('resCateAllList');
-    if (cateId == -1 && cateList.res.length > 0) {
-      const cateIdList = fromJS(cateList.res).filter((item) => item.get('isDefault') == 1);
+    if (cateId == -1 && cateList.length > 0) {
+      const cateIdList = fromJS(cateList).filter((item) => item.get('isDefault') == 1);
       if (cateIdList.size > 0) {
         cateId = cateIdList.get(0).get('cateId');
       }
@@ -251,7 +265,7 @@ export default class AppStore extends Store {
           this.dispatch('modal: cateIds', List.of(cateId.toString()));
           this.dispatch('modal: cateId', cateId.toString());
         }
-        this.dispatch('modal: imgCates', fromJS(cateList.res));
+        this.dispatch('modal: imgCates', fromJS(cateList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
           this.dispatch('modal: chooseImgs', fromJS(imageList.res.context).get('content').slice(0, successCount));
@@ -267,15 +281,14 @@ export default class AppStore extends Store {
   /**
    *  编辑时获取商品详情，转换数据
    */
-  _getGoodsDetail = async (resource, editResource, storeCateByCondition) => {
-    let resource1 = resource.context.spu;
-    let resource2 = resource;
-    resource2.context = resource1;
-    let goodsDetail = resource2;
-    localStorage.setItem('storeCode', editResource);
+  _getGoodsDetail = async (resource) => {
+    let resource1 = {};
+    resource1 = Object.assign({}, resource, { context: resource.context.spu });
+    let goodsDetail = resource1 as any;
+    localStorage.setItem('storeCode', resource.context.getStoreCode);
     // let storeCateList: any;
     let tmpContext = goodsDetail.context;
-    let storeCateList: any = storeCateByCondition;
+    let storeCateList: any = resource.context.storeCateByCondition;
     this.dispatch('loading:end');
     this.dispatch('goodsActor: initStoreCateList', fromJS(storeCateList.storeCateResponseVOList));
     this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue || '');
@@ -349,7 +362,7 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
 
       let id = goods.get('goodsNo');
-      goods = goods.set('internalGoodsNo', editResource + '_' + id);
+      goods = goods.set('internalGoodsNo', resource.context.getStoreCode + '_' + id);
 
       // 商品可能没有品牌，后面取值有toString等操作，空字符串方便处理
       if (!goods.get('brandId')) {
@@ -1152,7 +1165,6 @@ export default class AppStore extends Store {
       });
       /*console.log(b,22232222);
       console.log(item,3333333333);*/
-      console.log(goods.get('subscriptionStatus'), 11111222222);
       this.state().get('addSkUProduct');
       goodsList = goodsList.push(
         Map({
@@ -1291,12 +1303,12 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
-      result = await edit(param.toJS());
+      result = await edit(param && param.toJS());
     } else {
-      result = await save(param.toJS());
+      result = await save(param && param.toJS());
     }
 
-    console.log(param.toJS(), 'param.toJS(),----------------');
+    //console.log(param.toJS(), 'param.toJS(),----------------');
 
     this.dispatch('goodsActor: saveLoading', false);
     if (result.res.code === Const.SUCCESS_CODE) {

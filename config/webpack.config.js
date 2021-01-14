@@ -177,8 +177,8 @@ module.exports = function (webpackEnv, envCode = 'prod') {
 
       splitChunks: {
         chunks: 'async',
-        minSize: 1000000,
-        maxSize: 1000000,
+        minSize: 1600000,
+        maxSize: 1600000,
         minChunks: 2,
         name: true,
         cacheGroups: {
@@ -186,20 +186,20 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             test: /[\\/]node_modules[\\/]/,
             priority: -10
           },
-          antDesigns: {
-            name: 'antDesigns',
-            chunks: 'all',
-            test: /[\\/]node_modules[\\/](@ant-design|antd)[\\/]/,
-            priority: -11,
-          },
-          web_modules: {
-            test: /[\\/]web_modules[\\/]/,
-            priority: -30
+          antd: {
+            test: /[\\/]antd[\\/]/,
+            priority: -20
           },
           default: {
             minChunks: 2,
-            priority: -40,
+            priority: -30,
             reuseExistingChunk: true
+          },
+          styles:{
+            name:'styles',
+            test:/\.css$/,
+            chunks:'all',
+            enforce: true
           }
         }
       },

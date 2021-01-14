@@ -66,12 +66,7 @@ const columns = [
     title: '单价',
     key: 'marketPrice',
     dataIndex: 'marketPrice',
-    render: (text) => (
-      <span>
-        {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-          QMFloat.addZero(text)}
-      </span>
-    ),
+    render: (text) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + QMFloat.addZero(text)}</span>,
     width: '20%'
   }
 ];
@@ -102,56 +97,34 @@ export default class CouponBasicInfo extends Component<any, any> {
   };
 
   render() {
-    const {
-      couponCates,
-      coupon,
-      skuBrands,
-      skuCates,
-      skus
-    } = this.props.relaxProps;
-    const {
-      couponName,
-      rangeDayType,
-      startTime,
-      endTime,
-      effectiveDays,
-      denomination,
-      fullBuyType,
-      fullBuyPrice,
-      scopeType,
-      couponDesc
-    } = coupon.toJS();
+    const { couponCates, coupon, skuBrands, skuCates, skus } = this.props.relaxProps;
+    const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType, fullBuyPrice, scopeType, couponDesc } = coupon.toJS();
     return (
       <FormDiv>
         <Form>
-          <FormItem {...formItemLayout} label="优惠券名称">
+          <FormItem {...formItemLayout} label="Coupon name">
             {couponName}
           </FormItem>
-          <FormItem {...formItemLayout} label="优惠券分类">
+          <FormItem {...formItemLayout} label="Coupon classify">
             <div className="bubbleBox">
               {couponCates.map((cate) => (
                 <span key={cate}>{cate}</span>
               ))}
             </div>
           </FormItem>
-          <FormItem {...formItemLayout} label="起止时间">
-            {this._buildRangeDayType(
-              rangeDayType,
-              startTime,
-              endTime,
-              effectiveDays
-            )}
+          <FormItem {...formItemLayout} label="Start and end time">
+            {this._buildRangeDayType(rangeDayType, startTime, endTime, effectiveDays)}
           </FormItem>
-          <FormItem {...formItemLayout} label="优惠券面值">
+          <FormItem {...formItemLayout} label="Coupon value">
             {denomination}元
           </FormItem>
-          <FormItem {...formItemLayout} label="使用门槛">
+          <FormItem {...formItemLayout} label="Threshold">
             {this._buildFullBuyType(fullBuyType, fullBuyPrice)}
           </FormItem>
-          <FormItem {...formItemLayout} label="商品">
+          <FormItem {...formItemLayout} label="Products">
             {this._buildSkus(scopeType, skuBrands, skuCates, skus)}
           </FormItem>
-          <FormItem {...formItemLayout} label="使用说明">
+          <FormItem {...formItemLayout} label="Instructions for use">
             <div
               style={{ wordBreak: 'break-all' }}
               dangerouslySetInnerHTML={{
@@ -169,11 +142,7 @@ export default class CouponBasicInfo extends Component<any, any> {
    */
   _buildRangeDayType = (rangeDayType, beginTime, endTime, effectiveDays) => {
     if (rangeDayType === 0) {
-      return (
-        moment(beginTime).format(Const.TIME_FORMAT).toString() +
-        ' ~ ' +
-        moment(endTime).format(Const.TIME_FORMAT).toString()
-      );
+      return moment(beginTime).format(Const.TIME_FORMAT).toString() + ' ~ ' + moment(endTime).format(Const.TIME_FORMAT).toString();
     } else if (rangeDayType === 1) {
       return `领取当天开始${effectiveDays}天内有效`;
     }
@@ -200,24 +169,14 @@ export default class CouponBasicInfo extends Component<any, any> {
       return (
         <div>
           <h3>按品牌</h3>
-          <div className="bubbleBox">
-            {skuBrands.size == 0
-              ? '-'
-              : skuBrands.map((brand, index) => (
-                  <span key={index}>{brand}</span>
-                ))}
-          </div>
+          <div className="bubbleBox">{skuBrands.size == 0 ? '-' : skuBrands.map((brand, index) => <span key={index}>{brand}</span>)}</div>
         </div>
       );
     } else if (scopeType === 3) {
       return (
         <div>
           <h3>按店铺分类</h3>
-          <div className="bubbleBox">
-            {skuCates.size == 0
-              ? '-'
-              : skuCates.map((cate, index) => <span key={index}>{cate}</span>)}
-          </div>
+          <div className="bubbleBox">{skuCates.size == 0 ? '-' : skuCates.map((cate, index) => <span key={index}>{cate}</span>)}</div>
         </div>
       );
     } else if (scopeType === 4) {
@@ -232,14 +191,7 @@ export default class CouponBasicInfo extends Component<any, any> {
       return (
         <div>
           <h3>自定义选择</h3>
-          <Table
-            pagination={false}
-            rowKey={(record: any) => record.skuId}
-            columns={columns}
-            dataSource={skuList}
-            bordered
-            scroll={{ y: 216 }}
-          />
+          <Table pagination={false} rowKey={(record: any) => record.skuId} columns={columns} dataSource={skuList} bordered scroll={{ y: 216 }} />
         </div>
       );
     }

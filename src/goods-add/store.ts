@@ -105,7 +105,17 @@ export default class AppStore extends Store {
       enterpriseCheck: { goodsId },
       storeCateByCondition: {}
     };
-
+    //初始化素材
+    this.initImg({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0
+    });
+    this.initVideo({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0
+    });
     const { res: editProductResource } = await getEditProductResource(resource);
     let editResource = (editProductResource as any).context;
 
@@ -1152,7 +1162,6 @@ export default class AppStore extends Store {
       });
       /*console.log(b,22232222);
       console.log(item,3333333333);*/
-      console.log(goods.get('subscriptionStatus'), 11111222222);
       this.state().get('addSkUProduct');
       goodsList = goodsList.push(
         Map({
@@ -1291,12 +1300,12 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
-      result = await edit(param.toJS());
+      result = await edit(param && param.toJS());
     } else {
-      result = await save(param.toJS());
+      result = await save(param && param.toJS());
     }
 
-    console.log(param.toJS(), 'param.toJS(),----------------');
+    //console.log(param.toJS(), 'param.toJS(),----------------');
 
     this.dispatch('goodsActor: saveLoading', false);
     if (result.res.code === Const.SUCCESS_CODE) {

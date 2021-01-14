@@ -67,7 +67,14 @@ export default class ReportList extends Component<any, any> {
           <Column title="Product" key="skuName" dataIndex="skuName" width="200px" />
           <Column title="SKU" key="SKU" dataIndex="skuCode" />
           <Column title="Sales volume" key="salesVolume" dataIndex="salesVolume" />
-          <Column title="Revenue" dataIndex="revenue" key="revenue" />
+          <Column
+            title="Revenue"
+            dataIndex="revenue"
+            key="revenue"
+            render={(text) => {
+              return text ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + text : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + 0;
+            }}
+          />
 
           <Column
             title="Rating"

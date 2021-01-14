@@ -32,7 +32,13 @@ export default class AppStore extends Store {
     this.dispatch('loading:start');
     const { res, err } = (await webapi.goodsList(param.pageNum, param.pageSize, param.stock)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      this.dispatch('list:init', res.context.goodsInfoPage);
+      let result = res.context.goodsInfoPage;
+      if (result.content) {
+        result.content.forEach((item) => {
+          item.goodsInfoImg = item.goodsInfoImg ? item.goodsInfoImg : item.goods.goodsImg ? item.goods.goodsImg : null;
+        });
+      }
+      this.dispatch('list:init', result);
       this.dispatch('current', pageNum + 1);
       this.dispatch('loading:end');
     } else {

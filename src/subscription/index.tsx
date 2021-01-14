@@ -49,7 +49,7 @@ export default class SubscriptionList extends Component<any, any> {
   }
 
   componentDidMount() {
-    this.querySysDictionary('Frequency_week');
+    this.querySysDictionary('Frequency_day');
     if (sessionStorage.getItem('s2b-supplier@employee')) {
       let employee = JSON.parse(sessionStorage.getItem('s2b-supplier@employee'));
       if (employee.roleName && employee.roleName.indexOf('Prescriber') !== -1) {
@@ -139,14 +139,26 @@ export default class SubscriptionList extends Component<any, any> {
     );
   };
   //查询frequency
+
   querySysDictionary = (type: String) => {
     webapi
-      .querySysDictionary({ type: type })
+      .querySysDictionary({
+        type: type
+      })
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          if (type === 'Frequency_week') {
+          if (type === 'Frequency_day') {
             let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyList: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_week')
+            );
+          }
+          if (type === 'Frequency_week') {
+            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState(
               {
                 frequencyList: frequencyList
@@ -250,7 +262,7 @@ export default class SubscriptionList extends Component<any, any> {
                     <Input
                       addonBefore={
                         <Select
-                          style={{ width: 180 }}
+                          style={{ width: 170 }}
                           defaultValue={searchForm.subscriptionOption}
                           onChange={(value) => {
                             value = value === '' ? null : value;
@@ -314,7 +326,7 @@ export default class SubscriptionList extends Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={{ width: 120 }}>Frequency</p>}
+                      label={<p style={{ width: 110 }}>Frequency</p>}
                       style={{ width: 180 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -342,7 +354,7 @@ export default class SubscriptionList extends Component<any, any> {
                     <Input
                       addonBefore={
                         <Select
-                          style={{ width: 180 }}
+                          style={{ width: 170 }}
                           defaultValue={searchForm.consumerOption}
                           onChange={(value) => {
                             value = value === '' ? null : value;
@@ -525,7 +537,7 @@ export default class SubscriptionList extends Component<any, any> {
 }
 const styles = {
   label: {
-    width: 160,
+    width: 150,
     textAlign: 'center'
   },
   wrapper: {

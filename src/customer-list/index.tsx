@@ -1,19 +1,5 @@
 import React from 'react';
-import {
-  Breadcrumb,
-  Table,
-  Form,
-  Button,
-  Input,
-  Divider,
-  Select,
-  Spin,
-  message,
-  Modal,
-  Row,
-  Col,
-  Tooltip
-} from 'antd';
+import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip } from 'antd';
 import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -32,32 +18,26 @@ export default class Customer extends React.Component<any, any> {
           title: 'Consumer account',
           dataIndex: 'customerAccount',
           key: 'consumerAccount',
-          width: '15%',
-          ellipsis: true
+          width: '15%'
         },
         {
           title: 'Consumer name',
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
-          ellipsis: true,
-          render: (text, record) => (
-            <p>{record.firstName + ' ' + record.lastName}</p>
-          )
+          render: (text, record) => <p>{record.firstName + ' ' + record.lastName}</p>
         },
         {
           title: 'Consumer type',
           dataIndex: 'customerLevelName',
           key: 'consumerType',
-          width: '10%',
-          ellipsis: true
+          width: '15%'
         },
         {
           title: 'Email',
           dataIndex: 'email',
           key: 'email',
-          width: '15%',
-          ellipsis: true
+          width: '15%'
         },
 
         {
@@ -71,12 +51,7 @@ export default class Customer extends React.Component<any, any> {
           dataIndex: 'defaultClinics',
           key: 'defaultClinics',
           width: '15%',
-          ellipsis: true,
-          render: (text, record) => (
-            <p>
-              {record.defaultClinics ? record.defaultClinics.clinicsName : ''}
-            </p>
-          )
+          render: (text, record) => <p>{record.defaultClinics ? record.defaultClinics.clinicsName : ''}</p>
         },
         // {
         //   title: 'Selected Prescriber ID',
@@ -87,23 +62,11 @@ export default class Customer extends React.Component<any, any> {
         {
           title: 'Operation',
           key: 'operation',
-          width: '8%',
+          width: '10%',
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title="Details">
-                <Link
-                  to={
-                    '/customer-details/' +
-                    (record.customerLevelName
-                      ? record.customerLevelName
-                      : 'Guest') +
-                    '/' +
-                    record.customerId +
-                    '/' +
-                    record.customerAccount
-                  }
-                  className="iconfont iconDetails"
-                ></Link>
+                <Link to={'/customer-details/' + (record.customerLevelName ? record.customerLevelName : 'Guest') + '/' + record.customerId + '/' + record.customerAccount} className="iconfont iconDetails"></Link>
               </Tooltip>
               {/* <Divider type="vertical" />
               <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}
@@ -437,7 +400,7 @@ export default class Customer extends React.Component<any, any> {
               rowKey="customerDetailId"
               dataSource={this.state.searchList}
               pagination={this.state.pagination}
-              loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+              loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
               scroll={{ x: '100%' }}
               onChange={this.handleTableChange}
             />

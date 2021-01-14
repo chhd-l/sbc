@@ -61,7 +61,7 @@ export default class ShopInfo extends React.Component<any, any> {
               <Tabs.TabPane tab={<FormattedMessage id="signedInformation" />} key="2" />
               <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
               <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
-              <Tabs.TabPane tab="Taxes" key="5" />
+              {/* <Tabs.TabPane tab="Taxes" key="5" /> */}
               {/* <Tabs.TabPane
                 tab={<FormattedMessage id="footerConfig" />}
                 key="5"

@@ -114,7 +114,7 @@ export default class RevenueList extends React.Component<any, any> {
               dataIndex="totalAmount"
               key="totalAmount"
               render={(_text, rowData: any) => {
-                return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text}</span>;
+                return <span>{_text ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + _text : '--'}</span>;
               }}
             />
             {/* <Column
@@ -176,7 +176,7 @@ export default class RevenueList extends React.Component<any, any> {
               dataIndex="syncTotalAmount"
               key="syncTotalAmount"
               render={(_text, rowData: any) => {
-                return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text != '' ? _text : '--'}</span>;
+                return <span>{_text ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + _text : '--'}</span>;
               }}
             />
             {/*<Column

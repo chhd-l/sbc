@@ -31,7 +31,7 @@ export default class CouponInfoActor extends Actor {
       // 购满多少钱
       fullBuyPrice: null,
       // 营销类型(0,1,2,3) 0全部商品，1品牌，2平台类目/店铺分类，3自定义货品（店铺可用）
-      scopeType: 0,
+      scopeType: 4,
       // 分类
       cates: [],
       // 品牌
@@ -82,23 +82,7 @@ export default class CouponInfoActor extends Actor {
    */
   @Action('coupon: info: data')
   fetchCouponInfo(state, params) {
-    const {
-      cateIds,
-      couponDesc,
-      couponId,
-      couponName,
-      couponType,
-      denomination,
-      effectiveDays,
-      endTime,
-      fullBuyPrice,
-      fullBuyType,
-      rangeDayType,
-      scopeIds,
-      scopeType,
-      startTime,
-      goodsList
-    } = params;
+    const { cateIds, couponDesc, couponId, couponName, couponType, denomination, effectiveDays, endTime, fullBuyPrice, fullBuyType, rangeDayType, scopeIds, scopeType, startTime, goodsList } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
       .set('couponName', couponName)
@@ -111,10 +95,7 @@ export default class CouponInfoActor extends Actor {
       .set('fullBuyType', fullBuyType)
       .set('rangeDayType', rangeDayType)
       .set('scopeType', scopeType)
-      .set(
-        'startTime',
-        startTime ? moment(startTime).format(Const.DAY_FORMAT) : ''
-      )
+      .set('startTime', startTime ? moment(startTime).format(Const.DAY_FORMAT) : '')
       .set('couponDesc', couponDesc);
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));
@@ -136,9 +117,7 @@ export default class CouponInfoActor extends Actor {
       chooseSkuIds.findIndex((item) => item == skuId),
       1
     );
-    goodsRows = goodsRows.delete(
-      goodsRows.findIndex((row) => row.get('goodsInfoId') == skuId)
-    );
+    goodsRows = goodsRows.delete(goodsRows.findIndex((row) => row.get('goodsInfoId') == skuId));
     return state.set('goodsRows', goodsRows).set('chooseSkuIds', chooseSkuIds);
   }
 
@@ -194,14 +173,10 @@ export default class CouponInfoActor extends Actor {
         });
       });
     cateList = cateList.map((cate) => {
-      const newCate = newCates.filter(
-        (i) => i.get('cateParentId') == cate.get('cateId')
-      );
+      const newCate = newCates.filter((i) => i.get('cateParentId') == cate.get('cateId'));
       if (newCate) {
         const concatCates = newCate.map((c) => c.get('storeCateId'));
-        cate = cate.update((i) =>
-          i.set('cateIds', i.get('cateIds').concat(concatCates))
-        );
+        cate = cate.update((i) => i.set('cateIds', i.get('cateIds').concat(concatCates)));
       }
       return cate;
     });

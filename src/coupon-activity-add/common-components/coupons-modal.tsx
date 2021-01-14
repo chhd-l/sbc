@@ -88,7 +88,7 @@ export default class CouponsModal extends React.Component<any, any> {
             <Input addonBefore="Coupon name" onChange={(e) => this._onSearchParamChange({ likeCouponName: e.target.value })} />
           </FormItem>
 
-          <FormItem>
+          {/* <FormItem>
             <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Use range" dropdownStyle={{ zIndex: 1053 }} defaultValue="Unlimited" onChange={(val) => this._onSearchParamChange({ scopeType: val })}>
               <Option value="">unlimited</Option>
               <Option value="0">{Const.couponScopeType[0]}</Option>
@@ -96,7 +96,7 @@ export default class CouponsModal extends React.Component<any, any> {
               <Option value="3">{Const.couponScopeType[3]}</Option>
               <Option value="4">{Const.couponScopeType[4]}</Option>
             </SelectGroup>
-          </FormItem>
+          </FormItem> */}
 
           <FormItem>
             <RangePicker
@@ -171,9 +171,9 @@ export default class CouponsModal extends React.Component<any, any> {
       >
         <Column title="Coupon name" dataIndex="couponName" key="couponName" width="15%" />
 
-        <Column title={`Face  value( ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} )`} dataIndex="denominationStr" key="denominationStr" width="10%" />
+        <Column title={`Face  value( ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} )`} dataIndex="denominationStr" key="denominationStr" width="15%" />
 
-        <Column title="Valid period" dataIndex="validity" key="validity" width="15%" />
+        <Column title="Valid period" dataIndex="validity" key="validity" width="25%" />
 
         {/*<Column*/}
         {/*  title="优惠券分类"*/}
@@ -185,7 +185,7 @@ export default class CouponsModal extends React.Component<any, any> {
         {/*  }*/}
         {/*/>*/}
 
-        <Column title="Use range" key="scopeNamesStr" dataIndex="scopeNamesStr" width="15%" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} />
+        {/* <Column title="Use range" key="scopeNamesStr" dataIndex="scopeNamesStr" width="15%" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} /> */}
 
         <Column title="Status" key="couponStatusStr" dataIndex="couponStatusStr" width="15%" />
 

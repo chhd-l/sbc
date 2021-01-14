@@ -21,26 +21,24 @@ const ErrorDiv = styled.div`
   }
 `;
 
-const RightContent = styled.div`
-  width: calc(100% - 320px);
-`;
+const RightContent = styled.div``;
 
 const FormItem = Form.Item;
 
 const formItemLayout = {
   labelCol: {
-    xl: { span: 5 }
+    span: 4
   },
   wrapperCol: {
-    xl: { span: 18 }
+    span: 20
   }
 };
 const formItemSmall = {
   labelCol: {
-    xl: { span: 5 }
+    span: 4
   },
   wrapperCol: {
-    xl: { span: 8 }
+    span: 20
   }
 };
 
@@ -197,6 +195,7 @@ export default class CouponInfoForm extends Component<any, any> {
                     value: e.currentTarget.value
                   });
                 }}
+                style={{ width: 360 }}
               />
             )}
           </FormItem>
@@ -405,24 +404,25 @@ export default class CouponInfoForm extends Component<any, any> {
               </RadioGroup>
             </FormItem>
           </ErrorDiv>
-          <FormItem {...formItemLayout} label="Select product" required={true}>
+          {/* <FormItem {...formItemLayout} label="Select product" required={true}>
             <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
                 <span style={styles.darkColor}>Base on brand</span>
-              </Radio>
-              {/*<Radio value={1}>
+              </Radio> */}
+          {/*<Radio value={1}>
                 <span style={styles.darkColor}>按品牌</span>
               </Radio>*/}
-              {/*<Radio value={3}>*/}
-              {/*  <span style={styles.darkColor}>Base on category</span>*/}
-              {/*</Radio>*/}
-              <Radio value={4}>
+          {/*<Radio value={3}>*/}
+          {/*  <span style={styles.darkColor}>Base on category</span>*/}
+          {/*</Radio>*/}
+          {/* <Radio value={4}>
                 <span style={styles.darkColor}>Custom</span>
               </Radio>
             </RadioGroup>
-          </FormItem>
+          </FormItem> */}
           <FormItem {...this._scopeBoxStyle(scopeType)} label="Selected products" id={'page-content'}>
-            {this.chooseGoods().dom}
+            {/* {this.chooseGoods().dom} */}
+            <SelectedGoodsGrid />
           </FormItem>
           <FormItem {...formItemLayout} label="Instructions for use">
             {getFieldDecorator('couponDesc', {

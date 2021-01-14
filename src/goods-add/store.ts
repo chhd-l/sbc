@@ -34,14 +34,12 @@ import {
   getImgCates,
   getResourceCates,
   getStoreCateList,
-  getStoreGoodsTab,
   getUserLevelList,
   save,
   toGeneralgoods,
   fetchBossCustomerList,
   fetchCustomerList,
   enterpriseToGeneralgoods,
-  getStoreCode,
   getRelatedList,
   fetchPropSort,
   fetchConsentDelete,
@@ -105,17 +103,7 @@ export default class AppStore extends Store {
       enterpriseCheck: { goodsId },
       storeCateByCondition: {}
     };
-    //初始化素材
-    this.initImg({
-      pageNum: 0,
-      cateId: -1,
-      successCount: 0
-    });
-    this.initVideo({
-      pageNum: 0,
-      cateId: -1,
-      successCount: 0
-    });
+
     const { res: editProductResource } = await getEditProductResource(resource);
     let editResource = (editProductResource as any).context;
 
@@ -125,6 +113,20 @@ export default class AppStore extends Store {
     } else {
       this.dispatch('formActor:enterpriseFlag', false);
     }
+    console.log((preEditProductResource as any).context.resourceCates, 2222222222);
+    //初始化素材
+    this.initImg({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0,
+      resourceCates: (preEditProductResource as any).context.resourceCates
+    });
+    this.initVideo({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0,
+      resourceCates: (preEditProductResource as any).context.resourceCates
+    });
 
     let userList: any;
     if (util.isThirdStore()) {
@@ -187,16 +189,16 @@ export default class AppStore extends Store {
    * 初始化
    */
   initVideo = async (
-    { pageNum, cateId, successCount } = {
+    { pageNum, cateId, successCount, resourceCates } = {
       pageNum: 0,
       cateId: null,
       successCount: 0
     }
   ) => {
-    const cateList: any = await getResourceCates();
+    const cateList: any = resourceCates;
     const cateListIm = this.state().get('resCateAllList');
-    if (cateId == -1 && cateList.res.length > 0) {
-      cateId = fromJS(cateList.res)
+    if (cateId == -1 && cateList.length > 0) {
+      cateId = fromJS(cateList)
         .find((item) => item.get('isDefault') == 1)
         .get('cateId');
     }
@@ -216,7 +218,7 @@ export default class AppStore extends Store {
         if (cateId) {
           this.selectVideoCate(cateId);
         }
-        this.dispatch('cateActor: init', fromJS(cateList.res));
+        this.dispatch('cateActor: init', fromJS(cateList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
           this.dispatch('modal: chooseVideos', fromJS(videoList.res.context).get('content').slice(0, successCount));
@@ -233,16 +235,18 @@ export default class AppStore extends Store {
    * 初始化
    */
   initImg = async (
-    { pageNum, cateId, successCount } = {
+    { pageNum, cateId, successCount, resourceCates } = {
       pageNum: 0,
       cateId: null,
       successCount: 0
     }
   ) => {
-    const cateList: any = await getImgCates();
+    let cateList: any = resourceCates;
+    console.log(cateList, 111111111);
+    console.log(resourceCates);
     const cateListIm = this.state().get('resCateAllList');
-    if (cateId == -1 && cateList.res.length > 0) {
-      const cateIdList = fromJS(cateList.res).filter((item) => item.get('isDefault') == 1);
+    if (cateId == -1 && cateList.length > 0) {
+      const cateIdList = fromJS(cateList).filter((item) => item.get('isDefault') == 1);
       if (cateIdList.size > 0) {
         cateId = cateIdList.get(0).get('cateId');
       }
@@ -261,7 +265,7 @@ export default class AppStore extends Store {
           this.dispatch('modal: cateIds', List.of(cateId.toString()));
           this.dispatch('modal: cateId', cateId.toString());
         }
-        this.dispatch('modal: imgCates', fromJS(cateList.res));
+        this.dispatch('modal: imgCates', fromJS(cateList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
           this.dispatch('modal: chooseImgs', fromJS(imageList.res.context).get('content').slice(0, successCount));

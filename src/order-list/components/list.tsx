@@ -185,8 +185,8 @@ export default class ListView extends React.Component<any, any> {
                       </th>
                       <th style={{ width: '14%' }}>
                         <FormattedMessage id="consumerName" />
-                        <br />
-                        <FormattedMessage id="consumerAccount" />
+                        {/* <br />
+                        <FormattedMessage id="consumerAccount" /> */}
                       </th>
                       <th style={{ width: '17%' }}>
                         <FormattedMessage id="recipient" />
@@ -490,10 +490,10 @@ export default class ListView extends React.Component<any, any> {
                       <p title={v.getIn(['buyer', 'name'])} className="line-ellipse">
                         {v.getIn(['buyer', 'name'])}
                       </p>
-                      <br />
+                      {/* <br />
                       <p title={v.getIn(['buyer', 'name'])} className="line-ellipse">
                         {v.getIn(['buyer', 'account'])}
-                      </p>
+                      </p> */}
                     </td>
                     <td style={{ width: '17%' }}>
                       {/*收件人姓名*/}

@@ -6,6 +6,7 @@ import { fromJS, List } from 'immutable';
 import { cache, noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
+import { any } from 'prop-types';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -188,9 +189,10 @@ class SkuForm extends React.Component<any, any> {
         let b = null;
         let c = 0;
         a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || null;
-        a == null? a = {minStock:''}: a
+        // a == null? a = {minStock:''}: a
+        a = a ? a : { minStock: '' };
         c = a.minStock - rowInfo.maxStock >= 0 ? rowInfo.stock : a.minStock;
-        if (a) {
+        if (a && a.minStock) {
           b = a.minStock - rowInfo.maxStock >= 0 ? a.minStock : rowInfo.maxStock;
         } else {
           b = 999999;

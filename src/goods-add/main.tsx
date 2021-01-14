@@ -124,113 +124,115 @@ export default class Main extends React.Component<any, any> {
     const path = this.props.match.path || '';
     const parentPath = path.indexOf('/goods-check-edit/') > -1 ? '待审核商品' : '商品列表';
     return (
-      <div>
-        <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{gid ? 'Edit product (Bundle product)' : 'New product (Bundle product)'}</Breadcrumb.Item>
-        </BreadCrumb>
-        <div className="container-search">
-          <Headline title={gid ? 'Edit product (Bundle product)' : 'New product (Bundle product)'} state={this._getState(gid)} />
-        </div>
-        <div className="container ">
-          <Tabs
-            activeKey={this.store.get('activeTabKey')}
-            // onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
-            defaultActiveKey="main"
-            ref={(e) => {
-              this._Tabs = e;
-            }}
-            onChange={(activeKey) => this.onMainTabChange(activeKey)}
-          >
-            {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane tab="Product information" key="main">
+      <Spin spinning={this.store.get('saveLoading')}>
+        <div>
+          <BreadCrumb thirdLevel={true}>
+            <Breadcrumb.Item>{gid ? 'Edit product (Bundle product)' : 'New product (Bundle product)'}</Breadcrumb.Item>
+          </BreadCrumb>
+          <div className="container-search">
+            <Headline title={gid ? 'Edit product (Bundle product)' : 'New product (Bundle product)'} state={this._getState(gid)} />
+          </div>
+          <div className="container ">
+            <Tabs
+              activeKey={this.store.get('activeTabKey')}
+              // onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
+              defaultActiveKey="main"
+              ref={(e) => {
+                this._Tabs = e;
+              }}
+              onChange={(activeKey) => this.onMainTabChange(activeKey)}
+            >
+              {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
+                <Tabs.TabPane tab="Product information" key="main">
+                  <AlertInfo />
+                  {/*商品基本信息*/}
+                  <Goods />
+                  {/*商品属性信息*/}
+                  <GoodsPropDetail />
+
+                  {/*商品规格信息*/}
+                  <Spec />
+
+                  {/*商品表格*/}
+                  <SkuTable />
+
+                  {/*物流表单*/}
+                  {/* <Logistics /> */}
+
+                  {/*详情*/}
+                  <Detail />
+                </Tabs.TabPane>
+              )}
+              <Tabs.TabPane tab="Product price" key="price">
                 <AlertInfo />
-                {/*商品基本信息*/}
-                <Goods />
-                {/*商品属性信息*/}
-                <GoodsPropDetail />
 
-                {/*商品规格信息*/}
-                <Spec />
-
-                {/*商品表格*/}
-                <SkuTable />
-
-                {/*物流表单*/}
-                {/* <Logistics /> */}
-
-                {/*详情*/}
-                <Detail />
+                <ProductPrice />
               </Tabs.TabPane>
-            )}
-            <Tabs.TabPane tab="Product price" key="price">
-              <AlertInfo />
+              <Tabs.TabPane tab="Product inventory" key="inventory">
+                <AlertInfo />
 
-              <ProductPrice />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Product inventory" key="inventory">
-              <AlertInfo />
+                <ProductInventory />
+              </Tabs.TabPane>
 
-              <ProductInventory />
-            </Tabs.TabPane>
+              <Tabs.TabPane
+                tab="Related product"
+                key="related"
 
-            <Tabs.TabPane
-              tab="Related product"
-              key="related"
+                //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
+              >
+                <AlertInfo />
 
-              //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
-            >
-              <AlertInfo />
+                <Related />
+              </Tabs.TabPane>
+              <Tabs.TabPane
+                tab="SEO Setting"
+                key="seo"
 
-              <Related />
-            </Tabs.TabPane>
-            <Tabs.TabPane
-              tab="SEO Setting"
-              key="seo"
+                // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
+              >
+                <AlertInfo
+                  message={
+                    <div>
+                      <p>You can delete these fields, including &#123; name &#125;-Royal Canin, &#123; name &#125;, &#123; subtitle &#125;, &#123; sales category &#125;, &#123; tagging &#125;, &#123; description &#125;, but can not edit the field</p>
+                      <p>1、&#123; name &#125; means the name of the product which enters in the product information tab page</p>
+                      <p>2、&#123;subtitle &#125; means the subtitle of the product which enters in the product information tab page</p>
+                      <p>3、&#123; sales category &#125; means the sales category of the product which was chosen in the product information tab page</p>
+                      <p>4、&#123; tagging &#125; means the sales category of the product which was chosen in the product information</p>
+                      <p>5、&#123;description &#125; means the description of the product which enters in the product information tab page</p>
+                    </div>
+                  }
+                />
+                <SeoFormModel />
+              </Tabs.TabPane>
+            </Tabs>
 
-              // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
-            >
-              <AlertInfo
-                message={
-                  <div>
-                    <p>You can delete these fields, including &#123; name &#125;-Royal Canin, &#123; name &#125;, &#123; subtitle &#125;, &#123; sales category &#125;, &#123; tagging &#125;, &#123; description &#125;, but can not edit the field</p>
-                    <p>1、&#123; name &#125; means the name of the product which enters in the product information tab page</p>
-                    <p>2、&#123;subtitle &#125; means the subtitle of the product which enters in the product information tab page</p>
-                    <p>3、&#123; sales category &#125; means the sales category of the product which was chosen in the product information tab page</p>
-                    <p>4、&#123; tagging &#125; means the sales category of the product which was chosen in the product information</p>
-                    <p>5、&#123;description &#125; means the description of the product which enters in the product information tab page</p>
-                  </div>
-                }
-              />
-              <SeoFormModel />
-            </Tabs.TabPane>
-          </Tabs>
+            {/*页脚*/}
+            <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} isLeave={true} tabType={this.store.get('activeTabKey')} onNext={this.onNext} onPrev={this.onPrev} />
+            {/*{this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}*/}
 
-          {/*页脚*/}
-          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} isLeave={true} tabType={this.store.get('activeTabKey')} onNext={this.onNext} onPrev={this.onPrev} />
-          {/*{this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}*/}
+            {/*品牌*/}
+            <BrandModal />
 
-          {/*品牌*/}
-          <BrandModal />
+            {/*分类*/}
+            <CateModal />
 
-          {/*分类*/}
-          <CateModal />
+            {/*图片库*/}
+            <PicModal />
 
-          {/*图片库*/}
-          <PicModal />
+            <ImgModal />
 
-          <ImgModal />
+            {/*视频库*/}
+            <VideoModal />
 
-          {/*视频库*/}
-          <VideoModal />
-
-          {this.store.get('loading') ? (
-            <div className="spin">
-              {/*<Spin spinning={this.store.get('loading')} size="large" />*/}
-              <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px' }} alt="" />
-            </div>
-          ) : null}
+            {this.store.get('loading') ? (
+              <div className="spin">
+                {/*<Spin spinning={this.store.get('loading')} size="large" />*/}
+                <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px' }} alt="" />
+              </div>
+            ) : null}
+          </div>
         </div>
-      </div>
+      </Spin>
     );
   }
 

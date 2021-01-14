@@ -43,7 +43,7 @@ export default class SearchHead extends React.Component<any, any> {
           />
         </FormItem>
 
-        <FormItem>
+        {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label="Use range"
@@ -56,23 +56,23 @@ export default class SearchHead extends React.Component<any, any> {
               Non-limitation
             </Select.Option>
             <Select.Option key="0" value="0">
-              {/* {Const.couponScopeType[0]} */}
+              {Const.couponScopeType[0]}
               All products
             </Select.Option>
             <Select.Option key="1" value="1">
-              {/* {Const.couponScopeType[1]} */}
+              {Const.couponScopeType[1]}
               Brands
             </Select.Option>
             <Select.Option key="3" value="3">
-              {/* {Const.couponScopeType[3]} */}
+              {Const.couponScopeType[3]}
               Product category
             </Select.Option>
             <Select.Option key="4" value="4">
-              {/* {Const.couponScopeType[4]} */}
+              {Const.couponScopeType[4]}
               Partial products
             </Select.Option>
           </SelectGroup>
-        </FormItem>
+        </FormItem> */}
         <FormItem>
           <DatePicker allowClear={true} disabledDate={this.disabledStartDate} format={Const.DAY_FORMAT} value={startValue} placeholder="Start date" onChange={this.onStartChange} showToday={false} />
         </FormItem>

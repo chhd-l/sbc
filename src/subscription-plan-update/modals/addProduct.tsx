@@ -14,6 +14,7 @@ export default class addTargetProduct extends Component<any, any> {
     this.state = {
       visible: false,
       selectedRowKeys: [],
+      isMultiple: false,
 
       brandList: [],
       serchForm: {},
@@ -38,12 +39,13 @@ export default class addTargetProduct extends Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visible, selectedRowKeys } = nextProps;
+    const { visible, selectedRowKeys, isMultiple } = nextProps;
 
     if (visible !== prevState.visible) {
       return {
         visible: visible,
-        selectedRowKeys: selectedRowKeys
+        selectedRowKeys: selectedRowKeys,
+        isMultiple: isMultiple
       };
     }
 
@@ -178,7 +180,7 @@ export default class addTargetProduct extends Component<any, any> {
   }
 
   onSelectChange(selectedRowKeys) {
-    this.setState({selectedRowKeys });
+    this.setState({ selectedRowKeys });
   }
 
   handleOk() {
@@ -235,6 +237,12 @@ export default class addTargetProduct extends Component<any, any> {
       }
     ];
     const rowSelection = {
+      columnTitle: ' ', // hide all check
+      getCheckboxProps: (record) => ({
+        disabled: this.state.selectedRowKeys && this.state.selectedRowKeys.length >= 1 && 
+            (this.state.isMultiple ? record.goodsInfoId !== this.state.selectedRowKeys[0] : record.goodsInfoId !== this.state.selectedRowKeys[0]),
+        name: record.name
+      }),
       selectedRowKeys,
       onChange: this.onSelectChange
     };

@@ -16,7 +16,7 @@ export default class targetProduct extends Component<any, any> {
   deleteProduct(key) {
     const { subscriptionPlan, addField, allSkuProduct } = this.props;
 
-    let newTargetProductIds = []
+    let newTargetProductIds = [];
     subscriptionPlan.targetProductIds.map((item) => {
       if (item !== key) {
         newTargetProductIds.push(item);
@@ -106,11 +106,13 @@ export default class targetProduct extends Component<any, any> {
                           ))}
                       </tbody>
                     </table>
-                    <div className="noProduct">
-                      <div className="addProduct" onClick={this.showAddTargetProduct}>
-                        <span> + Add product</span>
+                    {subscriptionPlan.targetProducts && subscriptionPlan.targetProducts.length > 0 ? null : (
+                      <div className="noProduct">
+                        <div className="addProduct" onClick={this.showAddTargetProduct}>
+                          <span> + Add product</span>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>

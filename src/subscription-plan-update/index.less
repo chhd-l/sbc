@@ -61,6 +61,43 @@
     width: 100%;
   }
 
+  .addProduct {
+    border: 1px solid #e1021a;
+    border-radius: 17px;
+    border-radius: 17px;
+    text-align: center;
+    width: 100px;
+    margin: auto;
+    cursor: pointer;
+    padding: 2px 0;
+    span {
+      font-size: 12px;
+      color: #e20119;
+    }
+  }
+
+  .ant-table {
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    border-radius: 2px;
+    tr {
+      border-top: 1px solid #d9d9d9;
+    }
+    .ant-table-tbody {
+      .overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 190px;
+      }
+      img {
+        width: 30px;
+        height: 30px;
+        background: rgb(255, 255, 255);
+      }
+    }
+  }
+
   // basicInformation
   .basicInformation {
     margin-top: 15px;
@@ -73,43 +110,8 @@
   // targetProduct
   .targetProduct {
     margin-top: 15px;
-    .ant-table {
-      border: 1px solid #d9d9d9;
-      border-radius: 2px;
-      border-radius: 2px;
-      tr {
-        border-top: 1px solid #d9d9d9;
-      }
-      .ant-table-tbody {
-        .overflow {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          width: 190px;
-        }
-        img {
-          width: 30px;
-          height: 30px;
-          background: rgb(255, 255, 255);
-        }
-      }
-      .noProduct {
-        padding: 16px 0;
-        .addProduct {
-          border: 1px solid #e1021a;
-          border-radius: 17px;
-          border-radius: 17px;
-          text-align: center;
-          width: 100px;
-          margin: auto;
-          cursor: pointer;
-          padding: 2px 0;
-          span {
-            font-size: 12px;
-            color: #e20119;
-          }
-        }
-      }
+    .noProduct {
+      padding: 16px 0;
     }
   }
   .entryCriteria {
@@ -151,6 +153,10 @@
         }
       }
     }
+  }
+
+  .details {
+    margin-top: 15px;
   }
 }
 

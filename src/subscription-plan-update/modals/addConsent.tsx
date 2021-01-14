@@ -142,6 +142,8 @@ export default class addConsent extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     label={<p className="formLable">Category</p>}
+                    allowClear={true}
+                    style={{ width: 280 }}
                     onChange={(value) => {
                       this.onFormFieldChange('consentCategory', value);
                     }}
@@ -154,7 +156,7 @@ export default class addConsent extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <SelectGroup
-                    defaultValue="Optional"
+                    allowClear={true}
                     label={<p className="formLable">Field type</p>}
                     style={{ width: 280 }}
                     onChange={(value) => {
@@ -170,6 +172,7 @@ export default class addConsent extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <SelectGroup
+                    allowClear={true}
                     label={<p className="formLable">Consent type</p>}
                     style={{ width: 280 }}
                     onChange={(value, index) => {

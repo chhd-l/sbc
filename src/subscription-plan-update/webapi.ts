@@ -40,3 +40,13 @@ export function getAllSkuProducts() {
     })
   });
 }
+
+
+export function getWeekFrequency() {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'Frequency_week'
+    })
+  });
+}

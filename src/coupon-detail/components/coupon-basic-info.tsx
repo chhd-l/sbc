@@ -51,19 +51,19 @@ const columns = [
     width: '20%'
   },
   {
-    title: '商品名称',
+    title: 'Product name',
     dataIndex: 'goodsInfoName',
     key: 'goodsInfoName',
     width: '40%'
   },
   {
-    title: '规格',
+    title: 'Specifications',
     dataIndex: 'specText',
     key: 'specText',
     width: '20%'
   },
   {
-    title: '单价',
+    title: 'Price',
     key: 'marketPrice',
     dataIndex: 'marketPrice',
     render: (text) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + QMFloat.addZero(text)}</span>,
@@ -105,18 +105,18 @@ export default class CouponBasicInfo extends Component<any, any> {
           <FormItem {...formItemLayout} label="Coupon name">
             {couponName}
           </FormItem>
-          <FormItem {...formItemLayout} label="Coupon classify">
+          {/* <FormItem {...formItemLayout} label="Coupon classify">
             <div className="bubbleBox">
               {couponCates.map((cate) => (
                 <span key={cate}>{cate}</span>
               ))}
             </div>
-          </FormItem>
+          </FormItem> */}
           <FormItem {...formItemLayout} label="Start and end time">
             {this._buildRangeDayType(rangeDayType, startTime, endTime, effectiveDays)}
           </FormItem>
           <FormItem {...formItemLayout} label="Coupon value">
-            {denomination}元
+            {`${denomination} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}`}
           </FormItem>
           <FormItem {...formItemLayout} label="Threshold">
             {this._buildFullBuyType(fullBuyType, fullBuyPrice)}
@@ -144,7 +144,7 @@ export default class CouponBasicInfo extends Component<any, any> {
     if (rangeDayType === 0) {
       return moment(beginTime).format(Const.TIME_FORMAT).toString() + ' ~ ' + moment(endTime).format(Const.TIME_FORMAT).toString();
     } else if (rangeDayType === 1) {
-      return `领取当天开始${effectiveDays}天内有效`;
+      return `Valid for ${effectiveDays} days from the day of collection`;
     }
   };
 
@@ -153,9 +153,9 @@ export default class CouponBasicInfo extends Component<any, any> {
    */
   _buildFullBuyType = (fullBuyType, fullBuyPrice) => {
     if (fullBuyType === 0) {
-      return '无门槛';
+      return 'No threshold';
     } else if (fullBuyType === 1) {
-      return `满${fullBuyPrice}元可使用`;
+      return `Over ${fullBuyPrice} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} is available`;
     }
   };
 
@@ -190,7 +190,7 @@ export default class CouponBasicInfo extends Component<any, any> {
       });
       return (
         <div>
-          <h3>自定义选择</h3>
+          {/* <h3>自定义选择</h3> */}
           <Table pagination={false} rowKey={(record: any) => record.skuId} columns={columns} dataSource={skuList} bordered scroll={{ y: 216 }} />
         </div>
       );

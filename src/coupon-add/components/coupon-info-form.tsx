@@ -316,40 +316,37 @@ export default class CouponInfoForm extends Component<any, any> {
           <ErrorDiv>
             <FormItem {...formItemSmall} label="Coupon value" required={true}>
               <Row>
-                <Col span={12}>
-                  {getFieldDecorator('denomination', {
-                    initialValue: denomination,
-                    rules: [
-                      { required: true, message: 'Please input the face value of coupon' },
-                      {
-                        validator: (_rule, value, callback) => {
-                          if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                            callback('Integers between 1-99999 are allowed');
-                            return;
-                          }
-                          callback();
+                {getFieldDecorator('denomination', {
+                  initialValue: denomination,
+                  rules: [
+                    { required: true, message: 'Please input the face value of coupon' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
+                          callback('Integers between 1-99999 are allowed');
+                          return;
                         }
+                        callback();
                       }
-                    ]
-                  })(
-                    <Input
-                      placeholder="integer from 1 to 9999"
-                      maxLength={'5' as any}
-                      onChange={async (e) => {
-                        await fieldsValue({
-                          field: 'denomination',
-                          value: e.currentTarget.value
-                        });
-                        this.props.form.validateFields(['fullBuyPrice'], {
-                          force: true
-                        });
-                      }}
-                    />
-                  )}
-                </Col>
-                <Col span={5}>
-                  <span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                </Col>
+                    }
+                  ]
+                })(
+                  <Input
+                    placeholder="integer from 1 to 99999"
+                    maxLength={'5' as any}
+                    onChange={async (e) => {
+                      await fieldsValue({
+                        field: 'denomination',
+                        value: e.currentTarget.value
+                      });
+                      this.props.form.validateFields(['fullBuyPrice'], {
+                        force: true
+                      });
+                    }}
+                    style={{ width: 360 }}
+                  />
+                )}
+                <span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
               </Row>
             </FormItem>
             <FormItem {...formItemLayout} label="Threshold" required={true}>
@@ -368,10 +365,10 @@ export default class CouponInfoForm extends Component<any, any> {
                           validator: (_rule, value, callback) => {
                             if (fullBuyType == 1 && (value || value === 0)) {
                               if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                                callback('只允许输入1-99999间的整数');
+                                callback('Integers between 1-99999 are allowed');
                                 return;
                               } else if (value <= parseInt(`${denomination}`)) {
-                                callback('使用门槛必须大于优惠券面值');
+                                callback('The threshold must be greater than the face value of the coupon');
                                 return;
                               }
                             }

@@ -31,7 +31,7 @@ export default class CouponActivityList extends React.Component<any, any> {
             <Headline title="Coupon list" />
             <SearchHead />
             {/*操作按钮组*/}
-            <ButtonGroup />
+            {/* <ButtonGroup /> */}
             <SearchList />
           </div>
         </div>

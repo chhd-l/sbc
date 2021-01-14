@@ -262,7 +262,7 @@ export default class SubscriptionList extends Component<any, any> {
                     <Input
                       addonBefore={
                         <Select
-                          style={{ width: 180 }}
+                          style={{ width: 170 }}
                           defaultValue={searchForm.subscriptionOption}
                           onChange={(value) => {
                             value = value === '' ? null : value;
@@ -326,7 +326,7 @@ export default class SubscriptionList extends Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={{ width: 120 }}>Frequency</p>}
+                      label={<p style={{ width: 110 }}>Frequency</p>}
                       style={{ width: 180 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -354,7 +354,7 @@ export default class SubscriptionList extends Component<any, any> {
                     <Input
                       addonBefore={
                         <Select
-                          style={{ width: 180 }}
+                          style={{ width: 170 }}
                           defaultValue={searchForm.consumerOption}
                           onChange={(value) => {
                             value = value === '' ? null : value;
@@ -537,7 +537,7 @@ export default class SubscriptionList extends Component<any, any> {
 }
 const styles = {
   label: {
-    width: 160,
+    width: 150,
     textAlign: 'center'
   },
   wrapper: {

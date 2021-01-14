@@ -20,12 +20,12 @@ const StepFourForm = Form.create()(StepFour);
 const StepFiveForm = Form.create()(StepConsent);
 
 const PAIN = {
-  '5': <StepOneForm />,
+  '0': <StepOneForm />,
   '1': <StepTwoForm />,
   '2': <StepThree />,
   '3': <StepFourForm />,
   '4': <StepFiveForm />,
-  '0': <StepTaxes />,
+  '5': <StepTaxes />,
   '6': <StepFooterConfig />
 };
 
@@ -61,7 +61,7 @@ export default class ShopInfo extends React.Component<any, any> {
               <Tabs.TabPane tab={<FormattedMessage id="signedInformation" />} key="2" />
               <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
               <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
-              <Tabs.TabPane tab="Taxes" key="5" />
+              {/* <Tabs.TabPane tab="Taxes" key="5" /> */}
               {/* <Tabs.TabPane
                 tab={<FormattedMessage id="footerConfig" />}
                 key="5"

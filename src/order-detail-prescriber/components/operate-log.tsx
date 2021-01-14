@@ -60,26 +60,17 @@ export default class OperateLog extends React.Component<any, any> {
 
   render() {
     const { log } = this.props.relaxProps;
+    debugger;
     const Panel = Collapse.Panel;
 
     return (
       <div>
         <div style={styles.backItem}>
           <Collapse>
-            <Panel
-              header={<FormattedMessage id="operationLog" />}
-              key="1"
-              style={customPanelStyle}
-            >
+            <Panel header={<FormattedMessage id="operationLog" />} key="1" style={customPanelStyle}>
               <Row>
                 <Col span={24}>
-                  <Table
-                    rowKey={(_record, index) => index.toString()}
-                    columns={columns}
-                    dataSource={log.toJS()}
-                    pagination={false}
-                    bordered
-                  />
+                  <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={log.toJS()} pagination={false} bordered />
                 </Col>
               </Row>
             </Panel>

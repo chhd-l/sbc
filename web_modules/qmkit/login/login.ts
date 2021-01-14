@@ -51,7 +51,6 @@ export async function login(routerType, oktaToken: string) {
       res = resLocal.res as TResult;
   }
 
-
   if ((res as any).code === Const.SUCCESS_CODE) {
     if(res.context.checkState === 1) { // need checked
       sessionStorage.setItem(

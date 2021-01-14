@@ -6,5 +6,6 @@ export default {
 
   //product
   //  HOST: 'https://store.royalcanin.com/api',
+  //  HOST: 'https://shopde.466920.com/api',
   ...Common
 };

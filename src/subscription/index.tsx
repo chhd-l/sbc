@@ -49,7 +49,7 @@ export default class SubscriptionList extends Component<any, any> {
   }
 
   componentDidMount() {
-    this.querySysDictionary('Frequency_week');
+    this.querySysDictionary('Frequency_day');
     if (sessionStorage.getItem('s2b-supplier@employee')) {
       let employee = JSON.parse(sessionStorage.getItem('s2b-supplier@employee'));
       if (employee.roleName && employee.roleName.indexOf('Prescriber') !== -1) {
@@ -139,14 +139,26 @@ export default class SubscriptionList extends Component<any, any> {
     );
   };
   //查询frequency
+
   querySysDictionary = (type: String) => {
     webapi
-      .querySysDictionary({ type: type })
+      .querySysDictionary({
+        type: type
+      })
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          if (type === 'Frequency_week') {
+          if (type === 'Frequency_day') {
             let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyList: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_week')
+            );
+          }
+          if (type === 'Frequency_week') {
+            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState(
               {
                 frequencyList: frequencyList

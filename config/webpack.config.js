@@ -177,9 +177,9 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       ],
       splitChunks: {
         chunks: 'async',
-        minSize: 1600000,
-        maxSize: 1600000,
-        minChunks: 2,
+        minSize: 1200000,
+        maxSize: 1200000,
+        minChunks: 3,
         name: true,
         cacheGroups: {
           vendors: {

@@ -31,7 +31,7 @@ export default class CouponInfoActor extends Actor {
       // 购满多少钱
       fullBuyPrice: null,
       // 营销类型(0,1,2,3) 0全部商品，1品牌，2平台类目/店铺分类，3自定义货品（店铺可用）
-      scopeType: 4,
+      scopeType: 0,
       // 分类
       cates: [],
       // 品牌

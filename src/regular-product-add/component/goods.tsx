@@ -79,6 +79,8 @@ export default class Info extends React.Component<any, any> {
       goodsTaggingRelList: IList;
       productFilter: IList;
       sourceGoodCateList: IList;
+      purchaseTypeList: IList;
+      frequencyList: IList;
     };
   };
 
@@ -126,7 +128,9 @@ export default class Info extends React.Component<any, any> {
     onProductFilter: noop,
     goodsTaggingRelList: 'goodsTaggingRelList',
     productFilter: 'productFilter',
-    sourceGoodCateList: 'sourceGoodCateList'
+    sourceGoodCateList: 'sourceGoodCateList',
+    purchaseTypeList: 'purchaseTypeList',
+    frequencyList: 'frequencyList'
   };
 
   constructor(props) {
@@ -232,11 +236,10 @@ class GoodsForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
+    const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter, purchaseTypeList, frequencyList } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
-
     if (storeCateIds) {
       storeCateIds.toJS().map((id) => {
         if (!parentIds.includes(id)) {
@@ -434,39 +437,50 @@ class GoodsForm extends React.Component<any, any> {
 
         {/*修改*/}
         <Row type="flex" justify="start">
-          <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
-              {getFieldDecorator('subscriptionStatus', {
-                rules: [],
-                onChange: this._editGoods.bind(this, 'subscriptionStatus'),
-                // initialValue: 'Y'
-                initialValue: goods.get('subscriptionStatus') === 0 || goods.get('subscriptionStatus') == null ? 'N' : 'Y'
-              })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default purchase type">
-                  <Option value="1">Y</Option>
-                  <Option value="0">N</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
-              {getFieldDecorator('tagging', {
-                // rules: [
-                //   {
-                //     required: false,
-                //     message: 'Please select product tagging'
-                //   }
-                // ],
-                initialValue: taggingRelListValues
-              })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default frequency">
-                  <Option value="1">Y</Option>
-                  <Option value="0">N</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
+          {purchaseTypeList && purchaseTypeList.length > 0 ? (
+            <Col span={8}>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
+                {getFieldDecorator('defaultPurchaseType', {
+                  rules: [],
+                  onChange: this._editGoods.bind(this, 'defaultPurchaseType'),
+                  // initialValue: 'Y'
+                  initialValue: goods.get('defaultPurchaseType')
+                })(
+                  <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default purchase type">
+                    {purchaseTypeList.map((option) => (
+                      <Option value={option.id} key={option.id}>
+                        {option.name}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          ) : null}
+          {frequencyList && frequencyList.length > 0 ? (
+            <Col span={8}>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
+                {getFieldDecorator('defaultFrequencyId', {
+                  // rules: [
+                  //   {
+                  //     required: false,
+                  //     message: 'Please select product tagging'
+                  //   }
+                  // ],
+                  initialValue: goods.get('defaultFrequencyId'),
+                  onChange: this._editGoods.bind(this, 'defaultFrequencyId')
+                })(
+                  <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder="please select Default frequency" disabled={goods.get('defaultPurchaseType') !== 5764}>
+                    {frequencyList.map((option) => (
+                      <Option value={option.id} key={option.id}>
+                        {option.name}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          ) : null}
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
@@ -859,6 +873,12 @@ class GoodsForm extends React.Component<any, any> {
       });
       updateGoodsForm(this.props.form);
       editGoods(goods);
+    }
+
+    if (key === 'defaultPurchaseType' && e === 5765) {
+      this.props.form.setFieldsValue({
+        defaultFrequencyId: null
+      });
     }
   };
 

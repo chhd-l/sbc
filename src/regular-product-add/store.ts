@@ -113,10 +113,19 @@ export default class AppStore extends Store {
           this.dispatch('formActor:check', fromJS((results[0].res as any).context.distributionCheck));
           this.dispatch('goodsActor:flashsaleGoods', fromJS((results[0].res as any).context.flashsalegoodsList.flashSaleGoodsVOList));
           this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[0].res as any).context.querySysDictionary));
+          console.log((results[0].res as any).context.purchase_type.sysDictionaryPage.content, '(results[0].res as any).context.purchase_type.sysDictionaryPage.content----');
+          this.dispatch('goodsActor:purchaseTypeList', (results[0].res as any).context.purchase_type.sysDictionaryPage.content);
+          this.dispatch('goodsActor:frequencyList', {
+            dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
+            weekList: (results[0].res as any).context.frequency_week ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content : [],
+            monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : []
+          });
+
           this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods));
           this.dispatch('goodsActor:filtersTotal', fromJS((results[0].res as any).context.filtersTotal));
           this.dispatch('goodsActor:taggingTotal', fromJS((results[0].res as any).context.taggingTotal));
           this.dispatch('goodsActor:resourceCates', (results[0].res as any).context.resourceCates);
+
           this.dispatch('related:goodsId', goodsId);
           this.dispatch('goodsActor:getGoodsId', goodsId);
         });
@@ -620,6 +629,9 @@ export default class AppStore extends Store {
       goods = goods.set('internalGoodsNo', localStorage.getItem('storeCode') + '_' + goods.get('goodsNo'));
     }
 
+    if (goods.get('defaultPurchaseType') === 5765) {
+      goods = goods.set('defaultFrequencyId', null);
+    }
     this.dispatch('goodsActor: editGoods', goods);
   };
 
@@ -1375,6 +1387,7 @@ export default class AppStore extends Store {
     let result3: any;
     const i = this.state().get('checkFlag');
     const enterpriseFlag = this.state().get('enterpriseFlag');
+    console.log(param.toJS().goods, 'param------------');
     if (this.state().get('getGoodsId')) {
       if (goods.get('saleType') == 0) {
         const goodsId = goods.get('goodsId');

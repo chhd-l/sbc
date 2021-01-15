@@ -313,7 +313,6 @@ export default class GoodsActor extends Actor {
   frequencyList(state, params) {
     const { dayList, weekList, monthList } = params;
     const frequencyList = [...dayList, ...weekList, ...monthList];
-    console.log(frequencyList, 'frequencyList---------------');
     return state.set('frequencyList', frequencyList);
   }
 }

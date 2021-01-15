@@ -113,7 +113,7 @@ export default class AppStore extends Store {
           this.dispatch('formActor:check', fromJS((results[0].res as any).context.distributionCheck));
           this.dispatch('goodsActor:flashsaleGoods', fromJS((results[0].res as any).context.flashsalegoodsList.flashSaleGoodsVOList));
           this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[0].res as any).context.querySysDictionary));
-          console.log((results[0].res as any).context.purchase_type.sysDictionaryPage.content, '(results[0].res as any).context.purchase_type.sysDictionaryPage.content----');
+
           this.dispatch('goodsActor:purchaseTypeList', (results[0].res as any).context.purchase_type.sysDictionaryPage.content);
           this.dispatch('goodsActor:frequencyList', {
             dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
@@ -1292,7 +1292,6 @@ export default class AppStore extends Store {
         })
       );
     });
-    console.log(goodsList, 'goodsList---');
     if (goodsList.count() === 0) {
       message.error('SKU不能为空');
       return false;
@@ -1387,7 +1386,6 @@ export default class AppStore extends Store {
     let result3: any;
     const i = this.state().get('checkFlag');
     const enterpriseFlag = this.state().get('enterpriseFlag');
-    console.log(param.toJS().goods, 'param------------');
     if (this.state().get('getGoodsId')) {
       if (goods.get('saleType') == 0) {
         const goodsId = goods.get('goodsId');

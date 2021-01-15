@@ -237,12 +237,14 @@ class GoodsForm extends React.Component<any, any> {
     let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
 
-    storeCateIds &&
+    if (storeCateIds) {
       storeCateIds.toJS().map((id) => {
         if (!parentIds.includes(id)) {
           storeCateValues.push({ value: id });
         }
       });
+    }
+
     const taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {
@@ -425,6 +427,43 @@ class GoodsForm extends React.Component<any, any> {
                 >
                   {this.loopTagging(taggingTotal)}
                 </TreeSelect>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+
+        {/*修改*/}
+        <Row type="flex" justify="start">
+          <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
+              {getFieldDecorator('subscriptionStatus', {
+                rules: [],
+                onChange: this._editGoods.bind(this, 'subscriptionStatus'),
+                // initialValue: 'Y'
+                initialValue: goods.get('subscriptionStatus') === 0 || goods.get('subscriptionStatus') == null ? 'N' : 'Y'
+              })(
+                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default purchase type">
+                  <Option value="1">Y</Option>
+                  <Option value="0">N</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
+              {getFieldDecorator('tagging', {
+                // rules: [
+                //   {
+                //     required: false,
+                //     message: 'Please select product tagging'
+                //   }
+                // ],
+                initialValue: taggingRelListValues
+              })(
+                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default frequency">
+                  <Option value="1">Y</Option>
+                  <Option value="0">N</Option>
+                </Select>
               )}
             </FormItem>
           </Col>

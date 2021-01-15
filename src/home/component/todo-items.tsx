@@ -506,7 +506,7 @@ export default class TodoItems extends React.Component<any, any> {
                   </span>
                 </div>
               </div>
-              {goodsInfoTopView.length === 0 ? (
+              {goodsInfoTopView && goodsInfoTopView.length === 0 ? (
                 <div className="data-img">
                   <img src={nodataImg} className="no-data-img" />
                 </div>

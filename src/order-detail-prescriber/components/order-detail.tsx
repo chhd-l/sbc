@@ -488,12 +488,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
               {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}</p>}
-              <p style={styles.darkText}>
+              {/* <p style={styles.darkText}>
                 {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
               </p>
               <p style={styles.darkText}>
                 {<FormattedMessage id="recommenderName" />}: {detail.get('recommenderName')}
-              </p>
+              </p> */}
             </Col>
           </Row>
         </div>

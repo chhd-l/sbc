@@ -337,7 +337,6 @@ export default class AppStore extends Store {
       this.onGoodsTaggingRelList(taggingIds);
 
       goodsDetail = fromJS(tmpContext);
-
       let addSkUProduct =
         tmpContext.goodsInfos &&
         tmpContext.goodsInfos.map((item) => {
@@ -1008,47 +1007,47 @@ export default class AppStore extends Store {
     // 详情
     const detailEditor = data.get('detailEditor') || {};
 
-    goods = goods.set('goodsDetail', detailEditor.getContent ? detailEditor.getContent() : '');
+    goods = goods.set('goodsDetail', data.get('goods').get('goodsDetail'));
     const tabs = [];
     // console.log(data.get('detailEditor_0'),11111111111111);
-    if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
-      // console.log(data.get('detailEditor_0').val.getContent())
-      tabs.push({
-        goodsId: goods.get('goodsId'),
-        tabId: data.get('detailEditor_0').tabId,
-        tabDetail: data.get('detailEditor_0').val.getContent()
-      });
-    }
-    if (data.get('detailEditor_1') && data.get('detailEditor_1').val && data.get('detailEditor_1').val.getContent) {
-      tabs.push({
-        goodsId: goods.get('goodsId'),
-        tabId: data.get('detailEditor_1').tabId,
-        tabDetail: data.get('detailEditor_1').val.getContent()
-      });
-    }
-    if (data.get('detailEditor_2') && data.get('detailEditor_2').val && data.get('detailEditor_2').val.getContent) {
-      tabs.push({
-        goodsId: goods.get('goodsId'),
-        tabId: data.get('detailEditor_2').tabId,
-        tabDetail: data.get('detailEditor_2').val.getContent()
-      });
-    }
+    // if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
+    //   // console.log(data.get('detailEditor_0').val.getContent())
+    //   tabs.push({
+    //     goodsId: goods.get('goodsId'),
+    //     tabId: data.get('detailEditor_0').tabId,
+    //     tabDetail: data.get('detailEditor_0').val.getContent()
+    //   });
+    // }
+    // if (data.get('detailEditor_1') && data.get('detailEditor_1').val && data.get('detailEditor_1').val.getContent) {
+    //   tabs.push({
+    //     goodsId: goods.get('goodsId'),
+    //     tabId: data.get('detailEditor_1').tabId,
+    //     tabDetail: data.get('detailEditor_1').val.getContent()
+    //   });
+    // }
+    // if (data.get('detailEditor_2') && data.get('detailEditor_2').val && data.get('detailEditor_2').val.getContent) {
+    //   tabs.push({
+    //     goodsId: goods.get('goodsId'),
+    //     tabId: data.get('detailEditor_2').tabId,
+    //     tabDetail: data.get('detailEditor_2').val.getContent()
+    //   });
+    // }
     if (data.get('video') && JSON.stringify(data.get('video')) !== '{}') {
       goods = goods.set('goodsVideo', data.get('video').get('artworkUrl'));
     }
 
-    let goodsDetailTab = data.get('goodsDetailTab');
-    let goodsDetailTabTemplate = {};
-    goodsDetailTab = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
-    goodsDetailTab.map((item, i) => {
-      const contect = data.get('detailEditor_' + i).getContent();
-      const contectTxt = data.get('detailEditor_' + i).getContentTxt();
-      if (contectTxt.substring(0, 1) === '[' && contectTxt.substring(contectTxt.length - 1, contectTxt.length) === ']') {
-        goodsDetailTabTemplate[item.get('name')] = contectTxt;
-      } else {
-        goodsDetailTabTemplate[item.get('name')] = contect;
-      }
-    });
+    // let goodsDetailTab = data.get('goodsDetailTab');
+    // let goodsDetailTabTemplate = {};
+    // goodsDetailTab = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
+    // goodsDetailTab.map((item, i) => {
+    //   const contect = data.get('detailEditor_' + i).getContent();
+    //   const contectTxt = data.get('detailEditor_' + i).getContentTxt();
+    //   if (contectTxt.substring(0, 1) === '[' && contectTxt.substring(contectTxt.length - 1, contectTxt.length) === ']') {
+    //     goodsDetailTabTemplate[item.get('name')] = contectTxt;
+    //   } else {
+    //     goodsDetailTabTemplate[item.get('name')] = contect;
+    //   }
+    // });
 
     let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
     let storeId = loginInfo ? loginInfo.storeId : '';
@@ -1056,8 +1055,6 @@ export default class AppStore extends Store {
     //如果是法国，不改变goodsDetail
     if (storeId === 123457909 && oldGoodsDetailTabContent) {
       goods = goods.set('goodsDetail', oldGoodsDetailTabContent);
-    } else {
-      goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
     }
 
     param = param.set('goodsTabRelas', tabs);
@@ -1656,6 +1653,14 @@ export default class AppStore extends Store {
     }
   };
 
+  /**
+   * 获取富文本框的值
+   * @param
+   */
+  editEditorContent = (keyName, value) => {
+    console.log(keyName, value, 'keyName,value');
+    this.dispatch('goodsActor: editorContent', { keyName, value });
+  };
   editEditor = (editor) => {
     this.dispatch('goodsActor: editor', editor);
   };

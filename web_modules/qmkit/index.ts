@@ -40,7 +40,7 @@ import OktaLogout from './okta/okta-logout'
 import DragTable from './dragTable';
 import AssetManagement from './assetManagement';
 import ErrorBoundary from './errorBoundary';
-
+import ReactEditor from './reactEditor/index'
 export {
   noop,
   SelectGroup,
@@ -86,5 +86,6 @@ export {
   getRoutType,
   DragTable,
   AssetManagement,
-  ErrorBoundary
+  ErrorBoundary,
+  ReactEditor
 };

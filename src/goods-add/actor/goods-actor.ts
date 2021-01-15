@@ -270,6 +270,12 @@ export default class GoodsActor extends Actor {
     return state.set('editor', editor);
   }
 
+  @Action('goodsActor: editorContent')
+  editEditorContent(state, { keyName, value }) {
+    console.log(keyName, value);
+    return state.setIn(['goods', keyName], value);
+  }
+
   @Action('priceActor:setAlonePrice')
   toggleSetAlonePrice(state, result) {
     return state.setIn(['goods', 'allowPriceSet'], result);

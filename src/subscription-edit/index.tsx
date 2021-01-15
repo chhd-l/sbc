@@ -783,14 +783,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       countryArr,
       deliveryList,
       billingList,
-      customerAccount,
-      promotionCodeShow,
       title,
       noStartOrder,
       completedOrder,
       currentOrder,
-      billingCityArr,
-      deliveryCityArr,
       currencySymbol
       // operationLog
     } = this.state;
@@ -1018,21 +1014,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </div>
         )
       },
-      {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Promotion code</span>,
-        key: 'promotionCode',
-        width: '20%',
-        render: (text, record) => (
-          <div>
-            <Search placeholder="Promotion code" enterButton="Apply" onSearch={(value) => console.log(value)} />
-          </div>
-        )
-      },
+      // {
+      //   title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Promotion code</span>,
+      //   key: 'promotionCode',
+      //   width: '20%',
+      //   render: (text, record) => (
+      //     <div>
+      //       <Search placeholder="Promotion code" enterButton="Apply" onSearch={(value) => console.log(value)} />
+      //     </div>
+      //   )
+      // },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + currencySymbol + ' ' + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
@@ -1049,6 +1045,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       {
         title: 'Operation',
         dataIndex: '',
+        width: '10%',
         key: 'x',
         render: (text, record) => (
           <div>
@@ -1114,7 +1111,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + currencySymbol + ' ' + record.tradePrice.discountsPrice : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
@@ -1177,10 +1174,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   Subscription Date :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>
                 </p>
                 <p>
-                  Presciber ID : <span>{subscriptionInfo.presciberID}</span>
+                  Auditor ID : <span>{subscriptionInfo.presciberID}</span>
                 </p>
                 <p>
-                  Presciber Name : <span>{subscriptionInfo.presciberName}</span>
+                  Auditor Name : <span>{subscriptionInfo.presciberName}</span>
                 </p>
               </Col>
               <Col span={11} className="basic-info">

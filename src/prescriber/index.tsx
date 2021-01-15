@@ -13,6 +13,7 @@ const Option = Select.Option;
 export default class ClinicList extends Component<any, any> {
   constructor(props: any) {
     super(props);
+    console.log(cache.MAP_MODE, '==cache.MAP_MODE');
     this.state = {
       isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false,
 

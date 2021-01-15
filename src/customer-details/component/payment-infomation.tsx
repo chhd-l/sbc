@@ -129,7 +129,7 @@ class PaymentInformation extends React.Component<any, any> {
                         <Row>
                           <Col span={16} offset={1}>
                             <p>{item.adyenPaymentMethod.holder_name}</p>
-                            <p>{item.adyenPaymentMethod.lastFour ? '**** **** **** ' + item.payuPaymentMethod.lastFour : ''}</p>
+                            <p>{item.adyenPaymentMethod?.lastFour ? '**** **** **** ' + item.adyenPaymentMethod.lastFour : ''}</p>
                             <p>{item.adyenPaymentMethod.card_type}</p>
                           </Col>
                           <Col span={5}>

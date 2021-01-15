@@ -69,7 +69,8 @@ export default class GoodsActor extends Actor {
       taggingTotal: '',
       goodsTaggingRelList: null,
       productFilter: null,
-      oldGoodsDetailTabContent: ''
+      oldGoodsDetailTabContent: '',
+      resourceCates: []
     };
   }
 
@@ -294,5 +295,10 @@ export default class GoodsActor extends Actor {
   @Action('product:productFilter')
   productFilter(state, productFilter) {
     return state.set('productFilter', productFilter);
+  }
+
+  @Action('goodsActor:resourceCates')
+  resourceCates(state, resourceCates) {
+    return state.set('resourceCates', resourceCates);
   }
 }

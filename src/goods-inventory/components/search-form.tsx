@@ -51,10 +51,12 @@ export default class SearchForm extends React.Component<any, any> {
 
   onChangeNumber = (res) => {
     const { onStock } = this.props.relaxProps;
+    const value = res ? res : 1;
     this.setState({
-      getThreshold: res
+      getThreshold: value
     });
-    onStock(res);
+
+    onStock(value);
   };
 
   onRefresh = () => {
@@ -64,6 +66,7 @@ export default class SearchForm extends React.Component<any, any> {
 
   render() {
     const { getThreshold, bulkExport, stock } = this.props.relaxProps;
+    console.log(stock, 'stock---------------');
     return (
       <div className="filter-content">
         <Alert message="Set a quantity that when products are below this certain quantity, they are considered as ‘Low inventory’ and will be shown in the list below." type="info" />
@@ -81,6 +84,7 @@ export default class SearchForm extends React.Component<any, any> {
                 disabled={this.state.disabledType}
                 onChange={this.onChangeNumber}
                 min={1}
+                value={stock}
                 formatter={(e) => {
                   if (!/(^[1-9]\d*$)/.test(e)) {
                     return 1;

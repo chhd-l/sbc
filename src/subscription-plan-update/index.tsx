@@ -38,19 +38,21 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     this.setState({
       title: id ? 'Edit Plan (Food Dispenser)' : 'Add New Plan (Food Dispenser)'
     });
-    webapi.getAllSkuProducts() .then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          allSkuProduct: res.context.goodsInfos.content
-        });
-      } else {
-        message.error(res.message || 'Get data failed');
-      }
-    })
-    .catch(() => {
-      message.error('Get data failed');
-    });
+    webapi
+      .getAllSkuProducts()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            allSkuProduct: res.context.goodsInfos.content
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
     if (id) {
       webapi
         .getSubscriptionPlanById(id)
@@ -137,11 +139,11 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     const steps = [
       {
         title: 'Basic Information',
-        controller: <BasicInformation subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form}/>
+        controller: <BasicInformation subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
       },
       {
         title: 'Target Product',
-        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct}/>
+        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} />
       },
       {
         title: 'Entry Criteria',
@@ -153,7 +155,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       },
       {
         title: 'Details',
-        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct}/>
+        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} />
       }
     ];
     return (
@@ -164,7 +166,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
 
         <div className="container-search" id="subscriptionPlanStep">
           <Headline title={title} />
-          <Steps current={current} labelPlacement='vertical'>
+          <Steps current={current} labelPlacement="vertical">
             {steps.map((item) => (
               <Step key={item.title} title={item.title} />
             ))}

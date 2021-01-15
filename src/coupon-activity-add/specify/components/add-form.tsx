@@ -211,7 +211,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                   <Radio value={-2}>Custom</Radio>
                 </RadioGroup>
 
-                {level._levelPropsShow && (
+                {/* {level._levelPropsShow && (
                   <div>
                     {util.isThirdStore() && (
                       <Checkbox indeterminate={level._indeterminate} onChange={(e) => this._allLevelChecked(e.target.checked, levelList)} checked={level._checkAll}>
@@ -220,7 +220,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                     )}
                     <CheckboxGroup options={this._renderCheckboxOptions(levelList)} onChange={(value) => this._levelGroupChange(value, levelList)} value={level._checkedLevelList} />
                   </div>
-                )}
+                )} */}
 
                 {loading && <Spin />}
 

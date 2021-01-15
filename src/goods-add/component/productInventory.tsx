@@ -6,6 +6,7 @@ import { fromJS, List } from 'immutable';
 import { cache, noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
+import { any } from 'prop-types';
 
 const FormItem = Form.Item;
 const { Option } = Select;

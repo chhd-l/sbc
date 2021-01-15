@@ -16,7 +16,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+//const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
@@ -27,7 +27,6 @@ const WebpackBar = require('webpackbar');
 const HappyPack = require('happypack');
 const os = require('os');
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-//const happyThreadPool = HappyPack.ThreadPool({ size: 20 });
 
 //prerender-spa-plugin 预渲染
 //const PrerenderSpaPlugin = require('prerender-spa-plugin')
@@ -54,8 +53,8 @@ module.exports = function (webpackEnv, envCode = 'prod') {
   const isEnvProduction = envCode === 'prod';
 
   const publicPath = isEnvProduction
-    ? "/"
-    : isEnvDevelopment && './';
+    ? '/'
+    : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction
@@ -177,9 +176,9 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       ],
       splitChunks: {
         chunks: 'async',
-        minSize: 1200000,
-        maxSize: 1200000,
-        minChunks: 3,
+        minSize: 1600000,
+        maxSize: 1600000,
+        minChunks: 2,
         name: true,
         cacheGroups: {
           vendors: {
@@ -423,7 +422,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
 
          }
        ),*/
-      /*new BundleAnalyzerPlugin(
+      new BundleAnalyzerPlugin(
         {
           //  可以是`server`，`static`或`disabled`。
           //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。
@@ -454,7 +453,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
           statsOptions: null,
           logLevel: 'info' // 日志级别。可以是'信息'，'警告'，'错误'或'沉默'。
         }
-      ),*/
+      ),
       new CompressionPlugin({
         filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
         algorithm: 'gzip', // 算法

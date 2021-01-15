@@ -57,7 +57,7 @@ export default class List extends React.Component<any, any> {
             value.length > 12 ? `${value.substring(0, 12)}...` : value
           }
         /> */}
-        <DataGrid.Column title="Use range" dataIndex="scopeNamesStr" key="scopeNamesStr" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} />
+        {/* <DataGrid.Column title="Use range" dataIndex="scopeNamesStr" key="scopeNamesStr" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} /> */}
         <DataGrid.Column title="Status" dataIndex="couponStatusStr" key="couponStatusStr" />
         <DataGrid.Column
           title="Operation"

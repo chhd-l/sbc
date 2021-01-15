@@ -24,13 +24,13 @@ export default class CouponInfo extends Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>优惠券详情</Breadcrumb.Item>
+          <Breadcrumb.Item>Coupon detail</Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container">
-          <Headline title="优惠券" />
+          <Headline title="Coupon" />
           <Tabs>
-            <Tabs.TabPane tab="优惠券信息" key="1">
+            <Tabs.TabPane tab="Coupon info" key="1">
               <CouponBasicInfo />
             </Tabs.TabPane>
           </Tabs>

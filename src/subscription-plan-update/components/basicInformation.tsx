@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Input, DatePicker, Select, Row, Col } from 'antd';
+import { Form, Input, DatePicker, Select, Row, Col, message } from 'antd';
 import moment from 'moment';
+import { Const } from 'qmkit';
+import * as webapi from '../webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -15,7 +17,7 @@ export default class basicInformation extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      frequencyList: [{ id: 2, name: '2 weeks' }]
+      frequencyList: []
     };
   }
 
@@ -25,6 +27,19 @@ export default class basicInformation extends Component<any, any> {
       subscriptionPlan.subscriptionPlanId = 'SP' + moment(new Date()).format('YYYYMMDDHHSSS');
       addField('subscriptionPlanId', subscriptionPlan.subscriptionPlanId);
     }
+    webapi.getWeekFrequency().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          frequencyList: res.context.sysDictionaryVOS
+        });
+      } else {
+        message.error(res.message || 'Get data failed');
+      }
+    })
+    .catch(() => {
+      message.error('Get data failed');
+    });
   }
 
   render() {
@@ -104,8 +119,9 @@ export default class basicInformation extends Component<any, any> {
                   <Col span={4}>
                     <span>Once every</span>
                   </Col>
-                  <Col span={8}>
+                  <Col span={12}>
                     <Select
+                      mode="multiple"
                       onChange={(value: any) => {
                         this.props.addField('frequency', value);
                       }}

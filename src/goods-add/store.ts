@@ -107,9 +107,6 @@ export default class AppStore extends Store {
           this.dispatch('related:goodsId', goodsId);
           this.dispatch('goodsActor:getGoodsId', goodsId);
         });
-      } else {
-        message.error((results[0].res as any).message);
-        this.dispatch('loading:end');
       }
       editProductResource = results[1].res as any;
     });

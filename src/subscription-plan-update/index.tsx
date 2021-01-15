@@ -19,7 +19,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: '',
-      current: 3,
+      current: 4,
       subscriptionPlan: {
         canCancelPlan: true,
         canCancelChargedFee: true,
@@ -153,7 +153,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       },
       {
         title: 'Details',
-        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct}/>
       }
     ];
     return (

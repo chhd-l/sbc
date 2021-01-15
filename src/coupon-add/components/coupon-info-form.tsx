@@ -21,26 +21,24 @@ const ErrorDiv = styled.div`
   }
 `;
 
-const RightContent = styled.div`
-  width: calc(100% - 320px);
-`;
+const RightContent = styled.div``;
 
 const FormItem = Form.Item;
 
 const formItemLayout = {
   labelCol: {
-    xl: { span: 5 }
+    span: 4
   },
   wrapperCol: {
-    xl: { span: 18 }
+    span: 20
   }
 };
 const formItemSmall = {
   labelCol: {
-    xl: { span: 5 }
+    span: 4
   },
   wrapperCol: {
-    xl: { span: 8 }
+    span: 20
   }
 };
 
@@ -189,14 +187,15 @@ export default class CouponInfoForm extends Component<any, any> {
               ]
             })(
               <Input
-                placeholder="No more than ten words"
-                maxLength={'10' as any}
+                placeholder="No more than one hundred words"
+                maxLength={'100' as any}
                 onChange={(e) => {
                   fieldsValue({
                     field: 'couponName',
                     value: e.currentTarget.value
                   });
                 }}
+                style={{ width: 360 }}
               />
             )}
           </FormItem>
@@ -317,40 +316,37 @@ export default class CouponInfoForm extends Component<any, any> {
           <ErrorDiv>
             <FormItem {...formItemSmall} label="Coupon value" required={true}>
               <Row>
-                <Col span={12}>
-                  {getFieldDecorator('denomination', {
-                    initialValue: denomination,
-                    rules: [
-                      { required: true, message: 'Please input the face value of coupon' },
-                      {
-                        validator: (_rule, value, callback) => {
-                          if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                            callback('Integers between 1-99999 are allowed');
-                            return;
-                          }
-                          callback();
+                {getFieldDecorator('denomination', {
+                  initialValue: denomination,
+                  rules: [
+                    { required: true, message: 'Please input the face value of coupon' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
+                          callback('Integers between 1-99999 are allowed');
+                          return;
                         }
+                        callback();
                       }
-                    ]
-                  })(
-                    <Input
-                      placeholder="integer from 1 to 9999"
-                      maxLength={'5' as any}
-                      onChange={async (e) => {
-                        await fieldsValue({
-                          field: 'denomination',
-                          value: e.currentTarget.value
-                        });
-                        this.props.form.validateFields(['fullBuyPrice'], {
-                          force: true
-                        });
-                      }}
-                    />
-                  )}
-                </Col>
-                <Col span={5}>
-                  <span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                </Col>
+                    }
+                  ]
+                })(
+                  <Input
+                    placeholder="integer from 1 to 99999"
+                    maxLength={'5' as any}
+                    onChange={async (e) => {
+                      await fieldsValue({
+                        field: 'denomination',
+                        value: e.currentTarget.value
+                      });
+                      this.props.form.validateFields(['fullBuyPrice'], {
+                        force: true
+                      });
+                    }}
+                    style={{ width: 360 }}
+                  />
+                )}
+                <span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
               </Row>
             </FormItem>
             <FormItem {...formItemLayout} label="Threshold" required={true}>
@@ -369,10 +365,10 @@ export default class CouponInfoForm extends Component<any, any> {
                           validator: (_rule, value, callback) => {
                             if (fullBuyType == 1 && (value || value === 0)) {
                               if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                                callback('只允许输入1-99999间的整数');
+                                callback('Integers between 1-99999 are allowed');
                                 return;
                               } else if (value <= parseInt(`${denomination}`)) {
-                                callback('使用门槛必须大于优惠券面值');
+                                callback('The threshold must be greater than the face value of the coupon');
                                 return;
                               }
                             }
@@ -405,24 +401,25 @@ export default class CouponInfoForm extends Component<any, any> {
               </RadioGroup>
             </FormItem>
           </ErrorDiv>
-          <FormItem {...formItemLayout} label="Select product" required={true}>
+          {/* <FormItem {...formItemLayout} label="Select product" required={true}>
             <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
                 <span style={styles.darkColor}>Base on brand</span>
-              </Radio>
-              {/*<Radio value={1}>
+              </Radio> */}
+          {/*<Radio value={1}>
                 <span style={styles.darkColor}>按品牌</span>
               </Radio>*/}
-              {/*<Radio value={3}>*/}
-              {/*  <span style={styles.darkColor}>Base on category</span>*/}
-              {/*</Radio>*/}
-              <Radio value={4}>
+          {/*<Radio value={3}>*/}
+          {/*  <span style={styles.darkColor}>Base on category</span>*/}
+          {/*</Radio>*/}
+          {/* <Radio value={4}>
                 <span style={styles.darkColor}>Custom</span>
               </Radio>
             </RadioGroup>
-          </FormItem>
+          </FormItem> */}
           <FormItem {...this._scopeBoxStyle(scopeType)} label="Selected products" id={'page-content'}>
-            {this.chooseGoods().dom}
+            {/* {this.chooseGoods().dom} */}
+            <SelectedGoodsGrid />
           </FormItem>
           <FormItem {...formItemLayout} label="Instructions for use">
             {getFieldDecorator('couponDesc', {

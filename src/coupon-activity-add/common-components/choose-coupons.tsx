@@ -96,8 +96,8 @@ export default class ChooseCoupons extends React.Component<any, any> {
                         },
                         {
                           validator: (_rule, value, callback) => {
-                            if (type != 0 && value > 10) {
-                              callback('请输入1-10的整数');
+                            if (type != 0 && value > 10000) {
+                              callback('请输入1-10000的整数');
                             }
                             callback();
                           }

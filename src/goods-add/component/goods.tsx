@@ -495,7 +495,6 @@ class GoodsForm extends React.Component<any, any> {
                   placeholder="Please select sales category"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  showSearch={false}
                   onChange={this.storeCateChange}
                   treeDefaultExpandAll
                 >

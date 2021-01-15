@@ -25,6 +25,7 @@ const formItemLayout = {
     span: 21
   }
 };
+const { RangePicker } = DatePicker;
 
 export default class SpecifyAddForm extends React.Component<any, any> {
   props;
@@ -118,12 +119,12 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 {
                   required: true,
                   whitespace: true,
-                  message: '活动名称不超过40个字'
+                  message: 'The name of the activity should not exceed 40 words'
                 },
-                { min: 1, max: 40, message: '1-40字符' },
+                { min: 1, max: 40, message: '1-40 wrods' },
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorEmoji(rule, value, callback, '活动名称');
+                    QMMethod.validatorEmoji(rule, value, callback, 'Activity name');
                   }
                 }
               ],
@@ -137,13 +138,13 @@ export default class SpecifyAddForm extends React.Component<any, any> {
           <FormItem {...formItemLayout} label="Activity time">
             {getFieldDecorator('startTime', {
               rules: [
-                { required: true, message: '请选择发放时间' },
+                { required: true, message: 'Please select the delivery time' },
                 {
                   validator: (_rule, value, callback) => {
                     if (value && moment().add(-5, 'minutes').second(0).unix() > moment(value).unix()) {
-                      callback('发放时间不能早于现在');
+                      callback('The delivery time cannot be earlier than now');
                     } else if (value && moment().add('months', 3).unix() < moment(value).minute(0).second(0).unix()) {
-                      callback('发放时间不能晚于三个月');
+                      callback('The delivery time cannot be later than three months');
                     } else {
                       callback();
                     }
@@ -153,20 +154,22 @@ export default class SpecifyAddForm extends React.Component<any, any> {
               onChange: (date, dateString) => {
                 if (date) {
                   store.changeFormField({
-                    startTime: dateString + ':00'
+                    startTime: dateString[0] + ':00',
+                    endTime: dateString[1] + ':00'
                   });
                 }
               },
-              initialValue: activity.get('startTime') ? moment(activity.get('startTime')) : null
+              initialValue: activity.get('startTime') && activity.get('endTime') && [moment(activity.get('startTime')), moment(activity.get('endTime'))]
+              // initialValue: activity.get('startTime') ? moment(activity.get('startTime')) : null
             })(
-              <DatePicker
+              <RangePicker
                 getCalendarContainer={() => document.getElementById('page-content')}
                 allowClear={false}
                 disabledDate={(current) => {
                   return (current && current < moment().add(-1, 'minutes')) || (current && current > moment().add(3, 'months'));
                 }}
                 format={Const.DATE_FORMAT}
-                placeholder={'Start date       ~       End date'}
+                placeholder={['Start date', 'End date']}
                 showTime={{ format: 'HH:mm' }}
               />
             )}
@@ -338,7 +341,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     if (coupons.size == 0) {
       errorObject['coupons'] = {
         value: null,
-        errors: [new Error('请选择优惠券')]
+        errors: [new Error('Please select coupons')]
       };
       errorFlag = true;
     }
@@ -359,13 +362,13 @@ export default class SpecifyAddForm extends React.Component<any, any> {
       if (!customer || customer.size == 0) {
         errorObject['joinLevel'] = {
           value: null,
-          errors: [new Error('请选择指定用户')]
+          errors: [new Error('Please select the specified user')]
         };
         errorFlag = true;
       } else if (customer.size > 1000) {
         errorObject['joinLevel'] = {
           value: null,
-          errors: [new Error('最多可选1000位用户')]
+          errors: [new Error('Up to 1000 users')]
         };
         errorFlag = true;
       }

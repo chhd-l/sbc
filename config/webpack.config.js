@@ -26,7 +26,7 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const WebpackBar = require('webpackbar');
 const HappyPack = require('happypack');
 const os = require('os');
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+const happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
 //const happyThreadPool = HappyPack.ThreadPool({ size: 20 });
 
 //prerender-spa-plugin 预渲染
@@ -50,20 +50,16 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 module.exports = function (webpackEnv, envCode = 'prod') {
-  const isEnvDevelopment = envCode !== 'prod';
-  const isEnvProduction = envCode === 'prod';
+  console.log(envCode);
+  const isEnvDevelopment = envCode === 'dev';
+  const isEnvProduction = envCode === 'stg' || envCode === 'prod_de' || envCode === 'prod_fa';
 
-  const publicPath = isEnvProduction
-    ? "/"
-    : isEnvDevelopment && './';
+  const publicPath = isEnvProduction ? "https://cdnstorestg.azureedge.net/res/" : isEnvDevelopment && './';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
-  const publicUrl = isEnvProduction
-    ? publicPath.slice(0, -1)
-    : isEnvDevelopment && '';
+  const publicUrl = isEnvProduction ? publicPath.slice(0, -1) : isEnvDevelopment && '';
 
   const env = getClientEnvironment(envCode, publicUrl);
-
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
@@ -71,7 +67,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
         loader: MiniCssExtractPlugin.loader,
         options: Object.assign(
           {},
-          shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
+          shouldUseRelativeAssetPaths ? {publicPath: '../../'} : undefined
         ),
       },
       {
@@ -179,7 +175,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
         chunks: 'async',
         minSize: 1200000,
         maxSize: 1200000,
-        minChunks: 3,
+        minChunks: 2,
         name: true,
         cacheGroups: {
           vendors: {
@@ -195,10 +191,10 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             priority: -30,
             reuseExistingChunk: true
           },
-          styles:{
-            name:'styles',
-            test:/\.css$/,
-            chunks:'all',
+          styles: {
+            name: 'styles',
+            test: /\.css$/,
+            chunks: 'all',
             enforce: true
           }
         }
@@ -240,7 +236,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
           //排除node_modules 目录下的文件
           exclude: /node_modules/
         },
-        { parser: { requireEnsure: false } },
+        {parser: {requireEnsure: false}},
         // {
         //      test: /\.(js|mjs|jsx)$/,
         //      enforce: 'pre',
@@ -478,6 +474,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
         Object.assign(
           {},
           {
+            cdnName: env.raw.CDN_PATH.replace(/^\"|\"$/g, ''),
             dllName: isEnvProduction ? require('./compile-env.json').prodDll : require('./compile-env.json').testDll,
             inject: true,
             template: paths.appHtml,
@@ -505,7 +502,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
       new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
       new ModuleNotFoundPlugin(paths.appPath),
-      new webpack.DefinePlugin({ ...env.stringified, __DEV__: !isEnvProduction }),
+      new webpack.DefinePlugin({...env.stringified, __DEV__: !isEnvProduction}),
       new webpack.DllReferencePlugin({
         manifest: isEnvProduction ? require("../public/javascript/dll/vendor-manifest-prod.json") : require("../public/javascript/dll/vendor-manifest.json") // eslint-disable-line
       }),

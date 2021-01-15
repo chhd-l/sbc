@@ -9,8 +9,8 @@
 
 var Common = require('./common');
 module.exports = {
-  host: 'http://127.0.0.1:8087',
-  HOST: 'http://127.0.0.1:8087',
+  HOST: 'https://store.royalcanin.com/de/api',
+  CDN_PATH: '"https://cdnstorestg.azureedge.net/res"',
   X_XITE_ADMIN_HOST: 'http://172.19.25.191:3000',
   X_XITE_OPEN_HOST: 'http://172.19.25.191:9000',
   ...Common

@@ -89,13 +89,13 @@ class ProductTooltipSKU extends React.Component<any, any> {
   handleOK=()=>{
     const {selectedRowKeys,selectedRows} = this.state
     const { onProductselectSku } = this.props.relaxProps;
-    let a = [];
+    // let a = [];
     let minStock = []
-    selectedRowKeys.map((item) => {
-      a.push({
-        goodsInfoNo: item
-      });
-    });
+    // selectedRowKeys.map((item) => {
+    //   a.push({
+    //     goodsInfoNo: item
+    //   });
+    // });
     selectedRows && selectedRows.map((item) => {
       if(item.stock){
         minStock.push(item.stock)
@@ -121,7 +121,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
       minStock: tempMinStock
     });
     if (targetGoodsIds.length <= 10) {
-      if (targetGoodsIds.length != 0) {
+      if (targetGoodsIds.length !== 0) {
         onProductselectSku(targetGoodsList);
       }
       targetGoodsIds = [];

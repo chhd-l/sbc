@@ -70,7 +70,8 @@ export default class GoodsActor extends Actor {
       goodsTaggingRelList: null,
       productFilter: null,
       addSkUProduct: [],
-      oldGoodsDetailTabContent: ''
+      oldGoodsDetailTabContent: '',
+      resourceCates: []
     };
   }
 
@@ -302,5 +303,10 @@ export default class GoodsActor extends Actor {
   @Action('product:productFilter')
   productFilter(state, productFilter) {
     return state.set('productFilter', productFilter);
+  }
+
+  @Action('goodsActor:resourceCates')
+  resourceCates(state, resourceCates) {
+    return state.set('resourceCates', resourceCates);
   }
 }

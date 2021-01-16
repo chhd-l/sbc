@@ -49,17 +49,23 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-module.exports = function (webpackEnv, envCode = 'prod') {
+module.exports = function (webpackEnv, envCode = 'dev') {
   console.log(envCode);
   const isEnvDevelopment = envCode === 'dev';
-  const isEnvProduction = envCode === 'stg' || envCode === 'prod_de' || envCode === 'prod_fa';
+  const isEnvProduction = envCode !== 'dev'
 
-  const publicPath = isEnvProduction ? "https://cdnstorestg.azureedge.net/res/" : isEnvDevelopment && './';
+
+
+
+  const env = getClientEnvironment(envCode);
+
+  console.log(env,11111111);
+
+  const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && './';
   const shouldUseRelativeAssetPaths = publicPath === './';
+  console.log(publicPath);
+  const publicUrl = isEnvProduction ? publicPath : isEnvDevelopment && '';
 
-  const publicUrl = isEnvProduction ? publicPath.slice(0, -1) : isEnvDevelopment && '';
-
-  const env = getClientEnvironment(envCode, publicUrl);
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
@@ -259,7 +265,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
-                name: 'static/media/[name].[hash:8].[ext]',
+                name: '/static/media/[name].[hash:8].[ext]',
               },
             },
             {
@@ -395,7 +401,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
               loader: require.resolve('file-loader'),
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
-                name: 'static/media/[name].[hash:8].[ext]',
+                name: '/static/media/[name].[hash:8].[ext]',
               },
             },
           ],

@@ -53,7 +53,7 @@ let evnMap = {
 // injected into the application via DefinePlugin in Webpack configuration.
 const REACT_APP = /^REACT_APP_/i;
 
-function getClientEnvironment(envCode, publicUrl) {
+function getClientEnvironment(envCode) {
 
   let config = evnMap[envCode];
 
@@ -66,7 +66,6 @@ function getClientEnvironment(envCode, publicUrl) {
       },
       Object.assign({}, {
         NODE_ENV: process.env.NODE_ENV || 'development',
-        PUBLIC_URL: publicUrl
       }, config)
     );
   const stringified = {

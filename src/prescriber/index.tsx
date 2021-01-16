@@ -284,7 +284,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'prescriberCode',
         key: 'prescriberCode',
         width: '10%',
-        render: (text, record) => <p>{this.state.isMapMode ? '' : text}</p>
+        render: (text, record) => <p>{this.state.isMapMode ? '--' : text}</p>
       },
       {
         title: 'Prescriber status',

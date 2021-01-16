@@ -215,7 +215,7 @@ class CateModalForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: 'Please selecte display in shop'
+                  message: 'Please selected display in shop'
                 }
               ],
               initialValue: displayStatus,
@@ -269,7 +269,7 @@ class CateModalForm extends React.Component<any, any> {
                 // rules: [
                 //   {
                 //     required: true,
-                //     message: 'Please selecte category type'
+                //     message: 'Please selected category type'
                 //   }
                 // ],
                 onChange: this._editGoods.bind(this, 'cateType'),

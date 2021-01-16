@@ -960,8 +960,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: '回审',
-      content: '确认将选中的订单退回重新审核?',
+      title: 'Re-review',
+      content: 'Confirm to return the selected order for re approval ?',
       onOk() {
         retrial(tdId);
       },

@@ -49,21 +49,16 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-module.exports = function (webpackEnv, envCode = 'dev') {
+module.exports = function (webpackEnv, envCode) {
+  console.log(webpackEnv);
   console.log(envCode);
-  const isEnvDevelopment = envCode === 'dev';
-  const isEnvProduction = envCode !== 'dev'
-
-
-
+  const isEnvDevelopment = webpackEnv === 'development';
+  const isEnvProduction = webpackEnv !== 'development'
 
   const env = getClientEnvironment(envCode);
 
-  console.log(env,11111111);
-
   const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && './';
   const shouldUseRelativeAssetPaths = publicPath === './';
-  console.log(publicPath);
   const publicUrl = isEnvProduction ? publicPath : isEnvDevelopment && '';
 
   const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -265,7 +260,7 @@ module.exports = function (webpackEnv, envCode = 'dev') {
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
-                name: '/static/media/[name].[hash:8].[ext]',
+                name: 'static/media/[name].[hash:8].[ext]',
               },
             },
             {
@@ -401,7 +396,7 @@ module.exports = function (webpackEnv, envCode = 'dev') {
               loader: require.resolve('file-loader'),
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
-                name: '/static/media/[name].[hash:8].[ext]',
+                name: 'static/media/[name].[hash:8].[ext]',
               },
             },
           ],

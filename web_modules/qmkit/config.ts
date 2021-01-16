@@ -1,6 +1,7 @@
 import Common from './config-common';
 export default {
-  HOST: 'https://storestg.royalcanin.com/api',
-  CDN_PATH: 'https://cdnstorestg.azureedge.net/res',
+  // dev
+  HOST: 'http://172.19.25.6:8490',
+  CDN_PATH: '',
   ...Common
 };

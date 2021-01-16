@@ -14,7 +14,6 @@ export default class addTargetProduct extends Component<any, any> {
     this.state = {
       visible: false,
       selectedRowKeys: [],
-      isMultiple: false,
 
       brandList: [],
       serchForm: {},
@@ -22,6 +21,8 @@ export default class addTargetProduct extends Component<any, any> {
 
       loading: false,
       skuProducts: [],
+      clearExsit: false,
+      exsitRowKeys: [],
       pagination: {
         current: 1,
         pageSize: 10,
@@ -39,13 +40,14 @@ export default class addTargetProduct extends Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visible, selectedRowKeys, isMultiple } = nextProps;
+    const { visible, selectedRowKeys, clearExsit, exsitRowKeys } = nextProps;
 
     if (visible !== prevState.visible) {
       return {
         visible: visible,
         selectedRowKeys: selectedRowKeys,
-        isMultiple: isMultiple
+        clearExsit: clearExsit,
+        exsitRowKeys: exsitRowKeys
       };
     }
 
@@ -128,14 +130,21 @@ export default class addTargetProduct extends Component<any, any> {
     webapi
       .getSkuProducts(params)
       .then((data) => {
+        const { clearExsit, exsitRowKeys } = this.state;
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          pagination.total = res.context.goodsInfos.total;
-          res.context.goodsInfos.content.map((item) => {
+          let total = res.context.goodsInfos.total;
+          let productData = res.context.goodsInfos.content;
+          if (clearExsit && exsitRowKeys) {
+            total = total - exsitRowKeys.length;
+            productData = productData.filter((x) => !exsitRowKeys.includes(x.goodsInfoId));
+          }
+          pagination.total = total;
+          productData.map((item) => {
             item.key = item.goodsInfoId;
           });
           this.setState({
-            skuProducts: res.context.goodsInfos.content,
+            skuProducts: productData,
             pagination: pagination,
             loading: false
           });
@@ -190,7 +199,7 @@ export default class addTargetProduct extends Component<any, any> {
     this.props.updateTable();
   }
   render() {
-    const { visible, loading, brandList, productCategories, skuProducts, selectedRowKeys } = this.state;
+    const { visible, loading, brandList, productCategories, skuProducts, selectedRowKeys, clearExsit } = this.state;
     const columns = [
       {
         title: 'Image',
@@ -239,8 +248,7 @@ export default class addTargetProduct extends Component<any, any> {
     const rowSelection = {
       columnTitle: ' ', // hide all check
       getCheckboxProps: (record) => ({
-        disabled: this.state.selectedRowKeys && this.state.selectedRowKeys.length >= 1 && 
-            (this.state.isMultiple ? record.goodsInfoId !== this.state.selectedRowKeys[0] : record.goodsInfoId !== this.state.selectedRowKeys[0]),
+        disabled: selectedRowKeys && selectedRowKeys.length >= 1 && record.goodsInfoId !== selectedRowKeys[0],
         name: record.name
       }),
       selectedRowKeys,

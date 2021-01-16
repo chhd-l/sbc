@@ -44,19 +44,16 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 
 let evnMap = {
   dev: require('./env-config/dev.js'),
-  prod: require('./env-config/prod.js'),
-  test1: require('./env-config/test1.js'),
-  test2: require('./env-config/test2.js'),
-  test3: require('./env-config/test3.js'),
-  local: require('./env-config/local.js'),
-  "dev:205": require('./env-config/dev_205.js'),
+  stg: require('./env-config/stg.js'),
+  prod_fa: require('./env-config/prod_fa.js'),
+  prod_de: require('./env-config/prod_de.js'),
 }
 
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
 const REACT_APP = /^REACT_APP_/i;
 
-function getClientEnvironment(envCode, publicUrl) {
+function getClientEnvironment(envCode) {
 
   let config = evnMap[envCode];
 
@@ -69,7 +66,6 @@ function getClientEnvironment(envCode, publicUrl) {
       },
       Object.assign({}, {
         NODE_ENV: process.env.NODE_ENV || 'development',
-        PUBLIC_URL: publicUrl
       }, config)
     );
   const stringified = {

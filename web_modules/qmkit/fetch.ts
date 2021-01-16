@@ -42,7 +42,7 @@ export default async function Fetch<T>(
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Accept-Language': 'en',
+        'Accept-Language': 'en-US',
         Authorization:
           'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
       },

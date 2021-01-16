@@ -79,7 +79,6 @@ export default class NewCityModal extends Component<any, any> {
   render() {
     const { onStateFormChange, cityForm, cityModalVisible } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-    console.log(cityForm.toJS(), 'ddddddddddddd');
     const { country, state, postCode, city } = cityForm.toJS();
     return (
       <Modal

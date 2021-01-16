@@ -35,9 +35,6 @@ export default class TaxesTable extends React.Component<any, any> {
   };
   confirm = (check, id) => {
     this.onChange(!check, id);
-    // this.setState({ showSwich: true });
-    // console.log(check);
-    // message.success('Click on Yes');
   };
   cancel = () => {
     message.info('canceled');
@@ -104,9 +101,6 @@ export default class TaxesTable extends React.Component<any, any> {
           dataIndex="Status"
           key="Status"
           render={(rowInfo) => {
-            setTimeout(() => {
-              console.log(rowInfo, 111111111);
-            });
             const check = rowInfo === 0 ? false : true;
             return (
               <Popconfirm title={check ? 'Are you sure disable this consent?' : 'Are you sure able this consent?'} onConfirm={() => this.confirm(check, rowInfo)} onCancel={this.cancel} okText="Yes" cancelText="No">

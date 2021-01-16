@@ -133,9 +133,7 @@ export default class NewStateModal extends Component<any, any> {
     const { modalVisible, onStateFormChange, stateForm } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
 
-    console.log(stateForm.toJS(), 'ddddddddddddd');
     const { country, state, postCodeArr } = stateForm.toJS();
-    console.log(postCodeArr, 'postCodeArr-------------');
     return (
       <Modal
         maskClosable={false}

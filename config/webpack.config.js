@@ -54,7 +54,8 @@ module.exports = function (webpackEnv, envCode) {
   console.log(envCode);
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv !== 'development'
-
+  console.log(isEnvDevelopment);
+  console.log(isEnvProduction);
   const env = getClientEnvironment(envCode);
 
   const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && './';
@@ -580,7 +581,7 @@ module.exports = function (webpackEnv, envCode) {
       type: "filesystem"
     },
     performance: {
-      hints: "warning"
+      hints: isEnvDevelopment?false:"warning"
     },
   };
 };

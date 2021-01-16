@@ -63,6 +63,7 @@ import {
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
+import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -82,38 +83,75 @@ export default class AppStore extends Store {
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
     this.dispatch('loading:start');
-    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList(), fetchFiltersTotal(), fetchTaggingTotal()]).then((results) => {
-      this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
-      this.dispatch('goodsActor: initBrandList', fromJS((results[1].res as any).context));
-      this.dispatch('formActor:check', fromJS((results[2].res as any).context));
-      this.dispatch('goodsActor:flashsaleGoods', fromJS((results[3].res as any).context).get('flashSaleGoodsVOList'));
-      this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
-      this.dispatch('goodsActor:getGoodsCate', fromJS((results[6].res as any).context.storeCateResponseVOList));
-      this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
-      this.dispatch('goodsActor:taggingTotal', fromJS((results[8].res as any).context));
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let params = {
+      flashSaleGoodsListRequest: {
+        goodsId: goodsId,
+        queryDataType: 3
+      },
+      sysDictionaryQueryRequest: {
+        storeId: loginInfo.storeId,
+        type: 'goodsDetailTab'
+      },
+      storeGoodsFilterListRequest: {
+        filterStatus: '1'
+      }
+    };
+    let resource = {
+      enterpriseCheck: { goodsId },
+      storeCateByCondition: {}
+    };
 
-      this.dispatch('related:goodsId', goodsId);
-      this.dispatch('goodsActor:getGoodsId', goodsId);
-      // fetchFiltersTotal
+    let editResource: any;
+    let editProductResource: any;
+    await Promise.all([getPreEditProductResource(params), getEditProductResource(resource)]).then((results) => {
+      if ((results[0].res as any).code === Const.SUCCESS_CODE) {
+        this.transaction(() => {
+          this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context.cateList));
+          this.dispatch('goodsActor:getGoodsCate', fromJS((results[0].res as any).context.storeCateByCondition.storeCateResponseVOList));
+          this.dispatch('goodsActor: initBrandList', fromJS((results[0].res as any).context.brandList));
+          this.dispatch('formActor:check', fromJS((results[0].res as any).context.distributionCheck));
+          this.dispatch('goodsActor:flashsaleGoods', fromJS((results[0].res as any).context.flashsalegoodsList.flashSaleGoodsVOList));
+          this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[0].res as any).context.querySysDictionary));
+
+          this.dispatch('goodsActor:purchaseTypeList', (results[0].res as any).context.purchase_type.sysDictionaryPage.content);
+          this.dispatch('goodsActor:frequencyList', {
+            dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
+            weekList: (results[0].res as any).context.frequency_week ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content : [],
+            monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : []
+          });
+
+          this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods));
+          this.dispatch('goodsActor:filtersTotal', fromJS((results[0].res as any).context.filtersTotal));
+          this.dispatch('goodsActor:taggingTotal', fromJS((results[0].res as any).context.taggingTotal));
+          this.dispatch('goodsActor:resourceCates', (results[0].res as any).context.resourceCates);
+
+          this.dispatch('related:goodsId', goodsId);
+          this.dispatch('goodsActor:getGoodsId', goodsId);
+        });
+      } else {
+        message.error((results[0].res as any).message);
+        this.dispatch('loading:end');
+      }
+      editProductResource = results[1].res as any;
     });
+
+    editResource = editProductResource.context;
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
-      const { res: checkResponse } = await checkEnterpriseType(goodsId);
-      if (checkResponse.code === config.SUCCESS_CODE) {
-        this.dispatch('formActor:enterpriseFlag', fromJS(checkResponse.context).get('checkFlag'));
-      }
+      this.dispatch('formActor:enterpriseFlag', fromJS(editResource.enterpriseCheck).get('checkFlag'));
     } else {
       this.dispatch('formActor:enterpriseFlag', false);
     }
 
     let userList: any;
     if (util.isThirdStore()) {
-      userList = await getUserList('');
+      userList = editResource.allCustomers;
     } else {
-      userList = await getBossUserList();
+      userList = editResource.allBossCustomers;
     }
 
-    const sourceUserList = fromJS(userList.res.context);
+    const sourceUserList = fromJS(userList);
     this.dispatch('userActor: setUserList', sourceUserList);
     this.dispatch('userActor: setSourceUserList', sourceUserList);
 
@@ -128,8 +166,7 @@ export default class AppStore extends Store {
         });
       });
     } else {
-      const userLevelList: any = await getBossUserLevelList();
-      newLevelList = userLevelList.res.context.customerLevelVOList;
+      newLevelList = editResource.listBoss.customerLevelVOList;
     }
 
     const userLevel = {
@@ -140,34 +177,39 @@ export default class AppStore extends Store {
     newLevelList.unshift(userLevel);
     this.dispatch('userActor: setUserLevelList', fromJS(newLevelList));
     this.dispatch('priceActor: setUserLevelList', fromJS(newLevelList));
-
     if (goodsId) {
       this.dispatch('goodsActor: isEditGoods', true);
-      this._getGoodsDetail(goodsId);
+      await this._getGoodsDetail(editProductResource);
     } else {
       // 新增商品，可以选择平台类目
-      const storeCode = await getStoreCode();
-      localStorage.setItem('storeCode', storeCode.res.context);
+      localStorage.setItem('storeCode', editResource.getStoreCode);
       this.dispatch('goodsActor: disableCate', false);
-      this.dispatch('goodsActor:randomGoodsNo', storeCode.res.context);
+      this.dispatch('goodsActor:randomGoodsNo', editResource.getStoreCode);
       this.dispatch('loading:end');
-      const storeGoodsTab = await getStoreGoodsTab();
-      if ((storeGoodsTab.res as any).code === Const.SUCCESS_CODE) {
-        const tabs = [];
-        (storeGoodsTab.res as any).context.forEach((info) => {
-          if (info.isDefault !== 1) {
-            tabs.push({
-              tabId: info.tabId,
-              tabName: info.tabName,
-              tabDetail: ''
-            });
-          }
-        });
-        this.dispatch('goodsActor: goodsTabs', tabs);
-      } else {
-        this.dispatch('loading:end');
-      }
+      const storeGoodsTab = editResource.storeGoodsTab;
+      const tabs = [];
+      storeGoodsTab.forEach((info) => {
+        if (info.isDefault !== 1) {
+          tabs.push({
+            tabId: info.tabId,
+            tabName: info.tabName,
+            tabDetail: ''
+          });
+        }
+      });
+      this.dispatch('goodsActor: goodsTabs', tabs);
     }
+    //初始化素材
+    this.initImg({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0
+    });
+    this.initVideo({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0
+    });
   };
 
   /**
@@ -180,24 +222,14 @@ export default class AppStore extends Store {
       successCount: 0
     }
   ) => {
-    const cateList: any = await getResourceCates();
-    // const cateListIm = this.state().get('resCateAllList');
-    // if (cateId == -1 && cateList.res.context.length > 0) {
-    //   cateId = cateList.res.context
-    //     .find((item) => item.isDefault == 1)
-    //     .storeCateId;
-    // }
-    // cateId = cateId ? cateId : this.state().get('videoCateId').toJS();
-
-    // const cateList: any = await getImgCates();
+    const cateList: any = this.state().get('resourceCates');
     const cateListIm = this.state().get('resCateAllList');
-    if (cateId == -1 && cateList.res.length > 0) {
-      const cateIdList = fromJS(cateList.res).filter((item) => item.get('isDefault') == 1);
-      if (cateIdList.size > 0) {
-        cateId = cateIdList.get(0).get('cateId');
-      }
+    if (cateId == -1 && cateList.length > 0) {
+      cateId = fromJS(cateList)
+        .find((item) => item.get('isDefault') == 1)
+        .get('cateId');
     }
-    cateId = cateId ? cateId : this.state().get('cateId');
+    cateId = cateId ? cateId : this.state().get('videoCateId').toJS();
 
     //查询视频分页信息
     const videoList: any = await fetchResource({
@@ -213,7 +245,7 @@ export default class AppStore extends Store {
         if (cateId) {
           this.selectVideoCate(cateId);
         }
-        this.dispatch('cateActor: init', fromJS(cateList.res));
+        this.dispatch('cateActor: init', fromJS(cateList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
           this.dispatch('modal: chooseVideos', fromJS(videoList.res.context).get('content').slice(0, successCount));
@@ -236,16 +268,15 @@ export default class AppStore extends Store {
       successCount: 0
     }
   ) => {
-    const cateList: any = await getImgCates();
+    const cateList: any = this.state().get('resourceCates');
     const cateListIm = this.state().get('resCateAllList');
-    if (cateId == -1 && cateList.res.length > 0) {
-      const cateIdList = fromJS(cateList.res).filter((item) => item.get('isDefault') == 1);
+    if (cateId == -1 && cateList.length > 0) {
+      const cateIdList = fromJS(cateList).filter((item) => item.get('isDefault') == 1);
       if (cateIdList.size > 0) {
         cateId = cateIdList.get(0).get('cateId');
       }
     }
     cateId = cateId ? cateId : this.state().get('cateId');
-
     const imageList: any = await fetchImages({
       pageNum,
       pageSize: 10,
@@ -259,7 +290,7 @@ export default class AppStore extends Store {
           this.dispatch('modal: cateIds', List.of(cateId.toString()));
           this.dispatch('modal: cateId', cateId.toString());
         }
-        this.dispatch('modal: imgCates', fromJS(cateList.res));
+        this.dispatch('modal: imgCates', fromJS(cateList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
           this.dispatch('modal: chooseImgs', fromJS(imageList.res.context).get('content').slice(0, successCount));
@@ -275,68 +306,73 @@ export default class AppStore extends Store {
   /**
    *  编辑时获取商品详情，转换数据
    */
-  _getGoodsDetail = async (goodsId?: string) => {
-    let goodsDetail: any = await getGoodsDetail(goodsId);
-    const storeCode = await getStoreCode();
-    localStorage.setItem('storeCode', storeCode.res.context);
+  _getGoodsDetail = async (resource) => {
+    let resource1 = {};
+    resource1 = Object.assign({}, resource, { context: resource.context.spu });
+    let goodsDetail = resource1 as any;
+    localStorage.setItem('storeCode', resource.context.getStoreCode);
     // let storeCateList: any;
-    if (goodsDetail.res.code == Const.SUCCESS_CODE) {
-      let tmpContext = goodsDetail.res.context;
-      let storeCateList: any = await getStoreCateList();
+    let tmpContext = goodsDetail.context;
+    let storeCateList: any = resource.context.storeCateByCondition;
+    this.dispatch('loading:end');
+    this.dispatch('goodsActor: initStoreCateList', fromJS(storeCateList.storeCateResponseVOList));
+    this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue || '');
 
-      this.dispatch('loading:end');
-      this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
-      this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue || '');
+    // 合并多属性字段
+    let goodsPropDetailRelsOrigin = [];
 
-      // 合并多属性字段
-      let goodsPropDetailRelsOrigin = [];
-
-      if (tmpContext.goodsAttributesValueRelList) {
-        tmpContext.goodsAttributesValueRelList.map((x) => {
-          goodsPropDetailRelsOrigin.push({
-            propId: x.goodsAttributeId,
-            detailId: x.goodsAttributeValueId
-          });
+    if (tmpContext.goodsAttributesValueRelList) {
+      tmpContext.goodsAttributesValueRelList.map((x) => {
+        goodsPropDetailRelsOrigin.push({
+          propId: x.goodsAttributeId,
+          detailId: x.goodsAttributeValueId
         });
-      }
-
-      if (goodsPropDetailRelsOrigin) {
-        let tmpGoodsPropDetailRels = [];
-        goodsPropDetailRelsOrigin.forEach((item) => {
-          let tmpItem = tmpGoodsPropDetailRels.find((t) => t.propId === item.propId);
-          if (tmpItem) {
-            tmpItem.detailIds.push(item.detailId);
-          } else {
-            item.detailIds = [item.detailId];
-            tmpGoodsPropDetailRels.push(item);
-          }
-        });
-        tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
-      }
-      let productFilter = tmpContext.filterList
-        ? tmpContext.filterList.map((x) => {
-            return {
-              filterId: x.filterId,
-              filterValueId: x.id
-            };
-          })
-        : [];
-      this.onProductFilter(productFilter);
-
-      let taggingIds = tmpContext.taggingList
-        ? tmpContext.taggingList.map((x) => {
-            return { taggingId: x.id };
-          })
-        : [];
-
-      this.onGoodsTaggingRelList(taggingIds);
-
-      goodsDetail = fromJS(tmpContext);
-    } else {
-      this.dispatch('loading:end');
-      message.error('查询商品信息失败');
-      return false;
+      });
     }
+
+    if (goodsPropDetailRelsOrigin) {
+      let tmpGoodsPropDetailRels = [];
+      goodsPropDetailRelsOrigin.forEach((item) => {
+        let tmpItem = tmpGoodsPropDetailRels.find((t) => t.propId === item.propId);
+        if (tmpItem) {
+          tmpItem.detailIds.push(item.detailId);
+        } else {
+          item.detailIds = [item.detailId];
+          tmpGoodsPropDetailRels.push(item);
+        }
+      });
+      tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
+    }
+    let productFilter = tmpContext.filterList
+      ? tmpContext.filterList.map((x) => {
+          return {
+            filterId: x.filterId,
+            filterValueId: x.id
+          };
+        })
+      : [];
+    this.onProductFilter(productFilter);
+
+    let taggingIds = tmpContext.taggingList
+      ? tmpContext.taggingList.map((x) => {
+          return { taggingId: x.id };
+        })
+      : [];
+
+    this.onGoodsTaggingRelList(taggingIds);
+
+    goodsDetail = fromJS(tmpContext);
+
+    let addSkUProduct =
+      tmpContext.goodsInfos &&
+      tmpContext.goodsInfos.map((item) => {
+        return {
+          pid: item.goodsInfoNo,
+          targetGoodsIds: item.goodsInfoBundleRels,
+          minStock: item.stock
+        };
+      });
+    this.dispatch('sku:addSkUProduct', addSkUProduct);
     this.transaction(() => {
       // 可能只保存了基本信息没有设价方式，价格tab中由需要默认选中按客户设价
       // 这里给一个默认值2，保存基本信息的时候不能传这个值，要过滤掉 priceType-mark
@@ -351,7 +387,7 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
 
       let id = goods.get('goodsNo');
-      goods = goods.set('internalGoodsNo', storeCode.res.context + '_' + id);
+      goods = goods.set('internalGoodsNo', resource.context.getStoreCode + '_' + id);
 
       // 商品可能没有品牌，后面取值有toString等操作，空字符串方便处理
       if (!goods.get('brandId')) {
@@ -360,6 +396,7 @@ export default class AppStore extends Store {
       if (goods.get('freightTempId')) {
         this.setGoodsFreight(goods.get('freightTempId'), true);
       }
+
       this.dispatch('goodsActor: editGoods', goods);
 
       this.dispatch('goodsActor: goodsDetailTabContentOld', goods.get('goodsDetail'));
@@ -436,7 +473,6 @@ export default class AppStore extends Store {
 
             const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
             item = item.set('specId-' + specId, goodsSpecDetail.get('detailName'));
-
             item = item.set('specDetailId-' + specId, detailId);
             if (item.get('goodsInfoImg')) {
               item = item.set(
@@ -453,7 +489,6 @@ export default class AppStore extends Store {
               );
             }
           });
-
           item = item.set('id', item.get('goodsInfoId'));
           item = item.set('skuSvIds', mockSpecDetailIds.join());
           item = item.set('index', index + 1);
@@ -594,6 +629,9 @@ export default class AppStore extends Store {
       goods = goods.set('internalGoodsNo', localStorage.getItem('storeCode') + '_' + goods.get('goodsNo'));
     }
 
+    if (goods.get('defaultPurchaseType') === 5765) {
+      goods = goods.set('defaultFrequencyId', null);
+    }
     this.dispatch('goodsActor: editGoods', goods);
   };
 
@@ -1254,7 +1292,6 @@ export default class AppStore extends Store {
         })
       );
     });
-    console.log(goodsList, 'goodsList---');
     if (goodsList.count() === 0) {
       message.error('SKU不能为空');
       return false;

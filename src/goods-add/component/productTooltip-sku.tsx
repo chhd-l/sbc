@@ -70,18 +70,22 @@ class ProductTooltipSKU extends React.Component<any, any> {
   init = () => {
     const { addSkUProduct } = this.props.relaxProps;
     let obj = addSkUProduct;
-    if (Array.isArray(obj) && obj[0].targetGoodsIds) {
-      let tempArr = obj[0].targetGoodsIds
-      if(Array.isArray(tempArr)&& tempArr.length>0){
-        let selectedRows = [];
-        let selectedRowKeys = [];
-        for (let i = 0; i < tempArr.length; i++) {
-          const element = tempArr[i];
-          selectedRows.push(element);
-          selectedRowKeys.push(element.subGoodsInfoNo);
+    if (Array.isArray(obj) &&obj.length>0) {
+      let currentObj = obj.find(item=>item.pid === this.props.pid)
+      if(currentObj){
+        let tempArr = currentObj.targetGoodsIds
+        if(Array.isArray(tempArr)&& tempArr.length>0){
+          let selectedRows = [];
+          let selectedRowKeys = [];
+          for (let i = 0; i < tempArr.length; i++) {
+            const element = tempArr[i];
+            selectedRows.push(element);
+            selectedRowKeys.push(element.subGoodsInfoNo);
+          }
+          this.setState({ selectedRows, selectedRowKeys });
         }
-        this.setState({ selectedRows, selectedRowKeys });
       }
+      
       
     }
   };
@@ -89,13 +93,13 @@ class ProductTooltipSKU extends React.Component<any, any> {
   handleOK=()=>{
     const {selectedRowKeys,selectedRows} = this.state
     const { onProductselectSku } = this.props.relaxProps;
-    let a = [];
+    // let a = [];
     let minStock = []
-    selectedRowKeys.map((item) => {
-      a.push({
-        goodsInfoNo: item
-      });
-    });
+    // selectedRowKeys.map((item) => {
+    //   a.push({
+    //     goodsInfoNo: item
+    //   });
+    // });
     selectedRows && selectedRows.map((item) => {
       if(item.stock){
         minStock.push(item.stock)
@@ -121,7 +125,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
       minStock: tempMinStock
     });
     if (targetGoodsIds.length <= 10) {
-      if (targetGoodsIds.length != 0) {
+      if (targetGoodsIds.length !== 0) {
         onProductselectSku(targetGoodsList);
       }
       targetGoodsIds = [];

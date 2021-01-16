@@ -159,7 +159,7 @@ export default class AppStore extends Store {
     let params = {} as any;
     params.activityName = activity.activityName;
     params.startTime = activity.startTime;
-    params.endTime = activity.startTime;
+    params.endTime = activity.endTime;
     params.couponActivityType = 1; // 指定赠券
     params.receiveType = 1;
     params.receiveCount = 1;
@@ -185,23 +185,26 @@ export default class AppStore extends Store {
       res = await webapi.addCouponActivity(params);
     }
     res = res.res;
+
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       history.push({
         pathname: '/coupon-activity-list'
       });
     } else if (res.code == 'K-080106') {
-      this.dispatch('set: invalid: coupons', fromJS(res.errorData));
       info({
-        content: `${res.errorData.length}张优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。`,
+        content: '优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。',
+        // content: `${res.errorData.length}张优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。`,
         okText: '好的'
       });
+      this.dispatch('set: invalid: coupons', fromJS(res.errorData));
     } else if (res.code == 'K-080104') {
-      this.dispatch('set: invalid: coupons', fromJS(res.errorData));
       info({
-        content: `${res.errorData.length}张优惠券不存在，请删除后保存。`,
+        content: '优惠券不存在，请删除后保存。',
+        // content: `${res.errorData.length}张优惠券不存在，请删除后保存。`,
         okText: '好的'
       });
+      this.dispatch('set: invalid: coupons', fromJS(res.errorData));
     } else {
       message.error(res.message);
     }

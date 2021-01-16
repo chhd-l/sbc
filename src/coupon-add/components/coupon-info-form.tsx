@@ -181,7 +181,7 @@ export default class CouponInfoForm extends Component<any, any> {
               rules: [
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Coupon name', 1, 10);
+                    QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Coupon name', 1, 100);
                   }
                 }
               ]
@@ -241,43 +241,43 @@ export default class CouponInfoForm extends Component<any, any> {
             </Col>
           </FormItem>*/}
           <FormItem {...formItemLayout} label="Start and end time" required={true}>
-            <RadioGroup
+            {/* <RadioGroup
               value={rangeDayType}
               onChange={(e) => {
                 this.changeRangeDayType((e as any).target.value);
               }}
-            >
-              <FormItem>
-                <Radio value={0} style={styles.radioStyle}>
-                  {getFieldDecorator('rangeDay', {
-                    initialValue: startTime && endTime && [moment(startTime), moment(endTime)],
-                    rules: [
-                      {
-                        required: rangeDayType === 0,
-                        message: 'Please input the start and end time'
-                      }
-                    ]
-                  })(
-                    <RangePicker
-                      disabledDate={this.disabledDate}
-                      disabled={rangeDayType === 1}
-                      getCalendarContainer={() => document.getElementById('page-content')}
-                      format="YYYY-MM-DD"
-                      placeholder={['Start date', 'End date']}
-                      onChange={(e) => {
-                        if (e.length > 0) {
-                          changeDateRange({
-                            startTime: e[0].format(Const.DAY_FORMAT),
-                            endTime: e[1].format(Const.DAY_FORMAT)
-                          });
-                        }
-                      }}
-                    />
-                  )}
-                  <span style={styles.greyColor}>&nbsp;&nbsp;Coupons can be collected but not used before the start time</span>
-                </Radio>
-              </FormItem>
-              <FormItem>
+            > */}
+            <FormItem>
+              {/* <Radio value={0} style={styles.radioStyle}> */}
+              {getFieldDecorator('rangeDay', {
+                initialValue: startTime && endTime && [moment(startTime), moment(endTime)],
+                rules: [
+                  {
+                    required: rangeDayType === 0,
+                    message: 'Please input the start and end time'
+                  }
+                ]
+              })(
+                <RangePicker
+                  disabledDate={this.disabledDate}
+                  disabled={rangeDayType === 1}
+                  getCalendarContainer={() => document.getElementById('page-content')}
+                  format="YYYY-MM-DD"
+                  placeholder={['Start date', 'End date']}
+                  onChange={(e) => {
+                    if (e.length > 0) {
+                      changeDateRange({
+                        startTime: e[0].format(Const.DAY_FORMAT),
+                        endTime: e[1].format(Const.DAY_FORMAT)
+                      });
+                    }
+                  }}
+                />
+              )}
+              <span style={styles.greyColor}>&nbsp;&nbsp;Coupons can be collected but not used before the start time</span>
+              {/* </Radio> */}
+            </FormItem>
+            {/* <FormItem>
                 <Radio value={1} style={styles.lastRadioStyle}>
                   <span style={styles.darkColor}>Valid for&nbsp;&nbsp;</span>
                   {getFieldDecorator('effectiveDays', {
@@ -310,8 +310,8 @@ export default class CouponInfoForm extends Component<any, any> {
                   )}
                   <span style={styles.darkColor}>&nbsp;&nbsp;days from the day of collection, Fill in 1 and it will be invalid at 24:00</span>
                 </Radio>
-              </FormItem>
-            </RadioGroup>
+              </FormItem> */}
+            {/* </RadioGroup> */}
           </FormItem>
           <ErrorDiv>
             <FormItem {...formItemSmall} label="Coupon value" required={true}>
@@ -401,26 +401,28 @@ export default class CouponInfoForm extends Component<any, any> {
               </RadioGroup>
             </FormItem>
           </ErrorDiv>
-          {/* <FormItem {...formItemLayout} label="Select product" required={true}>
+          <FormItem {...formItemLayout} label="Select product" required={true}>
             <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
                 <span style={styles.darkColor}>Base on brand</span>
-              </Radio> */}
-          {/*<Radio value={1}>
-                <span style={styles.darkColor}>按品牌</span>
-              </Radio>*/}
-          {/*<Radio value={3}>*/}
-          {/*  <span style={styles.darkColor}>Base on category</span>*/}
-          {/*</Radio>*/}
-          {/* <Radio value={4}>
+              </Radio>
+              {/*<Radio value={1}>
+                    <span style={styles.darkColor}>按品牌</span>
+                  </Radio>*/}
+              {/*<Radio value={3}>*/}
+              {/*  <span style={styles.darkColor}>Base on category</span>*/}
+              {/*</Radio>*/}
+              <Radio value={4}>
                 <span style={styles.darkColor}>Custom</span>
               </Radio>
             </RadioGroup>
-          </FormItem> */}
-          <FormItem {...this._scopeBoxStyle(scopeType)} label="Selected products" id={'page-content'}>
-            {/* {this.chooseGoods().dom} */}
-            <SelectedGoodsGrid />
           </FormItem>
+          {scopeType === 4 ? (
+            <FormItem {...this._scopeBoxStyle(scopeType)} label="Selected products" id={'page-content'}>
+              {/* {this.chooseGoods().dom} */}
+              <SelectedGoodsGrid />
+            </FormItem>
+          ) : null}
           <FormItem {...formItemLayout} label="Instructions for use">
             {getFieldDecorator('couponDesc', {
               initialValue: couponDesc,
@@ -444,7 +446,7 @@ export default class CouponInfoForm extends Component<any, any> {
             Save
           </Button>
           <Button onClick={() => history.goBack()} style={{ marginLeft: 10 }}>
-            Delete
+            Cancel
           </Button>
         </div>
         <GoodsModal showValidGood={true} visible={goodsModalVisible} selectedSkuIds={chooseSkuIds.toJS()} selectedRows={goodsRows.toJS()} onOkBackFun={this._onOkBackFun} onCancelBackFun={onCancelBackFun} />

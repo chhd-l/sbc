@@ -2,6 +2,20 @@ import { Fetch } from 'qmkit';
 import { IMap } from 'typings/globalType';
 import { TResult } from '../../typings/global';
 
+/**整合接口1*/
+export const getPreEditProductResource = (params) => {
+  return Fetch('/preEditProductResource', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+/**整合接口2*/
+export const getEditProductResource = (res: any) => {
+  return Fetch('/EditProductResource', {
+    method: 'POST',
+    body: JSON.stringify(res)
+  });
+};
 /**
  * 获取商品详情
  */
@@ -209,6 +223,13 @@ export const getCateIdsPropDetail = (cateId: string) => {
 /*export const getCateIdsPropDetail = (cateId: string) => {
   return Fetch(`/goods/goodsProp/1129`);
 };*/
+
+export function fetchlistGoodsInfo(param) {
+  return Fetch<TResult>('/goodsInfos/bundelPage', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
 
 export function fetchFiltersTotal(params = {}) {
   return Fetch('/goods_filter/filters/total', {

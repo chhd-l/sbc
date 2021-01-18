@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Tabs } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { ErrorBoundary, noop, UEditor } from 'qmkit';
+import { ErrorBoundary, noop, UEditor, ReactEditor } from 'qmkit';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+let goodsDetailTabObj = {};
 
 @Relax
 export default class Detail extends React.Component<any, any> {
@@ -23,6 +24,7 @@ export default class Detail extends React.Component<any, any> {
       reftabDetailEditor: Function;
       modalVisible: Function;
       editEditor: Function;
+      editEditorContent: Function;
     };
   };
 
@@ -38,7 +40,8 @@ export default class Detail extends React.Component<any, any> {
     refDetailEditor: noop,
     reftabDetailEditor: noop,
     modalVisible: noop,
-    editEditor: noop
+    editEditor: noop,
+    editEditorContent: noop
   };
 
   getDetailString = (goodsDetailTabContent, name) => {
@@ -51,6 +54,20 @@ export default class Detail extends React.Component<any, any> {
     } else {
       return detail.toString();
     }
+  };
+  onContentChange = (html: string, name: string) => {
+    const { editEditorContent } = this.props.relaxProps;
+
+    const reg = /[^><]+(?=<\/code>)/gim;
+    let _html = html.match(reg);
+    if (_html) {
+      goodsDetailTabObj[name] = _html.toString();
+    } else {
+      goodsDetailTabObj[name] = html;
+    }
+    let p = JSON.stringify(goodsDetailTabObj);
+    editEditorContent('goodsDetail', p);
+    // console.log(goodsDetailTabObj)
   };
 
   render() {
@@ -70,90 +87,22 @@ export default class Detail extends React.Component<any, any> {
       }
     }
     let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
-    let storeId =  loginInfo ? loginInfo.storeId : '';
+    let storeId = loginInfo ? loginInfo.storeId : '';
     return (
       <div>
-        <Tabs defaultActiveKey="main1" animated={false}>
-          {goodsDetailTabCopy.map((item, i) => {
-            return (
-              <Tabs.TabPane tab={item.get('name')} key={'main' + i} forceRender>
-                <ErrorBoundary>
-                  <UEditor
-                    ref={(UEditor) => {
-                      refDetailEditor({
-                        detailEditor: (UEditor && UEditor.editor) || {},
-                        ref: 'detailEditor_' + i
-                      });
-                      this.child = UEditor;
-                    }}
-                    id={'main' + i}
-                    height="320"
-                    disabled={storeId === 123457909} //fr
-                    content={this.getDetailString(goodsDetailTabContent, item.get('name'))} //去除前后的双引号, 数组加上[]
-                    insertImg={() => {
-                      this._handleClick();
-                      this.props.relaxProps.editEditor('detail');
-                    }}
-                    chooseImgs={chooseImgs.toJS()}
-                    imgType={imgType}
-                  />
-                </ErrorBoundary>
-              </Tabs.TabPane>
-            );
-          })}
-        </Tabs>
-        {/* <Tabs defaultActiveKey="main" onChange={() => {}}>
-          <Tabs.TabPane
-            tab={<FormattedMessage id="product.productDetail" />}
-            key="main"
-          >
-            <UEditor
-              ref={(UEditor) => {
-                refDetailEditor((UEditor && UEditor.editor) || {});
-                this.child = UEditor;
-              }}
-              id="main"
-              height="320"
-              content={goods.get('goodsDetail')}
-              insertImg={() => {
-                this._handleClick();
-                this.props.relaxProps.editEditor('detail');
-              }}
-              chooseImgs={chooseImgs.toJS()}
-              imgType={imgType}
-            />
-          </Tabs.TabPane>
-          {goodsTabs &&
-            goodsTabs.map((val, index) => {
+        {goodsDetailContent && (
+          <Tabs defaultActiveKey="main0" animated={false}>
+            {goodsDetailTabCopy.map((item, i) => {
               return (
-                <Tabs.TabPane tab={val.tabName} key={index}>
-                  <UEditor
-                    ref={(UEditor) => {
-                      reftabDetailEditor(
-                        (UEditor &&
-                          UEditor.editor && {
-                            tabId: val.tabId,
-                            tab: 'detailEditor_' + index,
-                            val: UEditor.editor
-                          }) ||
-                          {}
-                      );
-                      this.child = UEditor;
-                    }}
-                    id={'main' + index}
-                    height="320"
-                    content={val.tabDetail}
-                    insertImg={() => {
-                      this._handleClick();
-                      this.props.relaxProps.editEditor('detailEditor_' + index);
-                    }}
-                    chooseImgs={chooseImgs.toJS()}
-                    imgType={imgType}
-                  />
+                <Tabs.TabPane tab={item.get('name')} key={'main' + i} forceRender>
+                  <ErrorBoundary>
+                    <ReactEditor id={'main-' + i} content={this.getDetailString(goodsDetailTabContent, item.get('name'))} onContentChange={this.onContentChange} tabNanme={item.get('name')} disabled={false} height={320} />
+                  </ErrorBoundary>
                 </Tabs.TabPane>
               );
             })}
-        </Tabs> */}
+          </Tabs>
+        )}
       </div>
     );
   }

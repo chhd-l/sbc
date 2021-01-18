@@ -42,7 +42,7 @@ export const getCateList = () => {
 /**
  * 获取店铺分类列表
  */
-export const getStoreCateList = () => {
+export const getStoreCateList = (param = '') => {
   let params = {};
   return Fetch('/storeCate/storeCateByCondition', {
     method: 'POST',

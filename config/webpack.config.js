@@ -50,16 +50,14 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 module.exports = function (webpackEnv, envCode) {
-  console.log(webpackEnv);
-  console.log(envCode);
+
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv !== 'development'
-  console.log(isEnvDevelopment);
-  console.log(isEnvProduction);
+
   const env = getClientEnvironment(envCode);
 
-  const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && './';
-  const shouldUseRelativeAssetPaths = publicPath === './';
+  const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && '/';
+  const shouldUseRelativeAssetPaths = publicPath === '/';
   const publicUrl = isEnvProduction ? publicPath : isEnvDevelopment && '';
 
   const getStyleLoaders = (cssOptions, preProcessor) => {

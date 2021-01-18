@@ -164,14 +164,14 @@ const Common = {
   // REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
 
   // PROD Europ RC STAFF Okta Config
-  // REACT_APP_RC_CLIENT_ID: "0oa78y2vww7kzTbiq357",
-  // REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
-  // REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
-
-  // STG RC STAFF Okta Config
-  REACT_APP_RC_CLIENT_ID: "0oa6fb12ahvn5lAAL357",
+  REACT_APP_RC_CLIENT_ID: "0oa78y2vww7kzTbiq357",
   REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
   REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
+
+  // STG RC STAFF Okta Config
+  // REACT_APP_RC_CLIENT_ID: "0oa6fb12ahvn5lAAL357",
+  // REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
+  // REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
 
 };
 export default Common;

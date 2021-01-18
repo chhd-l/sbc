@@ -50,7 +50,7 @@ export default class Detail extends React.Component<any, any> {
       return '';
     }
     if (Array.isArray(detail)) {
-      return '[' + goodsDetailTabContent[name].toString().replace(/^\"|\"$/g, '') + ']';
+      return '<code>[' + goodsDetailTabContent[name].toString().replace(/^\"|\"$/g, '') + ']</code>';
     } else {
       return detail.toString();
     }
@@ -71,13 +71,11 @@ export default class Detail extends React.Component<any, any> {
   };
 
   render() {
-    const { goods, refDetailEditor, reftabDetailEditor, chooseImgs, imgType, goodsTabs } = this.props.relaxProps;
-    let { goodsDetailTab } = this.props.relaxProps;
+    const { goods, refDetailEditor, reftabDetailEditor, chooseImgs, imgType, goodsTabs, goodsDetailTab } = this.props.relaxProps;
     let goodsDetailTabCopy = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
     let goodsDetailTabContent: any = {};
-    let goodsDetailContent;
-    if (goods.get('goodsDetail')) {
-      goodsDetailContent = goods.get('goodsDetail');
+    let goodsDetailContent: string = goods.get('goodsDetail');
+    if (goodsDetailContent) {
       try {
         goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'));
       } catch {

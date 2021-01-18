@@ -23,13 +23,13 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-module.exports = function(webpackEnv, envCode) {
-  console.log(envCode);
-  const isEnvDevelopment = envCode !== 'production';
-  const isEnvProduction = envCode === 'production';
+module.exports = function(webpackEnv, envCode = 'prod') {
+
+  const isEnvDevelopment = envCode !== 'prod';
+  const isEnvProduction = envCode === 'prod';
 
   const publicPath = isEnvProduction ? '/' : isEnvDevelopment && '/';
-  const shouldUseRelativeAssetPaths = publicPath === '/';
+  const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction
     ? publicPath.slice(0, -1)

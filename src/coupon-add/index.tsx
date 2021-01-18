@@ -32,10 +32,10 @@ export default class CouponInfo extends Component<any, any> {
     const { source } = (state || {}) as any;
     return [
       <BreadCrumb thirdLevel={true}>
-        <Breadcrumb.Item>{id ? '编辑' : '创建'}优惠券</Breadcrumb.Item>
+        <Breadcrumb.Item>{id ? 'Edit ' : 'Create '}coupon</Breadcrumb.Item>
       </BreadCrumb>,
       <div className="container" key="container">
-        <Headline title={id ? '编辑优惠券' : '创建优惠券'} />
+        <Headline title={id ? 'Edit coupon' : 'Create coupon'} />
         <div style={styles.container}>
           {/*<MobileShowBox />*/}
           <CouponInfoRelax />

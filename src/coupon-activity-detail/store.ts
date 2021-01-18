@@ -34,7 +34,7 @@ export default class AppStore extends Store {
       if (item.rangeDayType == 0) {
         item.time = moment(item.startTime).format(Const.TIME_FORMAT).toString() + '至' + moment(item.endTime).format(Const.TIME_FORMAT).toString();
       } else {
-        item.time = `领取当天${item.effectiveDays}日内有效`;
+        item.time = `Day of collection${item.effectiveDays}Valid within days`;
       }
       if (item.fullBuyType == 0) {
         item.price = `满0元减${item.denomination}`;

@@ -23,16 +23,20 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-module.exports = function (webpackEnv, envCode) {
+module.exports = function(webpackEnv, envCode = 'prod') {
 
-  const isEnvDevelopment = webpackEnv === 'development';
-  const isEnvProduction = webpackEnv !== 'development'
+  const isEnvDevelopment = envCode !== 'prod';
+  const isEnvProduction = envCode === 'prod';
 
-  const env = getClientEnvironment(envCode);
+  const publicPath = isEnvProduction ? 'https://cdnstorestg.azureedge.net/res/' : isEnvDevelopment && '/';
+  const shouldUseRelativeAssetPaths = publicPath === './';
 
-  const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && '/';
-  const shouldUseRelativeAssetPaths = publicPath === '/';
-  const publicUrl = isEnvProduction ? publicPath : isEnvDevelopment && '';
+  const publicUrl = isEnvProduction
+    ? publicPath.slice(0, -1)
+    : isEnvDevelopment && '';
+
+  const env = getClientEnvironment(envCode, publicUrl);
+
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),

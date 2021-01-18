@@ -29,19 +29,19 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={queryTab}
         >
-          <Tabs.TabPane tab="全部" key="0">
+          <Tabs.TabPane tab="ALL" key="0">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="生效中" key="1">
+          <Tabs.TabPane tab="Valid" key="1">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="未生效" key="2">
+          <Tabs.TabPane tab="Invalid" key="2">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="领取生效" key="3">
+          {/* <Tabs.TabPane tab="领取生效" key="3">
             <List />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="已失效" key="4">
+          </Tabs.TabPane> */}
+          <Tabs.TabPane tab="Completed" key="4">
             <List />
           </Tabs.TabPane>
         </Tabs>

@@ -23,6 +23,7 @@ export default class AppStore extends Store {
    * 初始化页面
    */
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+    this.dispatch('loading:start');
     const query = this.state().get('form').toJS();
     const queryTab = this.state().get('queryTab');
     if (query.joinLevel == -3) {
@@ -38,6 +39,7 @@ export default class AppStore extends Store {
       pageSize
     });
     if (res.code != Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
       message.error(res.message);
     }
     let activityList = res.context.content;
@@ -67,6 +69,7 @@ export default class AppStore extends Store {
     if (util.isThirdStore()) {
       const levRes = await webapi.getUserLevelList();
       if (levRes.res.code != Const.SUCCESS_CODE) {
+        this.dispatch('loading:end');
         message.error(levRes.res.message);
         return;
       }
@@ -76,9 +79,11 @@ export default class AppStore extends Store {
         level.customerLevelId = level.storeLevelId;
         level.customerLevelName = level.levelName;
       });
+      this.dispatch('loading:end');
     } else {
       const levRes = await webapi.allCustomerLevel();
       if (levRes.res.code != Const.SUCCESS_CODE) {
+        this.dispatch('loading:end');
         message.error(levRes.res.message);
         return;
       }
@@ -90,6 +95,7 @@ export default class AppStore extends Store {
       total: res.context.totalElements,
       pageNum: pageNum + 1
     });
+    this.dispatch('loading:end');
   };
 
   /**

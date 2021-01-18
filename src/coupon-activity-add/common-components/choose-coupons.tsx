@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Form, InputNumber, Table } from 'antd';
-import { AuthWrapper, DataGrid, ValidConst } from 'qmkit';
+import { AuthWrapper, DataGrid, ValidConst, cache } from 'qmkit';
 import CouponsModal from './coupons-modal';
 
 import styled from 'styled-components';
@@ -35,17 +35,10 @@ export default class ChooseCoupons extends React.Component<any, any> {
     const { getFieldDecorator } = form;
     return (
       <div>
-        <Button
-          type="primary"
-          icon="plus"
-          onClick={() => this.changeModalVisible(true)}
-        >
-          选择优惠券
+        <Button type="primary" icon="plus" onClick={() => this.changeModalVisible(true)}>
+          Select coupons
         </Button>
-        <span style={{ color: '#999', marginLeft: 8 }}>
-          {' '}
-          {'最多可选10张' + (type == 2 ? ',选择多张时成组发放' : '')}
-        </span>
+        <span style={{ color: '#999', marginLeft: 8 }}> {'' + (type == 2 ? 'Up to ten coupons' : '')}</span>
         <TableRow>
           <DataGrid
             scroll={{ y: 500 }}
@@ -60,22 +53,12 @@ export default class ChooseCoupons extends React.Component<any, any> {
               return '';
             }}
           >
-            <Column
-              title="优惠券名称"
-              dataIndex="couponName"
-              key="couponName"
-              width="15%"
-            />
+            <Column title="Coupon name" dataIndex="couponName" key="couponName" width="15%" />
+
+            <Column title={`Coupon  value( ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} )`} dataIndex="denominationStr" key="denominationStr" width="15%" />
 
             <Column
-              title="优惠券面值（元）"
-              dataIndex="denominationStr"
-              key="denominationStr"
-              width="15%"
-            />
-
-            <Column
-              title="有效期"
+              title="Valid period"
               dataIndex="validity"
               key="validity"
               width="30%"
@@ -92,72 +75,58 @@ export default class ChooseCoupons extends React.Component<any, any> {
               title={
                 <div style={{ minWidth: 140 }}>
                   <p>
-                    <span style={{ color: 'red' }}>*</span>{' '}
-                    {type == 0 ? '总张数' : '每组赠送张数'}
+                    <span style={{ color: 'red' }}>*</span> {type == 0 ? '总张数' : 'Total number'}
                   </p>
-                  <p style={{ color: '#999' }}>
-                    {' '}
-                    {type == 0 ? '（1-999999999张）' : '(1-10张)'}
-                  </p>
+                  <p style={{ color: '#999' }}> {type == 0 ? '（1-999999999张）' : ''}</p>
                 </div>
               }
               key="totalCount"
               dataIndex="totalCount"
-              width="20%"
+              width="15%"
               render={(value, rowData, index) => {
-                const message =
-                  type == 0 ? '请输入1-999999999的整数' : '请输入1-10的整数';
+                const message = type == 0 ? 'Please enter an integer of 1-9999999' : 'Please enter an integer of 1-10';
                 return (
                   <FormItem>
-                    {getFieldDecorator(
-                      'couponId_' + (rowData as any).couponId,
-                      {
-                        rules: [
-                          { required: true, message: '请输入优惠券的的数量' },
-                          {
-                            pattern: ValidConst.noZeroNineNumber,
-                            message: message
-                          },
-                          {
-                            validator: (_rule, value, callback) => {
-                              if (type != 0 && value > 10) {
-                                callback('请输入1-10的整数');
-                              }
-                              callback();
-                            }
-                          }
-                        ],
-                        onChange: (val) => {
-                          this.props.onChangeCouponTotalCount(index, val);
+                    {getFieldDecorator('couponId_' + (rowData as any).couponId, {
+                      rules: [
+                        { required: true, message: 'Please enter the number of coupons' },
+                        {
+                          pattern: ValidConst.noZeroNineNumber,
+                          message: message
                         },
-                        initialValue: value
-                      }
-                    )(<InputNumber min={1} max={999999999} />)}
+                        {
+                          validator: (_rule, value, callback) => {
+                            if (type != 0 && value > 10000) {
+                              callback('Please enter an integer of 1-10000');
+                            }
+                            callback();
+                          }
+                        }
+                      ],
+                      onChange: (val) => {
+                        this.props.onChangeCouponTotalCount(index, val);
+                      },
+                      initialValue: value
+                    })(<InputNumber min={1} max={999999999} />)}
                   </FormItem>
                 );
               }}
             />
 
             <Column
-              title="操作"
+              title="Operation"
               key="operate"
-              width="10%"
+              width="15%"
               render={(row) => {
                 return (
                   <div>
                     <AuthWrapper functionName={'f_coupon_detail'}>
-                      <a
-                        style={{ textDecoration: 'none' }}
-                        href={`/coupon-detail/${row.couponId}`}
-                        target="_blank"
-                      >
-                        详情
+                      <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">
+                        Detail
                       </a>
                     </AuthWrapper>
                     &nbsp;&nbsp;
-                    <a onClick={() => this.props.onDelCoupon(row.couponId)}>
-                      删除
-                    </a>
+                    <a onClick={() => this.props.onDelCoupon(row.couponId)}>Delete</a>
                   </div>
                 );
               }}

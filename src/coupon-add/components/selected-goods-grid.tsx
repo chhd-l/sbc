@@ -41,33 +41,17 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     return (
       <div>
         <Button type="primary" icon="plus" onClick={() => this.onAdd()}>
-          添加商品
+          Add product
         </Button>
         &nbsp;&nbsp;
         <TableRow>
-          <DataGrid
-            scroll={{ y: 500 }}
-            size="small"
-            rowKey={(record) => record.goodsInfoId}
-            dataSource={goodsRows ? goodsRows.toJS() : []}
-            pagination={false}
-          >
-            <Column
-              title="SKU code"
-              dataIndex="goodsInfoNo"
-              key="goodsInfoNo"
-              width="15%"
-            />
+          <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={goodsRows ? goodsRows.toJS() : []} pagination={false}>
+            <Column title="SKU code" dataIndex="goodsInfoNo" key="goodsInfoNo" width="15%" />
+
+            <Column title="Product name" dataIndex="goodsInfoName" key="goodsInfoName" width="20%" />
 
             <Column
-              title="商品名称"
-              dataIndex="goodsInfoName"
-              key="goodsInfoName"
-              width="20%"
-            />
-
-            <Column
-              title="规格"
+              title="Specifications"
               dataIndex="specText"
               key="specText"
               width="20%"
@@ -80,15 +64,10 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               }}
             />
 
-            <Column
-              title="分类"
-              key="cateName"
-              dataIndex="cateName"
-              width="10%"
-            />
+            <Column title="Classification" key="cateName" dataIndex="cateName" width="10%" />
 
             <Column
-              title="品牌"
+              title="Brand"
               key="brandName"
               dataIndex="brandName"
               width="10%"
@@ -102,7 +81,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             />
 
             <Column
-              title="单价"
+              title="Price"
               key="marketPrice"
               dataIndex="marketPrice"
               width="10%"
@@ -112,13 +91,11 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             />
 
             <Column
-              title="操作"
+              title="Operation"
               key="operate"
               width="10%"
               render={(row) => {
-                return (
-                  <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>删除</a>
-                );
+                return <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>Delete</a>;
               }}
             />
           </DataGrid>

@@ -473,7 +473,6 @@ export default class SearchList extends React.Component<any, any> {
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
                                 onClick={() => {
-                                  console.log(onRejectRefund, 'onRejectRefund');
                                   this._showRejectRefund(
                                     onRejectRefund,
                                     rid,

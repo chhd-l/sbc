@@ -160,7 +160,7 @@ export default class ListView extends React.Component<any, any> {
 
   render() {
     const { loading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible } = this.props.relaxProps;
-    console.log(dataList, 'dataList');
+
     return (
       <div>
         <div className="ant-table-wrapper">

@@ -281,7 +281,7 @@ export default class StepNewConsent extends Component<any, any> {
 
             <BraftEditor className="my-editor" controls={controls} placeholder="请输入正文内容" />
 
-            {/* 
+            {/*
             <div className="edit-content">
               {this.state.consentTitle == true ? (
                 <div>
@@ -310,7 +310,7 @@ export default class StepNewConsent extends Component<any, any> {
                 />
               )}
             </div>
-          
+
            */}
           </div>
 

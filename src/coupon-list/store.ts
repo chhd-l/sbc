@@ -20,6 +20,7 @@ export default class AppStore extends Store {
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+    this.dispatch('loading:start');
     const query = this.state().get('form').toJS();
     const couponStatus = this.state().get('queryTab');
     if (query.scopeType == -1) {
@@ -35,6 +36,7 @@ export default class AppStore extends Store {
       pageSize
     });
     if (res.code != Const.SUCCESS_CODE) {
+      this.dispatch('loading:start');
       message.error(res.message);
     }
     let couponList = null;
@@ -76,6 +78,7 @@ export default class AppStore extends Store {
         }
         return coupon;
       });
+      this.dispatch('loading:end');
       this.dispatch('init', {
         couponList: fromJS(couponList),
         total: res.context.couponInfos.totalElements,

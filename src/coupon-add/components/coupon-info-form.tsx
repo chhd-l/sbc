@@ -404,7 +404,7 @@ export default class CouponInfoForm extends Component<any, any> {
           <FormItem {...formItemLayout} label="Select product" required={true}>
             <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
-                <span style={styles.darkColor}>Base on brand</span>
+                <span style={styles.darkColor}>All product</span>
               </Radio>
               {/*<Radio value={1}>
                     <span style={styles.darkColor}>按品牌</span>

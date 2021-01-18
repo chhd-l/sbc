@@ -350,7 +350,7 @@ export default class StepConsentDetail extends Component<any, any> {
               <SelectGroup
                 label="Category"
                 defaultValue={editList.consentCategory ? editList.consentCategory : 'Prescriber'}
-                style={{ width: 280 }}
+                style={{ width: 220 }}
                 onChange={(value) => {
                   this.onCategory(value);
                   consentForm.consentCategory = value
@@ -367,6 +367,7 @@ export default class StepConsentDetail extends Component<any, any> {
             </FormItem>
             <FormItem>
               <Input
+                className="consent-id"
                 addonBefore="Consent id"
                 defaultValue={editList.consentId ? editList.consentId : ''}
                 onChange={(e) => {
@@ -385,7 +386,7 @@ export default class StepConsentDetail extends Component<any, any> {
                   editList.filedType ? editList.filedType : 'Optional'
                 }
                 label="Field type"
-                style={{ width: 280 }}
+                style={{ width: 220 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   consentForm.filedType = value
@@ -423,7 +424,7 @@ export default class StepConsentDetail extends Component<any, any> {
                   editList.consentType ? editList.consentType : 'E-mail in'
                 }
                 label="Consent type"
-                style={{ width: 280 }}
+                style={{ width: 220 }}
                 onChange={(value, index) => {
                   value = value === '' ? null : value;
                   consentForm.consentType = value
@@ -447,6 +448,7 @@ export default class StepConsentDetail extends Component<any, any> {
                       : 'Content'
                   }
                   label="Consent title"
+                  style={{ width: 220 }}
                   onChange={(value, index) => {
                     value = value === '' ? null : value;
                     this.handleConsentTitle(index);

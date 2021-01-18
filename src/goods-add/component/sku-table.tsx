@@ -207,7 +207,6 @@ class SkuForm extends React.Component<any, any> {
       key: 'goodsInfoNo',
       render: (rowInfo) => {
         const { addSkUProduct } = this.props.relaxProps;
-        //console.log(rowInfo.index,33333333);
 
         let a = ''
         /*if(rowInfo.goodsInfoNo == addSkUProduct[rowInfo.index-1].pid) {

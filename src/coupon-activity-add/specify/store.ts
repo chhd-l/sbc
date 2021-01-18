@@ -193,16 +193,16 @@ export default class AppStore extends Store {
       });
     } else if (res.code == 'K-080106') {
       info({
-        content: '优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。',
+        content: 'The end time of the coupon is earlier than the end time of the activity.Please delete it and save it or modify the activity time.',
         // content: `${res.errorData.length}张优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。`,
-        okText: '好的'
+        okText: 'Ok'
       });
       this.dispatch('set: invalid: coupons', fromJS(res.errorData));
     } else if (res.code == 'K-080104') {
       info({
-        content: '优惠券不存在，请删除后保存。',
+        content: 'Coupon does not exist, please delete and save.',
         // content: `${res.errorData.length}张优惠券不存在，请删除后保存。`,
-        okText: '好的'
+        okText: 'Ok'
       });
       this.dispatch('set: invalid: coupons', fromJS(res.errorData));
     } else {

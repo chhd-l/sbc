@@ -215,7 +215,7 @@ class CateModalForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: 'Please selected display in shop'
+                  message: 'Please select display in shop'
                 }
               ],
               initialValue: displayStatus,

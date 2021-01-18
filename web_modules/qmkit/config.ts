@@ -5,11 +5,6 @@ export default {
 
   /* stg */
   //HOST: 'https://storestg.royalcanin.com/api',
-
-  /* product */
-  //HOST: 'http://eurostore.royalcanin.com/api',
-
-
-  CDN_PATH: '',
+  CDN_PATH: 'https://cdnstorestg.azureedge.net/res/',
   ...Common
 };

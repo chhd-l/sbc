@@ -84,7 +84,6 @@ export default class Line extends React.Component {
             normal: {
               position: 'inside'
               /*formatter: function(e){
-                console.log(e);
 
                 return (<div>111111111</div>)
               },*/

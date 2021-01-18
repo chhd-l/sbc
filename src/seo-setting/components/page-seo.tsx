@@ -65,7 +65,6 @@ export default class PageSeo extends React.Component<any, any> {
       }
     ];
 
-    console.log(total, 'total----------');
     return (
       <div>
         <Table

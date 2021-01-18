@@ -50,16 +50,14 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 module.exports = function (webpackEnv, envCode) {
-  console.log(webpackEnv);
-  console.log(envCode);
+
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv !== 'development'
-  console.log(isEnvDevelopment);
-  console.log(isEnvProduction);
+
   const env = getClientEnvironment(envCode);
 
-  const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && './';
-  const shouldUseRelativeAssetPaths = publicPath === './';
+  const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && '/';
+  const shouldUseRelativeAssetPaths = publicPath === '/';
   const publicUrl = isEnvProduction ? publicPath : isEnvDevelopment && '';
 
   const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -421,7 +419,7 @@ module.exports = function (webpackEnv, envCode) {
 
          }
        ),*/
-      /*new BundleAnalyzerPlugin(
+      new BundleAnalyzerPlugin(
         {
           //  可以是`server`，`static`或`disabled`。
           //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。
@@ -452,7 +450,7 @@ module.exports = function (webpackEnv, envCode) {
           statsOptions: null,
           logLevel: 'info' // 日志级别。可以是'信息'，'警告'，'错误'或'沉默'。
         }
-      ),*/
+      ),
       new CompressionPlugin({
         filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
         algorithm: 'gzip', // 算法

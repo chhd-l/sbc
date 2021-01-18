@@ -11,8 +11,8 @@
     "build:prod_de": "node ./web_modules/qmkit/build.ts prod_de && cross-env NODE_ENV=production --info=true node scripts/build.js prod_de",
     "build:prod_fa": "node ./web_modules/qmkit/build.ts prod_fa && cross-env NODE_ENV=production --info=true node scripts/build.js prod_fa",
     "build:prod": "cross-env NODE_ENV=production node scripts/build.js prod",
-    "dll-dev": "node scripts/dll.js dev",
-    "dll-prod": "node scripts/dll.js prod",
+    "dll-dev": "node scripts/dll.js development",
+    "dll-prod": "node scripts/dll.js production",
     "server": "http-server dist",
     "dev": "cross-env BABEL_ENV=development webpack-dev-server --inline --progress --config ./web_modules/qmkit/build.ts dev",
     "test": "jest --verbose",
@@ -96,6 +96,7 @@
     "stylelint-order": "^4.0.0",
     "uuid-js": "^0.7.5",
     "video.js": "7.2.3",
+    "wangeditor": "^4.6.2",
     "webpack-bundle-analyzer": "^4.1.0"
   },
   "devDependencies": {

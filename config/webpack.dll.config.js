@@ -23,12 +23,12 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-module.exports = function(webpackEnv, envCode = 'prod') {
+module.exports = function(webpackEnv, envCode) {
 
-  const isEnvDevelopment = envCode !== 'prod';
-  const isEnvProduction = envCode === 'prod';
+  const isEnvDevelopment = envCode !== 'production';
+  const isEnvProduction = envCode === 'production';
 
-  const publicPath = isEnvProduction ? 'https://cdnstorestg.azureedge.net/res/' : isEnvDevelopment && '/';
+  const publicPath = isEnvProduction ? '/' : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction

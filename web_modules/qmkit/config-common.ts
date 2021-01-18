@@ -120,10 +120,10 @@ const Common = {
     4: 'Expired'
   },
   activityStatus: {
-    1: '进行中',
-    2: '暂停中',
-    3: '未开始',
-    4: '已结束'
+    1: 'In process',
+    2: 'Pause',
+    3: 'Not start',
+    4: 'Completed'
   },
   couponActivityType: {
     0: '全场赠券',
@@ -144,14 +144,14 @@ const Common = {
   spuMaxSku: 50,
 
   // STG Presciber Okta Config
-  // REACT_APP_PRESCRIBER_CLIENT_ID: "0oaq5jv1f653OBJn80x6",
-  // REACT_APP_PRESCRIBER_ISSUER : "https://accountpreview.royalcanin.com/oauth2/default",
-  // REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback",
+  REACT_APP_PRESCRIBER_CLIENT_ID: "0oaq5jv1f653OBJn80x6",
+  REACT_APP_PRESCRIBER_ISSUER : "https://accountpreview.royalcanin.com/oauth2/default",
+  REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback",
 
   // PROD Presciber Okta Config
-  REACT_APP_PRESCRIBER_CLIENT_ID: "0oa6ac06a7I03dDyY416",
-  REACT_APP_PRESCRIBER_ISSUER : "https://signin.royalcanin.com/oauth2/default",
-  REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback?type=prescriber",
+  // REACT_APP_PRESCRIBER_CLIENT_ID: "0oa6ac06a7I03dDyY416",
+  // REACT_APP_PRESCRIBER_ISSUER : "https://signin.royalcanin.com/oauth2/default",
+  // REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback?type=prescriber",
 
   // DEV RC STAFF Okta Config
   // REACT_APP_RC_CLIENT_ID: "0oazb1qrtg8k0aKCP4x6",
@@ -159,14 +159,14 @@ const Common = {
   // REACT_APP_RC_RedirectURL: window.origin +  "/implicit/callback",
 
   // PROD RC STAFF Okta Config
-  REACT_APP_RC_CLIENT_ID: "0oa5odnbjhRhbV16X357",
-  REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
-  REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
-
-  // STG RC STAFF Okta Config
-  // REACT_APP_RC_CLIENT_ID: "0oa6fb12ahvn5lAAL357",
+  // REACT_APP_RC_CLIENT_ID: "0oa5odnbjhRhbV16X357",
   // REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
   // REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
+
+  // STG RC STAFF Okta Config
+  REACT_APP_RC_CLIENT_ID: "0oa6fb12ahvn5lAAL357",
+  REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
+  REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
 
 };
 export default Common;

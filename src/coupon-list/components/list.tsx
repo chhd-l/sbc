@@ -17,6 +17,7 @@ export default class List extends React.Component<any, any> {
       init: Function;
       copyCoupon: Function;
       couponExport: Function;
+      loading: boolean;
     };
   };
 
@@ -28,13 +29,15 @@ export default class List extends React.Component<any, any> {
     deleteCoupon: noop,
     init: noop,
     copyCoupon: noop,
-    couponExport: noop
+    couponExport: noop,
+    loading: 'loading'
   };
 
   render() {
-    const { total, pageNum, pageSize, couponList, deleteCoupon, init, copyCoupon, couponExport } = this.props.relaxProps;
+    const { total, pageNum, pageSize, couponList, deleteCoupon, init, copyCoupon, couponExport, loading } = this.props.relaxProps;
     return (
       <DataGrid
+        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         rowKey={(record) => record.couponId}
         dataSource={couponList.toJS()}
         pagination={{
@@ -109,7 +112,7 @@ export default class List extends React.Component<any, any> {
                   </a>
 
                   {text == 1 && (
-                    <Popconfirm title="确定删除该优惠券？" onConfirm={() => deleteCoupon((record as any).couponId)} okText="确定" cancelText="取消">
+                    <Popconfirm title="Are you sure to delete this coupon?" onConfirm={() => deleteCoupon((record as any).couponId)} okText="Yes" cancelText="Cancel">
                       <a href="javascript:void(0);">Delete</a>
                     </Popconfirm>
                   )}

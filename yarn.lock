@@ -1160,6 +1160,14 @@
     "@babel/helper-validator-option" "^7.12.1"
     "@babel/plugin-transform-typescript" "^7.12.1"
 
+"@babel/runtime-corejs3@^7.11.2":
+  version "7.12.5"
+  resolved "https://registry.npm.taobao.org/@babel/runtime-corejs3/download/@babel/runtime-corejs3-7.12.5.tgz#ffee91da0eb4c6dae080774e94ba606368e414f4"
+  integrity sha1-/+6R2g60xtrggHdOlLpgY2jkFPQ=
+  dependencies:
+    core-js-pure "^3.0.0"
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@7.9.0":
   version "7.9.0"
   resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.9.0.tgz?cache=0&sync_timestamp=1604441331796&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.9.0.tgz#337eda67401f5b066a6f205a3113d4ac18ba495b"
@@ -1167,7 +1175,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.12.1", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.7", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.1", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.7", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   version "7.12.5"
   resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.12.5.tgz?cache=0&sync_timestamp=1604441331796&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
   integrity sha1-QQ5+SHRB4bNgwpvnFdhw2bmFiC4=
@@ -4327,6 +4335,11 @@ core-js-compat@^3.6.2, core-js-compat@^3.8.0:
   dependencies:
     browserslist "^4.15.0"
     semver "7.0.0"
+
+core-js-pure@^3.0.0:
+  version "3.8.2"
+  resolved "https://registry.npm.taobao.org/core-js-pure/download/core-js-pure-3.8.2.tgz?cache=0&sync_timestamp=1609682166582&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcore-js-pure%2Fdownload%2Fcore-js-pure-3.8.2.tgz#286f885c0dac1cdcd6d78397392abc25ddeca225"
+  integrity sha1-KG+IXA2sHNzW14OXOSq8Jd3soiU=
 
 core-js@^1.0.0:
   version "1.2.7"
@@ -13504,6 +13517,14 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.npm.taobao.org/vm-browserify/download/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha1-eGQcSIuObKkadfUR56OzKobl3aA=
+
+wangeditor@^4.6.2:
+  version "4.6.3"
+  resolved "https://registry.npm.taobao.org/wangeditor/download/wangeditor-4.6.3.tgz?cache=0&sync_timestamp=1610631233896&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwangeditor%2Fdownload%2Fwangeditor-4.6.3.tgz#cc572911b20e318fca8254af0fe36efc40642bdc"
+  integrity sha1-zFcpEbIOMY/KglSvD+Nu/EBkK9w=
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+    "@babel/runtime-corejs3" "^7.11.2"
 
 warning@4.x, warning@^4.0.1, warning@^4.0.2, warning@^4.0.3, warning@~4.0.3:
   version "4.0.3"

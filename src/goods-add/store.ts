@@ -1907,13 +1907,13 @@ export default class AppStore extends Store {
 
   onRelatedList = async (param?: any) => {
     const { res } = await getRelatedList(param);
-    // if (res.code == Const.SUCCESS_CODE) {
-    //   this.transaction(() => {
-    //     this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
-    //   });
-    // } else {
-    //   message.error(res.message);
-    // }
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
+      });
+    } else {
+      message.error(res.message);
+    }
   };
 
   propSort = async (param?: any) => {
@@ -1928,11 +1928,11 @@ export default class AppStore extends Store {
   //删除
   getConsentDelete = async (param?: any) => {
     const { res } = await fetchConsentDelete(param);
-    // if (res.code == Const.SUCCESS_CODE) {
-    //   this.transaction(() => {
-    //     this.onRelatedList(this.state().get('getGoodsId'));
-    //   });
-    // }
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.onRelatedList(this.state().get('getGoodsId'));
+      });
+    }
   };
 
   //productselect

@@ -680,7 +680,7 @@ class AttributeLibrary extends Component<any, any> {
           </div>
 
           <Modal
-            width="600px"
+            width="800px"
             title={modalName}
             visible={visibleAttribute}
             onCancel={() => {

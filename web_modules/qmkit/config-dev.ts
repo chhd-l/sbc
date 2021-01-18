@@ -10,6 +10,6 @@ export default {
   //HOST: 'http://eurostore.royalcanin.com/api',
 
 
-  CDN_PATH: '',
+  CDN_PATH: '/',
   ...Common
 };

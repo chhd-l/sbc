@@ -165,7 +165,10 @@ class DeliveryInfomation extends React.Component<any, any> {
             }
 
             let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
-            this.getCityNameById(deliveryForm.cityId);
+            if(deliveryForm.cityId){
+              this.getCityNameById(deliveryForm.cityId);
+            }
+            
 
             this.setState(
               {
@@ -277,7 +280,9 @@ class DeliveryInfomation extends React.Component<any, any> {
     let deliveryForm = addressList.find((item) => {
       return item.deliveryAddressId === id;
     });
-    this.getCityNameById(deliveryForm.cityId);
+    if(deliveryForm.cityId){
+      this.getCityNameById(deliveryForm.cityId);
+    }
 
     this.setState(
       {
@@ -354,7 +359,8 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0].cityName) {
+          debugger
+          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
             this.setState({
               initCityName: res.context.systemCityVO[0].cityName
             });

@@ -176,6 +176,7 @@ export default class SearchHead extends Component<any, any> {
                     {this.state.statusSelect === 'paymentStatus' ? (
                       <Select
                         style={styles.wrapper}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         onChange={(value) =>
                           this.setState({
                             tradeState: {
@@ -240,6 +241,7 @@ export default class SearchHead extends Component<any, any> {
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.setState({
                           orderCategory: value

@@ -1006,10 +1006,11 @@ export default class AppStore extends Store {
     // 详情
     const detailEditor = data.get('detailEditor') || {};
 
-    goods = goods.set('goodsDetail', detailEditor.getContent ? detailEditor.getContent() : '');
+    // goods = goods.set('goodsDetail', detailEditor.getContent ? detailEditor.getContent() : '');
+    goods = goods.set('goodsDetail', data.get('goods').get('goodsDetail'));
     const tabs = [];
     // console.log(data.get('detailEditor_0'),11111111111111);
-    if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
+    /*if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
       // console.log(data.get('detailEditor_0').val.getContent())
       tabs.push({
         goodsId: goods.get('goodsId'),
@@ -1030,11 +1031,11 @@ export default class AppStore extends Store {
         tabId: data.get('detailEditor_2').tabId,
         tabDetail: data.get('detailEditor_2').val.getContent()
       });
-    }
+    }*/
     if (data.get('video') && JSON.stringify(data.get('video')) !== '{}') {
       goods = goods.set('goodsVideo', data.get('video').get('artworkUrl'));
     }
-
+    /*
     let goodsDetailTab = data.get('goodsDetailTab');
     let goodsDetailTabTemplate = {};
     goodsDetailTab = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
@@ -1047,16 +1048,17 @@ export default class AppStore extends Store {
         goodsDetailTabTemplate[item.get('name')] = contect;
       }
     });
-
+*/
     let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
     let storeId = loginInfo ? loginInfo.storeId : '';
     let oldGoodsDetailTabContent = data.get('oldGoodsDetailTabContent');
     //如果是法国，不改变goodsDetail
     if (storeId === 123457909 && oldGoodsDetailTabContent) {
       goods = goods.set('goodsDetail', oldGoodsDetailTabContent);
-    } else {
-      goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
     }
+    // else {
+    //   goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    // }
 
     param = param.set('goodsTabRelas', tabs);
 
@@ -1652,7 +1654,13 @@ export default class AppStore extends Store {
       }
     }
   };
-
+  /**
+   * 获取富文本框的值
+   * @param
+   */
+  editEditorContent = (keyName, value) => {
+    this.dispatch('goodsActor: editorContent', { keyName, value });
+  };
   editEditor = (editor) => {
     this.dispatch('goodsActor: editor', editor);
   };
@@ -1899,13 +1907,13 @@ export default class AppStore extends Store {
 
   onRelatedList = async (param?: any) => {
     const { res } = await getRelatedList(param);
-    if (res.code == Const.SUCCESS_CODE) {
-      this.transaction(() => {
-        this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
-      });
-    } else {
-      message.error(res.message);
-    }
+    // if (res.code == Const.SUCCESS_CODE) {
+    //   this.transaction(() => {
+    //     this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
+    //   });
+    // } else {
+    //   message.error(res.message);
+    // }
   };
 
   propSort = async (param?: any) => {
@@ -1920,11 +1928,11 @@ export default class AppStore extends Store {
   //删除
   getConsentDelete = async (param?: any) => {
     const { res } = await fetchConsentDelete(param);
-    if (res.code == Const.SUCCESS_CODE) {
-      this.transaction(() => {
-        this.onRelatedList(this.state().get('getGoodsId'));
-      });
-    }
+    // if (res.code == Const.SUCCESS_CODE) {
+    //   this.transaction(() => {
+    //     this.onRelatedList(this.state().get('getGoodsId'));
+    //   });
+    // }
   };
 
   //productselect

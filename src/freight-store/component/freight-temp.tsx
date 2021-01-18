@@ -228,7 +228,10 @@ export default class FreightTemp extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <span style={{ paddingLeft: 10 }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}. Freight after meeting the conditions will be free.Order is judged whether it meets the free shipping conditions according to the amount after excluding the discount.</span>
+                <span style={{ paddingLeft: 10 }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}.</span>
+              </div>
+              <div style={{marginTop: 20, marginBottom: 20}}>
+                Freight after meeting the conditions will be free.Order is judged whether it meets the free shipping conditions according to the amount after excluding the discount.
               </div>
 
               <div className="radio-item">

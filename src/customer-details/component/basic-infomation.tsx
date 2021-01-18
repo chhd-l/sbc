@@ -341,7 +341,7 @@ class BasicInfomation extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          debugger
+          debugger;
           if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
             this.setState({
               initCityName: res.context.systemCityVO[0].cityName

@@ -647,13 +647,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + currencySymbol + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
         width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
@@ -701,13 +701,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + currencySymbol + record.tradePrice.discountsPrice : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
         width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + record.tradePrice.totalPrice : '-'}</div>
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,

@@ -196,6 +196,7 @@ export default class SearchHead extends Component<any, any> {
                     {this.state.statusSelect === 'paymentStatus' ? (
                       <Select
                         style={styles.wrapper}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         onChange={(value) =>
                           this.setState({
                             tradeState: {
@@ -213,9 +214,9 @@ export default class SearchHead extends Component<any, any> {
                         <Option value="NOT_PAID">
                           <FormattedMessage id="order.unpaid" />
                         </Option>
-                        <Option value="UNCONFIRMED">
+                        {/*<Option value="UNCONFIRMED">
                           <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>
+                        </Option>*/}
                         <Option value="PAID">
                           <FormattedMessage id="order.paid" />
                         </Option>
@@ -260,6 +261,7 @@ export default class SearchHead extends Component<any, any> {
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.setState({
                           orderCategory: value

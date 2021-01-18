@@ -96,8 +96,8 @@
     "stylelint-order": "^4.0.0",
     "uuid-js": "^0.7.5",
     "video.js": "7.2.3",
-    "webpack-bundle-analyzer": "^4.1.0",
-    "wangeditor": "^4.6.2"
+    "wangeditor": "^4.6.2",
+    "webpack-bundle-analyzer": "^4.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

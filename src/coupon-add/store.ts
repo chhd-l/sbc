@@ -169,23 +169,7 @@ export default class AppStore extends Store {
    * 获取请求参数
    */
   fetchParams = () => {
-    const {
-      couponName,
-      couponType,
-      couponCateIds,
-      rangeDayType,
-      startTime,
-      endTime,
-      effectiveDays,
-      denomination,
-      fullBuyType,
-      fullBuyPrice,
-      scopeType,
-      chooseBrandIds,
-      chooseCateIds,
-      couponDesc,
-      chooseSkuIds
-    } = this.state().toJS();
+    const { couponName, couponType, couponCateIds, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType, fullBuyPrice, scopeType, chooseBrandIds, chooseCateIds, couponDesc, chooseSkuIds } = this.state().toJS();
 
     let params = {
       couponName,
@@ -237,9 +221,7 @@ export default class AppStore extends Store {
       });
       //过滤已删除的品牌
       if (value == 1 && scopeIds) {
-        scopeIds = scopeIds.filter((id) =>
-          brandRes.context.find((brand) => brand.brandId == id)
-        );
+        scopeIds = scopeIds.filter((id) => brandRes.context.find((brand) => brand.brandId == id));
       }
     }
 
@@ -250,9 +232,7 @@ export default class AppStore extends Store {
       });
       //过滤已删除的分类
       if (value == 3 && scopeIds) {
-        scopeIds = scopeIds.filter((id) =>
-          context.find((cate) => cate.storeCateId == id)
-        );
+        scopeIds = scopeIds.filter((id) => context.find((cate) => cate.storeCateId == id));
         this.dispatch('coupon: info: cates', context);
       }
     }
@@ -319,13 +299,9 @@ export default class AppStore extends Store {
    * 处理特殊的错误码
    */
   dealErrorCode = async (res) => {
-    const couponCates = this.state()
-      .get('couponCates')
-      .toJS();
+    const couponCates = this.state().get('couponCates').toJS();
     const errorIds = res.context;
-    let errorsNames = couponCates.filter((cate) =>
-      errorIds.find((id) => cate.couponCateId == id)
-    );
+    let errorsNames = couponCates.filter((cate) => errorIds.find((id) => cate.couponCateId == id));
     let errorsName = '';
     errorsNames.forEach((i) => {
       errorsName = errorsName + i.couponCateName + ',';

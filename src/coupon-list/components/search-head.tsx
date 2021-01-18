@@ -35,7 +35,7 @@ export default class SearchHead extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="优惠券名称"
+            addonBefore="Coupon Name"
             value={form.get('likeCouponName')}
             onChange={(e: any) => {
               onFormFieldChange('likeCouponName', e.target.value);
@@ -43,53 +43,41 @@ export default class SearchHead extends React.Component<any, any> {
           />
         </FormItem>
 
-        <FormItem>
+        {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="使用范围"
-            defaultValue="不限"
+            label="Use range"
+            defaultValue="Non-limitation"
             onChange={(value) => {
               onFormFieldChange('scopeType', value);
             }}
           >
             <Select.Option key="-1" value="-1">
-              不限
+              Non-limitation
             </Select.Option>
             <Select.Option key="0" value="0">
               {Const.couponScopeType[0]}
+              All products
             </Select.Option>
             <Select.Option key="1" value="1">
               {Const.couponScopeType[1]}
+              Brands
             </Select.Option>
             <Select.Option key="3" value="3">
               {Const.couponScopeType[3]}
+              Product category
             </Select.Option>
             <Select.Option key="4" value="4">
               {Const.couponScopeType[4]}
+              Partial products
             </Select.Option>
           </SelectGroup>
+        </FormItem> */}
+        <FormItem>
+          <DatePicker allowClear={true} disabledDate={this.disabledStartDate} format={Const.DAY_FORMAT} value={startValue} placeholder="Start date" onChange={this.onStartChange} showToday={false} />
         </FormItem>
         <FormItem>
-          <DatePicker
-            allowClear={true}
-            disabledDate={this.disabledStartDate}
-            format={Const.DAY_FORMAT}
-            value={startValue}
-            placeholder="开始时间"
-            onChange={this.onStartChange}
-            showToday={false}
-          />
-        </FormItem>
-        <FormItem>
-          <DatePicker
-            allowClear={true}
-            disabledDate={this.disabledEndDate}
-            format={Const.DAY_FORMAT}
-            value={endValue}
-            placeholder="结束时间"
-            onChange={this.onEndChange}
-            showToday={false}
-          />
+          <DatePicker allowClear={true} disabledDate={this.disabledEndDate} format={Const.DAY_FORMAT} value={endValue} placeholder="End date" onChange={this.onEndChange} showToday={false} />
         </FormItem>
 
         <FormItem>
@@ -103,7 +91,7 @@ export default class SearchHead extends React.Component<any, any> {
               search();
             }}
           >
-            搜索
+            Search
           </Button>
         </FormItem>
       </Form>

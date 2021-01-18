@@ -24,12 +24,12 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 module.exports = function(webpackEnv, envCode) {
-
+  console.log(envCode);
   const isEnvDevelopment = envCode !== 'production';
   const isEnvProduction = envCode === 'production';
 
   const publicPath = isEnvProduction ? '/' : isEnvDevelopment && '/';
-  const shouldUseRelativeAssetPaths = publicPath === './';
+  const shouldUseRelativeAssetPaths = publicPath === '/';
 
   const publicUrl = isEnvProduction
     ? publicPath.slice(0, -1)

@@ -30,7 +30,7 @@ export default class ActivityTab extends React.Component<any, any> {
         }}
         activeKey={tab}
       >
-        <Tabs.TabPane tab="活动信息" key="0">
+        <Tabs.TabPane tab="Activity information" key="0">
           <ActivityInfo />
         </Tabs.TabPane>
         {/*<Tabs.TabPane tab="相关优惠券" key="1" > </Tabs.TabPane>*/}

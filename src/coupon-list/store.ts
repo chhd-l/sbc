@@ -1,7 +1,7 @@
 import { IOptions, Store } from 'plume2';
 
 import { fromJS } from 'immutable';
-import { Const } from 'qmkit';
+import { Const, util } from 'qmkit';
 import { message } from 'antd';
 import moment from 'moment';
 import * as webapi from './webapi';
@@ -20,6 +20,7 @@ export default class AppStore extends Store {
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+    this.dispatch('loading:start');
     const query = this.state().get('form').toJS();
     const couponStatus = this.state().get('queryTab');
     if (query.scopeType == -1) {
@@ -35,6 +36,7 @@ export default class AppStore extends Store {
       pageSize
     });
     if (res.code != Const.SUCCESS_CODE) {
+      this.dispatch('loading:start');
       message.error(res.message);
     }
     let couponList = null;
@@ -44,52 +46,39 @@ export default class AppStore extends Store {
         // 3.1.面值
         if (coupon.fullBuyType == 0) {
           //无门槛
-          coupon.denominationStr = `满0减${coupon.denomination}`;
+          coupon.denominationStr = `over zero minus${coupon.denomination}`;
         } else {
-          coupon.denominationStr = `满${coupon.fullBuyPrice}减${coupon.denomination}`;
+          coupon.denominationStr = `over${coupon.fullBuyPrice}minus${coupon.denomination}`;
         }
         // 3.2.有效期
         if (coupon.rangeDayType == 0) {
           // 按起止时间
-          let startTime = moment(coupon.startTime)
-            .format(Const.DAY_FORMAT)
-            .toString();
-          let endTime = moment(coupon.endTime)
-            .format(Const.DAY_FORMAT)
-            .toString();
-          coupon.startTime = coupon.validity = `${startTime}至${endTime}`;
+          let startTime = moment(coupon.startTime).format(Const.DAY_FORMAT).toString();
+          let endTime = moment(coupon.endTime).format(Const.DAY_FORMAT).toString();
+          coupon.startTime = coupon.validity = `${startTime} to ${endTime}`;
         } else {
           // 按N天有效
-          coupon.validity = `领取当天${coupon.effectiveDays}日内有效`;
+          coupon.validity = `On the day of collection, valid for ${coupon.effectiveDays} day`;
         }
         // 3.3.优惠券分类
-        coupon.cateNamesStr =
-          coupon.cateNames.length == 0
-            ? '其他'
-            : coupon.cateNames.reduce((a, b) => `${a},${b}`, '').substr(1);
+        coupon.cateNamesStr = coupon.cateNames.length == 0 ? '其他' : coupon.cateNames.reduce((a, b) => `${a},${b}`, '').substr(1);
         // 3.4.使用范围
         if ([0, 4].indexOf(coupon.scopeType) != -1) {
-          coupon.scopeNamesStr =
-            Const.couponScopeType[coupon.scopeType] +
-            coupon.scopeNames.reduce((a, b) => `${a},${b}`, '').substr(1);
+          coupon.scopeNamesStr = Const.couponScopeType[coupon.scopeType] + coupon.scopeNames.reduce((a, b) => `${a},${b}`, '').substr(1);
         } else {
-          coupon.scopeNamesStr =
-            Const.couponScopeType[coupon.scopeType] +
-            ':' +
-            (coupon.scopeNames.length != 0
-              ? coupon.scopeNames.reduce((a, b) => `${a},${b}`, '').substr(1)
-              : '-');
+          coupon.scopeNamesStr = Const.couponScopeType[coupon.scopeType] + ':' + (coupon.scopeNames.length != 0 ? coupon.scopeNames.reduce((a, b) => `${a},${b}`, '').substr(1) : '-');
         }
         // 3.5.优惠券状态
         coupon.couponStatusStr = Const.couponStatus[coupon.couponStatus];
         //3.6 使用范围
         if (coupon.scopeType == 0) {
-          coupon.scopeNamesStr = '全部商品';
+          coupon.scopeNamesStr = 'All products';
         } else if (coupon.scopeType == 4) {
-          coupon.scopeNamesStr = '部分商品';
+          coupon.scopeNamesStr = 'Partial products';
         }
         return coupon;
       });
+      this.dispatch('loading:end');
       this.dispatch('init', {
         couponList: fromJS(couponList),
         total: res.context.couponInfos.totalElements,
@@ -136,5 +125,26 @@ export default class AppStore extends Store {
     message.success('Operate successfully');
     //刷新页面
     this.init();
+  };
+
+  couponExport = async (couponId: any) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          const result = JSON.stringify({
+            couponId: couponId,
+            token: token
+          });
+          const encrypted = base64.urlEncode(result);
+          const exportHref = Const.HOST + `/coupon-info/coupon-code/export/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('请登录');
+        }
+        resolve();
+      }, 500);
+    });
   };
 }

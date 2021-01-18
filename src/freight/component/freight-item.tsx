@@ -192,7 +192,7 @@ export default class FreightItem extends React.Component<any, any> {
               )}
               {!isDefault && ((checkAuth('f_store_temp_del') && isStore) || (checkAuth('f_goods_temp_del') && !isStore)) && (
                 <Tooltip placement="top" title="Delete">
-                  <a href="#!" onClick={() => this._del(freightId, isStore)} className="iconfont iconDelete"></a>
+                  <a  onClick={() => this._del(freightId, isStore)}  className="iconfont iconDelete"></a>
                 </Tooltip>
               )}
             </div>
@@ -201,9 +201,14 @@ export default class FreightItem extends React.Component<any, any> {
       }
     } as any;
     return (
-      <TableDiv>
-        <Table rowKey={(record: any) => record.id || record.freightTempId} {...params} />
-      </TableDiv>
+      <div>
+        {
+          data && data.length >0 ?
+            <TableDiv>
+              <Table rowKey={(record: any) => record.id || record.freightTempId} {...params} />
+            </TableDiv> : null
+        }
+      </div>
     );
   }
 

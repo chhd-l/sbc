@@ -23,16 +23,20 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-module.exports = function (webpackEnv, envCode) {
+module.exports = function(webpackEnv, envCode) {
+  console.log(envCode);
+  const isEnvDevelopment = envCode !== 'production';
+  const isEnvProduction = envCode === 'production';
 
-  const isEnvDevelopment = webpackEnv === 'development';
-  const isEnvProduction = webpackEnv !== 'development'
-
-  const env = getClientEnvironment(envCode);
-
-  const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && '/';
+  const publicPath = isEnvProduction ? '/' : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === '/';
-  const publicUrl = isEnvProduction ? publicPath : isEnvDevelopment && '';
+
+  const publicUrl = isEnvProduction
+    ? publicPath.slice(0, -1)
+    : isEnvDevelopment && '';
+
+  const env = getClientEnvironment(envCode, publicUrl);
+
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),

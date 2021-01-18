@@ -158,7 +158,7 @@ export default class Main extends React.Component<any, any> {
                 {/* <Logistics /> */}
 
                 {/*详情*/}
-                <Detail />
+                {/* <Detail /> */}
               </Tabs.TabPane>
             )}
             <Tabs.TabPane tab="Product price" key="price">

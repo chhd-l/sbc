@@ -1,22 +1,5 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Radio,
-  Menu,
-  Card,
-  DatePicker,
-  Empty,
-  Spin,
-  Popconfirm
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, DatePicker, Empty, Spin, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
@@ -175,9 +158,7 @@ class PetInfomation extends React.Component<any, any> {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
-            currentPet.customerPetsPropRelations = this.getSpecialNeeds(
-              currentPet.customerPetsPropRelations
-            );
+            currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
 
             if (currentPet.petsType === 'dog') {
               this.props.form.setFieldsValue({
@@ -254,8 +235,7 @@ class PetInfomation extends React.Component<any, any> {
       petsName: petForm.petsName,
       petsSex: petForm.petsSex,
       petsSizeValueId: '0',
-      petsSizeValueName:
-        petForm.petsType === 'dog' ? petForm.petsSizeValueName : '',
+      petsSizeValueName: petForm.petsType === 'dog' ? petForm.petsSizeValueName : '',
       petsType: petForm.petsType,
       sterilized: petForm.sterilized,
       storeId: 123456858
@@ -292,9 +272,7 @@ class PetInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let currentPet = res.context.context;
-          currentPet.customerPetsPropRelations = this.getSpecialNeeds(
-            currentPet.customerPetsPropRelations
-          );
+          currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
           if (currentPet.petsType === 'dog') {
             this.props.form.setFieldsValue({
               petsType: currentPet.petsType,
@@ -364,15 +342,7 @@ class PetInfomation extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      petsType,
-      petGender,
-      sizeArr,
-      customerPetsPropRelations,
-      catBreed,
-      dogBreed,
-      petForm
-    } = this.state;
+    const { petsType, petGender, sizeArr, customerPetsPropRelations, catBreed, dogBreed, petForm } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -386,7 +356,7 @@ class PetInfomation extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <Col span={3}>
             <h3>All Pets( {this.state.petList.length} )</h3>
             <ul>
@@ -407,9 +377,7 @@ class PetInfomation extends React.Component<any, any> {
             </ul>
           </Col>
           <Col span={20}>
-            {this.state.petList.length === 0 ? (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            ) : null}
+            {this.state.petList.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
             <Card
               title={this.state.title}
               style={{
@@ -424,7 +392,7 @@ class PetInfomation extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please selected Pet Category!'
+                            message: 'Please select Pet Category!'
                           }
                         ]
                       })(
@@ -475,9 +443,7 @@ class PetInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="Gender">
                       {getFieldDecorator('petsSex', {
-                        rules: [
-                          { required: true, message: 'Please selected Gender!' }
-                        ]
+                        rules: [{ required: true, message: 'Please select Gender!' }]
                       })(
                         <Select
                           onChange={(value) => {
@@ -506,7 +472,7 @@ class PetInfomation extends React.Component<any, any> {
                           rules: [
                             {
                               required: true,
-                              message: 'Please selected Breed!'
+                              message: 'Please select Breed!'
                             }
                           ]
                         })(
@@ -538,7 +504,7 @@ class PetInfomation extends React.Component<any, any> {
                           rules: [
                             {
                               required: true,
-                              message: 'Please selected Breed!'
+                              message: 'Please select Breed!'
                             }
                           ]
                         })(
@@ -573,9 +539,7 @@ class PetInfomation extends React.Component<any, any> {
                     >
                       <FormItem label="Weight">
                         {getFieldDecorator('petsSizeValueName', {
-                          rules: [
-                            { required: true, message: 'Please input Weight!' }
-                          ],
+                          rules: [{ required: true, message: 'Please input Weight!' }],
                           initialValue: petForm.petsSizeValueName
                         })(
                           <Select
@@ -626,10 +590,7 @@ class PetInfomation extends React.Component<any, any> {
                             message: 'Please input Birth Date!'
                           }
                         ],
-                        initialValue: moment(
-                          new Date(this.state.currentBirthDay),
-                          'DD/MM/YYYY'
-                        )
+                        initialValue: moment(new Date(this.state.currentBirthDay), 'DD/MM/YYYY')
                       })(
                         <DatePicker
                           style={{ width: '100%' }}
@@ -654,7 +615,7 @@ class PetInfomation extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please Selected Special needs!'
+                            message: 'Please Select Special needs!'
                           }
                         ]
                       })(
@@ -687,20 +648,11 @@ class PetInfomation extends React.Component<any, any> {
                         Save
                       </Button>
 
-                      <Popconfirm
-                        placement="topRight"
-                        title="Are you sure to delete this item?"
-                        onConfirm={() => this.delPets(petForm.petsId)}
-                        okText="Confirm"
-                        cancelText="Cancel"
-                      >
+                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delPets(petForm.petsId)} okText="Confirm" cancelText="Cancel">
                         <Button
                           style={{
                             marginLeft: '20px',
-                            display:
-                              this.props.customerType === 'Guest'
-                                ? 'none'
-                                : null
+                            display: this.props.customerType === 'Guest' ? 'none' : null
                           }}
                         >
                           <FormattedMessage id="delete" />

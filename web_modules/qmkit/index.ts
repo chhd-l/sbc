@@ -24,7 +24,7 @@ import ValidConst from './validate';
 import TreeSelectGroup from './tree-select-group';
 import * as QMFloat from './float';
 import * as QMMethod from './comment-method';
-import UEditor from './ueditor/Ueditor';
+// import UEditor from './ueditor/Ueditor';
 import QMUpload from './upload';
 import DataModal from './data-dictionary';
 import { AuthWrapper, checkAuth, checkMenu } from './checkAuth';
@@ -68,7 +68,7 @@ export {
   TreeSelectGroup,
   QMFloat,
   QMMethod,
-  UEditor,
+  // UEditor,
   QMUpload,
   DataModal,
   AuthWrapper,

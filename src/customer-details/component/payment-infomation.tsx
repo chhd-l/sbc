@@ -96,118 +96,69 @@ class PaymentInformation extends React.Component<any, any> {
     return (
       <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <Row style={{ minHeight: 200 }}>
-          {cardList &&
-            cardList.map((item, index) => (
-              <Col span={6} offset={1} key={index}>
-                {item.paymentType === 'PAYU' ? (
-                  <>
-                    {item.payuPaymentMethod ? (
-                      <Card>
-                        <Row>
-                          <Col span={16} offset={1}>
-                            <p>{item.payuPaymentMethod.holder_name}</p>
-                            <p>{item.payuPaymentMethod.last_4_digits ? '**** **** **** ' + item.payuPaymentMethod.last_4_digits : ''}</p>
-                            <p>{item.payuPaymentMethod.card_type}</p>
-                          </Col>
-                          <Col span={5}>
-                            {!item.isDefault ? (
-                              <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
-                                <Tooltip placement="top" title="Delete">
-                                  <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
-                                </Tooltip>
-                              </Popconfirm>
-                            ) : null}
-                          </Col>
-                        </Row>
-                      </Card>
-                    ) : null}
-                  </>
-                ) : (
-                  <>
-                    {item.adyenPaymentMethod ? (
-                      <Card>
-                        <Row>
-                          <Col span={16} offset={1}>
-                            <p>{item.adyenPaymentMethod.holder_name}</p>
-                            <p>{item.adyenPaymentMethod.lastFour ? '**** **** **** ' + item.adyenPaymentMethod.lastFour : ''}</p>
-                            <p>{item.adyenPaymentMethod.card_type}</p>
-                          </Col>
-                          <Col span={5}>
-                            {!item.isDefault ? (
-                              <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
-                                <Tooltip placement="top" title="Delete">
-                                  <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
-                                </Tooltip>
-                              </Popconfirm>
-                            ) : null}
-                          </Col>
-                        </Row>
-                      </Card>
-                    ) : null}
-                  </>
-                )}
-              </Col>
-            ))}
+          {cardList && cardList.length === 0 ? (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          ) : (
+            <>
+              {cardList.map((item, index) => (
+                <Col span={6} offset={1} key={index}>
+                  {item.paymentType === 'PAYU' ? (
+                    <>
+                      {item.payuPaymentMethod ? (
+                        <Card>
+                          <Row>
+                            <Col span={16} offset={1}>
+                              <p>{item.payuPaymentMethod.holder_name}</p>
+                              <p>{item.payuPaymentMethod.last_4_digits ? '**** **** **** ' + item.payuPaymentMethod.last_4_digits : ''}</p>
+                              <p>{item.payuPaymentMethod.card_type}</p>
+                            </Col>
+                            <Col span={5}>
+                              {!item.isDefault ? (
+                                <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
+                                  <Tooltip placement="top" title="Delete">
+                                    <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
+                                  </Tooltip>
+                                </Popconfirm>
+                              ) : null}
+                            </Col>
+                          </Row>
+                        </Card>
+                      ) : null}
+                    </>
+                  ) : (
+                    <>
+                      {item.adyenPaymentMethod ? (
+                        <Card>
+                          <Row>
+                            <Col span={16} offset={1}>
+                              <p>{item.adyenPaymentMethod.holder_name}</p>
+                              <p>{item.adyenPaymentMethod.lastFour ? '**** **** **** ' + item.adyenPaymentMethod.lastFour : ''}</p>
+                              <p>{item.adyenPaymentMethod.card_type}</p>
+                            </Col>
+                            <Col span={5}>
+                              {!item.isDefault ? (
+                                <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
+                                  <Tooltip placement="top" title="Delete">
+                                    <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
+                                  </Tooltip>
+                                </Popconfirm>
+                              ) : null}
+                            </Col>
+                          </Row>
+                        </Card>
+                      ) : null}
+                    </>
+                  )}
+                </Col>
+              ))}
+            </>
+          )}
+
           <div className="bar-button">
             <Button>
               <Link to="/customer-list">Cancel</Link>
             </Button>
           </div>
-
-          {/* <Col span={20}>
-            {this.state.cardList.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
-            
-            
-            <Card
-              style={{
-                display: this.state.cardList.length === 0 ? 'none' : 'block'
-              }}
-            >
-              <Form {...formItemLayout}>
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <FormItem label="Card number">
-                      {getFieldDecorator('cardNumber', {
-                      })(
-                        <Input
-                          disabled
-                        />
-                      )}
-                    </FormItem>
-                  </Col>
-
-                  <Col span={12}>
-                    <FormItem label="Card owner">
-                      {getFieldDecorator('cardOwner', {
-                      })(
-                        <Input disabled/>
-                      )}
-                    </FormItem>
-                  </Col>
-
-                  <Col span={24}>
-                    <FormItem>
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delCard()} okText="Confirm" cancelText="Cancel">
-                        <Button
-                          style={{
-                            marginRight: '20px',
-                            display: this.props.customerType === 'Guest' ? 'none' : null
-                          }}
-                        >
-                          <FormattedMessage id="delete" />
-                        </Button>
-                      </Popconfirm>
-
-                      <Button>
-                        <Link to="/customer-list">Cancel</Link>
-                      </Button>
-                    </FormItem>
-                  </Col>
-                </Row>
-              </Form>
-            </Card>
-          </Col>
-         */}
         </Row>
       </Spin>
     );

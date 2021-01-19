@@ -154,8 +154,11 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
+          this.setState({
+            loading: false
+          });
           let addressList = res.context.customerDeliveryAddressVOList;
-          if (addressList.length > 0) {
+          if (addressList && addressList.length > 0) {
             let billingForm = this.state.billingForm;
             if (this.state.currentId) {
               billingForm = addressList.find((item) => {
@@ -177,8 +180,8 @@ class BillingInfomation extends React.Component<any, any> {
                 addressList: addressList,
                 billingForm: billingForm,
                 title: billingForm.consigneeName,
-                isDefault: billingForm.isDefaltAddress === 1 ? true : false,
-                loading: false
+                isDefault: billingForm.isDefaltAddress === 1 ? true : false
+                // loading: false
               },
               () => {
                 this.props.form.setFieldsValue({

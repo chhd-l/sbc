@@ -153,8 +153,10 @@ class DeliveryInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let addressList = res.context.customerDeliveryAddressVOList;
-
-          if (addressList.length > 0) {
+          this.setState({
+            loading: false
+          });
+          if (addressList && addressList.length > 0) {
             let deliveryForm = this.state.deliveryForm;
             if (this.state.currentId) {
               deliveryForm = addressList.find((item) => {
@@ -176,8 +178,8 @@ class DeliveryInfomation extends React.Component<any, any> {
                 addressList: addressList,
                 deliveryForm: deliveryForm,
                 title: deliveryForm.consigneeName,
-                isDefault: deliveryForm.isDefaltAddress === 1 ? true : false,
-                loading: false
+                isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
+                // loading: false
               },
               () => {
                 this.props.form.setFieldsValue({

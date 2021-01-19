@@ -199,6 +199,10 @@ class BillingInfomation extends React.Component<any, any> {
                 });
               }
             );
+          } else {
+            this.setState({
+              loading: false
+            });
           }
         } else {
           this.setState({
@@ -368,7 +372,6 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          debugger;
           if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
             this.setState({
               initCityName: res.context.systemCityVO[0].cityName
@@ -400,8 +403,8 @@ class BillingInfomation extends React.Component<any, any> {
     };
     const { getFieldDecorator } = this.props.form;
     return (
-      <Row>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+      <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
+        <Row>
           <Col span={3}>
             <h3>All Address( {this.state.addressList.length} )</h3>
             <ul>
@@ -776,8 +779,8 @@ class BillingInfomation extends React.Component<any, any> {
               </Form>
             </Card>
           </Col>
-        </Spin>
-      </Row>
+        </Row>
+      </Spin>
     );
   }
 }

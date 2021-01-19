@@ -305,7 +305,7 @@ export default class ClinicList extends Component<any, any> {
         key: 'action',
         width: '10%',
         render: (text, record) => (
-          <span>
+          <div>
             <Tooltip placement="top" title="Details">
               <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
@@ -317,7 +317,7 @@ export default class ClinicList extends Component<any, any> {
             </Tooltip>
             {/* <Divider type="vertical" />
             <a onClick={() => this.showConfirm(record.prescriberId)}>Delete</a> */}
-          </span>
+          </div>
         )
       }
     ];
@@ -391,6 +391,7 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <SelectGroup
                     defaultValue=""
+                    getPopupContainer={() => document.getElementById('page-content')}
                     label="Prescriber type"
                     // style={{ width: 80 }}
                     onChange={(value) => {
@@ -474,6 +475,7 @@ export default class ClinicList extends Component<any, any> {
                   <SelectGroup
                     defaultValue="true"
                     label="Prescriber status"
+                    getPopupContainer={() => document.getElementById('page-content')}
                     // style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? '' : value;

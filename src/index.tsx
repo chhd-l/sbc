@@ -22,24 +22,26 @@ import 'moment/locale/zh-cn';
 import { IntlProvider } from 'react-intl';
 import es_ES from '../web_modules/qmkit/es_ES';
 import configOkta from '../web_modules/qmkit/config-okta';
-
+import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 moment.locale('zh-cn');
 
 const PrescriberRouter = () => (
   <IntlProvider locale="es" messages={es_ES}>
     <ConfigProvider locale={enUS}>
-      <Provider store={store}>
-        <Router history={history}>
-          <Security {...configOkta.prescrberOidc}>
-            <div className="father">
-              <Switch>
-                {routeWithSubRoutes(homeRoutes, noop)}
-                <Route component={Main} />
-              </Switch>
-            </div>
-          </Security>
-        </Router>
-      </Provider>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <Router history={history}>
+            <Security {...configOkta.prescrberOidc}>
+              <div className="father">
+                <Switch>
+                  {routeWithSubRoutes(homeRoutes, noop)}
+                  <Route component={Main} />
+                </Switch>
+              </div>
+            </Security>
+          </Router>
+        </Provider>
+      </ErrorBoundary>
     </ConfigProvider>
   </IntlProvider>
 );

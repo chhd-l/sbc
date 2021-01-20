@@ -694,7 +694,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Select Prescriber">
                   {getFieldDecorator('selectedClinics', {
-                    rules: [{ required: true, message: 'Please Select Prescriber!' }]
+                    // rules: [{ required: true, message: 'Please Select Prescriber!' }]
                   })(
                     <Select
                       mode="tags"

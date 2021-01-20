@@ -74,6 +74,9 @@ export default class TodoItems extends React.Component<any, any> {
   componentWillUnmount() {
     const { cleanRedux } = this.props.relaxProps;
     cleanRedux();
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {

@@ -10,7 +10,6 @@ import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
 import { Provider } from 'react-redux';
 import { routeWithSubRoutes, history, noop, cache, getRoutType } from 'qmkit';
 import { homeRoutes } from './router';
-import 'regenerator-runtime/runtime';
 import store from './redux/store';
 import './index.less';
 import Main from './main';
@@ -28,20 +27,18 @@ moment.locale('zh-cn');
 const PrescriberRouter = () => (
   <IntlProvider locale="es" messages={es_ES}>
     <ConfigProvider locale={enUS}>
-      <ErrorBoundary>
-        <Provider store={store}>
-          <Router history={history}>
-            <Security {...configOkta.prescrberOidc}>
-              <div className="father">
-                <Switch>
-                  {routeWithSubRoutes(homeRoutes, noop)}
-                  <Route component={Main} />
-                </Switch>
-              </div>
-            </Security>
-          </Router>
-        </Provider>
-      </ErrorBoundary>
+      <Provider store={store}>
+        <Router history={history}>
+          <Security {...configOkta.prescrberOidc}>
+            <div className="father">
+              <Switch>
+                {routeWithSubRoutes(homeRoutes, noop)}
+                <Route component={Main} />
+              </Switch>
+            </div>
+          </Security>
+        </Router>
+      </Provider>
     </ConfigProvider>
   </IntlProvider>
 );

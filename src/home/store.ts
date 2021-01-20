@@ -176,14 +176,14 @@ export default class AppStore extends Store {
 
   cleanRedux = () => {
     setTimeout(() => {
-      this.dispatch('home:tradeCustomerView', null);
-      this.dispatch('home:goodsInfoTopView', null);
-      this.dispatch('home:conversionFunnelDashboardView', null);
-      this.dispatch('home:prescriberTrendView', null);
-      this.dispatch('home:prescriberTopView', null);
-      this.dispatch('home:trafficDashboardView', null);
-      this.dispatch('home:transactionTrendView', null);
-      this.dispatch('home:trafficTrendDashboardView', null);
+      this.dispatch('home:tradeCustomerView', []);
+      this.dispatch('home:goodsInfoTopView', []);
+      this.dispatch('home:conversionFunnelDashboardView', []);
+      this.dispatch('home:prescriberTrendView', []);
+      this.dispatch('home:prescriberTopView', []);
+      this.dispatch('home:trafficDashboardView', []);
+      this.dispatch('home:transactionTrendView', []);
+      this.dispatch('home:trafficTrendDashboardView', []);
     }, 3000);
   };
 }

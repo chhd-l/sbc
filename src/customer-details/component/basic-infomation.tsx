@@ -282,7 +282,7 @@ class BasicInfomation extends React.Component<any, any> {
   //手机校验
   comparePhone = (rule, value, callback) => {
     const { form } = this.props;
-    let reg = /^[0-9+-\s]{6,20}$/;
+    let reg = /^(\([0-9]{2,4}\))?[0-9+-\s]{6,20}$/;
     if (!reg.test(form.getFieldValue('contactPhone'))) {
       callback('Please enter the correct phone');
     } else {
@@ -692,7 +692,7 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Selected Prescriber">
+                <FormItem label="Select Prescriber">
                   {getFieldDecorator('selectedClinics', {
                     rules: [{ required: true, message: 'Please Select Prescriber!' }]
                   })(

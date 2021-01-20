@@ -282,7 +282,7 @@ class BasicInfomation extends React.Component<any, any> {
   //手机校验
   comparePhone = (rule, value, callback) => {
     const { form } = this.props;
-    let reg = /^(\([0-9]{2,4}\))?[0-9+-\s]{6,20}$/;
+    let reg = /^[0-9+-\s\(\)]{6,20}$/;
     if (!reg.test(form.getFieldValue('contactPhone'))) {
       callback('Please enter the correct phone');
     } else {

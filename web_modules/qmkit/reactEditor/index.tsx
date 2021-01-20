@@ -9,7 +9,7 @@ class ReactEditor extends Component<any, any> {
     props: {
         id: String;
         content: string;
-        disabled: boolean;
+        disabled?: boolean;
         height: number;
         onContentChange: Function;
         toolbars?: StringArray;

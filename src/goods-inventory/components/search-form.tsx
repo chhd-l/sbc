@@ -79,18 +79,18 @@ export default class SearchForm extends React.Component<any, any> {
                 style={{ width: '120px' }}
                 // key={Number(stock) + 1}
                 defaultValue={stock}
-                step={1}
+                // step={1}
                 disabled={this.state.disabledType}
                 onChange={this.onChangeNumber}
                 min={1}
                 value={stock}
-                formatter={(e) => {
-                  if (!/(^[1-9]\d*$)/.test(e)) {
-                    return 1;
-                  } else {
-                    return e;
-                  }
-                }}
+                // formatter={(e) => {
+                //   if (!/(^[1-9]\d*$)/.test(e)) {
+                //     return 1;
+                //   } else {
+                //     return e;
+                //   }
+                // }}
               />
             }
           </div>

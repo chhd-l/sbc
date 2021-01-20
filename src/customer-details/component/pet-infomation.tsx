@@ -356,7 +356,7 @@ class PetInfomation extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
           <Col span={3}>
             <h3>All Pets( {this.state.petList.length} )</h3>
             <ul>

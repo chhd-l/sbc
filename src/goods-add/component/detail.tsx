@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Tabs } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { ErrorBoundary, noop, UEditor, ReactEditor } from 'qmkit';
+import { ErrorBoundary, noop, ReactEditor, history } from 'qmkit';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 let goodsDetailTabObj = {};
@@ -75,6 +75,8 @@ export default class Detail extends React.Component<any, any> {
     let goodsDetailTabCopy = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
     let goodsDetailTabContent: any = {};
     let goodsDetailContent: string = goods.get('goodsDetail');
+    let pathname = history.location.pathname,
+      bool = pathname === '/goods-main';
     if (goodsDetailContent) {
       try {
         goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'));
@@ -88,7 +90,7 @@ export default class Detail extends React.Component<any, any> {
     let storeId = loginInfo ? loginInfo.storeId : '';
     return (
       <div>
-        {goodsDetailContent && (
+        {(goodsDetailContent || bool) && (
           <Tabs defaultActiveKey="main0" animated={false}>
             {goodsDetailTabCopy.map((item, i) => {
               return (

@@ -562,7 +562,29 @@ module.exports = function (webpackEnv, envCode) {
       new WebpackBar(
         {
           name: 'Store Portal',
-          color: '#e2001a'
+          color: '#e2001a',
+          start(context) {
+            // Called when (re)compile is started
+          },
+          change(context) {
+            // Called when a file changed on watch mode
+          },
+          update(context) {
+            // Called after each progress update
+          },
+          done(context) {
+            // Called when compile finished
+          },
+          progress(context) {
+            // Called when build progress updated
+          },
+          allDone(context) {
+            // Called when _all_ compiles finished
+          },
+          beforeAllDone(context) {
+          },
+          afterAllDone(context) {
+          },
         }
       ),
     ].filter(Boolean),

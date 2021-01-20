@@ -8,6 +8,7 @@ import { fromJS } from 'immutable';
 export default class TodoItemsActor extends Actor {
   defaultState() {
     return {
+      loading: false,
       tradeTodo: {}, //订单待处理事项
       returnTodo: {}, //退单待处理事项
       goodsTodo: {}, //会员待处理事项
@@ -52,5 +53,15 @@ export default class TodoItemsActor extends Actor {
   setEmployee(state: IMap, res) {
     sessionStorage.setItem('s2b-supplier@employee', JSON.stringify(res));
     return state.set('employee', fromJS(res));
+  }
+
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

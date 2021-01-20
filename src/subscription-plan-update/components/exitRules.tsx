@@ -82,14 +82,14 @@ export default class exitRules extends Component<any, any> {
                   <FormItem>
                     <strong style={{marginRight: '10px'}}>Total cancellation fee:</strong>
                     <strong>remaining number of refills *</strong>
-                    {getFieldDecorator('cancellationFee', {
-                      initialValue: subscriptionPlan.cancellationFee,
+                    {getFieldDecorator('cancellationRefillFee', {
+                      initialValue: subscriptionPlan.cancellationRefillFee,
                       rules: [{ required: true, message: 'This is Required' }]
                     })(
                       <InputNumber
                         min={0}
                         onChange={(value) => {
-                          addField('cancellationFee', value);
+                          addField('cancellationRefillFee', value);
                         }}
                       />
                     )}

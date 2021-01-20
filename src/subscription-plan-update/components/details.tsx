@@ -1,20 +1,17 @@
 import { Col, Row } from 'antd';
 import React, { Component } from 'react';
 import AddProduct from '../modals/addProduct';
-import { Spin, Popconfirm, Tooltip, Input, Icon } from 'antd';
+import { Spin, Popconfirm, Tooltip, Input, Icon, InputNumber } from 'antd';
 import moment from 'moment';
 import { cache } from 'qmkit';
 
 const intReg = /^[0-9]*$/;
-const decimalReg = /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/
 export default class details extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
-      visible: false,
-      mainProducts: [],
-      mainProductIds: []
+      visible: false
     };
     this.showAddMainProduct = this.showAddMainProduct.bind(this);
     this.deleteProduct = this.deleteProduct.bind(this);
@@ -31,19 +28,16 @@ export default class details extends Component<any, any> {
   }
 
   updateTable(selectedRowKeys) {
-    const { addField, allSkuProduct } = this.props;
-    const { mainProducts, mainProductIds } = this.state;
+    const { addField, allSkuProduct, subscriptionPlan } = this.props;
     if (selectedRowKeys) {
       let selectMainProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
       selectMainProducts.map((item) => {
         item.packageId = 'PK' + moment(new Date()).format('YYYYMMDDHHSSS');
         item.qty = 1;
-        item.settingPrice = ''
+        item.settingPrice = '';
       });
-      mainProducts.push(...selectMainProducts);
-      mainProductIds.push(...selectedRowKeys);
-      addField('mainProducts', mainProducts);
-      addField('mainProductIds', mainProductIds);
+      subscriptionPlan.mainProducts.push(...selectMainProducts);
+      subscriptionPlan.mainProductIds.push(...selectedRowKeys);
     }
     this.setState({
       visible: false
@@ -68,6 +62,9 @@ export default class details extends Component<any, any> {
     if (qty && !intReg.test(qty)) {
       return;
     }
+    if(qty <= 0) {
+      return;
+    }
     const { subscriptionPlan, addField } = this.props;
     subscriptionPlan.mainProducts.map((item) => {
       if (item.goodsInfoId === goodsInfoId) {
@@ -80,7 +77,7 @@ export default class details extends Component<any, any> {
 
   onBlurQty(goodsInfoId, qty) {
     const { subscriptionPlan, addField } = this.props;
-    if(!qty) {
+    if (!qty) {
       subscriptionPlan.mainProducts.map((item) => {
         if (item.goodsInfoId === goodsInfoId) {
           item.qty = 1;
@@ -92,13 +89,6 @@ export default class details extends Component<any, any> {
   }
 
   updateSettingPrice(goodsInfoId, settingPrice) {
-    debugger
-    if(settingPrice && settingPrice.subString(settingPrice.length -1 , settingPrice.length) === '.') {
-      
-    }
-    if (settingPrice && !decimalReg.test(settingPrice)) {
-      return;
-    }
     const { subscriptionPlan, addField } = this.props;
     subscriptionPlan.mainProducts.map((item) => {
       if (item.goodsInfoId === goodsInfoId) {
@@ -174,18 +164,21 @@ export default class details extends Component<any, any> {
                                 }}
                                 onChange={(e) => {
                                   const value = (e.target as any).value;
-                                  this.updateQty(item.goodsInfoId, intReg.test(value) ? parseInt(value) : value);
+                                  this.updateQty(item.goodsInfoId, value && intReg.test(value) ? parseInt(value) : value);
                                 }}
                               />
                               <Icon type="plus" onClick={() => this.updateQty(item.goodsInfoId, item.qty + 1)} />
                             </td>
-                            <td>{item.marketPrice}</td>
                             <td>
-                              <span>{currencySymbol}</span>
-                              <Input
-                               value={item.settingPrice}
-                                onChange={(e) => {
-                                  const value = (e.target as any).value;
+                              <span className="currency">{currencySymbol}</span>
+                              {item.marketPrice}
+                            </td>
+                            <td>
+                              <span className="currency">{currencySymbol}</span>
+                              <InputNumber
+                                precision={2}
+                                value={item.settingPrice}
+                                onChange={(value) => {
                                   this.updateSettingPrice(item.goodsInfoId, value);
                                 }}
                               />

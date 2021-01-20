@@ -80,12 +80,12 @@ export default class entryCriteria extends Component<any, any> {
               </Checkbox>
             </FormItem>
             {subscriptionPlan.signOnSubscription === 1 ? (
-              <FormItem {...layout} label="Consent type">
+              <FormItem {...layout} label="Consent">
                 <Row>
                   <Col span={16}>
                     {getFieldDecorator('consentTypeIds', {
                       initialValue: subscriptionPlan.consentTypeIds,
-                      rules: [{ required: true, message: 'Please select Consent type' }]
+                      rules: [{ required: true, message: 'Please add Consent' }]
                     })(
                       <Select
                         mode="multiple"

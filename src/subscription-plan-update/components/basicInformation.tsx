@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, DatePicker, Select, Row, Col, message } from 'antd';
+import { Form, Input, DatePicker, Select, Row, Col, message, InputNumber } from 'antd';
 import moment from 'moment';
 import { Const } from 'qmkit';
 import * as webapi from '../webapi';
@@ -76,10 +76,11 @@ export default class basicInformation extends Component<any, any> {
                 initialValue: subscriptionPlan.quantity,
                 rules: [{ required: false, message: 'Please input Quantity' }]
               })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    addField('quantity', value);
+                <InputNumber
+                  precision={0}
+                  max={100}
+                  onChange={(value) => {
+                    addField('quantity', 11.33);
                   }}
                 />
               )}

@@ -105,6 +105,9 @@
     .ant-form-item-label {
       text-align: left;
     }
+    .ant-input-number {
+      width: 100%;
+    }
   }
 
   // targetProduct
@@ -159,11 +162,22 @@
     .ant-table-wrapper {
       margin-top: 15px;
       .ant-table-tbody {
-        td input {
-          display: inline-block;
-          width: 60%;
-          margin: 0 5px;
-        }
+        td { 
+          input {
+            display: inline-block;
+            width: 60%;
+            margin: 0 5px;
+          }
+          .ant-input-number {
+            display: inline-block;
+            width: 85%;
+          }
+          .currency {
+            display: inline;
+            margin-right: 5px;
+          }
+
+        } 
         .anticon {
           font-size: 15px;
           color: #e2001a;

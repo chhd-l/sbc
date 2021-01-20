@@ -19,12 +19,14 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: '',
-      current: 4,
+      current: 0,
       subscriptionPlan: {
         canCancelPlan: true,
         canCancelChargedFee: true,
         canChangeDelivery: true,
-        canSkipNextDelivery: true
+        canSkipNextDelivery: true,
+        mainProducts: [],
+        mainProductIds: []
       },
       allSkuProduct: []
     };

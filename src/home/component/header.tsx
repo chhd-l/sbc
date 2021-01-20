@@ -213,9 +213,6 @@ export default class Header extends React.Component<any, any> {
             defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date())}
             disabledDate={(current) => {
               if (current && current.year() >= 2021 && current.week() > 3) {
-                if (current.week() > moment().endOf('day').week()) {
-                  return current.week();
-                }
               } else if (current && current.year() <= 2021 && current.week() <= 3) {
                 return current && current.week();
               }

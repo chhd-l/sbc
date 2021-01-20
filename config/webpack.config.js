@@ -105,11 +105,7 @@ module.exports = function (webpackEnv, envCode) {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
-    devtool: isEnvProduction
-      ? shouldUseSourceMap
-        ? false
-        : false
-      : isEnvDevelopment && 'eval-source-map',
+    devtool: isEnvProduction ? '' : 'cheap-module-eval-source-map', //prod: cheap-module-source-map
     entry: [
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appIndexJs,
@@ -419,7 +415,7 @@ module.exports = function (webpackEnv, envCode) {
 
          }
        ),*/
-      new BundleAnalyzerPlugin(
+      isEnvProduction && new BundleAnalyzerPlugin(
         {
           //  可以是`server`，`static`或`disabled`。
           //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。

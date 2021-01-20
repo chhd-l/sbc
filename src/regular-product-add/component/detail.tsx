@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Tabs } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { noop, UEditor, ErrorBoundary, ReactEditor } from 'qmkit';
+import { noop, ErrorBoundary, ReactEditor, history } from 'qmkit';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 let goodsDetailTabObj = {};
@@ -66,13 +66,14 @@ export default class Detail extends React.Component<any, any> {
     }
     let p = JSON.stringify(goodsDetailTabObj);
     editEditorContent('goodsDetail', p);
-    // console.log(goodsDetailTabObj)
   };
   render() {
     const { goods, refDetailEditor, reftabDetailEditor, chooseImgs, imgType, goodsTabs, goodsDetailTab } = this.props.relaxProps;
     let goodsDetailTabCopy = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
     let goodsDetailTabContent: any = {};
     let goodsDetailContent: string = goods.get('goodsDetail');
+    let pathname = history.location.pathname,
+      bool = pathname === '/regular-product-add';
     if (goodsDetailContent) {
       try {
         goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'));
@@ -86,46 +87,19 @@ export default class Detail extends React.Component<any, any> {
     let storeId = loginInfo ? loginInfo.storeId : '';
     return (
       <div>
-        {/* <Tabs defaultActiveKey="main1" animated={false}>
-          {goodsDetailTabCopy.map((item, i) => {
-            return (
-              <Tabs.TabPane tab={item.get('name')} key={'main' + i} forceRender>
-                <ErrorBoundary>
-                  <UEditor
-                    ref={(UEditor) => {
-                      refDetailEditor({
-                        detailEditor: (UEditor && UEditor.editor) || {},
-                        ref: 'detailEditor_' + i
-                      });
-                      this.child = UEditor;
-                    }}
-                    id={'main' + i}
-                    height="320"
-                    disabled={storeId === 123457909} //fr
-                    content={this.getDetailString(goodsDetailTabContent, item.get('name'))} //去除前后的双引号, 数组加上[]
-                    insertImg={() => {
-                      this._handleClick();
-                      this.props.relaxProps.editEditor('detail');
-                    }}
-                    chooseImgs={chooseImgs.toJS()}
-                    imgType={imgType}
-                  />
-                </ErrorBoundary>
-              </Tabs.TabPane>
-            );
-          })}
-        </Tabs> */}
-        <Tabs defaultActiveKey="main0" animated={false}>
-          {goodsDetailTabCopy.map((item, i) => {
-            return (
-              <Tabs.TabPane tab={item.get('name')} key={'main' + i} forceRender>
-                <ErrorBoundary>
-                  <ReactEditor id={'main-' + i} content={this.getDetailString(goodsDetailTabContent, item.get('name'))} onContentChange={this.onContentChange} tabNanme={item.get('name')} disabled={false} height={320} />
-                </ErrorBoundary>
-              </Tabs.TabPane>
-            );
-          })}
-        </Tabs>
+        {(goodsDetailContent || bool) && (
+          <Tabs defaultActiveKey="main0" animated={false}>
+            {goodsDetailTabCopy.map((item, i) => {
+              return (
+                <Tabs.TabPane tab={item.get('name')} key={'main' + i} forceRender>
+                  <ErrorBoundary>
+                    <ReactEditor id={'main-' + i} content={this.getDetailString(goodsDetailTabContent, item.get('name'))} onContentChange={this.onContentChange} tabNanme={item.get('name')} disabled={false} height={320} />
+                  </ErrorBoundary>
+                </Tabs.TabPane>
+              );
+            })}
+          </Tabs>
+        )}
       </div>
     );
   }

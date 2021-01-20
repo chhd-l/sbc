@@ -246,7 +246,7 @@ export default class StepConsentDetail extends Component<any, any> {
       <div className="consent-detail">
         <div className="detail space-between">
           <div className="detail-form">
-            <FormItem>
+            <FormItem className="input-consent">
               <SelectGroup
                 label="Category"
                 defaultValue={editList.consentCategory ? editList.consentCategory : 'Prescriber'}
@@ -265,7 +265,7 @@ export default class StepConsentDetail extends Component<any, any> {
                 <Option value="Consumer">Consumer</Option>
               </SelectGroup>
             </FormItem>
-            <FormItem>
+            <FormItem className="input-consent">
               <Input
                 addonBefore="Consent id"
                 defaultValue={editList.consentId ? editList.consentId : ''}
@@ -279,7 +279,7 @@ export default class StepConsentDetail extends Component<any, any> {
           </div>
 
           <div className="detail-form">
-            <FormItem>
+            <FormItem className="input-consent">
               <SelectGroup
                 defaultValue={editList.filedType ? editList.filedType : 'Optional'}
                 label="Field type"
@@ -294,7 +294,7 @@ export default class StepConsentDetail extends Component<any, any> {
                 <Option value="Required">Required</Option>
               </SelectGroup>
             </FormItem>
-            <FormItem>
+            <FormItem className="input-consent">
               <Input
                 addonBefore="Consent code"
                 defaultValue={editList.consentCode ? editList.consentCode : ''}
@@ -315,7 +315,7 @@ export default class StepConsentDetail extends Component<any, any> {
             {/* <FormItem>
               <TreeSelect {...tProps} />
             </FormItem> */}
-            <FormItem>
+            <FormItem className="input-consent">
               <SelectGroup
                 defaultValue={editList.consentType ? editList.consentType : 'E-mail in'}
                 label="Consent type"
@@ -334,7 +334,7 @@ export default class StepConsentDetail extends Component<any, any> {
 
           <div className="edit">
             <div className="edit-consent">
-              <FormItem>
+              <FormItem className="input-consent">
                 <SelectGroup
                   defaultValue={editList.consentTitleType ? editList.consentTitleType : 'Content'}
                   label="Consent title"

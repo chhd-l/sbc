@@ -60,7 +60,6 @@ export default class OperateLog extends React.Component<any, any> {
 
   render() {
     const { log } = this.props.relaxProps;
-    debugger;
     const Panel = Collapse.Panel;
 
     return (

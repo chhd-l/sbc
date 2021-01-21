@@ -55,7 +55,7 @@ module.exports = function (webpackEnv, envCode) {
   const isEnvProduction = webpackEnv !== 'development'
 
   const env = getClientEnvironment(envCode);
-  console.log(isEnvProduction,1111);
+
   const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === '/';
   const publicUrl = isEnvProduction ? publicPath : isEnvDevelopment && '';
@@ -105,13 +105,9 @@ module.exports = function (webpackEnv, envCode) {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
-    devtool: isEnvProduction
-      ? shouldUseSourceMap
-        ? false
-        : false
-      : isEnvDevelopment && 'eval-source-map',
+    devtool: isEnvProduction ? '' : 'cheap-module-eval-source-map', //prod: cheap-module-source-map
     entry: [
-      require.resolve('react-dev-utils/webpackHotDevClient'),
+      isEnvDevelopment ? require.resolve('react-dev-utils/webpackHotDevClient') : undefined,
       paths.appIndexJs,
     ].filter(Boolean),
     output: {
@@ -419,7 +415,7 @@ module.exports = function (webpackEnv, envCode) {
 
          }
        ),*/
-      /*new BundleAnalyzerPlugin(
+      isEnvProduction && new BundleAnalyzerPlugin(
         {
           //  可以是`server`，`static`或`disabled`。
           //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。
@@ -450,7 +446,7 @@ module.exports = function (webpackEnv, envCode) {
           statsOptions: null,
           logLevel: 'info' // 日志级别。可以是'信息'，'警告'，'错误'或'沉默'。
         }
-      ),*/
+      ),
       new CompressionPlugin({
         filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
         algorithm: 'gzip', // 算法
@@ -562,7 +558,29 @@ module.exports = function (webpackEnv, envCode) {
       new WebpackBar(
         {
           name: 'Store Portal',
-          color: '#e2001a'
+          color: '#e2001a',
+          start(context) {
+            // Called when (re)compile is started
+          },
+          change(context) {
+            // Called when a file changed on watch mode
+          },
+          update(context) {
+            // Called after each progress update
+          },
+          done(context) {
+            // Called when compile finished
+          },
+          progress(context) {
+            // Called when build progress updated
+          },
+          allDone(context) {
+            // Called when _all_ compiles finished
+          },
+          beforeAllDone(context) {
+          },
+          afterAllDone(context) {
+          },
         }
       ),
     ].filter(Boolean),

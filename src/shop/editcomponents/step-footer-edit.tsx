@@ -38,6 +38,8 @@ export default class StepFour extends React.Component<any, any> {
     this.state = {
       contentForm: {}
     };
+  }
+  componentDidMount() {
     this.getContentInformation();
   }
 
@@ -68,11 +70,7 @@ export default class StepFour extends React.Component<any, any> {
         <Form>
           <Row style={{ padding: '0 20px' }}>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="contactUsUrl" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="contactUsUrl" />}>
                 {getFieldDecorator('contactUsUrl', {
                   initialValue: this.state.contentForm.contactUsUrl,
                   rules: [
@@ -95,11 +93,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="ourValues" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="ourValues" />}>
                 {getFieldDecorator('ourValues', {
                   initialValue: this.state.contentForm.ourValues
                 })(
@@ -116,11 +110,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="qualityAndSafety" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="qualityAndSafety" />}>
                 {getFieldDecorator('qualityAndSafety', {
                   initialValue: this.state.contentForm.qualityAndSafety
                 })(
@@ -137,11 +127,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="specificNutrition" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="specificNutrition" />}>
                 {getFieldDecorator('specificNutrition', {
                   initialValue: this.state.contentForm.specificNutrition
                 })(
@@ -158,11 +144,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="informationForParents" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="informationForParents" />}>
                 {getFieldDecorator('informationForParents', {
                   initialValue: this.state.contentForm.informationForParents
                 })(
@@ -179,11 +161,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="cookies" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="cookies" />}>
                 {getFieldDecorator('cookiesUrl', {
                   initialValue: this.state.contentForm.cookiesUrl
                 })(
@@ -200,11 +178,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="storeContactEmail" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeContactEmail" />}>
                 {getFieldDecorator('storeContactEmail', {
                   initialValue: this.state.contentForm.storeContactEmail,
                   rules: [
@@ -226,11 +200,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="storeContactPhoneNumber" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeContactPhoneNumber" />}>
                 {getFieldDecorator('storeContactPhoneNumber', {
                   initialValue: this.state.contentForm.storeContactPhoneNumber,
                   rules: [
@@ -252,11 +222,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="contactTimePeriod" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="contactTimePeriod" />}>
                 {getFieldDecorator('contactTimePeriod', {
                   initialValue: this.state.contentForm.contactTimePeriod,
                   rules: [
@@ -278,11 +244,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="confirmationEmail" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="confirmationEmail" />}>
                 {getFieldDecorator('confirmationEmail', {
                   initialValue: this.state.contentForm.confirmationEmail,
                   rules: [

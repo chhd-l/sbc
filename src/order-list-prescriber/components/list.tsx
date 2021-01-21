@@ -692,13 +692,12 @@ const styles = {
     height: 300
   },
   imgItem: {
-    width: '30%',
-    height: 'auto',
+    width: 60,
+    height: 60,
     padding: 5,
     border: '1px solid #ddd',
     float: 'left',
-    marginRight: 5,
-    marginBottom: 5,
+    marginRight: 10,
     background: '#fff',
     borderRadius: 3
   },

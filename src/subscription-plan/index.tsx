@@ -115,7 +115,7 @@ export default class SubscriptionPlan extends Component<any, any> {
         title: 'Subscription Plan Type',
         dataIndex: 'type',
         key: 'type',
-        width: '18%'
+        width: '12%'
       },
       {
         title: 'Quantity',
@@ -134,7 +134,14 @@ export default class SubscriptionPlan extends Component<any, any> {
         title: 'Number of Delivery',
         dataIndex: 'delivery',
         key: 'delivery',
-        width: '13%'
+        width: '10%'
+      },
+      {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        width: '7%',
+        render: (text) => (text == 0 ? 'Draft': 'Publish')
       },
       {
         title: 'Operation',

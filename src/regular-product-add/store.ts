@@ -1291,7 +1291,9 @@ export default class AppStore extends Store {
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',
           basePrice: data.get('selectedBasePrice') !== 'None' && item.get('basePrice') ? item.get('basePrice') : null,
-          subscriptionBasePrice: data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null
+          subscriptionBasePrice: data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null,
+          virtualInventory: item.get('virtualInventory') ? item.get('virtualInventory') : null,
+          virtualAlert: item.get('virtualAlert') ? item.get('virtualAlert') : null
         })
       );
     });

@@ -3,7 +3,7 @@ import DataGrid from './datagrid';
 import SelectGroup from './select-group';
 import AsyncRouter from './async-router';
 import routeWithSubRoutes from './route-with-subroutes';
-import Fetch from './fetch';
+// import Fetch from './fetch';
 import Headline from './head-line';
 import MyHeader from './my-header';
 import MyLeftMenu from './my-left-menu';
@@ -41,7 +41,7 @@ import DragTable from './dragTable';
 import AssetManagement from './assetManagement';
 import ErrorBoundary from './errorBoundary';
 import ReactEditor from './reactEditor/index'
-
+import Fetch from './fetch/index'
 export {
   noop,
   SelectGroup,

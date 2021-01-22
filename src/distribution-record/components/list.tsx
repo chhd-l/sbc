@@ -42,19 +42,10 @@ export default class ListView extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      dataList,
-      init,
-      currentPage,
-      selected,
-      onSelect
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, dataList, init, currentPage, selected, onSelect } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         rowKey="recordId"
         rowSelection={{
           type: 'checkbox',
@@ -82,50 +73,25 @@ export default class ListView extends React.Component<any, any> {
             const specList = fromJS(rowData.goodsInfoSpecDetailRelVOS);
             return (
               <div style={{ width: '265px' }}>
-                {goodsInfo && goodsInfo.get('goodsInfoImg') ? (
-                  <img
-                    src={goodsInfo.get('goodsInfoImg')}
-                    style={styles.imgItem}
-                  />
-                ) : (
-                  <img src={defaultImg} style={styles.imgItem} />
-                )}
+                {goodsInfo && goodsInfo.get('goodsInfoImg') ? <img src={goodsInfo.get('goodsInfoImg')} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />}
                 <div style={{ marginLeft: '65px', textAlign: 'left' }}>
-                  <div style={styles.nameText}>
-                    {goodsInfo && goodsInfo.get('goodsInfoName')
-                      ? goodsInfo.get('goodsInfoName')
-                      : '-'}
-                  </div>
+                  <div style={styles.nameText}>{goodsInfo && goodsInfo.get('goodsInfoName') ? goodsInfo.get('goodsInfoName') : '-'}</div>
                   <div>
                     {specList
                       ? specList.map((v) => {
-                          return (
-                            <span style={styles.greyText}>
-                              {v.get('detailName')}
-                            </span>
-                          );
+                          return <span style={styles.greyText}>{v.get('detailName')}</span>;
                         })
                       : ''}
                   </div>
                   <div>
-                    <span style={styles.greyText}>
-                      {goodsInfo && goodsInfo.get('goodsInfoNo')
-                        ? goodsInfo.get('goodsInfoNo')
-                        : ''}
-                    </span>
+                    <span style={styles.greyText}>{goodsInfo && goodsInfo.get('goodsInfoNo') ? goodsInfo.get('goodsInfoNo') : ''}</span>
                   </div>
                 </div>
               </div>
             );
           }}
         />
-        <Column
-          width="145"
-          title="订单编号"
-          key="tradeId"
-          dataIndex="tradeId"
-          render={(tradeId) => (tradeId ? tradeId : '-')}
-        />
+        <Column width="145" title="订单编号" key="tradeId" dataIndex="tradeId" render={(tradeId) => (tradeId ? tradeId : '-')} />
         <Column
           title={
             <p>
@@ -138,25 +104,9 @@ export default class ListView extends React.Component<any, any> {
             const customerInfo = fromJS(rowData.customerDetailVO);
             return (
               <div style={{ wordBreak: 'break-word' }}>
+                <div>{customerInfo && customerInfo.get('customerName') ? customerInfo.get('customerName') : '-'}</div>
                 <div>
-                  {customerInfo && customerInfo.get('customerName')
-                    ? customerInfo.get('customerName')
-                    : '-'}
-                </div>
-                <div>
-                  {customerInfo &&
-                  customerInfo.get('customerVO') &&
-                  customerInfo.get('customerVO').get('customerAccount')
-                    ? customerInfo
-                        .get('customerVO')
-                        .get('customerAccount')
-                        .substr(0, 3) +
-                      '****' +
-                      customerInfo
-                        .get('customerVO')
-                        .get('customerAccount')
-                        .substr(7)
-                    : '-'}
+                  {customerInfo && customerInfo.get('customerVO') && customerInfo.get('customerVO').get('customerAccount') ? customerInfo.get('customerVO').get('customerAccount').substr(0, 3) + '****' + customerInfo.get('customerVO').get('customerAccount').substr(7) : '-'}
                 </div>
               </div>
             );
@@ -174,16 +124,8 @@ export default class ListView extends React.Component<any, any> {
             const distributor = fromJS(rowData.distributionCustomerVO);
             return (
               <div style={{ wordBreak: 'break-word' }}>
-                <div>
-                  {distributor && distributor.get('customerName')
-                    ? distributor.get('customerName')
-                    : '-'}
-                </div>
-                <div>
-                  {distributor && distributor.get('customerAccount')
-                    ? distributor.get('customerAccount')
-                    : '-'}
-                </div>
+                <div>{distributor && distributor.get('customerName') ? distributor.get('customerName') : '-'}</div>
+                <div>{distributor && distributor.get('customerAccount') ? distributor.get('customerAccount') : '-'}</div>
               </div>
             );
           }}
@@ -195,9 +137,7 @@ export default class ListView extends React.Component<any, any> {
           width="110"
           render={(payTime) => {
             const day = Moment(payTime).format(Const.DAY_FORMAT).toString();
-            const time = Moment(payTime)
-              .format(Const.DATE_FORMAT_SECOND)
-              .toString();
+            const time = Moment(payTime).format(Const.DATE_FORMAT_SECOND).toString();
             return (
               <div style={{ wordBreak: 'break-word' }}>
                 <div>{payTime ? day : '-'}</div>
@@ -212,9 +152,7 @@ export default class ListView extends React.Component<any, any> {
           dataIndex="finishTime"
           render={(finishTime) => {
             const day = Moment(finishTime).format(Const.DAY_FORMAT).toString();
-            const time = Moment(finishTime)
-              .format(Const.DATE_FORMAT_SECOND)
-              .toString();
+            const time = Moment(finishTime).format(Const.DATE_FORMAT_SECOND).toString();
             return (
               <div style={{ wordBreak: 'break-word' }}>
                 <div>{finishTime ? day : '-'}</div>
@@ -228,12 +166,8 @@ export default class ListView extends React.Component<any, any> {
           key="missionReceivedTime"
           dataIndex="missionReceivedTime"
           render={(missionReceivedTime) => {
-            const day = Moment(missionReceivedTime)
-              .format(Const.DAY_FORMAT)
-              .toString();
-            const time = Moment(missionReceivedTime)
-              .format(Const.DATE_FORMAT_SECOND)
-              .toString();
+            const day = Moment(missionReceivedTime).format(Const.DAY_FORMAT).toString();
+            const time = Moment(missionReceivedTime).format(Const.DATE_FORMAT_SECOND).toString();
             return (
               <div style={{ wordBreak: 'break-word' }}>
                 <div>{missionReceivedTime ? day : '-'}</div>
@@ -255,15 +189,8 @@ export default class ListView extends React.Component<any, any> {
             const orderGoodsNum = fromJS(rowData).get('orderGoodsCount');
             return (
               <div>
-                <div>
-                  {orderGoodsPrice
-                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                      orderGoodsPrice.toFixed(2)
-                    : '-'}
-                </div>
-                <div style={{ color: '#999' }}>
-                  {orderGoodsNum ? orderGoodsNum + 'piece' : '-'}
-                </div>
+                <div>{orderGoodsPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + orderGoodsPrice.toFixed(2) : '-'}</div>
+                <div style={{ color: '#999' }}>{orderGoodsNum ? orderGoodsNum + 'piece' : '-'}</div>
               </div>
             );
           }}
@@ -278,20 +205,11 @@ export default class ListView extends React.Component<any, any> {
           }
           render={(rowData) => {
             const commissionGoods = rowData.commissionGoods;
-            const commissionRate =
-              QMFloat.accMul(
-                rowData.commissionRate ? rowData.commissionRate : 0.0,
-                100
-              ) + '%';
+            const commissionRate = QMFloat.accMul(rowData.commissionRate ? rowData.commissionRate : 0.0, 100) + '%';
 
             return (
               <div>
-                <div>
-                  {commissionGoods
-                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                      commissionGoods.toFixed(2)
-                    : '-'}
-                </div>
+                <div>{commissionGoods ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + commissionGoods.toFixed(2) : '-'}</div>
                 <div style={{ color: '#999' }}>{commissionRate}</div>
               </div>
             );
@@ -314,7 +232,8 @@ const styles = {
     border: '1px solid #ddd',
     float: 'left',
     marginRight: 10,
-    background: '#fff'
+    background: '#fff',
+    borderRadius: 3
   } as any,
   platform: {
     fontSize: 12,

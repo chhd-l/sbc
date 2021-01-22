@@ -254,7 +254,7 @@ module.exports = function (webpackEnv, envCode) {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
               loader: require.resolve('url-loader'),
               options: {
-                limit: 10000,
+                limit: 1000,
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
@@ -394,6 +394,16 @@ module.exports = function (webpackEnv, envCode) {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
+          ],
+        },
+        {
+          loader: 'webpack-ant-icon-loader',
+          enforce: 'pre',
+          options: {
+            chunkName: 'antd-icons',
+          },
+          include: [
+            require.resolve('@ant-design/icons/lib/dist')
           ],
         },
       ],

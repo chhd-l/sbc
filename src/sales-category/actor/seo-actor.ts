@@ -7,7 +7,8 @@ export default class SeoActor extends Actor {
       seoForm: {
         titleSource: '', //{name}
         metaKeywordsSource: '', //{name}
-        metaDescriptionSource: '' //{description}
+        metaDescriptionSource: '', //{description}
+        headingTag: ''
       },
       seoModalVisible: false,
       currentStoreCateId: null,
@@ -40,9 +41,10 @@ export default class SeoActor extends Actor {
     return state.set(
       'seoForm',
       fromJS({
-        titleSource: '{name}',
-        metaKeywordsSource: '{name}',
-        metaDescriptionSource: '{description}'
+        titleSource: '',
+        metaKeywordsSource: '',
+        metaDescriptionSource: '',
+        headingTag: ''
       })
     );
   }

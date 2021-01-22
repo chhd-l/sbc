@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Alert } from 'antd';
+import { Spin, Alert, Form } from 'antd';
 import { IOptions, StoreProvider } from 'plume2';
 
 import { Headline, BreadCrumb } from 'qmkit';
@@ -10,7 +10,9 @@ import Tool from './component/tool';
 import { FormattedMessage } from 'react-intl';
 import PicModal from './component/pic-modal';
 import SeoSettingModal from './component/seo-setting-modal';
+const _SeoSettingModal = Form.create({})(SeoSettingModal);
 import './index.less';
+import NewStateModal from '@/address-management/components/new-state-modal';
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsCate extends React.Component<any, any> {
   store: AppStore;
@@ -62,7 +64,7 @@ export default class GoodsCate extends React.Component<any, any> {
 
             <PicModal />
 
-            <SeoSettingModal />
+            <_SeoSettingModal />
           </div>
         </Spin>
       </div>

@@ -3,6 +3,7 @@ import { Layout, message } from 'antd';
 import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache } from 'qmkit';
 const { Content } = Layout;
 import { routes, auditDidNotPass } from './router';
+const pcIco = require('../public/images/login/pcIco.ico');
 
 export default class Main extends React.Component<any, any> {
   _menu: any;
@@ -16,6 +17,9 @@ export default class Main extends React.Component<any, any> {
   }
 
   UNSAFE_componentWillMount() {
+    const linkEle = document.getElementById('icoLink') as any;
+    linkEle.href = pcIco;
+    linkEle.type = 'image/x-icon';
     if (this.props.location.pathname != '/implicit/callback') {
       Fetch('/baseConfig')
         .then((resIco: any) => {
@@ -23,12 +27,12 @@ export default class Main extends React.Component<any, any> {
             if ((resIco.res as any).defaultLocalDateTime) {
               sessionStorage.setItem('defaultLocalDateTime', (resIco.res as any).defaultLocalDateTime);
             }
-            const ico = (resIco.res.context as any).pcIco ? JSON.parse((resIco.res.context as any).pcIco) : null;
+            /*const ico = (resIco.res.context as any).pcIco ? JSON.parse((resIco.res.context as any).pcIco) : null;
             if (ico) {
               const linkEle = document.getElementById('icoLink') as any;
-              linkEle.href = ico[0].url;
+              linkEle.href = pcIco;
               linkEle.type = 'image/x-icon';
-            }
+            }*/
           }
         })
         .catch((err) => {

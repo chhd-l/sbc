@@ -2015,7 +2015,8 @@ export default class AppStore extends Store {
         fromJS({
           titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '', //{name}-Royal Canin
           metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '', //{name}, {subtitle}, {sales category}, {tagging}
-          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '' //{description}
+          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '', //{description}
+          headingTag: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : ''
         })
       );
     }
@@ -2027,15 +2028,16 @@ export default class AppStore extends Store {
       goodsId,
       metaDescriptionSource: seoObj.metaDescriptionSource,
       metaKeywordsSource: seoObj.metaKeywordsSource,
-      titleSource: seoObj.titleSource
+      titleSource: seoObj.titleSource,
+      headingTag: seoObj.headingTag
     };
+    console.log(params, 'params-------------');
     const { res } = (await editSeo(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
       // history.push('./goods-list');
       message.success('Save successfully.');
       history.replace('/goods-list');
     }
-    //调接口
   };
 
   // 产品规格

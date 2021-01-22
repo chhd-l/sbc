@@ -88,13 +88,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      detail,
-      sellerRemarkVisible,
-      setSellerRemarkVisible,
-      remedySellerRemark,
-      setSellerRemark
-    } = this.props.relaxProps;
+    const { detail, sellerRemarkVisible, setSellerRemarkVisible, remedySellerRemark, setSellerRemark } = this.props.relaxProps;
     //当前的订单号
     const tid = detail.get('id');
 
@@ -110,9 +104,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     };
 
     //附件信息
-    const encloses = detail.get('encloses')
-      ? detail.get('encloses').split(',')
-      : [];
+    const encloses = detail.get('encloses') ? detail.get('encloses').split(',') : [];
     const enclo = fromJS(
       encloses.map((url, index) =>
         Map({
@@ -137,9 +129,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               justifyContent: 'space-between'
             }}
           >
-            <label style={styles.greenText}>
-              {flowState(detail.getIn(['tradeState', 'flowState']))}
-            </label>
+            <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
 
             {this._renderBtnAction(tid)}
           </div>
@@ -152,32 +142,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </p>
             </Col>
             <Col span={8}>
-              <p style={styles.darkText}>
-                客户：{detail.getIn(['buyer', 'name'])}
-              </p>
-              <p style={styles.darkText}>
-                客户账号：{detail.getIn(['buyer', 'account'])}
-              </p>
-              {detail.getIn(['buyer', 'customerFlag']) && (
-                <p style={styles.darkText}>
-                  {(util.isThirdStore() ? '客户等级：  ' : '平台等级：  ') +
-                    detail.getIn(['buyer', 'levelName'])}
-                </p>
-              )}
+              <p style={styles.darkText}>客户：{detail.getIn(['buyer', 'name'])}</p>
+              <p style={styles.darkText}>客户账号：{detail.getIn(['buyer', 'account'])}</p>
+              {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{(util.isThirdStore() ? '客户等级：  ' : '平台等级：  ') + detail.getIn(['buyer', 'levelName'])}</p>}
             </Col>
           </Row>
         </div>
 
-        <div
-          style={{ display: 'flex', marginTop: 20, flexDirection: 'column' }}
-        >
-          <Table
-            rowKey={(_record, index) => index.toString()}
-            columns={columns}
-            dataSource={tradeItems}
-            pagination={false}
-            bordered
-          />
+        <div style={{ display: 'flex', marginTop: 20, flexDirection: 'column' }}>
+          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems} pagination={false} bordered />
           <div style={styles.detailBox as any}>
             <div style={styles.inputBox as any} />
 
@@ -190,9 +163,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           </div>
         </div>
 
-        <div
-          style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}
-        >
+        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
           <div
             style={{
               display: 'flex',
@@ -209,9 +180,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </a>
             )}
             {sellerRemarkVisible == false && (
-              <div
-                style={{ width: 400, display: 'flex', flexDirection: 'row' }}
-              >
+              <div style={{ width: 400, display: 'flex', flexDirection: 'row' }}>
                 <Input
                   style={{ width: 300, marginRight: 20 }}
                   onChange={(e) => {
@@ -229,20 +198,13 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </div>
             )}
           </div>
-          <label style={styles.inforItem}>
-            买家备注: {detail.get('buyerRemark') || '无'}
-          </label>
-          <label style={styles.inforItem}>
-            订单附件: {this._renderEncloses(enclo)}
-          </label>
+          <label style={styles.inforItem}>买家备注: {detail.get('buyerRemark') || '无'}</label>
+          <label style={styles.inforItem}>订单附件: {this._renderEncloses(enclo)}</label>
 
-          <label style={styles.inforItem}>
-            支付方式: {detail.getIn(['payInfo', 'desc']) || '暂无信息'}
-          </label>
+          <label style={styles.inforItem}>支付方式: {detail.getIn(['payInfo', 'desc']) || '暂无信息'}</label>
           <label style={styles.inforItem}>配送方式: 快递配送</label>
           <label style={styles.inforItem}>
-            收货信息：{consignee.name} {consignee.phone}{' '}
-            {consignee.detailAddress}
+            收货信息：{consignee.name} {consignee.phone} {consignee.detailAddress}
           </label>
         </div>
       </div>
@@ -257,19 +219,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     return encloses.map((v, k) => {
       return (
-        <Popover
-          key={'pp-' + k}
-          placement="topRight"
-          title={''}
-          trigger="click"
-          content={
-            <img
-              key={'p-' + k}
-              style={styles.attachmentView}
-              src={v.get('url')}
-            />
-          }
-        >
+        <Popover key={'pp-' + k} placement="topRight" title={''} trigger="click" content={<img key={'p-' + k} style={styles.attachmentView} src={v.get('url')} />}>
           <a href="#">
             <img key={k} style={styles.attachment} src={v.get('url')} />
           </a>
@@ -419,12 +369,14 @@ const styles = {
   } as any,
 
   imgItem: {
-    width: 40,
-    height: 40,
+    width: 60,
+    height: 60,
+    padding: 5,
     border: '1px solid #ddd',
-    display: 'inline-block',
+    float: 'left',
     marginRight: 10,
-    background: '#fff'
+    background: '#fff',
+    borderRadius: 3
   },
   attachment: {
     maxWidth: 40,

@@ -65,11 +65,11 @@ export default class List extends React.Component<any, any> {
               </Col>
             </Row>*/}
 
-            <h3>
+            {/*<h3>
               Order conversion<span>More orders and sales</span>
-            </h3>
+            </h3>*/}
             <Row>
-              <AuthWrapper functionName={'f_create_coupon'}>
+              {/*<AuthWrapper functionName={'f_create_coupon'}>
                 <Col span={6}>
                   <a
                     className="createMarket"
@@ -90,11 +90,11 @@ export default class List extends React.Component<any, any> {
                       <h5>Coupon creation</h5>
                       <p>Create coupon meeting specific conditions</p>
                     </div>
-                    {/* <span className="miniTags">推荐</span> */}
-                    {/* <span className="mini-tags">Optimum</span> */}
+                     <span className="miniTags">推荐</span>
+                     <span className="mini-tags">Optimum</span>
                   </a>
                 </Col>
-              </AuthWrapper>
+              </AuthWrapper>*/}
 
               {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
@@ -121,7 +121,7 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>*/}
 
-              <AuthWrapper functionName={'f_create_all_coupon_activity'}>
+              {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
                   <a
                     className="createMarket"
@@ -143,7 +143,7 @@ export default class List extends React.Component<any, any> {
                     </div>
                   </a>
                 </Col>
-              </AuthWrapper>
+              </AuthWrapper>*/}
 
               {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>

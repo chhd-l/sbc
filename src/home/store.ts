@@ -127,14 +127,14 @@ export default class AppStore extends Store {
     const { res } = await webapi.getStoreDashboardCollectViewstore(data);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      this.dispatch('home:tradeCustomerView', res.context.tradeCustomerView);
+      this.dispatch('home:tradeCustomerView', res.context ? res.context.tradeCustomerView : []);
       this.dispatch('home:goodsInfoTopView', res.context.goodsInfoTopView.goodsInfoTopViewItemList || []);
-      this.dispatch('home:conversionFunnelDashboardView', res.context.conversionFunnelDashboardView);
-      this.dispatch('home:prescriberTrendView', res.context.prescriberTrendView);
-      this.dispatch('home:prescriberTopView', res.context.prescriberTopView);
-      this.dispatch('home:trafficDashboardView', res.context.trafficDashboardView);
-      this.dispatch('home:transactionTrendView', res.context.transactionTrendView);
-      this.dispatch('home:trafficTrendDashboardView', res.context.trafficTrendDashboardView);
+      this.dispatch('home:conversionFunnelDashboardView', res.context ? res.context.conversionFunnelDashboardView : []);
+      this.dispatch('home:prescriberTrendView', res.context ? res.context.prescriberTrendView : []);
+      this.dispatch('home:prescriberTopView', res.context ? res.context.prescriberTopView : []);
+      this.dispatch('home:trafficDashboardView', res.context ? res.context.trafficDashboardView : []);
+      this.dispatch('home:transactionTrendView', res.context ? res.context.transactionTrendView : []);
+      this.dispatch('home:trafficTrendDashboardView', res.context ? res.context.trafficTrendDashboardView : []);
       //this.dispatch('home:searchData', getListAll.context);
     } else {
       this.dispatch('loading:end');
@@ -142,7 +142,6 @@ export default class AppStore extends Store {
   };
 
   prescriberInit = async (data) => {
-    console.log(data, '---------params');
     this.dispatch('loading:start');
     const { res: getTradeCustomerView } = await webapi.getPrescriberTradeAndCustomerData(data);
     const { res: getPrescriberTopView } = await webapi.getPrescriberTopView(data);
@@ -177,14 +176,14 @@ export default class AppStore extends Store {
 
   cleanRedux = () => {
     setTimeout(() => {
-      this.dispatch('home:tradeCustomerView', null);
-      this.dispatch('home:goodsInfoTopView', null);
-      this.dispatch('home:conversionFunnelDashboardView', null);
-      this.dispatch('home:prescriberTrendView', null);
-      this.dispatch('home:prescriberTopView', null);
-      this.dispatch('home:trafficDashboardView', null);
-      this.dispatch('home:transactionTrendView', null);
-      this.dispatch('home:trafficTrendDashboardView', null);
+      this.dispatch('home:tradeCustomerView', []);
+      this.dispatch('home:goodsInfoTopView', []);
+      this.dispatch('home:conversionFunnelDashboardView', []);
+      this.dispatch('home:prescriberTrendView', []);
+      this.dispatch('home:prescriberTopView', []);
+      this.dispatch('home:trafficDashboardView', []);
+      this.dispatch('home:transactionTrendView', []);
+      this.dispatch('home:trafficTrendDashboardView', []);
     }, 3000);
   };
 }

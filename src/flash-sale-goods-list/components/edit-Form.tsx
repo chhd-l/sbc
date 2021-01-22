@@ -39,15 +39,9 @@ export default class EditForm extends React.Component<any, any> {
       <Form className="login-form errorFeedback">
         <FormItem {...formItemLayout} label="商品图片">
           {formData.get('goodsInfo').get('goodsInfoImg') ? (
-            <img
-              src={formData.get('goodsInfo').get('goodsInfoImg')}
-              style={styles.imgItem}
-            />
+            <img src={formData.get('goodsInfo').get('goodsInfoImg')} style={styles.imgItem} />
           ) : formData.get('goods').get('goodsImg') ? (
-            <img
-              src={formData.get('goods').get('goodsImg')}
-              style={styles.imgItem}
-            />
+            <img src={formData.get('goods').get('goodsImg')} style={styles.imgItem} />
           ) : (
             <img src={defaultImg} style={styles.imgItem} />
           )}
@@ -62,10 +56,7 @@ export default class EditForm extends React.Component<any, any> {
           {formData.get('goodsInfo').get('storeName')}
         </FormItem>
         <FormItem {...formItemLayout} label="市场价格">
-          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-            (formData.get('goodsInfo').get('marketPrice') == null
-              ? 0
-              : formData.get('goodsInfo').get('marketPrice'))}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (formData.get('goodsInfo').get('marketPrice') == null ? 0 : formData.get('goodsInfo').get('marketPrice'))}
         </FormItem>
         <FormItem {...formItemLayout} label="现有库存">
           {formData.get('goodsInfo').get('stock')}
@@ -90,16 +81,8 @@ export default class EditForm extends React.Component<any, any> {
                 }
               }
             ],
-            initialValue:
-              formData.get('price') || formData.get('price') == 0
-                ? formData.get('price').toString()
-                : null
-          })(
-            <Input
-              onChange={(e) => this._changeFormData('price', e.target.value)}
-              style={{ width: '70px' }}
-            />
-          )}
+            initialValue: formData.get('price') || formData.get('price') == 0 ? formData.get('price').toString() : null
+          })(<Input onChange={(e) => this._changeFormData('price', e.target.value)} style={{ width: '70px' }} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="分类">
           {getFieldDecorator('cateId', {
@@ -132,10 +115,7 @@ export default class EditForm extends React.Component<any, any> {
         </FormItem>
         <FormItem {...formItemLayout} label="抢购库存">
           {getFieldDecorator('stock', {
-            initialValue:
-              formData.get('stock') || formData.get('stock') == 0
-                ? formData.get('stock').toString()
-                : null,
+            initialValue: formData.get('stock') || formData.get('stock') == 0 ? formData.get('stock').toString() : null,
             rules: [
               { required: true, message: '必须输入抢购库存' },
               {
@@ -148,10 +128,7 @@ export default class EditForm extends React.Component<any, any> {
                     callback('抢购库存不可大于剩余库存');
                     return;
                   }
-                  if (
-                    formData.get('maxNum') &&
-                    Number(formData.get('maxNum')) > Number(value)
-                  ) {
+                  if (formData.get('maxNum') && Number(formData.get('maxNum')) > Number(value)) {
                     callback('抢购库存不可小于限购数量');
                     return;
                   }
@@ -159,12 +136,7 @@ export default class EditForm extends React.Component<any, any> {
                 }
               }
             ]
-          })(
-            <Input
-              onChange={(e) => this._changeFormData('stock', e.target.value)}
-              style={{ width: '70px' }}
-            />
-          )}
+          })(<Input onChange={(e) => this._changeFormData('stock', e.target.value)} style={{ width: '70px' }} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="限购数量">
           {getFieldDecorator('maxNum', {
@@ -192,19 +164,11 @@ export default class EditForm extends React.Component<any, any> {
                 }
               }
             ]
-          })(
-            <Input
-              onChange={(e) => this._changeFormData('maxNum', e.target.value)}
-              style={{ width: '70px' }}
-            />
-          )}
+          })(<Input onChange={(e) => this._changeFormData('maxNum', e.target.value)} style={{ width: '70px' }} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="起售数量">
           {getFieldDecorator('minNum', {
-            initialValue:
-              formData.get('minNum') || formData.get('minNum') == 0
-                ? formData.get('minNum').toString()
-                : null,
+            initialValue: formData.get('minNum') || formData.get('minNum') == 0 ? formData.get('minNum').toString() : null,
             rules: [
               { required: true, message: '必须输入起售数量' },
               {
@@ -217,10 +181,7 @@ export default class EditForm extends React.Component<any, any> {
                     callback('起售数量不可大于100');
                     return;
                   }
-                  if (
-                    formData.get('maxNum') &&
-                    Number(formData.get('maxNum')) < Number(value)
-                  ) {
+                  if (formData.get('maxNum') && Number(formData.get('maxNum')) < Number(value)) {
                     callback('起售数量不可大于限购数量');
                     return;
                   }
@@ -228,12 +189,7 @@ export default class EditForm extends React.Component<any, any> {
                 }
               }
             ]
-          })(
-            <Input
-              onChange={(e) => this._changeFormData('minNum', e.target.value)}
-              style={{ width: '70px' }}
-            />
-          )}
+          })(<Input onChange={(e) => this._changeFormData('minNum', e.target.value)} style={{ width: '70px' }} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="是否包邮">
           {getFieldDecorator('postage', {
@@ -289,7 +245,10 @@ const styles = {
     height: 60,
     padding: 5,
     border: '1px solid #ddd',
-    background: '#fff'
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
   },
   textCon: {
     width: 120,

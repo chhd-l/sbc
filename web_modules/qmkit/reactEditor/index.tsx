@@ -9,7 +9,7 @@ class ReactEditor extends Component<any, any> {
     props: {
         id: String;
         content: string;
-        disabled: boolean;
+        disabled?: boolean;
         height: number;
         onContentChange: Function;
         toolbars?: StringArray;
@@ -68,6 +68,7 @@ class ReactEditor extends Component<any, any> {
         this.editor.config.uploadImgMaxSize = 2048000;
         this.editor.config.uploadFileName = 'uploadFile' //提交的图片表单名称 ,
         this.uploadImage();*/
+       this.editor.config.placeholder = 'Please enter the text'
         this.editor.config.uploadImgShowBase64 = true
         this.editor.create()
         disabled && this.editor.disable()

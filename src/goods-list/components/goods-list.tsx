@@ -174,7 +174,6 @@ export default class CateList extends React.Component<any, any> {
           dataIndex="brandName"
           key="brandName"
           render={(rowInfo) => {
-            console.log(rowInfo);
             return rowInfo != null ? rowInfo : '--';
             /*return (
               goodsBrandList
@@ -500,7 +499,10 @@ const styles = {
     height: 60,
     padding: 5,
     border: '1px solid #ddd',
-    background: '#fff'
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
   },
   textCon: {
     width: 100,

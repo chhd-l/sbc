@@ -82,7 +82,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                       <p>Consumer type</p>
                     </Col>
                     <Col span={12}>
-                      <strong>{details.consumerType === 0 ? 'Member' : 'Guest'}</strong>
+                      <strong>{details.consumerType === 0 ? 'Guest' : 'Member'}</strong>
                     </Col>
                   </Row>
                 </Col>

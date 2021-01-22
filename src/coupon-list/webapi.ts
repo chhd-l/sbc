@@ -4,7 +4,8 @@ import { Fetch } from 'qmkit';
  * 获取优惠券列表
  */
 export function couponList(params) {
-  return Fetch<TResult>('/coupon-info/page', {
+  return Fetch<TResult>('/coupon-info/pageTimeConvert', {
+    ///coupon-info/page
     method: 'POST',
     body: JSON.stringify({
       ...params

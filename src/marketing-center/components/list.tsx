@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Col, message, Row } from 'antd';
 
 import { AuthWrapper, Headline, history } from 'qmkit';
+// import '../index.less';
 
 const images = {
   new_01: require('../images/new/01.png'),
@@ -64,8 +65,8 @@ export default class List extends React.Component<any, any> {
               </Col>
             </Row>*/}
 
-            {/*<h3>
-              下单转化<span>更多订单和销量</span>
+            <h3>
+              Order conversion<span>More orders and sales</span>
             </h3>
             <Row>
               <AuthWrapper functionName={'f_create_coupon'}>
@@ -86,15 +87,16 @@ export default class List extends React.Component<any, any> {
                       <img src={images.order_01} />
                     </span>
                     <div className="info">
-                      <h5>优惠券</h5>
-                      <p>优惠券抵扣，购物更优惠</p>
+                      <h5>Coupon creation</h5>
+                      <p>Create coupon meeting specific conditions</p>
                     </div>
-                    <span className="miniTags">推荐</span>
+                    {/* <span className="miniTags">推荐</span> */}
+                    {/* <span className="mini-tags">Optimum</span> */}
                   </a>
                 </Col>
-              </AuthWrapper>*/}
+              </AuthWrapper>
 
-            {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
+              {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
                   <a
                     className="createMarket"
@@ -119,7 +121,7 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>*/}
 
-            {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
+              <AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
                   <a
                     className="createMarket"
@@ -136,14 +138,14 @@ export default class List extends React.Component<any, any> {
                       <img src={images.order_03} />
                     </span>
                     <div className="info">
-                      <h5>精准发券</h5>
-                      <p>定向发券，精准触达会员</p>
+                      <h5>Coupon distribution</h5>
+                      <p>Distribute coupon under certain conditiion, including valid period</p>
                     </div>
                   </a>
                 </Col>
-              </AuthWrapper>*/}
+              </AuthWrapper>
 
-            {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
+              {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
                   <a
                     className="createMarket"
@@ -165,8 +167,8 @@ export default class List extends React.Component<any, any> {
                     </div>
                   </a>
                 </Col>
-              </AuthWrapper>
-            </Row>*/}
+              </AuthWrapper>*/}
+            </Row>
             {/*<Row>
               <Col span={6}>
                 <a

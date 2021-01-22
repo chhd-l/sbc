@@ -37,14 +37,7 @@ export default class ListView extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      dataList,
-      init,
-      currentPage
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, dataList, init, currentPage } = this.props.relaxProps;
 
     return (
       <div>
@@ -85,11 +78,7 @@ export default class ListView extends React.Component<any, any> {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="ant-table-tbody">
-                    {loading
-                      ? this._renderLoading()
-                      : this._renderContent(dataList)}
-                  </tbody>
+                  <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
                 </table>
               </div>
               {!loading && total == 0 ? (
@@ -127,7 +116,7 @@ export default class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={9}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
         </td>
       </tr>
     );
@@ -160,9 +149,7 @@ export default class ListView extends React.Component<any, any> {
                     </td>
                     <td style={{ width: '17%' }}>
                       {/*操作时间*/}
-                      {opTime
-                        ? moment(opTime).format(Const.TIME_FORMAT).toString()
-                        : '-'}
+                      {opTime ? moment(opTime).format(Const.TIME_FORMAT).toString() : '-'}
                     </td>
                     <td style={{ width: '10%' }}>
                       {/*一级菜单*/}
@@ -205,7 +192,8 @@ const styles = {
     border: '1px solid #ddd',
     float: 'left',
     marginRight: 10,
-    background: '#fff'
+    background: '#fff',
+    borderRadius: 3
   },
   platform: {
     fontSize: 12,

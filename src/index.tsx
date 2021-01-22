@@ -10,7 +10,6 @@ import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
 import { Provider } from 'react-redux';
 import { routeWithSubRoutes, history, noop, cache, getRoutType } from 'qmkit';
 import { homeRoutes } from './router';
-import 'regenerator-runtime/runtime';
 import store from './redux/store';
 import './index.less';
 import Main from './main';
@@ -22,7 +21,7 @@ import 'moment/locale/zh-cn';
 import { IntlProvider } from 'react-intl';
 import es_ES from '../web_modules/qmkit/es_ES';
 import configOkta from '../web_modules/qmkit/config-okta';
-
+import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 moment.locale('zh-cn');
 
 const PrescriberRouter = () => (

@@ -536,9 +536,7 @@ export default class ClinicList extends Component<any, any> {
                       this.onSearch();
                     }}
                   >
-                    <div>
-                      <FormattedMessage id="search" />
-                    </div>
+                    <FormattedMessage id="search" />
                   </Button>
                 </FormItem>
                 {/* </div> */}

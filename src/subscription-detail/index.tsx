@@ -742,6 +742,66 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
     ];
 
+    const columns_foodDispenser_no_start = [
+      {
+        title: 'Delivery date',
+        key: 'shipmentDate',
+        dataIndex: 'shipmentDate',
+        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+      },
+      {
+        title: 'Product',
+        key: 'Product',
+        render: (text, record) => (
+          <div>
+            {record.tradeItems &&
+              record.tradeItems.map((item, index) => (
+                <div style={{ display: 'flex' }} key={index}>
+                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
+                  <div style={{ margin: 'auto 10px' }}>
+                    <p>{item.skuName}</p>
+                    <p>{item.specDetails}</p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )
+      },
+      {
+        title: ' ', // cover last th text align right
+      }
+    ]
+
+    const columns_foodDispenser_completed = [
+      {
+        title: 'Delivery date',
+        key: 'shipmentDate',
+        dataIndex: 'shipmentDate',
+        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+      },
+      {
+        title: 'Product',
+        key: 'Product',
+        render: (text, record) => (
+          <div>
+            {record.tradeItems &&
+              record.tradeItems.map((item, index) => (
+                <div style={{ display: 'flex' }} key={index}>
+                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
+                  <div style={{ margin: 'auto 10px' }}>
+                    <p>{item.skuName}</p>
+                    <p>{item.specDetails}</p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )
+      },
+      {
+        title: ' ', // cover last th text align right
+      }
+    ]
+
     const styles = {
       backItem: {
         display: 'flex',
@@ -906,7 +966,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
               <TabPane tab="No start" key="noStart">
-                <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
+                <Table rowKey={(record, index) => index.toString()} columns={columns_foodDispenser_no_start} dataSource={noStartOrder} pagination={false}></Table>
               </TabPane>
               <TabPane tab="Completed" key="completed">
                 <Table

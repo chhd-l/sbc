@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, DatePicker, Select, Row, Col, message, InputNumber } from 'antd';
+import { Form, Input, DatePicker, Select, Row, Col, message, InputNumber, Switch } from 'antd';
 import moment from 'moment';
 import { Const } from 'qmkit';
 import * as webapi from '../webapi';
@@ -24,7 +24,7 @@ export default class basicInformation extends Component<any, any> {
   componentDidMount() {
     const { subscriptionPlan, addField } = this.props;
     if (!subscriptionPlan.subscriptionPlanId) {
-      subscriptionPlan.subscriptionPlanId = 'SP' + moment(new Date()).format('YYYYMMDDHHSSS');
+      subscriptionPlan.subscriptionPlanId = 'SP' + moment(new Date()).format('YYMMDDHHmmSSS');
       addField('subscriptionPlanId', subscriptionPlan.subscriptionPlanId);
     }
     webapi
@@ -61,7 +61,7 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Subscription Plan name">
               {getFieldDecorator('name', {
                 initialValue: subscriptionPlan.name,
-                rules: [{ required: false, message: 'Please input Subscription Plan Name' }]
+                rules: [{ required: true, message: 'Please input Subscription Plan Name' }]
               })(
                 <Input
                   onChange={(e) => {
@@ -74,13 +74,13 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Subscription Plan ID">
               {getFieldDecorator('subscriptionPlanId ', {
                 initialValue: subscriptionPlan.subscriptionPlanId,
-                rules: [{ required: false, message: 'Please input Subscription Plan ID' }]
+                rules: [{ required: true, message: 'Please input Subscription Plan ID' }]
               })(<Input disabled={true} />)}
             </FormItem>
             <FormItem {...layout} label="Quantity">
               {getFieldDecorator('quantity', {
                 initialValue: subscriptionPlan.quantity,
-                rules: [{ required: false, message: 'Please input Quantity' }]
+                rules: [{ required: true, message: 'Please input Quantity' }]
               })(
                 <InputNumber
                   precision={0}
@@ -96,7 +96,7 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Landing page">
               {getFieldDecorator('landingPage', {
                 initialValue: subscriptionPlan.landingPage,
-                rules: [{ required: false, message: 'Please input Landing page' }]
+                rules: [{ required: true, message: 'Please input Landing page' }]
               })(
                 <Input
                   onChange={(e) => {
@@ -106,10 +106,20 @@ export default class basicInformation extends Component<any, any> {
                 />
               )}
             </FormItem>
+            <FormItem {...layout} label="Enable landing page">
+              {getFieldDecorator('landingFlag', {
+                initialValue: subscriptionPlan.landingFlag
+              })(
+                <Switch 
+                  checked={subscriptionPlan.landingFlag === 0 ? false : true} 
+                  onChange={(value) => addField('landingFlag', value ? 1 : 0)} 
+                />)
+              }
+            </FormItem>
             <FormItem {...layout} label="Offer time period">
               {getFieldDecorator('offerTimePeriod', {
                 initialValue: subscriptionPlan.startDate && subscriptionPlan.end ? [subscriptionPlan.startDate, subscriptionPlan.endDate] : undefined,
-                rules: [{ required: false, message: 'Please select Offer time period' }]
+                rules: [{ required: true, message: 'Please select Offer time period' }]
               })(
                 <RangePicker
                   onChange={(dates, dateStrings) => {
@@ -127,7 +137,7 @@ export default class basicInformation extends Component<any, any> {
                 <Col span={20}>
                   {getFieldDecorator('frequency', {
                     initialValue: subscriptionPlan.frequency,
-                    rules: [{ required: false, message: 'Please select Frequency' }]
+                    rules: [{ required: true, message: 'Please select Frequency' }]
                   })(
                     <Select
                       mode="multiple"
@@ -148,7 +158,7 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Number of delivery">
               {getFieldDecorator('delivery', {
                 initialValue: subscriptionPlan.delivery,
-                rules: [{ required: false, message: 'Please input Number of delivery' }]
+                rules: [{ required: true, message: 'Please input Number of delivery' }]
               })(
                 <InputNumber
                   precision={0}
@@ -168,7 +178,7 @@ export default class basicInformation extends Component<any, any> {
                   autoSize={{ minRows: 5, maxRows: 10 }}
                   onChange={(e) => {
                     const value = (e.target as any).value;
-                    addField('Description', value);
+                    addField('description', value);
                   }}
                 />
               )}

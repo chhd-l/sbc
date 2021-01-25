@@ -148,11 +148,13 @@ export default class SubscriptionPlan extends Component<any, any> {
         key: 'operation',
         width: '8%',
         render: (text, record) => (
+          record.status === 0 ?
           <div>
             <Tooltip placement="top" title="Edit">
               <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit"></Link>
             </Tooltip>
           </div>
+          : null
         )
       }
     ];

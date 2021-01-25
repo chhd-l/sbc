@@ -36,11 +36,11 @@ let ErrorPage = (props) => {
           <Row style={styles.selectFont}>
             <Col span={12}>
               <Button type="primary" onClick={loginpPercriberOkta}>
-                返回登录
+                Back to login
               </Button>
             </Col>
             <Col span={12}>
-              <Button onClick={loginpRcOkta}>返回上一页</Button>
+              <Button onClick={loginpRcOkta}>Back to previous page</Button>
             </Col>
           </Row>
         </Row>

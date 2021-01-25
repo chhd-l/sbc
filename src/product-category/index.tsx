@@ -6,6 +6,8 @@ import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 
+import BindDescription from './components/bind-description';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TabPane } = Tabs;
@@ -30,7 +32,9 @@ class PeoductCategory extends Component<any, any> {
         attributeName: '',
         attributeValue: ''
       },
-      loading: true
+      loading: true,
+      bindId: 0,
+      bindVisible: false
     };
   }
   componentDidMount() {
@@ -235,8 +239,21 @@ class PeoductCategory extends Component<any, any> {
     );
   };
 
+  openBindModal = (id) => {
+    this.setState({
+      bindId: id,
+      bindVisible: true
+    });
+  };
+
+  onCloseBindingModal = (status: boolean) => {
+    this.setState({
+      bindVisible: status
+    });
+  };
+
   render() {
-    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination } = this.state;
+    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination, bindId, bindVisible } = this.state;
     const columns = [
       {
         title: 'Category name',
@@ -256,9 +273,14 @@ class PeoductCategory extends Component<any, any> {
         render: (text, record) => (
           <div>
             {record.cateGrade === 3 ? (
-              <Tooltip placement="topLeft" title="Bind attribute">
-                <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
-              </Tooltip>
+              <div>
+                <Tooltip placement="topLeft" title="Bind attribute">
+                  <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
+                </Tooltip>
+                <Tooltip placement="topLeft" title="Bind description">
+                  <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindModal(record.cateId)}></a>
+                </Tooltip>
+              </div>
             ) : (
               '-'
             )}
@@ -374,6 +396,13 @@ class PeoductCategory extends Component<any, any> {
             <Table rowKey="id" onChange={this.handleTableChange} rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
           </div>
         </Modal>
+        <BindDescription
+          id={bindId}
+          visible={bindVisible}
+          onCloseModal={() => {
+            this.onCloseBindingModal(false);
+          }}
+        />
       </div>
     );
   }

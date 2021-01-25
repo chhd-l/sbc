@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AssetManagement } from 'qmkit';
 import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Spin, Switch, Popconfirm } from 'antd';
 
+import SearchForm from './components/search-form';
+import CreateForm from './components/create-form';
+
 import * as webapi from './webapi';
+import { getDictionaryByType } from './../shop/webapi';
+
 import { FormattedMessage } from 'react-intl';
+import Search from 'antd/lib/input/Search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -22,12 +28,12 @@ class DescriptionManagement extends Component<any, any> {
         total: 0
       },
       descList: [],
-
+      languageList: [],
       visible: false,
       descForm: {
+        id: 0,
         descName: '',
-        dipNameFr: '',
-        dipNameEn: '',
+        dipNames: [],
         status: false
       },
       isEdit: false,
@@ -38,13 +44,26 @@ class DescriptionManagement extends Component<any, any> {
   }
   componentDidMount() {
     this.getDescriptionList();
+    this.getLanguageList();
   }
 
-  onSearchFormChange = ({ field, value }) => {
+  getLanguageList = async () => {
+    const { res } = await getDictionaryByType('language');
+    if (res.code === Const.SUCCESS_CODE && res.context && res.context.sysDictionaryVOS) {
+      this.setState({
+        languageList: res.context.sysDictionaryVOS
+      });
+    } else {
+      message.error('Fetching language setting failed!');
+    }
+  };
+
+  onSearchFormChange = (value) => {
     let data = this.state.searchForm;
-    data[field] = value;
     this.setState({
-      searchForm: data
+      searchForm: {
+        descName: value
+      }
     });
   };
 
@@ -69,9 +88,15 @@ class DescriptionManagement extends Component<any, any> {
 
   openAddPage = () => {
     let descForm = {
+      id: 0,
       descName: '',
-      dipNameFr: '',
-      dipNameEn: '',
+      dipNames: this.state.languageList.map((lan, idx) => ({
+        label: idx === 0 ? 'Display name' : ' ',
+        key: lan.value,
+        value: '',
+        placeholder: lan.valueEn,
+        rules: [{ required: true, message: 'Display name is required' }]
+      })),
       status: false
     };
     this.setState({
@@ -100,15 +125,15 @@ class DescriptionManagement extends Component<any, any> {
   };
   handleSubmit = () => {
     const { descForm, isEdit, currentEditTab } = this.state;
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        if (isEdit) {
-          this.updateDescriptionItem(Object.assign({}, descForm, { id: currentEditTab.id }));
-        } else {
-          this.addDescriptionItem(Object.assign({}, descForm));
-        }
-      }
-    });
+    // this.props.form.validateFields((err, values) => {
+    //   if (!err) {
+    //     if (isEdit) {
+    //       this.updateDescriptionItem(Object.assign({}, descForm, { id: currentEditTab.id }));
+    //     } else {
+    //       this.addDescriptionItem(Object.assign({}, descForm));
+    //     }
+    //   }
+    // });
   };
   getDescriptionList = () => {
     const { searchForm, pagination } = this.state;
@@ -240,16 +265,8 @@ class DescriptionManagement extends Component<any, any> {
     this.updateDescriptionItem(params);
   };
 
-  getColour = (value) => {
-    const { colourList } = this.state;
-    let colour = colourList.find((item) => item.id == value || item.valueEn === value);
-    return colour;
-  };
-
   render() {
     const { loading, title, descList, visible, modalName, descForm } = this.state;
-
-    const { getFieldDecorator } = this.props.form;
 
     const columns = [
       {
@@ -287,17 +304,6 @@ class DescriptionManagement extends Component<any, any> {
       }
     ];
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 }
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
-      }
-    };
-
     return (
       <div>
         <BreadCrumb />
@@ -305,39 +311,7 @@ class DescriptionManagement extends Component<any, any> {
         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <div className="container-search">
             <Headline title={title} />
-            <Form layout="inline" style={{ marginBottom: 20 }}>
-              <Row>
-                <Col span={8}>
-                  <FormItem>
-                    <Input
-                      addonBefore="Description name"
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onSearchFormChange({
-                          field: 'descName',
-                          value
-                        });
-                      }}
-                    />
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <Button
-                    type="primary"
-                    icon="search"
-                    shape="round"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.onSearch();
-                    }}
-                  >
-                    <span>
-                      <FormattedMessage id="search" />
-                    </span>
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
+            <SearchForm descName={this.state.searchForm.descName} onChangeDescName={this.onSearchFormChange} onSearch={this.onSearch} />
             <div>
               <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
                 <span>Add new description</span>
@@ -350,105 +324,24 @@ class DescriptionManagement extends Component<any, any> {
           </div>
 
           {visible ? (
-            <Modal
-              zIndex={1000}
-              width="600px"
-              title={modalName}
+            <CreateForm
+              name={modalName}
               visible={visible}
-              confirmLoading={loading}
-              maskClosable={false}
-              onCancel={() =>
-                this.setState({
-                  visible: false
-                })
-              }
-              footer={[
-                <Button
-                  key="back"
-                  onClick={() => {
-                    this.setState({
-                      visible: false
-                    });
-                  }}
-                >
-                  Close
-                </Button>,
-                <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-                  Confirm
-                </Button>
-              ]}
-            >
-              <Form {...formItemLayout}>
-                <FormItem label="Description name">
-                  {getFieldDecorator('descName', {
-                    rules: [{ required: true, message: 'Description name is required' }],
-                    initialValue: descForm.descName
-                  })(
-                    <Input
-                      style={{ width: '80%' }}
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onDescFormChange({
-                          field: 'descName',
-                          value
-                        });
-                      }}
-                    />
-                  )}
-                </FormItem>
-                <FormItem label="Display name">
-                  {getFieldDecorator('dipNameFr', {
-                    initialValue: descForm.dipNameFr,
-                    rules: [{ required: true, message: 'Display name is required' }]
-                  })(
-                    <Input
-                      style={{ width: '80%' }}
-                      placeholder="French"
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onDescFormChange({
-                          field: 'dipNameFr',
-                          value
-                        });
-                      }}
-                    />
-                  )}
-                </FormItem>
-                <FormItem label="">
-                  {getFieldDecorator('dipNameEn', {
-                    initialValue: descForm.dipNameEn,
-                    rules: [{ required: true, message: 'Display name is required' }]
-                  })(
-                    <Input
-                      style={{ width: '80%' }}
-                      placeholder="English"
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onDescFormChange({
-                          field: 'dipNameEn',
-                          value
-                        });
-                      }}
-                    />
-                  )}
-                </FormItem>
-                <div className="ant-form-item-required">The number display name is set in shop information</div>
-                <FormItem label="Status">
-                  {getFieldDecorator('status', {
-                    initialValue: descForm.status
-                  })(
-                    <Switch
-                      onChange={(value) => {
-                        this.onDescFormChange({
-                          field: 'status',
-                          value
-                        });
-                      }}
-                    />
-                  )}
-                </FormItem>
-              </Form>
-            </Modal>
+              loading={loading}
+              descName={descForm.descName}
+              dipName={descForm.dipNames}
+              status={descForm.status}
+              onSubmit={this.handleSubmit}
+              onCancel={() => {
+                this.setState({ visible: false });
+              }}
+              onChangeFormVisibility={(visible) => {
+                this.setState({ visible });
+              }}
+              onChangeFormLoading={(loading) => {
+                this.setState({ loading });
+              }}
+            />
           ) : null}
         </Spin>
       </div>
@@ -468,4 +361,4 @@ const styles = {
   }
 } as any;
 
-export default Form.create()(DescriptionManagement);
+export default DescriptionManagement;

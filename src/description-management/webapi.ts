@@ -29,7 +29,7 @@ export function getDescriptionList(filterParams = {}) {
           status: true
         },
         {
-          id: 1,
+          id: 2,
           descName: 'Benifit',
           dipNameFr: 'benifit_fr',
           dipNameEn: 'benifit_en',

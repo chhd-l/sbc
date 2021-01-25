@@ -27,19 +27,25 @@ export default class basicInformation extends Component<any, any> {
       subscriptionPlan.subscriptionPlanId = 'SP' + moment(new Date()).format('YYYYMMDDHHSSS');
       addField('subscriptionPlanId', subscriptionPlan.subscriptionPlanId);
     }
-    webapi.getWeekFrequency().then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          frequencyList: res.context.sysDictionaryVOS
-        });
-      } else {
-        message.error(res.message || 'Get data failed');
-      }
-    })
-    .catch(() => {
-      message.error('Get data failed');
-    });
+    webapi
+      .getWeekFrequency()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          let defaultFrequency = res.context.sysDictionaryVOS.find((x) => parseInt(x.valueEn) === 4);
+          if (defaultFrequency) {
+            addField('frequency', [defaultFrequency.id]);
+          }
+          this.setState({
+            frequencyList: res.context.sysDictionaryVOS.filter((x) => parseInt(x.valueEn) >= 3 && parseInt(x.valueEn) <= 5)
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
   }
 
   render() {
@@ -78,9 +84,11 @@ export default class basicInformation extends Component<any, any> {
               })(
                 <InputNumber
                   precision={0}
+                  min={1}
                   max={100}
+                  disabled={true}
                   onChange={(value) => {
-                    addField('quantity', 11.33);
+                    addField('quantity', value);
                   }}
                 />
               )}
@@ -112,15 +120,15 @@ export default class basicInformation extends Component<any, any> {
               )}
             </FormItem>
             <FormItem {...layout} label="Frequency">
-              {getFieldDecorator('frequency', {
-                initialValue: subscriptionPlan.frequency,
-                rules: [{ required: false, message: 'Please select Frequency' }]
-              })(
-                <Row style={{color: '#222222'}}>
-                  <Col span={4}>
-                    <span>Once every</span>
-                  </Col>
-                  <Col span={12}>
+              <Row style={{ color: '#222222' }}>
+                <Col span={4}>
+                  <span>Once every</span>
+                </Col>
+                <Col span={20}>
+                  {getFieldDecorator('frequency', {
+                    initialValue: subscriptionPlan.frequency,
+                    rules: [{ required: false, message: 'Please select Frequency' }]
+                  })(
                     <Select
                       mode="multiple"
                       onChange={(value: any) => {
@@ -133,18 +141,20 @@ export default class basicInformation extends Component<any, any> {
                         </Option>
                       ))}
                     </Select>
-                  </Col>
-                </Row>
-              )}
+                  )}
+                </Col>
+              </Row>
             </FormItem>
             <FormItem {...layout} label="Number of delivery">
               {getFieldDecorator('delivery', {
                 initialValue: subscriptionPlan.delivery,
                 rules: [{ required: false, message: 'Please input Number of delivery' }]
               })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
+                <InputNumber
+                  precision={0}
+                  min={1}
+                  max={100}
+                  onChange={(value) => {
                     addField('delivery', value);
                   }}
                 />

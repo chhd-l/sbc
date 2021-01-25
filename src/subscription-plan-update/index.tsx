@@ -19,14 +19,15 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: '',
-      current: 0,
+      current: 4,
       subscriptionPlan: {
         canCancelPlan: true,
         canCancelChargedFee: true,
         canChangeDelivery: true,
         canSkipNextDelivery: true,
         mainProducts: [],
-        mainProductIds: []
+        mainProductIds: [],
+        quantity: 100
       },
       allSkuProduct: []
     };
@@ -40,19 +41,21 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     this.setState({
       title: id ? 'Edit Plan (Food Dispenser)' : 'Add New Plan (Food Dispenser)'
     });
-    webapi.getAllSkuProducts() .then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          allSkuProduct: res.context.goodsInfos.content
-        });
-      } else {
-        message.error(res.message || 'Get data failed');
-      }
-    })
-    .catch(() => {
-      message.error('Get data failed');
-    });
+    webapi
+      .getAllSkuProducts()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            allSkuProduct: res.context.goodsInfos.content
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
     if (id) {
       webapi
         .getSubscriptionPlanById(id)
@@ -94,11 +97,14 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       subscriptionPlan: data
     });
   }
-  updateSubscriptionPlan(e) {
+  updateSubscriptionPlan(e, isDraft) {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
         const { subscriptionPlan, id } = this.state;
+        if(isDraft){
+          subscriptionPlan.status = 1
+        }
         if (id) {
           subscriptionPlan.id = id; // edit by id
           webapi
@@ -139,11 +145,11 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     const steps = [
       {
         title: 'Basic Information',
-        controller: <BasicInformation subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form}/>
+        controller: <BasicInformation subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
       },
       {
         title: 'Target Product',
-        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct}/>
+        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} />
       },
       {
         title: 'Entry Criteria',
@@ -155,7 +161,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       },
       {
         title: 'Details',
-        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct}/>
+        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} />
       }
     ];
     return (
@@ -166,7 +172,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
 
         <div className="container-search" id="subscriptionPlanStep">
           <Headline title={title} />
-          <Steps current={current} labelPlacement='vertical'>
+          <Steps current={current} labelPlacement="vertical">
             {steps.map((item) => (
               <Step key={item.title} title={item.title} />
             ))}
@@ -185,9 +191,14 @@ class SubscriptionPlanUpdate extends Component<any, any> {
               </Button>
             )}
             {current === steps.length - 1 && (
-              <Button type="primary" onClick={(e) => this.updateSubscriptionPlan(e)}>
-                Submit <Icon type="right" />
-              </Button>
+              <div className="saveBtn">
+                <Button style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, true)}>
+                  Save <Icon type="right" />
+                </Button>
+                <Button type="primary" onClick={(e) => this.updateSubscriptionPlan(e, false)}>
+                  Publish <Icon type="right" />
+                </Button>
+              </div>
             )}
           </div>
         </div>

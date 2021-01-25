@@ -1291,7 +1291,9 @@ export default class AppStore extends Store {
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',
           basePrice: data.get('selectedBasePrice') !== 'None' && item.get('basePrice') ? item.get('basePrice') : null,
-          subscriptionBasePrice: data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null
+          subscriptionBasePrice: data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null,
+          virtualInventory: item.get('virtualInventory') ? item.get('virtualInventory') : null,
+          virtualAlert: item.get('virtualAlert') ? item.get('virtualAlert') : null
         })
       );
     });
@@ -2095,7 +2097,8 @@ export default class AppStore extends Store {
         fromJS({
           titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '', //{name}-Royal Canin
           metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '', //{name}, {subtitle}, {sales category}, {tagging}
-          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '' //{description}
+          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '', //{description}
+          headingTag: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : ''
         })
       );
     }
@@ -2107,7 +2110,8 @@ export default class AppStore extends Store {
       goodsId,
       metaDescriptionSource: seoObj.metaDescriptionSource,
       metaKeywordsSource: seoObj.metaKeywordsSource,
-      titleSource: seoObj.titleSource
+      titleSource: seoObj.titleSource,
+      headingTag: seoObj.headingTag
     };
     const { res } = (await editSeo(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {

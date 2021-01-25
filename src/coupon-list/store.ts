@@ -39,9 +39,9 @@ export default class AppStore extends Store {
       this.dispatch('loading:start');
       message.error(res.message);
     }
-    let couponList = null;
-    if (res.context.couponInfos) {
-      couponList = res.context.couponInfos.content;
+    let couponList = [];
+    if (res.context) {
+      couponList = res.context.content;
       couponList = couponList.map((coupon) => {
         // 3.1.面值
         if (coupon.fullBuyType == 0) {
@@ -81,7 +81,7 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
       this.dispatch('init', {
         couponList: fromJS(couponList),
-        total: res.context.couponInfos.totalElements,
+        total: res.context.totalElements,
         pageNum: pageNum + 1
       });
     }

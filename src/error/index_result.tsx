@@ -1,50 +1,31 @@
-import { useOktaAuth } from '@okta/okta-react';
+// import { useOktaAuth } from '@okta/okta-react';
 import React, { useEffect } from 'react';
 import { login, cache, history } from 'qmkit';
 import { Row, Col, Button } from 'antd';
 const bg_selectRole = require('./img/bg-SelectRole.jpg');
-const role_RC = require('./img/role-RC.png');
-const role_Perscriber = require('./img/role-Perscriber.png');
-let switchedRouter = false;
-import { switchRouter } from '@/index';
+// const role_RC = require('./img/role-RC.png');
+// const role_Perscriber = require('./img/role-Perscriber.png');
+// let switchedRouter = false;
+// import { switchRouter } from '@/index';
 let ErrorPage = (props) => {
-  let { authState, authService } = useOktaAuth();
-  let loginpPercriberOkta = () => {
-    history.push('login', { oktaLogout: true });
-  };
-
-  let loginpRcOkta = () => {
-    history.go(-2);
-  };
-  let defaultData = JSON.stringify({
-    fetchStatus: 404,
-    msg: 'Please check route or click button ',
-    error: 'Not Find Page'
-  });
-  let errorInfo = JSON.parse(sessionStorage.getItem(cache.ERROR_INFO) || defaultData);
+  let errorInfo = props?.errorObj?.hasError ?? false ? props.errorObj : {};
 
   return (
-    <div>
-      <div style={styles.container}>
-        <Row style={{ top: '25%' }}>
-          <Row style={styles.welcomeFont}>{errorInfo.fetchStatus}</Row>
+    <div style={styles.container}>
+      <Row style={{ top: '25%' }}>
+        <Col span={24}>
+          <Row style={styles.welcomeFont}>
+            <Col span={24}>{errorInfo.fetchStatus}</Col>
+          </Row>
 
           <Row style={styles.selectFont}>
-            <Col>info:{errorInfo.msg}</Col>
-            <Col>error:{errorInfo.error}</Col>
-          </Row>
-          <Row style={styles.selectFont}>
-            <Col span={12}>
-              <Button type="primary" onClick={loginpPercriberOkta}>
-                返回登录
-              </Button>
-            </Col>
-            <Col span={12}>
-              <Button onClick={loginpRcOkta}>返回上一页</Button>
+            <Col span={24}>{errorInfo.error.toString()}</Col>
+            <Col span={24} style={{ background: '#f3f3f3', marginTop: '10px' }}>
+              info:{errorInfo.msg}
             </Col>
           </Row>
-        </Row>
-      </div>
+        </Col>
+      </Row>
     </div>
   );
 };
@@ -54,6 +35,7 @@ const styles = {
     // alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
+    width: '100%',
     backgroundImage: 'url(' + bg_selectRole + ')',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',

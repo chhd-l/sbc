@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Col, message, Row } from 'antd';
 
 import { AuthWrapper, Headline, history } from 'qmkit';
-import '../index.less';
+// import '../index.less';
 
 const images = {
   new_01: require('../images/new/01.png'),
@@ -30,7 +30,7 @@ export default class List extends React.Component<any, any> {
         </div>
         <div className="container">
           <div className="appsMain">
-            {/*<h3>
+            <h3>
               获客拉新<span>全渠道新用户</span>
             </h3>
             <Row>
@@ -63,7 +63,7 @@ export default class List extends React.Component<any, any> {
                   <span className="miniTags">推荐</span>
                 </a>
               </Col>
-            </Row>*/}
+            </Row>
 
             <h3>
               Order conversion<span>More orders and sales</span>
@@ -90,13 +90,13 @@ export default class List extends React.Component<any, any> {
                       <h5>Coupon creation</h5>
                       <p>Create coupon meeting specific conditions</p>
                     </div>
-                    {/* <span className="miniTags">推荐</span> */}
-                    {/* <span className="mini-tags">Optimum</span> */}
+                    <span className="miniTags">推荐</span>
+                    <span className="mini-tags">Optimum</span>
                   </a>
                 </Col>
               </AuthWrapper>
 
-              {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
+              <AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
                   <a
                     className="createMarket"
@@ -119,7 +119,7 @@ export default class List extends React.Component<any, any> {
                     <span className="miniTags">推荐</span>
                   </a>
                 </Col>
-              </AuthWrapper>*/}
+              </AuthWrapper>
 
               <AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
@@ -145,7 +145,7 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>
 
-              {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
+              <AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
                   <a
                     className="createMarket"
@@ -167,9 +167,9 @@ export default class List extends React.Component<any, any> {
                     </div>
                   </a>
                 </Col>
-              </AuthWrapper>*/}
+              </AuthWrapper>
             </Row>
-            {/*<Row>
+            <Row>
               <Col span={6}>
                 <a
                   className="createMarket"
@@ -186,7 +186,7 @@ export default class List extends React.Component<any, any> {
                   </div>
                 </a>
               </Col>
-            </Row>*/}
+            </Row>
 
             <h3>
               Improve consumer bill<span>Higher sales and profits</span>
@@ -240,79 +240,79 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>
 
-              {/*<AuthWrapper functionName="f_marketing_gift_add">*/}
-              {/*  <Col span={6}>*/}
-              {/*    <a*/}
-              {/*      className="createMarket"*/}
-              {/*      onClick={() =>*/}
-              {/*        history.push({*/}
-              {/*          pathname: '/marketing-full-gift',*/}
-              {/*          state: {*/}
-              {/*            source: 'marketCenter'*/}
-              {/*          }*/}
-              {/*        })*/}
-              {/*      }*/}
-              {/*    >*/}
-              {/*      <span className="left">*/}
-              {/*        <img src={images.full_03} />*/}
-              {/*      </span>*/}
-              {/*      <div className="info">*/}
-              {/*        <h5>满赠</h5>*/}
-              {/*        <p>满足指定条件获得赠品</p>*/}
-              {/*      </div>*/}
-              {/*    </a>*/}
-              {/*  </Col>*/}
-              {/*</AuthWrapper>*/}
+              <AuthWrapper functionName="f_marketing_gift_add">
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: '/marketing-full-gift',
+                        state: {
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.full_03} />
+                    </span>
+                    <div className="info">
+                      <h5>满赠</h5>
+                      <p>满足指定条件获得赠品</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
             </Row>
 
-            {/*<h3>*/}
-            {/*  Increase Repeat purchase<span>Improve consumer loyalty</span>*/}
-            {/*</h3>*/}
-            {/*<Row>*/}
-            {/*  <AuthWrapper functionName="f_subscription_promotion">*/}
-            {/*    <Col span={6}>*/}
-            {/*      <a className="createMarket" onClick={() => history.push('/customer-level')}>*/}
-            {/*        <span className="left">*/}
-            {/*          <img src={images.order_02} />*/}
-            {/*        </span>*/}
-            {/*        <div className="info">*/}
-            {/*          <h5>Subscription Promotion</h5>*/}
-            {/*          <p>Enjoy easy repeat deliveries and saving on each order</p>*/}
-            {/*        </div>*/}
-            {/*      </a>*/}
-            {/*    </Col>*/}
-            {/*  </AuthWrapper>*/}
-            {/*</Row>*/}
+            <h3>
+              Increase Repeat purchase<span>Improve consumer loyalty</span>
+            </h3>
+            <Row>
+              <AuthWrapper functionName="f_subscription_promotion">
+                <Col span={6}>
+                  <a className="createMarket" onClick={() => history.push('/customer-level')}>
+                    <span className="left">
+                      <img src={images.order_02} />
+                    </span>
+                    <div className="info">
+                      <h5>Subscription Promotion</h5>
+                      <p>Enjoy easy repeat deliveries and saving on each order</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
+            </Row>
 
-            {/*<h3>*/}
-            {/*  留存复购<span>维护老客不流失</span>*/}
-            {/*</h3>*/}
-            {/*<Row>*/}
-            {/*  <Col span={6}>*/}
-            {/*    <a className="createMarket" onClick={() => history.push('/customer-level')}>*/}
-            {/*      <span className="left">*/}
-            {/*        <img src={images.customer_01} />*/}
-            {/*      </span>*/}
-            {/*      <div className="info">*/}
-            {/*        <h5>店铺会员等级</h5>*/}
-            {/*        <p>店铺内会员体系管理，差异化服务</p>*/}
-            {/*      </div>*/}
-            {/*    </a>*/}
-            {/*  </Col>*/}
+            <h3>
+              留存复购<span>维护老客不流失</span>
+            </h3>
+            <Row>
+              <Col span={6}>
+                <a className="createMarket" onClick={() => history.push('/customer-level')}>
+                  <span className="left">
+                    <img src={images.customer_01} />
+                  </span>
+                  <div className="info">
+                    <h5>店铺会员等级</h5>
+                    <p>店铺内会员体系管理，差异化服务</p>
+                  </div>
+                </a>
+              </Col>
 
-            {/*  <Col span={6}>*/}
-            {/*    <a className="createMarket" onClick={() => history.push('/points-order-list')}>*/}
-            {/*      <span className="left">*/}
-            {/*        <img src={images.customer_02} />*/}
-            {/*      </span>*/}
-            {/*      <div className="info">*/}
-            {/*        <h5>积分商城</h5>*/}
-            {/*        <p>小积分大价值，礼品随心兑</p>*/}
-            {/*      </div>*/}
-            {/*      <span className="miniTags">推荐</span>*/}
-            {/*    </a>*/}
-            {/*  </Col>*/}
-            {/*</Row>*/}
+              <Col span={6}>
+                <a className="createMarket" onClick={() => history.push('/points-order-list')}>
+                  <span className="left">
+                    <img src={images.customer_02} />
+                  </span>
+                  <div className="info">
+                    <h5>积分商城</h5>
+                    <p>小积分大价值，礼品随心兑</p>
+                  </div>
+                  <span className="miniTags">推荐</span>
+                </a>
+              </Col>
+            </Row>
           </div>
         </div>
       </div>

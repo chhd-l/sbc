@@ -56,17 +56,7 @@ export default class GoodsList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      goodsBrandList,
-      goodsPageContent,
-      selectedSpuKeys,
-      onSelectChange,
-      total,
-      pageNum,
-      expandedRowKeys,
-      onImport,
-      goodsCateList
-    } = this.props.relaxProps;
+    const { goodsBrandList, goodsPageContent, selectedSpuKeys, onSelectChange, total, pageNum, expandedRowKeys, onImport, goodsCateList } = this.props.relaxProps;
     return (
       <DataGrid
         rowKey={(record) => record.goodsId}
@@ -85,25 +75,8 @@ export default class GoodsList extends React.Component<any, any> {
         }}
         pagination={{ total, current: pageNum, onChange: this._getData }}
       >
-        <Column
-          title={<FormattedMessage id="image" />}
-          dataIndex="goodsImg"
-          key="goodsImg"
-          render={(img) =>
-            img ? (
-              <img src={img} style={styles.imgItem} />
-            ) : (
-              <img src={defaultImg} style={styles.imgItem} />
-            )
-          }
-        />
-        <Column
-          title={<FormattedMessage id="product.productName" />}
-          dataIndex="goodsName"
-          key="goodsName"
-          className="nameBox"
-          width={200}
-        />
+        <Column title={<FormattedMessage id="image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        <Column title={<FormattedMessage id="product.productName" />} dataIndex="goodsName" key="goodsName" className="nameBox" width={200} />
         <Column
           title={<FormattedMessage id="product.marketPrice" />}
           dataIndex="marketPrice"
@@ -203,11 +176,7 @@ export default class GoodsList extends React.Component<any, any> {
     return currentGoods
       .map((goods, i) => {
         const currentGoodsSpecDetails = standardSkuSpecDetails
-          .filter(
-            (v) =>
-              goods.get('specDetailRelIds').indexOf(v.get('specDetailRelId')) !=
-              -1
-          )
+          .filter((v) => goods.get('specDetailRelIds').indexOf(v.get('specDetailRelId')) != -1)
           .map((v) => {
             return v.get('detailName');
           })
@@ -216,27 +185,16 @@ export default class GoodsList extends React.Component<any, any> {
         return (
           <div key={`${index}_${i}`} style={styles.item}>
             <div style={{ marginLeft: 17 }}>
-              <img
-                src={
-                  goods.get('goodsInfoImg')
-                    ? goods.get('goodsInfoImg')
-                    : defaultImg
-                }
-                style={styles.imgItem}
-              />
+              <img src={goods.get('goodsInfoImg') ? goods.get('goodsInfoImg') : defaultImg} style={styles.imgItem} />
             </div>
             <div style={{ marginLeft: 0 }}>
               <div style={styles.cell}>
                 <label style={styles.label}>规格：</label>
-                <span className="specification">
-                  {currentGoodsSpecDetails ? currentGoodsSpecDetails : '-'}
-                </span>
+                <span className="specification">{currentGoodsSpecDetails ? currentGoodsSpecDetails : '-'}</span>
               </div>
               <div style={styles.cell}>
                 <label style={styles.label}>市场价：</label>
-                {goods.get('marketPrice')
-                  ? goods.get('marketPrice').toFixed(2)
-                  : '-'}
+                {goods.get('marketPrice') ? goods.get('marketPrice').toFixed(2) : '-'}
               </div>
             </div>
           </div>
@@ -291,7 +249,10 @@ const styles = {
     height: 60,
     padding: 5,
     border: '1px solid #ddd',
-    background: '#fff'
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
   },
   textCon: {
     width: 120,

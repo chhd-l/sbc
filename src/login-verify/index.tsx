@@ -3,7 +3,7 @@ import { Form } from 'antd';
 import { StoreProvider } from 'plume2';
 import verifyForm from './components/verify-form';
 const bg_login = require('../login/img/bg_login.png');
-import AppStore from '../login/store';
+import AppStore from '../../web_modules/qmkit/fetch/HttpUtil';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class LoginVerify extends React.Component<any, any> {
@@ -18,7 +18,7 @@ export default class LoginVerify extends React.Component<any, any> {
     const VerifyFormDetail = Form.create({})(verifyForm);
     return (
       <div style={styles.container}>
-        <VerifyFormDetail/>
+        <VerifyFormDetail />
       </div>
     );
   }

@@ -17,6 +17,15 @@ const { TextArea } = Input;
 export default class SkuTable extends React.Component<any, any> {
   WrapperForm: any;
 
+  constructor(props) {
+    super(props);
+    this.WrapperForm = Form.create({})(SkuForm);
+    this.state = {
+      visible: false,
+      EANList: []
+    };
+  }
+
   props: {
     relaxProps?: {
       goodsSpecs: IList;
@@ -69,14 +78,6 @@ export default class SkuTable extends React.Component<any, any> {
     onProductselectSku: noop,
     onEditSubSkuItem: noop,
   };
-
-  constructor(props) {
-    super(props);
-    this.WrapperForm = Form.create({})(SkuForm);
-    this.state = {
-      visible: false,
-    };
-  }
 
   render() {
     const WrapperForm = this.WrapperForm;
@@ -131,6 +132,13 @@ class SkuForm extends React.Component<any, any> {
     this.setState({
       visible: type,
     });
+  };
+
+  addEAN = (res,e) => {
+    let EANList = []
+    this.setState({
+      EANList: EANList
+    })
   };
 
 
@@ -324,6 +332,73 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
+
+    //EAN
+    columns = columns.push({
+      title: 'EAN',
+      key: 'EAN',
+      render: (rowInfo) => {
+        const { addSkUProduct } = this.props.relaxProps;
+        return (
+          <Row>
+            <Col span={16}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsInfoBundleRels' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input EAN code'
+                    },
+                    {
+                      pattern: ValidConst.number,
+                      message: 'Please enter a positive integer'
+                    }
+                  ],
+                })(
+                  <div className="space-between-align">
+                    <div style={{ paddingTop: 6 }}>
+                      {' '}
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.addEAN({type: 1}, rowInfo.goodsInfoNo)} />
+                    </div>
+                    <div style={{ lineHeight: 2 }}>
+                      {addSkUProduct&&addSkUProduct.map((i, index) => {
+                        return(
+                          i.pid == rowInfo.goodsInfoNo&&i.targetGoodsIds.map((item, index) => {
+                            return (
+                              <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
+                                <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
+                                <InputNumber
+                                  style={{ width: '60px', height: '28px', textAlign: 'center' }}
+                                  defaultValue={item.bundleNum}
+                                  key={item.subGoodsInfoNo}
+                                  min={1}
+                                  onChange={(e) => {
+                                    if (i.pid == rowInfo.goodsInfoNo) {
+                                      const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoNo)[0];
+                                      if (target) {
+                                        target['bundleNum'] = e;
+                                      }
+                                      let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
+                                      this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
+                                    }
+                                  }}
+                                />
+                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id)}></a>
+                              </div>
+                            );
+                          })
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
 
     columns = columns.push({
       title: 'Weight value',

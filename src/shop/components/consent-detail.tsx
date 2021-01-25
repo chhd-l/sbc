@@ -117,7 +117,7 @@ export default class StepConsentDetail extends Component<any, any> {
         value: this.state.editList.consentPage.split(',')
       });
     } else {
-      consentForm.languageTypeId = consentLanguage[0].id;
+      consentForm.languageTypeId = consentLanguage[0] && consentLanguage[0].id;
       onFormChange(consentForm);
     }
   }

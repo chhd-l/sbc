@@ -14,10 +14,14 @@ let ErrorPage = (props) => {
   };
 
   let loginpRcOkta = () => {
-    history.go(-1);
+    history.go(-2);
   };
-
-  let errorInfo = JSON.parse(sessionStorage.getItem(cache.ERROR_INFO) || '{}');
+  let defaultData = JSON.stringify({
+    fetchStatus: 404,
+    msg: 'Please check route or click button ',
+    error: 'Not Find Page'
+  });
+  let errorInfo = JSON.parse(sessionStorage.getItem(cache.ERROR_INFO) || defaultData);
 
   return (
     <div>

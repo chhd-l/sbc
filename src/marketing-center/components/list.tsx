@@ -16,10 +16,17 @@ const images = {
   full_01: require('../images/full/01.png'),
   full_02: require('../images/full/02.png'),
   full_03: require('../images/full/03.png'),
+  full_001: require('../images/full/001.png'),
+  full_002: require('../images/full/002.png'),
   customer_01: require('../images/customer/01.png'),
   customer_02: require('../images/customer/02.png'),
-  customer_03: require('../images/customer/03.png')
+  customer_03: require('../images/customer/03.png'),
+  order_001: require('../images/order/001.png'),
+  order_003: require('../images/order/003.png')
 };
+
+const iconSpanStyle = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
+const iconStyle = { width: 'initial', height: 'initial' };
 
 export default class List extends React.Component<any, any> {
   render() {
@@ -70,7 +77,7 @@ export default class List extends React.Component<any, any> {
             </h3>
             <Row>
               <AuthWrapper functionName={'f_create_coupon'}>
-                <Col span={6}>
+                <Col span={10}>
                   <a
                     className="createMarket"
                     onClick={() =>
@@ -83,8 +90,8 @@ export default class List extends React.Component<any, any> {
                       })
                     }
                   >
-                    <span className="left">
-                      <img src={images.order_01} />
+                    <span className="left" style={iconSpanStyle}>
+                      <img src={images.order_001} style={iconStyle} />
                     </span>
                     <div className="info">
                       <h5>优惠券</h5>
@@ -121,7 +128,7 @@ export default class List extends React.Component<any, any> {
               </AuthWrapper>
 
               <AuthWrapper functionName={'f_create_all_coupon_activity'}>
-                <Col span={6}>
+                <Col span={10}>
                   <a
                     className="createMarket"
                     onClick={() =>
@@ -133,8 +140,8 @@ export default class List extends React.Component<any, any> {
                       })
                     }
                   >
-                    <span className="left">
-                      <img src={images.order_03} />
+                    <span className="left" style={iconSpanStyle}>
+                      <img src={images.order_003} style={iconStyle} />
                     </span>
                     <div className="info">
                       <h5>精准发券</h5>
@@ -192,7 +199,7 @@ export default class List extends React.Component<any, any> {
             </h3>
             <Row>
               <AuthWrapper functionName="f_marketing_reduction_add">
-                <Col span={6}>
+                <Col span={10}>
                   <a
                     className="createMarket"
                     onClick={() =>
@@ -204,8 +211,8 @@ export default class List extends React.Component<any, any> {
                       })
                     }
                   >
-                    <span className="left">
-                      <img src={images.full_01} />
+                    <span className="left" style={iconSpanStyle}>
+                      <img src={images.full_001} style={iconStyle} />
                     </span>
                     <div className="info">
                       <h5>Reduction</h5>
@@ -216,7 +223,7 @@ export default class List extends React.Component<any, any> {
               </AuthWrapper>
 
               <AuthWrapper functionName="f_marketing_discount_add">
-                <Col span={6}>
+                <Col span={10}>
                   <a
                     className="createMarket"
                     onClick={() =>
@@ -228,8 +235,8 @@ export default class List extends React.Component<any, any> {
                       })
                     }
                   >
-                    <span className="left">
-                      <img src={images.full_02} />
+                    <span className="left" style={iconSpanStyle}>
+                      <img src={images.full_002} style={iconStyle} />
                     </span>
                     <div className="info">
                       <h5>Discount</h5>

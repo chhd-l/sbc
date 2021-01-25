@@ -808,6 +808,10 @@ const routes = [
     asyncComponent: () => import('./product-finder-list')
   },
   {
+    path: '/product-sales-setting',
+    asyncComponent: () => import('./product-sales-setting')
+  },
+  {
     path: '/product-finder-details/:id',
     asyncComponent: () => import('./product-finder-details')
   },

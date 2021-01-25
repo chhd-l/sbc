@@ -30,34 +30,36 @@ export default class AppStore extends Store {
       flushSelected: true
     }
   ) => {
-    const { res, err } = (await goodsList({
-      pageNum,
-      pageSize,
-      auditStatusList: this.state().get('auditStatusList').toJS()
-    })) as any;
-    this.dispatch('loading:start');
-    if (!err && res.code === Const.SUCCESS_CODE) {
-      this.dispatch('loading:end');
-      res.context.goodsPage.content.forEach((v, i) => {
-        v.key = i;
+    try {
+      const { res, err } = (await goodsList({
+        pageNum,
+        pageSize,
+        auditStatusList: this.state().get('auditStatusList').toJS()
+      })) as any;
+      this.dispatch('loading:start');
+      if (!err && res.code === Const.SUCCESS_CODE) {
+        this.dispatch('loading:end');
+        res.context.goodsPage.content.forEach((v, i) => {
+          v.key = i;
+        });
+        this.dispatch('goodsActor: init', fromJS(res.context));
+        this.dispatch('form:field', { key: 'pageNum', value: pageNum });
+      } else {
+        this.dispatch('loading:end');
+        message.error(res.message);
+      }
+
+      const cates: any = await getCateList();
+      const brands: any = await getBrandList();
+      this.transaction(() => {
+        this.dispatch('cateActor: init', fromJS(cates.res.context));
+        this.dispatch('brandActor: init', fromJS(brands.res.context));
       });
-      this.dispatch('goodsActor: init', fromJS(res.context));
-      this.dispatch('form:field', { key: 'pageNum', value: pageNum });
-    } else {
-      this.dispatch('loading:end');
-      message.error(res.message);
-    }
 
-    const cates: any = await getCateList();
-    const brands: any = await getBrandList();
-    this.transaction(() => {
-      this.dispatch('cateActor: init', fromJS(cates.res.context));
-      this.dispatch('brandActor: init', fromJS(brands.res.context));
-    });
-
-    if (flushSelected) {
-      this.dispatch('goodsActor:clearSelectedSpuKeys');
-    }
+      if (flushSelected) {
+        this.dispatch('goodsActor:clearSelectedSpuKeys');
+      }
+    } catch (error) {}
   };
 
   /**

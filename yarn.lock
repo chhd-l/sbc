@@ -13569,6 +13569,11 @@ webcrypto-shim@^0.1.5:
   resolved "https://registry.npm.taobao.org/webcrypto-shim/download/webcrypto-shim-0.1.5.tgz#13e34a010ccc544edecfe8a2642204502841bcf0"
   integrity sha1-E+NKAQzMVE7ez+iiZCIEUChBvPA=
 
+webpack-ant-icon-loader@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.npm.taobao.org/webpack-ant-icon-loader/download/webpack-ant-icon-loader-1.0.8.tgz#92ecfe6421066d27dee8d4cb0cf0630109283b6a"
+  integrity sha1-kuz+ZCEGbSfe6NTLDPBjAQkoO2o=
+
 webpack-bundle-analyzer@^4.1.0:
   version "4.2.0"
   resolved "https://registry.npm.taobao.org/webpack-bundle-analyzer/download/webpack-bundle-analyzer-4.2.0.tgz?cache=0&sync_timestamp=1606743159803&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwebpack-bundle-analyzer%2Fdownload%2Fwebpack-bundle-analyzer-4.2.0.tgz#f19ed40e1767ab35cad78c517529596e885bf64a"

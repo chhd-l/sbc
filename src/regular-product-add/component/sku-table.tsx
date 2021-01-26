@@ -238,7 +238,7 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       message: 'Please input weight value'
-                    },
+                    }
                     /*{
                       pattern: ValidConst.number,
                       message: 'Please enter the correct value'
@@ -246,7 +246,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={e=>this.noMinus(e)}/>)}
+                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
               </FormItem>
             </Col>
           </Row>
@@ -341,16 +341,16 @@ class SkuForm extends React.Component<any, any> {
             float: 'left'
           }}
         >
-          <span
-            style={{
-              color: 'red',
-              fontFamily: 'SimSun',
-              marginRight: '4px',
-              fontSize: '12px'
-            }}
-          >
-            *
-          </span>
+          {/*<span*/}
+          {/*  style={{*/}
+          {/*    color: 'red',*/}
+          {/*    fontFamily: 'SimSun',*/}
+          {/*    marginRight: '4px',*/}
+          {/*    fontSize: '12px'*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  **/}
+          {/*</span>*/}
           Subscription
           {/* <br />
           <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'subscriptionStatus')}>
@@ -366,14 +366,14 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
-        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = 0 : rowInfo.subscriptionStatus
-        return(
-          <Row style={{marginRight: '124px'}}>
+        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = 0 : rowInfo.subscriptionStatus
+        return (
+          <Row style={{ marginRight: '124px' }}>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
-                  initialValue:goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus === 0 ?  '0' : '1'
+                  initialValue: goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus === 0 ? '0' : '1'
                 })(
                   <Select disabled={goods.get('subscriptionStatus') == 0} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
@@ -383,10 +383,10 @@ class SkuForm extends React.Component<any, any> {
               </FormItem>
             </Col>
           </Row>
-        )
+        );
       }
     });
-   /* let a = columns.toJS();
+    /* let a = columns.toJS();
     let b = a.splice(a.length - 4, 1);
     a.splice(3, 0, b[0]);*/
     return columns.toJS();
@@ -486,7 +486,7 @@ class SkuForm extends React.Component<any, any> {
   };
 
   noMinus = (e) => {
-    let val=e.target.value;
+    let val = e.target.value;
     //限制只能输入一个小数点
     if (val.indexOf('.') != -1) {
       let str = val.substr(val.indexOf('.') + 1);
@@ -494,8 +494,8 @@ class SkuForm extends React.Component<any, any> {
         val = val.substr(0, val.indexOf('.') + str.indexOf('.') + 1);
       }
     }
-    e.target.value = val.replace(/[^\d^\.]+/g,'');
-  }
+    e.target.value = val.replace(/[^\d^\.]+/g, '');
+  };
 }
 
 const styles = {

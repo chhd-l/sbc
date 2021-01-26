@@ -67,14 +67,14 @@ export default class SkuTable extends React.Component<any, any> {
     removeImg: noop,
     modalVisible: noop,
     onProductselectSku: noop,
-    onEditSubSkuItem: noop,
+    onEditSubSkuItem: noop
   };
 
   constructor(props) {
     super(props);
     this.WrapperForm = Form.create({})(SkuForm);
     this.state = {
-      visible: false,
+      visible: false
     };
   }
 
@@ -121,18 +121,17 @@ class SkuForm extends React.Component<any, any> {
     );
   }
 
-  showProduct = (res,e) => {
-    let type = res.type ==1?true:false
-    if(e) {
+  showProduct = (res, e) => {
+    let type = res.type == 1 ? true : false;
+    if (e) {
       this.setState({
         pid: e
       });
     }
     this.setState({
-      visible: type,
+      visible: type
     });
   };
-
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
@@ -145,7 +144,7 @@ class SkuForm extends React.Component<any, any> {
       columns = goodsSpecs
         .map((item) => {
           return {
-            title:item.get('specName'),
+            title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
@@ -208,7 +207,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         const { addSkUProduct } = this.props.relaxProps;
 
-        let a = ''
+        let a = '';
         /*if(rowInfo.goodsInfoNo == addSkUProduct[rowInfo.index-1].pid) {
           a =  addSkUProduct[rowInfo.index-1].pid
 
@@ -216,12 +215,11 @@ class SkuForm extends React.Component<any, any> {
           // console.log(333333)
           a = ''
         }*/
-        if(rowInfo.goodsInfoNo == '') {
-          a = addSkUProduct[rowInfo.index-1]?addSkUProduct[rowInfo.index-1].pid:''
-
-        }else {
+        if (rowInfo.goodsInfoNo == '') {
+          a = addSkUProduct[rowInfo.index - 1] ? addSkUProduct[rowInfo.index - 1].pid : '';
+        } else {
           // console.log(333333)
-          a = rowInfo.goodsInfoNo
+          a = rowInfo.goodsInfoNo;
         }
 
         return (
@@ -251,7 +249,6 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-
     //Sub-SKU
     columns = columns.push({
       title: (
@@ -278,42 +275,44 @@ class SkuForm extends React.Component<any, any> {
                       pattern: ValidConst.number,
                       message: 'Please enter a positive integer'
                     }
-                  ],
+                  ]
                 })(
                   <div className="space-between-align">
                     <div style={{ paddingTop: 6 }}>
                       {' '}
-                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({type: 1}, rowInfo.goodsInfoNo)} />
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo)} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
-                      {addSkUProduct&&addSkUProduct.map((i, index) => {
-                        return(
-                          i.pid == rowInfo.goodsInfoNo&&i.targetGoodsIds.map((item, index) => {
-                            return (
-                              <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
-                                <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
-                                <InputNumber
-                                  style={{ width: '60px', height: '28px', textAlign: 'center' }}
-                                  defaultValue={item.bundleNum}
-                                  key={item.subGoodsInfoNo}
-                                  min={1}
-                                  onChange={(e) => {
-                                    if (i.pid == rowInfo.goodsInfoNo) {
-                                      const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoNo)[0];
-                                      if (target) {
-                                        target['bundleNum'] = e;
+                      {addSkUProduct &&
+                        addSkUProduct.map((i, index) => {
+                          return (
+                            i.pid == rowInfo.goodsInfoNo &&
+                            i.targetGoodsIds.map((item, index) => {
+                              return (
+                                <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
+                                  <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
+                                  <InputNumber
+                                    style={{ width: '60px', height: '28px', textAlign: 'center' }}
+                                    defaultValue={item.bundleNum}
+                                    key={item.subGoodsInfoNo}
+                                    min={1}
+                                    onChange={(e) => {
+                                      if (i.pid == rowInfo.goodsInfoNo) {
+                                        const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoNo)[0];
+                                        if (target) {
+                                          target['bundleNum'] = e;
+                                        }
+                                        let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
+                                        this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
                                       }
-                                      let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
-                                      this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
-                                    }
-                                  }}
-                                />
-                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id)}></a>
-                              </div>
-                            );
-                          })
-                        )
-                      })}
+                                    }}
+                                  />
+                                  <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id)}></a>
+                                </div>
+                              );
+                            })
+                          );
+                        })}
                     </div>
                   </div>
                 )}
@@ -323,7 +322,6 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
-
 
     columns = columns.push({
       title: 'Weight value',
@@ -338,7 +336,7 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       message: 'Please input weight value'
-                    },
+                    }
                     /*{
                       pattern: ValidConst.noMinus,
                       message: 'Please enter the correct value'
@@ -346,7 +344,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={e=>this.noMinus(e)}/>)}
+                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
               </FormItem>
             </Col>
           </Row>
@@ -354,20 +352,19 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-
     columns = columns.push({
       title: 'Weight unit',
       key: 'goodsInfoUnit',
-      render:  (rowInfo) => {
-        return(
+      render: (rowInfo) => {
+        return (
           <Row>
             <Col span={6}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
-                  initialValue: rowInfo.goodsInfoUnit?rowInfo.goodsInfoUnit:'kg'
+                  initialValue: rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{width: '81px'}} placeholder="please select unit">
+                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select unit">
                     <Option value="kg">kg</Option>
                     <Option value="g">g</Option>
                   </Select>
@@ -375,7 +372,7 @@ class SkuForm extends React.Component<any, any> {
               </FormItem>
             </Col>
           </Row>
-        )
+        );
       }
     });
 
@@ -410,22 +407,23 @@ class SkuForm extends React.Component<any, any> {
       }
     });*/
 
-
     columns = columns.push({
       title: (
-        <div style={{
-          marginRight: '152px',
-        }}>
-          <span
-            style={{
-              color: 'red',
-              fontFamily: 'SimSun',
-              marginRight: '4px',
-              fontSize: '12px'
-            }}
-          >
-            *
-          </span>
+        <div
+          style={{
+            marginRight: '152px'
+          }}
+        >
+          {/*<span*/}
+          {/*  style={{*/}
+          {/*    color: 'red',*/}
+          {/*    fontFamily: 'SimSun',*/}
+          {/*    marginRight: '4px',*/}
+          {/*    fontSize: '12px'*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  **/}
+          {/*</span>*/}
           Subscription
           {/* <br />
           <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'subscriptionStatus')}>
@@ -441,18 +439,20 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
-        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = 0 : rowInfo.subscriptionStatus
+        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = 0 : rowInfo.subscriptionStatus
         return (
-          <Row  style={{
-            marginRight: '124px',
-          }}>
+          <Row
+            style={{
+              marginRight: '124px'
+            }}
+          >
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
-                  initialValue:goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus === 0 ?  '0' : '1'
+                  initialValue: goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus === 0 ? '0' : '1'
                 })(
-                  <Select  disabled={goods.get('subscriptionStatus') == 0?true:false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>
@@ -460,7 +460,8 @@ class SkuForm extends React.Component<any, any> {
               </FormItem>
             </Col>
           </Row>
-        )}
+        );
+      }
     });
     /*columns = columns.push({
       title: (
@@ -490,12 +491,11 @@ class SkuForm extends React.Component<any, any> {
 
   _getSubSkulist = (id: string) => {
     const { addSkUProduct } = this.props.relaxProps;
-    addSkUProduct&&addSkUProduct.map(item=>{
-      return (
-        <div>{item.goodsInfoNo}</div>
-      )
-    })
-
+    if (addSkUProduct) {
+      addSkUProduct.map((item) => {
+        return <div>{item.goodsInfoNo}</div>;
+      });
+    }
   };
 
   /**
@@ -597,44 +597,39 @@ class SkuForm extends React.Component<any, any> {
     // console.log(item,11111);
     // console.log(pid);
     // console.log(addSkUProduct,2222);
-    let a = []
-    let b = []
-    let c = []
-    addSkUProduct.map((i) =>{
-      if(i.pid == pid) {
-        i.targetGoodsIds.map(o=>{
+    let a = [];
+    let b = [];
+    let c = [];
+    addSkUProduct.map((i) => {
+      if (i.pid == pid) {
+        i.targetGoodsIds.map((o) => {
           if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
-            a.push(o)
+            a.push(o);
           }
-        })
-        b.push(
-          {
-            pid: pid,
-            targetGoodsIds: a
-          }
-        )
-      }else {
-        c.push(i)
+        });
+        b.push({
+          pid: pid,
+          targetGoodsIds: a
+        });
+      } else {
+        c.push(i);
       }
-
     });
-    let d = b.concat(c)
+    let d = b.concat(c);
     this._editGoodsItem(id, 'goodsInfoBundleRels', a);
     onProductselectSku(d);
   };
 
   noMinus = (e) => {
-    let val=e.target.value;
+    let val = e.target.value;
     if (val.indexOf('.') != -1) {
       let str = val.substr(val.indexOf('.') + 1);
       if (str.indexOf('.') != -1) {
         val = val.substr(0, val.indexOf('.') + str.indexOf('.') + 1);
       }
     }
-    e.target.value = val.replace(/[^\d^\.]+/g,'');
-  }
-
-
+    e.target.value = val.replace(/[^\d^\.]+/g, '');
+  };
 }
 
 const styles = {

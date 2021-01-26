@@ -568,7 +568,7 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export all orders',
+      byParamsTitle: 'Export filtered orders',
       byIdsTitle: 'Export selected orders',
       exportByParams: onExportByParams,
       exportByIds: onExportByIds

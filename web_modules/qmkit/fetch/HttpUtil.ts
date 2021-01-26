@@ -6,6 +6,7 @@ const msg = {
     'K-000015': 'Failed to obtain authorization',
     'K-000002': ''
 }
+let _index:number=0;
 class HttpUtil{
     /**
       * 发送fetch请求
@@ -30,7 +31,9 @@ class HttpUtil{
         // 2. 对fetch请求再进行一次Promise的封装
         const fetchPromise = new Promise((resolve, reject) => {
             fetch(fetchUrl, fetchParams).then(
+               
                 (response: any) => {
+                    _index=0;
                     // 3. 放弃迟到的响应
                     if (httpCustomerOpertion.isAbort) {
                         // 3. 请求超时后，放弃迟到的响应
@@ -81,8 +84,9 @@ class HttpUtil{
                     return
                 }
                 httpCustomerOpertion.isFetched = true
-                httpCustomerOpertion.isHandleResult && message.error('Service is busy,please try again later');
+               _index===0&&httpCustomerOpertion.isHandleResult && message.error('Service is busy,please try again later');
                 let er={ fetchStatus: "404", error: errMsg ,msg:'Request interface failed or interface does not exist, please check it'}
+              _index++;
                 reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
@@ -119,7 +123,7 @@ class HttpUtil{
             }
             const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
             sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify(result))
-            process.env.NODE_ENV==="production"&& history.push('error')
+            process.env.NODE_ENV==="production"&&history.push('error')
 
             return errorMsg
        

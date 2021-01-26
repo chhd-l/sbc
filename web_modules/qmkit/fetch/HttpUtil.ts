@@ -1,10 +1,11 @@
 import { message } from 'antd';
-import { util, history } from 'qmkit';
+import { util, history,cache } from 'qmkit';
 const msg = {
     'K-000005': 'Your account is disabled',
     'K-000015': 'Failed to obtain authorization',
     'K-000002': ''
 }
+let _index=0;
 class HttpUtil {
     /**
       * 发送fetch请求
@@ -30,6 +31,7 @@ class HttpUtil {
         const fetchPromise = new Promise((resolve, reject) => {
             fetch(fetchUrl, fetchParams).then(
                 (response: any) => {
+                    _index=0;
                     // 3. 放弃迟到的响应
                     if (httpCustomerOpertion.isAbort) {
                         // 3. 请求超时后，放弃迟到的响应
@@ -81,8 +83,9 @@ class HttpUtil {
                     return
                 }
                 httpCustomerOpertion.isFetched = true
-                httpCustomerOpertion.isHandleResult && message.error('Service is busy,please try again later');
-                reject(HttpUtil.handleFailedResult({ fetchStatus: "error", error: errMsg }, httpCustomerOpertion))
+              _index===0 && httpCustomerOpertion.isHandleResult && message.error('Service is busy,please try again later');
+              _index++; 
+              reject(HttpUtil.handleFailedResult({ fetchStatus: "error", error: errMsg }, httpCustomerOpertion))
             })
         })
         return Promise.race([fetchPromise, HttpUtil.fetchTimeout(httpCustomerOpertion)])
@@ -109,18 +112,20 @@ class HttpUtil {
      */
     static handleFailedResult(result, httpCustomerOpertion) {
         
-            if (!result.code && httpCustomerOpertion.isHandleResult === true) {
-                const errMsg = result.msg || result.message || "Service is busy,please try again later"
-                const errStr = `${errMsg}（${result.code}）`
-                // HttpUtil.hideLoading()
-                message.info(errStr)
-            }
-            const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
-           
-            return errorMsg
-       
+        if (result.code && httpCustomerOpertion.isHandleResult === true) {
+            const errMsg = result.msg || result.message || "Service is busy,please try again later"
+            const errStr = `${errMsg}（${result.code}）`
+            // HttpUtil.hideLoading()
+            message.info(errStr)
+        }
+        const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
+        sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify(result))
+        process.env.NODE_ENV==="production"&&history.push('error')
 
-    }
+        return errorMsg
+   
+
+}
     /**
      * 控制Fetch请求是否超时
      * @returns {Promise}

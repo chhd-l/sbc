@@ -37,9 +37,9 @@ export default class AppStore extends Store {
         item.time = `Day of collection${item.effectiveDays}Valid within days`;
       }
       if (item.fullBuyType == 0) {
-        item.price = `满0元减${item.denomination}`;
+        item.price = `full $0 reduce${item.denomination}`;
       } else {
-        item.price = `满${item.fullBuyPrice}元减${item.denomination}`;
+        item.price = `full${item.fullBuyPrice} reduce ${item.denomination}`;
       }
       const config = couponActivityConfigList.find((config) => config.couponId == item.couponId);
       item.totalCount = config.totalCount;

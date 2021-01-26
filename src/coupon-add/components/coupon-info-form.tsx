@@ -401,28 +401,28 @@ export default class CouponInfoForm extends Component<any, any> {
               </RadioGroup>
             </FormItem>
           </ErrorDiv>
-          {/*<FormItem {...formItemLayout} label="Select product" required={true}>*/}
-          {/*  <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>*/}
-          {/*    <Radio value={0}>*/}
-          {/*      <span style={styles.darkColor}>All product</span>*/}
-          {/*    </Radio>*/}
-          {/*    /!*<Radio value={1}>*/}
-          {/*          <span style={styles.darkColor}>按品牌</span>*/}
-          {/*        </Radio>*!/*/}
-          {/*    /!*<Radio value={3}>*!/*/}
-          {/*    /!*  <span style={styles.darkColor}>Base on category</span>*!/*/}
-          {/*    /!*</Radio>*!/*/}
-          {/*    <Radio value={4}>*/}
-          {/*      <span style={styles.darkColor}>Custom</span>*/}
-          {/*    </Radio>*/}
-          {/*  </RadioGroup>*/}
-          {/*</FormItem>*/}
-          {/*{scopeType === 4 ? (*/}
-          {/*  <FormItem {...this._scopeBoxStyle(scopeType)} label="Selected products" id={'page-content'}>*/}
-          {/*    /!* {this.chooseGoods().dom} *!/*/}
-          {/*    <SelectedGoodsGrid />*/}
-          {/*  </FormItem>*/}
-          {/*) : null}*/}
+          <FormItem {...formItemLayout} label="Select product" required={true}>
+            <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
+              <Radio value={0}>
+                <span style={styles.darkColor}>All product</span>
+              </Radio>
+              {/*<Radio value={1}>
+                    <span style={styles.darkColor}>按品牌</span>
+                  </Radio>*/}
+              {/*<Radio value={3}>*/}
+              {/*  <span style={styles.darkColor}>Base on category</span>*/}
+              {/*</Radio>*/}
+              <Radio value={4}>
+                <span style={styles.darkColor}>Custom</span>
+              </Radio>
+            </RadioGroup>
+          </FormItem>
+          {scopeType === 4 ? (
+            <FormItem {...this._scopeBoxStyle(scopeType)} label="Selected products" id={'page-content'}>
+              {/* {this.chooseGoods().dom} */}
+              <SelectedGoodsGrid />
+            </FormItem>
+          ) : null}
           <FormItem {...formItemLayout} label="Instructions for use">
             {getFieldDecorator('couponDesc', {
               initialValue: couponDesc,

@@ -706,6 +706,8 @@ export default {
   items: 'Items',
   'product.subscriptionStatus': 'Subscription status',
   'product.subscriptionPrice': 'Subscription Price',
+  'product.defaultPurchaseType': 'Default purchase type',
+  'product.defaultFrequency': 'Default frequency',
 
   'subscription.subList': 'Subscription list',
   'subscription.orderNumber': 'Order number',

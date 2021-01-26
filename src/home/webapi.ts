@@ -98,10 +98,12 @@ export const getPrescriberTransactionTrendView = (params) => {
   });
 };
 
-export const getListAll = (params) => {
-  return Fetch('/prescriber/listAll', {
+export const getListAll = ({ prescriberName }) => {
+  //console.log(prescriberName,'======')
+  //{"prescriberNoOrName":"PETS MEDICAL"}
+  return Fetch(/*'/prescriber/listAll'*/ '/prescriber/listAllByNoOrName', {
     method: 'POST',
-    body: JSON.stringify(params)
+    body: JSON.stringify({ prescriberNoOrName: prescriberName })
   });
 };
 

@@ -76,6 +76,7 @@ export default class Main extends React.Component<any, any> {
   }
 
   render() {
+    // this.props.text.d
     return (
       <div>
         <Layout>

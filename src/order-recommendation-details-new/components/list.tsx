@@ -86,9 +86,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   render() {
     const { productselect } = this.props.relaxProps;
     //const pageNum = productForm && productForm.pageNum;
-    setTimeout(() => {
-      console.log(productselect, 111111111);
-    });
     return (
       <TableRow>
         <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record, index) => index} dataSource={productselect instanceof Array ? productselect : []} pagination={false}>

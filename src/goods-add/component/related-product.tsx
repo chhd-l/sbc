@@ -44,7 +44,7 @@ class RelatedProduct extends React.Component<any, any> {
   };
 
   componentDidMount() {
-    const { onRelatedList } = this.props.relaxProps;
+    //const { onRelatedList } = this.props.relaxProps;
     //onRelatedList();
   }
 

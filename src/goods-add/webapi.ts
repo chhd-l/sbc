@@ -187,7 +187,7 @@ export const addCate = (formData: any) => {
  * 获取图片类目列表
  */
 export const getImgCates = () => {
-  return Fetch('/store/resourceCates');
+    return Fetch('/store/resourceCates');
 };
 
 /**

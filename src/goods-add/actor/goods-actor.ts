@@ -44,7 +44,9 @@ export default class GoodsActor extends Actor {
         displayFlag: 1,
         subscriptionPrice: '',
         subscriptionStatus: 1,
-        goodsId: null
+        goodsId: null,
+        defaultPurchaseType: null,
+        defaultFrequencyId: null
       },
       // 是否编辑商品
       isEditGoods: false,
@@ -71,7 +73,9 @@ export default class GoodsActor extends Actor {
       productFilter: null,
       addSkUProduct: [],
       oldGoodsDetailTabContent: '',
-      resourceCates: []
+      resourceCates: [],
+      purchaseTypeList: [],
+      frequencyList: []
     };
   }
 
@@ -272,7 +276,6 @@ export default class GoodsActor extends Actor {
   }
   @Action('goodsActor: editorContent')
   editEditorContent(state, { keyName, value }) {
-    console.log(keyName, value);
     return state.setIn(['goods', keyName], value);
   }
   @Action('priceActor:setAlonePrice')
@@ -312,5 +315,16 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor:resourceCates')
   resourceCates(state, resourceCates) {
     return state.set('resourceCates', resourceCates);
+  }
+
+  @Action('goodsActor:purchaseTypeList')
+  purchaseTypeList(state, purchaseTypeList) {
+    return state.set('purchaseTypeList', purchaseTypeList);
+  }
+  @Action('goodsActor:frequencyList')
+  frequencyList(state, params) {
+    const { dayList, weekList, monthList } = params;
+    const frequencyList = [...dayList, ...weekList, ...monthList];
+    return state.set('frequencyList', frequencyList);
   }
 }

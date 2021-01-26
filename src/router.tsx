@@ -58,6 +58,18 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./subscription-edit')
   },
+  {
+    path: '/subscription-plan',
+    asyncComponent: () => import('./subscription-plan')
+  },
+  {
+    path: '/subscription-plan-update/:id',
+    asyncComponent: () => import('./subscription-plan-update')
+  },
+  {
+    path: '/subscription-plan-add',
+    asyncComponent: () => import('./subscription-plan-update')
+  },
   // prescriber
   {
     path: '/order-list-prescriber',
@@ -794,6 +806,10 @@ const routes = [
   {
     path: '/product-finder-list',
     asyncComponent: () => import('./product-finder-list')
+  },
+  {
+    path: '/product-sales-setting',
+    asyncComponent: () => import('./product-sales-setting')
   },
   {
     path: '/product-finder-details/:id',

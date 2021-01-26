@@ -67,7 +67,6 @@ export default class Detail extends React.Component<any, any> {
     }
     let p = JSON.stringify(goodsDetailTabObj);
     editEditorContent('goodsDetail', p);
-    // console.log(goodsDetailTabObj)
   };
 
   render() {

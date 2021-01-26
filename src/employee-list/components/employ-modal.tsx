@@ -56,7 +56,6 @@ export default class EmployeeModal extends React.Component<any, any> {
         values.roleIdList = values.roleIdList ? [values.roleIdList] : null;
         values.employeeName = values.firstName + ' ' + values.lastName;
         values.accountState = 0;
-        console.log(values.roleIdList, 1111111);
         this.props.relaxProps.onSave(values);
       }
     });

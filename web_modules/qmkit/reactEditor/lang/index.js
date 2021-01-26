@@ -1,4 +1,4 @@
-export default {
+export default  {
     en: {
         wangEditor: {
             插入: 'insert',

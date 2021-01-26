@@ -1,6 +1,6 @@
 import { Store } from 'plume2';
 
-import { Const } from 'qmkit';
+import { cache, Const } from 'qmkit';
 import { message } from 'antd';
 import { fromJS } from 'immutable';
 import moment from 'moment';
@@ -32,14 +32,14 @@ export default class AppStore extends Store {
     let { couponInfoList, couponActivityConfigList, couponActivity, customerDetailVOS } = res.context;
     couponInfoList = couponInfoList.map((item) => {
       if (item.rangeDayType == 0) {
-        item.time = moment(item.startTime).format(Const.TIME_FORMAT).toString() + '至' + moment(item.endTime).format(Const.TIME_FORMAT).toString();
+        item.time = moment(item.startTime).format(Const.TIME_FORMAT).toString() + ' to ' + moment(item.endTime).format(Const.TIME_FORMAT).toString();
       } else {
         item.time = `Day of collection${item.effectiveDays}Valid within days`;
       }
       if (item.fullBuyType == 0) {
-        item.price = `full $0 reduce${item.denomination}`;
+        item.price = `full ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}0 reduce ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${item.denomination}`;
       } else {
-        item.price = `full${item.fullBuyPrice} reduce ${item.denomination}`;
+        item.price = `full ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${item.fullBuyPrice} reduce ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${item.denomination}`;
       }
       const config = couponActivityConfigList.find((config) => config.couponId == item.couponId);
       item.totalCount = config.totalCount;

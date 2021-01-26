@@ -164,7 +164,7 @@ export default class CouponBasicInfo extends Component<any, any> {
    */
   _buildSkus = (scopeType, skuBrands, skuCates, skus) => {
     if (scopeType === 0) {
-      return '全部商品';
+      return 'All products';
     } else if (scopeType === 1) {
       return (
         <div>

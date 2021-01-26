@@ -878,7 +878,9 @@ const homeRoutes = [
   {
     path: '/generalTermsAndConditions',
     asyncComponent: () => import('./general-terms-and-conditions')
-  }
+  },
+  { path: '/error', asyncComponent: () => import('./error') }
+  //{ path: '*', asyncComponent: () => import('./error') }
 ];
 
 // 审核未通过下的, 包括未开店

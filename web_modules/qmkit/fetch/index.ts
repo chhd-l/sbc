@@ -31,7 +31,7 @@ export interface IAsyncResult<T> {
   */
 interface IHttpCustomerOpertion{
     isHandleResult:boolean,
-    isShowLoading:boolean,
+    isShowLoading?:boolean,
     customHead?:any,
     timeout?: number
 }

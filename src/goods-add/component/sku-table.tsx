@@ -417,16 +417,16 @@ class SkuForm extends React.Component<any, any> {
         <div style={{
           marginRight: '152px',
         }}>
-          <span
-            style={{
-              color: 'red',
-              fontFamily: 'SimSun',
-              marginRight: '4px',
-              fontSize: '12px'
-            }}
-          >
-            *
-          </span>
+          {/*<span*/}
+          {/*  style={{*/}
+          {/*    color: 'red',*/}
+          {/*    fontFamily: 'SimSun',*/}
+          {/*    marginRight: '4px',*/}
+          {/*    fontSize: '12px'*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  **/}
+          {/*</span>*/}
           Subscription
           {/* <br />
           <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'subscriptionStatus')}>

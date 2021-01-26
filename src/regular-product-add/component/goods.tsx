@@ -480,10 +480,10 @@ class GoodsForm extends React.Component<any, any> {
             <FormItem {...formItemLayout} label="Sales category">
               {getFieldDecorator('storeCateIds', {
                 rules: [
-                  {
-                    required: true,
-                    message: 'Please select sales category'
-                  }
+                  // {
+                  //   required: true,
+                  //   message: 'Please select sales category'
+                  // }
                 ],
 
                 initialValue: storeCateValues

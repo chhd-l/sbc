@@ -225,6 +225,37 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
+
+    //EAN
+    columns = columns.push({
+      title: 'EAN',
+      key: 'goodsInfoBarcode',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsInfoBarcode' + rowInfo.id, {
+                  rules: [
+                    /*{
+                      required: true,
+                      message: 'Please input EAN code'
+                    },*/
+                    /*{
+                      pattern: ValidConst.noMinus,
+                      message: 'Please enter the correct value'
+                    }*/
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
+                  initialValue: rowInfo.goodsInfoBarcode
+                })(<Input style={{ width: '180px' }} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
     columns = columns.push({
       title: 'Weight value',
       key: 'goodsInfoWeight',

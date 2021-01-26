@@ -563,9 +563,44 @@ class GoodsForm extends React.Component<any, any> {
                 xs: { span: 24 },
                 sm: { span: 18 }
               }}
-              label={<FormattedMessage id="product.productSubtitle" />}
+              label="Product card intro."
             >
               {getFieldDecorator('goodsSubtitle', {
+                rules: [
+                  {
+                    min: 1,
+                    max: 225,
+                    message: '1-225 characters'
+                  },
+                  {
+                    validator: (rule, value, callback) => {
+                      QMMethod.validatorEmoji(rule, value, callback, 'Product card intro.');
+                    }
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'goodsSubtitle'),
+                initialValue: goods.get('goodsSubtitle')
+              })(<Input placeholder="Please input the item card intro., no more than 225 words" />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={16}>
+            <FormItem
+              // {...formItemLayout}
+              labelCol={{
+                span: 2,
+                xs: { span: 24 },
+                sm: { span: 6 }
+              }}
+              wrapperCol={{
+                span: 24,
+                xs: { span: 24 },
+                sm: { span: 18 }
+              }}
+              label={<FormattedMessage id="product.productSubtitle" />}
+            >
+              {getFieldDecorator('goodsNewSubtitle', {
                 rules: [
                   {
                     min: 1,
@@ -578,8 +613,8 @@ class GoodsForm extends React.Component<any, any> {
                     }
                   }
                 ],
-                onChange: this._editGoods.bind(this, 'goodsSubtitle'),
-                initialValue: goods.get('goodsSubtitle')
+                onChange: this._editGoods.bind(this, 'goodsNewSubtitle'),
+                initialValue: goods.get('goodsNewSubtitle')
               })(<Input placeholder="Please input the item subtitle, no more than 225 words" />)}
             </FormItem>
           </Col>

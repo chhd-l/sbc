@@ -25,28 +25,9 @@ export default class BindDescription extends Component<Iprop, any> {
         total: 0
       },
       descList: [],
-      step: 2,
+      step: 1,
       loading: false,
-      bindList: [
-        {
-          id: 1,
-          descName: 'Description',
-          dipNameEn: 'Description_en',
-          status: false
-        },
-        {
-          id: 2,
-          descName: 'entity',
-          dipNameEn: 'entity_en',
-          status: true
-        },
-        {
-          id: 3,
-          descName: 'thirdd',
-          dipNameEn: 'thirdd_en',
-          status: false
-        }
-      ]
+      bindList: []
     };
   }
 
@@ -92,10 +73,28 @@ export default class BindDescription extends Component<Iprop, any> {
     );
   };
 
+  onNextButtonClick = () => {
+    const { descList, selectedRowKeys } = this.state;
+    const bindList = descList.filter((d) => selectedRowKeys.indexOf(d.id) > -1);
+    this.setState({ bindList, step: 2 });
+  };
+
+  onPrevButtonClick = () => {
+    this.setState({ step: 1 });
+  };
+
   onDragSortEnd = (sortList) => {
     console.log(sortList);
     this.setState({
       bindList: sortList
+    });
+  };
+
+  onDeleteItem = (idx: number) => {
+    const { bindList } = this.state;
+    bindList.splice(idx, 1);
+    this.setState({
+      bindList
     });
   };
 
@@ -130,17 +129,28 @@ export default class BindDescription extends Component<Iprop, any> {
           onCloseModal();
         }}
         footer={[
+          step === 2 ? (
+            <Button key="prev" onClick={this.onPrevButtonClick}>
+              Previous
+            </Button>
+          ) : null,
           <Button
             key="back"
             onClick={() => {
               onCloseModal();
             }}
           >
-            Close
+            Cancel
           </Button>,
-          <Button key="submit" type="primary" onClick={() => {}}>
-            Confirm
-          </Button>
+          step === 2 ? (
+            <Button key="submit" type="primary" onClick={() => {}}>
+              Confirm
+            </Button>
+          ) : (
+            <Button key="next" type="primary" disabled={!selectedRowKeys.length} onClick={this.onNextButtonClick}>
+              Next
+            </Button>
+          )
         ]}
       >
         {step === 1 && (
@@ -166,7 +176,7 @@ export default class BindDescription extends Component<Iprop, any> {
 
         {step === 2 && (
           <div>
-            <SortList dataList={bindList} onSortEnd={this.onDragSortEnd} />
+            <SortList dataList={bindList} onSortEnd={this.onDragSortEnd} onDeleteRow={this.onDeleteItem} />
           </div>
         )}
       </Modal>

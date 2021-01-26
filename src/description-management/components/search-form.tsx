@@ -11,8 +11,8 @@ type Iprop = {
 export default function SearchForm(props: Iprop) {
   return (
     <Form layout="inline" style={{ marginBottom: 20 }}>
-      <Row>
-        <Col span={8}>
+      <Row type="flex" align="middle">
+        <Col span={10}>
           <Form.Item>
             <Input
               addonBefore="Description name"

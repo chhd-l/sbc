@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Table } from 'antd';
+import { Table, Tooltip, Popconfirm } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
+
+type AlignType = 'left' | 'center' | 'right';
 
 class SortList extends Component<any, any> {
   constructor(props: any) {
@@ -28,10 +30,22 @@ class SortList extends Component<any, any> {
     },
     {
       title: 'Operation',
+      align: 'center' as AlignType,
       key: 'action',
-      render: (_text, _record) => <div></div>
+      render: (_text, _record, _index) => (
+        <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteRow(_index)} okText="Confirm" cancelText="Cancel">
+          <Tooltip placement="top" title="Delete">
+            <a className="iconfont iconDelete"></a>
+          </Tooltip>
+        </Popconfirm>
+      )
     }
   ];
+
+  deleteRow = (index: number) => {
+    const { onDeleteRow } = this.props;
+    onDeleteRow(index);
+  };
 
   moveRow = (dragIndex, hoverIndex) => {
     const { dataList, onSortEnd } = this.props;

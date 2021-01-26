@@ -278,7 +278,7 @@ class PeoductCategory extends Component<any, any> {
                   <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
                 </Tooltip>
                 <Tooltip placement="topLeft" title="Bind description">
-                  <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindModal(record.cateId)}></a>
+                  <a className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindModal(record.cateId)}></a>
                 </Tooltip>
               </div>
             ) : (
@@ -407,6 +407,10 @@ class PeoductCategory extends Component<any, any> {
     );
   }
 }
-const styles = {} as any;
+const styles = {
+  edit: {
+    paddingRight: 10
+  }
+} as any;
 
 export default Form.create()(PeoductCategory);

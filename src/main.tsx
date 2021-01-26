@@ -3,7 +3,8 @@ import { Layout, message } from 'antd';
 import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache } from 'qmkit';
 const { Content } = Layout;
 import { routes, auditDidNotPass } from './router';
-const pcIco = require('../public/images/login/pcIco.ico');
+import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
+import UUID from 'uuid-js';
 
 export default class Main extends React.Component<any, any> {
   _menu: any;
@@ -12,14 +13,13 @@ export default class Main extends React.Component<any, any> {
     super(props);
     this.state = {
       // 当前浏览器地址匹配的路由path
-      matchedPath: ''
+      matchedPath: '',
+      hasError: false,
+      uuid: ''
     };
   }
 
   UNSAFE_componentWillMount() {
-    const linkEle = document.getElementById('icoLink') as any;
-    linkEle.href = pcIco;
-    linkEle.type = 'image/x-icon';
     if (this.props.location.pathname != '/implicit/callback') {
       Fetch('/baseConfig')
         .then((resIco: any) => {
@@ -27,12 +27,12 @@ export default class Main extends React.Component<any, any> {
             if ((resIco.res as any).defaultLocalDateTime) {
               sessionStorage.setItem('defaultLocalDateTime', (resIco.res as any).defaultLocalDateTime);
             }
-            /*const ico = (resIco.res.context as any).pcIco ? JSON.parse((resIco.res.context as any).pcIco) : null;
+            const ico = (resIco.res.context as any).pcIco ? JSON.parse((resIco.res.context as any).pcIco) : null;
             if (ico) {
               const linkEle = document.getElementById('icoLink') as any;
-              linkEle.href = pcIco;
+              linkEle.href = ico[0].url;
               linkEle.type = 'image/x-icon';
-            }*/
+            }
           }
         })
         .catch((err) => {
@@ -77,6 +77,7 @@ export default class Main extends React.Component<any, any> {
   }
 
   render() {
+    // this.props.text.d
     return (
       <div>
         <Layout>
@@ -89,18 +90,20 @@ export default class Main extends React.Component<any, any> {
             {/*左侧二三级菜单*/}
             <MyLeftMenu matchedPath={this.state.matchedPath} ref={(menu) => (this._menu = menu)} />
             {/*右侧主操作区域*/}
-            <Content>
-              <div className="main-content" id="page-content">
-                {routeWithSubRoutes(routes, this.handlePathMatched)}
-                {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
-                <div style={styles.copyright}>
-                  © Royal Canin SAS 2020
-                  {/* © 2017-2019 南京万米信息技术有限公司 版本号：{
+            <ErrorBoundary uuid={this.state.uuid}>
+              <Content>
+                <div className="main-content" id="page-content">
+                  {routeWithSubRoutes(routes, this.handlePathMatched)}
+                  {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
+                  <div style={styles.copyright}>
+                    © Royal Canin SAS 2020
+                    {/* © 2017-2019 南京万米信息技术有限公司 版本号：{
                     Const.COPY_VERSION
                   } */}
+                  </div>
                 </div>
-              </div>
-            </Content>
+              </Content>
+            </ErrorBoundary>
           </Layout>
         </Layout>
       </div>
@@ -112,6 +115,12 @@ export default class Main extends React.Component<any, any> {
    * @private
    */
   _onFirstActiveChange = () => {
+    console.log('------2-2--2-2-2--');
+    const uuid = UUID.create().toString();
+    this.setState({
+      hasError: false,
+      uuid
+    });
     this._menu._openKeysChange(['0']);
   };
 }

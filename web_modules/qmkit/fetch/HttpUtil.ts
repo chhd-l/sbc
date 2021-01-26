@@ -1,11 +1,12 @@
 import { message } from 'antd';
-import { util, history } from 'qmkit';
+import { Store } from 'plume2';
+import { util, history,cache } from 'qmkit';
 const msg = {
     'K-000005': 'Your account is disabled',
     'K-000015': 'Failed to obtain authorization',
     'K-000002': ''
 }
-class HttpUtil {
+class HttpUtil{
     /**
       * 发送fetch请求
        * @param fetchUrl
@@ -40,7 +41,6 @@ class HttpUtil {
                     }
                     httpCustomerOpertion.isFetched = true
                     response.json().then(jsonBody => {
-                        
                             if (response.status == 200 && response.ok) {
                                 if (jsonBody.code === 'K-999996') {
                                     message.error(jsonBody.message);
@@ -66,12 +66,12 @@ class HttpUtil {
                                 }
 
                                 message.info(msg)
-                                reject(HttpUtil.handleFailedResult({ fetchStatus: "error", netStatus: response.status, error: msg }, httpCustomerOpertion))
+                                reject(HttpUtil.handleFailedResult({ fetchStatus: response.status, netStatus: response.status, error: msg }, httpCustomerOpertion))
                             }
                        
                     }).catch(e => {
                         const errMsg = e.name + " " + e.message
-                        reject(HttpUtil.handleFailedResult({ fetchStatus: "error", error: errMsg, netStatus: response.status }, httpCustomerOpertion))
+                        reject(HttpUtil.handleFailedResult({ fetchStatus: response.status, error: errMsg, netStatus: response.status }, httpCustomerOpertion))
                     })
                 }
             ).catch(e => {
@@ -82,7 +82,8 @@ class HttpUtil {
                 }
                 httpCustomerOpertion.isFetched = true
                 httpCustomerOpertion.isHandleResult && message.error('Service is busy,please try again later');
-                reject(HttpUtil.handleFailedResult({ fetchStatus: "error", error: errMsg }, httpCustomerOpertion))
+                let er={ fetchStatus: "404", error: errMsg ,msg:'Request interface failed or interface does not exist, please check it'}
+                reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
         return Promise.race([fetchPromise, HttpUtil.fetchTimeout(httpCustomerOpertion)])
@@ -100,6 +101,7 @@ class HttpUtil {
                 const errStr = `${errMsg}`
                 //message.success(errStr)
             }
+
             return result
         }
     /**
@@ -109,14 +111,16 @@ class HttpUtil {
      */
     static handleFailedResult(result, httpCustomerOpertion) {
         
-            if (!result.code && httpCustomerOpertion.isHandleResult === true) {
+            if (result.code && httpCustomerOpertion.isHandleResult === true) {
                 const errMsg = result.msg || result.message || "Service is busy,please try again later"
                 const errStr = `${errMsg}（${result.code}）`
                 // HttpUtil.hideLoading()
                 message.info(errStr)
             }
             const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
-           
+            sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify(result))
+            history.push('error')
+
             return errorMsg
        
 

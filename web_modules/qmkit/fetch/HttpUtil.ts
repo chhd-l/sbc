@@ -122,8 +122,6 @@ class HttpUtil{
             process.env.NODE_ENV==="production"&&history.push('/error')
 
             return errorMsg
-       
-
     }
     /**
      * 控制Fetch请求是否超时

@@ -66,7 +66,7 @@ export default class List extends React.Component<any, any> {
         <DataGrid.Column
           title={
             <p>
-              Start
+              Start time
               <br />
               End time
             </p>
@@ -96,8 +96,8 @@ export default class List extends React.Component<any, any> {
         /> */}
         <DataGrid.Column
           title="Status"
-          dataIndex="pauseFlag"
-          key="pauseFlag"
+          dataIndex="couponActivityType"
+          key="couponActivityType"
           render={(text) => {
             return Const.activityStatus[text];
           }}

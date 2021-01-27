@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Tabs } from 'antd';
-import { noop } from 'qmkit';
+import { Const, noop } from 'qmkit';
 import { Relax } from 'plume2';
 import List from './list';
 
@@ -29,19 +29,19 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={queryTab}
         >
-          <Tabs.TabPane tab="ALL" key="0">
+          <Tabs.TabPane tab={Const.couponStatus[0]} key="0">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Valid" key="1">
+          <Tabs.TabPane tab={Const.couponStatus[1]} key="1">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Invalid" key="2">
+          <Tabs.TabPane tab={Const.couponStatus[2]} key="2">
             <List />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane tab="领取生效" key="3">
+          <Tabs.TabPane tab={Const.couponStatus[3]} key="3">
             <List />
-          </Tabs.TabPane> */}
-          <Tabs.TabPane tab="Completed" key="4">
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={Const.couponStatus[4]} key="4">
             <List />
           </Tabs.TabPane>
         </Tabs>

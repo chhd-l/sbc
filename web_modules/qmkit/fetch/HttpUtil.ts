@@ -68,7 +68,7 @@ class HttpUtil{
                                // message.info(msg)
                                 reject(HttpUtil.handleFailedResult({ fetchStatus: response.status,msg,  error: msg }, httpCustomerOpertion))
                             }
-                       
+
                     }).catch(e => {
                         let msg = "Service is busy,please try again later"
                         const errMsg = e.name + " " + e.message
@@ -91,10 +91,10 @@ class HttpUtil{
     /**
        * 统一处理后台返回的结果, 包括业务逻辑报错的结果
        * @param result
-       * 
+       *
        */
     static handleResult(result, httpCustomerOpertion) {
-        
+
             let code = result.code
             if (code && httpCustomerOpertion.isHandleResult === true) {
                 const errMsg = result.msg || result.message || "Service is busy,please try again later"
@@ -107,10 +107,10 @@ class HttpUtil{
     /**
      * 统一处fetch的异常, 不包括业务逻辑报错
      * @param result
-     * 
+     *
      */
     static handleFailedResult(result, httpCustomerOpertion) {
-        
+
             if (result.fetchStatus && httpCustomerOpertion.isHandleResult === true) {
                 const errMsg = result.msg || result.message || "Service is busy,please try again later"
                 const errStr = `${errMsg}（${result.fetchStatus}）`

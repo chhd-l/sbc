@@ -6,7 +6,6 @@ const msg = {
     'K-000015': 'Failed to obtain authorization',
     'K-000002': ''
 }
-let _index:number=0;
 class HttpUtil{
     /**
       * 发送fetch请求
@@ -31,9 +30,7 @@ class HttpUtil{
         // 2. 对fetch请求再进行一次Promise的封装
         const fetchPromise = new Promise((resolve, reject) => {
             fetch(fetchUrl, fetchParams).then(
-               
                 (response: any) => {
-                    _index=0;
                     // 3. 放弃迟到的响应
                     if (httpCustomerOpertion.isAbort) {
                         // 3. 请求超时后，放弃迟到的响应
@@ -65,16 +62,17 @@ class HttpUtil{
                                 // http status header <200 || >299
                                 let msg = "Service is busy,please try again later"
                                 if (response.status === 404) {
-                                    msg = "Not Find"
+                                    msg = jsonBody.message
                                 }
 
-                                message.info(msg)
-                                reject(HttpUtil.handleFailedResult({ fetchStatus: response.status, netStatus: response.status, error: msg }, httpCustomerOpertion))
+                               // message.info(msg)
+                                reject(HttpUtil.handleFailedResult({ fetchStatus: response.status,msg,  error: msg }, httpCustomerOpertion))
                             }
                        
                     }).catch(e => {
+                        let msg = "Service is busy,please try again later"
                         const errMsg = e.name + " " + e.message
-                        reject(HttpUtil.handleFailedResult({ fetchStatus: response.status, error: errMsg, netStatus: response.status }, httpCustomerOpertion))
+                        reject(HttpUtil.handleFailedResult({ fetchStatus: response.status,msg, error: errMsg,  }, httpCustomerOpertion))
                     })
                 }
             ).catch(e => {
@@ -84,9 +82,7 @@ class HttpUtil{
                     return
                 }
                 httpCustomerOpertion.isFetched = true
-               _index===0&&httpCustomerOpertion.isHandleResult && message.error('Service is busy,please try again later');
                 let er={ fetchStatus: "404", error: errMsg ,msg:'Request interface failed or interface does not exist, please check it'}
-              _index++;
                 reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
@@ -115,14 +111,14 @@ class HttpUtil{
      */
     static handleFailedResult(result, httpCustomerOpertion) {
         
-            if (result.code && httpCustomerOpertion.isHandleResult === true) {
+            if (result.fetchStatus && httpCustomerOpertion.isHandleResult === true) {
                 const errMsg = result.msg || result.message || "Service is busy,please try again later"
-                const errStr = `${errMsg}（${result.code}）`
+                const errStr = `${errMsg}（${result.fetchStatus}）`
                 // HttpUtil.hideLoading()
                 message.info(errStr)
             }
             const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
-            sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify(result))
+            sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify({...result,error:errorMsg}))
             process.env.NODE_ENV==="production"&&history.push('error')
 
             return errorMsg

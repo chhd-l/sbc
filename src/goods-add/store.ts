@@ -2040,7 +2040,7 @@ export default class AppStore extends Store {
       titleSource: seoObj.titleSource,
       headingTag: seoObj.headingTag
     };
-    console.log(params, 'params-------------');
+    // console.log(params, 'params-------------');
     const { res } = (await editSeo(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
       // history.push('./goods-list');

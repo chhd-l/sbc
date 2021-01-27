@@ -77,7 +77,7 @@ export default class List extends React.Component<any, any> {
             </h3>
             <Row>
               <AuthWrapper functionName={'f_create_coupon'}>
-                <Col span={10}>
+                <Col span={6}>
                   <a
                     className="createMarket"
                     onClick={() =>
@@ -97,8 +97,8 @@ export default class List extends React.Component<any, any> {
                       <h5>Coupon creation</h5>
                       <p>Create coupon meeting specific conditions</p>
                     </div>
-                    <span className="miniTags">推荐</span>
-                    <span className="mini-tags">Optimum</span>
+                    {/*<span className="miniTags">推荐</span>
+                    <span className="mini-tags">Optimum</span>*/}
                   </a>
                 </Col>
               </AuthWrapper>
@@ -129,7 +129,7 @@ export default class List extends React.Component<any, any> {
               {/*</AuthWrapper>*/}
 
               <AuthWrapper functionName={'f_create_all_coupon_activity'}>
-                <Col span={10}>
+                <Col span={6}>
                   <a
                     className="createMarket"
                     onClick={() =>
@@ -200,7 +200,7 @@ export default class List extends React.Component<any, any> {
             </h3>
             <Row>
               <AuthWrapper functionName="f_marketing_reduction_add">
-                <Col span={10}>
+                <Col span={6}>
                   <a
                     className="createMarket"
                     onClick={() =>
@@ -224,7 +224,7 @@ export default class List extends React.Component<any, any> {
               </AuthWrapper>
 
               <AuthWrapper functionName="f_marketing_discount_add">
-                <Col span={10}>
+                <Col span={6}>
                   <a
                     className="createMarket"
                     onClick={() =>

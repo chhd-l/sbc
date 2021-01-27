@@ -152,7 +152,7 @@ export default class AppStore extends Store {
       message.error('请选择目标客户');
       return;
     }
-
+    debugger;
     // 1.从state中获取数据
     let activity = this.state().get('activity').toJS();
     // 2.格式化数据
@@ -197,14 +197,18 @@ export default class AppStore extends Store {
         // content: `${res.errorData.length}张优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。`,
         okText: 'Ok'
       });
-      this.dispatch('set: invalid: coupons', fromJS(res.errorData));
+      if (res.errorData) {
+        this.dispatch('set: invalid: coupons', fromJS(res.errorData));
+      }
     } else if (res.code == 'K-080104') {
       info({
         content: 'Coupon does not exist, please delete and save.',
         // content: `${res.errorData.length}张优惠券不存在，请删除后保存。`,
         okText: 'Ok'
       });
-      this.dispatch('set: invalid: coupons', fromJS(res.errorData));
+      if (res.errorData) {
+        this.dispatch('set: invalid: coupons', fromJS(res.errorData));
+      }
     } else {
       message.error(res.message);
     }

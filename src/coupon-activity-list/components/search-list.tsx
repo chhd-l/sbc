@@ -37,18 +37,18 @@ export default class SearchList extends React.Component<any, any> {
           <Tabs.TabPane tab={Const.activityStatus[1]} key="1">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={Const.activityStatus[2]} key="2">
-            <List />
-          </Tabs.TabPane>
+          {/*<Tabs.TabPane tab={Const.activityStatus[2]} key="2">*/}
+          {/*  <List />*/}
+          {/*</Tabs.TabPane>*/}
           <Tabs.TabPane tab={Const.activityStatus[3]} key="3">
             <List />
           </Tabs.TabPane>
           <Tabs.TabPane tab={Const.activityStatus[4]} key="4">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab={Const.activityStatus[5]} key="5">
-            <List />
-          </Tabs.TabPane>
+          {/*<Tabs.TabPane tab={Const.activityStatus[5]} key="5">*/}
+          {/*  <List />*/}
+          {/*</Tabs.TabPane>*/}
         </Tabs>
       </div>
     );

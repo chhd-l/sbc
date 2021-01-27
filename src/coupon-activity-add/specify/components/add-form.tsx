@@ -107,7 +107,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     const store = this._store as any;
     const activity = store.state().get('activity');
     const loading = store.state().get('loading');
-
+    debugger;
     const levelList = store.state().get('levelList').toJS();
     const chooseCustomerList = activity.get('chooseCustomerList');
     const { getFieldDecorator } = form;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import E from 'wangeditor'
 import Const from '../config';
+import i18next from 'i18next'
 interface StringArray {
     [index: number]: string;
 }
@@ -68,7 +69,8 @@ class ReactEditor extends Component<any, any> {
         this.editor.config.uploadImgMaxSize = 2048000;
         this.editor.config.uploadFileName = 'uploadFile' //提交的图片表单名称 ,
         this.uploadImage();*/
-       this.editor.config.placeholder = 'Please enter the text'
+        this.editor.config.lang = 'en'
+        this.editor.i18next = i18next
         this.editor.config.uploadImgShowBase64 = true
         this.editor.create()
         disabled && this.editor.disable()

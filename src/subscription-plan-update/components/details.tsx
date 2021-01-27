@@ -32,12 +32,14 @@ export default class details extends Component<any, any> {
     if (selectedRowKeys) {
       let selectMainProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
       selectMainProducts.map((item) => {
-        item.packageId = 'PK' + moment(new Date()).format('YYYYMMDDHHSSS');
+        item.packageId = 'PK' + moment(new Date()).format('YYMMDDHHmmSSS');
         item.qty = 1;
         item.settingPrice = '';
       });
       subscriptionPlan.mainProducts.push(...selectMainProducts);
       subscriptionPlan.mainProductIds.push(...selectedRowKeys);
+      addField('mainProducts', subscriptionPlan.mainProducts)
+      addField('mainProductIds', subscriptionPlan.mainProductIds)
     }
     this.setState({
       visible: false
@@ -133,7 +135,7 @@ export default class details extends Component<any, any> {
                             <th style={{ width: '10%', textAlign: 'center' }}>Qty</th>
                             <th style={{ width: '10%' }}>Market Price</th>
                             <th style={{ width: '12%' }}>Setting Price</th>
-                            {subscriptionPlan.id ? null : <th style={{ width: '10%' }}>Operation</th>}
+                            <th style={{ width: '10%' }}>Operation</th>
                           </tr>
                         </thead>
                         <tbody className="ant-table-tbody">
@@ -177,21 +179,20 @@ export default class details extends Component<any, any> {
                               <span className="currency">{currencySymbol}</span>
                               <InputNumber
                                 precision={2}
+                                min={0}
                                 value={item.settingPrice}
                                 onChange={(value) => {
                                   this.updateSettingPrice(item.goodsInfoId, value);
                                 }}
                               />
                             </td>
-                            {subscriptionPlan.id ? null : (
-                              <td>
-                                <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
-                                  <Tooltip placement="top" title="Delete">
-                                    <a className="iconfont iconDelete"></a>
-                                  </Tooltip>
-                                </Popconfirm>
-                              </td>
-                            )}
+                            <td>
+                              <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
+                                <Tooltip placement="top" title="Delete">
+                                  <a className="iconfont iconDelete"></a>
+                                </Tooltip>
+                              </Popconfirm>
+                            </td>
                           </tr>
                         </tbody>
                       </table>

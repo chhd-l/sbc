@@ -44,13 +44,13 @@ export default class exitRules extends Component<any, any> {
                   <strong>Consumer is charged a fee upon cancellation</strong>
                 </Col>
                 <Col span={4}>
-                  {getFieldDecorator('canCancelChargedFee', {
-                    initialValue: subscriptionPlan.canCancelChargedFee
+                  {getFieldDecorator('subscriptionPlanFlag', {
+                    initialValue: subscriptionPlan.subscriptionPlanFlag
                   })(
                     <Radio.Group
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        addField('canCancelChargedFee', value);
+                        addField('subscriptionPlanFlag', value);
                       }}
                     >
                       <Radio value={true}>Yes</Radio>
@@ -60,20 +60,20 @@ export default class exitRules extends Component<any, any> {
                 </Col>
               </FormItem>
             </Row>
-            {subscriptionPlan.canCancelPlan && subscriptionPlan.canCancelChargedFee ? (
+            {subscriptionPlan.canCancelPlan && subscriptionPlan.subscriptionPlanFlag ? (
               <div>
                 <h5>Terms of cancellation</h5>
                 <Row className="rules">
                   <FormItem>
                     <strong>Consumer is charged a fee before</strong>
-                    {getFieldDecorator('chargedRefills', {
-                      initialValue: subscriptionPlan.chargedRefills,
+                    {getFieldDecorator('cancellationRefillTimes', {
+                      initialValue: subscriptionPlan.cancellationRefillTimes,
                       rules: [{ required: true, message: 'This is Required' }]
                     })(
                       <InputNumber
                         min={0}
                         onChange={(value) => {
-                          addField('chargedRefills', value);
+                          addField('cancellationRefillTimes', value);
                         }}
                       />
                     )}
@@ -105,13 +105,13 @@ export default class exitRules extends Component<any, any> {
                   <strong>Change delivery date</strong>
                 </Col>
                 <Col span={4}>
-                  {getFieldDecorator('canChangeDelivery', {
-                    initialValue: subscriptionPlan.canChangeDelivery
+                  {getFieldDecorator('canChargeDeliveryFlag', {
+                    initialValue: subscriptionPlan.canChargeDeliveryFlag
                   })(
                     <Radio.Group
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        addField('canChangeDelivery', value);
+                        addField('canChargeDeliveryFlag', value);
                       }}
                     >
                       <Radio value={true}>Yes</Radio>
@@ -120,17 +120,17 @@ export default class exitRules extends Component<any, any> {
                   )}
                 </Col>
               </FormItem>
-              {subscriptionPlan.canChangeDelivery ? (
+              {subscriptionPlan.canChargeDeliveryFlag ? (
                 <FormItem>
                   <strong>After</strong>
-                  {getFieldDecorator('ChangeDeliveryTime', {
-                    initialValue: subscriptionPlan.ChangeDeliveryTime,
+                  {getFieldDecorator('chargeAfterDeliveryTimes', {
+                    initialValue: subscriptionPlan.chargeAfterDeliveryTimes,
                     rules: [{ required: true, message: 'This is Required' }]
                   })(
                     <InputNumber
                       min={0}
                       onChange={(value) => {
-                        addField('ChangeDeliveryTime', value);
+                        addField('chargeAfterDeliveryTimes', value);
                       }}
                     />
                   )}
@@ -144,13 +144,13 @@ export default class exitRules extends Component<any, any> {
                   <strong>Skip the next delivery</strong>
                 </Col>
                 <Col span={4}>
-                  {getFieldDecorator('canSkipNextDelivery', {
-                    initialValue: subscriptionPlan.canSkipNextDelivery
+                  {getFieldDecorator('skipNextDeliveryFlag', {
+                    initialValue: subscriptionPlan.skipNextDeliveryFlag
                   })(
                     <Radio.Group
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        addField('canSkipNextDelivery', value);
+                        addField('skipNextDeliveryFlag', value);
                       }}
                     >
                       <Radio value={true}>Yes</Radio>
@@ -159,17 +159,17 @@ export default class exitRules extends Component<any, any> {
                   )}
                 </Col>
               </FormItem>
-              {subscriptionPlan.canSkipNextDelivery ? (
+              {subscriptionPlan.skipNextDeliveryFlag ? (
                 <FormItem>
                   <strong>After</strong>
-                  {getFieldDecorator('skipNextDeliveryTime', {
-                    initialValue: subscriptionPlan.skipNextDeliveryTime,
+                  {getFieldDecorator('skipNextDeliveryTimes', {
+                    initialValue: subscriptionPlan.skipNextDeliveryTimes,
                     rules: [{ required: true, message: 'This is Required' }]
                   })(
                     <InputNumber
                       min={0}
                       onChange={(value) => {
-                        addField('skipNextDeliveryTime', value);
+                        addField('skipNextDeliveryTimes', value);
                       }}
                     />
                   )}

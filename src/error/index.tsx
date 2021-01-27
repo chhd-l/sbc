@@ -14,10 +14,14 @@ let ErrorPage = (props) => {
   };
 
   let loginpRcOkta = () => {
-    history.go(-1);
+    history.go(-2);
   };
-
-  let errorInfo = JSON.parse(sessionStorage.getItem(cache.ERROR_INFO) || '{}');
+  let defaultData = JSON.stringify({
+    fetchStatus: 404,
+    msg: 'Please check route or click button ',
+    error: 'Not Find Page'
+  });
+  let errorInfo = JSON.parse(sessionStorage.getItem(cache.ERROR_INFO) || defaultData);
 
   return (
     <div>
@@ -32,11 +36,11 @@ let ErrorPage = (props) => {
           <Row style={styles.selectFont}>
             <Col span={12}>
               <Button type="primary" onClick={loginpPercriberOkta}>
-                返回登录
+                Back to login
               </Button>
             </Col>
             <Col span={12}>
-              <Button onClick={loginpRcOkta}>返回上一页</Button>
+              <Button onClick={loginpRcOkta}>Back to previous page</Button>
             </Col>
           </Row>
         </Row>

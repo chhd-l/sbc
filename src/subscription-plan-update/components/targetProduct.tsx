@@ -68,7 +68,7 @@ export default class targetProduct extends Component<any, any> {
                           <th style={{ width: '15%' }}>Product Category</th>
                           <th style={{ width: '10%' }}>Brand</th>
                           <th style={{ width: '10%' }}>Price</th>
-                          {subscriptionPlan.id ? null : <th style={{ width: '10%' }}>Operation</th>}
+                          <th style={{ width: '10%' }}>Operation</th>
                         </tr>
                       </thead>
                       <tbody className="ant-table-tbody">
@@ -95,15 +95,13 @@ export default class targetProduct extends Component<any, any> {
                               <td>{item.goodsCateName}</td>
                               <td>{item.brandName}</td>
                               <td>{item.marketPrice}</td>
-                              {subscriptionPlan.id ? null : (
-                                <td>
-                                  <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
-                                    <Tooltip placement="top" title="Delete">
-                                      <a className="iconfont iconDelete"></a>
-                                    </Tooltip>
-                                  </Popconfirm>
-                                </td>
-                              )}
+                              <td>
+                                <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
+                                  <Tooltip placement="top" title="Delete">
+                                    <a className="iconfont iconDelete"></a>
+                                  </Tooltip>
+                                </Popconfirm>
+                              </td>
                             </tr>
                           ))}
                       </tbody>

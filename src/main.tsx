@@ -1,11 +1,10 @@
 import React from 'react';
 import { Layout, message } from 'antd';
 import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache } from 'qmkit';
-const { Content } = Layout;
 import { routes, auditDidNotPass } from './router';
 import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 import UUID from 'uuid-js';
-
+const { Content } = Layout;
 export default class Main extends React.Component<any, any> {
   _menu: any;
 
@@ -115,7 +114,6 @@ export default class Main extends React.Component<any, any> {
    * @private
    */
   _onFirstActiveChange = () => {
-    console.log('------2-2--2-2-2--');
     const uuid = UUID.create().toString();
     this.setState({
       hasError: false,

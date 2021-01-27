@@ -316,7 +316,7 @@ export default class AppStore extends Store {
     if (this.state().get('edit')) {
       //如果非主账号，部门ID,需要拼接
       if (this.state().get('isMaster') == 0) {
-        let restDepartmentIds = this.state().get('restDepartmentIds').toJS();
+        let restDepartmentIds = this.state().get('restDepartmentIds');
         employeeForm.departmentIdList = employeeForm.departmentIdList.concat(restDepartmentIds);
       }
       employeeForm.employeeId = this.state().getIn(['employeeForm', 'employeeId']);

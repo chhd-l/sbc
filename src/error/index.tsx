@@ -10,7 +10,7 @@ import { switchRouter } from '@/index';
 let ErrorPage = (props) => {
   let { authState, authService } = useOktaAuth();
   let loginpPercriberOkta = () => {
-    history.push('login', { oktaLogout: true });
+    history.push('login', { oktaLogout: false });
   };
 
   let loginpRcOkta = () => {

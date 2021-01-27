@@ -17,6 +17,15 @@ const { TextArea } = Input;
 export default class SkuTable extends React.Component<any, any> {
   WrapperForm: any;
 
+  constructor(props) {
+    super(props);
+    this.WrapperForm = Form.create({})(SkuForm);
+    this.state = {
+      visible: false,
+      EANList: []
+    };
+  }
+
   props: {
     relaxProps?: {
       goodsSpecs: IList;
@@ -70,14 +79,6 @@ export default class SkuTable extends React.Component<any, any> {
     onEditSubSkuItem: noop
   };
 
-  constructor(props) {
-    super(props);
-    this.WrapperForm = Form.create({})(SkuForm);
-    this.state = {
-      visible: false
-    };
-  }
-
   render() {
     const WrapperForm = this.WrapperForm;
     const { updateSkuForm } = this.props.relaxProps;
@@ -130,6 +131,13 @@ class SkuForm extends React.Component<any, any> {
     }
     this.setState({
       visible: type
+    });
+  };
+
+  addEAN = (res, e) => {
+    let EANList = [];
+    this.setState({
+      EANList: EANList
     });
   };
 
@@ -316,6 +324,36 @@ class SkuForm extends React.Component<any, any> {
                     </div>
                   </div>
                 )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    //EAN
+    columns = columns.push({
+      title: 'EAN',
+      key: 'goodsInfoBarcode',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsInfoBarcode' + rowInfo.id, {
+                  rules: [
+                    /*{
+                      required: true,
+                      message: 'Please input EAN code'
+                    },*/
+                    /*{
+                      pattern: ValidConst.noMinus,
+                      message: 'Please enter the correct value'
+                    }*/
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
+                  initialValue: rowInfo.goodsInfoBarcode
+                })(<Input style={{ width: '180px' }} />)}
               </FormItem>
             </Col>
           </Row>

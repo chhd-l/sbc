@@ -169,9 +169,9 @@ module.exports = function (webpackEnv, envCode) {
       ],
       splitChunks: {
         chunks: 'async',
-        minSize: 1200000,
-        maxSize: 1200000,
-        minChunks: 2,
+        minSize: 2000000,
+        maxSize: 2000000,
+        minChunks: 1,
         name: true,
         cacheGroups: {
           vendors: {
@@ -226,28 +226,13 @@ module.exports = function (webpackEnv, envCode) {
       strictExportPresence: true,
       rules: [
         {
-          test: /\.js$/,
+          test:  /\.ts$/,
           //把对.js 的文件处理交给id为happyBabel 的HappyPack 的实例执行
           loader: 'happypack/loader?id=happyBabel',
           //排除node_modules 目录下的文件
           exclude: /node_modules/
         },
         {parser: {requireEnsure: false}},
-        // {
-        //      test: /\.(js|mjs|jsx)$/,
-        //      enforce: 'pre',
-        //      use: [
-        //        {
-        //          options: {
-        //            formatter: require.resolve('react-dev-utils/eslintFormatter'),
-        //            eslintPath: require.resolve('eslint'),
-        //
-        //          },
-        //          loader: require.resolve('eslint-loader'),
-        //        },
-        //      ],
-        //      include: paths.appSrc,
-        //    },
         {
           oneOf: [
             {
@@ -473,8 +458,12 @@ module.exports = function (webpackEnv, envCode) {
         }],
         //共享进程池
         threadPool: happyThreadPool,
-        //允许 HappyPack 输出日志
         verbose: true,
+      }),
+      new HappyPack({
+        id: 'styles',
+        threadPool: happyThreadPool,
+        loaders: [ 'style-loader', 'css-loader', 'less-loader' ]
       }),
       new HtmlWebpackPlugin(
         Object.assign(

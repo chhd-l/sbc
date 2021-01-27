@@ -37,9 +37,9 @@ export default class AppStore extends Store {
         item.time = `Day of collection${item.effectiveDays}Valid within days`;
       }
       if (item.fullBuyType == 0) {
-        item.price = `full ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}0 reduce ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${item.denomination}`;
+        item.price = `full ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}0 minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${item.denomination}`;
       } else {
-        item.price = `full ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${item.fullBuyPrice} reduce ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${item.denomination}`;
+        item.price = `full ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${item.fullBuyPrice} minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${item.denomination}`;
       }
       const config = couponActivityConfigList.find((config) => config.couponId == item.couponId);
       item.totalCount = config.totalCount;

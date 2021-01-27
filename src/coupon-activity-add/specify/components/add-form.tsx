@@ -133,7 +133,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 store.changeFormField({ activityName: e.target.value });
               },
               initialValue: activity.get('activityName')
-            })(<Input placeholder="No more than hundred words" style={{ width: 360 }} />)}
+            })(<Input placeholder="No more than one hundred words" style={{ width: 360 }} />)}
           </FormItem>
 
           <FormItem {...formItemLayout} label="Activity time">
@@ -210,7 +210,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                     this._levelRadioChange(e.target.value, levelList);
                   }}
                 >
-                  <Radio value={-1}>All platform</Radio>
+                  <Radio value={-1}>All customers</Radio>
                   {/*{util.isThirdStore() && <Radio value={0}>店铺内客户</Radio>}*/}
                   {/*<Radio value={-2}>Custom</Radio>*/}
                 </RadioGroup>

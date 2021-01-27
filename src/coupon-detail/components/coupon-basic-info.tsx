@@ -116,7 +116,7 @@ export default class CouponBasicInfo extends Component<any, any> {
             {this._buildRangeDayType(rangeDayType, startTime, endTime, effectiveDays)}
           </FormItem>
           <FormItem {...formItemLayout} label="Coupon value">
-            {`${denomination} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}`}
+            {`${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${denomination}`}
           </FormItem>
           <FormItem {...formItemLayout} label="Threshold">
             {this._buildFullBuyType(fullBuyType, fullBuyPrice)}
@@ -155,7 +155,7 @@ export default class CouponBasicInfo extends Component<any, any> {
     if (fullBuyType === 0) {
       return 'No threshold';
     } else if (fullBuyType === 1) {
-      return `Over ${fullBuyPrice} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} is available`;
+      return `Over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${fullBuyPrice} is available`;
     }
   };
 
@@ -164,7 +164,7 @@ export default class CouponBasicInfo extends Component<any, any> {
    */
   _buildSkus = (scopeType, skuBrands, skuCates, skus) => {
     if (scopeType === 0) {
-      return '全部商品';
+      return 'All products';
     } else if (scopeType === 1) {
       return (
         <div>

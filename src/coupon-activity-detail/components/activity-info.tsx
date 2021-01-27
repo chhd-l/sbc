@@ -74,31 +74,31 @@ export default class ActivityInfo extends React.Component<any, any> {
             </Row>
           )}
         </GreyBg>
-        <GreyBg>
-          {couponActivity.get('couponActivityType') != 2 && (
-            <Row>
-              <Col span={24}>
-                {couponActivity.get('joinLevel') != -2 && (
-                  <div>
-                    <span>Target customers：</span>
-                    {couponActivity.get('joinLevel') == -1 ? 'All platform' : this._showLevel(couponActivity.get('joinLevel'), customerLevelList)}
-                  </div>
-                )}
+        {/*<GreyBg>*/}
+        {/*  {couponActivity.get('couponActivityType') != 2 && (*/}
+        {/*    <Row>*/}
+        {/*      <Col span={24}>*/}
+        {/*        {couponActivity.get('joinLevel') != -2 && (*/}
+        {/*          <div>*/}
+        {/*            <span>Target customers：</span>*/}
+        {/*            {couponActivity.get('joinLevel') == -1 ? 'All platform' : this._showLevel(couponActivity.get('joinLevel'), customerLevelList)}*/}
+        {/*          </div>*/}
+        {/*        )}*/}
 
-                {!loading && couponActivity.get('joinLevel') == -2 && customerDetailVOS && (
-                  <div>
-                    <span style={styles.lableSpan}>Target customers：</span>
-                    <div style={styles.lableBox}>
-                      {customerDetailVOS.toJS().map((record) => {
-                        return <span style={styles.item}>{record.customerAccount}</span>;
-                      })}
-                    </div>
-                  </div>
-                )}
-              </Col>
-            </Row>
-          )}
-        </GreyBg>
+        {/*        {!loading && couponActivity.get('joinLevel') == -2 && customerDetailVOS && (*/}
+        {/*          <div>*/}
+        {/*            <span style={styles.lableSpan}>Target customers：</span>*/}
+        {/*            <div style={styles.lableBox}>*/}
+        {/*              {customerDetailVOS.toJS().map((record) => {*/}
+        {/*                return <span style={styles.item}>{record.customerAccount}</span>;*/}
+        {/*              })}*/}
+        {/*            </div>*/}
+        {/*          </div>*/}
+        {/*        )}*/}
+        {/*      </Col>*/}
+        {/*    </Row>*/}
+        {/*  )}*/}
+        {/*</GreyBg>*/}
       </div>
     );
   }

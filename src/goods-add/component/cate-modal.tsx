@@ -357,7 +357,6 @@ class CateModalForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    console.log(key, 'key');
     if (key === 'cateId') {
       this._onChange(e);
       if (e === '-1') {

@@ -10,6 +10,7 @@ export default class ErrorBoundary extends React.Component<any, any> {
   componentDidCatch(error, info) {
     // Display fallback UI
     this.setState({ hasError: true, fetchStatus: "TypeError", error, msg: 'data error' });
+
   }
   static   getDerivedStateFromProps(props, current_state) {
     if (props.uuid !== current_state.uuid) {
@@ -20,7 +21,6 @@ export default class ErrorBoundary extends React.Component<any, any> {
     }
     return null;
   }
-
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI

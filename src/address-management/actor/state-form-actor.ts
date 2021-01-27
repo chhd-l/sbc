@@ -11,7 +11,7 @@ export default class StateFormActor extends Actor {
         state: '',
         postCodeArr: [
           {
-            id: 1,
+            id: new Date().getTime(),
             preCode: '',
             suffCode: ''
           }
@@ -37,9 +37,15 @@ export default class StateFormActor extends Actor {
   @Action('StateFormActor:resetForm')
   resetForm(state: IMap) {
     const stateForm = {
-      country: '',
+      country: JSON.parse(sessionStorage.getItem('currentCountry')).name,
       state: '',
-      postCode: ''
+      postCodeArr: [
+        {
+          id: new Date().getTime(),
+          preCode: '',
+          suffCode: ''
+        }
+      ]
     };
     return state.set('stateForm', fromJS(stateForm));
   }

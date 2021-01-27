@@ -39,7 +39,11 @@ export default class NewStateModal extends Component<any, any> {
   constructor(props) {
     super(props);
   }
-  state = {};
+  state = {
+    okDisabled: false,
+    confirmLoading: false,
+    codeValidateStatus: 'success'
+  };
   props: {
     form: any;
     relaxProps?: {
@@ -70,17 +74,71 @@ export default class NewStateModal extends Component<any, any> {
   }
 
   _handleModelCancel = () => {
-    const { setStateModalVisible, onResetStateForm } = this.props.relaxProps;
+    const { setStateModalVisible } = this.props.relaxProps;
     setStateModalVisible(false);
-    onResetStateForm();
+  };
+
+  _validateCode = () => {
+    const { stateForm } = this.props.relaxProps;
+    const { postCodeArr } = stateForm.toJS();
+    let flag = true;
+    if (postCodeArr.length > 0) {
+      postCodeArr.forEach((item) => {
+        if ((item.preCode && !item.suffCode) || (!item.preCode && item.suffCode)) {
+          flag = false;
+        }
+      });
+    }
+    return flag;
   };
 
   _handleSubmit = () => {
+    this.setState({
+      okDisabled: true
+    });
     this.props.form.validateFields((err) => {
+      if (this._validateCode()) {
+        this.setState({
+          codeValidateStatus: 'success'
+        });
+      } else {
+        this.setState({
+          codeValidateStatus: 'error'
+        });
+        return;
+      }
       if (!err) {
-        const { setStateModalVisible, onResetStateForm } = this.props.relaxProps;
-        setStateModalVisible(false);
-        onResetStateForm();
+        this.setState({
+          confirmLoading: true
+        });
+        const { setStateModalVisible, onResetStateForm, stateForm } = this.props.relaxProps;
+        const { country, state, postCodeArr } = stateForm.toJS();
+        let arr = [];
+        if (postCodeArr.length > 1) {
+          postCodeArr.forEach((item) => {
+            if (item.preCode && item.suffCode) {
+              arr.push(`${item.preCode}-${item.suffCode}`);
+            }
+          });
+        } else {
+          if (postCodeArr[0].preCode && postCodeArr[0].suffCode) {
+            arr.push(`${postCodeArr[0].preCode}-${postCodeArr[0].suffCode}`);
+          } else {
+            arr.push('');
+          }
+        }
+        const params = {
+          country,
+          state,
+          postCodeArr: arr.join(';')
+        };
+        setTimeout(() => {
+          this.setState({
+            confirmLoading: false
+          });
+          // setStateModalVisible(false);
+        }, 4000);
+        // onResetStateForm();
       }
     });
   };
@@ -129,35 +187,38 @@ export default class NewStateModal extends Component<any, any> {
       value: fromJS(postCodeArr)
     });
   };
+
+  _afterClose = () => {
+    this.props.form.resetFields();
+    const { onResetStateForm } = this.props.relaxProps;
+    this.setState({
+      codeValidateStatus: 'success'
+    });
+    onResetStateForm();
+  };
   render() {
+    const { confirmLoading, codeValidateStatus } = this.state;
     const { modalVisible, onStateFormChange, stateForm } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-
     const { country, state, postCodeArr } = stateForm.toJS();
     return (
-      <Modal
-        maskClosable={false}
-        title="Add state"
-        visible={modalVisible}
-        width={920}
-        // confirmLoading={true}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
+      <Modal maskClosable={false} title="Add state" visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>
           <Form>
             <FormItem {...formItemLayout} label="Country name">
               {getFieldDecorator('country', {
-                initialValue: country,
-                rules: [{ required: true, message: 'Please select country name.' }]
+                initialValue: country
+                // rules: [{ required: true, message: 'Please select country name.' }]
               })(
                 <Input
-                  onChange={(e) =>
-                    onStateFormChange({
-                      field: 'country',
-                      value: e.target.value
-                    })
-                  }
+                  // onChange={(e) =>
+                  //   onStateFormChange({
+                  //     field: 'country',
+                  //     value: e.target.value
+                  //   })
+                  // }
+                  value={country}
+                  disabled
                 />
               )}
             </FormItem>
@@ -167,6 +228,7 @@ export default class NewStateModal extends Component<any, any> {
                 rules: [{ required: true, message: 'Please enter state name.' }]
               })(
                 <Input
+                  value={state}
                   onChange={(e) =>
                     onStateFormChange({
                       field: 'state',
@@ -176,18 +238,24 @@ export default class NewStateModal extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="Code">
+            <FormItem
+              {...formItemLayout}
+              label="Code"
+              validateStatus={codeValidateStatus === 'success' ? 'success' : 'error'}
+              // validateStatus="success"
+            >
               {postCodeArr.length > 0
                 ? postCodeArr.map((item) => (
-                    <div className="code-container">
+                    <span className="code-container">
                       <Input value={item.preCode} onChange={(e) => this._codeOnChange(e, item, 'preCode')} />
                       &nbsp;&nbsp;-&nbsp;&nbsp;
                       <Input value={item.suffCode} onChange={(e) => this._codeOnChange(e, item, 'suffCode')} />
-                      <div className="iconfont iconjia" onClick={this._addCode}></div>
-                      <div className={`iconfont iconjian2 ${postCodeArr.length > 1 ? '' : 'grey-color'}`} onClick={() => this._removeCode(item)}></div>
-                    </div>
+                      <span className="iconfont iconjia" onClick={this._addCode}></span>
+                      <span className={`iconfont iconjian2 ${postCodeArr.length > 1 ? '' : 'grey-color'}`} onClick={() => this._removeCode(item)}></span>
+                    </span>
                   ))
                 : null}
+              <span className={`${codeValidateStatus === 'success' ? 'hide' : 'codeStr'}`}>If you fill in one of them, you haveto complete the other.</span>
             </FormItem>
           </Form>
         </div>

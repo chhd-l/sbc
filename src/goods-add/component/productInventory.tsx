@@ -6,6 +6,7 @@ import { fromJS, List } from 'immutable';
 import { cache, noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
+import { any } from 'prop-types';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -224,7 +225,32 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
-
+    columns = columns.push({
+      title: 'Virtual inventory',
+      key: 'virtualInventory',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('virtualInventory_' + rowInfo.id, {
+                rules: [
+                  // {
+                  //   required: true,
+                  //   message: 'Please input inventory'
+                  // },
+                  {
+                    pattern: ValidConst.number,
+                    message: 'Please enter the correct value'
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualInventory'),
+                initialValue: rowInfo.virtualInventory
+              })(<InputNumber style={{ width: '121px' }} min={0} max={9999999} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
     columns = columns.push({
       title: 'UOM',
       key: 'goodsMeasureUnit',
@@ -249,6 +275,33 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         );
       }
+    });
+
+    columns = columns.push({
+      title: <div>Inventory Alert</div>,
+      key: 'virtualAlert',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('virtualAlert_' + rowInfo.id, {
+                rules: [
+                  // {
+                  //   required: true,
+                  //   message: 'Please input inventory'
+                  // },
+                  {
+                    pattern: ValidConst.number,
+                    message: 'Please enter the correct value'
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualAlert'),
+                initialValue: rowInfo.virtualAlert
+              })(<InputNumber style={{ width: '121px' }} min={0} max={9999999} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
     });
 
     columns = columns.push({

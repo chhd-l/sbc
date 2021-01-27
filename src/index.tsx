@@ -21,7 +21,6 @@ import 'moment/locale/zh-cn';
 import { IntlProvider } from 'react-intl';
 import es_ES from '../web_modules/qmkit/es_ES';
 import configOkta from '../web_modules/qmkit/config-okta';
-import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 moment.locale('zh-cn');
 
 const PrescriberRouter = () => (

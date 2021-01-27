@@ -121,11 +121,11 @@ class NavigationUpdate extends Component<any, any> {
     const { id, current, title, navigation, store, noLanguageSelect, topNames } = this.state;
     const steps = [
       {
-        title: 'Navigation language',
+        title: 'Navigation Language',
         controller: <NavigationLanguage navigation={navigation} addField={this.addField} />
       },
       {
-        title: 'Basic information',
+        title: 'Basic Information',
         controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} noLanguageSelect={noLanguageSelect} store={store} topNames={topNames} />
       },
       {
@@ -144,7 +144,7 @@ class NavigationUpdate extends Component<any, any> {
 
         <div className="container-search" id="navigationStep">
           <Headline title={title} />
-          <Steps current={current}>
+          <Steps current={current} labelPlacement='vertical'>
             {steps.map((item) => (
               <Step key={item.title} title={item.title} />
             ))}

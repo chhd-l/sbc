@@ -133,7 +133,6 @@ export default class ProductGridSKU extends React.Component<any, any> {
               rowChangeBackFun(selectedRowKeys, selectedRows);
             },
             getCheckboxProps(record) {
-              //console.log(record);
               let a = [];
               let b = null;
               goodsNo.map((item) => {
@@ -141,8 +140,6 @@ export default class ProductGridSKU extends React.Component<any, any> {
                   return a.push(i);
                 });
               });
-              //console.log(a);
-              //console.log(record);
               a.map((o) => {
                 if (o.subGoodsInfoNo == record.goodsInfoNo) {
                   if (o.subGoodsInfoNo) {

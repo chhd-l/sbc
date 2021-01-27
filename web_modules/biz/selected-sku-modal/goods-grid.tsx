@@ -6,6 +6,7 @@ import { Const, DataGrid, cache } from 'qmkit';
 import SearchForm from './search-form';
 import * as webapi from './webapi';
 import { Table } from 'antd';
+import 'index.less'
 
 
 const Column = Table.Column;

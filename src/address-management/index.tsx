@@ -13,13 +13,14 @@ import NewCityModal from './components/new-city-modal';
 const NewStateModalForm = Form.create({})(NewStateModal);
 const NewCityModalForm = Form.create({})(NewCityModal);
 const { TabPane } = Tabs;
-
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class AddressManagement extends Component<any, any> {
   store: AppStore;
   state: {};
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.store.init();
+  }
   tabsOnChange = () => {};
   render() {
     return (

@@ -188,7 +188,7 @@ export default class CouponInfoForm extends Component<any, any> {
             })(
               <Input
                 placeholder="No more than one hundred words"
-                maxLength={'100' as any}
+                maxLength={100}
                 onChange={(e) => {
                   fieldsValue({
                     field: 'couponName',
@@ -260,6 +260,7 @@ export default class CouponInfoForm extends Component<any, any> {
               })(
                 <RangePicker
                   disabledDate={this.disabledDate}
+                  style={{ width: 360 }}
                   disabled={rangeDayType === 1}
                   getCalendarContainer={() => document.getElementById('page-content')}
                   format="YYYY-MM-DD"
@@ -333,7 +334,8 @@ export default class CouponInfoForm extends Component<any, any> {
                 })(
                   <Input
                     placeholder="integer from 1 to 99999"
-                    maxLength={'5' as any}
+                    prefix={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    maxLength={5}
                     onChange={async (e) => {
                       await fieldsValue({
                         field: 'denomination',
@@ -346,7 +348,7 @@ export default class CouponInfoForm extends Component<any, any> {
                     style={{ width: 360 }}
                   />
                 )}
-                <span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                {/*<span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
               </Row>
             </FormItem>
             <FormItem {...formItemLayout} label="Threshold" required={true}>
@@ -378,10 +380,12 @@ export default class CouponInfoForm extends Component<any, any> {
                       ]
                     })(
                       <Input
-                        style={{ maxWidth: 170 }}
+                        // style={{ maxWidth: 170 }}
+                        style={{ width: 338 }}
+                        prefix={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                         disabled={fullBuyType === 0}
                         placeholder="integer from 1 to 9999"
-                        maxLength={'5' as any}
+                        maxLength={5}
                         onChange={(e) => {
                           fieldsValue({
                             field: 'fullBuyPrice',
@@ -390,7 +394,7 @@ export default class CouponInfoForm extends Component<any, any> {
                         }}
                       />
                     )}
-                    <span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                    {/*<span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
                   </Radio>
                 </FormItem>
                 <FormItem>
@@ -404,7 +408,7 @@ export default class CouponInfoForm extends Component<any, any> {
           <FormItem {...formItemLayout} label="Select product" required={true}>
             <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
-                <span style={styles.darkColor}>Product</span>
+                <span style={styles.darkColor}>All products</span>
               </Radio>
               {/*<Radio value={1}>
                     <span style={styles.darkColor}>按品牌</span>
@@ -429,7 +433,7 @@ export default class CouponInfoForm extends Component<any, any> {
               rules: [{ max: 500, message: '使用说明最多500个字符' }]
             })(
               <TextArea
-                maxLength={'500' as any}
+                maxLength={500}
                 placeholder={'0 to 500 Words'}
                 onChange={(e) => {
                   fieldsValue({

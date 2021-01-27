@@ -119,7 +119,7 @@ class HttpUtil{
             }
             const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
             sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify({...result,error:errorMsg}))
-            process.env.NODE_ENV==="production"&&history.push('error')
+            process.env.NODE_ENV==="production"&&history.push('/error')
 
             return errorMsg
        

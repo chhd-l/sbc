@@ -80,7 +80,7 @@ export default class exitRules extends Component<any, any> {
                     <strong>refills</strong>
                   </FormItem>
                   <FormItem>
-                    <strong style={{marginRight: '10px'}}>Total cancellation fee:</strong>
+                    <strong style={{ marginRight: '10px' }}>Total cancellation fee:</strong>
                     <strong>remaining number of refills *</strong>
                     {getFieldDecorator('cancellationRefillFee', {
                       initialValue: subscriptionPlan.cancellationRefillFee,
@@ -105,13 +105,13 @@ export default class exitRules extends Component<any, any> {
                   <strong>Change delivery date</strong>
                 </Col>
                 <Col span={4}>
-                  {getFieldDecorator('canChargeDeliveryFlag', {
-                    initialValue: subscriptionPlan.canChargeDeliveryFlag
+                  {getFieldDecorator('changeDeliveryDateFlag', {
+                    initialValue: subscriptionPlan.changeDeliveryDateFlag
                   })(
                     <Radio.Group
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        addField('canChargeDeliveryFlag', value);
+                        addField('changeDeliveryDateFlag', value);
                       }}
                     >
                       <Radio value={true}>Yes</Radio>
@@ -120,17 +120,17 @@ export default class exitRules extends Component<any, any> {
                   )}
                 </Col>
               </FormItem>
-              {subscriptionPlan.canChargeDeliveryFlag ? (
+              {subscriptionPlan.changeDeliveryDateFlag ? (
                 <FormItem>
                   <strong>After</strong>
-                  {getFieldDecorator('chargeAfterDeliveryTimes', {
-                    initialValue: subscriptionPlan.chargeAfterDeliveryTimes,
+                  {getFieldDecorator('changeDeliveryDateAfterTimes', {
+                    initialValue: subscriptionPlan.changeDeliveryDateAfterTimes,
                     rules: [{ required: true, message: 'This is Required' }]
                   })(
                     <InputNumber
                       min={0}
                       onChange={(value) => {
-                        addField('chargeAfterDeliveryTimes', value);
+                        addField('changeDeliveryDateAfterTimes', value);
                       }}
                     />
                   )}
@@ -138,7 +138,7 @@ export default class exitRules extends Component<any, any> {
                 </FormItem>
               ) : null}
             </Row>
-            <Row className="rules" style={{marginTop: '15px'}}>
+            <Row className="rules" style={{ marginTop: '15px' }}>
               <FormItem>
                 <Col span={6}>
                   <strong>Skip the next delivery</strong>

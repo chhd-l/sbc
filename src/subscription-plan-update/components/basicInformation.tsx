@@ -16,9 +16,6 @@ const layout = {
 export default class basicInformation extends Component<any, any> {
   constructor(props) {
     super(props);
-    this.state = {
-      frequencyList: []
-    };
   }
 
   componentDidMount() {
@@ -27,37 +24,36 @@ export default class basicInformation extends Component<any, any> {
       subscriptionPlan.subscriptionPlanId = 'SP' + moment(new Date()).format('YYMMDDHHmmSSS');
       addField('subscriptionPlanId', subscriptionPlan.subscriptionPlanId);
     }
-    webapi
-      .getWeekFrequency()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          let defaultFrequency = res.context.sysDictionaryVOS.find((x) => parseInt(x.valueEn) === 4);
-          if (defaultFrequency) {
-            addField('frequency', [defaultFrequency.id]);
-          }
-          this.setState({
-            frequencyList: res.context.sysDictionaryVOS.filter((x) => parseInt(x.valueEn) >= 3 && parseInt(x.valueEn) <= 5)
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { subscriptionPlan, addField } = this.props;
-    const { frequencyList } = this.state;
+    const { subscriptionPlan, addField, frequencyList, planTypeList } = this.props;
+
     return (
       <div>
         <h3>Step1</h3>
         <h4>Basic Information</h4>
         <div className="basicInformation">
           <Form>
+            <FormItem {...layout} label="Subscription Plan type">
+              {getFieldDecorator('type', {
+                initialValue: subscriptionPlan.type,
+                rules: [{ required: true, message: 'Please input Subscription Plan Type' }]
+              })(
+                <Select
+                  onChange={(value: any) => {
+                    addField('type', value);
+                  }}
+                >
+                  {planTypeList.map((item, index) => (
+                    <Option value={item.name} key={index}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
             <FormItem {...layout} label="Subscription Plan name">
               {getFieldDecorator('name', {
                 initialValue: subscriptionPlan.name,
@@ -108,23 +104,20 @@ export default class basicInformation extends Component<any, any> {
             </FormItem>
             <FormItem {...layout} label="Enable landing page">
               {getFieldDecorator('landingFlag', {
+                valuePropName: 'checked',
                 initialValue: subscriptionPlan.landingFlag
-              })(
-                <Switch 
-                  checked={subscriptionPlan.landingFlag === 0 ? false : true} 
-                  onChange={(value) => addField('landingFlag', value ? 1 : 0)} 
-                />)
-              }
+              })(<Switch onChange={(value) => addField('landingFlag', value)} />)}
             </FormItem>
             <FormItem {...layout} label="Offer time period">
               {getFieldDecorator('offerTimePeriod', {
-                initialValue: subscriptionPlan.startDate && subscriptionPlan.end ? [subscriptionPlan.startDate, subscriptionPlan.endDate] : undefined,
+                initialValue: subscriptionPlan.startDate && subscriptionPlan.endDate ? [moment(subscriptionPlan.startDate), moment(subscriptionPlan.endDate)] : undefined,
                 rules: [{ required: true, message: 'Please select Offer time period' }]
               })(
                 <RangePicker
+                  disabledDate={(current) => current < moment().startOf('day')}
                   onChange={(dates, dateStrings) => {
                     addField('startDate', dateStrings[0]);
-                    addField('endDate', dateStrings[0]);
+                    addField('endDate', dateStrings[1]);
                   }}
                 />
               )}
@@ -157,7 +150,7 @@ export default class basicInformation extends Component<any, any> {
             </FormItem>
             <FormItem {...layout} label="Number of delivery">
               {getFieldDecorator('delivery', {
-                initialValue: subscriptionPlan.delivery,
+                initialValue: subscriptionPlan.deliveryTimes,
                 rules: [{ required: true, message: 'Please input Number of delivery' }]
               })(
                 <InputNumber
@@ -165,7 +158,7 @@ export default class basicInformation extends Component<any, any> {
                   min={1}
                   max={100}
                   onChange={(value) => {
-                    addField('delivery', value);
+                    addField('deliveryTimes', value);
                   }}
                 />
               )}

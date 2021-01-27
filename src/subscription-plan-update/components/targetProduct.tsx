@@ -17,14 +17,14 @@ export default class targetProduct extends Component<any, any> {
     const { subscriptionPlan, addField, allSkuProduct } = this.props;
 
     let newTargetProductIds = [];
-    subscriptionPlan.targetProductIds.map((item) => {
+    subscriptionPlan.targetGoodsIds.map((item) => {
       if (item !== key) {
         newTargetProductIds.push(item);
       }
     });
     let targetProducts = allSkuProduct.filter((x) => newTargetProductIds.includes(x.goodsInfoId));
-    addField('targetProducts', targetProducts);
-    addField('targetProductIds', newTargetProductIds);
+    addField('targetGoods', targetProducts);
+    addField('targetGoodsIds', newTargetProductIds);
   }
 
   showAddTargetProduct() {
@@ -37,8 +37,8 @@ export default class targetProduct extends Component<any, any> {
     const { addField, allSkuProduct } = this.props;
     if (selectedRowKeys) {
       let targetProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
-      addField('targetProducts', targetProducts);
-      addField('targetProductIds', selectedRowKeys);
+      addField('targetGoods', targetProducts);
+      addField('targetGoodsIds', selectedRowKeys);
     }
     this.setState({
       visible: false
@@ -72,8 +72,8 @@ export default class targetProduct extends Component<any, any> {
                         </tr>
                       </thead>
                       <tbody className="ant-table-tbody">
-                        {subscriptionPlan.targetProducts &&
-                          subscriptionPlan.targetProducts.map((item) => (
+                        {subscriptionPlan.targetGoods &&
+                          subscriptionPlan.targetGoods.map((item) => (
                             <tr key={item.goodsInfoId}>
                               <td>
                                 <img src={item.goodsInfoImg} />
@@ -106,7 +106,7 @@ export default class targetProduct extends Component<any, any> {
                           ))}
                       </tbody>
                     </table>
-                    {subscriptionPlan.targetProducts && subscriptionPlan.targetProducts.length > 0 ? null : (
+                    {subscriptionPlan.targetGoods && subscriptionPlan.targetGoods.length > 0 ? null : (
                       <div className="noProduct">
                         <div className="addProduct" onClick={this.showAddTargetProduct}>
                           <span> + Add product</span>
@@ -118,7 +118,7 @@ export default class targetProduct extends Component<any, any> {
               </div>
             </div>
           </Spin>
-          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetProductIds} />
+          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetGoodsIds} />
         </div>
       </div>
     );

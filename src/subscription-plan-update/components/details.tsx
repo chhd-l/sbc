@@ -33,13 +33,13 @@ export default class details extends Component<any, any> {
       let selectMainProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
       selectMainProducts.map((item) => {
         item.packageId = 'PK' + moment(new Date()).format('YYMMDDHHmmSSS');
-        item.qty = 1;
-        item.settingPrice = '';
+        item.quantity = 1;
+        item.settingPrice = null;
       });
-      subscriptionPlan.mainProducts.push(...selectMainProducts);
-      subscriptionPlan.mainProductIds.push(...selectedRowKeys);
-      addField('mainProducts', subscriptionPlan.mainProducts)
-      addField('mainProductIds', subscriptionPlan.mainProductIds)
+      subscriptionPlan.mainGoods.push(...selectMainProducts);
+      subscriptionPlan.mainGoodsIds.push(...selectedRowKeys);
+      addField('mainGoods', subscriptionPlan.mainGoods);
+      addField('mainGoodsIds', subscriptionPlan.mainGoodsIds);
     }
     this.setState({
       visible: false
@@ -50,14 +50,14 @@ export default class details extends Component<any, any> {
     const { subscriptionPlan, addField, allSkuProduct } = this.props;
 
     let newMainProductIds = [];
-    subscriptionPlan.mainProductIds.map((item) => {
+    subscriptionPlan.mainGoodsIds.map((item) => {
       if (item !== key) {
         newMainProductIds.push(item);
       }
     });
     let mainProducts = allSkuProduct.filter((x) => newMainProductIds.includes(x.goodsInfoId));
-    addField('mainProducts', mainProducts);
-    addField('mainProductIds', newMainProductIds);
+    addField('mainGoods', mainProducts);
+    addField('mainGoodsIds', newMainProductIds);
   }
 
   updateQty(goodsInfoId, qty) {
@@ -68,37 +68,41 @@ export default class details extends Component<any, any> {
       return;
     }
     const { subscriptionPlan, addField } = this.props;
-    subscriptionPlan.mainProducts.map((item) => {
+    subscriptionPlan.mainGoods.map((item) => {
       if (item.goodsInfoId === goodsInfoId) {
-        item.qty = qty;
+        item.quantity = qty;
       }
       return item;
     });
-    addField('mainProducts', subscriptionPlan.mainProducts);
+    addField('mainGoods', subscriptionPlan.mainGoods);
   }
 
   onBlurQty(goodsInfoId, qty) {
     const { subscriptionPlan, addField } = this.props;
     if (!qty) {
-      subscriptionPlan.mainProducts.map((item) => {
-        if (item.goodsInfoId === goodsInfoId) {
-          item.qty = 1;
-        }
-        return item;
-      });
-      addField('mainProducts', subscriptionPlan.mainProducts);
+      addField(
+        'mainGoods',
+        subscriptionPlan.mainGoods.map((item) => {
+          if (item.goodsInfoId === goodsInfoId) {
+            item.quantity = 1;
+          }
+          return item;
+        })
+      );
     }
   }
 
   updateSettingPrice(goodsInfoId, settingPrice) {
     const { subscriptionPlan, addField } = this.props;
-    subscriptionPlan.mainProducts.map((item) => {
-      if (item.goodsInfoId === goodsInfoId) {
-        item.settingPrice = settingPrice;
-      }
-      return item;
-    });
-    addField('mainProducts', subscriptionPlan.mainProducts);
+    addField(
+      'mainGoods',
+      subscriptionPlan.mainGoods.map((item) => {
+        if (item.goodsInfoId === goodsInfoId) {
+          item.settingPrice = settingPrice;
+        }
+        return item;
+      })
+    );
   }
 
   render() {
@@ -120,8 +124,8 @@ export default class details extends Component<any, any> {
           </Col>
         </Row>
         <div className="details">
-          {subscriptionPlan.mainProducts &&
-            subscriptionPlan.mainProducts.map((item) => (
+          {subscriptionPlan.mainGoods &&
+            subscriptionPlan.mainGoods.map((item) => (
               <div className="ant-table-wrapper" key={item.packageId}>
                 <div className="ant-table ant-table-large ant-table-scroll-position-left">
                   <div className="ant-table-content">
@@ -156,10 +160,10 @@ export default class details extends Component<any, any> {
                               </Tooltip>
                             </td>
                             <td>
-                              <Icon type="minus" onClick={() => this.updateQty(item.goodsInfoId, item.qty - 1)} />
+                              <Icon type="minus" onClick={() => this.updateQty(item.goodsInfoId, item.quantity - 1)} />
                               <Input
                                 style={{ textAlign: 'center' }}
-                                value={item.qty}
+                                value={item.quantity}
                                 onBlur={(e) => {
                                   const value = (e.target as any).value;
                                   this.onBlurQty(item.goodsInfoId, value);
@@ -169,7 +173,7 @@ export default class details extends Component<any, any> {
                                   this.updateQty(item.goodsInfoId, value && intReg.test(value) ? parseInt(value) : value);
                                 }}
                               />
-                              <Icon type="plus" onClick={() => this.updateQty(item.goodsInfoId, item.qty + 1)} />
+                              <Icon type="plus" onClick={() => this.updateQty(item.goodsInfoId, item.quantity + 1)} />
                             </td>
                             <td>
                               <span className="currency">{currencySymbol}</span>
@@ -202,7 +206,7 @@ export default class details extends Component<any, any> {
               </div>
             ))}
         </div>
-        {visible ? <AddProduct visible={visible} clearExsit={true} updateTable={this.updateTable} exsitRowKeys={subscriptionPlan.mainProductIds} /> : null}
+        {visible ? <AddProduct visible={visible} clearExsit={true} updateTable={this.updateTable} exsitRowKeys={subscriptionPlan.mainGoodsIds} /> : null}
       </div>
     );
   }

@@ -12,12 +12,10 @@ export function getSubscriptionPlanById(id) {
   });
 }
 
-export function addSubscriptionPlan(filterParams) {
-  return Fetch<TResult>('/subscriptionPlan', {
+export function addSubscriptionPlan(plan) {
+  return Fetch<TResult>('http://192.168.23.239/order/1.5.0/subscription/plan/save', {
     method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
+    body: JSON.stringify(plan)
   });
 }
 
@@ -30,7 +28,6 @@ export function updateSubscriptionPlan(filterParams) {
   });
 }
 
-
 export function getAllSkuProducts() {
   return Fetch<TResult>('/goodsInfos/bundelPage', {
     method: 'POST',
@@ -41,12 +38,20 @@ export function getAllSkuProducts() {
   });
 }
 
-
 export function getWeekFrequency() {
   return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',
     body: JSON.stringify({
       type: 'Frequency_week'
+    })
+  });
+}
+
+export function getSubscriptionPlanTypes() {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'SubscriptionPlanType'
     })
   });
 }

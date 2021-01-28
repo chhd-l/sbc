@@ -45,7 +45,7 @@ class ModalForm extends Component<Props, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input your E-mail!'
+                    message: 'Please input your frequency name!'
                   }
                 ]
               })(<Input />)}
@@ -56,7 +56,7 @@ class ModalForm extends Component<Props, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input your password!'
+                      message: 'Please input your display name!'
                     }
                   ]
                 })(<Input />)}
@@ -67,7 +67,7 @@ class ModalForm extends Component<Props, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input your password!'
+                      message: 'Please input your display name!'
                     }
                   ]
                 })(<Input />)}

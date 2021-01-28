@@ -48,9 +48,9 @@ export default class AppStore extends Store {
   };
 
   onThreshold = async () => {
-    const { res, err } = await webapi.getThreshold();
+    const { res, err } = (await webapi.getThreshold()) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      this.dispatch('goodsActor:stock', res.context.valueEn);
+      this.dispatch('goodsActor:stock', res.context.valueEn || 0);
       this.init(0, 10, res.context.valueEn);
     } else {
       message.error(res.message);

@@ -46,8 +46,14 @@ class HttpUtil{
                                     message.error(jsonBody.message);
                                     return;
                                 }
+                                // token 过期时，前端直接处理
+                                else if (jsonBody.code === 'K-000002') {
+                                    message.error(jsonBody.message);
+                                    util.logout();
+                                    history.push('/login');
+                                }
                                 // 账号禁用 统一返回到登录页面
-                                else if (['K-000005', 'K-000015', 'K-000002'].includes(jsonBody.code)) {
+                                else if (['K-000005', 'K-000015'].includes(jsonBody.code)) {
                                     message.error(msg[jsonBody.code]);
                                     history.push('login', { oktaLogout: true })
                                     return;
@@ -119,11 +125,9 @@ class HttpUtil{
             }
             const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
             sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify({...result,error:errorMsg}))
-            process.env.NODE_ENV==="production"&& history.push('/error')
+            process.env.NODE_ENV==="production"&&history.push('/error')
 
             return errorMsg
-
-
     }
     /**
      * 控制Fetch请求是否超时

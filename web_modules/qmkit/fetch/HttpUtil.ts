@@ -1,6 +1,6 @@
 import { message } from 'antd';
-import { Store } from 'plume2';
 import { util, history,cache } from 'qmkit';
+import throttle from './throttle';
 const msg = {
     'K-000005': 'Your account is disabled',
     'K-000015': 'Failed to obtain authorization',
@@ -46,16 +46,15 @@ class HttpUtil{
                                     message.error(jsonBody.message);
                                     return;
                                 }
-                                // token 过期时，前端直接处理
-                                else if (jsonBody.code === 'K-000002') {
-                                    message.error(jsonBody.message);
-                                    util.logout();
-                                    history.push('/login');
-                                }
                                 // 账号禁用 统一返回到登录页面
-                                else if (['K-000005', 'K-000015'].includes(jsonBody.code)) {
-                                    message.error(msg[jsonBody.code]);
-                                    history.push('login', { oktaLogout: true })
+                                else if (['K-000002','K-000005', 'K-000015'].includes(jsonBody.code)) {
+                                    const throttleFunc = throttle(60, () => {
+                                        message.error(msg[jsonBody.code]);
+                                    });
+                                    throttleFunc.cancel();
+                                   
+                                    util.logout();
+                                    history.push('/login', { oktaLogout: false })
                                     return;
                                 } else if (jsonBody === 'Method Not Allowed') {
                                     message.error('You do not have permission to access this feature');
@@ -64,14 +63,6 @@ class HttpUtil{
                                     resolve(HttpUtil.handleResult(jsonBody, httpCustomerOpertion))
                                 }
                             } else {
-                                // 5. 接口状态判断
-                                // http status header <200 || >299
-                                let msg = "Service is busy,please try again later"
-                                if (response.status === 404) {
-                                    msg = jsonBody.message
-                                }
-
-                               // message.info(msg)
                                 reject(HttpUtil.handleFailedResult({ fetchStatus: response.status,msg,  error: msg }, httpCustomerOpertion))
                             }
 
@@ -116,16 +107,18 @@ class HttpUtil{
      *
      */
     static handleFailedResult(result, httpCustomerOpertion) {
-
             if (result.fetchStatus && httpCustomerOpertion.isHandleResult === true) {
                 const errMsg = result.msg || result.message || "Service is busy,please try again later"
                 const errStr = `${errMsg}（${result.fetchStatus}）`
-                // HttpUtil.hideLoading()
-                message.info(errStr)
+                const throttleFunc = throttle(60, () => {
+                    message.info(errStr)
+                });
+                throttleFunc.cancel();
             }
             const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
             sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify({...result,error:errorMsg}))
-            process.env.NODE_ENV==="production"&&history.push('/error')
+           // process.env.NODE_ENV==="production"&&history.push('/error')
+
 
             return errorMsg
     }

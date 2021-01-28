@@ -84,7 +84,6 @@ export default class AppStore extends Store {
         })
         // webapi.refresh(orderInfo.totalTid)
       ]).then((results) => {
-        console.log(results, 'results-------------------');
         const { res: payRecordResult } = results[0] as any;
         const { res: logistics } = results[1] as any;
         // const { res: needRes } = results[2] as any;

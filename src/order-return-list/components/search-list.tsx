@@ -94,24 +94,7 @@ export default class SearchList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      currentPage,
-      init,
-      allChecked,
-      dataList,
-      onCheckedAll,
-      rejectModalData,
-      onRejectModalHide,
-      deliverModalData,
-      onDeliverModalHide,
-      refundModalData,
-      onRefundModalHide,
-      onlineRefundModalData,
-      onlineRefundModalHide
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, currentPage, init, allChecked, dataList, onCheckedAll, rejectModalData, onRejectModalHide, deliverModalData, onDeliverModalHide, refundModalData, onRefundModalHide, onlineRefundModalData, onlineRefundModalHide } = this.props.relaxProps;
 
     return (
       <div>
@@ -119,9 +102,7 @@ export default class SearchList extends React.Component<any, any> {
           <div className="ant-table ant-table-large ant-table-scroll-position-left">
             <div className="ant-table-content">
               <div className="ant-table-body">
-                <table
-                  style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}
-                >
+                <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
                       <th style={{ width: '0.5%' }}>
@@ -162,11 +143,7 @@ export default class SearchList extends React.Component<any, any> {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="ant-table-tbody">
-                    {loading
-                      ? this._renderLoading()
-                      : this._renderContent(dataList)}
-                  </tbody>
+                  <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
                 </table>
               </div>
               {total == 0 ? (
@@ -194,25 +171,10 @@ export default class SearchList extends React.Component<any, any> {
             />
           ) : null}
         </div>
-        <RejectModal
-          data={rejectModalData}
-          onHide={onRejectModalHide}
-          handleOk={rejectModalData.get('onOk')}
-        />
-        <DeliverModal
-          data={deliverModalData}
-          onHide={onDeliverModalHide}
-          handleOk={deliverModalData.get('onOk')}
-        />
-        <RefundModal
-          data={refundModalData}
-          onHide={onRefundModalHide}
-          handleOk={refundModalData.get('onOk')}
-        />
-        <OnlineRefundModal
-          data={onlineRefundModalData}
-          onHide={onlineRefundModalHide}
-        />
+        <RejectModal data={rejectModalData} onHide={onRejectModalHide} handleOk={rejectModalData.get('onOk')} />
+        <DeliverModal data={deliverModalData} onHide={onDeliverModalHide} handleOk={deliverModalData.get('onOk')} />
+        <RefundModal data={refundModalData} onHide={onRefundModalHide} handleOk={refundModalData.get('onOk')} />
+        <OnlineRefundModal data={onlineRefundModalData} onHide={onlineRefundModalHide} />
       </div>
     );
   }
@@ -221,25 +183,14 @@ export default class SearchList extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={10}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
         </td>
       </tr>
     );
   }
 
   _renderContent(dataList) {
-    const {
-      onChecked,
-      onAudit,
-      onRealRefund,
-      onReject,
-      onDeliver,
-      onReceive,
-      onRejectReceive,
-      onOnlineRefund,
-      onOfflineRefund,
-      onRejectRefund
-    } = this.props.relaxProps;
+    const { onChecked, onAudit, onRealRefund, onReject, onDeliver, onReceive, onRejectReceive, onOnlineRefund, onOfflineRefund, onRejectRefund } = this.props.relaxProps;
 
     return dataList.map((v, index) => {
       const rid = v.get('id');
@@ -252,9 +203,7 @@ export default class SearchList extends React.Component<any, any> {
       const returnFlowState = v.get('returnFlowState');
 
       //退单赠品
-      const returnGifts = v.get('returnGifts')
-        ? v.get('returnGifts')
-        : fromJS([]);
+      const returnGifts = v.get('returnGifts') ? v.get('returnGifts') : fromJS([]);
 
       // 应退积分
       const applyPoints = v.getIn(['returnPoints', 'applyPoints']);
@@ -269,29 +218,16 @@ export default class SearchList extends React.Component<any, any> {
       const applyStatus = v.getIn(['returnPrice', 'applyStatus']);
       // 应退金额，如果对退单做了改价，使用applyPrice，否则，使用总额totalPrice
       const payPrice = totalPrice;
-      const actualReturnPrice = applyStatus
-        ? applyPrice
-        : v.getIn(['returnPrice', 'actualReturnPrice']);
+      const actualReturnPrice = applyStatus ? applyPrice : v.getIn(['returnPrice', 'actualReturnPrice']);
 
       const refundStatus = v.get('refundStatus');
 
-      const enableReturn =
-        (returnFlowState === 'RECEIVED' ||
-          (returnType == 'REFUND' && returnFlowState === 'AUDIT')) &&
-        refundStatus != null &&
-        refundStatus != 2 &&
-        refundStatus != 3;
+      const enableReturn = (returnFlowState === 'RECEIVED' || (returnType == 'REFUND' && returnFlowState === 'AUDIT')) && refundStatus != null && refundStatus != 2 && refundStatus != 3;
 
       return (
-        <tr
-          className="ant-table-row  ant-table-row-level-0"
-          key={Math.random()}
-        >
+        <tr className="ant-table-row  ant-table-row-level-0" key={Math.random()}>
           <td colSpan={10} style={{ padding: 0 }}>
-            <table
-              className="ant-table-self"
-              style={{ border: '1px solid #ddd' }}
-            >
+            <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
               <thead>
                 <tr>
                   <td
@@ -318,19 +254,13 @@ export default class SearchList extends React.Component<any, any> {
                         />
                       </span>
                       <span style={{ marginLeft: 20, color: '#000' }}>
-                        {rid}{' '}
-                        {v.get('platform') != 'CUSTOMER' && (
-                          <span style={styles.platform}>Chargeback</span>
-                        )}
+                        {rid} {v.get('platform') != 'CUSTOMER' && <span style={styles.platform}>Chargeback</span>}
                       </span>
                       <span style={{ marginRight: 0, float: 'right' }}>
                         {returnFlowState === 'INIT' && (
                           <AuthWrapper functionName="f_order_return_edit">
                             <Tooltip placement="top" title="Modify">
-                              <Link
-                                style={{ marginLeft: 20 }}
-                                to={`/order-return-edit/${rid}`}
-                              >
+                              <Link style={{ marginLeft: 20 }} to={`/order-return-edit/${rid}`}>
                                 Modify
                               </Link>
                             </Tooltip>
@@ -339,11 +269,7 @@ export default class SearchList extends React.Component<any, any> {
                         {returnFlowState === 'INIT' && (
                           <AuthWrapper functionName="rolf002">
                             <Tooltip placement="top" title="审核">
-                              <a
-                                href="javascript:void(0)"
-                                style={{ marginLeft: 20 }}
-                                onClick={() => this._showAudit(onAudit, rid)}
-                              >
+                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showAudit(onAudit, rid)}>
                                 审核
                               </a>
                             </Tooltip>
@@ -353,11 +279,7 @@ export default class SearchList extends React.Component<any, any> {
                         {returnFlowState === 'INIT' && (
                           <AuthWrapper functionName="rolf002">
                             <Tooltip placement="top" title="驳回">
-                              <a
-                                href="javascript:void(0)"
-                                style={{ marginLeft: 20 }}
-                                onClick={() => this._showReject(onReject, rid)}
-                              >
+                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReject(onReject, rid)}>
                                 驳回
                               </a>
                             </Tooltip>
@@ -368,13 +290,7 @@ export default class SearchList extends React.Component<any, any> {
                         {returnFlowState === 'AUDIT' && returnType == 'RETURN' && (
                           <AuthWrapper functionName="rolf003">
                             <Tooltip placement="top" title="Fill in logistics">
-                              <a
-                                href="javascript:void(0)"
-                                style={{ marginLeft: 20 }}
-                                onClick={() =>
-                                  this._showDeliver(onDeliver, rid)
-                                }
-                              >
+                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid)}>
                                 Fill in logistics
                               </a>
                             </Tooltip>
@@ -384,13 +300,7 @@ export default class SearchList extends React.Component<any, any> {
                         {returnFlowState === 'DELIVERED' && (
                           <AuthWrapper functionName="rolf004">
                             <Tooltip placement="top" title="收货">
-                              <a
-                                href="javascript:void(0)"
-                                style={{ marginLeft: 20 }}
-                                onClick={() =>
-                                  this._showReceive(onReceive, rid)
-                                }
-                              >
+                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
                                 收货
                               </a>
                             </Tooltip>
@@ -400,23 +310,14 @@ export default class SearchList extends React.Component<any, any> {
                         {returnFlowState === 'DELIVERED' && (
                           <AuthWrapper functionName="rolf004">
                             <Tooltip placement="top" title="拒绝收货">
-                              <a
-                                href="javascript:void(0)"
-                                style={{ marginLeft: 20 }}
-                                onClick={() =>
-                                  this._showRejectReceive(onRejectReceive, rid)
-                                }
-                              >
+                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
                                 拒绝收货
                               </a>
                             </Tooltip>
                           </AuthWrapper>
                         )}
 
-                        {((returnType == 'REFUND' &&
-                          returnFlowState == 'AUDIT') ||
-                          (returnType == 'RETURN' &&
-                            returnFlowState == 'RECEIVED')) && (
+                        {((returnType == 'REFUND' && returnFlowState == 'AUDIT') || (returnType == 'RETURN' && returnFlowState == 'RECEIVED')) && (
                           <AuthWrapper functionName="rolf005">
                             <Tooltip placement="top" title="Real refund">
                               <a
@@ -440,21 +341,9 @@ export default class SearchList extends React.Component<any, any> {
                                 style={{ marginLeft: 20 }}
                                 onClick={() => {
                                   if (payType == 0) {
-                                    this._showOnlineRefund(
-                                      onOnlineRefund,
-                                      rid,
-                                      customerId,
-                                      payPrice,
-                                      applyPoints
-                                    );
+                                    this._showOnlineRefund(onOnlineRefund, rid, customerId, payPrice, applyPoints);
                                   } else {
-                                    this._showOfflineRefund(
-                                      onOfflineRefund,
-                                      rid,
-                                      customerId,
-                                      payPrice,
-                                      applyPoints
-                                    );
+                                    this._showOfflineRefund(onOfflineRefund, rid, customerId, payPrice, applyPoints);
                                   }
                                 }}
                                 className="iconfont iconbtn-refund"
@@ -474,11 +363,7 @@ export default class SearchList extends React.Component<any, any> {
                                 style={{ marginLeft: 20 }}
                                 onClick={() => {
                                   console.log(onRejectRefund, 'onRejectRefund');
-                                  this._showRejectRefund(
-                                    onRejectRefund,
-                                    rid,
-                                    0 == payType
-                                  );
+                                  this._showRejectRefund(onRejectRefund, rid, 0 == payType);
                                 }}
                               >
                                 <FormattedMessage id="refusedToRefund" />
@@ -488,11 +373,7 @@ export default class SearchList extends React.Component<any, any> {
                         )}
                         <AuthWrapper functionName="rodf001">
                           <Tooltip placement="top" title="See details">
-                            <Link
-                              style={{ marginRight: 18, marginLeft: 20 }}
-                              to={`/order-return-detail/${rid}`}
-                              className="iconfont iconDetails"
-                            >
+                            <Link style={{ marginRight: 18, marginLeft: 20 }} to={`/order-return-detail/${rid}`} className="iconfont iconDetails">
                               {/*<FormattedMessage id="order.seeDetails" />*/}
                             </Link>
                           </Tooltip>
@@ -512,14 +393,7 @@ export default class SearchList extends React.Component<any, any> {
                       .concat(returnGifts)
                       .map((v, k) => {
                         const img = v.get('pic') ? v.get('pic') : defaultImg;
-                        return k < 3 ? (
-                          <img
-                            style={styles.listImages}
-                            src={img}
-                            title={v.get('skuName')}
-                            key={k}
-                          />
-                        ) : null;
+                        return k < 3 ? <img style={styles.listImages} src={img} title={v.get('skuName')} key={k} /> : null;
                       })}
 
                     {
@@ -529,25 +403,11 @@ export default class SearchList extends React.Component<any, any> {
                         <div style={styles.imgBg}>
                           <img
                             //@ts-ignore
-                            src={
-                              v
-                                .get('returnItems')
-                                .concat(returnGifts)
-                                .get(3)
-                                .get('pic')
-                                ? v
-                                    .get('returnItems')
-                                    .concat(returnGifts)
-                                    .get(3)
-                                    .get('pic')
-                                : defaultImg
-                            }
+                            src={v.get('returnItems').concat(returnGifts).get(3).get('pic') ? v.get('returnItems').concat(returnGifts).get(3).get('pic') : defaultImg}
                             style={styles.imgFourth}
                           />
                           //@ts-ignore
-                          <div style={styles.imgNum}>
-                            共{v.get('returnItems').concat(returnGifts).size}件
-                          </div>
+                          <div style={styles.imgNum}>共{v.get('returnItems').concat(returnGifts).size}件</div>
                         </div>
                       ) : null
                     }
@@ -558,27 +418,18 @@ export default class SearchList extends React.Component<any, any> {
                   </td>
                   <td style={{ width: '98px' }}>
                     {/*退单时间*/}
-                    {v.get('createTime')
-                      ? momnet(v.get('createTime'))
-                          .format(Const.TIME_FORMAT)
-                          .toString()
-                      : ''}
+                    {v.get('createTime') ? momnet(v.get('createTime')).format(Const.TIME_FORMAT).toString() : ''}
                   </td>
                   <td style={{ width: '10%' }}>
                     {/*收件人姓名*/}
                     {v.get('buyer') ? v.getIn(['buyer', 'name']) : ''}
                   </td>
-                  <td style={{ width: '12%' }}>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                      parseFloat(payPrice).toFixed(2)}
-                  </td>
+                  <td style={{ width: '12%' }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(payPrice).toFixed(2)}</td>
                   {/*应退积分*/}
                   <td style={{ width: '10%' }}>{applyPoints}</td>
                   {/*状态*/}
                   <td style={{ width: '10%' }}>
-                    {returnType == 'RETURN'
-                      ? Const.returnGoodsState[returnFlowState]
-                      : Const.returnMoneyState[returnFlowState] || ''}
+                    {returnType == 'RETURN' ? Const.returnGoodsState[returnFlowState] : Const.returnMoneyState[returnFlowState] || ''}
                     {returnFlowState == 'REFUND_FAILED' && (
                       <Tooltip title={v.get('refundFailedReason')}>
                         <a style={{ display: 'block' }}>原因</a>
@@ -586,12 +437,7 @@ export default class SearchList extends React.Component<any, any> {
                     )}
                   </td>
                   {/*实退金额*/}
-                  <td style={{ width: '12%' }}>
-                    {returnFlowState == 'COMPLETED'
-                      ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                        parseFloat(actualReturnPrice).toFixed(2)
-                      : '-'}
-                  </td>
+                  <td style={{ width: '12%' }}>{returnFlowState == 'COMPLETED' ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(actualReturnPrice).toFixed(2) : '-'}</td>
                   {/*实退积分*/}
                   <td
                     style={{
@@ -676,13 +522,7 @@ export default class SearchList extends React.Component<any, any> {
   }
 
   // 在线退款
-  async _showOnlineRefund(
-    onOnlineRefund: Function,
-    rid: string,
-    customerId: string,
-    refundAmount: number,
-    applyPoints: number
-  ) {
+  async _showOnlineRefund(onOnlineRefund: Function, rid: string, customerId: string, refundAmount: number, applyPoints: number) {
     this.props.relaxProps.onRefundOnlineModalChange({
       visible: true,
       onOk: onOnlineRefund,
@@ -694,13 +534,7 @@ export default class SearchList extends React.Component<any, any> {
   }
 
   // 线下退款
-  async _showOfflineRefund(
-    onOfflineRefund: Function,
-    rid: string,
-    customerId: string,
-    refundAmount: number,
-    applyPoints: number
-  ) {
+  async _showOfflineRefund(onOfflineRefund: Function, rid: string, customerId: string, refundAmount: number, applyPoints: number) {
     this.props.relaxProps.onRefundModalChange({
       visible: true,
       onOk: onOfflineRefund,
@@ -712,22 +546,13 @@ export default class SearchList extends React.Component<any, any> {
   }
 
   // 拒绝退款
-  async _showRejectRefund(
-    onRejectRefund: Function,
-    rid: string,
-    online: boolean
-  ) {
+  async _showRejectRefund(onRejectRefund: Function, rid: string, online: boolean) {
     const { onCheckFunAuth } = this.props.relaxProps;
     const { res } = await onCheckFunAuth('/return/refund/*/reject', 'POST');
     if (res.context) {
       // 在线退款需要校验是否已在退款处理中
       if (online) {
-        const {
-          checkRefundStatus,
-          init,
-          currentPage,
-          pageSize
-        } = this.props.relaxProps;
+        const { checkRefundStatus, init, currentPage, pageSize } = this.props.relaxProps;
         const { res } = await checkRefundStatus(rid);
         if (res.code !== Const.SUCCESS_CODE) {
           message.error(res.message);
@@ -765,14 +590,14 @@ const styles = {
     width: 250,
     height: 60
   },
-  listImages: {
+  imgItem: {
     width: 60,
     height: 60,
-    float: 'left',
     padding: 5,
-    background: '#fff',
     border: '1px solid #ddd',
+    float: 'left',
     marginRight: 10,
+    background: '#fff',
     borderRadius: 3
   },
   imgFourth: {

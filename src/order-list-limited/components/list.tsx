@@ -160,7 +160,7 @@ export default class ListView extends React.Component<any, any> {
 
   render() {
     const { loading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible } = this.props.relaxProps;
-    console.log(dataList, 'dataList');
+
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -644,13 +644,12 @@ const styles = {
     height: 300
   },
   imgItem: {
-    width: '25%',
-    height: 'auto',
+    width: 60,
+    height: 60,
     padding: 5,
     border: '1px solid #ddd',
     float: 'left',
-    marginRight: 5,
-    marginBottom: 5,
+    marginRight: 10,
     background: '#fff',
     borderRadius: 3
   },

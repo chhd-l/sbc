@@ -40,7 +40,7 @@ export default class CateList extends React.Component<any, any> {
     const { loading, total, pageSize, dataList, init, current, stock } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         rowKey={(record) => record.goodsInfoNo}
         pagination={{
           pageSize,
@@ -48,7 +48,7 @@ export default class CateList extends React.Component<any, any> {
           fitColumns: true,
           current: current,
           onChange: (pageNum, pageSize) => {
-            init(pageNum - 1, pageSize, stock );
+            init(pageNum - 1, pageSize, stock);
           }
         }}
         dataSource={dataList && dataList}
@@ -110,9 +110,7 @@ export default class CateList extends React.Component<any, any> {
           dataIndex="goods.storeCateNames"
           key="goods.storeCateNames"
           render={(rowInfo) => {
-            return (
-              rowInfo &&  rowInfo.join(' , ')
-            )
+            return rowInfo && rowInfo.join(' , ');
           }}
         />
         <Column
@@ -176,7 +174,10 @@ const styles = {
     height: 60,
     padding: 5,
     border: '1px solid #ddd',
-    background: '#fff'
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
   },
   textCon: {
     width: 100,

@@ -3,6 +3,7 @@ import { Button, DatePicker, Form, Input, message, Modal, Select, Table } from '
 import { AuthWrapper, Const, DataGrid, SelectGroup, cache } from 'qmkit';
 import moment from 'moment';
 import * as webapi from './webapi';
+import '../index.less';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

@@ -47,10 +47,10 @@ export default class entryCriteria extends Component<any, any> {
     const { allConsents } = this.state;
     if (selectedRowKeys) {
       let consents = allConsents.filter((x) => selectedRowKeys.includes(x.id));
-      addField('consentTypes', consents);
-      addField('consentTypeIds', selectedRowKeys);
+      addField('consents', consents);
+      addField('consentIds', selectedRowKeys);
       form.setFieldsValue({
-        consentTypeIds: selectedRowKeys
+        consentIds: selectedRowKeys
       });
     }
     this.setState({
@@ -70,34 +70,34 @@ export default class entryCriteria extends Component<any, any> {
           <Form>
             <FormItem {...layout} label="Subscription Plan name">
               <Checkbox
-                checked={subscriptionPlan.signOnSubscription === 1 ? true : false}
+                checked={subscriptionPlan.signOnSubscriptionFlag === 1 ? true : false}
                 onChange={(e) => {
-                  subscriptionPlan.signOnSubscription = e.target.checked ? 1 : 0;
-                  addField('signOnSubscription', subscriptionPlan.signOnSubscription);
+                  subscriptionPlan.signOnSubscriptionFlag = e.target.checked ? 1 : 0;
+                  addField('signOnSubscriptionFlag', subscriptionPlan.signOnSubscriptionFlag);
                 }}
               >
                 <span className="checkBoxTip">Consumers need consent to sign on subscription</span>
               </Checkbox>
             </FormItem>
-            {subscriptionPlan.signOnSubscription === 1 ? (
-              <FormItem {...layout} label="Consent type">
+            {subscriptionPlan.signOnSubscriptionFlag === 1 ? (
+              <FormItem {...layout} label="Consent">
                 <Row>
                   <Col span={16}>
-                    {getFieldDecorator('consentTypeIds', {
-                      initialValue: subscriptionPlan.consentTypeIds,
-                      rules: [{ required: true, message: 'Please select Consent type' }]
+                    {getFieldDecorator('consentIds', {
+                      initialValue: subscriptionPlan.consentIds,
+                      rules: [{ required: true, message: 'Please add Consent' }]
                     })(
                       <Select
                         mode="multiple"
                         onChange={(value: any) => {
-                          addField('consentTypeIds', value);
+                          addField('consentIds', value);
                           let consents = allConsents.filter((x) => value.includes(x.id));
-                          addField('consentTypes', consents);
+                          addField('consents', consents);
                         }}
                         dropdownStyle={{display: 'none'}}
                       >
-                        {subscriptionPlan.consentTypes &&
-                          subscriptionPlan.consentTypes.map((item, index) => (
+                        {subscriptionPlan.consents &&
+                          subscriptionPlan.consents.map((item, index) => (
                             <Option value={item.id} key={index}>
                               <Tooltip
                                 overlayStyle={{
@@ -125,17 +125,17 @@ export default class entryCriteria extends Component<any, any> {
 
             <FormItem {...layout} label="Subscription Plan">
               <Checkbox
-                checked={subscriptionPlan.otherPromotion === 1 ? true : false}
+                checked={subscriptionPlan.subscriptionPlanFlag === 1 ? true : false}
                 onChange={(e) => {
-                  subscriptionPlan.otherPromotion = e.target.checked ? 1 : 0;
-                  addField('otherPromotion', subscriptionPlan.otherPromotion);
+                  subscriptionPlan.subscriptionPlanFlag = e.target.checked ? 1 : 0;
+                  addField('subscriptionPlanFlag', subscriptionPlan.subscriptionPlanFlag);
                 }}
               >
                 <span className="checkBoxTip">Subscription plan can be applied with other promotions</span>
               </Checkbox>
             </FormItem>
           </Form>
-          <AddConsent getAllConsent={this.getAllConsent} visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.consentTypeIds} />
+          <AddConsent getAllConsent={this.getAllConsent} visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.consentIds} />
         </div>
       </div>
     );

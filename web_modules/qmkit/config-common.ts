@@ -120,10 +120,12 @@ const Common = {
     4: 'Expired'
   },
   activityStatus: {
-    1: '进行中',
-    2: '暂停中',
-    3: '未开始',
-    4: '已结束'
+    0: 'All',
+    1: 'In process',
+    2: 'Pause',
+    3: 'Not start',
+    4: 'Completed',
+    5: 'Not start and in process'
   },
   couponActivityType: {
     0: '全场赠券',
@@ -158,8 +160,13 @@ const Common = {
   // REACT_APP_RC_ISSUER : "https://dev-476019.okta.com/oauth2/default",
   // REACT_APP_RC_RedirectURL: window.origin +  "/implicit/callback",
 
-  // PROD RC STAFF Okta Config
+  // PROD MX RC STAFF Okta Config
   // REACT_APP_RC_CLIENT_ID: "0oa5odnbjhRhbV16X357",
+  // REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
+  // REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
+
+  // PROD Europ RC STAFF Okta Config
+  // REACT_APP_RC_CLIENT_ID: "0oa78y2vww7kzTbiq357",
   // REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
   // REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
 

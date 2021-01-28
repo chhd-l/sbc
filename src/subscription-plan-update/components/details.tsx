@@ -1,9 +1,11 @@
 import { Col, Row } from 'antd';
 import React, { Component } from 'react';
 import AddProduct from '../modals/addProduct';
-import { Spin, Popconfirm, Tooltip } from 'antd';
+import { Spin, Popconfirm, Tooltip, Input, Icon, InputNumber } from 'antd';
 import moment from 'moment';
+import { cache } from 'qmkit';
 
+const intReg = /^[0-9]*$/;
 export default class details extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -14,6 +16,9 @@ export default class details extends Component<any, any> {
     this.showAddMainProduct = this.showAddMainProduct.bind(this);
     this.deleteProduct = this.deleteProduct.bind(this);
     this.updateTable = this.updateTable.bind(this);
+    this.updateQty = this.updateQty.bind(this);
+    this.updateSettingPrice = this.updateSettingPrice.bind(this);
+    this.onBlurQty = this.onBlurQty.bind(this);
   }
 
   showAddMainProduct() {
@@ -23,14 +28,18 @@ export default class details extends Component<any, any> {
   }
 
   updateTable(selectedRowKeys) {
-    const { addField, allSkuProduct } = this.props;
+    const { addField, allSkuProduct, subscriptionPlan } = this.props;
     if (selectedRowKeys) {
-      let mainProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
-      mainProducts.map((item) => {
-        item.packageId = 'PK' + moment(new Date()).format('YYYYMMDDHHSSS');
+      let selectMainProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
+      selectMainProducts.map((item) => {
+        item.packageId = 'PK' + moment(new Date()).format('YYMMDDHHmmSSS');
+        item.qty = 1;
+        item.settingPrice = '';
       });
-      addField('mainProducts', mainProducts);
-      addField('mainProductIds', selectedRowKeys);
+      subscriptionPlan.mainProducts.push(...selectMainProducts);
+      subscriptionPlan.mainProductIds.push(...selectedRowKeys);
+      addField('mainProducts', subscriptionPlan.mainProducts)
+      addField('mainProductIds', subscriptionPlan.mainProductIds)
     }
     this.setState({
       visible: false
@@ -51,9 +60,51 @@ export default class details extends Component<any, any> {
     addField('mainProductIds', newMainProductIds);
   }
 
+  updateQty(goodsInfoId, qty) {
+    if (qty && !intReg.test(qty)) {
+      return;
+    }
+    if (qty <= 0) {
+      return;
+    }
+    const { subscriptionPlan, addField } = this.props;
+    subscriptionPlan.mainProducts.map((item) => {
+      if (item.goodsInfoId === goodsInfoId) {
+        item.qty = qty;
+      }
+      return item;
+    });
+    addField('mainProducts', subscriptionPlan.mainProducts);
+  }
+
+  onBlurQty(goodsInfoId, qty) {
+    const { subscriptionPlan, addField } = this.props;
+    if (!qty) {
+      subscriptionPlan.mainProducts.map((item) => {
+        if (item.goodsInfoId === goodsInfoId) {
+          item.qty = 1;
+        }
+        return item;
+      });
+      addField('mainProducts', subscriptionPlan.mainProducts);
+    }
+  }
+
+  updateSettingPrice(goodsInfoId, settingPrice) {
+    const { subscriptionPlan, addField } = this.props;
+    subscriptionPlan.mainProducts.map((item) => {
+      if (item.goodsInfoId === goodsInfoId) {
+        item.settingPrice = settingPrice;
+      }
+      return item;
+    });
+    addField('mainProducts', subscriptionPlan.mainProducts);
+  }
+
   render() {
     const { loading, visible } = this.state;
     const { subscriptionPlan } = this.props;
+    const currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
     return (
       <div>
         <h3>Step5</h3>
@@ -71,7 +122,7 @@ export default class details extends Component<any, any> {
         <div className="details">
           {subscriptionPlan.mainProducts &&
             subscriptionPlan.mainProducts.map((item) => (
-              <div className="ant-table-wrapper">
+              <div className="ant-table-wrapper" key={item.packageId}>
                 <div className="ant-table ant-table-large ant-table-scroll-position-left">
                   <div className="ant-table-content">
                     <div className="ant-table-body">
@@ -81,9 +132,9 @@ export default class details extends Component<any, any> {
                             <th style={{ width: '10%' }}>Package ID</th>
                             <th style={{ width: '10%' }}>Image</th>
                             <th style={{ width: '20%' }}>Product Name</th>
-                            <th style={{ width: '10%' }}>Qty</th>
+                            <th style={{ width: '10%', textAlign: 'center' }}>Qty</th>
                             <th style={{ width: '10%' }}>Market Price</th>
-                            <th style={{ width: '10%' }}>Setting Price</th>
+                            <th style={{ width: '12%' }}>Setting Price</th>
                             <th style={{ width: '10%' }}>Operation</th>
                           </tr>
                         </thead>
@@ -97,7 +148,6 @@ export default class details extends Component<any, any> {
                               <Tooltip
                                 overlayStyle={{
                                   overflowY: 'auto'
-                                  //height: 100
                                 }}
                                 placement="bottomLeft"
                                 title={<div>{item.goodsInfoName}</div>}
@@ -105,9 +155,37 @@ export default class details extends Component<any, any> {
                                 <p className="overflow">{item.goodsInfoName}</p>
                               </Tooltip>
                             </td>
-                            <td>{item.qty}</td>
-                            <td>{item.marketPrice}</td>
-                            <td>{item.settingPrice}</td>
+                            <td>
+                              <Icon type="minus" onClick={() => this.updateQty(item.goodsInfoId, item.qty - 1)} />
+                              <Input
+                                style={{ textAlign: 'center' }}
+                                value={item.qty}
+                                onBlur={(e) => {
+                                  const value = (e.target as any).value;
+                                  this.onBlurQty(item.goodsInfoId, value);
+                                }}
+                                onChange={(e) => {
+                                  const value = (e.target as any).value;
+                                  this.updateQty(item.goodsInfoId, value && intReg.test(value) ? parseInt(value) : value);
+                                }}
+                              />
+                              <Icon type="plus" onClick={() => this.updateQty(item.goodsInfoId, item.qty + 1)} />
+                            </td>
+                            <td>
+                              <span className="currency">{currencySymbol}</span>
+                              {item.marketPrice}
+                            </td>
+                            <td>
+                              <span className="currency">{currencySymbol}</span>
+                              <InputNumber
+                                precision={2}
+                                min={0}
+                                value={item.settingPrice}
+                                onChange={(value) => {
+                                  this.updateSettingPrice(item.goodsInfoId, value);
+                                }}
+                              />
+                            </td>
                             <td>
                               <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
@@ -124,7 +202,7 @@ export default class details extends Component<any, any> {
               </div>
             ))}
         </div>
-        <AddProduct visible={visible} isMultiple={true} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.mainProductIds} />
+        {visible ? <AddProduct visible={visible} clearExsit={true} updateTable={this.updateTable} exsitRowKeys={subscriptionPlan.mainProductIds} /> : null}
       </div>
     );
   }

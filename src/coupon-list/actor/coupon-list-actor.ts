@@ -18,7 +18,8 @@ export default class CouponDetailActor extends Actor {
       pageSize: 10,
       //当前页
       pageNum: 1,
-      couponList: []
+      couponList: [],
+      loading: true
     };
   }
 
@@ -34,9 +35,16 @@ export default class CouponDetailActor extends Actor {
 
   @Action('init')
   init(state, { couponList, total, pageNum }) {
-    return state
-      .set('couponList', couponList)
-      .set('total', total)
-      .set('pageNum', pageNum);
+    return state.set('couponList', couponList).set('total', total).set('pageNum', pageNum);
+  }
+
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

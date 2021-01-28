@@ -19,12 +19,16 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: '',
-      current: 4,
+      current: 0,
       subscriptionPlan: {
         canCancelPlan: true,
-        canCancelChargedFee: true,
-        canChangeDelivery: true,
-        canSkipNextDelivery: true
+        subscriptionPlanFlag: true,
+        canChargeDeliveryFlag: true,
+        skipNextDeliveryFlag: true,
+        mainProducts: [],
+        mainProductIds: [],
+        quantity: 100,
+        landingFlag: 1
       },
       allSkuProduct: []
     };
@@ -59,6 +63,9 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         .then((data) => {
           const { res } = data;
           if (res.code === 'K-000000') {
+            if(res.context.status === 0) {
+              history.push('/subscription-plan')
+            }
             this.setState({
               subscriptionPlan: res.context
             });
@@ -94,11 +101,18 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       subscriptionPlan: data
     });
   }
-  updateSubscriptionPlan(e) {
+  updateSubscriptionPlan(e, isDraft) {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
         const { subscriptionPlan, id } = this.state;
+        if(isDraft){
+          subscriptionPlan.status = 0 // Draft
+        } else {
+          subscriptionPlan.status = 1 // Publish
+        }
+        console.log(subscriptionPlan)
+        console.log( JSON.stringify(subscriptionPlan))
         if (id) {
           subscriptionPlan.id = id; // edit by id
           webapi
@@ -136,6 +150,14 @@ class SubscriptionPlanUpdate extends Component<any, any> {
   }
   render() {
     const { current, title, subscriptionPlan, allSkuProduct } = this.state;
+    let targetDisabled = false;
+    let saveDisabled = false;
+    if(current === 1) {
+      targetDisabled = !subscriptionPlan.targetProductIds || subscriptionPlan.targetProductIds.length === 0
+    }
+    if(current === 4) {
+      saveDisabled = !subscriptionPlan.mainProductIds || subscriptionPlan.mainProductIds.length === 0
+    }
     const steps = [
       {
         title: 'Basic Information',
@@ -180,14 +202,19 @@ class SubscriptionPlanUpdate extends Component<any, any> {
               </Button>
             )}
             {current < steps.length - 1 && (
-              <Button type="primary" onClick={(e) => this.next(e)}>
+              <Button type="primary" onClick={(e) => this.next(e)} disabled={targetDisabled}>
                 Next step <Icon type="right" />
               </Button>
             )}
             {current === steps.length - 1 && (
-              <Button type="primary" onClick={(e) => this.updateSubscriptionPlan(e)}>
-                Submit <Icon type="right" />
-              </Button>
+              <div className="saveBtn">
+                <Button  disabled={saveDisabled} style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, true)}>
+                  Save <Icon type="right" />
+                </Button>
+                <Button disabled={saveDisabled} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, false)}>
+                  Publish <Icon type="right" />
+                </Button>
+              </div>
             )}
           </div>
         </div>

@@ -35,7 +35,8 @@ export default class TaxesTable extends React.Component<any, any> {
 
   deleteTax = (id) => {
     this.props.deleteFunction(id);
-  };
+  }
+
   handleTableChange = (pagination) => {
     this.props.tableChangeFunction(pagination);
   };

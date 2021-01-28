@@ -5,7 +5,7 @@ const bg_login = require('./img/bg-notify.png');
 const img_review = require('./img/review.png');
 import AppStore from '../login/store';
 import { withOktaAuth } from '@okta/okta-react';
-import { cache} from 'qmkit';
+import { cache, Const } from 'qmkit';
 
 const FormItem = Form.Item;
 
@@ -50,8 +50,15 @@ export default withOktaAuth(class LoginNotify extends React.Component<any, any> 
   }
   _handleReturn = async (e) =>{
     e.preventDefault();
-    this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
-  }
+    let idToken = this.props.authState.idToken;
+    let redirectUri = window.origin + '/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);
+    let issure = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) ===  'staff' ? Const.REACT_APP_RC_ISSUER : Const.REACT_APP_PRESCRIBER_ISSUER;
+    if(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff') {
+      this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
+    } else {
+      window.location.href = `${issure}/v1/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${redirectUri}`;
+    }
+}
 })
 const styles = {
     reviewLogo: {

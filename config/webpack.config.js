@@ -16,7 +16,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
-//const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
@@ -26,7 +26,8 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const WebpackBar = require('webpackbar');
 const HappyPack = require('happypack');
 const os = require('os');
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+const happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
+//const happyThreadPool = HappyPack.ThreadPool({ size: 20 });
 
 //prerender-spa-plugin 预渲染
 //const PrerenderSpaPlugin = require('prerender-spa-plugin')
@@ -48,20 +49,16 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-module.exports = function (webpackEnv, envCode = 'prod') {
-  const isEnvDevelopment = envCode !== 'prod';
-  const isEnvProduction = envCode === 'prod';
+module.exports = function (webpackEnv, envCode) {
 
-  const publicPath = isEnvProduction
-    ? '/'
-    : isEnvDevelopment && '/';
-  const shouldUseRelativeAssetPaths = publicPath === './';
+  const isEnvDevelopment = webpackEnv === 'development';
+  const isEnvProduction = webpackEnv !== 'development'
 
-  const publicUrl = isEnvProduction
-    ? publicPath.slice(0, -1)
-    : isEnvDevelopment && '';
+  const env = getClientEnvironment(envCode);
 
-  const env = getClientEnvironment(envCode, publicUrl);
+  const publicPath = isEnvProduction ? env.raw.CDN_PATH : isEnvDevelopment && '/';
+  const shouldUseRelativeAssetPaths = publicPath === '/';
+  const publicUrl = isEnvProduction ? publicPath : isEnvDevelopment && '';
 
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
@@ -70,7 +67,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
         loader: MiniCssExtractPlugin.loader,
         options: Object.assign(
           {},
-          shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
+          shouldUseRelativeAssetPaths ? {publicPath: '../../'} : undefined
         ),
       },
       {
@@ -108,13 +105,9 @@ module.exports = function (webpackEnv, envCode = 'prod') {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
-    devtool: isEnvProduction
-      ? shouldUseSourceMap
-        ? false
-        : false
-      : isEnvDevelopment && 'eval-source-map',
+    devtool: isEnvProduction ? '' : 'cheap-module-eval-source-map', //prod: cheap-module-source-map
     entry: [
-      require.resolve('react-dev-utils/webpackHotDevClient'),
+      isEnvDevelopment ? require.resolve('react-dev-utils/webpackHotDevClient') : undefined,
       paths.appIndexJs,
     ].filter(Boolean),
     output: {
@@ -176,9 +169,9 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       ],
       splitChunks: {
         chunks: 'async',
-        minSize: 1600000,
-        maxSize: 1600000,
-        minChunks: 2,
+        minSize: 2000000,
+        maxSize: 2000000,
+        minChunks: 1,
         name: true,
         cacheGroups: {
           vendors: {
@@ -194,10 +187,10 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             priority: -30,
             reuseExistingChunk: true
           },
-          styles:{
-            name:'styles',
-            test:/\.css$/,
-            chunks:'all',
+          styles: {
+            name: 'styles',
+            test: /\.css$/,
+            chunks: 'all',
             enforce: true
           }
         }
@@ -233,35 +226,20 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       strictExportPresence: true,
       rules: [
         {
-          test: /\.js$/,
+          test:  /\.ts$/,
           //把对.js 的文件处理交给id为happyBabel 的HappyPack 的实例执行
           loader: 'happypack/loader?id=happyBabel',
           //排除node_modules 目录下的文件
           exclude: /node_modules/
         },
-        { parser: { requireEnsure: false } },
-        // {
-        //      test: /\.(js|mjs|jsx)$/,
-        //      enforce: 'pre',
-        //      use: [
-        //        {
-        //          options: {
-        //            formatter: require.resolve('react-dev-utils/eslintFormatter'),
-        //            eslintPath: require.resolve('eslint'),
-        //
-        //          },
-        //          loader: require.resolve('eslint-loader'),
-        //        },
-        //      ],
-        //      include: paths.appSrc,
-        //    },
+        {parser: {requireEnsure: false}},
         {
           oneOf: [
             {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
               loader: require.resolve('url-loader'),
               options: {
-                limit: 10000,
+                limit: 1000,
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
@@ -403,6 +381,16 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             },
           ],
         },
+        {
+          loader: 'webpack-ant-icon-loader',
+          enforce: 'pre',
+          options: {
+            chunkName: 'antd-icons',
+          },
+          include: [
+            require.resolve('@ant-design/icons/lib/dist')
+          ],
+        },
       ],
     },
     plugins: [
@@ -422,7 +410,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
 
          }
        ),*/
-      new BundleAnalyzerPlugin(
+      isEnvProduction && new BundleAnalyzerPlugin(
         {
           //  可以是`server`，`static`或`disabled`。
           //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。
@@ -470,13 +458,18 @@ module.exports = function (webpackEnv, envCode = 'prod') {
         }],
         //共享进程池
         threadPool: happyThreadPool,
-        //允许 HappyPack 输出日志
         verbose: true,
+      }),
+      new HappyPack({
+        id: 'styles',
+        threadPool: happyThreadPool,
+        loaders: [ 'style-loader', 'css-loader', 'less-loader' ]
       }),
       new HtmlWebpackPlugin(
         Object.assign(
           {},
           {
+            cdnName: env.raw.CDN_PATH.replace(/^\"|\"$/g, ''),
             dllName: isEnvProduction ? require('./compile-env.json').prodDll : require('./compile-env.json').testDll,
             inject: true,
             template: paths.appHtml,
@@ -504,7 +497,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
       new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
       new ModuleNotFoundPlugin(paths.appPath),
-      new webpack.DefinePlugin({ ...env.stringified, __DEV__: !isEnvProduction }),
+      new webpack.DefinePlugin({...env.stringified, __DEV__: !isEnvProduction}),
       new webpack.DllReferencePlugin({
         manifest: isEnvProduction ? require("../public/javascript/dll/vendor-manifest-prod.json") : require("../public/javascript/dll/vendor-manifest.json") // eslint-disable-line
       }),
@@ -564,7 +557,29 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       new WebpackBar(
         {
           name: 'Store Portal',
-          color: '#e2001a'
+          color: '#e2001a',
+          start(context) {
+            // Called when (re)compile is started
+          },
+          change(context) {
+            // Called when a file changed on watch mode
+          },
+          update(context) {
+            // Called after each progress update
+          },
+          done(context) {
+            // Called when compile finished
+          },
+          progress(context) {
+            // Called when build progress updated
+          },
+          allDone(context) {
+            // Called when _all_ compiles finished
+          },
+          beforeAllDone(context) {
+          },
+          afterAllDone(context) {
+          },
         }
       ),
     ].filter(Boolean),
@@ -581,7 +596,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       type: "filesystem"
     },
     performance: {
-      hints: "warning"
+      hints: isEnvDevelopment?false:"warning"
     },
   };
 };

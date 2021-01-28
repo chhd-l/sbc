@@ -175,7 +175,6 @@ export default class OrderInvoiceList extends React.Component<any, any> {
     const { getPrescriberId } = this.props.relaxProps;
 
     getPrescriberId({ prescriberId: rowInfo });
-    //console.log(this.props.relaxProps.ccccccc);
     history.push({
       pathname: '/finance-reward-details',
       params: {

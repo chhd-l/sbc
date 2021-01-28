@@ -196,6 +196,7 @@ export default class SearchHead extends Component<any, any> {
                     {this.state.statusSelect === 'paymentStatus' ? (
                       <Select
                         style={styles.wrapper}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         onChange={(value) =>
                           this.setState({
                             tradeState: {
@@ -213,9 +214,9 @@ export default class SearchHead extends Component<any, any> {
                         <Option value="NOT_PAID">
                           <FormattedMessage id="order.unpaid" />
                         </Option>
-                        <Option value="UNCONFIRMED">
+                        {/*<Option value="UNCONFIRMED">
                           <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>
+                        </Option>*/}
                         <Option value="PAID">
                           <FormattedMessage id="order.paid" />
                         </Option>
@@ -225,6 +226,7 @@ export default class SearchHead extends Component<any, any> {
                       <Select
                         value={tradeState.deliverStatus}
                         style={styles.wrapper}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         onChange={(value) => {
                           this.setState({
                             tradeState: {
@@ -260,6 +262,7 @@ export default class SearchHead extends Component<any, any> {
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.setState({
                           orderCategory: value
@@ -410,6 +413,7 @@ export default class SearchHead extends Component<any, any> {
             buyerOptions: value
           });
         }}
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.buyerOptions}
         style={styles.label}
       >
@@ -431,6 +435,7 @@ export default class SearchHead extends Component<any, any> {
             goodsOptions: val
           });
         }}
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.goodsOptions}
         style={styles.label}
       >
@@ -452,6 +457,7 @@ export default class SearchHead extends Component<any, any> {
             receiverSelect: val
           })
         }
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.receiverSelect}
         style={styles.label}
       >
@@ -473,6 +479,7 @@ export default class SearchHead extends Component<any, any> {
             clinicSelect: val
           });
         }}
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.clinicSelect}
         style={styles.label}
       >
@@ -493,6 +500,7 @@ export default class SearchHead extends Component<any, any> {
             numberSelect: val
           });
         }}
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.numberSelect}
         style={styles.label}
       >
@@ -513,6 +521,7 @@ export default class SearchHead extends Component<any, any> {
             recommenderSelect: val
           })
         }
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.recommenderSelect}
         style={styles.label}
       >
@@ -534,6 +543,7 @@ export default class SearchHead extends Component<any, any> {
             statusSelect: val
           });
         }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.statusSelect}
         style={styles.label}
       >
@@ -578,7 +588,7 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export all orders',
+      byParamsTitle: 'Export filtered orders',
       byIdsTitle: 'Export selected orders',
       exportByParams: onExportByParams,
       exportByIds: onExportByIds

@@ -132,7 +132,6 @@ export default class NewStateModal extends Component<any, any> {
           state,
           postCodeArr: arr.join(';')
         };
-        console.log(params, 'params--------');
         setTimeout(() => {
           this.setState({
             confirmLoading: false
@@ -202,7 +201,6 @@ export default class NewStateModal extends Component<any, any> {
     const { modalVisible, onStateFormChange, stateForm } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     const { country, state, postCodeArr } = stateForm.toJS();
-    console.log(postCodeArr, 'postCodeArr-------------');
     return (
       <Modal maskClosable={false} title="Add state" visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>

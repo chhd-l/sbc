@@ -26,12 +26,13 @@ export default class CouponActivityDetail extends React.Component<any, any> {
       <div>
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
-            {Const.couponActivityType[type]}活动详情
+            {/* {Const.couponActivityType[type]} */}
+            Activity detail
           </Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container">
-          <Headline title={Const.couponActivityType[type] + '活动详情'} />
+          <Headline title={'Activity detail'} />
           <ActivityTab />
         </div>
       </div>

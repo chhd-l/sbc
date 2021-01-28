@@ -39,14 +39,7 @@ export default class SearchList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      currentPage,
-      apply,
-      init
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, currentPage, apply, init } = this.props.relaxProps;
 
     let orderList = this.props.relaxProps.orderList || [];
 
@@ -55,41 +48,23 @@ export default class SearchList extends React.Component<any, any> {
         <div className="ant-table ant-table-large ant-table-scroll-position-left">
           <div className="ant-table-content">
             <div className="ant-table-body">
-              <table
-                style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}
-              >
+              <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                 <thead className="ant-table-thead">
                   <tr>
-                    <th style={{ width: '300' }}>
-                      {<FormattedMessage id="commodity" />}
-                    </th>
-                    <th style={{ width: '10%' }}>
-                      {<FormattedMessage id="consumerName" />}
-                    </th>
-                    <th style={{ width: '15%' }}>
-                      {<FormattedMessage id="recipient" />}
-                    </th>
+                    <th style={{ width: '300' }}>{<FormattedMessage id="commodity" />}</th>
+                    <th style={{ width: '10%' }}>{<FormattedMessage id="consumerName" />}</th>
+                    <th style={{ width: '15%' }}>{<FormattedMessage id="recipient" />}</th>
                     <th style={{ width: '10%' }}>
                       {<FormattedMessage id="amount" />}
                       <br />
                       {<FormattedMessage id="quantity" />}
                     </th>
-                    <th style={{ width: '10%' }}>
-                      {<FormattedMessage id="shippingStatus" />}
-                    </th>
-                    <th style={{ width: '10%' }}>
-                      {<FormattedMessage id="orderStatus" />}
-                    </th>
-                    <th style={{ width: '10%', textAlign: 'right' }}>
-                      {<FormattedMessage id="paymentStatus" />}
-                    </th>
+                    <th style={{ width: '10%' }}>{<FormattedMessage id="shippingStatus" />}</th>
+                    <th style={{ width: '10%' }}>{<FormattedMessage id="orderStatus" />}</th>
+                    <th style={{ width: '10%', textAlign: 'right' }}>{<FormattedMessage id="paymentStatus" />}</th>
                   </tr>
                 </thead>
-                <tbody className="ant-table-tbody">
-                  {loading
-                    ? this._renderLoading()
-                    : this._renderContent(orderList, apply)}
-                </tbody>
+                <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList, apply)}</tbody>
               </table>
             </div>
             {total == 0 ? (
@@ -120,7 +95,7 @@ export default class SearchList extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={7}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
         </td>
       </tr>
     );
@@ -144,10 +119,7 @@ export default class SearchList extends React.Component<any, any> {
       return (
         <tr className="ant-table-row  ant-table-row-level-0" key={id}>
           <td colSpan={8} style={{ padding: 0 }}>
-            <table
-              className="ant-table-self"
-              style={{ border: '1px solid #ddd' }}
-            >
+            <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
               <thead>
                 <tr>
                   <td colSpan={12} style={{ color: '#999' }}>
@@ -158,14 +130,9 @@ export default class SearchList extends React.Component<any, any> {
                         height: 36
                       }}
                     >
-                      <span style={{ marginLeft: 20, color: '#000' }}>
-                        {id}
-                      </span>
+                      <span style={{ marginLeft: 20, color: '#000' }}>{id}</span>
                       <span style={{ marginLeft: 60 }}>
-                        {<FormattedMessage id="orderTime" />}:
-                        {moment(v.getIn(['tradeState', 'createTime'])).format(
-                          Const.TIME_FORMAT
-                        )}
+                        {<FormattedMessage id="orderTime" />}:{moment(v.getIn(['tradeState', 'createTime'])).format(Const.TIME_FORMAT)}
                       </span>
                       <span style={{ marginRight: 20, float: 'right' }}>
                         <Tooltip placement="top" title="Application">
@@ -200,16 +167,8 @@ export default class SearchList extends React.Component<any, any> {
                       .concat(gifts)
                       .map((v, k) => {
                         if (k < 3) {
-                          const imageSrc = v.get('pic')
-                            ? v.get('pic')
-                            : defaultImg;
-                          return (
-                            <img
-                              src={imageSrc}
-                              key={k}
-                              style={styles.imgItem}
-                            />
-                          );
+                          const imageSrc = v.get('pic') ? v.get('pic') : defaultImg;
+                          return <img src={imageSrc} key={k} style={styles.imgItem} />;
                         } else if (k == 4) {
                           return <label>...</label>;
                         }
@@ -222,25 +181,11 @@ export default class SearchList extends React.Component<any, any> {
                         <div style={styles.imgBg}>
                           <img
                             //@ts-ignore
-                            src={
-                              v
-                                .get('tradeItems')
-                                .concat(gifts)
-                                .get(3)
-                                .get('pic')
-                                ? v
-                                    .get('tradeItems')
-                                    .concat(gifts)
-                                    .get(3)
-                                    .get('pic')
-                                : defaultImg
-                            }
+                            src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? v.get('tradeItems').concat(gifts).get(3).get('pic') : defaultImg}
                             style={styles.imgFourth}
                           />
                           //@ts-ignore
-                          <div style={styles.imgNum}>
-                            total {v.get('tradeItems').concat(gifts).size}
-                          </div>
+                          <div style={styles.imgNum}>total {v.get('tradeItems').concat(gifts).size}</div>
                         </div>
                       ) : null
                     }
@@ -251,8 +196,7 @@ export default class SearchList extends React.Component<any, any> {
                   </td>
                   <td style={{ width: '15%' }}>
                     {/*收件人姓名*/}
-                    {<FormattedMessage id="recipient" />}：
-                    {v.getIn(['consignee', 'name'])}
+                    {<FormattedMessage id="recipient" />}：{v.getIn(['consignee', 'name'])}
                     <br />
                     {/*收件人手机号码*/}
                     {v.getIn(['consignee', 'phone'])}
@@ -262,17 +206,9 @@ export default class SearchList extends React.Component<any, any> {
                     <br />( total {num})
                   </td>
                   {/*发货状态*/}
-                  <td style={{ width: '10%' }}>
-                    {
-                      Const.deliverStatus[
-                        v.getIn(['tradeState', 'deliverStatus'])
-                      ]
-                    }
-                  </td>
+                  <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td>
                   {/*订单状态*/}
-                  <td style={{ width: '10%' }}>
-                    {Const.flowState[v.getIn(['tradeState', 'flowState'])]}
-                  </td>
+                  <td style={{ width: '10%' }}>{Const.flowState[v.getIn(['tradeState', 'flowState'])]}</td>
                   {/*支付状态*/}
                   <td
                     style={{
@@ -303,7 +239,7 @@ const styles = {
     height: 60,
     padding: 5,
     border: '1px solid #ddd',
-    display: 'inline-block',
+    float: 'left',
     marginRight: 10,
     background: '#fff',
     borderRadius: 3

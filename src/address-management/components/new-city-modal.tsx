@@ -127,7 +127,6 @@ export default class NewCityModal extends Component<any, any> {
           city,
           postCodeArr: arr.join(';')
         };
-        console.log(params, 'params--------');
         setTimeout(() => {
           this.setState({
             confirmLoading: false

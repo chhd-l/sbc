@@ -154,8 +154,11 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
+          this.setState({
+            loading: false
+          });
           let addressList = res.context.customerDeliveryAddressVOList;
-          if (addressList.length > 0) {
+          if (addressList && addressList.length > 0) {
             let billingForm = this.state.billingForm;
             if (this.state.currentId) {
               billingForm = addressList.find((item) => {
@@ -166,7 +169,9 @@ class BillingInfomation extends React.Component<any, any> {
             }
 
             let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
-            this.getCityNameById(billingForm.cityId);
+            if (billingForm.cityId) {
+              this.getCityNameById(billingForm.cityId);
+            }
 
             this.setState(
               {
@@ -175,8 +180,8 @@ class BillingInfomation extends React.Component<any, any> {
                 addressList: addressList,
                 billingForm: billingForm,
                 title: billingForm.consigneeName,
-                isDefault: billingForm.isDefaltAddress === 1 ? true : false,
-                loading: false
+                isDefault: billingForm.isDefaltAddress === 1 ? true : false
+                // loading: false
               },
               () => {
                 this.props.form.setFieldsValue({
@@ -194,6 +199,10 @@ class BillingInfomation extends React.Component<any, any> {
                 });
               }
             );
+          } else {
+            this.setState({
+              loading: false
+            });
           }
         } else {
           this.setState({
@@ -279,7 +288,9 @@ class BillingInfomation extends React.Component<any, any> {
     let billingForm = addressList.find((item) => {
       return item.deliveryAddressId === id;
     });
-    this.getCityNameById(billingForm.cityId);
+    if (billingForm.cityId) {
+      this.getCityNameById(billingForm.cityId);
+    }
 
     this.setState(
       {
@@ -361,7 +372,7 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0].cityName) {
+          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
             this.setState({
               initCityName: res.context.systemCityVO[0].cityName
             });
@@ -392,8 +403,8 @@ class BillingInfomation extends React.Component<any, any> {
     };
     const { getFieldDecorator } = this.props.form;
     return (
-      <Row>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+      <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
+        <Row>
           <Col span={3}>
             <h3>All Address( {this.state.addressList.length} )</h3>
             <ul>
@@ -768,8 +779,8 @@ class BillingInfomation extends React.Component<any, any> {
               </Form>
             </Card>
           </Col>
-        </Spin>
-      </Row>
+        </Row>
+      </Spin>
     );
   }
 }

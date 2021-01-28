@@ -51,10 +51,12 @@ export default class SearchForm extends React.Component<any, any> {
 
   onChangeNumber = (res) => {
     const { onStock } = this.props.relaxProps;
+    const value = res ? res : 1;
     this.setState({
-      getThreshold: res
+      getThreshold: value
     });
-    onStock(res);
+
+    onStock(value);
   };
 
   onRefresh = () => {
@@ -77,17 +79,18 @@ export default class SearchForm extends React.Component<any, any> {
                 style={{ width: '120px' }}
                 // key={Number(stock) + 1}
                 defaultValue={stock}
-                step={1}
+                // step={1}
                 disabled={this.state.disabledType}
                 onChange={this.onChangeNumber}
                 min={1}
-                formatter={(e) => {
-                  if (!/(^[1-9]\d*$)/.test(e)) {
-                    return 1;
-                  } else {
-                    return e;
-                  }
-                }}
+                value={stock}
+                // formatter={(e) => {
+                //   if (!/(^[1-9]\d*$)/.test(e)) {
+                //     return 1;
+                //   } else {
+                //     return e;
+                //   }
+                // }}
               />
             }
           </div>

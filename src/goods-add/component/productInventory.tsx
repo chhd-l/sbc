@@ -192,8 +192,12 @@ class SkuForm extends React.Component<any, any> {
         // a == null? a = {minStock:''}: a
         a = a ? a : { minStock: '' };
         c = a.minStock - rowInfo.maxStock >= 0 ? rowInfo.stock : a.minStock;
-        if (a && a.minStock) {
+        if (a && a.minStock && rowInfo.maxStock) {
           b = a.minStock - rowInfo.maxStock >= 0 ? a.minStock : rowInfo.maxStock;
+        } else if (a && a.minStock) {
+          b = a.minStock;
+        } else if (a && a.maxStock) {
+          b = a.maxStock;
         } else {
           b = 999999;
         }
@@ -221,7 +225,32 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
-
+    columns = columns.push({
+      title: 'Virtual inventory',
+      key: 'virtualInventory',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('virtualInventory_' + rowInfo.id, {
+                rules: [
+                  // {
+                  //   required: true,
+                  //   message: 'Please input inventory'
+                  // },
+                  {
+                    pattern: ValidConst.number,
+                    message: 'Please enter the correct value'
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualInventory'),
+                initialValue: rowInfo.virtualInventory
+              })(<InputNumber style={{ width: '121px' }} min={0} max={9999999} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
     columns = columns.push({
       title: 'UOM',
       key: 'goodsMeasureUnit',
@@ -246,6 +275,33 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         );
       }
+    });
+
+    columns = columns.push({
+      title: <div>Inventory Alert</div>,
+      key: 'virtualAlert',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('virtualAlert_' + rowInfo.id, {
+                rules: [
+                  // {
+                  //   required: true,
+                  //   message: 'Please input inventory'
+                  // },
+                  {
+                    pattern: ValidConst.number,
+                    message: 'Please enter the correct value'
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualAlert'),
+                initialValue: rowInfo.virtualAlert
+              })(<InputNumber style={{ width: '121px' }} min={0} max={9999999} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
     });
 
     columns = columns.push({

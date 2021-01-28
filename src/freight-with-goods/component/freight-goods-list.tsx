@@ -38,8 +38,7 @@ export default class FreightGoodsList extends React.Component<any, any> {
   render() {
     const { selectedRowKeys, freightWithGoods } = this.props.relaxProps;
     const { goodsPage } = freightWithGoods.toJS();
-    const total =
-      goodsPage && goodsPage.totalElements ? goodsPage.totalElements : 0;
+    const total = goodsPage && goodsPage.totalElements ? goodsPage.totalElements : 0;
     const pageNum = goodsPage && goodsPage.number ? goodsPage.number : 0;
     const rowSelection = {
       selectedRowKeys: selectedRowKeys.toJS(),
@@ -49,22 +48,12 @@ export default class FreightGoodsList extends React.Component<any, any> {
       <div>
         <AuthWrapper functionName="f_goods_rela_edit">
           <div style={{ marginBottom: 16 }}>
-            <Button
-              type="primary"
-              disabled={total == 0}
-              onClick={() => this._setBatchFeight()}
-            >
+            <Button type="primary" disabled={total == 0} onClick={() => this._setBatchFeight()}>
               Bulk replacement shipping templates
             </Button>
           </div>
         </AuthWrapper>
-        <Table
-          rowKey={(record: any) => record.goodsId}
-          rowSelection={rowSelection}
-          columns={this._columns}
-          dataSource={goodsPage && goodsPage.content ? goodsPage.content : []}
-          pagination={{ total, current: pageNum + 1, onChange: this._getData }}
-        />
+        <Table rowKey={(record: any) => record.goodsId} rowSelection={rowSelection} columns={this._columns} dataSource={goodsPage && goodsPage.content ? goodsPage.content : []} pagination={{ total, current: pageNum + 1, onChange: this._getData }} />
       </div>
     );
   }
@@ -75,11 +64,7 @@ export default class FreightGoodsList extends React.Component<any, any> {
       dataIndex: 'goodsImg',
       key: 'goodsImg',
       render: (value) => {
-        return value ? (
-          <img src={value} style={styles.imgItem} />
-        ) : (
-          <img src={defaultImg} style={styles.imgItem} />
-        );
+        return value ? <img src={value} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />;
       }
     },
     {
@@ -135,14 +120,7 @@ export default class FreightGoodsList extends React.Component<any, any> {
    * 批量设置窗口
    */
   _setBatchFeight = () => {
-    const {
-      setFeightVisible,
-      selectedRowKeys,
-      setIsBatch,
-      freightTemp,
-      setFreightTempId,
-      setGoodsFreight
-    } = this.props.relaxProps;
+    const { setFeightVisible, selectedRowKeys, setIsBatch, freightTemp, setFreightTempId, setGoodsFreight } = this.props.relaxProps;
     if (selectedRowKeys.toJS().length < 1) {
       message.error('Select at least one item');
       return;
@@ -159,13 +137,7 @@ export default class FreightGoodsList extends React.Component<any, any> {
    * 单个设置窗口
    */
   _setFeight = (row) => {
-    const {
-      setFeightVisible,
-      setGoodsId,
-      setFreightTempId,
-      setGoodsFreight,
-      setIsBatch
-    } = this.props.relaxProps;
+    const { setFeightVisible, setGoodsId, setFreightTempId, setGoodsFreight, setIsBatch } = this.props.relaxProps;
     setGoodsId(row.goodsId);
     setFreightTempId(row.freightTempId);
     if (row.freightTempId) {
@@ -181,6 +153,9 @@ const styles = {
     height: 60,
     padding: 5,
     border: '1px solid #ddd',
-    background: '#fff'
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
   }
 } as any;

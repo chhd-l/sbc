@@ -26,7 +26,6 @@ export default class AppStore extends Store {
     const { res: storeInfo } = await webapi.fetchStoreInfo();
     if (storeInfo.code == Const.SUCCESS_CODE) {
       const { countryId } = storeInfo.context;
-      console.log(storeInfo.context, 'storeInfo.context-----------');
       const { res: countryInfo } = await webapi.fetchDictionaryList({
         keywords: '',
         type: 'Country',
@@ -34,7 +33,6 @@ export default class AppStore extends Store {
         pageSize: 1000
       });
       if (countryInfo.code == Const.SUCCESS_CODE) {
-        console.log(countryInfo.context, 'countryInfo.context-----------');
         const currentCountry = countryInfo.context.sysDictionaryPage.content.find((item) => {
           return item.id === countryId;
         });

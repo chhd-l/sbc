@@ -100,6 +100,14 @@ export default class AppStore extends Store {
           this.dispatch('formActor:check', fromJS((results[0].res as any).context.distributionCheck));
           this.dispatch('goodsActor:flashsaleGoods', fromJS((results[0].res as any).context.flashsalegoodsList.flashSaleGoodsVOList));
           this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[0].res as any).context.querySysDictionary));
+
+          this.dispatch('goodsActor:purchaseTypeList', (results[0].res as any).context.purchase_type.sysDictionaryPage.content);
+          this.dispatch('goodsActor:frequencyList', {
+            dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
+            weekList: (results[0].res as any).context.frequency_week ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content : [],
+            monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : []
+          });
+
           this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods));
           this.dispatch('goodsActor:filtersTotal', fromJS((results[0].res as any).context.filtersTotal));
           this.dispatch('goodsActor:taggingTotal', fromJS((results[0].res as any).context.taggingTotal));
@@ -107,6 +115,9 @@ export default class AppStore extends Store {
           this.dispatch('related:goodsId', goodsId);
           this.dispatch('goodsActor:getGoodsId', goodsId);
         });
+      } else {
+        message.error((results[0].res as any).message);
+        this.dispatch('loading:end');
       }
       editProductResource = results[1].res as any;
     });
@@ -604,6 +615,10 @@ export default class AppStore extends Store {
       goods = goods.set('internalGoodsNo', localStorage.getItem('storeCode') + '_' + goods.get('goodsNo'));
     }
 
+    if (goods.get('defaultPurchaseType') === 5765) {
+      goods = goods.set('defaultFrequencyId', null);
+    }
+
     this.dispatch('goodsActor: editGoods', goods);
   };
 
@@ -1003,11 +1018,10 @@ export default class AppStore extends Store {
     // 详情
     const detailEditor = data.get('detailEditor') || {};
 
-    goods = goods.set('goodsDetail', detailEditor.getContent ? detailEditor.getContent() : '');
+    // goods = goods.set('goodsDetail', detailEditor.getContent ? detailEditor.getContent() : '');
+    goods = goods.set('goodsDetail', data.get('goods').get('goodsDetail'));
     const tabs = [];
-    // console.log(data.get('detailEditor_0'),11111111111111);
-    if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
-      // console.log(data.get('detailEditor_0').val.getContent())
+    /*if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
       tabs.push({
         goodsId: goods.get('goodsId'),
         tabId: data.get('detailEditor_0').tabId,
@@ -1027,11 +1041,11 @@ export default class AppStore extends Store {
         tabId: data.get('detailEditor_2').tabId,
         tabDetail: data.get('detailEditor_2').val.getContent()
       });
-    }
+    }*/
     if (data.get('video') && JSON.stringify(data.get('video')) !== '{}') {
       goods = goods.set('goodsVideo', data.get('video').get('artworkUrl'));
     }
-
+    /*
     let goodsDetailTab = data.get('goodsDetailTab');
     let goodsDetailTabTemplate = {};
     goodsDetailTab = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
@@ -1044,16 +1058,17 @@ export default class AppStore extends Store {
         goodsDetailTabTemplate[item.get('name')] = contect;
       }
     });
-
+*/
     let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
     let storeId = loginInfo ? loginInfo.storeId : '';
     let oldGoodsDetailTabContent = data.get('oldGoodsDetailTabContent');
     //如果是法国，不改变goodsDetail
     if (storeId === 123457909 && oldGoodsDetailTabContent) {
       goods = goods.set('goodsDetail', oldGoodsDetailTabContent);
-    } else {
-      goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
     }
+    // else {
+    //   goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    // }
 
     param = param.set('goodsTabRelas', tabs);
 
@@ -1163,8 +1178,6 @@ export default class AppStore extends Store {
         b = i.targetGoodsIds;
         c = i.minStock;
       });
-      /*console.log(b,22232222);
-      console.log(item,3333333333);*/
       this.state().get('addSkUProduct');
       goodsList = goodsList.push(
         Map({
@@ -1185,11 +1198,14 @@ export default class AppStore extends Store {
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           goodsInfoBundleRels: b,
-          subscriptionStatus: goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus'),
+          // subscriptionStatus: goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus'),
+          subscriptionStatus: item.get('subscriptionStatus') ? item.get('subscriptionStatus') : goods.get('subscriptionStatus') ? goods.get('subscriptionStatus') : 1,
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',
           basePrice: data.get('selectedBasePrice') !== 'None' && item.get('basePrice') ? item.get('basePrice') : null,
-          subscriptionBasePrice: data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null
+          subscriptionBasePrice: data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null,
+          virtualInventory: item.get('virtualInventory') ? item.get('virtualInventory') : null,
+          virtualAlert: item.get('virtualAlert') ? item.get('virtualAlert') : null
         })
       );
     });
@@ -1649,7 +1665,13 @@ export default class AppStore extends Store {
       }
     }
   };
-
+  /**
+   * 获取富文本框的值
+   * @param
+   */
+  editEditorContent = (keyName, value) => {
+    this.dispatch('goodsActor: editorContent', { keyName, value });
+  };
   editEditor = (editor) => {
     this.dispatch('goodsActor: editor', editor);
   };
@@ -2002,7 +2024,8 @@ export default class AppStore extends Store {
         fromJS({
           titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '', //{name}-Royal Canin
           metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '', //{name}, {subtitle}, {sales category}, {tagging}
-          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '' //{description}
+          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '', //{description}
+          headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );
     }
@@ -2014,15 +2037,16 @@ export default class AppStore extends Store {
       goodsId,
       metaDescriptionSource: seoObj.metaDescriptionSource,
       metaKeywordsSource: seoObj.metaKeywordsSource,
-      titleSource: seoObj.titleSource
+      titleSource: seoObj.titleSource,
+      headingTag: seoObj.headingTag
     };
+    // console.log(params, 'params-------------');
     const { res } = (await editSeo(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
       // history.push('./goods-list');
       message.success('Save successfully.');
       history.replace('/goods-list');
     }
-    //调接口
   };
 
   // 产品规格

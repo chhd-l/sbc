@@ -29,5 +29,6 @@ export default {
   CURRENT_YEAR: 'current_year',
   STORE_LANGUAGES: 'store_languages',
   DEFAULT_LANGUAGE: 'default_language',
-  STORE_INFRO: 'store_info'
+  STORE_INFRO: 'store_info',
+  ERROR_INFO:'error_info'
 };

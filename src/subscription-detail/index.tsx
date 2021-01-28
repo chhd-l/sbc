@@ -508,7 +508,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '40%',
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
-            <img src={record.goodsPic} style={{ width: 60, height: 80 }} alt="" />
+            <img src={record.goodsPic} className="img-item" alt="" />
             <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
           </div>
         )
@@ -611,7 +611,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
+                  <img src={item.pic} className="img-item" alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>{item.skuName}</p>
                     <p>{item.specDetails}</p>
@@ -647,13 +647,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + currencySymbol + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
         width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
@@ -672,7 +672,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
+                  <img src={item.pic} className="img-item" alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>{item.skuName}</p>
                     <p>{item.specDetails}</p>
@@ -701,13 +701,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + currencySymbol + record.tradePrice.discountsPrice : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
         width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + record.tradePrice.totalPrice : '-'}</div>
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
@@ -741,6 +741,66 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       }
     ];
+
+    const columns_foodDispenser_no_start = [
+      {
+        title: 'Delivery date',
+        key: 'shipmentDate',
+        dataIndex: 'shipmentDate',
+        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+      },
+      {
+        title: 'Product',
+        key: 'Product',
+        render: (text, record) => (
+          <div>
+            {record.tradeItems &&
+              record.tradeItems.map((item, index) => (
+                <div style={{ display: 'flex' }} key={index}>
+                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
+                  <div style={{ margin: 'auto 10px' }}>
+                    <p>{item.skuName}</p>
+                    <p>{item.specDetails}</p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )
+      },
+      {
+        title: ' ', // cover last th text align right
+      }
+    ]
+
+    const columns_foodDispenser_completed = [
+      {
+        title: 'Delivery date',
+        key: 'shipmentDate',
+        dataIndex: 'shipmentDate',
+        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+      },
+      {
+        title: 'Product',
+        key: 'Product',
+        render: (text, record) => (
+          <div>
+            {record.tradeItems &&
+              record.tradeItems.map((item, index) => (
+                <div style={{ display: 'flex' }} key={index}>
+                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
+                  <div style={{ margin: 'auto 10px' }}>
+                    <p>{item.skuName}</p>
+                    <p>{item.specDetails}</p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )
+      },
+      {
+        title: ' ', // cover last th text align right
+      }
+    ]
 
     const styles = {
       backItem: {
@@ -906,7 +966,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
               <TabPane tab="No start" key="noStart">
-                <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
+                <Table rowKey={(record, index) => index.toString()} columns={columns_foodDispenser_no_start} dataSource={noStartOrder} pagination={false}></Table>
               </TabPane>
               <TabPane tab="Completed" key="completed">
                 <Table

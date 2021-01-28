@@ -653,22 +653,22 @@ const routes = [
   //页面管理
   {
     path: '/page-manage/weixin',
-    asyncComponent: () => System.import('./page-manage')
+    asyncComponent: () => import('./page-manage')
   },
   //模板管理
   {
     path: '/template-manage/weixin',
-    asyncComponent: () => System.import('./template-manage')
+    asyncComponent: () => import('./template-manage')
   },
   //页面管理
   {
     path: '/page-manage/pc',
-    asyncComponent: () => System.import('./page-manage')
+    asyncComponent: () => import('./page-manage')
   },
   //模板管理
   {
     path: '/template-manage/pc',
-    asyncComponent: () => System.import('./template-manage')
+    asyncComponent: () => import('./template-manage')
   },
   // 企业会员列表
   {
@@ -808,6 +808,10 @@ const routes = [
     asyncComponent: () => import('./product-finder-list')
   },
   {
+    path: '/product-sales-setting',
+    asyncComponent: () => import('./product-sales-setting')
+  },
+  {
     path: '/product-finder-details/:id',
     asyncComponent: () => import('./product-finder-details')
   },
@@ -885,12 +889,14 @@ const homeRoutes = [
   //商家注册协议
   {
     path: '/supplier-agreement',
-    asyncComponent: () => System.import('./company-register/component/agreement')
+    asyncComponent: () => import('./company-register/component/agreement')
   },
   {
     path: '/generalTermsAndConditions',
     asyncComponent: () => import('./general-terms-and-conditions')
-  }
+  },
+  { path: '/error', asyncComponent: () => import('./error') }
+  //{ path: '*', asyncComponent: () => import('./error') }
 ];
 
 // 审核未通过下的, 包括未开店

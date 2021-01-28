@@ -46,8 +46,14 @@ class HttpUtil{
                                     message.error(jsonBody.message);
                                     return;
                                 }
+                                // token 过期时，前端直接处理
+                                else if (jsonBody.code === 'K-000002') {
+                                    message.error(jsonBody.message);
+                                    util.logout();
+                                    history.push('/login');
+                                }
                                 // 账号禁用 统一返回到登录页面
-                                else if (['K-000005', 'K-000015', 'K-000002'].includes(jsonBody.code)) {
+                                else if (['K-000005', 'K-000015'].includes(jsonBody.code)) {
                                     message.error(msg[jsonBody.code]);
                                     history.push('login', { oktaLogout: true })
                                     return;

@@ -3,12 +3,8 @@ import React, { useEffect } from 'react';
 import { login, cache, history } from 'qmkit';
 import { Row, Col, Button } from 'antd';
 const bg_selectRole = require('./img/bg-SelectRole.jpg');
-const role_RC = require('./img/role-RC.png');
-const role_Perscriber = require('./img/role-Perscriber.png');
-let switchedRouter = false;
-import { switchRouter } from '@/index';
+
 let ErrorPage = (props) => {
-  let { authState, authService } = useOktaAuth();
   let loginpPercriberOkta = () => {
     history.push('login', { oktaLogout: false });
   };

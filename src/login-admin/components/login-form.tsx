@@ -5,8 +5,8 @@ const logo = require('../img/logo.png');
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
 import { history, Const, login, cache } from 'qmkit';
-import { TIMEOUT } from 'dns';
-
+//import { TIMEOUT } from 'dns';
+const pcLogo = require('../../../public/images/login/logo1.png');
 export default class LoginForm extends React.Component<any, any> {
   form;
 
@@ -24,7 +24,7 @@ export default class LoginForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const loginLogo = sessionStorage.getItem(cache.SITE_LOGO);
+    const loginLogo = pcLogo;
 
     return (
       <Form style={styles.loginForm}>

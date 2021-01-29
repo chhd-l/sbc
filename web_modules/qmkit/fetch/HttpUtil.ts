@@ -72,13 +72,13 @@ class HttpUtil{
                                 }
 
                                // message.info(msg)
-                                reject(HttpUtil.handleFailedResult({ fetchStatus: response.status,msg,  error: msg }, httpCustomerOpertion))
+                                reject(HttpUtil.handleFailedResult({code: response.status,message:msg,  error: msg }, httpCustomerOpertion))
                             }
 
                     }).catch(e => {
                         let msg = "Service is busy,please try again later"
                         const errMsg = e.name + " " + e.message
-                        reject(HttpUtil.handleFailedResult({ fetchStatus: response.status,msg, error: errMsg,  }, httpCustomerOpertion))
+                        reject(HttpUtil.handleFailedResult({ code: response.status,message:msg, error: errMsg,  }, httpCustomerOpertion))
                     })
                 }
             ).catch(e => {
@@ -88,7 +88,7 @@ class HttpUtil{
                     return
                 }
                 httpCustomerOpertion.isFetched = true
-                let er={ fetchStatus: "404", error: errMsg ,msg:'Request interface failed or interface does not exist, please check it'}
+                let er={ code: "404", error: errMsg ,message:'Request interface failed or interface does not exist, please check it'}
                 reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
@@ -117,17 +117,17 @@ class HttpUtil{
      */
     static handleFailedResult(result, httpCustomerOpertion) {
 
-            if (result.fetchStatus && httpCustomerOpertion.isHandleResult === true) {
+            if (result.code && httpCustomerOpertion.isHandleResult === true) {
                 const errMsg = result.msg || result.message || "Service is busy,please try again later"
-                const errStr = `${errMsg}（${result.fetchStatus}）`
+                const errStr = `${errMsg}（${result.code}）`
                 // HttpUtil.hideLoading()
                 message.info(errStr)
             }
-            const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
-            sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify({...result,error:errorMsg}))
-            process.env.NODE_ENV==="production"&&history.push('/error')
+            // const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
+            // sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify({...result,error:errorMsg}))
+           // process.env.NODE_ENV==="production"&&history.push('/error')
 
-            return errorMsg
+            return result;
     }
     /**
      * 控制Fetch请求是否超时

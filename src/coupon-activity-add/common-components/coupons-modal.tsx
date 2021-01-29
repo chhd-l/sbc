@@ -280,7 +280,7 @@ export default class CouponsModal extends React.Component<any, any> {
     let { res } = (await webapi.fetchCouponPage(params)) as any;
     if (res.code == Const.SUCCESS_CODE) {
       // 3.格式化返回结构
-      let couponInfos = res.context.couponInfos;
+      let couponInfos = res.context;
       couponInfos.content.forEach((coupon) => {
         // 3.1.面值
         coupon.denominationStr =

@@ -166,7 +166,8 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 getCalendarContainer={() => document.getElementById('page-content')}
                 allowClear={false}
                 disabledDate={(current) => {
-                  return (current && current < moment().add(-1, 'minutes')) || (current && current > moment().add(3, 'months'));
+                  return current && current < moment().startOf('day');
+                  // return (current && current < moment().add(-1, 'minutes')) || (current && current > moment().add(3, 'months'));
                 }}
                 format={Const.DATE_FORMAT}
                 placeholder={['Start date', 'End date']}

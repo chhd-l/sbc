@@ -31,7 +31,7 @@ export default class CouponInfo extends Component<any, any> {
         {/* <Breadcrumb.Item>
           {source == 'marketCenter' ? '营销中心' : '优惠券活动'}
         </Breadcrumb.Item> */}
-        <Breadcrumb.Item>{id ? 'Edit ' : 'Create '}full-count coupon activity</Breadcrumb.Item>
+        <Breadcrumb.Item>{id ? 'Edit ' : 'Create '}coupon activity</Breadcrumb.Item>
       </BreadCrumb>,
       // <Breadcrumb separator=">" key="Breadcrumb">
       //   <Breadcrumb.Item>营销</Breadcrumb.Item>
@@ -42,7 +42,7 @@ export default class CouponInfo extends Component<any, any> {
       //   <Breadcrumb.Item>{id ? '编辑' : '创建'}精准发券活动</Breadcrumb.Item>
       // </Breadcrumb>,
       <div className="container" key="container">
-        <Headline title={id ? 'Create full-count coupon activity' : 'Create full-count coupon activity'} />
+        <Headline title={id ? 'Create coupon activity' : 'Create coupon activity'} />
         <Alert
           message={
             <div>

@@ -69,7 +69,7 @@ export default class CouponsModal extends React.Component<any, any> {
         onOk={() => this._onOk()}
         onCancel={() => this._onCancel()}
         okText="Save"
-        cancelText="Delete"
+        cancelText="Cancel"
       >
         {/*search*/}
         {this._renderSearchForm()}
@@ -123,18 +123,18 @@ export default class CouponsModal extends React.Component<any, any> {
             />
           </FormItem>
           <FormItem>
-            {/*<Button*/}
-            {/*  htmlType="submit"*/}
-            {/*  type="primary"*/}
-            {/*  shape="round"*/}
-            {/*  icon="search"*/}
-            {/*  onClick={(e) => {*/}
-            {/*    e.preventDefault();*/}
-            {/*    this._pageSearch(0);*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  搜索*/}
-            {/*</Button>*/}
+            <Button
+              htmlType="submit"
+              type="primary"
+              shape="round"
+              icon="search"
+              onClick={(e) => {
+                e.preventDefault();
+                this._pageSearch(0);
+              }}
+            >
+              Search
+            </Button>
           </FormItem>
         </Form>
       </div>
@@ -283,7 +283,10 @@ export default class CouponsModal extends React.Component<any, any> {
       let couponInfos = res.context.couponInfos;
       couponInfos.content.forEach((coupon) => {
         // 3.1.面值
-        coupon.denominationStr = coupon.fullBuyType == 0 ? `over 0 minus${coupon.denomination}` : `over${coupon.fullBuyPrice}minus${coupon.denomination}`;
+        coupon.denominationStr =
+          coupon.fullBuyType == 0
+            ? `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}0 minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${coupon.denomination}`
+            : `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${coupon.fullBuyPrice} minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${coupon.denomination}`;
         // 3.2.有效期
         if (coupon.rangeDayType == 0) {
           // 按起止时间

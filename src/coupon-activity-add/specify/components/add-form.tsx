@@ -251,7 +251,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 Save
               </Button>
               &nbsp;&nbsp;
-              <Button onClick={() => history.goBack()}>Back</Button>
+              <Button onClick={() => history.goBack()}>Cancel</Button>
             </Col>
           </Row>
         </Form>

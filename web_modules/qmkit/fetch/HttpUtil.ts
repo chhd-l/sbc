@@ -6,7 +6,10 @@ const msg = {
     'K-000015': 'Failed to obtain authorization',
     'K-000002': ''
 }
+let errorList:any=[];
+let errorObj:any={}
 class HttpUtil{
+
     /**
       * 发送fetch请求
        * @param fetchUrl
@@ -15,6 +18,7 @@ class HttpUtil{
        */
 
     static handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion) {
+        errorObj=Object.assign({},{fetchUrl, fetchParams, httpCustomerOpertion});
         // 1. 处理的第一步
         const { isShowLoading } = httpCustomerOpertion
         if (isShowLoading) {
@@ -80,6 +84,9 @@ class HttpUtil{
                 }
                 httpCustomerOpertion.isFetched = true
                 let er={ fetchStatus: "404", error: errMsg ,msg:'Request interface failed or interface does not exist, please check it'}
+               
+              
+               
                 reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
@@ -141,6 +148,18 @@ class HttpUtil{
         })
     }
 
+    /**
+     * 
+     * @param status 请求成功的状态
+     */
+    static findErrorInterfaceReload(status){
+        let _index= errorList.findIndex(item=>item.fetchUrl===errorObj.fetchUrl)
+        if(!status&&_index===-1){
+            errorList.push(errorObj);
+        }else{
+            
+        }
+    }
 
 }
 export default HttpUtil;

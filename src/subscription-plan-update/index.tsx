@@ -8,22 +8,26 @@ import EntryCriteria from './components/entryCriteria';
 import ExitRules from './components/exitRules';
 import Details from './components/details';
 import * as webapi from './webapi';
+import { edit } from '@/regular-product-add/webapi';
 
 const { Step } = Steps;
 
 class SubscriptionPlanUpdate extends Component<any, any> {
   static propTypes = {};
-  static defaultProps = {};
+  static defaultProps = {
+    id: null,
+    editable: true
+  };
   constructor(props) {
     super(props);
-    const id = this.props.match.params.id;
+    const id = props.id || this.props.match.params.id;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId;
     this.state = {
       id,
       title: id ? 'Edit Plan (Food Dispenser)' : 'Add New Plan (Food Dispenser)',
       current: 0,
+      storeId,
       subscriptionPlan: {
-        storeId,
         canCancelPlan: true,
         subscriptionPlanFlag: true,
         changeDeliveryDateFlag: true,
@@ -103,7 +107,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         .then((data) => {
           const { res } = data;
           if (res.code === 'K-000000') {
-            if (res.context.status === 0) {
+            if (res.context.status === 1) {
               history.push('/subscription-plan');
             }
             this.setState({
@@ -151,6 +155,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         } else {
           subscriptionPlan.status = 1; // Publish
         }
+        subscriptionPlan.storeId = this.state.storeId;
         console.log(subscriptionPlan);
         if (id) {
           subscriptionPlan.id = id; // edit by id
@@ -188,41 +193,42 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     });
   }
   render() {
+    const editable = this.props.editable;
     const { current, title, subscriptionPlan, allSkuProduct, frequencyList, planTypeList } = this.state;
     let targetDisabled = false;
     let saveDisabled = false;
     if (current === 1) {
-      targetDisabled = !subscriptionPlan.targetGoodsIds || subscriptionPlan.targetGoodsIds.length === 0;
+      targetDisabled = !subscriptionPlan.targetGoods || subscriptionPlan.targetGoods.length === 0;
     }
     if (current === 4) {
-      saveDisabled = !subscriptionPlan.mainGoodsIds || subscriptionPlan.mainGoodsIds.length === 0;
+      saveDisabled = !subscriptionPlan.mainGoods || subscriptionPlan.mainGoods.length === 0;
     }
     const steps = [
       {
         title: 'Basic Information',
-        controller: <BasicInformation subscriptionPlan={subscriptionPlan} frequencyList={frequencyList} planTypeList={planTypeList} addField={this.addField} form={this.props.form} />
+        controller: <BasicInformation subscriptionPlan={subscriptionPlan} frequencyList={frequencyList} planTypeList={planTypeList} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
         title: 'Target Product',
-        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} />
+        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       },
       {
         title: 'Entry Criteria',
-        controller: <EntryCriteria subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        controller: <EntryCriteria subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
         title: 'Exit Rules',
-        controller: <ExitRules subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        controller: <ExitRules subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
         title: 'Details',
-        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} />
+        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       }
     ];
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{title}</Breadcrumb.Item>
+          <Breadcrumb.Item>{editable ? title : subscriptionPlan.name}</Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container-search" id="subscriptionPlanStep">
@@ -245,7 +251,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
                 Next step <Icon type="right" />
               </Button>
             )}
-            {current === steps.length - 1 && (
+            {current === steps.length - 1 && editable ? (
               <div className="saveBtn">
                 <Button disabled={saveDisabled} style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, true)}>
                   Save <Icon type="right" />
@@ -254,7 +260,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
                   Publish <Icon type="right" />
                 </Button>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

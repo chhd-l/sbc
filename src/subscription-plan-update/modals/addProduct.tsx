@@ -11,9 +11,10 @@ const TreeNode = Tree.TreeNode;
 export default class addTargetProduct extends Component<any, any> {
   constructor(props) {
     super(props);
+    const defaultSelectedKeys = (this.props.selectedRowKeys || []).map((row) => row.goodsInfoId);
     this.state = {
       visible: false,
-      selectedRowKeys: [],
+      selectedRowKeys: defaultSelectedKeys,
 
       brandList: [],
       serchForm: {},
@@ -22,7 +23,6 @@ export default class addTargetProduct extends Component<any, any> {
       loading: false,
       skuProducts: [],
       clearExsit: false,
-      exsitRowKeys: [],
       pagination: {
         current: 1,
         pageSize: 10,
@@ -37,21 +37,6 @@ export default class addTargetProduct extends Component<any, any> {
     this.onSearch = this.onSearch.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
     this.getSkuProductList = this.getSkuProductList.bind(this);
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { visible, selectedRowKeys, clearExsit, exsitRowKeys } = nextProps;
-
-    if (visible !== prevState.visible) {
-      return {
-        visible: visible,
-        selectedRowKeys: selectedRowKeys,
-        clearExsit: clearExsit,
-        exsitRowKeys: exsitRowKeys
-      };
-    }
-
-    return null;
   }
 
   componentDidMount() {
@@ -120,9 +105,11 @@ export default class addTargetProduct extends Component<any, any> {
   }
   getSkuProductList() {
     const { serchForm, pagination } = this.state;
+    const { exsit } = this.props;
     let params = Object.assign(serchForm, {
       pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize
+      pageSize: pagination.pageSize,
+      selectedGoodIds: exsit && exsit.length ? exsit.map((item) => item.goodsInfoId) : []
     });
     this.setState({
       loading: true
@@ -130,15 +117,10 @@ export default class addTargetProduct extends Component<any, any> {
     webapi
       .getSkuProducts(params)
       .then((data) => {
-        const { clearExsit, exsitRowKeys } = this.state;
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let total = res.context.goodsInfos.total;
           let productData = res.context.goodsInfos.content;
-          if (clearExsit && exsitRowKeys) {
-            total = total - exsitRowKeys.length;
-            productData = productData.filter((x) => !exsitRowKeys.includes(x.goodsInfoId));
-          }
           pagination.total = total;
           productData.map((item) => {
             item.key = item.goodsInfoId;
@@ -199,7 +181,8 @@ export default class addTargetProduct extends Component<any, any> {
     this.props.updateTable();
   }
   render() {
-    const { visible, loading, brandList, productCategories, skuProducts, selectedRowKeys, clearExsit } = this.state;
+    const { loading, brandList, productCategories, skuProducts, selectedRowKeys, clearExsit } = this.state;
+    const { visible } = this.props;
     const columns = [
       {
         title: 'Image',

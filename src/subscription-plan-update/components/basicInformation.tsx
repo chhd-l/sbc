@@ -26,9 +26,16 @@ export default class basicInformation extends Component<any, any> {
     }
   }
 
+  offerTimePeriodValidator = (rule, value, callback) => {
+    if (value[0] < moment().startOf('day')) {
+      callback('Start Date invalid');
+    }
+    callback();
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { subscriptionPlan, addField, frequencyList, planTypeList } = this.props;
+    const { editable, subscriptionPlan, addField, frequencyList, planTypeList } = this.props;
 
     return (
       <div>
@@ -42,6 +49,7 @@ export default class basicInformation extends Component<any, any> {
                 rules: [{ required: true, message: 'Please input Subscription Plan Type' }]
               })(
                 <Select
+                  disabled={!editable}
                   onChange={(value: any) => {
                     addField('type', value);
                   }}
@@ -60,6 +68,7 @@ export default class basicInformation extends Component<any, any> {
                 rules: [{ required: true, message: 'Please input Subscription Plan Name' }]
               })(
                 <Input
+                  disabled={!editable}
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     addField('name', value);
@@ -95,6 +104,7 @@ export default class basicInformation extends Component<any, any> {
                 rules: [{ required: true, message: 'Please input Landing page' }]
               })(
                 <Input
+                  disabled={!editable}
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     addField('landingPage', value);
@@ -106,14 +116,15 @@ export default class basicInformation extends Component<any, any> {
               {getFieldDecorator('landingFlag', {
                 valuePropName: 'checked',
                 initialValue: subscriptionPlan.landingFlag
-              })(<Switch onChange={(value) => addField('landingFlag', value)} />)}
+              })(<Switch disabled={!editable} onChange={(value) => addField('landingFlag', value)} />)}
             </FormItem>
             <FormItem {...layout} label="Offer time period">
               {getFieldDecorator('offerTimePeriod', {
                 initialValue: subscriptionPlan.startDate && subscriptionPlan.endDate ? [moment(subscriptionPlan.startDate), moment(subscriptionPlan.endDate)] : undefined,
-                rules: [{ required: true, message: 'Please select Offer time period' }]
+                rules: [{ required: true, message: 'Please select Offer time period' }, { validator: this.offerTimePeriodValidator }]
               })(
                 <RangePicker
+                  disabled={!editable}
                   disabledDate={(current) => current < moment().startOf('day')}
                   onChange={(dates, dateStrings) => {
                     addField('startDate', dateStrings[0]);
@@ -133,6 +144,7 @@ export default class basicInformation extends Component<any, any> {
                     rules: [{ required: true, message: 'Please select Frequency' }]
                   })(
                     <Select
+                      disabled={!editable}
                       mode="multiple"
                       onChange={(value: any) => {
                         this.props.addField('frequency', value);
@@ -154,6 +166,7 @@ export default class basicInformation extends Component<any, any> {
                 rules: [{ required: true, message: 'Please input Number of delivery' }]
               })(
                 <InputNumber
+                  disabled={!editable}
                   precision={0}
                   min={1}
                   max={100}
@@ -168,6 +181,7 @@ export default class basicInformation extends Component<any, any> {
                 initialValue: subscriptionPlan.description
               })(
                 <Input.TextArea
+                  disabled={!editable}
                   autoSize={{ minRows: 5, maxRows: 10 }}
                   onChange={(e) => {
                     const value = (e.target as any).value;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table } from 'antd';
+import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, Switch } from 'antd';
 import * as webapi from './webapi';
 import { getSubscriptionPlanTypes } from './../subscription-plan-update/webapi';
 import { FormattedMessage } from 'react-intl';
@@ -111,6 +111,37 @@ export default class SubscriptionPlan extends Component<any, any> {
         });
       });
   };
+
+  setSubscriptionPlanEnableFlag = (id, enableFlag) => {
+    const { subscriptionPlanList } = this.state;
+    this.setState({ loading: true });
+    webapi
+      .setSubscriptionPlanEnableFlag(id, enableFlag)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          subscriptionPlanList.forEach((plan) => {
+            if (plan.id === id) {
+              plan.enableFlag = enableFlag;
+            }
+          });
+          this.setState({
+            subscriptionPlanList,
+            loading: false
+          });
+        } else {
+          message.error(res.message || 'Update Data Failed');
+          this.setState({ loading: false });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Update Data Failed');
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
   render() {
     const { title, typeList, subscriptionPlanList } = this.state;
     const columns = [
@@ -158,12 +189,31 @@ export default class SubscriptionPlan extends Component<any, any> {
         render: (text) => (text === 0 ? 'Draft' : 'Publish')
       },
       {
+        title: 'Enable',
+        dataIndex: 'enableFlag',
+        key: 'enable',
+        width: '8%',
+        render: (text, record) => (
+          <div>
+            <Switch
+              checked={text}
+              onChange={(value) => {
+                this.setSubscriptionPlanEnableFlag(record.id, value);
+              }}
+            />
+          </div>
+        )
+      },
+      {
         title: 'Operation',
         key: 'operation',
         width: '8%',
         render: (text, record) =>
           record.status === 0 ? (
             <div>
+              <Tooltip placement="top" title="Detail">
+                <Link to={'/subscription-plan-detail/' + record.id} className="iconfont iconDetails" style={{ paddingRight: 10 }}></Link>
+              </Tooltip>
               <Tooltip placement="top" title="Edit">
                 <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit"></Link>
               </Tooltip>

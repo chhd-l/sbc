@@ -7,24 +7,22 @@ type TResult = {
 };
 
 export function getSubscriptionPlanById(id) {
-  return Fetch<TResult>('/subscriptionPlan/' + id, {
+  return Fetch<TResult>('/sub/plan/detail/' + id, {
     method: 'GET'
   });
 }
 
 export function addSubscriptionPlan(plan) {
-  return Fetch<TResult>('http://192.168.23.239/order/1.5.0/subscription/plan/save', {
+  return Fetch<TResult>('/sub/plan/save', {
     method: 'POST',
     body: JSON.stringify(plan)
   });
 }
 
-export function updateSubscriptionPlan(filterParams) {
-  return Fetch<TResult>('/subscriptionPlan/' + filterParams.id, {
+export function updateSubscriptionPlan(plan) {
+  return Fetch<TResult>('/sub/plan/update', {
     method: 'PUT',
-    body: JSON.stringify({
-      ...filterParams
-    })
+    body: JSON.stringify(plan)
   });
 }
 

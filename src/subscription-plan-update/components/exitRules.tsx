@@ -1,3 +1,4 @@
+import { edit } from '@/regular-product-add/webapi';
 import { Row, Col, Radio, Form, Input, InputNumber } from 'antd';
 import React, { Component } from 'react';
 
@@ -9,7 +10,7 @@ export default class exitRules extends Component<any, any> {
     this.state = {};
   }
   render() {
-    const { subscriptionPlan, addField } = this.props;
+    const { editable, subscriptionPlan, addField } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
@@ -28,6 +29,7 @@ export default class exitRules extends Component<any, any> {
                     initialValue: subscriptionPlan.canCancelPlan
                   })(
                     <Radio.Group
+                      disabled={!editable}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         addField('canCancelPlan', value);
@@ -48,6 +50,7 @@ export default class exitRules extends Component<any, any> {
                     initialValue: subscriptionPlan.subscriptionPlanFlag
                   })(
                     <Radio.Group
+                      disabled={!editable}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         addField('subscriptionPlanFlag', value);
@@ -71,6 +74,7 @@ export default class exitRules extends Component<any, any> {
                       rules: [{ required: true, message: 'This is Required' }]
                     })(
                       <InputNumber
+                        disabled={!editable}
                         min={0}
                         onChange={(value) => {
                           addField('cancellationRefillTimes', value);
@@ -87,6 +91,7 @@ export default class exitRules extends Component<any, any> {
                       rules: [{ required: true, message: 'This is Required' }]
                     })(
                       <InputNumber
+                        disabled={!editable}
                         min={0}
                         onChange={(value) => {
                           addField('cancellationRefillFee', value);
@@ -109,6 +114,7 @@ export default class exitRules extends Component<any, any> {
                     initialValue: subscriptionPlan.changeDeliveryDateFlag
                   })(
                     <Radio.Group
+                      disabled={!editable}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         addField('changeDeliveryDateFlag', value);
@@ -128,6 +134,7 @@ export default class exitRules extends Component<any, any> {
                     rules: [{ required: true, message: 'This is Required' }]
                   })(
                     <InputNumber
+                      disabled={!editable}
                       min={0}
                       onChange={(value) => {
                         addField('changeDeliveryDateAfterTimes', value);
@@ -148,6 +155,7 @@ export default class exitRules extends Component<any, any> {
                     initialValue: subscriptionPlan.skipNextDeliveryFlag
                   })(
                     <Radio.Group
+                      disabled={!editable}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         addField('skipNextDeliveryFlag', value);
@@ -167,6 +175,7 @@ export default class exitRules extends Component<any, any> {
                     rules: [{ required: true, message: 'This is Required' }]
                   })(
                     <InputNumber
+                      disabled={!editable}
                       min={0}
                       onChange={(value) => {
                         addField('skipNextDeliveryTimes', value);

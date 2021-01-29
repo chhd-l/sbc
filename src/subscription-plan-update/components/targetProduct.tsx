@@ -47,7 +47,7 @@ export default class targetProduct extends Component<any, any> {
 
   render() {
     const { loading, visible } = this.state;
-    const { subscriptionPlan } = this.props;
+    const { editable, subscriptionPlan } = this.props;
     return (
       <div>
         <h3>Step2</h3>
@@ -95,30 +95,23 @@ export default class targetProduct extends Component<any, any> {
                               <td>{item.goodsCateName}</td>
                               <td>{item.brandName}</td>
                               <td>{item.marketPrice}</td>
-                              <td>
-                                <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
-                                  <Tooltip placement="top" title="Delete">
-                                    <a className="iconfont iconDelete"></a>
-                                  </Tooltip>
-                                </Popconfirm>
-                              </td>
                             </tr>
                           ))}
                       </tbody>
                     </table>
-                    {subscriptionPlan.targetGoods && subscriptionPlan.targetGoods.length > 0 ? null : (
+                    {editable ? (
                       <div className="noProduct">
                         <div className="addProduct" onClick={this.showAddTargetProduct}>
-                          <span> + Add product</span>
+                          <span> + Select product</span>
                         </div>
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>
             </div>
           </Spin>
-          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetGoodsIds} />
+          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetGoods} />
         </div>
       </div>
     );

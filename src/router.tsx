@@ -63,6 +63,10 @@ const routes = [
     asyncComponent: () => import('./subscription-plan')
   },
   {
+    path: '/subscription-plan-detail/:id',
+    asyncComponent: () => import('./subscription-plan/detail')
+  },
+  {
     path: '/subscription-plan-update/:id',
     asyncComponent: () => import('./subscription-plan-update')
   },

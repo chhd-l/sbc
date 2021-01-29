@@ -37,7 +37,7 @@ export default class details extends Component<any, any> {
         item.settingPrice = null;
       });
       subscriptionPlan.mainGoods.push(...selectMainProducts);
-      subscriptionPlan.mainGoodsIds.push(...selectedRowKeys);
+      //subscriptionPlan.mainGoodsIds.push(...selectedRowKeys);
       addField('mainGoods', subscriptionPlan.mainGoods);
       addField('mainGoodsIds', subscriptionPlan.mainGoodsIds);
     }
@@ -107,7 +107,7 @@ export default class details extends Component<any, any> {
 
   render() {
     const { loading, visible } = this.state;
-    const { subscriptionPlan } = this.props;
+    const { editable, subscriptionPlan } = this.props;
     const currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
     return (
       <div>
@@ -117,10 +117,11 @@ export default class details extends Component<any, any> {
             <h4>Details</h4>
           </Col>
           <Col span={4}>
-            {' '}
-            <div className="addProduct" onClick={this.showAddMainProduct} style={{ marginTop: '10px', marginRight: '0px' }}>
-              <span> + Add product</span>
-            </div>
+            {editable ? (
+              <div className="addProduct" onClick={this.showAddMainProduct} style={{ marginTop: '10px', marginRight: '0px' }}>
+                <span> + Add product</span>
+              </div>
+            ) : null}
           </Col>
         </Row>
         <div className="details">
@@ -162,6 +163,7 @@ export default class details extends Component<any, any> {
                             <td>
                               <Icon type="minus" onClick={() => this.updateQty(item.goodsInfoId, item.quantity - 1)} />
                               <Input
+                                disabled={!editable}
                                 style={{ textAlign: 'center' }}
                                 value={item.quantity}
                                 onBlur={(e) => {
@@ -182,6 +184,7 @@ export default class details extends Component<any, any> {
                             <td>
                               <span className="currency">{currencySymbol}</span>
                               <InputNumber
+                                disabled={!editable}
                                 precision={2}
                                 min={0}
                                 value={item.settingPrice}
@@ -206,7 +209,7 @@ export default class details extends Component<any, any> {
               </div>
             ))}
         </div>
-        {visible ? <AddProduct visible={visible} clearExsit={true} updateTable={this.updateTable} exsitRowKeys={subscriptionPlan.mainGoodsIds} /> : null}
+        {visible ? <AddProduct visible={visible} clearExsit={true} updateTable={this.updateTable} exsit={subscriptionPlan.mainGoods} /> : null}
       </div>
     );
   }

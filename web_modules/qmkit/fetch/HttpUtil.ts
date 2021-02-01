@@ -7,7 +7,7 @@ const msg = {
     'K-000015': 'Failed to obtain authorization',
     'K-000002': ''
 };
-let errorList: any = [], _timerOut: any = null, _times: number = 0,_error_index=0;
+let errorList: any = [], _timerOut = 0, _times: number = 0,_error_index=0;
 class HttpUtil {
     /**
       * 发送fetch请求
@@ -46,6 +46,7 @@ class HttpUtil {
                     response.json().then(jsonBody => {
                         if (response.status == 200 && response.ok) {
                             _error_index=0;
+                            _timerOut=0;
                            HttpUtil.findErrorInterfaceReload(true, errorObj)
                             if (jsonBody.code === 'K-999996') {
                                 message.error(jsonBody.message);
@@ -168,33 +169,31 @@ class HttpUtil {
         } else if (status && _index > -1) {
             errorList.splice(_index, 1)
         }
-    // return
         const reoloadApi = () => {
+            _timerOut++;
             new Promise((resolve,reject)=>{
-                _timerOut = setTimeout(() => {
                     if ((errorList.length-1) === _times) {
                         _times = 0;
-                        clearTimeout(_timerOut)
                     } else {
                         _times++;
                         reoloadApi();
                     }
-                }, 0);
+               
                 let obj = errorList[_times];
                 resolve(obj);
             }).then((obj:any)=>{
-                console.log(errorList,_times)
+             
                 if (typeof obj.fetchUrl === 'string') {
                     obj.fetchUrl += `${obj.fetchUrl.indexOf('?') == -1 ? '?reqId=' : '&reqId='
                         }${Math.random()}`;
                 }
-                HttpUtil.handleFetchData(obj.fetchUrl, obj.fetchParams, obj.httpCustomerOpertion);
+               HttpUtil.handleFetchData(obj.fetchUrl, obj.fetchParams, obj.httpCustomerOpertion);
             }).catch(e=>{
                 console.error(e)
             });
 
         }
-        errorList.length>0&&reoloadApi();
+        errorList.length>0&&_timerOut<errorList.length&&reoloadApi();
 
     }
 

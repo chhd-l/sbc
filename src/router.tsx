@@ -848,12 +848,24 @@ const routes = [
     asyncComponent: () => import('./campaigns')
   },
   {
-    path: '/add-campaigns',
+    path: '/add-campaign',
     asyncComponent: () => import('./campaign-update')
   },
   {
-    path: '/edit-campaigns/:id',
+    path: '/edit-campaign/:id',
     asyncComponent: () => import('./campaign-update')
+  },
+  {
+    path: '/tasks',
+    asyncComponent: () => import('./task')
+  },
+  {
+    path: '/add-task',
+    asyncComponent: () => import('./task-update')
+  },
+  {
+    path: '/edit-task/:id',
+    asyncComponent: () => import('./task-update')
   }
   // {
   //   path: '/invoice-details',

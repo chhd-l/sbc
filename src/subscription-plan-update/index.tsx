@@ -86,21 +86,6 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       .catch(() => {
         message.error('Get data failed');
       });
-    webapi
-      .getAllSkuProducts()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            allSkuProduct: res.context.goodsInfos.content
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
     if (id) {
       webapi
         .getSubscriptionPlanById(id)

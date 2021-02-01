@@ -71,16 +71,16 @@ export default class entryCriteria extends Component<any, any> {
             <FormItem {...layout} label="Subscription Plan name">
               <Checkbox
                 disabled={!editable}
-                checked={subscriptionPlan.signOnSubscriptionFlag === 1 ? true : false}
+                checked={subscriptionPlan.signOnSubscriptionFlag}
                 onChange={(e) => {
-                  subscriptionPlan.signOnSubscriptionFlag = e.target.checked ? 1 : 0;
+                  subscriptionPlan.signOnSubscriptionFlag = e.target.checked;
                   addField('signOnSubscriptionFlag', subscriptionPlan.signOnSubscriptionFlag);
                 }}
               >
                 <span className="checkBoxTip">Consumers need consent to sign on subscription</span>
               </Checkbox>
             </FormItem>
-            {subscriptionPlan.signOnSubscriptionFlag === 1 ? (
+            {subscriptionPlan.signOnSubscriptionFlag ? (
               <FormItem {...layout} label="Consent">
                 <Row>
                   <Col span={16}>
@@ -128,9 +128,9 @@ export default class entryCriteria extends Component<any, any> {
             <FormItem {...layout} label="Subscription Plan">
               <Checkbox
                 disabled={!editable}
-                checked={subscriptionPlan.subscriptionPlanFlag === 1 ? true : false}
+                checked={subscriptionPlan.subscriptionPlanFlag}
                 onChange={(e) => {
-                  subscriptionPlan.subscriptionPlanFlag = e.target.checked ? 1 : 0;
+                  subscriptionPlan.subscriptionPlanFlag = e.target.checked;
                   addField('subscriptionPlanFlag', subscriptionPlan.subscriptionPlanFlag);
                 }}
               >

@@ -27,19 +27,18 @@ export default class details extends Component<any, any> {
     });
   }
 
-  updateTable(selectedRowKeys) {
-    const { addField, allSkuProduct, subscriptionPlan } = this.props;
-    if (selectedRowKeys) {
-      let selectMainProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
-      selectMainProducts.map((item) => {
+  updateTable(selectedGoods) {
+    const { addField, subscriptionPlan } = this.props;
+    if (selectedGoods) {
+      selectedGoods.map((item) => {
         item.packageId = 'PK' + moment(new Date()).format('YYMMDDHHmmSSS');
         item.quantity = 1;
         item.settingPrice = null;
       });
-      subscriptionPlan.mainGoods.push(...selectMainProducts);
+      subscriptionPlan.mainGoods.push(...selectedGoods);
       //subscriptionPlan.mainGoodsIds.push(...selectedRowKeys);
       addField('mainGoods', subscriptionPlan.mainGoods);
-      addField('mainGoodsIds', subscriptionPlan.mainGoodsIds);
+      //addField('mainGoodsIds', subscriptionPlan.mainGoodsIds);
     }
     this.setState({
       visible: false

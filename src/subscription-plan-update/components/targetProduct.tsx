@@ -33,12 +33,11 @@ export default class targetProduct extends Component<any, any> {
     });
   }
 
-  updateTable(selectedRowKeys) {
-    const { addField, allSkuProduct } = this.props;
-    if (selectedRowKeys) {
-      let targetProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
-      addField('targetGoods', targetProducts);
-      addField('targetGoodsIds', selectedRowKeys);
+  updateTable(selectedGoods) {
+    const { addField } = this.props;
+    if (selectedGoods) {
+      addField('targetGoods', selectedGoods);
+      //addField('targetGoodsIds', selectedRowKeys);
     }
     this.setState({
       visible: false
@@ -65,10 +64,9 @@ export default class targetProduct extends Component<any, any> {
                           <th style={{ width: '10%' }}>SKU</th>
                           <th style={{ width: '20%' }}>Product Name</th>
                           <th style={{ width: '15%' }}>Specification</th>
-                          <th style={{ width: '15%' }}>Product Category</th>
+                          <th style={{ width: '25%' }}>Product Category</th>
                           <th style={{ width: '10%' }}>Brand</th>
                           <th style={{ width: '10%' }}>Price</th>
-                          <th style={{ width: '10%' }}>Operation</th>
                         </tr>
                       </thead>
                       <tbody className="ant-table-tbody">

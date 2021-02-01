@@ -27,7 +27,8 @@ export default class basicInformation extends Component<any, any> {
   }
 
   offerTimePeriodValidator = (rule, value, callback) => {
-    if (value[0] < moment().startOf('day')) {
+    const { editable } = this.props;
+    if (editable && value[0] < moment().startOf('day')) {
       callback('Start Date invalid');
     }
     callback();

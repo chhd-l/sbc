@@ -175,7 +175,8 @@ export default class addTargetProduct extends Component<any, any> {
   }
 
   handleOk() {
-    this.props.updateTable(this.state.selectedRowKeys);
+    const { skuProducts, selectedRowKeys } = this.state;
+    this.props.updateTable(skuProducts.filter((p) => selectedRowKeys.includes(p.goodsInfoId)));
   }
   handleCancel() {
     this.props.updateTable();

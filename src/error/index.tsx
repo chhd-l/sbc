@@ -1,11 +1,12 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useEffect } from 'react';
-import { login, cache, history } from 'qmkit';
+import { login, cache, history, util } from 'qmkit';
 import { Row, Col, Button } from 'antd';
 const bg_selectRole = require('./img/bg-SelectRole.jpg');
 
 let ErrorPage = (props) => {
   let loginpPercriberOkta = () => {
+    util.logout();
     history.push('login', { oktaLogout: false });
   };
 

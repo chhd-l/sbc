@@ -1102,10 +1102,10 @@ export default class AppStore extends Store {
       return false;
     }
 
-    if (!goods.get('storeCateIds')) {
-      message.error('请选择店铺分类');
-      return false;
-    }
+    // if (!goods.get('storeCateIds')) {
+    //   message.error('请选择店铺分类');
+    //   return false;
+    // }
 
     if (goods.get('brandId') === '0') {
       message.error('请选择品牌');

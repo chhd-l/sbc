@@ -126,7 +126,7 @@ export default class ChooseCoupons extends React.Component<any, any> {
                       </a>
                     </AuthWrapper>
                     &nbsp;&nbsp;
-                    <a onClick={() => this.props.onDelCoupon(row.couponId)}>Delete</a>
+                    <a onClick={() => this.props.onDelCoupon(row.couponId)}>Cancel</a>
                   </div>
                 );
               }}

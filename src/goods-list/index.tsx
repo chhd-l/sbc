@@ -19,7 +19,6 @@ export default class GoodsView extends React.Component<any, any> {
   }
 
   render() {
-    // this.props.tex.d
     return (
       <AuthWrapper functionName="f_goods_1">
         <div>

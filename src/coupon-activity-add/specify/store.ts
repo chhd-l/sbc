@@ -1,7 +1,7 @@
 import { Store } from 'plume2';
 import { fromJS } from 'immutable';
 import moment from 'moment';
-import { Const, history, util } from 'qmkit';
+import { Const, history, util, cache } from 'qmkit';
 import { message, Modal } from 'antd';
 import * as webapi from './webapi';
 import SpecifyActor from './actor/specify.actor';
@@ -107,7 +107,10 @@ export default class AppStore extends Store {
           coupon.totalCount = item.totalCount;
           coupon.couponName = couponInfo.couponName;
           // 2.2.2.面值
-          coupon.denominationStr = couponInfo.fullBuyType == 0 ? `over zero minus${couponInfo.denomination}` : `over${couponInfo.fullBuyPrice}minus${couponInfo.denomination}`;
+          coupon.denominationStr =
+            couponInfo.fullBuyType == 0
+              ? `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}zero minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${couponInfo.denomination}`
+              : `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${couponInfo.fullBuyPrice} minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${couponInfo.denomination}`;
           // 2.2.3.有效期
           if (couponInfo.rangeDayType == 0) {
             // 按起止时间
@@ -193,9 +196,9 @@ export default class AppStore extends Store {
       });
     } else if (res.code == 'K-080106') {
       info({
-        content: 'The end time of the coupon is earlier than the end time of the activity.Please delete it and save it or modify the activity time.',
+        content: 'The end time of the coupon is earlier than the end time of the activity.Please delete it or modify the activity time.',
         // content: `${res.errorData.length}张优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。`,
-        okText: 'Ok'
+        okText: 'OK'
       });
       if (res.errorData) {
         this.dispatch('set: invalid: coupons', fromJS(res.errorData));
@@ -204,7 +207,7 @@ export default class AppStore extends Store {
       info({
         content: 'Coupon does not exist, please delete and save.',
         // content: `${res.errorData.length}张优惠券不存在，请删除后保存。`,
-        okText: 'Ok'
+        okText: 'OK'
       });
       if (res.errorData) {
         this.dispatch('set: invalid: coupons', fromJS(res.errorData));

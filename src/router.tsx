@@ -842,6 +842,18 @@ const routes = [
   {
     path: '/subscription-setting',
     asyncComponent: () => import('./subscription-setting')
+  },
+  {
+    path: '/campaigns',
+    asyncComponent: () => import('./campaigns')
+  },
+  {
+    path: '/add-campaigns',
+    asyncComponent: () => import('./campaign-update')
+  },
+  {
+    path: '/edit-campaigns/:id',
+    asyncComponent: () => import('./campaign-update')
   }
   // {
   //   path: '/invoice-details',

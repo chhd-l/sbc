@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { BreadCrumb, history } from 'qmkit';
+import { Headline, BreadCrumb, history } from 'qmkit';
 import BasicInfomation from './component/basic-infomation';
 import PetInfomation from './component/pet-infomation';
 import DeliveryInformation from './component/delivery-information';
 import BillingInfomation from './component/billing-infomation';
 import PaymentInfo from './component/payment-infomation';
+
+import './index.less';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -107,6 +109,72 @@ export default class CustomerDetails extends React.Component<any, any> {
         </BreadCrumb>
         {/*导航面包屑*/}
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <div className="detail-container">
+            <Row>
+              <Col span="20">
+                <Headline title="Basic information"></Headline>
+              </Col>
+              <Col span="4" className="text-align-right">
+                <Link>
+                  <span className="icon iconEdit"></span> Edit
+                </Link>
+              </Col>
+            </Row>
+            <div style={{ margin: '20px 0' }}>
+              <Row>
+                <Col span="4">Name</Col>
+                <Col span="4">Age</Col>
+                <Col span="4">Member level</Col>
+                <Col span="4">Growth value</Col>
+                <Col span="4">Points</Col>
+              </Row>
+              <Row className="text-highlight" style={{ marginTop: 5 }}>
+                <Col span="4">Shilin Hu</Col>
+                <Col span="4">30</Col>
+                <Col span="4">Classic</Col>
+                <Col span="4">3555</Col>
+                <Col span="4">3000</Col>
+              </Row>
+            </div>
+            <div className="basic-info-detail">
+              <Row type="flex" align="middle">
+                <Col span="4">Registration date</Col>
+                <Col span="6" className="text-highlight">
+                  2020-10-09
+                </Col>
+                <Col span="4">Email address</Col>
+                <Col span="6" className="text-highlight">
+                  xxx@xxx.xx
+                </Col>
+              </Row>
+              <Row type="flex" align="middle">
+                <Col span="4">Phone number</Col>
+                <Col span="6" className="text-highlight">
+                  20200303
+                </Col>
+                <Col span="4">Prefer channel</Col>
+                <Col span="6" className="text-highlight">
+                  Email
+                </Col>
+              </Row>
+              <Row type="flex" align="middle">
+                <Col span="4">Country</Col>
+                <Col span="6" className="text-highlight">
+                  Mexico
+                </Col>
+                <Col span="4">Address reference</Col>
+                <Col span="6" className="text-highlight">
+                  none
+                </Col>
+              </Row>
+              <Row type="flex" align="middle">
+                <Col span="4">Consent</Col>
+                <Col span="6" className="text-highlight">
+                  Email comunication
+                </Col>
+              </Row>
+            </div>
+          </div>
           <div className="container">
             {this.state.customerType !== 'Guest' ? (
               <Tabs

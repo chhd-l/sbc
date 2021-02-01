@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
 import { Form, Input, Select, Modal, Button, Radio } from 'antd';
 import ModalForm from './conponents/modal-form';
+import { FormattedMessage } from 'react-intl';
+
 const { Option } = Select;
 
 class ProductSearchSetting extends Component<any, any> {
-  state = { visible: false };
+  state = { visible: false, disabled: true };
   onFinish = (e: any) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -29,6 +31,7 @@ class ProductSearchSetting extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { disabled } = this.state;
     return (
       <div style={styles.container}>
         <BreadCrumb />
@@ -44,7 +47,7 @@ class ProductSearchSetting extends Component<any, any> {
                   }
                 ]
               })(
-                <Radio.Group>
+                <Radio.Group disabled={disabled}>
                   <Radio.Button value="One-off" style={{ width: 150, textAlign: 'center' }}>
                     One-off
                   </Radio.Button>
@@ -64,22 +67,22 @@ class ProductSearchSetting extends Component<any, any> {
                     }
                   ]
                 })(
-                  <Select>
+                  <Select disabled={disabled}>
                     <Option value="demo">Demo</Option>
                   </Select>
                 )}
               </Form.Item>
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
-                <Button type="danger" size="default" onClick={this.showModal}>
+                <Button type="danger" size="default" onClick={this.showModal} disabled={disabled}>
                   Add new frequency
                 </Button>
               </Form.Item>
             </Form.Item>
-            <Form.Item label=" ">
-              <Button type="primary" htmlType="submit">
-                Submit
+            <div className="bar-button">
+              <Button type="primary" onClick={this._edit}>
+                {<FormattedMessage id={disabled ? 'Edit' : 'Save'} />}
               </Button>
-            </Form.Item>
+            </div>
           </Form>
         </div>
 
@@ -87,6 +90,12 @@ class ProductSearchSetting extends Component<any, any> {
       </div>
     );
   }
+  _edit = () => {
+    const { disabled } = this.state;
+    this.setState({
+      disabled: !disabled
+    });
+  };
 }
 export default Form.create()(ProductSearchSetting);
 const styles = {

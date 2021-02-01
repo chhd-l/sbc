@@ -1,12 +1,13 @@
 import { message } from 'antd';
 import { Store } from 'plume2';
+import { number } from 'prop-types';
 import { util, history, cache } from 'qmkit';
 const msg = {
     'K-000005': 'Your account is disabled',
     'K-000015': 'Failed to obtain authorization',
     'K-000002': ''
 };
-let errorList: any = [], errorObj: any = {}, _timerOut: any = null, _times: number = 0,_error_index=0;
+let errorList: any = [], _timerOut: any = null, _times: number = 0,_error_index=0;
 class HttpUtil {
     /**
       * 发送fetch请求
@@ -16,7 +17,7 @@ class HttpUtil {
        */
 
     static handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion) {
-        errorObj = Object.assign({}, { fetchUrl: fetchUrl.split('?')[0], fetchParams, httpCustomerOpertion });
+       let errorObj = Object.assign({}, { fetchUrl: fetchUrl.split('?')[0], fetchParams, httpCustomerOpertion });
         // 1. 处理的第一步
         const { isShowLoading } = httpCustomerOpertion
         if (isShowLoading) {
@@ -45,7 +46,7 @@ class HttpUtil {
                     response.json().then(jsonBody => {
                         if (response.status == 200 && response.ok) {
                             _error_index=0;
-                            HttpUtil.findErrorInterfaceReload(true, fetchUrl)
+                           HttpUtil.findErrorInterfaceReload(true, errorObj)
                             if (jsonBody.code === 'K-999996') {
                                 message.error(jsonBody.message);
                                 return;
@@ -93,7 +94,7 @@ class HttpUtil {
                 }
                 httpCustomerOpertion.isFetched = true
                 let er = { code: "404", error: errMsg, message: 'Request interface failed or interface does not exist, please check it' }
-                HttpUtil.findErrorInterfaceReload(false, fetchUrl.split('?')[0])
+               HttpUtil.findErrorInterfaceReload(false, errorObj)
                 reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
@@ -158,38 +159,42 @@ class HttpUtil {
     /**
      * 
      * @param status 请求成功的状态
+     * fetchUrl.split('?')[0]
      */
-    static findErrorInterfaceReload(status, fetchUrl: any) {
-        let _index = errorList.findIndex(item => item.fetchUrl === fetchUrl)
-
+    static findErrorInterfaceReload(status, errorObj) {
+        let _index = errorList.findIndex(item => item.fetchUrl === errorObj.fetchUrl)
         if (!status && _index === -1) {
             errorList.push(errorObj);
         } else if (status && _index > -1) {
             errorList.splice(_index, 1)
         }
-        // return errorList;
+    // return
         const reoloadApi = () => {
-            _timerOut = setTimeout(() => {
-                let {
-                    fetchUrl,
-                    fetchParams,
-                    httpCustomerOpertion
-                } = errorList[_times];
-                if (typeof fetchUrl === 'string') {
-                    fetchUrl += `${fetchUrl.indexOf('?') == -1 ? '?reqId=' : '&reqId='
+            new Promise((resolve,reject)=>{
+                _timerOut = setTimeout(() => {
+                    if ((errorList.length-1) === _times) {
+                        _times = 0;
+                        clearTimeout(_timerOut)
+                    } else {
+                        _times++;
+                        reoloadApi();
+                    }
+                }, 0);
+                let obj = errorList[_times];
+                resolve(obj);
+            }).then((obj:any)=>{
+                console.log(errorList,_times)
+                if (typeof obj.fetchUrl === 'string') {
+                    obj.fetchUrl += `${obj.fetchUrl.indexOf('?') == -1 ? '?reqId=' : '&reqId='
                         }${Math.random()}`;
                 }
-                if (errorList.length === _times) {
-                    _times = 0;
-                    HttpUtil.handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion);
-                    clearTimeout(_timerOut)
-                } else {
-                    HttpUtil.handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion);
-                    _times++;
-                }
-            }, 1000);
+                HttpUtil.handleFetchData(obj.fetchUrl, obj.fetchParams, obj.httpCustomerOpertion);
+            }).catch(e=>{
+                console.error(e)
+            });
+
         }
-        reoloadApi();
+        errorList.length>0&&reoloadApi();
 
     }
 

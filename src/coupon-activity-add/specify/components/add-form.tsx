@@ -8,6 +8,7 @@ import { fromJS } from 'immutable';
 import ChooseCoupons from '../../common-components/choose-coupons';
 import ChooseCustomer from './specify-customer';
 import moment from 'moment';
+import '../../index.less';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
@@ -106,7 +107,6 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     const store = this._store as any;
     const activity = store.state().get('activity');
     const loading = store.state().get('loading');
-
     const levelList = store.state().get('levelList').toJS();
     const chooseCustomerList = activity.get('chooseCustomerList');
     const { getFieldDecorator } = form;
@@ -119,9 +119,9 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 {
                   required: true,
                   whitespace: true,
-                  message: 'The name of the activity should not exceed 40 words'
+                  message: 'The name of the activity should not exceed 100 words'
                 },
-                { min: 1, max: 40, message: '1-40 wrods' },
+                { min: 1, max: 100, message: '1-100 wrods' },
                 {
                   validator: (rule, value, callback) => {
                     QMMethod.validatorEmoji(rule, value, callback, 'Activity name');
@@ -132,7 +132,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 store.changeFormField({ activityName: e.target.value });
               },
               initialValue: activity.get('activityName')
-            })(<Input placeholder="No more than ten words" style={{ width: 360 }} />)}
+            })(<Input placeholder="No more than one hundred words" style={{ width: 360 }} />)}
           </FormItem>
 
           <FormItem {...formItemLayout} label="Activity time">
@@ -166,7 +166,8 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 getCalendarContainer={() => document.getElementById('page-content')}
                 allowClear={false}
                 disabledDate={(current) => {
-                  return (current && current < moment().add(-1, 'minutes')) || (current && current > moment().add(3, 'months'));
+                  return current && current < moment().startOf('day');
+                  // return (current && current < moment().add(-1, 'minutes')) || (current && current > moment().add(3, 'months'));
                 }}
                 format={Const.DATE_FORMAT}
                 placeholder={['Start date', 'End date']}
@@ -209,9 +210,9 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                     this._levelRadioChange(e.target.value, levelList);
                   }}
                 >
-                  <Radio value={-1}>All platform</Radio>
-                  {util.isThirdStore() && <Radio value={0}>店铺内客户</Radio>}
-                  <Radio value={-2}>Custom</Radio>
+                  <Radio value={-1}>All customers</Radio>
+                  {/*{util.isThirdStore() && <Radio value={0}>店铺内客户</Radio>}*/}
+                  {/*<Radio value={-2}>Custom</Radio>*/}
                 </RadioGroup>
 
                 {/* {level._levelPropsShow && (
@@ -225,23 +226,21 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                   </div>
                 )} */}
 
-                {loading && <Spin />}
-
-                {!loading && level._specify && (
-                  <ChooseCustomer
-                    chooseCustomerList={chooseCustomerList && chooseCustomerList.toJS()}
-                    selectedCustomerIds={activity.get('chooseCustomerIds') && activity.get('chooseCustomerIds').toJS()}
-                    maxLength={1000}
-                    onDelCustomer={async (id) => {
-                      store.onDelCustomer(id);
-                      form.resetFields(['joinLevel']);
-                    }}
-                    chooseCustomerBackFun={async (customerIds, rows) => {
-                      store.chooseCustomerBackFun(customerIds, rows);
-                      form.resetFields(['joinLevel']);
-                    }}
-                  />
-                )}
+                {/*{!loading && level._specify && (*/}
+                {/*  <ChooseCustomer*/}
+                {/*    chooseCustomerList={chooseCustomerList && chooseCustomerList.toJS()}*/}
+                {/*    selectedCustomerIds={activity.get('chooseCustomerIds') && activity.get('chooseCustomerIds').toJS()}*/}
+                {/*    maxLength={1000}*/}
+                {/*    onDelCustomer={async (id) => {*/}
+                {/*      store.onDelCustomer(id);*/}
+                {/*      form.resetFields(['joinLevel']);*/}
+                {/*    }}*/}
+                {/*    chooseCustomerBackFun={async (customerIds, rows) => {*/}
+                {/*      store.chooseCustomerBackFun(customerIds, rows);*/}
+                {/*      form.resetFields(['joinLevel']);*/}
+                {/*    }}*/}
+                {/*  />*/}
+                {/*)}*/}
               </div>
             )}
           </FormItem>
@@ -253,10 +252,11 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 Save
               </Button>
               &nbsp;&nbsp;
-              <Button onClick={() => history.goBack()}>Back</Button>
+              <Button onClick={() => history.goBack()}>Cancel</Button>
             </Col>
           </Row>
         </Form>
+        {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
       </NumBox>
     );
   }

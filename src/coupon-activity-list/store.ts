@@ -44,26 +44,26 @@ export default class AppStore extends Store {
     }
     let activityList = res.context.content;
     const now = moment();
-    activityList = activityList.map((item) => {
-      //设置活动状态
-      let pauseFlag;
-      const flag = item.pauseFlag;
-      const startTime = moment(item.startTime);
-      const endTime = moment(item.endTime);
-      if (endTime.isBefore(now)) {
-        pauseFlag = 4;
-      } else if (startTime.isAfter(now)) {
-        pauseFlag = 3;
-      } else if (now.isBetween(startTime, endTime)) {
-        if (flag == 1) {
-          pauseFlag = 2;
-        } else {
-          pauseFlag = 1;
-        }
-      }
-      item.pauseFlag = pauseFlag;
-      return item;
-    });
+    // activityList = activityList.map((item) => {
+    //   //设置活动状态
+    //   let pauseFlag;
+    //   const flag = item.pauseFlag;
+    //   const startTime = moment(item.startTime);
+    //   const endTime = moment(item.endTime);
+    //   if (endTime.isBefore(now)) {
+    //     pauseFlag = 4;
+    //   } else if (startTime.isAfter(now)) {
+    //     pauseFlag = 3;
+    //   } else if (now.isBetween(startTime, endTime)) {
+    //     if (flag == 1) {
+    //       pauseFlag = 2;
+    //     } else {
+    //       pauseFlag = 1;
+    //     }
+    //   }
+    //   item.pauseFlag = pauseFlag;
+    //   return item;
+    // });
     // 查询自营/非自营客户等级
     let levelList = [];
     if (util.isThirdStore()) {

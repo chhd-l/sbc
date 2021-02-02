@@ -66,7 +66,7 @@ export default class List extends React.Component<any, any> {
         <DataGrid.Column
           title={
             <p>
-              Start
+              Start time
               <br />
               End time
             </p>
@@ -96,17 +96,18 @@ export default class List extends React.Component<any, any> {
         /> */}
         <DataGrid.Column
           title="Status"
-          dataIndex="pauseFlag"
-          key="pauseFlag"
+          dataIndex="marketingStatus"
+          key="marketingStatus"
           render={(text) => {
             return Const.activityStatus[text];
           }}
         />
+        {/*pauseFlag*/}
         <DataGrid.Column
           title="Operation"
           key="operate"
           className={'operation-th'}
-          dataIndex="pauseFlag"
+          dataIndex="marketingStatus"
           render={(text, record) => {
             return this.operator(text, record);
           }}
@@ -165,34 +166,34 @@ export default class List extends React.Component<any, any> {
         <AuthWrapper functionName={'f_coupon_activity_detail'}>
           <Link to={`/coupon-activity-detail/${record.activityId}/${record.couponActivityType}`}>View</Link>
         </AuthWrapper>
-        <AuthWrapper functionName={'f_coupon_activity_editor'}>
-          {activityType != 'specify' && text == 1 && (
-            <a
-              href="javascript:void(0);"
-              onClick={() => {
-                pauseActivity(record.activityId);
-              }}
-            >
-              Pause
-            </a>
-          )}
-          {activityType != 'specify' && text == 2 && (
-            <a
-              href="javascript:void(0);"
-              onClick={() => {
-                startActivity(record.activityId);
-              }}
-            >
-              Start
-            </a>
-          )}
-          {text == 3 && <Link to={url}>Edit</Link>}
-          {text == 3 && (
-            <Popconfirm title="Are you sure to delete this activity?" onConfirm={() => deleteActivity(record.activityId)} okText="Yes" cancelText="Cancel">
-              <a href="javascript:void(0);">Delete</a>
-            </Popconfirm>
-          )}
-        </AuthWrapper>
+        {/*<AuthWrapper functionName={'f_coupon_activity_editor'}>*/}
+        {/*  {activityType != 'specify' && text == 1 && (*/}
+        {/*    <a*/}
+        {/*      href="javascript:void(0);"*/}
+        {/*      onClick={() => {*/}
+        {/*        pauseActivity(record.activityId);*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      Pause*/}
+        {/*    </a>*/}
+        {/*  )}*/}
+        {/*  {activityType != 'specify' && text == 2 && (*/}
+        {/*    <a*/}
+        {/*      href="javascript:void(0);"*/}
+        {/*      onClick={() => {*/}
+        {/*        startActivity(record.activityId);*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      Start*/}
+        {/*    </a>*/}
+        {/*  )}*/}
+        {/*  {text == 3 && <Link to={url}>Edit</Link>}*/}
+        {/*  {text == 3 && (*/}
+        {/*    <Popconfirm title="Are you sure to delete this activity?" onConfirm={() => deleteActivity(record.activityId)} okText="Yes" cancelText="Cancel">*/}
+        {/*      <a href="javascript:void(0);">Delete</a>*/}
+        {/*    </Popconfirm>*/}
+        {/*  )}*/}
+        {/*</AuthWrapper>*/}
       </div>
     );
   }

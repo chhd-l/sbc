@@ -1,7 +1,6 @@
 import { IOptions, Store } from 'plume2';
-
 import { fromJS } from 'immutable';
-import { Const, util } from 'qmkit';
+import { Const, util, cache } from 'qmkit';
 import { message } from 'antd';
 import moment from 'moment';
 import * as webapi from './webapi';
@@ -46,9 +45,9 @@ export default class AppStore extends Store {
         // 3.1.面值
         if (coupon.fullBuyType == 0) {
           //无门槛
-          coupon.denominationStr = `over zero minus${coupon.denomination}`;
+          coupon.denominationStr = `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}zero minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${coupon.denomination}`;
         } else {
-          coupon.denominationStr = `over${coupon.fullBuyPrice}minus${coupon.denomination}`;
+          coupon.denominationStr = `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${coupon.fullBuyPrice} minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${coupon.denomination}`;
         }
         // 3.2.有效期
         if (coupon.rangeDayType == 0) {

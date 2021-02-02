@@ -17,7 +17,7 @@ export default class Task extends Component<any, any> {
     super(props);
     this.state = {
       title: 'Task Board',
-      isCardView: false,
+      isCardView: true,
       goldenMomentList: [],
       taskStatus: ['To Do', 'On-going', 'Completed', 'Cancelled'],
       priorityList: ['Low', '	Medium', 'High'],

@@ -18,3 +18,12 @@ export function getSubscriptionPlanList(filterParams = {}) {
     })
   });
 }
+
+export function getGlodenMomentList() {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'GoldenMoment'
+    })
+  });
+}

@@ -30,3 +30,28 @@ export function translateAddBatch(filterParams = {}) {
     })
   });
 }
+
+/**
+ * 新增批量翻译
+ * @param filterParams
+ */
+export function defaultProductSetting(filterParams = {}) {
+  return Fetch<TResult>('/goods/translate/defaultProductSetting', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+/**
+ * 新增字典
+ * @param filterParams
+ */
+export function addSysDictionary(filterParams = {}) {
+  return Fetch<TResult>('/sysdict/addSysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

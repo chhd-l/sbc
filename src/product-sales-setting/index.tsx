@@ -3,7 +3,7 @@ import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
 import { Form, Input, Select, Modal, Button, Radio } from 'antd';
 import ModalForm from './conponents/modal-form';
 import { FormattedMessage } from 'react-intl';
-import { querySysDictionary } from './webapi';
+import { querySysDictionary, defaultProductSetting, translateAddBatch, addSysDictionary } from './webapi';
 const { Option } = Select;
 
 class ProductSearchSetting extends Component<any, any> {
@@ -17,11 +17,29 @@ class ProductSearchSetting extends Component<any, any> {
   };
   onFinish = (e: any) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
+    const { disabled } = this.state;
+
+    if (disabled) {
+      this.setState({
+        disabled: false
+      });
+    } else {
+      this.props.form.validateFieldsAndScroll(async (err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values);
+          await defaultProductSetting(values);
+          this.setState(
+            {
+              disabled: true
+            },
+            () => {
+              let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+              sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify({ ...obj, ...values }));
+            }
+          );
+        }
+      });
+    }
   };
   componentDidMount() {
     this.querySysDictionary();
@@ -36,7 +54,16 @@ class ProductSearchSetting extends Component<any, any> {
       visible: false
     });
   };
-  handleSubmit = () => {};
+  handleSubmit = () => {
+    this.setState(
+      {
+        visible: false
+      },
+      () => {
+        this.querySysDictionary();
+      }
+    );
+  };
 
   /**
    * 获取更新频率月｜ 周
@@ -77,7 +104,7 @@ class ProductSearchSetting extends Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input your E-mail!'
+                    message: 'Please select purchase type!'
                   }
                 ]
               })(
@@ -119,7 +146,7 @@ class ProductSearchSetting extends Component<any, any> {
               </Form.Item>
             </Form.Item>
             <div className="bar-button">
-              <Button type="primary" onClick={this._edit}>
+              <Button type="primary" htmlType="submit">
                 {/* {<FormattedMessage id= />} */}
                 {disabled ? 'Edit' : 'Save'}
               </Button>
@@ -131,12 +158,6 @@ class ProductSearchSetting extends Component<any, any> {
       </div>
     );
   }
-  _edit = () => {
-    const { disabled } = this.state;
-    this.setState({
-      disabled: !disabled
-    });
-  };
 }
 export default Form.create()(ProductSearchSetting);
 const styles = {

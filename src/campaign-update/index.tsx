@@ -22,8 +22,6 @@ export default class CampaignUpdate extends Component<any, any> {
                 <Flow
                   style={{ height: '600px' }}
                   data={flowdata}
-                  // grid={cell: 10}
-                  // align={grid: true}
                   // onNodeDoubleClick="handleNodeDoubleClick"
                   // onNodeClick="handleNodeClick"
                   // noEndEdge="false"

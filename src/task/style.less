@@ -1,0 +1,149 @@
+.taskCardViewClass {
+  min-height: 600px;
+  overflow-y: auto;
+  max-height: 600px;
+}
+
+.taskCardViewClass h3 {
+  padding: 10px 0;
+}
+
+.taskCardViewClass .taskCardItem {
+  cursor: pointer;
+}
+
+.taskStatusList {
+  margin-bottom: 20px;
+
+  h3 {
+    display: inline-block;
+    margin-right: 10px;
+    text-transform: uppercase;
+  }
+}
+
+.stick {
+  display: inline-block;
+  width: 4px;
+  height: 22px;
+  opacity: 1;
+  border-radius: 20px;
+  margin-right: 10px;
+  top: 5px;
+  position: relative;
+}
+
+.todo {
+  span {
+    color: rgba(233, 63, 81);
+  }
+
+  .stick {
+    background: rgba(233, 63, 81, 1);
+  }
+}
+
+.onGoing {
+  span {
+    color: rgba(57, 173, 255);
+  }
+
+  .stick {
+    background: rgba(57, 173, 255);
+  }
+}
+
+.completed {
+  span {
+    color: rgba(114, 198, 127);
+  }
+
+  .stick {
+    background: rgba(114, 198, 127);
+  }
+}
+
+.cancelled {
+  span {
+    color: rgba(172, 176, 180);
+  }
+
+  .stick {
+    background: rgba(172, 176, 180);
+  }
+}
+
+.taskCard {
+  color: rgba(127, 127, 127);
+  height: 135px;
+}
+
+.taskCard .status {
+  font-size: 12px;
+}
+
+.upborder {
+  border-top: 1px solid rgb(217, 217, 217);
+}
+
+.contentPanel div {
+  color: #221357;
+  margin-bottom: 10px;
+
+  &.goldenMoment {
+    font-size: 15px;
+
+    .addTaskIcon {
+      padding: 3px;
+      color: #ffffff;
+      border-radius: 3px;
+      margin-right: 10px;
+    }
+
+    .warningIcon {
+      float: right;
+    }
+  }
+
+  &.contentInfo {
+    font-size: 10px;
+    color: #989898;
+
+    .addTaskIcon {
+      font-size: 5px;
+      margin-right: 24px;
+      margin-left: 8px;
+    }
+  }
+}
+
+.ant-advanced-search-form {
+  /deep/ .ant-form-item {
+    .ant-form-item-label {
+      width: 32%;
+    }
+
+    .ant-form-item-control-wrapper {
+      display: inline-block;
+      width: 250px;
+    }
+  }
+}
+
+.taskCardViewClass .taskCard .ant-card-body {
+  padding: 15px 25px 15px 45px !important;
+}
+
+.cardViewList .ant-card-body {
+  padding: 0 !important;
+}
+
+.taskCardViewClass .iconPanel {
+  padding-left: 0;
+  text-align: center;
+}
+
+.taskItem {
+  position: relative;
+  margin-bottom: 20px;
+}

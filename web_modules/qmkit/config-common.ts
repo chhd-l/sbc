@@ -120,10 +120,12 @@ const Common = {
     4: 'Expired'
   },
   activityStatus: {
+    0: 'All',
     1: 'In process',
     2: 'Pause',
     3: 'Not start',
-    4: 'Completed'
+    4: 'Completed',
+    5: 'Not start and in process'
   },
   couponActivityType: {
     0: '全场赠券',

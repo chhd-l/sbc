@@ -1,51 +1,109 @@
 import React, { Component } from 'react';
-import { Modal, Button, Form, Input, Switch } from 'antd';
+import { Modal, Button, Form, Input, Switch, message } from 'antd';
+import { Const } from 'qmkit';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import { string } from 'prop-types';
+
+import { addDescriptionItem, updateDescriptionItem } from '../webapi';
+
 import './../index.less';
+import { add } from '@/groupon-add/webapi';
 const FormItem = Form.Item;
 
 interface FormItemType {
-  label: string;
-  key: string;
-  value: string;
-  rules: Array<any>;
-  placeholder?: string;
+  languageId: number;
+  languageName?: string;
+  translateName: string;
+  label?: string;
+  rules?: Array<any>;
 }
 
 interface Iprop extends FormComponentProps {
+  id: string;
   name: string;
   visible: boolean;
   loading: boolean;
-  descName: string;
-  dipName: Array<FormItemType>;
-  status: boolean;
+  descriptionName: string;
+  translateList: Array<FormItemType>;
+  displayStatus: boolean;
   onSubmit: Function;
   onCancel: Function;
   onChangeFormVisibility: (status: boolean) => void;
   onChangeFormLoading: (status: boolean) => void;
 }
 
-class CreateForm extends Component<Iprop> {
+interface Istate {
+  id: string;
+  descriptionName: string;
+  translateList: Array<FormItemType>;
+  displayStatus: boolean;
+}
+
+class CreateForm extends Component<Iprop, Istate> {
   constructor(props: Iprop) {
     super(props);
+    this.state = {
+      id: this.props.id || undefined,
+      descriptionName: this.props.descriptionName,
+      translateList: this.props.translateList.map((t) => ({ languageId: t.languageId, translateName: t.translateName })),
+      displayStatus: this.props.displayStatus
+    };
   }
 
+  handleUpdateDescriptionName = (value: string) => {
+    this.setState({
+      descriptionName: value
+    });
+  };
+
+  handleUpdateDisplayStatue = (status: boolean) => {
+    this.setState({
+      displayStatus: status
+    });
+  };
+
+  handleUpdateDisplayName = (languageId: number, value: string) => {
+    this.setState({
+      translateList: this.state.translateList.map((t) => {
+        if (t.languageId === languageId) {
+          t.translateName = value;
+        }
+        return t;
+      })
+    });
+  };
+
   handleSubmit = () => {
+    const { onChangeFormLoading, onSubmit } = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        const handleMethodFunc = this.state.id ? updateDescriptionItem : addDescriptionItem;
+        onChangeFormLoading(true);
+        handleMethodFunc(this.state)
+          .then((data) => {
+            const { res } = data;
+            if (res.code === Const.SUCCESS_CODE) {
+              onSubmit(res.message);
+            } else {
+              onChangeFormLoading(false);
+              message.error(res.message || 'Add Data Failed');
+            }
+          })
+          .catch((err) => {
+            onChangeFormLoading(false);
+            message.error(err || 'Add Data Failed');
+          });
       }
     });
   };
 
   render() {
-    const { name, visible, loading, onChangeFormVisibility, descName, dipName, status } = this.props;
+    const { name, visible, loading, onChangeFormVisibility, descriptionName, translateList, displayStatus } = this.props;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -80,15 +138,15 @@ class CreateForm extends Component<Iprop> {
           <FormItem key="descName" label="Description name">
             {getFieldDecorator('descName', {
               rules: [{ required: true, message: 'Description name is required' }],
-              initialValue: descName
-            })(<Input style={{ width: '80%' }} />)}
+              initialValue: descriptionName
+            })(<Input onChange={(e) => this.handleUpdateDescriptionName(e.target.value)} style={{ width: '80%' }} />)}
           </FormItem>
-          {dipName.map((item: FormItemType, idx: number) => (
-            <FormItem key={item.key} label={item.label} className={item.label === ' ' ? 'emit-lable-item' : ''}>
-              {getFieldDecorator(item.key, {
+          {translateList.map((item: FormItemType, idx: number) => (
+            <FormItem key={item.languageId} label={item.label}>
+              {getFieldDecorator(item.languageName, {
                 rules: item.rules,
-                initialValue: item.value
-              })(<Input style={{ width: '80%' }} placeholder={item.placeholder || ''} />)}
+                initialValue: item.translateName
+              })(<Input onChange={(e) => this.handleUpdateDisplayName(item.languageId, e.target.value)} style={{ width: '80%' }} placeholder={item.languageName || ''} />)}
             </FormItem>
           ))}
           <div className="ant-form-item-required" style={{ color: '#f5222d' }}>
@@ -97,8 +155,8 @@ class CreateForm extends Component<Iprop> {
           <FormItem key="status" label="Status">
             {getFieldDecorator('status', {
               valuePropName: 'checked',
-              initialValue: status
-            })(<Switch />)}
+              initialValue: displayStatus
+            })(<Switch onChange={this.handleUpdateDisplayStatue} />)}
           </FormItem>
         </Form>
       </Modal>

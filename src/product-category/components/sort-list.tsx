@@ -20,13 +20,13 @@ class SortList extends Component<any, any> {
   _columns = [
     {
       title: 'Description name',
-      dataIndex: 'descName',
+      dataIndex: 'descriptionName',
       key: 'descName'
     },
     {
       title: 'Display name',
-      dataIndex: 'dipNameEn',
-      key: 'dipNameEn'
+      key: 'dipName',
+      render: (text, record) => <div>{record.translateList && record.translateList.length ? record.translateList[0]['translateName'] : ''}</div>
     },
     {
       title: 'Operation',

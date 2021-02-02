@@ -20,7 +20,7 @@ class DescriptionManagement extends Component<any, any> {
     this.state = {
       title: 'Description management',
       searchForm: {
-        descName: ''
+        descriptionName: ''
       },
       pagination: {
         current: 1,
@@ -31,10 +31,10 @@ class DescriptionManagement extends Component<any, any> {
       languageList: [],
       visible: false,
       descForm: {
-        id: 0,
-        descName: '',
-        dipNames: [],
-        status: false
+        id: '',
+        discriptionName: '',
+        translateList: [],
+        displayStatus: false
       },
       isEdit: false,
       currentEditTab: {},
@@ -59,16 +59,22 @@ class DescriptionManagement extends Component<any, any> {
   };
 
   onSearchFormChange = (value) => {
-    let data = this.state.searchForm;
     this.setState({
       searchForm: {
-        descName: value
+        descriptionName: value
       }
     });
   };
 
   onSearch = () => {
-    this.getDescriptionList();
+    const { pagination } = this.state;
+    pagination.current = 1;
+    this.setState(
+      {
+        pagination
+      },
+      () => this.getDescriptionList()
+    );
   };
   handleTableChange = (pagination: any) => {
     this.setState(
@@ -88,16 +94,16 @@ class DescriptionManagement extends Component<any, any> {
 
   openAddPage = () => {
     let descForm = {
-      id: 0,
-      descName: '',
-      dipNames: this.state.languageList.map((lan, idx) => ({
-        label: idx === 0 ? 'Display name' : ' ',
-        key: lan.value,
-        value: '',
-        placeholder: lan.valueEn,
+      id: undefined,
+      descriptionName: '',
+      translateList: this.state.languageList.map((lan) => ({
+        label: `Display name(${lan.valueEn})`,
+        languageId: lan.id,
+        languageName: lan.valueEn,
+        translateName: '',
         rules: [{ required: true, message: 'Display name is required' }]
       })),
-      status: false
+      displayStatus: false
     };
     this.setState({
       modalName: 'Add new tab',
@@ -109,10 +115,19 @@ class DescriptionManagement extends Component<any, any> {
   };
   openEditPage = (row) => {
     let descForm = {
-      descName: row.descName,
-      dipNameFr: row.dipNameFr,
-      dipNameEn: row.dipNameEn,
-      status: row.status
+      id: row.id,
+      descriptionName: row.descriptionName,
+      translateList: this.state.languageList.map((lan) => {
+        const tl = row.translateList.find((x) => x.languageId == lan.id) || {};
+        return {
+          label: `Display name(${lan.valueEn})`,
+          languageId: lan.id,
+          languageName: lan.valueEn,
+          translateName: tl.translateName || '',
+          rules: [{ required: true, message: 'Display name is required' }]
+        };
+      }),
+      displayStatus: row.displayStatus
     };
     this.setState({
       modalName: 'Edit tab',
@@ -123,17 +138,15 @@ class DescriptionManagement extends Component<any, any> {
       loading: false
     });
   };
-  handleSubmit = () => {
-    const { descForm, isEdit, currentEditTab } = this.state;
-    // this.props.form.validateFields((err, values) => {
-    //   if (!err) {
-    //     if (isEdit) {
-    //       this.updateDescriptionItem(Object.assign({}, descForm, { id: currentEditTab.id }));
-    //     } else {
-    //       this.addDescriptionItem(Object.assign({}, descForm));
-    //     }
-    //   }
-    // });
+  handleSubmit = (msg) => {
+    message.success(msg);
+    this.setState(
+      {
+        visible: false,
+        loading: false
+      },
+      () => this.getDescriptionList()
+    );
   };
   getDescriptionList = () => {
     const { searchForm, pagination } = this.state;
@@ -141,16 +154,17 @@ class DescriptionManagement extends Component<any, any> {
       loading: true
     });
     let params = {
-      descName: searchForm.descName,
+      descriptionName: searchForm.descriptionName,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
     };
     webapi
       .getDescriptionList(params)
-      .then((res) => {
+      .then((data) => {
+        const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
-          const descList = res.context.descList;
+          const descList = res.context.descriptionList;
           this.setState({ descList, pagination, loading: false });
         } else {
           this.setState({
@@ -166,51 +180,17 @@ class DescriptionManagement extends Component<any, any> {
         message.error(err.toString() || 'Operation failed');
       });
   };
-  addDescriptionItem = (params: object) => {
-    this.setState({
-      loading: true
-    });
-    webapi
-      .addDescriptionItem(params)
-      .then((res) => {
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
-          this.setState(
-            {
-              visible: false,
-              loading: false
-            },
-            () => this.getDescriptionList()
-          );
-        } else {
-          this.setState({
-            loading: false
-          });
-          message.error(res.message || 'Operation failed');
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          loading: false
-        });
-        message.error(err.toString() || 'Operation failed');
-      });
-  };
   deleteDescriptionItem = (id) => {
-    let idList = [];
-    idList.push(id);
-    let params = {
-      idList: idList
-    };
     this.setState({
       loading: true
     });
     webapi
-      .deleteDescriptionItem(params)
-      .then((res) => {
+      .deleteDescriptionItem(id)
+      .then((data) => {
+        const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getDescriptionList();
-          message.success('Operate successfully');
+          message.success(res.message || 'Operate successfully');
         } else {
           this.setState({
             loading: false
@@ -226,43 +206,29 @@ class DescriptionManagement extends Component<any, any> {
       });
   };
 
-  updateDescriptionItem = (params) => {
-    this.setState({
-      loading: true
-    });
+  updateDescriptionStatus = (row, status) => {
+    let params = {
+      id: row.id,
+      descriptionName: row.descriptionName,
+      translateList: row.translateList,
+      displayStatus: status
+    };
+    this.setState({ loading: true });
     webapi
       .updateDescriptionItem(params)
-      .then((res) => {
+      .then((data) => {
+        const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            visible: false,
-            loading: false
-          });
           this.getDescriptionList();
-          message.success('Operate successfully');
         } else {
-          this.setState({
-            loading: false
-          });
-          message.error(res.message.toString() || 'Operation failed');
+          this.setState({ loading: false });
+          message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
-        this.setState({
-          loading: false
-        });
-        message.error(err.toString() || 'Operation failed');
+        this.setState({ loading: false });
+        message.error(err || 'Operation failed');
       });
-  };
-  updateDescriptionStatus = (checked, row) => {
-    let params = {
-      descName: row.descName,
-      dipNameFr: row.dipNameFr,
-      dipNameEn: row.dipNameEn,
-      id: row.id,
-      status: checked
-    };
-    this.updateDescriptionItem(params);
   };
 
   render() {
@@ -271,19 +237,19 @@ class DescriptionManagement extends Component<any, any> {
     const columns = [
       {
         title: 'Description name',
-        dataIndex: 'descName',
-        key: 'descName'
+        dataIndex: 'descriptionName',
+        key: 'descriptionName'
       },
       {
         title: 'Display name',
-        dataIndex: 'dipNameEn',
-        key: 'dipNameEn'
+        key: 'dipName',
+        render: (text, record) => <div>{record.translateList && record.translateList.length ? record.translateList[0]['translateName'] : ''}</div>
       },
       {
         title: 'Status',
-        dataIndex: 'status',
+        dataIndex: 'displayStatus',
         key: 'status',
-        render: (text, record) => <Switch onChange={(value) => this.updateDescriptionStatus(value, record)} checked={text} />
+        render: (text, record) => <Switch onChange={(value) => this.updateDescriptionStatus(record, value)} checked={text} />
       },
       {
         title: 'Operation',
@@ -311,7 +277,7 @@ class DescriptionManagement extends Component<any, any> {
         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <div className="container-search">
             <Headline title={title} />
-            <SearchForm descName={this.state.searchForm.descName} onChangeDescName={this.onSearchFormChange} onSearch={this.onSearch} />
+            <SearchForm descName={this.state.searchForm.descriptionName} onChangeDescName={this.onSearchFormChange} onSearch={this.onSearch} />
             <div>
               <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
                 <span>Add new description</span>
@@ -325,12 +291,13 @@ class DescriptionManagement extends Component<any, any> {
 
           {visible ? (
             <CreateForm
+              id={descForm.id}
               name={modalName}
               visible={visible}
               loading={loading}
-              descName={descForm.descName}
-              dipName={descForm.dipNames}
-              status={descForm.status}
+              descriptionName={descForm.descriptionName}
+              translateList={descForm.translateList}
+              displayStatus={descForm.displayStatus}
               onSubmit={this.handleSubmit}
               onCancel={() => {
                 this.setState({ visible: false });

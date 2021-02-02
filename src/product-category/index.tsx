@@ -34,7 +34,8 @@ class PeoductCategory extends Component<any, any> {
       },
       loading: true,
       bindId: 0,
-      bindVisible: false
+      bindVisible: false,
+      bindDescriptionIds: []
     };
   }
   componentDidMount() {
@@ -240,10 +241,31 @@ class PeoductCategory extends Component<any, any> {
   };
 
   openBindModal = (id) => {
-    this.setState({
-      bindId: id,
-      bindVisible: true
-    });
+    this.setState({ loading: true });
+    webapi
+      .getBindDescription(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false,
+            bindId: id,
+            bindVisible: true,
+            bindDescriptionIds: res.context.map((item) => item.id)
+          });
+        } else {
+          message.error(res.message || 'Get Data Failed');
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Get Data Failed');
+        this.setState({
+          loading: false
+        });
+      });
   };
 
   onCloseBindingModal = (status: boolean) => {
@@ -253,7 +275,7 @@ class PeoductCategory extends Component<any, any> {
   };
 
   render() {
-    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination, bindId, bindVisible } = this.state;
+    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination, bindId, bindVisible, bindDescriptionIds } = this.state;
     const columns = [
       {
         title: 'Category name',
@@ -396,13 +418,16 @@ class PeoductCategory extends Component<any, any> {
             <Table rowKey="id" onChange={this.handleTableChange} rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
           </div>
         </Modal>
-        <BindDescription
-          id={bindId}
-          visible={bindVisible}
-          onCloseModal={() => {
-            this.onCloseBindingModal(false);
-          }}
-        />
+        {bindVisible && (
+          <BindDescription
+            id={bindId}
+            visible={bindVisible}
+            defaultIds={bindDescriptionIds}
+            onCloseModal={() => {
+              this.onCloseBindingModal(false);
+            }}
+          />
+        )}
       </div>
     );
   }

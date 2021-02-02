@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { Modal, Button, Table } from 'antd';
+import { Modal, Button, Table, message } from 'antd';
 import { Const } from 'qmkit';
 
 import SearchForm from './../../description-management/components/search-form';
 import { getDescriptionList } from './../../description-management/webapi';
+import { bindDescription } from '../webapi';
 
 import SortList from './sort-list';
 
 interface Iprop {
   id: number;
   visible: boolean;
+  defaultIds: Array<string>;
   onCloseModal: () => void;
 }
 
@@ -18,7 +20,7 @@ export default class BindDescription extends Component<Iprop, any> {
     super(props);
     this.state = {
       descName: '',
-      selectedRowKeys: [],
+      selectedRowKeys: this.props.defaultIds,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -35,6 +37,17 @@ export default class BindDescription extends Component<Iprop, any> {
     this.getDescList();
   }
 
+  onCancel = () => {
+    const { onCloseModal } = this.props;
+    this.setState({
+      selectedRowKeys: [],
+      step: 1,
+      loading: false,
+      bindList: []
+    });
+    onCloseModal();
+  };
+
   setDescName = (value: string) => {
     this.setState({
       descName: value
@@ -42,15 +55,18 @@ export default class BindDescription extends Component<Iprop, any> {
   };
 
   getDescList = () => {
+    const { defaultIds } = this.props;
     const { descName, pagination } = this.state;
     getDescriptionList({
-      descName,
+      descriptionName: descName,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
-    }).then((res) => {
+    }).then((data) => {
+      const { res } = data;
       if ((res.code = Const.SUCCESS_CODE)) {
         this.setState({
-          descList: res.context.descList
+          descList: res.context.descriptionList,
+          bindList: res.context.descriptionList.filter((d) => defaultIds.includes(d.id))
         });
       }
     });
@@ -58,7 +74,8 @@ export default class BindDescription extends Component<Iprop, any> {
 
   onSelectRowChange = (selectedRowKeys) => {
     this.setState({
-      selectedRowKeys
+      selectedRowKeys,
+      bindList: []
     });
   };
 
@@ -74,9 +91,11 @@ export default class BindDescription extends Component<Iprop, any> {
   };
 
   onNextButtonClick = () => {
-    const { descList, selectedRowKeys } = this.state;
-    const bindList = descList.filter((d) => selectedRowKeys.indexOf(d.id) > -1);
-    this.setState({ bindList, step: 2 });
+    const { descList, selectedRowKeys, bindList } = this.state;
+    this.setState({
+      bindList: bindList.length > 0 ? bindList : descList.filter((d) => selectedRowKeys.includes(d.id)),
+      step: 2
+    });
   };
 
   onPrevButtonClick = () => {
@@ -98,19 +117,49 @@ export default class BindDescription extends Component<Iprop, any> {
     });
   };
 
+  onSubmit = () => {
+    const { id } = this.props;
+    const { bindList } = this.state;
+    this.setState({
+      loading: true
+    });
+    bindDescription({
+      goodsCateId: id,
+      descriptionIdList: bindList.map((item) => item.id)
+    })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.onCancel();
+          message.success(res.message || 'Operate successfully');
+        } else {
+          message.error(res.message || 'Operate failed');
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Operate failed');
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
   render() {
-    const { visible, onCloseModal } = this.props;
+    const { visible } = this.props;
     const { descName, loading, selectedRowKeys, descList, step, pagination, bindList } = this.state;
     const listColumns = [
       {
         title: 'Description name',
-        dataIndex: 'descName',
+        dataIndex: 'descriptionName',
         key: 'descName'
       },
       {
         title: 'Display name',
-        dataIndex: 'dipNameEn',
-        key: 'dipNameEn'
+        key: 'dipName',
+        render: (text, record) => <div>{record.translateList && record.translateList.length ? record.translateList[0]['translateName'] : ''}</div>
       }
     ];
     const rowSelection = {
@@ -123,10 +172,9 @@ export default class BindDescription extends Component<Iprop, any> {
         title="Bind description"
         visible={visible}
         width="800px"
-        confirmLoading={loading}
         maskClosable={false}
         onCancel={() => {
-          onCloseModal();
+          this.onCancel();
         }}
         footer={[
           step === 2 ? (
@@ -137,13 +185,20 @@ export default class BindDescription extends Component<Iprop, any> {
           <Button
             key="back"
             onClick={() => {
-              onCloseModal();
+              this.onCancel();
             }}
           >
             Cancel
           </Button>,
           step === 2 ? (
-            <Button key="submit" type="primary" onClick={() => {}}>
+            <Button
+              key="submit"
+              type="primary"
+              loading={loading}
+              onClick={() => {
+                this.onSubmit();
+              }}
+            >
               Confirm
             </Button>
           ) : (

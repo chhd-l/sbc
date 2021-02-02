@@ -36,7 +36,6 @@ class DescriptionManagement extends Component<any, any> {
         translateList: [],
         displayStatus: false
       },
-      isEdit: false,
       currentEditTab: {},
       modalName: '',
       loading: true
@@ -109,7 +108,6 @@ class DescriptionManagement extends Component<any, any> {
       modalName: 'Add new tab',
       visible: true,
       descForm,
-      isEdit: false,
       loading: false
     });
   };
@@ -133,7 +131,6 @@ class DescriptionManagement extends Component<any, any> {
       modalName: 'Edit tab',
       visible: true,
       descForm,
-      isEdit: true,
       currentEditTab: row,
       loading: false
     });

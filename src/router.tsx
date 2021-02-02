@@ -864,6 +864,10 @@ const routes = [
     asyncComponent: () => import('./tag-management-detail')
   },
   {
+    path: '/tag-management-edit/:id',
+    asyncComponent: () => import('./tag-management-edit')
+  },
+  {
     path: '/tasks',
     asyncComponent: () => import('./task')
   },

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AuthWrapper } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb } from 'antd';
+import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon } from 'antd';
 
 import * as webapi from './webapi';
+import { FormattedMessage } from 'react-intl';
 
 const { Search } = Input;
+const { Meta } = Card;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const InputGroup = Input.Group;
@@ -18,12 +20,12 @@ class TagManagementDetail extends Component<any, any> {
       id: this.props.match.params.id,
       pagination: {
         current: 1,
-        pageSize: 10,
-        total: 0
+        pageSize: 9,
+        total: 10
       },
 
       tagDetail: {},
-      petOwnerList: [],
+      petOwnerList: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }],
       loading: false
     };
   }
@@ -35,6 +37,12 @@ class TagManagementDetail extends Component<any, any> {
   };
   onSearch = (value) => {
     console.log(value);
+  };
+  onPageChange = (page, pageSize) => {
+    console.log(page, pageSize);
+  };
+  deletePetOwner = (id) => {
+    console.log(id);
   };
 
   render() {
@@ -90,9 +98,45 @@ class TagManagementDetail extends Component<any, any> {
                 extra={
                   <div>
                     <Search placeholder="Please input keyword" onSearch={(value) => this.onSearch(value)} style={{ width: 200 }} />
+                    <Button type="primary" style={{ marginLeft: 20 }}>
+                      <p>New</p>
+                    </Button>
                   </div>
                 }
               />
+              <Row>
+                {petOwnerList &&
+                  petOwnerList.map((item, index) => (
+                    <Col span={8}>
+                      <Card style={{ width: 330, marginTop: 16 }} key={index}>
+                        <Meta avatar={<Avatar size={64} icon="user" />} title="Card title" description="This is the description" />
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 10
+                          }}
+                        >
+                          <Link to={'/pet-owner-detail/' + item.id} style={styles.linkStyle}>
+                            <Icon type="eye" />
+                          </Link>
+
+                          <span style={styles.deleteStyle} className="iconfont iconDelete" onClick={() => this.deletePetOwner(item.id)}></span>
+                        </div>
+                      </Card>
+                    </Col>
+                  ))}
+              </Row>
+              {pagination.total ? <Pagination style={{ marginBottom: 20 }} current={pagination.current} pageSize={pagination.pageSize} total={pagination.total} onChange={this.onPageChange} /> : null}
+            </div>
+
+            <div className="bar-button">
+              <Link to={'/tag-management-edit/' + this.state.id}>
+                <Button type="primary">{<FormattedMessage id="edit" />}</Button>
+              </Link>
+              <Button style={{ marginLeft: 20 }} onClick={() => (history as any).go(-1)}>
+                {<FormattedMessage id="back" />}
+              </Button>
             </div>
           </Spin>
         </div>
@@ -107,6 +151,15 @@ const styles = {
     lineHeight: 2
   },
   detailValue: {
+    color: '#221357'
+  },
+  deleteStyle: {
+    color: '#e2001a',
+    marginLeft: 10,
+    cursor: 'pointer'
+  },
+  linkStyle: {
+    cursor: 'pointer',
     color: '#221357'
   }
 } as any;

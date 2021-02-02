@@ -1,6 +1,8 @@
 import React from 'react';
-import { Button, Modal, Form, Radio, Input, Select, Spin, InputNumber } from 'antd';
+import { Button, Modal, Form, Radio, Input, Select, Spin, InputNumber, message } from 'antd';
 import _ from 'lodash';
+import * as webApi from './../webapi';
+import { Const } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,21 +18,23 @@ class TaxesAdd extends React.Component<any, any> {
         id: '',
         taxZoneName: '',
         taxZoneDescription: '',
-        taxZoneType: '',
-        zoneIncludes: '',
+        taxZoneType: 0,
+        zoneIncludes: [],
         taxRates: ''
       },
       taxZoneTypeList: [
         {
-          value: 'statesBased',
+          value: 0,
           name: 'States based'
         },
         {
-          value: 'countryBased',
+          value: 1,
           name: 'Country based'
         }
       ],
-      zoneList: []
+      zoneList: [],
+      statesZoneIncludes: sessionStorage.getItem('currentCountry') ? [sessionStorage.getItem('currentCountry')] : [],
+      countryZoneIncludes: []
     };
   }
   componentDidMount() {}
@@ -49,33 +53,99 @@ class TaxesAdd extends React.Component<any, any> {
   }
 
   handleSubmit = () => {
-    this.props.closeFunction();
+    const { taxForm, isEdit } = this.state;
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        let params = {
+          description: taxForm.taxZoneDescription,
+          taxRate: taxForm.taxRates,
+          taxZoneName: taxForm.taxZoneName,
+          taxZoneStateRels: taxForm.zoneIncludes,
+          taxZoneType: taxForm.taxZoneType
+        };
+        if (isEdit) {
+          params = Object.assign(params, {
+            id: taxForm.id
+          });
+          this.updateTaxZone(params);
+        } else {
+          this.addTaxZone(params);
+        }
+      }
+    });
   };
 
   handleCancel = () => {
-    this.props.closeFunction();
+    this.props.closeFunction(false);
   };
 
   onTaxFormChange = ({ field, value }) => {
     let data = this.state.taxForm;
+
+    if (field === 'taxZoneType') {
+      if (value) {
+        data['zoneIncludes'] = this.state.countryZoneIncludes;
+      } else {
+        data['zoneIncludes'] = this.state.statesZoneIncludes;
+      }
+    }
+    if (field === 'zoneIncludes') {
+      this.setState({
+        countryZoneIncludes: value
+      });
+    }
     data[field] = value;
     this.setState({
       taxForm: data
     });
   };
+  addTaxZone = (params) => {
+    webApi
+      .addTaxZone(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.props.closeFunction(true);
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  updateTaxZone = (params) => {
+    webApi
+      .editTaxZone(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.props.closeFunction(true);
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
   getZoneList = () => {};
 
   render() {
     const { visible, isEdit, loading, taxForm, taxZoneTypeList, fetching, zoneList } = this.state;
     const { getFieldDecorator } = this.props.form;
+    this.props.form.resetFields();
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 }
+        sm: { span: 15 }
       }
     };
     return (
@@ -172,23 +242,22 @@ class TaxesAdd extends React.Component<any, any> {
             )}
           </FormItem>
           <FormItem label="Zone includes">
-            {getFieldDecorator('objectNo', {
+            {getFieldDecorator('zoneIncludes', {
               rules: [
                 {
                   required: true,
                   message: 'Please Select zone!'
-                },
-                {
-                  max: 50,
-                  message: 'Exceed maximum length!'
                 }
-              ]
+              ],
+              initialValue: taxForm.zoneIncludes
             })(
               <Select
                 style={{ width: '80%' }}
                 showSearch
                 placeholder="Select zone"
                 optionFilterProp="children"
+                mode="multiple"
+                disabled={taxForm.taxZoneType === 0}
                 onChange={(value) => {
                   this.onTaxFormChange({
                     field: 'zoneIncludes',

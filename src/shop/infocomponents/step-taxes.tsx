@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Spin, Modal } from 'antd';
+import { Button, Spin, Modal, message } from 'antd';
 import TaxesTable from '../components/taxes-table';
 import TaxesAdd from '../components/taxes-add';
 import TaxesSetting from '../components/taxes-setting';
 
+import * as webApi from './../webapi';
+import { Const } from 'qmkit';
 export default class StepTaxes extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -45,63 +47,76 @@ export default class StepTaxes extends Component<any, any> {
         pagination: pagination
       },
       () => {
-        this.getTaxList();
+        this.getTaxZoneList();
       }
     );
   };
 
   handleTableChange = (pagination) => {
-    debugger;
     this.setState(
       {
         pagination: pagination
       },
       () => {
-        this.getTaxList();
+        this.getTaxZoneList();
       }
     );
   };
 
-  getTaxList = () => {
+  getTaxZoneList = () => {
     const { pagination } = this.state;
-    console.log(pagination);
-
-    let taxList = [
-      {
-        id: 1982,
-        taxZoneName: 'test_1',
-        taxZoneDescription: 'test_1',
-        taxZoneType: 'statesBased',
-        zoneIncludes: '',
-        taxRates: 0.12,
-        status: 0
-      },
-      {
-        id: 1983,
-        taxZoneName: 'test_3',
-        taxZoneDescription: 'test_3',
-        taxZoneType: 'countryBased',
-        zoneIncludes: '',
-        taxRates: 0.15,
-        status: 1
-      }
-    ];
+    let params = {
+      number: pagination.current - 1,
+      size: pagination.pageSize
+    };
     this.setState({
-      dataList: taxList,
-      pagination: {
-        current: pagination.current,
-        pageSize: pagination.pageSize,
-        total: 2
-      }
+      loading: true
     });
+
+    webApi
+      .getTaxZoneList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let tempObj = res.context.taxZones;
+          let taxList = tempObj.content;
+
+          this.setState({
+            dataList: taxList,
+            loading: false,
+            pagination: {
+              current: tempObj.number + 1,
+              pageSize: tempObj.size,
+              total: tempObj.total
+            }
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   openAddTaxPage = () => {
+    let zoneIncludes = [];
+    let currentCountry = sessionStorage.getItem('currentCountry') || '';
+    if (currentCountry) {
+      zoneIncludes.push(currentCountry);
+    }
+
     let taxForm = {
       id: '',
       taxZoneName: '',
       taxZoneDescription: '',
-      taxZoneType: '',
-      zoneIncludes: '',
+      taxZoneType: 0,
+      zoneIncludes: zoneIncludes,
       taxRates: ''
     };
     this.setState({
@@ -110,11 +125,23 @@ export default class StepTaxes extends Component<any, any> {
       taxForm
     });
   };
-  closeAllModal = () => {
+  closeAllModal = (isRefresh) => {
+    let taxForm = {
+      id: '',
+      taxZoneName: '',
+      taxZoneDescription: '',
+      taxZoneType: 0,
+      zoneIncludes: [],
+      taxRates: ''
+    };
     this.setState({
       addVisible: false,
-      settingVisible: false
+      settingVisible: false,
+      taxForm
     });
+    if (isRefresh) {
+      this.getTaxZoneList();
+    }
   };
 
   openEditTaxPage = (row) => {
@@ -137,6 +164,25 @@ export default class StepTaxes extends Component<any, any> {
       settingVisible: true
     });
   };
+  handleDetele = (id) => {
+    this.setState({
+      loading: true
+    });
+    webApi
+      .deleteTaxZone({ id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.error(res.message || 'Operation successful');
+          this.getTaxZoneList();
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
 
   render() {
     const { loading, dataList, pagination, addVisible, isEdit, settingVisible, taxForm } = this.state;
@@ -152,7 +198,7 @@ export default class StepTaxes extends Component<any, any> {
             </Button>
           </div>
           <div id="consent" className="consent-table">
-            <TaxesTable dataList={dataList} pagination={pagination} editFunction={this.openEditTaxPage} tableChangeFunction={this.handleTableChange} />
+            <TaxesTable dataList={dataList} pagination={pagination} editFunction={this.openEditTaxPage} tableChangeFunction={this.handleTableChange} deleteFunction={this.handleDetele} />
             <TaxesAdd visible={addVisible} isEdit={isEdit} taxForm={taxForm} closeFunction={this.closeAllModal} />
             <TaxesSetting visible={settingVisible} closeFunction={this.closeAllModal} />
           </div>

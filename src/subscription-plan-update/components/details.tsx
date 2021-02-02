@@ -46,17 +46,16 @@ export default class details extends Component<any, any> {
   }
 
   deleteProduct(key) {
-    const { subscriptionPlan, addField, allSkuProduct } = this.props;
+    const { subscriptionPlan, addField } = this.props;
 
-    let newMainProductIds = [];
-    subscriptionPlan.mainGoodsIds.map((item) => {
-      if (item !== key) {
-        newMainProductIds.push(item);
+    let newMainProducts = [];
+    subscriptionPlan.mainGoods.forEach((item) => {
+      if (item.goodsInfoId !== key) {
+        newMainProducts.push(item);
       }
     });
-    let mainProducts = allSkuProduct.filter((x) => newMainProductIds.includes(x.goodsInfoId));
-    addField('mainGoods', mainProducts);
-    addField('mainGoodsIds', newMainProductIds);
+    addField('mainGoods', newMainProducts);
+    //addField('mainGoodsIds', newMainProductIds);
   }
 
   updateQty(goodsInfoId, qty) {
@@ -193,11 +192,13 @@ export default class details extends Component<any, any> {
                               />
                             </td>
                             <td>
-                              <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
-                                <Tooltip placement="top" title="Delete">
-                                  <a className="iconfont iconDelete"></a>
-                                </Tooltip>
-                              </Popconfirm>
+                              {editable && (
+                                <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
+                                  <Tooltip placement="top" title="Delete">
+                                    <a className="iconfont iconDelete"></a>
+                                  </Tooltip>
+                                </Popconfirm>
+                              )}
                             </td>
                           </tr>
                         </tbody>

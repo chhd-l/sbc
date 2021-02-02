@@ -193,7 +193,7 @@ class HttpUtil {
             });
 
         }
-        errorList.length>0&&_timerOut<errorList.length&&reoloadApi();
+        errorList.length>0&&_timerOut<5&&reoloadApi();
 
     }
 

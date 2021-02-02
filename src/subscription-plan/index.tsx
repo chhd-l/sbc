@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table } from 'antd';
+import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, Switch } from 'antd';
 import * as webapi from './webapi';
+import { getSubscriptionPlanTypes } from './../subscription-plan-update/webapi';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -17,7 +18,7 @@ export default class SubscriptionPlan extends Component<any, any> {
     this.state = {
       title: 'Subscription Plan',
       subscriptionForm: {},
-      typeList: ['Product'],
+      typeList: [],
       subscriptionPlanList: [],
       pagination: {
         current: 1,
@@ -27,12 +28,26 @@ export default class SubscriptionPlan extends Component<any, any> {
       loading: false
     };
 
-    this.handleTableChange = this.handleTableChange.bind(this);
-    this.getSubscriptionPlanList = this.getSubscriptionPlanList.bind(this);
+    // this.handleTableChange = this.handleTableChange.bind(this);
+    // this.getSubscriptionPlanList = this.getSubscriptionPlanList.bind(this);
   }
 
   componentDidMount() {
     this.getSubscriptionPlanList();
+    getSubscriptionPlanTypes()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            typeList: res.context.sysDictionaryVOS
+          });
+        } else {
+          message.error('Get plan type list failed!');
+        }
+      })
+      .catch(() => {
+        message.error('Get plan type list failed!');
+      });
   }
 
   onFormChange = ({ field, value }) => {
@@ -78,7 +93,7 @@ export default class SubscriptionPlan extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           this.setState({
-            subscriptionPlanList: res.context,
+            subscriptionPlanList: res.context.subscriptionPlanResponses || [],
             pagination: pagination,
             loading: false
           });
@@ -96,25 +111,56 @@ export default class SubscriptionPlan extends Component<any, any> {
         });
       });
   };
+
+  setSubscriptionPlanEnableFlag = (id, enableFlag) => {
+    const { subscriptionPlanList } = this.state;
+    this.setState({ loading: true });
+    webapi
+      .setSubscriptionPlanEnableFlag(id, enableFlag)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          subscriptionPlanList.forEach((plan) => {
+            if (plan.id === id) {
+              plan.enableFlag = enableFlag;
+            }
+          });
+          this.setState({
+            subscriptionPlanList,
+            loading: false
+          });
+        } else {
+          message.error(res.message || 'Update Data Failed');
+          this.setState({ loading: false });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Update Data Failed');
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
   render() {
     const { title, typeList, subscriptionPlanList } = this.state;
     const columns = [
       {
         title: 'Subscription Plan ID',
-        dataIndex: 'subscriptionPlanId',
-        key: 'subscriptionPlanId',
+        dataIndex: 'planId',
+        key: 'planId',
         width: '18%'
       },
       {
         title: 'Subscription Plan Name',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'planName',
+        key: 'planName',
         width: '18%'
       },
       {
         title: 'Subscription Plan Type',
-        dataIndex: 'type',
-        key: 'type',
+        dataIndex: 'planType',
+        key: 'planType',
         width: '12%'
       },
       {
@@ -125,15 +171,14 @@ export default class SubscriptionPlan extends Component<any, any> {
       },
       {
         title: 'Offer Time Period',
-        dataIndex: 'timePeriod',
         key: 'timePeriod',
         width: '13%',
         render: (text, record) => moment(record.startDate).format('YYYY.MM.DD') + '-' + moment(record.endDate).format('YYYY.MM.DD')
       },
       {
         title: 'Number of Delivery',
-        dataIndex: 'delivery',
-        key: 'delivery',
+        dataIndex: 'deliveryTimes',
+        key: 'deliveryTimes',
         width: '10%'
       },
       {
@@ -141,21 +186,39 @@ export default class SubscriptionPlan extends Component<any, any> {
         dataIndex: 'status',
         key: 'status',
         width: '7%',
-        render: (text) => (text == 0 ? 'Draft': 'Publish')
+        render: (text) => (text === 0 ? 'Draft' : 'Publish')
+      },
+      {
+        title: 'Enable',
+        dataIndex: 'enableFlag',
+        key: 'enable',
+        width: '8%',
+        render: (text, record) => (
+          <div>
+            <Switch
+              checked={text}
+              onChange={(value) => {
+                this.setSubscriptionPlanEnableFlag(record.id, value);
+              }}
+            />
+          </div>
+        )
       },
       {
         title: 'Operation',
         key: 'operation',
         width: '8%',
-        render: (text, record) => (
-          record.status === 0 ?
-          <div>
-            <Tooltip placement="top" title="Edit">
-              <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit"></Link>
-            </Tooltip>
-          </div>
-          : null
-        )
+        render: (text, record) =>
+          record.status === 0 ? (
+            <div>
+              <Tooltip placement="top" title="Detail">
+                <Link to={'/subscription-plan-detail/' + record.id} className="iconfont iconDetails" style={{ paddingRight: 10 }}></Link>
+              </Tooltip>
+              <Tooltip placement="top" title="Edit">
+                <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit"></Link>
+              </Tooltip>
+            </div>
+          ) : null
       }
     ];
     return (
@@ -172,7 +235,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
-                        field: 'name',
+                        field: 'planName',
                         value
                       });
                     }}
@@ -186,7 +249,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
-                        field: 'id',
+                        field: 'planId',
                         value
                       });
                     }}
@@ -202,7 +265,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
-                        field: 'consumerType',
+                        field: 'planType',
                         value
                       });
                     }}
@@ -212,8 +275,8 @@ export default class SubscriptionPlan extends Component<any, any> {
                     </Option>
                     {typeList &&
                       typeList.map((item, index) => (
-                        <Option value={item} key={index}>
-                          {item}
+                        <Option value={item.name} key={index}>
+                          {item.name}
                         </Option>
                       ))}
                   </SelectGroup>

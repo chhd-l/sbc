@@ -7,29 +7,24 @@ type TResult = {
 };
 
 export function getSubscriptionPlanById(id) {
-  return Fetch<TResult>('/subscriptionPlan/' + id, {
+  return Fetch<TResult>('/sub/plan/detail/' + id, {
     method: 'GET'
   });
 }
 
-export function addSubscriptionPlan(filterParams) {
-  return Fetch<TResult>('/subscriptionPlan', {
+export function addSubscriptionPlan(plan) {
+  return Fetch<TResult>('/sub/plan/save', {
     method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
+    body: JSON.stringify(plan)
   });
 }
 
-export function updateSubscriptionPlan(filterParams) {
-  return Fetch<TResult>('/subscriptionPlan/' + filterParams.id, {
+export function updateSubscriptionPlan(plan) {
+  return Fetch<TResult>('/sub/plan/update', {
     method: 'PUT',
-    body: JSON.stringify({
-      ...filterParams
-    })
+    body: JSON.stringify(plan)
   });
 }
-
 
 export function getAllSkuProducts() {
   return Fetch<TResult>('/goodsInfos/bundelPage', {
@@ -41,12 +36,20 @@ export function getAllSkuProducts() {
   });
 }
 
-
 export function getWeekFrequency() {
   return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',
     body: JSON.stringify({
       type: 'Frequency_week'
+    })
+  });
+}
+
+export function getSubscriptionPlanTypes() {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'SubscriptionPlanType'
     })
   });
 }

@@ -5,11 +5,25 @@ type TResult = {
   context: any;
 };
 
-//new
+/**
+ * get Dict
+ * @param filterParams
+ */
+export function querySysDictionary(filterParams = {}) {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
 
-// 获取customer list
-export function getSearchDetailData(filterParams = {}) {
-  return Fetch<TResult>('/search/details', {
+/**
+ * 新增批量翻译
+ * @param filterParams
+ */
+export function translateAddBatch(filterParams = {}) {
+  return Fetch<TResult>('/goods/translate/translate/addBatch', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

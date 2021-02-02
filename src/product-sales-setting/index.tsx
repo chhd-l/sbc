@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
+import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
 import { Form, Input, Select, Modal, Button, Radio } from 'antd';
 import ModalForm from './conponents/modal-form';
 import { FormattedMessage } from 'react-intl';
-
+import { querySysDictionary } from './webapi';
 const { Option } = Select;
 
 class ProductSearchSetting extends Component<any, any> {
-  state = { visible: false, disabled: true };
+  state = {
+    visible: false,
+    disabled: true,
+    options: [],
+    defaultPurchaseType: '',
+    defaultSubscriptionFrequencyId: '',
+    language: []
+  };
   onFinish = (e: any) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -16,7 +23,9 @@ class ProductSearchSetting extends Component<any, any> {
       }
     });
   };
-
+  componentDidMount() {
+    this.querySysDictionary();
+  }
   showModal = () => {
     this.setState({
       visible: true
@@ -29,17 +38,42 @@ class ProductSearchSetting extends Component<any, any> {
   };
   handleSubmit = () => {};
 
+  /**
+   * 获取更新频率月｜ 周
+   */
+  async querySysDictionary() {
+    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), querySysDictionary({ type: 'language' })]);
+    let { defaultPurchaseType, defaultSubscriptionFrequencyId, languageId } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+    let weeks = result[0].res.context.sysDictionaryVOS;
+    let months = result[1].res.context.sysDictionaryVOS;
+    let languageList = result[2].res.context.sysDictionaryVOS;
+    let options = [...months, ...weeks];
+    let d = languageId.split(',');
+
+    let language = languageList.map((item) => {
+      if (d.includes(item.id.toString())) {
+        return item;
+      }
+    });
+    this.setState({
+      options,
+      defaultPurchaseType,
+      defaultSubscriptionFrequencyId,
+      language
+    });
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { disabled } = this.state;
+    const { disabled, defaultPurchaseType, visible, defaultSubscriptionFrequencyId, options, language } = this.state;
     return (
       <div style={styles.container}>
         <BreadCrumb />
-
         <div style={styles.formContainer}>
           <Form name="complex" onSubmit={this.onFinish} labelAlign="left" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }}>
             <Form.Item label={<span style={{ color: '#666' }}>Default purchase type</span>}>
-              {getFieldDecorator('email', {
+              {getFieldDecorator('defaultPurchaseType', {
+                initialValue: defaultPurchaseType,
                 rules: [
                   {
                     required: true,
@@ -57,18 +91,24 @@ class ProductSearchSetting extends Component<any, any> {
                 </Radio.Group>
               )}
             </Form.Item>
+
             <Form.Item label={<span style={{ color: '#666' }}>Default subscription frequency</span>} style={{ marginBottom: 0 }}>
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
-                {getFieldDecorator('password6', {
+                {getFieldDecorator('defaultSubscriptionFrequencyId', {
+                  initialValue: defaultSubscriptionFrequencyId,
                   rules: [
                     {
                       required: true,
-                      message: 'Please input your password!'
+                      message: 'Please select subscription frequency !'
                     }
                   ]
                 })(
-                  <Select disabled={disabled}>
-                    <Option value="demo">Demo</Option>
+                  <Select disabled={disabled} placeholder="Please select subscription frequency !">
+                    {options.map((item) => (
+                      <Option key={item.id} value={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
                   </Select>
                 )}
               </Form.Item>
@@ -80,13 +120,14 @@ class ProductSearchSetting extends Component<any, any> {
             </Form.Item>
             <div className="bar-button">
               <Button type="primary" onClick={this._edit}>
-                {<FormattedMessage id={disabled ? 'Edit' : 'Save'} />}
+                {/* {<FormattedMessage id= />} */}
+                {disabled ? 'Edit' : 'Save'}
               </Button>
             </div>
           </Form>
         </div>
 
-        <ModalForm visible={this.state.visible} handleOk={this.handleSubmit} handleCancel={this.handleCancel} />
+        <ModalForm visible={visible} languageList={language} handleOk={this.handleSubmit} handleCancel={this.handleCancel} />
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Checkbox, Col, DatePicker, Form, Input, Radio, Row, Spin } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Radio, Row, Spin } from 'antd';
 import PropTypes from 'prop-types';
 import { Store } from 'plume2';
 import styled from 'styled-components';
@@ -275,26 +275,27 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     // if (!activity.activityId) {
     form.resetFields(['time']);
     //强制校验创建时间
-
     if (moment().add(-5, 'minutes').second(0).unix() >= moment(activity.get('startTime')).unix()) {
       form.setFields({
         ['startTime']: {
-          errors: [new Error('发放时间不能小于当前时间')]
+          errors: [new Error('The selected time must be later than the current time')]
         }
       });
+      message.error('The selected time must be later than the current time');
       errors = true;
     }
-    if (moment().add('months', 3).unix() < moment(activity.get('startTime')).minute(0).second(0).unix()) {
-      form.setFields({
-        ['startTime']: {
-          errors: [new Error('发放时间不能晚于三个月')]
-        }
-      });
-      errors = true;
-    }
+    // if (moment().add('months', 3).unix() < moment(activity.get('startTime')).minute(0).second(0).unix()) {
+    //   form.setFields({
+    //     ['startTime']: {
+    //       errors: [new Error('发放时间不能晚于三个月')]
+    //     }
+    //   });
+    //   message.error('发放时间不能小于当前时间')
+    //   errors = true;
+    // }
     // }
     // 2.验证其它表单信息
-    this.props.form.validateFields(null, (errs) => {
+    this.props.form.validateFields((errs) => {
       if (!errs && !errors && !errorsCustomer) {
         // 3.验证通过，保存
         const { level } = this.state;

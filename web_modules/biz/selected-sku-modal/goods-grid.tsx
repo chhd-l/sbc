@@ -142,7 +142,8 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          <Column title="Category" key="goodsCate" dataIndex="cateName" />
+          <Column title="Product category" key="goodsCate" dataIndex="cateName"  width="15%"
+          />
 
           <Column
             title="Brand"

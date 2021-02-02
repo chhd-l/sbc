@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AssetManagement, AuthWrapper } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Spin, Tabs, Popconfirm, Switch } from 'antd';
+import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb } from 'antd';
 
 import * as webapi from './webapi';
-import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const InputGroup = Input.Group;
 
 class TagManagementList extends Component<any, any> {
   constructor(props: any) {
@@ -23,10 +23,14 @@ class TagManagementList extends Component<any, any> {
         current: 1,
         pageSize: 10,
         total: 0
-      }
+      },
+      tagList: [],
+      loading: false
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getTagList();
+  }
   updateTagPublishedStatus = (status, row) => {
     console.log(status, row);
   };
@@ -44,9 +48,32 @@ class TagManagementList extends Component<any, any> {
     const { searchForm, pagination } = this.state;
     console.log(searchForm, pagination);
   };
+  getTagList = () => {
+    let tagList = [];
+    let tag = {
+      tagName: 'test_1',
+      tagDescription: 'test_1',
+      publishedStatus: false,
+      id: 123,
+      petOwner: 5
+    };
+    tagList.push(tag);
+    this.setState({
+      tagList
+    });
+  };
+
+  handleTableChange = (pagination) => {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.getTagList()
+    );
+  };
 
   render() {
-    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList, images } = this.state;
+    const { loading, title, tagList, pagination } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -91,10 +118,11 @@ class TagManagementList extends Component<any, any> {
         title: 'Operation',
         dataIndex: '',
         key: 'x',
+        width: '10%',
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Detail">
-              <Link to={'/subscription-detail/' + record.id} className="iconfont iconDetails"></Link>
+              <Link to={'/tag-management-detail/' + record.id} className="iconfont iconDetails" style={{ paddingRight: 10 }}></Link>
             </Tooltip>
 
             <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTag(record.id)} okText="Confirm" cancelText="Cancel">
@@ -107,72 +135,75 @@ class TagManagementList extends Component<any, any> {
       }
     ];
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 }
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
-      }
-    };
-
     return (
       <AuthWrapper functionName="f_tag_management_list">
         <div>
-          <BreadCrumb />
           <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <BreadCrumb thirdLevel={true}>
+              <Breadcrumb.Item>{title}</Breadcrumb.Item>
+            </BreadCrumb>
             <div className="container-search">
               <Headline title={title} />
               <Form layout="inline" style={{ marginBottom: 20 }}>
                 <Row>
                   <Col span={8}>
                     <FormItem>
-                      <Input
-                        addonBefore="Tag name"
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onSearchFormChange({
-                            field: 'tagName',
-                            value
-                          });
-                        }}
-                      />
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input style={styles.label} disabled defaultValue="Tag name" />
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onSearchFormChange({
+                              field: 'tagName',
+                              value
+                            });
+                          }}
+                        />
+                      </InputGroup>
                     </FormItem>
                   </Col>
 
                   <Col span={8}>
                     <FormItem>
-                      <Input
-                        addonBefore="Tag description"
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onSearchFormChange({
-                            field: 'tagDescription',
-                            value
-                          });
-                        }}
-                      />
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input style={styles.label} disabled defaultValue="Tag description" />
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onSearchFormChange({
+                              field: 'tagDescription',
+                              value
+                            });
+                          }}
+                        />
+                      </InputGroup>
                     </FormItem>
                   </Col>
 
                   <Col span={8}>
                     <FormItem>
-                      <Input
-                        addonBefore="Publish status"
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onSearchFormChange({
-                            field: 'publishStatus',
-                            value
-                          });
-                        }}
-                      />
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input style={styles.label} disabled defaultValue="Publish status" />
+                        <Select
+                          style={styles.wrapper}
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onSearchFormChange({
+                              field: 'publishStatus',
+                              value
+                            });
+                          }}
+                        >
+                          <Option value="">All</Option>
+                          <Option value="published">Published</Option>
+                          <Option value="unpublished">Unpublished</Option>
+                        </Select>
+                      </InputGroup>
                     </FormItem>
                   </Col>
-
-                  <Col span={24} style={{ textAlign: 'center' }}>
+                  <Col span={24} style={{ textAlign: 'center', marginTop: 10 }}>
                     <FormItem>
                       <Button
                         type="primary"
@@ -184,14 +215,15 @@ class TagManagementList extends Component<any, any> {
                           this.onSearch();
                         }}
                       >
-                        <span>
-                          <FormattedMessage id="search" />
-                        </span>
+                        <span>Search</span>
                       </Button>
                     </FormItem>
                   </Col>
                 </Row>
               </Form>
+            </div>
+            <div className="container-search">
+              <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={tagList} pagination={pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
             </div>
           </Spin>
         </div>
@@ -199,16 +231,36 @@ class TagManagementList extends Component<any, any> {
     );
   }
 }
+
 const styles = {
-  edit: {
-    paddingRight: 10
+  formItemStyle: {
+    width: 335
   },
-  tableImage: {
-    width: '60px',
-    height: '60px',
-    padding: '5px',
-    border: '1px solid rgb(221, 221, 221)',
-    background: 'rgb(255, 255, 255)'
+  label: {
+    width: 135,
+    textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
+  wrapper: {
+    width: 200
+  },
+  successPoint: {
+    display: 'inline-block',
+    width: 7,
+    height: 7,
+    margin: '0 5px 2px 0',
+    background: '#008900',
+    borderRadius: '50%'
+  },
+  warningPoint: {
+    display: 'inline-block',
+    width: 7,
+    height: 7,
+    margin: '0 5px 2px 0',
+    background: '#EE8B00',
+    borderRadius: '50%'
   }
 } as any;
 

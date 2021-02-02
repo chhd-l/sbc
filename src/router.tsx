@@ -854,6 +854,14 @@ const routes = [
   {
     path: '/edit-campaigns/:id',
     asyncComponent: () => import('./campaign-update')
+  },
+  {
+    path: '/tag-management-list',
+    asyncComponent: () => import('./tag-management-list')
+  },
+  {
+    path: '/tag-management-detail/:id',
+    asyncComponent: () => import('./tag-management-detail')
   }
   // {
   //   path: '/invoice-details',

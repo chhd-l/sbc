@@ -5,7 +5,14 @@ export default class LoadingActor extends Actor {
     return {
       // 表格数据
       statesList: [],
-      cityList: []
+      cityList: [],
+      // stateCurrentPage: 0,
+      // statePageSize: 10,
+      statePagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0
+      }
     };
   }
 
@@ -17,5 +24,10 @@ export default class LoadingActor extends Actor {
   @Action('list:cityList')
   getCityList(state: IMap, params) {
     return state.set('cityList', params);
+  }
+
+  @Action('list:statePagination')
+  statePagination(state, statePagination) {
+    return state.set('statePagination', statePagination);
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Relax } from 'plume2';
 import { FormattedMessage } from 'react-intl';
 import { noop } from 'qmkit';
-import { Form, Button, Spin, Tooltip, Popconfirm } from 'antd';
+import { Form, Button, Spin, Tooltip, Popconfirm, Pagination } from 'antd';
 import { IMap } from 'plume2';
 import { List } from 'immutable';
 import nodataImg from '/web_modules/qmkit/images/sys/no-data.jpg';
@@ -23,32 +23,45 @@ export default class StatesList extends Component<any, any> {
     relaxProps?: {
       loading: boolean;
       statesList: TList;
+      statePagination: any;
       getStatesList: Function;
       setStateModalVisible: Function;
       setIsEditStateForm: Function;
       editStateForm: Function;
       newStateForm: Function;
+      deleteState: Function;
     };
   };
 
   static relaxProps = {
     loading: 'loading',
     statesList: 'statesList',
+    statePagination: 'statePagination',
     getStatesList: noop,
     setStateModalVisible: noop,
     setIsEditStateForm: noop,
     editStateForm: noop,
-    newStateForm: noop
+    newStateForm: noop,
+    deleteState: noop
   };
   componentDidMount() {
-    const { getStatesList } = this.props.relaxProps;
-    getStatesList();
+    this.getStatesList(0, 10);
   }
+  getStatesList = (currentPage, pageSize) => {
+    const { getStatesList } = this.props.relaxProps;
+    getStatesList({
+      pageNum: currentPage,
+      pageSize
+    });
+  };
   editRow = (item) => {
     const { editStateForm } = this.props.relaxProps;
     editStateForm(item);
   };
-  deleteRow = (item) => {};
+  deleteRow = (item) => {
+    const { deleteState } = this.props.relaxProps;
+    deleteState({ id: item.id });
+  };
   _renderContent(dataList) {
     return (
       dataList &&
@@ -90,7 +103,8 @@ export default class StatesList extends Component<any, any> {
   };
 
   render() {
-    const { loading, statesList } = this.props.relaxProps;
+    const { loading, statesList, statePagination } = this.props.relaxProps;
+    const pagination = statePagination.toJS();
     return (
       <div>
         <div>
@@ -123,6 +137,16 @@ export default class StatesList extends Component<any, any> {
                   </div>
                 </div>
               </div>
+              {pagination.total > 0 ? (
+                <Pagination
+                  current={pagination.current}
+                  total={pagination.total}
+                  pageSize={pagination.pageSize}
+                  onChange={(pageNum, pageSize) => {
+                    this.getStatesList(pageNum - 1, pageSize);
+                  }}
+                />
+              ) : null}
             </div>
           </div>
         ) : (

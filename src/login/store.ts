@@ -21,9 +21,9 @@ export default class AppStore extends Store {
 
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
   init = async () => {
-    const linkEle = document.getElementById('icoLink') as any;
-    linkEle.href = pcIco;
-    linkEle.type = 'image/x-icon';
+    // const linkEle = document.getElementById('icoLink') as any;
+    // linkEle.href = pcIco;
+    // linkEle.type = 'image/x-icon';
     webapi.getSiteInfo().then((resIco: any) => {
       if (resIco.res.code == Const.SUCCESS_CODE) {
         //logo

@@ -30,5 +30,6 @@ export default {
   STORE_LANGUAGES: 'store_languages',
   DEFAULT_LANGUAGE: 'default_language',
   STORE_INFRO: 'store_info',
-  ERROR_INFO:'error_info'
+  ERROR_INFO:'error_info',
+  PRODUCT_SALES_SETTING:'product_sales_setting'
 };

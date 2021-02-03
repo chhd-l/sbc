@@ -66,7 +66,13 @@ export default class BindDescription extends Component<Iprop, any> {
       if ((res.code = Const.SUCCESS_CODE)) {
         this.setState({
           descList: res.context.descriptionList,
-          bindList: res.context.descriptionList.filter((d) => defaultIds.includes(d.id))
+          bindList: defaultIds.reduce((prev, curr) => {
+            let idx = res.context.descriptionList.findIndex((d) => d.id === curr);
+            if (idx > -1) {
+              prev.push(res.context.descriptionList[idx]);
+            }
+            return prev;
+          }, [])
         });
       }
     });

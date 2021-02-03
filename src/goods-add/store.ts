@@ -2008,28 +2008,34 @@ export default class AppStore extends Store {
   };
 
   getSeo = async (goodsId, type = 1) => {
+    this.dispatch('loading:start');
     const { res } = (await getSeo(goodsId, type)) as any;
+    this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
           titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '', //{name}-Royal Canin
           metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '', //{name}, {subtitle}, {sales category}, {tagging}
-          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '' //{description}
+          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '', //{description}
+          headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );
     }
   };
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
+    this.dispatch('loading:start');
     const params = {
       type: 1,
       goodsId,
       metaDescriptionSource: seoObj.metaDescriptionSource,
       metaKeywordsSource: seoObj.metaKeywordsSource,
-      titleSource: seoObj.titleSource
+      titleSource: seoObj.titleSource,
+      headingTag: seoObj.headingTag
     };
     const { res } = (await editSeo(params)) as any;
+    this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {
       // history.push('./goods-list');
       message.success('Save successfully.');

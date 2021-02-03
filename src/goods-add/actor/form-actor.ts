@@ -19,7 +19,8 @@ export default class FormActor extends Actor {
       seoForm: {
         titleSource: '', //{name}-Royal Canin
         metaKeywordsSource: '', //{name}, {subtitle}, {sales category}, {tagging}
-        metaDescriptionSource: '' //{description}
+        metaDescriptionSource: '', //{description}
+        headingTag: ''
       }
     };
   }

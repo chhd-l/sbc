@@ -21,7 +21,8 @@ export default class Task extends Component<any, any> {
       goldenMomentList: [],
       taskStatus: ['To Do', 'On-going', 'Completed', 'Cancelled'],
       priorityList: ['Low', '	Medium', 'High'],
-      taskForm: {}
+      taskForm: {},
+      queryType: '1'
     };
     this.onFormChange = this.onFormChange.bind(this);
   }
@@ -34,7 +35,7 @@ export default class Task extends Component<any, any> {
     });
   };
   render() {
-    const { title, goldenMomentList, taskStatus, priorityList, isCardView, taskForm, reflashData } = this.state;
+    const { title, goldenMomentList, taskStatus, priorityList, isCardView, taskForm, queryType } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -194,9 +195,9 @@ export default class Task extends Component<any, any> {
                     onClick={(e) => {
                       e.preventDefault();
                       if (isCardView) {
-                        this.refs.cardView.getTaskList();
+                        this.refs.cardView.getTaskList(queryType);
                       } else {
-                        this.refs.listView.getTaskList();
+                        this.refs.listView.getTaskList(queryType);
                       }
                     }}
                   >
@@ -210,9 +211,44 @@ export default class Task extends Component<any, any> {
           </Form>
         </div>
         <div className="container">
-          <Button type="primary" htmlType="submit" style={{ marginBottom: '20px' }}>
-            <Link to={{ pathname: '/add-task' }}>Add New Task</Link>
-          </Button>
+          <Row style={{ marginBottom: '20px' }}>
+            <Col span={12}>
+              <Button type="primary" htmlType="submit">
+                <Link to={{ pathname: '/add-task' }}>Add New Task</Link>
+              </Button>
+            </Col>
+            <Col span={12} style={{ textAlign: 'right' }}>
+              <Select
+                defaultValue={'1'}
+                style={{ width: '120px', marginRight: '20px' }}
+                onChange={(value) => {
+                  this.setState({
+                    queryType: value
+                  });
+                  if (isCardView) {
+                    this.refs.cardView.getTaskList(value);
+                  } else {
+                    this.refs.listView.getTaskList(value);
+                  }
+                }}
+              >
+                <Option value={'1'}>My Task</Option>
+                <Option value={'0'}>All Task</Option>
+              </Select>
+              <Select
+                defaultValue={0}
+                style={{ width: '120px' }}
+                onChange={(value) =>
+                  this.setState({
+                    isCardView: value === 0
+                  })
+                }
+              >
+                <Option value={0}>Card View</Option>
+                <Option value={1}>List View</Option>
+              </Select>
+            </Col>
+          </Row>
           {isCardView ? <CardView ref="cardView" formData={taskForm} /> : <ListView ref="listView" formData={taskForm} />}
         </div>
       </div>

@@ -8,14 +8,25 @@ export default class ListView extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      taskList: [],
+      taskList: [
+        {
+          assistantEmail: 'george.guo@effem.com',
+          assistantName: 'George Guo',
+          dueTime: '2021-02-18',
+          goldenMoment: 'First purchase(order confirmation)',
+          id: 1236,
+          name: 'test',
+          status: 'To Do'
+        }
+      ],
       formData: {},
       pagination: {
         current: 1,
         pageSize: 10,
         total: 0
       },
-      loading: false
+      loading: false,
+      queryType: '1'
     };
     this.handleTableChange = this.handleTableChange.bind(this);
     this.statuColor = this.statuColor.bind(this);
@@ -23,7 +34,7 @@ export default class ListView extends Component<any, any> {
   }
 
   componentDidMount() {
-    this.getTaskList();
+    this.getTaskList(this.state.queryType);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -42,17 +53,19 @@ export default class ListView extends Component<any, any> {
       {
         pagination: pagination
       },
-      () => this.getTaskList()
+      () => this.getTaskList(this.state.queryType)
     );
   };
-  getTaskList = () => {
+  getTaskList = (queryType?: String) => {
     const { formData, pagination } = this.state;
     let params = Object.assign(formData, {
       pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize
+      pageSize: pagination.pageSize,
+      queryType: queryType
     });
     this.setState({
-      loading: true
+      loading: true,
+      queryType: queryType
     });
     webapi
       .getTaskListView(params)
@@ -61,7 +74,7 @@ export default class ListView extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           this.setState({
-            subscriptionPlanList: res.context,
+            taskList: res.context,
             pagination: pagination,
             loading: false
           });
@@ -114,7 +127,7 @@ export default class ListView extends Component<any, any> {
         title: 'Task Status',
         dataIndex: 'status',
         width: '10%',
-        render: (text) => <div style={{ color: this.statuColor(text) }}> {{ text }}</div>
+        render: (text) => <div style={{ color: this.statuColor(text) }}> {text}</div>
       },
       {
         title: 'Priority',
@@ -146,14 +159,13 @@ export default class ListView extends Component<any, any> {
         title: 'Operation',
         key: 'operation',
         width: '10%',
-        render: (text, record) =>
-          record.status === 0 ? (
-            <div>
-              <Tooltip placement="top" title="Edit">
-                <Link to={'/edit-task/' + record.id} className="iconfont iconEdit"></Link>
-              </Tooltip>
-            </div>
-          ) : null
+        render: (text, record) => (
+          <div>
+            <Tooltip placement="top" title="Edit">
+              <Link to={'/edit-task/' + record.id} className="iconfont iconDetails"></Link>
+            </Tooltip>
+          </div>
+        )
       }
     ];
     return (

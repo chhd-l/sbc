@@ -5,6 +5,7 @@ import ServiceList from './components/service-list';
 import Activity from './components/activity';
 import './style.less';
 import * as webapi from './webapi';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -41,14 +42,25 @@ class TaskUpdate extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: this.props.match.params.id ? 'Task edition' : 'Task creation',
-      task: {},
+      taskCompleted: false,
+      task: {
+        assistantEmail: 'george.guo@effem.com',
+        assistantName: 'George Guo',
+        startTime: '2021-02-18',
+        dueTime: '2021-02-18',
+        goldenMoment: 'First purchase(order confirmation)',
+        id: 1236,
+        name: 'test',
+        status: 'To Do'
+      },
       assignedUsers: [],
       goldenMomentList: [],
       actionTypeList: ['Call', 'Email', 'N/A'],
       priorityList: ['Low', 'Medium', 'High'],
       associatedPetOwners: [],
       associatedPetList: [],
-      associatedOrderList: []
+      associatedOrderList: [],
+      statusList: ['To Do', 'On-going', 'Completed', 'Cancelled']
     };
     this.onChange = this.onChange.bind(this);
     this.searchAssignedTo = this.searchAssignedTo.bind(this);
@@ -89,7 +101,9 @@ class TaskUpdate extends Component<any, any> {
   };
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { title, task, assignedUsers, goldenMomentList, actionTypeList, priorityList, associatedPetOwners, associatedPetList, associatedOrderList } = this.state;
+    const { title, task, id, taskCompleted, assignedUsers } = this.state;
+    const { associatedPetOwners, associatedPetList, associatedOrderList } = this.state;
+    const { goldenMomentList, actionTypeList, priorityList, statusList } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -108,6 +122,7 @@ class TaskUpdate extends Component<any, any> {
                         rules: [{ required: true, message: 'Please input task name' }]
                       })(
                         <Input
+                          disabled={taskCompleted}
                           placeholder="Input task name to create a new task"
                           onChange={(e: any) =>
                             this.onChange({
@@ -119,6 +134,30 @@ class TaskUpdate extends Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
+                  {id ? (
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Task Status">
+                        {getFieldDecorator('status', {
+                          initialValue: task.status
+                        })(
+                          <Select
+                            onChange={(value) =>
+                              this.onChange({
+                                field: 'status',
+                                value: value
+                              })
+                            }
+                          >
+                            {statusList.map((item) => (
+                              <Option value={item} key={item}>
+                                {item}
+                              </Option>
+                            ))}
+                          </Select>
+                        )}
+                      </FormItem>
+                    </Col>
+                  ) : null}
                 </Row>
                 <Row>
                   <Col span={12}>
@@ -127,6 +166,7 @@ class TaskUpdate extends Component<any, any> {
                         initialValue: task.assignedTo
                       })(
                         <Select
+                          disabled={taskCompleted}
                           placeholder="Please input email"
                           showSearch
                           onSearch={this.searchAssignedTo}
@@ -153,6 +193,7 @@ class TaskUpdate extends Component<any, any> {
                         rules: [{ required: true, message: 'Please select golden moment' }]
                       })(
                         <Select
+                          disabled={taskCompleted || !!task.goldenMoment}
                           onChange={(value) =>
                             this.onChange({
                               field: 'goldenMoment',
@@ -174,10 +215,11 @@ class TaskUpdate extends Component<any, any> {
                   <Col span={12}>
                     <FormItem {...formItemLayout} label="Start Time">
                       {getFieldDecorator('startTime', {
-                        initialValue: task.startTime,
+                        initialValue: task.startTime ? moment(task.startTime) : null,
                         rules: [{ required: true, message: 'Please select start time' }]
                       })(
                         <DatePicker
+                          disabled={taskCompleted || !!task.startTime}
                           style={{ width: '100%' }}
                           placeholder="Start Time"
                           format="YYYY-MM-DD"
@@ -195,10 +237,11 @@ class TaskUpdate extends Component<any, any> {
                   <Col span={12}>
                     <FormItem {...formItemLayout} label="Due Time">
                       {getFieldDecorator('dueTime', {
-                        initialValue: task.startTime,
+                        initialValue: task.dueTime ? moment(task.dueTime) : null,
                         rules: [{ required: true, message: 'Please select due time' }]
                       })(
                         <DatePicker
+                          disabled={taskCompleted}
                           style={{ width: '100%' }}
                           placeholder="Due Time"
                           format="YYYY-MM-DD"
@@ -221,6 +264,7 @@ class TaskUpdate extends Component<any, any> {
                         initialValue: task.actionType
                       })(
                         <Select
+                          disabled={taskCompleted}
                           onChange={(value) =>
                             this.onChange({
                               field: 'actionType',
@@ -243,6 +287,7 @@ class TaskUpdate extends Component<any, any> {
                         initialValue: task.priority
                       })(
                         <Select
+                          disabled={taskCompleted}
                           onChange={(value) =>
                             this.onChange({
                               field: 'priority',
@@ -267,6 +312,7 @@ class TaskUpdate extends Component<any, any> {
                         initialValue: task.associatedPetOwner
                       })(
                         <Select
+                          disabled={taskCompleted || !!task.associatedPetOwner}
                           placeholder="Please input name"
                           showSearch
                           onSearch={this.searchAssignedPetOwners}
@@ -292,6 +338,7 @@ class TaskUpdate extends Component<any, any> {
                         initialValue: task.associatedPet
                       })(
                         <Select
+                          disabled={taskCompleted || !!task.associatedPet}
                           onChange={(value) =>
                             this.onChange({
                               field: 'associatedPet',
@@ -316,6 +363,7 @@ class TaskUpdate extends Component<any, any> {
                         initialValue: task.associatedOrder
                       })(
                         <Select
+                          disabled={taskCompleted || !!task.associatedOrder}
                           onChange={(value) =>
                             this.onChange({
                               field: 'associatedOrder',
@@ -336,6 +384,7 @@ class TaskUpdate extends Component<any, any> {
                 <Row>
                   <FormItem {...formRowItemLayout} label="Description">
                     <ReactEditor
+                      disabled={taskCompleted}
                       id="description"
                       height={200}
                       content={task.description}
@@ -353,9 +402,11 @@ class TaskUpdate extends Component<any, any> {
             <TabPane tab="Service List" key="services">
               <ServiceList goldenMomentList={goldenMomentList} goldenMoment={this.state.task.goldenMoment} />
             </TabPane>
-            <TabPane tab="Activity" key="activity">
-              <Activity />
-            </TabPane>
+            {id ? (
+              <TabPane tab="Activity" key="activity">
+                <Activity />
+              </TabPane>
+            ) : null}
           </Tabs>
         </div>
       </div>

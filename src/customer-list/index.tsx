@@ -68,6 +68,9 @@ export default class Customer extends React.Component<any, any> {
               <Tooltip placement="top" title="Details">
                 <Link to={'/customer-details/' + (record.customerLevelName ? record.customerLevelName : 'Guest') + '/' + record.customerId + '/' + record.customerAccount} className="iconfont iconDetails"></Link>
               </Tooltip>
+              <Tooltip placement="top" title="Activity">
+                <Link to={'/pet-owner-activity/' + record.customerId} className="iconfont iconreports"></Link>
+              </Tooltip>
               {/* <Divider type="vertical" />
               <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}
             </span>

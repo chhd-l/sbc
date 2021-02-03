@@ -878,6 +878,18 @@ const routes = [
   {
     path: '/edit-task/:id',
     asyncComponent: () => import('./task-update')
+  },
+  {
+    path: '/pet-owner-activity/:id',
+    asyncComponent: () => import('./pet-owner-activity')
+  },
+  {
+    path: '/pet-all/:id',
+    asyncComponent: () => import('./pet-all')
+  },
+  {
+    path: '/pet-owner-all/:id',
+    asyncComponent: () => import('./pet-owner-all')
   }
   // {
   //   path: '/invoice-details',

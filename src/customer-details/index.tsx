@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm } from 'antd';
+import { Form, Card, Avatar, Input, InputNumber, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
@@ -116,12 +116,12 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Col>
               <Col span="4" className="text-align-right">
                 <Link>
-                  <span className="icon iconEdit"></span> Edit
+                  <span className="iconfont iconEdit"></span> Edit
                 </Link>
               </Col>
             </Row>
             <div style={{ margin: '20px 0' }}>
-              <Row>
+              <Row className="text-tip">
                 <Col span="4">Name</Col>
                 <Col span="4">Age</Col>
                 <Col span="4">Member level</Col>
@@ -138,42 +138,106 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <div className="basic-info-detail">
               <Row type="flex" align="middle">
-                <Col span="4">Registration date</Col>
+                <Col span="4" className="text-tip">
+                  Registration date
+                </Col>
                 <Col span="6" className="text-highlight">
                   2020-10-09
                 </Col>
-                <Col span="4">Email address</Col>
+                <Col span="4" className="text-tip">
+                  Email address
+                </Col>
                 <Col span="6" className="text-highlight">
                   xxx@xxx.xx
                 </Col>
               </Row>
               <Row type="flex" align="middle">
-                <Col span="4">Phone number</Col>
+                <Col span="4" className="text-tip">
+                  Phone number
+                </Col>
                 <Col span="6" className="text-highlight">
                   20200303
                 </Col>
-                <Col span="4">Prefer channel</Col>
+                <Col span="4" className="text-tip">
+                  Prefer channel
+                </Col>
                 <Col span="6" className="text-highlight">
                   Email
                 </Col>
               </Row>
               <Row type="flex" align="middle">
-                <Col span="4">Country</Col>
+                <Col span="4" className="text-tip">
+                  Country
+                </Col>
                 <Col span="6" className="text-highlight">
                   Mexico
                 </Col>
-                <Col span="4">Address reference</Col>
+                <Col span="4" className="text-tip">
+                  Address reference
+                </Col>
                 <Col span="6" className="text-highlight">
                   none
                 </Col>
               </Row>
               <Row type="flex" align="middle">
-                <Col span="4">Consent</Col>
+                <Col span="4" className="text-tip">
+                  Consent
+                </Col>
                 <Col span="6" className="text-highlight">
                   Email comunication
                 </Col>
               </Row>
             </div>
+          </div>
+          <div className="detail-container">
+            <Headline title="Segment" />
+            <div style={{ margin: '10px 0', color: 'rgb(226,0,26)', fontWeight: 700 }}>Significant Valued Member</div>
+            <Row>
+              <Col span={20}>
+                <Form layout="vertical">
+                  <FormItem label="Tag name">
+                    <Select mode="multiple">
+                      <Option key="1" value="a">
+                        Active User
+                      </Option>
+                      <Option key="2" value="b">
+                        Student
+                      </Option>
+                    </Select>
+                  </FormItem>
+                </Form>
+              </Col>
+            </Row>
+          </div>
+          <div className="detail-container">
+            <Headline title="Pet information" />
+            <Card style={{ width: 350 }} bodyStyle={{ padding: '10px 20px' }}>
+              <div className="text-align-right">
+                <Link>
+                  <span className="iconfont iconEdit"></span> Edit
+                </Link>
+              </div>
+              <Row gutter={10}>
+                <Col span={6}>
+                  <Avatar size={70} icon="user" />
+                </Col>
+                <Col span={18}>
+                  <Row>
+                    <Col span={24}>
+                      <div className="text-highlight">Hanhan</div>
+                    </Col>
+                  </Row>
+                  <Row className="text-tip">
+                    <Col span={12}>Age</Col>
+                    <Col span={12}>Breed</Col>
+                  </Row>
+                  <Row style={{ fontSize: 16 }}>
+                    <Col span={12}>9 months</Col>
+                    <Col span={12}>Weimaranger</Col>
+                  </Row>
+                </Col>
+              </Row>
+            </Card>
           </div>
           <div className="container">
             {this.state.customerType !== 'Guest' ? (

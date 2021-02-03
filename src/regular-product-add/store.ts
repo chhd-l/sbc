@@ -1384,8 +1384,8 @@ export default class AppStore extends Store {
 
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)
-    this.dispatch('goodsActor: saveLoading', true);
-
+    // this.dispatch('goodsActor: saveLoading', true);
+    this.dispatch('loading:start');
     let result: any;
     let result2: any;
     let result3: any;
@@ -1410,8 +1410,8 @@ export default class AppStore extends Store {
       result = await save(param.toJS());
     }
 
-    this.dispatch('goodsActor: saveLoading', false);
-
+    // this.dispatch('goodsActor: saveLoading', false);
+    this.dispatch('loading:end');
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor:getGoodsId', result.res.context);
       this.dispatch('priceActor:goodsId', result.res.context);

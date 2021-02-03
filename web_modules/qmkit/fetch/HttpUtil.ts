@@ -47,7 +47,7 @@ class HttpUtil {
                         if (response.status == 200 && response.ok) {
                             _error_index=0;
                             _timerOut=0;
-                           HttpUtil.findErrorInterfaceReload(true, errorObj)
+                         //  HttpUtil.findErrorInterfaceReload(true, errorObj)
                             if (jsonBody.code === 'K-999996') {
                                 message.error(jsonBody.message);
                                 return;
@@ -95,7 +95,7 @@ class HttpUtil {
                 }
                 httpCustomerOpertion.isFetched = true
                 let er = { code: "404", error: errMsg, message: 'Request interface failed or interface does not exist, please check it' }
-               HttpUtil.findErrorInterfaceReload(false, errorObj)
+              // HttpUtil.findErrorInterfaceReload(false, errorObj)
                 reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
@@ -193,7 +193,7 @@ class HttpUtil {
             });
 
         }
-        errorList.length>0&&_timerOut<errorList.length&&reoloadApi();
+       // errorList.length>0&&_timerOut<errorList.length&&reoloadApi();
 
     }
 

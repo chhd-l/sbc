@@ -7,7 +7,6 @@ import FormActor from './actor/form-actor';
 import Item from 'antd/lib/list/Item';
 import { array } from 'prop-types';
 
-
 export default class AppStore extends Store {
   bindActor() {
     return [new FormActor()];
@@ -28,14 +27,14 @@ export default class AppStore extends Store {
         this.dispatch('login:logo', logo[0].url);
         sessionStorage.setItem(cache.SITE_LOGO, logo[0].url); //放入缓存,以便登陆后获取
         //icon
-        const ico = (resIco.res.context as any).pcIco
-          ? JSON.parse((resIco.res.context as any).pcIco)
-          : null;
-        if (ico) {
-          const linkEle = document.getElementById('icoLink') as any;
-          linkEle.href = ico[0].url;
-          linkEle.type = 'image/x-icon';
-        }
+        // const ico = (resIco.res.context as any).pcIco
+        //   ? JSON.parse((resIco.res.context as any).pcIco)
+        //   : null;
+        // if (ico) {
+        //   const linkEle = document.getElementById('icoLink') as any;
+        //   linkEle.href = ico[0].url;
+        //   linkEle.type = 'image/x-icon';
+        // }
       }
       this.dispatch('login:refresh', true);
     });

@@ -18,7 +18,7 @@ class TaxesAdd extends React.Component<any, any> {
         id: '',
         taxZoneName: '',
         taxZoneDescription: '',
-        taxZoneType: 0,
+        taxZoneType: 1,
         zoneIncludes: [],
         taxRates: ''
       },
@@ -257,7 +257,7 @@ class TaxesAdd extends React.Component<any, any> {
                 placeholder="Select zone"
                 optionFilterProp="children"
                 mode="multiple"
-                disabled={taxForm.taxZoneType === 0}
+                disabled={taxForm.taxZoneType === 1}
                 onChange={(value) => {
                   this.onTaxFormChange({
                     field: 'zoneIncludes',

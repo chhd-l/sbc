@@ -66,8 +66,8 @@ export default class StepTaxes extends Component<any, any> {
   getTaxZoneList = () => {
     const { pagination } = this.state;
     let params = {
-      number: pagination.current - 1,
-      size: pagination.pageSize
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
     };
     this.setState({
       loading: true
@@ -115,7 +115,7 @@ export default class StepTaxes extends Component<any, any> {
       id: '',
       taxZoneName: '',
       taxZoneDescription: '',
-      taxZoneType: 0,
+      taxZoneType: 1,
       zoneIncludes: zoneIncludes,
       taxRates: ''
     };

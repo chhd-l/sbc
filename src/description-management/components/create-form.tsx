@@ -110,6 +110,7 @@ class CreateForm extends Component<Iprop, Istate> {
         sm: { span: 16 }
       }
     };
+    const isRequired = this.state.translateList.filter((t) => t.translateName.trim() === '').length === this.state.translateList.length;
 
     return (
       <Modal
@@ -142,9 +143,9 @@ class CreateForm extends Component<Iprop, Istate> {
             })(<Input onChange={(e) => this.handleUpdateDescriptionName(e.target.value)} style={{ width: '80%' }} />)}
           </FormItem>
           {translateList.map((item: FormItemType, idx: number) => (
-            <FormItem key={item.languageId} label={item.label}>
+            <FormItem key={item.languageId} label={item.label} required={idx === 0} className={idx === 0 ? '' : 'emit-lable-item'}>
               {getFieldDecorator(item.languageName, {
-                rules: item.rules,
+                rules: [{ required: idx === 0 && isRequired, message: 'Display name is required' }],
                 initialValue: item.translateName
               })(<Input onChange={(e) => this.handleUpdateDisplayName(item.languageId, e.target.value)} style={{ width: '80%' }} placeholder={item.languageName || ''} />)}
             </FormItem>

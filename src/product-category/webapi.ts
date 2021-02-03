@@ -1,4 +1,4 @@
-import { Fetch } from 'qmkit';
+import { Fetch, cache } from 'qmkit';
 type TResult = {
   code: string;
   message: string;
@@ -35,6 +35,22 @@ export function relationAttributes(filterParams = {}) {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
+    })
+  });
+}
+//获取已绑定的descriptions
+export function getBindDescription(goodsCateId) {
+  return Fetch<TResult>(`/goods/description/description/${goodsCateId}`, {
+    method: 'GET'
+  });
+}
+//绑定 description 列表
+export function bindDescription(params) {
+  return Fetch<TResult>('/goods/description/description/goodsCateRelatedDescription', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId
     })
   });
 }

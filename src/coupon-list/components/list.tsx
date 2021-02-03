@@ -72,15 +72,17 @@ export default class List extends React.Component<any, any> {
               return (
                 <div className="operation-box">
                   <AuthWrapper functionName={'f_coupon_detail'}>
-                    <span
-                      className="link"
-                      onClick={() => {
-                        couponExport((record as any).couponId);
-                      }}
-                      style={{ marginRight: 10 }}
-                    >
-                      Export
-                    </span>
+                    {text == 0 && ( //0 有活动
+                      <span
+                        className="link"
+                        onClick={() => {
+                          couponExport((record as any).couponId);
+                        }}
+                        style={{ marginRight: 10 }}
+                      >
+                        Export
+                      </span>
+                    )}
                   </AuthWrapper>
                   <AuthWrapper functionName={'f_coupon_detail'}>
                     <Link to={`/coupon-detail/${(record as any).couponId}`} style={{ marginRight: 10, paddingLeft: 0 }}>

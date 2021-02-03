@@ -234,6 +234,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
    * @private
    */
   _goThirdMenu = (url, index, i) => {
+    this.props.onSecondActiveChange()
     sessionStorage.setItem(cache.SECOND_ACTIVE, index);
     // 缓存中记录当前选中的三级菜单
     sessionStorage.setItem(cache.THIRD_ACTIVE, i);

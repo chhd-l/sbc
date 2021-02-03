@@ -8,8 +8,10 @@ import StepOne from './editcomponents/step-basic-edit';
 import StepTwo from './editcomponents/step-sso-edit';
 import StepThree from './editcomponents/step-signed-edit';
 import StepFour from './editcomponents/step-footer-edit';
-import StepConsentedit from './editcomponents/step-consent-edit';
+import StepConsent from './infocomponents/step-consent';
 import StepFooterConfig from './infocomponents/step-footer-config';
+import StepTaxes from './infocomponents/step-taxes';
+
 import BrandModal from './components/brand-modal';
 import SortsModal from './components/sort-modal';
 import { FormattedMessage } from 'react-intl';
@@ -17,7 +19,7 @@ import { FormattedMessage } from 'react-intl';
 const StepOneForm = Form.create()(StepOne);
 const StepTwoForm = Form.create()(StepTwo);
 const StepFourForm = Form.create()(StepFour);
-const StepConsenteditForm = Form.create()(StepConsentedit);
+const StepConsenteditForm = Form.create()(StepConsent);
 const SortsForm = Form.create()(SortsModal);
 const BrandForm = Form.create()(BrandModal); //品牌弹框
 
@@ -27,7 +29,8 @@ const PAIN = {
   2: <StepThree />,
   3: <StepFourForm />,
   4: <StepConsenteditForm />,
-  5: <StepFooterConfig />
+  5: <StepTaxes />,
+  6: <StepFooterConfig />
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -48,9 +51,7 @@ export default class ShopInfoEdit extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb>
-          <Breadcrumb.Item>
-            {<FormattedMessage id="storeInformationEdit" />}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>{<FormattedMessage id="storeInformationEdit" />}</Breadcrumb.Item>
         </BreadCrumb>
         {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>设置</Breadcrumb.Item>
@@ -62,21 +63,13 @@ export default class ShopInfoEdit extends React.Component<any, any> {
           <Headline title={<FormattedMessage id="storeInformationEdit" />} />
         </div>
         <div className="container">
-          <Tabs
-            onChange={(key) => this.store.setCurrentTab(key)}
-            activeKey={currentTab}
-          >
-            <Tabs.TabPane
-              tab={<FormattedMessage id="basicInformation" />}
-              key="0"
-            />
+          <Tabs onChange={(key) => this.store.setCurrentTab(key)} activeKey={currentTab}>
+            <Tabs.TabPane tab={<FormattedMessage id="basicInformation" />} key="0" />
             <Tabs.TabPane tab={<FormattedMessage id="ssoSetting" />} key="1" />
-            <Tabs.TabPane
-              tab={<FormattedMessage id="signedInformation" />}
-              key="2"
-            />
+            <Tabs.TabPane tab={<FormattedMessage id="signedInformation" />} key="2" />
             <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
             <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
+            <Tabs.TabPane tab="Taxes" key="5" />
             {/* <Tabs.TabPane
               tab={<FormattedMessage id="footerConfig" />}
               key="5"

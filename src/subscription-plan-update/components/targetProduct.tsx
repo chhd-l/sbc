@@ -17,14 +17,14 @@ export default class targetProduct extends Component<any, any> {
     const { subscriptionPlan, addField, allSkuProduct } = this.props;
 
     let newTargetProductIds = [];
-    subscriptionPlan.targetProductIds.map((item) => {
+    subscriptionPlan.targetGoodsIds.map((item) => {
       if (item !== key) {
         newTargetProductIds.push(item);
       }
     });
     let targetProducts = allSkuProduct.filter((x) => newTargetProductIds.includes(x.goodsInfoId));
-    addField('targetProducts', targetProducts);
-    addField('targetProductIds', newTargetProductIds);
+    addField('targetGoods', targetProducts);
+    addField('targetGoodsIds', newTargetProductIds);
   }
 
   showAddTargetProduct() {
@@ -33,12 +33,11 @@ export default class targetProduct extends Component<any, any> {
     });
   }
 
-  updateTable(selectedRowKeys) {
-    const { addField, allSkuProduct } = this.props;
-    if (selectedRowKeys) {
-      let targetProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
-      addField('targetProducts', targetProducts);
-      addField('targetProductIds', selectedRowKeys);
+  updateTable(selectedGoods) {
+    const { addField } = this.props;
+    if (selectedGoods) {
+      addField('targetGoods', selectedGoods);
+      //addField('targetGoodsIds', selectedRowKeys);
     }
     this.setState({
       visible: false
@@ -47,7 +46,7 @@ export default class targetProduct extends Component<any, any> {
 
   render() {
     const { loading, visible } = this.state;
-    const { subscriptionPlan } = this.props;
+    const { editable, subscriptionPlan } = this.props;
     return (
       <div>
         <h3>Step2</h3>
@@ -65,15 +64,14 @@ export default class targetProduct extends Component<any, any> {
                           <th style={{ width: '10%' }}>SKU</th>
                           <th style={{ width: '20%' }}>Product Name</th>
                           <th style={{ width: '15%' }}>Specification</th>
-                          <th style={{ width: '15%' }}>Product Category</th>
+                          <th style={{ width: '25%' }}>Product Category</th>
                           <th style={{ width: '10%' }}>Brand</th>
                           <th style={{ width: '10%' }}>Price</th>
-                          <th style={{ width: '10%' }}>Operation</th>
                         </tr>
                       </thead>
                       <tbody className="ant-table-tbody">
-                        {subscriptionPlan.targetProducts &&
-                          subscriptionPlan.targetProducts.map((item) => (
+                        {subscriptionPlan.targetGoods &&
+                          subscriptionPlan.targetGoods.map((item) => (
                             <tr key={item.goodsInfoId}>
                               <td>
                                 <img src={item.goodsInfoImg} />
@@ -95,30 +93,23 @@ export default class targetProduct extends Component<any, any> {
                               <td>{item.goodsCateName}</td>
                               <td>{item.brandName}</td>
                               <td>{item.marketPrice}</td>
-                              <td>
-                                <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
-                                  <Tooltip placement="top" title="Delete">
-                                    <a className="iconfont iconDelete"></a>
-                                  </Tooltip>
-                                </Popconfirm>
-                              </td>
                             </tr>
                           ))}
                       </tbody>
                     </table>
-                    {subscriptionPlan.targetProducts && subscriptionPlan.targetProducts.length > 0 ? null : (
+                    {editable ? (
                       <div className="noProduct">
                         <div className="addProduct" onClick={this.showAddTargetProduct}>
-                          <span> + Add product</span>
+                          <span> + Select product</span>
                         </div>
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>
             </div>
           </Spin>
-          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetProductIds} />
+          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetGoods} />
         </div>
       </div>
     );

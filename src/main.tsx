@@ -87,7 +87,7 @@ export default class Main extends React.Component<any, any> {
             {/*左侧一级菜单*/}
             <MyLeftLevel1 matchedPath={this.state.matchedPath} onFirstActiveChange={this._onFirstActiveChange} />
             {/*左侧二三级菜单*/}
-            <MyLeftMenu matchedPath={this.state.matchedPath} ref={(menu) => (this._menu = menu)} />
+            <MyLeftMenu matchedPath={this.state.matchedPath} onSecondActiveChange={this._onSecondActiveChange} ref={(menu) => (this._menu = menu)} />
             {/*右侧主操作区域*/}
             <ErrorBoundary uuid={this.state.uuid}>
               <Content>
@@ -120,6 +120,13 @@ export default class Main extends React.Component<any, any> {
       uuid
     });
     this._menu._openKeysChange(['0']);
+  };
+  _onSecondActiveChange = () => {
+    const uuid = UUID.create().toString();
+    this.setState({
+      hasError: false,
+      uuid
+    });
   };
 }
 

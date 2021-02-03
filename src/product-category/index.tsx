@@ -6,6 +6,8 @@ import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 
+import BindDescription from './components/bind-description';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TabPane } = Tabs;
@@ -30,7 +32,10 @@ class PeoductCategory extends Component<any, any> {
         attributeName: '',
         attributeValue: ''
       },
-      loading: true
+      loading: true,
+      bindId: 0,
+      bindVisible: false,
+      bindDescriptionIds: []
     };
   }
   componentDidMount() {
@@ -235,8 +240,42 @@ class PeoductCategory extends Component<any, any> {
     );
   };
 
+  openBindModal = (id) => {
+    this.setState({ loading: true });
+    webapi
+      .getBindDescription(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false,
+            bindId: id,
+            bindVisible: true,
+            bindDescriptionIds: res.context.map((item) => item.id)
+          });
+        } else {
+          message.error(res.message || 'Get Data Failed');
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Get Data Failed');
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
+  onCloseBindingModal = (status: boolean) => {
+    this.setState({
+      bindVisible: status
+    });
+  };
+
   render() {
-    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination } = this.state;
+    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination, bindId, bindVisible, bindDescriptionIds } = this.state;
     const columns = [
       {
         title: 'Category name',
@@ -256,9 +295,14 @@ class PeoductCategory extends Component<any, any> {
         render: (text, record) => (
           <div>
             {record.cateGrade === 3 ? (
-              <Tooltip placement="topLeft" title="Bind attribute">
-                <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
-              </Tooltip>
+              <div>
+                <Tooltip placement="topLeft" title="Bind attribute">
+                  <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
+                </Tooltip>
+                <Tooltip placement="topLeft" title="Bind description">
+                  <a className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindModal(record.cateId)}></a>
+                </Tooltip>
+              </div>
             ) : (
               '-'
             )}
@@ -374,10 +418,24 @@ class PeoductCategory extends Component<any, any> {
             <Table rowKey="id" onChange={this.handleTableChange} rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
           </div>
         </Modal>
+        {bindVisible && (
+          <BindDescription
+            id={bindId}
+            visible={bindVisible}
+            defaultIds={bindDescriptionIds}
+            onCloseModal={() => {
+              this.onCloseBindingModal(false);
+            }}
+          />
+        )}
       </div>
     );
   }
 }
-const styles = {} as any;
+const styles = {
+  edit: {
+    paddingRight: 10
+  }
+} as any;
 
 export default Form.create()(PeoductCategory);

@@ -95,8 +95,7 @@ export default class AppStore extends Store {
       if ((results[0].res as any).code === Const.SUCCESS_CODE) {
         this.transaction(() => {
           this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context.cateList));
-          this.dispatch('goodsActor:getGoodsCate', fromJS((results[0].res as any).context.storeCateByCondition.storeCateResponseVOList));
-          this.dispatch('goodsActor: initBrandList', fromJS((results[0].res as any).context.brandList));
+          this.dispatch('goodsActor:getGoodsCate', ff, fromJS((results[0].res as any).context.brandList));
           this.dispatch('formActor:check', fromJS((results[0].res as any).context.distributionCheck));
           this.dispatch('goodsActor:flashsaleGoods', fromJS((results[0].res as any).context.flashsalegoodsList.flashSaleGoodsVOList));
           this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[0].res as any).context.querySysDictionary));
@@ -1298,8 +1297,8 @@ export default class AppStore extends Store {
 
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)
-    this.dispatch('goodsActor: saveLoading', true);
-
+    // this.dispatch('goodsActor: saveLoading', true);
+    this.dispatch('loading:start');
     let result: any;
     let result2: any;
     let result3: any;
@@ -1326,7 +1325,8 @@ export default class AppStore extends Store {
 
     //console.log(param.toJS(), 'param.toJS(),----------------');
 
-    this.dispatch('goodsActor: saveLoading', false);
+    // this.dispatch('goodsActor: saveLoading', false);
+    this.dispatch('loading:end');
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor:getGoodsId', result.res.context);
       this.dispatch('goodsActor:goodsId', result.res.context);
@@ -2017,7 +2017,9 @@ export default class AppStore extends Store {
   };
 
   getSeo = async (goodsId, type = 1) => {
+    this.dispatch('loading:start');
     const { res } = (await getSeo(goodsId, type)) as any;
+    this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
       this.dispatch(
         'seoActor: setSeoForm',
@@ -2032,6 +2034,7 @@ export default class AppStore extends Store {
   };
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
+    this.dispatch('loading:start');
     const params = {
       type: 1,
       goodsId,
@@ -2042,6 +2045,7 @@ export default class AppStore extends Store {
     };
     // console.log(params, 'params-------------');
     const { res } = (await editSeo(params)) as any;
+    this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {
       // history.push('./goods-list');
       message.success('Save successfully.');

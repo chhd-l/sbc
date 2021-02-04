@@ -59,6 +59,7 @@ export default class BindDescription extends Component<Iprop, any> {
     const { descName, pagination } = this.state;
     getDescriptionList({
       descriptionName: descName,
+      displayStatus: true,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
     }).then((data) => {
@@ -66,7 +67,13 @@ export default class BindDescription extends Component<Iprop, any> {
       if ((res.code = Const.SUCCESS_CODE)) {
         this.setState({
           descList: res.context.descriptionList,
-          bindList: res.context.descriptionList.filter((d) => defaultIds.includes(d.id))
+          bindList: defaultIds.reduce((prev, curr) => {
+            let idx = res.context.descriptionList.findIndex((d) => d.id === curr);
+            if (idx > -1) {
+              prev.push(res.context.descriptionList[idx]);
+            }
+            return prev;
+          }, [])
         });
       }
     });
@@ -159,7 +166,16 @@ export default class BindDescription extends Component<Iprop, any> {
       {
         title: 'Display name',
         key: 'dipName',
-        render: (text, record) => <div>{record.translateList && record.translateList.length ? record.translateList[0]['translateName'] : ''}</div>
+        render: (text, record) => (
+          <div>
+            {record.translateList && record.translateList.length
+              ? record.translateList
+                  .filter((r) => r.translateName.trim() !== '')
+                  .map((r) => r.translateName)
+                  .join(';')
+              : ''}
+          </div>
+        )
       }
     ];
     const rowSelection = {

@@ -5,10 +5,10 @@ import { message, Modal } from 'antd';
 
 import * as webApi from './webapi';
 import CouponInfoActor from './actor/coupon-info-actor';
-
+import LoadingActor from './actor/loading-actor';
 export default class AppStore extends Store {
   bindActor() {
-    return [new CouponInfoActor()];
+    return [new CouponInfoActor(), new LoadingActor()];
   }
 
   /**
@@ -138,8 +138,10 @@ export default class AppStore extends Store {
    * 新增优惠券
    */
   addCoupon = async () => {
+    this.dispatch('loading:start');
     const params = this.fetchParams();
     const { res } = (await webApi.addCoupon(params)) as any;
+    this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       history.push('/coupon-list');
@@ -153,9 +155,11 @@ export default class AppStore extends Store {
    * 修改优惠券
    */
   editCoupon = async () => {
+    this.dispatch('loading:start');
     let params = this.fetchParams();
     params.couponId = this.state().get('couponId');
     const { res } = (await webApi.editCoupon(params)) as any;
+    this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       history.push('/coupon-list');

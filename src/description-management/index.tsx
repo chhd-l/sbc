@@ -95,12 +95,11 @@ class DescriptionManagement extends Component<any, any> {
     let descForm = {
       id: undefined,
       descriptionName: '',
-      translateList: this.state.languageList.map((lan) => ({
-        label: `Display name(${lan.valueEn})`,
+      translateList: this.state.languageList.map((lan, idx) => ({
+        label: idx === 0 ? 'Display name' : ' ',
         languageId: lan.id,
         languageName: lan.valueEn,
-        translateName: '',
-        rules: [{ required: true, message: 'Display name is required' }]
+        translateName: ''
       })),
       displayStatus: false
     };
@@ -115,14 +114,13 @@ class DescriptionManagement extends Component<any, any> {
     let descForm = {
       id: row.id,
       descriptionName: row.descriptionName,
-      translateList: this.state.languageList.map((lan) => {
+      translateList: this.state.languageList.map((lan, idx) => {
         const tl = row.translateList.find((x) => x.languageId == lan.id) || {};
         return {
-          label: `Display name(${lan.valueEn})`,
+          label: idx === 0 ? 'Display name' : ' ',
           languageId: lan.id,
           languageName: lan.valueEn,
-          translateName: tl.translateName || '',
-          rules: [{ required: true, message: 'Display name is required' }]
+          translateName: tl.translateName || ''
         };
       }),
       displayStatus: row.displayStatus
@@ -235,23 +233,36 @@ class DescriptionManagement extends Component<any, any> {
       {
         title: 'Description name',
         dataIndex: 'descriptionName',
-        key: 'descriptionName'
+        key: 'descriptionName',
+        width: '20%'
       },
       {
         title: 'Display name',
         key: 'dipName',
-        render: (text, record) => <div>{record.translateList && record.translateList.length ? record.translateList[0]['translateName'] : ''}</div>
+        width: '55%',
+        render: (text, record) => (
+          <div>
+            {record.translateList && record.translateList.length
+              ? record.translateList
+                  .filter((r) => r.translateName.trim() !== '')
+                  .map((r) => r.translateName)
+                  .join(';')
+              : ''}
+          </div>
+        )
       },
       {
         title: 'Status',
         dataIndex: 'displayStatus',
         key: 'status',
+        width: '10%',
         render: (text, record) => <Switch onChange={(value) => this.updateDescriptionStatus(record, value)} checked={text} />
       },
       {
         title: 'Operation',
         dataIndex: '',
         key: 'x',
+        width: '15%',
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Edit">

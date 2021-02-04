@@ -26,7 +26,16 @@ class SortList extends Component<any, any> {
     {
       title: 'Display name',
       key: 'dipName',
-      render: (text, record) => <div>{record.translateList && record.translateList.length ? record.translateList[0]['translateName'] : ''}</div>
+      render: (text, record) => (
+        <div>
+          {record.translateList && record.translateList.length
+            ? record.translateList
+                .filter((r) => r.translateName.trim() !== '')
+                .map((r) => r.translateName)
+                .join(';')
+            : ''}
+        </div>
+      )
     },
     {
       title: 'Operation',

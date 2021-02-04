@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Card, Avatar, Input, InputNumber, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm } from 'antd';
+import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm } from 'antd';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
@@ -10,12 +11,14 @@ import PetInfomation from './component/pet-infomation';
 import DeliveryInformation from './component/delivery-information';
 import BillingInfomation from './component/billing-infomation';
 import PaymentInfo from './component/payment-infomation';
+import OrderInformation from './component/order-information';
 
 import './index.less';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TabPane } = Tabs;
+const { RangePicker } = DatePicker;
 
 const { Column } = Table;
 const { confirm } = Modal;
@@ -109,165 +112,168 @@ export default class CustomerDetails extends React.Component<any, any> {
         </BreadCrumb>
         {/*导航面包屑*/}
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-          <div className="detail-container">
-            <Row>
-              <Col span="20">
-                <Headline title="Basic information"></Headline>
-              </Col>
-              <Col span="4" className="text-align-right">
-                <Link>
-                  <span className="iconfont iconEdit"></span> Edit
-                </Link>
-              </Col>
-            </Row>
-            <div style={{ margin: '20px 0' }}>
-              <Row className="text-tip">
-                <Col span="4">Name</Col>
-                <Col span="4">Age</Col>
-                <Col span="4">Member level</Col>
-                <Col span="4">Growth value</Col>
-                <Col span="4">Points</Col>
-              </Row>
-              <Row className="text-highlight" style={{ marginTop: 5 }}>
-                <Col span="4">Shilin Hu</Col>
-                <Col span="4">30</Col>
-                <Col span="4">Classic</Col>
-                <Col span="4">3555</Col>
-                <Col span="4">3000</Col>
-              </Row>
-            </div>
-            <div className="basic-info-detail">
-              <Row type="flex" align="middle">
-                <Col span="4" className="text-tip">
-                  Registration date
-                </Col>
-                <Col span="6" className="text-highlight">
-                  2020-10-09
-                </Col>
-                <Col span="4" className="text-tip">
-                  Email address
-                </Col>
-                <Col span="6" className="text-highlight">
-                  xxx@xxx.xx
-                </Col>
-              </Row>
-              <Row type="flex" align="middle">
-                <Col span="4" className="text-tip">
-                  Phone number
-                </Col>
-                <Col span="6" className="text-highlight">
-                  20200303
-                </Col>
-                <Col span="4" className="text-tip">
-                  Prefer channel
-                </Col>
-                <Col span="6" className="text-highlight">
-                  Email
-                </Col>
-              </Row>
-              <Row type="flex" align="middle">
-                <Col span="4" className="text-tip">
-                  Country
-                </Col>
-                <Col span="6" className="text-highlight">
-                  Mexico
-                </Col>
-                <Col span="4" className="text-tip">
-                  Address reference
-                </Col>
-                <Col span="6" className="text-highlight">
-                  none
-                </Col>
-              </Row>
-              <Row type="flex" align="middle">
-                <Col span="4" className="text-tip">
-                  Consent
-                </Col>
-                <Col span="6" className="text-highlight">
-                  Email comunication
-                </Col>
-              </Row>
-            </div>
-          </div>
-          <div className="detail-container">
-            <Headline title="Segment" />
-            <div style={{ margin: '10px 0', color: 'rgb(226,0,26)', fontWeight: 700 }}>Significant Valued Member</div>
-            <Row>
-              <Col span={20}>
-                <Form layout="vertical">
-                  <FormItem label="Tag name">
-                    <Select mode="multiple">
-                      <Option key="1" value="a">
-                        Active User
-                      </Option>
-                      <Option key="2" value="b">
-                        Student
-                      </Option>
-                    </Select>
-                  </FormItem>
-                </Form>
-              </Col>
-            </Row>
-          </div>
-          <div className="detail-container">
-            <Headline title="Pet information" />
-            <Card style={{ width: 350 }} bodyStyle={{ padding: '10px 20px' }}>
-              <div className="text-align-right">
-                <Link>
-                  <span className="iconfont iconEdit"></span> Edit
-                </Link>
-              </div>
-              <Row gutter={10}>
-                <Col span={6}>
-                  <Avatar size={70} icon="user" />
-                </Col>
-                <Col span={18}>
-                  <Row>
-                    <Col span={24}>
-                      <div className="text-highlight">Hanhan</div>
-                    </Col>
-                  </Row>
-                  <Row className="text-tip">
-                    <Col span={12}>Age</Col>
-                    <Col span={12}>Breed</Col>
-                  </Row>
-                  <Row style={{ fontSize: 16 }}>
-                    <Col span={12}>9 months</Col>
-                    <Col span={12}>Weimaranger</Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Card>
-          </div>
-          <div className="container">
-            {this.state.customerType !== 'Guest' ? (
-              <Tabs
-                defaultActiveKey="basic"
-                onChange={this.clickTabs}
-                tabBarExtraContent={
+          {this.state.customerType !== 'Guest' && (
+            <div>
+              <div className="detail-container">
+                <div className="text-align-right">
                   <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => this.removeConsumer(this.state.customerId)} okText="Confirm" cancelText="Cancel">
                     <Button type="link">
                       <FormattedMessage id="consumer.removeConsumer" />
                     </Button>
                   </Popconfirm>
-                }
-              >
-                <TabPane tab="Basic infomation" key="basic">
-                  <BasicInfomation customerId={this.state.customerId}></BasicInfomation>
-                </TabPane>
-                <TabPane tab="Pet infomation" key="pet">
-                  <PetInfomation customerId={this.state.customerId} customerAccount={this.state.customerAccount}></PetInfomation>
-                </TabPane>
-                <TabPane tab="Delivery infomation" key="delivery">
-                  <DeliveryInformation customerId={this.state.customerId}></DeliveryInformation>
-                </TabPane>
-                <TabPane tab="Billing infomation" key="billing">
-                  <BillingInfomation customerId={this.state.customerId}></BillingInfomation>
-                </TabPane>
-                <TabPane tab="Payment methods" key="payment">
-                  <PaymentInfo customerId={this.state.customerId}></PaymentInfo>
-                </TabPane>
-              </Tabs>
+                </div>
+                <Headline
+                  title="Basic information"
+                  extra={
+                    <Link to={`/edit-customer-basicinfo/${this.state.customerId}`}>
+                      <i className="iconfont iconEdit"></i> Edit
+                    </Link>
+                  }
+                />
+                <div style={{ margin: '20px 0' }}>
+                  <Row className="text-tip">
+                    <Col span="4">Name</Col>
+                    <Col span="4">Age</Col>
+                  </Row>
+                  <Row className="text-highlight" style={{ marginTop: 5 }}>
+                    <Col span="4">Shilin Hu</Col>
+                    <Col span="4">30</Col>
+                  </Row>
+                </div>
+                <div className="basic-info-detail">
+                  <Row type="flex" align="middle">
+                    <Col span="4" className="text-tip">
+                      Registration date
+                    </Col>
+                    <Col span="6" className="text-highlight">
+                      2020-10-09
+                    </Col>
+                    <Col span="4" className="text-tip">
+                      Email address
+                    </Col>
+                    <Col span="6" className="text-highlight">
+                      xxx@xxx.xx
+                    </Col>
+                  </Row>
+                  <Row type="flex" align="middle">
+                    <Col span="4" className="text-tip">
+                      Phone number
+                    </Col>
+                    <Col span="6" className="text-highlight">
+                      20200303
+                    </Col>
+                    <Col span="4" className="text-tip">
+                      Prefer channel
+                    </Col>
+                    <Col span="6" className="text-highlight">
+                      Email
+                    </Col>
+                  </Row>
+                  <Row type="flex" align="middle">
+                    <Col span="4" className="text-tip">
+                      Country
+                    </Col>
+                    <Col span="6" className="text-highlight">
+                      Mexico
+                    </Col>
+                    <Col span="4" className="text-tip">
+                      Address reference
+                    </Col>
+                    <Col span="6" className="text-highlight">
+                      none
+                    </Col>
+                  </Row>
+                  <Row type="flex" align="middle">
+                    <Col span="4" className="text-tip">
+                      Consent
+                    </Col>
+                    <Col span="6" className="text-highlight">
+                      Email comunication
+                    </Col>
+                  </Row>
+                </div>
+              </div>
+              <div className="detail-container">
+                <Headline title="Segment" />
+                <Row>
+                  <Col span={20}>
+                    <Form layout="vertical">
+                      <FormItem label="Tag name">
+                        <Select mode="multiple">
+                          <Option key="1" value="a">
+                            Active User
+                          </Option>
+                          <Option key="2" value="b">
+                            Student
+                          </Option>
+                        </Select>
+                      </FormItem>
+                    </Form>
+                  </Col>
+                </Row>
+              </div>
+              <div className="detail-container">
+                <Headline title="Pet information" />
+                <Card style={{ width: 350 }} bodyStyle={{ padding: '10px 20px' }}>
+                  <div className="text-align-right">
+                    <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
+                      <Button type="link">
+                        <span className="iconfont iconDelete"></span> Delete
+                      </Button>
+                    </Popconfirm>
+                    <Link>
+                      <span className="iconfont iconEdit"></span> Edit
+                    </Link>
+                  </div>
+                  <Row gutter={10}>
+                    <Col span={6}>
+                      <Avatar size={70} icon="user" />
+                    </Col>
+                    <Col span={18}>
+                      <Row>
+                        <Col span={24}>
+                          <div className="text-highlight">Hanhan</div>
+                        </Col>
+                      </Row>
+                      <Row className="text-tip">
+                        <Col span={12}>Age</Col>
+                        <Col span={12}>Breed</Col>
+                      </Row>
+                      <Row style={{ fontSize: 16 }}>
+                        <Col span={12}>9 months</Col>
+                        <Col span={12}>Weimaranger</Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </Card>
+              </div>
+            </div>
+          )}
+          <div className="container">
+            {this.state.customerType !== 'Guest' ? (
+              <div>
+                <Headline title="Other information" extra={<RangePicker defaultValue={[moment(), moment()]} />} />
+                <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
+                  <TabPane tab="Order information" key="order">
+                    <OrderInformation startDate="2020-02-01" endDate="2020-02-03" />
+                  </TabPane>
+                  <TabPane tab="Basic infomation" key="basic">
+                    <BasicInfomation customerId={this.state.customerId}></BasicInfomation>
+                  </TabPane>
+                  <TabPane tab="Pet infomation" key="pet">
+                    <PetInfomation customerId={this.state.customerId} customerAccount={this.state.customerAccount}></PetInfomation>
+                  </TabPane>
+                  <TabPane tab="Delivery infomation" key="delivery">
+                    <DeliveryInformation customerId={this.state.customerId}></DeliveryInformation>
+                  </TabPane>
+                  <TabPane tab="Billing infomation" key="billing">
+                    <BillingInfomation customerId={this.state.customerId}></BillingInfomation>
+                  </TabPane>
+                  <TabPane tab="Payment methods" key="payment">
+                    <PaymentInfo customerId={this.state.customerId}></PaymentInfo>
+                  </TabPane>
+                </Tabs>
+              </div>
             ) : (
               <Tabs defaultActiveKey="delivery" onChange={this.clickTabs}>
                 <TabPane tab="Delivery infomation" key="vistor-delivery">

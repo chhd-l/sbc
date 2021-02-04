@@ -322,3 +322,31 @@ export function deleteTaxZone(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+export function getAddressList(param = {}) {
+  return Fetch<TResult>('/systemState/queryPageView', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function getSystemConfig(param = {}) {
+  return Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function ModifyConfig(param = {}) {
+  return Fetch<TResult>('/system/config/batchModifyConfig', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function changeTaxZoneStatus(param = {}) {
+  return Fetch<TResult>('/taxZone/changeTaxZoneStatus', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

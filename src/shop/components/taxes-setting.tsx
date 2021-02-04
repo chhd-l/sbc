@@ -11,10 +11,10 @@ class TaxesAdd extends React.Component<any, any> {
       visible: false,
       loading: false,
       settingForm: {
-        calculateTax: '',
-        enterPrice: '',
-        rewardCalculation: '',
-        promotionCalculation: ''
+        calculateTax: 0,
+        enterPrice: 0,
+        rewardCalculation: 0,
+        promotionCalculation: 0
       },
 
       zoneList: []
@@ -26,7 +26,8 @@ class TaxesAdd extends React.Component<any, any> {
     // 当传入的值发生变化的时候，更新state
     if (props.visible !== state.visible) {
       return {
-        visible: props.visible
+        visible: props.visible,
+        settingForm: props.settingForm
       };
     }
 
@@ -34,26 +35,20 @@ class TaxesAdd extends React.Component<any, any> {
   }
 
   handleSubmit = () => {
-    this.props.closeFunction();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const { settingForm } = this.state;
+        this.props.submitFunction(settingForm);
+      }
+    });
   };
 
   handleCancel = () => {
     this.props.closeFunction();
   };
-  getSettingForm = () => {
-    let settingForm = {
-      calculateTax: 'shippingAddress',
-      enterPrice: 'inclusiveOfTax',
-      rewardCalculation: 'inclusiveOfTax',
-      promotionCalculation: 'inclusiveOfTax'
-    };
-    this.setState({
-      settingForm
-    });
-  };
 
   onSettingFormChange = ({ field, value }) => {
-    let data = this.state.taxForm;
+    let data = this.state.settingForm;
     data[field] = value;
     this.setState({
       taxForm: data
@@ -63,6 +58,7 @@ class TaxesAdd extends React.Component<any, any> {
   render() {
     const { visible, loading, settingForm } = this.state;
     const { getFieldDecorator } = this.props.form;
+    this.props.form.resetFields();
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -111,8 +107,8 @@ class TaxesAdd extends React.Component<any, any> {
                   });
                 }}
               >
-                <Radio value="shippingAddress">Shipping address</Radio>
-                <Radio value="billingAddress">Billing address</Radio>
+                <Radio value={0}>Shipping address</Radio>
+                <Radio value={1}>Billing address</Radio>
               </Radio.Group>
             )}
           </FormItem>
@@ -130,8 +126,8 @@ class TaxesAdd extends React.Component<any, any> {
                   });
                 }}
               >
-                <Radio value="inclusiveOfTax">Inclusive of tax</Radio>
-                <Radio value="exclusiveOfTax">Exclusive of tax</Radio>
+                <Radio value={0}>Inclusive of tax</Radio>
+                <Radio value={1}>Exclusive of tax</Radio>
               </Radio.Group>
             )}
           </FormItem>
@@ -149,8 +145,8 @@ class TaxesAdd extends React.Component<any, any> {
                   });
                 }}
               >
-                <Radio value="inclusiveOfTax">Inclusive of tax</Radio>
-                <Radio value="exclusiveOfTax">Exclusive of tax</Radio>
+                <Radio value={0}>Inclusive of tax</Radio>
+                <Radio value={1}>Exclusive of tax</Radio>
               </Radio.Group>
             )}
           </FormItem>
@@ -168,8 +164,8 @@ class TaxesAdd extends React.Component<any, any> {
                   });
                 }}
               >
-                <Radio value="inclusiveOfTax">Inclusive of tax</Radio>
-                <Radio value="exclusiveOfTax">Exclusive of tax</Radio>
+                <Radio value={0}>Inclusive of tax</Radio>
+                <Radio value={1}>Exclusive of tax</Radio>
               </Radio.Group>
             )}
           </FormItem>

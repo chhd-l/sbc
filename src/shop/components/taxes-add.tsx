@@ -37,7 +37,9 @@ class TaxesAdd extends React.Component<any, any> {
       countryZoneIncludes: []
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getZoneList('');
+  }
 
   static getDerivedStateFromProps(props, state) {
     // 当传入的值发生变化的时候，更新state
@@ -54,13 +56,21 @@ class TaxesAdd extends React.Component<any, any> {
 
   handleSubmit = () => {
     const { taxForm, isEdit } = this.state;
+
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        let taxZoneStateRels = [];
+        for (let i = 0; i < taxForm.zoneIncludes.length; i++) {
+          let param = {
+            stateId: taxForm.zoneIncludes[i]
+          };
+          taxZoneStateRels.push(param);
+        }
         let params = {
           description: taxForm.taxZoneDescription,
-          taxRate: taxForm.taxRates,
+          taxRate: (taxForm.taxRates / 100).toFixed(2),
           taxZoneName: taxForm.taxZoneName,
-          taxZoneStateRels: taxForm.zoneIncludes,
+          taxZoneStateRels: +taxForm.taxZoneType ? [] : taxZoneStateRels,
           taxZoneType: taxForm.taxZoneType
         };
         if (isEdit) {
@@ -84,9 +94,9 @@ class TaxesAdd extends React.Component<any, any> {
 
     if (field === 'taxZoneType') {
       if (value) {
-        data['zoneIncludes'] = this.state.countryZoneIncludes;
-      } else {
         data['zoneIncludes'] = this.state.statesZoneIncludes;
+      } else {
+        data['zoneIncludes'] = this.state.countryZoneIncludes;
       }
     }
     if (field === 'zoneIncludes') {
@@ -132,7 +142,39 @@ class TaxesAdd extends React.Component<any, any> {
       });
   };
 
-  getZoneList = () => {};
+  getZoneList = (value) => {
+    let params = {
+      stateName: value,
+      pageNum: 0,
+      pageSize: 50
+    };
+    this.setState({
+      fetching: true
+    });
+    webApi
+      .getAddressList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let zoneList = res.context.systemStates.content;
+          this.setState({
+            zoneList,
+            fetching: false
+          });
+        } else {
+          this.setState({
+            fetching: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          fetching: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
 
   render() {
     const { visible, isEdit, loading, taxForm, taxZoneTypeList, fetching, zoneList } = this.state;
@@ -152,11 +194,14 @@ class TaxesAdd extends React.Component<any, any> {
       <Modal
         width={600}
         maskClosable={false}
-        zIndex={1000}
         title={isEdit ? 'Edit tax zone' : 'New tax zone'}
         visible={visible}
         confirmLoading={loading}
         onCancel={() => this.handleCancel()}
+        // onOk={this.handleSubmit}
+        // cancelText="Cancel"
+        // okText="Submit"
+
         footer={[
           <Button
             key="back"
@@ -166,7 +211,7 @@ class TaxesAdd extends React.Component<any, any> {
           >
             Cancel
           </Button>,
-          <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
+          <Button key="submit" type="primary" onClick={this.handleSubmit}>
             Submit
           </Button>
         ]}
@@ -271,7 +316,7 @@ class TaxesAdd extends React.Component<any, any> {
                 {zoneList &&
                   zoneList.map((item, index) => (
                     <Option value={item.id} key={index}>
-                      {item.name}
+                      {item.stateName}
                     </Option>
                   ))}
               </Select>

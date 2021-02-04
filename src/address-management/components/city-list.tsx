@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Relax } from 'plume2';
 import { FormattedMessage } from 'react-intl';
 import { noop } from 'qmkit';
-import { Form, Button, Spin, Tooltip, Popconfirm } from 'antd';
+import { Form, Button, Spin, Tooltip, Popconfirm, Pagination } from 'antd';
 import { IMap } from 'plume2';
 import { List } from 'immutable';
 import nodataImg from '/web_modules/qmkit/images/sys/no-data.jpg';
@@ -26,25 +26,42 @@ export default class CityList extends Component<any, any> {
       getCitysList: Function;
       newCityForm: Function;
       editCityForm: Function;
+      deleteCity: Function;
+      cityPagination: any;
     };
   };
 
   static relaxProps = {
     loading: 'loading',
     cityList: 'cityList',
+    cityPagination: 'cityPagination',
     getCitysList: noop,
     newCityForm: noop,
-    editCityForm: noop
+    editCityForm: noop,
+    deleteCity: noop
   };
   componentDidMount() {
-    const { getCitysList } = this.props.relaxProps;
-    getCitysList();
+    debugger;
+    this.getCityList(1, 10);
   }
+  getCityList = (currentPage, pageSize) => {
+    const { getCitysList } = this.props.relaxProps;
+    if (currentPage < 1 || pageSize < 0) {
+      return;
+    }
+    getCitysList({
+      pageNum: currentPage - 1,
+      pageSize
+    });
+  };
   editRow = (item) => {
     const { editCityForm } = this.props.relaxProps;
     editCityForm(item);
   };
-  deleteRow = (item) => {};
+  deleteRow = (item) => {
+    const { deleteCity } = this.props.relaxProps;
+    deleteCity({ id: item.id });
+  };
   addCity = () => {
     const { newCityForm } = this.props.relaxProps;
     newCityForm();
@@ -87,8 +104,18 @@ export default class CityList extends Component<any, any> {
       })
     );
   }
+  _renderLoading() {
+    return (
+      <tr style={styles.loading}>
+        <td colSpan={9}>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+        </td>
+      </tr>
+    );
+  }
   render() {
-    const { loading, cityList } = this.props.relaxProps;
+    const { loading, cityList, cityPagination } = this.props.relaxProps;
+    const pagination = cityPagination.toJS();
     return (
       <div>
         <div>
@@ -96,7 +123,7 @@ export default class CityList extends Component<any, any> {
             Add City
           </Button>
         </div>
-        {cityList.size > 0 ? (
+        {cityList ? (
           <div>
             <div className="ant-table-wrapper">
               <div className="ant-table ant-table-large ant-table-scroll-position-left">
@@ -117,18 +144,28 @@ export default class CityList extends Component<any, any> {
                           <th style={{ width: '10%' }}>Operation</th>
                         </tr>
                       </thead>
-                      <tbody className="ant-table-tbody">{this._renderContent(cityList)}</tbody>
+                      <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(cityList)}</tbody>
                     </table>
                   </div>
                 </div>
               </div>
+              {pagination.total > 0 ? (
+                <Pagination
+                  current={pagination.current}
+                  total={pagination.total}
+                  pageSize={pagination.pageSize}
+                  onChange={(pageNum, pageSize) => {
+                    this.getCityList(pageNum, pageSize);
+                  }}
+                />
+              ) : null}
             </div>
           </div>
-        ) : (
+        ) : !loading ? (
           <div className="ant-table-placeholder">
             <img src={nodataImg} width="80" className="no-data-img" />
           </div>
-        )}
+        ) : null}
       </div>
     );
   }

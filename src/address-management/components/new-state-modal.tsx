@@ -136,31 +136,27 @@ export default class NewStateModal extends Component<any, any> {
             });
           }
         }
-
-        if (isEdit) {
-          const params = {
-            id,
-            countryName: country,
-            stateName: state,
-            // "stateNo": "string",
-            systemStatePostCodes: arr
-          };
+        const params = {
+          id,
+          countryName: country,
+          stateName: state,
+          // "stateNo": "string",
+          systemStatePostCodes: arr
+        };
+        if (id) {
           editState(params);
         } else {
-          const params = {
-            countryName: country,
-            stateName: state,
-            // "stateNo": "string",
-            systemStatePostCodes: arr
-          };
           addState(params);
         }
-        setTimeout(() => {
-          this.setState({
-            confirmLoading: false
-          });
-          // setStateModalVisible(false);
-        }, 4000);
+        this.setState({
+          confirmLoading: false
+        });
+        // setTimeout(() => {
+        //   this.setState({
+        //     confirmLoading: false
+        //   });
+        //   setStateModalVisible(false);
+        // }, 4000);
         // onResetStateForm();
       }
     });
@@ -224,6 +220,7 @@ export default class NewStateModal extends Component<any, any> {
     const { modalVisible, onStateFormChange, stateForm } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     const { country, state, postCodeArr } = stateForm.toJS();
+    console.log(postCodeArr, 'postCodeArr------------');
     return (
       <Modal maskClosable={false} title="Add state" visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>

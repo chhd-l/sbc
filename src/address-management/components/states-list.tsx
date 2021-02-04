@@ -45,12 +45,15 @@ export default class StatesList extends Component<any, any> {
     deleteState: noop
   };
   componentDidMount() {
-    this.getStatesList(0, 10);
+    this.getStatesList(1, 10);
   }
   getStatesList = (currentPage, pageSize) => {
     const { getStatesList } = this.props.relaxProps;
+    if (currentPage < 1 || pageSize < 0) {
+      return;
+    }
     getStatesList({
-      pageNum: currentPage,
+      pageNum: currentPage - 1,
       pageSize
     });
   };
@@ -101,7 +104,15 @@ export default class StatesList extends Component<any, any> {
     const { newStateForm } = this.props.relaxProps;
     newStateForm();
   };
-
+  _renderLoading() {
+    return (
+      <tr style={styles.loading}>
+        <td colSpan={9}>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+        </td>
+      </tr>
+    );
+  }
   render() {
     const { loading, statesList, statePagination } = this.props.relaxProps;
     const pagination = statePagination.toJS();
@@ -112,7 +123,7 @@ export default class StatesList extends Component<any, any> {
             Add State
           </Button>
         </div>
-        {statesList.size > 0 ? (
+        {statesList ? (
           <div>
             <div className="ant-table-wrapper">
               <div className="ant-table ant-table-large ant-table-scroll-position-left">
@@ -132,7 +143,7 @@ export default class StatesList extends Component<any, any> {
                           <th style={{ width: '10%' }}>Operation</th>
                         </tr>
                       </thead>
-                      <tbody className="ant-table-tbody">{this._renderContent(statesList)}</tbody>
+                      <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(statesList)}</tbody>
                     </table>
                   </div>
                 </div>
@@ -143,17 +154,17 @@ export default class StatesList extends Component<any, any> {
                   total={pagination.total}
                   pageSize={pagination.pageSize}
                   onChange={(pageNum, pageSize) => {
-                    this.getStatesList(pageNum - 1, pageSize);
+                    this.getStatesList(pageNum, pageSize);
                   }}
                 />
               ) : null}
             </div>
           </div>
-        ) : (
+        ) : !loading ? (
           <div className="ant-table-placeholder">
             <img src={nodataImg} width="80" className="no-data-img" />
           </div>
-        )}
+        ) : null}
       </div>
     );
   }

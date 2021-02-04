@@ -12,6 +12,11 @@ export default class LoadingActor extends Actor {
         current: 1,
         pageSize: 10,
         total: 0
+      },
+      cityPagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0
       }
     };
   }
@@ -29,5 +34,10 @@ export default class LoadingActor extends Actor {
   @Action('list:statePagination')
   statePagination(state, statePagination) {
     return state.set('statePagination', statePagination);
+  }
+
+  @Action('list:cityPagination')
+  cityPagination(state, cityPagination) {
+    return state.set('cityPagination', cityPagination);
   }
 }

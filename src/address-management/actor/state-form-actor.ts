@@ -43,7 +43,7 @@ export default class StateFormActor extends Actor {
       state: '',
       postCodeArr: [
         {
-          id: new Date().getTime(),
+          value: new Date().getTime(),
           preCode: '',
           suffCode: ''
         }

@@ -2090,7 +2090,9 @@ export default class AppStore extends Store {
   };
 
   getSeo = async (goodsId, type = 1) => {
+    this.dispatch('loading:start');
     const { res } = (await getSeo(goodsId, type)) as any;
+    this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
       this.dispatch(
         'seoActor: setSeoForm',
@@ -2105,6 +2107,7 @@ export default class AppStore extends Store {
   };
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
+    this.dispatch('loading:start');
     const params = {
       type: 1,
       goodsId,
@@ -2114,6 +2117,7 @@ export default class AppStore extends Store {
       headingTag: seoObj.headingTag
     };
     const { res } = (await editSeo(params)) as any;
+    this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {
       // history.push('./goods-list');
       message.success('Save successfully.');

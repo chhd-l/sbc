@@ -7,7 +7,7 @@ interface Iprop {
   endDate: string;
 }
 
-export default class OrderInformation extends React.Component<Iprop, any> {
+export default class SubscribInformation extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
     super(props);
     this.state = {
@@ -42,21 +42,24 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                   <td colSpan={7}>
                     <div style={styles.orderCon}>
                       <span style={styles.orderId}>432143213243</span>
-                      <span style={styles.orderNo}>4321543154335</span>
-                      <span style={styles.orderTime}>Order time: 2020-07-10</span>
+                      <span style={styles.orderTime}>Subscription time: 2020-07-10</span>
                     </div>
                   </td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ width: '30%' }}>images</td>
-                  <td style={{ width: '10%' }}>Tom</td>
-                  <td style={{ width: '10%' }}>$1312.00</td>
-                  <td style={{ width: '10%' }}>12</td>
-                  <td style={{ width: '20%' }}>PRESCRIP TIMD</td>
-                  <td style={{ width: '10%' }}>Not shipped</td>
-                  <td style={{ width: '10%' }}>To be recieved</td>
+                  <td style={{ width: '40%' }}>images</td>
+                  <td style={{ width: '20%' }}>TomTTT</td>
+                  <td style={{ width: '20%' }}>Every 4 Weeks</td>
+                  <td rowSpan={2} style={{ width: '20%' }}>
+                    Active
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ width: '40%' }}>images</td>
+                  <td style={{ width: '20%' }}>TomTTT</td>
+                  <td style={{ width: '20%' }}>Every 4 Weeks</td>
                 </tr>
               </tbody>
             </table>
@@ -77,13 +80,10 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '30%' }}>Product</th>
-                      <th style={{ width: '10%' }}>Recipient</th>
-                      <th style={{ width: '10%' }}>Amount</th>
-                      <th style={{ width: '10%' }}>Quantity</th>
-                      <th style={{ width: '20%' }}>Prescriber name</th>
-                      <th style={{ width: '10%' }}>Shipping status</th>
-                      <th style={{ width: '10%' }}>Order status</th>
+                      <th style={{ width: '40%' }}>Product</th>
+                      <th style={{ width: '20%' }}>Product name</th>
+                      <th style={{ width: '20%' }}>Frequency</th>
+                      <th style={{ width: '20%' }}>Subscription status</th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList)}</tbody>
@@ -118,17 +118,11 @@ const styles = {
   orderId: {
     display: 'inline-block',
     fontSize: 14,
-    width: '15%'
-  },
-  orderNo: {
-    display: 'inline-block',
-    width: '60%',
-    fontSize: 14,
-    color: '#666'
+    width: '50%'
   },
   orderTime: {
     display: 'inline-block',
-    width: '25%',
+    width: '50%',
     fontSize: 14,
     textAlign: 'right',
     color: '#999'

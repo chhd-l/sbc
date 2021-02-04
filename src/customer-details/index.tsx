@@ -12,6 +12,8 @@ import DeliveryInformation from './component/delivery-information';
 import BillingInfomation from './component/billing-infomation';
 import PaymentInfo from './component/payment-infomation';
 import OrderInformation from './component/order-information';
+import SubscribInformation from './component/subscrib-information';
+import PrescribInformation from './component/prescrib-information';
 
 import './index.less';
 
@@ -256,6 +258,12 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
                   <TabPane tab="Order information" key="order">
                     <OrderInformation startDate="2020-02-01" endDate="2020-02-03" />
+                  </TabPane>
+                  <TabPane tab="Subscription information" key="subscrib">
+                    <SubscribInformation startDate="2020-02-01" endDate="2020-02-03" />
+                  </TabPane>
+                  <TabPane tab="Prescriber information" key="prescrib">
+                    <PrescribInformation startDate="2020-02-01" endDate="2020-02-02" />
                   </TabPane>
                   <TabPane tab="Basic infomation" key="basic">
                     <BasicInfomation customerId={this.state.customerId}></BasicInfomation>

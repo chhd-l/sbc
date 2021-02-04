@@ -99,7 +99,7 @@ export async function login(routerType, oktaToken: string) {
         dataList.filter((item) => item.get('grade') === 1),
         dataList
       );
-
+      
       sessionStorage.setItem(cache.LOGIN_MENUS, JSON.stringify(allGradeMenus));
       const functionsRes = menusRes.res.context.functionList
       sessionStorage.setItem(cache.LOGIN_FUNCTIONS, JSON.stringify(functionsRes));
@@ -149,9 +149,17 @@ export async function login(routerType, oktaToken: string) {
             sessionStorage.setItem(cache.SYSTEM_BASE_CONFIG, JSON.stringify(menusRes.res.context.baseConfigRopResponse));
             sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(menusRes.res.context.employeeAccountByIdResponse));
             let configResponse = menusRes.res.context.configResponse
+            let defaultPurchase={
+              defaultPurchaseType:(configResponse as any).storeVO?.defaultPurchaseType??'',
+              defaultSubscriptionFrequencyId:(configResponse as any).storeVO?.defaultSubscriptionFrequencyId??'',
+              languageId:(configResponse as any).storeVO?.languageId??''
+            }
             sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (configResponse as any).currency.valueEn); //货币符号
             sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (configResponse as any).currency.name); //货币名称
             sessionStorage.setItem(cache.MAP_MODE, (configResponse as any).storeVO.prescriberMap); //货币名称
+           
+            sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify(defaultPurchase));//add product sales setting 
+
             sessionStorage.setItem(cache.CURRENT_YEAR, (configResponse as any).currentDate); //年
             sessionStorage.setItem(cache.SYSTEM_GET_WEIGHT, (configResponse as any).weight.valueEn); //weight
           // } else {

@@ -60,7 +60,7 @@ export default class entryCriteria extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { subscriptionPlan, addField } = this.props;
+    const { editable, subscriptionPlan, addField } = this.props;
     const { visible, allConsents } = this.state;
     return (
       <div>
@@ -70,16 +70,17 @@ export default class entryCriteria extends Component<any, any> {
           <Form>
             <FormItem {...layout} label="Subscription Plan name">
               <Checkbox
-                checked={subscriptionPlan.signOnSubscriptionFlag === 1 ? true : false}
+                disabled={!editable}
+                checked={subscriptionPlan.signOnSubscriptionFlag}
                 onChange={(e) => {
-                  subscriptionPlan.signOnSubscriptionFlag = e.target.checked ? 1 : 0;
+                  subscriptionPlan.signOnSubscriptionFlag = e.target.checked;
                   addField('signOnSubscriptionFlag', subscriptionPlan.signOnSubscriptionFlag);
                 }}
               >
                 <span className="checkBoxTip">Consumers need consent to sign on subscription</span>
               </Checkbox>
             </FormItem>
-            {subscriptionPlan.signOnSubscriptionFlag === 1 ? (
+            {subscriptionPlan.signOnSubscriptionFlag ? (
               <FormItem {...layout} label="Consent">
                 <Row>
                   <Col span={16}>
@@ -88,13 +89,14 @@ export default class entryCriteria extends Component<any, any> {
                       rules: [{ required: true, message: 'Please add Consent' }]
                     })(
                       <Select
+                        disabled={!editable}
                         mode="multiple"
                         onChange={(value: any) => {
                           addField('consentIds', value);
                           let consents = allConsents.filter((x) => value.includes(x.id));
                           addField('consents', consents);
                         }}
-                        dropdownStyle={{display: 'none'}}
+                        dropdownStyle={{ display: 'none' }}
                       >
                         {subscriptionPlan.consents &&
                           subscriptionPlan.consents.map((item, index) => (
@@ -115,7 +117,7 @@ export default class entryCriteria extends Component<any, any> {
                   </Col>
                   <Col span={1}></Col>
                   <Col span={4}>
-                    <Button type="primary" onClick={this.showAddConsent}>
+                    <Button type="primary" onClick={this.showAddConsent} disabled={!editable}>
                       Add
                     </Button>
                   </Col>
@@ -125,9 +127,10 @@ export default class entryCriteria extends Component<any, any> {
 
             <FormItem {...layout} label="Subscription Plan">
               <Checkbox
-                checked={subscriptionPlan.subscriptionPlanFlag === 1 ? true : false}
+                disabled={!editable}
+                checked={subscriptionPlan.subscriptionPlanFlag}
                 onChange={(e) => {
-                  subscriptionPlan.subscriptionPlanFlag = e.target.checked ? 1 : 0;
+                  subscriptionPlan.subscriptionPlanFlag = e.target.checked;
                   addField('subscriptionPlanFlag', subscriptionPlan.subscriptionPlanFlag);
                 }}
               >

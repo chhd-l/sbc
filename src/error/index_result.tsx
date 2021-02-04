@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { login, cache, history } from 'qmkit';
 import { Row, Col, Button } from 'antd';
-const bg_selectRole = require('./img/bg-SelectRole.jpg');
+const bg_selectRole = require('./img/error.png');
 // const role_RC = require('./img/role-RC.png');
 // const role_Perscriber = require('./img/role-Perscriber.png');
 // let switchedRouter = false;
@@ -12,7 +12,7 @@ let ErrorPage = (props) => {
 
   return (
     <div style={styles.container}>
-      <Row style={{ top: '25%' }}>
+      <Row style={{ top: '15%' }}>
         <Col span={24}>
           <Row style={styles.welcomeFont}>
             <Col span={24}>{errorInfo.fetchStatus}</Col>
@@ -37,7 +37,7 @@ const styles = {
     height: '100vh',
     width: '100%',
     backgroundImage: 'url(' + bg_selectRole + ')',
-    backgroundSize: 'cover',
+    // backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'
   } as any,

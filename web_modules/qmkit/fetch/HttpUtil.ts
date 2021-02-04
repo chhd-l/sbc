@@ -1,16 +1,14 @@
 import { message } from 'antd';
+import { Store } from 'plume2';
+import { number } from 'prop-types';
 import { util, history, cache } from 'qmkit';
 const msg = {
     'K-000005': 'Your account is disabled',
     'K-000015': 'Failed to obtain authorization',
     'K-000002': ''
-}
-let errorList: any = [];
-let errorObj: any = {};
-let _times: number = 0;
-let _timerOut:any=null;
+};
+let errorList: any = [], _timerOut = 0, _times: number = 0,_error_index=0;
 class HttpUtil {
-
     /**
       * 发送fetch请求
        * @param fetchUrl
@@ -19,7 +17,7 @@ class HttpUtil {
        */
 
     static handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion) {
-        errorObj = Object.assign({}, { fetchUrl:fetchUrl.split('?')[0], fetchParams, httpCustomerOpertion });
+       let errorObj = Object.assign({}, { fetchUrl: fetchUrl.split('?')[0], fetchParams, httpCustomerOpertion });
         // 1. 处理的第一步
         const { isShowLoading } = httpCustomerOpertion
         if (isShowLoading) {
@@ -47,16 +45,23 @@ class HttpUtil {
                     httpCustomerOpertion.isFetched = true
                     response.json().then(jsonBody => {
                         if (response.status == 200 && response.ok) {
-                            HttpUtil.findErrorInterfaceReload(true,fetchUrl.split('?')[0])
+                            _error_index=0;
+                            _timerOut=0;
+                         //  HttpUtil.findErrorInterfaceReload(true, errorObj)
                             if (jsonBody.code === 'K-999996') {
                                 message.error(jsonBody.message);
                                 return;
                             }
-                            // 账号禁用 统一返回到登录页面
-                            else if (['K-000002', 'K-000005', 'K-000015'].includes(jsonBody.code)) {
-                                message.error(msg[jsonBody.code]);
+                            // token 过期时，前端直接处理
+                            else if (jsonBody.code === 'K-000002') {
+                                message.error(jsonBody.message);
                                 util.logout();
-                                history.push('/login', { oktaLogout: false })
+                                history.push('/login');
+                            }
+                            // 账号禁用 统一返回到登录页面
+                            else if (['K-000005', 'K-000015'].includes(jsonBody.code)) {
+                                message.error(msg[jsonBody.code]);
+                                history.push('login', { oktaLogout: true })
                                 return;
                             } else if (jsonBody === 'Method Not Allowed') {
                                 message.error('You do not have permission to access this feature');
@@ -65,6 +70,14 @@ class HttpUtil {
                                 resolve(HttpUtil.handleResult(jsonBody, httpCustomerOpertion))
                             }
                         } else {
+                            // 5. 接口状态判断
+                            // http status header <200 || >299
+                            let msg = "Service is busy,please try again later"
+                            if (response.status === 404) {
+                                msg = jsonBody.message
+                            }
+
+                            // message.info(msg)
                             reject(HttpUtil.handleFailedResult({ code: response.status, message: msg, error: msg }, httpCustomerOpertion))
                         }
 
@@ -82,7 +95,7 @@ class HttpUtil {
                 }
                 httpCustomerOpertion.isFetched = true
                 let er = { code: "404", error: errMsg, message: 'Request interface failed or interface does not exist, please check it' }
-                HttpUtil.findErrorInterfaceReload(false,fetchUrl.split('?')[0])
+              // HttpUtil.findErrorInterfaceReload(false, errorObj)
                 reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
@@ -95,7 +108,7 @@ class HttpUtil {
        */
     static handleResult(result, httpCustomerOpertion) {
 
-        let code = result.code
+        let code = result?.code??false;
         if (code && httpCustomerOpertion.isHandleResult === true) {
             const errMsg = result.msg || result.message || "Service is busy,please try again later"
             const errStr = `${errMsg}`
@@ -115,8 +128,9 @@ class HttpUtil {
             const errMsg = result.msg || result.message || "Service is busy,please try again later"
             const errStr = `${errMsg}（${result.code}）`
             // HttpUtil.hideLoading()
-            //  message.info(errStr)
+            _error_index===0&&message.info(errStr)
         }
+        _error_index++;
         // const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
         // sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify({...result,error:errorMsg}))
         // process.env.NODE_ENV==="production"&&history.push('/error')
@@ -134,50 +148,53 @@ class HttpUtil {
                 if (!httpCustomerOpertion.isFetched) {
                     // 还未收到响应，则开始超时逻辑，并标记fetch需要放弃
                     httpCustomerOpertion.isAbort = true
+
                     message.info("Service is busy,please try again later")
                     reject({ code: "timeout" })
                 }
-            }, httpCustomerOpertion.timeout || 100000000)
+            }, httpCustomerOpertion.timeout || 100000)
         })
     }
+
 
     /**
      * 
      * @param status 请求成功的状态
+     * fetchUrl.split('?')[0]
      */
-    static findErrorInterfaceReload(status,fetchUrl:any) {
-        let _index = errorList.findIndex(item => item.fetchUrl === fetchUrl)
-
+    static findErrorInterfaceReload(status, errorObj) {
+        let _index = errorList.findIndex(item => item.fetchUrl === errorObj.fetchUrl)
         if (!status && _index === -1) {
             errorList.push(errorObj);
         } else if (status && _index > -1) {
-           errorList.splice(_index, 1)
+            errorList.splice(_index, 1)
         }
-        // return errorList;
         const reoloadApi = () => {
-            _timerOut= setTimeout(() => {
-                let {
-                    fetchUrl,
-                    fetchParams,
-                    httpCustomerOpertion
-                } = errorList[_times];
-                if (typeof fetchUrl === 'string') {
-                    fetchUrl += `${
-                        fetchUrl.indexOf('?') == -1 ? '?reqId=' : '&reqId='
-                    }${Math.random()}`;
-                  }
-                if (errorList.length === _times) {
-                    _times=0;
-                    HttpUtil.handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion);
-                    clearTimeout(_timerOut)
-                }else{
-                    HttpUtil.handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion);
-                    _times++;
+            _timerOut++;
+            new Promise((resolve,reject)=>{
+                    if ((errorList.length-1) === _times) {
+                        _times = 0;
+                    } else {
+                        _times++;
+                        reoloadApi();
+                    }
+               
+                let obj = errorList[_times];
+                resolve(obj);
+            }).then((obj:any)=>{
+             
+                if (typeof obj.fetchUrl === 'string') {
+                    obj.fetchUrl += `${obj.fetchUrl.indexOf('?') == -1 ? '?reqId=' : '&reqId='
+                        }${Math.random()}`;
                 }
-            }, 1000);
+               HttpUtil.handleFetchData(obj.fetchUrl, obj.fetchParams, obj.httpCustomerOpertion);
+            }).catch(e=>{
+                console.error(e)
+            });
+
         }
-        reoloadApi();
-       
+       // errorList.length>0&&_timerOut<errorList.length&&reoloadApi();
+
     }
 
 }

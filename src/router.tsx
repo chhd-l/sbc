@@ -63,6 +63,10 @@ const routes = [
     asyncComponent: () => import('./subscription-plan')
   },
   {
+    path: '/subscription-plan-detail/:id',
+    asyncComponent: () => import('./subscription-plan/detail')
+  },
+  {
     path: '/subscription-plan-update/:id',
     asyncComponent: () => import('./subscription-plan-update')
   },
@@ -868,6 +872,10 @@ const routes = [
     asyncComponent: () => import('./tag-management-edit')
   },
   {
+    path: '/tag-management-add',
+    asyncComponent: () => import('./tag-management-edit')
+  },
+  {
     path: '/tasks',
     asyncComponent: () => import('./task')
   },
@@ -878,6 +886,10 @@ const routes = [
   {
     path: '/edit-task/:id',
     asyncComponent: () => import('./task-update')
+  },
+  {
+    path: '/description-management',
+    asyncComponent: () => import('./description-management')
   },
   {
     path: '/pet-owner-activity/:id',

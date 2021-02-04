@@ -275,7 +275,7 @@ export default class CouponInfoForm extends Component<any, any> {
                   }}
                 />
               )}
-              <span style={styles.greyColor}>&nbsp;&nbsp;Coupons can be collected but not used before the start time</span>
+              <span style={styles.greyColor}>&nbsp;&nbsp;Coupons can be created but not used before the start time</span>
               {/* </Radio> */}
             </FormItem>
             {/* <FormItem>

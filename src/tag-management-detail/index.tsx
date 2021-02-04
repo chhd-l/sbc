@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AuthWrapper } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon } from 'antd';
+import { Button, Form, Input, Row, Col, message, Select, Spin, Breadcrumb, Card, Avatar, Pagination, Icon, Popconfirm } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
+
+import AddPetOwner from './components/add-pet-owner';
 
 const { Search } = Input;
 const { Meta } = Card;
@@ -23,10 +25,11 @@ class TagManagementDetail extends Component<any, any> {
         pageSize: 9,
         total: 10
       },
-
       tagDetail: {},
+      keyword: '',
       petOwnerList: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }],
-      loading: false
+      loading: false,
+      visible: false
     };
   }
   componentDidMount() {
@@ -36,7 +39,17 @@ class TagManagementDetail extends Component<any, any> {
     console.log(id);
   };
   onSearch = (value) => {
-    console.log(value);
+    this.setState(
+      {
+        keyword: value,
+        pagination: {
+          current: 1,
+          pageSize: 9,
+          total: 0
+        }
+      },
+      () => this.getIncludePetOwnerList()
+    );
   };
   onPageChange = (page, pageSize) => {
     console.log(page, pageSize);
@@ -44,9 +57,36 @@ class TagManagementDetail extends Component<any, any> {
   deletePetOwner = (id) => {
     console.log(id);
   };
+  getIncludePetOwnerList = () => {
+    const { pagination, keyword, id } = this.state;
+    let params = {
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current - 1,
+      keyword: keyword,
+      tagId: id
+    };
+    console.log(params);
+  };
+  openModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+  closeModal = (isRefresh) => {
+    this.setState(
+      {
+        visible: false
+      },
+      () => {
+        if (isRefresh) {
+          this.onSearch('');
+        }
+      }
+    );
+  };
 
   render() {
-    const { loading, title, tagDetail, petOwnerList, pagination } = this.state;
+    const { loading, title, tagDetail, petOwnerList, pagination, visible, id, keyword } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -97,8 +137,8 @@ class TagManagementDetail extends Component<any, any> {
                 title={'Pet owner list (' + pagination.total + ')'}
                 extra={
                   <div>
-                    <Search placeholder="Please input keyword" onSearch={(value) => this.onSearch(value)} style={{ width: 200 }} />
-                    <Button type="primary" style={{ marginLeft: 20 }}>
+                    <Search placeholder="Please input keyword" value={keyword} onChange={(value) => this.setState({ keyword: value })} onSearch={(value) => this.onSearch(value)} style={{ width: 200 }} />
+                    <Button type="primary" style={{ marginLeft: 20 }} onClick={this.openModal}>
                       <p>New</p>
                     </Button>
                   </div>
@@ -121,7 +161,9 @@ class TagManagementDetail extends Component<any, any> {
                             <Icon type="eye" />
                           </Link>
 
-                          <span style={styles.deleteStyle} className="iconfont iconDelete" onClick={() => this.deletePetOwner(item.id)}></span>
+                          <Popconfirm placement="topRight" title={'Are you sure to delete this item?'} onConfirm={() => this.deletePetOwner(item.id)} okText="Confirm" cancelText="Cancel">
+                            <span style={styles.deleteStyle} className="iconfont iconDelete"></span>
+                          </Popconfirm>
                         </div>
                       </Card>
                     </Col>
@@ -138,6 +180,8 @@ class TagManagementDetail extends Component<any, any> {
                 {<FormattedMessage id="back" />}
               </Button>
             </div>
+
+            <AddPetOwner visible={visible} tagId={id} closeFunction={this.closeModal} />
           </Spin>
         </div>
       </AuthWrapper>

@@ -64,16 +64,16 @@ export default class ActivityInfo extends React.Component<any, any> {
           </Row>
         </GreyBg>
         <CouponList />
-        <GreyBg>
-          {couponActivity.get('couponActivityType') != 1 && (
-            <Row>
-              <Col span={24}>
-                <span>{couponActivity.get('couponActivityType') == 2 ? 'Total number of coupons：' : 'Maximum number of times per person：'}</span>
-                {couponActivity.get('receiveType') == '0' ? 'Unlimited' : couponActivity.get('receiveCount') + 'group'}
-              </Col>
-            </Row>
-          )}
-        </GreyBg>
+        {/*<GreyBg>*/}
+        {/*  {couponActivity.get('couponActivityType') != 1 && (*/}
+        {/*    <Row>*/}
+        {/*      <Col span={24}>*/}
+        {/*        <span>{couponActivity.get('couponActivityType') == 2 ? 'Total number of coupons：' : 'Maximum number of times per person：'}</span>*/}
+        {/*        {couponActivity.get('receiveType') == '0' ? 'Unlimited' : couponActivity.get('receiveCount') + 'group'}*/}
+        {/*      </Col>*/}
+        {/*    </Row>*/}
+        {/*  )}*/}
+        {/*</GreyBg>*/}
         {/*<GreyBg>*/}
         {/*  {couponActivity.get('couponActivityType') != 2 && (*/}
         {/*    <Row>*/}

@@ -223,6 +223,12 @@ class TagManagementList extends Component<any, any> {
               </Form>
             </div>
             <div className="container-search">
+              <Link to={'/tag-management-add'}>
+                <Button type="primary" style={{ marginBottom: 20 }}>
+                  <p>New</p>
+                </Button>
+              </Link>
+
               <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={tagList} pagination={pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
             </div>
           </Spin>

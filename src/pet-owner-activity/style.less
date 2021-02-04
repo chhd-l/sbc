@@ -1,0 +1,327 @@
+.petOwnerActivity {
+  .activities-right {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .ui-cursor-pointer {
+    cursor: pointer;
+  }
+
+  .font-size-18 {
+    font-size: 18px;
+  }
+
+  .ui-title {
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .viewAll {
+    display: inline-block;
+    float: right;
+    color: #999999;
+    font-size: 12px;
+    line-height: 25px;
+    cursor: pointer;
+  }
+
+  .activities-timeline {
+    background-color: #f7f7f7;
+    padding: 20px 0 0 20px;
+  }
+
+  .jump-link {
+    border: 0;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .activity-name {
+    font-size: 14px;
+    color: black;
+  }
+
+  .activity-type {
+    font-size: 12px;
+    color: #a6a6a6;
+    margin-bottom: 10px;
+  }
+
+  .order-panel /deep/ .ant-collapse-content-box {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .order-filter {
+    margin-bottom: 13px;
+  }
+
+  .table-custom {
+    /deep/ .ant-table-small {
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+
+      .ant-table-thead {
+        font-size: 10px;
+
+        .ant-table-column-has-actions {
+          padding-right: 0 !important;
+        }
+      }
+
+      .ant-table-body {
+        margin: 0;
+      }
+    }
+  }
+
+  /deep/ .ant-card-body {
+    .ant-dropdown-link {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+
+  /deep/ .ant-card-body {
+    padding: 16px 10px 10px 10px;
+  }
+
+  .rightCard {
+    min-height: 392px;
+    // min-height: 795px;
+    overflow-y: auto;
+
+    /deep/ .ant-card-body {
+      padding: 16px 10px 0 10px;
+
+      .ant-table {
+        min-height: 212px;
+        border-bottom: none;
+
+        .ant-table-content {
+          border-bottom: 1px solid #e8e8e8;
+        }
+      }
+    }
+
+    .actionBtn {
+      margin-right: 2px;
+    }
+  }
+
+  .icon-action {
+    font-size: 16px;
+    cursor: pointer;
+
+    &:not(:last-child) {
+      margin-bottom: 3px;
+    }
+  }
+
+  .icon-location {
+    background: #434343;
+    color: #fff;
+    border-radius: 10em;
+    padding: 2px 7px 3px;
+    margin-left: 10px;
+    font-size: 0.9em;
+    vertical-align: middle;
+  }
+
+  .ui-row-detail {
+    position: relative;
+    margin-left: 10px;
+    width: 100%;
+
+    .icon-default {
+      width: 16%;
+      border-radius: 50%;
+    }
+
+    .icon-edit {
+      position: absolute;
+      right: 0;
+      top: 5px;
+    }
+
+    .detail-content {
+      margin-left: 4%;
+      line-height: 1.8;
+      width: 88%;
+
+      .ant-col-6 {
+        white-space: break-spaces;
+        word-wrap: break-word;
+      }
+    }
+
+    .contactName {
+      font-weight: bold;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .avatar-box {
+      width: 96px;
+      margin: 11px 0;
+      padding: 0 5% 0 0;
+      border-right: 1px solid #fff;
+
+      .icon-default {
+        border-radius: 50%;
+        width: 85%;
+      }
+    }
+
+    .anticon {
+      font-size: 22px;
+    }
+
+    .font-size-13 {
+      font-size: 13px !important;
+    }
+  }
+
+  .ui-primary-background-2 {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  .segment-item {
+    position: relative;
+    display: inline-block;
+    margin: 8px 10px 0 0;
+    padding: 3px 13px;
+    color: #221357;
+    text-align: center;
+    background-color: #ffccc7;
+    color: #fff;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.2;
+    }
+  }
+
+  .contactSegments {
+    white-space: nowrap;
+    max-width: 250px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    margin-left: 10px;
+  }
+
+  .userBase {
+    margin-bottom: 15px;
+    margin-left: 0 !important;
+
+    .detail-content {
+      width: auto !important;
+    }
+  }
+
+  .contactDetail .ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td {
+    padding: 8px 4px;
+  }
+
+  .ui-primary-background-2 .ant-avatar-string {
+    top: -10%;
+  }
+
+  .ant-card-head .ant-tabs {
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: 500;
+  }
+
+  .ant-timeline-item {
+    padding-right: 10px;
+  }
+
+  .ant-timeline-item-head-blue {
+    background-color: #e20119;
+    color: #e20119;
+    border-color: #e20119;
+  }
+
+  .ant-timeline-item-pending .ant-timeline-item-head-blue {
+    background-color: unset;
+  }
+
+  .ant-timeline {
+    max-height: 608px;
+    min-height: 608px;
+    overflow-y: auto;
+
+    .ant-empty-image {
+      line-height: 500px;
+    }
+
+    .ant-empty-description {
+      line-height: 450px;
+    }
+  }
+
+  .sortBtn {
+    padding: 0 5px;
+    margin-right: 10px;
+  }
+
+  .addCommentBtn {
+    padding: 0 5px;
+  }
+
+  .searchInput {
+    .ant-input {
+      border-radius: 20px;
+    }
+  }
+
+  // scrollbar
+  .contactSegments::-webkit-scrollbar {
+    width: 71px;
+    height: 4px;
+  }
+
+  .contactSegments::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  .contactSegments::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(153, 153, 153, 1);
+  }
+
+  .ant-timeline::-webkit-scrollbar {
+    width: 4px;
+    height: 91px;
+  }
+
+  .ant-timeline::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  .ant-timeline::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(153, 153, 153, 1);
+  }
+
+  .ant-timeline-item-content {
+    top: 0;
+  }
+
+  .ant-card-head {
+    padding: 0 10px 0 24px;
+  }
+
+  .ant-input-affix-wrapper .ant-input-prefix {
+    z-index: 1;
+  }
+}

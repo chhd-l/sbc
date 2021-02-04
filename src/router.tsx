@@ -890,6 +890,18 @@ const routes = [
   {
     path: '/description-management',
     asyncComponent: () => import('./description-management')
+  },
+  {
+    path: '/pet-owner-activity/:id',
+    asyncComponent: () => import('./pet-owner-activity')
+  },
+  {
+    path: '/pet-all/:id',
+    asyncComponent: () => import('./pet-all')
+  },
+  {
+    path: '/pet-owner-all/:id',
+    asyncComponent: () => import('./pet-owner-all')
   }
   // {
   //   path: '/invoice-details',

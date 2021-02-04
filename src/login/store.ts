@@ -21,17 +21,19 @@ export default class AppStore extends Store {
 
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
   init = async () => {
-    const linkEle = document.getElementById('icoLink') as any;
-    linkEle.href = pcIco;
-    linkEle.type = 'image/x-icon';
-    webapi.getSiteInfo().then((resIco: any) => {
-      if (resIco.res.code == Const.SUCCESS_CODE) {
-        //logo
-        const logo = JSON.parse((resIco.res.context as any).pcLogo);
-        this.dispatch('login:logo', logo[0].url);
-        sessionStorage.setItem(cache.SITE_LOGO, logo[0].url); //放入缓存,以便登陆后获取
-        //icon
-        /*const ico = (resIco.res.context as any).pcIco
+    // const linkEle = document.getElementById('icoLink') as any;
+    // linkEle.href = pcIco;
+    // linkEle.type = 'image/x-icon';
+    webapi
+      .getSiteInfo()
+      .then((resIco: any) => {
+        if (resIco.res.code == Const.SUCCESS_CODE) {
+          //logo
+          const logo = JSON.parse((resIco.res.context as any).pcLogo);
+          this.dispatch('login:logo', logo[0].url);
+          sessionStorage.setItem(cache.SITE_LOGO, logo[0].url); //放入缓存,以便登陆后获取
+          //icon
+          /*const ico = (resIco.res.context as any).pcIco
           ? JSON.parse((resIco.res.context as any).pcIco)
           : null;
         if (ico) {
@@ -39,9 +41,12 @@ export default class AppStore extends Store {
           linkEle.href = ico[0].url;
           linkEle.type = 'image/x-icon';
         }*/
-      }
-      this.dispatch('login:refresh', true);
-    });
+        }
+        this.dispatch('login:refresh', true);
+      })
+      .catch((err) => {
+        message.error(err.toString());
+      });
   };
 
   /**

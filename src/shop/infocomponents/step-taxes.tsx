@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Spin, Modal } from 'antd';
+import { Button, Spin, Modal, message } from 'antd';
 import TaxesTable from '../components/taxes-table';
 import TaxesAdd from '../components/taxes-add';
 import TaxesSetting from '../components/taxes-setting';
 
+import * as webApi from './../webapi';
+import { Const } from 'qmkit';
 export default class StepTaxes extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -26,7 +28,14 @@ export default class StepTaxes extends Component<any, any> {
         taxZoneType: '',
         zoneIncludes: '',
         taxRates: ''
-      }
+      },
+      settingForm: {
+        calculateTax: 0,
+        enterPrice: 0,
+        rewardCalculation: 0,
+        promotionCalculation: 0
+      },
+      settingParams: []
     };
   }
 
@@ -45,63 +54,157 @@ export default class StepTaxes extends Component<any, any> {
         pagination: pagination
       },
       () => {
-        this.getTaxList();
+        this.getTaxZoneList();
+        this.getSettingConfig();
       }
     );
   };
 
   handleTableChange = (pagination) => {
-    debugger;
     this.setState(
       {
         pagination: pagination
       },
       () => {
-        this.getTaxList();
+        this.getTaxZoneList();
       }
     );
   };
 
-  getTaxList = () => {
+  getTaxZoneList = () => {
     const { pagination } = this.state;
-    console.log(pagination);
-
-    let taxList = [
-      {
-        id: 1982,
-        taxZoneName: 'test_1',
-        taxZoneDescription: 'test_1',
-        taxZoneType: 'statesBased',
-        zoneIncludes: '',
-        taxRates: 0.12,
-        status: 0
-      },
-      {
-        id: 1983,
-        taxZoneName: 'test_3',
-        taxZoneDescription: 'test_3',
-        taxZoneType: 'countryBased',
-        zoneIncludes: '',
-        taxRates: 0.15,
-        status: 1
-      }
-    ];
+    let params = {
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
+    };
     this.setState({
-      dataList: taxList,
-      pagination: {
-        current: pagination.current,
-        pageSize: pagination.pageSize,
-        total: 2
-      }
+      loading: true
     });
+
+    webApi
+      .getTaxZoneList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let tempObj = res.context.taxZones;
+          let taxList = tempObj.content;
+
+          this.setState({
+            dataList: taxList,
+            loading: false,
+            pagination: {
+              current: tempObj.number + 1,
+              pageSize: tempObj.size,
+              total: tempObj.total
+            }
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
+  getSettingConfig = () => {
+    webApi
+      .getSystemConfig({ configType: 'tax_setting' })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let settingParams = res.context;
+          let settingForm = {
+            calculateTax: this.getSettingFormValue('calculate_tax_address_type', settingParams),
+            enterPrice: this.getSettingFormValue('enter_price_type', settingParams),
+            rewardCalculation: this.getSettingFormValue('reward_calculation', settingParams),
+            promotionCalculation: this.getSettingFormValue('promotion_calculation', settingParams)
+          };
+          this.setState({
+            settingParams,
+            settingForm
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  getSettingFormValue = (key, arr) => {
+    let element = arr.find((item) => item.configKey === key);
+    if (element) {
+      return +element.context;
+    } else {
+      return 0;
+    }
+  };
+  updateSettingConfig = (settingForm) => {
+    const { settingParams } = this.state;
+    for (let i = 0; i < settingParams.length; i++) {
+      if (settingParams[i].configKey === 'calculate_tax_address_type') {
+        settingParams[i].context = settingForm.calculateTax.toString();
+      }
+      if (settingParams[i].configKey === 'enter_price_type') {
+        settingParams[i].context = settingForm.enterPrice.toString();
+      }
+      if (settingParams[i].configKey === 'reward_calculation') {
+        settingParams[i].context = settingForm.rewardCalculation.toString();
+      }
+      if (settingParams[i].configKey === 'promotion_calculation') {
+        settingParams[i].context = settingForm.promotionCalculation.toString();
+      }
+    }
+    let params = {
+      configRequestList: settingParams
+    };
+    webApi
+      .ModifyConfig(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.closeAllModal(true);
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   openAddTaxPage = () => {
+    let zoneIncludes = [];
+    let currentCountry = sessionStorage.getItem('currentCountry') || '';
+    if (currentCountry) {
+      zoneIncludes.push(currentCountry);
+    }
+
     let taxForm = {
       id: '',
       taxZoneName: '',
       taxZoneDescription: '',
-      taxZoneType: '',
-      zoneIncludes: '',
+      taxZoneType: 1,
+      zoneIncludes: zoneIncludes,
       taxRates: ''
     };
     this.setState({
@@ -110,21 +213,41 @@ export default class StepTaxes extends Component<any, any> {
       taxForm
     });
   };
-  closeAllModal = () => {
+  closeAllModal = (isRefresh) => {
+    let taxForm = {
+      id: '',
+      taxZoneName: '',
+      taxZoneDescription: '',
+      taxZoneType: 0,
+      zoneIncludes: [],
+      taxRates: ''
+    };
     this.setState({
       addVisible: false,
-      settingVisible: false
+      settingVisible: false,
+      taxForm
     });
+    if (isRefresh) {
+      this.getTaxZoneList();
+    }
   };
 
   openEditTaxPage = (row) => {
+    let zoneIncludes = [];
+    if (row.taxZoneStateRels) {
+      for (let i = 0; i < row.taxZoneStateRels.length; i++) {
+        let element = row.taxZoneStateRels[i].stateId;
+        zoneIncludes.push(element);
+      }
+    }
+
     let taxForm = {
       id: row.id,
       taxZoneName: row.taxZoneName,
-      taxZoneDescription: row.taxZoneDescription,
+      taxZoneDescription: row.description,
       taxZoneType: row.taxZoneType,
-      zoneIncludes: row.zoneIncludes,
-      taxRates: row.taxRates
+      zoneIncludes: zoneIncludes,
+      taxRates: (row.taxRate * 100).toFixed(0)
     };
     this.setState({
       addVisible: true,
@@ -137,9 +260,51 @@ export default class StepTaxes extends Component<any, any> {
       settingVisible: true
     });
   };
+  handleDetele = (id) => {
+    this.setState({
+      loading: true
+    });
+    webApi
+      .deleteTaxZone({ id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.getTaxZoneList();
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
+  updateTaxStatus = (param) => {
+    webApi
+      .changeTaxZoneStatus(param)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.getTaxZoneList();
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
 
   render() {
-    const { loading, dataList, pagination, addVisible, isEdit, settingVisible, taxForm } = this.state;
+    const { loading, dataList, pagination, addVisible, isEdit, settingVisible, taxForm, settingForm } = this.state;
     return (
       <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <div className="consent">
@@ -152,9 +317,9 @@ export default class StepTaxes extends Component<any, any> {
             </Button>
           </div>
           <div id="consent" className="consent-table">
-            <TaxesTable dataList={dataList} pagination={pagination} editFunction={this.openEditTaxPage} tableChangeFunction={this.handleTableChange} />
+            <TaxesTable dataList={dataList} pagination={pagination} editFunction={this.openEditTaxPage} tableChangeFunction={this.handleTableChange} deleteFunction={this.handleDetele} updateFunction={this.updateTaxStatus} />
             <TaxesAdd visible={addVisible} isEdit={isEdit} taxForm={taxForm} closeFunction={this.closeAllModal} />
-            <TaxesSetting visible={settingVisible} closeFunction={this.closeAllModal} />
+            <TaxesSetting visible={settingVisible} settingForm={settingForm} closeFunction={this.closeAllModal} submitFunction={this.updateSettingConfig} />
           </div>
         </div>
       </Spin>

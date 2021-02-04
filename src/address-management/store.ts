@@ -135,7 +135,31 @@ export default class AppStore extends Store {
     const { res } = await webapi.getCityList(params);
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      this.dispatch('list:getList', fromJS(res.context));
+      if (res.context && res.context.systemCitys) {
+        const list = [...res.context.systemCitys.content];
+        list.forEach((item) => {
+          let codeArr = [];
+          item.city = item.cityName;
+          item.state = item.stateName;
+          item.country = item.countryName;
+          if (item.systemCityPostCodes && item.systemCityPostCodes.length > 0) {
+            item.systemCityPostCodes.forEach((code) => {
+              codeArr.push(code.postCode);
+            });
+            item.postCode = codeArr.join(';');
+          }
+        });
+
+        this.dispatch('list:cityList', fromJS(list));
+        this.dispatch(
+          'list:cityPagination',
+          fromJS({
+            current: res.context.systemCitys.number + 1,
+            pageSize: res.context.systemCitys.size,
+            total: res.context.systemCitys.total
+          })
+        );
+      }
     } else {
       this.dispatch('loading:end');
       message.error(res.message);
@@ -143,60 +167,73 @@ export default class AppStore extends Store {
   };
 
   addState = async (params) => {
-    this.dispatch('loading:start');
     const { res } = await webapi.addState(params);
     if (res.code === Const.SUCCESS_CODE) {
-      this.dispatch('loading:end');
-      this.setStateModalVisible(false);
-      this.getStatesList({
-        pageNum: this.state().get('stateCurrentPage'),
-        pageSize: this.state().get('statePageSize')
-      });
-    } else {
-      this.dispatch('loading:end');
-      message.error(res.message);
-    }
-  };
-  editState = async (params) => {
-    this.dispatch('loading:start');
-    const { res } = await webapi.editState(params);
-    if (res.code === Const.SUCCESS_CODE) {
-      this.dispatch('loading:end');
       this.setStateModalVisible(false);
       this.getStatesList({
         pageNum: this.state().get('statePagination').toJS().current - 1,
         pageSize: this.state().get('statePagination').toJS().pageSize
       });
     } else {
-      this.dispatch('loading:end');
+      message.error(res.message);
+    }
+  };
+  editState = async (params) => {
+    const { res } = await webapi.editState(params);
+    if (res.code === Const.SUCCESS_CODE) {
+      this.setStateModalVisible(false);
+      this.getStatesList({
+        pageNum: this.state().get('statePagination').toJS().current - 1,
+        pageSize: this.state().get('statePagination').toJS().pageSize
+      });
+    } else {
       message.error(res.message);
     }
   };
   deleteState = async (params) => {
-    this.dispatch('loading:start');
     const { res } = await webapi.deleteState(params);
     if (res.code === Const.SUCCESS_CODE) {
-      this.dispatch('loading:end');
       this.getStatesList({
-        pageNum: this.state().get('stateCurrentPage'),
-        pageSize: this.state().get('statePageSize')
+        pageNum: this.state().get('statePagination').toJS().current - 1,
+        pageSize: this.state().get('statePagination').toJS().pageSize
       });
     } else {
-      this.dispatch('loading:end');
+      message.error(res.message);
+    }
+  };
+  deleteCity = async (params) => {
+    const { res } = await webapi.deleteCity(params);
+    if (res.code === Const.SUCCESS_CODE) {
+      this.getCitysList({
+        pageNum: this.state().get('cityPagination').toJS().current - 1,
+        pageSize: this.state().get('cityPagination').toJS().pageSize
+      });
+    } else {
+      message.error(res.message);
+    }
+  };
+  addCity = async (params) => {
+    const { res } = await webapi.addCity(params);
+    if (res.code === Const.SUCCESS_CODE) {
+      this.setCityModalVisible(false);
+      this.getCitysList({
+        pageNum: this.state().get('cityPagination').toJS().current - 1,
+        pageSize: this.state().get('cityPagination').toJS().pageSize
+      });
+    } else {
       message.error(res.message);
     }
   };
 
-  addCity = async (params) => {
-    this.dispatch('loading:start');
-    const { res } = await webapi.addCity(params);
+  editCity = async (params) => {
+    const { res } = await webapi.editCity(params);
     if (res.code === Const.SUCCESS_CODE) {
-      this.dispatch('loading:end');
-      if (res.context && res.context.systemStates) {
-        this.dispatch('list:getList', fromJS(res.context.systemStates.content));
-      }
+      this.setCityModalVisible(false);
+      this.getCitysList({
+        pageNum: this.state().get('statePagination').toJS().current - 1,
+        pageSize: this.state().get('statePagination').toJS().pageSize
+      });
     } else {
-      this.dispatch('loading:end');
       message.error(res.message);
     }
   };
@@ -205,14 +242,36 @@ export default class AppStore extends Store {
     this.setStateModalVisible(true);
   };
   newCityForm = () => {
+    this.getStateDropdown({
+      pageNum: 0,
+      pageSize: 100000
+    });
     this.setIsEditCityForm(false);
     this.setCityModalVisible(true);
+  };
+
+  getStateDropdown = async (params) => {
+    const { res } = await webapi.getStateList(params);
+    if (res.code === Const.SUCCESS_CODE) {
+      if (res.context && res.context.systemStates) {
+        const list = [...res.context.systemStates.content];
+        this.dispatch('CityFormActor:stateNameList', fromJS(list));
+      }
+    } else {
+      message.error(res.message);
+    }
+  };
+
+  searchState = (value) => {
+    console.log(value, '搜-----------------');
   };
   editStateForm = (form) => {
     if (form.systemStatePostCodes) {
       const postCodeArr = form.systemStatePostCodes;
       postCodeArr.forEach((item) => {
-        (item.preCode = item.postCode.split('-')[0]), (item.suffCode = item.postCode.split('-')[1]);
+        item.preCode = item.postCode.split('-')[0];
+        item.suffCode = item.postCode.split('-')[1];
+        item.value = item.id;
       });
       const newForm = {
         id: form.id,
@@ -238,20 +297,24 @@ export default class AppStore extends Store {
   };
   editCityForm = (form) => {
     let arr = [];
-    if (form.postCode) {
-      const postCodeArr = form.postCode.split(';');
+    this.getStateDropdown({
+      pageNum: 0,
+      pageSize: 100000
+    });
+    if (form.systemCityPostCodes) {
+      const postCodeArr = form.systemCityPostCodes;
       postCodeArr.forEach((item) => {
-        arr.push({
-          id: new Date().getTime(),
-          preCode: item.split('-')[0],
-          suffCode: item.split('-')[1]
-        });
+        item.preCode = item.postCode.split('-')[0];
+        item.suffCode = item.postCode.split('-')[1];
+        item.value = item.id;
       });
       const newForm = {
+        id: form.id,
         country: form.country,
         state: form.state,
         city: form.city,
-        postCodeArr: arr
+        postCodeArr,
+        ...form
       };
       this.dispatch('CityFormActor:cityForm', newForm);
     } else {

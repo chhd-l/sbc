@@ -11,7 +11,8 @@ enum operatorDic {
   PLATFORM = 'Platform',
   CUSTOMER = 'Customer',
   THIRD = 'Third',
-  SUPPLIER = 'Supplier'
+  SUPPLIER = 'Supplier',
+  INTEGRATION = 'Integration'
 }
 
 const columns = [

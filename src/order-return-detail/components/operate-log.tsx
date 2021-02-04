@@ -11,7 +11,8 @@ enum operatorDic {
   PLATFORM = 'Platform',
   CUSTOMER = 'Customer',
   THIRD = 'Third',
-  SUPPLIER = 'Supplier'
+  SUPPLIER = 'Supplier',
+  INTEGRATION = 'Integration'
 }
 
 const columns = [
@@ -20,7 +21,7 @@ const columns = [
     dataIndex: 'operator',
     key: 'operator',
     render: (operator) => {
-      return operatorDic[operator.platform];
+      return operatorDic[operator.platform] || operator.platform;
     }
   },
   {
@@ -90,18 +91,8 @@ export default class OperateLog extends React.Component<any, any> {
           }}
         >
           <Collapse>
-            <Panel
-              header={<FormattedMessage id="operationLog" />}
-              key="1"
-              style={customPanelStyle}
-            >
-              <Table
-                bordered
-                rowKey={() => Math.random().toString()}
-                columns={columns}
-                dataSource={logs}
-                pagination={false}
-              />
+            <Panel header={<FormattedMessage id="operationLog" />} key="1" style={customPanelStyle}>
+              <Table bordered rowKey={() => Math.random().toString()} columns={columns} dataSource={logs} pagination={false} />
             </Panel>
           </Collapse>
         </div>

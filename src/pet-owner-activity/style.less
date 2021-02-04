@@ -34,7 +34,7 @@
   .jump-link {
     border: 0;
     font-size: 14px;
-    cursor: pointer;
+    color: #f5222d;
   }
 
   .activity-name {
@@ -213,7 +213,6 @@
 
   .contactSegments {
     white-space: nowrap;
-    max-width: 250px;
     overflow-x: auto;
     padding-bottom: 5px;
     margin-left: 10px;
@@ -324,4 +323,106 @@
   .ant-input-affix-wrapper .ant-input-prefix {
     z-index: 1;
   }
+
+  .topCard {
+    min-height: 373px;
+    max-height: 373px;
+    overflow-y: auto;
+
+    .icon.iconfont {
+      color: #ffccc7;
+    }
+  }
+
+  .viewMore {
+    border: 0;
+    color: #999999;
+    font-size: 12px;
+    padding-right: 0;
+  }
+
+  .footer-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 50px;
+  }
+}
+
+.pet-panel {
+  margin-bottom: 16px;
+
+  .inclub {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+  }
+
+  .btns-icon {
+    display: none;
+    position: absolute;
+    right: 5px;
+    top: 3px;
+    z-index: 2;
+  }
+
+  &:hover {
+    .btns-icon {
+      display: block;
+    }
+  }
+
+  .ant-empty-image {
+    height: 200px;
+  }
+}
+
+.avatar-box {
+  width: 96px;
+  margin: 11px 0;
+  border-right: 1px solid #fff;
+
+  .icon-default {
+    border-radius: 50%;
+    width: 85%;
+  }
+
+  .idBox {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+  }
+}
+
+.idClass {
+  color: #221357;
+  font-size: 0.95em;
+  margin-left: 3px;
+}
+
+.idLable {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.icon-action {
+  font-size: 16px;
+  cursor: pointer;
+
+  &:not(:first-child) {
+    margin-left: 3px;
+  }
+}
+
+/deep/ .description-list.small .term,
+/deep/ .description-list.small .content {
+  padding-bottom: 4px;
+  font-size: 0.95em;
+}
+
+/deep/ .description-list.small .content {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.avatar-box img {
+  width: 80px !important;
+  height: 75px !important;
 }

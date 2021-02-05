@@ -21,7 +21,7 @@ class HttpUtil {
         // 1. 处理的第一步
         const { isShowLoading } = httpCustomerOpertion
         if (isShowLoading) {
-
+            console.log(window._store)
         }
         httpCustomerOpertion.isFetched = false
         httpCustomerOpertion.isAbort = false

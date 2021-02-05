@@ -85,7 +85,6 @@ export default async function Fetch<T>(
     url = url.replace(/([^:])\/\//, '$1/');
     //const res = await fetch(url, merge);
     const res:any = await HttpUtil.handleFetchData(url, merge, httpCustomerOpertion)
-    console.log(res,'------')
     if(url.indexOf('/clinics/exportPrescriber') !== -1){
       const resBlob =await res.blob();
       return {

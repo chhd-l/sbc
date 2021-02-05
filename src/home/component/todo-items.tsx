@@ -191,22 +191,22 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="Funnel-l">
                     <div className="Funnel-l-text">
                       <p>Landing page</p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</p>
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList[0] != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</p>
                       <p className="Funnel-l-dash1"></p>
                     </div>
                     <div className="Funnel-l-text">
                       <p>Shopping cart</p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</p>
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList[1] != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</p>
                       <p className="Funnel-l-dash2"></p>
                     </div>
                     <div className="Funnel-l-text">
                       <p>Checkout</p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</p>
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList[2] != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</p>
                       <p className="Funnel-l-dash3"></p>
                     </div>
                     <div className="Funnel-l-text">
                       <p>Payment</p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</p>
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList[3] != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</p>
                       <p className="Funnel-l-dash4"></p>
                     </div>
                   </div>
@@ -565,7 +565,7 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
             <div className="item-btm-m">
               <div className="top-text">Prescribers Trend</div>
-              {!prescriberTrendView || (prescriberTrendView.weekNumList.length === 0 && prescriberTrendView.reward.length === 0 && prescriberTrendView.activeRate.length === 0) ? (
+              {!prescriberTrendView || (!prescriberTrendView.weekNumList && !prescriberTrendView.reward && !prescriberTrendView.activeRate) ? (
                 <div className="data-img">
                   <img src={nodataImg} className="no-data-img" />
                 </div>

@@ -95,7 +95,7 @@ export default class Header extends React.Component<any, any> {
           companyId: 2,
           weekNum: date.week(),
           year: moment(date).weekYear(),
-          prescriberId: this.state.id == '' ? prescribers[0].id : this.state.id
+          prescriberId: this.state.prescriberId
         };
         prescriberInit(obj);
       } else {

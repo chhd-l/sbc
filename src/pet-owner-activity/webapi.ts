@@ -6,7 +6,16 @@ type TResult = {
   context: any;
 };
 
-export function getTaskListView(filterParams = {}) {
+export function getPetOwner(filterParams = {}) {
+  return Fetch<TResult>('/biz/task/listView', {
+    method: 'GET',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getPetList(filterParams = {}) {
   return Fetch<TResult>('/biz/task/listView', {
     method: 'POST',
     body: JSON.stringify({

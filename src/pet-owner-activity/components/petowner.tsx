@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { history } from 'qmkit';
-import { Card, Icon, Row, Col } from 'antd';
+import { history, Const } from 'qmkit';
+import { Card, Icon, Row, Col, message } from 'antd';
+import * as webapi from '../webapi';
 
 export default class petowner extends Component<any, any> {
   constructor(props) {
@@ -26,9 +27,46 @@ export default class petowner extends Component<any, any> {
           id: 221,
           isPublished: true,
           name: 'Cute'
+        },
+        {
+          id: 216,
+          isPublished: true,
+          name: 'cxcxsssssssssssssss'
+        },
+        {
+          id: 221,
+          isPublished: true,
+          name: 'Cutedddddddddddddddddddddd'
         }
       ]
     };
+  }
+  getPetOwner() {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getPetOwner()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            contactDetails: res.context,
+            loading: false
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+        this.setState({
+          loading: false
+        });
+      });
   }
   render() {
     const { contactDetails, allocatedSegments } = this.state;
@@ -36,6 +74,7 @@ export default class petowner extends Component<any, any> {
     return (
       <div>
         <Card
+          className="topCard"
           title={
             <div className="title">
               <span>About This Pet Owner</span>
@@ -73,7 +112,7 @@ export default class petowner extends Component<any, any> {
           </Row>
           <br />
           <Row type="flex" className="ui-row-detail">
-            <span className="icon iconfont iconcontactEmail" />
+            <span className="icon iconfont iconEmail" />
             <div className="detail-content">
               <Row>
                 <Col span={6}>
@@ -87,7 +126,7 @@ export default class petowner extends Component<any, any> {
           </Row>
           <br />
           <Row type="flex" className="ui-row-detail">
-            <span className="icon iconfont iconcontactPhone" />
+            <span className="icon iconfont iconPhone" />
             <div className="detail-content">
               <Row>
                 <Col span={6}>

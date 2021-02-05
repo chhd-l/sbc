@@ -565,7 +565,8 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
             <div className="item-btm-m">
               <div className="top-text">Prescribers Trend</div>
-              {!prescriberTrendView || (!prescriberTrendView.weekNumList && !prescriberTrendView.reward && !prescriberTrendView.activeRate) ? (
+              {!prescriberTrendView ||
+              ((!prescriberTrendView.weekNumList || prescriberTrendView.weekNumList.length === 0) && (!prescriberTrendView.reward || prescriberTrendView.reward.length === 0) && (!prescriberTrendView.activeRate || prescriberTrendView.activeRate.length === 0)) ? (
                 <div className="data-img">
                   <img src={nodataImg} className="no-data-img" />
                 </div>

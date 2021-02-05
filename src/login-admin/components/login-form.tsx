@@ -92,18 +92,24 @@ export default class LoginForm extends React.Component<any, any> {
     form.validateFields(null, (errs, values) => {
       //如果校验通过
       if (!errs) {
-        login(values, '');
+        login(values, '', (res) => {
+          if (res.auditState === 1) {
+            this.setState({
+              loading: false
+            });
+          }
+        });
       } else {
         this.setState({
           loading: false
         });
       }
     });
-    setTimeout(() => {
-      this.setState({
-        loading: false
-      });
-    }, 20000);
+    // setTimeout(() => {
+    //   this.setState({
+    //     loading: false
+    //   });
+    // }, 20000);
   };
 }
 

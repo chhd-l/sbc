@@ -70,15 +70,7 @@ class HttpUtil {
                                 resolve(HttpUtil.handleResult(jsonBody, httpCustomerOpertion))
                             }
                         } else {
-                            // 5. 接口状态判断
-                            // http status header <200 || >299
-                            let msg = "Service is busy,please try again later"
-                            if (response.status === 404) {
-                                msg = jsonBody.message
-                            }
-
-                            // message.info(msg)
-                            reject(HttpUtil.handleFailedResult({ code: response.status, message: msg, error: msg }, httpCustomerOpertion))
+                            reject(HttpUtil.handleFailedResult({ code: response.status, message: jsonBody.message, error: jsonBody.message }, httpCustomerOpertion))
                         }
 
                     }).catch(e => {
@@ -152,13 +144,13 @@ class HttpUtil {
                     httpCustomerOpertion.isAbort = true
                     notification.open({
                         message: 'System Notification',
-                        // duration:null,
+                        duration:null,
                         description:'Service  timeout , try again later',
                         onClick: () => {
                            
                         },
                       });
-                    reject({ code: "timeout" })
+                    reject({ code: "timeout" ,message:'Service  timeout , try again later'})
                 }
             }, httpCustomerOpertion.timeout || 40000)
         })

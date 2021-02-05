@@ -7,12 +7,29 @@ type TResult = {
 
 //new
 
-// 分页获取 tagging list
-export function getTagging(filterParams = {}) {
-  return Fetch<TResult>('/goods_tagging/taggings', {
+// 新增tag
+export function addTag(filterParams = {}) {
+  return Fetch<TResult>('/customer/segment/segment', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })
+  });
+}
+
+// 编辑tag
+export function editTag(filterParams = {}) {
+  return Fetch<TResult>('/customer/segment/segment', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 查询tag详情
+export function getTagDetail(id) {
+  return Fetch<TResult>(`/customer/segment/segment/${id}`, {
+    method: 'GET'
   });
 }

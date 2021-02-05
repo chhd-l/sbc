@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Modal, Spin, Table, Input } from 'antd';
-import { Headline } from 'qmkit';
+import { Modal, Spin, Table, Input, message } from 'antd';
+import { Const, Headline } from 'qmkit';
+import * as webapi from './../webapi';
 
 const { Search } = Input;
 
@@ -14,7 +15,7 @@ export default class AddPetOwner extends Component<any, any> {
       pagination: {
         current: 1,
         pageSize: 10,
-        total: 1
+        total: 0
       },
       keyword: '',
       petOwnerList: [],
@@ -43,8 +44,6 @@ export default class AddPetOwner extends Component<any, any> {
   componentDidMount() {}
   componentDidUpdate() {
     if (this.state.visible) {
-      console.log('getPetOwnerList');
-
       this.getPetOwnerList();
     }
   }
@@ -54,14 +53,54 @@ export default class AddPetOwner extends Component<any, any> {
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1,
       keyword: keyword,
-      tagId: id
+      segmentId: id
     };
-    console.log(params);
+    webapi
+      .getNotBindPetOwner(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   handleOk = () => {
-    const { selectedRowKeys } = this.state;
-    console.log(selectedRowKeys);
-    this.props.closeFunction(true);
+    const { selectedRowKeys, id } = this.state;
+    let params = {
+      segmentId: id,
+      customerIdList: selectedRowKeys
+    };
+    webapi
+      .addPetOwnerBindTag(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.props.closeFunction(true);
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   handleCancel = () => {
     this.props.closeFunction(false);

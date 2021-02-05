@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon } from 'antd';
 
@@ -13,22 +13,59 @@ class TagManagementEdit extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Tag management edit',
-      id: this.props.match.params.id,
-
+      title: 'Tag management add',
+      id: 0,
+      isEdit: false,
       tagForm: {
-        tagName: '123',
-        tagDescription: 'test',
-        published: true
+        tagName: '',
+        tagDescription: '',
+        isPublished: true
       },
       loading: false
     };
   }
   componentDidMount() {
-    this.getTagDeatail(this.state.id);
+    if (this.props.match.path.indexOf('edit') !== -1) {
+      this.setState(
+        {
+          isEdit: true,
+          id: this.props.match.params.id,
+          title: 'Tag management edit'
+        },
+        () => {
+          this.getTagDetail(this.props.match.params.id);
+        }
+      );
+    } else if (this.props.match.path.indexOf('add') !== -1) {
+      this.setState({
+        isEdit: false,
+        title: 'Tag management add'
+      });
+    }
   }
-  getTagDeatail = (id) => {
-    console.log(id);
+  getTagDetail = (id) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getTagDetail(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   onTagFormChange = ({ field, value }) => {
     let data = this.state.tagForm;
@@ -40,8 +77,65 @@ class TagManagementEdit extends Component<any, any> {
   saveTag = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        const { tagForm, isEdit, id } = this.state;
+        let params = {
+          name: tagForm.tagName,
+          description: tagForm.tagDescription,
+          isPublished: tagForm.isPublished
+        };
+        if (isEdit) {
+          params = Object.assign(params, { id: id });
+          this.editTag(params);
+        } else {
+          this.addTag(params);
+        }
       }
     });
+  };
+
+  editTag = (params) => {
+    webapi
+      .editTag(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          history.push(`./tag-management-detail/${params.id}`);
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  addTag = (params) => {
+    webapi
+      .addTag(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          history.push('./tag-management-list');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
 
   render() {
@@ -117,14 +211,14 @@ class TagManagementEdit extends Component<any, any> {
 
                 <FormItem label="Published">
                   {getFieldDecorator(
-                    'published',
+                    'isPublished',
                     {}
                   )(
                     <Switch
-                      checked={tagForm.published}
+                      checked={tagForm.isPublished}
                       onChange={(checked) =>
                         this.onTagFormChange({
-                          field: 'published',
+                          field: 'isPublished',
                           value: checked
                         })
                       }

@@ -23,20 +23,42 @@ class TagManagementDetail extends Component<any, any> {
       pagination: {
         current: 1,
         pageSize: 9,
-        total: 10
+        total: 0
       },
       tagDetail: {},
       keyword: '',
-      petOwnerList: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }],
+      petOwnerList: [],
       loading: false,
       visible: false
     };
   }
   componentDidMount() {
-    this.getTagDeatail(this.state.id);
+    this.getTagDetail(this.state.id);
+    this.getIncludePetOwnerList();
   }
-  getTagDeatail = (id) => {
-    console.log(id);
+  getTagDetail = (id) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getTagDetail(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   onSearch = (value) => {
     this.setState(
@@ -55,7 +77,26 @@ class TagManagementDetail extends Component<any, any> {
     console.log(page, pageSize);
   };
   deletePetOwner = (id) => {
-    console.log(id);
+    webapi
+      .deletePetOwnerBindTag({ id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.getIncludePetOwnerList();
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   getIncludePetOwnerList = () => {
     const { pagination, keyword, id } = this.state;
@@ -63,9 +104,30 @@ class TagManagementDetail extends Component<any, any> {
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1,
       keyword: keyword,
-      tagId: id
+      segmentId: id
     };
-    console.log(params);
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getBindPetOwner(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   openModal = () => {
     this.setState({
@@ -87,8 +149,6 @@ class TagManagementDetail extends Component<any, any> {
 
   render() {
     const { loading, title, tagDetail, petOwnerList, pagination, visible, id, keyword } = this.state;
-
-    const { getFieldDecorator } = this.props.form;
 
     return (
       <AuthWrapper functionName="f_tag_management_detail">

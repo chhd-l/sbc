@@ -25,7 +25,7 @@ export function getRoutType(callbackUrl: string) {
   }
 }
 
-export async function login(routerType, oktaToken: string) {
+export async function login(routerType, oktaToken: string,callback?:Function) {
   var res = {} as TResult;
   if (oktaToken) {
     sessionStorage.setItem(
@@ -164,6 +164,7 @@ export async function login(routerType, oktaToken: string) {
             let url = _getUrl(allGradeMenus);
             history.push(url);
           }
+          callback(res.context)
           break;
         /**审核未通过*/
         case 2:

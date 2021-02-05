@@ -17,6 +17,7 @@ import HomeAuthActor from './actor/home-auth-actor';
 import HeaderActor from './actor/header-actor';
 import SettlementActor from './actor/settlement-actor';
 import EvaluateSumActor from './actor/evaluate-sum-actor';
+import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
 
 const SUCCESS = Modal.success;
 
@@ -161,6 +162,27 @@ export default class AppStore extends Store {
     } else {
       this.dispatch('loading:end');
     }
+    // await Promise.all([
+    //   webapi.getPrescriberTradeAndCustomerData(data),
+    //   webapi.getPrescriberTopView(data),
+    //   webapi.getPrescriberConversionFunnelDashboardView(data),
+    //   webapi.getPrescriberTrafficTrendDashboardView(data),
+    //   webapi.getPrescriberTransactionTrendView(data),
+    //   webapi.getTrafficDashboardView(data)
+    // ]).then((results) => {
+    //   debugger
+    //   this.dispatch('loading:end');
+    //   this.transaction(() => {
+    //     this.dispatch('prescriber:p_trafficDashboardView', results[0].res.context);
+    //     this.dispatch('prescriber:p_tradeCustomerView', results[1].res.context);
+    //     this.dispatch('prescriber:p_prescriberTopView', results[2].res.context);
+    //     this.dispatch('prescriber:p_conversionFunnelDashboardView', results[3].res.context);
+    //     this.dispatch('prescriber:p_trafficTrendDashboardView', results[4].res.context);
+    //     this.dispatch('prescriber:p_transactionTrendView', results[5].res.context);
+    //   });
+    // }).catch(err => {
+    //   this.dispatch('loading:end');
+    // })
   };
 
   onSearchData = async (data) => {

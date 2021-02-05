@@ -481,16 +481,7 @@ export default class ListView extends React.Component<any, any> {
                       {v
                         .get('tradeItems')
                         .concat(gifts)
-                        .map((v, k) =>
-                          k < 4 ? (
-                            <img
-                              src={v.get('pic') ? v.get('pic') : defaultImg}
-                              // style={styles.imgItem}
-                              className="img-item"
-                              key={k}
-                            />
-                          ) : null
-                        )}
+                        .map((v, k) => (k < 4 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} style={styles.imgItem} className="img-item" key={k} /> : null))}
 
                       {
                         /*第4张特殊处理*/
@@ -653,6 +644,7 @@ const styles = {
     background: '#fff',
     borderRadius: 3
   },
+
   imgFourth: {
     position: 'absolute',
     top: 0,

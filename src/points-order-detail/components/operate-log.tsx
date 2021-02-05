@@ -10,7 +10,8 @@ enum operatorDic {
   PLATFORM = '平台',
   CUSTOMER = '客户',
   THIRD = '第三方',
-  SUPPLIER = '商家'
+  SUPPLIER = '商家',
+  INTEGRATION = 'Integration'
 }
 
 const columns = [
@@ -18,7 +19,7 @@ const columns = [
     title: '操作方',
     dataIndex: 'operator.platform',
     key: 'operator.platform',
-    render: (val) => `${operatorDic[val]}`
+    render: (val) => operatorDic[val] || val
   },
   {
     title: '操作人',
@@ -29,11 +30,7 @@ const columns = [
     title: '时间',
     dataIndex: 'eventTime',
     key: 'eventTime',
-    render: (time) =>
-      time &&
-      moment(time)
-        .format(Const.TIME_FORMAT)
-        .toString()
+    render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
   },
   {
     title: '操作类别',
@@ -72,13 +69,7 @@ export default class OperateLog extends React.Component<any, any> {
             <Panel header="操作日志" key="1" style={customPanelStyle}>
               <Row>
                 <Col span={24}>
-                  <Table
-                    rowKey={(_record, index) => index.toString()}
-                    columns={columns}
-                    dataSource={log.toJS()}
-                    pagination={false}
-                    bordered
-                  />
+                  <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={log.toJS()} pagination={false} bordered />
                 </Col>
               </Row>
             </Panel>

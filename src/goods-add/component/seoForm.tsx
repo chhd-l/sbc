@@ -96,26 +96,26 @@ export default class SeoForm extends Component<any, any> {
             />
           )}
         </Form.Item>
-        <Form.Item label="Heading Tag">
-          {getFieldDecorator('headingTag', {
-            initialValue: seoObj.headingTag
-          })(
-            <Select
-              onChange={(e) =>
-                updateSeoForm({
-                  field: 'headingTag',
-                  value: e
-                })
-              }
-            >
-              {arr.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-          )}
-        </Form.Item>
+        {/*<Form.Item label="Heading Tag">*/}
+        {/*  {getFieldDecorator('headingTag', {*/}
+        {/*    initialValue: seoObj.headingTag*/}
+        {/*  })(*/}
+        {/*    <Select*/}
+        {/*      onChange={(e) =>*/}
+        {/*        updateSeoForm({*/}
+        {/*          field: 'headingTag',*/}
+        {/*          value: e*/}
+        {/*        })*/}
+        {/*      }*/}
+        {/*    >*/}
+        {/*      {arr.map((item) => (*/}
+        {/*        <option key={item.id} value={item.id}>*/}
+        {/*          {item.name}*/}
+        {/*        </option>*/}
+        {/*      ))}*/}
+        {/*    </Select>*/}
+        {/*  )}*/}
+        {/*</Form.Item>*/}
         <Form.Item label="Meta Keywords">
           {getFieldDecorator('metaKeywordsSource', {
             initialValue: seoObj.metaKeywordsSource
@@ -145,6 +145,16 @@ export default class SeoForm extends Component<any, any> {
               }
             />
           )}
+        </Form.Item>
+        <Form.Item label="H1">
+          {getFieldDecorator('h1', {
+            initialValue: '{ name }'
+          })(<Input style={{ width: 300 }} disabled />)}
+        </Form.Item>
+        <Form.Item label="H2">
+          {getFieldDecorator('h2', {
+            initialValue: '{ subtitle }'
+          })(<Input style={{ width: 300 }} disabled />)}
         </Form.Item>
       </Form>
     );

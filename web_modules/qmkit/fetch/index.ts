@@ -85,6 +85,7 @@ export default async function Fetch<T>(
     url = url.replace(/([^:])\/\//, '$1/');
     //const res = await fetch(url, merge);
     const res:any = await HttpUtil.handleFetchData(url, merge, httpCustomerOpertion)
+    console.log(res,'------')
     if(url.indexOf('/clinics/exportPrescriber') !== -1){
       const resBlob =await res.blob();
       return {
@@ -112,16 +113,16 @@ export default async function Fetch<T>(
       err: null
     };
   } catch (err) {
-    console.error(err)
+    // console.error(err)
     //dev
     if (process.env.NODE_ENV != 'production') {
       console.warn(err);
     }
     //全局的错误提示
     return {
-      res: null,
-      res2: null,
-      res3: null,
+      res: err,
+      res2: err,
+      res3: err,
       err
     };
   }

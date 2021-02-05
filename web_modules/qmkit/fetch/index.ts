@@ -112,16 +112,16 @@ export default async function Fetch<T>(
       err: null
     };
   } catch (err) {
-    console.error(err)
+    // console.error(err)
     //dev
     if (process.env.NODE_ENV != 'production') {
       console.warn(err);
     }
     //全局的错误提示
     return {
-      res: null,
-      res2: null,
-      res3: null,
+      res: err,
+      res2: err,
+      res3: err,
       err
     };
   }

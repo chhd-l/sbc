@@ -3,12 +3,14 @@ import E from 'wangeditor'
 import Const from '../config';
 import lang from './lang/index.js'
 import i18next from 'i18next'
+import { message } from 'antd';
 interface StringArray {
     [index: number]: string;
 }
 class ReactEditor extends Component<any, any> {
     editor: any;
     props: {
+        
         id: String;
         content: string;
         disabled?: boolean;
@@ -16,6 +18,7 @@ class ReactEditor extends Component<any, any> {
         onContentChange: Function;
         toolbars?: StringArray;
         tabNanme?: string
+        count?:number
     }
     constructor(props) {
         super(props);
@@ -61,11 +64,16 @@ class ReactEditor extends Component<any, any> {
         this.editor = new E(elemMenu, elemBody)
         // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
         this.editor.config.onchange = (html: any) => {
+            let  text= this.editor.txt.text()
+            if(this.props.count&&text.length>this.props.count){
+                message.info('More than 1000 words, please delete some after retry')
+                return
+            }
             onContentChange(html, tabNanme);
         }
         this.editor.config.menus = toolbars
         this.editor.config.zIndex = 90
-
+        this.editor.config.onchangeTimeout = 500 
        /* this.editor.config.uploadImgServer =  Const.HOST + '/uploadImage4UEditor/uploadimage';
         this.editor.config.uploadImgAccept = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
         this.editor.config.uploadImgMaxSize = 2048000;

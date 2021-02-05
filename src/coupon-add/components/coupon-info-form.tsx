@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Button, Col, DatePicker, Form, Input, message, Radio, Row, Select, Tree, TreeSelect } from 'antd';
+import { Button, Col, DatePicker, Form, Input, message, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 
@@ -9,6 +9,7 @@ import moment from 'moment';
 import SelectedGoodsGrid from './selected-goods-grid';
 import { fromJS } from 'immutable';
 import { GoodsModal } from 'biz';
+import '../index.less';
 
 const ErrorDiv = styled.div`
   margin-top: -15px;
@@ -95,6 +96,7 @@ export default class CouponInfoForm extends Component<any, any> {
       btnDisabled: boolean;
       // 聚合分类Ids
       reducedCateIds: IList;
+      loading: boolean;
 
       // 键值设置方法
       fieldsValue: Function;
@@ -136,6 +138,7 @@ export default class CouponInfoForm extends Component<any, any> {
     goodsRows: 'goodsRows',
     btnDisabled: 'btnDisabled',
     reducedCateIds: 'reducedCateIds',
+    loading: 'loading',
 
     fieldsValue: noop,
     changeDateRange: noop,
@@ -170,7 +173,8 @@ export default class CouponInfoForm extends Component<any, any> {
       goodsModalVisible,
       chooseSkuIds,
       goodsRows,
-      btnDisabled
+      btnDisabled,
+      loading
     } = this.props.relaxProps;
     return (
       <RightContent>
@@ -453,6 +457,7 @@ export default class CouponInfoForm extends Component<any, any> {
             Cancel
           </Button>
         </div>
+        {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
         <GoodsModal showValidGood={true} visible={goodsModalVisible} selectedSkuIds={chooseSkuIds.toJS()} selectedRows={goodsRows.toJS()} onOkBackFun={this._onOkBackFun} onCancelBackFun={onCancelBackFun} />
       </RightContent>
     );

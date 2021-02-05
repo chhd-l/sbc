@@ -359,6 +359,7 @@ export default class StepConsentDetail extends Component<any, any> {
                 <FormItem>
                   <div className="editor-wrapper">
                     <ReactEditor
+                      count={1000}
                       id={'name-wrapper'}
                       toolbars={[
                         'fontName', // 字体
@@ -407,6 +408,7 @@ export default class StepConsentDetail extends Component<any, any> {
                         <div className="add-title">Detail {i + 1}</div>
                         <div className="add-i">
                           <Input
+                            maxLength={100}
                             placeholder="Please enter  keywords"
                             defaultValue={item.contentTitle}
                             key={item.contentTitle}
@@ -422,6 +424,7 @@ export default class StepConsentDetail extends Component<any, any> {
                       <FormItem>
                         <div className="editor-wrapper">
                           <ReactEditor
+                            count={1000}
                             id={'name-mian' + item.uuid}
                             onContentChange={(content2) => {
                               item.contentBody = content2;

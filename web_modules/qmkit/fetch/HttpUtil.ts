@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { message,notification } from 'antd';
 import { Store } from 'plume2';
 import { number } from 'prop-types';
 import { util, history, cache } from 'qmkit';
@@ -70,15 +70,7 @@ class HttpUtil {
                                 resolve(HttpUtil.handleResult(jsonBody, httpCustomerOpertion))
                             }
                         } else {
-                            // 5. 接口状态判断
-                            // http status header <200 || >299
-                            let msg = "Service is busy,please try again later"
-                            if (response.status === 404) {
-                                msg = jsonBody.message
-                            }
-
-                            // message.info(msg)
-                            reject(HttpUtil.handleFailedResult({ code: response.status, message: msg, error: msg }, httpCustomerOpertion))
+                            reject(HttpUtil.handleFailedResult({ code: response.status, message: jsonBody.message, error: jsonBody.message }, httpCustomerOpertion))
                         }
 
                     }).catch(e => {
@@ -127,14 +119,16 @@ class HttpUtil {
         if (result.code && httpCustomerOpertion.isHandleResult === true) {
             const errMsg = result.msg || result.message || "Service is busy,please try again later"
             const errStr = `${errMsg}（${result.code}）`
-            // HttpUtil.hideLoading()
-            _error_index===0&&message.info(errStr)
+            _error_index===0&&notification.open({
+                message: 'System Notification',
+                duration:null,
+                description:errStr,
+                onClick: () => {
+                    _error_index=0;
+                },
+              });
         }
         _error_index++;
-        // const errorMsg = "Uncaught PromiseError: " + (result.netStatus || "") + " " + (result.error || result.msg || result.message || "")
-        // sessionStorage.setItem(cache.ERROR_INFO,JSON.stringify({...result,error:errorMsg}))
-        // process.env.NODE_ENV==="production"&&history.push('/error')
-
         return result;
     }
     /**
@@ -148,11 +142,17 @@ class HttpUtil {
                 if (!httpCustomerOpertion.isFetched) {
                     // 还未收到响应，则开始超时逻辑，并标记fetch需要放弃
                     httpCustomerOpertion.isAbort = true
-
-                    message.info("Service is busy,please try again later")
-                    reject({ code: "timeout" })
+                    notification.open({
+                        message: 'System Notification',
+                        duration:null,
+                        description:'Service  timeout , try again later',
+                        onClick: () => {
+                           
+                        },
+                      });
+                    reject({ code: "timeout" ,message:'Service  timeout , try again later'})
                 }
-            }, httpCustomerOpertion.timeout || 100000)
+            }, httpCustomerOpertion.timeout || 40000)
         })
     }
 

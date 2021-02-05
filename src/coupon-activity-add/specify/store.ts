@@ -155,7 +155,7 @@ export default class AppStore extends Store {
       message.error('请选择目标客户');
       return;
     }
-    debugger;
+    this.dispatch('loading:start');
     // 1.从state中获取数据
     let activity = this.state().get('activity').toJS();
     // 2.格式化数据
@@ -188,7 +188,7 @@ export default class AppStore extends Store {
       res = await webapi.addCouponActivity(params);
     }
     res = res.res;
-
+    this.dispatch('loading:end');
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       history.push({

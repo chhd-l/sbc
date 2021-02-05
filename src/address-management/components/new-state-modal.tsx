@@ -54,6 +54,8 @@ export default class NewStateModal extends Component<any, any> {
       resetImageForm: Function;
       onStateFormChange: Function;
       onResetStateForm: Function;
+      addState: Function;
+      editState: Function;
     };
   };
 
@@ -64,7 +66,9 @@ export default class NewStateModal extends Component<any, any> {
     setStateModalVisible: noop,
     resetImageForm: noop,
     onStateFormChange: noop,
-    onResetStateForm: noop
+    onResetStateForm: noop,
+    addState: noop,
+    editState: noop
   };
   componentDidMount() {
     const { isEdit } = this.props.relaxProps;
@@ -93,6 +97,7 @@ export default class NewStateModal extends Component<any, any> {
   };
 
   _handleSubmit = () => {
+    const { addState, isEdit, editState } = this.props.relaxProps;
     this.setState({
       okDisabled: true
     });
@@ -112,32 +117,46 @@ export default class NewStateModal extends Component<any, any> {
           confirmLoading: true
         });
         const { setStateModalVisible, onResetStateForm, stateForm } = this.props.relaxProps;
-        const { country, state, postCodeArr } = stateForm.toJS();
+        const { id, country, state, postCodeArr } = stateForm.toJS();
         let arr = [];
         if (postCodeArr.length > 1) {
           postCodeArr.forEach((item) => {
             if (item.preCode && item.suffCode) {
-              arr.push(`${item.preCode}-${item.suffCode}`);
+              arr.push({
+                id: item.id,
+                postCode: `${item.preCode}-${item.suffCode}`
+              });
             }
           });
         } else {
           if (postCodeArr[0].preCode && postCodeArr[0].suffCode) {
-            arr.push(`${postCodeArr[0].preCode}-${postCodeArr[0].suffCode}`);
-          } else {
-            arr.push('');
+            arr.push({
+              id: postCodeArr[0].id,
+              postCode: `${postCodeArr[0].preCode}-${postCodeArr[0].suffCode}`
+            });
           }
         }
         const params = {
-          country,
-          state,
-          postCodeArr: arr.join(';')
+          id,
+          countryName: country,
+          stateName: state,
+          // "stateNo": "string",
+          systemStatePostCodes: arr
         };
-        setTimeout(() => {
-          this.setState({
-            confirmLoading: false
-          });
-          // setStateModalVisible(false);
-        }, 4000);
+        if (id) {
+          editState(params);
+        } else {
+          addState(params);
+        }
+        this.setState({
+          confirmLoading: false
+        });
+        // setTimeout(() => {
+        //   this.setState({
+        //     confirmLoading: false
+        //   });
+        //   setStateModalVisible(false);
+        // }, 4000);
         // onResetStateForm();
       }
     });
@@ -147,7 +166,7 @@ export default class NewStateModal extends Component<any, any> {
     const { stateForm, onStateFormChange } = this.props.relaxProps;
     let postCodeArr = stateForm.toJS().postCodeArr;
     postCodeArr.push({
-      id: new Date().getTime(),
+      value: new Date().getTime(),
       preCode: '',
       suffCode: ''
     });
@@ -164,7 +183,7 @@ export default class NewStateModal extends Component<any, any> {
       return;
     }
     postCodeArr.forEach((code, index) => {
-      if (code.id === item.id) {
+      if (code.value === item.value) {
         postCodeArr.splice(index, 1);
       }
     });
@@ -178,7 +197,7 @@ export default class NewStateModal extends Component<any, any> {
     const { postCodeArr } = stateForm.toJS();
 
     postCodeArr.forEach((code) => {
-      if (code.id === item.id) {
+      if (code.value === item.value) {
         code[field] = e.target.value;
       }
     });
@@ -201,6 +220,7 @@ export default class NewStateModal extends Component<any, any> {
     const { modalVisible, onStateFormChange, stateForm } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     const { country, state, postCodeArr } = stateForm.toJS();
+    console.log(postCodeArr, 'postCodeArr------------');
     return (
       <Modal maskClosable={false} title="Add state" visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>

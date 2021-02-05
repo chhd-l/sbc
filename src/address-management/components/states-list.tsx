@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Relax } from 'plume2';
 import { FormattedMessage } from 'react-intl';
 import { noop } from 'qmkit';
-import { Form, Button, Spin, Tooltip, Popconfirm } from 'antd';
+import { Form, Button, Spin, Tooltip, Popconfirm, Pagination } from 'antd';
 import { IMap } from 'plume2';
 import { List } from 'immutable';
 import nodataImg from '/web_modules/qmkit/images/sys/no-data.jpg';
@@ -23,32 +23,48 @@ export default class StatesList extends Component<any, any> {
     relaxProps?: {
       loading: boolean;
       statesList: TList;
+      statePagination: any;
       getStatesList: Function;
       setStateModalVisible: Function;
       setIsEditStateForm: Function;
       editStateForm: Function;
       newStateForm: Function;
+      deleteState: Function;
     };
   };
 
   static relaxProps = {
     loading: 'loading',
     statesList: 'statesList',
+    statePagination: 'statePagination',
     getStatesList: noop,
     setStateModalVisible: noop,
     setIsEditStateForm: noop,
     editStateForm: noop,
-    newStateForm: noop
+    newStateForm: noop,
+    deleteState: noop
   };
   componentDidMount() {
-    const { getStatesList } = this.props.relaxProps;
-    getStatesList();
+    this.getStatesList(1, 10);
   }
+  getStatesList = (currentPage, pageSize) => {
+    const { getStatesList } = this.props.relaxProps;
+    if (currentPage < 1 || pageSize < 0) {
+      return;
+    }
+    getStatesList({
+      pageNum: currentPage - 1,
+      pageSize
+    });
+  };
   editRow = (item) => {
     const { editStateForm } = this.props.relaxProps;
     editStateForm(item);
   };
-  deleteRow = (item) => {};
+  deleteRow = (item) => {
+    const { deleteState } = this.props.relaxProps;
+    deleteState({ id: item.id });
+  };
   _renderContent(dataList) {
     return (
       dataList &&
@@ -88,9 +104,18 @@ export default class StatesList extends Component<any, any> {
     const { newStateForm } = this.props.relaxProps;
     newStateForm();
   };
-
+  _renderLoading() {
+    return (
+      <tr style={styles.loading}>
+        <td colSpan={9}>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+        </td>
+      </tr>
+    );
+  }
   render() {
-    const { loading, statesList } = this.props.relaxProps;
+    const { loading, statesList, statePagination } = this.props.relaxProps;
+    const pagination = statePagination.toJS();
     return (
       <div>
         <div>
@@ -98,7 +123,7 @@ export default class StatesList extends Component<any, any> {
             Add State
           </Button>
         </div>
-        {statesList.size > 0 ? (
+        {statesList ? (
           <div>
             <div className="ant-table-wrapper">
               <div className="ant-table ant-table-large ant-table-scroll-position-left">
@@ -118,18 +143,28 @@ export default class StatesList extends Component<any, any> {
                           <th style={{ width: '10%' }}>Operation</th>
                         </tr>
                       </thead>
-                      <tbody className="ant-table-tbody">{this._renderContent(statesList)}</tbody>
+                      <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(statesList)}</tbody>
                     </table>
                   </div>
                 </div>
               </div>
+              {pagination.total > 0 ? (
+                <Pagination
+                  current={pagination.current}
+                  total={pagination.total}
+                  pageSize={pagination.pageSize}
+                  onChange={(pageNum, pageSize) => {
+                    this.getStatesList(pageNum, pageSize);
+                  }}
+                />
+              ) : null}
             </div>
           </div>
-        ) : (
+        ) : !loading ? (
           <div className="ant-table-placeholder">
             <img src={nodataImg} width="80" className="no-data-img" />
           </div>
-        )}
+        ) : null}
       </div>
     );
   }

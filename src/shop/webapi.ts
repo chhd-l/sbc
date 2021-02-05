@@ -70,12 +70,9 @@ export const getBrandList = () => {
  * 获取所有品牌
  */
 export const getAllBrands = (params: any) => {
-  return Fetch<TResult>(
-    `/goods/allGoodsBrands?likeBrandName=${(params as any).likeBrandName}`,
-    {
-      method: 'GET'
-    }
-  );
+  return Fetch<TResult>(`/goods/allGoodsBrands?likeBrandName=${(params as any).likeBrandName}`, {
+    method: 'GET'
+  });
 };
 
 /**
@@ -296,3 +293,60 @@ export const fetchConsentDetailDelete = (params) => {
     method: 'DELETE'
   });
 };
+
+//tax
+export function getTaxZoneList(param = {}) {
+  return Fetch<TResult>('/taxZone/queryPageView', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function editTaxZone(param = {}) {
+  return Fetch<TResult>('/taxZone/editTaxZone', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function addTaxZone(param = {}) {
+  return Fetch<TResult>('/taxZone/addTaxZone', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function deleteTaxZone(param = {}) {
+  return Fetch<TResult>('/taxZone/deleteTaxZone', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function getAddressList(param = {}) {
+  return Fetch<TResult>('/systemState/queryPageView', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function getSystemConfig(param = {}) {
+  return Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function ModifyConfig(param = {}) {
+  return Fetch<TResult>('/system/config/batchModifyConfig', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function changeTaxZoneStatus(param = {}) {
+  return Fetch<TResult>('/taxZone/changeTaxZoneStatus', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

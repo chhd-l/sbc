@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pagination, Spin, Row, Col } from 'antd';
+import { Pagination, Spin, Badge } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 interface Iprop {
@@ -56,7 +56,9 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                   <td style={{ width: '10%' }}>12</td>
                   <td style={{ width: '20%' }}>PRESCRIP TIMD</td>
                   <td style={{ width: '10%' }}>Not shipped</td>
-                  <td style={{ width: '10%' }}>To be recieved</td>
+                  <td style={{ width: '10%' }}>
+                    <Badge color="green" text="To be received" />
+                  </td>
                 </tr>
               </tbody>
             </table>

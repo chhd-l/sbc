@@ -1,11 +1,11 @@
 import React from 'react';
-import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm } from 'antd';
+import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm, Icon } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { Headline, BreadCrumb, history } from 'qmkit';
+import { Headline, BreadCrumb, history, Const } from 'qmkit';
 import BasicInfomation from './component/basic-infomation';
 import PetInfomation from './component/pet-infomation';
 import DeliveryInformation from './component/delivery-information';
@@ -14,6 +14,8 @@ import PaymentInfo from './component/payment-infomation';
 import OrderInformation from './component/order-information';
 import SubscribInformation from './component/subscrib-information';
 import PrescribInformation from './component/prescrib-information';
+import DeliveryList from './component/delivery-list';
+import PaymentList from './component/payment-list';
 
 import './index.less';
 
@@ -32,13 +34,57 @@ export default class CustomerDetails extends React.Component<any, any> {
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
       customerType: this.props.match.params.type ? this.props.match.params.type : 'Guest',
       customerAccount: this.props.match.params.account ? this.props.match.params.account : '',
-      loading: false
+      loading: false,
+      basic: {
+        customerName: '',
+        email: '',
+        age: '',
+        createTime: '',
+        contactPhone: '',
+        preferredMethods: '',
+        country: '',
+        address: '',
+        consent: ''
+      },
+      startDate: moment().format('YYYY-MM-DD'),
+      endDate: moment().format('YYYY-MM-DD')
     };
   }
   componentDidMount() {
     // this.querySysDictionary('country');
     // this.querySysDictionary('city');
+    if (this.state.customerType !== 'Guest') {
+      this.getBasicInformation();
+    }
   }
+
+  getBasicInformation = () => {
+    webapi
+      .getBasicDetails(this.state.customerId)
+      .then((data) => {
+        const { res } = data;
+        if (res.code && res.code !== Const.SUCCESS_CODE) {
+          message.error(res.message || 'Get basic information failed');
+        } else {
+          this.setState({
+            basic: {
+              customerName: res.customerName || '',
+              email: res.email || '',
+              age: res.birthDay ? moment(res.birthDay).fromNow() : '',
+              createTime: res.createTime ? moment(res.createTime).format('YYYY-MM-DD') : '',
+              contactPhone: res.contactPhone || '',
+              preferredMethods: '',
+              country: res.country,
+              address: res.address1,
+              consent: ''
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Get basic information failed');
+      });
+  };
 
   // querySysDictionary = async (type: String) => {
   //   const { res } = await webapi.querySysDictionary({
@@ -104,7 +150,15 @@ export default class CustomerDetails extends React.Component<any, any> {
       });
   };
 
+  handleChangeDateRange = (dates, dateStrs) => {
+    this.setState({
+      startDate: dateStrs[0],
+      endDate: dateStrs[1]
+    });
+  };
+
   render() {
+    const { basic, startDate, endDate } = this.state;
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -134,12 +188,16 @@ export default class CustomerDetails extends React.Component<any, any> {
                 />
                 <div style={{ margin: '20px 0' }}>
                   <Row className="text-tip">
-                    <Col span="4">Name</Col>
-                    <Col span="4">Age</Col>
+                    <Col span="4">
+                      <Icon type="user" /> Name
+                    </Col>
+                    <Col span="4">
+                      <Icon type="calendar" /> Age
+                    </Col>
                   </Row>
                   <Row className="text-highlight" style={{ marginTop: 5 }}>
-                    <Col span="4">Shilin Hu</Col>
-                    <Col span="4">30</Col>
+                    <Col span="4">{basic.customerName}</Col>
+                    <Col span="4">{basic.age}</Col>
                   </Row>
                 </div>
                 <div className="basic-info-detail">
@@ -148,13 +206,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                       Registration date
                     </Col>
                     <Col span="6" className="text-highlight">
-                      2020-10-09
+                      {basic.createTime}
                     </Col>
                     <Col span="4" className="text-tip">
                       Email address
                     </Col>
                     <Col span="6" className="text-highlight">
-                      xxx@xxx.xx
+                      {basic.email}
                     </Col>
                   </Row>
                   <Row type="flex" align="middle">
@@ -162,13 +220,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                       Phone number
                     </Col>
                     <Col span="6" className="text-highlight">
-                      20200303
+                      {basic.contactPhone}
                     </Col>
                     <Col span="4" className="text-tip">
                       Prefer channel
                     </Col>
                     <Col span="6" className="text-highlight">
-                      Email
+                      {basic.preferredMethods}
                     </Col>
                   </Row>
                   <Row type="flex" align="middle">
@@ -176,13 +234,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                       Country
                     </Col>
                     <Col span="6" className="text-highlight">
-                      Mexico
+                      {basic.country}
                     </Col>
                     <Col span="4" className="text-tip">
                       Address reference
                     </Col>
                     <Col span="6" className="text-highlight">
-                      none
+                      {basic.address}
                     </Col>
                   </Row>
                   <Row type="flex" align="middle">
@@ -190,7 +248,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                       Consent
                     </Col>
                     <Col span="6" className="text-highlight">
-                      Email comunication
+                      {basic.consent}
                     </Col>
                   </Row>
                 </div>
@@ -254,18 +312,24 @@ export default class CustomerDetails extends React.Component<any, any> {
           <div className="container">
             {this.state.customerType !== 'Guest' ? (
               <div>
-                <Headline title="Other information" extra={<RangePicker defaultValue={[moment(), moment()]} />} />
+                <Headline title="Other information" extra={<RangePicker defaultValue={[moment(), moment()]} onChange={this.handleChangeDateRange} />} />
                 <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
                   <TabPane tab="Order information" key="order">
-                    <OrderInformation startDate="2020-02-01" endDate="2020-02-03" />
+                    <OrderInformation startDate={startDate} endDate={endDate} />
                   </TabPane>
                   <TabPane tab="Subscription information" key="subscrib">
-                    <SubscribInformation startDate="2020-02-01" endDate="2020-02-03" />
+                    <SubscribInformation startDate={startDate} endDate={endDate} />
                   </TabPane>
                   <TabPane tab="Prescriber information" key="prescrib">
-                    <PrescribInformation startDate="2020-02-01" endDate="2020-02-02" />
+                    <PrescribInformation startDate={startDate} endDate={endDate} />
                   </TabPane>
-                  <TabPane tab="Basic infomation" key="basic">
+                  <TabPane tab="Delivery information" key="delivery">
+                    <DeliveryList startDate={startDate} endDate={endDate} />
+                  </TabPane>
+                  <TabPane tab="Payment methods" key="payment">
+                    <PaymentList startDate={startDate} endDate={endDate} />
+                  </TabPane>
+                  {/* <TabPane tab="Basic infomation" key="basic">
                     <BasicInfomation customerId={this.state.customerId}></BasicInfomation>
                   </TabPane>
                   <TabPane tab="Pet infomation" key="pet">
@@ -279,7 +343,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </TabPane>
                   <TabPane tab="Payment methods" key="payment">
                     <PaymentInfo customerId={this.state.customerId}></PaymentInfo>
-                  </TabPane>
+                  </TabPane> */}
                 </Tabs>
               </div>
             ) : (

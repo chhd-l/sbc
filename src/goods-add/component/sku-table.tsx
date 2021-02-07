@@ -442,11 +442,7 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
-        console.log(goods.get('subscriptionStatus') == 0,222222222);
-
-        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus
-        console.log(rowInfo.subscriptionStatus,333333333);
-
+        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus;
         return (
           <Row  style={{
             marginRight: '124px',

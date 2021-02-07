@@ -1,6 +1,4 @@
 import { message,notification } from 'antd';
-import { Store } from 'plume2';
-import { number } from 'prop-types';
 import { util, history, cache } from 'qmkit';
 const msg = {
     'K-000005': 'Your account is disabled',

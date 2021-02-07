@@ -74,9 +74,8 @@ class HttpUtil {
                         }
 
                     }).catch(e => {
-                        let msg = "Service is busy,please try again later"
                         const errMsg = e.name + " " + e.message
-                        reject(HttpUtil.handleFailedResult({ code: response.status, message: msg, error: errMsg, }, httpCustomerOpertion))
+                        reject(HttpUtil.handleFailedResult({ code: response.status, message: errMsg, error: errMsg, }, httpCustomerOpertion))
                     })
                 }
             ).catch(e => {
@@ -101,7 +100,7 @@ class HttpUtil {
 
         let code = result?.code??false;
         if (code && httpCustomerOpertion.isHandleResult === true) {
-            const errMsg = result.msg || result.message || "Service is busy,please try again later"
+            const errMsg = result.msg || result.message ;
             const errStr = `${errMsg}`
             //message.success(errStr)
         }
@@ -116,7 +115,7 @@ class HttpUtil {
     static handleFailedResult(result, httpCustomerOpertion) {
 
         if (result.code && httpCustomerOpertion.isHandleResult === true) {
-            const errMsg = result.msg || result.message || "Service is busy,please try again later"
+            const errMsg = result.msg || result.message;
             const errStr = `${errMsg}（${result.code}）`
             _error_index===0&&notification.open({
                 message: 'System Notification',

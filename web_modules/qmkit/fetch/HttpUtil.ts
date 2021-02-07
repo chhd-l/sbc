@@ -69,6 +69,7 @@ class HttpUtil {
                                 resolve(HttpUtil.handleResult(jsonBody, httpCustomerOpertion))
                             }
                         } else {
+                           
                             reject(HttpUtil.handleFailedResult({ code: response.status, message: jsonBody.message, error: jsonBody.message }, httpCustomerOpertion))
                         }
 
@@ -144,10 +145,10 @@ class HttpUtil {
                         duration:null,
                         description:'Service  timeout , try again later',
                         onClick: () => {
-                           
+                            _error_index=0;
                         },
                       });
-                    reject({ code: "timeout" ,message:'Service  timeout , try again later'})
+                      reject({ code: "timeout" ,message:'Service  timeout , try again later'})
                 }
             }, httpCustomerOpertion.timeout || 40000)
         })

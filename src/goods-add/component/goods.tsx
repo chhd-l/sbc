@@ -700,7 +700,6 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>*/}
-
         <Row type="flex" justify="start">
           <Col span={8}>
             <FormItem {...formItemLayout} label="Sales status">

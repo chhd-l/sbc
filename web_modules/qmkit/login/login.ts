@@ -174,6 +174,7 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
             let url = _getUrl(allGradeMenus);
             history.push(url);
           }
+          callback(res.context)
           break;
         /**审核未通过*/
         case 2:

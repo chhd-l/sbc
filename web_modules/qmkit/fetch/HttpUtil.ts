@@ -47,7 +47,6 @@ class HttpUtil {
                         if (response.status == 200 && response.ok) {
                             _error_index=0;
                             _timerOut=0;
-                         //  HttpUtil.findErrorInterfaceReload(true, errorObj)
                             if (jsonBody.code === 'K-999996') {
                                 message.error(jsonBody.message);
                                 return;
@@ -74,9 +73,8 @@ class HttpUtil {
                         }
 
                     }).catch(e => {
-                        let msg = "Service is busy,please try again later"
                         const errMsg = e.name + " " + e.message
-                        reject(HttpUtil.handleFailedResult({ code: response.status, message: msg, error: errMsg, }, httpCustomerOpertion))
+                        reject(HttpUtil.handleFailedResult({ code: response.status, message: errMsg, error: errMsg, }, httpCustomerOpertion))
                     })
                 }
             ).catch(e => {
@@ -87,7 +85,6 @@ class HttpUtil {
                 }
                 httpCustomerOpertion.isFetched = true
                 let er = { code: "404", error: errMsg, message: 'Request interface failed or interface does not exist, please check it' }
-              // HttpUtil.findErrorInterfaceReload(false, errorObj)
                 reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
@@ -102,7 +99,7 @@ class HttpUtil {
 
         let code = result?.code??false;
         if (code && httpCustomerOpertion.isHandleResult === true) {
-            const errMsg = result.msg || result.message || "Service is busy,please try again later"
+            const errMsg = result.msg || result.message ;
             const errStr = `${errMsg}`
             //message.success(errStr)
         }
@@ -117,7 +114,7 @@ class HttpUtil {
     static handleFailedResult(result, httpCustomerOpertion) {
 
         if (result.code && httpCustomerOpertion.isHandleResult === true) {
-            const errMsg = result.msg || result.message || "Service is busy,please try again later"
+            const errMsg = result.msg || result.message;
             const errStr = `${errMsg}（${result.code}）`
             _error_index===0&&notification.open({
                 message: 'System Notification',

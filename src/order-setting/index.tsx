@@ -62,7 +62,6 @@ class OrderSetting extends Component<any, any> {
   }
 
   handleCategoryChange = (e) => {
-    console.log(e.target.value);
     this.setState({
       paymentCategory: e.target.value
     });

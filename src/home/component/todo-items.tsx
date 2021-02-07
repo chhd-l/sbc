@@ -122,7 +122,6 @@ export default class TodoItems extends React.Component<any, any> {
   render() {
     const { loading } = this.props.relaxProps;
     const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
-    console.log(conversionFunnelDashboardView, 'conversionFunnelDashboardView--------');
     return (
       <div className="item">
         <Spin spinning={loading} delay="500" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>

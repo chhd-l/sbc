@@ -1,6 +1,7 @@
 import Common from './config-common';
 export default {
-  HOST: 'https://storestg.royalcanin.com/api',
-  CDN_PATH: 'https://cdnstorestg.azureedge.net/res/',
+  HOST: 'https://eurostore.royalcanin.com/api',
+  CDN_PATH: '/',
+  //CDN_PATH: 'https://d2cde.azureedge.net/rs/',
   ...Common
 };

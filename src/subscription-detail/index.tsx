@@ -508,7 +508,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '40%',
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
-            <img src={record.goodsPic} className="img-item" alt="" />
+            <img src={record.goodsPic} className="img-item" style={styles.imgItem} alt="" />
             <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
           </div>
         )
@@ -611,7 +611,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} className="img-item" alt="" />
+                  <img src={item.pic} className="img-item" style={styles.imgItem} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>{item.skuName}</p>
                     <p>{item.specDetails}</p>
@@ -672,7 +672,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} className="img-item" alt="" />
+                  <img src={item.pic} style={styles.imgItem} className="img-item" alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>{item.skuName}</p>
                     <p>{item.specDetails}</p>
@@ -1010,5 +1010,15 @@ const styles = {
   },
   edit: {
     paddingRight: 10
+  },
+  imgItem: {
+    width: 60,
+    height: 60,
+    padding: 5,
+    border: '1px solid #ddd',
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
   }
 };

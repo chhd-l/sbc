@@ -229,7 +229,6 @@ export default class GoodsActor extends Actor {
 
   @Action('goodsActor: editGoods')
   editGoods(state, data: IMap) {
-    console.error(data.toJS(), '---');
     return state.update('goods', (goods) => goods.merge(data));
   }
 

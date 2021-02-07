@@ -83,7 +83,7 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
 
           <FormItem>
-            <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Category" dropdownStyle={{ zIndex: 1053 }} onChange={(value) => this.paramsOnChange('cateId', value)} value={searchParams.cateId.toString()}>
+            <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Product category" dropdownStyle={{ zIndex: 1053 }} onChange={(value) => this.paramsOnChange('cateId', value)} value={searchParams.cateId.toString()}>
               <TreeNode key="0" value="0" title="All">
                 {this.loop(fromJS(cates), fromJS(cates), 0)}
               </TreeNode>

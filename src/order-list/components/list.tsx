@@ -464,7 +464,7 @@ export default class ListView extends React.Component<any, any> {
                       {v
                         .get('tradeItems')
                         .concat(gifts)
-                        .map((v, k) => (k < 4 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} className="img-item" key={k} /> : null))}
+                        .map((v, k) => (k < 4 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} className="img-item" style={styles.imgItem} key={k} /> : null))}
 
                       {
                         /*最后一张特殊处理*/

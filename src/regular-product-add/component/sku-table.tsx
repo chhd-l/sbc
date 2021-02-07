@@ -396,14 +396,14 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
-        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = 0 : rowInfo.subscriptionStatus
-        return (
-          <Row style={{ marginRight: '124px' }}>
+        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus
+        return(
+          <Row style={{marginRight: '124px'}}>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
-                  initialValue: goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus === 0 ? '0' : '1'
+                  initialValue:goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus === 0 ?  '0' : '1'
                 })(
                   <Select disabled={goods.get('subscriptionStatus') == 0} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
@@ -413,7 +413,7 @@ class SkuForm extends React.Component<any, any> {
               </FormItem>
             </Col>
           </Row>
-        );
+        )
       }
     });
     /* let a = columns.toJS();

@@ -117,7 +117,7 @@ class HttpUtil {
             const errStr = `${errMsg}（${result.code}）`
             _error_index === 0 && notification.error({
                 message: 'System Notification',
-                duration: null,
+                duration: 5,
                 description: errStr,
                 onClose: () => {
                     _error_index = 0;
@@ -140,7 +140,7 @@ class HttpUtil {
                     httpCustomerOpertion.isAbort = true
                     notification.info({
                         message: 'System Notification',
-                        duration: null,
+                        duration: 5,
                         description: 'Service  timeout , try again later',
                         onClose: () => {
                             _error_index = 0;

@@ -39,7 +39,6 @@ export default class AppStore extends Store {
       }
       this.dispatch('setting:init', fromJS(context));
     } else {
-      message.error(res.message);
     }
   };
 
@@ -47,9 +46,7 @@ export default class AppStore extends Store {
    * 保存
    */
   editSetting = async () => {
-    let settings = this.state()
-      .get('setting')
-      .toJS();
+    let settings = this.state().get('setting').toJS();
     settings.openFlag = settings.openFlag ? 1 : 0;
     settings.commissionFlag = settings.commissionFlag ? 1 : 0;
     settings.commissionRate = settings.commissionRate / 100;
@@ -58,7 +55,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 

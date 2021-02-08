@@ -139,13 +139,13 @@ export default class PicModal extends React.Component<any, any> {
         this.setState({
           loading: false
         })
-        message.error(res.message || 'Operation failure')
+       
       }
     }).catch(err => {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+     
     })
   }
 

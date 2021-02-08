@@ -17,12 +17,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new loadingActor(),
-      new listActor(),
-      new editActor(),
-      new visibleActor()
-    ];
+    return [new loadingActor(), new listActor(), new editActor(), new visibleActor()];
   }
 
   init = async (param?) => {
@@ -81,7 +76,6 @@ export default class AppStore extends Store {
         //修改分页留在当前
         this.init({ pageNum: this.state().get('current') - 1 });
       } else {
-        message.error(res.message);
       }
       return;
     }
@@ -103,7 +97,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init({ pageNum: this.state().get('current') - 1 });
     } else {
-      message.error(res.message);
     }
   };
 }

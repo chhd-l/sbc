@@ -57,7 +57,7 @@ export default class ClinicList extends Component<any, any> {
       pageNum,
       pageSize
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let pagination = this.state.pagination;
       let prescriberList = res.context.content;
       if (prescriberList.length > 0) {
@@ -91,45 +91,37 @@ export default class ClinicList extends Component<any, any> {
     const { res } = await webapi.queryClinicsDictionary({
       type: type
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         typeArr: res.context
       });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   querySysDictionary = async (type: String) => {
     const { res } = await webapi.querySysDictionary({
       type: type
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         cityArr: res.context.sysDictionaryVOS
       });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   delClinic = async (id) => {
     const { res } = await webapi.deleteClinic({
       id: id
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   enableAndDisable = async (id) => {
     // message.info('API under development');
     const { res } = await webapi.enableAndDisable(id);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   onFormChange = ({ field, value }) => {

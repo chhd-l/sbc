@@ -70,8 +70,6 @@ export default class SelectAttribute extends React.Component<any, any> {
           pagination.total = res.context.total;
           const attributeList = res.context.attributesList;
           this.setState({ attributeList, pagination });
-        } else {
-          message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
@@ -129,14 +127,12 @@ export default class SelectAttribute extends React.Component<any, any> {
           this.setState({
             confirmLoading: false
           });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           confirmLoading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
   handleCancel = () => {

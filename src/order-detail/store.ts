@@ -58,7 +58,6 @@ export default class AppStore extends Store {
       });
     } else {
       this.dispatch('loading:end');
-      message.error(errorInfo);
     }
   };
   init = async (tid: string) => {
@@ -106,7 +105,6 @@ export default class AppStore extends Store {
       });
     } else {
       this.dispatch('loading:end');
-      message.error(errorInfo);
     }
   };
 
@@ -116,8 +114,6 @@ export default class AppStore extends Store {
     const { res } = (await webapi.refresh(tid)) as any;
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('dict:refresh', res.context.tradeDelivers);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -139,8 +135,6 @@ export default class AppStore extends Store {
       const tid = this.state().get('tid');
       this.setReceiveVisible();
       this.init(tid);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -155,9 +149,7 @@ export default class AppStore extends Store {
   onDelivery = async () => {
     const tid = this.state().getIn(['detail', 'id']);
     const { res } = await webapi.deliverVerify(tid);
-    if (res.code !== Const.SUCCESS_CODE) {
-      message.error(res.message);
-    } else {
+    if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('tab:init', '2');
     }
   };
@@ -189,9 +181,7 @@ export default class AppStore extends Store {
     const tid = this.state().getIn(['detail', 'id']);
     await this.fetchLogistics();
     const { res } = await webapi.deliverVerify(tid);
-    if (res.code !== Const.SUCCESS_CODE) {
-      message.error(res.message);
-    } else {
+    if (res.code === Const.SUCCESS_CODE) {
       const tradeItems = this.state()
         .getIn(['detail', 'tradeItems'])
         .concat(this.state().getIn(['detail', 'gifts']));
@@ -233,8 +223,6 @@ export default class AppStore extends Store {
       this.init(tid);
     } else if (res.code == 'K-000001') {
       message.error('订单状态已改变，请刷新页面后重试!');
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -286,8 +274,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       //刷新
       this.init(tid);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -318,8 +304,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.init(tid);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -335,8 +319,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.init(tid);
       message.success('Operate successfully');
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -359,8 +341,6 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.init(tid);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -397,8 +377,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -462,8 +440,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
-    } else {
-      message.error(res.message);
     }
   };
 

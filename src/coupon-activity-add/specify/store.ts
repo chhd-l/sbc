@@ -61,7 +61,6 @@ export default class AppStore extends Store {
       const levRes = await webapi.allStoreCustomerLevel();
       if (levRes.res.code != Const.SUCCESS_CODE) {
         this.dispatch('loading:end');
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.storeLevelVOList;
@@ -73,7 +72,6 @@ export default class AppStore extends Store {
     } else {
       const levRes = await webapi.allCustomerLevel();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.customerLevelVOList;
@@ -213,7 +211,6 @@ export default class AppStore extends Store {
         this.dispatch('set: invalid: coupons', fromJS(res.errorData));
       }
     } else {
-      message.error(res.message);
     }
   };
 

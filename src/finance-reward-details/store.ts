@@ -256,7 +256,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       history.push('/finance-manage-settle');
     } else {
-      message.error(res.message);
     }
   };
 

@@ -20,13 +20,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new ListActor(),
-      new LoadingActor(),
-      new FormActor(),
-      new CustomerLevelActor(),
-      new EmployeeActor()
-    ];
+    return [new ListActor(), new LoadingActor(), new FormActor(), new CustomerLevelActor(), new EmployeeActor()];
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
@@ -36,9 +30,7 @@ export default class AppStore extends Store {
     }
 
     this.dispatch('loading:start');
-    const query = this.state()
-      .get('form')
-      .toJS();
+    const query = this.state().get('form').toJS();
     if (query.enterpriseCheckState === '-1') {
       query.enterpriseCheckState = null;
     }
@@ -57,15 +49,11 @@ export default class AppStore extends Store {
         this.dispatch('listActor:init', res.context);
         this.dispatch('list:currentPage', pageNum && pageNum + 1);
         this.dispatch('enterprise: employee:init', fromJS(resEmployee));
-        this.dispatch(
-          'customerLevel:init',
-          fromJS(resLevel.context.customerLevelVOList)
-        );
+        this.dispatch('customerLevel:init', fromJS(resLevel.context.customerLevelVOList));
         this.dispatch('select:init', []);
       });
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
 

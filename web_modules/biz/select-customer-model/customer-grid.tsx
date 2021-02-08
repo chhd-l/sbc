@@ -308,7 +308,7 @@ export default class CustomerGrid extends React.Component<any, any> {
     params.pageSize = pageSize;
     const { res } = await webApi.fetchCustomerList(params);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
+     
     } else {
       this.setState({
         customerPage: res.context,

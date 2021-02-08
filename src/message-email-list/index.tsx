@@ -81,14 +81,12 @@ export default class ClinicList extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           loading: false
         });
@@ -99,7 +97,7 @@ export default class ClinicList extends Component<any, any> {
       .querySysDictionary({ type: type })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (type === 'objectType') {
             let objectTypeList = [...res.context.sysDictionaryVOS];
             this.setState({
@@ -118,13 +116,9 @@ export default class ClinicList extends Component<any, any> {
               statusList
             });
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
   handleTableChange = (pagination: any) => {
     this.setState(
@@ -166,14 +160,12 @@ export default class ClinicList extends Component<any, any> {
           message.success('Operate successfully');
           this.getEmailTaskList();
         } else {
-          message.error(res.message || 'Delete Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Delete Failed');
         this.setState({
           loading: false
         });

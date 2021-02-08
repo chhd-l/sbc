@@ -182,13 +182,9 @@ export default class RelevancyProduct extends React.Component<any, any> {
             prpductList,
             pagination
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
 
   getSelectedProductList = () => {
@@ -226,13 +222,9 @@ export default class RelevancyProduct extends React.Component<any, any> {
             selectedRowKeys,
             selectedRowList
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   updateOverridedProduct = (params) => {
     webapi
@@ -244,13 +236,9 @@ export default class RelevancyProduct extends React.Component<any, any> {
           this.setState({
             visible: false
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
 
   onSortEnd = ({ oldIndex, newIndex }) => {

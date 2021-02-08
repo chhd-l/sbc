@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Button, Form, Input, DatePicker, Select, Menu, Dropdown, Icon, Tabs, message, Spin, Row, Col } from 'antd';
 import './index.less';
-import { AuthWrapper, BreadCrumb, Headline, SelectGroup } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Headline, SelectGroup, Const } from 'qmkit';
 import List from './components/list-new';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -147,7 +147,7 @@ export default class SubscriptionList extends Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (type === 'Frequency_day') {
             let frequencyList = [...res.context.sysDictionaryVOS];
             this.setState(
@@ -172,13 +172,9 @@ export default class SubscriptionList extends Component<any, any> {
               frequencyList: frequencyList
             });
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
   //todo
   _handleBatchExport = () => {};
@@ -204,7 +200,7 @@ export default class SubscriptionList extends Component<any, any> {
       .getSubscriptionList(params)
       .then((data) => {
         let { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let pagination = {
             current: 1,
             pageSize: 10,
@@ -221,14 +217,12 @@ export default class SubscriptionList extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 

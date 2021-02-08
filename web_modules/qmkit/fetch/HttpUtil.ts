@@ -1,13 +1,11 @@
-import { message,notification } from 'antd';
-import { Store } from 'plume2';
-import { number } from 'prop-types';
+import { message, notification } from 'antd';
 import { util, history, cache } from 'qmkit';
 const msg = {
     'K-000005': 'Your account is disabled',
     'K-000015': 'Failed to obtain authorization',
     'K-000002': ''
 };
-let errorList: any = [], _timerOut = 0, _times: number = 0,_error_index=0;
+let errorList: any = [], _timerOut = 0, _times: number = 0, _error_index = 0;
 class HttpUtil {
     /**
       * 发送fetch请求
@@ -17,7 +15,7 @@ class HttpUtil {
        */
 
     static handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion) {
-       let errorObj = Object.assign({}, { fetchUrl: fetchUrl.split('?')[0], fetchParams, httpCustomerOpertion });
+        let errorObj = Object.assign({}, { fetchUrl: fetchUrl.split('?')[0], fetchParams, httpCustomerOpertion });
         // 1. 处理的第一步
         const { isShowLoading } = httpCustomerOpertion
         if (isShowLoading) {
@@ -45,8 +43,8 @@ class HttpUtil {
                     httpCustomerOpertion.isFetched = true
                     response.json().then(jsonBody => {
                         if (response.status == 200 && response.ok) {
-                            _error_index=0;
-                            _timerOut=0;
+                            _error_index = 0;
+                            _timerOut = 0;
                             if (jsonBody.code === 'K-999996') {
                                 message.error(jsonBody.message);
                                 return;
@@ -69,7 +67,7 @@ class HttpUtil {
                                 resolve(HttpUtil.handleResult(jsonBody, httpCustomerOpertion))
                             }
                         } else {
-                           
+
                             reject(HttpUtil.handleFailedResult({ code: response.status, message: jsonBody.message, error: jsonBody.message }, httpCustomerOpertion))
                         }
 
@@ -98,9 +96,9 @@ class HttpUtil {
        */
     static handleResult(result, httpCustomerOpertion) {
 
-        let code = result?.code??false;
+        let code = result?.code ?? false;
         if (code && httpCustomerOpertion.isHandleResult === true) {
-            const errMsg = result.msg || result.message ;
+            const errMsg = result.msg || result.message;
             const errStr = `${errMsg}`
             //message.success(errStr)
         }
@@ -117,14 +115,14 @@ class HttpUtil {
         if (result.code && httpCustomerOpertion.isHandleResult === true) {
             const errMsg = result.msg || result.message;
             const errStr = `${errMsg}（${result.code}）`
-            _error_index===0&&notification.open({
+            _error_index === 0 && notification.error({
                 message: 'System Notification',
-                duration:null,
-                description:errStr,
-                onClick: () => {
-                    _error_index=0;
+                duration: null,
+                description: errStr,
+                onClose: () => {
+                    _error_index = 0;
                 },
-              });
+            });
         }
         _error_index++;
         return result;
@@ -140,15 +138,15 @@ class HttpUtil {
                 if (!httpCustomerOpertion.isFetched) {
                     // 还未收到响应，则开始超时逻辑，并标记fetch需要放弃
                     httpCustomerOpertion.isAbort = true
-                    notification.open({
+                    notification.info({
                         message: 'System Notification',
-                        duration:null,
-                        description:'Service  timeout , try again later',
-                        onClick: () => {
-                            _error_index=0;
+                        duration: null,
+                        description: 'Service  timeout , try again later',
+                        onClose: () => {
+                            _error_index = 0;
                         },
-                      });
-                      reject({ code: "timeout" ,message:'Service  timeout , try again later'})
+                    });
+                    reject({ code: "timeout", message: 'Service  timeout , try again later' })
                 }
             }, httpCustomerOpertion.timeout || 40000)
         })
@@ -169,29 +167,29 @@ class HttpUtil {
         }
         const reoloadApi = () => {
             _timerOut++;
-            new Promise((resolve,reject)=>{
-                    if ((errorList.length-1) === _times) {
-                        _times = 0;
-                    } else {
-                        _times++;
-                        reoloadApi();
-                    }
-               
+            new Promise((resolve, reject) => {
+                if ((errorList.length - 1) === _times) {
+                    _times = 0;
+                } else {
+                    _times++;
+                    reoloadApi();
+                }
+
                 let obj = errorList[_times];
                 resolve(obj);
-            }).then((obj:any)=>{
-             
+            }).then((obj: any) => {
+
                 if (typeof obj.fetchUrl === 'string') {
                     obj.fetchUrl += `${obj.fetchUrl.indexOf('?') == -1 ? '?reqId=' : '&reqId='
                         }${Math.random()}`;
                 }
-               HttpUtil.handleFetchData(obj.fetchUrl, obj.fetchParams, obj.httpCustomerOpertion);
-            }).catch(e=>{
+                HttpUtil.handleFetchData(obj.fetchUrl, obj.fetchParams, obj.httpCustomerOpertion);
+            }).catch(e => {
                 console.error(e)
             });
 
         }
-       // errorList.length>0&&_timerOut<errorList.length&&reoloadApi();
+        // errorList.length>0&&_timerOut<errorList.length&&reoloadApi();
 
     }
 

@@ -115,7 +115,6 @@ export default class AppStore extends Store {
           this.dispatch('goodsActor:getGoodsId', goodsId);
         });
       } else {
-        message.error((results[0].res as any).message);
         this.dispatch('loading:end');
       }
       editProductResource = results[1].res as any;
@@ -238,8 +237,6 @@ export default class AppStore extends Store {
         this.dispatch('modal: videos', fromJS(videoList.res.context)); //初始化视频分页列表
         this.dispatch('modal: page', fromJS({ currentPage: pageNum + 1, resourceType: 1 }));
       });
-    } else {
-      message.error(videoList.res.message);
     }
   };
 
@@ -1332,11 +1329,9 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor:goodsId', result.res.context);
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
-          message.error(result.res.message);
           return false;
         }
         if (result3 != undefined && result3.res.code !== Const.SUCCESS_CODE) {
-          message.error(result.res.message);
           return false;
         }
       }
@@ -1345,7 +1340,6 @@ export default class AppStore extends Store {
       this.onMainTabChange('related');
       //history.push('/goods-list');
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -1437,7 +1431,6 @@ export default class AppStore extends Store {
         .setFieldsValue({ brandId: result.res.context + '' });
       this.dispatch('goodsActor: editGoods', Map({ ['brandId']: result.res.context + '' }));
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -1474,7 +1467,6 @@ export default class AppStore extends Store {
       const cateList = await getStoreCateList();
       this.dispatch('goodsActor: initStoreCateList', fromJS((cateList.res as any).context));
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -1805,7 +1797,6 @@ export default class AppStore extends Store {
         this.dispatch('propActor: setPropList', this._changeList(catePropDetail));
         this.dispatch('propActor: goodsPropDetails', catePropDetail);
       } else {
-        message.error(result.res.message);
       }
     }
   };
@@ -1847,7 +1838,6 @@ export default class AppStore extends Store {
     if (!err && res.code === Const.SUCCESS_CODE) {
       this.dispatch('freight:freightList', fromJS(res.context));
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -1862,13 +1852,13 @@ export default class AppStore extends Store {
     //     if (result.res.code === Const.SUCCESS_CODE) {
     //       this.dispatch('freight:selectTempExpress', fromJS(result.res.context));
     //     } else {
-    //       message.error(result.res.message);
+    //
     //     }
     //   } else {
     //     this.dispatch('freight:freightTemp', fromJS(res.context));
     //   }
     // } else {
-    //   message.error(res.message);
+    //
     // }
   };
 
@@ -1923,7 +1913,6 @@ export default class AppStore extends Store {
         this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -1955,7 +1944,6 @@ export default class AppStore extends Store {
         this.onRelatedList(this.state().get('getGoodsId'));
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -1987,7 +1975,6 @@ export default class AppStore extends Store {
       this.dispatch('related:productTooltip', res.context.goods);
       this.dispatch('related:searchType', true);
     } else {
-      message.error(res.message);
     }
   };
 
@@ -2004,7 +1991,6 @@ export default class AppStore extends Store {
       this.dispatch('related:productTooltip', res.context.goods);
       this.dispatch('related:searchType', true);
     } else {
-      message.error(res.message);
     }
 
     //this.onPageSearch();

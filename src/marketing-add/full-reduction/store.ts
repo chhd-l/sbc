@@ -24,10 +24,8 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('marketing:reductionBean', res.context);
     } else if (res.code == 'K-080016') {
-      message.error(res.message);
+      //
       history.go(-1);
-    } else {
-      message.error(res.message);
     }
   };
 

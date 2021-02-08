@@ -93,13 +93,9 @@ class PeoductCategory extends Component<any, any> {
           pagination.total = res.context.total;
           const attributeList = res.context.attributesList;
           this.setState({ attributeList, pagination });
-        } else {
-          message.error(res.message || 'Operation failed');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failed');
-      });
+      .catch((err) => {});
   };
 
   getGoodsCates = () => {
@@ -193,14 +189,12 @@ class PeoductCategory extends Component<any, any> {
             confirmLoading: false,
             loading: false
           });
-          message.error(res.message || 'Operate failed');
         }
       })
       .catch((err) => {
         this.setState({
           confirmLoading: false
         });
-        message.error(err.toString() || 'Operate failed');
       });
   };
   getAttributeValue = (attributeValueList) => {

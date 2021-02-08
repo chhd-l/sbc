@@ -10,12 +10,7 @@ import { Const } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new RoleActor(),
-      new BossMenuActor(),
-      new VisibleActor(),
-      new EditActor()
-    ];
+    return [new RoleActor(), new BossMenuActor(), new VisibleActor(), new EditActor()];
   }
 
   constructor(props) {
@@ -37,18 +32,10 @@ export default class AppStore extends Store {
     let menuIdList = [];
     let functionIdList = [];
     const { res } = (await webapi.fetchRoleMenuAuths(roleInfoId)) as any;
-    if (
-      res.context &&
-      res.context.menuIdList &&
-      res.context.menuIdList.length > 0
-    ) {
+    if (res.context && res.context.menuIdList && res.context.menuIdList.length > 0) {
       menuIdList = res.context.menuIdList;
     }
-    if (
-      res.context &&
-      res.context.functionIdList &&
-      res.context.functionIdList.length > 0
-    ) {
+    if (res.context && res.context.functionIdList && res.context.functionIdList.length > 0) {
       functionIdList = res.context.functionIdList;
     }
     this.transaction(() => {
@@ -69,9 +56,7 @@ export default class AppStore extends Store {
    */
   _getChildren = (list, dataList) => {
     return list.map((data) => {
-      const children = dataList.filter(
-        (item) => item.get('pid') == data.get('id')
-      );
+      const children = dataList.filter((item) => item.get('pid') == data.get('id'));
       if (!children.isEmpty()) {
         data = data.set('children', this._getChildren(children, dataList));
       }
@@ -130,7 +115,6 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
     } else {
-      message.error(res.message);
     }
   }
 }

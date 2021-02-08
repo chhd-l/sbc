@@ -3,13 +3,7 @@ import { fromJS } from 'immutable';
 import { IList, IMap } from 'typings/globalType';
 import RoleActor from './actor/role-actor';
 import update from 'immutability-helper';
-import {
-  addEquities,
-  deleteEquities,
-  dragSort,
-  getEquitiesList,
-  modifyEquities
-} from './webapi';
+import { addEquities, deleteEquities, dragSort, getEquitiesList, modifyEquities } from './webapi';
 import { Const } from 'qmkit';
 import { message } from 'antd';
 
@@ -31,12 +25,7 @@ export default class AppStore extends Store {
   init = async () => {
     const { res } = (await getEquitiesList()) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      this.dispatch(
-        'equities: init',
-        fromJS(res.context.roleInfoAndMenuInfoVOList)
-      );
-    } else {
-      message.error(message);
+      this.dispatch('equities: init', fromJS(res.context.roleInfoAndMenuInfoVOList));
     }
   };
 
@@ -80,9 +69,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   cateSort = async (dragIndex, hoverIndex) => {
-    let couponCateList = this.state()
-      .get('equitiesList')
-      .toJS();
+    let couponCateList = this.state().get('equitiesList').toJS();
     //拖拽排序
     const dragRow = couponCateList[dragIndex];
     //拖拽排序后的列表
@@ -100,8 +87,6 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.refresh();
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -129,8 +114,6 @@ export default class AppStore extends Store {
       // 刷新
       this.refresh();
       this.modal(false);
-    } else {
-      message.error(result.res.message);
     }
   };
 
@@ -143,8 +126,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       // 刷新
       this.refresh();
-    } else {
-      message.error(result.res.message);
     }
   };
 }

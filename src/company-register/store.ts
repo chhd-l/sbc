@@ -27,20 +27,13 @@ export default class AppStore extends Store {
       });
     }
     const business = ((await webapi.getBusinessConfig()) as any).res;
-    if (business.code == 'K-000000') {
+    if (business.code == Const.SUCCESS_CODE) {
       //取商家自己的配置信息
       this.transaction(() => {
-        this.dispatch(
-          'register:businessBanner',
-          business.context.supplierBanner
-        );
-        this.dispatch(
-          'register:businessCustom',
-          business.context.supplierCustom
-        );
+        this.dispatch('register:businessBanner', business.context.supplierBanner);
+        this.dispatch('register:businessCustom', business.context.supplierCustom);
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -69,19 +62,16 @@ export default class AppStore extends Store {
     const telCode = form.telCode;
     const password = form.password;
     if (telCode == '') {
-      message.error('手机验证码不能为空');
     } else if (QMMethod.testPass(password) && QMMethod.testTel(account)) {
       this.dispatch('register:doingRegister', true);
-      const res = ((await webapi.register(account, telCode, password)) as any)
-        .res;
-      if ((res as any).code == 'K-000000') {
+      const res = ((await webapi.register(account, telCode, password)) as any).res;
+      if ((res as any).code == Const.SUCCESS_CODE) {
         message.success('Operate successfully');
         //清除本地缓存的审核未通过的或者正在审核中的账户信息
         localStorage.removeItem(cache.PENDING_AND_REFUSED);
         //去登录页
         history.push('./login');
       } else {
-        message.error((res as any).message);
         this.dispatch('register:doingRegister', false);
       }
     }
@@ -117,7 +107,7 @@ export default class AppStore extends Store {
     //账号类型 0 b2b账号 1 s2b平台端账号 2 商家端账号 3供应商端账号
     const type = 2;
     return webapi.sendCode(tel, type).then(({ res }) => {
-      if ((res as any).code == 'K-000000') {
+      if ((res as any).code == Const.SUCCESS_CODE) {
         message.success('Operate successfully');
       } else {
         message.error((res as any).message);

@@ -63,7 +63,6 @@ export default class AppStore extends Store {
       // 设置当前页码
       this.dispatch('info:setCurrent', pageNum + 1);
     } else {
-      message.error(res.message);
       this.dispatch('loading:end');
     }
   };
@@ -87,7 +86,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.fetchSettleList();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -121,7 +119,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('settle:storeMap', res.context);
     } else {
-      message.error(res.message);
     }
   };
 

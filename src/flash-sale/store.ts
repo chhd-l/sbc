@@ -24,9 +24,7 @@ export default class AppStore extends Store {
   getSoonList = async () => {
     // 设置loading开始状态
     this.dispatch('info:setLoading', true);
-    const param = this.state()
-      .get('searchData')
-      .toJS();
+    const param = this.state().get('searchData').toJS();
     const { res: listRes } = await webApi.getSoonlist(param);
     if (listRes.code === Const.SUCCESS_CODE) {
       // 3.格式化返回结构
@@ -34,13 +32,9 @@ export default class AppStore extends Store {
         // 设置loading结束状态
         this.dispatch('info:setLoading', false);
         // 设置分页数据
-        this.dispatch(
-          'info:setListData',
-          listRes.context.flashSaleActivityVOList
-        );
+        this.dispatch('info:setListData', listRes.context.flashSaleActivityVOList);
       });
     } else {
-      message.error(listRes.message);
       this.dispatch('info:setLoading', false);
     }
   };
@@ -48,9 +42,7 @@ export default class AppStore extends Store {
   /**
    * 查询进行中
    */
-  getSaleList = async (
-    { pageNum, pageSize } = { pageNum: 0, pageSize: 10 }
-  ) => {
+  getSaleList = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     // 设置loading开始状态
     this.dispatch('info:setLoading', true);
     const param = { pageNum, pageSize };
@@ -67,7 +59,6 @@ export default class AppStore extends Store {
         this.dispatch('info:setCurrent', pageNum + 1);
       });
     } else {
-      message.error(pageRes.message);
       this.dispatch('info:setLoading', false);
     }
   };
@@ -78,9 +69,7 @@ export default class AppStore extends Store {
   getEndList = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     // 设置loading开始状态
     this.dispatch('info:setLoading', true);
-    const param = this.state()
-      .get('searchData')
-      .toJS();
+    const param = this.state().get('searchData').toJS();
     param.pageNum = pageNum;
     param.pageSize = pageSize;
     const { res: pageRes } = await webApi.getEndList(param);
@@ -96,7 +85,6 @@ export default class AppStore extends Store {
         this.dispatch('info:setCurrent', pageNum + 1);
       });
     } else {
-      message.error(pageRes.message);
       this.dispatch('info:setLoading', false);
     }
   };

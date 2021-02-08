@@ -61,7 +61,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
     } else {
       //登录失败原因
-      message.error(res.message);
     }
   }
 }

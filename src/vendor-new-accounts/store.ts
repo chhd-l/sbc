@@ -39,12 +39,8 @@ export default class AppStore extends Store {
    * 新增银行结算账户
    */
   addNewAccounts = () => {
-    const newAccounts = this.state()
-      .get('newAccounts')
-      .toJS();
-    const primaryBankList = this.state()
-      .get('primaryBankList')
-      .toJS();
+    const newAccounts = this.state().get('newAccounts').toJS();
+    const primaryBankList = this.state().get('primaryBankList').toJS();
     let currentKey = this.state().get('num');
     if (newAccounts.length + primaryBankList.length >= 5) {
       message.error('最多可添加5个结算账户');
@@ -106,9 +102,7 @@ export default class AppStore extends Store {
    * 保存新增的银行账户
    */
   saveNewAccount = async () => {
-    const newAccounts = this.state()
-      .get('newAccounts')
-      .toJS();
+    const newAccounts = this.state().get('newAccounts').toJS();
     const { res } = await webApi.saveAccountAdd({
       offlineAccounts: newAccounts
     });
@@ -116,7 +110,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       history.push('./vendor-payment-account');
     } else {
-      message.error(res.message);
     }
   };
 }

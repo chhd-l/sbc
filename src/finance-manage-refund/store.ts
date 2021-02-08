@@ -39,7 +39,6 @@ export default class AppStore extends Store {
       });
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
     if (kind == 'income') {
       //收入对账明细

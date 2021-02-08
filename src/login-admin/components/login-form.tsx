@@ -93,11 +93,9 @@ export default class LoginForm extends React.Component<any, any> {
       //如果校验通过
       if (!errs) {
         login(values, '', (res) => {
-          if (res.auditState === 1) {
-            this.setState({
-              loading: false
-            });
-          }
+          this.setState({
+            loading: false
+          });
         });
       } else {
         this.setState({

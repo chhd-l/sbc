@@ -50,8 +50,7 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
       ) as any ;
       res = resLocal.res as TResult;
   }
-
-  if ((res as any)?.code === Const.SUCCESS_CODE) {
+  if ((res as any).code === Const.SUCCESS_CODE) {
     if(res.context.checkState === 1) { // need checked
       sessionStorage.setItem(
         cache.LOGIN_ACCOUNT_NAME,
@@ -74,7 +73,6 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
       history.push('/login', {oktaLogout : true})
       return
     }
-
     if(res.context.accountState === 3) {
       message.error('Your account is inactivated')
       history.push('/login', {oktaLogout : true})
@@ -99,7 +97,7 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
         dataList.filter((item) => item.get('grade') === 1),
         dataList
       );
-
+      
       sessionStorage.setItem(cache.LOGIN_MENUS, JSON.stringify(allGradeMenus));
       const functionsRes = menusRes.res.context.functionList
       sessionStorage.setItem(cache.LOGIN_FUNCTIONS, JSON.stringify(functionsRes));
@@ -131,6 +129,8 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
         message.error(employee.res.message)
       }*/
 
+    
+  
       /**
        * 审核状态 0、待审核 1、已审核 2、审核未通过 -1、未开店
        */
@@ -149,9 +149,17 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
             sessionStorage.setItem(cache.SYSTEM_BASE_CONFIG, JSON.stringify(menusRes.res.context.baseConfigRopResponse));
             sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(menusRes.res.context.employeeAccountByIdResponse));
             let configResponse = menusRes.res.context.configResponse
+            let defaultPurchase={
+              defaultPurchaseType:(configResponse as any).storeVO?.defaultPurchaseType??'',
+              defaultSubscriptionFrequencyId:(configResponse as any).storeVO?.defaultSubscriptionFrequencyId??'',
+              languageId:(configResponse as any).storeVO?.languageId??''
+            }
             sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (configResponse as any).currency.valueEn); //货币符号
             sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (configResponse as any).currency.name); //货币名称
             sessionStorage.setItem(cache.MAP_MODE, (configResponse as any).storeVO.prescriberMap); //货币名称
+           
+            sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify(defaultPurchase));//add product sales setting 
+
             sessionStorage.setItem(cache.CURRENT_YEAR, (configResponse as any).currentDate); //年
             sessionStorage.setItem(cache.SYSTEM_GET_WEIGHT, (configResponse as any).weight.valueEn); //weight
           // } else {
@@ -174,6 +182,7 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
           //申请开店
           history.push('/shop-process');
       }
+      callback(res.context)
     } else {
         message.error(menusRes.res.message);
     }
@@ -181,7 +190,8 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
     if(res.message === 'E-000052') {
       history.push('/403')
     } else {
-       message.error(res.message);
+      callback(res)
+      //
     }
   }
 };

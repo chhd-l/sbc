@@ -122,7 +122,6 @@ export default class TodoItems extends React.Component<any, any> {
   render() {
     const { loading } = this.props.relaxProps;
     const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
-
     return (
       <div className="item">
         <Spin spinning={loading} delay="500" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -191,22 +190,22 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="Funnel-l">
                     <div className="Funnel-l-text">
                       <p>Landing page</p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList[0] != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</p>
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList && conversionFunnelDashboardView.dataList[0] != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</p>
                       <p className="Funnel-l-dash1"></p>
                     </div>
                     <div className="Funnel-l-text">
                       <p>Shopping cart</p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList[1] != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</p>
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList && conversionFunnelDashboardView.dataList[1] != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</p>
                       <p className="Funnel-l-dash2"></p>
                     </div>
                     <div className="Funnel-l-text">
                       <p>Checkout</p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList[2] != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</p>
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList && conversionFunnelDashboardView.dataList[2] != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</p>
                       <p className="Funnel-l-dash3"></p>
                     </div>
                     <div className="Funnel-l-text">
                       <p>Payment</p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList[3] != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</p>
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList && conversionFunnelDashboardView.dataList[3] != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</p>
                       <p className="Funnel-l-dash4"></p>
                     </div>
                   </div>
@@ -228,15 +227,15 @@ export default class TodoItems extends React.Component<any, any> {
                     <div className="Funnel-r-btm"></div>
                   </div>
                   <div className="Funnel-per1 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                   <div className="Funnel-per2 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                   <div className="Funnel-per3 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                 </div>
@@ -544,7 +543,13 @@ export default class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
 
-              {!trafficTrendDashboardView || (trafficTrendDashboardView.weekNumList.length === 0 && trafficTrendDashboardView.totalPVList.length === 0 && trafficTrendDashboardView.conversionRateList.length === 0) ? (
+              {!trafficTrendDashboardView ||
+              (trafficTrendDashboardView.weekNumList &&
+                trafficTrendDashboardView.weekNumList.length === 0 &&
+                trafficTrendDashboardView.totalPVList &&
+                trafficTrendDashboardView.totalPVList.length === 0 &&
+                trafficTrendDashboardView.conversionRateList &&
+                trafficTrendDashboardView.conversionRateList.length === 0) ? (
                 <div className="data-img">
                   <img src={nodataImg} className="no-data-img" />
                 </div>
@@ -594,7 +599,8 @@ export default class TodoItems extends React.Component<any, any> {
                   <Link to="/report-transaction">more &gt;</Link>
                 </span>
               </div>
-              {!transactionTrendView || (transactionTrendView.weekNumList.length === 0 && transactionTrendView.revenueList.length === 0 && transactionTrendView.transactionList.length === 0) ? (
+              {!transactionTrendView ||
+              (transactionTrendView.weekNumList && transactionTrendView.weekNumList.length === 0 && transactionTrendView.revenueList && transactionTrendView.revenueList.length === 0 && transactionTrendView.transactionList && transactionTrendView.transactionList.length === 0) ? (
                 <div className="data-img">
                   <img src={nodataImg} className="no-data-img" />
                 </div>

@@ -117,23 +117,11 @@ class SkuForm extends React.Component<any, any> {
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
-
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
-      /*let a = ''
 
-
-
-      if(goodsSpecs.toJS().length == 1) {
-        a = a.merge(goodsSpecs)
-      }
-      setTimeout(()=>{
-        console.log(goodsSpecs.toJS(),11111111);
-
-
-      })*/
       columns = goodsSpecs
         .map((item, i) => {
           return {
@@ -288,17 +276,21 @@ class SkuForm extends React.Component<any, any> {
       title: 'Weight unit',
       key: 'goodsInfoUnit',
       render: (rowInfo) => {
+       /* setTimeout(()=>{
+          console.log(goodsSpecs.toJS(),22222222);
+        })*/
         return (
           <Row>
             <Col span={6}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
-                  initialValue: rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'
+                  initialValue: rowInfo.goodsInfoUnit !== null ? rowInfo.goodsInfoUnit : 'kg'
                 })(
                   <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '60px' }} placeholder="please select unit">
                     <Option value="kg">kg</Option>
                     <Option value="g">g</Option>
+                    <Option value="lb">lb</Option>
                   </Select>
                 )}
               </FormItem>
@@ -364,26 +356,48 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{
-          marginRight: '152px',
-        }}>
+        <div
+          style={{
+            marginRight: '152px',
+            textAlign: 'left',
+            float: 'left'
+          }}
+        >
+          {/*<span*/}
+          {/*  style={{*/}
+          {/*    color: 'red',*/}
+          {/*    fontFamily: 'SimSun',*/}
+          {/*    marginRight: '4px',*/}
+          {/*    fontSize: '12px'*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  **/}
+          {/*</span>*/}
           Subscription
+          {/* <br />
+          <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'subscriptionStatus')}>
+            <FormattedMessage id="allTheSame" />
+            &nbsp;
+            <Tooltip placement="top" title={'After checking, all subscription status use the same inventory'}>
+              <a style={{ fontSize: 14 }}>
+                <Icon type="question-circle-o" />
+              </a>
+            </Tooltip>
+          </Checkbox> */}
         </div>
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
-        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
-        return (
-          <Row  style={{
-            marginRight: '124px',
-          }}>
+        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus
+        return(
+          <Row style={{marginRight: '124px'}}>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
-                  initialValue: rowInfo.subscriptionStatus == 0 ? '0':'1'
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
+                  initialValue:goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus === 0 ?  '0' : '1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0?true:false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>
@@ -391,7 +405,8 @@ class SkuForm extends React.Component<any, any> {
               </FormItem>
             </Col>
           </Row>
-        )}
+        )
+      }
     });
     /* let a = columns.toJS();
     let b = a.splice(a.length - 4, 1);

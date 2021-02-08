@@ -53,8 +53,6 @@ export default class AppStore extends Store {
           this.btnLoading = false;
         });
       } else {
-        message.error(res.message);
-
         this.dispatch('loading:end');
       }
     });

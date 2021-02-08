@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
-import { SelectGroup, cache } from 'qmkit';
+import { SelectGroup, cache, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
 import UserModal from './user-modal';
@@ -57,7 +57,7 @@ class UserList extends Component<any, any> {
       pageNum,
       pageSize
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let pagination = this.state.pagination;
       let userData = res.context.content;
       pagination.total = res.context.total;
@@ -66,8 +66,6 @@ class UserList extends Component<any, any> {
         userData: userData,
         loading: false
       });
-    } else {
-      message.error(res.message || 'search failed');
     }
   };
 
@@ -82,10 +80,8 @@ class UserList extends Component<any, any> {
     let employeeIds = [];
     employeeIds.push(id);
     const { res } = await webapi.deleteEmployeeByIds(employeeIds);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.getUsers();
-    } else {
-      message.error(res.message || 'delete failed');
     }
   };
 
@@ -112,10 +108,8 @@ class UserList extends Component<any, any> {
 
   enableUser = async (record) => {
     const { res } = await webapi.enableEmployee([record.employeeId]);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.getUsers();
-    } else {
-      message.error(res.message || 'enable failed');
     }
   };
 
@@ -131,23 +125,19 @@ class UserList extends Component<any, any> {
   handleAudit = async (agree: Boolean) => {
     if (agree) {
       const { res } = await webapi.auditEmployee([this.state.userForm.id], 0);
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         this.setState({
           auditModalVisible: false
         });
         this.getUsers();
-      } else {
-        message.error(res.message || 'audit failed');
       }
     } else {
       const { res } = await webapi.auditEmployee([this.state.userForm.id], 1);
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         this.setState({
           auditModalVisible: false
         });
         this.getUsers();
-      } else {
-        message.error(res.message || 'audit failed');
       }
     }
   };
@@ -157,7 +147,7 @@ class UserList extends Component<any, any> {
       id: this.props.prescriberKeyId
     });
     let prescriberId = '';
-    if (prescriberRes.code === 'K-000000') {
+    if (prescriberRes.code === Const.SUCCESS_CODE) {
       prescriberId = prescriberRes.context.prescriberId;
     }
     let employeeName = recored.employeeName.split(' ');
@@ -168,10 +158,8 @@ class UserList extends Component<any, any> {
       prescriberId: prescriberId
     };
     const { res } = await webapi.sendEmail(paramter);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('send successful');
-    } else {
-      message.error(res.message || 'send failed');
     }
   };
 

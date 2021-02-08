@@ -362,7 +362,7 @@ export default class SearchList extends React.Component<any, any> {
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
                                 onClick={() => {
-                                  console.log(onRejectRefund, 'onRejectRefund');
+                                  // console.log(onRejectRefund, 'onRejectRefund');
                                   this._showRejectRefund(onRejectRefund, rid, 0 == payType);
                                 }}
                               >
@@ -555,7 +555,6 @@ export default class SearchList extends React.Component<any, any> {
         const { checkRefundStatus, init, currentPage, pageSize } = this.props.relaxProps;
         const { res } = await checkRefundStatus(rid);
         if (res.code !== Const.SUCCESS_CODE) {
-          message.error(res.message);
           setTimeout(
             () =>
               init({

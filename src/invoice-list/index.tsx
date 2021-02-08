@@ -130,14 +130,12 @@ class InvoiceList extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Operation failure');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
         this.setState({
           loading: false
         });
@@ -148,9 +146,7 @@ class InvoiceList extends Component<any, any> {
       .querySysDictionary({ type: type })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
-        } else {
-          message.error(res.message || 'Operation failure');
+        if (res.code === Const.SUCCESS_CODE) {
         }
       })
       .catch((err) => {
@@ -174,13 +170,9 @@ class InvoiceList extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.getInvoiceList();
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   onChangeDate = (date, dateString) => {
     const { searchForm } = this.state;
@@ -309,13 +301,9 @@ class InvoiceList extends Component<any, any> {
             orderList: res.context.content,
             objectFetching: false
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   orderInvoiceState = (params) => {
     webapi
@@ -326,13 +314,9 @@ class InvoiceList extends Component<any, any> {
           message.success('Operate successfully');
           this.getInvoiceList();
           this.emptySelected();
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   onExport = (params) => {
     return new Promise<void>((resolve) => {
@@ -370,14 +354,12 @@ class InvoiceList extends Component<any, any> {
           this.setState({
             confirmLoading: false
           });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           confirmLoading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -458,17 +440,21 @@ class InvoiceList extends Component<any, any> {
         render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD') : '-'}</p>
       },
       {
-        title: (<div>
-          <p>Order number</p>
-          <p>Subscription number</p>
-        </div>),
+        title: (
+          <div>
+            <p>Order number</p>
+            <p>Subscription number</p>
+          </div>
+        ),
         dataIndex: 'orderNo',
         key: 'orderNo',
         width: '13%',
-        render: (text,row) => <div>
-          <p>{row.orderNo ? row.orderNo : '-'}</p>
-          <p>{row.subscriptionId ? row.subscriptionId : '-'}</p>
-        </div> 
+        render: (text, row) => (
+          <div>
+            <p>{row.orderNo ? row.orderNo : '-'}</p>
+            <p>{row.subscriptionId ? row.subscriptionId : '-'}</p>
+          </div>
+        )
       },
       {
         title: 'Order amount',

@@ -4,14 +4,7 @@ import CateActor from './actor/cate-actor';
 import { IMap } from 'typings/globalType';
 import { message } from 'antd';
 import { Const } from 'qmkit';
-import {
-  getCateList,
-  addCate,
-  deleteCate,
-  editCate,
-  getImage,
-  getChild
-} from './webapi';
+import { getCateList, addCate, deleteCate, editCate, getImage, getChild } from './webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -89,8 +82,6 @@ export default class AppStore extends Store {
     if (result.res.code === Const.SUCCESS_CODE) {
       message.success(msgStr);
       this.refresh();
-    } else {
-      message.error(result.res.message);
     }
   };
 
@@ -103,8 +94,6 @@ export default class AppStore extends Store {
       message.success('Successfully deleted!');
       // 刷新
       this.refresh();
-    } else {
-      message.error(result.res.message);
     }
   };
 

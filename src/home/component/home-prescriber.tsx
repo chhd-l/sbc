@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table, Divider, Row, Col, Select } from 'antd';
 import { WMChart } from 'biz';
 import { getClinicById } from './../../prescriber-add/webapi';
-import { cache, history } from 'qmkit';
+import { cache, history, Const } from 'qmkit';
 import * as webapi from './../webapi';
 import { FormattedMessage } from 'react-intl';
 const Option = Select.Option;
@@ -118,7 +118,7 @@ export default class homePrescriber extends Component<any, any> {
 
   getPrescribersData = async (id) => {
     const { res } = await webapi.getPrescribersData(id);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         tradeInfo: res.context
       });
@@ -127,7 +127,7 @@ export default class homePrescriber extends Component<any, any> {
 
   getTradeData = async (id) => {
     const { res } = await webapi.prescribersTradeView(id);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       if (!res.context.content) {
         return [];
       }
@@ -149,7 +149,7 @@ export default class homePrescriber extends Component<any, any> {
 
   getFlowTrendData = async (id) => {
     const { res } = await webapi.prescribersTradeReport(id);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let tradeFlowData = res.context.map((order, index) => {
         return {
           key: index,
@@ -168,7 +168,7 @@ export default class homePrescriber extends Component<any, any> {
 
   getCustomerData = async (id) => {
     const { res } = await webapi.prescribersCustomerGrowReport(id);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let customerData = res.context.data.map((cus, index) => {
         return {
           key: index,
@@ -186,7 +186,7 @@ export default class homePrescriber extends Component<any, any> {
 
   getCustomerGrowTrendData = async (id) => {
     const { res } = await webapi.prescribersCustomerGrowTrend(id);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let customerFlowData = res.context.map((cus, index) => {
         return {
           key: index,

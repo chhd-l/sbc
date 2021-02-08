@@ -37,11 +37,7 @@ export default class AppStore extends Store {
    * 选中一个或多个快递公司
    *
    */
-  onChecked = async (
-    index: number,
-    checked: boolean,
-    expressCompanyId: Number
-  ) => {
+  onChecked = async (index: number, checked: boolean, expressCompanyId: Number) => {
     const checkedRelation = this.state().get('checkedRelation');
     if (checked) {
       if (checkedRelation.size >= 20) {
@@ -55,21 +51,16 @@ export default class AppStore extends Store {
           message.error('The selected logistics company does not exist!');
           this.init();
         } else {
-          message.error(res.message);
           this.init();
         }
       }
     } else {
       if (checkedRelation.get(expressCompanyId.toString())) {
-        const { res } = await webapi.deleteExpress(
-          checkedRelation.get(expressCompanyId.toString()),
-          expressCompanyId.toString()
-        );
+        const { res } = await webapi.deleteExpress(checkedRelation.get(expressCompanyId.toString()), expressCompanyId.toString());
         if (res.code == Const.SUCCESS_CODE) {
           this.dispatch('exp:afterUnChecked', expressCompanyId.toString());
           this.dispatch('exp:checked', { index, checked });
         } else {
-          message.error(res.message);
           this.init();
         }
       }

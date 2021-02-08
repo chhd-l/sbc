@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Button, message, Input, DatePicker } from 'antd';
+import { Const } from 'qmkit';
 
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
@@ -45,12 +46,10 @@ export default class StepFour extends React.Component<any, any> {
 
   getContentInformation = async () => {
     const { res } = await webapi.getStoreContentInfo();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         contentForm: res.context
       });
-    } else {
-      message.error(res.message);
     }
   };
   onFormChange = ({ field, value }) => {
@@ -294,10 +293,8 @@ export default class StepFour extends React.Component<any, any> {
     const { res } = await webapi.saveStoreContentInfo({
       ...contentForm
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(res.message || 'save faild');
     }
   };
 }

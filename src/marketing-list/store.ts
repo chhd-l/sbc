@@ -31,7 +31,6 @@ export default class AppStore extends Store {
     if (util.isThirdStore()) {
       const levRes = await webapi.getUserLevelList();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.storeLevelVOList;
@@ -54,7 +53,6 @@ export default class AppStore extends Store {
       });
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
 
@@ -91,7 +89,6 @@ export default class AppStore extends Store {
 
       message.success('Operate successfully');
     } else {
-      message.error(res.message);
       this.dispatch('loading:end');
     }
     this.init();
@@ -101,8 +98,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.pause(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(res.message);
     }
     this.init();
   };
@@ -111,8 +106,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.close(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       message.success('close successful');
-    } else {
-      message.error(res.message);
     }
     this.init();
   };
@@ -120,8 +113,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.start(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(res.message);
     }
     this.init();
   };

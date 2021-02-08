@@ -77,20 +77,16 @@ class BillingInfomation extends React.Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
             });
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -126,16 +122,12 @@ class BillingInfomation extends React.Component<any, any> {
       .updateAddress(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.getAddressList();
           message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
 
   getSelectedClinic = (array) => {
@@ -153,7 +145,7 @@ class BillingInfomation extends React.Component<any, any> {
       .getAddressListByType(this.props.customerId, 'BILLING')
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             loading: false
           });
@@ -208,14 +200,12 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -232,16 +222,12 @@ class BillingInfomation extends React.Component<any, any> {
       .delAddress(this.state.billingForm.deliveryAddressId)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.getAddressList();
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
   clickDefault = () => {
     let isDefault = !this.state.isDefault;
@@ -257,7 +243,7 @@ class BillingInfomation extends React.Component<any, any> {
       })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             loading: false,
             clinicList: res.context.content
@@ -266,14 +252,12 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -353,14 +337,12 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
   getCityNameById = (id) => {
@@ -380,13 +362,9 @@ class BillingInfomation extends React.Component<any, any> {
               cityId: res.context.systemCityVO[0].cityName
             });
           }
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
 
   render() {

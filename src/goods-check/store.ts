@@ -46,7 +46,6 @@ export default class AppStore extends Store {
         this.dispatch('form:field', { key: 'pageNum', value: pageNum });
       } else {
         this.dispatch('loading:end');
-        message.error(res.message);
       }
 
       const cates: any = await getCateList();

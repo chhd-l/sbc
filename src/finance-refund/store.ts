@@ -14,15 +14,7 @@ import { Const } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new ListActor(),
-      new SearchActor(),
-      new LoadingActor(),
-      new SelectedActor(),
-      new VisibleActor(),
-      new EditActor(),
-      new RefuseActor()
-    ];
+    return [new ListActor(), new SearchActor(), new LoadingActor(), new SelectedActor(), new VisibleActor(), new EditActor(), new RefuseActor()];
   }
 
   constructor(props) {
@@ -34,20 +26,8 @@ export default class AppStore extends Store {
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
   init = async (param?) => {
     this.dispatch('loading:start');
-    param = this.state()
-      .get('searchForm')
-      .merge(fromJS(param))
-      .toJS();
-    Promise.all([
-      webapi.fetchRefundOrderList(param),
-      webapi.offlineAccounts()
-    ]).then((res) => {
-      if (res[0].res.code != Const.SUCCESS_CODE) {
-        message.error(res[0].res.message);
-      }
-      if (res[1].res.code != Const.SUCCESS_CODE) {
-        message.error(res[1].res.message);
-      }
+    param = this.state().get('searchForm').merge(fromJS(param)).toJS();
+    Promise.all([webapi.fetchRefundOrderList(param), webapi.offlineAccounts()]).then((res) => {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('list:init', res[0].res.context);
@@ -66,9 +46,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   onSearch = async () => {
-    const param = this.state()
-      .get('searchForm')
-      .toJS();
+    const param = this.state().get('searchForm').toJS();
 
     this.init(param);
     this.dispatch('current', 1);
@@ -90,16 +68,8 @@ export default class AppStore extends Store {
     this.messageByResult(res);
   };
 
-  onCreateRefund = async (
-    customerId,
-    refundId,
-    returnOrderCode,
-    returnPrice
-  ) => {
-    const { res: result } = await webapi.checkFunctionAuth(
-      '/return/refund/*/online',
-      'POST'
-    );
+  onCreateRefund = async (customerId, refundId, returnOrderCode, returnPrice) => {
+    const { res: result } = await webapi.checkFunctionAuth('/return/refund/*/online', 'POST');
     if (!result.context) {
       message.error('此功能您没有权限访问');
       return;
@@ -133,7 +103,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   }
 
@@ -147,27 +116,25 @@ export default class AppStore extends Store {
     refundForm.offlineAccountId = refundForm.accountId;
     refundForm.customerId = this.state().get('refundOfflineCustomerId');
     //保存
-    webapi
-      .refundOffline(this.state().get('returnOrderCode'), refundForm)
-      .then((result) => {
-        const { res } = result;
-        const code = res.code;
-        const errorInfo = res.message;
-        // 提示异常信息
-        if (code != Const.SUCCESS_CODE) {
-          message.error(errorInfo);
+    webapi.refundOffline(this.state().get('returnOrderCode'), refundForm).then((result) => {
+      const { res } = result;
+      const code = res.code;
+      const errorInfo = res.message;
+      // 提示异常信息
+      if (code != Const.SUCCESS_CODE) {
+        message.error(errorInfo);
 
-          if (code === 'K-040017') {
-            throw Error('K-040017');
-          }
-        } else {
-          message.success('Operate successfully');
+        if (code === 'K-040017') {
+          throw Error('K-040017');
         }
+      } else {
+        message.success('Operate successfully');
+      }
 
-        this.dispatch('modal:hide');
+      this.dispatch('modal:hide');
 
-        this.init();
-      });
+      this.init();
+    });
   };
 
   /**
@@ -182,10 +149,7 @@ export default class AppStore extends Store {
    * 显示拒绝退款弹窗
    */
   onCreateRefuse = async (refundId: string) => {
-    const { res: result } = await webapi.checkFunctionAuth(
-      '/account/refundOrders/refuse',
-      'PUT'
-    );
+    const { res: result } = await webapi.checkFunctionAuth('/account/refundOrders/refuse', 'PUT');
     if (!result.context) {
       message.error('此功能您没有权限访问');
       return;
@@ -215,9 +179,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   saveRefuse = async () => {
-    const refuseForm = this.state()
-      .get('refuseForm')
-      .toJS();
+    const refuseForm = this.state().get('refuseForm').toJS();
     const { res } = await webapi.saveRefuse(refuseForm);
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
@@ -227,7 +189,6 @@ export default class AppStore extends Store {
         this.init();
       });
     } else {
-      message.error(res.message);
     }
   };
 

@@ -47,7 +47,6 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: init', fromJS(res.context));
       this.dispatch('form:field', { key: 'pageNum', value: pageNum });
     } else {
-      message.error(res.message);
       this.dispatch('info:setLoading', false);
     }
 
@@ -175,8 +174,6 @@ export default class AppStore extends Store {
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(data.res.code);
     }
   };
   /**
@@ -199,7 +196,6 @@ export default class AppStore extends Store {
     if (!err && res.code === Const.SUCCESS_CODE) {
       this.dispatch('freight:freightList', fromJS(res.context));
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -214,13 +210,11 @@ export default class AppStore extends Store {
         if (result.res.code === Const.SUCCESS_CODE) {
           this.dispatch('freight:selectTempExpress', fromJS(result.res.context));
         } else {
-          message.error(result.res.message);
         }
       } else {
         this.dispatch('freight:freightTemp', fromJS(res.context));
       }
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -239,7 +233,6 @@ export default class AppStore extends Store {
       this.setFreightTempId(null);
       this.dispatch('goodsActor:clearSelectedSpuKeys');
     } else {
-      message.error(res.message);
     }
   };
 }

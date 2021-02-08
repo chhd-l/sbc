@@ -5,12 +5,7 @@ import FormActor from './actor/form-actor';
 import { message } from 'antd';
 import { Const } from 'qmkit';
 import { IList } from 'typings/globalType';
-import {
-  getBrandList,
-  getCateList,
-  goodsList,
-  importToGoodsLibrary
-} from './webapi';
+import { getBrandList, getCateList, goodsList, importToGoodsLibrary } from './webapi';
 import BrandActor from './actor/brand-actor';
 import CateActor from './actor/cate-actor';
 
@@ -23,12 +18,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new CateActor(),
-      new BrandActor(),
-      new GoodsActor(),
-      new FormActor()
-    ];
+    return [new CateActor(), new BrandActor(), new GoodsActor(), new FormActor()];
   }
 
   /**
@@ -50,7 +40,6 @@ export default class AppStore extends Store {
       this.changeData(fromJS(res.context.usedStandard), fromJS(res.context));
       this.dispatch('form:field', { key: 'pageNum', value: pageNum });
     } else {
-      message.error(res.message);
     }
     const cates: any = await getCateList();
     const brands: any = await getBrandList();
@@ -79,10 +68,7 @@ export default class AppStore extends Store {
       }
       return item.set('addGoodsLibraryFlag', false).set('addStatus', false);
     });
-    this.dispatch(
-      'goodsActor: init',
-      data.setIn(['standardGoodsPage', 'content'], goodsContent)
-    );
+    this.dispatch('goodsActor: init', data.setIn(['standardGoodsPage', 'content'], goodsContent));
     this.dispatch('goodsActor:addUsedStandard', goodsIds);
   };
 
@@ -120,11 +106,7 @@ export default class AppStore extends Store {
       this.onFormFieldChange({ key: 'pageNum', value: pageNum });
       this.onFormFieldChange({ key: 'pageSize', value: pageSize });
     }
-    if (
-      res.context.standardGoodsPage.content.length == 0 &&
-      res.context.standardGoodsPage.content.totalElements &&
-      res.context.standardGoodsPage.content.totalElements != 0
-    ) {
+    if (res.context.standardGoodsPage.content.length == 0 && res.context.standardGoodsPage.content.totalElements && res.context.standardGoodsPage.content.totalElements != 0) {
       this.onSearch();
     }
   };
@@ -137,7 +119,6 @@ export default class AppStore extends Store {
       this.onSelectChange([]);
       message.success('Operate successfully');
     } else {
-      message.error(res.message);
     }
   };
 
@@ -159,8 +140,6 @@ export default class AppStore extends Store {
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(data.res.code);
     }
   };
 }

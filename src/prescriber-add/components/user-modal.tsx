@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Form, Button, message, Input, Modal, Switch, Select } from 'antd';
 import * as webapi from '../webapi';
 import { FormattedMessage } from 'react-intl';
-import { QMMethod, ValidConst } from 'qmkit';
+import { QMMethod, ValidConst, Const } from 'qmkit';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import { fromJS, List } from 'immutable';
@@ -133,21 +133,17 @@ class UserModal extends Component<any, any> {
         });
         if (this.props.userForm.id) {
           const { res } = await webapi.updateUser(param);
-          if (res.code === 'K-000000') {
+          if (res.code === Const.SUCCESS_CODE) {
             message.success('Operate successfully');
             this.props.reflash();
             this.cancel();
-          } else {
-            message.error(res.message || 'save faild');
           }
         } else {
           const { res } = await webapi.addUser(param);
-          if (res.code === 'K-000000') {
+          if (res.code === Const.SUCCESS_CODE) {
             message.success('Operate successfully');
             this.props.reflash();
             this.cancel();
-          } else {
-            message.error(res.message || 'save faild');
           }
         }
       }

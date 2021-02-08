@@ -27,7 +27,6 @@ export default class AppStore extends Store {
         this.dispatch('report:productStatistics', res.context);
       });
     } else {
-      message.error(res.message);
       this.dispatch('loading:end');
     }
   };
@@ -42,7 +41,6 @@ export default class AppStore extends Store {
       this.dispatch('report:getDate', { beginDate: param.beginDate, endDate: param.endDate });
       this.dispatch('report:getForm', param);
     } else {
-      message.error(res.message);
       this.dispatch('loading:end');
     }
   };

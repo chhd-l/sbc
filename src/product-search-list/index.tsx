@@ -98,12 +98,9 @@ export default class ProductSearchList extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
         }
       })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
-      });
+      .catch((err) => {});
   }
 
   allTableChange = (pagination, filters, sorter) => {
@@ -159,14 +156,12 @@ export default class ProductSearchList extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             allLoading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           allLoading: false,
           loading: false
@@ -227,7 +222,6 @@ export default class ProductSearchList extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             noResultLoading: false,
             loading: false
@@ -235,7 +229,6 @@ export default class ProductSearchList extends React.Component<any, any> {
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           noResultLoading: false,
           loading: false
@@ -259,8 +252,6 @@ export default class ProductSearchList extends React.Component<any, any> {
 
           const exportHref = Const.HOST + `/search/details/term/statistics/export/${encrypted}`;
           window.open(exportHref);
-        } else {
-          message.error('Unsuccessful');
         }
         resolve();
       }, 500);

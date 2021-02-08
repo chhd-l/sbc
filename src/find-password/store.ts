@@ -48,7 +48,6 @@ export default class AppStore extends Store {
     if (res && res.code == Const.SUCCESS_CODE) {
       this.toNext(1);
     } else {
-      message.error(res.message);
     }
   };
 
@@ -104,7 +103,6 @@ export default class AppStore extends Store {
       localStorage.setItem('forgetpassword-validcode', res.context);
       this.toNext(2);
     } else {
-      message.error(res.message);
     }
   };
 
@@ -124,17 +122,12 @@ export default class AppStore extends Store {
       return;
     }
     let smsVerifyCode = localStorage.getItem('forgetpassword-validcode');
-    const { res } = await webapi.resetPassword(
-      phone,
-      password.trim(),
-      smsVerifyCode
-    );
+    const { res } = await webapi.resetPassword(phone, password.trim(), smsVerifyCode);
     if (res.code == Const.SUCCESS_CODE) {
       this.toNext(3);
       localStorage.removeItem('forgetpassword-validcode');
       setTimeout(() => history.push('/login'), 3000);
     } else {
-      message.error(res.message);
     }
   };
 }

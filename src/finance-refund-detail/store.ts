@@ -14,15 +14,7 @@ import ExportActor from './actor/export-actor';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new ListActor(),
-      new SearchActor(),
-      new LoadingActor(),
-      new SelectedActor(),
-      new VisibleActor(),
-      new EditActor(),
-      new ExportActor()
-    ];
+    return [new ListActor(), new SearchActor(), new LoadingActor(), new SelectedActor(), new VisibleActor(), new EditActor(), new ExportActor()];
   }
 
   constructor(props) {
@@ -115,7 +107,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   }
 
@@ -126,9 +117,7 @@ export default class AppStore extends Store {
    */
   onSave = async (refundForm) => {
     refundForm.refundId = this.state().get('refundId');
-    refundForm.createTime = momnet(refundForm.createTime)
-      .format('YYYY-MM-DD')
-      .toString();
+    refundForm.createTime = momnet(refundForm.createTime).format('YYYY-MM-DD').toString();
     refundForm.offlineAccountId = refundForm.accountId;
     //保存
     const { res } = await webapi.addRefundBill(refundForm);
@@ -137,7 +126,6 @@ export default class AppStore extends Store {
       this.dispatch('modal:hide');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 

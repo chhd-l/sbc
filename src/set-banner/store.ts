@@ -39,7 +39,6 @@ export default class AppStore extends Store {
       this.getList({ storeId: this.getStoreId() });
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
 
@@ -55,7 +54,6 @@ export default class AppStore extends Store {
       this.dispatch('list:getList', fromJS(res.context));
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
   getBannerById = async (params) => {
@@ -136,8 +134,6 @@ export default class AppStore extends Store {
         field: 'mFileList',
         value: mFileList
       });
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -147,8 +143,6 @@ export default class AppStore extends Store {
       this.setModalVisible(false);
       this.getList({ storeId: this.getStoreId() });
       message.success('Edit successfully.');
-    } else {
-      message.error(res.message);
     }
   };
   uploadBanner = async (params) => {
@@ -158,7 +152,6 @@ export default class AppStore extends Store {
       this.setModalVisible(false);
       return res;
     } else {
-      message.error(res.message);
       return -1;
     }
   };

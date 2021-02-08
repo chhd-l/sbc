@@ -190,14 +190,12 @@ class AttributeLibrary extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
       });
   };
   querySysDictionary = (type: String) => {
@@ -219,12 +217,9 @@ class AttributeLibrary extends Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   addTagging = (params: object) => {
     this.setState({
@@ -247,14 +242,12 @@ class AttributeLibrary extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
       });
   };
   deleteTagging = (id) => {
@@ -277,14 +270,12 @@ class AttributeLibrary extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message.toString() || 'Operation failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
       });
   };
 
@@ -307,14 +298,12 @@ class AttributeLibrary extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message.toString() || 'Operation failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
       });
   };
   updateTaggingStatus = (checked, row) => {

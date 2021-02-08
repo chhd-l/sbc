@@ -34,7 +34,6 @@ export default class AppStore extends Store {
         this.dispatch('product:productselect', arr);
       });
     } else {
-      message.error(res1.res.message);
       this.dispatch('loading:end');
     }
   };
@@ -50,7 +49,6 @@ export default class AppStore extends Store {
         this.dispatch('productList:productInit', res1.res.context.goodsInfos.content);
       });
     } else {
-      message.error(res1.res.message);
       this.dispatch('loading:end');
     }
   };
@@ -107,7 +105,6 @@ export default class AppStore extends Store {
         this.dispatch('get:send', true);
       }
     } else {
-      message.error(res.res.message);
       if (res.res.code === 'K-110001') {
         message.success('send failed!');
         return false;
@@ -123,7 +120,6 @@ export default class AppStore extends Store {
       //message.success('switch successfully!');
       this.dispatch('get:linkStatus', res.res.context);
     } else {
-      message.error(res.res.message);
       if (res.res.code === 'K-110001') {
         message.success('switch failed!');
         return false;

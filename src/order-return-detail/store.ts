@@ -26,26 +26,15 @@ export default class AppStore extends Store {
       // 只有已完成的退单，能看到退款记录
       if ('COMPLETED' == returnFlowState) {
         this.fetchRefundOrder();
-      } else if (
-        'REJECT_RECEIVE' == returnFlowState ||
-        'VOID' == returnFlowState
-      ) {
+      } else if ('REJECT_RECEIVE' == returnFlowState || 'VOID' == returnFlowState) {
         // 拒绝收货 或者 审核驳回
-        this.dispatch(
-          'order-return-detail:rejectReason',
-          this.state().getIn(['detail', 'rejectReason']) || ''
-        );
+        this.dispatch('order-return-detail:rejectReason', this.state().getIn(['detail', 'rejectReason']) || '');
       } else if ('REJECT_REFUND' == returnFlowState) {
         // 拒绝退款
-        webapi
-          .fetchRefundOrdeById(this.state().getIn(['detail', 'id']))
-          .then((res) => {
-            const result = fromJS(res.res);
-            this.dispatch(
-              'order-return-detail:rejectReason',
-              result.getIn(['context', 'refuseReason']) || ''
-            );
-          });
+        webapi.fetchRefundOrdeById(this.state().getIn(['detail', 'id'])).then((res) => {
+          const result = fromJS(res.res);
+          this.dispatch('order-return-detail:rejectReason', result.getIn(['context', 'refuseReason']) || '');
+        });
       }
       this.fetchRefundOrder();
     }
@@ -76,10 +65,7 @@ export default class AppStore extends Store {
 
   //线上退款 modal状态改变
   onRefundOnlineModalChange = (status) => {
-    this.dispatch(
-      'order-return-detail:refund-online-modal:change',
-      fromJS(status)
-    );
+    this.dispatch('order-return-detail:refund-online-modal:change', fromJS(status));
   };
 
   onRefundModalHide = () => {
@@ -150,7 +136,6 @@ export default class AppStore extends Store {
 
       // 提示异常信息
       if (code != Const.SUCCESS_CODE) {
-        message.error(errorInfo);
       } else {
         // 退款的回调是异步的，立刻刷新页面可能退单的状态还没有被回调修改。所以先给个提示信息，延迟3秒后再刷新列表
         message.success('Operate successfully');
@@ -161,36 +146,27 @@ export default class AppStore extends Store {
   };
 
   onOfflineRefund = (rid: string, formData: any) => {
-    return webapi
-      .refundOffline(this.state().getIn(['detail', 'id']), formData)
-      .then((result) => {
-        const { res } = result;
-        const code = res.code;
-        const errorInfo = res.message;
-        // 提示异常信息
-        if (code != Const.SUCCESS_CODE) {
-          message.error(errorInfo);
-
-          if (code === 'K-040017') {
-            throw Error('K-040017');
-          }
-        } else {
-          message.success('Operate successfully');
+    return webapi.refundOffline(this.state().getIn(['detail', 'id']), formData).then((result) => {
+      const { res } = result;
+      const code = res.code;
+      const errorInfo = res.message;
+      // 提示异常信息
+      if (code != Const.SUCCESS_CODE) {
+        if (code === 'K-040017') {
+          throw Error('K-040017');
         }
-        this.init(rid);
-      });
+      } else {
+        message.success('Operate successfully');
+      }
+      this.init(rid);
+    });
   };
 
   fetchRefundOrder = () => {
-    webapi
-      .fetchRefundOrdeById(this.state().getIn(['detail', 'id']))
-      .then((res) => {
-        const result = fromJS(res.res);
-        this.dispatch(
-          'order-return-detail:refund-record',
-          result.get('context')
-        );
-      });
+    webapi.fetchRefundOrdeById(this.state().getIn(['detail', 'id'])).then((res) => {
+      const result = fromJS(res.res);
+      this.dispatch('order-return-detail:refund-record', result.get('context'));
+    });
   };
 
   onRefundDestroy = (refundId: string) => {

@@ -95,13 +95,9 @@ class BasicInfomation extends React.Component<any, any> {
             });
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
 
   getSelectedClinic = (array) => {
@@ -118,9 +114,7 @@ class BasicInfomation extends React.Component<any, any> {
       .getBasicDetails(this.props.customerId)
       .then((data) => {
         let res = data.res;
-        if (res.code && res.code !== Const.SUCCESS_CODE) {
-          message.error(res.message || 'Unsuccessful');
-        } else {
+        if (res.code && res.code === Const.SUCCESS_CODE) {
           let res2 = JSON.stringify(data.res);
 
           let resObj = JSON.parse(res2);
@@ -195,7 +189,6 @@ class BasicInfomation extends React.Component<any, any> {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -243,13 +236,9 @@ class BasicInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
 
   getClinicList = () => {
@@ -269,14 +258,12 @@ class BasicInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
   //手机校验
@@ -324,13 +311,9 @@ class BasicInfomation extends React.Component<any, any> {
             cityArr: res.context.systemCityVO,
             objectFetching: false
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   getCityNameById = (id) => {
     let params = {
@@ -346,13 +329,9 @@ class BasicInfomation extends React.Component<any, any> {
               initCityName: res.context.systemCityVO[0].cityName
             });
           }
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
 
   render() {

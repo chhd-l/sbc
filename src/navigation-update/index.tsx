@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb, history } from 'qmkit';
+import { Headline, BreadCrumb, history, Const } from 'qmkit';
 import { Breadcrumb, message, Steps, Button, Icon, Form } from 'antd';
 import './index.less';
 import NavigationLanguage from './components/navigationLanguage';
@@ -55,17 +55,13 @@ class NavigationUpdate extends Component<any, any> {
         .getNavigationById(this.state.id)
         .then((data) => {
           const { res } = data;
-          if (res.code === 'K-000000') {
+          if (res.code === Const.SUCCESS_CODE) {
             this.setState({
               navigation: res.context
             });
-          } else {
-            message.error(res.message || 'Get Data Failed');
           }
         })
-        .catch((err) => {
-          message.error(err || 'Get Data Failed');
-        });
+        .catch((err) => {});
     }
   }
 
@@ -87,32 +83,24 @@ class NavigationUpdate extends Component<any, any> {
             .updateNavigation(navigation)
             .then((data) => {
               const { res } = data;
-              if (res.code === 'K-000000') {
+              if (res.code === Const.SUCCESS_CODE) {
                 message.success('Operate successfully');
                 history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
-              } else {
-                message.error(res.message || 'Update Failed');
               }
             })
-            .catch((err) => {
-              message.error(err || 'Update Failed');
-            });
+            .catch((err) => {});
         } else if (type === 'add') {
           navigation.parentId = id; // add by parentId
           webapi
             .addNavigation(navigation)
             .then((data) => {
               const { res } = data;
-              if (res.code === 'K-000000') {
+              if (res.code === Const.SUCCESS_CODE) {
                 message.success('Operate successfully');
                 history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
-              } else {
-                message.error(res.message || 'Add Failed');
               }
             })
-            .catch((err) => {
-              message.error(err || 'Add Failed');
-            });
+            .catch((err) => {});
         }
       }
     });
@@ -144,7 +132,7 @@ class NavigationUpdate extends Component<any, any> {
 
         <div className="container-search" id="navigationStep">
           <Headline title={title} />
-          <Steps current={current} labelPlacement='vertical'>
+          <Steps current={current} labelPlacement="vertical">
             {steps.map((item) => (
               <Step key={item.title} title={item.title} />
             ))}

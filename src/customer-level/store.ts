@@ -18,13 +18,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new LoadingActor(),
-      new LevelActor(),
-      new SelfLevelActor(),
-      new VisibleActor(),
-      new EditActor()
-    ];
+    return [new LoadingActor(), new LevelActor(), new SelfLevelActor(), new VisibleActor(), new EditActor()];
   }
 
   init = () => {
@@ -32,12 +26,7 @@ export default class AppStore extends Store {
     webapi.fetchCustomerLevel().then(({ res }) => {
       if (res.code === Const.SUCCESS_CODE) {
         if (res.context.storeLevelVOList.length > 0) {
-          this.dispatch(
-            'edit: lastData',
-            res.context.storeLevelVOList[
-              res.context.storeLevelVOList.length - 1
-            ].storeLevelId
-          );
+          this.dispatch('edit: lastData', res.context.storeLevelVOList[res.context.storeLevelVOList.length - 1].storeLevelId);
         }
         this.transaction(() => {
           this.dispatch('loading:end');
@@ -45,7 +34,6 @@ export default class AppStore extends Store {
         });
       } else {
         this.dispatch('loading:end');
-        message.error(res.message);
       }
     });
   };
@@ -60,7 +48,6 @@ export default class AppStore extends Store {
         });
       } else {
         this.dispatch('loading:end');
-        message.error(res.message);
       }
     });
   };
@@ -121,7 +108,6 @@ export default class AppStore extends Store {
         this.dispatch('modal:hide');
         this.init();
       } else {
-        message.error(res.message);
       }
       return;
     }
@@ -132,7 +118,6 @@ export default class AppStore extends Store {
       this.dispatch('modal:hide');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -166,7 +151,6 @@ export default class AppStore extends Store {
       this.dispatch('modal:hide');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 }

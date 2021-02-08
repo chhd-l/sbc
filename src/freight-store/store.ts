@@ -24,18 +24,7 @@ export default class AppStore extends Store {
    */
   init = async (freightId) => {
     const { res } = (await webapi.fetchFreightStore(freightId)) as any;
-    const {
-      freightTempName,
-      destinationArea,
-      destinationAreaName,
-      freightType,
-      satisfyPrice,
-      satisfyFreight,
-      fixedFreight,
-      minimumDeliveryFee,
-      defaultFlag,
-      selectedAreas
-    } = res.context;
+    const { freightTempName, destinationArea, destinationAreaName, freightType, satisfyPrice, satisfyFreight, fixedFreight, minimumDeliveryFee, defaultFlag, selectedAreas } = res.context;
 
     this.dispatch('freight: init', {
       freightTempName,
@@ -113,7 +102,6 @@ export default class AppStore extends Store {
         state: { tab: 0 }
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -126,16 +114,9 @@ export default class AppStore extends Store {
       type: 'city'
     })) as any;
 
-    if (
-      city.res.code === Const.SUCCESS_CODE &&
-      country.res.code === Const.SUCCESS_CODE
-    ) {
-      let countryList = country.res.context.sysDictionaryVOS
-        ? country.res.context.sysDictionaryVOS
-        : [];
-      let cityList = city.res.context.sysDictionaryVOS
-        ? city.res.context.sysDictionaryVOS
-        : [];
+    if (city.res.code === Const.SUCCESS_CODE && country.res.code === Const.SUCCESS_CODE) {
+      let countryList = country.res.context.sysDictionaryVOS ? country.res.context.sysDictionaryVOS : [];
+      let cityList = city.res.context.sysDictionaryVOS ? city.res.context.sysDictionaryVOS : [];
       let treeNode = this.treeDataSource(countryList, cityList);
       this.dispatch('freight: store: field: value', {
         field: 'treeNode',
@@ -170,9 +151,7 @@ export default class AppStore extends Store {
     }
     if (parentNodes.length > 0) {
       for (let i = 0; i < parentNodes.length; i++) {
-        let nodes = childrenNodes.filter(
-          (item) => item.parentId === parentNodes[i].value
-        );
+        let nodes = childrenNodes.filter((item) => item.parentId === parentNodes[i].value);
 
         parentNodes[i].children = nodes;
       }

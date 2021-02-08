@@ -5,13 +5,7 @@ import { IMap } from 'typings/globalType';
 import { Const } from 'qmkit';
 import TabActor from './actor/tab-actor';
 
-import {
-  addTab,
-  deleteTabById,
-  editTab,
-  getStoreGoodsTabList,
-  setSort
-} from './webapi';
+import { addTab, deleteTabById, editTab, getStoreGoodsTabList, setSort } from './webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -92,7 +86,6 @@ export default class AppStore extends Store {
       // 刷新
       this.refresh();
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -105,7 +98,6 @@ export default class AppStore extends Store {
       // 刷新
       this.refresh();
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -117,15 +109,12 @@ export default class AppStore extends Store {
     for (let index in sortList) {
       sortList[index].sort = Number(index);
     }
-    tabSortRequest.storeGoodsTabList = sortList.filter(
-      (row) => row.isDefault != 1
-    );
+    tabSortRequest.storeGoodsTabList = sortList.filter((row) => row.isDefault != 1);
     const { res } = (await setSort(tabSortRequest)) as any;
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.dispatch('tabActor: init', fromJS(sortList));
     } else {
-      message.error(res.message);
     }
   };
 }

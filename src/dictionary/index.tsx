@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
+import { Headline, SelectGroup, BreadCrumb, Const } from 'qmkit';
 import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Spin } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
@@ -87,7 +87,7 @@ export default class DitionaryList extends Component<any, any> {
       pageNum,
       pageSize
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let pagination = this.state.pagination;
       let dictionaryData = res.context.sysDictionaryPage.content;
       pagination.total = res.context.sysDictionaryPage.total;
@@ -107,12 +107,11 @@ export default class DitionaryList extends Component<any, any> {
   };
   queryClinicsDictionary = async () => {
     const { res } = await webapi.getDictionaryTypes();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         dictionaryTypes: res.context
       });
     } else {
-      message.error(res.message);
     }
   };
   onSearch = () => {
@@ -128,14 +127,12 @@ export default class DitionaryList extends Component<any, any> {
     const { res } = await webapi.deleteDictionary({
       id: id
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.getDictionary({
         pageNum: this.state.pagination.current - 1,
         pageSize: 10
       });
-    } else {
-      message.error(res.message || 'delete faild');
     }
   };
   render() {
@@ -205,7 +202,7 @@ export default class DitionaryList extends Component<any, any> {
           </Button>
         </div>
         <div className="container">
-          <Spin spinning={this.state.loading}  indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <Table rowKey={(record, index) => index} dataSource={this.state.dictionaryData} columns={columns} pagination={this.state.pagination} onChange={this.handleTableChange} />
           </Spin>
         </div>

@@ -25,27 +25,13 @@ export default class AppStore extends Store {
   init = async (freightTempId, isCopy) => {
     const { res } = (await webapi.fetchFreightGoods(freightTempId)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      const {
-        areaId,
-        cityId,
-        provinceId,
-        freightTempName,
-        defaultFlag,
-        deliverWay,
-        freightFreeFlag,
-        freightTemplateGoodsExpresses,
-        freightTemplateGoodsFrees,
-        specifyTermFlag,
-        valuationType
-      } = res.context;
+      const { areaId, cityId, provinceId, freightTempName, defaultFlag, deliverWay, freightFreeFlag, freightTemplateGoodsExpresses, freightTemplateGoodsFrees, specifyTermFlag, valuationType } = res.context;
       this.transaction(() => {
         this.dispatch('goods: freight: init', {
           areaId,
           cityId,
           provinceId,
-          freightTempName: isCopy
-            ? `${freightTempName}的副本`
-            : freightTempName,
+          freightTempName: isCopy ? `${freightTempName}的副本` : freightTempName,
           defaultFlag: isCopy ? 0 : defaultFlag,
           deliverWay,
           freightFreeFlag,
@@ -58,7 +44,6 @@ export default class AppStore extends Store {
         this.dispatch('goods: freight: copy', isCopy);
       });
     } else {
-      message.error(res.message);
       history.goBack();
     }
   };
@@ -78,21 +63,7 @@ export default class AppStore extends Store {
    * 单品运费模板存储
    */
   saveGoodsFreight = async () => {
-    let {
-      copyFlag,
-      freightTempId,
-      freightTempName,
-      provinceId,
-      cityId,
-      areaId,
-      freightFreeFlag,
-      valuationType,
-      defaultFlag,
-      specifyTermFlag,
-      deliverWay,
-      freightTemplateGoodsExpressSaveRequests,
-      freightTemplateGoodsFreeSaveRequests
-    } = this.state().toJS();
+    let { copyFlag, freightTempId, freightTempName, provinceId, cityId, areaId, freightFreeFlag, valuationType, defaultFlag, specifyTermFlag, deliverWay, freightTemplateGoodsExpressSaveRequests, freightTemplateGoodsFreeSaveRequests } = this.state().toJS();
     freightTemplateGoodsExpressSaveRequests =
       freightTemplateGoodsExpressSaveRequests.length > 0
         ? freightTemplateGoodsExpressSaveRequests
@@ -167,7 +138,6 @@ export default class AppStore extends Store {
         state: { tab: 1 }
       });
     } else {
-      message.error(res.message);
     }
   };
 

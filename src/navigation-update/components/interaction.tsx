@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, message, Radio, Select, Tree, TreeSelect, Row, Col } from 'antd';
 import * as webapi from '../webapi';
-import { util, AssetManagement } from 'qmkit';
+import { util, AssetManagement, Const } from 'qmkit';
 const { SHOW_PARENT } = TreeSelect;
 
 const FormItem = Form.Item;
@@ -68,7 +68,7 @@ export default class Interaction extends React.Component<any, any> {
       .querySysDictionary({ type: 'pageType' })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let pageList = res.context.sysDictionaryVOS;
           this.setState({
             pageList
@@ -80,19 +80,16 @@ export default class Interaction extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+      .catch(() => {});
   }
   getCategories() {
     webapi
       .getCategories()
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let treeSource = res.context.map((item) => {
             return {
               id: item.storeCateId,
@@ -108,19 +105,16 @@ export default class Interaction extends React.Component<any, any> {
             treeData
           });
         } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+      .catch(() => {});
   }
   getFilters() {
     webapi
       .getFilters()
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let filterList = [];
           let activeFilters = res.context.filter((x) => x.filterStatus === '1');
           activeFilters.map((item) => {
@@ -154,20 +148,17 @@ export default class Interaction extends React.Component<any, any> {
             filterList
           });
         } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+      .catch(() => {});
   }
   getSorts() {
     webapi
       .getSorts()
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
-          let activeSorter = res.context.filter(x=>x.sortStatus === '1') 
+        if (res.code === Const.SUCCESS_CODE) {
+          let activeSorter = res.context.filter((x) => x.sortStatus === '1');
           let sortList = activeSorter.map((item) => {
             return {
               id: item.id,
@@ -178,12 +169,9 @@ export default class Interaction extends React.Component<any, any> {
             sortList
           });
         } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+      .catch(() => {});
   }
 
   radioChange(e) {
@@ -302,7 +290,7 @@ export default class Interaction extends React.Component<any, any> {
   }
 
   updateImg = (images) => {
-    let imageString =images && images.length > 0 ? images[0] : ''
+    let imageString = images && images.length > 0 ? images[0] : '';
     this.props.addField('pageImg', imageString);
   };
 

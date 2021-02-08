@@ -1,11 +1,10 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin } from 'antd';
+import { Tabs, Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
-import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-
+import { Const } from 'qmkit';
 const { TextArea } = Input;
 
 const FormItem = Form.Item;
@@ -75,8 +74,7 @@ class BasicInfomation extends React.Component<any, any> {
       .getBasicDetails(this.props.customerId)
       .then((data) => {
         let res = data.res;
-        if (res.code && res.code !== 'K-000000') {
-          message.error(res.message || 'Get data failed');
+        if (res.code && res.code !== Const.SUCCESS_CODE) {
         } else {
           let res2 = JSON.stringify(data.res);
 
@@ -119,9 +117,7 @@ class BasicInfomation extends React.Component<any, any> {
           });
         }
       })
-      .catch((err) => {
-        message.error('Get data failed');
-      });
+      .catch((err) => {});
   };
 
   onFormChange = ({ field, value }) => {
@@ -161,15 +157,12 @@ class BasicInfomation extends React.Component<any, any> {
         .basicDetailsUpdate(currentForm)
         .then((data) => {
           const res = data.res;
-          if (res.code === 'K-000000') {
+          if (res.code === Const.SUCCESS_CODE) {
             message.success('Operate successfully');
           } else {
-            message.error(res.message || 'Update data failed');
           }
         })
-        .catch((err) => {
-          message.error('Update data failed');
-        });
+        .catch((err) => {});
   };
 
   getClinicList = () => {
@@ -180,7 +173,7 @@ class BasicInfomation extends React.Component<any, any> {
       })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             loading: false,
             clinicList: res.context.content
@@ -189,14 +182,12 @@ class BasicInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Get data failed');
       });
   };
 

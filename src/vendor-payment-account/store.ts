@@ -53,10 +53,7 @@ export default class AppStore extends Store {
     const { res } = (await webapi.findOne()) as any;
     const companyInfo = res.context;
     if (companyInfo) {
-      this.dispatch(
-        'account:applyEnterTime',
-        (companyInfo as any).applyEnterTime
-      );
+      this.dispatch('account:applyEnterTime', (companyInfo as any).applyEnterTime);
     }
     //收款账户信息
     this.accountInfo();
@@ -71,7 +68,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('account:init', fromJS(res.context));
     } else {
-      message.error(res.message);
     }
   };
 
@@ -86,7 +82,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.accountInfo();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -149,7 +144,6 @@ export default class AppStore extends Store {
       await this.accountInfo();
       message.success('Operate successfully');
     } else {
-      message.error(res.message);
     }
     //关闭弹框
     this.dispatch('modalActor: accountModal');
@@ -168,7 +162,6 @@ export default class AppStore extends Store {
       await this.accountInfo();
       message.success('Operate successfully');
     } else {
-      message.error(res.message);
     }
     this.dispatch('modalActor: moneyModal');
   };
@@ -207,7 +200,6 @@ export default class AppStore extends Store {
         message.success('Successfully deleted！');
         this.accountInfo();
       } else {
-        message.error(res.message);
       }
       this.dispatch('modalActor: deleteModal');
     }

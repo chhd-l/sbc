@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import { message } from 'antd';
 import MarketingActor from './common/actor/marketing-actor';
 import GiftActor from './gift-details/actor/gift-actor';
-import {Const, util} from 'qmkit';
+import { Const, util } from 'qmkit';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -29,20 +29,17 @@ export default class AppStore extends Store {
           this.dispatch('giftActor:init', fromJS(gift.res.context));
         }
       }
-    } else {
-      message.error(marketing.res.message);
     }
 
     let levelList = [];
     if (util.isThirdStore()) {
       const levRes = await webapi.getUserLevelList();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.storeLevelVOList;
       // 店铺等级转成平台等级格式,方便后面的业务逻辑公用
-      levelList.forEach(level => {
+      levelList.forEach((level) => {
         level.customerLevelId = level.storeLevelId;
         level.customerLevelName = level.levelName;
       });

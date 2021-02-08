@@ -19,19 +19,7 @@ import ExportActor from './actor/export-actor';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new ListActor(),
-      new LoadingActor(),
-      new SearchActor(),
-      new SelectedActor(),
-      new VisibleActor(),
-      new OrderInvocieActor(),
-      new InvoiceFormActor(),
-      new InvoiceProjectActor(),
-      new AddressInfoActor(),
-      new InvoiceViewActor(),
-      new ExportActor()
-    ];
+    return [new ListActor(), new LoadingActor(), new SearchActor(), new SelectedActor(), new VisibleActor(), new OrderInvocieActor(), new InvoiceFormActor(), new InvoiceProjectActor(), new AddressInfoActor(), new InvoiceViewActor(), new ExportActor()];
   }
 
   constructor(props) {
@@ -56,7 +44,6 @@ export default class AppStore extends Store {
         this.dispatch('select:init', []);
       });
     } else {
-      message.error(res.message);
       if (res.code === 'K-110001') {
         this.dispatch('loading:end');
       }
@@ -70,9 +57,7 @@ export default class AppStore extends Store {
   onSearch = async () => {
     let param = this.state().get('searchForm').toJS();
     if (param && param.endTime) {
-      param.endTime = moment(param.endTime)
-        .add(1, 'day')
-        .format(Const.DAY_FORMAT);
+      param.endTime = moment(param.endTime).add(1, 'day').format(Const.DAY_FORMAT);
     }
     this.init(param);
     this.dispatch('current', 1);
@@ -142,9 +127,7 @@ export default class AppStore extends Store {
    */
   fetchDefault() {
     const invoiceProjects = this.state().get('invoiceProjects');
-    const invoiceProject = invoiceProjects.find(
-      (project) => project.get('projectName') == '明细'
-    );
+    const invoiceProject = invoiceProjects.find((project) => project.get('projectName') == '明细');
 
     return invoiceProject.get('projectId');
   }
@@ -173,17 +156,13 @@ export default class AppStore extends Store {
       propertyName: 'orderNo',
       propertyValue: orderNo
     });
-    const { res: orderInvoiceDetail } = await webapi.fetchOrderInvoiceDetail(
-      orderNo
-    );
+    const { res: orderInvoiceDetail } = await webapi.fetchOrderInvoiceDetail(orderNo);
     if (orderInvoiceDetail.code !== Const.SUCCESS_CODE) {
       message.error(orderInvoiceDetail.message);
       return;
     }
 
-    const { res: addressInfos } = await webapi.fetchAddressInfos(
-      orderInvoiceDetail.context.customerId
-    );
+    const { res: addressInfos } = await webapi.fetchAddressInfos(orderInvoiceDetail.context.customerId);
     if (addressInfos.code != Const.SUCCESS_CODE) {
       message.error(addressInfos.message);
       return;
@@ -192,10 +171,7 @@ export default class AppStore extends Store {
     const { res: invoiceConfig } = await webapi.invoiceConfig();
 
     this.transaction(() => {
-      this.dispatch(
-        'orderInvoice:orderInvoiceDetail',
-        orderInvoiceDetail.context
-      );
+      this.dispatch('orderInvoice:orderInvoiceDetail', orderInvoiceDetail.context);
       this.dispatch('invoice:addressInfos', addressInfos.context);
       this.dispatch('invoice:invoiceConfig', invoiceConfig);
     });
@@ -225,32 +201,20 @@ export default class AppStore extends Store {
    * 保存订单开票
    */
   onSaveOrderInvoice = async (param: any) => {
-    param.invoiceTime = moment(param.invoiceTime)
-      .format(Const.TIME_FORMAT)
-      .toString();
+    param.invoiceTime = moment(param.invoiceTime).format(Const.TIME_FORMAT).toString();
     param.customerId = this.state().getIn(['orderInvoiceDetail', 'customerId']);
 
-    const addressInfoId = this.state().getIn([
-      'orderInvoiceForm',
-      'addressInfoId'
-    ]);
+    const addressInfoId = this.state().getIn(['orderInvoiceForm', 'addressInfoId']);
     param.invoiceAddress = this.renderAddress(addressInfoId);
 
     //订单发票收件信息
     if (param.addressInfoId) {
       const address = this.state()
         .get('addressInfos')
-        .find(
-          (addressInfo) =>
-            addressInfo.get('deliveryAddressId').toString() == addressInfoId
-        );
+        .find((addressInfo) => addressInfo.get('deliveryAddressId').toString() == addressInfoId);
       param.contacts = address.get('consigneeName');
       param.phone = address.get('consigneeNumber');
-      param.address = `${FindArea.addressInfo(
-        address.get('provinceId').toString(),
-        address.get('cityId') && address.get('cityId').toString(),
-        address.get('areaId') && address.get('areaId').toString()
-      )} ${address.get('deliveryAddress')}`;
+      param.address = `${FindArea.addressInfo(address.get('provinceId').toString(), address.get('cityId') && address.get('cityId').toString(), address.get('areaId') && address.get('areaId').toString())} ${address.get('deliveryAddress')}`;
     }
 
     if (param.invoiceType === '0' && param.isCompany === '1') {
@@ -259,10 +223,7 @@ export default class AppStore extends Store {
     }
     // 增票资质情况下, 保存纳税人识别号
     if (param.invoiceType === '1') {
-      param.taxpayerNumber = this.state().getIn([
-        'orderInvoiceDetail',
-        'taxpayerNumber'
-      ]);
+      param.taxpayerNumber = this.state().getIn(['orderInvoiceDetail', 'taxpayerNumber']);
     }
     const { res } = await webapi.createOrderInvoice(param);
     this.messageResult(res);
@@ -276,17 +237,10 @@ export default class AppStore extends Store {
   renderAddress = (addressInfoId: string) => {
     const address = this.state()
       .get('addressInfos')
-      .find(
-        (addressInfo) =>
-          addressInfo.get('deliveryAddressId').toString() == addressInfoId
-      );
-    return `${address.get('consigneeName')} ${address.get(
-      'consigneeNumber'
-    )} ${FindArea.addressInfo(
-      address.get('provinceId').toString(),
-      address.get('cityId') && address.get('cityId').toString(),
-      address.get('areaId') && address.get('areaId').toString()
-    )} ${address.get('deliveryAddress')}`;
+      .find((addressInfo) => addressInfo.get('deliveryAddressId').toString() == addressInfoId);
+    return `${address.get('consigneeName')} ${address.get('consigneeNumber')} ${FindArea.addressInfo(address.get('provinceId').toString(), address.get('cityId') && address.get('cityId').toString(), address.get('areaId') && address.get('areaId').toString())} ${address.get(
+      'deliveryAddress'
+    )}`;
   };
 
   onSearchByInvoiceId = async (id: string) => {
@@ -297,7 +251,6 @@ export default class AppStore extends Store {
         this.dispatch('viewModal:show');
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -361,9 +314,7 @@ export default class AppStore extends Store {
       });
     }
 
-    return this._onExport({ orderInvoiceIds: selected.toJS() }, () =>
-      this.dispatch('select:init', [])
-    );
+    return this._onExport({ orderInvoiceIds: selected.toJS() }, () => this.dispatch('select:init', []));
   };
 
   _onExport = (params: {}, action: Function) => {
@@ -378,8 +329,7 @@ export default class AppStore extends Store {
           let encrypted = base64.urlEncode(result);
 
           // 新窗口下载
-          const exportHref =
-            Const.HOST + `/account/export/orderInvoices/${encrypted}`;
+          const exportHref = Const.HOST + `/account/export/orderInvoices/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');
@@ -395,7 +345,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   }
 }

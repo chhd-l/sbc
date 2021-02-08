@@ -21,8 +21,6 @@ export default class AppStore extends Store {
     const { res } = (await webApi.getCateList()) as any;
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('cate: init', fromJS(res.context.flashSaleCateVOList));
-    } else {
-      message.error(message);
     }
   };
 
@@ -32,9 +30,7 @@ export default class AppStore extends Store {
   queryPage = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     // 设置loading开始状态
     this.dispatch('info:setLoading', true);
-    const param = this.state()
-      .get('searchData')
-      .toJS();
+    const param = this.state().get('searchData').toJS();
     const activityDate = this.state().get('activityDate');
     const activityTime = this.state().get('activityTime');
     param.pageNum = pageNum;
@@ -52,7 +48,6 @@ export default class AppStore extends Store {
         this.dispatch('info:setCurrent', pageNum + 1);
       });
     } else {
-      message.error(pageRes.message);
       this.dispatch('info:setLoading', false);
     }
   };
@@ -73,8 +68,6 @@ export default class AppStore extends Store {
     if (delRes.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       await this.queryPage();
-    } else {
-      message.error(delRes.message);
     }
   };
 
@@ -120,7 +113,6 @@ export default class AppStore extends Store {
       this.dispatch('info:setFormData', fromJS({}));
       await this.init({ activityDate, activityTime });
     } else {
-      message.error(result.res.message);
     }
   };
 }

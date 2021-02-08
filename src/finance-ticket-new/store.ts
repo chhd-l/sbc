@@ -18,13 +18,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new loadingActor(),
-      new listActor(),
-      new editActor(),
-      new visibleActor(),
-      new InvoiceTypeActor()
-    ];
+    return [new loadingActor(), new listActor(), new editActor(), new visibleActor(), new InvoiceTypeActor()];
   }
 
   init = async (param?) => {
@@ -69,9 +63,7 @@ export default class AppStore extends Store {
    * @param value
    */
   onSwitchChange = (value) => {
-    const invoiceType = this.state()
-      .get('invoiceType')
-      .toJS();
+    const invoiceType = this.state().get('invoiceType').toJS();
     //不支持开票
     if (value) {
       invoiceType.isSupportInvoice = 0;
@@ -89,15 +81,9 @@ export default class AppStore extends Store {
    * 保存支持开票类型
    */
   onSaveInvoiceType = async () => {
-    const invoiceType = this.state()
-      .get('invoiceType')
-      .toJS();
+    const invoiceType = this.state().get('invoiceType').toJS();
     //如果支持开票，但却未选择开票类型
-    if (
-      invoiceType.isSupportInvoice == 1 &&
-      invoiceType.isPaperInvoice == 0 &&
-      invoiceType.isValueAddedTaxInvoice == 0
-    ) {
+    if (invoiceType.isSupportInvoice == 1 && invoiceType.isPaperInvoice == 0 && invoiceType.isValueAddedTaxInvoice == 0) {
       message.error('请选择支持的开票类型');
       return;
     }
@@ -107,7 +93,6 @@ export default class AppStore extends Store {
       //修改分页留在当前
       this.init({ pageNum: this.state().get('current') - 1 });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -142,7 +127,6 @@ export default class AppStore extends Store {
         //修改分页留在当前
         this.init({ pageNum: this.state().get('current') - 1 });
       } else {
-        message.error(res.message);
       }
       return;
     }
@@ -164,7 +148,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init({ pageNum: this.state().get('current') - 1 });
     } else {
-      message.error(res.message);
     }
   };
 }

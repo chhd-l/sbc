@@ -116,9 +116,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
         this.setState({
           timeZone: res.defaultLocalDateTime
         });
-      } else {
-        message.error(res.message);
-        return;
       }
     }
   };
@@ -512,7 +509,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     if (util.isThirdStore()) {
       const levRes = await webapi.getUserLevelList();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.storeLevelVOList;
@@ -1092,8 +1088,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     if (response.res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       history.push('/marketing-list');
-    } else {
-      message.error(response.res.message);
     }
     this.setState({ saveLoading: false });
   };

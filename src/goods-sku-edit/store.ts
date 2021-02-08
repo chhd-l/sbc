@@ -10,18 +10,7 @@ import UserActor from './actor/user-actor';
 import FormActor from './actor/form-actor';
 import ModalActor from './actor/modal-actor';
 
-import {
-  edit,
-  editPrice,
-  fetchImages,
-  getBossUserLevelList,
-  getBossUserList,
-  getBossUserListByName,
-  getGoodsDetail,
-  getImgCates,
-  getUserLevelList,
-  getUserList
-} from './webapi';
+import { edit, editPrice, fetchImages, getBossUserLevelList, getBossUserList, getBossUserListByName, getGoodsDetail, getImgCates, getUserLevelList, getUserList } from './webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -32,14 +21,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new GoodsActor(),
-      new SpecActor(),
-      new PriceActor(),
-      new UserActor(),
-      new FormActor(),
-      new ModalActor()
-    ];
+    return [new GoodsActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new ModalActor()];
   }
 
   /**
@@ -106,9 +88,7 @@ export default class AppStore extends Store {
         let goodsSpecs = goodsDetail.get('goodsSpecs') || List();
         const goodsSpecDetails = goodsDetail.get('goodsSpecDetails');
         goodsSpecs = goodsSpecs.map((item) => {
-          const specValues = goodsSpecDetails.filter(
-            (detailItem) => detailItem.get('specId') == item.get('specId')
-          );
+          const specValues = goodsSpecDetails.filter((detailItem) => detailItem.get('specId') == item.get('specId'));
           return item.set('specValues', specValues);
         });
 
@@ -134,13 +114,8 @@ export default class AppStore extends Store {
         const mockSpecIds = goodsInfo.get('mockSpecIds') || List();
         mockSpecIds.forEach((specId, index) => {
           const detailId = mockSpecDetailIds.get(index);
-          const goodsSpecDetail = goodsSpecDetails.find(
-            (item) => item.get('specDetailId') == detailId
-          );
-          goodsInfo = goodsInfo.set(
-            'specId-' + specId,
-            goodsSpecDetail.get('detailName')
-          );
+          const goodsSpecDetail = goodsSpecDetails.find((item) => item.get('specDetailId') == detailId);
+          goodsInfo = goodsInfo.set('specId-' + specId, goodsSpecDetail.get('detailName'));
           goodsInfo = goodsInfo.set('specDetailId-' + specId, detailId);
         });
         let goodsList = List();
@@ -150,19 +125,14 @@ export default class AppStore extends Store {
           goodsList
         });
 
-        this.dispatch(
-          'priceActor: editLevelDiscountFlag',
-          goodsInfo.get('levelDiscountFlag')
-        );
+        this.dispatch('priceActor: editLevelDiscountFlag', goodsInfo.get('levelDiscountFlag'));
 
         // 价格
         let aloneFlag = goodsInfo.get('aloneFlag');
         aloneFlag = aloneFlag ? aloneFlag : false;
         this.dispatch('priceActor: switchAloneFlag', aloneFlag);
         const goodsLevelPrices = goodsDetail.get('goodsLevelPrices');
-        const priceOpt = this.state()
-          .get('spu')
-          .get('priceType');
+        const priceOpt = this.state().get('spu').get('priceType');
         const openUserPrice = goodsInfo.get('customFlag') == 1 ? true : false;
         this.dispatch('priceActor: editPriceSetting', {
           key: 'priceOpt',
@@ -201,16 +171,10 @@ export default class AppStore extends Store {
             let goodsCustomerPrices = goodsDetail.get('goodsCustomerPrices');
             if (goodsCustomerPrices) {
               goodsCustomerPrices.forEach((item) => {
-                const user = userList.find(
-                  (userItem) =>
-                    userItem.get('customerId') == item.get('customerId')
-                );
+                const user = userList.find((userItem) => userItem.get('customerId') == item.get('customerId'));
                 item = item.set('userLevelName', user.get('customerLevelName'));
                 item = item.set('userName', user.get('customerName'));
-                userPriceMap = userPriceMap.set(
-                  item.get('customerId') + '',
-                  item
-                );
+                userPriceMap = userPriceMap.set(item.get('customerId') + '', item);
               });
             }
 
@@ -224,10 +188,7 @@ export default class AppStore extends Store {
           let areaPriceMap = Map();
           if (goodsDetail.get('goodsIntervalPrices')) {
             goodsDetail.get('goodsIntervalPrices').forEach((item) => {
-              areaPriceMap = areaPriceMap.set(
-                item.get('intervalPriceId') + '',
-                item
-              );
+              areaPriceMap = areaPriceMap.set(item.get('intervalPriceId') + '', item);
             });
             this.dispatch('priceActor: initPrice', {
               key: 'areaPrice',
@@ -275,11 +236,7 @@ export default class AppStore extends Store {
    * @param state
    * @param param1
    */
-  editUserLevelPriceItem = (
-    userLevelId: string,
-    key: string,
-    value: string
-  ) => {
+  editUserLevelPriceItem = (userLevelId: string, key: string, value: string) => {
     this.dispatch('priceActor: editUserLevelPriceItem', {
       userLevelId,
       key,
@@ -379,10 +336,7 @@ export default class AppStore extends Store {
   _validPriceForms() {
     let valid = true;
     // 校验表单
-    if (
-      this.state().get('levelPriceForm') &&
-      this.state().get('levelPriceForm').validateFieldsAndScroll
-    ) {
+    if (this.state().get('levelPriceForm') && this.state().get('levelPriceForm').validateFieldsAndScroll) {
       this.state()
         .get('levelPriceForm')
         .validateFieldsAndScroll(null, (errs) => {
@@ -392,10 +346,7 @@ export default class AppStore extends Store {
         });
     }
 
-    if (
-      this.state().get('userPriceForm') &&
-      this.state().get('userPriceForm').validateFieldsAndScroll
-    ) {
+    if (this.state().get('userPriceForm') && this.state().get('userPriceForm').validateFieldsAndScroll) {
       this.state()
         .get('userPriceForm')
         .validateFieldsAndScroll(null, (errs) => {
@@ -404,10 +355,7 @@ export default class AppStore extends Store {
           }
         });
     }
-    if (
-      this.state().get('areaPriceForm') &&
-      this.state().get('areaPriceForm').validateFieldsAndScroll
-    ) {
+    if (this.state().get('areaPriceForm') && this.state().get('areaPriceForm').validateFieldsAndScroll) {
       this.state()
         .get('areaPriceForm')
         .validateFieldsAndScroll(null, (errs) => {
@@ -441,17 +389,11 @@ export default class AppStore extends Store {
     goodsInfo = goodsInfo.set('addedFlag', data.getIn(['goods', 'addedFlag']));
     // 图片
     let imageUrl = null;
-    if (
-      goodsInfo.get('images') != null &&
-      goodsInfo.get('images').count() > 0
-    ) {
+    if (goodsInfo.get('images') != null && goodsInfo.get('images').count() > 0) {
       imageUrl = goodsInfo.get('images').toJS()[0].artworkUrl;
     }
     goodsInfo = goodsInfo.set('goodsInfoImg', imageUrl);
-    goodsInfo = goodsInfo.set(
-      'marketPrice',
-      data.getIn(['goods', 'marketPrice'])
-    );
+    goodsInfo = goodsInfo.set('marketPrice', data.getIn(['goods', 'marketPrice']));
     goodsInfo = goodsInfo.set('costPrice', data.getIn(['goods', 'costPrice']));
     param = param.set('goodsInfo', goodsInfo);
 
@@ -466,7 +408,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       return true;
     } else {
-      message.error(result.res.message);
     }
 
     return false;
@@ -489,26 +430,17 @@ export default class AppStore extends Store {
     goodsInfo = goodsInfo.set('addedFlag', data.getIn(['goods', 'addedFlag']));
     // 图片
     let imageUrl = null;
-    if (
-      goodsInfo.get('images') != null &&
-      goodsInfo.get('images').count() > 0
-    ) {
+    if (goodsInfo.get('images') != null && goodsInfo.get('images').count() > 0) {
       imageUrl = goodsInfo.get('images').toJS()[0].artworkUrl;
     }
     goodsInfo = goodsInfo.set('goodsInfoImg', imageUrl);
-    goodsInfo = goodsInfo.set(
-      'marketPrice',
-      data.getIn(['goods', 'marketPrice'])
-    );
+    goodsInfo = goodsInfo.set('marketPrice', data.getIn(['goods', 'marketPrice']));
     goodsInfo = goodsInfo.set('costPrice', data.getIn(['goods', 'costPrice']));
 
     // 是否按客户单独定价
     goodsInfo = goodsInfo.set('customFlag', data.get('openUserPrice') ? 1 : 0);
     // 是否叠加客户等级折扣
-    goodsInfo = goodsInfo.set(
-      'levelDiscountFlag',
-      data.get('levelDiscountFlag') ? 1 : 0
-    );
+    goodsInfo = goodsInfo.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
 
     param = param.set('goodsInfo', goodsInfo);
 
@@ -519,11 +451,7 @@ export default class AppStore extends Store {
     param = param.setIn(['goodsInfo', 'aloneFlag'], data.get('aloneFlag'));
 
     data.get('userLevelPrice').forEach((value) => {
-      if (
-        value.get('count') != null &&
-        value.get('maxCount') != null &&
-        value.get('count') > value.get('maxCount')
-      ) {
+      if (value.get('count') != null && value.get('maxCount') != null && value.get('count') > value.get('maxCount')) {
         isErr = true;
       }
     });
@@ -531,19 +459,12 @@ export default class AppStore extends Store {
       message.error('起订量不允许超过限订量');
       return false;
     }
-    const goodsLevelPrices = data
-      .get('userLevelPrice')
-      .valueSeq()
-      .toList();
+    const goodsLevelPrices = data.get('userLevelPrice').valueSeq().toList();
     param = param.set('goodsLevelPrices', goodsLevelPrices);
 
     // -----商品客户价格列表-------
     data.get('userPrice').forEach((value) => {
-      if (
-        value.get('count') != null &&
-        value.get('maxCount') != null &&
-        value.get('count') > value.get('maxCount')
-      ) {
+      if (value.get('count') != null && value.get('maxCount') != null && value.get('count') > value.get('maxCount')) {
         isErr = true;
       }
     });
@@ -551,17 +472,11 @@ export default class AppStore extends Store {
       message.error('起订量不允许超过限订量');
       return false;
     }
-    const userPrice = data
-      .get('userPrice')
-      .valueSeq()
-      .toList();
+    const userPrice = data.get('userPrice').valueSeq().toList();
     param = param.set('goodsCustomerPrices', userPrice);
 
     // -----商品订货区间价格列表-------
-    const areaPrice = data
-      .get('areaPrice')
-      .valueSeq()
-      .toList();
+    const areaPrice = data.get('areaPrice').valueSeq().toList();
     //验证订货区间是否重复
     if (areaPrice != null && areaPrice.count() > 0) {
       let cmap = Map();
@@ -593,7 +508,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       history.goBack();
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -720,12 +634,7 @@ export default class AppStore extends Store {
         this.dispatch('modal: imgCates', fromJS(cateList.res));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
-          this.dispatch(
-            'modal: chooseImgs',
-            fromJS(imageList.res.context)
-              .get('content')
-              .slice(0, successCount)
-          );
+          this.dispatch('modal: chooseImgs', fromJS(imageList.res.context).get('content').slice(0, successCount));
         }
         this.dispatch('modal: imgs', fromJS(imageList.res.context));
         this.dispatch('modal: page', fromJS({ currentPage: pageNum + 1 }));
@@ -742,23 +651,12 @@ export default class AppStore extends Store {
     let cateIdList = new Array();
     if (cateId) {
       cateIdList.push(cateId);
-      const secondCateList = cateListIm.filter(
-        (item) => item.get('cateParentId') == cateId
-      ); //找第二层子节点
+      const secondCateList = cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
       if (secondCateList && secondCateList.size > 0) {
-        cateIdList = cateIdList.concat(
-          secondCateList.map((item) => item.get('cateId')).toJS()
-        );
-        const thirdCateList = cateListIm.filter(
-          (item) =>
-            secondCateList.filter(
-              (sec) => item.get('cateParentId') == sec.get('cateId')
-            ).size > 0
-        ); //找第三层子节点
+        cateIdList = cateIdList.concat(secondCateList.map((item) => item.get('cateId')).toJS());
+        const thirdCateList = cateListIm.filter((item) => secondCateList.filter((sec) => item.get('cateParentId') == sec.get('cateId')).size > 0); //找第三层子节点
         if (thirdCateList && thirdCateList.size > 0) {
-          cateIdList = cateIdList.concat(
-            thirdCateList.map((item) => item.get('cateId')).toJS()
-          );
+          cateIdList = cateIdList.concat(thirdCateList.map((item) => item.get('cateId')).toJS());
         }
       }
     }

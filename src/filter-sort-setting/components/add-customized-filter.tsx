@@ -85,8 +85,6 @@ class AddCustomizedfilter extends React.Component<any, any> {
           this.setState({
             attributeValueList: attributeValueListTemp
           });
-        } else {
-          message.error(res.message.toString() || 'Operation failed');
         }
       })
       .catch((err) => {
@@ -157,13 +155,9 @@ class AddCustomizedfilter extends React.Component<any, any> {
           message.success('Operate successfully');
           this.props.refreshList();
           this.setState({ visibleAttribute: false });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   updateCustomizeFilter = (params) => {
     webapi
@@ -174,13 +168,9 @@ class AddCustomizedfilter extends React.Component<any, any> {
           message.success('Operate successfully');
           this.props.refreshList();
           this.setState({ visibleAttribute: false });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   handleSubmit = () => {
     const { attributeForm, attributeValueList, isEdit, currentEditAttribute } = this.state;

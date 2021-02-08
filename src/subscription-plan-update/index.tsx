@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb, history, Const } from 'qmkit';
+import { Headline, BreadCrumb, history, cache, Const } from 'qmkit';
 import { Breadcrumb, message, Steps, Button, Icon, Form } from 'antd';
 import './index.less';
 import BasicInformation from './components/basicInformation';
@@ -8,29 +8,38 @@ import EntryCriteria from './components/entryCriteria';
 import ExitRules from './components/exitRules';
 import Details from './components/details';
 import * as webapi from './webapi';
+import { edit } from '@/regular-product-add/webapi';
 
 const { Step } = Steps;
 
 class SubscriptionPlanUpdate extends Component<any, any> {
   static propTypes = {};
-  static defaultProps = {};
+  static defaultProps = {
+    id: null,
+    editable: true
+  };
   constructor(props) {
     super(props);
+    const id = props.id || this.props.match.params.id;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId;
     this.state = {
-      id: this.props.match.params.id,
-      title: '',
+      id,
+      title: id ? 'Edit Plan (Food Dispenser)' : 'Add New Plan (Food Dispenser)',
       current: 0,
+      storeId,
       subscriptionPlan: {
         canCancelPlan: true,
         subscriptionPlanFlag: true,
-        canChargeDeliveryFlag: true,
+        changeDeliveryDateFlag: true,
         skipNextDeliveryFlag: true,
-        mainProducts: [],
-        mainProductIds: [],
+        mainGoods: [],
+        mainGoodsIds: [],
         quantity: 100,
-        landingFlag: 1
+        landingFlag: true
       },
-      allSkuProduct: []
+      allSkuProduct: [],
+      frequencyList: [],
+      planTypeList: []
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
@@ -39,16 +48,36 @@ class SubscriptionPlanUpdate extends Component<any, any> {
 
   componentWillMount() {
     const { id } = this.state;
-    this.setState({
-      title: id ? 'Edit Plan (Food Dispenser)' : 'Add New Plan (Food Dispenser)'
-    });
     webapi
-      .getAllSkuProducts()
+      .getWeekFrequency()
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
+          let defaultFrequency = res.context.sysDictionaryVOS.find((x) => parseInt(x.valueEn) === 4);
+          if (!id && defaultFrequency) {
+            this.addField('frequency', [defaultFrequency.id]);
+          }
           this.setState({
-            allSkuProduct: res.context.goodsInfos.content
+            frequencyList: res.context.sysDictionaryVOS.filter((x) => parseInt(x.valueEn) >= 3 && parseInt(x.valueEn) <= 5)
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+    webapi
+      .getSubscriptionPlanTypes()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          const defaultType = res.context.sysDictionaryVOS.find((vo) => vo.valueEn === 'Product');
+          if (!id && defaultType) {
+            this.addField('type', defaultType.name);
+          }
+          this.setState({
+            planTypeList: res.context.sysDictionaryVOS
           });
         } else {
           message.error(res.message || 'Get data failed');
@@ -63,8 +92,8 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         .then((data) => {
           const { res } = data;
           if (res.code === 'K-000000') {
-            if(res.context.status === 0) {
-              history.push('/subscription-plan')
+            if (res.context.status === 1) {
+              history.push('/subscription-plan');
             }
             this.setState({
               subscriptionPlan: res.context
@@ -106,13 +135,13 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         const { subscriptionPlan, id } = this.state;
-        if(isDraft){
-          subscriptionPlan.status = 0 // Draft
+        if (isDraft) {
+          subscriptionPlan.status = 0; // Draft
         } else {
-          subscriptionPlan.status = 1 // Publish
+          subscriptionPlan.status = 1; // Publish
         }
-        console.log(subscriptionPlan)
-        console.log( JSON.stringify(subscriptionPlan))
+        subscriptionPlan.storeId = this.state.storeId;
+        console.log(subscriptionPlan);
         if (id) {
           subscriptionPlan.id = id; // edit by id
           webapi
@@ -121,7 +150,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
               const { res } = data;
               if (res.code === 'K-000000') {
                 message.success('Operate successfully');
-                history.push({ pathname: '/subscriptionPlan-list' });
+                history.push({ pathname: '/subscription-plan' });
               } else {
                 message.error(res.message || 'Update Failed');
               }
@@ -136,7 +165,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
               const { res } = data;
               if (res.code === 'K-000000') {
                 message.success('Operate successfully');
-                history.push({ pathname: '/subscriptionPlan-list' });
+                history.push({ pathname: '/subscription-plan' });
               } else {
                 message.error(res.message || 'Add Failed');
               }
@@ -149,41 +178,42 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     });
   }
   render() {
-    const { current, title, subscriptionPlan, allSkuProduct } = this.state;
+    const editable = this.props.editable;
+    const { current, title, subscriptionPlan, allSkuProduct, frequencyList, planTypeList } = this.state;
     let targetDisabled = false;
     let saveDisabled = false;
-    if(current === 1) {
-      targetDisabled = !subscriptionPlan.targetProductIds || subscriptionPlan.targetProductIds.length === 0
+    if (current === 1) {
+      targetDisabled = !subscriptionPlan.targetGoods || subscriptionPlan.targetGoods.length === 0;
     }
-    if(current === 4) {
-      saveDisabled = !subscriptionPlan.mainProductIds || subscriptionPlan.mainProductIds.length === 0
+    if (current === 4) {
+      saveDisabled = !subscriptionPlan.mainGoods || subscriptionPlan.mainGoods.length === 0;
     }
     const steps = [
       {
         title: 'Basic Information',
-        controller: <BasicInformation subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        controller: <BasicInformation subscriptionPlan={subscriptionPlan} frequencyList={frequencyList} planTypeList={planTypeList} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
         title: 'Target Product',
-        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} />
+        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       },
       {
         title: 'Entry Criteria',
-        controller: <EntryCriteria subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        controller: <EntryCriteria subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
         title: 'Exit Rules',
-        controller: <ExitRules subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        controller: <ExitRules subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
         title: 'Details',
-        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} />
+        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       }
     ];
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{title}</Breadcrumb.Item>
+          <Breadcrumb.Item>{editable ? title : subscriptionPlan.name}</Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container-search" id="subscriptionPlanStep">
@@ -206,16 +236,16 @@ class SubscriptionPlanUpdate extends Component<any, any> {
                 Next step <Icon type="right" />
               </Button>
             )}
-            {current === steps.length - 1 && (
+            {current === steps.length - 1 && editable ? (
               <div className="saveBtn">
-                <Button  disabled={saveDisabled} style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, true)}>
+                <Button disabled={saveDisabled} style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, true)}>
                   Save <Icon type="right" />
                 </Button>
                 <Button disabled={saveDisabled} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, false)}>
                   Publish <Icon type="right" />
                 </Button>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { BreadCrumb, history } from 'qmkit';
+import { BreadCrumb, history, Const } from 'qmkit';
 import BasicInfomation from './component/basic-infomation';
 import PetInfomation from './component/pet-infomation';
 import DeliveryInformation from './component/delivery-information';
@@ -37,7 +37,7 @@ export default class CustomerDetails extends React.Component<any, any> {
   //   const { res } = await webapi.querySysDictionary({
   //     type: type
   //   });
-  //   if (res.code === 'K-000000') {
+  //   if (res.code === Const.SUCCESS_CODE) {
   //     if (type === 'city') {
   //       sessionStorage.setItem(
   //         'dict-city',
@@ -79,18 +79,16 @@ export default class CustomerDetails extends React.Component<any, any> {
     webapi
       .delCustomer(params)
       .then((data) => {
-        if (data.res.code === 'K-000000') {
+        if (data.res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           history.push('/customer-list');
         } else {
-          message.error(data.res.message || 'Unsuccessful');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
         this.setState({
           loading: false
         });

@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import * as webapi from './../webapi';
 import moment from 'moment';
 const defaultImg = require('../../goods-list/img/none.png');
+import { Const } from 'qmkit';
 
 export default class ListView extends React.Component<any, any> {
   constructor(props) {
@@ -52,7 +53,7 @@ export default class ListView extends React.Component<any, any> {
       .getSubscriptionList(params)
       .then((data) => {
         let { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let pagination = {
             current: res.context.currentPage + 1,
             pageSize: 10,
@@ -69,14 +70,12 @@ export default class ListView extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
   onChecked = (index, checked) => {};
@@ -96,21 +95,19 @@ export default class ListView extends React.Component<any, any> {
       .cancelSubscription({ subscribeId: id })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.init();
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 

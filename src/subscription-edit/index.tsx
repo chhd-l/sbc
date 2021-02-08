@@ -97,7 +97,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .getSubscriptionDetail(this.state.subscriptionId)
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
@@ -186,14 +186,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -205,18 +203,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .petsById(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let petsInfo = res.context.context;
           this.setState({
             petsInfo: petsInfo
           });
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
 
   getDict = () => {
@@ -238,7 +232,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
@@ -270,12 +264,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
   onSubscriptionChange = ({ field, value }) => {
     let data = this.state.subscriptionInfo;
@@ -378,7 +369,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .updateSubscription(params)
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             saveLoading: false
           });
@@ -388,14 +379,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
   compareField = (field1, field2, fieldName) => {
@@ -435,7 +424,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   getAddressList = (customerId, type) => {
     webapi.getAddressListByType(customerId, type).then((data) => {
       const res = data.res;
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         let addressList = res.context.customerDeliveryAddressVOList;
         let customerAccount = res.context.customerAccount;
 
@@ -540,7 +529,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   //   };
   //   webapi.getBySubscribeId(params).then((data) => {
   //     const { res } = data;
-  //     if (res.code === 'K-000000') {
+  //     if (res.code === Const.SUCCESS_CODE) {
   //       let operationLog = res.context.subscriptionLogsVOS;
   //       this.setState({
   //         operationLog: operationLog
@@ -610,7 +599,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .getPromotionPrice(params)
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             deliveryPrice: res.context.deliveryPrice,
             discountsPrice: res.context.discountsPrice,
@@ -623,14 +612,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -666,14 +653,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
   updateNextDeliveryTime = (date) => {
@@ -709,14 +694,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -754,13 +737,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               deliveryCityArr
             });
           }
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   getCurrencySymbol = () => {
     let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';

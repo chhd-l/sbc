@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import {
-  Table,
-  Button,
-  Divider,
-  message,
-  Modal,
-  Popconfirm,
-  Tooltip
-} from 'antd';
+import { Headline, SelectGroup, BreadCrumb, Const } from 'qmkit';
+import { Table, Button, Divider, message, Modal, Popconfirm, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -41,21 +33,12 @@ export default class ClinicList extends Component<any, any> {
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title="Edit">
-                <Link
-                  className="iconfont iconEdit"
-                  to={'/prescriber-type-edit/' + record.id}
-                ></Link>
+                <Link className="iconfont iconEdit" to={'/prescriber-type-edit/' + record.id}></Link>
               </Tooltip>
 
               <Divider type="vertical" />
 
-              <Popconfirm
-                placement="topLeft"
-                title="Are you sure to delete this item?"
-                onConfirm={() => this.delClinicType(record.id)}
-                okText="Confirm"
-                cancelText="Cancel"
-              >
+              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.delClinicType(record.id)} okText="Confirm" cancelText="Cancel">
                 <Tooltip placement="top" title="Delete">
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
@@ -92,7 +75,7 @@ export default class ClinicList extends Component<any, any> {
       .getClinicsDictionaryListPage(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let typeList = res.context.prescriberDictionaryVOList;
 
           if (typeList.length > 0) {
@@ -118,19 +101,15 @@ export default class ClinicList extends Component<any, any> {
               typeList: typeList
             });
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
   delClinicType = async (id) => {
     const { res } = await webapi.delClinicsDictionary({
       id: id
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       const { pagination } = this.state;
       let params = {
@@ -139,8 +118,6 @@ export default class ClinicList extends Component<any, any> {
         pageSize: pagination.pageSize
       };
       this.getTypeList(params);
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   handleTableChange = (pagination: any) => {
@@ -183,7 +160,7 @@ export default class ClinicList extends Component<any, any> {
             rowKey={(record) => record.id}
             dataSource={this.state.typeList}
             pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
             onChange={this.handleTableChange}
           />
         </div>

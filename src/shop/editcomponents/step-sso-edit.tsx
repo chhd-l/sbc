@@ -46,12 +46,10 @@ export default class StepTwo extends React.Component<any, any> {
 
   getContentInformation = async () => {
     const { res } = await webapi.getStoreSooSetting();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         ssoForm: res.context
       });
-    } else {
-      message.error(res.message);
     }
   };
   onFormChange = ({ field, value }) => {
@@ -242,10 +240,8 @@ export default class StepTwo extends React.Component<any, any> {
     const { res } = await webapi.saveStoreCSooSetting({
       ...ssoForm
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(res.message || 'save faild');
     }
   };
 }

@@ -48,6 +48,9 @@ export default class NewCityModal extends Component<any, any> {
       resetImageForm: Function;
       onCityFormChange: Function;
       onResetCityForm: Function;
+      searchState: Function;
+      addCity: Function;
+      editCity: Function;
     };
   };
 
@@ -59,7 +62,10 @@ export default class NewCityModal extends Component<any, any> {
     setCityModalVisible: noop,
     resetImageForm: noop,
     onCityFormChange: noop,
-    onResetCityForm: noop
+    onResetCityForm: noop,
+    searchState: noop,
+    addCity: noop,
+    editCity: noop
   };
   componentDidMount() {
     const { isEdit } = this.props.relaxProps;
@@ -102,37 +108,57 @@ export default class NewCityModal extends Component<any, any> {
         return;
       }
       if (!err) {
-        const { setCityModalVisible, onResetCityForm, cityForm } = this.props.relaxProps;
-        const { country, state, city, postCodeArr } = cityForm.toJS();
+        const { setCityModalVisible, onResetCityForm, cityForm, stateNameList, addCity, editCity } = this.props.relaxProps;
+        const { country, state, city, postCodeArr, id } = cityForm.toJS();
+        let arr = [];
         this.setState({
           confirmLoading: true
         });
-        let arr = [];
         if (postCodeArr.length > 1) {
           postCodeArr.forEach((item) => {
             if (item.preCode && item.suffCode) {
-              arr.push(`${item.preCode}-${item.suffCode}`);
+              arr.push({
+                id: item.id,
+                postCode: `${item.preCode}-${item.suffCode}`
+              });
             }
           });
         } else {
           if (postCodeArr[0].preCode && postCodeArr[0].suffCode) {
-            arr.push(`${postCodeArr[0].preCode}-${postCodeArr[0].suffCode}`);
-          } else {
-            arr.push('');
+            arr.push({
+              id: postCodeArr[0].id,
+              postCode: `${postCodeArr[0].preCode}-${postCodeArr[0].suffCode}`
+            });
           }
         }
-        const params = {
-          country,
-          state,
-          city,
-          postCodeArr: arr.join(';')
-        };
-        setTimeout(() => {
-          this.setState({
-            confirmLoading: false
+        let selectedState = null;
+        if (stateNameList.size > 0) {
+          selectedState = stateNameList.toJS().find((item) => {
+            return item.id === state;
           });
-          setCityModalVisible(false);
-        }, 4000);
+        }
+        const params = {
+          id,
+          countryName: country,
+          stateName: selectedState ? selectedState.stateName : null,
+          stateId: state,
+          cityName: city,
+          systemCityPostCodes: arr
+        };
+        if (id) {
+          editCity(params);
+        } else {
+          addCity(params);
+        }
+        this.setState({
+          confirmLoading: false
+        });
+        // setTimeout(() => {
+        //   this.setState({
+        //     confirmLoading: false
+        //   });
+        //   setCityModalVisible(false);
+        // }, 4000);
         // onResetCityForm();
       }
     });
@@ -141,7 +167,7 @@ export default class NewCityModal extends Component<any, any> {
     const { cityForm, onCityFormChange } = this.props.relaxProps;
     let postCodeArr = cityForm.toJS().postCodeArr;
     postCodeArr.push({
-      id: new Date().getTime(),
+      value: new Date().getTime(),
       preCode: '',
       suffCode: ''
     });
@@ -158,7 +184,7 @@ export default class NewCityModal extends Component<any, any> {
       return;
     }
     postCodeArr.forEach((code, index) => {
-      if (code.id === item.id) {
+      if (code.value === item.value) {
         postCodeArr.splice(index, 1);
       }
     });
@@ -172,7 +198,7 @@ export default class NewCityModal extends Component<any, any> {
     const { postCodeArr } = cityForm.toJS();
 
     postCodeArr.forEach((code) => {
-      if (code.id === item.id) {
+      if (code.value === item.value) {
         code[field] = e.target.value;
       }
     });
@@ -193,9 +219,10 @@ export default class NewCityModal extends Component<any, any> {
 
   render() {
     const { confirmLoading, codeValidateStatus } = this.state;
-    const { onCityFormChange, cityForm, cityModalVisible, stateNameList } = this.props.relaxProps;
+    const { onCityFormChange, cityForm, cityModalVisible, stateNameList, searchState } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     const { country, state, postCodeArr, city } = cityForm.toJS();
+    console.log(postCodeArr, 'postCodeArr------------');
     return (
       <Modal maskClosable={false} title="Add City" visible={cityModalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>
@@ -217,40 +244,36 @@ export default class NewCityModal extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="State name">
-              {getFieldDecorator('state', {
-                initialValue: state,
-                rules: [{ required: true, message: 'Please enter state name.' }]
-              })(
-                // <Input
-                //   value={state}
-                //   onChange={(e) =>
-                //     onCityFormChange({
-                //       field: 'state',
-                //       value: e.target.value
-                //     })
-                //   }
-                // />
-                stateNameList.size > 0 ? (
+            {stateNameList.size > 0 ? (
+              <FormItem {...formItemLayout} label="State name">
+                {getFieldDecorator('state', {
+                  initialValue: state,
+                  rules: [{ required: true, message: 'Please enter state name.' }]
+                })(
                   <Select
                     // style={{ width: 160 }}
-                    defaultValue={state}
+                    // defaultValue={state}
+                    showSearch
+                    onSearch={(val) => {
+                      searchState(val);
+                    }}
                     onChange={(e) => {
                       onCityFormChange({
                         field: 'state',
                         value: e
                       });
                     }}
+                    value={state}
                   >
                     {stateNameList.toJS().map((item: any, index) => (
-                      <Option key={index} value={item.value}>
-                        {item.name}
+                      <Option key={index} value={item.id}>
+                        {item.stateName}
                       </Option>
                     ))}
                   </Select>
-                ) : null
-              )}
-            </FormItem>
+                )}
+              </FormItem>
+            ) : null}
 
             <FormItem {...formItemLayout} label="City name">
               {getFieldDecorator('city', {
@@ -272,7 +295,7 @@ export default class NewCityModal extends Component<any, any> {
             <FormItem {...formItemLayout} label="Code" validateStatus={codeValidateStatus === 'success' ? 'success' : 'error'}>
               {postCodeArr.length > 0
                 ? postCodeArr.map((item) => (
-                    <div className="code-container">
+                    <div className="code-container" key={item.value}>
                       <Input value={item.preCode} onChange={(e) => this._codeOnChange(e, item, 'preCode')} />
                       &nbsp;&nbsp;-&nbsp;&nbsp;
                       <Input value={item.suffCode} onChange={(e) => this._codeOnChange(e, item, 'suffCode')} />

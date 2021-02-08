@@ -57,14 +57,12 @@ class Notification extends Component<any, any> {
             allLoading: false
           });
         } else {
-          message.error(res.message || 'Operation failure');
           this.setState({
             allLoading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Operation failure');
         this.setState({
           allLoading: false
         });
@@ -107,13 +105,9 @@ class Notification extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.getNotificationList();
           message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Update Failed');
         }
       })
-      .catch((err) => {
-        message.error(err || 'Update Failed');
-      });
+      .catch((err) => {});
   };
   startNotification = (id: string) => {
     webapi
@@ -123,13 +117,9 @@ class Notification extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.getNotificationList();
           message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Update Failed');
         }
       })
-      .catch((err) => {
-        message.error(err || 'Update Failed');
-      });
+      .catch((err) => {});
   };
 
   getTemplateList = () => {
@@ -170,14 +160,12 @@ class Notification extends Component<any, any> {
             previewHtml: templateData.emailTemplateHtml
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           loading: false
         });
@@ -206,13 +194,9 @@ class Notification extends Component<any, any> {
             }
           );
           message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Save Failed');
         }
       })
-      .catch((err) => {
-        message.error(err || 'Save Failed');
-      });
+      .catch((err) => {});
   };
 
   render() {

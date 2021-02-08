@@ -9,19 +9,7 @@ import ModalActor from './actor/modal-actor';
 import SpecActor from './actor/spec-actor';
 import ImageActor from './actor/image-actor';
 
-import {
-  getCateList,
-  getSignCateList,
-  addCate,
-  deleteCate,
-  editCate,
-  chkChild,
-  chkGoods,
-  dragSort,
-  getCateIdsPropDetail,
-  getImgCates,
-  fetchImages
-} from './webapi';
+import { getCateList, getSignCateList, addCate, deleteCate, editCate, chkChild, chkGoods, dragSort, getCateIdsPropDetail, getImgCates, fetchImages } from './webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -32,12 +20,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new CateActor(),
-      new ModalActor(),
-      new SpecActor(),
-      new ImageActor()
-    ];
+    return [new CateActor(), new ModalActor(), new SpecActor(), new ImageActor()];
   }
 
   /**
@@ -117,7 +100,6 @@ export default class AppStore extends Store {
       // 刷新
       this.refresh();
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -130,7 +112,6 @@ export default class AppStore extends Store {
       // 刷新
       this.refresh();
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -211,7 +192,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -237,39 +217,23 @@ export default class AppStore extends Store {
           return prop.set('goodsPropDetails', goodsPropDetails);
         });
         //将商品中的属性与属性值信息映射到类目属性里
-        if (
-          goodsPropList &&
-          catePropDetail.size > 0 &&
-          goodsPropList.size > 0
-        ) {
+        if (goodsPropList && catePropDetail.size > 0 && goodsPropList.size > 0) {
           goodsPropList.forEach((item) => {
             const { detailIds, propId } = item.toJS();
-            const index = catePropDetail.findIndex(
-              (p) => p.get('propId') === propId
-            );
+            const index = catePropDetail.findIndex((p) => p.get('propId') === propId);
             if (index > -1) {
-              let detailList = catePropDetail
-                .getIn([index, 'goodsPropDetails'])
-                .map((d) => {
-                  let detailId = detailIds.find(
-                    (tmpId) => tmpId === d.get('detailId')
-                  );
-                  if (d.get('detailId') == detailId) {
-                    return d.set('select', 'select');
-                  }
-                  return d.set('select', '');
-                });
-              catePropDetail = catePropDetail.setIn(
-                [index, 'goodsPropDetails'],
-                detailList
-              );
+              let detailList = catePropDetail.getIn([index, 'goodsPropDetails']).map((d) => {
+                let detailId = detailIds.find((tmpId) => tmpId === d.get('detailId'));
+                if (d.get('detailId') == detailId) {
+                  return d.set('select', 'select');
+                }
+                return d.set('select', '');
+              });
+              catePropDetail = catePropDetail.setIn([index, 'goodsPropDetails'], detailList);
             }
           });
         }
-        this.dispatch(
-          'propActor: setPropList',
-          this._changeList(catePropDetail)
-        );
+        this.dispatch('propActor: setPropList', this._changeList(catePropDetail));
         this.dispatch('propActor: goodsPropDetails', catePropDetail);
       }
     }
@@ -298,11 +262,7 @@ export default class AppStore extends Store {
    * 修改商品基本信息
    */
   editGoods = (goods: IMap) => {
-    if (
-      goods.get('saleType') !== undefined &&
-      goods.get('saleType') === 1 &&
-      this.state().getIn(['goods', 'priceType']) === 1
-    ) {
+    if (goods.get('saleType') !== undefined && goods.get('saleType') === 1 && this.state().getIn(['goods', 'priceType']) === 1) {
       this.editPriceSetting('priceOpt', 2);
     }
     this.dispatch('cateActor: editGoods', goods);
@@ -328,9 +288,7 @@ export default class AppStore extends Store {
     const cateList: any = await getImgCates();
     const cateListIm = this.state().get('resCateAllList');
     if (cateId == -1 && cateList.res.length > 0) {
-      const cateIdList = fromJS(cateList.res).filter(
-        (item) => item.get('isDefault') == 1
-      );
+      const cateIdList = fromJS(cateList.res).filter((item) => item.get('isDefault') == 1);
       if (cateIdList.size > 0) {
         cateId = cateIdList.get(0).get('cateId');
       }
@@ -352,26 +310,16 @@ export default class AppStore extends Store {
         this.dispatch('modal: imgCates', fromJS(cateList.res));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
-          this.dispatch(
-            'modal: chooseImgs',
-            fromJS(imageList.res.context).get('content').slice(0, successCount)
-          );
+          this.dispatch('modal: chooseImgs', fromJS(imageList.res.context).get('content').slice(0, successCount));
         }
         this.dispatch('modal: imgs', fromJS(imageList.res.context));
-        this.dispatch(
-          'modal: page',
-          fromJS({ currentPage: pageNum + 1, resourceType: 0 })
-        );
+        this.dispatch('modal: page', fromJS({ currentPage: pageNum + 1, resourceType: 0 }));
       });
     } else {
       message.error(imageList.res.message);
     }
   };
-  modalVisibleFun = async (
-    maxCount: number,
-    imgType: number,
-    skuId: string
-  ) => {
+  modalVisibleFun = async (maxCount: number, imgType: number, skuId: string) => {
     // if (this.state().get('visible')) {
     // console.log(2)
     this.initImg({
@@ -417,23 +365,12 @@ export default class AppStore extends Store {
     let cateIdList = new Array();
     if (cateId) {
       cateIdList.push(cateId);
-      const secondCateList = cateListIm.filter(
-        (item) => item.get('cateParentId') == cateId
-      ); //找第二层子节点
+      const secondCateList = cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
       if (secondCateList && secondCateList.size > 0) {
-        cateIdList = cateIdList.concat(
-          secondCateList.map((item) => item.get('cateId')).toJS()
-        );
-        const thirdCateList = cateListIm.filter(
-          (item) =>
-            secondCateList.filter(
-              (sec) => item.get('cateParentId') == sec.get('cateId')
-            ).size > 0
-        ); //找第三层子节点
+        cateIdList = cateIdList.concat(secondCateList.map((item) => item.get('cateId')).toJS());
+        const thirdCateList = cateListIm.filter((item) => secondCateList.filter((sec) => item.get('cateParentId') == sec.get('cateId')).size > 0); //找第三层子节点
         if (thirdCateList && thirdCateList.size > 0) {
-          cateIdList = cateIdList.concat(
-            thirdCateList.map((item) => item.get('cateId')).toJS()
-          );
+          cateIdList = cateIdList.concat(thirdCateList.map((item) => item.get('cateId')).toJS());
         }
       }
     }

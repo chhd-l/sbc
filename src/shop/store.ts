@@ -34,8 +34,6 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('company:allBrands', fromJS(res.context));
-    } else {
-      message.error(res.message);
     }
     this.transaction(() => {
       this.dispatch('modalActor: brandModal');
@@ -127,8 +125,6 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.setCurrentStep(2);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -153,7 +149,6 @@ export default class AppStore extends Store {
     if (info) {
       const { res } = await webApi.checkExsit(cateId);
       if (res.code != Const.SUCCESS_CODE) {
-        message.error(res.message);
         return;
       }
       this.dispatch('modal: cate: delete', delIds.concat(fromJS([cateId])));
@@ -256,7 +251,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.sortModal();
     } else {
-      message.error(res.message);
       this.dispatch('modal: cate: loading: over');
     }
   };
@@ -577,8 +571,6 @@ export default class AppStore extends Store {
       this.dispatch('modalActor: brandModal');
       //重新获取签约详情
       this.fetchSignInfo();
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -717,16 +709,12 @@ export default class AppStore extends Store {
       if (res.code === Const.SUCCESS_CODE) {
         message.success('Operate successfully');
         this.setCurrentStep(1);
-      } else {
-        message.error(res.message);
       }
     } else {
       const { res } = await webApi.saveStoreInfo(storeInfo);
       if (res.code === Const.SUCCESS_CODE) {
         message.success('Operate successfully');
         this.setCurrentStep(1);
-      } else {
-        message.error(res.message);
       }
     }
   };
@@ -740,8 +728,6 @@ export default class AppStore extends Store {
     const { res } = await webApi.editStoreInfo(storeInfo);
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -759,8 +745,6 @@ export default class AppStore extends Store {
     const { res } = await webApi.saveCompanyInfo(info);
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -903,8 +887,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       history.push('/shop-info');
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -976,8 +958,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       const businessEnter = res.context.supplierEnter;
       this.dispatch('common: businessEnter', businessEnter);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -1044,8 +1024,6 @@ export default class AppStore extends Store {
             this.getConsentList();
             form = this.state().get('detailList');
           });
-        } else {
-          message.error(res.message);
         }
       } else {
         message.error('Submit Can not be empty！');
@@ -1060,8 +1038,6 @@ export default class AppStore extends Store {
             this.getConsentList();
           });
           //history.push('/shop-info');
-        } else {
-          message.error(res.message);
         }
       } else {
         message.error('Submit Can not be empty！');
@@ -1144,8 +1120,6 @@ export default class AppStore extends Store {
       this.transaction(() => {
         //this.getConsentList();
       });
-    } else {
-      message.error(res.message);
     }
   };
 

@@ -50,8 +50,6 @@ export default class AppStore extends Store {
       });
       this.dispatch('ticket:onRewardExport', fromJS(param));
     } else {
-      message.error(res.message);
-
       this.dispatch('loading:end');
     }
   };
@@ -267,7 +265,6 @@ export default class AppStore extends Store {
         this.dispatch('viewModal:show');
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -363,7 +360,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   }
 

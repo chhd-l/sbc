@@ -30,7 +30,6 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
 
@@ -66,7 +65,7 @@ export default class AppStore extends Store {
     //   this.dispatch('list:getList', fromJS(res.context));
     // } else {
     //   this.dispatch('loading:end');
-    //   message.error(res.message);
+    //
     // }
   };
 
@@ -101,7 +100,7 @@ export default class AppStore extends Store {
     //   this.dispatch('list:getList', fromJS(res.context));
     // } else {
     //   this.dispatch('loading:end');
-    //   message.error(res.message);
+    //
     // }
   };
 

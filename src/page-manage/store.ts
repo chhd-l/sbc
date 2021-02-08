@@ -5,15 +5,7 @@ import { Const } from 'qmkit';
 import { message } from 'antd';
 import PageActor from './actor/page-actor';
 
-import {
-  getTplList,
-  copyPage,
-  delPage,
-  queryTemplateList,
-  setIndex,
-  updateTitle,
-  getStore
-} from './webapi';
+import { getTplList, copyPage, delPage, queryTemplateList, setIndex, updateTitle, getStore } from './webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -41,20 +33,13 @@ export default class AppStore extends Store {
     const result = await getStore();
     if (result.code == Const.SUCCESS_CODE) {
       const storeId = result.context.storeId;
-      const res = await fetch(
-        `${
-        Const.X_XITE_OPEN_HOST
-        }/api/page/list?includePageTypeList=[${includePageTypeList}]&excludePageTypeList=[]&platform=${this.state().get(
-          'platform'
-        )}&pageNo=${pageNum}&pageSize=${pageSize}&storeId=${storeId}`,
-        {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            Authorization: (window as any).token
-          }
+      const res = await fetch(`${Const.X_XITE_OPEN_HOST}/api/page/list?includePageTypeList=[${includePageTypeList}]&excludePageTypeList=[]&platform=${this.state().get('platform')}&pageNo=${pageNum}&pageSize=${pageSize}&storeId=${storeId}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          Authorization: (window as any).token
         }
-      ).then((res: any) => {
+      }).then((res: any) => {
         return res.json();
       });
       if (res.status == 1) {
@@ -66,11 +51,9 @@ export default class AppStore extends Store {
         });
       } else {
         this.dispatch('loading:end');
-        message.error(res.message);
       }
     } else {
       this.dispatch('loading:end');
-      message.error(result.message);
     }
   };
 
@@ -79,8 +62,6 @@ export default class AppStore extends Store {
     if (res.status == 1) {
       message.success('Operate successfully');
       this.init();
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -95,8 +76,6 @@ export default class AppStore extends Store {
     if (res.status == 1) {
       message.success('Operate successfully');
       this.init();
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -115,8 +94,6 @@ export default class AppStore extends Store {
     if (res.status === 1) {
       message.success('Operate successfully');
       this.init();
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -125,32 +102,32 @@ export default class AppStore extends Store {
     if (visible) {
       const storeId = this.state().get('storeId');
       const pageType = this.state().get('includePageTypeList');
-      const platform = this.state().get('platform')
+      const platform = this.state().get('platform');
       const res = await getTplList(
         pageType.first() == 'index' && platform == 'pc'
           ? {
-            excludePageTypeList: [],
-            includePageTypeList: [this.state().get('includePageTypeList')],
-            name: '',
-            online: true,
-            pageNo: -1,
-            pageSize: 10,
-            platform: this.state().get('platform'),
-            tagList: [],
-            typeList: [this.state().get('typeList')],
-            storeId
-          }
+              excludePageTypeList: [],
+              includePageTypeList: [this.state().get('includePageTypeList')],
+              name: '',
+              online: true,
+              pageNo: -1,
+              pageSize: 10,
+              platform: this.state().get('platform'),
+              tagList: [],
+              typeList: [this.state().get('typeList')],
+              storeId
+            }
           : {
-            excludePageTypeList: [],
-            includePageTypeList: [this.state().get('includePageTypeList')],
-            name: '',
-            online: true,
-            pageNo: -1,
-            pageSize: 10,
-            platform: this.state().get('platform'),
-            tagList: [],
-            typeList: [this.state().get('typeList')]
-          }
+              excludePageTypeList: [],
+              includePageTypeList: [this.state().get('includePageTypeList')],
+              name: '',
+              online: true,
+              pageNo: -1,
+              pageSize: 10,
+              platform: this.state().get('platform'),
+              tagList: [],
+              typeList: [this.state().get('typeList')]
+            }
       );
       const templates = await queryTemplateList({
         includePageTypeList: this.state().get('includePageTypeList'),
@@ -230,6 +207,5 @@ export default class AppStore extends Store {
         }
       }
     }
-
   };
 }

@@ -48,8 +48,6 @@ export default class AppStore extends Store {
           this.btnLoading = false;
         });
       } else {
-        message.error(res.message);
-
         this.dispatch('loading:end');
       }
     });
@@ -115,7 +113,6 @@ export default class AppStore extends Store {
     } else if (res.code == 'K-000001') {
       message.error('订单状态已改变，请刷新页面后重试!');
     } else {
-      message.error(res.message);
     }
   };
 

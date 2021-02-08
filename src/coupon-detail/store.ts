@@ -20,11 +20,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('coupon: detail: field: value', {
           field: 'couponCates',
-          value: fromJS(
-            res.context.couponInfo.cateNames.length == 0
-              ? ['其他']
-              : res.context.couponInfo.cateNames
-          )
+          value: fromJS(res.context.couponInfo.cateNames.length == 0 ? ['其他'] : res.context.couponInfo.cateNames)
         });
 
         // 设置优惠券信息
@@ -45,13 +41,10 @@ export default class AppStore extends Store {
         // 设置商品列表
         this.dispatch('coupon: detail: field: value', {
           field: 'skus',
-          value: fromJS(
-            null == res.context.goodsList ? [] : res.context.goodsList
-          ) // 设置商品列表
+          value: fromJS(null == res.context.goodsList ? [] : res.context.goodsList) // 设置商品列表
         });
       });
     } else {
-      message.error(res.message);
     }
   };
 }

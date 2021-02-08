@@ -68,27 +68,12 @@ export default class AppStore extends Store {
       this.dispatch('achieve:emptyName');
     });
     if (dateType == 0 || dateType == 1) {
-      await this.onClientPagination(
-        1,
-        this.state().get('clientPageSize'),
-        this.state().get('clientSort')
-      );
+      await this.onClientPagination(1, this.state().get('clientPageSize'), this.state().get('clientSort'));
     } else {
-      await this.onClientPagination(
-        1,
-        this.state().get('clientPageSize'),
-        this.state().get('newlySort')
-      );
+      await this.onClientPagination(1, this.state().get('clientPageSize'), this.state().get('newlySort'));
     }
-    const sort = await this.getAchieveSortName(
-      this.state().get('achieveSortName'),
-      this.state().get('achieveSortType')
-    );
-    await this.onAchievePagination(
-      1,
-      this.state().get('achievePageSize'),
-      sort
-    );
+    const sort = await this.getAchieveSortName(this.state().get('achieveSortName'), this.state().get('achieveSortType'));
+    await this.onAchievePagination(1, this.state().get('achievePageSize'), sort);
   };
 
   /**
@@ -111,31 +96,16 @@ export default class AppStore extends Store {
   searchKeyWords = async (type) => {
     const dateType = this.state().get('dateType');
     if (type == 1) {
-      const sort = await this.getAchieveSortName(
-        this.state().get('achieveSortName'),
-        this.state().get('achieveSortOrder')
-      );
+      const sort = await this.getAchieveSortName(this.state().get('achieveSortName'), this.state().get('achieveSortOrder'));
       //业绩报表
-      await this.onAchievePagination(
-        1,
-        this.state().get('achievePageSize'),
-        sort
-      );
+      await this.onAchievePagination(1, this.state().get('achievePageSize'), sort);
     } else {
       //获客报表(日期为今天或者昨天，获客报表的排序按照总数排序)
       if (dateType == 0 || dateType == 1) {
-        await this.onClientPagination(
-          1,
-          this.state().get('clientPageSize'),
-          this.state().get('clientSort')
-        );
+        await this.onClientPagination(1, this.state().get('clientPageSize'), this.state().get('clientSort'));
       } else {
         //选择其他的日期类型时，按照新增客户排序
-        await this.onClientPagination(
-          1,
-          this.state().get('clientPageSize'),
-          'NEWLY_DESC'
-        );
+        await this.onClientPagination(1, this.state().get('clientPageSize'), 'NEWLY_DESC');
       }
     }
   };
@@ -152,14 +122,8 @@ export default class AppStore extends Store {
     let pageNo = pageSize == this.state().get('achievePageSize') ? pageNum : 1;
     //给定时间范围内的获客报表
     const { res } = await webapi.getAchieveTable({
-      dataCycle:
-        dateType == 0 || dateType == 1 || dateType == 2 || dateType == 3
-          ? dateType
-          : 0,
-      yearMonth:
-        dateType != 0 && dateType != 1 && dateType != 2 && dateType != 3
-          ? dateType
-          : '',
+      dataCycle: dateType == 0 || dateType == 1 || dateType == 2 || dateType == 3 ? dateType : 0,
+      yearMonth: dateType != 0 && dateType != 1 && dateType != 2 && dateType != 3 ? dateType : '',
       sort: sort == '' ? 'ORDER_AMT_DESC' : sort,
       pageNo: pageNo,
       pageSize: pageSize,
@@ -176,7 +140,6 @@ export default class AppStore extends Store {
         this.dispatch('achieve:table', res.context.viewList);
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -190,26 +153,15 @@ export default class AppStore extends Store {
   onClientPagination = async (pageNum, pageSize, sort) => {
     const dateType = this.state().get('dateType');
     let pageNo = pageSize == this.state().get('clientPageSize') ? pageNum : 1;
-    let clientSort =
-      sort == ''
-        ? dateType == 0 || dateType == 1
-          ? 'TOTAL_DESC'
-          : 'NEWLY_DESC'
-        : sort;
+    let clientSort = sort == '' ? (dateType == 0 || dateType == 1 ? 'TOTAL_DESC' : 'NEWLY_DESC') : sort;
     //给定时间范围内的获客报表
     const { res } = await webapi.getClientTable({
-      dataCycle:
-        dateType == 0 || dateType == 1 || dateType == 2 || dateType == 3
-          ? dateType
-          : 0,
+      dataCycle: dateType == 0 || dateType == 1 || dateType == 2 || dateType == 3 ? dateType : 0,
       sort: clientSort,
       pageNo: pageNo,
       pageSize: pageSize,
       keywords: this.state().get('clientEmployeeName'),
-      yearMonth:
-        dateType != 0 && dateType != 1 && dateType != 2 && dateType != 3
-          ? dateType
-          : ''
+      yearMonth: dateType != 0 && dateType != 1 && dateType != 2 && dateType != 3 ? dateType : ''
     });
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
@@ -228,7 +180,6 @@ export default class AppStore extends Store {
         this.dispatch('client:table', res.context.viewList);
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -250,10 +201,7 @@ export default class AppStore extends Store {
     this.transaction(() => {
       //保存sortName和sortType
       this.dispatch('achieve:sortName', sorter.field ? sorter.field : 'amount');
-      this.dispatch(
-        'achieve:sortOrder',
-        sorter.field ? sorter.order : 'descend'
-      );
+      this.dispatch('achieve:sortOrder', sorter.field ? sorter.order : 'descend');
     });
   };
 

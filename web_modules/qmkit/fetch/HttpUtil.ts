@@ -119,7 +119,7 @@ class HttpUtil {
                 message: 'System Notification',
                 duration: null,
                 description: errStr,
-                onClick: () => {
+                onClose: () => {
                     _error_index = 0;
                 },
             });
@@ -142,7 +142,7 @@ class HttpUtil {
                         message: 'System Notification',
                         duration: null,
                         description: 'Service  timeout , try again later',
-                        onClick: () => {
+                        onClose: () => {
                             _error_index = 0;
                         },
                     });

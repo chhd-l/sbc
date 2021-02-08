@@ -43,7 +43,6 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
 
@@ -53,7 +52,6 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor:stock', res.context.valueEn);
       this.init(0, 10, res.context.valueEn);
     } else {
-      message.error(res.message);
     }
   };
 
@@ -67,8 +65,6 @@ export default class AppStore extends Store {
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(data.res.code);
     }
   };
 

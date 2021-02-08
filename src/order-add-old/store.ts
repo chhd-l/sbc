@@ -20,14 +20,7 @@ export default class AppStore extends Store {
   }, 500);
 
   bindActor() {
-    return [
-      new FormModalActor(),
-      new CustomerActor(),
-      new DeliveryAddressActor(),
-      new GoodsListActor(),
-      new ExtraInfoActor(),
-      new OrderActor()
-    ];
+    return [new FormModalActor(), new CustomerActor(), new DeliveryAddressActor(), new GoodsListActor(), new ExtraInfoActor(), new OrderActor()];
   }
 
   constructor(props) {
@@ -69,9 +62,7 @@ export default class AppStore extends Store {
     } else {
       const addrs = this.state().get('addrs');
       const selectedAddrId = this.state().get('selectedAddrId');
-      const consigneeSel = addrs.find(
-        (address) => address.get('deliveryAddressId') == selectedAddrId
-      );
+      const consigneeSel = addrs.find((address) => address.get('deliveryAddressId') == selectedAddrId);
       if (!consigneeSel || !consigneeSel.get('provinceId')) {
         this.calcPayTotal();
         //选择得用户，目前没有任何收获地址，也没有选中临时地址
@@ -91,22 +82,13 @@ export default class AppStore extends Store {
       .get('goodsList')
       .get('dataSource')
       .map((g) => {
-        const goodsInfo = others.find(
-          (o) => o.get('goodsInfoId') == g.get('goodsInfoId')
-        );
+        const goodsInfo = others.find((o) => o.get('goodsInfoId') == g.get('goodsInfoId'));
 
         if (goodsInfo && goodsInfo.get('goodsInfoId')) {
-          return goodsInfo
-            .set('num', goodsInfo.get('buyCount'))
-            .set('skuId', goodsInfo.get('goodsInfoId'));
+          return goodsInfo.set('num', goodsInfo.get('buyCount')).set('skuId', goodsInfo.get('goodsInfoId'));
         } else {
-          const splitPrice = g.get('splitPrice')
-            ? g.get('splitPrice')
-            : QMFloat.accMul(g.get('salePrice'), g.get('buyCount'));
-          return g
-            .set('num', g.get('buyCount'))
-            .set('skuId', g.get('goodsInfoId'))
-            .set('splitPrice', splitPrice);
+          const splitPrice = g.get('splitPrice') ? g.get('splitPrice') : QMFloat.accMul(g.get('salePrice'), g.get('buyCount'));
+          return g.set('num', g.get('buyCount')).set('skuId', g.get('goodsInfoId')).set('splitPrice', splitPrice);
         }
       });
 
@@ -120,21 +102,13 @@ export default class AppStore extends Store {
       consignee,
       deliverWay: this.state().get('extra').get('deliverWay'),
       tradePrice: {
-        totalPrice: QMFloat.accSubtr(
-          QMFloat.accSubtr(
-            this.state().get('goodsList').get('totalMoney'),
-            this.state().get('discountPrice')
-          ),
-          this.state().get('reductionPrice')
-        )
+        totalPrice: QMFloat.accSubtr(QMFloat.accSubtr(this.state().get('goodsList').get('totalMoney'), this.state().get('discountPrice')), this.state().get('reductionPrice'))
       },
       oldTradeItems: goodsList.toJS(),
       oldGifts: this.state()
         .get('goodsList')
         .get('giftDataSource')
-        .map((g) =>
-          g.set('num', g.get('count')).set('skuId', g.get('goodsInfoId'))
-        )
+        .map((g) => g.set('num', g.get('count')).set('skuId', g.get('goodsInfoId')))
         .toJS()
     };
 
@@ -149,10 +123,7 @@ export default class AppStore extends Store {
    */
   calcTotalMoney = () => {
     const goodsList = this.state().get('goodsList');
-    const goodsIntervalPrices = this.state().getIn([
-      'goodsList',
-      'goodsIntervalPrices'
-    ]);
+    const goodsIntervalPrices = this.state().getIn(['goodsList', 'goodsIntervalPrices']);
     const dataSource = goodsList.get('dataSource');
     const totalMoney = (
       dataSource.reduce((a, b) => {
@@ -163,11 +134,7 @@ export default class AppStore extends Store {
             return 0;
           }
           const prices = fromJS(b.get('intervalPriceIds') || [])
-            .map((id) =>
-              goodsIntervalPrices
-                .filter((price) => price && price.get('intervalPriceId') == id)
-                .first()
-            )
+            .map((id) => goodsIntervalPrices.filter((price) => price && price.get('intervalPriceId') == id).first())
             .filter((f) => f && f.get('count') <= buyCount)
             .maxBy((f) => f.get('count'));
           if (prices) {
@@ -199,12 +166,7 @@ export default class AppStore extends Store {
     if (isEnableSpecVal) {
       payTotal = QMFloat.accAdd(specVal, deliverFee).toFixed(2);
     } else {
-      payTotal = QMFloat.addZero(
-        QMFloat.accSubtr(
-          QMFloat.accAdd(deliverFee, totalMoney),
-          QMFloat.accAdd(discountPrice, reductionPrice)
-        )
-      );
+      payTotal = QMFloat.addZero(QMFloat.accSubtr(QMFloat.accAdd(deliverFee, totalMoney), QMFloat.accAdd(discountPrice, reductionPrice)));
     }
     this.dispatch('goodsList:setPayTotal', payTotal);
   };
@@ -214,10 +176,7 @@ export default class AppStore extends Store {
    */
   calcMarketings = () => {
     const goodsList = this.state().get('goodsList');
-    const goodsIntervalPrices = this.state().getIn([
-      'goodsList',
-      'goodsIntervalPrices'
-    ]);
+    const goodsIntervalPrices = this.state().getIn(['goodsList', 'goodsIntervalPrices']);
     let dataSource = goodsList.get('dataSource');
 
     // 1.计算每个商品的会员价，同时将商品按营销活动分组
@@ -231,35 +190,21 @@ export default class AppStore extends Store {
       if (rowInfo.get('priceType') === 1) {
         const prices = rowInfo
           .get('intervalPriceIds')
-          .map((id) =>
-            goodsIntervalPrices
-              .filter((price) => price.get('intervalPriceId') == id)
-              .first()
-          )
+          .map((id) => goodsIntervalPrices.filter((price) => price.get('intervalPriceId') == id).first())
           .filter((f) => f && f.get('count') <= buyCount)
           .maxBy((f) => f.get('count'));
         if (prices) {
           price = prices.get('price');
         }
       }
-      rowInfo = rowInfo
-        .set('salePrice', price)
-        .set('splitPrice', price * buyCount);
+      rowInfo = rowInfo.set('salePrice', price).set('splitPrice', price * buyCount);
       // 将商品按营销活动分组
       let skuMarketings = rowInfo.get('marketings');
       if (skuMarketings) {
-        let selMarketing = skuMarketings.find(
-          (marketing) =>
-            marketing.get('marketingId') == rowInfo.get('marketingId')
-        );
-        let index = marketings.findIndex(
-          (marketing) =>
-            marketing.get('marketingId') == rowInfo.get('marketingId')
-        );
+        let selMarketing = skuMarketings.find((marketing) => marketing.get('marketingId') == rowInfo.get('marketingId'));
+        let index = marketings.findIndex((marketing) => marketing.get('marketingId') == rowInfo.get('marketingId'));
         if (index != -1) {
-          marketings = marketings.updateIn([index, 'goodsInfos'], (goodsInfo) =>
-            goodsInfo.push(rowInfo)
-          );
+          marketings = marketings.updateIn([index, 'goodsInfos'], (goodsInfo) => goodsInfo.push(rowInfo));
         } else {
           marketings = marketings.push(
             selMarketing.merge({
@@ -286,10 +231,7 @@ export default class AppStore extends Store {
         count = 0;
       marketing.get('goodsInfos').forEach((value) => {
         count = QMFloat.accAdd(value.get('buyCount'), count);
-        prices = QMFloat.accAdd(
-          QMFloat.accMul(value.get('salePrice'), value.get('buyCount')),
-          prices
-        );
+        prices = QMFloat.accAdd(QMFloat.accMul(value.get('salePrice'), value.get('buyCount')), prices);
       });
       switch (marketing.get('subType')) {
         case 0: //满金额减
@@ -300,10 +242,7 @@ export default class AppStore extends Store {
           if (!levels.isEmpty()) {
             priceTmp = levels.last().get('reduction');
             reductionPrice = QMFloat.accAdd(reductionPrice, priceTmp);
-            marketing = marketing.set(
-              'marketingLevelId',
-              levels.last().get('reductionLevelId')
-            );
+            marketing = marketing.set('marketingLevelId', levels.last().get('reductionLevelId'));
           }
           break;
         case 1: //满数量减
@@ -315,10 +254,7 @@ export default class AppStore extends Store {
             priceTmp = levels.last().get('reduction');
             priceTmp = priceTmp > prices ? prices : priceTmp;
             reductionPrice = QMFloat.accAdd(reductionPrice, priceTmp);
-            marketing = marketing.set(
-              'marketingLevelId',
-              levels.last().get('reductionLevelId')
-            );
+            marketing = marketing.set('marketingLevelId', levels.last().get('reductionLevelId'));
           }
           break;
         case 2: //满金额折
@@ -327,15 +263,9 @@ export default class AppStore extends Store {
             .filter((level) => level.get('fullAmount') <= prices)
             .sort((l1, l2) => l1.get('fullAmount') > l2.get('fullAmount'));
           if (!levels.isEmpty()) {
-            priceTmp = QMFloat.accSubtr(
-              prices,
-              QMFloat.accMul(prices, levels.last().get('discount'))
-            );
+            priceTmp = QMFloat.accSubtr(prices, QMFloat.accMul(prices, levels.last().get('discount')));
             discountPrice = QMFloat.accAdd(discountPrice, priceTmp);
-            marketing = marketing.set(
-              'marketingLevelId',
-              levels.last().get('discountLevelId')
-            );
+            marketing = marketing.set('marketingLevelId', levels.last().get('discountLevelId'));
           }
           break;
         case 3: //满数量折
@@ -344,65 +274,43 @@ export default class AppStore extends Store {
             .filter((level) => level.get('fullCount') <= count)
             .sort((l1, l2) => l1.get('fullCount') > l2.get('fullCount'));
           if (!levels.isEmpty()) {
-            priceTmp = QMFloat.accSubtr(
-              prices,
-              QMFloat.accMul(prices, levels.last().get('discount'))
-            );
+            priceTmp = QMFloat.accSubtr(prices, QMFloat.accMul(prices, levels.last().get('discount')));
             discountPrice = QMFloat.accAdd(discountPrice, priceTmp);
-            marketing = marketing.set(
-              'marketingLevelId',
-              levels.last().get('discountLevelId')
-            );
+            marketing = marketing.set('marketingLevelId', levels.last().get('discountLevelId'));
           }
           break;
         case 4: //满金额赠
           levels = marketing
             .get('fullGiftLevelList')
             .map((level) => {
-              if (level.get('fullAmount') <= prices)
-                return level.set('edit', true);
+              if (level.get('fullAmount') <= prices) return level.set('edit', true);
               return level;
             })
             .sort((l1, l2) => l1.get('fullAmount') > l2.get('fullAmount'));
           if (levels.first().get('edit')) {
-            newGiftMarketings = newGiftMarketings.push(
-              marketing.set('fullGiftLevelList', levels)
-            );
+            newGiftMarketings = newGiftMarketings.push(marketing.set('fullGiftLevelList', levels));
           }
           break;
         case 5: //满数量赠
           levels = marketing
             .get('fullGiftLevelList')
             .map((level) => {
-              if (level.get('fullCount') <= count)
-                return level.set('edit', true);
+              if (level.get('fullCount') <= count) return level.set('edit', true);
               return level;
             })
             .sort((l1, l2) => l1.get('fullCount') > l2.get('fullCount'));
           if (levels.first().get('edit')) {
-            newGiftMarketings = newGiftMarketings.push(
-              marketing.set('fullGiftLevelList', levels)
-            );
+            newGiftMarketings = newGiftMarketings.push(marketing.set('fullGiftLevelList', levels));
           }
           break;
       }
       //计算商品的营销均摊价
-      return marketing.set(
-        'goodsInfos',
-        this._calcSplitPrice(
-          marketing.get('goodsInfos'),
-          QMFloat.accSubtr(prices, Math.round(priceTmp * 100) / 100)
-        )
-      );
+      return marketing.set('goodsInfos', this._calcSplitPrice(marketing.get('goodsInfos'), QMFloat.accSubtr(prices, Math.round(priceTmp * 100) / 100)));
     });
-    const giftMarketingIds = newGiftMarketings.map((item) =>
-      item.get('marketingId')
-    );
+    const giftMarketingIds = newGiftMarketings.map((item) => item.get('marketingId'));
     this.dispatch(
       'goodsList:setOtherMarketings',
-      marketings.filter(
-        (item) => !giftMarketingIds.contains(item.get('marketingId'))
-      )
+      marketings.filter((item) => !giftMarketingIds.contains(item.get('marketingId')))
     );
     this.dispatch('goodsList:setGiftMarketings', newGiftMarketings);
     this.dispatch('goodsList:setReductionPrice', reductionPrice.toFixed(2));
@@ -415,9 +323,7 @@ export default class AppStore extends Store {
       return tradeItems.map((tradeItem) => tradeItem.set('splitPrice', 0));
     }
 
-    const total = tradeItems
-      .map((item) => item.get('splitPrice'))
-      .reduce((a, b) => QMFloat.accAdd(a, b), 0);
+    const total = tradeItems.map((item) => item.get('splitPrice')).reduce((a, b) => QMFloat.accAdd(a, b), 0);
 
     //内部总价为零或相等不用修改
     if (total == 0 || total == newTotal) {
@@ -428,18 +334,9 @@ export default class AppStore extends Store {
     let splitPriceTotal = 0; //累积平摊价，将剩余扣给最后一个元素
     return tradeItems.map((tradeItem, i) => {
       if (i == size - 1) {
-        return tradeItem.set(
-          'splitPrice',
-          QMFloat.accSubtr(newTotal, splitPriceTotal)
-        );
+        return tradeItem.set('splitPrice', QMFloat.accSubtr(newTotal, splitPriceTotal));
       } else {
-        const herePrice =
-          Math.round(
-            (Math.floor((tradeItem.get('splitPrice') / total) * 1000000) /
-              1000000) *
-              newTotal *
-              100
-          ) / 100;
+        const herePrice = Math.round((Math.floor((tradeItem.get('splitPrice') / total) * 1000000) / 1000000) * newTotal * 100) / 100;
         splitPriceTotal = QMFloat.accAdd(splitPriceTotal, herePrice);
         return tradeItem.set('splitPrice', herePrice);
       }
@@ -466,7 +363,6 @@ export default class AppStore extends Store {
     let { code, context: orderInfo, message: orderError } = orderRes;
 
     if (code != Const.SUCCESS_CODE) {
-      message.error(orderError);
       return;
     }
 
@@ -495,24 +391,14 @@ export default class AppStore extends Store {
       const {
         res: { context: startingMarketingsRes }
       } = (await webapi.fetchStartingMarketing({
-        marketingIds: tradeMarketings.map((marketing) =>
-          marketing.get('marketingId')
-        )
+        marketingIds: tradeMarketings.map((marketing) => marketing.get('marketingId'))
       })) as any;
-      startingMarketings = fromJS(startingMarketingsRes)
-        ? fromJS(startingMarketingsRes)
-        : fromJS([]);
-      const invalidMarketings = tradeMarketings.filter(
-        (marketing) =>
-          !startingMarketings.includes(marketing.get('marketingId'))
-      );
+      startingMarketings = fromJS(startingMarketingsRes) ? fromJS(startingMarketingsRes) : fromJS([]);
+      const invalidMarketings = tradeMarketings.filter((marketing) => !startingMarketings.includes(marketing.get('marketingId')));
       if (invalidMarketings.size > 0) {
         confirm({
           title: '优惠失效提醒',
-          content: `很抱歉${invalidMarketings.reduce(
-            (a, b) => `${a}，${b.get('marketingName')}`,
-            ''
-          )}活动已失效！`,
+          content: `很抱歉${invalidMarketings.reduce((a, b) => `${a}，${b.get('marketingName')}`, '')}活动已失效！`,
           okText: '继续修改',
           cancelText: '放弃修改',
           onCancel() {
@@ -542,9 +428,7 @@ export default class AppStore extends Store {
     let customerInvoiceTempAddressVisiable = false;
     if (!orderInvoice.get('addressId') && orderInvoice.get('provinceId')) {
       customerInvoiceTempAddressVisiable = true;
-      orderInvoice = orderInvoice
-        .set('addressId', 'tempId')
-        .set('name', orderInvoice.get('contacts'));
+      orderInvoice = orderInvoice.set('addressId', 'tempId').set('name', orderInvoice.get('contacts'));
     }
     //订单商品项
     const tradeItems = detail.get('tradeItems');
@@ -558,9 +442,7 @@ export default class AppStore extends Store {
     if (goodsResponse.code != Const.SUCCESS_CODE) return;
     // 商品列表、商品列表区间价当前信息
     let goodsInfos = fromJS(goodsResponse.context).get('goodsInfos');
-    let goodsIntervalPrices = fromJS(goodsResponse.context).get(
-      'goodsIntervalPrices'
-    );
+    let goodsIntervalPrices = fromJS(goodsResponse.context).get('goodsIntervalPrices');
 
     //批量查询商品生效的营销活动
     const { res: goodsMarketingsRes } = (await webapi.fetchGoodsMarketings({
@@ -571,23 +453,14 @@ export default class AppStore extends Store {
 
     //商品列表
     goodsInfos = goodsInfos.map((sku) => {
-      const matchSku = tradeItems.find(
-        (item) => item.get('skuId') == sku.get('goodsInfoId')
-      );
+      const matchSku = tradeItems.find((item) => item.get('skuId') == sku.get('goodsInfoId'));
 
       // 1.根据商品营销的情况，设置商品营销
       let skuMarketings = skuMarketingsMap.get(sku.get('goodsInfoId'));
-      skuMarketings =
-        skuMarketings && skuMarketings.size > 0 ? skuMarketings : undefined;
-      const marketingId = matchSku.get('marketingIds')
-        ? matchSku.get('marketingIds').get(0)
-        : null;
+      skuMarketings = skuMarketings && skuMarketings.size > 0 ? skuMarketings : undefined;
+      const marketingId = matchSku.get('marketingIds') ? matchSku.get('marketingIds').get(0) : null;
       if (marketingId && skuMarketings) {
-        if (
-          skuMarketings
-            .map((item) => item.get('marketingId'))
-            .includes(marketingId)
-        ) {
+        if (skuMarketings.map((item) => item.get('marketingId')).includes(marketingId)) {
           // 1.1.如果商品已选营销没失效，设置商品营销
           sku = sku.set('marketingId', marketingId);
         } else if (skuMarketings.size > 0) {
@@ -613,17 +486,10 @@ export default class AppStore extends Store {
     });
 
     // 从请求中获取满减、满折总金额
-    const discountsPriceDetails =
-      tradePrice.get('discountsPriceDetails') || fromJS([]);
-    const reduction = discountsPriceDetails.find(
-      (item) => item.get('marketingType') == 0
-    );
-    const discount = discountsPriceDetails.find(
-      (item) => item.get('marketingType') == 1
-    );
-    tradePrice = tradePrice
-      .set('reduction', reduction)
-      .set('discount', discount);
+    const discountsPriceDetails = tradePrice.get('discountsPriceDetails') || fromJS([]);
+    const reduction = discountsPriceDetails.find((item) => item.get('marketingType') == 0);
+    const discount = discountsPriceDetails.find((item) => item.get('marketingType') == 1);
+    tradePrice = tradePrice.set('reduction', reduction).set('discount', discount);
 
     //订单中商品的已购买数量
     const oldBuyCount = goodsInfos.map((sku) => {
@@ -661,21 +527,14 @@ export default class AppStore extends Store {
     const sellerRemark = detail.get('sellerRemark');
     //用户收货地址
     const { res } = (await webapi.addressList(accoutId)) as any;
-    let {
-      code: addressCode,
-      context: addressContext,
-      message: addressError
-    } = res;
+    let { code: addressCode, context: addressContext, message: addressError } = res;
 
     if (addressCode != Const.SUCCESS_CODE) {
-      message.error(addressError);
       return;
     }
 
     //订单附件
-    const encloses = detail.get('encloses')
-      ? detail.get('encloses').split(',')
-      : [];
+    const encloses = detail.get('encloses') ? detail.get('encloses').split(',') : [];
     const images = encloses.map((url, index) => {
       return { uid: index, name: index, size: 1, status: 'done', url: url };
     });
@@ -731,9 +590,7 @@ export default class AppStore extends Store {
 
     //初始赠品信息
     startingMarketings.forEach(async (marketingId) => {
-      const marketing = tradeMarketings.find(
-        (item) => item.get('marketingId') == marketingId
-      );
+      const marketing = tradeMarketings.find((item) => item.get('marketingId') == marketingId);
       //获取营销的赠品详情
       const {
         res: {
@@ -771,7 +628,6 @@ export default class AppStore extends Store {
       let { code, context, message: errorInfo } = res;
 
       if (code != Const.SUCCESS_CODE) {
-        message.error(errorInfo);
         return;
       }
 
@@ -836,8 +692,6 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.switchCustomerFormVisible(false);
-    } else {
-      message.error(res.message);
     }
     return res.code;
   };
@@ -885,23 +739,17 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       const { res } = (await webapi.addressList(customerId)) as any;
       let { code, context, message: errorInfo } = res;
-
-      if (code != Const.SUCCESS_CODE) {
-        message.error(errorInfo);
-        return;
-      }
-
-      this.transaction(() => {
-        this.dispatch('switchAddressFormVisible', {
-          field: 'switchAddressFormVisible',
-          result: true
+      if (code === Const.SUCCESS_CODE) {
+        this.transaction(() => {
+          this.dispatch('switchAddressFormVisible', {
+            field: 'switchAddressFormVisible',
+            result: true
+          });
+          const addressType = this.state().get('addressType');
+          this.dispatch('addrs:add', { addressList: context, addressType });
+          this.dispatch('addressType', 0);
         });
-        const addressType = this.state().get('addressType');
-        this.dispatch('addrs:add', { addressList: context, addressType });
-        this.dispatch('addressType', 0);
-      });
-    } else {
-      message.error(res.message);
+      }
     }
   };
 
@@ -922,15 +770,11 @@ export default class AppStore extends Store {
       }
 
       let addrs = this.state().get('addrs');
-      const index = addrs.findIndex(
-        (add) => add.get('deliveryAddressId') == editId
-      );
+      const index = addrs.findIndex((add) => add.get('deliveryAddressId') == editId);
       addrs = addrs.setIn([index], address);
 
       let invoiceAddrs = this.state().get('invoiceAddrs');
-      const invoiceIndex = invoiceAddrs.findIndex(
-        (add) => add.get('deliveryAddressId') == editId
-      );
+      const invoiceIndex = invoiceAddrs.findIndex((add) => add.get('deliveryAddressId') == editId);
       invoiceAddrs = invoiceAddrs.setIn([invoiceIndex], address);
       this.transaction(() => {
         this.dispatch('addrs:invoice:reset-edit-index');
@@ -944,7 +788,6 @@ export default class AppStore extends Store {
         this.dispatch('addrs:edit:save', fromJS(addrs.toJS()));
       });
     } else {
-      message.error(res.message);
       this.dispatch('switchVisible', {
         field: 'switchAddressFormVisible',
         result: false
@@ -960,8 +803,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.deleteAddress(addressId);
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('addrs:delete', addressId);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -1015,10 +856,7 @@ export default class AppStore extends Store {
    * 如果已经缓存，则不做处理
    */
   getGiftList = async (params) => {
-    const giftList = this.state().getIn([
-      'marketingGiftList',
-      params.marketingId
-    ]);
+    const giftList = this.state().getIn(['marketingGiftList', params.marketingId]);
     if (giftList) return;
     const { res } = (await webapi.fetchGiftList(params)) as any;
     this.dispatch('goodsList:setGiftList', {
@@ -1151,17 +989,9 @@ export default class AppStore extends Store {
    * @param forceCommit 是否忽略营销变动，直接提交
    * @param validDeliver 是否验证配送费用变更
    */
-  onCreateOrder = async (
-    edit: boolean,
-    forceCommit = false,
-    validDeliver = true
-  ) => {
+  onCreateOrder = async (edit: boolean, forceCommit = false, validDeliver = true) => {
     await this._calcFreight();
-    if (
-      edit &&
-      validDeliver &&
-      !this.state().getIn(['goodsList', 'isEnableDeliverFee'])
-    ) {
+    if (edit && validDeliver && !this.state().getIn(['goodsList', 'isEnableDeliverFee'])) {
       let newPrice = this.state().getIn(['goodsList', 'deliverFee']);
       newPrice = (newPrice || 0).toFixed(2);
       let oldPrice = this.state().getIn(['oldTradePrice', 'deliveryPrice']);
@@ -1169,13 +999,10 @@ export default class AppStore extends Store {
       if (newPrice != oldPrice) {
         confirm({
           title: '配送费用变更',
-          content: `由于配送地区、商品、运费模板或者运费计算模式发生了变化，配送费用已由￥{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + oldPrice}变更为${
-            sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + newPrice
-          }，您可手动修改后再保存或者直接保存！`,
+          content: `由于配送地区、商品、运费模板或者运费计算模式发生了变化，配送费用已由￥{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + oldPrice}变更为${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + newPrice}，您可手动修改后再保存或者直接保存！`,
           okText: '直接保存',
           cancelText: '我要修改',
-          onOk: () =>
-            this.onCreateOrder(this.state().get('edit'), forceCommit, false)
+          onOk: () => this.onCreateOrder(this.state().get('edit'), forceCommit, false)
         });
         return;
       }
@@ -1201,13 +1028,9 @@ export default class AppStore extends Store {
       const areaId = address.get('areaId');
 
       //收货地址的修改时间
-      consigneeUpdateTime = moment(address.get('updateTime')).format(
-        Const.TIME_FORMAT
-      );
+      consigneeUpdateTime = moment(address.get('updateTime')).format(Const.TIME_FORMAT);
       //收货地址
-      consigneeAddress =
-        FindArea.addressInfo(provinceId, cityId, areaId) +
-        address.get('deliveryAddress');
+      consigneeAddress = FindArea.addressInfo(provinceId, cityId, areaId) + address.get('deliveryAddress');
     }
 
     //获取选中的货品
@@ -1223,29 +1046,17 @@ export default class AppStore extends Store {
     const tradePrice = {};
 
     //是否开启特价
-    const isEnableSpecVal = this.state().getIn([
-      'goodsList',
-      'isEnableSpecVal'
-    ]);
+    const isEnableSpecVal = this.state().getIn(['goodsList', 'isEnableSpecVal']);
     if (isEnableSpecVal) {
       //特价金额
       tradePrice['special'] = true;
-      tradePrice['privilegePrice'] = this.state().getIn([
-        'goodsList',
-        'specVal'
-      ]);
+      tradePrice['privilegePrice'] = this.state().getIn(['goodsList', 'specVal']);
     }
     //是否开启运费
-    const isEnableDeliverFee = this.state().getIn([
-      'goodsList',
-      'isEnableDeliverFee'
-    ]);
+    const isEnableDeliverFee = this.state().getIn(['goodsList', 'isEnableDeliverFee']);
     if (isEnableDeliverFee) {
       tradePrice['enableDeliveryPrice'] = true;
-      tradePrice['deliveryPrice'] = this.state().getIn([
-        'goodsList',
-        'deliverFee'
-      ]);
+      tradePrice['deliveryPrice'] = this.state().getIn(['goodsList', 'deliverFee']);
     }
     const invoice = {};
 
@@ -1263,20 +1074,14 @@ export default class AppStore extends Store {
       //普通
       if (invoiceType == 0) {
         const generalInvoice = {};
-        const invoiceProjectType = this.state().getIn([
-          'extra',
-          'invoiceProjectType'
-        ]);
+        const invoiceProjectType = this.state().getIn(['extra', 'invoiceProjectType']);
         generalInvoice['flag'] = invoiceProjectType;
         //单位
         if (invoiceProjectType == 1) {
           //发票抬头
           const invoiceTitle = this.state().getIn(['extra', 'invoiceTitle']);
           generalInvoice['title'] = invoiceTitle;
-          generalInvoice['identification'] = this.state().getIn([
-            'extra',
-            'taxNo'
-          ]);
+          generalInvoice['identification'] = this.state().getIn(['extra', 'taxNo']);
         }
         invoice['generalInvoice'] = generalInvoice;
       } else if (invoiceType == 1) {
@@ -1286,10 +1091,7 @@ export default class AppStore extends Store {
         const invoiceFlag = this.state().get('invoiceFlag');
         const invoices = this.state().get('invoice');
         if (invoiceFlag && invoices) {
-          specialInvoice['id'] = invoices.getIn([
-            'customerInvoiceResponse',
-            'customerInvoiceId'
-          ]);
+          specialInvoice['id'] = invoices.getIn(['customerInvoiceResponse', 'customerInvoiceId']);
           invoice['specialInvoice'] = specialInvoice;
         }
       }
@@ -1298,17 +1100,11 @@ export default class AppStore extends Store {
       const invoiceResult = this.state().getIn(['extra', 'invoiceResult']);
       invoice['projectId'] = invoiceResult;
       //开票项目选项
-      const projectOptions = fromJS(
-        this.state().getIn(['extra', 'projectOptions'])
-      );
+      const projectOptions = fromJS(this.state().getIn(['extra', 'projectOptions']));
       //开票项目Name
-      const project = projectOptions
-        .filter((project) => project.get('projectId') == invoiceResult)
-        .first();
+      const project = projectOptions.filter((project) => project.get('projectId') == invoiceResult).first();
       invoice['projectName'] = project.get('projectName');
-      invoice['projectUpdateTime'] = moment(
-        project.get('projectUpdateTime')
-      ).format(Const.TIME_FORMAT);
+      invoice['projectUpdateTime'] = moment(project.get('projectUpdateTime')).format(Const.TIME_FORMAT);
 
       //是否使用发票独立收货地址
       const sperator = this.state().getIn(['extra', 'sperator']);
@@ -1327,9 +1123,7 @@ export default class AppStore extends Store {
           //收货地址
           const iConsigneeAddress = invoiceAddress.get('deliveryAddress');
           invoice['address'] = iConsigneeAddress;
-          invoice['updateTime'] = moment(
-            invoiceAddress.get('updateTime')
-          ).format(Const.TIME_FORMAT);
+          invoice['updateTime'] = moment(invoiceAddress.get('updateTime')).format(Const.TIME_FORMAT);
           invoice['addressId'] = selectedInvoiceAddrId;
         }
       } else {
@@ -1367,11 +1161,7 @@ export default class AppStore extends Store {
     params['consignee'] = this.state().get('consignee');
 
     if (tempAddressMode) {
-      params['consigneeAddress'] = `${FindArea.addressInfo(
-        params['consignee'].get('provinceId'),
-        params['consignee'].get('cityId'),
-        params['consignee'].get('areaId')
-      )}${params['consignee'].get('address')}`;
+      params['consigneeAddress'] = `${FindArea.addressInfo(params['consignee'].get('provinceId'), params['consignee'].get('cityId'), params['consignee'].get('areaId'))}${params['consignee'].get('address')}`;
     }
 
     params['invoiceConsignee'] = this.state().get('invoiceConsignee');
@@ -1388,12 +1178,7 @@ export default class AppStore extends Store {
           // 如果是满赠，处理赠品
           let level = item
             .get('fullGiftLevelList')
-            .filter(
-              (level) =>
-                level
-                  .get('fullGiftDetailList')
-                  .filter((gift) => gift.get('checked') == true).size > 0
-            )
+            .filter((level) => level.get('fullGiftDetailList').filter((gift) => gift.get('checked') == true).size > 0)
             .first();
           if (level) {
             marketing.marketingLevelId = level.get('giftLevelId');
@@ -1406,9 +1191,7 @@ export default class AppStore extends Store {
           // 否则直接记录levelId
           marketing.marketingLevelId = item.get('marketingLevelId');
         }
-        marketing.skuIds = item
-          .get('goodsInfos')
-          .map((goodsInfo) => goodsInfo.get('goodsInfoId'));
+        marketing.skuIds = item.get('goodsInfos').map((goodsInfo) => goodsInfo.get('goodsInfoId'));
         return marketing;
       })
       .filter((item) => item.marketingLevelId != undefined);
@@ -1424,9 +1207,7 @@ export default class AppStore extends Store {
     //清空临时地址
     this.emptyTempAddress(params);
     this.dispatch('order:submitting', true);
-    const { res } = edit
-      ? await webapi.remedyOrder(params)
-      : await webapi.createOrder(params);
+    const { res } = edit ? await webapi.remedyOrder(params) : await webapi.createOrder(params);
 
     this.dispatch('order:submitting', false);
 
@@ -1442,24 +1223,10 @@ export default class AppStore extends Store {
         onOk: () => this.onCreateOrder(this.state().get('edit'), true),
         onCancel: () => history.push('/order-add')
       });
-    } else {
-      message.error(res.message);
     }
   };
 
-  private emptyTempAddress(params: {
-    consigneeId: any;
-    consigneeAddress: string;
-    consigneeUpdateTime: string;
-    tradeItems: any;
-    tradePrice: {};
-    invoice: any;
-    buyerRemark: any;
-    sellerRemark: any;
-    encloses: string;
-    deliverWay: any;
-    payType: any;
-  }) {
+  private emptyTempAddress(params: { consigneeId: any; consigneeAddress: string; consigneeUpdateTime: string; tradeItems: any; tradePrice: {}; invoice: any; buyerRemark: any; sellerRemark: any; encloses: string; deliverWay: any; payType: any }) {
     if (params.consigneeId == 'tempId') {
       params.consigneeId = null;
     }

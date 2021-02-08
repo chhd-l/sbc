@@ -10,6 +10,7 @@ const { SubMenu } = Menu;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TabPane } = Tabs;
+import { Const } from 'qmkit';
 
 const { Column } = Table;
 
@@ -114,7 +115,7 @@ class PetInfomation extends React.Component<any, any> {
       .querySysDictionary(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (type === 'dogBreed') {
             let dogBreed = res.context.sysDictionaryVOS;
             this.setState({
@@ -128,13 +129,9 @@ class PetInfomation extends React.Component<any, any> {
               catBreed: catBreed
             });
           }
-        } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch((err) => {
-        message.error('Get data failed');
-      });
+      .catch((err) => {});
   };
   getSpecialNeeds = (array) => {
     let needs = [];
@@ -157,7 +154,7 @@ class PetInfomation extends React.Component<any, any> {
         this.setState({
           loading: false
         });
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
@@ -183,12 +180,9 @@ class PetInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch((err) => {
-        message.error('Get data failed');
-      });
+      .catch((err) => {});
   };
   editPets = () => {
     this.setState({
@@ -234,15 +228,11 @@ class PetInfomation extends React.Component<any, any> {
       .editPets(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Update data failed');
         }
       })
-      .catch((err) => {
-        message.error('Update data failed');
-      });
+      .catch((err) => {});
   };
 
   petsById = (id) => {
@@ -253,7 +243,7 @@ class PetInfomation extends React.Component<any, any> {
       .petsById(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let currentPet = res.context.context;
           let petsPropRelations = this.getSpecialNeeds(currentPet.petsPropRelations);
           if (currentPet.petsType === 'cat') {
@@ -281,13 +271,9 @@ class PetInfomation extends React.Component<any, any> {
             petForm: currentPet,
             currentBirthDay: currentPet.birthOfPets
           });
-        } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch((err) => {
-        message.error('Get data failed');
-      });
+      .catch((err) => {});
   };
 
   render() {

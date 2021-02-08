@@ -4,15 +4,7 @@ import GoodsActor from './actor/goods-actor';
 import FormActor from './actor/form-actor';
 import { message } from 'antd';
 import { Const, QMFloat, ValidConst } from 'qmkit';
-import {
-  goodsList,
-  getCateList,
-  getBrandList,
-  addDistributionGoods,
-  delDistributionGoods,
-  modifyDistributionGoodsCommission,
-  modifyDistributionGoods
-} from './webapi';
+import { goodsList, getCateList, getBrandList, addDistributionGoods, delDistributionGoods, modifyDistributionGoodsCommission, modifyDistributionGoods } from './webapi';
 import * as webapi from '../distribution-setting/webapi';
 
 export default class AppStore extends Store {
@@ -34,9 +26,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
-    const searchForm = this.state()
-      .get('form')
-      .toJS();
+    const searchForm = this.state().get('form').toJS();
     //已审核通过的
     const { res } = (await goodsList({
       ...searchForm,
@@ -49,7 +39,6 @@ export default class AppStore extends Store {
         pageNum: pageNum
       });
     } else {
-      message.error(res.message);
     }
 
     const cates: any = await getCateList();
@@ -72,10 +61,7 @@ export default class AppStore extends Store {
       // 如果分销设置里，分销佣金开关开启，取设置的佣金
       // this.onFieldChange('settingCommission', context.commission);
       if (context.openFlag == 1) {
-        this.onFieldChange(
-          'commissionRate',
-          QMFloat.accMul(context.commissionRate, 100).toFixed(0)
-        );
+        this.onFieldChange('commissionRate', QMFloat.accMul(context.commissionRate, 100).toFixed(0));
       }
       this.onFieldChange('settingOpenFlag', context.openFlag);
     }
@@ -140,9 +126,7 @@ export default class AppStore extends Store {
    * 验证InputGroupCompact控件数值大小，并进行大小值交换
    */
   checkSwapInputGroupCompact = () => {
-    const params = this.state()
-      .get('form')
-      .toJS();
+    const params = this.state().get('form').toJS();
     const {
       optGoodsType,
       salePriceFirst,
@@ -166,17 +150,11 @@ export default class AppStore extends Store {
       return validateFlag;
     }
 
-    if (
-      distributionCommissionFirst &&
-      !ValidConst.zeroPrice.test(distributionCommissionFirst)
-    ) {
+    if (distributionCommissionFirst && !ValidConst.zeroPrice.test(distributionCommissionFirst)) {
       return validateFlag;
     }
 
-    if (
-      distributionCommissionLast &&
-      !ValidConst.zeroPrice.test(distributionCommissionLast)
-    ) {
+    if (distributionCommissionLast && !ValidConst.zeroPrice.test(distributionCommissionLast)) {
       return validateFlag;
     }
 
@@ -188,10 +166,7 @@ export default class AppStore extends Store {
       return validateFlag;
     }
 
-    if (
-      commissionRateFirst &&
-      !ValidConst.zeroPrice.test(commissionRateFirst)
-    ) {
+    if (commissionRateFirst && !ValidConst.zeroPrice.test(commissionRateFirst)) {
       return validateFlag;
     }
 
@@ -222,10 +197,7 @@ export default class AppStore extends Store {
         value: salePriceFirst
       });
     }
-    if (
-      parseFloat(distributionCommissionFirst) >
-      parseFloat(distributionCommissionLast)
-    ) {
+    if (parseFloat(distributionCommissionFirst) > parseFloat(distributionCommissionLast)) {
       this.onFormFieldChange({
         key: 'distributionCommissionFirst',
         value: distributionCommissionLast
@@ -282,15 +254,11 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   onDelete = async (goodsInfoId, goodsInfoNo) => {
-    const { res } = (await delDistributionGoods(
-      goodsInfoId,
-      goodsInfoNo
-    )) as any;
+    const { res } = (await delDistributionGoods(goodsInfoId, goodsInfoNo)) as any;
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.init({ pageNum: 0, pageSize: 10 });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -303,17 +271,8 @@ export default class AppStore extends Store {
   onShowEditCommissionModal = async (data) => {
     this.onFieldChange('editGoodsInfoId', data.goodsInfoId);
     this.onFieldChange('editMarketPrice', data.marketPrice);
-    this.onFieldChange(
-      'editDistributionCommission',
-      QMFloat.addZeroFloor(data.distributionCommission)
-    );
-    this.onFieldChange(
-      'editCommissionRate',
-      QMFloat.accMul(
-        data.commissionRate ? data.commissionRate : 0,
-        100
-      ).toFixed(0)
-    );
+    this.onFieldChange('editDistributionCommission', QMFloat.addZeroFloor(data.distributionCommission));
+    this.onFieldChange('editCommissionRate', QMFloat.accMul(data.commissionRate ? data.commissionRate : 0, 100).toFixed(0));
     this.onFieldChange('distributionGoodsAudit', data.distributionGoodsAudit);
     this.switchShowModal(true);
   };
@@ -331,11 +290,7 @@ export default class AppStore extends Store {
    * @param distributionCommission
    * @returns {Promise<void>}
    */
-  onSaveCommission = async (
-    goodsInfoId,
-    distributionCommission,
-    commissionRate
-  ) => {
+  onSaveCommission = async (goodsInfoId, distributionCommission, commissionRate) => {
     const distributionGoodsAudit = this.state().get('distributionGoodsAudit');
     let commissionRateInput = QMFloat.accDiv(commissionRate, 100);
     if (distributionGoodsAudit == 2) {
@@ -349,7 +304,6 @@ export default class AppStore extends Store {
         this.switchShowModal(false);
         this.init({ pageNum: 0, pageSize: 10 });
       } else {
-        message.error(res.message);
       }
     } else if (distributionGoodsAudit != 1) {
       const { res } = (await modifyDistributionGoods({
@@ -362,7 +316,6 @@ export default class AppStore extends Store {
         this.switchShowModal(false);
         this.init({ pageNum: 0, pageSize: 10 });
       } else {
-        message.error(res.message);
       }
     }
   };
@@ -382,14 +335,9 @@ export default class AppStore extends Store {
    */
   editCommissionFuc = (marketingPrice, value) => {
     let rate = QMFloat.accDiv(value, 100);
-    let editDistributionCommission = QMFloat.addZeroFloor(
-      QMFloat.accMul(marketingPrice, rate)
-    );
+    let editDistributionCommission = QMFloat.addZeroFloor(QMFloat.accMul(marketingPrice, rate));
     this.onFieldChange('editCommissionRate', value);
-    this.onFieldChange(
-      'editDistributionCommission',
-      editDistributionCommission
-    );
+    this.onFieldChange('editDistributionCommission', editDistributionCommission);
   };
 
   /**
@@ -487,10 +435,8 @@ export default class AppStore extends Store {
       this.onCancelChoseSkuFun();
       this.init({ pageNum: 0, pageSize: 10 });
     } else if (res.code == 'K-030701') {
-      message.error(res.message);
       this.onFieldChange('invalidGoodsInfoIds', fromJS(res.errorData));
     } else {
-      message.error(res.message);
     }
   };
 }

@@ -10,12 +10,7 @@ import * as webapi from './webapi';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new TabActor(),
-      new ListActor(),
-      new FormActor(),
-      new LoadingActor()
-    ];
+    return [new TabActor(), new ListActor(), new FormActor(), new LoadingActor()];
   }
 
   constructor(props) {
@@ -41,28 +36,22 @@ export default class AppStore extends Store {
       form['returnFlowState'] = values[1];
     }
 
-    webapi
-      .fetchOrderReturnList({ ...form, pageNum, pageSize })
-      .then(({ res }) => {
-        if (res.code === Const.SUCCESS_CODE) {
-          this.transaction(() => {
-            this.dispatch('order-return-list:loading:end');
-            this.dispatch('order-return-list:init', {
-              flushSelected: flushSelected,
-              ...res.context
-            });
-            this.dispatch(
-              'order-return-list:page',
-              fromJS({ currentPage: pageNum + 1 })
-            );
+    webapi.fetchOrderReturnList({ ...form, pageNum, pageSize }).then(({ res }) => {
+      if (res.code === Const.SUCCESS_CODE) {
+        this.transaction(() => {
+          this.dispatch('order-return-list:loading:end');
+          this.dispatch('order-return-list:init', {
+            flushSelected: flushSelected,
+            ...res.context
           });
-        } else {
-          message.error(res.message);
-          if (res.code === 'K-110001') {
-            this.dispatch('order-return-list:loading:end');
-          }
+          this.dispatch('order-return-list:page', fromJS({ currentPage: pageNum + 1 }));
+        });
+      } else {
+        if (res.code === 'K-110001') {
+          this.dispatch('order-return-list:loading:end');
         }
-      });
+      }
+    });
   };
 
   onSearchFormChange = (searchFormParams) => {
@@ -117,10 +106,7 @@ export default class AppStore extends Store {
 
   //线上退款 modal状态改变
   onRefundOnlineModalChange = (status) => {
-    this.dispatch(
-      'order-return-detail:refund-online-modal:change',
-      fromJS(status)
-    );
+    this.dispatch('order-return-detail:refund-online-modal:change', fromJS(status));
   };
 
   onlineRefundModalHide = () => {
@@ -138,8 +124,6 @@ export default class AppStore extends Store {
         if (res.code == Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
       .catch(() => {});
@@ -152,8 +136,6 @@ export default class AppStore extends Store {
         if (res.code == Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
       .catch(() => {});
@@ -166,8 +148,6 @@ export default class AppStore extends Store {
         if (res.code == Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.init();
-        } else {
-          message.error(res.message || res.code);
         }
       })
       .catch(() => {});
@@ -180,8 +160,6 @@ export default class AppStore extends Store {
         if (res.code == Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
       .catch(() => {});
@@ -194,8 +172,6 @@ export default class AppStore extends Store {
         if (res.code == Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
       .catch(() => {});
@@ -208,8 +184,6 @@ export default class AppStore extends Store {
         if (res.code == Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
       .catch(() => {});
@@ -222,8 +196,6 @@ export default class AppStore extends Store {
         if (res.code == Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
       .catch(() => {});
@@ -234,8 +206,6 @@ export default class AppStore extends Store {
       if (res.code == Const.SUCCESS_CODE) {
         message.success('Operate successfully');
         this.init();
-      } else {
-        message.error(res.message);
       }
     });
   };
@@ -245,8 +215,6 @@ export default class AppStore extends Store {
       if (res.code == Const.SUCCESS_CODE) {
         message.success('Operate successfully');
         this.init();
-      } else {
-        message.error(res.message);
       }
     });
   };
@@ -263,7 +231,6 @@ export default class AppStore extends Store {
 
       // 提示异常信息
       if (code != Const.SUCCESS_CODE) {
-        message.error(errorInfo);
       } else {
         // 退款的回调是异步的，立刻刷新页面可能退单的状态还没有被回调修改。所以先给个提示信息，延迟3秒后再刷新列表
         message.success('Operate successfully');
@@ -280,8 +247,6 @@ export default class AppStore extends Store {
       const errorInfo = res.message;
       // 提示异常信息
       if (code != Const.SUCCESS_CODE) {
-        message.error(errorInfo);
-
         if (code === 'K-040017') {
           throw Error('K-040017');
         }

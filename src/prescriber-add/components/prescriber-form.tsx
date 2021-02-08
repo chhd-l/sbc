@@ -121,13 +121,9 @@ class ClinicForm extends React.Component<any, any> {
               rewardForm: res.context
             });
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
 
   saveReward = (id?) => {
@@ -163,14 +159,12 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -229,8 +223,6 @@ class ClinicForm extends React.Component<any, any> {
         auditAuthority: res.context.auditAuthority
       });
       this.getClinicsReward(res.context.prescriberId);
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   queryClinicsDictionary = async (type: String) => {
@@ -241,8 +233,6 @@ class ClinicForm extends React.Component<any, any> {
       this.setState({
         typeArr: res.context
       });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   querySysDictionary = async (type: String) => {
@@ -253,8 +243,6 @@ class ClinicForm extends React.Component<any, any> {
       this.setState({
         cityArr: res.context.sysDictionaryVOS
       });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   getClinicsLites = async () => {
@@ -263,8 +251,6 @@ class ClinicForm extends React.Component<any, any> {
       this.setState({
         clinicsLites: res.context
       });
-    } else {
-      message.error(res.message);
     }
   };
   onFormChange = ({ field, value }) => {
@@ -307,14 +293,12 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
   onUpdate = () => {
@@ -342,14 +326,12 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -458,7 +440,7 @@ class ClinicForm extends React.Component<any, any> {
   handleCopy = (value) => {
     if (copy(value)) {
       message.success('Operate successfully');
-    } else message.error('Unsuccessful');
+    }
   };
 
   switchTab = (key) => {
@@ -504,11 +486,7 @@ class ClinicForm extends React.Component<any, any> {
               });
             }
           );
-        } else {
-          message.error(res.message || 'Recommendation Code is empty');
         }
-      } else {
-        message.error(res.message || 'get Recommendation Code failed');
       }
     });
   };
@@ -549,13 +527,9 @@ class ClinicForm extends React.Component<any, any> {
             cityArr: res.context.systemCityVO,
             objectFetching: false
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
 
   render() {

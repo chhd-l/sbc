@@ -36,7 +36,6 @@ export default class AppStore extends Store {
     });
     if (res.code != Const.SUCCESS_CODE) {
       this.dispatch('loading:start');
-      message.error(res.message);
     }
     let couponList = [];
     if (res.context) {
@@ -105,7 +104,6 @@ export default class AppStore extends Store {
   deleteCoupon = async (id) => {
     const { res } = await webapi.deleteCoupon(id);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     message.success('Operate successfully');
@@ -118,7 +116,6 @@ export default class AppStore extends Store {
   copyCoupon = async (id) => {
     const { res } = await webapi.copyCoupon(id);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     message.success('Operate successfully');

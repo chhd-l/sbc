@@ -41,8 +41,6 @@ export default class AppStore extends Store {
         this.dispatch('select:init', []);
       });
     } else {
-      message.error(res.message);
-
       this.dispatch('loading:end');
     }
   };
@@ -152,7 +150,6 @@ export default class AppStore extends Store {
       this.init(param);
       this.dispatch('modal:hide');
     } else {
-      message.error(res.message);
     }
   };
 
@@ -256,7 +253,6 @@ export default class AppStore extends Store {
       };
       this.init(param);
     } else {
-      message.error(res.message);
     }
   }
 

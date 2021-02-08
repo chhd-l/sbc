@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb, DragTable } from 'qmkit';
+import { Headline, BreadCrumb, DragTable, Const } from 'qmkit';
 import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch, Form, Modal, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -55,7 +55,7 @@ class NavigationList extends Component<any, any> {
       .getNavigations(language)
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let dataSource = [];
           let allTopNavigationName = [];
           res.context.map((item) => {
@@ -90,7 +90,6 @@ class NavigationList extends Component<any, any> {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   }
   updateNavigationStatus(record, checked) {
@@ -108,18 +107,16 @@ class NavigationList extends Component<any, any> {
           .updateNavigationStatus(record.id, enable)
           .then((data) => {
             const { res } = data;
-            if (res.code === 'K-000000') {
+            if (res.code === Const.SUCCESS_CODE) {
               message.success('Operate successfully');
               that.getNavigationList(that.state.selectLanguage);
             } else {
-              message.error(res.message || 'Update Failed');
               that.setState({
                 loading: false
               });
             }
           })
           .catch((err) => {
-            message.error(err || 'Update Failed');
             that.setState({
               loading: false
             });
@@ -135,18 +132,14 @@ class NavigationList extends Component<any, any> {
       .sortNavigations(sortList)
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.setState({
             loading: false
           });
-        } else {
-          message.error(res.message || 'Sort Failed');
         }
       })
-      .catch((err) => {
-        message.error(err || 'Sort Failed');
-      });
+      .catch((err) => {});
   }
   deleteNavigation(record) {
     if (record.children && record.children.length > 0) {
@@ -160,18 +153,16 @@ class NavigationList extends Component<any, any> {
       .deleteNavigation(record.id)
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.getNavigationList(this.state.selectLanguage);
         } else {
-          message.error(res.message || 'Delete Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Delete Failed');
         this.setState({
           loading: false
         });

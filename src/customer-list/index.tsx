@@ -1,6 +1,6 @@
 import React from 'react';
 import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip } from 'antd';
-import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
+import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -157,7 +157,7 @@ export default class Customer extends React.Component<any, any> {
       })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let pagination = this.state.pagination;
           let searchList = res.context.detailResponseList;
           if (searchList.length > 0) {
@@ -185,15 +185,12 @@ export default class Customer extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Unsuccessful');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-
         this.setState({
           loading: false
         });
@@ -220,7 +217,7 @@ export default class Customer extends React.Component<any, any> {
   //   webapi
   //     .delCustomer(params)
   //     .then((data) => {
-  //       if (data.res.code === 'K-000000') {
+  //       if (data.res.code === Const.SUCCESS_CODE) {
   //         message.success('Operate successfully');
   //         this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
   //       } else {

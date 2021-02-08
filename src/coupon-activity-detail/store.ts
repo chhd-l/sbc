@@ -26,7 +26,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.activityDetail(id);
     if (res.code != Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
     //拼装页面需要展示的参数 couponInfoList
     let { couponInfoList, couponActivityConfigList, couponActivity, customerDetailVOS } = res.context;

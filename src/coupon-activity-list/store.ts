@@ -40,7 +40,6 @@ export default class AppStore extends Store {
     });
     if (res.code != Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
     let activityList = res.context.content;
     const now = moment();
@@ -70,7 +69,6 @@ export default class AppStore extends Store {
       const levRes = await webapi.getUserLevelList();
       if (levRes.res.code != Const.SUCCESS_CODE) {
         this.dispatch('loading:end');
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.storeLevelVOList;
@@ -84,7 +82,6 @@ export default class AppStore extends Store {
       const levRes = await webapi.allCustomerLevel();
       if (levRes.res.code != Const.SUCCESS_CODE) {
         this.dispatch('loading:end');
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.customerLevelVOList;
@@ -126,7 +123,6 @@ export default class AppStore extends Store {
   deleteActivity = async (id) => {
     const { res } = await webapi.deleteActivity(id);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     message.success('Operate successfully');
@@ -140,7 +136,6 @@ export default class AppStore extends Store {
   pauseActivity = async (id) => {
     const { res } = await webapi.pauseActivity(id);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     message.success('Operate successfully');
@@ -153,7 +148,6 @@ export default class AppStore extends Store {
   startActivity = async (id) => {
     const { res } = await webapi.startActivity(id);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     message.success('Operate successfully');

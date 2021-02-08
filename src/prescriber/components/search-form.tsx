@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Select, Input, Button } from 'antd';
-import { SelectGroup, AreaSelect, noop } from 'qmkit';
+import { SelectGroup, AreaSelect, noop, Const } from 'qmkit';
 import * as webapi from '../webapi';
 
 const FormItem = Form.Item;
@@ -28,7 +28,7 @@ export default class SearchForm extends React.Component<any, any> {
       pageNum,
       pageSize
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.props.getClinicList(res.context);
     }
   };

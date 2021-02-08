@@ -81,14 +81,12 @@ class OrderSetting extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Get config failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err || 'Get config failed');
       });
   };
   save = (params) => {
@@ -98,13 +96,9 @@ class OrderSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Save config failed');
         }
       })
-      .catch((err) => {
-        message.error(err || 'Save config failed');
-      });
+      .catch((err) => {});
   };
   getGoodsCategory = () => {
     webapi
@@ -120,14 +114,12 @@ class OrderSetting extends Component<any, any> {
           this.setState({
             categoryLoading: false
           });
-          message.error(res.message || 'Get goods category failed!');
         }
       })
       .catch((err) => {
         this.setState({
           categoryLoading: false
         });
-        message.error(err || 'Get goods category failed!');
       });
   };
   updateCategoryStatus = (params) => {
@@ -145,14 +137,12 @@ class OrderSetting extends Component<any, any> {
           this.setState({
             categoryLoading: false
           });
-          message.error(res.message || 'Update failed');
         }
       })
       .catch((err) => {
         this.setState({
           categoryLoading: false
         });
-        message.error(err || 'Update failed');
       });
   };
 
@@ -171,14 +161,12 @@ class OrderSetting extends Component<any, any> {
           this.setState({
             categoryLoading: false
           });
-          message.error(res.message || 'Update failed');
         }
       })
       .catch((err) => {
         this.setState({
           categoryLoading: false
         });
-        message.error(err || 'Update failed');
       });
   };
 
@@ -345,7 +333,7 @@ class OrderSetting extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline title={title} />
-          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <div style={{ margin: 20 }}>
               <span style={{ marginRight: 20 }}>Audit method:</span>
               <Radio.Group onChange={this.onAuditMethodChange} value={auditMethod}>

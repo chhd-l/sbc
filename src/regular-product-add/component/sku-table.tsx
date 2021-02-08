@@ -117,23 +117,11 @@ class SkuForm extends React.Component<any, any> {
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
-
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
-      /*let a = ''
 
-
-
-      if(goodsSpecs.toJS().length == 1) {
-        a = a.merge(goodsSpecs)
-      }
-      setTimeout(()=>{
-        console.log(goodsSpecs.toJS(),11111111);
-
-
-      })*/
       columns = goodsSpecs
         .map((item, i) => {
           return {
@@ -288,17 +276,21 @@ class SkuForm extends React.Component<any, any> {
       title: 'Weight unit',
       key: 'goodsInfoUnit',
       render: (rowInfo) => {
+       /* setTimeout(()=>{
+          console.log(goodsSpecs.toJS(),22222222);
+        })*/
         return (
           <Row>
             <Col span={6}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
-                  initialValue: rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'
+                  initialValue: rowInfo.goodsInfoUnit !== null ? rowInfo.goodsInfoUnit : 'kg'
                 })(
                   <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '60px' }} placeholder="please select unit">
                     <Option value="kg">kg</Option>
                     <Option value="g">g</Option>
+                    <Option value="lb">lb</Option>
                   </Select>
                 )}
               </FormItem>

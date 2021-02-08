@@ -45,29 +45,29 @@ class HttpUtil {
                         if (response.status == 200 && response.ok) {
                             _error_index = 0;
                             _timerOut = 0;
-                            if (jsonBody.code === 'K-999996') {
-                                message.error(jsonBody.message);
+                            if (jsonBody.code === 'K-999997') {
+                                HttpUtil.notificationPop(jsonBody.message)
                                 return;
                             }
                             // token 过期时，前端直接处理
-                            else if (jsonBody.code === 'K-000002') {
-                                message.error(jsonBody.message);
-                                util.logout();
-                                history.push('/login');
+                            else if (jsonBody.code === 'K-080016') {
+                                HttpUtil.notificationPop(jsonBody.message)
+                                history.go(-1)
                             }
                             // 账号禁用 统一返回到登录页面
-                            else if (['K-000005', 'K-000015'].includes(jsonBody.code)) {
-                                message.error(msg[jsonBody.code]);
-                                history.push('login', { oktaLogout: true })
-                                return;
+                            else if (['K-000002', 'K-000005', 'K-000015'].includes(jsonBody.code)) {
+                                HttpUtil.notificationPop(msg[jsonBody.code] || jsonBody.message)
+                                util.logout();
+                                history.push('/login')
                             } else if (jsonBody === 'Method Not Allowed') {
-                                message.error('You do not have permission to access this feature');
-                                return;
-                            } else {
+                                let message = 'You do not have permission to access this feature'
+                                HttpUtil.notificationPop(message)
+                            } else if (jsonBody.code === 'K-000000') {
                                 resolve(HttpUtil.handleResult(jsonBody, httpCustomerOpertion))
+                            } else {
+                                reject(HttpUtil.handleFailedResult({ code: jsonBody.code, message: jsonBody.message, error: jsonBody.message }, httpCustomerOpertion))
                             }
                         } else {
-
                             reject(HttpUtil.handleFailedResult({ code: response.status, message: jsonBody.message, error: jsonBody.message }, httpCustomerOpertion))
                         }
 
@@ -100,9 +100,7 @@ class HttpUtil {
         if (code && httpCustomerOpertion.isHandleResult === true) {
             const errMsg = result.msg || result.message;
             const errStr = `${errMsg}`
-            //message.success(errStr)
         }
-
         return result
     }
     /**
@@ -111,21 +109,24 @@ class HttpUtil {
      *
      */
     static handleFailedResult(result, httpCustomerOpertion) {
-
         if (result.code && httpCustomerOpertion.isHandleResult === true) {
             const errMsg = result.msg || result.message;
             const errStr = `${errMsg}（${result.code}）`
-            _error_index === 0 && notification.error({
-                message: 'System Notification',
-                duration: 5,
-                description: errStr,
-                onClose: () => {
-                    _error_index = 0;
-                },
-            });
+            _error_index === 0 && HttpUtil.notificationPop(errStr)
         }
         _error_index++;
         return result;
+    }
+    static notificationPop(errStr) {
+        return notification.error({
+            message: 'System Notification',
+            duration: 5,
+            key:'error_pop',
+            description: errStr,
+            onClose: () => {
+                _error_index = 0;
+            },
+        });
     }
     /**
      * 控制Fetch请求是否超时
@@ -138,60 +139,11 @@ class HttpUtil {
                 if (!httpCustomerOpertion.isFetched) {
                     // 还未收到响应，则开始超时逻辑，并标记fetch需要放弃
                     httpCustomerOpertion.isAbort = true
-                    notification.info({
-                        message: 'System Notification',
-                        duration: 5,
-                        description: 'Service  timeout , try again later',
-                        onClose: () => {
-                            _error_index = 0;
-                        },
-                    });
+                    HttpUtil.notificationPop('Service  timeout , try again later')
                     reject({ code: "timeout", message: 'Service  timeout , try again later' })
                 }
             }, httpCustomerOpertion.timeout || 40000)
         })
     }
-
-
-    /**
-     * 
-     * @param status 请求成功的状态
-     * fetchUrl.split('?')[0]
-     */
-    static findErrorInterfaceReload(status, errorObj) {
-        let _index = errorList.findIndex(item => item.fetchUrl === errorObj.fetchUrl)
-        if (!status && _index === -1) {
-            errorList.push(errorObj);
-        } else if (status && _index > -1) {
-            errorList.splice(_index, 1)
-        }
-        const reoloadApi = () => {
-            _timerOut++;
-            new Promise((resolve, reject) => {
-                if ((errorList.length - 1) === _times) {
-                    _times = 0;
-                } else {
-                    _times++;
-                    reoloadApi();
-                }
-
-                let obj = errorList[_times];
-                resolve(obj);
-            }).then((obj: any) => {
-
-                if (typeof obj.fetchUrl === 'string') {
-                    obj.fetchUrl += `${obj.fetchUrl.indexOf('?') == -1 ? '?reqId=' : '&reqId='
-                        }${Math.random()}`;
-                }
-                HttpUtil.handleFetchData(obj.fetchUrl, obj.fetchParams, obj.httpCustomerOpertion);
-            }).catch(e => {
-                console.error(e)
-            });
-
-        }
-        // errorList.length>0&&_timerOut<errorList.length&&reoloadApi();
-
-    }
-
 }
 export default HttpUtil;

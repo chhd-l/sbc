@@ -902,11 +902,11 @@ const routes = [
   {
     path: '/pet-owner-all/:id',
     asyncComponent: () => import('./pet-owner-all')
+  },
+  {
+    path: '/prescriber-booking-detail',
+    asyncComponent: () => import('./prescriber-booking-detail')
   }
-  // {
-  //   path: '/invoice-details',
-  //   asyncComponent: () => import('./invoice-details')
-  // }
 ];
 
 const homeRoutes = [

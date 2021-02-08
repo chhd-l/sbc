@@ -543,7 +543,9 @@ export default class ClinicList extends Component<any, any> {
               </Col>
             </Row>
           </Form>
-          <div style={{ textAlign: 'left' }}>
+        </div>
+        <div className="container">
+          <div style={{ textAlign: 'left', marginBottom: 10 }}>
             <Button
               style={{}}
               icon="download"
@@ -566,8 +568,7 @@ export default class ClinicList extends Component<any, any> {
               </Link>
             </Button>
           </div>
-        </div>
-        <div className="container">
+
           <Table
             rowKey="id"
             columns={columns}

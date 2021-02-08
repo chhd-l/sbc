@@ -360,22 +360,6 @@ const styles = {
   },
   wrapper: {
     width: 200
-  },
-  successPoint: {
-    display: 'inline-block',
-    width: 7,
-    height: 7,
-    margin: '0 5px 2px 0',
-    background: '#008900',
-    borderRadius: '50%'
-  },
-  warningPoint: {
-    display: 'inline-block',
-    width: 7,
-    height: 7,
-    margin: '0 5px 2px 0',
-    background: '#EE8B00',
-    borderRadius: '50%'
   }
 } as any;
 

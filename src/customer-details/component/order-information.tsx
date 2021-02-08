@@ -7,6 +7,10 @@ interface Iprop {
   endDate: string;
 }
 
+interface Istyle {
+  [key: string]: React.CSSProperties;
+}
+
 export default class OrderInformation extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
     super(props);
@@ -108,7 +112,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
   }
 }
 
-const styles = {
+const styles: Istyle = {
   loading: {
     textAlign: 'center',
     height: 300

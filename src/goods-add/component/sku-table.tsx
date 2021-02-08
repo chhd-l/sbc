@@ -405,6 +405,7 @@ class SkuForm extends React.Component<any, any> {
                   <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select unit">
                     <Option value="kg">kg</Option>
                     <Option value="g">g</Option>
+                    <Option value="lb">lb</Option>
                   </Select>
                 )}
               </FormItem>

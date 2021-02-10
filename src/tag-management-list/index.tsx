@@ -17,7 +17,7 @@ class TagManagementList extends Component<any, any> {
       searchForm: {
         tagName: '',
         tagDescription: '',
-        publishedStatus: ''
+        publishedStatus: null
       },
       pagination: {
         current: 1,
@@ -29,13 +29,87 @@ class TagManagementList extends Component<any, any> {
     };
   }
   componentDidMount() {
-    this.getTagList();
+    this.init();
   }
+  init = () => {
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        },
+        searchForm: {
+          tagName: '',
+          tagDescription: '',
+          publishedStatus: null
+        }
+      },
+      () => {
+        this.getTagList();
+      }
+    );
+  };
   updateTagPublishedStatus = (status, row) => {
-    console.log(status, row);
+    let params = {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      isPublished: status
+    };
+    this.editTag(params);
+  };
+  editTag = (params) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .editTag(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.getTagList();
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   deleteTag = (id) => {
-    console.log(id);
+    let idList = [];
+    idList.push(id);
+    let params = {
+      idList: idList
+    };
+    webapi
+      .deleteTag(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.getTagList();
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   onSearchFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -45,22 +119,57 @@ class TagManagementList extends Component<any, any> {
     });
   };
   onSearch = () => {
-    const { searchForm, pagination } = this.state;
-    console.log(searchForm, pagination);
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => {
+        this.getTagList();
+      }
+    );
   };
   getTagList = () => {
-    let tagList = [];
-    let tag = {
-      tagName: 'test_1',
-      tagDescription: 'test_1',
-      publishedStatus: false,
-      id: 123,
-      petOwner: 5
+    const { searchForm, pagination } = this.state;
+    let params = {
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize,
+      description: searchForm.tagDescription,
+      isPublished: searchForm.publishedStatus === 1 ? true : searchForm.publishedStatus === 0 ? false : null,
+      name: searchForm.tagName
     };
-    tagList.push(tag);
     this.setState({
-      tagList
+      loading: true
     });
+    webapi
+      .getTagList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          const { pagination } = this.state;
+          let tagList = res.context.segmentList;
+          pagination.total = res.context.total;
+          this.setState({
+            tagList,
+            loading: false,
+            pagination
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
 
   handleTableChange = (pagination) => {
@@ -80,14 +189,14 @@ class TagManagementList extends Component<any, any> {
     const columns = [
       {
         title: 'Tag name',
-        dataIndex: 'tagName',
-        key: 'tagName',
+        dataIndex: 'name',
+        key: 'name',
         width: '15%'
       },
       {
         title: 'Tag description',
-        dataIndex: 'tagDescription',
-        key: 'tagDescription',
+        dataIndex: 'description',
+        key: 'description',
         width: '15%'
       },
       {
@@ -96,7 +205,7 @@ class TagManagementList extends Component<any, any> {
         key: 'isPublished',
         width: '10%',
         render: (text, record) => (
-          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? 'disable' : 'enable') + ' this item?'} onConfirm={() => this.updateTagPublishedStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? 'unpublish' : 'publish') + ' this item?'} onConfirm={() => this.updateTagPublishedStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
             <Switch checked={+text ? true : false}></Switch>
           </Popconfirm>
         )
@@ -191,14 +300,14 @@ class TagManagementList extends Component<any, any> {
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onSearchFormChange({
-                              field: 'publishStatus',
+                              field: 'publishedStatus',
                               value
                             });
                           }}
                         >
-                          <Option value="">All</Option>
-                          <Option value="published">Published</Option>
-                          <Option value="unpublished">Unpublished</Option>
+                          <Option value={null}>All</Option>
+                          <Option value={1}>Published</Option>
+                          <Option value={0}>Unpublished</Option>
                         </Select>
                       </InputGroup>
                     </FormItem>
@@ -251,22 +360,6 @@ const styles = {
   },
   wrapper: {
     width: 200
-  },
-  successPoint: {
-    display: 'inline-block',
-    width: 7,
-    height: 7,
-    margin: '0 5px 2px 0',
-    background: '#008900',
-    borderRadius: '50%'
-  },
-  warningPoint: {
-    display: 'inline-block',
-    width: 7,
-    height: 7,
-    margin: '0 5px 2px 0',
-    background: '#EE8B00',
-    borderRadius: '50%'
   }
 } as any;
 

@@ -44,7 +44,6 @@ let LoginHome = (props) => {
       login(routerType, authState.accessToken);
     }
   }, [authState, authService]);
-
   return (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) || toOkta ? (
     <div>
       <div style={styles.noBackgroundContainer}>

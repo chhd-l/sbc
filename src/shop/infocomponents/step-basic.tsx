@@ -88,6 +88,19 @@ export default class StepOneEdit extends React.Component<any, any> {
     }
     return '';
   }
+  getCountryName = (data, id) => {
+    let result = data.find((x) => x.id === id);
+    if (result) {
+      if (result.valueEn) {
+        sessionStorage.setItem('currentCountry', result.valueEn);
+      } else {
+        sessionStorage.setItem('currentCountry', '');
+      }
+      return result.valueEn;
+    }
+    sessionStorage.setItem('currentCountry', '');
+    return '';
+  };
   getVaulesByData(data, ids) {
     let idlist = ids ? ids.toJS() : [];
     let valueList = [];
@@ -185,7 +198,7 @@ export default class StepOneEdit extends React.Component<any, any> {
             <Row>
               <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="targetCountry" />}>
-                  <p style={{ color: '#333' }}>{this.getVauleByData(countryData, storeInfo.get('countryId'))}</p>
+                  <p style={{ color: '#333' }}>{this.getCountryName(countryData, storeInfo.get('countryId'))}</p>
                 </FormItem>
               </Col>
               <Col span={12}>

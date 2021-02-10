@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AuthWrapper } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Button, Form, Input, Row, Col, message, Select, Spin, Breadcrumb, Card, Avatar, Pagination, Icon, Popconfirm } from 'antd';
+import { Button, Form, Input, Row, Col, message, Select, Spin, Breadcrumb, Card, Avatar, Pagination, Icon, Popconfirm, Empty } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -10,9 +10,6 @@ import AddPetOwner from './components/add-pet-owner';
 
 const { Search } = Input;
 const { Meta } = Card;
-const FormItem = Form.Item;
-const Option = Select.Option;
-const InputGroup = Input.Group;
 
 class TagManagementDetail extends Component<any, any> {
   constructor(props: any) {
@@ -23,20 +20,61 @@ class TagManagementDetail extends Component<any, any> {
       pagination: {
         current: 1,
         pageSize: 9,
-        total: 10
+        total: 0
       },
-      tagDetail: {},
+      tagDetail: {
+        tagName: '',
+        tagDescription: '',
+        // createdBy:'',
+        createdTime: '',
+        // modifiedBy:'',
+        lastModified: ''
+      },
       keyword: '',
-      petOwnerList: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }],
+      petOwnerList: [],
       loading: false,
       visible: false
     };
   }
   componentDidMount() {
-    this.getTagDeatail(this.state.id);
+    this.getTagDetail(this.state.id);
+    this.getIncludePetOwnerList();
   }
-  getTagDeatail = (id) => {
-    console.log(id);
+  getTagDetail = (id) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getTagDetail(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let tempObj = res.context;
+          let tagDetail = {
+            tagName: tempObj.name,
+            tagDescription: tempObj.description,
+            // createdBy:'',
+            createdTime: tempObj.createTime,
+            // modifiedBy:'',
+            lastModified: tempObj.updateTime
+          };
+          this.setState({
+            tagDetail,
+            loading: false
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   onSearch = (value) => {
     this.setState(
@@ -55,7 +93,26 @@ class TagManagementDetail extends Component<any, any> {
     console.log(page, pageSize);
   };
   deletePetOwner = (id) => {
-    console.log(id);
+    webapi
+      .deletePetOwnerBindTag({ id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.getIncludePetOwnerList();
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   getIncludePetOwnerList = () => {
     const { pagination, keyword, id } = this.state;
@@ -63,32 +120,44 @@ class TagManagementDetail extends Component<any, any> {
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1,
       keyword: keyword,
-      tagId: id
+      segmentId: id
     };
-    console.log(params);
-  };
-  openModal = () => {
     this.setState({
-      visible: true
+      loading: true
     });
-  };
-  closeModal = (isRefresh) => {
-    this.setState(
-      {
-        visible: false
-      },
-      () => {
-        if (isRefresh) {
-          this.onSearch('');
+    webapi
+      .getBindPetOwner(params)
+      .then((data) => {
+        const { res } = data;
+        this.setState({
+          loading: true
+        });
+        if (res.code === Const.SUCCESS_CODE) {
+          let petOwnerList = res.context.segmentCustomerRelList;
+          pagination.total = res.context.total;
+          this.setState({
+            petOwnerList,
+            loading: false,
+            pagination
+          });
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
         }
-      }
-    );
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
 
   render() {
     const { loading, title, tagDetail, petOwnerList, pagination, visible, id, keyword } = this.state;
-
-    const { getFieldDecorator } = this.props.form;
 
     return (
       <AuthWrapper functionName="f_tag_management_detail">
@@ -106,24 +175,24 @@ class TagManagementDetail extends Component<any, any> {
                     <span style={styles.detailValue}>{tagDetail.tagDescription}</span>
                   </p>
                 </Col>
-                <Col span={10}>
+                {/* <Col span={10}>
                   <p style={styles.detailDesc}>
                     Created by:
                     <span style={styles.detailValue}>{tagDetail.createdBy}</span>
                   </p>
-                </Col>
+                </Col> */}
                 <Col span={10}>
                   <p style={styles.detailDesc}>
                     Created on:
                     <span style={styles.detailValue}>{tagDetail.createdTime}</span>
                   </p>
                 </Col>
-                <Col span={10}>
+                {/* <Col span={10}>
                   <p style={styles.detailDesc}>
                     Modified by:
                     <span style={styles.detailValue}>{tagDetail.modifiedBy}</span>
                   </p>
-                </Col>
+                </Col> */}
                 <Col span={10}>
                   <p style={styles.detailDesc}>
                     Last Modified:
@@ -137,19 +206,27 @@ class TagManagementDetail extends Component<any, any> {
                 title={'Pet owner list (' + pagination.total + ')'}
                 extra={
                   <div>
-                    <Search placeholder="Please input keyword" value={keyword} onChange={(value) => this.setState({ keyword: value })} onSearch={(value) => this.onSearch(value)} style={{ width: 200 }} />
-                    <Button type="primary" style={{ marginLeft: 20 }} onClick={this.openModal}>
-                      <p>New</p>
-                    </Button>
+                    <Search
+                      placeholder="Please input keyword"
+                      value={keyword}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        this.setState({ keyword: value });
+                      }}
+                      onSearch={(value) => this.onSearch(value)}
+                      style={{ width: 200, marginRight: 20 }}
+                    />
+                    <AddPetOwner tagId={id} refreshFunction={this.onSearch} />
                   </div>
                 }
               />
               <Row>
+                {petOwnerList && petOwnerList.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
                 {petOwnerList &&
                   petOwnerList.map((item, index) => (
                     <Col span={8}>
                       <Card style={{ width: 330, marginTop: 16 }} key={index}>
-                        <Meta avatar={<Avatar size={64} icon="user" />} title="Card title" description="This is the description" />
+                        <Meta avatar={<Avatar size={64} icon="user" />} title={<div>{item.customer.customerDetail && item.customer.customerDetail.firstName + ' ' + item.customer.customerDetail.lastName}</div>} description={<div>{item.customer.customerAccount}</div>} />
                         <div
                           style={{
                             position: 'absolute',
@@ -180,8 +257,6 @@ class TagManagementDetail extends Component<any, any> {
                 {<FormattedMessage id="back" />}
               </Button>
             </div>
-
-            <AddPetOwner visible={visible} tagId={id} closeFunction={this.closeModal} />
           </Spin>
         </div>
       </AuthWrapper>
@@ -195,7 +270,8 @@ const styles = {
     lineHeight: 2
   },
   detailValue: {
-    color: '#221357'
+    color: '#221357',
+    marginLeft: 10
   },
   deleteStyle: {
     color: '#e2001a',

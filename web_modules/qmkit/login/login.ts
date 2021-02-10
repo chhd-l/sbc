@@ -25,7 +25,7 @@ export function getRoutType(callbackUrl: string) {
   }
 }
 
-export async function login(routerType, oktaToken: string) {
+export async function login(routerType, oktaToken: string,callback?:Function) {
   var res = {} as TResult;
   if (oktaToken) {
     sessionStorage.setItem(
@@ -50,6 +50,7 @@ export async function login(routerType, oktaToken: string) {
       ) as any ;
       res = resLocal.res as TResult;
   }
+  console.log('-----ssss---',res.context)
 
   if ((res as any).code === Const.SUCCESS_CODE) {
     if(res.context.checkState === 1) { // need checked
@@ -74,7 +75,6 @@ export async function login(routerType, oktaToken: string) {
       history.push('/login', {oktaLogout : true})
       return
     }
-
     if(res.context.accountState === 3) {
       message.error('Your account is inactivated')
       history.push('/login', {oktaLogout : true})
@@ -131,6 +131,8 @@ export async function login(routerType, oktaToken: string) {
         message.error(employee.res.message)
       }*/
 
+    
+  
       /**
        * 审核状态 0、待审核 1、已审核 2、审核未通过 -1、未开店
        */
@@ -181,6 +183,7 @@ export async function login(routerType, oktaToken: string) {
           //申请开店
           history.push('/shop-process');
       }
+      callback(res.context)
     } else {
         message.error(menusRes.res.message);
     }

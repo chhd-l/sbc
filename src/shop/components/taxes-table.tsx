@@ -30,7 +30,11 @@ export default class TaxesTable extends React.Component<any, any> {
   }
 
   updateStatus = (check, row) => {
-    console.log(check, row);
+    let param = {
+      id: row.id,
+      taxZoneStatus: +check
+    };
+    this.props.updateFunction(param);
   };
 
   deleteTax = (id) => {
@@ -63,23 +67,26 @@ export default class TaxesTable extends React.Component<any, any> {
         title: 'Zone Type',
         key: 'zoneType',
         dataIndex: 'taxZoneType',
-        width: '10%'
+        width: '10%',
+        render: (text) => {
+          return <p>{text ? 'Country based' : 'States based'}</p>;
+        }
       },
       {
         title: 'Rate(range 0-1)',
-        key: 'rate',
-        dataIndex: 'taxRates',
+        key: 'taxRate',
+        dataIndex: 'taxRate',
         width: '10%'
       },
       {
         title: 'Status',
-        key: 'status',
-        dataIndex: 'status',
+        key: 'taxZoneStatus',
+        dataIndex: 'taxZoneStatus',
         width: '10%',
         render: (text, row) => {
-          const check = +text ? true : false;
+          let check = +text ? true : false;
           return (
-            <Popconfirm title={'Are you sure to ' + (check ? ' disable' : 'enable') + ' this?'} onConfirm={() => this.updateStatus(check, row)} okText="Yes" cancelText="No">
+            <Popconfirm title={'Are you sure to ' + (check ? ' disable' : 'enable') + ' this?'} onConfirm={() => this.updateStatus(!check, row)} okText="Yes" cancelText="No">
               <Switch checked={check} />
             </Popconfirm>
           );

@@ -13,7 +13,7 @@ export default class emails extends Component<any, any> {
       emailLoading: false,
       emailList: [
         {
-          activityName: "New booking in /'clinics name' from /'2021-01-29T09:31 to /'2021-01-29T10:31'",
+          activityName: 'New booking in /\'clinics name\' from /\'2021-01-29T09:31 to /\'2021-01-29T10:31\'',
           activityType: 'Clinic Booking',
           auditId: 8018,
           category: 'Clinic',
@@ -28,9 +28,9 @@ export default class emails extends Component<any, any> {
         }
       ]
     };
-    this.activitiesEamilSort = this.activitiesEamilSort.bind(this);
+    this.activitiesEmailSort = this.activitiesEmailSort.bind(this);
   }
-  activitiesEamilSort() {}
+  activitiesEmailSort() {}
   render() {
     const { emailLoading, emailList } = this.state;
     const menu = (
@@ -64,8 +64,8 @@ export default class emails extends Component<any, any> {
                       </CheckboxGroup>
                     </Menu>
                   </Dropdown> */}
-          <Button className="sortBtn" onClick={this.activitiesEamilSort}>
-            <span className="icon iconfont iconbianzu8" style={{ fontSize: '22px' }} />
+          <Button className="sortBtn" onClick={this.activitiesEmailSort}>
+            <span className="icon iconfont iconbianzu" style={{ fontSize: '22px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">

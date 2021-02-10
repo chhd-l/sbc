@@ -193,7 +193,7 @@ class TaskUpdate extends Component<any, any> {
                         rules: [{ required: true, message: 'Please select golden moment' }]
                       })(
                         <Select
-                          disabled={taskCompleted || !!task.goldenMoment}
+                          // disabled={taskCompleted || !!task.goldenMoment}
                           onChange={(value) =>
                             this.onChange({
                               field: 'goldenMoment',

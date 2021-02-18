@@ -27,6 +27,24 @@ export default class Task extends Component<any, any> {
     this.onFormChange = this.onFormChange.bind(this);
   }
 
+  componentDidMount() {
+    webapi
+      .getGlodenMomentList()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            goldenMomentList: res.context.sysDictionaryVOS
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+  }
+
   onFormChange = ({ field, value }) => {
     let data = this.state.taskForm;
     data[field] = value;
@@ -61,6 +79,7 @@ export default class Task extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
+                    showSearch
                     label={<p style={styles.label}>Golden Moment</p>}
                     style={{ width: 195 }}
                     onChange={(value) => {
@@ -75,9 +94,9 @@ export default class Task extends Component<any, any> {
                       <FormattedMessage id="all" />
                     </Option>
                     {goldenMomentList &&
-                      goldenMomentList.map((item, index) => (
-                        <Option value={item} key={index}>
-                          {item}
+                      goldenMomentList.map((item) => (
+                        <Option value={item.value} key={item.id}>
+                          {item.value}
                         </Option>
                       ))}
                   </SelectGroup>
@@ -260,8 +279,5 @@ const styles = {
   label: {
     width: 143,
     textAlign: 'center'
-  },
-  wrapper: {
-    width: 157
   }
 } as any;

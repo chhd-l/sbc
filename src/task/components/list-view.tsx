@@ -74,7 +74,7 @@ export default class ListView extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           this.setState({
-            taskList: res.context,
+            taskList: res.context.taskList,
             pagination: pagination,
             loading: false
           });

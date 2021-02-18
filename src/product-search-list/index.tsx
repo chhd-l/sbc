@@ -22,7 +22,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      allSort: {},
+      allSort: { order: 'descend' },
       allLoading: false,
       noSearchResult: [],
       noResultPagination: {
@@ -30,7 +30,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      noResultSort: {},
+      noResultSort: { order: 'descend' },
       noResultLoading: false,
       dateRange: [],
       tabKey: '1',
@@ -121,7 +121,7 @@ export default class ProductSearchList extends React.Component<any, any> {
           pageSize: 10,
           total: 0
         },
-        allSort: {},
+        //allSort: {},
         loading: false
       },
       () => this.getAllSearchResult()
@@ -187,7 +187,7 @@ export default class ProductSearchList extends React.Component<any, any> {
           pageSize: 10,
           total: 0
         },
-        noResultSort: {},
+        //noResultSort: {},
         loading: false
       },
       () => this.getNoSearchResults()
@@ -278,6 +278,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         key: 'percent',
         width: '15%',
         sorter: true,
+        defaultSortOrder: 'descend',
         render: (text, record) => text.toFixed(2) + '%'
       },
       {
@@ -324,6 +325,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         key: 'percent',
         width: '15%',
         sorter: true,
+        defaultSortOrder: 'descend',
         render: (text, record) => text.toFixed(2) + '%'
       },
       {

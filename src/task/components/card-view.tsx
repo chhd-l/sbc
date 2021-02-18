@@ -8,51 +8,10 @@ export default class CardView extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      toDoList: [
-        {
-          assistantEmail: 'george.guo@effem.com',
-          assistantName: 'George Guo',
-          dueTime: '2021-02-18',
-          goldenMoment: 'Subscription program cancelation by PO',
-          id: 1236,
-          name: 'test',
-          status: 'To Do',
-          priority: 'high'
-        }
-      ],
-      onGoingList: [
-        {
-          assistantEmail: 'george.guo@effem.com',
-          assistantName: 'George Guo',
-          dueTime: '2021-02-18',
-          goldenMoment: 'First delivery with Welcome-pack',
-          id: 1237,
-          name: 'test',
-          status: 'On-going'
-        }
-      ],
-      completedList: [
-        {
-          assistantEmail: 'george.guo@effem.com',
-          assistantName: 'George Guo',
-          dueTime: '2021-02-18',
-          goldenMoment: 'Half Year subscription',
-          id: 1237,
-          name: 'test',
-          status: 'Completed'
-        }
-      ],
-      cancelledList: [
-        {
-          assistantEmail: 'george.guo@effem.com',
-          assistantName: 'George Guo',
-          dueTime: '2021-02-18',
-          goldenMoment: 'First month of Subscription',
-          id: 1237,
-          name: 'test',
-          status: 'Cancelled'
-        }
-      ],
+      toDoList: [],
+      onGoingList: [],
+      completedList: [],
+      cancelledList: [],
       circleBackground: [
         { type: 'todo', color: 'rgba(233, 63, 81)' },
         { type: 'onGoing', color: 'rgba(57, 173, 255)' },

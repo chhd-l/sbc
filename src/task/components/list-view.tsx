@@ -8,17 +8,7 @@ export default class ListView extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      taskList: [
-        {
-          assistantEmail: 'george.guo@effem.com',
-          assistantName: 'George Guo',
-          dueTime: '2021-02-18',
-          goldenMoment: 'First purchase(order confirmation)',
-          id: 1236,
-          name: 'test',
-          status: 'To Do'
-        }
-      ],
+      taskList: [],
       formData: {},
       pagination: {
         current: 1,

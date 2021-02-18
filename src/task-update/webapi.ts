@@ -8,7 +8,7 @@ type TResult = {
 
 export function getTaskById(id) {
   return Fetch<TResult>('/task/getTaskById' + '?id=' + id, {
-    method: 'GET',
+    method: 'GET'
   });
 }
 
@@ -35,6 +35,21 @@ export function getGlodenMomentList() {
     method: 'POST',
     body: JSON.stringify({
       type: 'GoldenMoment'
+    })
+  });
+}
+
+export function getTaskLogsById(id) {
+  return Fetch<TResult>('/taskLog/list' + '?taskId=' + id, {
+    method: 'GET'
+  });
+}
+
+export function createTaskLog(filterParams = {}) {
+  return Fetch<TResult>('/taskLog/createTaskLog', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
     })
   });
 }

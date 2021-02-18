@@ -83,8 +83,10 @@ class TaskUpdate extends Component<any, any> {
         .then((data) => {
           const res = data.res;
           if (res.code === Const.SUCCESS_CODE) {
+            let taskStatus = res.context.task.status;
             this.setState({
-              task: res.context.task
+              task: res.context.task,
+              taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled'
             });
           } else {
             message.error(res.message || 'Get data failed');
@@ -279,7 +281,7 @@ class TaskUpdate extends Component<any, any> {
                           disabled={taskCompleted || (!!task.startTime && id)}
                           style={{ width: '100%' }}
                           placeholder="Start Time"
-                          format="YYYY-MM-DD"
+                          format="YYYY-MM-DD HH:mm:ss"
                           onChange={(date, dateString) => {
                             const value = dateString;
                             this.onChange({
@@ -301,7 +303,7 @@ class TaskUpdate extends Component<any, any> {
                           disabled={taskCompleted}
                           style={{ width: '100%' }}
                           placeholder="Due Time"
-                          format="YYYY-MM-DD"
+                          format="YYYY-MM-DD HH:mm:ss"
                           onChange={(date, dateString) => {
                             const value = dateString;
                             this.onChange({
@@ -440,18 +442,34 @@ class TaskUpdate extends Component<any, any> {
                 </Row>
                 <Row>
                   <FormItem {...formRowItemLayout} label="Description">
-                    <ReactEditor
-                      disabled={taskCompleted}
-                      id="description"
-                      height={200}
-                      content={task.description}
-                      onContentChange={(html) =>
-                        this.onChange({
-                          field: 'description',
-                          value: html
-                        })
-                      }
-                    />
+                    {task.description ? (
+                      <ReactEditor
+                        disabled={taskCompleted}
+                        id="description"
+                        height={200}
+                        content={task.description}
+                        onContentChange={(html) =>
+                          this.onChange({
+                            field: 'description',
+                            value: html
+                          })
+                        }
+                      />
+                    ) : null}
+                    {!task.description ? (
+                      <ReactEditor
+                        disabled={taskCompleted}
+                        id="description"
+                        height={200}
+                        content={task.description}
+                        onContentChange={(html) =>
+                          this.onChange({
+                            field: 'description',
+                            value: html
+                          })
+                        }
+                      />
+                    ) : null}
                   </FormItem>
                 </Row>
               </Form>
@@ -461,7 +479,7 @@ class TaskUpdate extends Component<any, any> {
             </TabPane>
             {id ? (
               <TabPane tab="Activity" key="activity">
-                <Activity />
+                <Activity taskId={id} form={this.props.form} taskCompleted={taskCompleted} />
               </TabPane>
             ) : null}
           </Tabs>

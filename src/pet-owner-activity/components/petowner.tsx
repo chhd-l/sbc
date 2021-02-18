@@ -70,7 +70,7 @@ export default class petowner extends Component<any, any> {
   }
   render() {
     const { contactDetails, allocatedSegments } = this.state;
-    const { id } = this.props;
+    const { contactId } = this.props;
     return (
       <div>
         <Card
@@ -78,7 +78,7 @@ export default class petowner extends Component<any, any> {
           title={
             <div className="title">
               <span>About This Pet Owner</span>
-              <span className="viewAll" onClick={() => history.push('/pet-owner-all/' + id)}>
+              <span className="viewAll" onClick={() => history.push('/pet-owner-all/' + contactId)}>
                 View All
                 <Icon type="right" />
               </span>

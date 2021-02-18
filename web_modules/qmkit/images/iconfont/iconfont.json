@@ -6,6 +6,27 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "19905386",
+      "name": "绑定",
+      "font_class": "bangding",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "19893204",
+      "name": "role-RC",
+      "font_class": "role-RC",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "19893205",
+      "name": "role-Perscriber",
+      "font_class": "role-Perscriber",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
       "icon_id": "249480",
       "name": "新建",
       "font_class": "xinjian",

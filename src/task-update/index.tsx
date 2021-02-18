@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline, ReactEditor, history } from 'qmkit';
-import { Form, Input, Button, Col, Row, Select, InputNumber, message, Icon, Switch, DatePicker, Tabs } from 'antd';
+import { BreadCrumb, Const, Headline, ReactEditor, history } from 'qmkit';
+import { Form, Input, Button, Col, Row, Select, message, DatePicker, Tabs, Popconfirm, Tooltip } from 'antd';
 import ServiceList from './components/service-list';
 import Activity from './components/activity';
 import './style.less';
@@ -58,6 +58,7 @@ class TaskUpdate extends Component<any, any> {
     this.searchAssignedTo = this.searchAssignedTo.bind(this);
     this.searchAssignedPetOwners = this.searchAssignedPetOwners.bind(this);
     this.updateTask = this.updateTask.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
   }
 
   componentDidMount() {
@@ -153,6 +154,23 @@ class TaskUpdate extends Component<any, any> {
       }
     });
   }
+
+  deleteTask() {
+    webapi
+      .deleteTask(this.state.id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success('Operate successfully');
+          history.push({ pathname: '/tasks' });
+        } else {
+          message.error(res.message.toString() || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const { title, tabKey, task, id, taskCompleted, assignedUsers } = this.state;
@@ -162,7 +180,18 @@ class TaskUpdate extends Component<any, any> {
       <div>
         <BreadCrumb />
         <div className="container-search">
-          <Headline title={title} />
+          <Row>
+            <Col span={12}>
+              <Headline title={title} />
+            </Col>
+            <Col span={12} style={{textAlign:'right'}}>
+              <Popconfirm placement="topLeft" title="Task will be permanently deleted from the platform" onConfirm={() => this.deleteTask()} okText="Confirm" cancelText="Cancel">
+                <Tooltip placement="top" title="Delete">
+                  <Button type="primary">Delete</Button>
+                </Tooltip>
+              </Popconfirm>
+            </Col>
+          </Row>
         </div>
         <div className="container">
           <Tabs

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { history, Const, ReactEditor } from 'qmkit';
 import { Input, Card, Icon, Row, Col, Select, message, Dropdown, Button, Menu, Checkbox, Timeline, Skeleton, DatePicker } from 'antd';
 import * as webapi from '../webapi';
+import moment from 'moment';
 
 const Option = Select.Option;
 
@@ -15,28 +16,35 @@ export default class tasks extends Component<any, any> {
           assistantEmail: 'morgane.daum@royalcanin.com',
           assistantId: 139,
           assistantName: 'Morgane DAUM',
-          completedTime: '2021-01-19 21:58:04',
           contactEmail: 'morgane.lucas1@ibm.com',
           contactId: 229,
           contactName: 'Morgane Lucas',
-          createdBy: 139,
-          createdByUser: 'Morgane DAUM',
-          dateAdded: '2021-01-19',
-          dateModified: '2021-01-19',
           description: '<p>need to call PO</p>',
           dueTime: '2021-01-20',
           goldenMoment: 'Subscription program cancelation by PO',
           id: 1229,
-          modifiedBy: 139,
-          modifiedByUser: 'Morgane DAUM',
           name: 'Test 1',
-          priority: 'Низкий',
-          reminderNumber: 1,
-          reminderTime: '2021-01-20 00:00:00',
-          reminderType: 'Day',
+          priority: 'High',
           startTime: '2021-01-19',
           status: 'To Do',
-          tenantId: 4
+          showMore: false
+        },
+        {
+          assistantEmail: 'morgane.daum@royalcanin.com',
+          assistantId: 139,
+          assistantName: 'Morgane DAUM',
+          contactEmail: 'morgane.lucas1@ibm.com',
+          contactId: 229,
+          contactName: 'Morgane Lucas',
+          description: '<p>need to call PO</p>',
+          dueTime: '2021-01-20',
+          goldenMoment: 'First month of Subscription',
+          id: 1230,
+          name: 'Test 2',
+          priority: 'Low',
+          startTime: '2021-01-19',
+          status: 'Completed',
+          showMore: false
         }
       ],
       assignedUsers: [],
@@ -54,7 +62,27 @@ export default class tasks extends Component<any, any> {
     this.setRedBoarder = this.setRedBoarder.bind(this);
     this.getGoldenMomentIcon = this.getGoldenMomentIcon.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.moreClick = this.moreClick.bind(this);
   }
+
+  componentDidMount() {
+    webapi
+      .getGlodenMomentList()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            goldenMomentList: res.context.sysDictionaryVOS
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+  }
+
   taskSort() {}
   redirectDetail(id) {}
 
@@ -83,6 +111,18 @@ export default class tasks extends Component<any, any> {
       newTask: data
     });
   };
+  moreClick(task) {
+    const { taskList } = this.state;
+    taskList.map((item) => {
+      if (item.id === task.id) {
+        item.showMore = !task.showMore;
+      }
+      return item;
+    });
+    this.setState({
+      taskList
+    });
+  }
   render() {
     const { taskLoading, taskList, editble } = this.state;
     const { assignedUsers, associatedPetList, associatedOrderList } = this.state;
@@ -133,21 +173,22 @@ export default class tasks extends Component<any, any> {
               <Timeline.Item key={index} className="listitem">
                 <div className="contactTaskCard" style={{ background: this.setRedBoarder(item) }}>
                   <Row className="taskHeader padding">
-                    <Col span={14}>
+                    <Col span={12}>
                       <Row>
-                        <Col span={3}>
+                        <Col span={6}>
                           <div className="goldenMomentPanel">
-                            <span className={this.getGoldenMomentIcon(item.goldenMoment) + ' icon iconfont addTaskIcon'} />
+                            <span className={this.getGoldenMomentIcon(item.goldenMoment) + ' icon iconfont'} />
                           </div>
                         </Col>
-                        <Col span={4}>
+                        <Col span={16}>
                           <span className="tasksLable">Tasks</span>
                         </Col>
                       </Row>
                     </Col>
-                    <Col span={10}>
+                    <Col span={12}>
                       <Row style={{ textAlign: 'right' }}>
                         <Select
+                          style={{ width: '70%' }}
                           defaultValue={item.status}
                           onChange={(value) =>
                             this.onChange({
@@ -162,19 +203,20 @@ export default class tasks extends Component<any, any> {
                             </Option>
                           ))}
                         </Select>
-                        <span className="icontiaozhuan icon iconfont addTaskIcon" style={{ marginLeft: '30px' }} onClick={() => this.redirectDetail(item.id)} />
+                        <span className="icontiaozhuan icon iconfont" style={{ marginLeft: '15px' }} onClick={() => this.redirectDetail(item.id)} />
                       </Row>
                     </Col>
                   </Row>
                   <div>
                     <Row className="padding">
-                      <Col span={18}>
+                      <Col span={12}>
                         <div className="taskContactLable">
                           {' '}
                           <span className="icontaskName icon iconfont addTaskIcon" />
                           Name
                         </div>
                         <Input
+                          style={{ width: '97%' }}
                           defaultValue={item.name}
                           disabled={item.taskCompleted}
                           onChange={(e: any) =>
@@ -185,14 +227,13 @@ export default class tasks extends Component<any, any> {
                           }
                         />
                       </Col>
-                    </Row>
-                    <Row className="padding">
                       <Col span={12}>
                         <div className="taskContactLable">
                           <span className="iconxingzhuang icon iconfont addTaskIcon" />
                           Assigned to
                         </div>
                         <Select
+                          defaultValue={item.assistantName}
                           disabled={item.taskCompleted}
                           showSearch
                           onSearch={this.searchAssignedTo}
@@ -218,6 +259,7 @@ export default class tasks extends Component<any, any> {
                           Start Time
                         </div>
                         <DatePicker
+                          defaultValue={moment(item.startTime)}
                           disabled={item.taskCompleted || !!item.startTime}
                           style={{ width: '100%' }}
                           placeholder="Start Time"
@@ -237,6 +279,7 @@ export default class tasks extends Component<any, any> {
                           Due Time
                         </div>
                         <DatePicker
+                          defaultValue={moment(item.dueTime)}
                           disabled={item.taskCompleted}
                           style={{ width: '100%' }}
                           placeholder="Due Time"
@@ -252,12 +295,13 @@ export default class tasks extends Component<any, any> {
                       </Col>
                     </Row>
                     <Row className="padding">
-                      <Col span={24}>
+                      <Col span={12}>
                         <div className="taskContactLable">
                           <span className="iconbianzu7 icon iconfont addTaskIcon" />
                           Golden Moment
                         </div>
                         <Select
+                          defaultValue={item.goldenMoment}
                           disabled={item.taskCompleted || !!item.goldenMoment}
                           onChange={(value) =>
                             this.onChange({
@@ -275,128 +319,136 @@ export default class tasks extends Component<any, any> {
                       </Col>
                     </Row>
                   </div>
-                  <div>
-                    <div className="upborder"></div>
-                  </div>
-                  <Row>
+                  {!item.showMore ? (
                     <div>
-                      <div className="padding">
-                        <div className="taskContactLable">
-                          <span className="icondescribe icon iconfont addTaskIcon" />
-                          Task Description
+                      <div className="upborder"></div>
+                    </div>
+                  ) : null}
+                  {item.showMore ? (
+                    <Row>
+                      <div>
+                        <div className="padding">
+                          <div className="taskContactLable">
+                            <span className="icondescribe icon iconfont addTaskIcon" />
+                            Task Description
+                          </div>
+                          <Row>
+                            <ReactEditor
+                              disabled={item.taskCompleted}
+                              id="description"
+                              height={200}
+                              content={item.description}
+                              onContentChange={(html) =>
+                                this.onChange({
+                                  field: 'description',
+                                  value: html
+                                })
+                              }
+                            />
+                          </Row>
                         </div>
-                        <Row className="ml40">
-                          <ReactEditor
-                            disabled={item.taskCompleted}
-                            id="description"
-                            height={200}
-                            content={item.description}
-                            onContentChange={(html) =>
-                              this.onChange({
-                                field: 'description',
-                                value: html
-                              })
-                            }
-                          />
+                        <Row className="padding">
+                          <Col span={12}>
+                            <div className="taskContactLable">
+                              <span className="iconpaixu icon iconfont addTaskIcon" />
+                              Priority
+                            </div>
+                            <Select
+                              defaultValue={item.priority}
+                              disabled={item.taskCompleted}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'priority',
+                                  value: value
+                                })
+                              }
+                            >
+                              {priorityList.map((item) => (
+                                <Option value={item} key={item}>
+                                  {item}
+                                </Option>
+                              ))}
+                            </Select>
+                          </Col>
+                          <Col span={12}>
+                            <div className="taskContactLable">
+                              <span className="iconorder icon iconfont addTaskIcon" />
+                              Action Type
+                            </div>
+                            <Select
+                              defaultValue={item.actionType}
+                              disabled={item.taskCompleted}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'actionType',
+                                  value: value
+                                })
+                              }
+                            >
+                              {actionTypeList.map((item) => (
+                                <Option value={item} key={item}>
+                                  {item}
+                                </Option>
+                              ))}
+                            </Select>
+                          </Col>
+                        </Row>
+                        <Row className="padding">
+                          <Col span={12}>
+                            <div className="taskContactLable">
+                              <span className="iconbianzu icon iconfont addTaskIcon" />
+                              Associated Pet
+                            </div>
+                            <Select
+                              defaultValue={item.associatedPet}
+                              disabled={item.taskCompleted || !!item.associatedPet}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'associatedPet',
+                                  value: value
+                                })
+                              }
+                            >
+                              {associatedPetList.map((item) => (
+                                <Option value={item} key={item}>
+                                  {item}
+                                </Option>
+                              ))}
+                            </Select>
+                          </Col>
+                          <Col span={12}>
+                            <div className="taskContactLable">
+                              <span className="iconjishiben icon iconfont addTaskIcon" />
+                              Associated Order
+                            </div>
+                            <Select
+                              defaultValue={item.associatedOrder}
+                              disabled={item.taskCompleted || !!item.associatedOrder}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'associatedOrder',
+                                  value: value
+                                })
+                              }
+                            >
+                              {associatedOrderList.map((item) => (
+                                <Option value={item} key={item}>
+                                  {item}
+                                </Option>
+                              ))}
+                            </Select>
+                          </Col>
                         </Row>
                       </div>
-                      <Row className="padding">
-                        <Col span={12}>
-                          <div className="taskContactLable">
-                            <span className="iconpaixu icon iconfont addTaskIcon" />
-                            Priority
-                          </div>
-                          <Select
-                            disabled={item.taskCompleted}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'priority',
-                                value: value
-                              })
-                            }
-                          >
-                            {priorityList.map((item) => (
-                              <Option value={item} key={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                        </Col>
-                        <Col span={12}>
-                          <div className="taskContactLable">
-                            <span className="iconorder icon iconfont addTaskIcon" />
-                            Action Type
-                          </div>
-                          <Select
-                            disabled={item.taskCompleted}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'actionType',
-                                value: value
-                              })
-                            }
-                          >
-                            {actionTypeList.map((item) => (
-                              <Option value={item} key={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                        </Col>
-                      </Row>
-                      <Row className="padding">
-                        <Col span={12}>
-                          <div className="taskContactLable">
-                            <span className="iconbianzu icon iconfont addTaskIcon" />
-                            Associated Pet
-                          </div>
-                          <Select
-                            disabled={item.taskCompleted || !!item.associatedPet}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'associatedPet',
-                                value: value
-                              })
-                            }
-                          >
-                            {associatedPetList.map((item) => (
-                              <Option value={item} key={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                        </Col>
-                        <Col span={12}>
-                          <div className="taskContactLable">
-                            <span className="iconjishiben icon iconfont addTaskIcon" />
-                            Associated Order
-                          </div>
-                          <Select
-                            disabled={item.taskCompleted || !!item.associatedOrder}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'associatedOrder',
-                                value: value
-                              })
-                            }
-                          >
-                            {associatedOrderList.map((item) => (
-                              <Option value={item} key={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                        </Col>
-                      </Row>
+                    </Row>
+                  ) : null}
+                  <div className={item.showMore ? 'upborder' : ''}>
+                    <div className="more">
+                      <a onClick={() => this.moreClick(item)}>
+                        <Icon type={item.showMore ? 'up' : 'down'} /> {item.showMore ? 'Less' : 'More'}{' '}
+                      </a>
                     </div>
-                    <div className={item.showMore ? 'upborder' : ''}>
-                      <div className="more">
-                        <a>
-                          <Icon type={item.showMore ? 'up' : 'down'} /> {item.showMore ? 'Less' : 'More'}{' '}
-                        </a>
-                      </div>
-                    </div>
-                  </Row>
+                  </div>
                 </div>
               </Timeline.Item>
             ))}

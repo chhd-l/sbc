@@ -30,6 +30,12 @@ export function updateTask(filterParams = {}) {
   });
 }
 
+export function deleteTask(id) {
+  return Fetch<TResult>('/task/' + id, {
+    method: 'DELETE',
+  });
+}
+
 export function getGlodenMomentList() {
   return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',

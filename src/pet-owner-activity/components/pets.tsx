@@ -157,7 +157,7 @@ export default class pets extends Component<any, any> {
                   {item.photo ? <img src={item.photo} /> : <img className="icon-default" src={item.defaultPhoto} />}
                   <span style={{ color: '#e2001a' }} v-if="item.clubStatus" className="icon iconfont iconhuangguan inclub" />
                 </Row>
-                <div className="detail-content">
+                <div className="detail-content" style={{ width: '60%' }}>
                   <div>
                     <span className="contactName">{item.name}</span>
                   </div>

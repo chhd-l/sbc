@@ -1,9 +1,21 @@
-import { Fetch } from 'qmkit';
+import { Fetch, Const } from 'qmkit';
+import { getDictionaryByType, fetchStoreInfo } from './../shop/webapi';
 type TResult = {
   code: string;
   message: string;
   context: any;
 };
+
+//获取店铺设置的语言
+export async function getStoreLanguageList() {
+  const storeInfoRes = await fetchStoreInfo();
+  const lanListRes = await getDictionaryByType('language');
+  if (storeInfoRes.res.code === Const.SUCCESS_CODE && lanListRes.res.code === Const.SUCCESS_CODE) {
+    return lanListRes.res.context.sysDictionaryVOS.filter((t) => storeInfoRes.res.context.languageId.indexOf(`${t.id}`) > -1);
+  } else {
+    return [];
+  }
+}
 
 // 分页获取 tagging list
 export function getDescriptionList(filterParams) {

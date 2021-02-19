@@ -53,7 +53,7 @@ export default class ListSearchForm extends Component<any, any> {
     const params = {
       beginDate: getDate.beginDate,
       endDate: getDate.endDate,
-      skuCode: skuText,
+      skuCode: skuText || undefined,
       pageNum: 1,
       pageSize: 10,
       sortName: 'revenue'

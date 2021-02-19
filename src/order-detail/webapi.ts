@@ -211,3 +211,12 @@ export function queryCityById(filterParams = {}) {
     })
   });
 }
+
+export function updateFeedback(filterParams = {}) {
+  return Fetch<TResult>('/feedback/addOrEditFeedback', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

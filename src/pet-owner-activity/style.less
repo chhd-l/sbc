@@ -537,3 +537,29 @@
   text-align: center;
   width: 60%;
 }
+
+.dropdown-custom {
+  .ant-dropdown-menu {
+    padding: 15px !important;
+  }
+
+  /deep/ .ant-checkbox-wrapper {
+    margin-top: 5px;
+  }
+
+  .activitiesMenu {
+    width: 300px;
+    line-height: 2.5;
+
+    /deep/ .ant-checkbox-wrapper {
+      margin-left: 22px;
+      width: 100%;
+    }
+  }
+}
+
+.closeFilter {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}

@@ -74,11 +74,11 @@ class comment extends Component<any, any> {
   }
 
   handleSubmit() {
-    this.setState({
-      confirmLoading: true
-    });
     this.props.form.validateFields((err) => {
       if (!err) {
+        this.setState({
+          confirmLoading: true
+        });
         webapi
           .updateFeedback({ content: this.state.comment })
           .then((data) => {
@@ -129,7 +129,7 @@ class comment extends Component<any, any> {
                 this.setState({ commentVisible: true });
               }}
             >
-              Add Feedback
+              Add Comment
             </Button>
           </span>
         </Row>
@@ -170,19 +170,19 @@ class comment extends Component<any, any> {
             </List.Item>
           )}
         />
-        <Modal width={700} visible={commentVisible} title="Add Comments" onOk={this.handleSubmit} confirmLoading={confirmLoading} maskClosable={false} onCancel={this.closeModal} okText="Confirm">
+        <Modal width={700} visible={commentVisible} title="Add Comment" onOk={this.handleSubmit} confirmLoading={confirmLoading} maskClosable={false} onCancel={this.closeModal} okText="Confirm">
           <Form>
             <FormItem {...layout} label="Pet Owner">
-              {getFieldDecorator('name', {
+              {getFieldDecorator('petOwner', {
                 initialValue: petOwnerName
               })(<Input disabled={true} />)}
             </FormItem>
             <FormItem {...layout} label="Order Number">
-              {getFieldDecorator('name', {
+              {getFieldDecorator('orderNumber', {
                 initialValue: orderNumber
               })(<Input disabled={true} />)}
             </FormItem>
-            <FormItem {...layout} label="Feedback">
+            <FormItem {...layout} label="Comment">
               {getFieldDecorator('name', {
                 initialValue: comment,
                 rules: [{ required: true, message: 'Please input comment' }]

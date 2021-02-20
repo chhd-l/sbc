@@ -34,6 +34,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         skipNextDeliveryFlag: true,
         mainGoods: [],
         mainGoodsIds: [],
+        frequency: [],
         quantity: 100,
         landingFlag: true
       },

@@ -1,29 +1,81 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Tooltip, Table, Input } from 'antd';
+import { Card, Icon, Row, Col, message, Tooltip, Table, Input, Menu, Checkbox, Dropdown, Button } from 'antd';
 import * as webapi from '../webapi';
 import { history, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
+const { Divider } = Menu;
+const { Item } = Menu;
+const CheckboxGroup = Checkbox.Group;
 
 export default class orders extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      orderStatus: [],
-      orderCategories: [],
-      orderList: [],
+      orderStatus: [
+
+      ],
+      orderCategories: [
+        { label: 'Single purchase', value: 'SINGLE' },
+        { label: '1st autoship order', value: 'FIRST_AUTOSHIP' },
+        { label: 'Recurrent orders of autoship', value: 'RECURRENT_AUTOSHIP' }
+      ],
+      orderList: [
+        {
+          businessType: 'B2C',
+          contactName: 'Morgane Lucas',
+          contactUuid: '00uod83hrdUTgu6il0x6',
+          creationDate: '2020-10-06 16:59:35',
+          id: 1196,
+          orderNo: '99933863',
+          orderType: 'Single order',
+          status: 'failed'
+        },
+        {
+          businessType: 'B2C',
+          contactName: 'Morgane Lucas',
+          contactUuid: '00uod83hrdUTgu6il0x6',
+          creationDate: '2020-10-06 17:03:30',
+          id: 1197,
+          orderNo: '99933864',
+          orderType: 'Single order',
+          status: 'failed'
+        },
+        {
+          businessType: 'B2C',
+          contactName: 'Morgane Lucas',
+          contactUuid: '00uod83hrdUTgu6il0x6',
+          creationDate: '2020-10-06 17:14:22',
+          id: 1198,
+          orderNo: '99933865',
+          orderType: 'Single order',
+          status: 'failed'
+        },
+        {
+          businessType: 'B2C',
+          contactName: 'Morgane Lucas',
+          contactUuid: '00uod83hrdUTgu6il0x6',
+          creationDate: '2020-10-06 17:16:25',
+          id: 1199,
+          orderNo: '99933866',
+          orderType: 'Single order',
+          status: 'failed'
+        }
+      ],
       pagination: {
         current: 1,
         pageSize: 4,
         total: 0
       },
-      formData: {}
+      formData: {},
+      loading: false,
+      categoryVisible: false
     };
     this.handleTableChange = this.handleTableChange.bind(this);
     this.getOrderList = this.getOrderList.bind(this);
   }
 
   componentDidMount() {
-    this.getOrderList();
+    // this.getOrderList();
   }
 
   handleTableChange = (pagination: any) => {
@@ -76,31 +128,89 @@ export default class orders extends Component<any, any> {
       });
   };
   render() {
-    const { orderList } = this.state;
+    const { orderList, orderCategories, categoryVisible } = this.state;
+    const filterMenu = (
+      <Menu>
+        <Checkbox>Select All</Checkbox>
+        <a className="closeFilter" onClick={() => this.setState({ categoryVisible: false })}>
+          {' '}
+          X
+        </a>
+        <Divider />
+        <CheckboxGroup>
+          {orderCategories.map((item, index) => (
+            <Row gutter={24} key={index}>
+              <Col span={24}>
+                <Checkbox value={item.value}>{item.label}</Checkbox>
+              </Col>
+            </Row>
+          ))}
+        </CheckboxGroup>
+      </Menu>
+    );
     const columns = [
       {
         title: 'Order Type',
-        dataIndex: 'orderType',
+        dataIndex: 'businessType',
         width: '15%'
       },
       {
         title: 'Pet',
-        dataIndex: 'Pet',
-        width: '10%'
+        dataIndex: 'pet',
+        width: '10%',
+        render: (text) => {
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{text}</div>}
+            >
+              <p className="overFlowtext">{text}</p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: 'Order No',
-        dataIndex: 'status',
-        width: '15%'
+        dataIndex: 'orderNo',
+        width: '15%',
+        render: (text) => {
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{text}</div>}
+            >
+              <p className="overFlowtext">{text}</p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: 'Order Time',
-        dataIndex: 'priority',
-        width: '25%'
+        dataIndex: 'creationDate',
+        width: '25%',
+        render: (text) => {
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{text}</div>}
+            >
+              <p className="overFlowtext">{text}</p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: 'Order Status',
-        dataIndex: 'assistantEmail',
+        dataIndex: 'status',
         width: '25%'
       },
       {
@@ -135,7 +245,14 @@ export default class orders extends Component<any, any> {
             />
           </Col>
           <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-             
+          <div style={{ marginRight: '10px' }}>
+            <Dropdown overlay={filterMenu} trigger={['click']} overlayClassName="dropdown-custom" visible={categoryVisible}>
+              <Button className="ant-dropdown-link" onClick={(e) => this.setState({ categoryVisible: true })}>
+                 Order Category
+                <Icon type="down" />
+              </Button>
+            </Dropdown>
+          </div>
           </Col>
           <Col span={24}>
             <Table

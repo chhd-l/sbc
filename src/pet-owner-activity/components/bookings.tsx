@@ -8,17 +8,46 @@ export default class bookings extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      bookingList: [],
+      bookingList: [
+        {
+          bookingDate: '2021-01-29',
+          bookingTime: '9:31 AM-10:31 AM',
+          clinicsName: 'Вега',
+          id: 4,
+          pet: 'Doudou',
+          petId: '44750',
+          relationId: 6
+        },
+        {
+          bookingDate: '2021-01-27',
+          bookingTime: '2:19 PM-8:19 PM',
+          clinicsName: 'Вега',
+          id: 3,
+          pet: 'Doudou',
+          petId: '44750',
+          relationId: 6
+        },
+        {
+          bookingDate: '2021-01-19',
+          bookingTime: '12:19 PM-7:19 PM',
+          clinicsName: 'Вега',
+          id: 2,
+          pet: 'Doudou',
+          petId: '44750',
+          relationId: 6
+        }
+      ],
       pagination: {
         current: 1,
         pageSize: 4,
         total: 0
       },
-      formData: {}
+      formData: {},
+      loading: false
     };
   }
   componentDidMount() {
-    this.getBookingList();
+    // this.getBookingList();
   }
 
   handleTableChange = (pagination: any) => {
@@ -75,23 +104,62 @@ export default class bookings extends Component<any, any> {
     const columns = [
       {
         title: 'Pet',
-        dataIndex: 'orderType',
-        width: '10%'
+        dataIndex: 'pet',
+        width: '15%',
+        render: (text) => {
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{text}</div>}
+            >
+              <p className="overFlowtext">{text}</p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: 'Booking Date',
-        dataIndex: 'Pet',
+        dataIndex: 'bookingDate',
         width: '25%'
       },
       {
         title: 'Prescriber Name',
-        dataIndex: 'status',
-        width: '25%'
+        dataIndex: 'clinicsName',
+        width: '25%',
+        render: (text) => {
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{text}</div>}
+            >
+              <p className="overFlowtext">{text}</p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: 'Booking Time',
-        dataIndex: 'priority',
-        width: '25%'
+        dataIndex: 'bookingTime',
+        width: '25%',
+        render: (text) => {
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{text}</div>}
+            >
+              <p className="overFlowtext">{text}</p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: '',

@@ -151,7 +151,7 @@ export default class ListView extends Component<any, any> {
         width: '10%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
+            <Tooltip placement="top" title="Details">
               <Link to={'/edit-task/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>

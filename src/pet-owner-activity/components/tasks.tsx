@@ -453,6 +453,11 @@ export default class tasks extends Component<any, any> {
               </Timeline.Item>
             ))}
           </Timeline>
+          <div style={{ textAlign: 'center' }}>
+            <Button type="link" className="jump-link">
+              View More
+            </Button>
+          </div>
         </Col>
       </Row>
     );

@@ -37,7 +37,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               <div style={{ marginTop: '20px' }}></div>
               <Pets contactId={id} />
             </Col>
-            <Col span={9}>
+            <Col span={9} id="task">
               <Card>
                 <Tabs
                   defaultActiveKey="1"

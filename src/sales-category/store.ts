@@ -52,12 +52,10 @@ export default class AppStore extends Store {
           this.dispatch('loading:end');
         } else {
           this.dispatch('loading:end');
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.dispatch('loading:end');
-        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -128,7 +126,6 @@ export default class AppStore extends Store {
       this.refresh();
     } else {
       this.dispatch('loading:end');
-      message.error(result.res.message);
     }
   };
 
@@ -144,7 +141,6 @@ export default class AppStore extends Store {
       this.refresh();
     } else {
       this.dispatch('loading:end');
-      message.error(result.res.message);
     }
   };
 
@@ -230,8 +226,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.init();
-    } else {
-      message.error(res.message);
     }
   };
   /**
@@ -355,8 +349,6 @@ export default class AppStore extends Store {
         this.dispatch('modal: imgs', fromJS(imageList.res.context));
         this.dispatch('modal: page', fromJS({ currentPage: pageNum + 1, resourceType: 0 }));
       });
-    } else {
-      message.error(imageList.res.message);
     }
   };
   modalVisibleFun = async (maxCount: number, imgType: number, skuId: string) => {
@@ -559,7 +551,6 @@ export default class AppStore extends Store {
       this.setSeoModalVisible(false);
     } else {
       this.dispatch('loading:end');
-      message.error('Save error.');
     }
   };
   setCurrentStoreCateId = (storeCateId) => {
@@ -576,8 +567,6 @@ export default class AppStore extends Store {
       if (res.code === Const.SUCCESS_CODE) {
         // 刷新
         this.refresh();
-      } else {
-        message.error(res.message);
       }
     });
   };

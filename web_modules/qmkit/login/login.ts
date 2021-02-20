@@ -50,8 +50,6 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
       ) as any ;
       res = resLocal.res as TResult;
   }
-  console.log('-----ssss---',res.context)
-
   if ((res as any).code === Const.SUCCESS_CODE) {
     if(res.context.checkState === 1) { // need checked
       sessionStorage.setItem(
@@ -174,6 +172,7 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
             let url = _getUrl(allGradeMenus);
             history.push(url);
           }
+          callback(res.context)
           break;
         /**审核未通过*/
         case 2:
@@ -191,7 +190,8 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
     if(res.message === 'E-000052') {
       history.push('/403')
     } else {
-       message.error(res.message);
+      callback(res)
+      //
     }
   }
 };

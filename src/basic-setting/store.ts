@@ -27,7 +27,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('setting:init', fromJS((res as any).context));
     } else {
-      message.error(res.message);
     }
   };
 
@@ -42,10 +41,8 @@ export default class AppStore extends Store {
         message.success('Operate successfully');
         this.init();
       } else {
-        message.error(res.message);
       }
     } else {
-      message.error('暂无操作权限');
     }
   };
 }

@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
-import {
-  Row,
-  Col,
-  Form,
-  Button,
-  message,
-  Input,
-  Modal,
-  Switch,
-  Select
-} from 'antd';
+import { Row, Col, Form, Button, message, Input, Modal, Switch, Select } from 'antd';
 
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import * as webapi from '../webapi';
-import { SelectGroup } from 'qmkit';
+import { SelectGroup, Const } from 'qmkit';
 
 const formItemLayout = {
   labelCol: {
@@ -53,9 +43,7 @@ class PaymentModal extends React.Component<any, any> {
           appId: config.appId,
           privateKey: config.privateKey,
           publicKey: config.publicKey,
-          paymentMethod: nextProps.paymentForm.storePaymentMethod
-            ? nextProps.paymentForm.storePaymentMethod.split(',')
-            : [],
+          paymentMethod: nextProps.paymentForm.storePaymentMethod ? nextProps.paymentForm.storePaymentMethod.split(',') : [],
           enabled: nextProps.paymentForm.isOpen === 1 ? true : false
         })
       });
@@ -76,21 +64,11 @@ class PaymentModal extends React.Component<any, any> {
     }
 
     return (
-      <Modal
-        maskClosable={false}
-        title="Edit Payment Setting"
-        visible={this.props.visible}
-        onOk={this._next}
-        onCancel={() => this.cancel()}
-      >
+      <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()}>
         <Form>
           <Row>
             <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="apiKey" />}
-              >
+              <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="apiKey" />}>
                 {getFieldDecorator('apiKey', {
                   initialValue: this.state.paymentForm.apiKey,
                   rules: [{ required: true, message: 'Please input Api Key!' }]
@@ -98,11 +76,7 @@ class PaymentModal extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="appID" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="appID" />}>
                 {getFieldDecorator('appId', {
                   initialValue: this.state.paymentForm.appId,
                   rules: [{ required: false, message: 'Please input App ID!' }]
@@ -110,41 +84,25 @@ class PaymentModal extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="privateKey" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="privateKey" />}>
                 {getFieldDecorator('privateKey', {
                   initialValue: this.state.paymentForm.privateKey,
-                  rules: [
-                    { required: false, message: 'Please input Private Key!' }
-                  ]
+                  rules: [{ required: false, message: 'Please input Private Key!' }]
                 })(<Input.TextArea />)}
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="publicKey" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="publicKey" />}>
                 {getFieldDecorator('publicKey', {
                   initialValue: this.state.paymentForm.publicKey,
-                  rules: [
-                    { required: false, message: 'Please input Public Key!' }
-                  ]
+                  rules: [{ required: false, message: 'Please input Public Key!' }]
                 })(<Input.TextArea />)}
               </FormItem>
             </Col>
 
             {/*新增*/}
             <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="paymentMethod" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
                 {getFieldDecorator('paymentMethod', {
                   initialValue: this.state.paymentForm.paymentMethod,
                   rules: [
@@ -248,18 +206,10 @@ class PaymentModal extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="enabled" />}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
                 {getFieldDecorator('enabled', {
                   initialValue: this.state.paymentForm.enabled
-                })(
-                  <Switch
-                    checked={checked}
-                    onChange={(value) => this.onFormChange(value)}
-                  />
-                )}
+                })(<Switch checked={checked} onChange={(value) => this.onFormChange(value)} />)}
               </FormItem>
             </Col>
           </Row>
@@ -308,12 +258,10 @@ class PaymentModal extends React.Component<any, any> {
             type: true
           })
         });
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.props.reflash();
           this.cancel();
-        } else {
-          message.error(res.message || 'save faild');
         }
       }
     });

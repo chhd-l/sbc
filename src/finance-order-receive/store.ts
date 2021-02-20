@@ -13,14 +13,7 @@ import { Const } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new ListActor(),
-      new SearchActor(),
-      new LoadingActor(),
-      new SelectedActor(),
-      new VisibleActor(),
-      new EditActor()
-    ];
+    return [new ListActor(), new SearchActor(), new LoadingActor(), new SelectedActor(), new VisibleActor(), new EditActor()];
   }
 
   constructor(props) {
@@ -32,9 +25,7 @@ export default class AppStore extends Store {
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
   init = async (param?) => {
     this.dispatch('loading:start');
-    const searchForm = this.state()
-      .get('searchForm')
-      .merge(fromJS(param));
+    const searchForm = this.state().get('searchForm').merge(fromJS(param));
     const { res } = await webapi.fetchPayOrderList(searchForm.toJS());
 
     this.transaction(() => {
@@ -54,9 +45,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   onSearch = async () => {
-    const param = this.state()
-      .get('searchForm')
-      .toJS();
+    const param = this.state().get('searchForm').toJS();
 
     const { res } = await webapi.fetchPayOrderList(param);
 
@@ -75,10 +64,7 @@ export default class AppStore extends Store {
    * 批量
    */
   onBatchConfirm = async () => {
-    const { res: result } = await webapi.checkFunctionAuth(
-      '/account/confirm',
-      'POST'
-    );
+    const { res: result } = await webapi.checkFunctionAuth('/account/confirm', 'POST');
     if (!result.context) {
       message.error('此功能您没有权限访问');
       return;
@@ -118,10 +104,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   onBatchDestory = async () => {
-    const { res: result } = await webapi.checkFunctionAuth(
-      '/account/payOrder/destory',
-      'PUT'
-    );
+    const { res: result } = await webapi.checkFunctionAuth('/account/payOrder/destory', 'PUT');
     if (!result.context) {
       message.error('此功能您没有权限访问');
       return;
@@ -140,10 +123,7 @@ export default class AppStore extends Store {
     for (let orderId of orderIds) {
       const { res: verifyRes } = await webapi.verifyAfterProcessing(orderId);
 
-      if (
-        verifyRes.code === Const.SUCCESS_CODE &&
-        verifyRes.context.length > 0
-      ) {
+      if (verifyRes.code === Const.SUCCESS_CODE && verifyRes.context.length > 0) {
         message.error('订单已申请退货，不能作废收款记录');
         return;
       } else {
@@ -180,10 +160,7 @@ export default class AppStore extends Store {
   };
 
   onCreateReceivable = async (payOrderId) => {
-    const { res: result } = await webapi.checkFunctionAuth(
-      '/account/receivable',
-      'POST'
-    );
+    const { res: result } = await webapi.checkFunctionAuth('/account/receivable', 'POST');
     if (!result.context) {
       message.error('此功能您没有权限访问');
       return;
@@ -204,7 +181,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init({ pageNum: 0, pageSize: 10 });
     } else {
-      message.error(res.message);
     }
   }
 
@@ -215,9 +191,7 @@ export default class AppStore extends Store {
    */
   onSave = async (receivableForm) => {
     receivableForm.payOrderId = this.state().get('payOrderId');
-    receivableForm.createTime = momnet(receivableForm.createTime)
-      .format('YYYY-MM-DD')
-      .toString();
+    receivableForm.createTime = momnet(receivableForm.createTime).format('YYYY-MM-DD').toString();
     //保存
     const { res } = await webapi.addReceivable(receivableForm);
     if (res.code === Const.SUCCESS_CODE) {
@@ -225,7 +199,6 @@ export default class AppStore extends Store {
       this.dispatch('modal:hide');
       this.init({});
     } else {
-      message.error(res.message);
     }
   };
 

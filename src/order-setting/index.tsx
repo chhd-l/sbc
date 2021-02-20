@@ -225,13 +225,9 @@ class OrderSetting extends Component<any, any> {
             paymentCashForm,
             unlimitedForm
           });
-        } else {
-          message.error(res.message || 'Get config failed');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Get config failed');
-      });
+      .catch((err) => {});
   };
 
   updateOrderSettingConfig = () => {
@@ -376,13 +372,9 @@ class OrderSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'Save Successful');
-        } else {
-          message.error(res.message || 'Save Failed');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Save Failed');
-      });
+      .catch((err) => {});
   };
 
   render() {

@@ -27,9 +27,7 @@ export default class AppStore extends Store {
   init = ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
 
-    let form = this.state()
-      .get('form')
-      .toJS();
+    let form = this.state().get('form').toJS();
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
       this.transaction(() => {
@@ -57,7 +55,6 @@ export default class AppStore extends Store {
   apply = async (tid) => {
     let { res } = (await webapi.getTradeDetail(tid)) as any;
     if (res.code !== Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     let errMsg;
@@ -66,24 +63,15 @@ export default class AppStore extends Store {
     const trade = fromJS(res);
     const tradeState = trade && trade.getIn(['context', 'tradeState']);
 
-    let { res: applyable } = await webapi.fechReturnOrderCanApply(
-      tid,
-      tradeState.get('payState') === 'PAID' &&
-        tradeState.get('deliverStatus') === 'NOT_YET_SHIPPED'
-    );
+    let { res: applyable } = await webapi.fechReturnOrderCanApply(tid, tradeState.get('payState') === 'PAID' && tradeState.get('deliverStatus') === 'NOT_YET_SHIPPED');
     if ((applyable as any).code !== Const.SUCCESS_CODE) {
-      message.error((applyable as any).message);
       return;
     }
 
     if (res.code === Const.SUCCESS_CODE) {
       const flowState = trade.getIn(['context', 'tradeState', 'flowState']);
       const payState = trade.getIn(['context', 'tradeState', 'payState']);
-      const deliverStatus = trade.getIn([
-        'context',
-        'tradeState',
-        'deliverStatus'
-      ]);
+      const deliverStatus = trade.getIn(['context', 'tradeState', 'deliverStatus']);
 
       // 获取该订单所有的待处理及已完成的退单列表
       let orderReturnListRes = await webapi.fetchOrderReturnList(tid);
@@ -93,13 +81,7 @@ export default class AppStore extends Store {
 
         // 如果有未处理完的，则不允许再次申请
         orderReturnListRes.res['context'].forEach((v) => {
-          if (
-            v.returnFlowState != 'REFUNDED' &&
-            v.returnFlowState != 'COMPLETED' &&
-            v.returnFlowState != 'REJECT_REFUND' &&
-            v.returnFlowState != 'REJECT_RECEIVE' &&
-            v.returnFlowState != 'VOID'
-          ) {
+          if (v.returnFlowState != 'REFUNDED' && v.returnFlowState != 'COMPLETED' && v.returnFlowState != 'REJECT_REFUND' && v.returnFlowState != 'REJECT_RECEIVE' && v.returnFlowState != 'VOID') {
             // 有未处理完的
             canApply = false;
             errMsg = '该订单关联了处理中的退单，不可再次申请';
@@ -109,11 +91,7 @@ export default class AppStore extends Store {
         // 没有待处理的申请
         if (canApply) {
           // 退款申请，如果有已完成的则不允许再次申请
-          if (
-            flowState == 'AUDIT' &&
-            payState == 'PAID' &&
-            deliverStatus == 'NOT_YET_SHIPPED'
-          ) {
+          if (flowState == 'AUDIT' && payState == 'PAID' && deliverStatus == 'NOT_YET_SHIPPED') {
             orderReturnListRes.res['context'].forEach((v) => {
               // 已完成申请的
               if (v.returnFlowState == 'COMPLETED') {
@@ -122,37 +100,21 @@ export default class AppStore extends Store {
               }
             });
           } else {
-            if (
-              trade.getIn(['context', 'tradeItems']) &&
-              trade
-                .getIn(['context', 'tradeItems'])
-                .filter((v) => v.get('canReturnNum') > 0).length == 0
-            ) {
+            if (trade.getIn(['context', 'tradeItems']) && trade.getIn(['context', 'tradeItems']).filter((v) => v.get('canReturnNum') > 0).length == 0) {
               // 退货申请，如果没有可退商品则不允许申请
               canApply = false;
               errMsg = '无可退商品';
-            } else if (
-              trade.getIn(['context', 'payInfo', 'payTypeId']) == '0'
-            ) {
+            } else if (trade.getIn(['context', 'payInfo', 'payTypeId']) == '0') {
               // 在线支付需判断退款金额
               let totalApplyPrice = 0;
               orderReturnListRes.res['context'].forEach((v) => {
                 // 计算已完成的申请单退款总额
                 if (v.returnFlowState == 'COMPLETED') {
-                  totalApplyPrice = QMFloat.accAdd(
-                    totalApplyPrice,
-                    v.returnPrice.applyStatus
-                      ? v.returnPrice.applyPrice
-                      : v.returnPrice.totalPrice
-                  );
+                  totalApplyPrice = QMFloat.accAdd(totalApplyPrice, v.returnPrice.applyStatus ? v.returnPrice.applyPrice : v.returnPrice.totalPrice);
                 }
               });
 
-              if (
-                totalApplyPrice >=
-                  trade.getIn(['context', 'tradePrice', 'totalPrice']) &&
-                trade.getIn(['context', 'tradePrice', 'totalPrice']) !== 0
-              ) {
+              if (totalApplyPrice >= trade.getIn(['context', 'tradePrice', 'totalPrice']) && trade.getIn(['context', 'tradePrice', 'totalPrice']) !== 0) {
                 canApply = false;
                 errMsg = '无可退金额';
               }
@@ -169,8 +131,6 @@ export default class AppStore extends Store {
         pathname: '/order-return-add',
         search: `?tid=${tid}`
       });
-    } else {
-      message.error(errMsg);
     }
   };
 }

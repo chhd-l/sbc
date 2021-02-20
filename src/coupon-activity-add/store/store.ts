@@ -160,7 +160,6 @@ export default class AppStore extends Store {
         okText: '好的'
       });
     } else {
-      message.error(res.message);
     }
   };
 }

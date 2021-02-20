@@ -34,9 +34,7 @@ export default class Main extends React.Component<any, any> {
             // }
           }
         })
-        .catch((err) => {
-          message.error(err.toString() || 'Operation failure');
-        });
+        .catch((err) => {});
       /*if (util.isLogin()) {
         Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
           if (resIco.res.code == Const.SUCCESS_CODE) {

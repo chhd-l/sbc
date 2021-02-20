@@ -29,9 +29,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   init = async () => {
-    const nowDay = moment(
-      new Date(sessionStorage.getItem('defaultLocalDateTime'))
-    )
+    const nowDay = moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
       .format(Const.DAY_FORMAT)
       .toString();
     this.setDateRange(nowDay, nowDay, 0);
@@ -78,13 +76,7 @@ export default class AppStore extends Store {
    */
   getPageData = async (pageNum, pageSize, sortName, sortType) => {
     const { dateCycle } = this.state().get('dateRange').toJS();
-    const { res } = await webapi.getPageData(
-      dateCycle,
-      pageNum,
-      pageSize,
-      sortName,
-      sortType
-    );
+    const { res } = await webapi.getPageData(dateCycle, pageNum, pageSize, sortName, sortType);
     if (res && res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('flow:getPageData', res.context);
@@ -95,7 +87,6 @@ export default class AppStore extends Store {
         });
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -111,7 +102,6 @@ export default class AppStore extends Store {
     if (res && res.code == Const.SUCCESS_CODE) {
       this.dispatch('flow:getFlowData', res.context);
     } else {
-      message.error(res.message);
     }
   };
 

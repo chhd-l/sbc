@@ -116,7 +116,7 @@ export default class StepOneEdit extends React.Component<any, any> {
 
   getStoreLog = async () => {
     const { res } = await fetchStoreInfo();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         storeLogo: res.context.storeLogo,
         storeLogoImage:
@@ -132,8 +132,6 @@ export default class StepOneEdit extends React.Component<any, any> {
               ]
             : []
       });
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -518,10 +516,10 @@ export default class StepOneEdit extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label="City Select">
                   {getFieldDecorator('citySelection', {
-                    initialValue: storeInfo.get('citySelection') === 0  ? false : true // default checked
+                    initialValue: storeInfo.get('citySelection') === 0 ? false : true // default checked
                   })(
                     <Switch
-                      checked={storeInfo.get('citySelection') === 0  ? false : true}
+                      checked={storeInfo.get('citySelection') === 0 ? false : true}
                       onChange={(value) =>
                         onChange({
                           field: 'citySelection',

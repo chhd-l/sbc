@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
+import { Headline, SelectGroup, BreadCrumb, Const } from 'qmkit';
 import { Form, Select, Table, Button, Row, Col, Input, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -22,24 +22,20 @@ export default class RewardRate extends Component<any, any> {
 
   queryClinicsReward = async () => {
     const { res } = await webapi.queryClinicsReward();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       if (res.context.length > 0) {
         this.setState({
           sectionList: res.context,
           timeZone: res.context[0].timeZone
         });
       }
-    } else {
-      message.error(res.message || 'get data faild');
     }
   };
 
   addSection() {
     let section = {
       timeZone: this.state.timeZone,
-      tempId: new Date(
-        sessionStorage.getItem('defaultLocalDateTime')
-      ).valueOf(),
+      tempId: new Date(sessionStorage.getItem('defaultLocalDateTime')).valueOf(),
       orderAmount: '',
       rewardRate: ''
     };
@@ -64,24 +60,20 @@ export default class RewardRate extends Component<any, any> {
     }
     if (row.id) {
       const { res } = await webapi.updateClinicsReward(row);
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         message.success('update success');
-      } else {
-        message.error(res.message);
       }
     } else {
       const { res } = await webapi.addClinicsReward(row);
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         message.success('add success');
-      } else {
-        message.error(res.message);
       }
     }
   };
   deleteRewardRate = async (row) => {
     if (row.id) {
       const { res } = await webapi.delClinicsReward({ id: row.id });
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         message.success('delete success');
         let data = this.state.sectionList;
         data = data.filter((item) => {
@@ -92,8 +84,6 @@ export default class RewardRate extends Component<any, any> {
         this.setState({
           sectionList: data
         });
-      } else {
-        message.error(res.message);
       }
     } else {
       let data = this.state.sectionList;
@@ -150,15 +140,9 @@ export default class RewardRate extends Component<any, any> {
           >
             *
           </span>
-          <label style={{ minWidth: '200px', marginRight: '10px' }}>
-            Time Zome:
-          </label>
+          <label style={{ minWidth: '200px', marginRight: '10px' }}>Time Zome:</label>
           Every
-          <Select
-            value={this.state.timeZone}
-            onChange={(value) => this.selectTimeZone(value)}
-            style={{ minWidth: '200px', marginLeft: '10px' }}
-          >
+          <Select value={this.state.timeZone} onChange={(value) => this.selectTimeZone(value)} style={{ minWidth: '200px', marginLeft: '10px' }}>
             <Option value="Year" key="year">
               Year
             </Option>
@@ -169,15 +153,7 @@ export default class RewardRate extends Component<any, any> {
               Week
             </Option>
           </Select>
-          <Table
-            style={{ paddingTop: '10px' }}
-            pagination={false}
-            rowKey="intervalPriceId"
-            dataSource={this.state.sectionList}
-            footer={() => (
-              <Button onClick={() => this.addSection()}>+ Add section</Button>
-            )}
-          >
+          <Table style={{ paddingTop: '10px' }} pagination={false} rowKey="intervalPriceId" dataSource={this.state.sectionList} footer={() => <Button onClick={() => this.addSection()}>+ Add section</Button>}>
             <Column
               title={
                 <div>
@@ -269,15 +245,10 @@ export default class RewardRate extends Component<any, any> {
               render={(rowInfo, _x, i) => {
                 return (
                   <div>
-                    <Button
-                      style={{ marginRight: '10px' }}
-                      onClick={() => this.saveRewardRate(rowInfo)}
-                    >
+                    <Button style={{ marginRight: '10px' }} onClick={() => this.saveRewardRate(rowInfo)}>
                       Save
                     </Button>
-                    <Button onClick={() => this.deleteRewardRate(rowInfo)}>
-                      Delete
-                    </Button>
+                    <Button onClick={() => this.deleteRewardRate(rowInfo)}>Delete</Button>
                   </div>
                 );
               }}

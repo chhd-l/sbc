@@ -2,6 +2,7 @@ import React from 'react';
 import { Relax, IMap } from 'plume2';
 import { Row, Col, Form, Modal, message } from 'antd';
 import styled from 'styled-components';
+import { Const } from 'qmkit';
 
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
@@ -34,12 +35,10 @@ export default class StepTwo extends React.Component<any, any> {
 
   getContentInformation = async () => {
     const { res } = await webapi.getStoreSooSetting();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         sso: res.context
       });
-    } else {
-      message.error(res.message);
     }
   };
 

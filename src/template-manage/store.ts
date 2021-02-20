@@ -3,14 +3,7 @@ import { fromJS } from 'immutable';
 import 'whatwg-fetch';
 import { message } from 'antd';
 import TemplateActor from './actor/template-actor';
-import {
-  getList,
-  queryTemplateList,
-  delTemplate,
-  copyTemplate,
-  updateTitle,
-  getStore
-} from './webapi';
+import { getList, queryTemplateList, delTemplate, copyTemplate, updateTitle, getStore } from './webapi';
 import { Const } from 'qmkit';
 
 export default class AppStore extends Store {
@@ -30,32 +23,32 @@ export default class AppStore extends Store {
     if (result.code == Const.SUCCESS_CODE) {
       const storeId = result.context.storeId;
       const pageType = this.state().get('includePageTypeList');
-      const platform = this.state().get('platform')
+      const platform = this.state().get('platform');
       const res = await getList(
         pageType == 'index' && platform == 'pc'
           ? {
-            excludePageTypeList: [],
-            includePageTypeList: [this.state().get('includePageTypeList')],
-            name: '',
-            online: true,
-            pageNo: -1,
-            pageSize: 10,
-            platform: this.state().get('platform'),
-            tagList: [],
-            typeList: [this.state().get('typeList')],
-            storeId
-          }
+              excludePageTypeList: [],
+              includePageTypeList: [this.state().get('includePageTypeList')],
+              name: '',
+              online: true,
+              pageNo: -1,
+              pageSize: 10,
+              platform: this.state().get('platform'),
+              tagList: [],
+              typeList: [this.state().get('typeList')],
+              storeId
+            }
           : {
-            excludePageTypeList: [],
-            includePageTypeList: [this.state().get('includePageTypeList')],
-            name: '',
-            online: true,
-            pageNo: -1,
-            pageSize: 10,
-            platform: this.state().get('platform'),
-            tagList: [],
-            typeList: [this.state().get('typeList')]
-          }
+              excludePageTypeList: [],
+              includePageTypeList: [this.state().get('includePageTypeList')],
+              name: '',
+              online: true,
+              pageNo: -1,
+              pageSize: 10,
+              platform: this.state().get('platform'),
+              tagList: [],
+              typeList: [this.state().get('typeList')]
+            }
       );
       res.data.list = [];
 
@@ -99,8 +92,6 @@ export default class AppStore extends Store {
         this.dispatch('store:storeId', storeId);
         this.dispatch('listActor:init', res);
       });
-    } else {
-      message.error(result.message);
     }
   };
 
@@ -112,27 +103,17 @@ export default class AppStore extends Store {
     if (res.status === 1) {
       message.success('Operate successfully');
       this.init();
-    } else {
-      message.error(res.message);
     }
   };
 
   onCopyTemplate = async (userTplInfo) => {
     const res = await copyTemplate({
-      userTplInfo: `${JSON.stringify(
-        userTplInfo
-          .delete('_id')
-          .delete('updatedAt')
-          .delete('createdAt')
-          .set('name', userTplInfo.get('name').concat(' [副本]'))
-      )}`,
+      userTplInfo: `${JSON.stringify(userTplInfo.delete('_id').delete('updatedAt').delete('createdAt').set('name', userTplInfo.get('name').concat(' [副本]')))}`,
       sc: 'H4sIAAAAAAAAA0sxSg4uyS9KBQDJOKt4CAAAAA=='
     });
     if (res.status === 1) {
       message.success('Operate successfully');
       this.init();
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -155,12 +136,7 @@ export default class AppStore extends Store {
       const obj = dataList.find((info) => info.get('_id') === inputEdit.id);
       if (obj && obj.get('name') !== inputEdit.title) {
         const res = await updateTitle({
-          userTplInfo: JSON.stringify(
-            obj
-              .get('userTplInfo')
-              .set('name', inputEdit.title)
-              .toJS()
-          ),
+          userTplInfo: JSON.stringify(obj.get('userTplInfo').set('name', inputEdit.title).toJS()),
           sc: 'H4sIAAAAAAAAA0sxSg4uyS9KBQDJOKt4CAAAAA=='
         });
         if (res.status === 1) {

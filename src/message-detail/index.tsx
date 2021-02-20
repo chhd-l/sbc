@@ -83,7 +83,7 @@ class MessageDetails extends Component<any, any> {
       .querySysDictionary({ type: type })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (type === 'objectType') {
             let objectTypeList = [...res.context.sysDictionaryVOS];
             this.setState({
@@ -103,12 +103,9 @@ class MessageDetails extends Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
 
   initPage = () => {
@@ -301,14 +298,12 @@ class MessageDetails extends Component<any, any> {
             previewHtml: res.context.emailTemplateHtml
           });
         } else {
-          message.error(res.message || type + ' Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || type + ' Failed');
         this.setState({
           loading: false
         });
@@ -333,14 +328,12 @@ class MessageDetails extends Component<any, any> {
             previewHtml: res.context.emailTemplateHtml
           });
         } else {
-          message.error(res.message || type + ' Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || type + ' Failed');
         this.setState({
           loading: false
         });

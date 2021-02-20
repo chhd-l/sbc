@@ -53,8 +53,7 @@ export default class AppStore extends Store {
       let encrypted = base64.urlEncode(result);
 
       // 新窗口下载
-      const exportHref =
-        Const.HOST + `/finance/settlement/detail/export/${encrypted}`;
+      const exportHref = Const.HOST + `/finance/settlement/detail/export/${encrypted}`;
       window.open(exportHref);
     } else {
       message.error('请登录');
@@ -93,7 +92,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       history.push('/finance-manage-settle');
     } else {
-      message.error(res.message);
     }
   };
 }

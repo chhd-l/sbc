@@ -55,12 +55,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new ModalActor(),
-      new ChartActor(),
-      new TableActor(),
-      new GeneralActor()
-    ];
+    return [new ModalActor(), new ChartActor(), new TableActor(), new GeneralActor()];
   }
 
   downChart = () => {
@@ -77,9 +72,7 @@ export default class AppStore extends Store {
    * 初始化展示当天的交易趋势
    */
   init = async () => {
-    const today = moment()
-      .format(Const.DAY_FORMAT)
-      .toString();
+    const today = moment().format(Const.DAY_FORMAT).toString();
     this.transaction(() => {
       //表格默认显示的栏目
       this.dispatch('trade:columns', defaultColumns);
@@ -97,11 +90,7 @@ export default class AppStore extends Store {
    * @param startDate
    * @param endDate
    */
-  setDateRange = async (
-    startDate: string,
-    endDate: string,
-    selectType: number
-  ) => {
+  setDateRange = async (startDate: string, endDate: string, selectType: number) => {
     const weekly = this.state().get('weekly');
     if (weekly) {
       if (this.getWeeklyDisplay(startDate, endDate)) {
@@ -176,19 +165,13 @@ export default class AppStore extends Store {
       isWeek: false,
       pageNum: this.state().get('pageNum'),
       pageSize: this.state().get('pageSize'),
-      sortName:
-        this.state().get('sortedName') == 'title'
-          ? 'date'
-          : this.state().get('sortedName'),
+      sortName: this.state().get('sortedName') == 'title' ? 'date' : this.state().get('sortedName'),
       sortOrder: this.state().get('sortedOrder') == 'descend' ? 'DESC' : 'ASC'
     });
     if (tradeTable.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('trade:table', tradeTable.context.content);
-        this.dispatch(
-          'trade:total',
-          tradeTable.context.totalPages * this.state().get('pageSize')
-        );
+        this.dispatch('trade:total', tradeTable.context.totalPages * this.state().get('pageSize'));
       });
     } else {
       message.error('交易报表获取失败');
@@ -221,11 +204,7 @@ export default class AppStore extends Store {
    */
   onPagination = async (pageNum, pageSize, sortName, sortOrder) => {
     let sortedName = sortName ? sortName : 'date';
-    let sortedOrder = sortName
-      ? sortOrder == 'ASC'
-        ? 'ascend'
-        : 'descend'
-      : 'descend';
+    let sortedOrder = sortName ? (sortOrder == 'ASC' ? 'ascend' : 'descend') : 'descend';
     //给定时间范围内的交易报表
     const { res } = await webapi.getTradePage({
       //companyId: 1,
@@ -237,17 +216,13 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       //将被排序的名称和规则存储起来
-      this.dispatch(
-        'trade:sortName',
-        sortedName == 'date' ? 'title' : sortedName
-      );
+      this.dispatch('trade:sortName', sortedName == 'date' ? 'title' : sortedName);
       this.dispatch('trade:sortOrder', sortedOrder);
       this.dispatch('trade:table', (res as any).context.content);
       this.dispatch('trade:current', pageNum);
       this.dispatch('trade:total', res.context.totalPages * pageSize);
       this.dispatch('trade:pageSize', pageSize);
     } else {
-      message.error(res.message);
     }
   };
 

@@ -28,9 +28,7 @@ export default class AppStore extends Store {
    * 初始化拼团活动列表
    */
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
-    const params = this.state()
-      .get('form')
-      .toJS();
+    const params = this.state().get('form').toJS();
     const pageList: any = await getPageList({
       ...params,
       pageSize,
@@ -38,10 +36,7 @@ export default class AppStore extends Store {
     });
     if (pageList.res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.dispatch(
-          'group:list:init',
-          pageList.res.context.grouponActivityVOPage
-        );
+        this.dispatch('group:list:init', pageList.res.context.grouponActivityVOPage);
       });
     } else {
       message.error(pageList.res.message);
@@ -69,7 +64,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init({ pageNum: 0, pageSize: 10 });
     } else {
-      message.error(res.message);
     }
   };
 }

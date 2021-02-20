@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Tooltip, Table } from 'antd';
+import { Card, Icon, Row, Col, message, Tooltip, Table, Input } from 'antd';
 import * as webapi from '../webapi';
 import { history, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,8 @@ export default class orders extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
+      orderStatus: [],
+      orderCategories: [],
       orderList: [],
       pagination: {
         current: 1,
@@ -32,7 +34,13 @@ export default class orders extends Component<any, any> {
       () => this.getOrderList()
     );
   };
-
+  onFormChange = ({ field, value }) => {
+    let data = this.state.formData;
+    data[field] = value;
+    this.setState({
+      formData: data
+    });
+  };
   getOrderList = () => {
     const { formData, pagination } = this.state;
     let params = Object.assign(formData, {
@@ -73,30 +81,30 @@ export default class orders extends Component<any, any> {
       {
         title: 'Order Type',
         dataIndex: 'orderType',
-        width: '10%'
+        width: '15%'
       },
       {
         title: 'Pet',
         dataIndex: 'Pet',
-        width: '15%'
+        width: '10%'
       },
       {
         title: 'Order No',
         dataIndex: 'status',
-        width: '10%'
+        width: '15%'
       },
       {
         title: 'Order Time',
         dataIndex: 'priority',
-        width: '10%'
+        width: '25%'
       },
       {
         title: 'Order Status',
         dataIndex: 'assistantEmail',
-        width: '15%'
+        width: '25%'
       },
       {
-        title: 'Operation',
+        title: '',
         key: 'operation',
         width: '10%',
         render: (text, record) => (
@@ -109,20 +117,40 @@ export default class orders extends Component<any, any> {
       }
     ];
     return (
-      <div>
-        <Card title="Order">
-          <Table
-            rowKey="id"
-            size="small"
-            columns={columns}
-            dataSource={orderList}
-            pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
-            scroll={{ x: '100%' }}
-            onChange={this.handleTableChange}
-          />
-        </Card>
-      </div>
+      <Card title="Order" className="topCard">
+        <Row>
+          <Col span={9}>
+            <Input
+              className="searchInput"
+              placeholder="Search Keyword"
+              onPressEnter={() => this.getOrderList()}
+              onChange={(e) => {
+                const value = (e.target as any).value;
+                this.onFormChange({
+                  field: 'name',
+                  value
+                });
+              }}
+              prefix={<Icon type="search" onClick={() => this.getOrderList()} />}
+            />
+          </Col>
+          <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
+             
+          </Col>
+          <Col span={24}>
+            <Table
+              rowKey="id"
+              size="small"
+              columns={columns}
+              dataSource={orderList}
+              pagination={this.state.pagination}
+              loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+              scroll={{ x: '100%' }}
+              onChange={this.handleTableChange}
+            />
+          </Col>
+        </Row>
+      </Card>
     );
   }
 }

@@ -109,7 +109,7 @@ export default class targetProduct extends Component<any, any> {
               </div>
             </div>
           </Spin>
-          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetGoods} />
+          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={[]} />
         </div>
       </div>
     );

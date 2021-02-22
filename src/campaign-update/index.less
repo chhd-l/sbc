@@ -1,0 +1,67 @@
+.demo-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs-custom /deep/ .ant-tabs-bar {
+  margin-bottom: 0;
+}
+
+.demo-nav {
+  display: flex;
+  list-style: none;
+
+  a {
+    display: block;
+    padding: 0.5em 1rem;
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+.demo {
+  flex: 1;
+}
+
+.demo-chart {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .demo-chart__header {
+    border: 1px solid #e6e9ed;
+    padding: 8px;
+  }
+
+  .demo-chart__container {
+    flex: 1;
+    display: flex;
+  }
+
+  .demo-chart__sidebar {
+    width: 500px;
+    border-left: 1px solid @border-color-base;
+    display: flex;
+  }
+
+  .demo-chart__panel {
+    width: 14%;
+    background-color: #fafafa;
+    border-left: 1px solid #e6e9ed;
+  }
+
+  .demo-chart__main {
+    flex: 1;
+  }
+}
+
+.icon-edit {
+  font-size: 22px !important;
+  vertical-align: middle;
+  margin-left: 10px;
+  cursor: pointer;
+}

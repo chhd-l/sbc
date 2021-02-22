@@ -6,7 +6,7 @@ import SearchForm from './components/search-form';
 import CreateForm from './components/create-form';
 
 import * as webapi from './webapi';
-import { getDictionaryByType } from './../shop/webapi';
+//import { getDictionaryByType } from './../shop/webapi';
 
 import { FormattedMessage } from 'react-intl';
 import Search from 'antd/lib/input/Search';
@@ -47,14 +47,10 @@ class DescriptionManagement extends Component<any, any> {
   }
 
   getLanguageList = async () => {
-    const { res } = await getDictionaryByType('language');
-    if (res.code === Const.SUCCESS_CODE && res.context && res.context.sysDictionaryVOS) {
-      this.setState({
-        languageList: res.context.sysDictionaryVOS
-      });
-    } else {
-      message.error('Fetching language setting failed!');
-    }
+    const lanList = await webapi.getStoreLanguageList();
+    this.setState({
+      languageList: lanList
+    });
   };
 
   onSearchFormChange = (value) => {

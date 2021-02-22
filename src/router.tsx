@@ -848,13 +848,65 @@ const routes = [
     asyncComponent: () => import('./subscription-setting')
   },
   {
+    path: '/campaigns',
+    asyncComponent: () => import('./campaigns')
+  },
+  {
+    path: '/add-campaign',
+    asyncComponent: () => import('./campaign-update')
+  },
+  {
+    path: '/edit-campaign/:id',
+    asyncComponent: () => import('./campaign-update')
+  },
+  {
+    path: '/tag-management-list',
+    asyncComponent: () => import('./tag-management-list')
+  },
+  {
+    path: '/tag-management-detail/:id',
+    asyncComponent: () => import('./tag-management-detail')
+  },
+  {
+    path: '/tag-management-edit/:id',
+    asyncComponent: () => import('./tag-management-edit')
+  },
+  {
+    path: '/tag-management-add',
+    asyncComponent: () => import('./tag-management-edit')
+  },
+  {
+    path: '/tasks',
+    asyncComponent: () => import('./task')
+  },
+  {
+    path: '/add-task',
+    asyncComponent: () => import('./task-update')
+  },
+  {
+    path: '/edit-task/:id',
+    asyncComponent: () => import('./task-update')
+  },
+  {
     path: '/description-management',
     asyncComponent: () => import('./description-management')
+  },
+  {
+    path: '/pet-owner-activity/:id',
+    asyncComponent: () => import('./pet-owner-activity')
+  },
+  {
+    path: '/pet-all/:id',
+    asyncComponent: () => import('./pet-all')
+  },
+  {
+    path: '/pet-owner-all/:id',
+    asyncComponent: () => import('./pet-owner-all')
+  },
+  {
+    path: '/prescriber-booking-detail',
+    asyncComponent: () => import('./prescriber-booking-detail')
   }
-  // {
-  //   path: '/invoice-details',
-  //   asyncComponent: () => import('./invoice-details')
-  // }
 ];
 
 const homeRoutes = [

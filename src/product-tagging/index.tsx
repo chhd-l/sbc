@@ -361,46 +361,46 @@ class AttributeLibrary extends Component<any, any> {
         key: 'taggingType',
         render: (text) => <div>{text === 'Text' ? 'Text tag (Top left)' : 'Image tag (Top right)'}</div>
       },
-      {
-        title: 'Tagging fill color',
-        dataIndex: 'taggingFillColor',
-        key: 'taggingFillColor',
-        render: (text) => (
-          <div>
-            {this.getColour(text) ? (
-              <>
-                <div style={{ width: 12, height: 12, backgroundColor: this.getColour(text).valueEn, display: 'inline-block', borderRadius: '25%', border: '1px solid', marginRight: 5 }}></div>
-                {this.getColour(text).name}
-              </>
-            ) : (
-              <p>-</p>
-            )}
-          </div>
-        )
-      },
-      {
-        title: 'Tagging font color',
-        dataIndex: 'taggingFontColor',
-        key: 'taggingFontColor',
-        render: (text) => (
-          <div>
-            {this.getColour(text) ? (
-              <>
-                <div style={{ width: 12, height: 12, backgroundColor: this.getColour(text).valueEn, display: 'inline-block', borderRadius: '25%', border: '1px solid', marginRight: 5 }}></div>
-                {this.getColour(text).name}
-              </>
-            ) : (
-              <p>-</p>
-            )}
-          </div>
-        )
-      },
-      {
-        title: 'Tagging image',
-        dataIndex: 'taggingImgUrl',
-        key: 'taggingImgUrl',
-        render: (text) => (text ? <img style={styles.tableImage} src={text} alt="Image" /> : null)
-      },
+      // {
+      //   title: 'Tagging fill color',
+      //   dataIndex: 'taggingFillColor',
+      //   key: 'taggingFillColor',
+      //   render: (text) => (
+      //     <div>
+      //       {this.getColour(text) ? (
+      //         <>
+      //           <div style={{ width: 12, height: 12, backgroundColor: this.getColour(text).valueEn, display: 'inline-block', borderRadius: '25%', border: '1px solid', marginRight: 5 }}></div>
+      //           {this.getColour(text).name}
+      //         </>
+      //       ) : (
+      //         <p>-</p>
+      //       )}
+      //     </div>
+      //   )
+      // },
+      // {
+      //   title: 'Tagging font color',
+      //   dataIndex: 'taggingFontColor',
+      //   key: 'taggingFontColor',
+      //   render: (text) => (
+      //     <div>
+      //       {this.getColour(text) ? (
+      //         <>
+      //           <div style={{ width: 12, height: 12, backgroundColor: this.getColour(text).valueEn, display: 'inline-block', borderRadius: '25%', border: '1px solid', marginRight: 5 }}></div>
+      //           {this.getColour(text).name}
+      //         </>
+      //       ) : (
+      //         <p>-</p>
+      //       )}
+      //     </div>
+      //   )
+      // },
+      // {
+      //   title: 'Tagging image',
+      //   dataIndex: 'taggingImgUrl',
+      //   key: 'taggingImgUrl',
+      //   render: (text) => (text ? <img style={styles.tableImage} src={text} alt="Image" /> : null)
+      // },
       // {
       //   title: 'Display in shop',
       //   dataIndex: 'displayStatus',

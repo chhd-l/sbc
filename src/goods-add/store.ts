@@ -95,7 +95,7 @@ export default class AppStore extends Store {
       if ((results[0].res as any).code === Const.SUCCESS_CODE) {
         this.transaction(() => {
           this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context.cateList));
-          this.dispatch('goodsActor:getGoodsCate', ff, fromJS((results[0].res as any).context.brandList));
+          this.dispatch('goodsActor:getGoodsCate', fromJS((results[0].res as any).context.storeCateByCondition.storeCateResponseVOList));
           this.dispatch('formActor:check', fromJS((results[0].res as any).context.distributionCheck));
           this.dispatch('goodsActor:flashsaleGoods', fromJS((results[0].res as any).context.flashsalegoodsList.flashSaleGoodsVOList));
           this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[0].res as any).context.querySysDictionary));
@@ -611,7 +611,8 @@ export default class AppStore extends Store {
       goods = goods.set('internalGoodsNo', localStorage.getItem('storeCode') + '_' + goods.get('goodsNo'));
     }
 
-    if (goods.get('defaultPurchaseType') === 5765) {
+    if (Number(goods.get('subscriptionStatus')) === 0) {
+      goods = goods.set('defaultPurchaseType', null);
       goods = goods.set('defaultFrequencyId', null);
     }
 

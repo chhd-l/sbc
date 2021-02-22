@@ -190,7 +190,7 @@ class comment extends Component<any, any> {
     return (
       <div>
         <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
-          <Search id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
+          <Search placeholder="Please input comment" id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
           <span style={{ marginLeft: '10px' }}>
             <Button
               type="primary"

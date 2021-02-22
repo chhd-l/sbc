@@ -628,7 +628,8 @@ export default class AppStore extends Store {
       goods = goods.set('internalGoodsNo', localStorage.getItem('storeCode') + '_' + goods.get('goodsNo'));
     }
 
-    if (goods.get('defaultPurchaseType') === 5765) {
+    if (Number(goods.get('subscriptionStatus')) === 0) {
+      goods = goods.set('defaultPurchaseType', null);
       goods = goods.set('defaultFrequencyId', null);
     }
     this.dispatch('goodsActor: editGoods', goods);

@@ -109,7 +109,7 @@ export default class targetProduct extends Component<any, any> {
               </div>
             </div>
           </Spin>
-          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={[]} />
+          {visible && <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={[]} />}
         </div>
       </div>
     );

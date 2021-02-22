@@ -28,7 +28,7 @@ export default class basicInformation extends Component<any, any> {
 
   offerTimePeriodValidator = (rule, value, callback) => {
     const { editable } = this.props;
-    if (editable && value[0] < moment().startOf('day')) {
+    if (editable && value && value.length && value[0] < moment().startOf('day')) {
       callback('Start Date invalid');
     }
     callback();
@@ -141,11 +141,11 @@ export default class basicInformation extends Component<any, any> {
                 </Col>
                 <Col span={20}>
                   {getFieldDecorator('frequency', {
-                    initialValue: subscriptionPlan.frequency,
+                    initialValue: subscriptionPlan.frequency.map((fre) => parseInt(fre)),
                     rules: [{ required: true, message: 'Please select Frequency' }]
                   })(
                     <Select
-                      disabled={!editable}
+                      disabled={!!subscriptionPlan.id}
                       mode="multiple"
                       onChange={(value: any) => {
                         this.props.addField('frequency', value);
@@ -167,7 +167,7 @@ export default class basicInformation extends Component<any, any> {
                 rules: [{ required: true, message: 'Please input Number of delivery' }]
               })(
                 <InputNumber
-                  disabled={!editable}
+                  disabled={!!subscriptionPlan.id}
                   precision={0}
                   min={1}
                   max={100}

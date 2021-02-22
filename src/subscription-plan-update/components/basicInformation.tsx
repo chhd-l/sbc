@@ -145,7 +145,7 @@ export default class basicInformation extends Component<any, any> {
                     rules: [{ required: true, message: 'Please select Frequency' }]
                   })(
                     <Select
-                      disabled={!editable}
+                      disabled={!!subscriptionPlan.id}
                       mode="multiple"
                       onChange={(value: any) => {
                         this.props.addField('frequency', value);
@@ -167,7 +167,7 @@ export default class basicInformation extends Component<any, any> {
                 rules: [{ required: true, message: 'Please input Number of delivery' }]
               })(
                 <InputNumber
-                  disabled={!editable}
+                  disabled={!!subscriptionPlan.id}
                   precision={0}
                   min={1}
                   max={100}

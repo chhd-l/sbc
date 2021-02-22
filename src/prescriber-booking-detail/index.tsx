@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, DatePicker, Empty } from 'antd';
+import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, DatePicker, Empty, Modal } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -30,7 +30,16 @@ class BookingDetail extends Component<any, any> {
         pageSize: 9,
         total: 1
       },
-      BookingList: [1, 2, 34, 5]
+      BookingList: [1, 2, 34, 5],
+      isEdit: false,
+      visible: false,
+      bookForm: {
+        checkUpDate: '',
+        checkUpStartTime: '',
+        checkUpEndTime: '',
+        petOwner: '',
+        pet: ''
+      }
     };
   }
   componentDidMount() {}
@@ -55,8 +64,31 @@ class BookingDetail extends Component<any, any> {
   deleteBook = (id) => {};
   onPageChange = (page, pageSize) => {};
 
+  handleCancel = () => {};
+  handleSubmit = () => {};
+
+  onBookFormChange = ({ field, value }) => {
+    let data = this.state.bookForm;
+    data[field] = value;
+    this.setState({
+      bookForm: data
+    });
+  };
+
   render() {
-    const { loading, title, pagination, BookingList } = this.state;
+    const { loading, title, pagination, BookingList, isEdit, visible, bookForm } = this.state;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 15 }
+      }
+    };
+    const { getFieldDecorator } = this.props.form;
 
     return (
       <AuthWrapper functionName="f_booking_detail">
@@ -211,6 +243,74 @@ class BookingDetail extends Component<any, any> {
             </div>
           </Spin>
         </div>
+        <Modal
+          width={600}
+          maskClosable={false}
+          title={isEdit ? 'Edit tax zone' : 'New tax zone'}
+          visible={visible}
+          confirmLoading={loading}
+          onCancel={() => this.handleCancel()}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.handleCancel();
+              }}
+            >
+              Cancel
+            </Button>,
+            <Button key="submit" type="primary" onClick={this.handleSubmit}>
+              Submit
+            </Button>
+          ]}
+        >
+          <Form {...formItemLayout}>
+            {/* <FormItem label="Check-up Date">
+                {getFieldDecorator('checkUpDate', {
+                  rules: [
+                    { required: true, message: 'Check-up Date is required' },
+                  ],
+                  initialValue: bookForm.checkUpDate
+                })(
+
+                  <DatePicker style={{ width: '80%' }} onChange={} />
+                  <Input
+                    style={{ width: '80%' }}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onBookFormChange({
+                        field: 'taxZoneName',
+                        value
+                      });
+                    }}
+                  />
+                )}
+              </FormItem> */}
+            <FormItem label="Tax zone description">
+              {getFieldDecorator('taxZoneDescription', {
+                rules: [
+                  {
+                    max: 500,
+                    message: 'Exceed maximum length!'
+                  }
+                ],
+                initialValue: bookForm.taxZoneDescription
+              })(
+                <Input
+                  style={{ width: '80%' }}
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onBookFormChange({
+                      field: 'taxZoneDescription',
+                      value
+                    });
+                  }}
+                />
+              )}
+            </FormItem>
+          </Form>
+        </Modal>
+
         <div className="bar-button">
           <Button
             type="primary"

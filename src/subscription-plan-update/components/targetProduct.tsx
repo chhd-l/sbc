@@ -100,7 +100,7 @@ export default class targetProduct extends Component<any, any> {
                     {editable ? (
                       <div className="noProduct">
                         <div className="addProduct" onClick={this.showAddTargetProduct}>
-                          <span> + Select product</span>
+                          <span> + Add product</span>
                         </div>
                       </div>
                     ) : null}

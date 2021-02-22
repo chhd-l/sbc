@@ -144,12 +144,9 @@ class AttributeLibrary extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message.toString() || 'Operation failed');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failed');
-      });
+      .catch((err) => {});
   };
 
   onChangeValue = (id, value, type) => {
@@ -293,14 +290,12 @@ class AttributeLibrary extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
       });
   };
   addAttributes = (params: object) => {
@@ -319,12 +314,9 @@ class AttributeLibrary extends Component<any, any> {
             () => this.getAttributes()
           );
         } else {
-          message.error(res.message || 'Operation failed');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failed');
-      });
+      .catch((err) => {});
   };
   deleteAttributes = (id) => {
     let params = {
@@ -338,12 +330,9 @@ class AttributeLibrary extends Component<any, any> {
           this.getAttributes();
           message.success('Operate successfully');
         } else {
-          message.error(res.message.toString() || 'Operation failed');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failed');
-      });
+      .catch((err) => {});
   };
 
   updateAttributeStatus = (checked, row) => {
@@ -372,12 +361,9 @@ class AttributeLibrary extends Component<any, any> {
           this.getAttributes();
           message.success('Operate successfully');
         } else {
-          message.error(res.message.toString() || 'Operation failed');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failed');
-      });
+      .catch((err) => {});
   };
 
   getAttributeValue = (attributeValueList, type) => {

@@ -43,7 +43,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('freight: goods: init', fromJS(res.context));
     } else {
-      message.error(res.message);
     }
   };
 
@@ -58,7 +57,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('freight: store: init', fromJS(res.context));
     } else {
-      message.error(res.message);
     }
   };
 
@@ -80,7 +78,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
     } else {
-      message.error(res.message);
     }
   };
 
@@ -106,7 +103,6 @@ export default class AppStore extends Store {
         }
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -130,7 +126,6 @@ export default class AppStore extends Store {
         this.freightTemplateGoods();
       }
     } else {
-      message.error(res.message);
     }
   };
 
@@ -154,7 +149,6 @@ export default class AppStore extends Store {
         value: res.context.freightTemplateType
       });
     } else {
-      message.error(res.message);
     }
   };
 }

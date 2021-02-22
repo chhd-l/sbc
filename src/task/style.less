@@ -10,6 +10,7 @@
 
 .taskCardViewClass .taskCardItem {
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .taskStatusList {
@@ -106,7 +107,6 @@
       color: rgba(233, 63, 81);
       float: right;
       position: relative;
-      top: 70px;
       margin-right: 5px;
     }
   }
@@ -153,3 +153,10 @@
   position: relative;
   margin-bottom: 20px;
 }
+
+.filter-content {
+  /deep/ .ant-select-selection-selected-value {
+    width: 150px;
+  }
+}
+

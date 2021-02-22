@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb, AuthWrapper, history } from 'qmkit';
+import { Headline, SelectGroup, BreadCrumb, AuthWrapper, history, Const } from 'qmkit';
 import { Row, Col, Form, Modal, message, Button, Card, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
@@ -56,12 +56,10 @@ export default class PaymentSetting extends React.Component<any, any> {
   }
   getPaymentSetting = async () => {
     const { res } = await webapi.getPaymentSetting();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         paymentList: res.context.payGatewayVOList
       });
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -79,10 +77,7 @@ export default class PaymentSetting extends React.Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div
-          className="container-search"
-          style={{ height: '100vh', background: '#fff' }}
-        >
+        <div className="container-search" style={{ height: '100vh', background: '#fff' }}>
           <ContainerDiv>
             <Headline title={<FormattedMessage id="paymentSetting" />} />
             <Row>
@@ -101,9 +96,7 @@ export default class PaymentSetting extends React.Component<any, any> {
                         />
                       </div>
                       <div className="bar">
-                        <div className="status">
-                          {item.isOpen === 1 ? 'Enabled' : 'Disabled'}
-                        </div>
+                        <div className="status">{item.isOpen === 1 ? 'Enabled' : 'Disabled'}</div>
                         <div>
                           <Tooltip placement="top" title="Edit">
                             <a
@@ -128,12 +121,7 @@ export default class PaymentSetting extends React.Component<any, any> {
                 ))}
             </Row>
 
-            <PaymentModel
-              paymentForm={this.state.paymentForm}
-              visible={this.state.paymentVisible}
-              parent={this}
-              reflash={() => this.reflash()}
-            />
+            <PaymentModel paymentForm={this.state.paymentForm} visible={this.state.paymentVisible} parent={this} reflash={() => this.reflash()} />
           </ContainerDiv>
         </div>
       </div>

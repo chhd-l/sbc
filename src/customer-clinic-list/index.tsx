@@ -1,6 +1,6 @@
 import React from 'react';
 import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Row, Col, Tooltip } from 'antd';
-import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
+import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -154,7 +154,7 @@ export default class Customer extends React.Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let pagination = this.state.pagination;
           let searchList = res.context ? res.context.detailResponseList : [];
           pagination.total = res.context ? res.context.total : 0;
@@ -164,15 +164,12 @@ export default class Customer extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'get data filed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error('get data filed');
-
         this.setState({
           loading: false
         });
@@ -199,18 +196,16 @@ export default class Customer extends React.Component<any, any> {
     webapi
       .delCustomer(params)
       .then((data) => {
-        if (data.res.code === 'K-000000') {
+        if (data.res.code === Const.SUCCESS_CODE) {
           message.success(data.res.message || 'Delete success');
           this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
         } else {
-          message.error(data.res.message || 'Delete failed');
           this.setState({
             loading: true
           });
         }
       })
       .catch((err) => {
-        message.error('Delete failed');
         this.setState({
           loading: true
         });

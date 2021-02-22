@@ -6,7 +6,7 @@ import { IOptions, Store } from 'plume2';
 import { message } from 'antd';
 import moment from 'moment';
 
-import {Const, util} from 'qmkit';
+import { Const, util } from 'qmkit';
 
 import FlowStatisticsActor from './actor/customer-statistics-actor';
 import * as webapi from './webapi';
@@ -31,9 +31,7 @@ export default class AppStore extends Store {
   init = async () => {
     //客户分布概况（等级+地区）
     this.getViewData(0, 0);
-    const today = moment()
-      .format(Const.DAY_FORMAT)
-      .toString();
+    const today = moment().format(Const.DAY_FORMAT).toString();
     //设置时间段
     this.setDateRange(today, today, 0);
 
@@ -42,22 +40,20 @@ export default class AppStore extends Store {
     if (util.isThirdStore()) {
       const levRes = await webapi.getUserLevelList();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.storeLevelVOList;
       // 店铺等级转成平台等级格式,方便后面的业务逻辑公用
-      levelList.forEach(level => {
+      levelList.forEach((level) => {
         level.customerLevelId = level.storeLevelId;
         level.customerLevelName = level.levelName;
       });
     } else {
       const levRes = await webapi.getBossUserLevelList();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
         return;
       }
-      levelList = levRes.res.context.customerLevelVOList
+      levelList = levRes.res.context.customerLevelVOList;
     }
     this.dispatch('customer:levelInit', levelList);
   };
@@ -77,7 +73,6 @@ export default class AppStore extends Store {
         if (res && res.code == Const.SUCCESS_CODE) {
           this.dispatch('customer:getViewData', res.context);
         } else {
-          message.error(res.message);
         }
       });
     } else {
@@ -86,10 +81,7 @@ export default class AppStore extends Store {
       const areaResult = result.res;
       if (areaResult && areaResult.code == Const.SUCCESS_CODE) {
         let totalCount = 0;
-        const totalCountResult = await webapi.getCustomerLevelData(
-          dayChoice,
-          null
-        ); //为了获取客户总数，total
+        const totalCountResult = await webapi.getCustomerLevelData(dayChoice, null); //为了获取客户总数，total
         const totalCountRes = totalCountResult.res;
         if (totalCountRes && totalCountRes.code == Const.SUCCESS_CODE) {
           totalCount = (totalCountRes.context as any).total;
@@ -134,28 +126,12 @@ export default class AppStore extends Store {
       }
 
       //获取分页数据
-      const firstSortedInfo = this.state()
-        .get('firstSortedInfo')
-        .toJS();
-      this.getPageData(
-        1,
-        firstPageSize,
-        firstSortedInfo.columnKey,
-        firstSortedInfo.order
-      );
+      const firstSortedInfo = this.state().get('firstSortedInfo').toJS();
+      this.getPageData(1, firstPageSize, firstSortedInfo.columnKey, firstSortedInfo.order);
 
       //获取多表格数据
-      const secondSortedInfo = this.state()
-        .get('secondSortedInfo')
-        .toJS();
-      this.getMultiPageData(
-        queryType,
-        null,
-        1,
-        secondPageSize,
-        secondSortedInfo.columnKey,
-        secondSortedInfo.order
-      );
+      const secondSortedInfo = this.state().get('secondSortedInfo').toJS();
+      this.getMultiPageData(queryType, null, 1, secondPageSize, secondSortedInfo.columnKey, secondSortedInfo.order);
     });
   };
 
@@ -168,28 +144,11 @@ export default class AppStore extends Store {
    * @param sortType
    * @returns {Promise<void>}
    */
-  getMultiPageData = async (
-    queryType,
-    queryText,
-    pageNum,
-    pageSize,
-    sortName,
-    sortType
-  ) => {
-    const { dateCycle } = this.state()
-      .get('dateRange')
-      .toJS();
+  getMultiPageData = async (queryType, queryText, pageNum, pageSize, sortName, sortType) => {
+    const { dateCycle } = this.state().get('dateRange').toJS();
     const queryTypeStore = this.state().get('queryType');
     const pageSizeStore = this.state().get('pageSize');
-    const { res } = await webapi.getCustomerMultiPageData(
-      queryType,
-      dateCycle,
-      queryText,
-      pageNum,
-      pageSize,
-      sortName,
-      sortType
-    );
+    const { res } = await webapi.getCustomerMultiPageData(queryType, dateCycle, queryText, pageNum, pageSize, sortName, sortType);
     if (res && res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         if (queryTypeStore !== queryType) {
@@ -205,7 +164,6 @@ export default class AppStore extends Store {
         this.dispatch('customer:getMultiPageData', res.context);
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -219,16 +177,8 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   getPageData = async (pageNum, pageSize, sortName, sortType) => {
-    const { dateCycle } = this.state()
-      .get('dateRange')
-      .toJS();
-    const { res } = await webapi.getCustomerPageData(
-      dateCycle,
-      pageNum,
-      pageSize,
-      sortName,
-      sortType
-    );
+    const { dateCycle } = this.state().get('dateRange').toJS();
+    const { res } = await webapi.getCustomerPageData(dateCycle, pageNum, pageSize, sortName, sortType);
     if (res && res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('customer:getPageData', res.context);
@@ -239,7 +189,6 @@ export default class AppStore extends Store {
         });
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -250,14 +199,11 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   getChartData = async (isWeek) => {
-    const { dateCycle } = this.state()
-      .get('dateRange')
-      .toJS();
+    const { dateCycle } = this.state().get('dateRange').toJS();
     const { res } = await webapi.getCustomerChartData(dateCycle, isWeek);
     if (res && res.code == Const.SUCCESS_CODE) {
       this.dispatch('customer:getChartData', res.context);
     } else {
-      message.error(res.message);
     }
   };
 

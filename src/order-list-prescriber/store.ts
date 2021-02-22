@@ -159,7 +159,6 @@ export default class AppStore extends Store {
       this.init();
       message.success('Operate successfully');
     } else {
-      message.error(res.message);
     }
   };
 
@@ -175,8 +174,6 @@ export default class AppStore extends Store {
       this.init();
     } else if (res.code == 'K-000001') {
       message.error('订单状态已改变，请刷新页面后重试!');
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -187,9 +184,7 @@ export default class AppStore extends Store {
    */
   onCheckReturn = async (tid: string) => {
     const { res } = await webapi.deliverVerify(tid);
-    if (res.code !== Const.SUCCESS_CODE) {
-      message.error(res.message);
-    } else {
+    if (res.code === Const.SUCCESS_CODE) {
       history.push({
         pathname: `/order-detail/${tid}`,
         state: { tab: '2' }

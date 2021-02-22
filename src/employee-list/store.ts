@@ -48,7 +48,6 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
       });
     } else {
-      message.error(res.message);
       this.dispatch('loading:end');
     }
   };
@@ -76,7 +75,6 @@ export default class AppStore extends Store {
         this.dispatch('employee:defaultExpandedKeys', defaultExpandedKeys);
       }
     } else {
-      message.error(res.message);
     }
   };
 
@@ -144,7 +142,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -162,7 +159,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -182,7 +178,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -197,7 +192,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -209,7 +203,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -241,7 +234,6 @@ export default class AppStore extends Store {
       this.switchModal('');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -259,7 +251,6 @@ export default class AppStore extends Store {
       this.switchModal('');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -332,7 +323,6 @@ export default class AppStore extends Store {
         this.init();
       } else {
         this.dispatch('edit', true);
-        message.error(res.message);
       }
       return;
     }
@@ -343,7 +333,6 @@ export default class AppStore extends Store {
       this.dispatch('modal:hide');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -412,7 +401,6 @@ export default class AppStore extends Store {
       this.toggleAdjustModal();
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -445,7 +433,6 @@ export default class AppStore extends Store {
       this.toggleConnectModal();
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -466,7 +453,6 @@ export default class AppStore extends Store {
       //this.toggleConnectModal();
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 

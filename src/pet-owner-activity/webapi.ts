@@ -41,3 +41,22 @@ export function getGlodenMomentList() {
     })
   });
 }
+
+
+export function getOrderList(filterParams = {}) {
+  return Fetch<TResult>('/order/list', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getBookingList(filterParams = {}) {
+  return Fetch<TResult>('/booking/list', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

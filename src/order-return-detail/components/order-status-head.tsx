@@ -123,23 +123,14 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
     //退款单
     refundRecord = refundRecord || fromJS({});
-    const enableReturn =
-      (returnFlowState === 'RECEIVED' ||
-        (returnType == 'REFUND' && returnFlowState === 'AUDIT')) &&
-      refundRecord.get('refundStatus') != null &&
-      refundRecord.get('refundStatus') != 2 &&
-      refundRecord.get('refundStatus') != 3;
+    const enableReturn = (returnFlowState === 'RECEIVED' || (returnType == 'REFUND' && returnFlowState === 'AUDIT')) && refundRecord.get('refundStatus') != null && refundRecord.get('refundStatus') != 2 && refundRecord.get('refundStatus') != 3;
 
     return (
       <div>
         <div style={styles.container as any}>
           <div style={styles.row}>
             <div style={styles.orderPre}>
-              <label style={styles.greenText}>
-                {returnType == 'RETURN'
-                  ? Const.returnGoodsState[returnFlowState]
-                  : Const.returnMoneyState[returnFlowState] || ''}
-              </label>
+              <label style={styles.greenText}>{returnType == 'RETURN' ? Const.returnGoodsState[returnFlowState] : Const.returnMoneyState[returnFlowState] || ''}</label>
             </div>
             <div style={styles.orderEnd}>
               {returnFlowState === 'INIT' && (
@@ -157,11 +148,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
               )}
               {returnFlowState === 'INIT' && (
                 <AuthWrapper functionName="rolf002">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() => this._showAudit(onAudit, rid)}
-                  >
+                  <a style={styles.pr20} href="#" onClick={() => this._showAudit(onAudit, rid)}>
                     Audit
                   </a>
                 </AuthWrapper>
@@ -169,11 +156,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
               {returnFlowState === 'INIT' && (
                 <AuthWrapper functionName="rolf002">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() => this._showReject(onReject, rid)}
-                  >
+                  <a style={styles.pr20} href="#" onClick={() => this._showReject(onReject, rid)}>
                     Reject
                   </a>
                 </AuthWrapper>
@@ -182,11 +165,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
               {/*退货单的已审核状态*/}
               {returnFlowState === 'AUDIT' && returnType == 'RETURN' && (
                 <AuthWrapper functionName="rolf003">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() => this._showDeliver(onDeliver, rid)}
-                  >
+                  <a style={styles.pr20} href="#" onClick={() => this._showDeliver(onDeliver, rid)}>
                     Fill in logistics
                   </a>
                 </AuthWrapper>
@@ -194,11 +173,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
               {returnFlowState === 'DELIVERED' && (
                 <AuthWrapper functionName="rolf004">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() => this._showReceive(onReceive, rid)}
-                  >
+                  <a style={styles.pr20} href="#" onClick={() => this._showReceive(onReceive, rid)}>
                     收货
                   </a>
                 </AuthWrapper>
@@ -206,13 +181,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
               {returnFlowState === 'DELIVERED' && (
                 <AuthWrapper functionName="rolf004">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() =>
-                      this._showRejectReceive(onRejectReceive, rid)
-                    }
-                  >
+                  <a style={styles.pr20} href="#" onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
                     拒绝收货
                   </a>
                 </AuthWrapper>
@@ -228,21 +197,9 @@ export default class OrderStatusHead extends React.Component<any, any> {
                       href="#"
                       onClick={() => {
                         if (payType == 0) {
-                          this._showOnlineRefund(
-                            onOnlineRefund,
-                            rid,
-                            customerId,
-                            payPrice,
-                            applyPoints
-                          );
+                          this._showOnlineRefund(onOnlineRefund, rid, customerId, payPrice, applyPoints);
                         } else {
-                          this._showOfflineRefund(
-                            onOfflineRefund,
-                            rid,
-                            customerId,
-                            payPrice,
-                            applyPoints
-                          );
+                          this._showOfflineRefund(onOfflineRefund, rid, customerId, payPrice, applyPoints);
                         }
                       }}
                     >
@@ -254,13 +211,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
               {/*已收货状态 或者 退款单的已审核状态*/}
               {enableReturn && (
                 <AuthWrapper functionName="rolf005">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() =>
-                      this._showRejectRefund(onRejectRefund, rid, 0 == payType)
-                    }
-                  >
+                  <a style={styles.pr20} href="#" onClick={() => this._showRejectRefund(onRejectRefund, rid, 0 == payType)}>
                     <FormattedMessage id="refusedToRefund" />
                   </a>
                 </AuthWrapper>
@@ -278,8 +229,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                 )}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="applicationTime" />：
-                {moment(detail.get('createTime')).format(Const.TIME_FORMAT)}
+                <FormattedMessage id="applicationTime" />：{moment(detail.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
               <p style={styles.darkText}>
                 <FormattedMessage id="orderNumber" />：{detail.get('tid')}
@@ -290,12 +240,10 @@ export default class OrderStatusHead extends React.Component<any, any> {
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                <FormattedMessage id="consumer" />：
-                {detail.getIn(['buyer', 'name'])}
+                <FormattedMessage id="consumer" />：{detail.getIn(['buyer', 'name'])}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="consumerAccount" />：
-                {this._parsePhone(detail.getIn(['buyer', 'account']))}
+                <FormattedMessage id="consumerAccount" />：{this._parsePhone(detail.getIn(['buyer', 'account']))}
               </p>
 
               {detail.getIn(['buyer', 'customerFlag']) && (
@@ -307,25 +255,10 @@ export default class OrderStatusHead extends React.Component<any, any> {
             </Col>
           </Row>
         </div>
-        <RejectModal
-          data={rejectModalData}
-          onHide={onRejectModalHide}
-          handleOk={rejectModalData.get('onOk')}
-        />
-        <DeliverModal
-          data={deliverModalData}
-          onHide={onDeliverModalHide}
-          handleOk={deliverModalData.get('onOk')}
-        />
-        <RefundModal
-          data={refundModalData}
-          onHide={onRefundModalHide}
-          handleOk={refundModalData.get('onOk')}
-        />
-        <OnlineRefundModal
-          data={onlineRefundModalData}
-          onHide={onlineRefundModalHide}
-        />
+        <RejectModal data={rejectModalData} onHide={onRejectModalHide} handleOk={rejectModalData.get('onOk')} />
+        <DeliverModal data={deliverModalData} onHide={onDeliverModalHide} handleOk={deliverModalData.get('onOk')} />
+        <RefundModal data={refundModalData} onHide={onRefundModalHide} handleOk={refundModalData.get('onOk')} />
+        <OnlineRefundModal data={onlineRefundModalData} onHide={onlineRefundModalHide} />
       </div>
     );
   }
@@ -384,13 +317,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
   }
 
   // 在线退款 这里不要奇怪，新的需求 线上线下走的是一个接口 才onOfflineRefund
-  async _showOnlineRefund(
-    onOnlineRefund: Function,
-    rid: string,
-    customerId: string,
-    refundAmount: number,
-    applyPoints: number
-  ) {
+  async _showOnlineRefund(onOnlineRefund: Function, rid: string, customerId: string, refundAmount: number, applyPoints: number) {
     this.props.relaxProps.onRefundOnlineModalChange({
       visible: true,
       onOk: onOnlineRefund,
@@ -402,13 +329,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
   }
 
   // 线下退款
-  _showOfflineRefund(
-    onOfflineRefund: Function,
-    rid: string,
-    customerId: string,
-    refundAmount: number,
-    applyPoints: number
-  ) {
+  _showOfflineRefund(onOfflineRefund: Function, rid: string, customerId: string, refundAmount: number, applyPoints: number) {
     this.props.relaxProps.onRefundModalChange({
       visible: true,
       onOk: onOfflineRefund,
@@ -420,17 +341,12 @@ export default class OrderStatusHead extends React.Component<any, any> {
   }
 
   // 拒绝退款
-  async _showRejectRefund(
-    onRejectRefund: Function,
-    rid: string,
-    online: boolean
-  ) {
+  async _showRejectRefund(onRejectRefund: Function, rid: string, online: boolean) {
     // 在线退款需要校验是否已在退款处理中
     if (online) {
       const { checkRefundStatus, init } = this.props.relaxProps;
       const { res } = await checkRefundStatus(rid);
       if (res.code !== Const.SUCCESS_CODE) {
-        message.error(res.message);
         setTimeout(() => init(rid), 2000);
         return;
       }

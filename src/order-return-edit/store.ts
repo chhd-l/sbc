@@ -7,15 +7,7 @@ import FormActor from './actor/form-actor';
 import TradeActor from './actor/trade-actor';
 import PriceActor from './actor/price-actor';
 import ImageActor from './actor/image-actor';
-import {
-  fetchOrderReturnList,
-  getCanRefundPrice,
-  getReturnDetail,
-  getReturnReasons,
-  getReturnWays,
-  getTradeDetail,
-  remedy
-} from './webapi';
+import { fetchOrderReturnList, getCanRefundPrice, getReturnDetail, getReturnReasons, getReturnWays, getTradeDetail, remedy } from './webapi';
 
 const confirm = Modal.confirm;
 
@@ -28,12 +20,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new FormActor(),
-      new TradeActor(),
-      new PriceActor(),
-      new ImageActor()
-    ];
+    return [new FormActor(), new TradeActor(), new PriceActor(), new ImageActor()];
   }
 
   init = async (rid: string) => {
@@ -66,12 +53,7 @@ export default class AppStore extends Store {
             return v.returnFlowState == 'COMPLETED';
           })
           .forEach((v) => {
-            canApplyPrice = QMFloat.accSubtr(
-              canApplyPrice,
-              v.returnPrice.applyStatus
-                ? v.returnPrice.applyPrice
-                : v.returnPrice.totalPrice
-            );
+            canApplyPrice = QMFloat.accSubtr(canApplyPrice, v.returnPrice.applyStatus ? v.returnPrice.applyPrice : v.returnPrice.totalPrice);
           });
       }
     }
@@ -90,12 +72,8 @@ export default class AppStore extends Store {
 
     const detailMap: IMap = fromJS(returnDetail.res || Map());
 
-    const selectedReturnReason = detailMap.get('returnReason')
-      ? detailMap.get('returnReason').keySeq().first()
-      : '0';
-    const selectedReturnWay = detailMap.get('returnWay')
-      ? detailMap.get('returnWay').keySeq().first()
-      : '0';
+    const selectedReturnReason = detailMap.get('returnReason') ? detailMap.get('returnReason').keySeq().first() : '0';
+    const selectedReturnWay = detailMap.get('returnWay') ? detailMap.get('returnWay').keySeq().first() : '0';
 
     this.transaction(() => {
       this.dispatch('formActor: editItem', {
@@ -126,10 +104,7 @@ export default class AppStore extends Store {
         key: 'applyIntegral',
         value: detailMap.getIn(['returnPoints', 'applyPoints'])
       });
-      this.dispatch(
-        'imageActor: editImages',
-        fromJS(images.map((v) => JSON.parse(v)))
-      );
+      this.dispatch('imageActor: editImages', fromJS(images.map((v) => JSON.parse(v))));
 
       this.dispatch('tradeActor: init', {
         returnDetail: detailMap,
@@ -178,10 +153,7 @@ export default class AppStore extends Store {
     param = param.set('rid', data.get('id'));
 
     // 退货原因
-    param = param.set(
-      'returnReason',
-      Map().set(data.get('selectedReturnReason'), 0)
-    );
+    param = param.set('returnReason', Map().set(data.get('selectedReturnReason'), 0));
 
     // 退货说明
     param = param.set('description', data.get('description').trim());
@@ -215,30 +187,17 @@ export default class AppStore extends Store {
       }
 
       // 退货方式
-      param = param.set(
-        'returnWay',
-        Map().set(data.get('selectedReturnWay'), 0)
-      );
+      param = param.set('returnWay', Map().set(data.get('selectedReturnWay'), 0));
 
       param = param.set('returnItemNums', returnItems);
     }
 
     // 退款金额，退货是商品总额，退款是应付金额
-    const totalPrice = data.get('isReturn')
-      ? returnItems
-          .reduce(
-            (sum, item) =>
-              QMFloat.accAdd(sum, item.get('num') * item.get('price')),
-            0
-          )
-          .toFixed(2)
-      : data.getIn(['returnDetail', 'returnPrice', 'totalPrice']);
+    const totalPrice = data.get('isReturn') ? returnItems.reduce((sum, item) => QMFloat.accAdd(sum, item.get('num') * item.get('price')), 0).toFixed(2) : data.getIn(['returnDetail', 'returnPrice', 'totalPrice']);
 
     param = param.set('returnPriceRequest', {
       applyStatus: data.get('applyStatus'),
-      applyPrice: data.get('isReturn')
-        ? totalPrice
-        : data.get('applyPrice').toFixed(2),
+      applyPrice: data.get('isReturn') ? totalPrice : data.get('applyPrice').toFixed(2),
       totalPrice: totalPrice
     });
 
@@ -247,9 +206,7 @@ export default class AppStore extends Store {
     });
 
     // 本次退款金额
-    const rePrice = data.get('applyStatus')
-      ? data.get('applyPrice')
-      : totalPrice;
+    const rePrice = data.get('applyStatus') ? data.get('applyPrice') : totalPrice;
     // 剩余可退金额
     let remainPrice = rePrice;
     const { res } = await getCanRefundPrice(data.get('id'));
@@ -299,7 +256,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       history.go(-1);
     } else {
-      message.error(result.res.message);
       return;
     }
   };

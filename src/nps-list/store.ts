@@ -17,12 +17,7 @@ export default class AppStore extends Store {
   tabMap = { '1': null, '2': 0 };
 
   bindActor() {
-    return [
-      new ListActor(),
-      new LoadingActor(),
-      new FormActor(),
-      new EvaluateSumActor()
-    ];
+    return [new ListActor(), new LoadingActor(), new FormActor(), new EvaluateSumActor()];
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
@@ -64,7 +59,6 @@ export default class AppStore extends Store {
       });
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
 
     const param = {} as any;
@@ -73,13 +67,8 @@ export default class AppStore extends Store {
     const { res: storeEvaluateSum } = await webapi.fetchStoreEvaluateSum(param);
     if (storeEvaluateSum.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.dispatch(
-          'storeEvaluateSum:init',
-          storeEvaluateSum.context.storeEvaluateSumVO || {}
-        );
+        this.dispatch('storeEvaluateSum:init', storeEvaluateSum.context.storeEvaluateSumVO || {});
       });
-    } else {
-      message.error(storeEvaluateSum.message);
     }
   };
 
@@ -130,9 +119,7 @@ export default class AppStore extends Store {
   /**
    * 初始化服务评价记录
    */
-  initStoreEvaluate = async (
-    { pageNum, pageSize } = { pageNum: 0, pageSize: 10 }
-  ) => {
+  initStoreEvaluate = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     //近180天评分
     const param = {} as any;
     param.scoreCycle = 2;
@@ -141,8 +128,6 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('storeEvaluateNum:init', storeEvaluateNum.context);
       });
-    } else {
-      message.error(storeEvaluateNum.message);
     }
     //评价历史记录
     const { res } = await webapi.fetchStoreEvaluateList({
@@ -151,14 +136,9 @@ export default class AppStore extends Store {
     });
     if (res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.dispatch(
-          'storeEvaluateList:init',
-          res.context.storeEvaluateVOPage
-        );
+        this.dispatch('storeEvaluateList:init', res.context.storeEvaluateVOPage);
         this.dispatch('storeEvaluateList:currentPage', pageNum && pageNum + 1);
       });
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -178,7 +158,7 @@ export default class AppStore extends Store {
     //     res.context.goodsEvaluateVO.evaluateAnswer
     //   );
     // } else {
-    //   message.error(res.message);
+    //
     // }
   };
 
@@ -209,8 +189,6 @@ export default class AppStore extends Store {
       this.dispatch('cate: modal', false);
       this.init({ pageNum: 0, pageSize: 10 });
       message.success('Operate successfully');
-    } else {
-      message.error(res.message);
     }
   };
 }

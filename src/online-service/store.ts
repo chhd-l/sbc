@@ -24,8 +24,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.getOnlineServerSwitch();
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('ONLINE_SERVER_INIT', res.context);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -46,8 +44,6 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('ONLINE_SERVER_LIST', res.context);
       this.smsEdit();
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -78,14 +74,12 @@ export default class AppStore extends Store {
         }
       });
       this.transaction(() => {
-        ['effectivePc', 'effectiveApp', 'effectiveMobile'].forEach(
-          (v, index) => {
-            this.dispatch('ON_FORM_CHANGE', {
-              field: v,
-              value: valArr[index]
-            });
-          }
-        );
+        ['effectivePc', 'effectiveApp', 'effectiveMobile'].forEach((v, index) => {
+          this.dispatch('ON_FORM_CHANGE', {
+            field: v,
+            value: valArr[index]
+          });
+        });
       });
       return;
     }
@@ -131,9 +125,7 @@ export default class AppStore extends Store {
       }
 
       if (qqOnlineServerItemRopList.size > 0) {
-        let accounts = qqOnlineServerItemRopList.map((v) =>
-          v.get('customerServiceAccount')
-        );
+        let accounts = qqOnlineServerItemRopList.map((v) => v.get('customerServiceAccount'));
         let repeatNo = [];
         let temp = '';
         for (let i = 0; i < accounts.size - 1; i++) {
@@ -151,16 +143,12 @@ export default class AppStore extends Store {
         }
       }
 
-      const { res } = await webapi.onSaveOnlineServer(
-        qqOnlineServerRop,
-        qqOnlineServerItemRopList
-      );
+      const { res } = await webapi.onSaveOnlineServer(qqOnlineServerRop, qqOnlineServerItemRopList);
       if (res.code == Const.SUCCESS_CODE) {
         message.success('Operate successfully');
         this.smsCancel();
         this.init();
       } else {
-        message.error(res.message);
       }
     } else {
       message.error('No operation authority');

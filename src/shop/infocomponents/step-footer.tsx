@@ -3,6 +3,7 @@ import { Row, Col, Form, Modal, message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 import * as webapi from '../webapi';
+import { Const } from 'qmkit';
 
 const formItemLayout = {
   labelCol: {
@@ -30,12 +31,10 @@ export default class StepFour extends React.Component<any, any> {
 
   getContentInformation = async () => {
     const { res } = await webapi.getStoreContentInfo();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         contentInformation: res.context
       });
-    } else {
-      message.error(res.message);
     }
   };
 

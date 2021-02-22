@@ -57,12 +57,11 @@ export default class EditForm extends React.Component<any, any> {
 
   getClinicsLites = async () => {
     const { res } = await getClinicsLites();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         clinicsLites: res.context
       });
     } else {
-      message.error(res.message);
     }
   };
 
@@ -150,8 +149,7 @@ export default class EditForm extends React.Component<any, any> {
       };
 
       departmentIdList = {
-        initialValue: employeeForm.get('departmentIds')
-          ? employeeForm.get('departmentIds').split(',') : []
+        initialValue: employeeForm.get('departmentIds') ? employeeForm.get('departmentIds').split(',') : []
       };
       sex = {
         initialValue: employeeForm.get('sex') || 0
@@ -313,17 +311,7 @@ export default class EditForm extends React.Component<any, any> {
             {getFieldDecorator('departmentIdList', {
               ...departmentIdList
             })(
-              <TreeSelect
-                disabled={editDisable}
-                treeCheckable={true}
-                showSearch={false}
-                style={{ width: '100%' }}
-                dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
-                placeholder="Please select, Multiple choice"
-                allowClear
-                treeDefaultExpandAll
-                onChange={this.onChange}
-              >
+              <TreeSelect disabled={editDisable} treeCheckable={true} showSearch={false} style={{ width: '100%' }} dropdownStyle={{ maxHeight: 550, overflow: 'auto' }} placeholder="Please select, Multiple choice" allowClear treeDefaultExpandAll onChange={this.onChange}>
                 {this._loop(departTree)}
               </TreeSelect>
             )}

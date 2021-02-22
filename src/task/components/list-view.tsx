@@ -8,17 +8,7 @@ export default class ListView extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      taskList: [
-        {
-          assistantEmail: 'george.guo@effem.com',
-          assistantName: 'George Guo',
-          dueTime: '2021-02-18',
-          goldenMoment: 'First purchase(order confirmation)',
-          id: 1236,
-          name: 'test',
-          status: 'To Do'
-        }
-      ],
+      taskList: [],
       formData: {},
       pagination: {
         current: 1,
@@ -74,7 +64,7 @@ export default class ListView extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           this.setState({
-            taskList: res.context,
+            taskList: res.context.taskList,
             pagination: pagination,
             loading: false
           });
@@ -161,7 +151,7 @@ export default class ListView extends Component<any, any> {
         width: '10%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
+            <Tooltip placement="top" title="Details">
               <Link to={'/edit-task/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>

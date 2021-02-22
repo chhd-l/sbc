@@ -4,15 +4,7 @@ import { IMap } from 'typings/globalType';
 import { message } from 'antd';
 import DepartmentActor from './actor/department-actor';
 
-import {
-  addDepartment,
-  deleteDepartment,
-  modifyDepartmentName,
-  dragSort,
-  getDepartmentList,
-  filterEmployee,
-  modifyLeader
-} from './webapi';
+import { addDepartment, deleteDepartment, modifyDepartmentName, dragSort, getDepartmentList, filterEmployee, modifyLeader } from './webapi';
 import { Const } from 'qmkit';
 
 export default class AppStore extends Store {
@@ -143,7 +135,6 @@ export default class AppStore extends Store {
       // 关闭弹框
       this.modal(false);
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -156,7 +147,6 @@ export default class AppStore extends Store {
       // 刷新
       this.refresh();
     } else {
-      message.error(result.res.message);
     }
   };
 
@@ -165,17 +155,12 @@ export default class AppStore extends Store {
     const oldEmployeeId = formData.get('oldEmployeeId');
     const departmentId = formData.get('departmentId');
     const newEmployeeId = this.state().get('newEmployeeId');
-    let result: any = await modifyLeader(
-      departmentId,
-      oldEmployeeId,
-      newEmployeeId
-    );
+    let result: any = await modifyLeader(departmentId, oldEmployeeId, newEmployeeId);
     if (result.res.code === Const.SUCCESS_CODE) {
       // 刷新
       this.refresh();
       this.leaderModal();
     } else {
-      message.error(result.res.message);
       this.leaderModal();
     }
   };
@@ -190,16 +175,13 @@ export default class AppStore extends Store {
   cateSort = async (parentDepartmentIds, sourceIndex, targetIndex) => {
     let allDepartments = this.state().get('allDepartments');
 
-    let sortList = allDepartments
-      .filter((v) => v.get('parentDepartmentIds') == parentDepartmentIds)
-      .toJS();
+    let sortList = allDepartments.filter((v) => v.get('parentDepartmentIds') == parentDepartmentIds).toJS();
 
     const { res } = (await dragSort(sortList, sourceIndex, targetIndex)) as any;
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 }

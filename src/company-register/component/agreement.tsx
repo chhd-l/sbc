@@ -1,6 +1,6 @@
 import React from 'react';
 import { message, Layout } from 'antd';
-import { Fetch } from 'qmkit';
+import { Fetch, Const } from 'qmkit';
 import '../css/style.less';
 const { Header, Content } = Layout;
 
@@ -14,12 +14,11 @@ export default class Agreement extends React.Component<any, any> {
 
   componentDidMount() {
     Fetch('/business/config').then(({ res }) => {
-      if ((res as any).code == 'K-000000') {
+      if ((res as any).code == Const.SUCCESS_CODE) {
         this.setState((_prevState, _props) => ({
           businessRegister: (res as any).context.supplierRegister
         }));
       } else {
-        message.error((res as any).message);
       }
     });
   }
@@ -36,10 +35,7 @@ export default class Agreement extends React.Component<any, any> {
         </Header> */}
         <Content>
           <div style={styles.wrapper1} id="page-content">
-            <div
-              className="argeement-content wrapper"
-              dangerouslySetInnerHTML={{ __html: businessRegister }}
-            />
+            <div className="argeement-content wrapper" dangerouslySetInnerHTML={{ __html: businessRegister }} />
           </div>
         </Content>
       </Layout>

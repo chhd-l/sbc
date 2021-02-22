@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline, ReactEditor } from 'qmkit';
-import { Form, Input, Button, Col, Row, Select, InputNumber, message, Icon, Switch, DatePicker, Tabs } from 'antd';
+import { BreadCrumb, Const, Headline, ReactEditor, history } from 'qmkit';
+import { Form, Input, Button, Col, Row, Select, message, DatePicker, Tabs, Popconfirm, Tooltip } from 'antd';
 import ServiceList from './components/service-list';
 import Activity from './components/activity';
 import './style.less';
@@ -43,16 +43,8 @@ class TaskUpdate extends Component<any, any> {
       id: this.props.match.params.id,
       title: this.props.match.params.id ? 'Task edition' : 'Task creation',
       taskCompleted: false,
-      task: {
-        assistantEmail: 'george.guo@effem.com',
-        assistantName: 'George Guo',
-        startTime: '2021-02-18',
-        dueTime: '2021-02-18',
-        goldenMoment: 'First purchase(order confirmation)',
-        id: 1236,
-        name: 'test',
-        status: 'To Do'
-      },
+      tabKey: '',
+      task: {},
       assignedUsers: [],
       goldenMomentList: [],
       actionTypeList: ['Call', 'Email', 'N/A'],
@@ -65,6 +57,8 @@ class TaskUpdate extends Component<any, any> {
     this.onChange = this.onChange.bind(this);
     this.searchAssignedTo = this.searchAssignedTo.bind(this);
     this.searchAssignedPetOwners = this.searchAssignedPetOwners.bind(this);
+    this.updateTask = this.updateTask.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
   }
 
   componentDidMount() {
@@ -83,6 +77,26 @@ class TaskUpdate extends Component<any, any> {
       .catch(() => {
         message.error('Get data failed');
       });
+    const { id } = this.state;
+    if (id) {
+      webapi
+        .getTaskById(id)
+        .then((data) => {
+          const res = data.res;
+          if (res.code === Const.SUCCESS_CODE) {
+            let taskStatus = res.context.task.status;
+            this.setState({
+              task: res.context.task,
+              taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled'
+            });
+          } else {
+            message.error(res.message || 'Get data failed');
+          }
+        })
+        .catch(() => {
+          message.error('Get data failed');
+        });
+    }
   }
   onChange = ({ field, value }) => {
     let data = this.state.task;
@@ -99,19 +113,93 @@ class TaskUpdate extends Component<any, any> {
     if (value) {
     }
   };
+  updateTask(e) {
+    e.preventDefault();
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        const { task, id } = this.state;
+        console.log(task);
+        if (id) {
+          task.id = id; // edit by id
+          webapi
+            .updateTask(task)
+            .then((data) => {
+              const { res } = data;
+              if (res.code === 'K-000000') {
+                message.success('Operate successfully');
+                history.push({ pathname: '/tasks' });
+              } else {
+                message.error(res.message || 'Update Failed');
+              }
+            })
+            .catch((err) => {
+              message.error(err || 'Update Failed');
+            });
+        } else {
+          webapi
+            .createTask(task)
+            .then((data) => {
+              const { res } = data;
+              if (res.code === 'K-000000') {
+                message.success('Operate successfully');
+                history.push({ pathname: '/tasks' });
+              } else {
+                message.error(res.message || 'Add Failed');
+              }
+            })
+            .catch((err) => {
+              message.error(err || 'Add Failed');
+            });
+        }
+      }
+    });
+  }
+
+  deleteTask() {
+    webapi
+      .deleteTask(this.state.id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success('Operate successfully');
+          history.push({ pathname: '/tasks' });
+        } else {
+          message.error(res.message.toString() || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { title, task, id, taskCompleted, assignedUsers } = this.state;
+    const { title, tabKey, task, id, taskCompleted, assignedUsers } = this.state;
     const { associatedPetOwners, associatedPetList, associatedOrderList } = this.state;
     const { goldenMomentList, actionTypeList, priorityList, statusList } = this.state;
     return (
       <div>
         <BreadCrumb />
         <div className="container-search">
-          <Headline title={title} />
+          <Row>
+            <Col span={12}>
+              <Headline title={title} />
+            </Col>
+            <Col span={12} style={{textAlign:'right'}}>
+              <Popconfirm placement="topLeft" title="Task will be permanently deleted from the platform" onConfirm={() => this.deleteTask()} okText="Confirm" cancelText="Cancel">
+                <Tooltip placement="top" title="Delete">
+                  <Button type="primary">Delete</Button>
+                </Tooltip>
+              </Popconfirm>
+            </Col>
+          </Row>
         </div>
         <div className="container">
-          <Tabs defaultActiveKey="basic">
+          <Tabs
+            defaultActiveKey="basic"
+            onChange={(key) => {
+              this.setState({ tabKey: key });
+            }}
+          >
             <TabPane tab="Basic information" key="basic">
               <Form>
                 <Row>
@@ -193,7 +281,7 @@ class TaskUpdate extends Component<any, any> {
                         rules: [{ required: true, message: 'Please select golden moment' }]
                       })(
                         <Select
-                          disabled={taskCompleted || !!task.goldenMoment}
+                          disabled={taskCompleted || (!!task.goldenMoment && id)}
                           onChange={(value) =>
                             this.onChange({
                               field: 'goldenMoment',
@@ -219,10 +307,10 @@ class TaskUpdate extends Component<any, any> {
                         rules: [{ required: true, message: 'Please select start time' }]
                       })(
                         <DatePicker
-                          disabled={taskCompleted || !!task.startTime}
+                          disabled={taskCompleted || (!!task.startTime && id)}
                           style={{ width: '100%' }}
                           placeholder="Start Time"
-                          format="YYYY-MM-DD"
+                          format="YYYY-MM-DD HH:mm:ss"
                           onChange={(date, dateString) => {
                             const value = dateString;
                             this.onChange({
@@ -244,7 +332,7 @@ class TaskUpdate extends Component<any, any> {
                           disabled={taskCompleted}
                           style={{ width: '100%' }}
                           placeholder="Due Time"
-                          format="YYYY-MM-DD"
+                          format="YYYY-MM-DD HH:mm:ss"
                           onChange={(date, dateString) => {
                             const value = dateString;
                             this.onChange({
@@ -312,7 +400,7 @@ class TaskUpdate extends Component<any, any> {
                         initialValue: task.associatedPetOwner
                       })(
                         <Select
-                          disabled={taskCompleted || !!task.associatedPetOwner}
+                          disabled={taskCompleted || (!!task.associatedPetOwner && id)}
                           placeholder="Please input name"
                           showSearch
                           onSearch={this.searchAssignedPetOwners}
@@ -338,7 +426,7 @@ class TaskUpdate extends Component<any, any> {
                         initialValue: task.associatedPet
                       })(
                         <Select
-                          disabled={taskCompleted || !!task.associatedPet}
+                          disabled={taskCompleted || (!!task.associatedPet && id)}
                           onChange={(value) =>
                             this.onChange({
                               field: 'associatedPet',
@@ -363,7 +451,7 @@ class TaskUpdate extends Component<any, any> {
                         initialValue: task.associatedOrder
                       })(
                         <Select
-                          disabled={taskCompleted || !!task.associatedOrder}
+                          disabled={taskCompleted || (!!task.associatedOrder && id)}
                           onChange={(value) =>
                             this.onChange({
                               field: 'associatedOrder',
@@ -383,18 +471,34 @@ class TaskUpdate extends Component<any, any> {
                 </Row>
                 <Row>
                   <FormItem {...formRowItemLayout} label="Description">
-                    <ReactEditor
-                      disabled={taskCompleted}
-                      id="description"
-                      height={200}
-                      content={task.description}
-                      onContentChange={(html) =>
-                        this.onChange({
-                          field: 'description',
-                          value: html
-                        })
-                      }
-                    />
+                    {task.description ? (
+                      <ReactEditor
+                        disabled={taskCompleted}
+                        id="description"
+                        height={200}
+                        content={task.description}
+                        onContentChange={(html) =>
+                          this.onChange({
+                            field: 'description',
+                            value: html
+                          })
+                        }
+                      />
+                    ) : null}
+                    {!task.description ? (
+                      <ReactEditor
+                        disabled={taskCompleted}
+                        id="description"
+                        height={200}
+                        content={task.description}
+                        onContentChange={(html) =>
+                          this.onChange({
+                            field: 'description',
+                            value: html
+                          })
+                        }
+                      />
+                    ) : null}
                   </FormItem>
                 </Row>
               </Form>
@@ -404,11 +508,21 @@ class TaskUpdate extends Component<any, any> {
             </TabPane>
             {id ? (
               <TabPane tab="Activity" key="activity">
-                <Activity />
+                <Activity taskId={id} form={this.props.form} taskCompleted={taskCompleted} />
               </TabPane>
             ) : null}
           </Tabs>
         </div>
+        {tabKey !== 'activity' ? (
+          <div className="bar-button">
+            <Button type="primary" style={{ marginRight: '10px' }} onClick={(e) => this.updateTask(e)}>
+              Save
+            </Button>
+            <Button type="primary" onClick={() => (history as any).go(-1)}>
+              Cancel
+            </Button>
+          </div>
+        ) : null}
       </div>
     );
   }

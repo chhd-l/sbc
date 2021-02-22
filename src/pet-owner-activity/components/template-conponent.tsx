@@ -93,7 +93,7 @@ export default class TemplateConponent extends Component<any, any> {
               </Row>
             </div>
             <div className="separate"></div>
-            <div v-if="templateType === 'email'">
+            <div>
               <iframe ref="previewIframe" srcDoc={viewParams.templateContent} width="100%" height="700px" frameBorder="0"></iframe>
             </div>
           </div>

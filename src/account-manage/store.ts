@@ -98,7 +98,6 @@ export default class AppStore extends Store {
     const phone = this.state().get('phone');
     return webapi.sendSms(uuid, phone).then(({ res }) => {
       if (res.code != Const.SUCCESS_CODE) {
-        message.error(res.message);
         return Promise.reject(res.message);
       }
     });

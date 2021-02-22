@@ -8,7 +8,7 @@ export async function getStoreLanguages() {
   const { res: storeRes } = await webapi.getStoreInfo();
   let store = storeRes.context;
 
-  if (res.code === 'K-000000' && storeRes.code === 'K-000000') {
+  if (res.code === Const.SUCCESS_CODE && storeRes.code === Const.SUCCESS_CODE) {
     if (store && store.languageId) {
       sessionStorage.setItem(cache.STORE_INFRO, JSON.stringify(store));
       let languages = [];

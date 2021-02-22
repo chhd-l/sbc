@@ -32,7 +32,6 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('downloadReport:getReportList', res.context);
     } else {
-      message.error(res.message);
     }
   };
 
@@ -47,7 +46,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 }

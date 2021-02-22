@@ -103,7 +103,6 @@ export default class AppStore extends Store {
       }
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
 

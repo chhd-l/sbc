@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, InputNumber, Button, Select, message } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
+import { Const } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -31,7 +32,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
     const { res } = await webapi.clinicsDictionaryDetails({
       id: id
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let clinicTypeForm = {
         clinicTypeId: res.context.id,
         clinicTypeName: res.context.name,
@@ -45,8 +46,6 @@ class PrescriberTypeForm extends React.Component<any, any> {
         clinicTypeName: res.context.name,
         clinicTypeDesc: res.context.description
       });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   onFormChange = ({ field, value }) => {
@@ -71,10 +70,8 @@ class PrescriberTypeForm extends React.Component<any, any> {
     };
 
     const { res } = await webapi.addClinicsDictionary(params);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   onUpdate = async () => {
@@ -92,10 +89,8 @@ class PrescriberTypeForm extends React.Component<any, any> {
     };
 
     const { res } = await webapi.updateClinicsDictionary(params);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
 

@@ -78,7 +78,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   //     .querySysDictionary({ type: type })
   //     .then((data) => {
   //       const { res } = data;
-  //       if (res.code === 'K-000000') {
+  //       if (res.code === Const.SUCCESS_CODE) {
   //         this.setState({
   //           frequencyList: res.context.sysDictionaryVOS
   //         });
@@ -96,7 +96,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .getSubscriptionDetail(id)
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
@@ -158,15 +158,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               }
             }
           );
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
   skipNextDelivery = (id: String) => {
@@ -177,21 +174,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .cancelNextSubscription({ subscribeId: id })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail(this.state.subscriptionId);
           message.success('Operate successfully');
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -203,21 +198,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .orderNow({ subscribeId: id })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail(this.state.subscriptionId);
           message.success('Operate successfully');
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -229,23 +222,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .petsById(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let petsInfo = res.context.context;
           this.setState({
             petsInfo: petsInfo
           });
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
   addressById = (id: String, type: String) => {
     webapi.addressById(id).then((data) => {
       const { res } = data;
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         if (type === 'delivery') {
           let info = res.context;
           let deliveryAddressInfo = {
@@ -315,7 +304,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
@@ -351,13 +340,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           //     frequencyList: res.context.sysDictionaryVOS
           //   });
           // }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
 
   getDictValue = (list, id) => {
@@ -380,7 +365,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     };
     webapi.getBySubscribeId(params).then((data) => {
       const { res } = data;
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         let operationLog = res.context.subscriptionLogsVOS;
         this.setState({
           operationLog: operationLog
@@ -418,7 +403,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .getPromotionPrice(params)
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             deliveryPrice: res.context.deliveryPrice,
             discountsPrice: res.context.discountsPrice,
@@ -427,9 +412,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           });
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
   handleYearChange = (value) => {};
   tabChange = (key) => {};
@@ -456,13 +439,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               });
             }
           }
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   getCurrencySymbol = () => {
     let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
@@ -508,7 +487,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '40%',
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
-            <img src={record.goodsPic} className="img-item" alt="" />
+            <img src={record.goodsPic} className="img-item" style={styles.imgItem} alt="" />
             <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
           </div>
         )
@@ -611,7 +590,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} className="img-item" alt="" />
+                  <img src={item.pic} className="img-item" style={styles.imgItem} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>{item.skuName}</p>
                     <p>{item.specDetails}</p>
@@ -672,7 +651,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} className="img-item" alt="" />
+                  <img src={item.pic} style={styles.imgItem} className="img-item" alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>{item.skuName}</p>
                     <p>{item.specDetails}</p>
@@ -768,9 +747,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: ' ', // cover last th text align right
+        title: ' ' // cover last th text align right
       }
-    ]
+    ];
 
     const columns_foodDispenser_completed = [
       {
@@ -798,9 +777,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: ' ', // cover last th text align right
+        title: ' ' // cover last th text align right
       }
-    ]
+    ];
 
     const styles = {
       backItem: {
@@ -1010,5 +989,15 @@ const styles = {
   },
   edit: {
     paddingRight: 10
+  },
+  imgItem: {
+    width: 60,
+    height: 60,
+    padding: 5,
+    border: '1px solid #ddd',
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
   }
 };

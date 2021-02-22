@@ -150,69 +150,69 @@ export default class pets extends Component<any, any> {
             </div>
           }
         >
-          {petList.map((item, index) => (
-            <Row type="flex" justify="space-between" align="middle" key={index} className="pet-panel">
-              <Row type="flex" align="middle" className="ui-row-detail userBase">
-                <Row className="avatar-box" type="flex" justify="center" align="middle" style={{ borderRight: '1px solid #CED3DA' }}>
-                  {item.photo ? <img src={item.photo} /> : <img className="icon-default" src={item.defaultPhoto} />}
-                  <span style={{ color: '#e2001a' }} v-if="item.clubStatus" className="icon iconfont iconhuangguan inclub" />
-                </Row>
-                <div className="detail-content">
-                  <div>
-                    <span className="contactName">{item.name}</span>
+          <div>
+            {petList.map((item, index) => (
+              <Row type="flex" justify="space-between" align="middle" key={index} className="pet-panel">
+                <Row type="flex" align="middle" className="ui-row-detail userBase">
+                  <Row className="avatar-box" type="flex" justify="center" align="middle" style={{ borderRight: '1px solid #CED3DA' }}>
+                    {item.photo ? <img src={item.photo} /> : <img className="icon-default" src={item.defaultPhoto} />}
+                    <span style={{ color: '#e2001a' }} v-if="item.clubStatus" className="icon iconfont iconhuangguan inclub" />
+                  </Row>
+                  <div className="detail-content" style={{ width: '60%' }}>
+                    <div>
+                      <span className="contactName">{item.name}</span>
+                    </div>
+                    <span className="ui-lighter">
+                      ID:
+                      <span className="content"> {item.petId || '&nbsp;'}</span>
+                    </span>
                   </div>
-                  <span className="ui-lighter">
-                    ID:
-                    <span className="content"> {item.petId || '&nbsp;'}</span>
-                  </span>
-                </div>
+                </Row>
+                <Row type="flex" className="ui-row-detail">
+                  <span className="icon iconfont iconbirthday1" />
+                  <div className="detail-content">
+                    <Row>
+                      <Col span={6}>
+                        <span className="ui-lighter">Age</span>
+                      </Col>
+                      <Col span={18}>
+                        <span className="content">{this.getPetAgeString(item)}</span>
+                      </Col>
+                    </Row>
+                  </div>
+                </Row>
+                <br />
+                <Row type="flex" className="ui-row-detail">
+                  <span className="icon iconfont iconbreed" />
+                  <div className="detail-content">
+                    <Row>
+                      <Col span={6}>
+                        <span className="ui-lighter">Breed</span>
+                      </Col>
+                      <Col span={18}>
+                        <span className="content">{item.breedCode}</span>
+                      </Col>
+                    </Row>
+                  </div>
+                </Row>
+                <br />
+                <Row type="flex" className="ui-row-detail">
+                  <span className="icon iconfont iconclub" />
+                  <div className="detail-content">
+                    <Row>
+                      <Col span={6}>
+                        <span className="ui-lighter">Club</span>
+                      </Col>
+                      <Col span={18}>
+                        <span className="content">{item.clubStatu ? item.club : 'No Subscription'}</span>
+                      </Col>
+                    </Row>
+                  </div>
+                </Row>
               </Row>
-              <Row type="flex" className="ui-row-detail">
-                <span className="icon iconfont iconbirthday1" />
-                <div className="detail-content">
-                  <Row>
-                    <Col span={6}>
-                      <span className="ui-lighter">Age</span>
-                    </Col>
-                    <Col span={18}>
-                      <span className="content">{this.getPetAgeString(item)}</span>
-                    </Col>
-                  </Row>
-                </div>
-              </Row>
-              <br />
-              <Row type="flex" className="ui-row-detail">
-                <span className="icon iconfont iconbreed" />
-                <div className="detail-content">
-                  <Row>
-                    <Col span={6}>
-                      <span className="ui-lighter">Breed</span>
-                    </Col>
-                    <Col span={18}>
-                      <span className="content">{item.breedCode}</span>
-                    </Col>
-                  </Row>
-                </div>
-              </Row>
-              <br />
-              <Row type="flex" className="ui-row-detail">
-                <span className="icon iconfont iconclub" />
-                <div className="detail-content">
-                  <Row>
-                    <Col span={6}>
-                      <span className="ui-lighter">Club</span>
-                    </Col>
-                    <Col span={18}>
-                      <span className="content">{item.clubStatu ? item.club : 'No Subscription'}</span>
-                    </Col>
-                  </Row>
-                </div>
-              </Row>
-            </Row>
-          ))}
-          <Row type="flex" justify="end">
-            {petList && petList.length > 0 ? <Pagination onShowSizeChange={this.onShowSizeChange} total={petPagination.total} pageSize={petPagination.pageSize} size="small" /> : null}
-          </Row>
+            ))}
+            {petList && petList.length > 0 ? <Pagination style={{top:'331px'}} onShowSizeChange={this.onShowSizeChange} total={petPagination.total} pageSize={petPagination.pageSize} size="small" /> : null}
+          </div>
         </Card>
       </div>
     );

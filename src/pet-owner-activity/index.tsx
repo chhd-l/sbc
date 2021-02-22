@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
-import { Row, Col, Tabs } from 'antd';
+import { Row, Col, Tabs, Card } from 'antd';
 import PetOwner from './components/petowner';
 import Pets from './components/pets';
 import Tasks from './components/tasks';
@@ -23,7 +23,7 @@ export default class PetOwnerActivity extends Component<any, any> {
     };
   }
   render() {
-    const { title } = this.state;
+    const { title, id } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -32,39 +32,37 @@ export default class PetOwnerActivity extends Component<any, any> {
         </div>
         <div className="container petOwnerActivity">
           <Row gutter={10} style={{ marginBottom: '20px' }}>
-            <Col span={12}>
-              <PetOwner />
+            <Col span={7}>
+              <PetOwner contactId={id} />
+              <div style={{ marginTop: '20px' }}></div>
+              <Pets contactId={id} />
             </Col>
-            <Col span={12}>
-              <Pets />
+            <Col span={9} id="task">
+              <Card>
+                <Tabs
+                  defaultActiveKey="1"
+                  onChange={(key) =>
+                    this.setState({
+                      activityKey: key
+                    })
+                  }
+                >
+                  <TabPane tab="Task" key="1">
+                    <Tasks contactId={id} />
+                  </TabPane>
+                  <TabPane tab="Emails" key="2">
+                    <Emails contactId={id} />
+                  </TabPane>
+                  <TabPane tab="Activities" key="3">
+                    <Activities contactId={id} />
+                  </TabPane>
+                </Tabs>
+              </Card>
             </Col>
-          </Row>
-          <Row style={{ marginBottom: '20px' }}>
-            <Tabs
-              defaultActiveKey="1"
-              onChange={(key) =>
-                this.setState({
-                  activityKey: key
-                })
-              }
-            >
-              <TabPane tab="Task" key="1">
-                <Tasks />
-              </TabPane>
-              <TabPane tab="Emails" key="2">
-                <Emails />
-              </TabPane>
-              <TabPane tab="Activities" key="3">
-                <Activities />
-              </TabPane>
-            </Tabs>
-          </Row>
-          <Row gutter={10}>
-            <Col span={12}>
-              <Orders />
-            </Col>
-            <Col span={12}>
-              <Bookings />
+            <Col span={8}>
+              <Orders contactId={id} />
+              <div style={{ marginTop: '20px' }}></div>
+              <Bookings contactId={id} />
             </Col>
           </Row>
         </div>

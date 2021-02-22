@@ -57,13 +57,9 @@ export default class SubscriptionSetting extends Component<any, any> {
           this.setState({
             settingForm
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   updateSetting = () => {
     const { settingForm } = this.state;
@@ -87,13 +83,9 @@ export default class SubscriptionSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operation successful');
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   render() {
     const { title, settingForm } = this.state;

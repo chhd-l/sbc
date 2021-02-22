@@ -19,9 +19,7 @@ export default class AppStore extends Store {
 
   //初始化页面
   init = async ({ pageNum, pageSize, headInfo }) => {
-    const query = this.state()
-      .get('form')
-      .toJS();
+    const query = this.state().get('form').toJS();
     if (headInfo && headInfo != '' && headInfo.goodsInfoId) {
       this.dispatch('init: head', fromJS(headInfo));
       query.goodsInfoId = headInfo.goodsInfoId;
@@ -39,7 +37,6 @@ export default class AppStore extends Store {
       pageSize
     });
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     const goodsMatterList = res.context.distributionGoodsMatterPage.content;

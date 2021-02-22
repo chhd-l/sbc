@@ -130,9 +130,7 @@ export default class AppStore extends Store {
       const minNum = goods.minNum ? goods.minNum : 1;
       const postage = goods.recommendFlag ? goods.recommendFlag : 0;
       // 限购数量不可大于100
-      const maxNum = goods.convertStock
-        ? goods.convertStock
-        : goods.flashsaleStock;
+      const maxNum = goods.convertStock ? goods.convertStock : goods.flashsaleStock;
 
       flashSaleGoodsVOList.push({
         activityDate: activityDate,
@@ -155,7 +153,6 @@ export default class AppStore extends Store {
       // 刷新
       history.push(`/flash-sale-goods-list/${activityDate}/${activityTime}`);
     } else {
-      message.error(result.res.message);
     }
   }, 1500);
 }

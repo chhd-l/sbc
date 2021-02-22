@@ -609,7 +609,6 @@ export default class CouponInfoForm extends Component<any, any> {
             couponCateIds: ids.toJS()
           });
         } else {
-          message.error(res.message);
         }
       } else {
         changeBtnDisabled();

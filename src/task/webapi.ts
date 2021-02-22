@@ -7,7 +7,7 @@ type TResult = {
 };
 
 export function getTaskListView(filterParams = {}) {
-  return Fetch<TResult>('/biz/task/listView', {
+  return Fetch<TResult>('/task/listView', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -16,7 +16,7 @@ export function getTaskListView(filterParams = {}) {
 }
 
 export function getTaskCardView(filterParams = {}) {
-  return Fetch<TResult>('/biz/task/cardView', {
+  return Fetch<TResult>('/task/cardView', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

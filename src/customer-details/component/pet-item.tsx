@@ -154,4 +154,4 @@ class PetItem extends React.Component<Iprop, any> {
   }
 }
 
-export default Form.create()(PetItem);
+export default Form.create<Iprop>()(PetItem);

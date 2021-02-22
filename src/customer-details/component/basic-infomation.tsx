@@ -683,4 +683,4 @@ class BasicInfomation extends React.Component<any, any> {
     );
   }
 }
-export default Form.create()(BasicInfomation);
+export default Form.create<any>()(BasicInfomation);

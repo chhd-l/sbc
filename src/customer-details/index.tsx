@@ -281,7 +281,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                         <span className="iconfont iconDelete"></span> Delete
                       </Button>
                     </Popconfirm>
-                    <Link>
+                    <Link to={`/edit-customer-pet/${1}`}>
                       <span className="iconfont iconEdit"></span> Edit
                     </Link>
                   </div>

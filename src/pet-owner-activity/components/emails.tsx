@@ -79,7 +79,7 @@ export default class emails extends Component<any, any> {
             </Dropdown>
           </div>
           <Button className="sortBtn" onClick={this.activitiesEmailSort}>
-            <span className="icon iconfont iconbianzu" style={{ fontSize: '22px' }} />
+            <span className="icon iconfont iconbianzu8" style={{ fontSize: '22px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">

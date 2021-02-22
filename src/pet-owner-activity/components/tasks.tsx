@@ -159,7 +159,7 @@ export default class tasks extends Component<any, any> {
                   </Menu>
                 </Dropdown> */}
           <Button className="sortBtn" onClick={this.taskSort}>
-            <span className="icon iconfont iconbianzu" style={{ fontSize: '22px' }} />
+            <span className="icon iconfont iconbianzu8" style={{ fontSize: '22px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
-import { Row, Col, Tabs, Card } from 'antd';
+import { Row, Col, Tabs, Card, Breadcrumb } from 'antd';
 import PetOwner from './components/petowner';
 import Pets from './components/pets';
 import Tasks from './components/tasks';
@@ -26,7 +26,9 @@ export default class PetOwnerActivity extends Component<any, any> {
     const { title, id } = this.state;
     return (
       <div>
-        <BreadCrumb />
+        <BreadCrumb thirdLevel={true}>
+          <Breadcrumb.Item>Pet Owner Activity</Breadcrumb.Item>
+        </BreadCrumb>
         <div className="container-search">
           <Headline title={title} />
         </div>

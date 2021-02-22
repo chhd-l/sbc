@@ -294,7 +294,7 @@ class PeoductCategory extends Component<any, any> {
                   <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
                 </Tooltip>
                 <Tooltip placement="topLeft" title="Bind description">
-                  <a className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindModal(record.cateId)}></a>
+                  <a className="iconfont iconbangding" onClick={() => this.openBindModal(record.cateId)}></a>
                 </Tooltip>
               </div>
             ) : (

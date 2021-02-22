@@ -37,10 +37,10 @@ export default class addConsent extends Component<any, any> {
     return null;
   }
 
-  componentDidMount(){
-    this.getConsentList()     
+  componentDidMount() {
+    this.getConsentList();
   }
-  
+
   getConsentList() {
     const { serchForm } = this.state;
     this.setState({
@@ -243,6 +243,7 @@ export default class addConsent extends Component<any, any> {
             rowSelection={rowSelection}
             columns={columns}
             dataSource={consentList}
+            pagination={false}
             loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
           />
         </Modal>

@@ -85,7 +85,7 @@ export default class entryCriteria extends Component<any, any> {
                 <Row>
                   <Col span={16}>
                     {getFieldDecorator('consentIds', {
-                      initialValue: subscriptionPlan.consentIds,
+                      initialValue: subscriptionPlan.consentIds.map((cons) => parseInt(cons)),
                       rules: [{ required: true, message: 'Please add Consent' }]
                     })(
                       <Select
@@ -98,20 +98,19 @@ export default class entryCriteria extends Component<any, any> {
                         }}
                         dropdownStyle={{ display: 'none' }}
                       >
-                        {subscriptionPlan.consents &&
-                          subscriptionPlan.consents.map((item, index) => (
-                            <Option value={item.id} key={index}>
-                              <Tooltip
-                                overlayStyle={{
-                                  overflowY: 'auto'
-                                }}
-                                placement="bottomLeft"
-                                title={<div dangerouslySetInnerHTML={{ __html: item.name }} />}
-                              >
-                                <div className="overflow" dangerouslySetInnerHTML={{ __html: item.name }} />
-                              </Tooltip>
-                            </Option>
-                          ))}
+                        {allConsents.map((item, index) => (
+                          <Option value={item.id} key={index}>
+                            <Tooltip
+                              overlayStyle={{
+                                overflowY: 'auto'
+                              }}
+                              placement="bottomLeft"
+                              title={<div dangerouslySetInnerHTML={{ __html: item.name }} />}
+                            >
+                              <div className="overflow" dangerouslySetInnerHTML={{ __html: item.name }} />
+                            </Tooltip>
+                          </Option>
+                        ))}
                       </Select>
                     )}
                   </Col>

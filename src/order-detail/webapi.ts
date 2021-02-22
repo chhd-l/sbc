@@ -71,7 +71,7 @@ export function fetchOffLineAccout() {
 type TResult = {
   code: string;
   message: string;
-  context: Array<any>;
+  context: any;
 };
 
 export const audit = (tid: string, audit: string, reason: string) => {
@@ -212,11 +212,50 @@ export function queryCityById(filterParams = {}) {
   });
 }
 
-export function updateFeedback(filterParams = {}) {
-  return Fetch<TResult>('/feedback/addOrEditFeedback', {
+export function getComments(filterParams = {}) {
+  return Fetch<TResult>('/trade/detailComments/page', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
+    })
+  });
+}
+
+
+export function getCommentById(id) {
+  return Fetch<TResult>('/trade/detailComments/findById', {
+    method: 'POST',
+    body: JSON.stringify({
+      id: id
+    })
+  });
+}
+
+
+export function addComment(filterParams = {}) {
+  return Fetch<TResult>('/trade/detailComments/add', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+
+export function updateComment(filterParams = {}) {
+  return Fetch<TResult>('/trade/detailComments/modify', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function deleteCommentById(id) {
+  return Fetch<TResult>('/trade/detailComments/deleteById', {
+    method: 'POST',
+    body: JSON.stringify({
+      id: id
     })
   });
 }

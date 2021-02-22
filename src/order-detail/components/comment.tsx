@@ -270,6 +270,7 @@ class comment extends Component<any, any> {
                 rules: [{ required: true, message: 'Please input comment' }]
               })(
                 <Input.TextArea
+                  maxLength={2000}
                   placeholder="Please input comment"
                   autoSize={{ minRows: 5, maxRows: 10 }}
                   onChange={(e) => {

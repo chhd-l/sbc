@@ -143,7 +143,6 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           subscriptionPlan.status = 1; // Publish
         }
         subscriptionPlan.storeId = this.state.storeId;
-        console.log(subscriptionPlan);
         if (id) {
           subscriptionPlan.id = id; // edit by id
           webapi

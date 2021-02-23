@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import GGEditor, { Flow, RegisterEdge } from 'gg-editor';
+import { Tabs } from 'antd';
 import './style.less'
+import FlowItemPanel from './components/flow-item-panel' 
+
+const { TabPane } = Tabs;
 
 export default class CampaignUpdate extends Component<any, any> {
   constructor(props) {
@@ -34,14 +38,28 @@ export default class CampaignUpdate extends Component<any, any> {
                   style={{ height: '600px' }}
                   className='flow'
                   data={flowdata}
-                  grid={gird}
                   // onNodeDoubleClick="handleNodeDoubleClick"
                   // onNodeClick="handleNodeClick"
                   // noEndEdge="false"
                   // onAfterChange="onAfterChange"
                 />
               </div>
-              <div className="demo-chart__sidebar user-select-none"></div>
+              <div className="demo-chart__sidebar user-select-none">
+              <Tabs
+                style={{width: '100%'}}
+                tabPosition="top"
+                className="tabs-custom"
+              >
+                <TabPane tab="Builder" key="Builder">
+                  <FlowItemPanel />
+                </TabPane>
+                <TabPane
+                  tab="Item Properties"
+                  key="Item Properties"
+                >
+                </TabPane>
+              </Tabs>
+              </div>
             </div>
           </div>
         </GGEditor>

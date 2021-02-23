@@ -64,3 +64,31 @@
   margin-left: 10px;
   cursor: pointer;
 }
+
+.item-icon {
+  font-size: 35px;
+}
+.item-text {
+  padding-top: 7px;
+  font-size: 12px;
+  line-height: 1.2;
+  display: table-cell;
+  color: #595959;
+  width: 86px;
+}
+.panel-custom /deep/ .ant-collapse-content-box {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+.panel-custom#sendEmailItem  /deep/ .ant-collapse-content-box {
+    justify-content: start;
+    margin-left: 35px
+}
+
+#itemPanel {
+ .ant-collapse .panel-custom {
+    background: #fff;
+  }
+}
+

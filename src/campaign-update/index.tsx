@@ -3,6 +3,7 @@ import GGEditor, { Flow, RegisterEdge } from 'gg-editor';
 import { Tabs } from 'antd';
 import './style.less'
 import FlowItemPanel from './components/flow-item-panel' 
+import ItemCommunicationNode from './components/nodes/ItemCommunicationNode'
 
 const { TabPane } = Tabs;
 
@@ -62,6 +63,7 @@ export default class CampaignUpdate extends Component<any, any> {
               </div>
             </div>
           </div>
+          <ItemCommunicationNode />
         </GGEditor>
       </div>
     );

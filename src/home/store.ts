@@ -17,6 +17,7 @@ import HomeAuthActor from './actor/home-auth-actor';
 import HeaderActor from './actor/header-actor';
 import SettlementActor from './actor/settlement-actor';
 import EvaluateSumActor from './actor/evaluate-sum-actor';
+import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
 
 const SUCCESS = Modal.success;
 

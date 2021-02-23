@@ -17,7 +17,7 @@ class HttpUtil {
     static handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion) {
         let errorObj = Object.assign({}, { fetchUrl: fetchUrl.split('?')[0], fetchParams, httpCustomerOpertion });
         // 1. 处理的第一步
-        const { isShowLoading } = httpCustomerOpertion
+        const { isShowLoading, customerTip } = httpCustomerOpertion
         if (isShowLoading) {
 
         }
@@ -62,9 +62,10 @@ class HttpUtil {
                             } else if (jsonBody === 'Method Not Allowed') {
                                 let message = 'You do not have permission to access this feature'
                                 HttpUtil.notificationPop(message)
-                            } else if (jsonBody.code === 'K-000000') {
+                            } else if (jsonBody.code === 'K-000000' || customerTip) {
                                 resolve(HttpUtil.handleResult(jsonBody, httpCustomerOpertion))
                             } else {
+                             
                                 reject(HttpUtil.handleFailedResult({ code: jsonBody.code, message: jsonBody.message, error: jsonBody.message }, httpCustomerOpertion))
                             }
                         } else {

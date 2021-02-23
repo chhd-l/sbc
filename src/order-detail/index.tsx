@@ -7,6 +7,7 @@ import OperateLog from './components/operate-log';
 import OrderDetailTab from './components/order-detail';
 import OrderDelivery from './components/order-delivery';
 import OrderReceive from './components/order-receive';
+import Comment from './components/comment';
 
 import { Headline, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -27,6 +28,7 @@ export default class OrderDetail extends React.Component<any, any> {
   }
 
   render() {
+    const { tid } = this.props.match.params;
     if (this.state.loading) {
       return (
         <div style={styles.noBackgroundContainer}>
@@ -53,6 +55,9 @@ export default class OrderDetail extends React.Component<any, any> {
             </Tabs.TabPane>
             <Tabs.TabPane tab={<FormattedMessage id="collectionRecords" />} key="3">
               <OrderReceive />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Comment" key="4">
+              <Comment orderNumber={tid} petOwnerName={this.store.state().get('detail').getIn(['buyer', 'name'])} />
             </Tabs.TabPane>
           </Tabs>
 

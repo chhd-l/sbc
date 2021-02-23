@@ -314,6 +314,14 @@ const routes = [
     path: '/customer-details/:type/:id/:account',
     asyncComponent: () => import('./customer-details')
   },
+  {
+    path: '/edit-customer-basicinfo/:id',
+    asyncComponent: () => import('./customer-details/edit-basic-information')
+  },
+  {
+    path: '/edit-customer-pet/:id',
+    asyncComponent: () => import('./customer-details/edit-pet-item')
+  },
   // 客户等级
   {
     path: '/customer-level',

@@ -137,6 +137,8 @@ class UserModal extends Component<any, any> {
             message.success('Operate successfully');
             this.props.reflash();
             this.cancel();
+          } else {
+            message.error(res.message || 'save faild');
           }
         } else {
           const { res } = await webapi.addUser(param);
@@ -144,6 +146,8 @@ class UserModal extends Component<any, any> {
             message.success('Operate successfully');
             this.props.reflash();
             this.cancel();
+          } else {
+            message.error(res.message || 'save faild');
           }
         }
       }

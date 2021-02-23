@@ -47,7 +47,8 @@ import {
   fetchproductTooltip,
   getSeo,
   editSeo,
-  getCateList
+  getCateList,
+  getDescriptionTab
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
@@ -357,7 +358,12 @@ export default class AppStore extends Store {
 
       // 商品基本信息
       let goods = goodsDetail.get('goods');
-
+      if (tmpContext.goodsDescriptionDetailList.length === 0) {
+        const cateId = goods.get('cateId');
+        this.changeDescriptionTab(cateId);
+      } else {
+        this.editEditorContent(tmpContext.goodsDescriptionDetailList);
+      }
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
 
@@ -1282,6 +1288,8 @@ export default class AppStore extends Store {
     param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
+    param = param.set('goodsDescriptionDetailList', this.state().get('goodsDescriptionDetailList'));
+
     //console.log(this.state().get('productFilter'), 2222);
 
     //添加参数，是否允许独立设价
@@ -1649,12 +1657,13 @@ export default class AppStore extends Store {
       }
     }
   };
+
   /**
-   * 获取富文本框的值
+   * 设置富文本框的值
    * @param
    */
-  editEditorContent = (keyName, value) => {
-    this.dispatch('goodsActor: editorContent', { keyName, value });
+  editEditorContent = (value) => {
+    this.dispatch('goodsActor:descriptionTab', value);
   };
   editEditor = (editor) => {
     this.dispatch('goodsActor: editor', editor);
@@ -1799,6 +1808,28 @@ export default class AppStore extends Store {
     const result: any = await getStoreCateList(goodsCateId);
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor: initStoreCateList', fromJS((result.res as any).context.storeCateResponseVOList));
+    }
+  };
+  /**
+   * 对应类目、商品下的所有属性信息
+   */
+  changeDescriptionTab = async (cateId) => {
+    const result: any = await getDescriptionTab(cateId);
+
+    if (result.res.code === Const.SUCCESS_CODE) {
+      let content = result.res.context;
+      let res = content.map((item) => {
+        return {
+          goodsCateId: cateId,
+          descriptionId: item.id,
+          descriptionName: item.descriptionName,
+          contentType: 'json',
+          content: ' ',
+          sort: item.sort,
+          editable: true
+        };
+      });
+      this.editEditorContent(res);
     }
   };
   /**

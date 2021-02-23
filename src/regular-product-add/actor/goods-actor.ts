@@ -46,7 +46,8 @@ export default class GoodsActor extends Actor {
         subscriptionPrice: '',
         goodsId: null,
         defaultPurchaseType: null,
-        defaultFrequencyId: null
+        defaultFrequencyId: null,
+        resource: 1 //商品来源
       },
       // 是否编辑商品
       isEditGoods: false,
@@ -74,7 +75,8 @@ export default class GoodsActor extends Actor {
       oldGoodsDetailTabContent: '',
       resourceCates: [],
       purchaseTypeList: [],
-      frequencyList: []
+      frequencyList: [],
+      goodsDescriptionDetailList: []
     };
   }
 
@@ -267,10 +269,6 @@ export default class GoodsActor extends Actor {
   editEditor(state, editor) {
     return state.set('editor', editor);
   }
-  @Action('goodsActor: editorContent')
-  editEditorContent(state, { keyName, value }) {
-    return state.setIn(['goods', keyName], value);
-  }
   @Action('priceActor:setAlonePrice')
   toggleSetAlonePrice(state, result) {
     return state.setIn(['goods', 'allowPriceSet'], result);
@@ -318,4 +316,10 @@ export default class GoodsActor extends Actor {
     const frequencyList = [...dayList, ...weekList, ...monthList];
     return state.set('frequencyList', frequencyList);
   }
+  @Action('goodsActor:descriptionTab')
+  goodsDescriptionTab(state, tabList) {
+    return state.set('goodsDescriptionDetailList', tabList);
+  }
 }
+
+//1 fgs（text）  2、weshare 3、  salsify

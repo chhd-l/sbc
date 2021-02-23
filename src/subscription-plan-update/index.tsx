@@ -35,6 +35,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         mainGoods: [],
         mainGoodsIds: [],
         frequency: [],
+        consentIds: [],
         quantity: 100,
         landingFlag: true
       },

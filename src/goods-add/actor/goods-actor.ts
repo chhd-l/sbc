@@ -46,7 +46,8 @@ export default class GoodsActor extends Actor {
         subscriptionStatus: 1,
         goodsId: null,
         defaultPurchaseType: null,
-        defaultFrequencyId: null
+        defaultFrequencyId: null,
+        resource: 1 //商品来源
       },
       // 是否编辑商品
       isEditGoods: false,
@@ -75,7 +76,8 @@ export default class GoodsActor extends Actor {
       oldGoodsDetailTabContent: '',
       resourceCates: [],
       purchaseTypeList: [],
-      frequencyList: []
+      frequencyList: [],
+      goodsDescriptionDetailList: []
     };
   }
 
@@ -326,5 +328,9 @@ export default class GoodsActor extends Actor {
     const { dayList, weekList, monthList } = params;
     const frequencyList = [...dayList, ...weekList, ...monthList];
     return state.set('frequencyList', frequencyList);
+  }
+  @Action('goodsActor:descriptionTab')
+  goodsDescriptionTab(state, tabList) {
+    return state.set('goodsDescriptionDetailList', tabList);
   }
 }

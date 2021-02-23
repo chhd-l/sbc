@@ -187,7 +187,7 @@ export const addCate = (formData: any) => {
  * 获取图片类目列表
  */
 export const getImgCates = () => {
-    return Fetch('/store/resourceCates');
+  return Fetch('/store/resourceCates');
 };
 
 /**
@@ -418,5 +418,11 @@ export const addSeo = (params) => {
   return Fetch<TResult>('/seo/setting', {
     method: 'POST',
     body: JSON.stringify(params)
+  });
+};
+
+export const getDescriptionTab = (cateId) => {
+  return Fetch(`/goods/description/description/${cateId}`, {
+    method: 'GET'
   });
 };

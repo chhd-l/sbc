@@ -118,7 +118,7 @@ class TaskUpdate extends Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         const { task, id } = this.state;
-        console.log(task);
+        // console.log(task);
         if (id) {
           task.id = id; // edit by id
           webapi
@@ -184,7 +184,7 @@ class TaskUpdate extends Component<any, any> {
             <Col span={12}>
               <Headline title={title} />
             </Col>
-            <Col span={12} style={{textAlign:'right'}}>
+            <Col span={12} style={{ textAlign: 'right' }}>
               <Popconfirm placement="topLeft" title="Task will be permanently deleted from the platform" onConfirm={() => this.deleteTask()} okText="Confirm" cancelText="Cancel">
                 <Tooltip placement="top" title="Delete">
                   <Button type="primary">Delete</Button>
@@ -471,9 +471,9 @@ class TaskUpdate extends Component<any, any> {
                 </Row>
                 <Row>
                   <FormItem {...formRowItemLayout} label="Description">
-                    {task.description ? (
+                    {taskCompleted ? <ReactEditor id="description" height={200} disabled={true} content={task.description} onContentChange={(html) => {}} /> : null}
+                    {task.description && !taskCompleted ? (
                       <ReactEditor
-                        disabled={taskCompleted}
                         id="description"
                         height={200}
                         content={task.description}
@@ -485,9 +485,8 @@ class TaskUpdate extends Component<any, any> {
                         }
                       />
                     ) : null}
-                    {!task.description ? (
+                    {!task.description && !taskCompleted ? (
                       <ReactEditor
-                        disabled={taskCompleted}
                         id="description"
                         height={200}
                         content={task.description}

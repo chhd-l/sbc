@@ -46,7 +46,7 @@ export default class Activity extends Component<any, any> {
         const { feedback } = this.state;
         let taskId = this.props.taskId;
         webapi
-          .createTaskLog({ taskId: taskId, content: feedback })
+          .createTaskLog({ taskId: taskId, content: feedback, type: 0 })
           .then((data) => {
             const { res } = data;
             if (res.code === 'K-000000') {

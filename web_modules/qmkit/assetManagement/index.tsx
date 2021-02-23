@@ -83,7 +83,8 @@ export default class PicModal extends React.Component<any, any> {
     webapi.getImgCates().then(data => {
       const { res } = data
       if (res) {
-        let cateList = this.cates(res)
+        let storeResourceCateList = res.context.storeResourceCateVOList
+        let cateList = this.cates(storeResourceCateList)
         let cateId = cateList[0].cateId.toString()
         let cateIds = []
         cateIds.push(cateId)

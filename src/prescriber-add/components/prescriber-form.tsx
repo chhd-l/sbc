@@ -364,18 +364,18 @@ class ClinicForm extends React.Component<any, any> {
     });
   };
   //id校验
-  compareID = (rule, value, callback) => {
-    if (!value) {
-      callback('Please input Prescriber id!');
-    }
-    const { form } = this.props;
-    let reg = /^[1-9][0-9]{2,12}$/;
-    if (!reg.test(form.getFieldValue('prescriberId'))) {
-      callback('Please enter the correct Prescriber ID!');
-    } else {
-      callback();
-    }
-  };
+  // compareID = (rule, value, callback) => {
+  //   if (!value) {
+  //     callback('Please input Prescriber id!');
+  //   }
+  //   const { form } = this.props;
+  //   let reg = /^[1-9][0-9]{2,12}$/;
+  //   if (!reg.test(form.getFieldValue('prescriberId'))) {
+  //     callback('Please enter the correct Prescriber ID!');
+  //   } else {
+  //     callback();
+  //   }
+  // };
   //手机校验
   comparePhone = (rule, value, callback) => {
     if (!value) {
@@ -566,7 +566,7 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
                 <FormItem label="Prescriber ID">
                   {getFieldDecorator('prescriberId', {
-                    rules: [{ required: true }, { validator: this.compareID }]
+                    rules: [{ required: true, message: 'Please input Prescriber id!' }]
                   })(
                     <Input
                       disabled={this.state.isEdit}

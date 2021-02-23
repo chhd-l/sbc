@@ -444,7 +444,7 @@ class GoodsForm extends React.Component<any, any> {
                   // initialValue: 'Y'
                   initialValue: goods.get('defaultPurchaseType')
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default purchase type">
+                  <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default purchase type" disabled={Number(goods.get('subscriptionStatus')) === 0}>
                     {purchaseTypeList.map((option) => (
                       <Option value={option.id} key={option.id}>
                         {option.name}
@@ -468,7 +468,7 @@ class GoodsForm extends React.Component<any, any> {
                   initialValue: goods.get('defaultFrequencyId'),
                   onChange: this._editGoods.bind(this, 'defaultFrequencyId')
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder="please select Default frequency" disabled={goods.get('defaultPurchaseType') !== 5764}>
+                  <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder="please select Default frequency" disabled={Number(goods.get('subscriptionStatus')) === 0}>
                     {frequencyList.map((option) => (
                       <Option value={option.id} key={option.id}>
                         {option.name}
@@ -916,7 +916,10 @@ class GoodsForm extends React.Component<any, any> {
       editGoods(goods);
     }
 
-    if (key === 'defaultPurchaseType' && e === 5765) {
+    if (key === 'subscriptionStatus' && e == 0) {
+      this.props.form.setFieldsValue({
+        defaultPurchaseType: null
+      });
       this.props.form.setFieldsValue({
         defaultFrequencyId: null
       });

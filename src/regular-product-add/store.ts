@@ -122,7 +122,7 @@ export default class AppStore extends Store {
             monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : []
           });
 
-          this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods));
+          this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods ? (results[0].res as any).context.goodsRelation.relationGoods : []));
           this.dispatch('goodsActor:filtersTotal', fromJS((results[0].res as any).context.filtersTotal));
           this.dispatch('goodsActor:taggingTotal', fromJS((results[0].res as any).context.taggingTotal));
           this.dispatch('goodsActor:resourceCates', (results[0].res as any).context.resourceCates);
@@ -638,7 +638,8 @@ export default class AppStore extends Store {
       goods = goods.set('internalGoodsNo', localStorage.getItem('storeCode') + '_' + goods.get('goodsNo'));
     }
 
-    if (goods.get('defaultPurchaseType') === 5765) {
+    if (Number(goods.get('subscriptionStatus')) === 0) {
+      goods = goods.set('defaultPurchaseType', null);
       goods = goods.set('defaultFrequencyId', null);
     }
     this.dispatch('goodsActor: editGoods', goods);

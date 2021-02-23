@@ -20,10 +20,10 @@ export default class CardView extends Component<any, any> {
       ],
       goldenMomentList: [],
       taskCardLength: {
-        toDoLength: 1,
-        onGoingLength: 1,
-        completedLength: 1,
-        cancelledLength: 1
+        toDoLength: 0,
+        onGoingLength: 0,
+        completedLength: 0,
+        cancelledLength: 0
       },
       loading: false,
       formData: {}

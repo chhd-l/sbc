@@ -135,7 +135,7 @@ export default class addConsent extends Component<any, any> {
     };
     return (
       <div>
-        <Modal className="addTargetProductModal" width="1100px" maskClosable={false} title="Add products" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel} okText="Confirm" cancelText="Cancel">
+        <Modal className="addTargetProductModal" width="1100px" maskClosable={false} title="Add consents" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel} okText="Confirm" cancelText="Cancel">
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>

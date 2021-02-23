@@ -110,31 +110,24 @@ class PetInfomation extends React.Component<any, any> {
       storeId: 123456858,
       type: type
     };
-    webapi
-      .querySysDictionary(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
-          if (type === 'dogBreed') {
-            let dogBreed = res.context.sysDictionaryVOS;
-            this.setState({
-              dogBreed: dogBreed
-            });
-          }
-
-          if (type === 'catBreed') {
-            let catBreed = res.context.sysDictionaryVOS;
-            this.setState({
-              catBreed: catBreed
-            });
-          }
-        } else {
-          message.error(res.message || 'Unsuccessful');
+    webapi.querySysDictionary(params).then((data) => {
+      const res = data.res;
+      if (res.code === 'K-000000') {
+        if (type === 'dogBreed') {
+          let dogBreed = res.context.sysDictionaryVOS;
+          this.setState({
+            dogBreed: dogBreed
+          });
         }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+
+        if (type === 'catBreed') {
+          let catBreed = res.context.sysDictionaryVOS;
+          this.setState({
+            catBreed: catBreed
+          });
+        }
+      }
+    });
   };
   getSpecialNeeds = (array) => {
     let needs = [];
@@ -196,14 +189,12 @@ class PetInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
   editPets = () => {
@@ -246,66 +237,52 @@ class PetInfomation extends React.Component<any, any> {
       storeId: 123456858,
       userId: this.props.customerAccount
     };
-    webapi
-      .editPets(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
-          message.success('Operate successfully');
-          this.petsByConsumer();
-        } else {
-          message.error(res.message || 'Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+    webapi.editPets(params).then((data) => {
+      const res = data.res;
+      if (res.code === 'K-000000') {
+        message.success('Operate successfully');
+        this.petsByConsumer();
+      }
+    });
   };
 
   petsById = (id) => {
     let params = {
       petsId: id
     };
-    webapi
-      .petsById(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
-          let currentPet = res.context.context;
-          currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
-          if (currentPet.petsType === 'dog') {
-            this.props.form.setFieldsValue({
-              petsType: currentPet.petsType,
-              petsName: currentPet.petsName,
-              petsSex: currentPet.petsSex,
-              petsBreed: currentPet.petsBreed,
-              sterilized: currentPet.sterilized,
-              petsSizeValueName: currentPet.petsSizeValueName,
-              customerPetsPropRelations: currentPet.customerPetsPropRelations
-            });
-          } else {
-            this.props.form.setFieldsValue({
-              petsType: currentPet.petsType,
-              petsName: currentPet.petsName,
-              petsSex: currentPet.petsSex,
-              petsBreed: currentPet.petsBreed,
-
-              sterilized: currentPet.sterilized,
-              customerPetsPropRelations: currentPet.customerPetsPropRelations
-            });
-          }
-
-          this.setState({
-            petForm: currentPet,
-            currentBirthDay: currentPet.birthOfPets
+    webapi.petsById(params).then((data) => {
+      const res = data.res;
+      if (res.code === 'K-000000') {
+        let currentPet = res.context.context;
+        currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
+        if (currentPet.petsType === 'dog') {
+          this.props.form.setFieldsValue({
+            petsType: currentPet.petsType,
+            petsName: currentPet.petsName,
+            petsSex: currentPet.petsSex,
+            petsBreed: currentPet.petsBreed,
+            sterilized: currentPet.sterilized,
+            petsSizeValueName: currentPet.petsSizeValueName,
+            customerPetsPropRelations: currentPet.customerPetsPropRelations
           });
         } else {
-          message.error(res.message || 'Unsuccessful');
+          this.props.form.setFieldsValue({
+            petsType: currentPet.petsType,
+            petsName: currentPet.petsName,
+            petsSex: currentPet.petsSex,
+            petsBreed: currentPet.petsBreed,
+
+            sterilized: currentPet.sterilized,
+            customerPetsPropRelations: currentPet.customerPetsPropRelations
+          });
         }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+
+        this.setState({
+          petForm: currentPet,
+          currentBirthDay: currentPet.birthOfPets
+        });
+      }
+    });
   };
 
   delPets = (id) => {
@@ -326,14 +303,12 @@ class PetInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
     // const res = await delPets(params)
     // if (res.code === 'K-000000') {

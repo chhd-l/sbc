@@ -82,12 +82,7 @@ class DeliveryInfomation extends React.Component<any, any> {
             });
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
       });
   };
   handleSubmit = (e) => {
@@ -121,20 +116,13 @@ class DeliveryInfomation extends React.Component<any, any> {
       type: deliveryForm.type,
       clinicsVOS: clinicsVOS
     };
-    webapi
-      .updateAddress(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
-          this.getAddressList();
-          message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+    webapi.updateAddress(params).then((data) => {
+      const res = data.res;
+      if (res.code === 'K-000000') {
+        this.getAddressList();
+        message.success('Operate successfully');
+      }
+    });
   };
   getSelectedClinic = (array) => {
     let clinics = [];
@@ -206,14 +194,12 @@ class DeliveryInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -226,20 +212,13 @@ class DeliveryInfomation extends React.Component<any, any> {
   };
 
   delAddress = () => {
-    webapi
-      .delAddress(this.state.deliveryForm.deliveryAddressId)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
-          message.success('Operate successfully');
-          this.getAddressList();
-        } else {
-          message.error(res.message || 'Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+    webapi.delAddress(this.state.deliveryForm.deliveryAddressId).then((data) => {
+      const res = data.res;
+      if (res.code === 'K-000000') {
+        message.success('Operate successfully');
+        this.getAddressList();
+      }
+    });
   };
   clickDefault = () => {
     let isDefault = !this.state.isDefault;
@@ -265,14 +244,12 @@ class DeliveryInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
   onClinicChange = (clinics) => {
@@ -338,47 +315,33 @@ class DeliveryInfomation extends React.Component<any, any> {
       pageSize: 30,
       pageNum: 0
     };
-    webapi
-      .queryCityListByName(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            cityArr: res.context.systemCityVO,
-            objectFetching: false
-          });
-        } else {
-          message.error(res.message || 'Operation failure');
-        }
-      })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+    webapi.queryCityListByName(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          cityArr: res.context.systemCityVO,
+          objectFetching: false
+        });
+      }
+    });
   };
   getCityNameById = (id) => {
     let params = {
       id: [id]
     };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
-            this.setState({
-              initCityName: res.context.systemCityVO[0].cityName
-            });
-            this.props.form.setFieldsValue({
-              cityId: res.context.systemCityVO[0].cityName
-            });
-          }
-        } else {
-          message.error(res.message || 'Operation failure');
+    webapi.queryCityById(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
+          this.setState({
+            initCityName: res.context.systemCityVO[0].cityName
+          });
+          this.props.form.setFieldsValue({
+            cityId: res.context.systemCityVO[0].cityName
+          });
         }
-      })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      }
+    });
   };
 
   render() {

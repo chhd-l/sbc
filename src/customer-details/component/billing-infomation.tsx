@@ -84,12 +84,7 @@ class BillingInfomation extends React.Component<any, any> {
             });
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
       });
   };
   handleSubmit = (e) => {
@@ -122,20 +117,13 @@ class BillingInfomation extends React.Component<any, any> {
       rfc: billingForm.rfc,
       type: billingForm.type
     };
-    webapi
-      .updateAddress(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
-          this.getAddressList();
-          message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+    webapi.updateAddress(params).then((data) => {
+      const res = data.res;
+      if (res.code === 'K-000000') {
+        this.getAddressList();
+        message.success('Operate successfully');
+      }
+    });
   };
 
   getSelectedClinic = (array) => {
@@ -208,14 +196,12 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -228,20 +214,13 @@ class BillingInfomation extends React.Component<any, any> {
   };
 
   delAddress = () => {
-    webapi
-      .delAddress(this.state.billingForm.deliveryAddressId)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
-          message.success('Operate successfully');
-          this.getAddressList();
-        } else {
-          message.error(res.message || 'Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+    webapi.delAddress(this.state.billingForm.deliveryAddressId).then((data) => {
+      const res = data.res;
+      if (res.code === 'K-000000') {
+        message.success('Operate successfully');
+        this.getAddressList();
+      }
+    });
   };
   clickDefault = () => {
     let isDefault = !this.state.isDefault;
@@ -266,14 +245,12 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -353,40 +330,31 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
   getCityNameById = (id) => {
     let params = {
       id: [id]
     };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
-            this.setState({
-              initCityName: res.context.systemCityVO[0].cityName
-            });
-            this.props.form.setFieldsValue({
-              cityId: res.context.systemCityVO[0].cityName
-            });
-          }
-        } else {
-          message.error(res.message || 'Operation failure');
+    webapi.queryCityById(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
+          this.setState({
+            initCityName: res.context.systemCityVO[0].cityName
+          });
+          this.props.form.setFieldsValue({
+            cityId: res.context.systemCityVO[0].cityName
+          });
         }
-      })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      }
+    });
   };
 
   render() {

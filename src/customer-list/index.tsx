@@ -15,20 +15,20 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Consumer account',
+          title: 'Pet owner account',
           dataIndex: 'customerAccount',
           key: 'consumerAccount',
           width: '15%'
         },
         {
-          title: 'Consumer name',
+          title: 'Pet owner name',
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
           render: (text, record) => <p>{record.firstName + ' ' + record.lastName}</p>
         },
         {
-          title: 'Consumer type',
+          title: 'Pet owner type',
           dataIndex: 'customerLevelName',
           key: 'consumerType',
           width: '15%'
@@ -185,15 +185,12 @@ export default class Customer extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Unsuccessful');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-
         this.setState({
           loading: false
         });
@@ -305,7 +302,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={styles.label}>Customer type</p>}
+                      label={<p style={styles.label}>Pet owner type</p>}
                       style={{ width: 80 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;

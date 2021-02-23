@@ -59,31 +59,24 @@ export default class CustomerDetails extends React.Component<any, any> {
   }
 
   getBasicInformation = () => {
-    webapi
-      .getBasicDetails(this.state.customerId)
-      .then((data) => {
-        const { res } = data;
-        if (res.code && res.code !== Const.SUCCESS_CODE) {
-          message.error(res.message || 'Get basic information failed');
-        } else {
-          this.setState({
-            basic: {
-              customerName: res.customerName || '',
-              email: res.email || '',
-              age: res.birthDay ? moment(res.birthDay).fromNow() : '',
-              createTime: res.createTime ? moment(res.createTime).format('YYYY-MM-DD') : '',
-              contactPhone: res.contactPhone || '',
-              preferredMethods: '',
-              country: res.country,
-              address: res.address1,
-              consent: ''
-            }
-          });
-        }
-      })
-      .catch((err) => {
-        message.error(err || 'Get basic information failed');
-      });
+    webapi.getBasicDetails(this.state.customerId).then((data) => {
+      const { res } = data;
+      if (res.customerName != undefined) {
+        this.setState({
+          basic: {
+            customerName: res.customerName || '',
+            email: res.email || '',
+            age: res.birthDay ? moment(res.birthDay).fromNow() : '',
+            createTime: res.createTime ? moment(res.createTime).format('YYYY-MM-DD') : '',
+            contactPhone: res.contactPhone || '',
+            preferredMethods: '',
+            country: res.country,
+            address: res.address1,
+            consent: ''
+          }
+        });
+      }
+    });
   };
 
   // querySysDictionary = async (type: String) => {
@@ -136,14 +129,12 @@ export default class CustomerDetails extends React.Component<any, any> {
           message.success('Operate successfully');
           history.push('/customer-list');
         } else {
-          message.error(data.res.message || 'Unsuccessful');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
         this.setState({
           loading: false
         });
@@ -188,66 +179,66 @@ export default class CustomerDetails extends React.Component<any, any> {
                 />
                 <div style={{ margin: '20px 0' }}>
                   <Row className="text-tip">
-                    <Col span="4">
+                    <Col span={4}>
                       <Icon type="user" /> Name
                     </Col>
-                    <Col span="4">
+                    <Col span={4}>
                       <Icon type="calendar" /> Age
                     </Col>
                   </Row>
                   <Row className="text-highlight" style={{ marginTop: 5 }}>
-                    <Col span="4">{basic.customerName}</Col>
-                    <Col span="4">{basic.age}</Col>
+                    <Col span={4}>{basic.customerName}</Col>
+                    <Col span={4}>{basic.age}</Col>
                   </Row>
                 </div>
                 <div className="basic-info-detail">
                   <Row type="flex" align="middle">
-                    <Col span="4" className="text-tip">
+                    <Col span={4} className="text-tip">
                       Registration date
                     </Col>
-                    <Col span="6" className="text-highlight">
+                    <Col span={6} className="text-highlight">
                       {basic.createTime}
                     </Col>
-                    <Col span="4" className="text-tip">
+                    <Col span={4} className="text-tip">
                       Email address
                     </Col>
-                    <Col span="6" className="text-highlight">
+                    <Col span={6} className="text-highlight">
                       {basic.email}
                     </Col>
                   </Row>
                   <Row type="flex" align="middle">
-                    <Col span="4" className="text-tip">
+                    <Col span={4} className="text-tip">
                       Phone number
                     </Col>
-                    <Col span="6" className="text-highlight">
+                    <Col span={6} className="text-highlight">
                       {basic.contactPhone}
                     </Col>
-                    <Col span="4" className="text-tip">
+                    <Col span={4} className="text-tip">
                       Prefer channel
                     </Col>
-                    <Col span="6" className="text-highlight">
+                    <Col span={6} className="text-highlight">
                       {basic.preferredMethods}
                     </Col>
                   </Row>
                   <Row type="flex" align="middle">
-                    <Col span="4" className="text-tip">
+                    <Col span={4} className="text-tip">
                       Country
                     </Col>
-                    <Col span="6" className="text-highlight">
+                    <Col span={6} className="text-highlight">
                       {basic.country}
                     </Col>
-                    <Col span="4" className="text-tip">
+                    <Col span={4} className="text-tip">
                       Address reference
                     </Col>
-                    <Col span="6" className="text-highlight">
+                    <Col span={6} className="text-highlight">
                       {basic.address}
                     </Col>
                   </Row>
                   <Row type="flex" align="middle">
-                    <Col span="4" className="text-tip">
+                    <Col span={4} className="text-tip">
                       Consent
                     </Col>
-                    <Col span="6" className="text-highlight">
+                    <Col span={6} className="text-highlight">
                       {basic.consent}
                     </Col>
                   </Row>

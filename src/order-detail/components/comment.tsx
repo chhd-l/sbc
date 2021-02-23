@@ -196,7 +196,7 @@ class comment extends Component<any, any> {
               type="primary"
               icon="plus"
               onClick={() => {
-                this.setState({ commentVisible: true, comment: '' });
+                this.setState({ commentVisible: true, comment: '', commentId: null });
               }}
             >
               Add Comment
@@ -244,7 +244,19 @@ class comment extends Component<any, any> {
                   : [<div style={{ width: 56 }}></div>]
               }
             >
-              <List.Item.Meta title={<span style={{ fontWeight: 600 }}>{item.content}</span>} />
+              <List.Item.Meta
+                title={
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div> {item.content}</div>}
+                  >
+                    <p style={styles.text}> {item.content}</p>
+                  </Tooltip>
+                }
+              />
               <div>
                 <p style={{ marginBottom: '1em' }}>{item.createPersonNickName}</p>
                 <p>{item.createTime}</p>
@@ -252,40 +264,52 @@ class comment extends Component<any, any> {
             </List.Item>
           )}
         />
-      { commentVisible ? <Modal width={700} visible={commentVisible} title="Add Comment" onOk={this.handleSubmit} confirmLoading={confirmLoading} maskClosable={false} onCancel={this.closeModal} okText="Confirm">
-          <Form>
-            <FormItem {...layout} label="Pet Owner">
-              {getFieldDecorator('petOwner', {
-                initialValue: petOwnerName
-              })(<Input disabled={true} />)}
-            </FormItem>
-            <FormItem {...layout} label="Order Number">
-              {getFieldDecorator('orderNumber', {
-                initialValue: orderNumber
-              })(<Input disabled={true} />)}
-            </FormItem>
-            <FormItem {...layout} label="Comment">
-              {getFieldDecorator('name', {
-                initialValue: comment,
-                rules: [{ required: true, message: 'Please input comment' }]
-              })(
-                <Input.TextArea
-                  maxLength={2000}
-                  placeholder="Please input comment"
-                  autoSize={{ minRows: 5, maxRows: 10 }}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.setState({
-                      comment: value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-          </Form>
-        </Modal> : null }  
+        {commentVisible ? (
+          <Modal width={700} visible={commentVisible} title="Add Comment" onOk={this.handleSubmit} confirmLoading={confirmLoading} maskClosable={false} onCancel={this.closeModal} okText="Confirm">
+            <Form>
+              <FormItem {...layout} label="Pet Owner">
+                {getFieldDecorator('petOwner', {
+                  initialValue: petOwnerName
+                })(<Input disabled={true} />)}
+              </FormItem>
+              <FormItem {...layout} label="Order Number">
+                {getFieldDecorator('orderNumber', {
+                  initialValue: orderNumber
+                })(<Input disabled={true} />)}
+              </FormItem>
+              <FormItem {...layout} label="Comment">
+                {getFieldDecorator('name', {
+                  initialValue: comment,
+                  rules: [{ required: true, message: 'Please input comment' }]
+                })(
+                  <Input.TextArea
+                    maxLength={2000}
+                    placeholder="Please input comment"
+                    autoSize={{ minRows: 5, maxRows: 10 }}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.setState({
+                        comment: value
+                      });
+                    }}
+                  />
+                )}
+              </FormItem>
+            </Form>
+          </Modal>
+        ) : null}
       </div>
     );
   }
 }
 export default Form.create()(comment);
+
+const styles = {
+  text: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    fontWeight: 600,
+    width: 800
+  }
+};

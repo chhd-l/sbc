@@ -906,6 +906,10 @@ const routes = [
   {
     path: '/prescriber-booking-detail',
     asyncComponent: () => import('./prescriber-booking-detail')
+  },
+  {
+    path: '/validation-setting',
+    asyncComponent: () => import('./validation-setting')
   }
 ];
 

@@ -315,7 +315,7 @@ class BookingDetail extends Component<any, any> {
           <Button
             type="primary"
             onClick={() => {
-              console.log('save');
+              // console.log('save');
             }}
           >
             New book

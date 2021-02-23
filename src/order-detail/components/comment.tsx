@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Tooltip, Popconfirm, Input, Row, Button, Modal, Form, message } from 'antd';
+import { List, Tooltip, Popconfirm, Input, Row, Button, Modal, Form, message, Spin } from 'antd';
 import * as webapi from '../webapi';
 import { Const } from 'qmkit';
 
@@ -186,7 +186,7 @@ class comment extends Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { orderNumber, petOwnerName } = this.props;
-    const { initLoading, loading, list, commentVisible, confirmLoading, comment, pagination, searchValue } = this.state;
+    const { loading, list, commentVisible, confirmLoading, comment, pagination, searchValue } = this.state;
     return (
       <div>
         <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
@@ -203,67 +203,68 @@ class comment extends Component<any, any> {
             </Button>
           </span>
         </Row>
-        <List
-          className="demo-loadmore-list"
-          loading={initLoading}
-          itemLayout="horizontal"
-          dataSource={list}
-          pagination={{
-            onChange: (page, pageSize) => {
-              this.setState(
-                {
-                  pagination: {
-                    current: page,
-                    pageSize: pageSize
-                  }
-                },
-                () => this.searchComment(searchValue)
-              );
-            },
-            ...pagination
-          }}
-          renderItem={(item) => (
-            <List.Item
-              actions={
-                item.operableFlag
-                  ? [
-                      <Tooltip placement="top" title="Edit">
-                        <a onClick={() => this.editComment(item.id, item.content)}>
-                          {' '}
-                          <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
-                        </a>
-                      </Tooltip>,
-                      <Popconfirm placement="topLeft" title="Are you sure you want to delete this comment?" onConfirm={() => this.deleteComment(item.id)} okText="Confirm" cancelText="Cancel">
-                        <Tooltip placement="top" title="Delete">
-                          <a>
-                            <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
+        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <List
+            className="demo-loadmore-list"
+            itemLayout="horizontal"
+            dataSource={list}
+            pagination={{
+              onChange: (page, pageSize) => {
+                this.setState(
+                  {
+                    pagination: {
+                      current: page,
+                      pageSize: pageSize
+                    }
+                  },
+                  () => this.searchComment(searchValue)
+                );
+              },
+              ...pagination
+            }}
+            renderItem={(item) => (
+              <List.Item
+                actions={
+                  item.operableFlag
+                    ? [
+                        <Tooltip placement="top" title="Edit">
+                          <a onClick={() => this.editComment(item.id, item.content)}>
+                            {' '}
+                            <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
                           </a>
-                        </Tooltip>
-                      </Popconfirm>
-                    ]
-                  : [<div style={{ width: 56 }}></div>]
-              }
-            >
-              <List.Item.Meta
-                title={
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div> {item.content}</div>}
-                  >
-                    <p style={styles.text}> {item.content}</p>
-                  </Tooltip>
+                        </Tooltip>,
+                        <Popconfirm placement="topLeft" title="Are you sure you want to delete this comment?" onConfirm={() => this.deleteComment(item.id)} okText="Confirm" cancelText="Cancel">
+                          <Tooltip placement="top" title="Delete">
+                            <a>
+                              <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
+                            </a>
+                          </Tooltip>
+                        </Popconfirm>
+                      ]
+                    : [<div style={{ width: 56 }}></div>]
                 }
-              />
-              <div>
-                <p style={{ marginBottom: '1em' }}>{item.createPersonNickName}</p>
-                <p>{item.createTime}</p>
-              </div>
-            </List.Item>
-          )}
-        />
+              >
+                <List.Item.Meta
+                  title={
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div> {item.content}</div>}
+                    >
+                      <p style={styles.text}> {item.content}</p>
+                    </Tooltip>
+                  }
+                />
+                <div>
+                  <p style={{ marginBottom: '1em' }}>{item.createPersonNickName}</p>
+                  <p>{item.createTime}</p>
+                </div>
+              </List.Item>
+            )}
+          />
+        </Spin>
         {commentVisible ? (
           <Modal width={700} visible={commentVisible} title="Add Comment" onOk={this.handleSubmit} confirmLoading={confirmLoading} maskClosable={false} onCancel={this.closeModal} okText="Confirm">
             <Form>

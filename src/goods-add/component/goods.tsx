@@ -69,6 +69,7 @@ export default class Info extends React.Component<any, any> {
       clickImg: Function;
       removeImg: Function;
       removeVideo: Function;
+      changeDescriptionTab: Function;
       cateDisabled: boolean;
       checkFlag: boolean;
       enterpriseFlag: boolean;
@@ -109,6 +110,7 @@ export default class Info extends React.Component<any, any> {
     showGoodsPropDetail: noop,
     changeStoreCategory: noop,
     updateGoodsForm: noop,
+    changeDescriptionTab: noop,
     // 显示品牌窗口
     showBrandModal: noop,
     showCateModal: noop,
@@ -809,9 +811,10 @@ class GoodsForm extends React.Component<any, any> {
    * 选中平台类目时，实时显示对应类目下的所有属性信息
    */
   _onChange = (value) => {
-    const { showGoodsPropDetail, changeStoreCategory, changePropVal } = this.props.relaxProps;
+    const { showGoodsPropDetail, changeStoreCategory, changeDescriptionTab } = this.props.relaxProps;
     showGoodsPropDetail(value);
     changeStoreCategory(value);
+    changeDescriptionTab(value);
   };
   /**
    * 修改商品项
@@ -819,7 +822,6 @@ class GoodsForm extends React.Component<any, any> {
   _editGoods = (key: string, e) => {
     const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
-
     if (key === 'saleableFlag') {
       if (e.target.value == 0) {
         this.setState({

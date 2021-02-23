@@ -221,7 +221,6 @@ export function getComments(filterParams = {}) {
   });
 }
 
-
 export function getCommentById(id) {
   return Fetch<TResult>('/trade/detailComments/findById', {
     method: 'POST',
@@ -231,7 +230,6 @@ export function getCommentById(id) {
   });
 }
 
-
 export function addComment(filterParams = {}) {
   return Fetch<TResult>('/trade/detailComments/add', {
     method: 'POST',
@@ -240,7 +238,6 @@ export function addComment(filterParams = {}) {
     })
   });
 }
-
 
 export function updateComment(filterParams = {}) {
   return Fetch<TResult>('/trade/detailComments/modify', {

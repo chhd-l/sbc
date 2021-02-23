@@ -16,6 +16,7 @@ import SubscribInformation from './component/subscrib-information';
 import PrescribInformation from './component/prescrib-information';
 import DeliveryList from './component/delivery-list';
 import PaymentList from './component/payment-list';
+import Feedback from './component/feedback';
 
 import './index.less';
 
@@ -162,19 +163,14 @@ export default class CustomerDetails extends React.Component<any, any> {
           {this.state.customerType !== 'Guest' && (
             <div>
               <div className="detail-container">
-                <div className="text-align-right">
-                  <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => this.removeConsumer(this.state.customerId)} okText="Confirm" cancelText="Cancel">
-                    <Button type="link">
-                      <FormattedMessage id="consumer.removeConsumer" />
-                    </Button>
-                  </Popconfirm>
-                </div>
                 <Headline
                   title="Basic information"
                   extra={
-                    <Link to={`/edit-customer-basicinfo/${this.state.customerId}`}>
-                      <i className="iconfont iconEdit"></i> Edit
-                    </Link>
+                    <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => this.removeConsumer(this.state.customerId)} okText="Confirm" cancelText="Cancel">
+                      <Button type="link">
+                        <FormattedMessage id="consumer.removeConsumer" />
+                      </Button>
+                    </Popconfirm>
                   }
                 />
                 <div style={{ margin: '20px 0' }}>
@@ -184,6 +180,11 @@ export default class CustomerDetails extends React.Component<any, any> {
                     </Col>
                     <Col span={4}>
                       <Icon type="calendar" /> Age
+                    </Col>
+                    <Col span={16} className="text-align-right" style={{ padding: '0 35px' }}>
+                      <Link to={`/edit-customer-basicinfo/${this.state.customerId}`}>
+                        <i className="iconfont iconEdit"></i> Edit
+                      </Link>
                     </Col>
                   </Row>
                   <Row className="text-highlight" style={{ marginTop: 5 }}>
@@ -348,6 +349,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Tabs>
             )}
           </div>
+          {this.state.customerType !== 'Guest' && <Feedback />}
         </Spin>
       </div>
     );

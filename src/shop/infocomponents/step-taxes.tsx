@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Button, Spin, Modal, message, Form, Input, Select, InputNumber } from 'antd';
+import { Button, Spin, Modal, message, Form, Input, Select, InputNumber, Card, Tooltip, Popconfirm, Switch, Col, Row } from 'antd';
 import TaxesTable from '../components/taxes-table';
 // import TaxesAdd from '../components/taxes-add';
 import TaxesSetting from '../components/taxes-setting';
 import _ from 'lodash';
+const avalara = require('../img/avalara.png');
 
 import * as webApi from './../webapi';
-import { Const } from 'qmkit';
+import { Const, Headline } from 'qmkit';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class StepTaxes extends Component<any, any> {
@@ -52,7 +53,8 @@ class StepTaxes extends Component<any, any> {
       zoneList: [],
       fetching: false,
       statesZoneIncludes: sessionStorage.getItem('currentCountry') ? [sessionStorage.getItem('currentCountry')] : [],
-      countryZoneIncludes: []
+      countryZoneIncludes: [],
+      isFGS: true
     };
   }
 
@@ -441,7 +443,7 @@ class StepTaxes extends Component<any, any> {
   };
 
   render() {
-    const { loading, dataList, pagination, addVisible, isEdit, settingVisible, taxForm, settingForm, taxZoneTypeList, zoneList, fetching } = this.state;
+    const { loading, dataList, pagination, addVisible, isEdit, settingVisible, taxForm, settingForm, taxZoneTypeList, zoneList, fetching, isFGS } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -456,18 +458,82 @@ class StepTaxes extends Component<any, any> {
     return (
       <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <div className="consent">
-          <div className="taxes space-between">
-            <Button className="btn" type="primary" shape="round" onClick={() => this.openAddTaxPage()}>
-              Add tax zone
-            </Button>
-            <Button className="btn" shape="round" icon="setting" onClick={() => this.openTaxSettingPage()}>
-              Tax setting
-            </Button>
-          </div>
-          <div id="consent" className="consent-table">
-            <TaxesTable dataList={dataList} pagination={pagination} editFunction={this.openEditTaxPage} tableChangeFunction={this.handleTableChange} deleteFunction={this.handleDetele} updateFunction={this.updateTaxStatus} />
-          </div>
-          {/* <TaxesAdd visible={addVisible} isEdit={isEdit} taxForm={taxForm} closeFunction={this.closeAllModal} /> */}
+          <Headline
+            title="Tax calculation"
+            extra={
+              <Button shape="round" type="primary" ghost icon="setting" onClick={() => this.openTaxSettingPage()}>
+                <span style={{ color: '#e2001a' }}>Tax setting</span>
+              </Button>
+            }
+          />
+          <Row style={{ marginBottom: 10 }}>
+            <Col span={8}>
+              <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                <div style={{ textAlign: 'center', margin: '20px 0' }}>
+                  <img src={avalara} style={{ width: '200px' }} />
+                </div>
+                <div className="bar" style={{ float: 'right' }}>
+                  <Popconfirm
+                    title={'Are you sure to ' + (!isFGS ? ' disable' : 'enable') + ' this?'}
+                    onConfirm={() =>
+                      this.setState({
+                        isFGS: !isFGS
+                      })
+                    }
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Switch checked={!isFGS} size="small" />
+                  </Popconfirm>
+                </div>
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                <div style={{ textAlign: 'center', margin: '9px 0' }}>
+                  <h1
+                    style={{
+                      fontSize: 30,
+                      fontWeight: 'bold',
+                      color: '#e2001a'
+                    }}
+                  >
+                    FGS
+                  </h1>
+                  <p>Set up your own rule</p>
+                </div>
+                <div className="bar" style={{ float: 'right' }}>
+                  <Popconfirm
+                    title={'Are you sure to ' + (isFGS ? ' disable' : 'enable') + ' this?'}
+                    onConfirm={() =>
+                      this.setState({
+                        isFGS: !isFGS
+                      })
+                    }
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Switch checked={isFGS} size="small" />
+                  </Popconfirm>
+                </div>
+              </Card>
+            </Col>
+          </Row>
+          {isFGS ? (
+            <div>
+              <div className="taxes space-between">
+                <Button type="primary" shape="round" onClick={() => this.openAddTaxPage()}>
+                  Add tax zone
+                </Button>
+              </div>
+              <div id="consent" className="consent-table">
+                <TaxesTable dataList={dataList} pagination={pagination} editFunction={this.openEditTaxPage} tableChangeFunction={this.handleTableChange} deleteFunction={this.handleDetele} updateFunction={this.updateTaxStatus} />
+              </div>
+            </div>
+          ) : null}
+
+          <Headline title="Tax zone management" />
+
           <TaxesSetting visible={settingVisible} settingForm={settingForm} closeFunction={this.closeAllModal} submitFunction={this.updateSettingConfig} />
 
           <Modal

@@ -5,13 +5,15 @@ import GGEditor, { Flow, RegisterNode, setAnchorPointsState } from 'gg-editor';
 export default class ItemCommunicationNode extends Component {
   render() {
     const config = {
-      draw(model, group) {
-        //   const keyShape = this.drawKeyShape(item)
-        //   this.drawLabel(item)
+      draw(item) {
+        const keyShape = this.drawKeyShape(item);
+        this.drawLabel(item);
+        const group = item.getGraphicGroup();
+        const model = item.getModel();
 
         const text = substringName(model.name, 15, 25);
         const iconName = model.nodeType === 'SendEmail' ? '邮件' : model.nodeType === 'SendSMS' ? '短信' : '短信提醒';
-        const keyShape = group.addShape('text', {
+        group.addShape('text', {
           attrs: {
             x: 30,
             y: -20,
@@ -38,13 +40,11 @@ export default class ItemCommunicationNode extends Component {
 
         return keyShape;
       },
-      getAnchorPoints() {
-        return [
-          [0.5, 0],
-          [0.5, 1]
-        ];
-      }
+      anchor: [
+        [0.5, 0],
+        [0.5, 1]
+      ]
     };
-    return <RegisterNode name="item-communication-node" config={config} extend="flow-circle" />;
+    return <RegisterNode name="item-communication-node" config={config} extend="circle" />;
   }
 }

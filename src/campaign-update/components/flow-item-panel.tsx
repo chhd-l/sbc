@@ -5,13 +5,13 @@ const { Panel } = Collapse;
 
 export default class FlowItemPanel extends Component {
   render() {
-   const  color = {
+    const color = {
       yellow: '#ffc820',
       blue: '#5b9bd5',
       grey: '#a6a6a6',
       green: 'green',
       pink: '#FAB0B9'
-    }
+    };
     return (
       <div id="itemPanel">
         <ItemPanel>
@@ -153,6 +153,7 @@ export default class FlowItemPanel extends Component {
                 type="node"
                 model={{
                   size: [40, 40],
+                  type: 'circle',
                   shape: 'item-communication-node',
                   label: 'Send Email',
                   labelOffsetY: 20,

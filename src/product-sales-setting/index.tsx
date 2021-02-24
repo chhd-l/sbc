@@ -77,11 +77,12 @@ class ProductSearchSetting extends Component<any, any> {
     let options = [...months, ...weeks];
     let d = languageId.split(',');
 
-    let language = languageList.map((item) => {
+    let language = languageList.filter((item) => {
       if (d.includes(item.id.toString())) {
         return item;
       }
     });
+    // debugger
     this.setState({
       options,
       defaultPurchaseType,
@@ -162,7 +163,8 @@ class ProductSearchSetting extends Component<any, any> {
 export default Form.create()(ProductSearchSetting);
 const styles = {
   container: {
-    background: 'rgb(255, 255, 255)'
+    background: 'rgb(255, 255, 255)',
+    height: 'calc(100vh - 170px)'
   },
   formContainer: {
     marginTop: '30px',

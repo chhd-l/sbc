@@ -46,8 +46,11 @@ export default class Detail extends React.Component<any, any> {
     editEditor: noop,
     editEditorContent: noop
   };
+
   onContentChange = (html: string, name: string) => {
-    if (goodsDetailTabObj[name].contentType === 'json') {
+    const { goods } = this.props.relaxProps;
+    let resource = goods.get('resource');
+    if (resource !== 1 && goodsDetailTabObj[name].contentType === 'json') {
       const reg = /[^><]+(?=<\/xmp>)/gim;
       let _html = html.match(reg);
       goodsDetailTabObj[name].content = _html ? _html.toString() : '';
@@ -76,13 +79,14 @@ export default class Detail extends React.Component<any, any> {
             {goodsDescriptionDetailList.map((item, i) => {
               goodsDetailTabObj[item.descriptionName + '_' + item.descriptionId] = item;
               let resource = goods.get('resource'),
-                disabled = false;
+                disabled = true;
               if (resource !== 1) {
                 disabled = item.editable;
+                if (item.contentType === 'json') {
+                  item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content}</xmp></code></pre>`;
+                }
               }
-              if (item.contentType === 'json') {
-                item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content}</xmp></code></pre>`;
-              }
+
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
                   <ErrorBoundary>

@@ -18,6 +18,7 @@ export default class Detail extends React.Component<any, any> {
       chooseImgs: List<any>;
       imgType: number;
       goodsDetailTab: IList;
+      goodsDescriptionDetailList: any;
 
       editGoods: Function;
       refDetailEditor: Function;
@@ -35,6 +36,8 @@ export default class Detail extends React.Component<any, any> {
     imgType: 'imgType',
     goodsTabs: 'goodsTabs',
     goodsDetailTab: 'goodsDetailTab',
+    goodsDescriptionDetailList: 'goodsDescriptionDetailList',
+
     // 修改商品基本信息
     editGoods: noop,
     refDetailEditor: noop,
@@ -44,58 +47,59 @@ export default class Detail extends React.Component<any, any> {
     editEditorContent: noop
   };
 
-  getDetailString = (goodsDetailTabContent, name) => {
-    let detail = goodsDetailTabContent ? goodsDetailTabContent[name] : '';
-    if (!detail) {
-      return '';
-    }
-    if (Array.isArray(detail)) {
-      return '<code>[' + goodsDetailTabContent[name].toString().replace(/^\"|\"$/g, '') + ']</code>';
-    } else {
-      return detail.toString();
-    }
-  };
   onContentChange = (html: string, name: string) => {
-    const { editEditorContent } = this.props.relaxProps;
-
-    const reg = /[^><]+(?=<\/code>)/gim;
-    let _html = html.match(reg);
-    if (_html) {
-      goodsDetailTabObj[name] = _html.toString();
+    const { goods } = this.props.relaxProps;
+    let resource = goods.get('resource');
+    if (resource !== 1 && goodsDetailTabObj[name].contentType === 'json') {
+      const reg = /[^><]+(?=<\/xmp>)/gim;
+      let _html = html.match(reg);
+      goodsDetailTabObj[name].content = _html ? _html.toString() : '';
     } else {
-      goodsDetailTabObj[name] = html;
+      goodsDetailTabObj[name].content = html;
     }
-    let p = JSON.stringify(goodsDetailTabObj);
-    editEditorContent('goodsDetail', p);
+    this.sortDetailTab();
+  };
+
+  sortDetailTab = () => {
+    const { editEditorContent } = this.props.relaxProps;
+    let arr = [];
+    for (let key in goodsDetailTabObj) {
+      arr.push(goodsDetailTabObj[key]);
+    }
+    editEditorContent(arr);
   };
 
   render() {
-    const { goods, refDetailEditor, reftabDetailEditor, chooseImgs, imgType, goodsTabs, goodsDetailTab } = this.props.relaxProps;
-    let goodsDetailTabCopy = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
-    let goodsDetailTabContent: any = {};
-    let goodsDetailContent: string = goods.get('goodsDetail');
-    let pathname = history.location.pathname,
-      bool = pathname === '/goods-main';
-    if (goodsDetailContent) {
-      try {
-        goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'));
-      } catch {
-        goodsDetailTabCopy.map((item) => {
-          goodsDetailTabContent[item.get('name')] = '';
-        });
-      }
-    }
-    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
-    let storeId = loginInfo ? loginInfo.storeId : '';
+    const { goods, goodsDescriptionDetailList } = this.props.relaxProps;
+    goodsDetailTabObj = {};
     return (
       <div>
-        {(goodsDetailContent || bool) && (
-          <Tabs defaultActiveKey="main0" animated={false}>
-            {goodsDetailTabCopy.map((item, i) => {
+        {goodsDescriptionDetailList.length > 0 && (
+          <Tabs defaultActiveKey={'main' + goodsDescriptionDetailList[0].descriptionId} animated={false}>
+            {goodsDescriptionDetailList.map((item, i) => {
+              goodsDetailTabObj[item.descriptionName + '_' + item.descriptionId] = item;
+              let resource = goods.get('resource'),
+                disabled = true;
+              if (resource !== 1) {
+                disabled = item.editable;
+                if (item.contentType === 'json') {
+                  item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content}</xmp></code></pre>`;
+                }
+              }
+
               return (
-                <Tabs.TabPane tab={item.get('name')} key={'main' + i} forceRender>
+                <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
                   <ErrorBoundary>
-                    <ReactEditor id={'main-' + i} content={this.getDetailString(goodsDetailTabContent, item.get('name'))} onContentChange={this.onContentChange} tabNanme={item.get('name')} disabled={false} height={320} />
+                    <ReactEditor
+                      id={'main-' + item.descriptionId}
+                      cateId={item.goodsCateId}
+                      content={item.content}
+                      onContentChange={this.onContentChange}
+                      contentType={item.contentType}
+                      tabNanme={item.descriptionName + '_' + item.descriptionId}
+                      disabled={!disabled}
+                      height={320}
+                    />
                   </ErrorBoundary>
                 </Tabs.TabPane>
               );

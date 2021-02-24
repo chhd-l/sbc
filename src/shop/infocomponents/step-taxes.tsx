@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Button, Spin, Modal, message, Form, Input, Select, InputNumber } from 'antd';
+import { Button, Spin, Modal, message, Form, Input, Select, InputNumber, Card, Tooltip, Popconfirm, Switch, Col, Row } from 'antd';
 import TaxesTable from '../components/taxes-table';
 // import TaxesAdd from '../components/taxes-add';
 import TaxesSetting from '../components/taxes-setting';
 import _ from 'lodash';
+const avalara = require('../img/avalara.png');
 
 import * as webApi from './../webapi';
-import { Const } from 'qmkit';
+import { Const, Headline } from 'qmkit';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class StepTaxes extends Component<any, any> {
@@ -52,7 +53,16 @@ class StepTaxes extends Component<any, any> {
       zoneList: [],
       fetching: false,
       statesZoneIncludes: sessionStorage.getItem('currentCountry') ? [sessionStorage.getItem('currentCountry')] : [],
-      countryZoneIncludes: []
+      countryZoneIncludes: [],
+      isFGS: true,
+      visibleApiSetting: false,
+      taxSettingForm: {
+        calculationUrl: '',
+        userName: '123',
+        password: '',
+        companyCode: '',
+        taxCode: ''
+      }
     };
   }
 
@@ -243,6 +253,7 @@ class StepTaxes extends Component<any, any> {
     this.setState({
       addVisible: false,
       settingVisible: false,
+      visibleApiSetting: false,
       taxForm
     });
     if (isRefresh) {
@@ -323,7 +334,7 @@ class StepTaxes extends Component<any, any> {
   handleCancel = () => {
     this.closeAllModal(false);
   };
-  handleSubmit = () => {
+  handleZoneSubmit = () => {
     const { taxForm, isEdit } = this.state;
 
     this.props.form.validateFields((err, values) => {
@@ -371,6 +382,13 @@ class StepTaxes extends Component<any, any> {
     data[field] = value;
     this.setState({
       taxForm: data
+    });
+  };
+  onTaxSettingFormChange = ({ field, value }) => {
+    let data = this.state.taxSettingForm;
+    data[field] = value;
+    this.setState({
+      taxSettingForm: data
     });
   };
   getZoneList = (value) => {
@@ -439,9 +457,23 @@ class StepTaxes extends Component<any, any> {
         message.error(err.toString() || 'Operation failure');
       });
   };
+  openEditPage = () => {
+    this.setState({
+      visibleApiSetting: true
+    });
+  };
+  handleSettingSubmit = () => {
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.setState({
+          visibleApiSetting: false
+        });
+      }
+    });
+  };
 
   render() {
-    const { loading, dataList, pagination, addVisible, isEdit, settingVisible, taxForm, settingForm, taxZoneTypeList, zoneList, fetching } = this.state;
+    const { loading, dataList, pagination, addVisible, isEdit, settingVisible, taxForm, settingForm, taxZoneTypeList, zoneList, fetching, isFGS, visibleApiSetting, taxSettingForm } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -456,169 +488,369 @@ class StepTaxes extends Component<any, any> {
     return (
       <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <div className="consent">
-          <div className="taxes space-between">
-            <Button className="btn" type="primary" shape="round" onClick={() => this.openAddTaxPage()}>
-              Add tax zone
-            </Button>
-            <Button className="btn" shape="round" icon="setting" onClick={() => this.openTaxSettingPage()}>
-              Tax setting
-            </Button>
-          </div>
-          <div id="consent" className="consent-table">
-            <TaxesTable dataList={dataList} pagination={pagination} editFunction={this.openEditTaxPage} tableChangeFunction={this.handleTableChange} deleteFunction={this.handleDetele} updateFunction={this.updateTaxStatus} />
-          </div>
-          {/* <TaxesAdd visible={addVisible} isEdit={isEdit} taxForm={taxForm} closeFunction={this.closeAllModal} /> */}
-          <TaxesSetting visible={settingVisible} settingForm={settingForm} closeFunction={this.closeAllModal} submitFunction={this.updateSettingConfig} />
-
-          <Modal
-            width={600}
-            maskClosable={false}
-            title={isEdit ? 'Edit tax zone' : 'New tax zone'}
-            visible={addVisible}
-            confirmLoading={loading}
-            onCancel={() => this.handleCancel()}
-            footer={[
-              <Button
-                key="back"
-                onClick={() => {
-                  this.handleCancel();
-                }}
-              >
-                Cancel
-              </Button>,
-              <Button key="submit" type="primary" onClick={this.handleSubmit}>
-                Submit
+          <Headline
+            title="Tax calculation"
+            extra={
+              <Button shape="round" type="primary" ghost icon="setting" onClick={() => this.openTaxSettingPage()}>
+                <span style={{ color: '#e2001a' }}>Tax setting</span>
               </Button>
-            ]}
-          >
-            <Form {...formItemLayout}>
-              <FormItem label="Tax zone name">
-                {getFieldDecorator('taxZoneName', {
-                  rules: [
-                    { required: true, message: 'Tax zone name is required' },
-                    {
-                      max: 50,
-                      message: 'Exceed maximum length!'
-                    }
-                  ],
-                  initialValue: taxForm.taxZoneName
-                })(
-                  <Input
-                    style={{ width: '80%' }}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onTaxFormChange({
-                        field: 'taxZoneName',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-              <FormItem label="Tax zone description">
-                {getFieldDecorator('taxZoneDescription', {
-                  rules: [
-                    {
-                      max: 500,
-                      message: 'Exceed maximum length!'
-                    }
-                  ],
-                  initialValue: taxForm.taxZoneDescription
-                })(
-                  <Input
-                    style={{ width: '80%' }}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onTaxFormChange({
-                        field: 'taxZoneDescription',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-              <FormItem label="Tax zone type">
-                {getFieldDecorator('taxZoneType', {
-                  rules: [{ required: true, message: 'Tax zone type is required' }],
-                  initialValue: taxForm.taxZoneType
-                })(
-                  <Select
-                    style={{ width: '80%' }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onTaxFormChange({
-                        field: 'taxZoneType',
-                        value
-                      });
+            }
+          />
+          <div style={{ marginBottom: 10, display: 'flex' }}>
+            <Card style={{ width: 300, marginRight: 50 }} bodyStyle={{ padding: 10 }}>
+              <div style={{ textAlign: 'center', margin: '20px 0' }}>
+                <img src={avalara} style={{ width: '200px' }} />
+              </div>
+              <div className="bar" style={{ float: 'right' }}>
+                <Popconfirm
+                  title={'Are you sure to ' + (!isFGS ? ' disable' : 'enable') + ' this?'}
+                  onConfirm={() =>
+                    this.setState({
+                      isFGS: !isFGS
+                    })
+                  }
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Switch checked={!isFGS} size="small" />
+                </Popconfirm>
+                {!isFGS ? (
+                  <Tooltip placement="top" title="Edit">
+                    <a
+                      style={{
+                        position: 'absolute',
+                        top: 10,
+                        right: 10
+                      }}
+                      className="iconfont iconEdit"
+                      onClick={() => this.openEditPage()}
+                    ></a>
+                  </Tooltip>
+                ) : null}
+              </div>
+            </Card>
+
+            <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+              <div style={{ textAlign: 'center', margin: '9px 0' }}>
+                <h1
+                  style={{
+                    fontSize: 30,
+                    fontWeight: 'bold',
+                    color: '#e2001a'
+                  }}
+                >
+                  FGS
+                </h1>
+                <p>Set up your own rule</p>
+              </div>
+              <div className="bar" style={{ float: 'right' }}>
+                <Popconfirm
+                  title={'Are you sure to ' + (isFGS ? ' disable' : 'enable') + ' this?'}
+                  onConfirm={() =>
+                    this.setState({
+                      isFGS: !isFGS
+                    })
+                  }
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Switch checked={isFGS} size="small" />
+                </Popconfirm>
+              </div>
+            </Card>
+          </div>
+          {isFGS ? (
+            <div>
+              <Headline title="Tax zone management" />
+              <div className="taxes space-between">
+                <Button type="primary" shape="round" onClick={() => this.openAddTaxPage()}>
+                  Add tax zone
+                </Button>
+              </div>
+              <div id="consent" className="consent-table">
+                <TaxesTable dataList={dataList} pagination={pagination} editFunction={this.openEditTaxPage} tableChangeFunction={this.handleTableChange} deleteFunction={this.handleDetele} updateFunction={this.updateTaxStatus} />
+              </div>
+              <Modal
+                width={600}
+                maskClosable={false}
+                title={isEdit ? 'Edit tax zone' : 'New tax zone'}
+                visible={addVisible}
+                confirmLoading={loading}
+                onCancel={() => this.handleCancel()}
+                footer={[
+                  <Button
+                    key="back"
+                    onClick={() => {
+                      this.handleCancel();
                     }}
                   >
-                    {taxZoneTypeList &&
-                      taxZoneTypeList.map((item) => (
-                        <Option value={item.value} key={item.value}>
-                          {item.name}
-                        </Option>
-                      ))}
-                  </Select>
-                )}
-              </FormItem>
-              <FormItem label="Zone includes">
-                {getFieldDecorator('zoneIncludes', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please Select zone!'
-                    }
-                  ],
-                  initialValue: taxForm.zoneIncludes
-                })(
-                  <Select
-                    style={{ width: '80%' }}
-                    showSearch
-                    placeholder="Select zone"
-                    optionFilterProp="children"
-                    mode="multiple"
-                    disabled={taxForm.taxZoneType === 1}
-                    onChange={(value) => {
-                      this.onTaxFormChange({
-                        field: 'zoneIncludes',
-                        value
-                      });
+                    Cancel
+                  </Button>,
+                  <Button key="submit" type="primary" onClick={this.handleZoneSubmit}>
+                    Submit
+                  </Button>
+                ]}
+              >
+                <Form {...formItemLayout}>
+                  <FormItem label="Tax zone name">
+                    {getFieldDecorator('taxZoneName', {
+                      rules: [
+                        { required: true, message: 'Tax zone name is required' },
+                        {
+                          max: 50,
+                          message: 'Exceed maximum length!'
+                        }
+                      ],
+                      initialValue: taxForm.taxZoneName
+                    })(
+                      <Input
+                        style={{ width: '80%' }}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onTaxFormChange({
+                            field: 'taxZoneName',
+                            value
+                          });
+                        }}
+                      />
+                    )}
+                  </FormItem>
+                  <FormItem label="Tax zone description">
+                    {getFieldDecorator('taxZoneDescription', {
+                      rules: [
+                        {
+                          max: 500,
+                          message: 'Exceed maximum length!'
+                        }
+                      ],
+                      initialValue: taxForm.taxZoneDescription
+                    })(
+                      <Input
+                        style={{ width: '80%' }}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onTaxFormChange({
+                            field: 'taxZoneDescription',
+                            value
+                          });
+                        }}
+                      />
+                    )}
+                  </FormItem>
+                  <FormItem label="Tax zone type">
+                    {getFieldDecorator('taxZoneType', {
+                      rules: [{ required: true, message: 'Tax zone type is required' }],
+                      initialValue: taxForm.taxZoneType
+                    })(
+                      <Select
+                        style={{ width: '80%' }}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onTaxFormChange({
+                            field: 'taxZoneType',
+                            value
+                          });
+                        }}
+                      >
+                        {taxZoneTypeList &&
+                          taxZoneTypeList.map((item) => (
+                            <Option value={item.value} key={item.value}>
+                              {item.name}
+                            </Option>
+                          ))}
+                      </Select>
+                    )}
+                  </FormItem>
+                  <FormItem label="Zone includes">
+                    {getFieldDecorator('zoneIncludes', {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please Select zone!'
+                        }
+                      ],
+                      initialValue: taxForm.zoneIncludes
+                    })(
+                      <Select
+                        style={{ width: '80%' }}
+                        showSearch
+                        placeholder="Select zone"
+                        optionFilterProp="children"
+                        mode="multiple"
+                        disabled={taxForm.taxZoneType === 1}
+                        onChange={(value) => {
+                          this.onTaxFormChange({
+                            field: 'zoneIncludes',
+                            value
+                          });
+                        }}
+                        notFoundContent={fetching ? <Spin size="small" /> : null}
+                        onSearch={_.debounce(this.getZoneList, 500)}
+                        filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                      >
+                        {zoneList &&
+                          zoneList.map((item, index) => (
+                            <Option value={item.id} key={index}>
+                              {item.stateName}
+                            </Option>
+                          ))}
+                      </Select>
+                    )}
+                  </FormItem>
+                  <FormItem label="Tax rates">
+                    {getFieldDecorator('taxRates', {
+                      rules: [{ required: true, message: 'Tax rates is required' }],
+                      initialValue: taxForm.taxRates ? taxForm.taxRates : 0
+                    })(
+                      <InputNumber
+                        style={{ width: '80%' }}
+                        min={0}
+                        max={100}
+                        formatter={(value) => `${value}%`}
+                        parser={(value) => value.replace('%', '')}
+                        onChange={(value) => {
+                          this.onTaxFormChange({
+                            field: 'taxRates',
+                            value
+                          });
+                        }}
+                      />
+                    )}
+                  </FormItem>
+                </Form>
+              </Modal>
+            </div>
+          ) : (
+            <div>
+              <Modal
+                width={600}
+                maskClosable={false}
+                title={'Edit tax setting'}
+                visible={visibleApiSetting}
+                confirmLoading={loading}
+                onCancel={() => this.handleCancel()}
+                footer={[
+                  <Button
+                    key="back"
+                    onClick={() => {
+                      this.handleCancel();
                     }}
-                    notFoundContent={fetching ? <Spin size="small" /> : null}
-                    onSearch={_.debounce(this.getZoneList, 500)}
-                    filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
-                    {zoneList &&
-                      zoneList.map((item, index) => (
-                        <Option value={item.id} key={index}>
-                          {item.stateName}
-                        </Option>
-                      ))}
-                  </Select>
-                )}
-              </FormItem>
-              <FormItem label="Tax rates">
-                {getFieldDecorator('taxRates', {
-                  rules: [{ required: true, message: 'Tax rates is required' }],
-                  initialValue: taxForm.taxRates ? taxForm.taxRates : 0
-                })(
-                  <InputNumber
-                    style={{ width: '80%' }}
-                    min={0}
-                    max={100}
-                    formatter={(value) => `${value}%`}
-                    parser={(value) => value.replace('%', '')}
-                    onChange={(value) => {
-                      this.onTaxFormChange({
-                        field: 'taxRates',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Form>
-          </Modal>
+                    Cancel
+                  </Button>,
+                  <Button key="submit" type="primary" onClick={this.handleSettingSubmit}>
+                    Submit
+                  </Button>
+                ]}
+              >
+                <Form {...formItemLayout}>
+                  <FormItem label="Calculation url">
+                    {getFieldDecorator('calculationUrl', {
+                      rules: [
+                        { required: true, message: 'Calculation url is required' },
+                        {
+                          max: 500,
+                          message: 'Exceed maximum length!'
+                        }
+                      ],
+                      initialValue: taxSettingForm.calculationUrl
+                    })(
+                      <Input
+                        style={{ width: '80%' }}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onTaxSettingFormChange({
+                            field: 'calculationUrl',
+                            value
+                          });
+                        }}
+                      />
+                    )}
+                  </FormItem>
+
+                  <FormItem label="User name">
+                    {getFieldDecorator('userName', {
+                      rules: [
+                        { required: true, message: 'User name is required' },
+                        {
+                          max: 50,
+                          message: 'Exceed maximum length!'
+                        }
+                      ],
+                      initialValue: taxSettingForm.userName
+                    })(
+                      <Input
+                        style={{ width: '80%' }}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onTaxSettingFormChange({
+                            field: 'userName',
+                            value
+                          });
+                        }}
+                      />
+                    )}
+                  </FormItem>
+
+                  <FormItem label="Password">
+                    {getFieldDecorator('password', {
+                      rules: [{ required: true, message: 'Password is required' }],
+                      initialValue: taxSettingForm.password
+                    })(
+                      <Input.Password
+                        style={{ width: '80%' }}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onTaxSettingFormChange({
+                            field: 'password',
+                            value
+                          });
+                        }}
+                      />
+                    )}
+                  </FormItem>
+
+                  <FormItem label="Company code">
+                    {getFieldDecorator('companyCode', {
+                      rules: [{ required: true, message: 'Company code is required' }],
+                      initialValue: taxSettingForm.companyCode
+                    })(
+                      <Input
+                        style={{ width: '80%' }}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onTaxSettingFormChange({
+                            field: 'companyCode',
+                            value
+                          });
+                        }}
+                      />
+                    )}
+                  </FormItem>
+
+                  <FormItem label="Tax code">
+                    {getFieldDecorator('taxCode', {
+                      rules: [{ required: true, message: 'Tax code is required' }],
+                      initialValue: taxSettingForm.taxCode
+                    })(
+                      <Input
+                        style={{ width: '80%' }}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onTaxSettingFormChange({
+                            field: 'taxCode',
+                            value
+                          });
+                        }}
+                      />
+                    )}
+                  </FormItem>
+                </Form>
+              </Modal>
+            </div>
+          )}
+
+          <TaxesSetting visible={settingVisible} settingForm={settingForm} closeFunction={this.closeAllModal} submitFunction={this.updateSettingConfig} />
         </div>
       </Spin>
     );

@@ -420,3 +420,9 @@ export const addSeo = (params) => {
     body: JSON.stringify(params)
   });
 };
+
+export const getDescriptionTab = (cateId) => {
+  return Fetch(`/goods/description/description/${cateId}`, {
+    method: 'GET'
+  });
+};

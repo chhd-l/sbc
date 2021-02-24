@@ -185,7 +185,7 @@ class TaskUpdate extends Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         const { task, id } = this.state;
-        console.log(task);
+        // console.log(task);
         if (id) {
           task.id = id; // edit by id
           webapi

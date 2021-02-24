@@ -34,6 +34,8 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         skipNextDeliveryFlag: true,
         mainGoods: [],
         mainGoodsIds: [],
+        frequency: [],
+        consentIds: [],
         quantity: 100,
         landingFlag: true
       },
@@ -141,7 +143,6 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           subscriptionPlan.status = 1; // Publish
         }
         subscriptionPlan.storeId = this.state.storeId;
-        console.log(subscriptionPlan);
         if (id) {
           subscriptionPlan.id = id; // edit by id
           webapi

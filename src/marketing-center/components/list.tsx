@@ -247,29 +247,29 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>
 
-              {/*<AuthWrapper functionName="f_marketing_gift_add">*/}
-              {/*  <Col span={6}>*/}
-              {/*    <a*/}
-              {/*      className="createMarket"*/}
-              {/*      onClick={() =>*/}
-              {/*        history.push({*/}
-              {/*          pathname: '/marketing-full-gift',*/}
-              {/*          state: {*/}
-              {/*            source: 'marketCenter'*/}
-              {/*          }*/}
-              {/*        })*/}
-              {/*      }*/}
-              {/*    >*/}
-              {/*      <span className="left">*/}
-              {/*        <img src={images.full_03} />*/}
-              {/*      </span>*/}
-              {/*      <div className="info">*/}
-              {/*        <h5>满赠</h5>*/}
-              {/*        <p>满足指定条件获得赠品</p>*/}
-              {/*      </div>*/}
-              {/*    </a>*/}
-              {/*  </Col>*/}
-              {/*</AuthWrapper>*/}
+              <AuthWrapper functionName="f_marketing_gift_add">
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: '/marketing-full-gift',
+                        state: {
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.full_03} />
+                    </span>
+                    <div className="info">
+                      <h5>满赠</h5>
+                      <p>满足指定条件获得赠品</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
             </Row>
 
             {/*<h3>*/}

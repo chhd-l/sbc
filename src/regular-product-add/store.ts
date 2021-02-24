@@ -59,7 +59,8 @@ import {
   fetchFiltersTotal,
   getSeo,
   editSeo,
-  fetchTaggingTotal
+  fetchTaggingTotal,
+  getDescriptionTab
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
@@ -121,7 +122,7 @@ export default class AppStore extends Store {
             monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : []
           });
 
-          this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods));
+          this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods ? (results[0].res as any).context.goodsRelation.relationGoods : []));
           this.dispatch('goodsActor:filtersTotal', fromJS((results[0].res as any).context.filtersTotal));
           this.dispatch('goodsActor:taggingTotal', fromJS((results[0].res as any).context.taggingTotal));
           this.dispatch('goodsActor:resourceCates', (results[0].res as any).context.resourceCates);
@@ -381,7 +382,13 @@ export default class AppStore extends Store {
 
       // 商品基本信息
       let goods = goodsDetail.get('goods');
-
+      //设置编辑器是否为空数组，是空数组，根据cateId去查找，不为空，直接展示
+      if (tmpContext.goodsDescriptionDetailList.length === 0) {
+        const cateId = goods.get('cateId');
+        this.changeDescriptionTab(cateId);
+      } else {
+        this.editEditorContent(tmpContext.goodsDescriptionDetailList);
+      }
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
 
@@ -395,6 +402,8 @@ export default class AppStore extends Store {
       if (goods.get('freightTempId')) {
         this.setGoodsFreight(goods.get('freightTempId'), true);
       }
+
+      goods.set('resource', tmpContext.goods.resource);
 
       this.dispatch('goodsActor: editGoods', goods);
 
@@ -436,6 +445,7 @@ export default class AppStore extends Store {
           });
         });
       }
+
       this.dispatch('goodsActor: goodsTabs', tabs);
       // 属性信息
       this.showGoodsPropDetail(goodsDetail.getIn(['goods', 'cateId']), goodsDetail.get('goodsPropDetailRels'));
@@ -628,7 +638,8 @@ export default class AppStore extends Store {
       goods = goods.set('internalGoodsNo', localStorage.getItem('storeCode') + '_' + goods.get('goodsNo'));
     }
 
-    if (goods.get('defaultPurchaseType') === 5765) {
+    if (Number(goods.get('subscriptionStatus')) === 0) {
+      goods = goods.set('defaultPurchaseType', null);
       goods = goods.set('defaultFrequencyId', null);
     }
     this.dispatch('goodsActor: editGoods', goods);
@@ -1378,6 +1389,7 @@ export default class AppStore extends Store {
     param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
+    param = param.set('goodsDescriptionDetailList', this.state().get('goodsDescriptionDetailList'));
     //console.log(this.state().get('productFilter'), 2222);
 
     //添加参数，是否允许独立设价
@@ -1746,11 +1758,11 @@ export default class AppStore extends Store {
   };
 
   /**
-   * 获取富文本框的值
+   * 设置富文本框的值
    * @param
    */
-  editEditorContent = (keyName, value) => {
-    this.dispatch('goodsActor: editorContent', { keyName, value });
+  editEditorContent = (value) => {
+    this.dispatch('goodsActor:descriptionTab', value);
   };
   editEditor = (editor) => {
     this.dispatch('goodsActor: editor', editor);
@@ -1895,6 +1907,28 @@ export default class AppStore extends Store {
     const result: any = await getStoreCateList();
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor: initStoreCateList', fromJS((result.res as any).context.storeCateResponseVOList));
+    }
+  };
+  /**
+   * 对应类目、商品下的所有属性信息
+   */
+  changeDescriptionTab = async (cateId) => {
+    const result: any = await getDescriptionTab(cateId);
+
+    if (result.res.code === Const.SUCCESS_CODE) {
+      let content = result.res.context;
+      let res = content.map((item) => {
+        return {
+          goodsCateId: cateId,
+          descriptionId: item.id,
+          descriptionName: item.descriptionName,
+          contentType: item.contentType,
+          content: ' ',
+          sort: item.sort,
+          editable: true
+        };
+      });
+      this.editEditorContent(res);
     }
   };
   /**
@@ -2126,4 +2160,5 @@ export default class AppStore extends Store {
   modalVisibleFun = ({ key, value }) => {};
   onProductForm = ({ key, value }) => {};
   onEditSkuNo = ({ key, value }) => {};
+  saveMain = ({ key, value }) => {};
 }

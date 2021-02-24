@@ -33,7 +33,8 @@ interface IHttpCustomerOpertion{
     isHandleResult:boolean,
     isShowLoading?:boolean,
     customHead?:any,
-    timeout?: number
+    timeout?: number,
+    customerTip?:boolean
 }
 /**
  * 封装业务fetch
@@ -43,7 +44,7 @@ interface IHttpCustomerOpertion{
 export default async function Fetch<T>(
   input: RequestInfo,
   init?: RequestInit,
-  httpCustomerOpertion:IHttpCustomerOpertion={isHandleResult:true,isShowLoading:true}
+  httpCustomerOpertion:IHttpCustomerOpertion={isHandleResult:true,isShowLoading:true,customerTip:false}
 ): Promise<IAsyncResult<T>> {
   try {
     if (!httpCustomerOpertion.hasOwnProperty("isHandleResult")) {

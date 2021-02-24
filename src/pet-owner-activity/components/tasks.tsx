@@ -93,7 +93,7 @@ export default class tasks extends Component<any, any> {
   setRedBoarder(item) {
     let style = '';
     if (item.status === 'Completed') {
-      ('#FAFAFA;');
+      // ('#FAFAFA;');
     }
     return style;
   }

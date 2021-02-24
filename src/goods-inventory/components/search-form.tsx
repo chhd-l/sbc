@@ -70,7 +70,7 @@ export default class SearchForm extends React.Component<any, any> {
       <div className="filter-content">
         <Alert message="Set a quantity that when products are below this certain quantity, they are considered as ‘Low inventory’ and will be shown in the list below." type="info" />
         <div className="inventory flex-start-align">
-          <div className="inventory-text">
+          {/*<div className="inventory-text">
             <span>* </span>Products are ‘Low inventory’ when below :
           </div>
           <div style={{ width: '120px' }}>
@@ -96,12 +96,14 @@ export default class SearchForm extends React.Component<any, any> {
           </div>
           <Button type="primary" icon="edit" shape="round" onClick={() => this.onEdit()}>
             {this.state.editType == true ? 'Edit' : 'Save'}
-          </Button>
+          </Button>*/}
           {/*<Button type="primary" icon="sync" shape="round" onClick={() => this.onRefresh()}>*/}
           {/*  Refresh*/}
           {/*</Button>*/}
 
-          <Button onClick={() => bulkExport()}>{<FormattedMessage id="bulkExport" />}</Button>
+          <Button type="primary" onClick={() => bulkExport()}>
+            {<FormattedMessage id="bulkExport" />}
+          </Button>
         </div>
       </div>
     );

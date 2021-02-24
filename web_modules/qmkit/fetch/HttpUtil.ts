@@ -3,7 +3,10 @@ import { util, history, cache } from 'qmkit';
 const msg = {
     'K-000005': 'Your account is disabled',
     'K-000015': 'Failed to obtain authorization',
-    'K-000002': ''
+    'K-000002': '',
+    '500': 'System is deploying, if it does not recovery after 10 mins, please contact the administrator.',
+    '502': 'System is deploying, if it does not recovery after 10 mins, please contact the administrator.',
+    '503': 'System is deploying, if it does not recovery after 10 mins, please contact the administrator.',
 };
 let errorList: any = [], _timerOut = 0, _times: number = 0, _error_index = 0;
 class HttpUtil {
@@ -17,7 +20,7 @@ class HttpUtil {
     static handleFetchData(fetchUrl, fetchParams, httpCustomerOpertion) {
         let errorObj = Object.assign({}, { fetchUrl: fetchUrl.split('?')[0], fetchParams, httpCustomerOpertion });
         // 1. 处理的第一步
-        const { isShowLoading } = httpCustomerOpertion
+        const { isShowLoading, customerTip } = httpCustomerOpertion
         if (isShowLoading) {
 
         }
@@ -62,9 +65,10 @@ class HttpUtil {
                             } else if (jsonBody === 'Method Not Allowed') {
                                 let message = 'You do not have permission to access this feature'
                                 HttpUtil.notificationPop(message)
-                            } else if (jsonBody.code === 'K-000000') {
+                            } else if (jsonBody.code === 'K-000000' || customerTip) {
                                 resolve(HttpUtil.handleResult(jsonBody, httpCustomerOpertion))
                             } else {
+                             
                                 reject(HttpUtil.handleFailedResult({ code: jsonBody.code, message: jsonBody.message, error: jsonBody.message }, httpCustomerOpertion))
                             }
                         } else {
@@ -110,7 +114,7 @@ class HttpUtil {
      */
     static handleFailedResult(result, httpCustomerOpertion) {
         if (result.code && httpCustomerOpertion.isHandleResult === true) {
-            const errMsg = result.msg || result.message;
+            const errMsg = msg[result.code] || result.msg || result.message;
             const errStr = `${errMsg}（${result.code}）`
             _error_index === 0 && HttpUtil.notificationPop(errStr)
         }

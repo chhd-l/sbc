@@ -341,7 +341,7 @@ export default class AppStore extends Store {
           this.dispatch('modal: cateIds', List.of(cateId.toString()));
           this.dispatch('modal: cateId', cateId.toString());
         }
-        this.dispatch('modal: imgCates', fromJS(cateList.res));
+        this.dispatch('modal: imgCates', fromJS(cateList.res.context.storeResourceCateVOList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
           this.dispatch('modal: chooseImgs', fromJS(imageList.res.context).get('content').slice(0, successCount));

@@ -4,10 +4,9 @@ import TaxesTable from '../components/taxes-table';
 // import TaxesAdd from '../components/taxes-add';
 import TaxesSetting from '../components/taxes-setting';
 import _ from 'lodash';
-const avalara = require('../img/avalara.png');
 
 import * as webApi from './../webapi';
-import { Const, Headline } from 'qmkit';
+import { cache, Const, Headline } from 'qmkit';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class StepTaxes extends Component<any, any> {
@@ -56,13 +55,15 @@ class StepTaxes extends Component<any, any> {
       countryZoneIncludes: [],
       isFGS: true,
       visibleApiSetting: false,
+      taxApiSettings: [],
       taxSettingForm: {
         calculationUrl: '',
-        userName: '123',
+        userName: '',
         password: '',
         companyCode: '',
         taxCode: ''
-      }
+      },
+      currentSetting: {}
     };
   }
 
@@ -84,6 +85,7 @@ class StepTaxes extends Component<any, any> {
         this.getTaxZoneList();
         this.getSettingConfig();
         this.getZoneList('');
+        this.getTaxSetting();
       }
     );
   };
@@ -126,18 +128,12 @@ class StepTaxes extends Component<any, any> {
               total: tempObj.total
             }
           });
-        } else {
-          this.setState({
-            loading: false
-          });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -158,18 +154,12 @@ class StepTaxes extends Component<any, any> {
             settingParams,
             settingForm
           });
-        } else {
-          this.setState({
-            loading: false
-          });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
   getSettingFormValue = (key, arr) => {
@@ -199,6 +189,7 @@ class StepTaxes extends Component<any, any> {
     let params = {
       configRequestList: settingParams
     };
+    sessionStorage.setItem(cache.TAX_SWITCH, settingForm.enterPrice.toString());
     webApi
       .ModifyConfig(params)
       .then((data) => {
@@ -206,18 +197,12 @@ class StepTaxes extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.closeAllModal(true);
           message.success(res.message || 'Operation successful');
-        } else {
-          this.setState({
-            loading: false
-          });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
   openAddTaxPage = () => {
@@ -250,6 +235,7 @@ class StepTaxes extends Component<any, any> {
       zoneIncludes: [],
       taxRates: ''
     };
+    this.props.form.resetFields();
     this.setState({
       addVisible: false,
       settingVisible: false,
@@ -263,11 +249,14 @@ class StepTaxes extends Component<any, any> {
 
   openEditTaxPage = (row) => {
     let zoneIncludes = [];
-    if (row.taxZoneStateRels) {
+    if (row.taxZoneStateRels && +row.taxZoneType === 0) {
       for (let i = 0; i < row.taxZoneStateRels.length; i++) {
         let element = row.taxZoneStateRels[i].stateId;
         zoneIncludes.push(element);
       }
+    }
+    if (+row.taxZoneType === 1) {
+      zoneIncludes = sessionStorage.getItem('currentCountry') ? [sessionStorage.getItem('currentCountry')] : [];
     }
 
     let taxForm = {
@@ -293,20 +282,13 @@ class StepTaxes extends Component<any, any> {
     this.setState({
       loading: true
     });
-    webApi
-      .deleteTaxZone({ id })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
-          this.getTaxZoneList();
-        } else {
-          message.error(res.message || 'Operation failure');
-        }
-      })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+    webApi.deleteTaxZone({ id }).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(res.message || 'Operation successful');
+        this.getTaxZoneList();
+      }
+    });
   };
 
   updateTaxStatus = (param) => {
@@ -317,18 +299,12 @@ class StepTaxes extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'Operation successful');
           this.getTaxZoneList();
-        } else {
-          this.setState({
-            loading: false
-          });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
   handleCancel = () => {
@@ -410,70 +386,150 @@ class StepTaxes extends Component<any, any> {
             zoneList,
             fetching: false
           });
-        } else {
-          this.setState({
-            fetching: false
-          });
-          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           fetching: false
         });
-        message.error(err.toString() || 'Operation failure');
       });
   };
 
   addTaxZone = (params) => {
-    webApi
-      .addTaxZone(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
-          this.closeAllModal(true);
-        } else {
-          message.error(res.message || 'Operation failure');
-        }
-      })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+    webApi.addTaxZone(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(res.message || 'Operation successful');
+        this.closeAllModal(true);
+      }
+    });
   };
   updateTaxZone = (params) => {
-    webApi
-      .editTaxZone(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
-          this.closeAllModal(true);
-        } else {
-          message.error(res.message || 'Operation failure');
-        }
-      })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+    webApi.editTaxZone(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(res.message || 'Operation successful');
+        this.closeAllModal(true);
+      }
+    });
   };
-  openEditPage = () => {
+  openEditPage = (item) => {
+    let taxSettingForm = {
+      id: item.id,
+      calculationUrl: item.calculationUrl,
+      userName: item.userName,
+      password: item.password,
+      companyCode: item.companyCode,
+      taxCode: item.taxCode
+    };
     this.setState({
+      taxSettingForm,
+      currentSetting: item,
       visibleApiSetting: true
     });
   };
   handleSettingSubmit = () => {
     this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.setState({
-          visibleApiSetting: false
-        });
+      if (!err || this.validateSetting()) {
+        this.editTaxApiSetting();
       }
     });
   };
+  validateSetting = () => {
+    const { taxSettingForm } = this.state;
+    let status = true;
+    for (let propName in taxSettingForm) {
+      if (!taxSettingForm[propName]) {
+        status = false;
+        break;
+      }
+    }
+    return status;
+  };
+  getTaxSetting = () => {
+    this.setState({
+      loading: true
+    });
+    webApi
+      .getTaxSetting()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          const taxApiSettings = res.context.taxApiSettings;
+          sessionStorage.setItem(cache.TAX_API_SETTINGS, JSON.stringify(taxApiSettings));
+          let isFGS = false;
+          if (taxApiSettings[0].isOpen) {
+            isFGS = true;
+          }
+
+          this.setState({
+            taxApiSettings,
+            isFGS,
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
+  changeSettingStatus = (id) => {
+    let params = {
+      id,
+      isOpen: 1
+    };
+    webApi
+      .changeTaxApiSettingStatus(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getTaxSetting();
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
+  editTaxApiSetting = () => {
+    const { taxSettingForm } = this.state;
+    let params = {
+      id: taxSettingForm.id,
+      calculationUrl: taxSettingForm.calculationUrl,
+      userName: taxSettingForm.userName,
+      password: taxSettingForm.password,
+      companyCode: taxSettingForm.companyCode,
+      taxCode: taxSettingForm.taxCode
+    };
+    this.setState({
+      loading: true
+    });
+    webApi
+      .editTaxApiSetting(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            visibleApiSetting: false,
+            loading: false
+          });
+          message.success(res.message);
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
 
   render() {
-    const { loading, dataList, pagination, addVisible, isEdit, settingVisible, taxForm, settingForm, taxZoneTypeList, zoneList, fetching, isFGS, visibleApiSetting, taxSettingForm } = this.state;
+    const { loading, dataList, pagination, addVisible, isEdit, settingVisible, taxForm, settingForm, taxZoneTypeList, zoneList, fetching, isFGS, visibleApiSetting, taxSettingForm, taxApiSettings } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -496,69 +552,58 @@ class StepTaxes extends Component<any, any> {
               </Button>
             }
           />
-          <div style={{ marginBottom: 10, display: 'flex' }}>
-            <Card style={{ width: 300, marginRight: 50 }} bodyStyle={{ padding: 10 }}>
-              <div style={{ textAlign: 'center', margin: '20px 0' }}>
-                <img src={avalara} style={{ width: '200px' }} />
-              </div>
-              <div className="bar" style={{ float: 'right' }}>
-                <Popconfirm
-                  title={'Are you sure to ' + (!isFGS ? ' disable' : 'enable') + ' this?'}
-                  onConfirm={() =>
-                    this.setState({
-                      isFGS: !isFGS
-                    })
-                  }
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Switch checked={!isFGS} size="small" />
-                </Popconfirm>
-                {!isFGS ? (
-                  <Tooltip placement="top" title="Edit">
-                    <a
-                      style={{
-                        position: 'absolute',
-                        top: 10,
-                        right: 10
-                      }}
-                      className="iconfont iconEdit"
-                      onClick={() => this.openEditPage()}
-                    ></a>
-                  </Tooltip>
-                ) : null}
-              </div>
-            </Card>
-
-            <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-              <div style={{ textAlign: 'center', margin: '9px 0' }}>
-                <h1
-                  style={{
-                    fontSize: 30,
-                    fontWeight: 'bold',
-                    color: '#e2001a'
-                  }}
-                >
-                  FGS
-                </h1>
-                <p>Set up your own rule</p>
-              </div>
-              <div className="bar" style={{ float: 'right' }}>
-                <Popconfirm
-                  title={'Are you sure to ' + (isFGS ? ' disable' : 'enable') + ' this?'}
-                  onConfirm={() =>
-                    this.setState({
-                      isFGS: !isFGS
-                    })
-                  }
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Switch checked={isFGS} size="small" />
-                </Popconfirm>
-              </div>
-            </Card>
-          </div>
+          <Row style={{ marginBottom: 10 }}>
+            {taxApiSettings &&
+              taxApiSettings.map((item, index) => (
+                <Col span={8} key={item.id}>
+                  {+item.isCustom ? (
+                    <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                      <div style={{ textAlign: 'center', margin: '9px 0' }}>
+                        <h1
+                          style={{
+                            fontSize: 30,
+                            fontWeight: 'bold',
+                            color: '#e2001a'
+                          }}
+                        >
+                          FGS
+                        </h1>
+                        <p>Set up your own rule</p>
+                      </div>
+                      <div className="bar" style={{ float: 'right' }}>
+                        <Popconfirm title={'Are you sure to enable this?'} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                          <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
+                        </Popconfirm>
+                      </div>
+                    </Card>
+                  ) : (
+                    <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                      <div style={{ textAlign: 'center', margin: '20px 0' }}>
+                        <img src={item.imgUrl} style={{ width: '200px', height: '43px' }} />
+                      </div>
+                      <div className="bar" style={{ float: 'right' }}>
+                        <Popconfirm title={'Are you sure to enable this?'} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                          <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
+                        </Popconfirm>
+                        {item.isOpen ? (
+                          <Tooltip placement="top" title="Edit">
+                            <a
+                              style={{
+                                position: 'absolute',
+                                top: 10,
+                                right: 10
+                              }}
+                              className="iconfont iconEdit"
+                              onClick={() => this.openEditPage(item)}
+                            ></a>
+                          </Tooltip>
+                        ) : null}
+                      </div>
+                    </Card>
+                  )}
+                </Col>
+              ))}
+          </Row>
           {isFGS ? (
             <div>
               <Headline title="Tax zone management" />

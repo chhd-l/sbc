@@ -130,7 +130,7 @@ class CreateForm extends Component<Iprop, Istate> {
           >
             Close
           </Button>,
-          <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
+          <Button key="submit" type="primary" loading={loading} onClick={() => this.handleSubmit()}>
             Confirm
           </Button>
         ]}

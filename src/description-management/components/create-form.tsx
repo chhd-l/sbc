@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Modal, Button, Form, Input, Switch, message } from 'antd';
+import { Modal, Button, Form, Input, Switch, message, Select } from 'antd';
 import { Const } from 'qmkit';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import { string } from 'prop-types';
+
+const Option = Select.Option;
 
 import { addDescriptionItem, updateDescriptionItem } from '../webapi';
 
@@ -24,6 +26,7 @@ interface Iprop extends FormComponentProps {
   visible: boolean;
   loading: boolean;
   descriptionName: string;
+  contentType: string;
   translateList: Array<FormItemType>;
   displayStatus: boolean;
   onSubmit: Function;
@@ -35,6 +38,7 @@ interface Iprop extends FormComponentProps {
 interface Istate {
   id: string;
   descriptionName: string;
+  contentType: string;
   translateList: Array<FormItemType>;
   displayStatus: boolean;
 }
@@ -45,6 +49,7 @@ class CreateForm extends Component<Iprop, Istate> {
     this.state = {
       id: this.props.id || undefined,
       descriptionName: this.props.descriptionName,
+      contentType: this.props.contentType,
       translateList: this.props.translateList.map((t) => ({ languageId: t.languageId, translateName: t.translateName })),
       displayStatus: this.props.displayStatus
     };
@@ -53,6 +58,12 @@ class CreateForm extends Component<Iprop, Istate> {
   handleUpdateDescriptionName = (value: string) => {
     this.setState({
       descriptionName: value
+    });
+  };
+
+  handleUpdateContentType = (type: string) => {
+    this.setState({
+      contentType: type
     });
   };
 
@@ -98,7 +109,7 @@ class CreateForm extends Component<Iprop, Istate> {
   };
 
   render() {
-    const { name, visible, loading, onChangeFormVisibility, descriptionName, translateList, displayStatus } = this.props;
+    const { name, visible, loading, onChangeFormVisibility, descriptionName, contentType, translateList, displayStatus } = this.props;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -130,7 +141,7 @@ class CreateForm extends Component<Iprop, Istate> {
           >
             Close
           </Button>,
-          <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
+          <Button key="submit" type="primary" loading={loading} onClick={() => this.handleSubmit()}>
             Confirm
           </Button>
         ]}
@@ -158,6 +169,20 @@ class CreateForm extends Component<Iprop, Istate> {
               valuePropName: 'checked',
               initialValue: displayStatus
             })(<Switch onChange={this.handleUpdateDisplayStatue} />)}
+          </FormItem>
+          <FormItem key="descType" label="Description type">
+            {getFieldDecorator('descType', {
+              initialValue: contentType
+            })(
+              <Select onChange={this.handleUpdateContentType}>
+                <Option key="1" value="text">
+                  text
+                </Option>
+                <Option key="2" value="json">
+                  json
+                </Option>
+              </Select>
+            )}
           </FormItem>
         </Form>
       </Modal>

@@ -59,6 +59,9 @@ class TaskUpdate extends Component<any, any> {
     this.searchAssignedPetOwners = this.searchAssignedPetOwners.bind(this);
     this.updateTask = this.updateTask.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
+    this.getPetOwners = this.getPetOwners.bind(this);
+    this.getPetOwnerPets = this.getPetOwnerPets.bind(this);
+    this.getPetOwnerOrders = this.getPetOwnerOrders.bind(this);
   }
 
   componentDidMount() {
@@ -97,8 +100,73 @@ class TaskUpdate extends Component<any, any> {
           message.error('Get data failed');
         });
     }
+    this.getPetOwners();
   }
+
+  getPetOwners(value?: String) {
+    let params = {
+      pageNum: 0,
+      pageSize: 20,
+      customerAccount: value
+    };
+    webapi
+      .getPetOwnerList(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            associatedPetOwners: res.context.detailResponseList
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+  }
+
+  getPetOwnerPets(customerAccount) {
+    webapi
+      .getPetOwnerPets(customerAccount)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            associatedPetList: res.context.context
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+  }
+
+  getPetOwnerOrders(customerAccount) {
+    webapi
+      .getPetOwnerOrders(customerAccount)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            associatedOrderList: res.context.content
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+  }
+
   onChange = ({ field, value }) => {
+    if (field === 'contactId') {
+      this.getPetOwnerPets(value);
+      this.getPetOwnerOrders(value);
+    }
     let data = this.state.task;
     data[field] = value;
     this.setState({
@@ -110,8 +178,7 @@ class TaskUpdate extends Component<any, any> {
     }
   };
   searchAssignedPetOwners = (value) => {
-    if (value) {
-    }
+    this.getPetOwners(value);
   };
   updateTask(e) {
     e.preventDefault();
@@ -250,8 +317,8 @@ class TaskUpdate extends Component<any, any> {
                 <Row>
                   <Col span={12}>
                     <FormItem {...formItemLayout} label="Assigned to">
-                      {getFieldDecorator('assignedTo', {
-                        initialValue: task.assignedTo
+                      {getFieldDecorator('assistantId', {
+                        initialValue: task.assistantId
                       })(
                         <Select
                           disabled={taskCompleted}
@@ -260,7 +327,7 @@ class TaskUpdate extends Component<any, any> {
                           onSearch={this.searchAssignedTo}
                           onChange={(value) =>
                             this.onChange({
-                              field: 'assignedTo',
+                              field: 'assistantId',
                               value: value
                             })
                           }
@@ -396,24 +463,24 @@ class TaskUpdate extends Component<any, any> {
                 <Row>
                   <Col span={12}>
                     <FormItem {...formItemLayout} label="Associated Pet Owner">
-                      {getFieldDecorator('associatedPetOwner', {
-                        initialValue: task.associatedPetOwner
+                      {getFieldDecorator('contactId', {
+                        initialValue: task.contactId
                       })(
                         <Select
-                          disabled={taskCompleted || (!!task.associatedPetOwner && id)}
+                          disabled={taskCompleted || (!!task.contactId && id)}
                           placeholder="Please input name"
                           showSearch
                           onSearch={this.searchAssignedPetOwners}
                           onChange={(value) =>
                             this.onChange({
-                              field: 'associatedPetOwner',
+                              field: 'contactId',
                               value: value
                             })
                           }
                         >
                           {associatedPetOwners.map((item) => (
-                            <Option value={item.id} key={item.id}>
-                              {item.valueEn}
+                            <Option value={item.customerAccount} key={item.customerAccount}>
+                              {item.customerAccount}
                             </Option>
                           ))}
                         </Select>
@@ -422,21 +489,21 @@ class TaskUpdate extends Component<any, any> {
                   </Col>
                   <Col span={12}>
                     <FormItem {...formItemLayout} label="Associated Pet">
-                      {getFieldDecorator('associatedPet', {
-                        initialValue: task.associatedPet
+                      {getFieldDecorator('petId', {
+                        initialValue: task.petId
                       })(
                         <Select
-                          disabled={taskCompleted || (!!task.associatedPet && id)}
+                          disabled={taskCompleted || (!!task.petId && id)}
                           onChange={(value) =>
                             this.onChange({
-                              field: 'associatedPet',
+                              field: 'petId',
                               value: value
                             })
                           }
                         >
                           {associatedPetList.map((item) => (
-                            <Option value={item} key={item}>
-                              {item}
+                            <Option value={item.petsId} key={item.petsId}>
+                              {item.petsName}
                             </Option>
                           ))}
                         </Select>
@@ -460,8 +527,8 @@ class TaskUpdate extends Component<any, any> {
                           }
                         >
                           {associatedOrderList.map((item) => (
-                            <Option value={item} key={item}>
-                              {item}
+                            <Option value={item.id} key={item.id}>
+                              {item.id}
                             </Option>
                           ))}
                         </Select>

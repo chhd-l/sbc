@@ -32,7 +32,7 @@ export function updateTask(filterParams = {}) {
 
 export function deleteTask(id) {
   return Fetch<TResult>('/task/' + id, {
-    method: 'DELETE',
+    method: 'DELETE'
   });
 }
 
@@ -56,6 +56,43 @@ export function createTaskLog(filterParams = {}) {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
+    })
+  });
+}
+
+export function getEmployeesByKeyword(filterParams = {}) {
+  return Fetch<TResult>('/customer/employee/getListByKeywords', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getPetOwnerList(filterParams = {}) {
+  return Fetch<TResult>('/customer/pageBySupplier', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getPetOwnerPets(consumerAccount) {
+  return Fetch<TResult>('/pets/petsByConsumer', {
+    method: 'POST',
+    body: JSON.stringify({ consumerAccount: consumerAccount })
+  });
+}
+
+export function getPetOwnerOrders(consumerAccount) {
+  return Fetch<TResult>('/trade', {
+    method: 'POST',
+    body: JSON.stringify({
+      buyerAccount: consumerAccount,
+      orderType: 'NORMAL_ORDER',
+      pageNum: 0,
+      pageSize: 99999999
     })
   });
 }

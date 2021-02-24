@@ -86,7 +86,16 @@ export default class Detail extends React.Component<any, any> {
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
                   <ErrorBoundary>
-                    <ReactEditor id={'main-' + item.descriptionId} cateId={item.goodsCateId} content={item.content} onContentChange={this.onContentChange} contentType={item.contentType} tabNanme={item.descriptionName + '_' + item.descriptionId} disabled={disabled} height={320} />
+                    <ReactEditor
+                      id={'main-' + item.descriptionId}
+                      cateId={item.goodsCateId}
+                      content={item.content}
+                      onContentChange={this.onContentChange}
+                      contentType={item.contentType}
+                      tabNanme={item.descriptionName + '_' + item.descriptionId}
+                      disabled={!disabled}
+                      height={320}
+                    />
                   </ErrorBoundary>
                 </Tabs.TabPane>
               );

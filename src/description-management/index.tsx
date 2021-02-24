@@ -32,7 +32,8 @@ class DescriptionManagement extends Component<any, any> {
       visible: false,
       descForm: {
         id: '',
-        discriptionName: '',
+        descriptionName: '',
+        contentType: 'text',
         translateList: [],
         displayStatus: false
       },
@@ -91,6 +92,7 @@ class DescriptionManagement extends Component<any, any> {
     let descForm = {
       id: undefined,
       descriptionName: '',
+      contentType: 'text',
       translateList: this.state.languageList.map((lan, idx) => ({
         label: idx === 0 ? 'Display name' : ' ',
         languageId: lan.id,
@@ -110,6 +112,7 @@ class DescriptionManagement extends Component<any, any> {
     let descForm = {
       id: row.id,
       descriptionName: row.descriptionName,
+      contentType: row.contentType || 'text',
       translateList: this.state.languageList.map((lan, idx) => {
         const tl = row.translateList.find((x) => x.languageId == lan.id) || {};
         return {
@@ -235,7 +238,7 @@ class DescriptionManagement extends Component<any, any> {
       {
         title: 'Display name',
         key: 'dipName',
-        width: '55%',
+        width: '35%',
         render: (text, record) => (
           <div>
             {record.translateList && record.translateList.length
@@ -246,6 +249,12 @@ class DescriptionManagement extends Component<any, any> {
               : ''}
           </div>
         )
+      },
+      {
+        title: 'Description type',
+        dataIndex: 'contentType',
+        key: 'contentType',
+        width: '20%'
       },
       {
         title: 'Status',
@@ -300,6 +309,7 @@ class DescriptionManagement extends Component<any, any> {
               visible={visible}
               loading={loading}
               descriptionName={descForm.descriptionName}
+              contentType={descForm.contentType}
               translateList={descForm.translateList}
               displayStatus={descForm.displayStatus}
               onSubmit={this.handleSubmit}

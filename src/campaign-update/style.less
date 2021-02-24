@@ -1,0 +1,96 @@
+.demo-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs-custom /deep/ .ant-tabs-bar {
+  margin-bottom: 0;
+}
+
+.demo-nav {
+  display: flex;
+  list-style: none;
+
+  a {
+    display: block;
+    padding: 0.5em 1rem;
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+.demo {
+  flex: 1;
+}
+
+.demo-chart {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .demo-chart__header {
+    border: 1px solid #e6e9ed;
+    padding: 8px;
+  }
+
+  .demo-chart__container {
+    flex: 1;
+    display: flex;
+  }
+
+  .demo-chart__sidebar {
+    width: 500px;
+    display: flex;
+  }
+
+  .demo-chart__panel {
+    width: 14%;
+    background-color: #fafafa;
+    border-left: 1px solid #e6e9ed;
+  }
+
+  .demo-chart__main {
+    flex: 1;
+  }
+}
+
+.icon-edit {
+  font-size: 22px !important;
+  vertical-align: middle;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.item-icon {
+  font-size: 35px;
+}
+
+.item-text {
+  padding-top: 7px;
+  font-size: 12px;
+  line-height: 1.2;
+  display: table-cell;
+  color: #595959;
+  width: 86px;
+}
+
+.panel-custom /deep/ .ant-collapse-content-box {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.panel-custom#sendEmailItem /deep/ .ant-collapse-content-box {
+  justify-content: start;
+  margin-left: 35px;
+}
+
+#itemPanel {
+  .ant-collapse .panel-custom {
+    background: #fff;
+  }
+}

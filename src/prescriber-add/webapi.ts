@@ -196,25 +196,17 @@ export function enableEmployee(employeeIds: string[]) {
 }
 
 export function addUser(employee) {
-  return Fetch<TResult>(
-    '/customer/employee',
-    {
-      method: 'POST',
-      body: JSON.stringify(employee)
-    },
-    { isHandleResult: true, isShowLoading: true, customerTip: true }
-  );
+  return Fetch<TResult>('/customer/employee', {
+    method: 'POST',
+    body: JSON.stringify(employee)
+  });
 }
 
 export function updateUser(employee) {
-  return Fetch<TResult>(
-    '/customer/employee',
-    {
-      method: 'PUT',
-      body: JSON.stringify(employee)
-    },
-    { isHandleResult: true, isShowLoading: true, customerTip: true }
-  );
+  return Fetch<TResult>('/customer/employee', {
+    method: 'PUT',
+    body: JSON.stringify(employee)
+  });
 }
 
 export function getAllRoles() {

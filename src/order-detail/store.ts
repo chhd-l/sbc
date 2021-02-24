@@ -48,7 +48,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('detail:init', orderInfo);
-        this.dispatch('receive-record-actor:init', payRecordResult.res.payOrderResponses);
+        this.dispatch('receive-record-actor:init', payRecordResult.res.context.payOrderResponses);
         this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context);
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
@@ -93,8 +93,8 @@ export default class AppStore extends Store {
         this.transaction(() => {
           this.dispatch('loading:end');
           this.dispatch('detail:init', orderInfo);
-          this.dispatch('receive-record-actor:init', payRecordResult.payOrderResponses);
-          this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context);
+          this.dispatch('receive-record-actor:init', payRecordResult.context.payOrderResponses);
+          this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context ? payRecordResult2.context : {});
           this.dispatch('detail-actor:setSellerRemarkVisible', true);
           this.dispatch('logistics:init', logistics.context);
           // this.dispatch('detail:setNeedAudit', needRes.context.audit);

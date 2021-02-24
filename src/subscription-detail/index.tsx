@@ -54,6 +54,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       operationLog: [],
       promotionCode: '',
       deliveryPrice: '',
+      taxFeePrice: '',
       discountsPrice: '',
       frequencyList: [],
       promotionDesc: 'Promotion',
@@ -408,7 +409,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             deliveryPrice: res.context.deliveryPrice,
             discountsPrice: res.context.discountsPrice,
             promotionCodeShow: res.context.promotionCode,
-            promotionDesc: res.context.promotionDesc
+            promotionDesc: res.context.promotionDesc,
+            taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0
           });
         }
       })
@@ -854,11 +856,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>Shipping</span>
                   <span style={styles.priceStyle}>{currencySymbol + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
+                {+sessionStorage.getItem(cache.TAX_SWITCH) === 0 ? (
+                  <div className="flex-between">
+                    <span>Tax</span>
+                    <span style={styles.priceStyle}>{currencySymbol + (this.state.taxFeePrice ? this.state.taxFeePrice : 0).toFixed(2)}</span>
+                  </div>
+                ) : null}
+
                 <div className="flex-between">
                   <span>
                     <span>Total</span> (IVA Include):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice).toFixed(2)}</span>
                 </div>
               </Col>
             </Row>

@@ -45,7 +45,7 @@ export default class AppStore extends Store {
 
     this.transaction(() => {
       this.dispatch('loading:end');
-      this.dispatch('list:init', res);
+      this.dispatch('list:init', res.context);
       this.dispatch('offlineAccounts', offlineAccounts);
       this.dispatch('channelItem', channelValue);
       this.dispatch('sumPrice', (sumPrice as any).context);

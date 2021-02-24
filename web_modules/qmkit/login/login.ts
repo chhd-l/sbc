@@ -101,6 +101,11 @@ export async function login(routerType, oktaToken: string,callback?:Function) {
       sessionStorage.setItem(cache.LOGIN_MENUS, JSON.stringify(allGradeMenus));
       const functionsRes = menusRes.res.context.functionList
       sessionStorage.setItem(cache.LOGIN_FUNCTIONS, JSON.stringify(functionsRes));
+
+      const addressApiSettings = menusRes.res.context.addressApiSettingVOListResponse.addressApiSettings
+      const taxApiSettings = menusRes.res.context.addressApiSettingVOListResponse.taxApiSettings
+      sessionStorage.setItem(cache.TAX_API_SETTINGS, JSON.stringify(taxApiSettings))
+      sessionStorage.setItem(cache.ADDRESS_API_SETTINGS, JSON.stringify(addressApiSettings))
       /*const functionsRes = (await webapi.fetchFunctions()) as any;
       if (functionsRes.res.code === Const.SUCCESS_CODE) {
         sessionStorage.setItem(

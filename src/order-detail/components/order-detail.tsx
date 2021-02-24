@@ -606,6 +606,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   {(tradePrice.deliveryPrice || 0).toFixed(2)}
                 </strong>
               </label>
+              {+sessionStorage.getItem(cache.TAX_SWITCH) === 0 ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>{<FormattedMessage id="tax" />}: </span>
+                  <strong>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {(tradePrice.taxFeePrice || 0).toFixed(2)}
+                  </strong>
+                </label>
+              ) : null}
 
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="total" />}: </span>

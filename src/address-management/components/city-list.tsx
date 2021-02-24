@@ -41,7 +41,6 @@ export default class CityList extends Component<any, any> {
     deleteCity: noop
   };
   componentDidMount() {
-    debugger;
     this.getCityList(1, 10);
   }
   getCityList = (currentPage, pageSize) => {

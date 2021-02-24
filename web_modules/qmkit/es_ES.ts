@@ -359,6 +359,7 @@ export default {
   coupon: 'Coupon',
   pointsDeduction: 'Points deduction',
   shippingFees: 'Shipping fees',
+  tax: 'Tax',
   totalPayable: 'Total payable',
   sellerNotes: 'Seller notes',
   buyerNotes: 'Buyer notes',

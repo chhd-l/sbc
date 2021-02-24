@@ -2160,4 +2160,5 @@ export default class AppStore extends Store {
   modalVisibleFun = ({ key, value }) => {};
   onProductForm = ({ key, value }) => {};
   onEditSkuNo = ({ key, value }) => {};
+  saveMain = ({ key, value }) => {};
 }

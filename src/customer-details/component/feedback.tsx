@@ -25,11 +25,11 @@ class FeedBack extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const labelCol1 = {
       xs: { span: 24 },
-      sm: { span: 12 }
+      sm: { span: 14 }
     };
     const labelCol2 = {
       xs: { span: 24 },
-      sm: { span: 12, offset: 6 }
+      sm: { span: 14, offset: 4 }
     };
     const labelCol3 = {
       xs: { span: 24 },
@@ -273,7 +273,7 @@ class FeedBack extends React.Component<any, any> {
                 </Row>
                 <Row>
                   <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Quality of service 1:">
+                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Quality of service 1(scale from 1 to 5):">
                       {getFieldDecorator(
                         'qs1',
                         {}
@@ -289,9 +289,105 @@ class FeedBack extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Quality of service 2:">
+                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Quality of service 2(scale from 1 to 5):">
                       {getFieldDecorator(
                         'qs2',
+                        {}
+                      )(
+                        <Select>
+                          {[1, 2, 3, 4, 5].map((n) => (
+                            <Option key={n} value={n}>
+                              {n}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Veterinarian qualification 1(scale from 1 to 5):">
+                      {getFieldDecorator(
+                        'vet1',
+                        {}
+                      )(
+                        <Select>
+                          {[1, 2, 3, 4, 5].map((n) => (
+                            <Option key={n} value={n}>
+                              {n}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Veterinarian qualification 2(scale from 1 to 5):">
+                      {getFieldDecorator(
+                        'vet2',
+                        {}
+                      )(
+                        <Select>
+                          {[1, 2, 3, 4, 5].map((n) => (
+                            <Option key={n} value={n}>
+                              {n}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Clinics rating 1 of the last visiting clinic(scale from 1 to 5):">
+                      {getFieldDecorator(
+                        'cv1',
+                        {}
+                      )(
+                        <Select>
+                          {[1, 2, 3, 4, 5].map((n) => (
+                            <Option key={n} value={n}>
+                              {n}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Clinics rating 2 of the last visiting clinic(scale from 1 to 5):">
+                      {getFieldDecorator(
+                        'cv2',
+                        {}
+                      )(
+                        <Select>
+                          {[1, 2, 3, 4, 5].map((n) => (
+                            <Option key={n} value={n}>
+                              {n}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Vet clinic check-up 1(scale from 1 to 5):">
+                      {getFieldDecorator(
+                        'cek1',
+                        {}
+                      )(
+                        <Select>
+                          {[1, 2, 3, 4, 5].map((n) => (
+                            <Option key={n} value={n}>
+                              {n}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Vet clinic check-up 2(scale from 1 to 5):">
+                      {getFieldDecorator(
+                        'cek2',
                         {}
                       )(
                         <Select>

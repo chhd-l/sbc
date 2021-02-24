@@ -111,7 +111,7 @@ class ModalForm extends Component<Props, any> {
             <Form.Item label="Display name" style={{ marginBottom: 0 }}>
               {languageList &&
                 languageList.map((item) => (
-                  <Form.Item>
+                  <Form.Item key={item.id}>
                     {getFieldDecorator(`${item.id}`, {
                       rules: [
                         {

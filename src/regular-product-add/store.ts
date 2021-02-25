@@ -362,7 +362,6 @@ export default class AppStore extends Store {
     this.onGoodsTaggingRelList(taggingIds);
 
     goodsDetail = fromJS(tmpContext);
-
     let addSkUProduct =
       tmpContext.goodsInfos &&
       tmpContext.goodsInfos.map((item) => {

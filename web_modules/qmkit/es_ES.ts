@@ -672,7 +672,7 @@ export default {
   allSurvey: 'All survey',
   surveyTime: 'Survey time',
   defaultPrescriberName: 'default Prescriber Name',
-  'consumer.consumerDetails': 'Consumer Details',
+  'consumer.consumerDetails': 'Pet owner detail',
   'consumer.removeConsumer': 'Remove Consumer',
 
   shopping: 'Shopping',

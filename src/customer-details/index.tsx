@@ -47,6 +47,7 @@ export default class CustomerDetails extends React.Component<any, any> {
         address: '',
         consent: ''
       },
+      pets: [],
       startDate: moment().format('YYYY-MM-DD'),
       endDate: moment().format('YYYY-MM-DD')
     };
@@ -56,6 +57,7 @@ export default class CustomerDetails extends React.Component<any, any> {
     // this.querySysDictionary('city');
     if (this.state.customerType !== 'Guest') {
       this.getBasicInformation();
+      this.getPetsList();
     }
   }
 
@@ -77,6 +79,22 @@ export default class CustomerDetails extends React.Component<any, any> {
           }
         });
       }
+    });
+  };
+
+  getPetsList = () => {
+    const { customerAccount } = this.state;
+    webapi.petsByConsumer({ consumerAccount: customerAccount }).then((data) => {
+      const pets = data.res.context.context.map((r) => ({
+        petsId: r.petsId,
+        petsImg: r.petsImg,
+        petsName: r.petsName,
+        petsAge: r.birthOfPets ? moment().diff(r.borthOfPets, 'months') : '',
+        petsBreed: r.breederId
+      }));
+      this.setState({
+        pets: pets
+      });
     });
   };
 
@@ -150,7 +168,7 @@ export default class CustomerDetails extends React.Component<any, any> {
   };
 
   render() {
-    const { basic, startDate, endDate } = this.state;
+    const { basic, pets, startDate, endDate } = this.state;
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -266,38 +284,44 @@ export default class CustomerDetails extends React.Component<any, any> {
               </div>
               <div className="detail-container">
                 <Headline title="Pet information" />
-                <Card style={{ width: 350 }} bodyStyle={{ padding: '10px 20px' }}>
-                  <div className="text-align-right">
-                    <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
-                      <Button type="link">
-                        <span className="iconfont iconDelete"></span> Delete
-                      </Button>
-                    </Popconfirm>
-                    <Link to={`/edit-customer-pet/${1}`}>
-                      <span className="iconfont iconEdit"></span> Edit
-                    </Link>
-                  </div>
-                  <Row gutter={10}>
-                    <Col span={6}>
-                      <Avatar size={70} icon="user" />
+                <Row gutter={16}>
+                  {pets.map((pet) => (
+                    <Col span={8}>
+                      <Card bodyStyle={{ padding: '10px 20px' }}>
+                        <div className="text-align-right">
+                          <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
+                            <Button type="link">
+                              <span className="iconfont iconDelete"></span> Delete
+                            </Button>
+                          </Popconfirm>
+                          <Link to={`/edit-customer-pet/${pet.petsId}`}>
+                            <span className="iconfont iconEdit"></span> Edit
+                          </Link>
+                        </div>
+                        <Row gutter={10}>
+                          <Col span={6}>
+                            <Avatar size={70} src={pet.petsImg} />
+                          </Col>
+                          <Col span={18}>
+                            <Row>
+                              <Col span={24}>
+                                <div className="text-highlight">{pet.petsName}</div>
+                              </Col>
+                            </Row>
+                            <Row className="text-tip">
+                              <Col span={12}>Age</Col>
+                              <Col span={12}>Breed</Col>
+                            </Row>
+                            <Row style={{ fontSize: 16 }}>
+                              <Col span={12}>{pet.petsAge} months</Col>
+                              <Col span={12}>{pet.petsBreed}</Col>
+                            </Row>
+                          </Col>
+                        </Row>
+                      </Card>
                     </Col>
-                    <Col span={18}>
-                      <Row>
-                        <Col span={24}>
-                          <div className="text-highlight">Hanhan</div>
-                        </Col>
-                      </Row>
-                      <Row className="text-tip">
-                        <Col span={12}>Age</Col>
-                        <Col span={12}>Breed</Col>
-                      </Row>
-                      <Row style={{ fontSize: 16 }}>
-                        <Col span={12}>9 months</Col>
-                        <Col span={12}>Weimaranger</Col>
-                      </Row>
-                    </Col>
-                  </Row>
-                </Card>
+                  ))}
+                </Row>
               </div>
             </div>
           )}

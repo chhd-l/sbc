@@ -20,33 +20,31 @@ class FeedBack extends React.Component<any, any> {
     });
   };
 
+  changeEditable = (editable: boolean) => {
+    this.setState({
+      editable: editable
+    });
+  };
+
   render() {
     const { showMore, editable } = this.state;
     const { getFieldDecorator } = this.props.form;
-    const labelCol1 = {
-      xs: { span: 24 },
-      sm: { span: 14 }
-    };
-    const labelCol2 = {
-      xs: { span: 24 },
-      sm: { span: 14, offset: 4 }
-    };
-    const labelCol3 = {
-      xs: { span: 24 },
-      sm: { span: 6 }
-    };
-    const wrapperCol = {
-      xs: { span: 24 },
-      sm: { span: 6 }
-    };
-    const wrapperCol2 = {
-      xs: { span: 24 },
-      sm: { span: 18 }
-    };
+
     return (
       <div className="detail-container">
         <div>
-          <Headline title="Feedback" extra={<div>{showMore && <Button type="primary">Edit</Button>}</div>}>
+          <Headline
+            title="Feedback"
+            extra={
+              <div>
+                {showMore ? (
+                  <Button type="primary" onClick={() => this.changeEditable(true)}>
+                    Edit
+                  </Button>
+                ) : null}
+              </div>
+            }
+          >
             <Button
               type="link"
               onClick={() => {
@@ -58,20 +56,24 @@ class FeedBack extends React.Component<any, any> {
           </Headline>
         </div>
         <div style={{ display: showMore ? 'block' : 'none' }}>
-          <Form labelAlign="left">
+          <Form labelAlign="left" className="petowner-feedback-form">
             <Row gutter={8}>
               <Col span={6}>
                 <span className="text-highlight">After welcome pack received</span>
               </Col>
               <Col span={18}>
-                <Row>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Rate delivery(scale from 1 to 5):">
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <div>Rate delivery:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'delivery',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -81,13 +83,17 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Rate the pack(scale from 1 to 5):">
+                  <Col span={6} offset={4}>
+                    <div>Rate the pack:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'pack',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -97,10 +103,13 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
-                    <FormItem labelCol={labelCol3} wrapperCol={wrapperCol2} label="Comments:">
-                      {getFieldDecorator('com', {})(<TextArea cols={6} />)}
-                    </FormItem>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <div>Comments:</div>
+                  </Col>
+                  <Col span={18}>
+                    <FormItem>{getFieldDecorator('com', {})(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
                 </Row>
               </Col>
@@ -110,14 +119,18 @@ class FeedBack extends React.Component<any, any> {
                 <span className="text-highlight">During 2nd delivery confirmation</span>
               </Col>
               <Col span={18}>
-                <Row>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="NPS(scale from 1 to 10):">
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <div>NPS:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'nps',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -128,34 +141,35 @@ class FeedBack extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                 </Row>
-                <Row>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Delivery schedule fit:">
+                <Row gutter={8} type="flex" align="middle">
+                  <Col span={6}>Delivery schedule fit:</Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'sch',
                         {}
                       )(
-                        <Radio.Group>
+                        <Radio.Group disabled={!editable}>
                           <Radio value={1}>Yes</Radio>
                           <Radio value={0}>No</Radio>
                         </Radio.Group>
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={9} offset={3}>
-                    <FormItem>{getFieldDecorator('scht', {})(<Input />)}</FormItem>
+                  <Col span={8} offset={6}>
+                    <FormItem>{getFieldDecorator('scht', {})(<Input disabled={!editable} />)}</FormItem>
                   </Col>
                 </Row>
-                <Row>
-                  <Col span={24}>
-                    <FormItem labelCol={labelCol3} wrapperCol={wrapperCol2} label="Reason of interest of the Club:">
-                      {getFieldDecorator('reason', {})(<Input />)}
-                    </FormItem>
+                <Row gutter={8} type="flex" align="middle">
+                  <Col span={6}>Reason of interest of the Club:</Col>
+                  <Col span={18}>
+                    <FormItem>{getFieldDecorator('reason', {})(<Input disabled={!editable} />)}</FormItem>
                   </Col>
-                  <Col span={24}>
-                    <FormItem labelCol={labelCol3} wrapperCol={wrapperCol2} label="Comments:">
-                      {getFieldDecorator('comm', {})(<TextArea cols={6} />)}
-                    </FormItem>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>Comments:</Col>
+                  <Col span={18}>
+                    <FormItem>{getFieldDecorator('comm', {})(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
                 </Row>
               </Col>
@@ -165,14 +179,18 @@ class FeedBack extends React.Component<any, any> {
                 <span className="text-highlight">After 3rd delivery, during 4th delivery confirmation</span>
               </Col>
               <Col span={18}>
-                <Row>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="NPS(scale from 1 to 10):">
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <div>NPS:</div>
+                    <div>(scale from 1 to 10)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'npss',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -182,13 +200,17 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Rate PA consultation quality(scale from 1 to 5):">
+                  <Col span={6} offset={4}>
+                    <div>Rate PA consultation quality:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'pack',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -198,20 +220,23 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
-                    <FormItem labelCol={labelCol3} wrapperCol={wrapperCol2} label="Unnecessary services:">
-                      {getFieldDecorator('unne', {})(<Input />)}
-                    </FormItem>
+                </Row>
+                <Row gutter={8} type="flex" align="middle">
+                  <Col span={6}>Unnecessary services:</Col>
+                  <Col span={18}>
+                    <FormItem>{getFieldDecorator('unne', {})(<Input disabled={!editable} />)}</FormItem>
                   </Col>
-                  <Col span={24}>
-                    <FormItem labelCol={labelCol3} wrapperCol={wrapperCol2} label="Necessary services:">
-                      {getFieldDecorator('nece', {})(<Input />)}
-                    </FormItem>
+                </Row>
+                <Row gutter={8} type="flex" align="middle">
+                  <Col span={6}>Necessary services:</Col>
+                  <Col span={18}>
+                    <FormItem>{getFieldDecorator('nece', {})(<Input disabled={!editable} />)}</FormItem>
                   </Col>
-                  <Col span={24}>
-                    <FormItem labelCol={labelCol3} wrapperCol={wrapperCol2} label="Comments:">
-                      {getFieldDecorator('comm1', {})(<TextArea cols={6} />)}
-                    </FormItem>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>Comments:</Col>
+                  <Col span={18}>
+                    <FormItem>{getFieldDecorator('comm1', {})(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
                 </Row>
               </Col>
@@ -221,14 +246,18 @@ class FeedBack extends React.Component<any, any> {
                 <span className="text-highlight">Feedback 4(completion of Club)</span>
               </Col>
               <Col span={18}>
-                <Row>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="NPS(scale from 1 to 10):">
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <div>NPS:</div>
+                    <div>(scale from 1 to 10)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'nps',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -239,21 +268,22 @@ class FeedBack extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                 </Row>
-                <Row>
-                  <Col span={24}>
-                    <FormItem labelCol={labelCol3} wrapperCol={wrapperCol2} label="Reason for cancellation of membership:">
-                      {getFieldDecorator('rcan', {})(<Input />)}
-                    </FormItem>
+                <Row gutter={8} type="flex" align="middle">
+                  <Col span={6}>Reason for cancellation of membership:</Col>
+                  <Col span={18}>
+                    <FormItem>{getFieldDecorator('rcan', {})(<Input disabled={!editable} />)}</FormItem>
                   </Col>
-                  <Col span={24}>
-                    <FormItem labelCol={labelCol3} wrapperCol={wrapperCol2} label="Suggestions for improvement:">
-                      {getFieldDecorator('sugg', {})(<Input />)}
-                    </FormItem>
+                </Row>
+                <Row gutter={8} type="flex" align="middle">
+                  <Col span={6}>Suggestions for improvement:</Col>
+                  <Col span={18}>
+                    <FormItem>{getFieldDecorator('sugg', {})(<Input disabled={!editable} />)}</FormItem>
                   </Col>
-                  <Col span={24}>
-                    <FormItem labelCol={labelCol3} wrapperCol={wrapperCol2} label="Comments:">
-                      {getFieldDecorator('comm2', {})(<TextArea cols={6} />)}
-                    </FormItem>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>Comments:</Col>
+                  <Col span={18}>
+                    <FormItem>{getFieldDecorator('comm2', {})(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
                 </Row>
               </Col>
@@ -263,7 +293,7 @@ class FeedBack extends React.Component<any, any> {
                 <span className="text-highlight">Feedback for clinics</span>
               </Col>
               <Col span={18}>
-                <Row>
+                <Row gutter={8}>
                   <Col span={12}>
                     <div className="text-align-center text-highlight">Visit 1</div>
                   </Col>
@@ -271,14 +301,18 @@ class FeedBack extends React.Component<any, any> {
                     <div className="text-align-center text-highlight">Visit 2</div>
                   </Col>
                 </Row>
-                <Row>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Quality of service 1(scale from 1 to 5):">
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <div>Quality of service 1:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'qs1',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -288,13 +322,17 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Quality of service 2(scale from 1 to 5):">
+                  <Col span={6} offset={4}>
+                    <div>Quality of service 2:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'qs2',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -304,13 +342,19 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Veterinarian qualification 1(scale from 1 to 5):">
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <div>Veterinarian qualification 1:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'vet1',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -320,13 +364,17 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Veterinarian qualification 2(scale from 1 to 5):">
+                  <Col span={6} offset={4}>
+                    <div>Veterinarian qualification 2:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'vet2',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -336,13 +384,19 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Clinics rating 1 of the last visiting clinic(scale from 1 to 5):">
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <div>Clinics rating 1 of the last visiting clinic:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'cv1',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -352,13 +406,17 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Clinics rating 2 of the last visiting clinic(scale from 1 to 5):">
+                  <Col span={6} offset={4}>
+                    <div>Clinics rating 2 of the last visiting clinic:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'cv2',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -368,13 +426,19 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol1} wrapperCol={wrapperCol} label="Vet clinic check-up 1(scale from 1 to 5):">
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <div>Vet clinic check-up 1:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'cek1',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -384,13 +448,17 @@ class FeedBack extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem labelCol={labelCol2} wrapperCol={wrapperCol} label="Vet clinic check-up 2(scale from 1 to 5):">
+                  <Col span={6} offset={4}>
+                    <div>Vet clinic check-up 2:</div>
+                    <div>(scale from 1 to 5)</div>
+                  </Col>
+                  <Col span={4}>
+                    <FormItem>
                       {getFieldDecorator(
                         'cek2',
                         {}
                       )(
-                        <Select>
+                        <Select disabled={!editable}>
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Option key={n} value={n}>
                               {n}
@@ -404,6 +472,14 @@ class FeedBack extends React.Component<any, any> {
               </Col>
             </Row>
           </Form>
+          {editable && (
+            <div>
+              <Button type="primary" style={{ marginRight: 10 }}>
+                Save
+              </Button>
+              <Button onClick={() => this.changeEditable(false)}>Cancel</Button>
+            </div>
+          )}
         </div>
       </div>
     );

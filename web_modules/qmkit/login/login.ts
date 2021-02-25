@@ -106,7 +106,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       sessionStorage.setItem(cache.TAX_API_SETTINGS, JSON.stringify(taxApiSettings))
       sessionStorage.setItem(cache.ADDRESS_API_SETTINGS, JSON.stringify(addressApiSettings))
       const settingConfigList = menusRes.res.context.systemTaxSettingResponse.configVOList
-
+      sessionStorage.setItem(cache.LANGUAGE, 'English');
       let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');
       if (element) {
         sessionStorage.setItem(cache.TAX_SWITCH, element.context.toString());

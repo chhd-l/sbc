@@ -20,11 +20,19 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import { IntlProvider } from 'react-intl';
 import es_ES from '../web_modules/qmkit/es_ES';
+import es_RUS from '../web_modules/qmkit/es_RUS';
 import configOkta from '../web_modules/qmkit/config-okta';
 moment.locale('zh-cn');
 
+let language = es_ES;
+if(sessionStorage.getItem(cache.LANGUAGE) == 'English') {
+  language = es_ES
+}else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
+  language = es_RUS
+}
+
 const PrescriberRouter = () => (
-  <IntlProvider locale="es" messages={es_ES}>
+  <IntlProvider locale="es" messages={language}>
     <ConfigProvider locale={enUS}>
       <Provider store={store}>
         <Router history={history}>
@@ -43,7 +51,7 @@ const PrescriberRouter = () => (
 );
 
 const RcRouter = () => (
-  <IntlProvider locale="es" messages={es_ES}>
+  <IntlProvider locale="es" messages={language}>
     <ConfigProvider locale={enUS}>
       <Provider store={store}>
         <Router history={history}>

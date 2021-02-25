@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { Layout, Menu, Dropdown, Icon, message, Button, Select } from 'antd';
 const { Header } = Layout;
 import { history, cache, util } from 'qmkit';
 import QRCode from 'qrcode';
 import copy from 'copy-to-clipboard';
-import value from '*.json';
+//import value from '*.json';
 const Option = Select.Option;
 import OktaLogout from './okta/okta-logout';
 
@@ -199,20 +199,28 @@ export default class MyHeader extends React.Component {
                 // )
               )}
           </div>
-          <div style={styles.headerRight} className="flex-content-right">
-            <div style={{ height: 20 }}>
-              <Dropdown overlay={menu} trigger={['click']}>
-                <a className="ant-dropdown-link" href="#">
-                  {/* <Icon type="user" /> */}
-                  {/* <img style={{width: '60px'}} src={sessionStorage.getItem(cache.SITE_LOGO)
+          <div style={styles.headerRight} className="align-items-center">
+            <Select defaultValue={sessionStorage.getItem(cache.LANGUAGE)} style={{ width: 120, marginRight: 40 }} onChange={this.languageChange}>
+              <Option value="English">English</Option>
+              <Option value="Russian">Russian</Option>
+              <Option value="German">German</Option>
+            </Select>
+            <div className="flex-content-right">
+              <div style={{ height: 20 }}>
+                <Dropdown overlay={menu} trigger={['click']}>
+                  <a className="ant-dropdown-link" href="#">
+                    {/* <Icon type="user" /> */}
+                    {/* <img style={{width: '60px'}} src={sessionStorage.getItem(cache.SITE_LOGO)
                   ? sessionStorage.getItem(cache.SITE_LOGO)
                   : util.requireLocalSrc('sys/02.jpg')} alt="" /> */}
-                  <span style={styles.dropdownText}>{accountName}</span>
-                  <Icon type="down" />
-                </a>
-              </Dropdown>
+                    <span style={styles.dropdownText}>{accountName}</span>
+                    <Icon type="down" />
+                  </a>
+                </Dropdown>
+              </div>
+              <div>{storeName}</div>
             </div>
-            <div>{storeName}</div>
+
           </div>
         </Header>
 
@@ -237,6 +245,12 @@ export default class MyHeader extends React.Component {
       message.success('Operate successfully');
     } else message.error('Unsuccessful');
   };
+
+  languageChange = (value) => {
+    sessionStorage.setItem(cache.LANGUAGE, value);
+    this.forceUpdate();
+  };
+
 }
 
 const styles = {

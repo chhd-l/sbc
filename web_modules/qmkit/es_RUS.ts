@@ -1,8 +1,8 @@
 /**
- * 多语言英文
+ * 多语言俄语
  */
 export default {
-  'home.overview':'Overview111',
+  'home.overview':'Общее описание',
 
 
 

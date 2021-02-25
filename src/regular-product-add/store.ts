@@ -362,16 +362,26 @@ export default class AppStore extends Store {
     this.onGoodsTaggingRelList(taggingIds);
 
     goodsDetail = fromJS(tmpContext);
-    let addSkUProduct =
-      tmpContext.goodsInfos &&
-      tmpContext.goodsInfos.map((item) => {
+    debugger;
+    if (tmpContext && tmpContext.goodsInfos && tmpContext.goodsInfos.length > 0) {
+      let addSkUProduct = tmpContext.goodsInfos.map((item) => {
         return {
           pid: item.goodsInfoNo,
           targetGoodsIds: item.goodsInfoBundleRels,
           minStock: item.stock
         };
       });
-    this.dispatch('sku:addSkUProduct', addSkUProduct);
+      this.dispatch('sku:addSkUProduct', addSkUProduct);
+    }
+    // let addSkUProduct =
+    //   tmpContext.goodsInfos &&
+    //   tmpContext.goodsInfos.map((item) => {
+    //     return {
+    //       pid: item.goodsInfoNo,
+    //       targetGoodsIds: item.goodsInfoBundleRels,
+    //       minStock: item.stock
+    //     };
+    //   });
     this.transaction(() => {
       // 可能只保存了基本信息没有设价方式，价格tab中由需要默认选中按客户设价
       // 这里给一个默认值2，保存基本信息的时候不能传这个值，要过滤掉 priceType-mark

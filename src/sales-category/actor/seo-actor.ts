@@ -5,11 +5,12 @@ export default class SeoActor extends Actor {
   defaultState() {
     return {
       seoForm: {
-        titleSource: '', //{name}
+        titleSource: 'Royal Canin | {name}s', //{name}
         metaKeywordsSource: '', //{name}
         metaDescriptionSource: '', //{description}
         headingTag: ''
       },
+      updateNumbers: 0, //0：新增seo, 大于0：编辑seo
       seoModalVisible: false,
       currentStoreCateId: null,
       loading: false
@@ -31,6 +32,12 @@ export default class SeoActor extends Actor {
   setSeoForm(state: IMap, form) {
     return state.set('seoForm', form);
   }
+
+  @Action('seoActor: updateNumbers')
+  setSeoUpdateNumbers(state: IMap, updateNumbers) {
+    return state.set('updateNumbers', updateNumbers);
+  }
+
   @Action('seoActor: currentStoreCateId')
   setCurrentStoreCateId(state: IMap, currentStoreCateId) {
     return state.set('currentStoreCateId', currentStoreCateId);

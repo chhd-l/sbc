@@ -23,6 +23,7 @@ class ReactEditor extends Component<any, any> {
         count?: number
         contentType?: string
         cateId?: any
+        fontNames?:any
     }
     constructor(props) {
         super(props);
@@ -49,10 +50,25 @@ class ReactEditor extends Component<any, any> {
             'emoticon',  // 表情
             'image',  // 插入图片
             'table',  // 表格
-            'video',  // 插入视频
+            // 'video',  // 插入视频
             // 'code',  // 插入代码
             'undo',  // 撤销
             'redo'  // 重复
+        ],
+        fontNames : [
+            // '黑体',
+            // '仿宋',
+            // '楷体',
+            // '标楷体',
+            // '华文仿宋',
+            // '华文楷体',
+            // '宋体',
+            // '微软雅黑',
+            'Arial',
+            'Tahoma',
+            'Verdana',
+            'Times New Roman',
+            'Courier New',
         ]
     };
 
@@ -75,7 +91,7 @@ class ReactEditor extends Component<any, any> {
      * 初始化编辑器
      */
     initEditor() {
-        const { id, tabNanme, disabled, onContentChange, toolbars } = this.props
+        const { id, tabNanme, disabled, onContentChange, toolbars,fontNames,content } = this.props
         const elemMenu = ".editorElem-menu-" + id;
         const elemBody = ".editorElem-body-" + id;
 
@@ -93,19 +109,15 @@ class ReactEditor extends Component<any, any> {
 
         }
         this.editor.config.menus = toolbars
+        this.editor.config.fontNames =fontNames
         this.editor.config.zIndex = 90
         this.editor.config.onchangeTimeout = 500
-
         this.uploadImage();
         this.editor.config.lang = 'en'
-        //自定义
-        // this.editor.config.languages['custom-en']=lang.en;
-        //    this.editor.config.placeholder = 'Please enter the text'
         this.editor.i18next = i18next
-        this.editor.config.uploadImgShowBase64 = true
         this.editor.create()
         disabled && this.editor.disable()
-        this.editor.txt.html(this.props.content)
+        this.editor.txt.html(content)
     }
     uploadImage = () => {
         const _this = this;
@@ -113,7 +125,7 @@ class ReactEditor extends Component<any, any> {
         this.editor.config.uploadImgMaxLength = 1;
         this.editor.config.uploadImgServer = Const.HOST + `/store/uploadStoreResource?cateId=${this.props.cateId}&storeId=${userInfo.storeId}&companyInfoId=${userInfo.companyInfoId}&resourceType=IMAGE`;
         this.editor.config.uploadImgAccept = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-        this.editor.config.uploadImgMaxSize = 2048000;
+        this.editor.config.uploadImgMaxSize = 10*1024*1024;
         this.editor.config.withCredentials = true
         this.editor.config.uploadImgHeaders = {
             Authorization: `Bearer ${userInfo.token}`

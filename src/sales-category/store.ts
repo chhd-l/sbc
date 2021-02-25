@@ -522,29 +522,38 @@ export default class AppStore extends Store {
   };
 
   getSeo = async (storeCateId, type = 2) => {
-    this.clear();
+    const updateNumbers = this.state().get('updateNumbers');
     this.setCurrentStoreCateId(storeCateId);
     this.setSeoModalVisible(true);
-    this.dispatch('loading:start');
-    const { res } = (await getSeo(storeCateId, type)) as any;
-    if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
-      this.dispatch('loading:end');
-      this.dispatch(
-        'seoActor: setSeoForm',
-        fromJS({
-          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '',
-          metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '',
-          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '',
-          headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
-        })
-      );
+    if (updateNumbers && updateNumbers > 0) {
+      this.dispatch('loading:start');
+      const { res } = (await getSeo(storeCateId, type)) as any;
+      if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+        this.dispatch('loading:end');
+        this.dispatch(
+          'seoActor: setSeoForm',
+          fromJS({
+            titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '',
+            metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '',
+            metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '',
+            headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
+          })
+        );
+        this.dispatch('seoActor: updateNumbers', res.context.seoSettingVO.updateNumbers);
+      } else {
+        this.dispatch('loading:end');
+      }
     } else {
-      this.dispatch('loading:end');
+      this.updateSeoForm({
+        field: 'titleSource',
+        value: 'Royal Canin | {name}s'
+      });
     }
   };
   editSeo = async (params) => {
     this.dispatch('loading:start');
-    const { res } = (await editSeo(params)) as any;
+    const updateNumbers = this.state().get('updateNumbers') + 1;
+    const { res } = (await editSeo({ ...params, updateNumbers })) as any;
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
       message.success('Save successfully.');

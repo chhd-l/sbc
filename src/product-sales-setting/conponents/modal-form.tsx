@@ -16,7 +16,8 @@ class ModalForm extends Component<Props, any> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      form: props.formData
+      form: props.formData,
+      loading: false
     };
   }
 
@@ -33,6 +34,9 @@ class ModalForm extends Component<Props, any> {
   };
   handleSubmit = (values) => {
     const { languageList } = this.props;
+    this.setState({
+      loading: true
+    });
     let data = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '');
     new Promise((resolve) => {
       let d = languageList.map((item) => {
@@ -59,6 +63,9 @@ class ModalForm extends Component<Props, any> {
       });
       this.props.form.resetFields();
       this.props.handleOk();
+      this.setState({
+        loading: false
+      });
     });
   };
   handleCancel = (e: any) => {
@@ -71,18 +78,29 @@ class ModalForm extends Component<Props, any> {
     const { visible, languageList } = this.props;
     return (
       <div>
-        <Modal title="Add new frequency" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal
+          title="Add new frequency"
+          visible={visible}
+          footer={[
+            <Button key="back" onClick={this.handleCancel}>
+              Cancel
+            </Button>,
+            <Button key="submit" type="primary" loading={this.state.loading} onClick={this.handleOk}>
+              OK
+            </Button>
+          ]}
+        >
           <Form name="complex-form" labelAlign="left" labelCol={{ span: 9 }} wrapperCol={{ span: 15 }}>
             <Form.Item label="Frequency type">
               {getFieldDecorator('type', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input  frequency name!'
+                    message: 'Please input  frequency type!'
                   }
                 ]
               })(
-                <Select placeholder="Please input  frequency name!">
+                <Select placeholder="Please input  frequency type!">
                   <Select.Option value="Frequency_month">Frequency Month</Select.Option>
                   <Select.Option value="Frequency_week">Frequency Week</Select.Option>
                 </Select>
@@ -108,15 +126,15 @@ class ModalForm extends Component<Props, any> {
                 ]
               })(<Input placeholder="Please input  frequency value!" />)}
             </Form.Item>
-            <Form.Item label="Display name" style={{ marginBottom: 0 }}>
+            <Form.Item label={<span className="ant-form-item-required">Display name</span>} style={{ marginBottom: 0 }}>
               {languageList &&
-                languageList.map((item) => (
+                languageList.map((item, i) => (
                   <Form.Item key={item.id}>
                     {getFieldDecorator(`${item.id}`, {
                       rules: [
                         {
-                          required: true,
-                          message: `Please input ${item.name} display name!`
+                          required: i === 0 ? true : false,
+                          message: `Please input ${item.name}  name!`
                         }
                       ]
                     })(<Input placeholder={item.name} />)}

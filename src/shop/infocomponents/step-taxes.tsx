@@ -371,7 +371,7 @@ class StepTaxes extends Component<any, any> {
     let params = {
       stateName: value,
       pageNum: 0,
-      pageSize: 50
+      pageSize: 100
     };
     this.setState({
       fetching: true

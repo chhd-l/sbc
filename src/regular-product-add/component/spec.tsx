@@ -217,10 +217,10 @@ class SpecForm extends React.Component<any, any> {
                                         callback(new Error('The specification value cannot be a space character'));
                                         return;
                                       }
-                                      if (overLen) {
+                                      /*if (overLen) {
                                         callback(new Error('Each value supports up to 20 characters'));
                                         return;
-                                      }
+                                      }*/
                                       if (duplicated) {
                                         callback(new Error('Repeated specifications'));
                                         return;

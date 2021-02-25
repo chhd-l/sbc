@@ -454,10 +454,10 @@ export default class AppStore extends Store {
         let goodsSpecs = goodsDetail.get('goodsSpecs').sort((o1, o2) => {
           return o1.get('specId') - o2.get('specId');
         });
-
         const goodsSpecDetails = goodsDetail.get('goodsSpecDetails');
         goodsSpecs = goodsSpecs.map((item) => {
           // 规格值列表，按照id升序排列
+          console.log(goodsSpecDetails,11111111111);
           const specValues = goodsSpecDetails
             .filter((detailItem) => detailItem.get('specId') == item.get('specId'))
             .map((detailItem) => detailItem.set('isMock', false))

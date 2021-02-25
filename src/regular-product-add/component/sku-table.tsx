@@ -99,6 +99,9 @@ class SkuForm extends React.Component<any, any> {
     // }else {
     //   return false
     // }
+    setTimeout(()=>{
+      console.log(goodsList.toJS(),1111111111);
+    })
     return (
       <div style={{ marginBottom: 20 }}>
         {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
@@ -124,12 +127,14 @@ class SkuForm extends React.Component<any, any> {
 
       columns = goodsSpecs
         .map((item, i) => {
+          //debugger
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
-              return rowInfo;
+              console.log(rowInfo,11111111111);
+              return rowInfo
             }
           };
         })

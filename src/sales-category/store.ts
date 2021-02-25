@@ -522,32 +522,24 @@ export default class AppStore extends Store {
   };
 
   getSeo = async (storeCateId, type = 2) => {
-    const updateNumbers = this.state().get('updateNumbers');
     this.setCurrentStoreCateId(storeCateId);
     this.setSeoModalVisible(true);
-    if (updateNumbers && updateNumbers > 0) {
-      this.dispatch('loading:start');
-      const { res } = (await getSeo(storeCateId, type)) as any;
-      if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
-        this.dispatch('loading:end');
-        this.dispatch(
-          'seoActor: setSeoForm',
-          fromJS({
-            titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '',
-            metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '',
-            metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '',
-            headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
-          })
-        );
-        this.dispatch('seoActor: updateNumbers', res.context.seoSettingVO.updateNumbers);
-      } else {
-        this.dispatch('loading:end');
-      }
+    this.dispatch('loading:start');
+    const { res } = (await getSeo(storeCateId, type)) as any;
+    if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      this.dispatch('loading:end');
+      this.dispatch(
+        'seoActor: setSeoForm',
+        fromJS({
+          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : 'Royal Canin | {name}s',
+          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : '',
+          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : '',
+          headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
+        })
+      );
+      this.dispatch('seoActor: updateNumbers', res.context.seoSettingVO.updateNumbers);
     } else {
-      this.updateSeoForm({
-        field: 'titleSource',
-        value: 'Royal Canin | {name}s'
-      });
+      this.dispatch('loading:end');
     }
   };
   editSeo = async (params) => {

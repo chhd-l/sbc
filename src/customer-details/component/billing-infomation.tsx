@@ -85,8 +85,7 @@ class BillingInfomation extends React.Component<any, any> {
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
         }
-      })
-      .catch((err) => {});
+      });
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -118,16 +117,13 @@ class BillingInfomation extends React.Component<any, any> {
       rfc: billingForm.rfc,
       type: billingForm.type
     };
-    webapi
-      .updateAddress(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.getAddressList();
-          message.success('Operate successfully');
-        }
-      })
-      .catch((err) => {});
+    webapi.updateAddress(params).then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.getAddressList();
+        message.success('Operate successfully');
+      }
+    });
   };
 
   getSelectedClinic = (array) => {
@@ -218,16 +214,13 @@ class BillingInfomation extends React.Component<any, any> {
   };
 
   delAddress = () => {
-    webapi
-      .delAddress(this.state.billingForm.deliveryAddressId)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
-          this.getAddressList();
-        }
-      })
-      .catch((err) => {});
+    webapi.delAddress(this.state.billingForm.deliveryAddressId).then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success('Operate successfully');
+        this.getAddressList();
+      }
+    });
   };
   clickDefault = () => {
     let isDefault = !this.state.isDefault;
@@ -349,22 +342,19 @@ class BillingInfomation extends React.Component<any, any> {
     let params = {
       id: [id]
     };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
-            this.setState({
-              initCityName: res.context.systemCityVO[0].cityName
-            });
-            this.props.form.setFieldsValue({
-              cityId: res.context.systemCityVO[0].cityName
-            });
-          }
+    webapi.queryCityById(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
+          this.setState({
+            initCityName: res.context.systemCityVO[0].cityName
+          });
+          this.props.form.setFieldsValue({
+            cityId: res.context.systemCityVO[0].cityName
+          });
         }
-      })
-      .catch((err) => {});
+      }
+    });
   };
 
   render() {

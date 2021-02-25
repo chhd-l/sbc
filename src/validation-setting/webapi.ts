@@ -7,34 +7,34 @@ type TResult = {
 };
 
 export function getAddressSetting(param = {}) {
-  return Fetch<TResult>('/taxApiSetting/queryByStoreId', {
+  return Fetch<TResult>('/addressApiSetting/queryByStoreId', {
     method: 'POST',
     body: JSON.stringify(param)
   });
 }
 
 export function addAddressSetting(param = {}) {
-  return Fetch<TResult>('/taxApiSetting/addAddressApiSetting', {
+  return Fetch<TResult>('/addressApiSetting/addAddressApiSetting', {
     method: 'POST',
     body: JSON.stringify(param)
   });
 }
 
 export function editAddressApiSetting(param = {}) {
-  return Fetch<TResult>('/taxApiSetting/editAddressApiSetting', {
+  return Fetch<TResult>('/addressApiSetting/editAddressApiSetting', {
     method: 'POST',
     body: JSON.stringify(param)
   });
 }
 
 export function deleteAddressApiSetting(param = {}) {
-  return Fetch<TResult>('/taxApiSetting/deleteAddressApiSetting', {
+  return Fetch<TResult>('/addressApiSetting/deleteAddressApiSetting', {
     method: 'POST',
     body: JSON.stringify(param)
   });
 }
 export function changeAddressApiSettingStatus(param = {}) {
-  return Fetch<TResult>('/taxApiSetting/changeAddressApiSettingStatus', {
+  return Fetch<TResult>('/addressApiSetting/changeAddressApiSettingStatus', {
     method: 'POST',
     body: JSON.stringify(param)
   });

@@ -42,6 +42,7 @@ import AssetManagement from './assetManagement';
 import ErrorBoundary from './errorBoundary';
 import ReactEditor from './reactEditor/index'
 import Fetch from './fetch/index'
+import Fonts from './images/iconfont/iconfont.json'
 export {
   noop,
   SelectGroup,
@@ -88,5 +89,6 @@ export {
   DragTable,
   AssetManagement,
   ErrorBoundary,
-  ReactEditor
+  ReactEditor,
+  Fonts
 };

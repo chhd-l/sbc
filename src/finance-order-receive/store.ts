@@ -30,7 +30,7 @@ export default class AppStore extends Store {
 
     this.transaction(() => {
       this.dispatch('loading:end');
-      this.dispatch('list:init', res);
+      this.dispatch('list:init', res.context);
       this.dispatch('current', param && param.pageNum + 1);
       this.dispatch('select:init', []);
     });
@@ -51,7 +51,7 @@ export default class AppStore extends Store {
 
     this.transaction(() => {
       this.dispatch('loading:end');
-      this.dispatch('list:init', res);
+      this.dispatch('list:init', res.context);
       this.dispatch('current', 1);
     });
   };

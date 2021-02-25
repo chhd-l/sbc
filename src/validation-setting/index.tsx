@@ -17,6 +17,7 @@ class ValidationSetting extends Component<any, any> {
       loading: false,
       isFGS: true,
       visibleApiSetting: false,
+      addressApiSettings: [],
       addressSettingForm: {
         validationUrl: '',
         clientId: '',
@@ -31,16 +32,35 @@ class ValidationSetting extends Component<any, any> {
       }
     };
   }
-  componentDidMount() {}
-  init = () => {};
+  componentDidMount() {
+    this.init();
+  }
+  init = () => {
+    this.getAddressSetting();
+  };
 
-  openEditPage = () => {
+  openEditPage = (item) => {
+    let addressSettingForm = {
+      id: item.id,
+      validationUrl: item.validationUrl,
+      clientId: item.clientId,
+      parentKey: item.parentKey,
+      companyCode: item.companyCode,
+      parentPassword: item.parentPassword,
+      userKey: item.userKey,
+      userPassword: item.userPassword,
+      accountNumber: item.accountNumber,
+      meterNumber: item.meterNumber,
+      clientReferenceId: item.clientReferenceId
+    };
     this.setState({
+      addressSettingForm,
       visibleApiSetting: true
     });
   };
 
   handleCancel = () => {
+    this.props.form.setFieldsValue();
     this.setState({
       visibleApiSetting: false
     });
@@ -48,9 +68,7 @@ class ValidationSetting extends Component<any, any> {
   handleSettingSubmit = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.setState({
-          visibleApiSetting: false
-        });
+        this.editTaxApiSetting();
       }
     });
   };
@@ -61,9 +79,95 @@ class ValidationSetting extends Component<any, any> {
       addressSettingForm: data
     });
   };
+  getAddressSetting = () => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getAddressSetting()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          const addressApiSettings = res.context.addressApiSettings;
+
+          let isFGS = false;
+          if (addressApiSettings[0].isOpen) {
+            isFGS = true;
+          }
+
+          this.setState({
+            addressApiSettings,
+            isFGS,
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+  changeSettingStatus = (id) => {
+    let params = {
+      id,
+      isOpen: 1
+    };
+    webapi
+      .changeAddressApiSettingStatus(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getAddressSetting();
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
+  editTaxApiSetting = () => {
+    const { addressSettingForm } = this.state;
+    let params = {
+      id: addressSettingForm.id,
+      validationUrl: addressSettingForm.validationUrl,
+      clientId: addressSettingForm.clientId,
+      parentKey: addressSettingForm.parentKey,
+      companyCode: addressSettingForm.companyCode,
+      parentPassword: addressSettingForm.parentPassword,
+      userKey: addressSettingForm.userKey,
+      userPassword: addressSettingForm.userPassword,
+      accountNumber: addressSettingForm.accountNumber,
+      meterNumber: addressSettingForm.meterNumber,
+      clientReferenceId: addressSettingForm.clientReferenceId
+    };
+    this.setState({
+      loading: true
+    });
+    webapi
+      .editAddressApiSetting(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            visibleApiSetting: false,
+            loading: false
+          });
+          this.props.form.setFieldsValue();
+          message.success(res.message);
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
 
   render() {
-    const { loading, title, isFGS, visibleApiSetting, addressSettingForm } = this.state;
+    const { loading, title, isFGS, visibleApiSetting, addressSettingForm, addressApiSettings } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -85,60 +189,50 @@ class ValidationSetting extends Component<any, any> {
             </BreadCrumb>
             <div className="container">
               <Headline title={title} />
-              <div style={{ marginBottom: 10, display: 'flex' }}>
-                <Card style={{ width: 300, marginRight: 50 }} bodyStyle={{ padding: 10 }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <img src={fedEx} style={{ height: '90px' }} />
-                  </div>
-                  <div className="bar" style={{ float: 'right' }}>
-                    <Popconfirm
-                      title={'Are you sure to ' + (!isFGS ? ' disable' : 'enable') + ' this?'}
-                      onConfirm={() =>
-                        this.setState({
-                          isFGS: !isFGS
-                        })
-                      }
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <Switch checked={!isFGS} size="small" />
-                    </Popconfirm>
-                    {!isFGS ? (
-                      <Tooltip placement="top" title="Edit">
-                        <a
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 10
-                          }}
-                          className="iconfont iconEdit"
-                          onClick={() => this.openEditPage()}
-                        ></a>
-                      </Tooltip>
-                    ) : null}
-                  </div>
-                </Card>
+              <Row style={{ marginBottom: 10 }}>
+                {addressApiSettings &&
+                  addressApiSettings.map((item, index) => (
+                    <Col span={8} key={item.id}>
+                      {+item.isCustom ? (
+                        <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                          <div style={{ textAlign: 'center' }}>
+                            <i className="icon iconfont iconSetting" style={{ color: '#e2001a', fontSize: 60 }}></i>
+                          </div>
+                          <div className="bar" style={{ float: 'right' }}>
+                            <Popconfirm title={'Are you sure to enable this?'} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                              <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
+                            </Popconfirm>
+                          </div>
+                        </Card>
+                      ) : (
+                        <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                          <div style={{ textAlign: 'center' }}>
+                            <img src={item.imgUrl} style={{ width: '200px', height: '90px' }} />
+                          </div>
+                          <div className="bar" style={{ float: 'right' }}>
+                            <Popconfirm title={'Are you sure to enable this?'} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                              <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
+                            </Popconfirm>
+                            {item.isOpen ? (
+                              <Tooltip placement="top" title="Edit">
+                                <a
+                                  style={{
+                                    position: 'absolute',
+                                    top: 10,
+                                    right: 10
+                                  }}
+                                  className="iconfont iconEdit"
+                                  onClick={() => this.openEditPage(item)}
+                                ></a>
+                              </Tooltip>
+                            ) : null}
+                          </div>
+                        </Card>
+                      )}
+                    </Col>
+                  ))}
+              </Row>
 
-                <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <i className="icon iconfont iconSetting" style={{ color: '#e2001a', fontSize: 60 }}></i>
-                  </div>
-                  <div className="bar" style={{ float: 'right' }}>
-                    <Popconfirm
-                      title={'Are you sure to ' + (isFGS ? ' disable' : 'enable') + ' this?'}
-                      onConfirm={() =>
-                        this.setState({
-                          isFGS: !isFGS
-                        })
-                      }
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <Switch checked={isFGS} size="small" />
-                    </Popconfirm>
-                  </div>
-                </Card>
-              </div>
               <Modal
                 width={1200}
                 maskClosable={false}

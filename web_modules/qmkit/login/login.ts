@@ -109,7 +109,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
 
       let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');
       if (element) {
-        sessionStorage.setItem(cache.TAX_SWITCH, element.enterPrice.toString());
+        sessionStorage.setItem(cache.TAX_SWITCH, element.context.toString());
       } else {
         sessionStorage.setItem(cache.TAX_SWITCH, '0');
       }

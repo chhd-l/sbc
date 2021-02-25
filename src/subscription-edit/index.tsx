@@ -594,6 +594,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       totalPrice: this.subTotal(),
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode ? promotionCode : promotionCodeInput,
+      deliveryAddressId: this.state.deliveryAddressId,
       isAutoSub: true
     };
     webapi
@@ -1326,9 +1327,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 value={this.state.deliveryAddressId}
                 onChange={(e) => {
                   let value = e.target.value;
-                  this.setState({
-                    deliveryAddressId: value
-                  });
+                  this.setState(
+                    {
+                      deliveryAddressId: value
+                    },
+                    () => {
+                      this.applyPromotionCode();
+                    }
+                  );
                 }}
               >
                 {this.state.isUnfoldedDelivery

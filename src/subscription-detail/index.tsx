@@ -398,7 +398,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let params = {
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode,
-      isAutoSub: true
+      isAutoSub: true,
+      deliveryAddressId: this.state.deliveryAddressId
     };
     webapi
       .getPromotionPrice(params)

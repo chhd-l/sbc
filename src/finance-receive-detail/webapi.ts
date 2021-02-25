@@ -12,7 +12,7 @@ type TResult = {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function fetchPayOrderList(params = {}) {
-  return Fetch('/account/payOrders', {
+  return Fetch<TResult>('/account/payOrders', {
     method: 'POST',
     body: JSON.stringify({
       payOrderStatus: 0,
@@ -26,7 +26,7 @@ export function fetchPayOrderList(params = {}) {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function offlineAccounts() {
-  return Fetch<TResult>(`/account/offlineAccounts`);
+  return Fetch<TResult>('/account/offlineAccounts');
 }
 
 /**
@@ -34,7 +34,7 @@ export function offlineAccounts() {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function sumPayOrderPrice(params) {
-  return Fetch<TResult>(`/account/sumPayOrderPrice`, {
+  return Fetch<TResult>('/account/sumPayOrderPrice', {
     method: 'POST',
     body: JSON.stringify({
       payOrderStatus: 0,
@@ -44,6 +44,6 @@ export function sumPayOrderPrice(params) {
 }
 
 //获取网关支付渠道列表
-export const getChannelsByGateWaysId = gatewayId => {
+export const getChannelsByGateWaysId = (gatewayId) => {
   return Fetch<TResult>('/tradeManage/items/' + gatewayId);
 };

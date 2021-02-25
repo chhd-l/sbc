@@ -113,7 +113,7 @@ class ReactEditor extends Component<any, any> {
         this.editor.config.uploadImgMaxLength = 1;
         this.editor.config.uploadImgServer = Const.HOST + `/store/uploadStoreResource?cateId=${this.props.cateId}&storeId=${userInfo.storeId}&companyInfoId=${userInfo.companyInfoId}&resourceType=IMAGE`;
         this.editor.config.uploadImgAccept = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-        this.editor.config.uploadImgMaxSize = 2048000;
+        this.editor.config.uploadImgMaxSize = 10*1024*1024;
         this.editor.config.withCredentials = true
         this.editor.config.uploadImgHeaders = {
             Authorization: `Bearer ${userInfo.token}`

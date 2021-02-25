@@ -40,6 +40,7 @@ export default class SeoForm extends Component<any, any> {
       getGoodsId: any;
       updateSeoForm: Function;
       getSeo: Function;
+      updateNumbers: any;
     };
   };
 
@@ -47,14 +48,13 @@ export default class SeoForm extends Component<any, any> {
     updateSeoForm: noop,
     getSeo: noop,
     seoForm: 'seoForm',
-    getGoodsId: 'getGoodsId'
+    getGoodsId: 'getGoodsId',
+    updateNumbers: 'updateNumbers'
   };
   componentDidMount() {
-    const { getSeo, getGoodsId } = this.props.relaxProps;
-    if (getGoodsId) {
+    const { getSeo, getGoodsId, updateNumbers } = this.props.relaxProps;
+    if (getGoodsId && updateNumbers && updateNumbers > 0) {
       getSeo(getGoodsId);
-    } else {
-      getSeo();
     }
   }
 

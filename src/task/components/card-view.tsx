@@ -44,7 +44,7 @@ export default class CardView extends Component<any, any> {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
           });
-          this.getTaskList(this.state.queryType);
+          this.getTaskList('1'); // default my task
         } else {
           message.error(res.message || 'Get data failed');
         }
@@ -78,16 +78,20 @@ export default class CardView extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          let toDoList = res.context.toDoList ? res.context.toDoList : [];
+          let onGoingList = res.context.onGoingList ? res.context.onGoingList : [];
+          let completedList = res.context.completedList ? res.context.completedList : [];
+          let cancelledList = res.context.cancelledList ? res.context.cancelledList : [];
           this.setState({
-            toDoList: res.context.toDoList,
-            onGoingList: res.context.onGoingList,
-            completedList: res.context.completedList,
-            cancelledList: res.context.cancelledList,
+            toDoList: toDoList,
+            onGoingList: onGoingList,
+            completedList: completedList,
+            cancelledList: cancelledList,
             taskCardLength: {
-              toDoLength: res.context.toDoList.length,
-              onGoingLength: res.context.onGoingList.length,
-              completedLength: res.context.completedList.length,
-              cancelledLength: res.context.cancelledList.length
+              toDoLength: toDoList.length,
+              onGoingLength: onGoingList.length,
+              completedLength: completedList.length,
+              cancelledLength: cancelledList
             },
             loading: false
           });

@@ -36,6 +36,10 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
         this.setState({
           showSubMenu: false
         });
+      } else {
+        this.setState({
+          showSubMenu: true
+        });
       }
     }
   }

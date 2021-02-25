@@ -1832,7 +1832,7 @@ export default class AppStore extends Store {
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
-          contentType: 'json',
+          contentType: item.contentType,
           content: ' ',
           sort: item.sort,
           editable: true
@@ -2048,18 +2048,21 @@ export default class AppStore extends Store {
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );
+      this.dispatch('seoActor: updateNumbers', res.context.seoSettingVO.updateNumbers);
     }
   };
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
     this.dispatch('loading:start');
+    const updateNumbers = this.state().get('updateNumbers') + 1;
     const params = {
       type: 1,
       goodsId,
       metaDescriptionSource: seoObj.metaDescriptionSource,
       metaKeywordsSource: seoObj.metaKeywordsSource,
       titleSource: seoObj.titleSource,
-      headingTag: seoObj.headingTag
+      headingTag: seoObj.headingTag,
+      updateNumbers
     };
     // console.log(params, 'params-------------');
     const { res } = (await editSeo(params)) as any;

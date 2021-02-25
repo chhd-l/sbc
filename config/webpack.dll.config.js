@@ -69,11 +69,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
     devtool: isEnvProduction ? 'nosources-source-map' : 'eval-source-map', //prod: cheap-module-source-map
     entry: {
       vendor: [
-        'plume2',
         'react',
-        'immer',
-        'lodash',
-        'reselect',
         'react-dom',
         'react-redux',
         'whatwg-fetch',
@@ -82,6 +78,7 @@ module.exports = function(webpackEnv, envCode = 'prod') {
         'redux',
         'echarts',
         'echarts-for-react',
+        'gg-editor',
       ],
     },
     output: {

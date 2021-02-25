@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
-import { Form, Input, Select, Modal, Button, Radio } from 'antd';
+import { Form, Input, Select, Modal, Button, Radio, message } from 'antd';
 import ModalForm from './conponents/modal-form';
 import { FormattedMessage } from 'react-intl';
 import { querySysDictionary, defaultProductSetting, translateAddBatch, addSysDictionary } from './webapi';
@@ -9,7 +9,7 @@ const { Option } = Select;
 class ProductSearchSetting extends Component<any, any> {
   state = {
     visible: false,
-    disabled: true,
+    disabled: false,
     options: [],
     defaultPurchaseType: '',
     defaultSubscriptionFrequencyId: '',
@@ -19,27 +19,16 @@ class ProductSearchSetting extends Component<any, any> {
     e.preventDefault();
     const { disabled } = this.state;
 
-    if (disabled) {
-      this.setState({
-        disabled: false
-      });
-    } else {
-      this.props.form.validateFieldsAndScroll(async (err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values);
-          await defaultProductSetting(values);
-          this.setState(
-            {
-              disabled: true
-            },
-            () => {
-              let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
-              sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify({ ...obj, ...values }));
-            }
-          );
+    this.props.form.validateFieldsAndScroll(async (err, values) => {
+      if (!err) {
+        const res: any = await defaultProductSetting(values);
+        if (res.res.code === Const.SUCCESS_CODE) {
+          message.success(res.res.message);
+          let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+          sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify({ ...obj, ...values }));
         }
-      });
-    }
+      }
+    });
   };
   componentDidMount() {
     this.querySysDictionary();
@@ -148,8 +137,7 @@ class ProductSearchSetting extends Component<any, any> {
             </Form.Item>
             <div className="bar-button">
               <Button type="primary" htmlType="submit">
-                {/* {<FormattedMessage id= />} */}
-                {disabled ? 'Edit' : 'Save'}
+                Save
               </Button>
             </div>
           </Form>

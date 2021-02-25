@@ -1832,7 +1832,7 @@ export default class AppStore extends Store {
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
-          contentType: 'json',
+          contentType: item.contentType,
           content: ' ',
           sort: item.sort,
           editable: true

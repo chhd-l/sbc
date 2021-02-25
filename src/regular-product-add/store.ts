@@ -362,7 +362,6 @@ export default class AppStore extends Store {
     this.onGoodsTaggingRelList(taggingIds);
 
     goodsDetail = fromJS(tmpContext);
-
     let addSkUProduct =
       tmpContext.goodsInfos &&
       tmpContext.goodsInfos.map((item) => {
@@ -2120,18 +2119,21 @@ export default class AppStore extends Store {
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );
+      this.dispatch('seoActor: updateNumbers', res.context.seoSettingVO.updateNumbers);
     }
   };
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
     this.dispatch('loading:start');
+    const updateNumbers = this.state().get('updateNumbers') + 1;
     const params = {
       type: 1,
       goodsId,
       metaDescriptionSource: seoObj.metaDescriptionSource,
       metaKeywordsSource: seoObj.metaKeywordsSource,
       titleSource: seoObj.titleSource,
-      headingTag: seoObj.headingTag
+      headingTag: seoObj.headingTag,
+      updateNumbers
     };
     const { res } = (await editSeo(params)) as any;
     this.dispatch('loading:end');

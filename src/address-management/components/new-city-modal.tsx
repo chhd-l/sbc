@@ -34,7 +34,6 @@ export default class NewCityModal extends Component<any, any> {
   }
   state = {
     okDisabled: false,
-    confirmLoading: false,
     codeValidateStatus: 'success'
   };
   props: {
@@ -44,6 +43,7 @@ export default class NewCityModal extends Component<any, any> {
       cityModalVisible: boolean;
       cityForm: any;
       stateNameList: any;
+      confirmLoading: boolean;
       setCityModalVisible: Function;
       resetImageForm: Function;
       onCityFormChange: Function;
@@ -59,6 +59,7 @@ export default class NewCityModal extends Component<any, any> {
     cityModalVisible: 'cityModalVisible',
     cityForm: 'cityForm',
     stateNameList: 'stateNameList',
+    confirmLoading: 'confirmLoading',
     setCityModalVisible: noop,
     resetImageForm: noop,
     onCityFormChange: noop,
@@ -111,9 +112,7 @@ export default class NewCityModal extends Component<any, any> {
         const { setCityModalVisible, onResetCityForm, cityForm, stateNameList, addCity, editCity } = this.props.relaxProps;
         const { country, state, city, postCodeArr, id } = cityForm.toJS();
         let arr = [];
-        this.setState({
-          confirmLoading: true
-        });
+
         if (postCodeArr.length > 1) {
           postCodeArr.forEach((item) => {
             if (item.preCode && item.suffCode) {
@@ -150,9 +149,7 @@ export default class NewCityModal extends Component<any, any> {
         } else {
           addCity(params);
         }
-        this.setState({
-          confirmLoading: false
-        });
+
         // setTimeout(() => {
         //   this.setState({
         //     confirmLoading: false
@@ -218,13 +215,12 @@ export default class NewCityModal extends Component<any, any> {
   };
 
   render() {
-    const { confirmLoading, codeValidateStatus } = this.state;
-    const { onCityFormChange, cityForm, cityModalVisible, stateNameList, searchState } = this.props.relaxProps;
+    const { codeValidateStatus } = this.state;
+    const { onCityFormChange, cityForm, cityModalVisible, stateNameList, searchState, confirmLoading } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-    const { country, state, postCodeArr, city } = cityForm.toJS();
-    console.log(postCodeArr, 'postCodeArr------------');
+    const { id, country, state, postCodeArr, city } = cityForm.toJS();
     return (
-      <Modal maskClosable={false} title="Add City" visible={cityModalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
+      <Modal maskClosable={false} title={id ? 'Edit City' : 'Add City'} visible={cityModalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>
           <Form>
             <FormItem {...formItemLayout} label="Country name">

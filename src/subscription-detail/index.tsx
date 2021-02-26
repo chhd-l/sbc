@@ -398,7 +398,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let params = {
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode,
-      isAutoSub: true
+      isAutoSub: true,
+      deliveryAddressId: this.state.deliveryAddressId
     };
     webapi
       .getPromotionPrice(params)
@@ -856,7 +857,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>Shipping</span>
                   <span style={styles.priceStyle}>{currencySymbol + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
-                {+sessionStorage.getItem(cache.TAX_SWITCH) === 0 ? (
+                {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                   <div className="flex-between">
                     <span>Tax</span>
                     <span style={styles.priceStyle}>{currencySymbol + (this.state.taxFeePrice ? this.state.taxFeePrice : 0).toFixed(2)}</span>

@@ -594,6 +594,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       totalPrice: this.subTotal(),
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode ? promotionCode : promotionCodeInput,
+      deliveryAddressId: this.state.deliveryAddressId,
       isAutoSub: true
     };
     webapi
@@ -1206,7 +1207,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>Shipping</span>
                   <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
-                {+sessionStorage.getItem(cache.TAX_SWITCH) === 0 ? (
+                {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                   <div className="flex-between">
                     <span>Tax</span>
                     <span style={styles.priceStyle}>{currencySymbol + (this.state.taxFeePrice ? this.state.taxFeePrice : 0).toFixed(2)}</span>
@@ -1326,9 +1327,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 value={this.state.deliveryAddressId}
                 onChange={(e) => {
                   let value = e.target.value;
-                  this.setState({
-                    deliveryAddressId: value
-                  });
+                  this.setState(
+                    {
+                      deliveryAddressId: value
+                    },
+                    () => {
+                      this.applyPromotionCode();
+                    }
+                  );
                 }}
               >
                 {this.state.isUnfoldedDelivery

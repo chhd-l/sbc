@@ -67,7 +67,7 @@ export default class details extends Component<any, any> {
     }
     const { subscriptionPlan, addField } = this.props;
     subscriptionPlan.mainGoods.map((item) => {
-      if (item.goodsInfoId === goodsInfoId) {
+      if (item.goodsInfoId === goodsInfoId && qty <= item.stock) {
         item.quantity = qty;
       }
       return item;

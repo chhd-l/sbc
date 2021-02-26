@@ -188,7 +188,7 @@ export function delCustomer(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
-  }); 
+  });
 }
 
 export function queryCityById(filterParams = {}) {
@@ -289,3 +289,14 @@ export function queryCityListByName(filterParams = {}) {
 //     data: parameter
 //   })
 // }
+
+//查询州地址
+
+export function queryStateList() {
+  return Fetch<TResult>('systemState/queryByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...{ storeId: 123457910 }
+    })
+  });
+}

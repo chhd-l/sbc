@@ -240,6 +240,7 @@ class StepTaxes extends Component<any, any> {
       addVisible: false,
       settingVisible: false,
       visibleApiSetting: false,
+      countryZoneIncludes: [],
       taxForm
     });
     if (isRefresh) {
@@ -344,10 +345,17 @@ class StepTaxes extends Component<any, any> {
     let data = this.state.taxForm;
 
     if (field === 'taxZoneType') {
+      debugger;
       if (value) {
         data['zoneIncludes'] = this.state.statesZoneIncludes;
+        this.props.form.setFieldsValue({
+          zoneIncludes: this.state.statesZoneIncludes
+        });
       } else {
         data['zoneIncludes'] = this.state.countryZoneIncludes;
+        this.props.form.setFieldsValue({
+          zoneIncludes: this.state.countryZoneIncludes
+        });
       }
     }
     if (field === 'zoneIncludes') {

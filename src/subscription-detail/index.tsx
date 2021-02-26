@@ -151,12 +151,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             },
             () => {
               this.applyPromationCode(this.state.promotionCode);
-              if (subscriptionDetail.consignee && subscriptionDetail.consignee.cityId) {
-                this.getCityNameById([subscriptionDetail.consignee.cityId], 'BILLING');
-              }
-              if (subscriptionDetail.invoice && subscriptionDetail.invoice.cityId) {
-                this.getCityNameById([subscriptionDetail.invoice.cityId], 'DELIVERY');
-              }
             }
           );
         }
@@ -419,33 +413,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
   handleYearChange = (value) => {};
   tabChange = (key) => {};
-  getCityNameById = (ids, type) => {
-    let params = {
-      id: ids
-    };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (type === 'BILLING') {
-            if (res.context.systemCityVO[0].cityName) {
-              this.setState({
-                billingCityName: res.context.systemCityVO[0].cityName
-              });
-            }
-          }
-          if (type === 'DELIVERY') {
-            if (res.context.systemCityVO[0].cityName) {
-              this.setState({
-                deliveryCityName: res.context.systemCityVO[0].cityName
-              });
-            }
-          }
-        }
-      })
-      .catch((err) => {});
-  };
+
   getCurrencySymbol = () => {
     let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
     this.setState({
@@ -884,8 +852,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{deliveryAddressInfo ? deliveryCityName + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId) : ''}</p>
+                    <p style={{ width: 140 }}>City: </p>
+                    <p>{deliveryAddressInfo.city}</p>
+                  </Col>
+                  {deliveryAddressInfo.province ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>State: </p>
+                      <p>{deliveryAddressInfo.province}</p>
+                    </Col>
+                  ) : null}
+
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Country: </p>
+                    <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
@@ -908,9 +887,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{billingAddressInfo ? billingCityName + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
+                    <p style={{ width: 140 }}>City: </p>
+                    <p>{billingAddressInfo.city}</p>
                   </Col>
+                  {billingAddressInfo.province ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>State: </p>
+                      <p>{billingAddressInfo.province}</p>
+                    </Col>
+                  ) : null}
+
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Country: </p>
+                    <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                  </Col>
+
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
                     <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>

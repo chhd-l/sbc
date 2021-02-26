@@ -5,7 +5,7 @@ import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-import { Const } from 'qmkit';
+
 const { SubMenu } = Menu;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -110,24 +110,31 @@ class PetInfomation extends React.Component<any, any> {
       storeId: 123456858,
       type: type
     };
-    webapi.querySysDictionary(params).then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        if (type === 'dogBreed') {
-          let dogBreed = res.context.sysDictionaryVOS;
-          this.setState({
-            dogBreed: dogBreed
-          });
-        }
+    webapi
+      .querySysDictionary(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          if (type === 'dogBreed') {
+            let dogBreed = res.context.sysDictionaryVOS;
+            this.setState({
+              dogBreed: dogBreed
+            });
+          }
 
-        if (type === 'catBreed') {
-          let catBreed = res.context.sysDictionaryVOS;
-          this.setState({
-            catBreed: catBreed
-          });
+          if (type === 'catBreed') {
+            let catBreed = res.context.sysDictionaryVOS;
+            this.setState({
+              catBreed: catBreed
+            });
+          }
+        } else {
+          message.error(res.message || 'Unsuccessful');
         }
-      }
-    });
+      })
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
   };
   getSpecialNeeds = (array) => {
     let needs = [];
@@ -147,7 +154,7 @@ class PetInfomation extends React.Component<any, any> {
       .petsByConsumer(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
@@ -189,12 +196,14 @@ class PetInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
+        message.error(err.message || 'Unsuccessful');
       });
   };
   editPets = () => {
@@ -257,39 +266,46 @@ class PetInfomation extends React.Component<any, any> {
     let params = {
       petsId: id
     };
-    webapi.petsById(params).then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        let currentPet = res.context.context;
-        currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
-        if (currentPet.petsType === 'dog') {
-          this.props.form.setFieldsValue({
-            petsType: currentPet.petsType,
-            petsName: currentPet.petsName,
-            petsSex: currentPet.petsSex,
-            petsBreed: currentPet.petsBreed,
-            sterilized: currentPet.sterilized,
-            petsSizeValueName: currentPet.petsSizeValueName,
-            customerPetsPropRelations: currentPet.customerPetsPropRelations
+    webapi
+      .petsById(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          let currentPet = res.context.context;
+          currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
+          if (currentPet.petsType === 'dog') {
+            this.props.form.setFieldsValue({
+              petsType: currentPet.petsType,
+              petsName: currentPet.petsName,
+              petsSex: currentPet.petsSex,
+              petsBreed: currentPet.petsBreed,
+              sterilized: currentPet.sterilized,
+              petsSizeValueName: currentPet.petsSizeValueName,
+              customerPetsPropRelations: currentPet.customerPetsPropRelations
+            });
+          } else {
+            this.props.form.setFieldsValue({
+              petsType: currentPet.petsType,
+              petsName: currentPet.petsName,
+              petsSex: currentPet.petsSex,
+              petsBreed: currentPet.petsBreed,
+
+              sterilized: currentPet.sterilized,
+              customerPetsPropRelations: currentPet.customerPetsPropRelations
+            });
+          }
+
+          this.setState({
+            petForm: currentPet,
+            currentBirthDay: currentPet.birthOfPets
           });
         } else {
-          this.props.form.setFieldsValue({
-            petsType: currentPet.petsType,
-            petsName: currentPet.petsName,
-            petsSex: currentPet.petsSex,
-            petsBreed: currentPet.petsBreed,
-
-            sterilized: currentPet.sterilized,
-            customerPetsPropRelations: currentPet.customerPetsPropRelations
-          });
+          message.error(res.message || 'Unsuccessful');
         }
-
-        this.setState({
-          petForm: currentPet,
-          currentBirthDay: currentPet.birthOfPets
-        });
-      }
-    });
+      })
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
   };
 
   delPets = (id) => {
@@ -303,22 +319,24 @@ class PetInfomation extends React.Component<any, any> {
       .delPets(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           message.success('Operate successfully');
           this.petsByConsumer();
         } else {
           this.setState({
             loading: false
           });
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
+        message.error(err.message || 'Unsuccessful');
       });
     // const res = await delPets(params)
-    // if (res.code === Const.SUCCESS_CODE) {
+    // if (res.code === 'K-000000') {
     //   this.getPetList()
     // }
   };

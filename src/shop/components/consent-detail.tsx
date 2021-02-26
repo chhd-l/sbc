@@ -362,7 +362,7 @@ export default class StepConsentDetail extends Component<any, any> {
                       count={1000}
                       id={'name-wrapper'}
                       toolbars={[
-                        'fontName', // 字体
+                        // 'fontName', // 字体
                         'foreColor', // 文字颜色
                         'link' // 插入链接
                       ]}
@@ -431,7 +431,7 @@ export default class StepConsentDetail extends Component<any, any> {
                               this.handleContent(item, i);
                             }}
                             toolbars={[
-                              'fontName', // 字体
+                              // 'fontName', // 字体
                               'foreColor', // 文字颜色
                               'link' // 插入链接
                             ]}

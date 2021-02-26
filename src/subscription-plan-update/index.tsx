@@ -94,7 +94,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         .then((data) => {
           const { res } = data;
           if (res.code === 'K-000000') {
-            if (res.context.status === 1) {
+            if (this.props.editable && res.context.status === 1) {
               history.push('/subscription-plan');
             }
             this.setState({

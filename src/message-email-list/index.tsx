@@ -52,7 +52,16 @@ export default class ClinicList extends Component<any, any> {
     });
   };
   onSearch = () => {
-    this.getEmailTaskList();
+    const { pagination } = this.state;
+    this.setState(
+      {
+        pagination: {
+          ...pagination,
+          current: 1
+        }
+      },
+      () => this.getEmailTaskList()
+    );
   };
   getEmailTaskList = () => {
     const { searchForm, pagination } = this.state;
@@ -125,7 +134,7 @@ export default class ClinicList extends Component<any, any> {
       {
         pagination: pagination
       },
-      () => this.onSearch()
+      () => this.getEmailTaskList()
     );
   };
   overview = () => {

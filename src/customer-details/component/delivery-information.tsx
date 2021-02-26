@@ -83,8 +83,7 @@ class DeliveryInfomation extends React.Component<any, any> {
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
         }
-      })
-      .catch((err) => {});
+      });
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -117,16 +116,13 @@ class DeliveryInfomation extends React.Component<any, any> {
       type: deliveryForm.type,
       clinicsVOS: clinicsVOS
     };
-    webapi
-      .updateAddress(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.getAddressList();
-          message.success('Operate successfully');
-        }
-      })
-      .catch((err) => {});
+    webapi.updateAddress(params).then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.getAddressList();
+        message.success('Operate successfully');
+      }
+    });
   };
   getSelectedClinic = (array) => {
     let clinics = [];
@@ -216,16 +212,13 @@ class DeliveryInfomation extends React.Component<any, any> {
   };
 
   delAddress = () => {
-    webapi
-      .delAddress(this.state.deliveryForm.deliveryAddressId)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
-          this.getAddressList();
-        }
-      })
-      .catch((err) => {});
+    webapi.delAddress(this.state.deliveryForm.deliveryAddressId).then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success('Operate successfully');
+        this.getAddressList();
+      }
+    });
   };
   clickDefault = () => {
     let isDefault = !this.state.isDefault;
@@ -322,39 +315,33 @@ class DeliveryInfomation extends React.Component<any, any> {
       pageSize: 30,
       pageNum: 0
     };
-    webapi
-      .queryCityListByName(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            cityArr: res.context.systemCityVO,
-            objectFetching: false
-          });
-        }
-      })
-      .catch((err) => {});
+    webapi.queryCityListByName(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          cityArr: res.context.systemCityVO,
+          objectFetching: false
+        });
+      }
+    });
   };
   getCityNameById = (id) => {
     let params = {
       id: [id]
     };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
-            this.setState({
-              initCityName: res.context.systemCityVO[0].cityName
-            });
-            this.props.form.setFieldsValue({
-              cityId: res.context.systemCityVO[0].cityName
-            });
-          }
+    webapi.queryCityById(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
+          this.setState({
+            initCityName: res.context.systemCityVO[0].cityName
+          });
+          this.props.form.setFieldsValue({
+            cityId: res.context.systemCityVO[0].cityName
+          });
         }
-      })
-      .catch((err) => {});
+      }
+    });
   };
 
   render() {

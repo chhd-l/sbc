@@ -598,7 +598,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </strong>
               </label>
 
-              {+sessionStorage.getItem(cache.TAX_SWITCH) === 0 ? (
+              {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="tax" />}: </span>
                   <strong>

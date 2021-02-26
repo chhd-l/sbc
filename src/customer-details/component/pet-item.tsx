@@ -137,6 +137,236 @@ class PetItem extends React.Component<Iprop, any> {
               </Row>
             </Col>
           </Row>
+          <Row gutter={16}>
+            <Col span={8}>
+              <Form.Item label="Pet activity level">
+                <Select value="low" disabled>
+                  <Option key="low" value="low">
+                    low
+                  </Option>
+                  <Option key="medium" value="medium">
+                    medium
+                  </Option>
+                  <Option key="high" value="high">
+                    high
+                  </Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Breeder ID">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Pet owner ID">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Vet ID">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Death reason">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Weight">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Reproduction status">
+                <Radio.Group value={0} disabled>
+                  <Radio value={1}>true</Radio>
+                  <Radio value={0}>false</Radio>
+                </Radio.Group>
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="ICD">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Pet certificate ID ">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Certificate information">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Coat color">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Complementary information">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Death date">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Description">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Distinctives signs">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Hair color">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Reproducer">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Reason">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Lifestyle">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Microship ID">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Genetic code">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Pathologies">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Pedigree name ">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Species">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Sterilisation status">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Status">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Tags">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Tatoo ID">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Treatments">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Vaccinations">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Breeder prescription">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Ideal body weight">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Target weight">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Weight">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Last pet status">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Current risk">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Last weight">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Birth weight">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="After 48h weight">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Lof number">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Mother lof number">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Father lof number">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Size">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+          </Row>
           <Row gutter={30} type="flex" align="middle" style={{ padding: '30px 0' }}>
             <Col span={16}>
               <Button type="primary">Save</Button>

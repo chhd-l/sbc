@@ -67,16 +67,13 @@ class PaymentInformation extends React.Component<any, any> {
   }
 
   delCard = (id) => {
-    webapi
-      .deleteCard({ id })
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
-          this.getList();
-        }
-      })
-      .catch((err) => {});
+    webapi.deleteCard({ id }).then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success('Operate successfully');
+        this.getList();
+      }
+    });
   };
   clickDefault = () => {
     let isDefault = !this.state.isDefault;

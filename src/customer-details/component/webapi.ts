@@ -1,6 +1,5 @@
 import { Fetch } from 'qmkit';
 import { querySysDictionary } from '../webapi';
-import { message } from 'antd';
 import { Const } from 'qmkit';
 
 type TResult = {
@@ -21,12 +20,10 @@ export async function getCountryList() {
           sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           return res.context.sysDictionaryVOS;
         } else {
-          message.error(res.message || 'Get countries failed');
           return [];
         }
       })
       .catch((err) => {
-        message.error(err || 'Get countries failed');
         return [];
       });
   }

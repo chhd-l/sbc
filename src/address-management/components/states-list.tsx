@@ -116,6 +116,7 @@ export default class StatesList extends Component<any, any> {
   render() {
     const { loading, statesList, statePagination } = this.props.relaxProps;
     const pagination = statePagination.toJS();
+    console.log(statesList, 'statesList--------');
     return (
       <div>
         <div>
@@ -123,48 +124,47 @@ export default class StatesList extends Component<any, any> {
             Add State
           </Button>
         </div>
-        {statesList ? (
-          <div>
-            <div className="ant-table-wrapper">
-              <div className="ant-table ant-table-large ant-table-scroll-position-left">
-                <div className="ant-table-content">
-                  <div className="ant-table-body">
-                    <table
-                      style={{
-                        borderCollapse: 'separate',
-                        borderSpacing: '0 1em'
-                      }}
-                    >
-                      <thead className="ant-table-thead">
-                        <tr>
-                          <th style={{ width: '10%' }}>Country</th>
-                          <th style={{ width: '10%' }}>State</th>
-                          <th style={{ width: '10%' }}>Post code</th>
-                          <th style={{ width: '10%' }}>Operation</th>
-                        </tr>
-                      </thead>
-                      <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(statesList)}</tbody>
-                    </table>
-                  </div>
+        {/*{statesList && statesList.size > 0? (*/}
+        <div>
+          <div className="ant-table-wrapper">
+            <div className="ant-table ant-table-large ant-table-scroll-position-left">
+              <div className="ant-table-content">
+                <div className="ant-table-body">
+                  <table
+                    style={{
+                      borderCollapse: 'separate',
+                      borderSpacing: '0 1em'
+                    }}
+                  >
+                    <thead className="ant-table-thead">
+                      <tr>
+                        <th style={{ width: '10%' }}>Country</th>
+                        <th style={{ width: '10%' }}>State</th>
+                        <th style={{ width: '10%' }}>Post code</th>
+                        <th style={{ width: '10%' }}>Operation</th>
+                      </tr>
+                    </thead>
+                    <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(statesList)}</tbody>
+                  </table>
                 </div>
               </div>
-              {pagination.total > 0 ? (
-                <Pagination
-                  current={pagination.current}
-                  total={pagination.total}
-                  pageSize={pagination.pageSize}
-                  onChange={(pageNum, pageSize) => {
-                    this.getStatesList(pageNum, pageSize);
-                  }}
-                />
-              ) : null}
             </div>
+            {pagination.total > 0 ? (
+              <Pagination
+                current={pagination.current}
+                total={pagination.total}
+                pageSize={pagination.pageSize}
+                onChange={(pageNum, pageSize) => {
+                  this.getStatesList(pageNum, pageSize);
+                }}
+              />
+            ) : !loading ? (
+              <div className="ant-table-placeholder">
+                <img src={nodataImg} width="80" className="no-data-img" />
+              </div>
+            ) : null}
           </div>
-        ) : !loading ? (
-          <div className="ant-table-placeholder">
-            <img src={nodataImg} width="80" className="no-data-img" />
-          </div>
-        ) : null}
+        </div>
       </div>
     );
   }

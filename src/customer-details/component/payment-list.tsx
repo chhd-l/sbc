@@ -1,9 +1,12 @@
 import React from 'react';
 import { Table, Popconfirm } from 'antd';
+import { getPaymentMethods } from '../webapi';
+import { cache } from 'qmkit';
 
 interface Iprop {
   startDate: string;
   endDate: string;
+  customerId: string;
 }
 
 export default class PaymentList extends React.Component<Iprop, any> {
@@ -36,6 +39,29 @@ export default class PaymentList extends React.Component<Iprop, any> {
       }
     };
   }
+
+  componentDidMount() {
+    this.getCardList();
+  }
+
+  getCardList = () => {
+    this.setState({ loading: true });
+    getPaymentMethods({
+      customerId: this.props.customerId,
+      storeId: JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).storeId || ''
+    })
+      .then((data) => {
+        this.setState({
+          loading: false,
+          list: data.res.context.sort((a, b) => b.isDefault - a.isDefault)
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
 
   render() {
     const { list, pagination } = this.state;

@@ -20,7 +20,7 @@ export function queryClinicsDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function getBasicDetails(id = null) {
-  return Fetch<TResult>('/customer/detail/' + id, {
+  return Fetch<TResult>('/customer/detail2/' + id, {
     method: 'Get'
   });
 }
@@ -188,7 +188,7 @@ export function delCustomer(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
-  }); 
+  });
 }
 
 export function queryCityById(filterParams = {}) {

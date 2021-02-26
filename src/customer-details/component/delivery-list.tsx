@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Popconfirm } from 'antd';
 import { getAddressListByType } from '../webapi';
+import { getCityList, getCountryList } from './webapi';
 
 interface Iprop {
   startDate: string;
@@ -13,24 +14,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     super(props);
     this.state = {
       loading: false,
-      list: [
-        {
-          id: 5678,
-          name: 'test',
-          phone: '4321432',
-          postcode: '32143',
-          address: 'test',
-          reference: ''
-        },
-        {
-          id: 5678,
-          name: 'test',
-          phone: '4321432',
-          postcode: '32143',
-          address: 'test',
-          reference: ''
-        }
-      ],
+      list: [],
       pagination: {
         current: 1,
         pageSize: 10,
@@ -62,16 +46,16 @@ export default class DeliveryList extends React.Component<Iprop, any> {
   };
 
   render() {
-    const { loading, list, pagination } = this.state;
+    const { loading, list } = this.state;
     const columns = [
       {
         title: 'Receiver name',
-        dataIndex: 'name',
+        dataIndex: 'consigneeName',
         key: 'name'
       },
       {
         title: 'Phone number',
-        dataIndex: 'phone',
+        dataIndex: 'consigneeNumber',
         key: 'phone'
       },
       {
@@ -81,12 +65,12 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       },
       {
         title: 'Address',
-        dataIndex: 'address',
+        dataIndex: 'address1',
         key: 'address'
       },
       {
         title: 'Reference',
-        dataIndex: 'reference',
+        dataIndex: 'rfc',
         key: 'reference'
       },
       {
@@ -105,7 +89,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <Table rowKey="id" loading={loading} columns={columns} dataSource={list} pagination={pagination} />
+        <Table rowKey="id" loading={loading} columns={columns} dataSource={list} pagination={false} />
       </div>
     );
   }

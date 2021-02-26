@@ -343,7 +343,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
                   </TabPane>
                   <TabPane tab="Payment methods" key="payment">
-                    <PaymentList startDate={startDate} endDate={endDate} />
+                    <PaymentList startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
                   </TabPane>
                   {/* <TabPane tab="Basic infomation" key="basic">
                     <BasicInfomation customerId={this.state.customerId}></BasicInfomation>

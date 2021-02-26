@@ -28,3 +28,24 @@ export async function getCountryList() {
       });
   }
 }
+
+export async function getCityList() {
+  let countryList = JSON.parse(sessionStorage.getItem('dict-city'));
+  if (countryList) {
+    return countryList;
+  } else {
+    return await querySysDictionary({ type: 'city' })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          sessionStorage.setItem('dict-city', JSON.stringify(res.context.sysDictionaryVOS));
+          return res.context.sysDictionaryVOS;
+        } else {
+          return [];
+        }
+      })
+      .catch((err) => {
+        return [];
+      });
+  }
+}

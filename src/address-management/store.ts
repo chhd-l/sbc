@@ -76,7 +76,6 @@ export default class AppStore extends Store {
     // );
     const { res } = await webapi.getStateList(params);
     if (res.code === Const.SUCCESS_CODE) {
-      this.dispatch('loading:end');
       if (res.context && res.context.systemStates) {
         const list = [...res.context.systemStates.content];
         list.forEach((item) => {
@@ -100,6 +99,7 @@ export default class AppStore extends Store {
             total: res.context.systemStates.total
           })
         );
+        this.dispatch('loading:end');
       }
     } else {
       this.dispatch('loading:end');
@@ -166,6 +166,7 @@ export default class AppStore extends Store {
   };
 
   addState = async (params) => {
+    this.dispatch('confirmLoading:start');
     const { res } = await webapi.addState(params);
     if (res.code === Const.SUCCESS_CODE) {
       this.setStateModalVisible(false);
@@ -173,11 +174,14 @@ export default class AppStore extends Store {
         pageNum: this.state().get('statePagination').toJS().current - 1,
         pageSize: this.state().get('statePagination').toJS().pageSize
       });
+      this.dispatch('confirmLoading:end');
     } else {
+      this.dispatch('confirmLoading:end');
       message.error(res.message);
     }
   };
   editState = async (params) => {
+    this.dispatch('confirmLoading:start');
     const { res } = await webapi.editState(params);
     if (res.code === Const.SUCCESS_CODE) {
       this.setStateModalVisible(false);
@@ -185,8 +189,10 @@ export default class AppStore extends Store {
         pageNum: this.state().get('statePagination').toJS().current - 1,
         pageSize: this.state().get('statePagination').toJS().pageSize
       });
+      this.dispatch('confirmLoading:end');
     } else {
       message.error(res.message);
+      this.dispatch('confirmLoading:end');
     }
   };
   deleteState = async (params) => {
@@ -212,6 +218,7 @@ export default class AppStore extends Store {
     }
   };
   addCity = async (params) => {
+    this.dispatch('confirmLoading:start');
     const { res } = await webapi.addCity(params);
     if (res.code === Const.SUCCESS_CODE) {
       this.setCityModalVisible(false);
@@ -219,12 +226,15 @@ export default class AppStore extends Store {
         pageNum: this.state().get('cityPagination').toJS().current - 1,
         pageSize: this.state().get('cityPagination').toJS().pageSize
       });
+      this.dispatch('confirmLoading:end');
     } else {
       message.error(res.message);
+      this.dispatch('confirmLoading:end');
     }
   };
 
   editCity = async (params) => {
+    this.dispatch('confirmLoading:start');
     const { res } = await webapi.editCity(params);
     if (res.code === Const.SUCCESS_CODE) {
       this.setCityModalVisible(false);
@@ -232,8 +242,10 @@ export default class AppStore extends Store {
         pageNum: this.state().get('statePagination').toJS().current - 1,
         pageSize: this.state().get('statePagination').toJS().pageSize
       });
+      this.dispatch('confirmLoading:end');
     } else {
       message.error(res.message);
+      this.dispatch('confirmLoading:end');
     }
   };
   newStateForm = () => {
@@ -282,6 +294,10 @@ export default class AppStore extends Store {
       this.dispatch('StateFormActor:stateForm', newForm);
     } else {
       this.onStateFormChange({
+        field: 'id',
+        value: form.id
+      });
+      this.onStateFormChange({
         field: 'country',
         value: form.country
       });
@@ -317,6 +333,10 @@ export default class AppStore extends Store {
       };
       this.dispatch('CityFormActor:cityForm', newForm);
     } else {
+      this.onCityFormChange({
+        field: 'id',
+        value: form.id
+      });
       this.onCityFormChange({
         field: 'country',
         value: form.country

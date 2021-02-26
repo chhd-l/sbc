@@ -5,7 +5,7 @@ export default class SeoActor extends Actor {
   defaultState() {
     return {
       seoForm: {
-        titleSource: 'Royal Canin | {name}s', //{name}
+        titleSource: '', //{name}
         metaKeywordsSource: '', //{name}
         metaDescriptionSource: '', //{description}
         headingTag: ''

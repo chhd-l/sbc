@@ -41,7 +41,6 @@ export default class NewStateModal extends Component<any, any> {
   }
   state = {
     okDisabled: false,
-    confirmLoading: false,
     codeValidateStatus: 'success'
   };
   props: {
@@ -50,6 +49,7 @@ export default class NewStateModal extends Component<any, any> {
       isEdit: boolean;
       modalVisible: boolean;
       stateForm: any;
+      confirmLoading: boolean;
       setStateModalVisible: Function;
       resetImageForm: Function;
       onStateFormChange: Function;
@@ -63,6 +63,7 @@ export default class NewStateModal extends Component<any, any> {
     isEdit: 'isEdit',
     modalVisible: 'modalVisible',
     stateForm: 'stateForm',
+    confirmLoading: 'confirmLoading',
     setStateModalVisible: noop,
     resetImageForm: noop,
     onStateFormChange: noop,
@@ -113,9 +114,6 @@ export default class NewStateModal extends Component<any, any> {
         return;
       }
       if (!err) {
-        this.setState({
-          confirmLoading: true
-        });
         const { setStateModalVisible, onResetStateForm, stateForm } = this.props.relaxProps;
         const { id, country, state, postCodeArr } = stateForm.toJS();
         let arr = [];
@@ -148,9 +146,6 @@ export default class NewStateModal extends Component<any, any> {
         } else {
           addState(params);
         }
-        this.setState({
-          confirmLoading: false
-        });
         // setTimeout(() => {
         //   this.setState({
         //     confirmLoading: false
@@ -216,13 +211,12 @@ export default class NewStateModal extends Component<any, any> {
     onResetStateForm();
   };
   render() {
-    const { confirmLoading, codeValidateStatus } = this.state;
-    const { modalVisible, onStateFormChange, stateForm } = this.props.relaxProps;
+    const { codeValidateStatus } = this.state;
+    const { modalVisible, onStateFormChange, stateForm, confirmLoading } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-    const { country, state, postCodeArr } = stateForm.toJS();
-    console.log(postCodeArr, 'postCodeArr------------');
+    const { id, country, state, postCodeArr } = stateForm.toJS();
     return (
-      <Modal maskClosable={false} title="Add state" visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
+      <Modal maskClosable={false} title={id ? 'Edit State' : 'Add State'} visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>
           <Form>
             <FormItem {...formItemLayout} label="Country name">

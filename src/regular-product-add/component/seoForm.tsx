@@ -53,7 +53,7 @@ export default class SeoForm extends Component<any, any> {
   };
   componentDidMount() {
     const { getSeo, getGoodsId, updateNumbers } = this.props.relaxProps;
-    if (getGoodsId && updateNumbers && updateNumbers > 0) {
+    if (getGoodsId) {
       getSeo(getGoodsId);
     }
   }

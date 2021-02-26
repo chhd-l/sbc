@@ -109,7 +109,8 @@ export default class addTargetProduct extends Component<any, any> {
     let params = Object.assign(serchForm, {
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize,
-      selectedGoodIds: exsit && exsit.length ? exsit.map((item) => item.goodsInfoId) : []
+      selectedGoodIds: exsit && exsit.length ? exsit.map((item) => item.goodsInfoId) : [],
+      filterStock: true
     });
     this.setState({
       loading: true

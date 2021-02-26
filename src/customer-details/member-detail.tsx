@@ -33,27 +33,15 @@ export default class CustomerDetails extends React.Component<any, any> {
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
       customerAccount: this.props.match.params.account ? this.props.match.params.account : '',
       loading: false,
-      basic: {
-        customerName: '',
-        email: '',
-        age: '',
-        createTime: '',
-        contactPhone: '',
-        preferredMethods: '',
-        country: '',
-        address: '',
-        consent: ''
-      },
+      basic: {},
       pets: [],
       startDate: moment().format('YYYY-MM-DD'),
       endDate: moment().format('YYYY-MM-DD')
     };
   }
   componentDidMount() {
-    if (this.state.customerType !== 'Guest') {
-      this.getBasicInformation();
-      this.getPetsList();
-    }
+    this.getBasicInformation();
+    this.getPetsList();
   }
 
   getBasicInformation = () => {
@@ -61,17 +49,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          basic: {
-            customerName: res.context.customerName || '',
-            email: res.context.email || '',
-            age: res.context.birthDay ? moment(res.context.birthDay).fromNow() : '',
-            createTime: res.context.createTime ? moment(res.context.createTime).format('YYYY-MM-DD') : '',
-            contactPhone: res.context.contactPhone || '',
-            preferredMethods: '',
-            country: res.context.country,
-            address: res.context.address1,
-            consent: ''
-          }
+          basic: res.context
         });
       }
     });
@@ -141,6 +119,17 @@ export default class CustomerDetails extends React.Component<any, any> {
     });
   };
 
+  handleEditBasic = () => {
+    this.getBasicInformation();
+    this.changeDisplayPage('detail');
+  };
+
+  changeDisplayPage = (page: string) => {
+    this.setState({
+      displayPage: page
+    });
+  };
+
   render() {
     const { displayPage, basic, pets, startDate, endDate } = this.state;
     return (
@@ -173,9 +162,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                     <Icon type="calendar" /> Age
                   </Col>
                   <Col span={16} className="text-align-right" style={{ padding: '0 35px' }}>
-                    <Link to={`/edit-customer-basicinfo/${this.state.customerId}`}>
+                    <Button type="link" onClick={() => this.changeDisplayPage('editbasic')}>
                       <i className="iconfont iconEdit"></i> Edit
-                    </Link>
+                    </Button>
                   </Col>
                 </Row>
                 <Row className="text-highlight" style={{ marginTop: 5 }}>
@@ -327,7 +316,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             <Breadcrumb.Item>Edit basic information</Breadcrumb.Item>
           </BreadCrumb>
           <div className="container-search">
-            <BasicEdit customer={basic} />
+            <BasicEdit customer={basic} onChangePage={this.changeDisplayPage} onEdit={this.handleEditBasic} />
           </div>
         </div>
       </>

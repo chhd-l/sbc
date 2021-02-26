@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin, Checkbox } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin, Checkbox, AutoComplete } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import { Const, Headline } from 'qmkit';
 import _ from 'lodash';
+import { getCountryList, getCityList } from './webapi';
 
 const { TextArea } = Input;
 
@@ -25,30 +26,8 @@ class BasicEdit extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      basicForm: {
-        customerAccount: '',
-        createTime: '',
-        firstName: '',
-        lastName: '',
-        birthDay: '',
-        email: '',
-        contactPhone: '',
-        postalCode: '',
-        cityId: '',
-        countryId: '',
-        address1: '',
-        address2: '',
-        preferredMethods: '',
-        reference: '',
-        selectedClinics: [],
-        defaultClinicsId: '',
-        defaultClinics: {
-          clinicsId: 0,
-          clinicsName: ''
-        }
-      },
-      countryArr: [],
-      cityArr: [],
+      countryList: [],
+      cityList: [],
       currentBirthDay: '2020-01-01',
       clinicList: [],
       currentForm: {},
@@ -60,45 +39,16 @@ class BasicEdit extends React.Component<any, any> {
   }
   componentDidMount() {
     this.getDict();
-    this.getBasicDetails();
     this.getClinicList();
   }
 
-  getDict = () => {
-    if (JSON.parse(sessionStorage.getItem('dict-country'))) {
-      let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
-      this.setState({
-        countryArr: countryArr
-      });
-    } else {
-      this.querySysDictionary('country');
-    }
-  };
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({
-        type: type
-      })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          // if (type === 'city') {
-          //   this.setState({
-          //     cityArr: res.context.sysDictionaryVOS
-          //   });
-          //   sessionStorage.setItem(
-          //     'dict-city',
-          //     JSON.stringify(res.context.sysDictionaryVOS)
-          //   );
-          // }
-          if (type === 'country') {
-            this.setState({
-              countryArr: res.context.sysDictionaryVOS
-            });
-            sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
-          }
-        }
-      });
+  getDict = async () => {
+    const countryList = await getCountryList();
+    const cityList = await getCityList();
+    this.setState({
+      countryList: countryList,
+      cityList: cityList
+    });
   };
 
   getSelectedClinic = (array) => {
@@ -204,9 +154,23 @@ class BasicEdit extends React.Component<any, any> {
   };
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err) => {
+    const { customer, onEdit } = this.props;
+    this.props.form.validateFields((err, fieldsValue) => {
       if (!err) {
-        this.saveBasicInfomation();
+        //this.saveBasicInfomation();
+        const params = {
+          ...fieldsValue,
+          customerDetailId: customer.customerDetailId,
+          communicationEmail: fieldsValue['preferredMethods'].indexOf('communicationEmail') > -1 ? 1 : 0,
+          communicationPhone: fieldsValue['preferredMethods'].indexOf('communicationPhone') > -1 ? 1 : 0
+        };
+        webapi.basicDetailsUpdate(params).then((data) => {
+          const res = data.res;
+          if (res.code === Const.SUCCESS_CODE) {
+            message.success('Operate successfully');
+            onEdit();
+          }
+        });
       }
     });
   };
@@ -329,15 +293,16 @@ class BasicEdit extends React.Component<any, any> {
   };
 
   render() {
-    const { countryArr, cityArr, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
+    const { countryList, cityList, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
+    const { customer, onChangePage } = this.props;
     const options = [
       {
         label: 'Phone',
-        value: 'Phone'
+        value: 'communicationPhone'
       },
       {
         label: 'Email',
-        value: 'Email'
+        value: 'communicationEmail'
       }
     ];
     const formItemLayout = {
@@ -358,24 +323,25 @@ class BasicEdit extends React.Component<any, any> {
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
             <Row gutter={16}>
               <Col span={12}>
-                <FormItem label="Consumer account">
+                <FormItem label="Pet owner account">
                   {getFieldDecorator('customerAccount', {
-                    initialValue: this.state.basicForm.customerAccount
+                    initialValue: customer.customerAccount
                   })(<Input disabled={true} />)}
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem label="Registration date">
                   {getFieldDecorator('createTime', {
-                    initialValue: moment(this.state.basicForm.createTime)
+                    initialValue: moment(customer.createTime)
                   })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" disabled={true} />)}
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <FormItem label="First Name">
+                <FormItem label="First name">
                   {getFieldDecorator('firstName', {
+                    initialValue: customer.firstName,
                     rules: [
                       { required: true, message: 'Please input First Name!' },
                       {
@@ -383,23 +349,13 @@ class BasicEdit extends React.Component<any, any> {
                         message: 'Exceed maximum length!'
                       }
                     ]
-                  })(
-                    <Input
-                      style={{ width: '100%' }}
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'firstName',
-                          value
-                        });
-                      }}
-                    />
-                  )}
+                  })(<Input />)}
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Last Name">
+                <FormItem label="Last name">
                   {getFieldDecorator('lastName', {
+                    initialValue: customer.lastName,
                     rules: [
                       { required: true, message: 'Please input Last Name!' },
                       {
@@ -407,37 +363,20 @@ class BasicEdit extends React.Component<any, any> {
                         message: 'Exceed maximum length!'
                       }
                     ]
-                  })(
-                    <Input
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'lastName',
-                          value
-                        });
-                      }}
-                    />
-                  )}
+                  })(<Input />)}
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem label="Birth Date">
                   {getFieldDecorator('birthDay', {
                     rules: [{ required: true, message: 'Please input Birth Date!' }],
-                    initialValue: moment(new Date(this.state.currentBirthDay), 'YYYY-MM-DD')
+                    initialValue: customer.birthDay ? moment(customer.birthDay) : null
                   })(
                     <DatePicker
                       style={{ width: '100%' }}
                       format="YYYY-MM-DD"
                       disabledDate={(current) => {
                         return current && current > moment().endOf('day');
-                      }}
-                      onChange={(date, dateString) => {
-                        const value = dateString;
-                        this.onFormChange({
-                          field: 'birthDay',
-                          value
-                        });
                       }}
                     />
                   )}
@@ -446,78 +385,41 @@ class BasicEdit extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Email">
                   {getFieldDecorator('email', {
+                    initialValue: customer.email,
                     rules: [{ required: true, message: 'Please input Email!' }, { validator: this.compareEmail }, { max: 50, message: 'Exceed maximum length!' }]
-                  })(
-                    <Input
-                      disabled
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'email',
-                          value
-                        });
-                      }}
-                    />
-                  )}
+                  })(<Input disabled />)}
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem label="Phone number">
                   {getFieldDecorator('contactPhone', {
+                    initialValue: customer.contactPhone,
                     rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }]
-                  })(
-                    <Input
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'contactPhone',
-                          value
-                        });
-                      }}
-                    />
-                  )}
+                  })(<Input />)}
                 </FormItem>
               </Col>
 
               <Col span={12}>
                 <FormItem label="Postal code">
                   {getFieldDecorator('postalCode', {
+                    initialValue: customer.postalCode,
                     rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
-                  })(
-                    <Input
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'postalCode',
-                          value
-                        });
-                      }}
-                    />
-                  )}
+                  })(<Input />)}
                 </FormItem>
               </Col>
 
               <Col span={12}>
                 <FormItem label="Country">
-                  {getFieldDecorator('country', {
+                  {getFieldDecorator('countryId', {
+                    initialValue: customer.country,
                     rules: [{ required: true, message: 'Please input Country!' }]
                   })(
-                    <Select
-                      optionFilterProp="children"
-                      onChange={(value) => {
-                        this.onFormChange({
-                          field: 'countryId',
-                          value: value ? value : ''
-                        });
-                      }}
-                    >
-                      {countryArr
-                        ? countryArr.map((item) => (
-                            <Option value={item.id} key={item.id}>
-                              {item.name}
-                            </Option>
-                          ))
-                        : null}
+                    <Select optionFilterProp="children">
+                      {countryList.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
                     </Select>
                   )}
                 </FormItem>
@@ -527,35 +429,14 @@ class BasicEdit extends React.Component<any, any> {
                 <FormItem label="City">
                   {getFieldDecorator('city', {
                     rules: [{ required: true, message: 'Please select City!' }],
-                    initialValue: initCityName
-                  })(
-                    <Select
-                      showSearch
-                      placeholder="Select a Order number"
-                      notFoundContent={objectFetching ? <Spin size="small" /> : null}
-                      onSearch={_.debounce(this.getCityList, 500)}
-                      filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                      onChange={(value) => {
-                        this.onFormChange({
-                          field: 'cityId',
-                          value: value ? value : ''
-                        });
-                      }}
-                    >
-                      {cityArr
-                        ? cityArr.map((item) => (
-                            <Option value={item.id} key={item.id}>
-                              {item.cityName}
-                            </Option>
-                          ))
-                        : null}
-                    </Select>
-                  )}
+                    initialValue: customer.city
+                  })(<AutoComplete dataSource={cityList.map((city) => city.name)} />)}
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem label="Address reference">
                   {getFieldDecorator('address1', {
+                    initialValue: customer.address1,
                     rules: [
                       { required: true, message: 'Please input Address 1!' },
                       {
@@ -563,17 +444,7 @@ class BasicEdit extends React.Component<any, any> {
                         message: 'Exceed maximum length!'
                       }
                     ]
-                  })(
-                    <Input
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'address1',
-                          value
-                        });
-                      }}
-                    />
-                  )}
+                  })(<Input />)}
                 </FormItem>
               </Col>
               <Col span={12}>
@@ -594,54 +465,30 @@ class BasicEdit extends React.Component<any, any> {
                         message: 'Please Select Preferred methods of communication!'
                       }
                     ],
-                    initialValue: initPreferChannel
-                  })(
-                    <Checkbox.Group
-                      options={options}
-                      onChange={(value) => {
-                        this.onFormChange({
-                          field: 'preferredMethods',
-                          value
-                        });
-                      }}
-                    />
-                  )}
+                    initialValue: ['communicationPhone', 'communicationEmail'].reduce((prev, curr) => {
+                      if (+customer[curr]) {
+                        prev.push(curr);
+                      }
+                      return prev;
+                    }, [])
+                  })(<Checkbox.Group options={options} />)}
                 </FormItem>
               </Col>
 
-              <Col span={12}>
-                <FormItem label="Tag name">
-                  {getFieldDecorator('reference', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Tag name is required'
-                      }
-                    ]
-                  })(
-                    <Select
-                      mode="multiple"
-                      onChange={(value) => {
-                        this.onFormChange({
-                          field: 'reference',
-                          value
-                        });
-                      }}
-                    >
-                      <Option value="1">Active user</Option>
-                      <Option value="2">Student</Option>
-                    </Select>
-                  )}
-                </FormItem>
-              </Col>
+              <Col span={12}></Col>
               <Col span={24}>
                 <FormItem>
                   <Button type="primary" htmlType="submit">
                     Save
                   </Button>
 
-                  <Button style={{ marginLeft: '20px' }}>
-                    <Link to="/customer-list">Cancel</Link>
+                  <Button
+                    style={{ marginLeft: '20px' }}
+                    onClick={() => {
+                      onChangePage('detail');
+                    }}
+                  >
+                    Cancel
                   </Button>
                 </FormItem>
               </Col>

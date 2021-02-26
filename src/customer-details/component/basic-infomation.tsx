@@ -98,8 +98,7 @@ class BasicInfomation extends React.Component<any, any> {
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
         }
-      })
-      .catch((err) => {});
+      });
   };
 
   getSelectedClinic = (array) => {
@@ -116,7 +115,7 @@ class BasicInfomation extends React.Component<any, any> {
       .getBasicDetails(this.props.customerId)
       .then((data) => {
         let res = data.res;
-        if (res.code && res.code === Const.SUCCESS_CODE) {
+        if (!(res.code && res.code !== Const.SUCCESS_CODE)) {
           let res2 = JSON.stringify(data.res);
 
           let resObj = JSON.parse(res2);
@@ -234,15 +233,12 @@ class BasicInfomation extends React.Component<any, any> {
       communicationEmail: JSON.stringify(basicForm.preferredMethods).indexOf('Email') > -1 ? 1 : 0
     };
 
-    webapi
-      .basicDetailsUpdate(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
-        }
-      })
-      .catch((err) => {});
+    webapi.basicDetailsUpdate(params).then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success('Operate successfully');
+      }
+    });
   };
 
   getClinicList = () => {
@@ -306,36 +302,30 @@ class BasicInfomation extends React.Component<any, any> {
       pageSize: 30,
       pageNum: 0
     };
-    webapi
-      .queryCityListByName(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            cityArr: res.context.systemCityVO,
-            objectFetching: false
-          });
-        }
-      })
-      .catch((err) => {});
+    webapi.queryCityListByName(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          cityArr: res.context.systemCityVO,
+          objectFetching: false
+        });
+      }
+    });
   };
   getCityNameById = (id) => {
     let params = {
       id: [id]
     };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
-            this.setState({
-              initCityName: res.context.systemCityVO[0].cityName
-            });
-          }
+    webapi.queryCityById(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
+          this.setState({
+            initCityName: res.context.systemCityVO[0].cityName
+          });
         }
-      })
-      .catch((err) => {});
+      }
+    });
   };
 
   render() {

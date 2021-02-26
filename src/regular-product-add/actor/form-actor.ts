@@ -17,10 +17,10 @@ export default class FormActor extends Actor {
       //企业购提示按钮
       enterpriseFlag: false,
       seoForm: {
-        titleSource: '{name} | Royal Canin Shop', //{name}-Royal Canin
+        titleSource: '', //{name} | Royal Canin Shop
         headingTag: '',
-        metaKeywordsSource: '{name}, {subtitle}, {sales category}, {tagging}', //{name}, {subtitle}, {sales category}, {tagging}
-        metaDescriptionSource: '{description}' //{description}
+        metaKeywordsSource: '', //{name}, {subtitle}, {sales category}, {tagging}
+        metaDescriptionSource: '' //{description}
       },
       updateNumbers: 0 //0：新增seo, 大于0：编辑seo
     };

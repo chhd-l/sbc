@@ -618,7 +618,7 @@ class GoodsForm extends React.Component<any, any> {
               }}
               label="Product card intro."
             >
-              {getFieldDecorator('goodsSubtitle', {
+              {getFieldDecorator('goodsNewSubtitle', {
                 rules: [
                   {
                     min: 1,
@@ -631,8 +631,8 @@ class GoodsForm extends React.Component<any, any> {
                     }
                   }
                 ],
-                onChange: this._editGoods.bind(this, 'goodsSubtitle'),
-                initialValue: goods.get('goodsSubtitle')
+                onChange: this._editGoods.bind(this, 'goodsNewSubtitle'),
+                initialValue: goods.get('goodsNewSubtitle')
               })(<Input placeholder="Please input the item card intro., no more than 225 words" />)}
             </FormItem>
           </Col>
@@ -653,7 +653,7 @@ class GoodsForm extends React.Component<any, any> {
               }}
               label={<FormattedMessage id="product.productSubtitle" />}
             >
-              {getFieldDecorator('goodsNewSubtitle', {
+              {getFieldDecorator('goodsSubtitle', {
                 rules: [
                   {
                     min: 1,
@@ -666,8 +666,8 @@ class GoodsForm extends React.Component<any, any> {
                     }
                   }
                 ],
-                onChange: this._editGoods.bind(this, 'goodsNewSubtitle'),
-                initialValue: goods.get('goodsNewSubtitle')
+                onChange: this._editGoods.bind(this, 'goodsSubtitle'),
+                initialValue: goods.get('goodsSubtitle')
               })(<Input placeholder="Please input the item subtitle, no more than 225 words" />)}
             </FormItem>
           </Col>

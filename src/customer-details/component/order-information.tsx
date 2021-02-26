@@ -53,7 +53,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
     super(props);
     this.state = {
       loading: false,
-      orderList: [1, 2, 3],
+      orderList: [],
       pagination: {
         current: 1,
         pageSize: 10,
@@ -76,7 +76,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
     const { pagination } = this.state;
     this.setState(
       {
-        pagiantion: {
+        pagination: {
           ...pagination,
           current: page
         }
@@ -101,7 +101,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
         this.setState({
           loading: false,
           orderList: data.res.context.content,
-          pagiantion: {
+          pagination: {
             ...pagination,
             total: data.res.context.total
           }
@@ -127,7 +127,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
 
   _renderContent = (dataList) => {
     return dataList.map((item, idx) => {
-      const imgList = item.tradeItems.concat(item.gifts || []);
+      const imgList = (item.tradeItems || []).concat(item.gifts || []);
       const tradePrice = item.tradePrice.totalPrice || 0;
       const num = imgList.reduce((prev: number, curr: any) => prev + curr.num, 0);
       return (
@@ -138,16 +138,22 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                 <tr>
                   <td colSpan={7}>
                     <div style={styles.orderCon}>
-                      <span style={styles.orderId}>{item.id}</span>
-                      <span style={styles.orderNo}>{item.parentId}</span>
-                      <span style={styles.orderTime}>Order time: {moment(item.tradeState.createTime).format(Const.TIME_FORMAT)}</span>
+                      <span key="1" style={styles.orderId}>
+                        {item.id}
+                      </span>
+                      <span key="2" style={styles.orderNo}>
+                        {item.parentId}
+                      </span>
+                      <span key="3" style={styles.orderTime}>
+                        Order time: {moment(item.tradeState.createTime).format(Const.TIME_FORMAT)}
+                      </span>
                     </div>
                   </td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ width: '30%' }}>
+                  <td key="1" style={{ width: '30%' }}>
                     <div
                       style={{
                         textAlign: 'left',
@@ -158,7 +164,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                       }}
                     >
                       {/*商品图片*/}
-                      {imgList.map((v: any, k: number) => (k < 4 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} className="img-item" key={k} /> : null))}
+                      {imgList.map((v: any, k: number) => (k < 4 ? <img src={v.pic ? v.pic : defaultImg} className="img-item" key={k} /> : null))}
                       {
                         /*最后一张特殊处理*/
                         //@ts-ignore
@@ -179,14 +185,24 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                       }
                     </div>
                   </td>
-                  <td style={{ width: '10%' }}>{item.consignee.name}</td>
-                  <td style={{ width: '10%' }}>
+                  <td key="2" style={{ width: '10%' }}>
+                    {item.consignee.name}
+                  </td>
+                  <td key="3" style={{ width: '10%' }}>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
                   </td>
-                  <td style={{ width: '10%' }}>{num}</td>
-                  <td style={{ width: '20%' }}>{item.buyer.name}</td>
-                  <td style={{ width: '10%' }}>{deliverStatus(item.tradeState.deliverStatus)}</td>
-                  <td style={{ width: '10%' }}>{flowState(item.tradeState.flowState)}</td>
+                  <td key="4" style={{ width: '10%' }}>
+                    {num}
+                  </td>
+                  <td key="5" style={{ width: '20%' }}>
+                    {item.buyer.name}
+                  </td>
+                  <td key="6" style={{ width: '10%' }}>
+                    {deliverStatus(item.tradeState.deliverStatus)}
+                  </td>
+                  <td key="7" style={{ width: '10%' }}>
+                    {flowState(item.tradeState.flowState)}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -198,6 +214,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
 
   render() {
     const { loading, pagination, orderList } = this.state;
+
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -207,13 +224,27 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '30%' }}>Product</th>
-                      <th style={{ width: '10%' }}>Recipient</th>
-                      <th style={{ width: '10%' }}>Amount</th>
-                      <th style={{ width: '10%' }}>Quantity</th>
-                      <th style={{ width: '20%' }}>Prescriber name</th>
-                      <th style={{ width: '10%' }}>Shipping status</th>
-                      <th style={{ width: '10%' }}>Order status</th>
+                      <th key="1" style={{ width: '30%' }}>
+                        Product
+                      </th>
+                      <th key="2" style={{ width: '10%' }}>
+                        Recipient
+                      </th>
+                      <th key="3" style={{ width: '10%' }}>
+                        Amount
+                      </th>
+                      <th key="4" style={{ width: '10%' }}>
+                        Quantity
+                      </th>
+                      <th key="5" style={{ width: '20%' }}>
+                        Prescriber name
+                      </th>
+                      <th key="6" style={{ width: '10%' }}>
+                        Shipping status
+                      </th>
+                      <th key="7" style={{ width: '10%' }}>
+                        Order status
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList)}</tbody>
@@ -229,7 +260,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
               ) : null}
             </div>
           </div>
-          {pagination.total > 0 ? <Pagination current={pagination.current} total={pagination.total} pageSize={pagination.pageSize} onChange={(pageNum, pageSize) => {}} /> : null}
+          {pagination.total > 0 ? <Pagination current={pagination.current} total={pagination.total} pageSize={pagination.pageSize} onChange={this.onPageChange} /> : null}
         </div>
       </div>
     );

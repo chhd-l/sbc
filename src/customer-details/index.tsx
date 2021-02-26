@@ -331,7 +331,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <Headline title="Other information" extra={<RangePicker defaultValue={[moment(), moment()]} onChange={this.handleChangeDateRange} />} />
                 <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
                   <TabPane tab="Order information" key="order">
-                    <OrderInformation startDate={startDate} endDate={endDate} />
+                    <OrderInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                   </TabPane>
                   <TabPane tab="Subscription information" key="subscrib">
                     <SubscribInformation startDate={startDate} endDate={endDate} />

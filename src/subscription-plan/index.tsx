@@ -208,17 +208,18 @@ export default class SubscriptionPlan extends Component<any, any> {
         title: 'Operation',
         key: 'operation',
         width: '8%',
-        render: (text, record) =>
-          record.status === 0 ? (
-            <div>
-              <Tooltip placement="top" title="Detail">
-                <Link to={'/subscription-plan-detail/' + record.id} className="iconfont iconDetails" style={{ paddingRight: 10 }}></Link>
-              </Tooltip>
+        render: (text, record) => (
+          <div>
+            <Tooltip placement="top" title="Detail">
+              <Link to={'/subscription-plan-detail/' + record.id} className="iconfont iconDetails"></Link>
+            </Tooltip>
+            {record.status === 0 && (
               <Tooltip placement="top" title="Edit">
-                <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit"></Link>
+                <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit" style={{ paddingLeft: 10 }}></Link>
               </Tooltip>
-            </div>
-          ) : null
+            )}
+          </div>
+        )
       }
     ];
     return (

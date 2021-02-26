@@ -1,9 +1,11 @@
 import React from 'react';
 import { Table, Popconfirm } from 'antd';
+import { getAddressListByType } from '../webapi';
 
 interface Iprop {
   startDate: string;
   endDate: string;
+  customerId: string;
 }
 
 export default class DeliveryList extends React.Component<Iprop, any> {
@@ -37,8 +39,30 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     };
   }
 
+  componentDidMount() {
+    this.getAddressList();
+  }
+
+  getAddressList = () => {
+    this.setState({
+      loading: true
+    });
+    getAddressListByType(this.props.customerId, 'DELIVERY')
+      .then((data) => {
+        this.setState({
+          loading: false,
+          list: data.res.context.customerDeliveryAddressVOList
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
   render() {
-    const { list, pagination } = this.state;
+    const { loading, list, pagination } = this.state;
     const columns = [
       {
         title: 'Receiver name',
@@ -81,7 +105,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <Table rowKey="id" columns={columns} dataSource={list} pagination={pagination} />
+        <Table rowKey="id" loading={loading} columns={columns} dataSource={list} pagination={pagination} />
       </div>
     );
   }

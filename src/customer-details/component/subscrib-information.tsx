@@ -1,10 +1,19 @@
 import React from 'react';
 import { Pagination, Spin, Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { getSubscriptionList } from '../../subscription/webapi';
+import moment from 'moment';
+import { Const } from 'qmkit';
+const defaultImg = require('../../goods-list/img/none.png');
 
 interface Iprop {
   startDate: string;
   endDate: string;
+  customerAccount: string;
+}
+
+interface Istyle {
+  [key: string]: React.CSSProperties;
 }
 
 export default class SubscribInformation extends React.Component<Iprop, any> {
@@ -12,7 +21,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
     super(props);
     this.state = {
       loading: false,
-      orderList: [1, 2, 3],
+      orderList: [],
       pagination: {
         current: 1,
         pageSize: 10,
@@ -20,6 +29,57 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
       }
     };
   }
+
+  componentDidMount() {
+    this.getSubscriptionList();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.startDate !== prevProps.startDate || this.props.endDate !== prevProps.endDate) {
+      this.getSubscriptionList();
+    }
+  }
+
+  onPageChange = (page) => {
+    const { pagination } = this.state;
+    this.setState(
+      {
+        pagination: {
+          ...pagination,
+          current: page
+        }
+      },
+      () => this.getSubscriptionList()
+    );
+  };
+
+  getSubscriptionList = () => {
+    const { pagination } = this.state;
+    const { customerAccount } = this.props;
+    this.setState({
+      loading: true
+    });
+    getSubscriptionList({
+      customerAccount,
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
+    })
+      .then((data) => {
+        this.setState({
+          loading: false,
+          orderList: data.res.context.subscriptionResponses,
+          pagination: {
+            ...pagination,
+            total: data.res.context.total
+          }
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
 
   _renderLoading = () => {
     return (
@@ -41,26 +101,29 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 <tr>
                   <td colSpan={7}>
                     <div style={styles.orderCon}>
-                      <span style={styles.orderId}>432143213243</span>
-                      <span style={styles.orderTime}>Subscription time: 2020-07-10</span>
+                      <span style={styles.orderId}>{item.subscribeId}</span>
+                      <span style={styles.orderTime}>Subscription time: {moment(item.createTime).format(Const.TIME_FORMAT)}</span>
                     </div>
                   </td>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td style={{ width: '40%' }}>images</td>
-                  <td style={{ width: '20%' }}>TomTTT</td>
-                  <td style={{ width: '20%' }}>Every 4 Weeks</td>
-                  <td rowSpan={2} style={{ width: '20%' }}>
-                    Active
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ width: '40%' }}>images</td>
-                  <td style={{ width: '20%' }}>TomTTT</td>
-                  <td style={{ width: '20%' }}>Every 4 Weeks</td>
-                </tr>
+                {item.goodsInfo.map((v, k) => (
+                  <>
+                    <tr key={k}>
+                      <td style={{ width: '40%' }}>
+                        <img src={v.goodsPic ? v.goodsPic : defaultImg} className="img-item" />
+                      </td>
+                      <td style={{ width: '20%' }}>{v.goodsName}</td>
+                      <td style={{ width: '20%' }}>{v.frequency || ''}</td>
+                      {k === 0 && (
+                        <td rowSpan={item.goodsInfo.length} style={{ width: '20%' }}>
+                          {item.subscribeStatus === '0' ? 'Active' : 'Inactive'}
+                        </td>
+                      )}
+                    </tr>
+                  </>
+                ))}
               </tbody>
             </table>
           </td>
@@ -83,7 +146,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                       <th style={{ width: '40%' }}>Product</th>
                       <th style={{ width: '20%' }}>Product name</th>
                       <th style={{ width: '20%' }}>Frequency</th>
-                      <th style={{ width: '20%' }}>Subscription status</th>
+                      <th style={{ width: '20%', textAlign: 'left' }}>Subscription status</th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList)}</tbody>
@@ -106,7 +169,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
   }
 }
 
-const styles = {
+const styles: Istyle = {
   loading: {
     textAlign: 'center',
     height: 300

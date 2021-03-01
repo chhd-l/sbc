@@ -314,14 +314,14 @@ const routes = [
     path: '/customer-details/:type/:id/:account',
     asyncComponent: () => import('./customer-details')
   },
-  {
-    path: '/edit-customer-basicinfo/:id',
-    asyncComponent: () => import('./customer-details/edit-basic-information')
-  },
-  {
-    path: '/edit-customer-pet/:id',
-    asyncComponent: () => import('./customer-details/edit-pet-item')
-  },
+  // {
+  //   path: '/edit-customer-basicinfo/:id',
+  //   asyncComponent: () => import('./customer-details/edit-basic-information')
+  // },
+  // {
+  //   path: '/edit-customer-pet/:id',
+  //   asyncComponent: () => import('./customer-details/edit-pet-item')
+  // },
   // 客户等级
   {
     path: '/customer-level',
@@ -868,20 +868,8 @@ const routes = [
     asyncComponent: () => import('./campaign-update')
   },
   {
-    path: '/tag-management-list',
-    asyncComponent: () => import('./tag-management-list')
-  },
-  {
-    path: '/tag-management-detail/:id',
-    asyncComponent: () => import('./tag-management-detail')
-  },
-  {
-    path: '/tag-management-edit/:id',
-    asyncComponent: () => import('./tag-management-edit')
-  },
-  {
-    path: '/tag-management-add',
-    asyncComponent: () => import('./tag-management-edit')
+    path: '/pet-owner-tagging',
+    asyncComponent: () => import('./pet-owner-tagging')
   },
   {
     path: '/tasks',

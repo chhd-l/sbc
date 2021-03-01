@@ -1,17 +1,19 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, DatePicker, Empty, Spin, Popconfirm } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, DatePicker, Empty, Spin, Popconfirm, TreeSelect } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import { Const } from 'qmkit';
+
 const { SubMenu } = Menu;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TabPane } = Tabs;
 
 const { Column } = Table;
+const { TreeNode } = TreeSelect;
 
 const layout = {
   labelCol: { span: 8 },
@@ -31,7 +33,8 @@ class PetInfomation extends React.Component<any, any> {
         petsSizeValueName: '',
         sterilized: null,
         birthOfPets: '',
-        customerPetsPropRelations: []
+        customerPetsPropRelations: [],
+        taggingList: []
       },
       petList: [],
       petsType: [
@@ -110,24 +113,31 @@ class PetInfomation extends React.Component<any, any> {
       storeId: 123456858,
       type: type
     };
-    webapi.querySysDictionary(params).then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        if (type === 'dogBreed') {
-          let dogBreed = res.context.sysDictionaryVOS;
-          this.setState({
-            dogBreed: dogBreed
-          });
-        }
+    webapi
+      .querySysDictionary(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          if (type === 'dogBreed') {
+            let dogBreed = res.context.sysDictionaryVOS;
+            this.setState({
+              dogBreed: dogBreed
+            });
+          }
 
-        if (type === 'catBreed') {
-          let catBreed = res.context.sysDictionaryVOS;
-          this.setState({
-            catBreed: catBreed
-          });
+          if (type === 'catBreed') {
+            let catBreed = res.context.sysDictionaryVOS;
+            this.setState({
+              catBreed: catBreed
+            });
+          }
+        } else {
+          message.error(res.message || 'Unsuccessful');
         }
-      }
-    });
+      })
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
   };
   getSpecialNeeds = (array) => {
     let needs = [];
@@ -147,7 +157,7 @@ class PetInfomation extends React.Component<any, any> {
       .petsByConsumer(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
@@ -189,12 +199,14 @@ class PetInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
+        message.error(err.message || 'Unsuccessful');
       });
   };
   editPets = () => {
@@ -257,39 +269,46 @@ class PetInfomation extends React.Component<any, any> {
     let params = {
       petsId: id
     };
-    webapi.petsById(params).then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        let currentPet = res.context.context;
-        currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
-        if (currentPet.petsType === 'dog') {
-          this.props.form.setFieldsValue({
-            petsType: currentPet.petsType,
-            petsName: currentPet.petsName,
-            petsSex: currentPet.petsSex,
-            petsBreed: currentPet.petsBreed,
-            sterilized: currentPet.sterilized,
-            petsSizeValueName: currentPet.petsSizeValueName,
-            customerPetsPropRelations: currentPet.customerPetsPropRelations
+    webapi
+      .petsById(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          let currentPet = res.context.context;
+          currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
+          if (currentPet.petsType === 'dog') {
+            this.props.form.setFieldsValue({
+              petsType: currentPet.petsType,
+              petsName: currentPet.petsName,
+              petsSex: currentPet.petsSex,
+              petsBreed: currentPet.petsBreed,
+              sterilized: currentPet.sterilized,
+              petsSizeValueName: currentPet.petsSizeValueName,
+              customerPetsPropRelations: currentPet.customerPetsPropRelations
+            });
+          } else {
+            this.props.form.setFieldsValue({
+              petsType: currentPet.petsType,
+              petsName: currentPet.petsName,
+              petsSex: currentPet.petsSex,
+              petsBreed: currentPet.petsBreed,
+
+              sterilized: currentPet.sterilized,
+              customerPetsPropRelations: currentPet.customerPetsPropRelations
+            });
+          }
+
+          this.setState({
+            petForm: currentPet,
+            currentBirthDay: currentPet.birthOfPets
           });
         } else {
-          this.props.form.setFieldsValue({
-            petsType: currentPet.petsType,
-            petsName: currentPet.petsName,
-            petsSex: currentPet.petsSex,
-            petsBreed: currentPet.petsBreed,
-
-            sterilized: currentPet.sterilized,
-            customerPetsPropRelations: currentPet.customerPetsPropRelations
-          });
+          message.error(res.message || 'Unsuccessful');
         }
-
-        this.setState({
-          petForm: currentPet,
-          currentBirthDay: currentPet.birthOfPets
-        });
-      }
-    });
+      })
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
   };
 
   delPets = (id) => {
@@ -303,12 +322,50 @@ class PetInfomation extends React.Component<any, any> {
       .delPets(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           message.success('Operate successfully');
           this.petsByConsumer();
         } else {
           this.setState({
             loading: false
+          });
+          message.error(res.message || 'Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.message || 'Unsuccessful');
+      });
+    // const res = await delPets(params)
+    // if (res.code === 'K-000000') {
+    //   this.getPetList()
+    // }
+  };
+
+  loopTagging = (taggingTotalTree) => {
+    return (
+      taggingTotalTree &&
+      taggingTotalTree.map((item) => {
+        return <TreeNode key={item.id} value={item.id} title={item.name} />;
+      })
+    );
+  };
+  getTaggingList = () => {
+    let params = {
+      pageNum: 0,
+      pageSize: 1000,
+      tagType: 'petOwner'
+    };
+    webapi
+      .getTaggingList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let taggingList = res.context.segmentList;
+          this.setState({
+            taggingList
           });
         }
       })
@@ -316,15 +373,12 @@ class PetInfomation extends React.Component<any, any> {
         this.setState({
           loading: false
         });
+        message.error(err.toString() || 'Operation failure');
       });
-    // const res = await delPets(params)
-    // if (res.code === Const.SUCCESS_CODE) {
-    //   this.getPetList()
-    // }
   };
 
   render() {
-    const { petsType, petGender, sizeArr, customerPetsPropRelations, catBreed, dogBreed, petForm } = this.state;
+    const { petsType, petGender, sizeArr, customerPetsPropRelations, catBreed, dogBreed, petForm, taggingList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -621,6 +675,38 @@ class PetInfomation extends React.Component<any, any> {
                               ))
                             : null}
                         </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem {...formItemLayout} label="Pet owner tagging">
+                      {getFieldDecorator('tagging', {
+                        rules: [
+                          {
+                            required: false,
+                            message: 'Please select product tagging'
+                          }
+                        ],
+                        initialValue: petForm.tagging
+                      })(
+                        <TreeSelect
+                          getPopupContainer={() => document.getElementById('page-content')}
+                          treeCheckable={true}
+                          showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                          treeCheckStrictly={true}
+                          placeholder="Please select product tagging"
+                          notFoundContent="No classification"
+                          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                          showSearch={false}
+                          onChange={(value) =>
+                            this.onFormChange({
+                              field: 'preferredMethods',
+                              value
+                            })
+                          }
+                        >
+                          {this.loopTagging(taggingList)}
+                        </TreeSelect>
                       )}
                     </FormItem>
                   </Col>

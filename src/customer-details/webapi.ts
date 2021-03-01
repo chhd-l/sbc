@@ -188,7 +188,7 @@ export function delCustomer(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
-  }); 
+  });
 }
 
 export function queryCityById(filterParams = {}) {
@@ -289,3 +289,24 @@ export function queryCityListByName(filterParams = {}) {
 //     data: parameter
 //   })
 // }
+
+//查询州地址
+
+export function queryStateList() {
+  return Fetch<TResult>('systemState/queryByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...{ storeId: 123457910 }
+    })
+  });
+}
+
+// 分页获取 tag list
+export function getTaggingList(filterParams = {}) {
+  return Fetch<TResult>('/customer/segment/segment/query', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

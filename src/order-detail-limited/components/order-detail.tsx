@@ -207,6 +207,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
       phone: string;
       countryId: string;
       cityId: number;
+      city: string;
+      province: string;
       address: string;
       detailAddress1: string;
       detailAddress2: string;
@@ -330,8 +332,13 @@ export default class OrderDetailTab extends React.Component<any, any> {
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryCountry" />}: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
             </p>
+            {consignee.province ? (
+              <p style={styles.inforItem}>
+                {<FormattedMessage id="deliveryState" />}: {consignee.province}
+              </p>
+            ) : null}
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCity" />}: {cityDict.find((c) => c.id == consignee.cityId) && cityDict.find((c) => c.id == consignee.cityId).cityName}
+              {<FormattedMessage id="deliveryCity" />}: {consignee.city}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryAddress1" />}: {consignee.detailAddress1}

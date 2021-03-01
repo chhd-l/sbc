@@ -645,6 +645,7 @@ export default {
   recommenderId:'Recommender id',
   recommenderName:'Recommender name',
   deliveryCountry: 'Delivery Country',
+  deliveryState:'Delivery State',
   deliveryCity: 'Delivery City',
   deliveryAddress1: 'Delivery address1',
   deliveryAddress2: 'Delivery address2',

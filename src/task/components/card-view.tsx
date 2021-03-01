@@ -91,7 +91,7 @@ export default class CardView extends Component<any, any> {
               toDoLength: toDoList.length,
               onGoingLength: onGoingList.length,
               completedLength: completedList.length,
-              cancelledLength: cancelledList
+              cancelledLength: cancelledList.length
             },
             loading: false
           });

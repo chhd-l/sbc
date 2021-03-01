@@ -183,6 +183,7 @@ const styles = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-    width: 200
+    width: 200,
+    display: 'inline-block'
   }
 };

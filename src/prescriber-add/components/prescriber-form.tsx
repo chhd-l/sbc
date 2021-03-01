@@ -649,6 +649,23 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
+                <FormItem label="Prescriber website">
+                  {getFieldDecorator(
+                    'website',
+                    {}
+                  )(
+                    <Input
+                      disabled={firstPrescriberForm && firstPrescriberForm.website && this.state.isPrescriber}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'website',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
                 <FormItem label="Prescriber city">
                   {getFieldDecorator(
                     'primaryCity',

@@ -232,10 +232,12 @@ export default class EmployeeList extends React.Component<any, any> {
     }
     //所有的角色id集合
     const allIds = roles
-      .map((v) => {
-        return v.get('roleInfoId');
-      })
-      .toJS();
+      ? roles
+          .map((v) => {
+            return v && v.get('roleInfoId');
+          })
+          .toJS()
+      : [];
     const roleIds = rowInfo.roleIds
       ? rowInfo.roleIds.split(',').reduce((pre, cur) => {
           if (allIds.includes(Number(cur))) {

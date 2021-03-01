@@ -12,40 +12,40 @@ export default class tasks extends Component<any, any> {
     this.state = {
       taskLoading: false,
       taskList: [
-        {
-          assistantEmail: 'morgane.daum@royalcanin.com',
-          assistantId: 139,
-          assistantName: 'Morgane DAUM',
-          contactEmail: 'morgane.lucas1@ibm.com',
-          petOwnerId: 229,
-          contactName: 'Morgane Lucas',
-          description: '<p>need to call PO</p>',
-          dueTime: '2021-01-20',
-          goldenMoment: 'Subscription program cancelation by PO',
-          id: 1229,
-          name: 'Test 1',
-          priority: 'High',
-          startTime: '2021-01-19',
-          status: 'To Do',
-          showMore: false
-        },
-        {
-          assistantEmail: 'morgane.daum@royalcanin.com',
-          assistantId: 139,
-          assistantName: 'Morgane DAUM',
-          contactEmail: 'morgane.lucas1@ibm.com',
-          petOwnerId: 229,
-          contactName: 'Morgane Lucas',
-          description: '<p>need to call PO</p>',
-          dueTime: '2021-01-20',
-          goldenMoment: 'First month of Subscription',
-          id: 1230,
-          name: 'Test 2',
-          priority: 'Low',
-          startTime: '2021-01-19',
-          status: 'Completed',
-          showMore: false
-        }
+        // {
+        //   assistantEmail: 'morgane.daum@royalcanin.com',
+        //   assistantId: 139,
+        //   assistantName: 'Morgane DAUM',
+        //   contactEmail: 'morgane.lucas1@ibm.com',
+        //   petOwnerId: 229,
+        //   contactName: 'Morgane Lucas',
+        //   description: '<p>need to call PO</p>',
+        //   dueTime: '2021-01-20',
+        //   goldenMoment: 'Subscription program cancelation by PO',
+        //   id: 1229,
+        //   name: 'Test 1',
+        //   priority: 'High',
+        //   startTime: '2021-01-19',
+        //   status: 'To Do',
+        //   showMore: false
+        // },
+        // {
+        //   assistantEmail: 'morgane.daum@royalcanin.com',
+        //   assistantId: 139,
+        //   assistantName: 'Morgane DAUM',
+        //   contactEmail: 'morgane.lucas1@ibm.com',
+        //   petOwnerId: 229,
+        //   contactName: 'Morgane Lucas',
+        //   description: '<p>need to call PO</p>',
+        //   dueTime: '2021-01-20',
+        //   goldenMoment: 'First month of Subscription',
+        //   id: 1230,
+        //   name: 'Test 2',
+        //   priority: 'Low',
+        //   startTime: '2021-01-19',
+        //   status: 'Completed',
+        //   showMore: false
+        // }
       ],
       assignedUsers: [],
       goldenMomentList: [],
@@ -63,6 +63,7 @@ export default class tasks extends Component<any, any> {
     this.getGoldenMomentIcon = this.getGoldenMomentIcon.bind(this);
     this.onChange = this.onChange.bind(this);
     this.moreClick = this.moreClick.bind(this);
+    this.getPetOwnerTasks = this.getPetOwnerTasks.bind(this);
   }
 
   componentDidMount() {
@@ -73,6 +74,29 @@ export default class tasks extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+
+    this.getPetOwnerTasks();
+  }
+
+  getPetOwnerTasks() {
+    webapi
+      .getPetOwnerTasks(this.props.petOwnerId)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          res.context.tasks.map((item) => {
+            item.showBasicInfo = item.status !== 'Completed';
+          });
+          this.setState({
+            taskList: res.context.tasks || []
           });
         } else {
           message.error(res.message || 'Get data failed');
@@ -115,9 +139,23 @@ export default class tasks extends Component<any, any> {
     const { taskList } = this.state;
     taskList.map((item) => {
       if (item.id === task.id) {
-        item.showMore = !task.showMore;
+        if (item.status === 'Completed') {
+          if (item.showBasicInfo) {
+            item.showMore = false;
+            item.showBasicInfo = false;
+          } else {
+            item.showMore = true;
+            item.showBasicInfo = true;
+          }
+        } else {
+          if (item.showMore) {
+            item.showMore = false;
+          } else {
+            item.showMore = true;
+          }
+        }
+        return item;
       }
-      return item;
     });
     this.setState({
       taskList
@@ -207,119 +245,121 @@ export default class tasks extends Component<any, any> {
                       </Row>
                     </Col>
                   </Row>
-                  <div>
-                    <Row className="padding">
-                      <Col span={12}>
-                        <div className="taskContactLable">
-                          {' '}
-                          <span className="icontaskName icon iconfont addTaskIcon" />
-                          Name
-                        </div>
-                        <Input
-                          style={{ width: '97%' }}
-                          defaultValue={item.name}
-                          disabled={item.taskCompleted}
-                          onChange={(e: any) =>
-                            this.onChange({
-                              field: 'name',
-                              value: e.target.value
-                            })
-                          }
-                        />
-                      </Col>
-                      <Col span={12}>
-                        <div className="taskContactLable">
-                          <span className="iconxingzhuang icon iconfont addTaskIcon" />
-                          Assigned to
-                        </div>
-                        <Select
-                          defaultValue={item.assistantName}
-                          disabled={item.taskCompleted}
-                          showSearch
-                          onSearch={this.searchAssignedTo}
-                          onChange={(value) =>
-                            this.onChange({
-                              field: 'assignedTo',
-                              value: value
-                            })
-                          }
-                        >
-                          {assignedUsers.map((item) => (
-                            <Option value={item.id} key={item.id}>
-                              {item.valueEn}
-                            </Option>
-                          ))}
-                        </Select>
-                      </Col>
-                    </Row>
-                    <Row className="padding">
-                      <Col span={12}>
-                        <div className="taskContactLable">
-                          <span className="iconshizhong icon iconfont addTaskIcon" />
-                          Start Time
-                        </div>
-                        <DatePicker
-                          defaultValue={moment(item.startTime)}
-                          disabled={item.taskCompleted || !!item.startTime}
-                          style={{ width: '100%' }}
-                          placeholder="Start Time"
-                          format="YYYY-MM-DD"
-                          onChange={(date, dateString) => {
-                            const value = dateString;
-                            this.onChange({
-                              field: 'startTime',
-                              value
-                            });
-                          }}
-                        />
-                      </Col>
-                      <Col span={12}>
-                        <div className="taskContactLable">
-                          <span className="iconshizhong icon iconfont addTaskIcon" />
-                          Due Time
-                        </div>
-                        <DatePicker
-                          defaultValue={moment(item.dueTime)}
-                          disabled={item.taskCompleted}
-                          style={{ width: '100%' }}
-                          placeholder="Due Time"
-                          format="YYYY-MM-DD"
-                          onChange={(date, dateString) => {
-                            const value = dateString;
-                            this.onChange({
-                              field: 'dueTime',
-                              value
-                            });
-                          }}
-                        />
-                      </Col>
-                    </Row>
-                    <Row className="padding">
-                      <Col span={12}>
-                        <div className="taskContactLable">
-                          <span className="iconbianzu7 icon iconfont addTaskIcon" />
-                          Golden Moment
-                        </div>
-                        <Select
-                          defaultValue={item.goldenMoment}
-                          disabled={item.taskCompleted || !!item.goldenMoment}
-                          onChange={(value) =>
-                            this.onChange({
-                              field: 'goldenMoment',
-                              value: value
-                            })
-                          }
-                        >
-                          {goldenMomentList.map((item) => (
-                            <Option value={item.value} key={item.id}>
-                              {item.value}
-                            </Option>
-                          ))}
-                        </Select>
-                      </Col>
-                    </Row>
-                  </div>
-                  {!item.showMore ? (
+                  {item.showBasicInfo ? (
+                    <div>
+                      <Row className="padding">
+                        <Col span={12}>
+                          <div className="taskContactLable">
+                            {' '}
+                            <span className="icontaskName icon iconfont addTaskIcon" />
+                            Name
+                          </div>
+                          <Input
+                            style={{ width: '97%' }}
+                            defaultValue={item.name}
+                            disabled={item.taskCompleted}
+                            onChange={(e: any) =>
+                              this.onChange({
+                                field: 'name',
+                                value: e.target.value
+                              })
+                            }
+                          />
+                        </Col>
+                        <Col span={12}>
+                          <div className="taskContactLable">
+                            <span className="iconxingzhuang icon iconfont addTaskIcon" />
+                            Assigned to
+                          </div>
+                          <Select
+                            defaultValue={item.assistantName}
+                            disabled={item.taskCompleted}
+                            showSearch
+                            onSearch={this.searchAssignedTo}
+                            onChange={(value) =>
+                              this.onChange({
+                                field: 'assignedTo',
+                                value: value
+                              })
+                            }
+                          >
+                            {assignedUsers.map((item) => (
+                              <Option value={item.id} key={item.id}>
+                                {item.valueEn}
+                              </Option>
+                            ))}
+                          </Select>
+                        </Col>
+                      </Row>
+                      <Row className="padding">
+                        <Col span={12}>
+                          <div className="taskContactLable">
+                            <span className="iconshizhong icon iconfont addTaskIcon" />
+                            Start Time
+                          </div>
+                          <DatePicker
+                            defaultValue={moment(item.startTime)}
+                            disabled={item.taskCompleted || !!item.startTime}
+                            style={{ width: '100%' }}
+                            placeholder="Start Time"
+                            format="YYYY-MM-DD"
+                            onChange={(date, dateString) => {
+                              const value = dateString;
+                              this.onChange({
+                                field: 'startTime',
+                                value
+                              });
+                            }}
+                          />
+                        </Col>
+                        <Col span={12}>
+                          <div className="taskContactLable">
+                            <span className="iconshizhong icon iconfont addTaskIcon" />
+                            Due Time
+                          </div>
+                          <DatePicker
+                            defaultValue={moment(item.dueTime)}
+                            disabled={item.taskCompleted}
+                            style={{ width: '100%' }}
+                            placeholder="Due Time"
+                            format="YYYY-MM-DD"
+                            onChange={(date, dateString) => {
+                              const value = dateString;
+                              this.onChange({
+                                field: 'dueTime',
+                                value
+                              });
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="padding">
+                        <Col span={12}>
+                          <div className="taskContactLable">
+                            <span className="iconbianzu7 icon iconfont addTaskIcon" />
+                            Golden Moment
+                          </div>
+                          <Select
+                            defaultValue={item.goldenMoment}
+                            disabled={item.taskCompleted || !!item.goldenMoment}
+                            onChange={(value) =>
+                              this.onChange({
+                                field: 'goldenMoment',
+                                value: value
+                              })
+                            }
+                          >
+                            {goldenMomentList.map((item) => (
+                              <Option value={item.value} key={item.id}>
+                                {item.value}
+                              </Option>
+                            ))}
+                          </Select>
+                        </Col>
+                      </Row>
+                    </div>
+                  ) : null}
+                  {item.showBasicInfo ? (
                     <div>
                       <div className="upborder"></div>
                     </div>

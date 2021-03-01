@@ -42,7 +42,7 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('list:init', res.context);
-        this.dispatch('employee:initRoles', fromJS(roleRes));
+        this.dispatch('employee:initRoles', fromJS(roleRes.context));
         this.dispatch('current', pageNum && pageNum + 1);
         this.dispatch('select:init', List());
         this.dispatch('loading:end');

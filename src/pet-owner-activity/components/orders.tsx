@@ -11,9 +11,7 @@ export default class orders extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      orderStatus: [
-
-      ],
+      orderStatus: [],
       orderCategories: [
         { label: 'Single purchase', value: 'SINGLE' },
         { label: '1st autoship order', value: 'FIRST_AUTOSHIP' },
@@ -63,7 +61,7 @@ export default class orders extends Component<any, any> {
       ],
       pagination: {
         current: 1,
-        pageSize: 4,
+        pageSize: 20,
         total: 0
       },
       formData: {},
@@ -227,7 +225,7 @@ export default class orders extends Component<any, any> {
       }
     ];
     return (
-      <Card title="Order" className="topCard">
+      <Card title="Order" className="orderCard">
         <Row>
           <Col span={9}>
             <Input
@@ -245,14 +243,14 @@ export default class orders extends Component<any, any> {
             />
           </Col>
           <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-          <div style={{ marginRight: '10px' }}>
-            <Dropdown overlay={filterMenu} trigger={['click']} overlayClassName="dropdown-custom" visible={categoryVisible}>
-              <Button className="ant-dropdown-link" onClick={(e) => this.setState({ categoryVisible: true })}>
-                 Order Category
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </div>
+            <div style={{ marginRight: '10px' }}>
+              <Dropdown overlay={filterMenu} trigger={['click']} overlayClassName="dropdown-custom" visible={categoryVisible}>
+                <Button className="ant-dropdown-link" onClick={(e) => this.setState({ categoryVisible: true })}>
+                  Order Category
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+            </div>
           </Col>
           <Col span={24}>
             <Table

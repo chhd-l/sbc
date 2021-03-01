@@ -21,12 +21,9 @@ export function getPetList(filterParams = {}) {
   });
 }
 
-export function getTaskCardView(filterParams = {}) {
-  return Fetch<TResult>('/biz/task/cardView', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
+export function getPetOwnerTasks(customerId) {
+  return Fetch<TResult>('/customer/tasks/list' + '?customerId=' + customerId, {
+    method: 'GET'
   });
 }
 

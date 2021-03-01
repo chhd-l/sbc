@@ -63,8 +63,8 @@ export default class PetOwnerActivity extends Component<any, any> {
             </Col>
             <Col span={8}>
               <Orders petOwnerId={id} />
-              <div style={{ marginTop: '20px' }}></div>
-              <Bookings petOwnerId={id} />
+              {/* <div style={{ marginTop: '20px' }}></div>
+              <Bookings petOwnerId={id} /> */}
             </Col>
           </Row>
         </div>

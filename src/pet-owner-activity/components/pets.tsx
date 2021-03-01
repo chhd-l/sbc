@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { history, Const } from 'qmkit';
-import { Card, Icon, Row, Col, Pagination, message } from 'antd';
+import { Card, Icon, Row, Col, Pagination, message, Empty } from 'antd';
 const cat = require('../components/image/cat.png');
 const catFemale = require('../components/image/cat2.png');
 const dog = require('../components/image/dog.png');
@@ -21,7 +21,7 @@ export default class pets extends Component<any, any> {
           currentWeight: '4kg',
           dateAdded: '2020-10-28',
           dateModified: '2020-10-28',
-          gender: 'female',
+          genderCode: 'female',
           id: 29739,
           isPurebred: true,
           lastPetStatus: '10',
@@ -49,12 +49,12 @@ export default class pets extends Component<any, any> {
       }
     };
     this.getPetAgeString = this.getPetAgeString.bind(this);
-    this.onShowSizeChange = this.onShowSizeChange.bind(this);
+    this.pageChange = this.pageChange.bind(this);
     this.getPetList = this.getPetList.bind(this);
   }
 
   componentDidMount() {
-    // this.getPetList();
+    this.getPetList();
   }
 
   getPetAgeString(item) {
@@ -76,7 +76,7 @@ export default class pets extends Component<any, any> {
     }
     return ageString;
   }
-  onShowSizeChange(current, pageSize) {
+  pageChange(current, pageSize) {
     this.setState(
       {
         petPagination: {
@@ -89,10 +89,10 @@ export default class pets extends Component<any, any> {
   }
 
   getPetList() {
-    const { pagination } = this.state;
+    const { petPagination } = this.state;
     let params = {
-      pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize,
+      pageNum: petPagination.current - 1,
+      pageSize: petPagination.pageSize,
       customerId: this.props.petOwnerId
     };
     this.setState({
@@ -103,9 +103,11 @@ export default class pets extends Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
+          petPagination.total = res.context.total;
           this.setState({
-            petList: res.context,
-            loading: false
+            petList: res.context.customerPets ? res.context.customerPets : [],
+            loading: false,
+            petPagination: petPagination
           });
         } else {
           message.error(res.message || 'Get data failed');
@@ -125,19 +127,19 @@ export default class pets extends Component<any, any> {
     const { id } = this.props;
     const { petList, petPagination, loading } = this.state;
     petList.map((item) => {
-      if (item.speciesCode === 'dog' && (item.gender === 'male' || item.gender === 'other')) {
+      if (item.petsType === 'dog' && (item.genderCode === 'male' || item.genderCode === 'other')) {
         item.defaultPhoto = dog;
       }
-      if (item.speciesCode === 'dog' && item.gender === 'female') {
+      if (item.petsType === 'dog' && item.genderCode === 'female') {
         item.defaultPhoto = dogFemale;
       }
-      if (item.speciesCode === 'cat' && (item.gender === 'male' || item.gender === 'other')) {
+      if (item.petsType === 'cat' && (item.genderCode === 'male' || item.genderCode === 'other')) {
         item.defaultPhoto = cat;
       }
-      if (item.speciesCode === 'cat' && item.gender === 'female') {
+      if (item.petsType === 'cat' && item.genderCode === 'female') {
         item.defaultPhoto = catFemale;
       }
-      if (!item.speciesCode || !item.gender) {
+      if (!item.petsType || !item.genderCode) {
         item.defaultPhoto = dog;
       }
     });
@@ -166,11 +168,11 @@ export default class pets extends Component<any, any> {
                   </Row>
                   <div className="detail-content" style={{ width: '60%' }}>
                     <div>
-                      <span className="contactName">{item.name}</span>
+                      <span className="contactName">{item.petsName}</span>
                     </div>
                     <span className="ui-lighter">
                       ID:
-                      <span className="content"> {item.petId || '&nbsp;'}</span>
+                      <span className="content"> {item.petsId || '&nbsp;'}</span>
                     </span>
                   </div>
                 </Row>
@@ -196,7 +198,7 @@ export default class pets extends Component<any, any> {
                         <span className="ui-lighter">Breed</span>
                       </Col>
                       <Col span={18}>
-                        <span className="content">{item.breedCode}</span>
+                        <span className="content">{item.petsBreed}</span>
                       </Col>
                     </Row>
                   </div>
@@ -217,7 +219,8 @@ export default class pets extends Component<any, any> {
                 </Row>
               </Row>
             ))}
-            {petList && petList.length > 0 ? <Pagination style={{ top: '331px' }} onShowSizeChange={this.onShowSizeChange} total={petPagination.total} pageSize={petPagination.pageSize} size="small" /> : null}
+            {petList.length > 0 ? <Pagination style={{ top: '331px' }} onChange={this.pageChange} current={petPagination.current} total={petPagination.total} pageSize={petPagination.pageSize} size="small" /> : null}
+            {petList.length === 0 ? <Empty /> : null}
           </div>
         </Card>
       </div>

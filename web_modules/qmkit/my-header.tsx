@@ -248,7 +248,7 @@ export default class MyHeader extends React.Component {
 
   languageChange = (value) => {
     sessionStorage.setItem(cache.LANGUAGE, value);
-    this.forceUpdate();
+    history.go(0)
   };
 
 }

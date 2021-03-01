@@ -300,3 +300,13 @@ export function queryStateList() {
     })
   });
 }
+
+// 分页获取 tag list
+export function getTaggingList(filterParams = {}) {
+  return Fetch<TResult>('/customer/segment/segment/query', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

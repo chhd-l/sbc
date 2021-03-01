@@ -1,10 +1,11 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, DatePicker, Empty, Spin, Popconfirm } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, DatePicker, Empty, Spin, Popconfirm, TreeSelect } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+import { Const } from 'qmkit';
 
 const { SubMenu } = Menu;
 const FormItem = Form.Item;
@@ -12,6 +13,7 @@ const Option = Select.Option;
 const { TabPane } = Tabs;
 
 const { Column } = Table;
+const { TreeNode } = TreeSelect;
 
 const layout = {
   labelCol: { span: 8 },
@@ -31,7 +33,8 @@ class PetInfomation extends React.Component<any, any> {
         petsSizeValueName: '',
         sterilized: null,
         birthOfPets: '',
-        customerPetsPropRelations: []
+        customerPetsPropRelations: [],
+        taggingList: []
       },
       petList: [],
       petsType: [
@@ -341,8 +344,41 @@ class PetInfomation extends React.Component<any, any> {
     // }
   };
 
+  loopTagging = (taggingTotalTree) => {
+    return (
+      taggingTotalTree &&
+      taggingTotalTree.map((item) => {
+        return <TreeNode key={item.id} value={item.id} title={item.name} />;
+      })
+    );
+  };
+  getTaggingList = () => {
+    let params = {
+      pageNum: 0,
+      pageSize: 1000,
+      tagType: 'petOwner'
+    };
+    webapi
+      .getTaggingList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let taggingList = res.context.segmentList;
+          this.setState({
+            taggingList
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
   render() {
-    const { petsType, petGender, sizeArr, customerPetsPropRelations, catBreed, dogBreed, petForm } = this.state;
+    const { petsType, petGender, sizeArr, customerPetsPropRelations, catBreed, dogBreed, petForm, taggingList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -639,6 +675,38 @@ class PetInfomation extends React.Component<any, any> {
                               ))
                             : null}
                         </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem {...formItemLayout} label="Pet owner tagging">
+                      {getFieldDecorator('tagging', {
+                        rules: [
+                          {
+                            required: false,
+                            message: 'Please select product tagging'
+                          }
+                        ],
+                        initialValue: petForm.tagging
+                      })(
+                        <TreeSelect
+                          getPopupContainer={() => document.getElementById('page-content')}
+                          treeCheckable={true}
+                          showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                          treeCheckStrictly={true}
+                          placeholder="Please select product tagging"
+                          notFoundContent="No classification"
+                          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                          showSearch={false}
+                          onChange={(value) =>
+                            this.onFormChange({
+                              field: 'preferredMethods',
+                              value
+                            })
+                          }
+                        >
+                          {this.loopTagging(taggingList)}
+                        </TreeSelect>
                       )}
                     </FormItem>
                   </Col>

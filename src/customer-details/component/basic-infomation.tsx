@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin, Checkbox, AutoComplete } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin, Checkbox, AutoComplete, TreeSelect } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
@@ -13,8 +13,8 @@ const { TextArea } = Input;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TabPane } = Tabs;
-
 const { Column } = Table;
+const { TreeNode } = TreeSelect;
 
 const layout = {
   labelCol: { span: 8 },
@@ -56,7 +56,8 @@ class BasicInfomation extends React.Component<any, any> {
       initCityName: '',
       initPreferChannel: [],
       storeId: '',
-      stateList: []
+      stateList: [],
+      taggingList: []
     };
   }
   componentDidMount() {
@@ -69,6 +70,7 @@ class BasicInfomation extends React.Component<any, any> {
     this.getDict();
     this.getBasicDetails();
     this.getClinicList();
+    this.getTaggingList();
   }
 
   getDict = () => {
@@ -339,8 +341,41 @@ class BasicInfomation extends React.Component<any, any> {
     });
   };
 
+  loopTagging = (taggingTotalTree) => {
+    return (
+      taggingTotalTree &&
+      taggingTotalTree.map((item) => {
+        return <TreeNode key={item.id} value={item.id} title={item.name} />;
+      })
+    );
+  };
+  getTaggingList = () => {
+    let params = {
+      pageNum: 0,
+      pageSize: 1000,
+      tagType: 'petOwner'
+    };
+    webapi
+      .getTaggingList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let taggingList = res.context.segmentList;
+          this.setState({
+            taggingList
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
   render() {
-    const { countryArr, cityArr, clinicList, objectFetching, initPreferChannel, storeId, stateList, basicForm } = this.state;
+    const { countryArr, cityArr, clinicList, objectFetching, initPreferChannel, storeId, stateList, basicForm, taggingList } = this.state;
     const options = [
       {
         label: 'Phone',
@@ -751,6 +786,38 @@ class BasicInfomation extends React.Component<any, any> {
                           ))
                         : null}
                     </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem {...formItemLayout} label="Pet owner tagging">
+                  {getFieldDecorator('tagging', {
+                    rules: [
+                      {
+                        required: false,
+                        message: 'Please select product tagging'
+                      }
+                    ],
+                    initialValue: basicForm.tagging
+                  })(
+                    <TreeSelect
+                      getPopupContainer={() => document.getElementById('page-content')}
+                      treeCheckable={true}
+                      showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                      treeCheckStrictly={true}
+                      placeholder="Please select product tagging"
+                      notFoundContent="No classification"
+                      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                      showSearch={false}
+                      onChange={(value) =>
+                        this.onFormChange({
+                          field: 'preferredMethods',
+                          value
+                        })
+                      }
+                    >
+                      {this.loopTagging(taggingList)}
+                    </TreeSelect>
                   )}
                 </FormItem>
               </Col>

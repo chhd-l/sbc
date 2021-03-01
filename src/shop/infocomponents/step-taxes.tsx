@@ -53,7 +53,7 @@ class StepTaxes extends Component<any, any> {
       fetching: false,
       statesZoneIncludes: sessionStorage.getItem('currentCountry') ? [sessionStorage.getItem('currentCountry')] : [],
       countryZoneIncludes: [],
-      isFGS: true,
+      isFGS: false,
       visibleApiSetting: false,
       taxApiSettings: [],
       taxSettingForm: {
@@ -579,7 +579,7 @@ class StepTaxes extends Component<any, any> {
                         <p>Set up your own rule</p>
                       </div>
                       <div className="bar" style={{ float: 'right' }}>
-                        <Popconfirm title={'Are you sure to enable this?'} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                        <Popconfirm title={'Are you sure to enable this?'} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
                           <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                         </Popconfirm>
                       </div>
@@ -590,7 +590,7 @@ class StepTaxes extends Component<any, any> {
                         <img src={item.imgUrl} style={{ width: '200px', height: '43px' }} />
                       </div>
                       <div className="bar" style={{ float: 'right' }}>
-                        <Popconfirm title={'Are you sure to enable this?'} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                        <Popconfirm title={'Are you sure to enable this?'} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
                           <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                         </Popconfirm>
                         {item.isOpen ? (

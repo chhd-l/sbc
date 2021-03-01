@@ -54,6 +54,7 @@ const flowState = (status) => {
   } else if (status == 'COMPLETED') {
     return <FormattedMessage id="order.completed" />;
   } else if (status == 'VOID') {
+  } else if (status == 'VOID') {
     return <FormattedMessage id="order.outOfDate" />;
   }
 };

@@ -315,7 +315,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </TabPane>
               </Tabs>
             </div>
-            <Feedback />
+            <Feedback customerId={this.state.customerId} />
           </Spin>
         </div>
         <div style={{ display: displayPage === 'editbasic' ? 'block' : 'none' }}>

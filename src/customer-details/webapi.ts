@@ -208,6 +208,15 @@ export function queryCityListByName(filterParams = {}) {
   });
 }
 
+export function getFeedbackByCustomerId(customerId) {
+  return Fetch<TResult>('/customer/feedback/getByCustomerId', {
+    method: 'POST',
+    body: JSON.stringify({
+      customerId
+    })
+  });
+}
+
 // import axios from '@/utils/request'
 // import { register } from '../serviceWorker'
 

@@ -1,18 +1,39 @@
 import React from 'react';
 import { Icon, Button, Form, Row, Col, Input, Select, Radio } from 'antd';
 import { Headline } from 'qmkit';
+import { getFeedbackByCustomerId } from '../webapi';
+import { FormComponentProps } from 'antd/lib/form';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
 
-class FeedBack extends React.Component<any, any> {
+interface Iprop extends FormComponentProps {
+  customerId: string;
+}
+
+class FeedBack extends React.Component<Iprop, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       showMore: false,
-      editable: false
+      editable: false,
+      feedback: {}
     };
   }
+
+  componentDidMount() {
+    this.getFeedback();
+  }
+
+  getFeedback = () => {
+    const { customerId } = this.state;
+    getFeedbackByCustomerId(customerId).then((data) => {
+      this.setState({
+        feedback: data.res.context
+      });
+    });
+  };
 
   showMore = (stat: boolean) => {
     this.setState({
@@ -486,4 +507,4 @@ class FeedBack extends React.Component<any, any> {
   }
 }
 
-export default Form.create()(FeedBack);
+export default Form.create<Iprop>()(FeedBack);

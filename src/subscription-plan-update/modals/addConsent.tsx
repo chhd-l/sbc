@@ -60,14 +60,12 @@ export default class addConsent extends Component<any, any> {
           });
           this.props.getAllConsent(res.context.consentVOList);
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
+      .catch(() => {
         this.setState({
           loading: false
         });

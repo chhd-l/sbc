@@ -171,6 +171,15 @@ export default {
   'Order.Export': 'Export',
   'Order.Cancel': 'Cancel',
   'Order.Pleaseselectanexportmethod': 'Please select an export method',
+  'Order.Orderstatus': 'Order status',
+  'Order.Doyouconfirmthat': 'Do you confirm that the order has been approved?',
+  'Order.Confirmthatallproducts': 'Confirm that all products have been received?',
+  'Order.Invalid': 'Invalid',
+  'Order.Unknown': 'Unknown',
+  'Order.Refund': 'Refund',
+  'Order.Tobeformed': 'To be formed',
+  'Order.RejectionReasonTip': 'Please enter the reason for rejection',
+  'Order.OncerejectedTip': 'Once rejected, we will return the payment for this order to the consumer',
 
   /*-----------------------------  Task  ----------------------------------------------*/
 

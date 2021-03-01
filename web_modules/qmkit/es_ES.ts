@@ -1,14 +1,65 @@
 import {FormattedMessage} from "react-intl";
-import React from 'react';
-
+import React from "react";
+// 'Home.':'',
 /**
  * 多语言英文
  */
 export default {
   /*-------------------------------- Public ---------------------------------------------*/
-  'Public.overview':'Overview123',
+  'Public.Overview':'Overview',
   /*-----------------------------  Home ------ ----------------------------------------*/
-  'Home.overview':'Overview',
+  'Home.Overview':'Overview',
+  'Home.Revenue':'Revenue',
+  'Home.Averagebasket':'Average basket',
+  'Home.Conversion':'Conversion',
+  'Home.Traffic':'Traffic',
+  'Home.Trafficrate':'Traffic rate',
+  'Home.Conversionfunnel':'Conversion funnel',
+  'Home.Conversionrate':'Conversion rate',
+  'Home.more':'more',
+  'Home.Pageview':'Page view',
+  'Home.VETtraffic':'VET traffic',
+  'Home.VETtrafficrate':'VET traffic rate',
+  'Home.OrderNumber':'Order Number',
+  'Home.Salesvolume':'Sales volume',
+  'Home.Unitssold':'Units sold',
+  'Home.Retentionrate':'Retention rate',
+  'Home.Consumer':'Consumer',
+  'Home.Activeconsumers':'Active consumers',
+  'Home.Activeconsumerrate':'Active consumer rate',
+  'Home.Totalconsumers':'Total consumers',
+  'Home.Subscription':'Subscription',
+  'Home.Prescriber':'Prescriber',
+  'Home.Activeprescriberrates':'Active prescriber rates',
+  'Home.Activeprescribers':'Active prescribers',
+  'Home.PrescriberrewardTop3':'Prescriber reward Top 3',
+  'Home.Bestseller':'Best seller',
+  'Home.TrafficTrend':'Traffic Trend',
+  'Home.PrescribersTrend':'Prescribers Trend',
+  'Home.TransactionTrend':'Transaction Trend',
+  'Home.aa11':'aa11',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
 
 
   /*-----------------------------  Product  ------------------------------------------*/

@@ -37,7 +37,7 @@ export default {
   'Home.TrafficTrend':'Traffic Trend',
   'Home.PrescribersTrend':'Prescribers Trend',
   'Home.TransactionTrend':'Transaction Trend',
-  'Home.aa11':'aa11',
+  'Home.Prescriberreward':'Prescriber reward',
   'Home.':'',
   'Home.':'',
   'Home.':'',
@@ -63,7 +63,193 @@ export default {
 
 
   /*-----------------------------  Product  ------------------------------------------*/
+  "Product.Productlist": "Product list",
+  "Product.Productname": "Product name",
+  "Product.Salescategory": "Sales category",
+  "Product.SPU": "SPU",
+  "Product.SKU": "SKU",
+  "Product.Productcategory": "Product category",
+  "Product.Brand": "Brand",
+  "Product.Image": "Image",
+  "Product.Marketprice": "Market price",
+  "Product.On/offshelves": "On/off shelves",
+  "Product.Operation": "Operation",
+  "Product.All": "All",
+  "Product.Onshelves": "On shelves",
+  "Product.Offshelves": "Off shelves",
+  "Product.Batchoperation": "Batch operation",
+  "Product.Batchonshelves": "Batch on shelves",
+  "Product.Batchoffshelves": "Batch off shelves",
+  "Product.Batchdelete": "Batch delete",
 
+
+
+  "Product.Pending": "Pending",
+  "Product.Pendingreview": "Pending review",
+  "Product.Reviewfailed": "Review failed",
+  "Product.Banned": "Banned",
+  "Product.MarketpricePricesettingmethod": "Market price Price setting method",
+  "Product.Storecategory": "Store category",
+  "Product.Approvalstatus": "Approval status",
+  "Product.Batchdeletion": "Batch deletion",
+
+  "Product.Publishproduct": "Publish product",
+  "Product.Chooseapublishingmethod": "Choose a publishing method",
+  "Product.Publishdirectly": "Publish directly",
+  "Product.Publishdirectlydelicacymanagment": "Publish directly delicacy managment",
+  "Product.Producttemplateimport": "Product template import",
+  "Product.Excelfilequickimport": "Excel file quick import",
+  "Product.Productpoolimport": "Product pool import",
+  "Product.One-clickimportofplatformcommoditylibrary": "One-click import of platform commodity library",
+  "Product.Chooseaproductcharacteristic": "Choose a product characteristic",
+  "Product.Newproduct": "New product",
+  "Product.Regularproduct": "Regular product",
+  "Product.Productinformation": "Product information",
+  "Product.Productprice": "Product price",
+  "Product.Productinventory": "Product inventory",
+  "Product.Relatedproduct": "Related product",
+  "Product.SEOsetting": "SEO setting",
+  "Product.Operationinstruction": `Operation instruction：
+
+  1、Until filled all required fields, the product could be published.
+  
+  2、 The product information tab, product price tab, product inventory tab must be filled before published.
+  
+  3、If you do not need to set the related product or SEO, you can click 'Next' directly after editing the inventory information.`,
+
+  "Product.InternalSPU": "Internal SPU",
+  "Product.Subscriptionstatus": "Subscription status",
+  "Product.Productcardintro": "Product card intro",
+  "Product.Productsubtitle": "Product subtitle",
+  "Product.Salesstatus": "Sales status",
+  "Product.Saleable": "Saleable",
+  "Product.Not–Saleable": "Not–Saleable",
+  "Product.Productimage": "Product image",
+  "Product.Productimageinfo": "If the sales category is set to display in shop, the first picture is showed in the hompage and the next picture is showed in the product list page.",
+  "Product.Productvideo": "Product video",
+  "Product.Productvideoinfo": "Product video size is recommended 30M, the maximum limit is 50M, supported file type is mp4, recommended duration is less than or equal to 90s, greater than or equal to 6s, recommended video ratio of 7: 9",
+  "Product.Attributeinformation": "Attribute information",
+  "Product.Attributeinformationdesc": "Consumber can filter the products according to the attributes. If attributes are not filled in or filled in incorrectly, the products may not be found and affect your sales. Please input carefully and accurately",
+  "Product.Specificationsetting": "Specification setting",
+  "Product.Specificationsettingcheckbox": "Set multiple specification of products",
+  "Product.Weightvalue": "Weight value",
+  "Product.Weightunit": "Weight unit",
+  "Product.Subscription": "Subscription",
+  "Product.Purchasetype": "Purchase type",
+  "Product.Listprice": "List price",
+  /*  "Product.Marketprice": "Market price",*/
+  "Product.Baseprice": "Base price",
+  "Product.Inventory": "Inventory",
+  "Product.Virtualinventory": "Virtual inventory",
+  "Product.UOM": "UOM",
+  "Product.Inventory Alert": "Inventory Alert",
+
+  "Product.SEOsettingalert": `You can delete these fields, including { name }-Royal Canin, { name }, { subtitle }, { sales category }, { tagging }, { description }, but can not edit the field
+
+    1、{ name } means the name of the product which enters in the product information tab page
+    
+    2、{subtitle } means the subtitle of the product which enters in the product information tab page
+    
+    3、{ sales category } means the sales category of the product which was chosen in the product information tab page
+    
+    4、{ tagging } means the sales category of the product which was chosen in the product information
+    
+    5、{description } means the description of the product which enters in the product information tab page`,
+  "Product.MetaKeywords": "Meta Keywords",
+  "Product.MetaDescription": "Meta Description",
+  "Product.Title": "Title",
+  "Product.Defaultfrequency": "Default frequency",
+  "Product.Defaultpurchasetype": "Default purchase type",
+  "Product.Producttagging": "Product tagging",
+  "Product.Addnewtagging": "Add new tagging",
+  "Product.TexttagTopleft": "Text tag (Top left)",
+  "Product.ImagetagTopright": "Image tag (Top right)",
+  "Product.Taggingfontcolor": "Tagging font color",
+  "Product.Taggingfillcolor": "Tagging fill color",
+  "Product.Displayinshop": "Display in shop",
+  "Product.Taggingname": "Tagging name",
+  "Product.Taggingtype": "Tagging type",
+  "Product.Productcount": "Product count",
+
+  "Product.Inventorywarning": "Inventory warning",
+  "Product.Inventorywarningdesc": "Set a quantity that when products are below this certain quantity, they are considered as ‘Low inventory’ and will be shown in the list below.",
+  "Product.Bulkexport": "Bulk export",
+ 
+  "Product.Addnewcategory": "Add new category",
+  "Product.Numberofproduct": "Number of product",
+  "Product.Salescategorydesc": "Sales category is the classification of products within the scope of your store. Up to 3 levels can be added. When there is No categories, all products will be classified into the default classification",
+  "Product.Parentcategory": "Parent category",
+  "Product.SalescategoryRouter": `The router could be customized by business needs, which show in the shop when select relevant sales category. In shop, the router should be like this"/"any letters"/?prefn1={attribute name}&prefv1={Attibute value1}|{Attribute value2}|{Attribute valuen},{}should be replace with real content of attribute.For example /cats/?prefn1=ages&prefv1=Adulte (1-7 ans)|Mature (7-12 ans)|Senior (+ 12 ans)`,
+  "Product.ALTname": "ALT name",
+  "Product.Categorytype": "Category type",
+  "Product.Categorytypedesc": "English name of sales category for searching specific type producy, you need to create Alias name in dictionary first, and then choose from.",
+  "Product.Categoryimage": "Category image",
+  "Product.Categoryimagedesc": "If the sales category is set to display in shop, the first picture is showed in the hompage and the next picture is showed in the product list page.",
+  "Product.Descriptiontitle": "Description title",
+  "Product.Categorydescription": "Category description",
+  "Product.Categorydescriptionplaceholder": "Please input the product description",
+
+
+  "Product.Productcategorydesc": "Product category is set by RC staff, you can associate attribute to product category.",
+  "Product.Categoryimages": "Category images",
+  "Product.Categoryname": "Category name",
+
+  "Product.Attributelibrary": "Attribute library",
+  "Product.Attributename": "Attribute name",
+  "Product.Displayname": "Display name",
+  "Product.Attributevalue": "Attribute value",
+  "Product.Displayvalue": "Display value",
+  "Product.Status": "Status",
+  "Product.Addnewattribute": "Add new attribute",
+  "Product.Choosetype": "Choose type",
+  "Product.Singlechoice": "Single choice",
+  "Product.Multiplechoice": "Multiple choice",
+
+  "Product.FilterSortsetting": "Filter & Sort setting",
+  "Product.FilterSortsettingdesc": `
+  1. Filter attributes can be chosen from attributes, which are associated with product category
+  2. The enabled filters will show in the ‘Filter’ section for customer to choose and filter out desired products.
+  3. The enabled sort conditions will show in the ‘Sort by’ section for customer to sort products in desired orders.`,
+  "Product.Attributefilter": "Attribute filter",
+  "Product.Customizedfilter": "Customized filter",
+  "Product.Sortby": "Sort by",
+  "Product.Selectattribute": "Select attribute",
+  "Product.Filtername": "Filter name",
+  "Product.Filterstatus": "Filter status",
+  "Product.Search": "Search",
+  "Product.SearchesWithResults": "Searches With Results",
+  "Product.Totalofpdt.found": "Total # of pdt. found",
+  "Product.Avgpdtfoundpersearch": "Avg. pdt found per search",
+  "Product.SearchesWithNo-Result": "Searches With No-Result",
+  "Product.No-resultRate": "No-result Rate",
+  "Product.No-ResultTermCount": "No-Result Term Count",
+  "Product.SearchTerm": "Search Term",
+  "Product.Percent": "Percent",
+  "Product.Export": "Export",
+  "Product.SearchResultDetails": "Search Result Details",
+  "Product.Consumeraccount": "Consumer account",
+  "Product.SearchNumber": "Search No.",
+  "Product.SearchTime": "Search Time",
+  "Product.ConsumerType": "Consumer Type",
+  "Product.ConsumerAccount": "Consumer Account",
+  "Product.ConsumerName": "Consumer Name",
+  "Product.Back": "Back",
+
+  "Product.Descriptionmanagement": "Description management",
+  "Product.Addnewdescription": "Add new description",
+  "Product.Descriptionname": "Description name",
+  "Product.Descriptiontype": "Description type",
+  "Product.Addnewdescriptiontip": "The number display name is set in shop information",
+
+  "Product.Productsalessetting": "Product sales setting",
+  "Product.Defaultsubscriptionfrequency": "Default subscription frequency",
+  "Product.Addnewfrequency": "Add new frequency",
+  "Product.Frequencytype": "Frequency type",
+  "Product.Frequencyname": "Frequency name",
+  "Product.Frequencyvalue": "Frequency value",
+  "Product.Reviewmanagement": "Review management",
+  "Product.Categorymanagement": "Category management",
+  "Product.Productmanagement": "Product management",
   /*-----------------------------  Order  --------------------------------------------*/
 
   /*---order-list-prescriber yxy---*/

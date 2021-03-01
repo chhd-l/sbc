@@ -37,7 +37,7 @@ export default {
   'Home.TrafficTrend':'Traffic Trend',
   'Home.PrescribersTrend':'Prescribers Trend',
   'Home.TransactionTrend':'Transaction Trend',
-  'Home.aa':'aa',
+  'Home.aa11':'aa11',
   'Home.':'',
   'Home.':'',
   'Home.':'',

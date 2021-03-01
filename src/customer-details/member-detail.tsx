@@ -13,6 +13,7 @@ import DeliveryList from './component/delivery-list';
 import PaymentList from './component/payment-list';
 import Feedback from './component/feedback';
 import BasicEdit from './component/basic-edit';
+import PetItem from './component/pet-item';
 
 import './index.less';
 import basicEdit from './component/basic-edit';
@@ -35,6 +36,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       loading: false,
       basic: {},
       pets: [],
+      pet: {},
       startDate: moment().format('YYYY-MM-DD'),
       endDate: moment().format('YYYY-MM-DD')
     };
@@ -49,7 +51,10 @@ export default class CustomerDetails extends React.Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          basic: res.context
+          basic: {
+            ...res.context,
+            customerAccount: res.context.customerVO.customerAccount
+          }
         });
       }
     });
@@ -58,15 +63,8 @@ export default class CustomerDetails extends React.Component<any, any> {
   getPetsList = () => {
     const { customerAccount } = this.state;
     webapi.petsByConsumer({ consumerAccount: customerAccount }).then((data) => {
-      const pets = data.res.context.context.map((r) => ({
-        petsId: r.petsId,
-        petsImg: r.petsImg,
-        petsName: r.petsName,
-        petsAge: r.birthOfPets ? moment().diff(r.borthOfPets, 'months') : '',
-        petsBreed: r.breederId
-      }));
       this.setState({
-        pets: pets
+        pets: data.res.context.context
       });
     });
   };
@@ -124,14 +122,26 @@ export default class CustomerDetails extends React.Component<any, any> {
     this.changeDisplayPage('detail');
   };
 
-  changeDisplayPage = (page: string) => {
+  onClickEditPet = (id) => {
     this.setState({
-      displayPage: page
+      displayPage: 'editpet',
+      pet: this.state.pets.find((pet) => pet.petsId === id)
     });
   };
 
+  changeDisplayPage = (page: string) => {
+    this.setState(
+      {
+        displayPage: page
+      },
+      () => {
+        document.getElementById('page-content').scrollTop = 0;
+      }
+    );
+  };
+
   render() {
-    const { displayPage, basic, pets, startDate, endDate } = this.state;
+    const { displayPage, basic, pets, pet, startDate, endDate } = this.state;
     return (
       <>
         <div style={{ display: displayPage === 'detail' ? 'block' : 'none' }}>
@@ -256,9 +266,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <span className="iconfont iconDelete"></span> Delete
                           </Button>
                         </Popconfirm>
-                        <Link to={`/edit-customer-pet/${pet.petsId}`}>
+                        <Button type="link" onClick={() => this.onClickEditPet(pet.petsId)}>
                           <span className="iconfont iconEdit"></span> Edit
-                        </Link>
+                        </Button>
                       </div>
                       <Row gutter={10}>
                         <Col span={6}>
@@ -275,8 +285,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}>Breed</Col>
                           </Row>
                           <Row style={{ fontSize: 16 }}>
-                            <Col span={12}>{pet.petsAge} months</Col>
-                            <Col span={12}>{pet.petsBreed}</Col>
+                            <Col span={12}>{moment().diff(moment(pet.birthOfPets, 'DD/MM/YYYY'), 'months')} months</Col>
+                            <Col span={12}>{pet.breederId}</Col>
                           </Row>
                         </Col>
                       </Row>
@@ -317,6 +327,17 @@ export default class CustomerDetails extends React.Component<any, any> {
           </BreadCrumb>
           <div className="container-search">
             <BasicEdit customer={basic} onChangePage={this.changeDisplayPage} onEdit={this.handleEditBasic} />
+          </div>
+        </div>
+        <div style={{ display: displayPage === 'editpet' ? 'block' : 'none' }}>
+          <BreadCrumb thirdLevel={true}>
+            <Breadcrumb.Item>
+              <FormattedMessage id="consumer.consumerDetails" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>Edit pet information</Breadcrumb.Item>
+          </BreadCrumb>
+          <div className="container-search">
+            <PetItem pet={pet} />
           </div>
         </div>
       </>

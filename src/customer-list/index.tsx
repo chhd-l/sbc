@@ -94,7 +94,8 @@ export default class Customer extends React.Component<any, any> {
         phoneNumber: '',
         //选中的诊所
         selectedPrescriberId: '',
-        defaultPrescriberName: ''
+        defaultPrescriberName: '',
+        subscriptionType: ''
       },
       customerTypeArr: [
         {
@@ -108,6 +109,7 @@ export default class Customer extends React.Component<any, any> {
           id: 233
         }
       ],
+      subscriptionTypeList: [],
       loading: false
     };
     this.onFormChange = this.onFormChange.bind(this);
@@ -117,7 +119,16 @@ export default class Customer extends React.Component<any, any> {
 
   componentDidMount() {
     this.init();
+    this.getSubscriptionTypeList();
   }
+
+  getSubscriptionTypeList = () => {
+    webapi.getSubscriptionPlanTypes().then((data) => {
+      this.setState({
+        subscriptionTypeList: data.res.context.sysDictionaryVOS
+      });
+    });
+  };
 
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -247,7 +258,7 @@ export default class Customer extends React.Component<any, any> {
   // }
 
   render() {
-    const { customerTypeArr, columns } = this.state;
+    const { customerTypeArr, columns, subscriptionTypeList } = this.state;
     return (
       <AuthWrapper functionName="f_customer_0">
         <div>
@@ -355,6 +366,29 @@ export default class Customer extends React.Component<any, any> {
                         });
                       }}
                     />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <SelectGroup
+                      defaultValue=""
+                      label={<p style={styles.label}>Subscription type</p>}
+                      style={{ width: 80 }}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'subscriptionType',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">All</Option>
+                      {subscriptionTypeList.map((item) => (
+                        <Option value={item.name} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </SelectGroup>
                   </FormItem>
                 </Col>
                 <Col span={24} style={{ textAlign: 'center' }}>

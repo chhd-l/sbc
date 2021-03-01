@@ -217,6 +217,13 @@ export function getFeedbackByCustomerId(customerId) {
   });
 }
 
+export function saveFeedback(params = {}) {
+  return Fetch<TResult>('/customer/feedback/save', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
 // import axios from '@/utils/request'
 // import { register } from '../serviceWorker'
 

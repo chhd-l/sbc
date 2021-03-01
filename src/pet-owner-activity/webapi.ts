@@ -6,12 +6,9 @@ type TResult = {
   context: any;
 };
 
-export function getPetOwner(filterParams = {}) {
-  return Fetch<TResult>('/biz/task/listView', {
-    method: 'GET',
-    body: JSON.stringify({
-      ...filterParams
-    })
+export function getPetOwner(id) {
+  return Fetch('/customer/detail/' + id, {
+    method: 'GET'
   });
 }
 
@@ -41,7 +38,6 @@ export function getGlodenMomentList() {
     })
   });
 }
-
 
 export function getOrderList(filterParams = {}) {
   return Fetch<TResult>('/order/list', {

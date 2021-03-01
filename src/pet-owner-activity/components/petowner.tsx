@@ -41,25 +41,22 @@ export default class petowner extends Component<any, any> {
       ]
     };
   }
+
+  componentDidMount() {
+    this.getPetOwner();
+  }
+
   getPetOwner() {
     this.setState({
       loading: true
     });
     webapi
-      .getPetOwner()
+      .getPetOwner(this.props.petOwnerId)
       .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            contactDetails: res.context,
-            loading: false
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-          this.setState({
-            loading: false
-          });
-        }
+        this.setState({
+          contactDetails: data,
+          loading: false
+        });
       })
       .catch(() => {
         message.error('Get data failed');
@@ -70,7 +67,7 @@ export default class petowner extends Component<any, any> {
   }
   render() {
     const { contactDetails, allocatedSegments } = this.state;
-    const { contactId } = this.props;
+    const { petOwnerId } = this.props;
     return (
       <div>
         <Card
@@ -78,7 +75,7 @@ export default class petowner extends Component<any, any> {
           title={
             <div className="title">
               <span>About This Pet Owner</span>
-              <span className="viewAll" onClick={() => history.push('/pet-owner-all/' + contactId)}>
+              <span className="viewAll" onClick={() => history.push(`/customer-details/Member/${petOwnerId}/${contactDetails.customerVO.customerAccount}` + petOwnerId)}>
                 View All
                 <Icon type="right" />
               </span>

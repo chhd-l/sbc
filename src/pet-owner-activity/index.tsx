@@ -18,7 +18,7 @@ export default class PetOwnerActivity extends Component<any, any> {
     super(props);
     this.state = {
       activityKey: '1',
-      id: this.props.match.params.id,
+      id: this.props.match.params.id ? this.props.match.params.id : '',
       title: 'Pet Owner activity'
     };
   }
@@ -35,9 +35,9 @@ export default class PetOwnerActivity extends Component<any, any> {
         <div className="container petOwnerActivity">
           <Row gutter={10} style={{ marginBottom: '20px' }}>
             <Col span={7}>
-              <PetOwner contactId={id} />
+              <PetOwner petOwnerId={id} />
               <div style={{ marginTop: '20px' }}></div>
-              <Pets contactId={id} />
+              <Pets petOwnerId={id} />
             </Col>
             <Col span={9} id="task">
               <Card>
@@ -50,21 +50,21 @@ export default class PetOwnerActivity extends Component<any, any> {
                   }
                 >
                   <TabPane tab="Task" key="1">
-                    <Tasks contactId={id} />
+                    <Tasks petOwnerId={id} />
                   </TabPane>
                   <TabPane tab="Emails" key="2">
-                    <Emails contactId={id} />
+                    <Emails petOwnerId={id} />
                   </TabPane>
                   <TabPane tab="Activities" key="3">
-                    <Activities contactId={id} />
+                    <Activities petOwnerId={id} />
                   </TabPane>
                 </Tabs>
               </Card>
             </Col>
             <Col span={8}>
-              <Orders contactId={id} />
+              <Orders petOwnerId={id} />
               <div style={{ marginTop: '20px' }}></div>
-              <Bookings contactId={id} />
+              <Bookings petOwnerId={id} />
             </Col>
           </Row>
         </div>

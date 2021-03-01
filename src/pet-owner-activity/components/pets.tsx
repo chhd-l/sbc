@@ -16,7 +16,7 @@ export default class pets extends Component<any, any> {
           birthday: '2019-02-01',
           breedCode: 'mixed_breed',
           clubStatus: false,
-          contactId: 256,
+          petOwnerId: 256,
           createdAt: '2020-10-28',
           currentWeight: '4kg',
           dateAdded: '2020-10-28',
@@ -211,7 +211,7 @@ export default class pets extends Component<any, any> {
                 </Row>
               </Row>
             ))}
-            {petList && petList.length > 0 ? <Pagination style={{top:'331px'}} onShowSizeChange={this.onShowSizeChange} total={petPagination.total} pageSize={petPagination.pageSize} size="small" /> : null}
+            {petList && petList.length > 0 ? <Pagination style={{ top: '331px' }} onShowSizeChange={this.onShowSizeChange} total={petPagination.total} pageSize={petPagination.pageSize} size="small" /> : null}
           </div>
         </Card>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker } from 'antd';
+import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse } from 'antd';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import ListView from './components/list-view';
@@ -11,6 +11,7 @@ import './style.less';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
+const { Panel } = Collapse;
 
 export default class Task extends Component<any, any> {
   constructor(props) {
@@ -59,175 +60,179 @@ export default class Task extends Component<any, any> {
         <BreadCrumb />
         <div className="container-search">
           <Headline title={title} />
-          <Form className="filter-content" layout="inline">
-            <Row>
-              <Col span={8}>
-                <FormItem>
-                  <Input
-                    addonBefore={<p style={styles.label}>Task Name</p>}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'name',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    showSearch
-                    label={<p style={styles.label}>Golden Moment</p>}
-                    style={{ width: 195 }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'goldenMoment',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {goldenMomentList &&
-                      goldenMomentList.map((item) => (
-                        <Option value={item.value} key={item.id}>
-                          {item.value}
+          <Collapse style={{ marginBottom: '20px', background: '#fff' }}>
+            <Panel header="Advance Search" key="1">
+              <Form className="filter-content" layout="inline">
+                <Row>
+                  <Col span={8}>
+                    <FormItem>
+                      <Input
+                        addonBefore={<p style={styles.label}>Task Name</p>}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'name',
+                            value
+                          });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <SelectGroup
+                        defaultValue=""
+                        showSearch
+                        label={<p style={styles.label}>Golden Moment</p>}
+                        style={{ width: 195 }}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'goldenMoment',
+                            value
+                          });
+                        }}
+                      >
+                        <Option value="">
+                          <FormattedMessage id="all" />
                         </Option>
-                      ))}
-                  </SelectGroup>
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    label={<p style={styles.label}>Task Status</p>}
-                    style={{ width: 195 }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'status',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {taskStatus &&
-                      taskStatus.map((item, index) => (
-                        <Option value={item} key={index}>
-                          {item}
+                        {goldenMomentList &&
+                          goldenMomentList.map((item) => (
+                            <Option value={item.value} key={item.id}>
+                              {item.value}
+                            </Option>
+                          ))}
+                      </SelectGroup>
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <SelectGroup
+                        defaultValue=""
+                        label={<p style={styles.label}>Task Status</p>}
+                        style={{ width: 195 }}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'status',
+                            value
+                          });
+                        }}
+                      >
+                        <Option value="">
+                          <FormattedMessage id="all" />
                         </Option>
-                      ))}
-                  </SelectGroup>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    label={<p style={styles.label}>Priority</p>}
-                    style={{ width: 195 }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'priority',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {priorityList &&
-                      priorityList.map((item, index) => (
-                        <Option value={item} key={index}>
-                          {item}
+                        {taskStatus &&
+                          taskStatus.map((item, index) => (
+                            <Option value={item} key={index}>
+                              {item}
+                            </Option>
+                          ))}
+                      </SelectGroup>
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={8}>
+                    <FormItem>
+                      <SelectGroup
+                        defaultValue=""
+                        label={<p style={styles.label}>Priority</p>}
+                        style={{ width: 195 }}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'priority',
+                            value
+                          });
+                        }}
+                      >
+                        <Option value="">
+                          <FormattedMessage id="all" />
                         </Option>
-                      ))}
-                  </SelectGroup>
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <Input
-                    addonBefore={<p style={styles.label}>Pet Assistant Name</p>}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'petOwnerName',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <Input
-                    addonBefore={<p style={styles.label}>Pet Owner Name</p>}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'assistantName',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <RangePicker
-                  placeholder={['Due Start time', 'Due End time']}
-                  format="YYYY-MM-DD"
-                  onChange={(date, dateString) => {
-                    this.onFormChange({
-                      field: 'dueTimeStart',
-                      value: dateString[0]
-                    });
-                    this.onFormChange({
-                      field: 'dueTimeEnd',
-                      value: dateString[1]
-                    });
-                  }}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24} style={{ textAlign: 'center' }}>
-                <FormItem>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    icon="search"
-                    shape="round"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (isCardView) {
-                        this.refs.cardView.getTaskList(queryType);
-                      } else {
-                        this.refs.listView.getTaskList(queryType);
-                      }
-                    }}
-                  >
-                    <span>
-                      <FormattedMessage id="search" />
-                    </span>
-                  </Button>
-                </FormItem>
-              </Col>
-            </Row>
-          </Form>
+                        {priorityList &&
+                          priorityList.map((item, index) => (
+                            <Option value={item} key={index}>
+                              {item}
+                            </Option>
+                          ))}
+                      </SelectGroup>
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <Input
+                        addonBefore={<p style={styles.label}>Pet Assistant Name</p>}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'assistantName',
+                            value
+                          });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <Input
+                        addonBefore={<p style={styles.label}>Pet Owner Name</p>}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'petOwnerName',
+                            value
+                          });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={8}>
+                    <RangePicker
+                      placeholder={['Due Start time', 'Due End time']}
+                      format="YYYY-MM-DD"
+                      onChange={(date, dateString) => {
+                        this.onFormChange({
+                          field: 'dueTimeStart',
+                          value: dateString[0] ? dateString[0] + ' 00:00:00' : null
+                        });
+                        this.onFormChange({
+                          field: 'dueTimeEnd',
+                          value: dateString[1] ? dateString[1] + ' 00:00:00' : null
+                        });
+                      }}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={24} style={{ textAlign: 'center' }}>
+                    <FormItem>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        icon="search"
+                        shape="round"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (isCardView) {
+                            this.refs.cardView.getTaskList(queryType);
+                          } else {
+                            this.refs.listView.getTaskList(queryType);
+                          }
+                        }}
+                      >
+                        <span>
+                          <FormattedMessage id="search" />
+                        </span>
+                      </Button>
+                    </FormItem>
+                  </Col>
+                </Row>
+              </Form>
+            </Panel>
+          </Collapse>
         </div>
         <div className="container">
           <Row style={{ marginBottom: '20px' }}>
@@ -268,7 +273,7 @@ export default class Task extends Component<any, any> {
               </Select>
             </Col>
           </Row>
-          {isCardView ? <CardView ref="cardView" formData={taskForm} /> : <ListView ref="listView" formData={taskForm} />}
+          {isCardView ? <CardView ref="cardView" formData={taskForm} queryType={queryType} /> : <ListView ref="listView" formData={taskForm} queryType={queryType} />}
         </div>
       </div>
     );

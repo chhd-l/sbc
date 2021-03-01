@@ -44,7 +44,6 @@ export default class CardView extends Component<any, any> {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
           });
-          this.getTaskList('1'); // default my task
         } else {
           message.error(res.message || 'Get data failed');
         }
@@ -52,6 +51,7 @@ export default class CardView extends Component<any, any> {
       .catch(() => {
         message.error('Get data failed');
       });
+    this.getTaskList(this.props.queryType);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -167,13 +167,13 @@ export default class CardView extends Component<any, any> {
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">
                           <div className="goldenMoment">
-                            <span style={{ background: this.getBackground('todo') }} className={this.getGoldenMomentIcon(item.goldenMoment) + ' addTaskIcon icon iconfont'} />
-                            <span>{item.goldenMoment}</span>
-                            {item.priority === 'high' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                            <span style={{ background: this.getBackground('todo') }} className="point" />
+                            <span>{item.name}</span>
+                            {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontaskName" />
-                            {item.name}
+                            {item.goldenMoment}
                           </div>
                           <div className="contentInfo">
                             <span className=" icon iconfont addTaskIcon iconsingle-person" />
@@ -197,13 +197,13 @@ export default class CardView extends Component<any, any> {
                     <Row gutter={10}>
                       <Col span={24} className="contentPanel">
                         <div className="goldenMoment">
-                          <span style={{ background: this.getBackground('onGoing') }} className={this.getGoldenMomentIcon(item.goldenMoment) + ' addTaskIcon icon iconfont'} />
-                          {item.goldenMoment}
-                          {item.priority === 'high' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                          <span style={{ background: this.getBackground('onGoing') }} className="point" />
+                          {item.name}
+                          {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
                         </div>
                         <div className="contentInfo">
                           <span className="icon iconfont addTaskIcon icontaskName" />
-                          {item.name}
+                          {item.goldenMoment}
                         </div>
                         <div className="contentInfo">
                           <span className=" icon iconfont addTaskIcon iconsingle-person" />
@@ -226,19 +226,19 @@ export default class CardView extends Component<any, any> {
                     <Row gutter={10}>
                       <Col span={24} className="contentPanel">
                         <div className="goldenMoment">
-                          <span style={{ background: this.getBackground('completed') }} className={this.getGoldenMomentIcon(item.goldenMoment) + ' addTaskIcon icon iconfont'} />
-                          {item.goldenMoment}
-                          {item.priority === 'high' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                          <span style={{ background: this.getBackground('completed') }} className="point" />
+                          {item.name}
+                          {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
                         </div>
                         <div className="contentInfo">
                           <span className="icon iconfont addTaskIcon icontaskName" />
-                          {item.name}
+                          {item.goldenMoment}
                         </div>
                         <div className="contentInfo">
                           <span className=" icon iconfont addTaskIcon iconsingle-person" />
                           {item.assistantName ? item.assistantName : 'No Assistant Name'}
                         </div>
-                        <div style={{ color: this.overDueStyle(item) }} className="contentInfo">
+                        <div className="contentInfo">
                           <span className="icon iconfont addTaskIcon iconshizhong" />
                           {item.dueTime ? item.dueTime : 'No Due Time'}
                         </div>
@@ -255,19 +255,19 @@ export default class CardView extends Component<any, any> {
                     <Row gutter={10}>
                       <Col span={24} className="contentPanel">
                         <div className="goldenMoment">
-                          <span style={{ background: this.getBackground('cancelled') }} className={this.getGoldenMomentIcon(item.goldenMoment) + ' addTaskIcon icon iconfont'} />
-                          {item.goldenMoment}
-                          {item.priority === 'high' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                          <span style={{ background: this.getBackground('cancelled') }} className="point" />
+                          {item.name}
+                          {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
                         </div>
                         <div className="contentInfo">
                           <span className="icon iconfont addTaskIcon icontaskName" />
-                          {item.name}
+                          {item.goldenMoment}
                         </div>
                         <div className="contentInfo">
                           <span className="icon iconfont addTaskIcon iconsingle-person" />
                           {item.assistantName ? item.assistantName : 'No Assistant Name'}
                         </div>
-                        <div style={{ color: this.overDueStyle(item) }} className="contentInfo">
+                        <div className="contentInfo">
                           <span className="icon iconfont addTaskIcon iconshizhong" />
                           {item.dueTime ? item.dueTime : 'No Due Time'}
                         </div>

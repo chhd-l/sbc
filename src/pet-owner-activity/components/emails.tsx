@@ -19,7 +19,7 @@ export default class emails extends Component<any, any> {
           category: 'Clinic',
           clinicId: 6,
           clinicName: 'Вега',
-          contactId: 229,
+          petOwnerId: 229,
           createdBy: 138,
           createdByUser: 'Mia Lin',
           dateAdded: '2021-01-28 12:32:26',

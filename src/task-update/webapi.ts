@@ -96,3 +96,14 @@ export function getPetOwnerOrders(consumerAccount) {
     })
   });
 }
+
+export function getPetOwnerSubscriptions(consumerAccount) {
+  return Fetch<TResult>('/sub/findPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      customerAccount: consumerAccount,
+      pageNum: 0,
+      pageSize: 99999999
+    })
+  });
+}

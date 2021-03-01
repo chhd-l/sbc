@@ -15,6 +15,7 @@ export default class HomeAuthActor extends Actor {
       transactionTrendView: '',
       trafficTrendDashboardView: '',
       conversionFunnelDashboardView: '',
+      taskEmployeeStatisticsView: [],
       search: '',
       searchData: '',
       selectSearchData: '',
@@ -50,6 +51,12 @@ export default class HomeAuthActor extends Actor {
   trafficDashboardView(state: IMap, res) {
     return state.set('trafficDashboardView', res);
   }
+
+  @Action('home:taskEmployeeStatisticsView')
+  taskEmployeeStatisticsView(state: IMap, res) {
+    return state.set('taskEmployeeStatisticsView', res);
+  }
+
   @Action('home:transactionTrendView')
   transactionTrendView(state: IMap, res) {
     return state.set('transactionTrendView', res);

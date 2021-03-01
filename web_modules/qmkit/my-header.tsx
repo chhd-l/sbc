@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover } from 'antd';
+import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover, Empty } from 'antd';
 const { Header } = Layout;
 import { history, cache, util, Const } from 'qmkit';
 import QRCode from 'qrcode';
@@ -206,7 +206,7 @@ export default class MyHeader extends React.Component {
     const content = (
       <div style={{ width: 350 }}>
         <ul style={{ height: 380, overflow: 'auto' }}>
-          {this.state.taskList.map(item => {
+          {this.state.taskList.length>0?this.state.taskList.map(item => {
             return (
               <li style={styles.popoverList} className="popover-list" key={item.id}>
                 <div className="popover-list-text" style={styles.popoverListText}>
@@ -216,7 +216,7 @@ export default class MyHeader extends React.Component {
                 <div style={{ width: '15%', textAlign: 'center' }} > <Icon type="close" style={{ cursor: 'pointer' }} onClick={() => this.readTask(item)} /></div>
               </li>
             )
-          })}
+          }):<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         </ul>
         <div style={styles.linkMore}>
           <Link to="/tasks" style={{ color: 'red', fontSize: 18, textDecoration: 'underline' }}>View all task</Link>

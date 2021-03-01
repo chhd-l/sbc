@@ -15,20 +15,20 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Pet owner account',
+          title: 'Consumer account',
           dataIndex: 'customerAccount',
           key: 'consumerAccount',
           width: '15%'
         },
         {
-          title: 'Pet owner name',
+          title: 'Consumer name',
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
           render: (text, record) => <p>{record.firstName + ' ' + record.lastName}</p>
         },
         {
-          title: 'Pet owner type',
+          title: 'Consumer type',
           dataIndex: 'customerLevelName',
           key: 'consumerType',
           width: '15%'
@@ -67,10 +67,6 @@ export default class Customer extends React.Component<any, any> {
             <span>
               <Tooltip placement="top" title="Details">
                 <Link to={'/customer-details/' + (record.customerLevelName ? record.customerLevelName : 'Guest') + '/' + record.customerId + '/' + record.customerAccount} className="iconfont iconDetails"></Link>
-              </Tooltip>
-              <Divider type="vertical" />
-              <Tooltip placement="top" title="Activity">
-                <Link to={'/pet-owner-activity/' + record.customerId} className="iconfont iconhuanjie"></Link>
               </Tooltip>
               {/* <Divider type="vertical" />
               <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}
@@ -306,7 +302,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={styles.label}>Pet owner type</p>}
+                      label={<p style={styles.label}>Customer type</p>}
                       style={{ width: 80 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;

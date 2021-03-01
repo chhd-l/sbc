@@ -5,7 +5,7 @@ import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-import { Const, Headline } from 'qmkit';
+import { Const } from 'qmkit';
 import _ from 'lodash';
 
 const { TextArea } = Input;
@@ -26,8 +26,6 @@ class BasicInfomation extends React.Component<any, any> {
     super(props);
     this.state = {
       basicForm: {
-        customerAccount: '',
-        createTime: '',
         firstName: '',
         lastName: '',
         birthDay: '',
@@ -115,7 +113,9 @@ class BasicInfomation extends React.Component<any, any> {
       .getBasicDetails(this.props.customerId)
       .then((data) => {
         let res = data.res;
-        if (!(res.code && res.code !== Const.SUCCESS_CODE)) {
+        if (res.code && res.code !== Const.SUCCESS_CODE) {
+          message.error(res.message || 'Unsuccessful');
+        } else {
           let res2 = JSON.stringify(data.res);
 
           let resObj = JSON.parse(res2);
@@ -126,8 +126,6 @@ class BasicInfomation extends React.Component<any, any> {
           }
 
           let basicForm = {
-            customerAccount: resObj.customerVO.customerAccount,
-            createTime: resObj.createTime,
             firstName: resObj.firstName,
             lastName: resObj.lastName,
             birthDay: resObj.birthDay ? resObj.birthDay : this.state.currentBirthDay,
@@ -354,24 +352,7 @@ class BasicInfomation extends React.Component<any, any> {
     return (
       <div>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-          <Headline title="Edit basic information" />
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <FormItem label="Consumer account">
-                  {getFieldDecorator('customerAccount', {
-                    initialValue: this.state.basicForm.customerAccount
-                  })(<Input disabled={true} />)}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem label="Registration date">
-                  {getFieldDecorator('createTime', {
-                    initialValue: moment(this.state.basicForm.createTime)
-                  })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" disabled={true} />)}
-                </FormItem>
-              </Col>
-            </Row>
             <Row gutter={16}>
               <Col span={12}>
                 <FormItem label="First Name">
@@ -462,7 +443,7 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Phone number">
+                <FormItem label="Phone Number">
                   {getFieldDecorator('contactPhone', {
                     rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }]
                   })(
@@ -480,7 +461,7 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem label="Postal code">
+                <FormItem label="Postal Code">
                   {getFieldDecorator('postalCode', {
                     rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
                   })(
@@ -554,7 +535,7 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Address reference">
+                <FormItem label="Address 1">
                   {getFieldDecorator('address1', {
                     rules: [
                       { required: true, message: 'Please input Address 1!' },
@@ -564,7 +545,8 @@ class BasicInfomation extends React.Component<any, any> {
                       }
                     ]
                   })(
-                    <Input
+                    <TextArea
+                      autoSize={{ minRows: 3, maxRows: 3 }}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -577,11 +559,26 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Consent">
-                  {getFieldDecorator('consent', {
-                    valuePropName: 'checked',
-                    initialValue: true
-                  })(<Radio>Email communication</Radio>)}
+                <FormItem label="Address 2">
+                  {getFieldDecorator('address2', {
+                    rules: [
+                      {
+                        max: 200,
+                        message: 'Exceed maximum length!'
+                      }
+                    ]
+                  })(
+                    <TextArea
+                      autoSize={{ minRows: 3, maxRows: 3 }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'address2',
+                          value
+                        });
+                      }}
+                    />
+                  )}
                 </FormItem>
               </Col>
 
@@ -610,26 +607,98 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem label="Tag name">
+                <FormItem label="Reference">
                   {getFieldDecorator('reference', {
                     rules: [
                       {
-                        required: true,
-                        message: 'Tag name is required'
+                        max: 200,
+                        message: 'Exceed maximum length!'
                       }
                     ]
                   })(
-                    <Select
-                      mode="multiple"
-                      onChange={(value) => {
+                    <Input
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
                         this.onFormChange({
                           field: 'reference',
                           value
                         });
                       }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Default Prescriber">
+                  {getFieldDecorator(
+                    'defaultClinicsId',
+                    {}
+                  )(
+                    <Select
+                      showSearch
+                      placeholder="Please select"
+                      style={{ width: '100%' }}
+                      onChange={(value, Option) => {
+                        let tempArr = Option.props.children.split(',');
+                        let clinic = {
+                          clinicsId: tempArr[0],
+                          clinicsName: tempArr[1]
+                        };
+
+                        this.onFormChange({
+                          field: 'defaultClinics',
+                          value: clinic
+                        });
+                      }}
                     >
-                      <Option value="1">Active user</Option>
-                      <Option value="2">Student</Option>
+                      {clinicList
+                        ? clinicList.map((item) => (
+                            <Option value={item.prescriberId.toString()} key={item.prescriberId}>
+                              {item.prescriberId + ',' + item.prescriberName}
+                            </Option>
+                          ))
+                        : null}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Select Prescriber">
+                  {getFieldDecorator('selectedClinics', {
+                    // rules: [{ required: true, message: 'Please Select Prescriber!' }]
+                  })(
+                    <Select
+                      mode="tags"
+                      placeholder="Please select"
+                      style={{ width: '100%' }}
+                      onChange={(value, Option) => {
+                        let clinics = [];
+                        for (let i = 0; i < Option.length; i++) {
+                          let tempArr = Option[i].props.children.split(',');
+                          let clinic = {
+                            clinicsId: tempArr[0],
+                            clinicsName: tempArr[1]
+                          };
+                          clinics.push(clinic);
+                        }
+
+                        this.onFormChange({
+                          field: 'selectedClinics',
+                          value: clinics
+                        });
+                      }}
+                    >
+                      {/* {
+                      clinicList.map((item) => (
+                        <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
+                      ))} */}
+                      {clinicList
+                        ? clinicList.map((item) => (
+                            <Option value={item.prescriberId.toString()} key={item.prescriberId}>
+                              {item.prescriberId + ',' + item.prescriberName}
+                            </Option>
+                          ))
+                        : null}
                     </Select>
                   )}
                 </FormItem>
@@ -652,4 +721,4 @@ class BasicInfomation extends React.Component<any, any> {
     );
   }
 }
-export default Form.create<any>()(BasicInfomation);
+export default Form.create()(BasicInfomation);

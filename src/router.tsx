@@ -856,16 +856,16 @@ const routes = [
     asyncComponent: () => import('./subscription-setting')
   },
   {
-    path: '/campaigns',
-    asyncComponent: () => import('./campaigns')
+    path: '/automations',
+    asyncComponent: () => import('./automations')
   },
   {
-    path: '/add-campaign',
-    asyncComponent: () => import('./campaign-update')
+    path: '/add-automation',
+    asyncComponent: () => import('./automation-update')
   },
   {
-    path: '/edit-campaign/:id',
-    asyncComponent: () => import('./campaign-update')
+    path: '/edit-automation/:id',
+    asyncComponent: () => import('./automation-update')
   },
   {
     path: '/tag-management-list',

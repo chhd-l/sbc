@@ -8,12 +8,12 @@ import ItemCommunicationNode from './components/nodes/ItemCommunicationNode';
 
 const { TabPane } = Tabs;
 
-export default class CampaignUpdate extends Component<any, any> {
+export default class AutomationUpdate extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: this.props.match.params.id ? 'Edit Campaign' : 'Add Campaign',
+      title: this.props.match.params.id ? 'Edit Automation' : 'Add Automation',
       flowdata: {
         nodes: [],
         edges: []

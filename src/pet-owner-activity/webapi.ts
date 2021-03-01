@@ -7,13 +7,13 @@ type TResult = {
 };
 
 export function getPetOwner(id) {
-  return Fetch('/customer/detail/' + id, {
+  return Fetch<TResult>('/customer/detail/' + id, {
     method: 'GET'
   });
 }
 
 export function getPetList(filterParams = {}) {
-  return Fetch<TResult>('/biz/task/listView', {
+  return Fetch<TResult>('/customerpets/getListByCustomerAccount', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

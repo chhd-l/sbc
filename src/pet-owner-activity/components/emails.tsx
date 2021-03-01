@@ -29,7 +29,7 @@ export default class emails extends Component<any, any> {
       ],
       emailFilter: [
         { value: 'COMMUNICATION.Emails', label: 'Communication Email' },
-        { value: 'CAMPAIGN ACTIVITY.Emails', label: 'Campaign Email' }
+        { value: 'CAMPAIGN ACTIVITY.Emails', label: 'Automation Email' }
       ],
       filterVisible: false
     };

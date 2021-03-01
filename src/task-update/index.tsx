@@ -452,9 +452,9 @@ class TaskUpdate extends Component<any, any> {
                             disabled={taskCompleted || (!!task.startTime && id)}
                             style={{ width: '100%' }}
                             placeholder="Start Time"
-                            format="YYYY-MM-DD HH:mm:ss"
+                            format="YYYY-MM-DD"
                             onChange={(date, dateString) => {
-                              const value = dateString;
+                              const value = dateString ? dateString + ' 00:00:00' : null;
                               this.onChange({
                                 field: 'startTime',
                                 value
@@ -478,9 +478,9 @@ class TaskUpdate extends Component<any, any> {
                             disabled={taskCompleted}
                             style={{ width: '100%' }}
                             placeholder="Due Time"
-                            format="YYYY-MM-DD HH:mm:ss"
+                            format="YYYY-MM-DD"
                             onChange={(date, dateString) => {
-                              const value = dateString;
+                              const value = dateString ? dateString + ' 00:00:00' : null;
                               this.onChange({
                                 field: 'dueTime',
                                 value

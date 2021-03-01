@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { history, Const } from 'qmkit';
-import { Card, Icon, Row, Col, message } from 'antd';
+import { Card, Icon, Row, Col, message, Tooltip } from 'antd';
 import * as webapi from '../webapi';
 
 export default class petowner extends Component<any, any> {
@@ -53,10 +53,18 @@ export default class petowner extends Component<any, any> {
     webapi
       .getPetOwner(this.props.petOwnerId)
       .then((data) => {
-        this.setState({
-          contactDetails: data,
-          loading: false
-        });
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            contactDetails: res.context,
+            loading: false
+          });
+        } else {
+          message.error('Get data failed');
+          this.setState({
+            loading: false
+          });
+        }
       })
       .catch(() => {
         message.error('Get data failed');
@@ -85,10 +93,10 @@ export default class petowner extends Component<any, any> {
           <Row type="flex" align="middle" className="ui-row-detail userBase">
             <div className="detail-content" style={{ width: '100%' }}>
               <div>
-                <span className="contactName">{contactDetails.firstName + ' ' + contactDetails.lastName}</span>
+                <span className="contactName">{contactDetails.contactName}</span>
               </div>
               <span className="ui-lighter">
-                <span style={{ whiteSpace: 'break-spaces' }}>Pet Owner ID</span>:<span className="content">{contactDetails.uuid}</span>
+                <span style={{ whiteSpace: 'break-spaces' }}>Pet Owner ID</span>:<span className="content">{contactDetails.customerVO ? contactDetails.customerVO.customerId : ''}</span>
               </span>
             </div>
           </Row>
@@ -101,7 +109,7 @@ export default class petowner extends Component<any, any> {
                 </Col>
                 <Col span={18}>
                   <span className="content">
-                    {contactDetails.city} , {contactDetails.countryCode}
+                    {contactDetails.city} , {contactDetails.country}
                   </span>
                 </Col>
               </Row>
@@ -116,7 +124,17 @@ export default class petowner extends Component<any, any> {
                   <span className="ui-lighter">Email</span>
                 </Col>
                 <Col span={18}>
-                  <span className="content">{contactDetails.email}</span>
+                  <span className="content">
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div> {contactDetails.email}</div>}
+                    >
+                      <p style={styles.text}> {contactDetails.email}</p>
+                    </Tooltip>
+                  </span>
                 </Col>
               </Row>
             </div>
@@ -160,3 +178,11 @@ export default class petowner extends Component<any, any> {
     );
   }
 }
+const styles = {
+  text: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 200
+  }
+};

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './index.less';
 
-export default class Campaigns extends Component {
+export default class Automations extends Component {
   render() {
     return <div></div>;
   }

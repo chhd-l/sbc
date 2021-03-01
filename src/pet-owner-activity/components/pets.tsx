@@ -54,7 +54,7 @@ export default class pets extends Component<any, any> {
   }
 
   componentDidMount() {
-    this.getPetList();
+    // this.getPetList();
   }
 
   getPetAgeString(item) {
@@ -89,11 +89,17 @@ export default class pets extends Component<any, any> {
   }
 
   getPetList() {
+    const { pagination } = this.state;
+    let params = {
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize,
+      customerId: this.props.petOwnerId
+    };
     this.setState({
       loading: true
     });
     webapi
-      .getPetList()
+      .getPetList(params)
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {

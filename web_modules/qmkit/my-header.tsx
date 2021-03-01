@@ -2,33 +2,59 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover } from 'antd';
 const { Header } = Layout;
-import { history, cache, util } from 'qmkit';
+import { history, cache, util, Const } from 'qmkit';
 import QRCode from 'qrcode';
 import copy from 'copy-to-clipboard';
 import value from '*.json';
 const Option = Select.Option;
 import OktaLogout from './okta/okta-logout';
-
+import { getHomeTaskListAndCount, getTaskRead } from '../../src/task/webapi';
 export default class MyHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       qrCodeLink: '',
-      url: ''
+      url: '',
+      taskList: [],
+      visible: false
     };
   }
 
-  returnTask(item){
-    console.log(item)
-    history.push(`/edit-task/1251`)
+  componentDidMount() {
+    this.getTaskList();
   }
 
-  readTask(item){
+  async getTaskList() {
+    const { res } = await getHomeTaskListAndCount();
 
+    this.setState({
+      taskList: res?.context?.reminderTasks ?? []
+    })
   }
+  returnTask(item) {
+    this.readTask(item);
+    history.push(`/edit-task/${item.id}`)
+  }
+  async readTask(item) {
+    const { res } = await getTaskRead({ id: item.id });
+    if (res.code === Const.SUCCESS_CODE) {
+      const index = this.state.taskList.findIndex(it => it.id === item.id);
+      if (index !== undefined) {
+        this.state.taskList.splice(index, 1)
+        this.setState({
+          taskList: this.state.taskList,
+          visible: false
+        })
+      }
+    }
+  }
+  handleVisibleChange = visible => {
+    this.setState({ visible });
+  };
 
 
   render() {
+
     const loginInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     if (!loginInfo) {
       return null;
@@ -178,23 +204,24 @@ export default class MyHeader extends React.Component {
       </Menu>
     );
     const content = (
-      <div style={{width:350}}>
-        <div style={{height:380,overflow:'auto'}}>
-        {[1,2,3,4,5,6,7,8,9].map(item=>{
-          return (
-            <div style={styles.popoverList} className="popover-list">
-            <div className="popover-list-text" style={styles.popoverListText}>
-              <p  style={{color:'red',cursor:'pointer'}} onClick={()=>this.returnTask(item)}>When you click the reminder information, it will jump to the task details interface.</p>
-              <p style={{fontSize:12}}>2021-02-28</p>
-            </div>
-           <div style={{width:'15%',textAlign:'center'}} > <Icon type="close" style={{cursor:'pointer'}} onClick={()=>this.readTask(item)}/></div>
-           </div>
-          )
-        })}
+      <div style={{ width: 350 }}>
+        <ul style={{ height: 380, overflow: 'auto' }}>
+          {this.state.taskList.map(item => {
+            return (
+              <li style={styles.popoverList} className="popover-list" key={item.id}>
+                <div className="popover-list-text" style={styles.popoverListText}>
+                  <div style={{ color: 'red', cursor: 'pointer' }} onClick={() => this.returnTask(item)}><span style={{ background: 'red', height: 4, width: 4, verticalAlign: 'middle', display: 'inline-block', marginRight: 10 }}></span>{item.title}</div>
+                  <div style={{ fontSize: 12, marginTop: 5 }}>{item.createTime}</div>
+                </div>
+                <div style={{ width: '15%', textAlign: 'center' }} > <Icon type="close" style={{ cursor: 'pointer' }} onClick={() => this.readTask(item)} /></div>
+              </li>
+            )
+          })}
+        </ul>
+        <div style={styles.linkMore}>
+          <Link to="/tasks" style={{ color: 'red', fontSize: 18, textDecoration: 'underline' }}>View all task</Link>
+          <Icon type="right" />
         </div>
-        <div style={{marginTop:20,}}>
-          <Link to="/tasks" style={{color:'red',fontSize:18, textDecoration:'underline'}}>View all task</Link>
-          </div>
       </div>
     );
     const userImg =
@@ -231,13 +258,16 @@ export default class MyHeader extends React.Component {
           </div>
 
           <div style={styles.headerRight}>
-            <div style={{marginRight:30,marginTop:15}}>
-            <Badge count={99}>
-            <Popover placement="bottomRight"  content={content} trigger="click">
-              <Icon type="bell" style={{fontSize:25}}/>
-              </Popover>
-          </Badge>
-              </div>
+            <div style={{ marginRight: 30, marginTop: 15 }}>
+              <Badge count={this.state.taskList.length}>
+                <Popover style={{ padding: 0 }}
+                  visible={this.state.visible}
+                  onVisibleChange={this.handleVisibleChange}
+                  placement="bottomRight" content={content} trigger="click">
+                  <Icon type="bell" style={{ fontSize: 25 }} />
+                </Popover>
+              </Badge>
+            </div>
             <div style={{ height: 20, textAlign: 'right', }}>
               <div style={{ height: 20 }}>
                 <Dropdown overlay={menu} trigger={['click']}>
@@ -280,14 +310,25 @@ export default class MyHeader extends React.Component {
 }
 
 const styles = {
-  popoverList:{
+  popoverList: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding:'10px 0'
+    padding: '15px 0',
+    borderBottom: '1px solid #ccc'
   },
-  popoverListText:{
-    flex:1
+  linkMore: {
+    padding: '20px 16px',
+    background: '#f3f3f3',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    osition: 'relative',
+    margin: '0 -16px -12px -16px',
+
+  },
+  popoverListText: {
+    flex: 1
   },
   logoBg: {
     width: 134,

@@ -37,14 +37,14 @@ export default class OrderDetail extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{<FormattedMessage id="orderDetails" />}</Breadcrumb.Item>
+          <Breadcrumb.Item>{<FormattedMessage id="Order.OrderDetails" />}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title={<FormattedMessage id="orderDetails" />} />
+          <Headline title={<FormattedMessage id="Order.OrderDetails" />} />
         </div>
         <div className="container">
           <Tabs onChange={(key) => this.store.onTabsChange(key)} activeKey={this.store.state().get('tab')}>
-            <Tabs.TabPane tab={<FormattedMessage id="orderDetails" />} key="1">
+            <Tabs.TabPane tab={<FormattedMessage id="Order.OrderDetails" />} key="1">
               <OrderDetailTab />
             </Tabs.TabPane>
             {/* <Tabs.TabPane

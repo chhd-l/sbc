@@ -6,7 +6,7 @@ import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const invoiceContent = (invoice) => {
   let invoiceContent = '';
@@ -136,6 +136,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       showRejectModal: Function;
       hideRejectModal: Function;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -252,31 +253,31 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const columns = [
       {
-        title: 'SKU Code',
+        title: <FormattedMessage id="Order.SKUCode" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text
       },
       {
-        title: 'Product Name',
+        title: <FormattedMessage id="Order.ProductName" />,
         dataIndex: 'skuName',
         key: 'skuName',
         width: '20%'
       },
       {
-        title: 'Weight',
+        title: <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
       {
-        title: 'Pet category',
+        title: <FormattedMessage id="Order.Petcategory" />,
         dataIndex: 'petCategory',
         key: 'petCategory',
         width: '10%',
         render: (text, record) => <>{record.petsInfo && record.petsInfo.petsType ? <p>{record.petsInfo.petsType}</p> : null}</>
       },
       {
-        title: 'Pet name',
+        title: <FormattedMessage id="Order.Petname" />,
         dataIndex: 'petName',
         key: 'petName',
         width: '10%',
@@ -284,6 +285,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: 'Pet details',
+        title: <FormattedMessage id="Order.Petdetails" />,
         dataIndex: 'petDetails',
         key: 'petDetails',
         width: '10%',
@@ -299,11 +301,13 @@ export default class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: 'Quantity',
+        title: <FormattedMessage id="Order.Quantity" />,
         dataIndex: 'num',
         key: 'num'
       },
       {
         title: 'Price',
+        title: <FormattedMessage id="Order.Price" />,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
         render: (originalPrice, record) =>
@@ -327,6 +331,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: 'Subtotal',
+        title: <FormattedMessage id="Order.Subtotal" />,
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -363,29 +368,29 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const columnsNoPet = [
       {
-        title: 'SKU Code',
+        title: <FormattedMessage id="Order.SKUCode" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text
       },
       {
-        title: 'Product Name',
+        title: <FormattedMessage id="Order.ProductName" />,
         dataIndex: 'skuName',
         key: 'skuName',
         width: '20%'
       },
       {
-        title: 'Weight',
+        title: <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
       {
-        title: 'Quantity',
+        title: <FormattedMessage id="Order.Quantity" />,
         dataIndex: 'num',
         key: 'num'
       },
       {
-        title: 'Price',
+        title: <FormattedMessage id="Order.Price" />,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
         render: (originalPrice, record) =>
@@ -408,7 +413,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )
       },
       {
-        title: 'Subtotal',
+        title: <FormattedMessage id="Order.Subtotal" />,
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -477,15 +482,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 ''
               )}
               <p style={styles.darkText}>
-                {<FormattedMessage id="clinicID" />}: {detail.get('clinicsId')}
+                {<FormattedMessage id="Order.Auditorid" />}: {detail.get('clinicsId')}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="clinicName" />}: {detail.get('clinicsName')}
+                {<FormattedMessage id="Order.Auditorname" />}: {detail.get('clinicsName')}
               </p>
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
+                {<FormattedMessage id="Order.Consumeraccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
               {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}</p>}
               {/* <p style={styles.darkText}>
@@ -513,7 +518,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
             <div style={styles.priceBox}>
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="productAmount" />}:</span>
+                <span style={styles.name}>{<FormattedMessage id="Order.Productamount" />}:</span>
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.goodsPrice || 0).toFixed(2)}
@@ -534,7 +539,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
               {discount && (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
+                  <span style={styles.name}>{<FormattedMessage id="Order.Promotionamount" />}:</span>
                   <strong>$-{discount.discounts.toFixed(2)}</strong>
                 </label>
               )}
@@ -591,7 +596,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="shippingFees" />}: </span>
+                <span style={styles.name}>{<FormattedMessage id="Order.Shippingfees" />}: </span>
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.deliveryPrice || 0).toFixed(2)}
@@ -600,7 +605,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
               {+sessionStorage.getItem(cache.TAX_SWITCH) === 0 ? (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{<FormattedMessage id="tax" />}: </span>
+                  <span style={styles.name}>{<FormattedMessage id="Order.Tax" />}: </span>
                   <strong>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     {(tradePrice.taxFeePrice || 0).toFixed(2)}
@@ -609,7 +614,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="total" />}: </span>
+                <span style={styles.name}>{<FormattedMessage id="Order.Total" />}: </span>
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.totalPrice || 0).toFixed(2)}
@@ -728,7 +733,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
          */}
-        <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
+        <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.Save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm
             ref={(form) => {
               this._rejectForm = form;
@@ -772,7 +777,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null}
             </Col>
             <Col span={12}>
-              <h3>special Needs</h3>
+              <h3>
+                <FormattedMessage id="Order.specialNeeds" />
+              </h3>
               {currentPetInfo.customerPetsPropRelations && currentPetInfo.customerPetsPropRelations.map((item) => <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>)}
             </Col>
           </Row>
@@ -846,7 +853,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       href="javascript:void(0)"
                       style={styles.pr20}
                     >
-                      Re-review
+                      <FormattedMessage id="Order.Re-review" />
                     </a>
                   </Tooltip>
                 </AuthWrapper>
@@ -926,7 +933,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 href="javascript:void(0)"
                 style={styles.pr20}
               >
-                Confirm Receipt
+                <FormattedMessage id="Order.ConfirmReceipt" />
               </a>
             </Tooltip>
           </AuthWrapper>
@@ -970,8 +977,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: 'Re-review',
-      content: 'Confirm to return the selected order for re approval ?',
+      title: this.props.intl.formatMessage({
+        id: 'Order.Re-review'
+      }),
+      content: this.props.intl.formatMessage({
+        id: 'Order.Confirmtoreturntheselected'
+      }),
       onOk() {
         retrial(tdId);
       },
@@ -988,7 +999,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      content: 'Do you confirm that the order has been approved?',
+      content: this.props.intl.formatMessage({
+        id: 'Order.Doyouconfirmthat'
+      }),
       onOk() {
         onAudit(tid, 'CHECKED');
       },
@@ -1006,8 +1019,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: 'Confirm receipt',
-      content: 'Confirm receipt of all items?',
+      title: this.props.intl.formatMessage({
+        id: 'Order.ConfirmReceipt'
+      }),
+      content: this.props.intl.formatMessage({
+        id: 'Order.Confirmreceiptofallitems'
+      }),
       onOk() {
         confirm(tdId);
       },

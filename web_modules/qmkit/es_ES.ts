@@ -366,6 +366,17 @@ export default {
   'Order.Tobeformed': 'To be formed',
   'Order.RejectionReasonTip': 'Please enter the reason for rejection',
   'Order.OncerejectedTip': 'Once rejected, we will return the payment for this order to the consumer',
+  'Order.OrderDetails': 'Order Details',
+  'Order.Promotionamount': 'Promotion amount',
+  'Order.Tax': 'Tax',
+  'Order.Save': 'Save',
+  'Order.specialNeeds': 'special Needs',
+  'Order.Order.Re-review': 'Order.Re-review',
+  'Order.ConfirmReceipt': 'Confirm Receipt',
+  'Order.Confirmtoreturntheselected': 'Confirm to return the selected order for re approval ?',
+  'Order.Confirmreceiptofallitems': 'Confirm receipt of all items?',
+
+
 
   /*-----------------------------  Task  ----------------------------------------------*/
 

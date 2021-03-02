@@ -47,7 +47,7 @@ export default class addConsent extends Component<any, any> {
       loading: true
     });
     webapi
-      .getConsents(serchForm)
+      .getConsents({ ...serchForm, consentGroup: 'subscription-plan', openFlag: 1 })
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {

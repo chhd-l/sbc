@@ -1,6 +1,6 @@
 import React from 'react';
 import { StoreProvider } from 'plume2';
-
+import { Row, Col } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
@@ -8,6 +8,7 @@ import SearchForm from './components/search-form';
 import Tab from './components/tab';
 import FreightModal from './components/freight-modal';
 import { FormattedMessage } from 'react-intl';
+import SyncButton from './components/sync-product';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsView extends React.Component<any, any> {
@@ -29,7 +30,14 @@ export default class GoodsView extends React.Component<any, any> {
             <Breadcrumb.Item>商品列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="product.productList" />} />
+            <Row>
+              <Col span={18}>
+                <Headline title={<FormattedMessage id="product.productList" />} />
+              </Col>
+              <Col span={6} style={{ textAlign: 'right' }}>
+                <SyncButton />
+              </Col>
+            </Row>
 
             {/*搜索*/}
             <SearchForm />

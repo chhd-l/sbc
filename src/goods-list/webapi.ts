@@ -118,4 +118,4 @@ const syncProduct = () => {
   });
 };
 
-export { goodsList, spuOnSale, spuOffSale, spuDelete, getBrandList, getCateList, getProductCategories, freightList, goodsFreight, goodsFreightExpress, updateFreight };
+export { goodsList, spuOnSale, spuOffSale, spuDelete, getBrandList, getCateList, getProductCategories, freightList, goodsFreight, goodsFreightExpress, updateFreight, syncProduct };

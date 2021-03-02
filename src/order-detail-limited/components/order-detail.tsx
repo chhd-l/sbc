@@ -6,23 +6,23 @@ import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const columns = [
   {
-    title: 'SKU Code',
+    title: <FormattedMessage id="Order.SKUCode" />,
     dataIndex: 'skuNo',
     key: 'skuNo',
     render: (text) => text
   },
   {
-    title: 'Product Name',
+    title: <FormattedMessage id="Order.ProductName" />,
     dataIndex: 'skuName',
     key: 'skuName',
     width: '50%'
   },
   {
-    title: 'Weight',
+    title: <FormattedMessage id="Order.Weight" />,
     dataIndex: 'specDetails',
     key: 'specDetails'
   },
@@ -33,7 +33,7 @@ const columns = [
   //   render: (levelPrice) => <span>${levelPrice.toFixed(2)}</span>
   // },
   {
-    title: 'Quantity',
+    title: <FormattedMessage id="Order.Quantity" />,
     dataIndex: 'num',
     key: 'num'
   }
@@ -89,6 +89,9 @@ const flowState = (status) => {
  * 拒绝表单，只为校验体验
  */
 class RejectForm extends React.Component<any, any> {
+  props: {
+    intl: any;
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -99,7 +102,7 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.RejectionReasonTip" />
               },
               {
                 max: 100,
@@ -107,7 +110,14 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(
+            <Input.TextArea
+              placeholder={this.props.intl.formatMessage({
+                id: 'Order.RejectionReasonTip'
+              })}
+              autosize={{ minRows: 4, maxRows: 4 }}
+            />
+          )}
         </FormItem>
       </Form>
     );
@@ -127,13 +137,13 @@ class RejectForm extends React.Component<any, any> {
   };
 }
 
-const WrappedRejectForm = Form.create()(RejectForm);
+const WrappedRejectForm = Form.create()(injectIntl(RejectForm));
 
 /**
  * 订单详情
  */
 @Relax
-export default class OrderDetailTab extends React.Component<any, any> {
+class OrderDetailTab extends React.Component<any, any> {
   onAudit: any;
   _rejectForm;
 
@@ -155,6 +165,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       showRejectModal: Function;
       hideRejectModal: Function;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -274,18 +285,18 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="orderNumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
+                {<FormattedMessage id="Order.Ordernumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
                 {/*<span style={styles.platform}>代下单</span>*/}
                 {/* <span style={styles.platform}>{orderType}</span> */}
                 {detail.get('grouponFlag') && <span style={styles.platform}>拼团</span>}
                 {/*)}*/}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="orderTime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
+                {<FormattedMessage id="Order.Ordertime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
               {detail.get('isAutoSub') ? (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="order.subscriptioNumber" /> : {detail.get('subscribeId')}
+                  <FormattedMessage id="Order.Subscriptionumber" /> : {detail.get('subscribeId')}
                 </p>
               ) : (
                 ''
@@ -293,10 +304,10 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="consumer" />}: {detail.getIn(['buyer', 'name'])}
+                {<FormattedMessage id="Order.Consumer" />}: {detail.getIn(['buyer', 'name'])}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
+                {<FormattedMessage id="Order.Consumeraccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
               {detail.getIn(['buyer', 'customerFlag']) && (
                 <p style={styles.darkText}>
@@ -304,11 +315,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     ? 'Consumer Level:  '
                     : 'Platform Level:  ') +
                     detail.getIn(['buyer', 'levelName'])} */}
-                  {'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}
+                  {this.props.intl.formatMessage({
+                    id: 'Order.Consumertype'
+                  }) +
+                    ':  ' +
+                    detail.getIn(['buyer', 'levelName'])}
                 </p>
               )}
               <p style={styles.darkText}>
-                {<FormattedMessage id="phoneNumber" />}: {detail.getIn(['consignee', 'phone'])}
+                {<FormattedMessage id="Order.Phonenumber" />}: {detail.getIn(['consignee', 'phone'])}
               </p>
             </Col>
           </Row>
@@ -328,30 +343,30 @@ export default class OrderDetailTab extends React.Component<any, any> {
         <Row>
           <Col span={8}>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCountry" />}: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
+              {<FormattedMessage id="Order.DeliveryCountry" />}: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCity" />}: {cityDict.find((c) => c.id == consignee.cityId) && cityDict.find((c) => c.id == consignee.cityId).cityName}
+              {<FormattedMessage id="Order.DeliveryCity" />}: {cityDict.find((c) => c.id == consignee.cityId) && cityDict.find((c) => c.id == consignee.cityId).cityName}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryAddress1" />}: {consignee.detailAddress1}
+              {<FormattedMessage id="Order.Deliveryaddress1" />}: {consignee.detailAddress1}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryAddress2" />}: {consignee.detailAddress2}
+              {<FormattedMessage id="Order.Deliveryaddress2" />}: {consignee.detailAddress2}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="postalCode" />}: {consignee.postCode}
+              {<FormattedMessage id="Order.Postalcode" />}: {consignee.postCode}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="reference" />}: {consignee.rfc}
+              {<FormattedMessage id="Orer.Reference" />}: {consignee.rfc}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryComment" />}: {detail.get('buyerRemark')}
+              {<FormattedMessage id="Order.Deliverycomment" />}: {detail.get('buyerRemark')}
             </p>
           </Col>
         </Row>
 
-        <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
+        <Modal maskClosable={false} title={<FormattedMessage id="Order.RejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm
             ref={(form) => {
               this._rejectForm = form;
@@ -399,7 +414,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     verify(tid);
                   }}
                 >
-                  Modify
+                  <FormattedMessage id="Order.Modify" />
                 </a>
               </Tooltip>
             </AuthWrapper>
@@ -430,7 +445,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       href="javascript:void(0)"
                       style={styles.pr20}
                     >
-                      Re-review
+                      <FormattedMessage id="Order.Re-review" />
                     </a>
                   </Tooltip>
                 </AuthWrapper>
@@ -504,7 +519,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 href="javascript:void(0)"
                 style={styles.pr20}
               >
-                Confirm Receipt
+                <FormattedMessage id="Order.ConfirmReceipt" />
               </a>
             </Tooltip>
           </AuthWrapper>
@@ -548,8 +563,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: 'Re-review',
-      content: 'Confirm to return the selected order for re approval ?',
+      title: this.props.intl.formatMessage({
+        id: 'Order.Re-review'
+      }),
+      content: this.props.intl.formatMessage({
+        id: 'Order.Confirmtoreturntheselected'
+      }),
       onOk() {
         retrial(tdId);
       },
@@ -567,8 +586,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: 'Confirm receipt',
-      content: 'Confirm receipt of all items?',
+      title: this.props.intl.formatMessage({
+        id: 'Order.ConfirmReceipt'
+      }),
+      content: this.props.intl.formatMessage({
+        id: 'Order.Confirmreceiptofallitems'
+      }),
       onOk() {
         confirm(tdId);
       },
@@ -577,6 +600,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   };
 }
 
+export default injectIntl(OrderDetailTab);
 const styles = {
   headBox: {
     padding: 15,

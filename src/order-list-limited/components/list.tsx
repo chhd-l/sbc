@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
@@ -62,6 +62,9 @@ const flowState = (status) => {
 type TList = List<any>;
 
 class RejectForm extends React.Component<any, any> {
+  props: {
+    intl: any;
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -72,7 +75,7 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.RejectionReasonTip" />
+                message: <FormattedMessage id="Order.RejectionReasonTip" />
               },
               {
                 max: 100,
@@ -80,7 +83,7 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={this.props.intl.formatMessage({ id: 'Order.RejectionReasonTip' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -103,7 +106,7 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create({})(RejectForm);
 
 @Relax
-export default class ListView extends React.Component<any, any> {
+class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
@@ -132,6 +135,7 @@ export default class ListView extends React.Component<any, any> {
       hideRejectModal: Function;
       showRejectModal: Function;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -182,29 +186,29 @@ export default class ListView extends React.Component<any, any> {
                         />
                       </th>
                       <th>
-                        <FormattedMessage id="productFirstLetterUpperCase" />
+                        <FormattedMessage id="Order.Product" />
                       </th>
                       <th style={{ width: '14%' }}>
-                        <FormattedMessage id="consumerName" />
+                        <FormattedMessage id="Order.Consumername" />
                       </th>
                       <th style={{ width: '17%' }}>
-                        <FormattedMessage id="recipient" />
+                        <FormattedMessage id="Order.Recipient" />
                       </th>
                       <th style={{ width: '10%' }}>
                         {/* <FormattedMessage id="amount" /> */}
                         {/* <br /> */}
-                        <FormattedMessage id="quantity" />
+                        <FormattedMessage id="Order.Quantity" />
                       </th>
                       {/* <th style={{ width: '5%' }}>postCode</th> */}
                       {/* <th style={{ width: '5%' }}>rfc</th> */}
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="order.shippingStatus" />
+                        <FormattedMessage id="Order.Shippingstatus" />
                       </th>
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="order.orderStatus" />
+                        <FormattedMessage id="Order.Orderstatus" />
                       </th>
                       <th className="operation-th" style={{ width: '12%' }}>
-                        <FormattedMessage id="order.paymentStatus" />
+                        <FormattedMessage id="Order.Paymentstatus" />
                       </th>
                     </tr>
                   </thead>
@@ -232,7 +236,7 @@ export default class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
+          <Modal maskClosable={false} title={<FormattedMessage id="Order.RejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;
@@ -320,7 +324,7 @@ export default class ListView extends React.Component<any, any> {
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
                               <span style={styles.platform}>
-                                <FormattedMessage id="order.valetOrder" />
+                                <FormattedMessage id="Order.Valetorder" />
                               </span>
                             )}
                             {/* {orderType != '' && (
@@ -328,7 +332,7 @@ export default class ListView extends React.Component<any, any> {
                             )} */}
                             {v.get('grouponFlag') && (
                               <span style={styles.platform}>
-                                <FormattedMessage id="order.fightTogether" />
+                                <FormattedMessage id="Order.Fighttogether" />
                               </span>
                             )}
                             {v.get('isAutoSub') && <span style={styles.platform}>S</span>}
@@ -448,7 +452,7 @@ export default class ListView extends React.Component<any, any> {
                                   }}
                                   href="javascript:void(0)"
                                 >
-                                  <FormattedMessage id="order.confirmReceipt" />
+                                  <FormattedMessage id="Order.ConfirmReceipt" />
                                 </a>
                               </Tooltip>
                             </AuthWrapper>
@@ -568,8 +572,12 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="order.review" />,
-      content: <FormattedMessage id="order.confirmReview" />,
+      title: this.props.intl.formatMessage({
+        id: 'Order.Review'
+      }),
+      content: this.props.intl.formatMessage({
+        id: 'Order.ConfirmReview'
+      }),
       onOk() {
         onRetrial(tdId);
       },
@@ -597,8 +605,12 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: 'Confirm receipt',
-      content: 'Confirm that all products have been received?',
+      title: this.props.intl.formatMessage({
+        id: 'Order.ConfirmReceipt'
+      }),
+      content: this.props.intl.formatMessage({
+        id: 'Order.Confirmthatallproducts'
+      }),
       onOk() {
         onConfirm(tdId);
       },
@@ -629,7 +641,7 @@ export default class ListView extends React.Component<any, any> {
     this._rejectForm.setFieldsValue({ comment: '' });
   };
 }
-
+export default injectIntl(ListView);
 const styles = {
   loading: {
     textAlign: 'center',

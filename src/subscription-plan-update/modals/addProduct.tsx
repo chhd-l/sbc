@@ -40,45 +40,31 @@ export default class addTargetProduct extends Component<any, any> {
   }
 
   componentDidMount() {
-    webapi
-      .getBrandList()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            brandList: res.context
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+    webapi.getBrandList().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          brandList: res.context
+        });
+      }
+    });
 
-    webapi
-      .getProductCategoryList()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          let newCategoryList = res.context.map((item) => {
-            return {
-              id: item.cateId,
-              parentId: item.cateParentId === 0 ? null : item.cateParentId,
-              cateName: item.cateName
-            };
-          });
-          let treeData = util.setChildrenData(newCategoryList);
-          this.setState({
-            productCategories: treeData
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+    webapi.getProductCategoryList().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        let newCategoryList = res.context.map((item) => {
+          return {
+            id: item.cateId,
+            parentId: item.cateParentId === 0 ? null : item.cateParentId,
+            cateName: item.cateName
+          };
+        });
+        let treeData = util.setChildrenData(newCategoryList);
+        this.setState({
+          productCategories: treeData
+        });
+      }
+    });
 
     this.getSkuProductList();
   }
@@ -132,14 +118,12 @@ export default class addTargetProduct extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
+      .catch(() => {
         this.setState({
           loading: false
         });

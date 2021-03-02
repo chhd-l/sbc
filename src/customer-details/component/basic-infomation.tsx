@@ -57,7 +57,8 @@ class BasicInfomation extends React.Component<any, any> {
       initPreferChannel: [],
       storeId: '',
       stateList: [],
-      taggingList: []
+      taggingList: [],
+      selectedBind:[]
     };
   }
   componentDidMount() {

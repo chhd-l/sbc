@@ -310,3 +310,14 @@ export function getTaggingList(filterParams = {}) {
     })
   });
 }
+
+// bindTagging
+export function bindTagging(filterParams = {}) {
+  return Fetch<TResult>('/customer/segment/segment/segmentRelation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+

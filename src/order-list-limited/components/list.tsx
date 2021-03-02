@@ -12,49 +12,50 @@ const defaultImg = require('../../goods-list/img/none.png');
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="order.notShipped" />;
+    return <FormattedMessage id="Order.notshipped" />;
   } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="order.allShipments" />;
+    return <FormattedMessage id="Order.Allshipments" />;
   } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="order.partialShipment" />;
+    return <FormattedMessage id="Order.Partialshipment" />;
   } else if (status == 'VOID') {
-    return <FormattedMessage id="order.invalid" />;
+    return <FormattedMessage id="Order.Invalid" />;
   } else {
-    return <FormattedMessage id="order.unknown" />;
+    return <FormattedMessage id="Order.Unknown" />;
   }
 };
 
 const payStatus = (status) => {
   if (status == 'NOT_PAID') {
-    return <FormattedMessage id="order.unpaid" />;
+    return <FormattedMessage id="Order.Unpaid" />;
   } else if (status == 'UNCONFIRMED') {
-    return <FormattedMessage id="order.toBeConfirmed" />;
+    return <FormattedMessage id="Order.Tobeconfirmed" />;
   } else if (status == 'PAID') {
-    return <FormattedMessage id="order.paid" />;
+    return <FormattedMessage id="Order.Paid" />;
   } else if (status == 'REFUND') {
-    return <FormattedMessage id="Refund" />;
+    return <FormattedMessage id="Order.Refund" />;
   } else if (status == 'PAYING') {
-    return 'Paying';
+    return <FormattedMessage id="Order.Paying" />;
   } else {
-    return <FormattedMessage id="order.unknown" />;
+    return <FormattedMessage id="Order.Unknown" />;
   }
 };
 
 const flowState = (status) => {
   if (status == 'INIT') {
-    return <FormattedMessage id="order.pendingReview" />;
+    return <FormattedMessage id="Order.Pendingreview" />;
   } else if (status == 'GROUPON') {
-    return <FormattedMessage id="order.toBeFormed" />;
+    return <FormattedMessage id="Order.Tobeformed" />;
   } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="order.toBeDelivered" />;
+    return <FormattedMessage id="Order.Tobedelivered" />;
   } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="order.toBeReceived" />;
+    return <FormattedMessage id="Order.Tobereceived" />;
   } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="order.received" />;
+    return <FormattedMessage id="Order.Received" />;
   } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="order.completed" />;
+    return <FormattedMessage id="Order.Completed" />;
   } else if (status == 'VOID') {
-    return <FormattedMessage id="order.outOfDate" />;
+  } else if (status == 'VOID') {
+    return <FormattedMessage id="Order.Outofdate" />;
   }
 };
 
@@ -71,7 +72,7 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="order.RejectionReasonTip" />
               },
               {
                 max: 100,

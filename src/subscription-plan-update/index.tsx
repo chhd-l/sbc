@@ -50,63 +50,42 @@ class SubscriptionPlanUpdate extends Component<any, any> {
 
   componentWillMount() {
     const { id } = this.state;
-    webapi
-      .getWeekFrequency()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          let defaultFrequency = res.context.sysDictionaryVOS.find((x) => parseInt(x.valueEn) === 4);
-          if (!id && defaultFrequency) {
-            this.addField('frequency', [defaultFrequency.id]);
-          }
-          this.setState({
-            frequencyList: res.context.sysDictionaryVOS.filter((x) => parseInt(x.valueEn) >= 3 && parseInt(x.valueEn) <= 5)
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
+    webapi.getWeekFrequency().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        let defaultFrequency = res.context.sysDictionaryVOS.find((x) => parseInt(x.valueEn) === 4);
+        if (!id && defaultFrequency) {
+          this.addField('frequency', [defaultFrequency.id]);
         }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
-    webapi
-      .getSubscriptionPlanTypes()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          const defaultType = res.context.sysDictionaryVOS.find((vo) => vo.valueEn === 'Product');
-          if (!id && defaultType) {
-            this.addField('type', defaultType.name);
-          }
-          this.setState({
-            planTypeList: res.context.sysDictionaryVOS
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
-    if (id) {
-      webapi
-        .getSubscriptionPlanById(id)
-        .then((data) => {
-          const { res } = data;
-          if (res.code === 'K-000000') {
-            if (this.props.editable && res.context.status === 1) {
-              history.push('/subscription-plan');
-            }
-            this.setState({
-              subscriptionPlan: res.context
-            });
-          } else {
-            message.error(res.message || 'Get Data Failed');
-          }
-        })
-        .catch((err) => {
-          message.error(err || 'Get Data Failed');
+        this.setState({
+          frequencyList: res.context.sysDictionaryVOS.filter((x) => parseInt(x.valueEn) >= 3 && parseInt(x.valueEn) <= 5)
         });
+      }
+    });
+    webapi.getSubscriptionPlanTypes().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        const defaultType = res.context.sysDictionaryVOS.find((vo) => vo.valueEn === 'Product');
+        if (!id && defaultType) {
+          this.addField('type', defaultType.name);
+        }
+        this.setState({
+          planTypeList: res.context.sysDictionaryVOS
+        });
+      }
+    });
+    if (id) {
+      webapi.getSubscriptionPlanById(id).then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          if (this.props.editable && res.context.status === 1) {
+            history.push('/subscription-plan');
+          }
+          this.setState({
+            subscriptionPlan: res.context
+          });
+        }
+      });
     }
   }
 
@@ -145,35 +124,21 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         subscriptionPlan.storeId = this.state.storeId;
         if (id) {
           subscriptionPlan.id = id; // edit by id
-          webapi
-            .updateSubscriptionPlan(subscriptionPlan)
-            .then((data) => {
-              const { res } = data;
-              if (res.code === 'K-000000') {
-                message.success('Operate successfully');
-                history.push({ pathname: '/subscription-plan' });
-              } else {
-                message.error(res.message || 'Update Failed');
-              }
-            })
-            .catch((err) => {
-              message.error(err || 'Update Failed');
-            });
+          webapi.updateSubscriptionPlan(subscriptionPlan).then((data) => {
+            const { res } = data;
+            if (res.code === Const.SUCCESS_CODE) {
+              message.success('Operate successfully');
+              history.push({ pathname: '/subscription-plan' });
+            }
+          });
         } else {
-          webapi
-            .addSubscriptionPlan(subscriptionPlan)
-            .then((data) => {
-              const { res } = data;
-              if (res.code === 'K-000000') {
-                message.success('Operate successfully');
-                history.push({ pathname: '/subscription-plan' });
-              } else {
-                message.error(res.message || 'Add Failed');
-              }
-            })
-            .catch((err) => {
-              message.error(err || 'Add Failed');
-            });
+          webapi.addSubscriptionPlan(subscriptionPlan).then((data) => {
+            const { res } = data;
+            if (res.code === Const.SUCCESS_CODE) {
+              message.success('Operate successfully');
+              history.push({ pathname: '/subscription-plan' });
+            }
+          });
         }
       }
     });

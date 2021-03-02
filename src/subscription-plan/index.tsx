@@ -34,20 +34,14 @@ export default class SubscriptionPlan extends Component<any, any> {
 
   componentDidMount() {
     this.getSubscriptionPlanList();
-    getSubscriptionPlanTypes()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            typeList: res.context.sysDictionaryVOS
-          });
-        } else {
-          message.error('Get plan type list failed!');
-        }
-      })
-      .catch(() => {
-        message.error('Get plan type list failed!');
-      });
+    getSubscriptionPlanTypes().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          typeList: res.context.sysDictionaryVOS
+        });
+      }
+    });
   }
 
   onFormChange = ({ field, value }) => {
@@ -98,14 +92,12 @@ export default class SubscriptionPlan extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
+      .catch(() => {
         this.setState({
           loading: false
         });
@@ -130,12 +122,10 @@ export default class SubscriptionPlan extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Update Data Failed');
           this.setState({ loading: false });
         }
       })
-      .catch((err) => {
-        message.error(err || 'Update Data Failed');
+      .catch(() => {
         this.setState({
           loading: false
         });
@@ -158,7 +148,7 @@ export default class SubscriptionPlan extends Component<any, any> {
         width: '18%'
       },
       {
-        title: 'Subscription Plan Type',
+        title: 'Subscription Type',
         dataIndex: 'planType',
         key: 'planType',
         width: '12%'
@@ -261,7 +251,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}>Subscription Plan Type</p>}
+                    label={<p style={styles.label}>Subscription Type</p>}
                     style={{ width: 195 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;

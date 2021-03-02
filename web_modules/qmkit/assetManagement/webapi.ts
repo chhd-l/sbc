@@ -10,7 +10,7 @@ type TResult = {
  * 获取图片类目列表
  */
 export const getImgCates = () => {
-  return Fetch('/store/resourceCates');
+  return Fetch<TResult>('/store/resourceCates');
 };
 /**
  * 分页获取图片列表

@@ -315,7 +315,7 @@ const routes = [
     asyncComponent: () => import('./customer-details/member-detail')
   },
   {
-    path: '/edit-customer-pet/:id',
+    path: '/edit-pet/:id',
     asyncComponent: () => import('./customer-details/edit-pet-item')
   },
   // 客户等级

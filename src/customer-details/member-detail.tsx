@@ -13,7 +13,6 @@ import DeliveryList from './component/delivery-list';
 import PaymentList from './component/payment-list';
 import Feedback from './component/feedback';
 import BasicEdit from './component/basic-edit';
-import PetItem from './component/pet-item';
 
 import './index.less';
 import basicEdit from './component/basic-edit';
@@ -36,7 +35,6 @@ export default class CustomerDetails extends React.Component<any, any> {
       loading: false,
       basic: {},
       pets: [],
-      pet: {},
       startDate: moment().format('YYYY-MM-DD'),
       endDate: moment().format('YYYY-MM-DD')
     };
@@ -120,13 +118,6 @@ export default class CustomerDetails extends React.Component<any, any> {
   handleEditBasic = () => {
     this.getBasicInformation();
     this.changeDisplayPage('detail');
-  };
-
-  onClickEditPet = (id) => {
-    this.setState({
-      displayPage: 'editpet',
-      pet: this.state.pets.find((pet) => pet.petsId === id)
-    });
   };
 
   changeDisplayPage = (page: string) => {
@@ -266,9 +257,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <span className="iconfont iconDelete"></span> Delete
                           </Button>
                         </Popconfirm>
-                        <Button type="link" onClick={() => this.onClickEditPet(pet.petsId)}>
+                        <Link to={`/edit-pet/${pet.petsId}`}>
                           <span className="iconfont iconEdit"></span> Edit
-                        </Button>
+                        </Link>
                       </div>
                       <Row gutter={10}>
                         <Col span={6}>
@@ -327,17 +318,6 @@ export default class CustomerDetails extends React.Component<any, any> {
           </BreadCrumb>
           <div className="container-search">
             <BasicEdit customer={basic} onChangePage={this.changeDisplayPage} onEdit={this.handleEditBasic} />
-          </div>
-        </div>
-        <div style={{ display: displayPage === 'editpet' ? 'block' : 'none' }}>
-          <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>
-              <FormattedMessage id="consumer.consumerDetails" />
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>Edit pet information</Breadcrumb.Item>
-          </BreadCrumb>
-          <div className="container-search">
-            <PetItem pet={pet} />
           </div>
         </div>
       </>

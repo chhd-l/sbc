@@ -44,7 +44,7 @@ export default class basicInformation extends Component<any, any> {
         <h4>Basic Information</h4>
         <div className="basicInformation">
           <Form>
-            <FormItem {...layout} label="Subscription Plan type">
+            <FormItem {...layout} label="Subscription type">
               {getFieldDecorator('type', {
                 initialValue: subscriptionPlan.type,
                 rules: [{ required: true, message: 'Please input Subscription Plan Type' }]

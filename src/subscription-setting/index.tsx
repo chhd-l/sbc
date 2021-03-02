@@ -96,7 +96,7 @@ export default class SubscriptionSetting extends Component<any, any> {
         <div className="container-search">
           <Headline title={title} />
           <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-            <FormItem label="Remind of new orders">
+            <FormItem label={<FormattedMessage id="SubscriptionSetting.RemindOfNewOrders" />}>
               <Row>
                 <Col span={1}>
                   <Switch
@@ -126,14 +126,16 @@ export default class SubscriptionSetting extends Component<any, any> {
                           })
                         }
                       />
-                      <span style={{ marginLeft: 10 }}>Days ahead new orders being created, an email will be sent to pet owners to remind them of new orders.</span>
+                      <span style={{ marginLeft: 10 }}>
+                        <FormattedMessage id="SubscriptionSetting.Days1" />
+                      </span>
                     </div>
                   </Col>
                 ) : null}
               </Row>
             </FormItem>
 
-            <FormItem label="Remind of card expiration">
+            <FormItem label={<FormattedMessage id="SubscriptionSetting.RemindOfCardExpiration" />}>
               <Row>
                 <Col span={1}>
                   <Switch
@@ -163,7 +165,9 @@ export default class SubscriptionSetting extends Component<any, any> {
                           })
                         }
                       />
-                      <span style={{ marginLeft: 10 }}>Days ahead pet owners’ card expired, an email will be sent to pet owners to remind them of card expiration.</span>
+                      <span style={{ marginLeft: 10 }}>
+                        <FormattedMessage id="SubscriptionSetting.Days2" />
+                      </span>
                     </div>
                   </Col>
                 ) : null}

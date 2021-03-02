@@ -10,6 +10,7 @@ import * as webapi from './webapi';
 const Panel = Collapse.Panel;
 
 import moment from 'moment';
+import FormModalActor from '@/order-add/actor/form-modal-actor';
 
 const { Search } = Input;
 
@@ -18,15 +19,15 @@ const { TabPane } = Tabs;
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="order.notShipped" />;
+    return <FormattedMessage id="SubscriptionDetail.order.notShipped" />;
   } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="order.allShipments" />;
+    return <FormattedMessage id="SubscriptionDetail.order.allShipments" />;
   } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="order.partialShipment" />;
+    return <FormattedMessage id="SubscriptionDetail.order.partialShipment" />;
   } else if (status == 'VOID') {
-    return <FormattedMessage id="order.invalid" />;
+    return <FormattedMessage id="SubscriptionDetail.order.invalid" />;
   } else {
-    return <FormattedMessage id="order.unknown" />;
+    return <FormattedMessage id="SubscriptionDetail.order.unknown" />;
   }
 };
 /**
@@ -177,7 +178,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail(this.state.subscriptionId);
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="SubscriptionDetail.OperateSuccessfully" />);
         } else {
           this.setState({
             loading: false
@@ -201,7 +202,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail(this.state.subscriptionId);
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="SubscriptionDetail.OperateSuccessfully" />);
         } else {
           this.setState({
             loading: false
@@ -456,16 +457,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, noStartOrder, completedOrder, deliveryCityName, billingCityName, currencySymbol } = this.state;
     const cartTitle = (
       <div className="cart-title">
-        <span>Subscription Details</span>
+        <span>{<FormattedMessage id="Subscription.SubscriptionDetails" />}</span>
         <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
       </div>
     );
     const cartExtra = (
       <div>
-        <Popconfirm placement="topRight" title="Are you sure skip next delivery?" onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
-          <Tooltip placement="top" title="Skip Next Delivery">
+        <Popconfirm placement="topRight" title={<FormattedMessage id="SubscriptionDetail.AreYouSureDelivery" />} onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
+          <Tooltip placement="top" title={<FormattedMessage id="SubscriptionDetail.SkipNextDelivery" />}>
             <Button type="link" style={{ fontSize: 16 }}>
-              Skip Next Delivery
+              {<FormattedMessage id="Subscription.SkipNextDelivery" />}
             </Button>
           </Tooltip>
         </Popconfirm>
@@ -484,7 +485,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     );
     const columns = [
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.List.Product" />
+          </span>
+        ),
         key: 'Product',
         width: '40%',
         render: (text, record) => (
@@ -495,7 +500,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Price</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.List.Price" />
+          </span>
+        ),
         key: 'Price',
         width: '15%',
         render: (text, record) => (
@@ -506,7 +515,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.List.Quantity" />
+          </span>
+        ),
         dataIndex: 'subscribeNum',
         key: 'subscribeNum',
         width: '15%'
@@ -517,7 +530,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         // )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Delivery frequency</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.List.DeliveryFrequency" />
+          </span>
+        ),
         dataIndex: 'frequency',
         key: 'frequency',
         width: '15%',
@@ -534,7 +551,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Total</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.List.Total" />
+          </span>
+        ),
         dataIndex: 'Total',
         key: 'Total',
         width: '15%',
@@ -554,28 +575,28 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     const operatorColumns = [
       {
-        title: 'Operator Type',
+        title: <FormattedMessage id="SubscriptionDetail.operatorColumns.OperatorType" />,
         dataIndex: 'operatorType',
         key: 'operatorType'
       },
       {
-        title: 'Operator',
+        title: <FormattedMessage id="SubscriptionDetail.operatorColumns.Operator" />,
         dataIndex: 'operator',
         key: 'operator'
       },
       {
-        title: 'Time',
+        title: <FormattedMessage id="SubscriptionDetail.operatorColumns.Time" />,
         dataIndex: 'time',
         key: 'time',
         render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
       },
       {
-        title: 'Operation Category',
+        title: <FormattedMessage id="SubscriptionDetail.operatorColumns.OperationCategory" />,
         dataIndex: 'operationCategory',
         key: 'operationCategory'
       },
       {
-        title: 'Operation Log',
+        title: <FormattedMessage id="SubscriptionDetail.operatorColumns.OperationLog" />,
         dataIndex: 'operationLog',
         key: 'operationLog',
         width: '50%'
@@ -584,7 +605,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     const columns_no_start = [
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.noStart.Product" />
+          </span>
+        ),
         key: 'Product',
         width: '20%',
         render: (text, record) => (
@@ -603,7 +628,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.noStart.Quantity" />
+          </span>
+        ),
         key: 'subscribeNum',
         width: '10%',
         render: (text, record) => (
@@ -625,19 +654,31 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       //   render: (text, record) => <div>{text}</div>
       // },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.noStart.EnjoyDiscount" />
+          </span>
+        ),
         key: 'discount',
         width: '10%',
         render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
       },
       {
-        title: <span style={{ fontWeight: 500 }}>Amount</span>,
+        title: (
+          <span style={{ fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.noStart.Amount" />
+          </span>
+        ),
         key: 'amount',
         width: '10%',
         render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.noStart.ShipmentDate" />
+          </span>
+        ),
         key: 'shipmentDate',
         width: '10%',
         render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
@@ -645,7 +686,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     ];
     const columns_completed = [
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.columnsCompleted.Product" />
+          </span>
+        ),
         key: 'Product',
         width: '30%',
         render: (text, record) => (
@@ -664,7 +709,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.columnsCompleted.Quantity" />
+          </span>
+        ),
         key: 'subscribeNum',
         width: '10%',
         render: (text, record) => (
@@ -679,33 +728,49 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.columnsCompleted.EnjoyDiscount" />
+          </span>
+        ),
         key: 'discount',
         width: '10%',
         render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
-        title: <span style={{ fontWeight: 500 }}>Amount</span>,
+        title: (
+          <span style={{ fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.columnsCompleted.Amount" />
+          </span>
+        ),
         key: 'amount',
         width: '10%',
         render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.columnsCompleted.ShipmentDate" />
+          </span>
+        ),
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         width: '10%',
         render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Order status</span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="SubscriptionDetail.columnsCompleted.OrderStatus" />
+          </span>
+        ),
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
         width: '10%',
         render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].deliverStatus ? deliverStatus(record.tradeItems[0].deliverStatus) : '-'}</div>
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="SubscriptionDetail.columnsCompleted.Operation" />,
         dataIndex: '',
         key: 'x',
         width: '10%',
@@ -713,7 +778,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <>
             {record.id ? (
               <Link to={'/order-detail/' + record.id}>
-                <Tooltip placement="top" title="Details">
+                <Tooltip placement="top" title={<FormattedMessage id="SubscriptionDetail.Details" />}>
                   <a style={styles.edit} className="iconfont iconDetails"></a>
                 </Tooltip>
               </Link>
@@ -725,13 +790,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     const columns_foodDispenser_no_start = [
       {
-        title: 'Delivery date',
+        title: <FormattedMessage id="SubscriptionDetail.noStar.DeliveryDate" />,
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
-        title: 'Product',
+        title: <FormattedMessage id="SubscriptionDetail.noStar.Product" />,
         key: 'Product',
         render: (text, record) => (
           <div>
@@ -755,13 +820,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     const columns_foodDispenser_completed = [
       {
-        title: 'Delivery date',
+        title: <FormattedMessage id="SubscriptionDetail.completed.DeliveryDate" />,
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
-        title: 'Product',
+        title: <FormattedMessage id="SubscriptionDetail.completed.Product" />,
         key: 'Product',
         render: (text, record) => (
           <div>
@@ -808,30 +873,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                  Subscription Number : <span>{subscriptionInfo.subscriptionNumber}</span>
+                  {<FormattedMessage id="SubscriptionDetail.ColSpan.ubscriptionNumberS" />} : <span>{subscriptionInfo.subscriptionNumber}</span>
                 </p>
                 <p>
-                  Subscription Date :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>
+                  {<FormattedMessage id="SubscriptionDetail.ColSpan.SubscriptionDate" />} :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>
                 </p>
                 <p>
-                  Auditor ID : <span>{subscriptionInfo.presciberID}</span>
+                  {<FormattedMessage id="SubscriptionDetail.ColSpan.AuditorID" />} : <span>{subscriptionInfo.presciberID}</span>
                 </p>
                 <p>
-                  Auditor Name : <span>{subscriptionInfo.presciberName}</span>
+                  {<FormattedMessage id="SubscriptionDetail.ColSpan.AuditorName" />} : <span>{subscriptionInfo.presciberName}</span>
                 </p>
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                  Consumer name: <span>{subscriptionInfo.consumer}</span>
+                  {<FormattedMessage id="SubscriptionDetail.ColSpan.ConsumerName" />} : <span>{subscriptionInfo.consumer}</span>
                 </p>
                 <p>
-                  Consumer Account : <span>{subscriptionInfo.consumerAccount}</span>
+                  {<FormattedMessage id="SubscriptionDetail.ColSpan.ConsumerAccount" />} : <span>{subscriptionInfo.consumerAccount}</span>
                 </p>
                 <p>
-                  Consumer type : <span>{subscriptionInfo.consumerType}</span>
+                  {<FormattedMessage id="SubscriptionDetail.ColSpan.ConsumerType" />} : <span>{subscriptionInfo.consumerType}</span>
                 </p>
                 <p>
-                  Phone Number : <span>{subscriptionInfo.phoneNumber}</span>
+                  {<FormattedMessage id="SubscriptionDetail.ColSpan.PhoneNumber" />} : <span>{subscriptionInfo.phoneNumber}</span>
                 </p>
               </Col>
             </Row>
@@ -843,29 +908,39 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
               <Col span={8} offset={16}>
                 <div className="flex-between">
-                  <span>Subtotal</span>
+                  <span>
+                    <FormattedMessage id="SubscriptionDetail.ColSpan.Subtotal" />
+                  </span>
                   <span style={styles.priceStyle}>{currencySymbol + this.subTotal().toFixed(2)}</span>
                 </div>
 
                 <div className="flex-between">
-                  <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span>
+                  <span>{this.state.promotionDesc ? this.state.promotionDesc : <FormattedMessage id="SubscriptionDetail.ColSpan.Promotion" />}</span>
                   <span style={styles.priceStyle}>{currencySymbol + '  -' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
                 </div>
 
                 <div className="flex-between">
-                  <span>Shipping</span>
+                  <span>
+                    <FormattedMessage id="SubscriptionDetail.ColSpan.Shipping" />
+                  </span>
                   <span style={styles.priceStyle}>{currencySymbol + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
                 {+sessionStorage.getItem(cache.TAX_SWITCH) === 0 ? (
                   <div className="flex-between">
-                    <span>Tax</span>
+                    <span>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.Tax" />
+                    </span>
                     <span style={styles.priceStyle}>{currencySymbol + (this.state.taxFeePrice ? this.state.taxFeePrice : 0).toFixed(2)}</span>
                   </div>
                 ) : null}
 
                 <div className="flex-between">
                   <span>
-                    <span>Total</span> (IVA Include):
+                    <span>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.Total" />
+                    </span>{' '}
+                    (<FormattedMessage id="SubscriptionDetail.ColSpan.IVAInclude" />
+                    ):
                   </span>
                   <span style={styles.priceStyle}>{currencySymbol + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice).toFixed(2)}</span>
                 </div>
@@ -875,48 +950,68 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title">Delivery Address</label>
+                    <label className="info-title">
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.DeliveryAddress" />
+                    </label>
                   </Col>
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}>Name: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.DeliveryAddress.Name" />:{' '}
+                    </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>City,Country: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.DeliveryAddress.CityCountry" />:{' '}
+                    </p>
                     <p>{deliveryAddressInfo ? deliveryCityName + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId) : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>Address1: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.DeliveryAddress.Address1" />:{' '}
+                    </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
                   </Col>
                 </Row>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address2: </p>
+                  <p style={{ width: 140 }}>
+                    <FormattedMessage id="SubscriptionDetail.ColSpan.DeliveryAddress.Address2" />:{' '}
+                  </p>
                   <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                 </Col>
               </Col>
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title">Billing Address</label>
+                    <label className="info-title">
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.BillingAddress" />
+                    </label>
                   </Col>
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}>Name: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.BillingAddress.Name" />:{' '}
+                    </p>
                     <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>City,Country: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.BillingAddress.CityCountry" />:{' '}
+                    </p>
                     <p>{billingAddressInfo ? billingCityName + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>Address1: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.BillingAddress.Address1" />:{' '}
+                    </p>
                     <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
                   </Col>
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}>Address2: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.BillingAddress.Address2" />:{' '}
+                    </p>
                     <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                   </Col>
                 </Row>
@@ -924,15 +1019,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8}>
                 <Row>
                   <Col span={24}>
-                    <label className="info-title">Payment Method</label>
+                    <label className="info-title">
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.PaymentMethod" />
+                    </label>
                   </Col>
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}>Payment Method: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.PaymentMethod.PaymentMethod" />:{' '}
+                    </p>
                     <p>{paymentInfo ? paymentInfo.paymentType : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>Card Number: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="SubscriptionDetail.ColSpan.PaymentMethod.CardNumber" />:{' '}
+                    </p>
                     <p>{paymentInfo && paymentInfo.payuPaymentMethod ? '**** **** **** ' + paymentInfo.payuPaymentMethod.last_4_digits : paymentInfo && paymentInfo.adyenPaymentMethod ? '**** **** **** ' + paymentInfo.adyenPaymentMethod.lastFour : ''}</p>
                   </Col>
                 </Row>
@@ -941,7 +1042,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </div>
           <div className="container-search">
             <Headline
-              title="Autoship order"
+              title={<FormattedMessage id="SubscriptionDetail.AutoshipOrder" />}
               // extra={
               //   <div>
               //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
@@ -953,10 +1054,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               // }
             />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
-              <TabPane tab="No start" key="noStart">
+              <TabPane tab={<FormattedMessage id="SubscriptionDetail.NoStart" />} key="noStart">
                 <Table rowKey={(record, index) => index.toString()} columns={columns_foodDispenser_no_start} dataSource={noStartOrder} pagination={false}></Table>
               </TabPane>
-              <TabPane tab="Completed" key="completed">
+              <TabPane tab={<FormattedMessage id="SubscriptionDetail.Completed" />} key="completed">
                 <Table
                   rowKey={(record, index) => index.toString()}
                   rowClassName={(record, index) => {
@@ -972,7 +1073,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Tabs>
             <Row style={styles.backItem}>
               <Collapse>
-                <Panel header={<FormattedMessage id="operationLog" />} key="1" style={{ paddingRight: 10 }}>
+                <Panel header={<FormattedMessage id="SubscriptionDetail.operationLog" />} key="1" style={{ paddingRight: 10 }}>
                   <Row>
                     <Col span={24}>
                       <Table rowKey={(record, index) => index.toString()} columns={operatorColumns} dataSource={operationLog} bordered pagination={false} />
@@ -985,7 +1086,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </Spin>
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="back" />}
+            {<FormattedMessage id="SubscriptionDetail.back" />}
           </Button>
         </div>
       </div>

@@ -27,7 +27,6 @@ export default class SubscriptionList extends Component<any, any> {
         prescriber: ''
       },
       subscriptionOption: ['Subscription Number', 'Order Number'],
-
       consumerOption: ['Consumer Name', 'Consumer Account'],
       productOption: ['Product Name', 'SKU Code'],
       recipientOption: ['Receiver', 'Receiver Phone'],
@@ -248,7 +247,7 @@ export default class SubscriptionList extends Component<any, any> {
         <div className="order-con">
           <BreadCrumb />
           <div className="container-search">
-            <Headline title={<FormattedMessage id="subscriptionList" />} />
+            <Headline title={<FormattedMessage id="Subscription.SubscriptionList" />} />
             <Form className="filter-content" layout="inline">
               <Row>
                 <Col span={8}>
@@ -447,7 +446,7 @@ export default class SubscriptionList extends Component<any, any> {
                       }}
                     >
                       <span>
-                        <FormattedMessage id="search" />
+                        <FormattedMessage id="Subscription.search" />
                       </span>
                     </Button>
                   </FormItem>
@@ -513,13 +512,13 @@ export default class SubscriptionList extends Component<any, any> {
               }}
               activeKey={activeKey}
             >
-              <Tabs.TabPane tab={<FormattedMessage id="all" />} key="all">
+              <Tabs.TabPane tab={<FormattedMessage id="Subscription.TabPane.all" />} key="all">
                 <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Active" key="0">
+              <Tabs.TabPane tab={<FormattedMessage id="Subscription.TabPane.Active" />} key="0">
                 <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Inactive" key="2">
+              <Tabs.TabPane tab={<FormattedMessage id="Subscription.TabPane.Inactive" />} key="2">
                 <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
               </Tabs.TabPane>
             </Tabs>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Spin, Popconfirm, Tooltip } from 'antd';
 import AddProduct from '../modals/addProduct';
+import { FormattedMessage } from 'react-intl';
 export default class targetProduct extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -49,8 +50,12 @@ export default class targetProduct extends Component<any, any> {
     const { editable, subscriptionPlan } = this.props;
     return (
       <div>
-        <h3>Step2</h3>
-        <h4>Target Product</h4>
+        <h3>
+          <FormattedMessage id="SubscriptionPlanUpdate.Step2" />
+        </h3>
+        <h4>
+          <FormattedMessage id="SubscriptionPlanUpdate.TargetProduct" />
+        </h4>
         <div className="targetProduct">
           <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <div className="ant-table-wrapper">
@@ -60,13 +65,27 @@ export default class targetProduct extends Component<any, any> {
                     <table>
                       <thead className="ant-table-thead">
                         <tr>
-                          <th style={{ width: '10%' }}>Image</th>
-                          <th style={{ width: '10%' }}>SKU</th>
-                          <th style={{ width: '20%' }}>Product Name</th>
-                          <th style={{ width: '15%' }}>Specification</th>
-                          <th style={{ width: '25%' }}>Product Category</th>
-                          <th style={{ width: '10%' }}>Brand</th>
-                          <th style={{ width: '10%' }}>Price</th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="SubscriptionPlanUpdate.Image" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="SubscriptionPlanUpdate.SKU" />
+                          </th>
+                          <th style={{ width: '20%' }}>
+                            <FormattedMessage id="SubscriptionPlanUpdate.ProductName" />
+                          </th>
+                          <th style={{ width: '15%' }}>
+                            <FormattedMessage id="SubscriptionPlanUpdate.Specification" />
+                          </th>
+                          <th style={{ width: '25%' }}>
+                            <FormattedMessage id="SubscriptionPlanUpdate.ProductCategory" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="SubscriptionPlanUpdate.Brand" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="SubscriptionPlanUpdate.Price" />
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="ant-table-tbody">
@@ -100,7 +119,9 @@ export default class targetProduct extends Component<any, any> {
                     {editable ? (
                       <div className="noProduct">
                         <div className="addProduct" onClick={this.showAddTargetProduct}>
-                          <span> + Add product</span>
+                          <span>
+                            <FormattedMessage id="SubscriptionPlanUpdate.AddProduct" />
+                          </span>
                         </div>
                       </div>
                     ) : null}

@@ -180,6 +180,16 @@ class PetInfomation extends React.Component<any, any> {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
+            debugger;
+
+            let selectedBind = [];
+            if (currentPet.segmentList) {
+              for (let i = 0; i < currentPet.segmentList.length; i++) {
+                const element = currentPet.segmentList[i].id;
+                selectedBind.push(element);
+              }
+            }
+            currentPet.selectedBind = selectedBind;
             currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
 
             if (currentPet.petsType === 'dog') {
@@ -191,7 +201,7 @@ class PetInfomation extends React.Component<any, any> {
                 sterilized: +currentPet.sterilized,
                 petsSizeValueName: currentPet.petsSizeValueName,
                 customerPetsPropRelations: currentPet.customerPetsPropRelations,
-                selectedBind: currentPet.segmentList
+                selectedBind: currentPet.selectedBind
               });
             } else {
               this.props.form.setFieldsValue({
@@ -296,6 +306,14 @@ class PetInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let currentPet = res.context.context;
+          let selectedBind = [];
+          if (currentPet.segmentList) {
+            for (let i = 0; i < currentPet.segmentList.length; i++) {
+              const element = currentPet.segmentList[i].id;
+              selectedBind.push(element);
+            }
+          }
+          currentPet.selectedBind = selectedBind;
           currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
           if (currentPet.petsType === 'dog') {
             this.props.form.setFieldsValue({
@@ -305,7 +323,8 @@ class PetInfomation extends React.Component<any, any> {
               petsBreed: currentPet.petsBreed,
               sterilized: +currentPet.sterilized,
               petsSizeValueName: currentPet.petsSizeValueName,
-              customerPetsPropRelations: currentPet.customerPetsPropRelations
+              customerPetsPropRelations: currentPet.customerPetsPropRelations,
+              selectedBind: currentPet.selectedBind
             });
           } else {
             this.props.form.setFieldsValue({
@@ -315,7 +334,8 @@ class PetInfomation extends React.Component<any, any> {
               petsBreed: currentPet.petsBreed,
 
               sterilized: +currentPet.sterilized,
-              customerPetsPropRelations: currentPet.customerPetsPropRelations
+              customerPetsPropRelations: currentPet.customerPetsPropRelations,
+              selectedBind: currentPet.selectedBind
             });
           }
 
@@ -434,6 +454,8 @@ class PetInfomation extends React.Component<any, any> {
         sm: { span: 12 }
       }
     };
+    console.log(petForm);
+    debugger;
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
@@ -745,7 +767,7 @@ class PetInfomation extends React.Component<any, any> {
                           getPopupContainer={() => document.getElementById('page-content')}
                           treeCheckable={true}
                           showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                          treeCheckStrictly={true}
+                          // treeCheckStrictly={true}
                           placeholder="Please select product tagging"
                           notFoundContent="No classification"
                           dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}

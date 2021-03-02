@@ -129,6 +129,14 @@ class BasicInfomation extends React.Component<any, any> {
           if (resObj.defaultClinics && resObj.defaultClinics.clinicsId) {
             defaultClinicsId = resObj.defaultClinics.clinicsId;
           }
+          let selectedBind = [];
+          if (resObj.segmentList) {
+            for (let i = 0; i < resObj.segmentList.length; i++) {
+              const element = resObj.segmentList[i].id;
+              selectedBind.push(element);
+            }
+          }
+
           let basicForm = {
             firstName: resObj.firstName,
             lastName: resObj.lastName,
@@ -149,7 +157,7 @@ class BasicInfomation extends React.Component<any, any> {
             defaultClinicsId: defaultClinicsId,
             defaultClinics: resObj.defaultClinics,
             preferredMethods: [],
-            selectedBind: resObj.segmentList
+            selectedBind: selectedBind
           };
 
           let initPreferChannel = [];
@@ -349,8 +357,8 @@ class BasicInfomation extends React.Component<any, any> {
   loopTagging = (taggingTotalTree) => {
     return (
       taggingTotalTree &&
-      taggingTotalTree.map((item) => {
-        return <TreeNode key={item.id} value={item.id} title={item.name} />;
+      taggingTotalTree.map((item, index) => {
+        return <TreeNode key={index} value={item.id} title={item.name} />;
       })
     );
   };
@@ -578,8 +586,8 @@ class BasicInfomation extends React.Component<any, any> {
                       }}
                     >
                       {countryArr
-                        ? countryArr.map((item) => (
-                            <Option value={item.id} key={item.id}>
+                        ? countryArr.map((item, index) => (
+                            <Option value={item.id} key={index}>
                               {item.name}
                             </Option>
                           ))
@@ -608,8 +616,8 @@ class BasicInfomation extends React.Component<any, any> {
                         }}
                       >
                         {stateList
-                          ? stateList.map((item) => (
-                              <Option value={item.stateName} key={item.id}>
+                          ? stateList.map((item, index) => (
+                              <Option value={item.stateName} key={index}>
                                 {item.stateName}
                               </Option>
                             ))
@@ -638,8 +646,8 @@ class BasicInfomation extends React.Component<any, any> {
                       }}
                     >
                       {cityArr &&
-                        cityArr.map((item) => (
-                          <Option value={item.cityName} key={item.id}>
+                        cityArr.map((item, index) => (
+                          <Option value={item.cityName} key={index}>
                             {item.cityName}
                           </Option>
                         ))}
@@ -771,8 +779,8 @@ class BasicInfomation extends React.Component<any, any> {
                       }}
                     >
                       {clinicList
-                        ? clinicList.map((item) => (
-                            <Option value={item.prescriberId.toString()} key={item.prescriberId}>
+                        ? clinicList.map((item, index) => (
+                            <Option value={item.prescriberId.toString()} key={index}>
                               {item.prescriberId + ',' + item.prescriberName}
                             </Option>
                           ))
@@ -814,8 +822,8 @@ class BasicInfomation extends React.Component<any, any> {
                         <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                       ))} */}
                       {clinicList
-                        ? clinicList.map((item) => (
-                            <Option value={item.prescriberId.toString()} key={item.prescriberId}>
+                        ? clinicList.map((item, index) => (
+                            <Option value={item.prescriberId.toString()} key={index}>
                               {item.prescriberId + ',' + item.prescriberName}
                             </Option>
                           ))
@@ -839,7 +847,7 @@ class BasicInfomation extends React.Component<any, any> {
                       getPopupContainer={() => document.getElementById('page-content')}
                       treeCheckable={true}
                       showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                      treeCheckStrictly={true}
+                      // treeCheckStrictly={true}
                       placeholder="Please select product tagging"
                       notFoundContent="No classification"
                       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}

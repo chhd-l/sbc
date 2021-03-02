@@ -123,7 +123,6 @@ class TodoItems extends React.Component<any, any> {
   };
   render() {
     const { loading } = this.props.relaxProps;
-    const { formatMessage } = this.props.intl;
     const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
     return (
       <div className="item">
@@ -623,7 +622,7 @@ class TodoItems extends React.Component<any, any> {
               ) : (
                 <div className="line">
                   <BarLine
-                    yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                    yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Traffic' }), y2: this.props.intl.formatMessage({ id: 'Home.Conversionrate' }) }}
                     unit={{ unit1: '', unit2: '%' }}
                     nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
                     data={{
@@ -648,9 +647,9 @@ class TodoItems extends React.Component<any, any> {
                 <div className="line">
                   {prescriberTrendView && (
                     <BarLine
-                      yName={{ y1: this.props.intl.formatMessage({ id: 'Prescriberreward' }), y2: 'Active rate' }}
+                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Prescriberreward' }), y2: this.props.intl.formatMessage({ id: 'Home.Activerate' }) }}
                       unit={{ unit1: '', unit2: '%' }}
-                      nameTextStyle={{ y1: [0, 0, 0, 42], y2: [0, 0, 0, 22] }}
+                      nameTextStyle={{ y1: [0, 0, 0, 42], y2: [0, 0, 0, 20] }}
                       data={{
                         x: prescriberTrendView.weekNumList,
                         y1: prescriberTrendView.reward,
@@ -681,7 +680,7 @@ class TodoItems extends React.Component<any, any> {
                 <div className="line">
                   {transactionTrendView && (
                     <BarLine
-                      yName={{ y1: 'Revenue', y2: 'Transaction' }}
+                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Revenue' }), y2: this.props.intl.formatMessage({ id: 'Home.Transaction' }) }}
                       unit={{ unit1: '', unit2: '' }}
                       nameTextStyle={{ y1: [0, 52, 0, 0], y2: [0, 22, 0, 0] }}
                       data={{

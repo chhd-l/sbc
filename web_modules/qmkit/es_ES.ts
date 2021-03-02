@@ -55,8 +55,18 @@ export default {
   'Home.TrafficTrend':'Traffic Trend',
   'Home.PrescribersTrend':'Prescribers Trend',
   'Home.TransactionTrend':'Transaction Trend',
-  'Home.Prescriberreward':'Prescriber reward11',
+  'Home.Prescriberreward':'Prescriber reward',
+  'Home.Activerate':'Active rate',
+  'Home.Transaction':'Transaction',
   'Home.':'',
+  'Home.':'',
+  'Home.':'',
+  'Home.':'',
+
+
+
+
+
 
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",

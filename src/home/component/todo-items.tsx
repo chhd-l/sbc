@@ -13,7 +13,7 @@ import Funnel from 'web_modules/biz/funnel/funnel.tsx';
 import BarLine from 'web_modules/biz/BarLine/index.tsx';
 import CountUp from 'react-countup';
 import nodataImg from '../images/no-data.jpg';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
 const icon2 =
@@ -27,7 +27,7 @@ const countUpProps = {
   separator: ','
 };
 @Relax
-export default class TodoItems extends React.Component<any, any> {
+class TodoItems extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,6 +57,7 @@ export default class TodoItems extends React.Component<any, any> {
       conversionFunnelDashboardView: any;
       cleanRedux: Function;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -621,7 +622,7 @@ export default class TodoItems extends React.Component<any, any> {
               ) : (
                 <div className="line">
                   <BarLine
-                    yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                    yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Traffic' }), y2: this.props.intl.formatMessage({ id: 'Home.Conversionrate' }) }}
                     unit={{ unit1: '', unit2: '%' }}
                     nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
                     data={{
@@ -635,7 +636,7 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
             <div className="item-btm-m">
               <div className="top-text">
-                <FormattedMessage id="Home.Prescribers Trend" />
+                <FormattedMessage id="Home.PrescribersTrend" />
               </div>
               {!prescriberTrendView ||
               ((!prescriberTrendView.weekNumList || prescriberTrendView.weekNumList.length === 0) && (!prescriberTrendView.reward || prescriberTrendView.reward.length === 0) && (!prescriberTrendView.activeRate || prescriberTrendView.activeRate.length === 0)) ? (
@@ -646,9 +647,9 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="line">
                   {prescriberTrendView && (
                     <BarLine
-                      yName={{ y1: 'Prescriber reward', y2: 'Active rate' }}
+                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Prescriberreward' }), y2: this.props.intl.formatMessage({ id: 'Home.Activerate' }) }}
                       unit={{ unit1: '', unit2: '%' }}
-                      nameTextStyle={{ y1: [0, 0, 0, 42], y2: [0, 0, 0, 22] }}
+                      nameTextStyle={{ y1: [0, 0, 0, 42], y2: [0, 0, 0, 20] }}
                       data={{
                         x: prescriberTrendView.weekNumList,
                         y1: prescriberTrendView.reward,
@@ -679,7 +680,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="line">
                   {transactionTrendView && (
                     <BarLine
-                      yName={{ y1: 'Revenue', y2: 'Transaction' }}
+                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Revenue' }), y2: this.props.intl.formatMessage({ id: 'Home.Transaction' }) }}
                       unit={{ unit1: '', unit2: '' }}
                       nameTextStyle={{ y1: [0, 52, 0, 0], y2: [0, 22, 0, 0] }}
                       data={{
@@ -698,3 +699,5 @@ export default class TodoItems extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(TodoItems);

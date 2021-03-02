@@ -1,5 +1,10 @@
+//import {FormattedMessage} from "react-intl";
+//import React from "react";
+//import {Row} from "antd";
+// 'Home.':'',
 import {FormattedMessage} from "react-intl";
 import React from "react";
+import { Button } from 'antd';
 // 'Home.':'',
 /**
  * 多语言英文
@@ -7,6 +12,30 @@ import React from "react";
 export default {
   /*-------------------------------- Public ---------------------------------------------*/
   'Public.Overview':'Overview',
+  'Public.WelcometoROYALCANIN':'Welcome to ROYALCANIN',
+  'Public.storeportal':'store portal',
+  'Public.Pleaseselectyourrole':'Please select your role',
+  'Public.RCStaff':'RC Staff',
+  'Public.Prescriber':'Prescriber',
+  'Public.R':'R',
+  'Public.Storeportal':'Store portal',
+  'Public.LoginAccount':'Login Account',
+  'Public.RoyalCaninSAS2020':'Royal Canin SAS 2020',
+  'Public.Pleaseinputyour':'Please input your login account',
+  'Public.Login':'Login',
+  'Public.UnderReview':'Under Review',
+  'Public.Yourapplication':'Your application has been sent to the related prescriber and the user account is under audit.\n' +
+    '                  We will notify you of the result by email.',
+  'Public.Return':'Return',
+  'Public.Thisserviceis':'This service is dedicated to our customers only.',
+  'Public.YourclientID':'Your client ID is specified on your Royal Canin invoice. It can be an e-mail address or a client number',
+  'Public.Proceed':'Proceed',
+  'Public.aaaa2':'aaa1111aaa1234',
+
+
+
+
+
   /*-----------------------------  Home ------ ----------------------------------------*/
   'Home.Overview':'Overview',
   'Home.Revenue':'Revenue',
@@ -38,29 +67,8 @@ export default {
   'Home.PrescribersTrend':'Prescribers Trend',
   'Home.TransactionTrend':'Transaction Trend',
   'Home.Prescriberreward':'Prescriber reward',
-  'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-  // 'Home.':'',
-
+  'Home.Activerate':'Active rate',
+  'Home.Transaction':'Transaction',
 
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
@@ -268,7 +276,7 @@ export default {
   /*---order-list-prescriber yxy---*/
   'Order.order': 'order',
   'Order.Orderlist': 'Order list',
-  'Order.Ordernumer': 'Order number',
+  'Order.Ordernumber': 'Order number',
   'Order.Subscriptionumber': 'Subscription number',
   'Order.Petownername': 'Pet owner name',
   'Order.Petowneraccount': 'Pet owner account',
@@ -299,6 +307,7 @@ export default {
   'Order.Quantity': 'Quantity',
   'Order.Seedetails': 'See details',
   'Order.DeliveryRecord': 'Delivery Record',
+  'Order.PaymentRecords': 'Payment Records',
   'Order.Ordertime': 'Order time',
   'Order.Consumertype': 'Consumer type',
   'Order.Phonenumber': 'Phone number',
@@ -327,9 +336,8 @@ export default {
   'Order.No.': 'No.',
   'Order.Shipped': 'Shipped',
   'Order.ThisShipment': 'This Shipment',
-  'Order.PaymentRecords': 'Payment Records',
   'Order.Amountreceivable': 'Amount receivable',
-  'Order.CollectionSerial Number': 'Collection Serial Number',
+  'Order.CollectionSerialNumber': 'Collection Serial Number',
   'Order.CollectionTime': 'Collection Time',
   'Order.AmountReceived': 'Amount Received',
   'Order.AccountsReceivable': 'Accounts Receivable',
@@ -368,6 +376,7 @@ export default {
   'Order.Recurrentorders of autoship': 'Recurrent orders of autoship',
   'Order.Export': 'Export',
   'Order.Cancel': 'Cancel',
+  'Order.Search': 'Search',
   'Order.Pleaseselectanexportmethod': 'Please select an export method',
   'Order.Orderstatus': 'Order status',
   'Order.Doyouconfirmthat': 'Do you confirm that the order has been approved?',
@@ -387,8 +396,24 @@ export default {
   'Order.ConfirmReceipt': 'Confirm Receipt',
   'Order.Confirmtoreturntheselected': 'Confirm to return the selected order for re approval ?',
   'Order.Confirmreceiptofallitems': 'Confirm receipt of all items?',
-
-
+  'Order.Valetorder': 'Valet order',
+  'Order.Fighttogether': 'Fight together',
+  'Order.ConfirmAudit': 'Confirm to review the selected order?',
+  'Order.Modify': 'Modify',
+  'Order.Consumer': 'Consumer',
+  'Order.Promotion': 'Promotion',
+  'Order.Back': 'Back',
+  'Order.Whethertoinvalidate': 'Whether to invalidate this delivery record',
+  'Order.Turndown': 'Turn down',
+  'Order.Items': 'Items',
+  'Order.Piece': 'Piece',
+  'Order.Review': 'Review',
+  'Order.ConfirmReview': 'Are you sure you want to return the selected order for reconsideration?',
+  'Order.Trackdelivery': 'Track delivery',
+  'Order.Refresh': 'Refresh',
+  'Order.Confirm': 'Confirm',
+  'Order.PetOwner': 'Pet Owner',
+  'Order.OrderNumber': 'Order Number',
 
   /*-----------------------------  Task  ----------------------------------------------*/
 

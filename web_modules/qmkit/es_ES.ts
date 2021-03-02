@@ -1,3 +1,7 @@
+//import {FormattedMessage} from "react-intl";
+//import React from "react";
+//import {Row} from "antd";
+// 'Home.':'',
 import {FormattedMessage} from "react-intl";
 import React from "react";
 import { Button } from 'antd';
@@ -8,6 +12,20 @@ import { Button } from 'antd';
 export default {
   /*-------------------------------- Public ---------------------------------------------*/
   'Public.Overview':'Overview',
+  'Public.WelcometoROYALCANIN':'Welcome to ROYALCANIN',
+  'Public.storeportal':'store portal',
+  'Public.Pleaseselectyourrole':'Please select your role',
+  'Public.RCStaff':'RC Staff',
+  'Public.Prescriber':'Prescriber',
+  'Public.R':'R',
+  'Public.Storeportal':'Store portal',
+  'Public.LoginAccount':'Login Account',
+  'Public.RoyalCaninSAS2020':'Royal Canin SAS 2020',
+  'Public.Pleaseinputyour':'Please input your login account',
+  'Public.aaaa':'aaa1111aaa1234',
+  'Public.aaaa1':'aaa1111aaa1234',
+  'Public.aaaa1':'aaa1111aaa1234',
+  'Public.aaaa2':'aaa1111aaa1234',
   /*-----------------------------  Home ------ ----------------------------------------*/
   'Home.Overview':'Overview',
   'Home.Revenue':'Revenue',
@@ -38,30 +56,8 @@ export default {
   'Home.TrafficTrend':'Traffic Trend',
   'Home.PrescribersTrend':'Prescribers Trend',
   'Home.TransactionTrend':'Transaction Trend',
-  'Home.Prescriberreward':'Prescriber reward',
+  'Home.Prescriberreward':'Prescriber reward11',
   'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-
 
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",

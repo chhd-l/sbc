@@ -14,7 +14,7 @@ export function fetchEmployList(params = {}) {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function fetchAllRoles() {
-  return Fetch('/customer/employee/roles');
+  return Fetch<TResult>('/customer/employee/roles');
 }
 
 /**
@@ -85,11 +85,7 @@ export function enableEmployee(employeeIds: string[]) {
  * @param employeeIds
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export function disableEmployee(
-  employeeId,
-  accountDisableReason,
-  accountState
-) {
+export function disableEmployee(employeeId, accountDisableReason, accountState) {
   return Fetch<TResult>('/customer/employee/disable', {
     method: 'POST',
     body: JSON.stringify({
@@ -105,11 +101,7 @@ export function disableEmployee(
  * @param employeeIds
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export function batchDisableEmployee(
-  employeeIds,
-  accountDisableReason,
-  accountState
-) {
+export function batchDisableEmployee(employeeIds, accountDisableReason, accountState) {
   return Fetch<TResult>('/customer/employee/batch/disable', {
     method: 'POST',
     body: JSON.stringify({

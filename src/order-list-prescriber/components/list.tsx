@@ -72,7 +72,7 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.RejectionReasonTip" />
               },
               {
                 max: 100,
@@ -119,7 +119,7 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create({})(RejectForm);
 
 @Relax
-export default class ListView extends React.Component<any, any> {
+class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
@@ -481,7 +481,7 @@ export default class ListView extends React.Component<any, any> {
                                   }}
                                   href="javascript:void(0)"
                                 >
-                                  <FormattedMessage id="order.confirmReceipt" />
+                                  <FormattedMessage id="Order.ConfirmReceipt" />
                                 </a>
                               </Tooltip>
                             </AuthWrapper>
@@ -600,8 +600,12 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="order.review" />,
-      content: <FormattedMessage id="order.confirmReview" />,
+      title: this.props.intl.formatMessage({
+        id: 'Order.Review'
+      }),
+      content: this.props.intl.formatMessage({
+        id: 'Order.ConfirmReview'
+      }),
       onOk() {
         onRetrial(tdId);
       },
@@ -646,7 +650,9 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: 'Confirm receipt',
+      title: this.props.intl.formatMessage({
+        id: 'Order.ConfirmReceipt'
+      }),
       content: this.props.intl.formatMessage({
         id: 'Order.Confirmthatallproducts'
       }),
@@ -689,6 +695,7 @@ export default class ListView extends React.Component<any, any> {
     }
   };
 }
+export default injectIntl(ListView);
 
 const styles = {
   loading: {

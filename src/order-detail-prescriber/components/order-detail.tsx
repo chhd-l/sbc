@@ -64,7 +64,7 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.RejectionReasonTip" />
               },
               {
                 max: 100,
@@ -85,7 +85,7 @@ class RejectForm extends React.Component<any, any> {
                 >
                   *
                 </span>
-                Once rejected, we will return the payment for this order to the consumer
+                <FormattedMessage id="Order.OncerejectedTip" />
               </p>
             </div>
           )}
@@ -114,7 +114,7 @@ const WrappedRejectForm = Form.create()(RejectForm);
  * 订单详情 yxy
  */
 @Relax
-export default class OrderDetailTab extends React.Component<any, any> {
+class OrderDetailTab extends React.Component<any, any> {
   onAudit: any;
   _rejectForm;
 
@@ -488,7 +488,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <p style={styles.darkText}>
                 {<FormattedMessage id="Order.Consumeraccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
-              {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Consumer type' + ':  ' + detail.getIn(['buyer', 'levelName'])}</p>}
+              {detail.getIn(['buyer', 'customerFlag']) && (
+                <p style={styles.darkText}>
+                  {this.props.intl.formatMessage({
+                    id: 'Order.Consumertype'
+                  }) +
+                    ':  ' +
+                    detail.getIn(['buyer', 'levelName'])}
+                </p>
+              )}
               {/* <p style={styles.darkText}>
                 {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
               </p>
@@ -729,7 +737,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
          */}
-        <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.Save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
+        <Modal maskClosable={false} title={<FormattedMessage id="Order.RejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.Save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm
             ref={(form) => {
               this._rejectForm = form;
@@ -1046,6 +1054,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   };
 }
 
+export default injectIntl(OrderDetailTab);
 const styles = {
   headBox: {
     padding: 15,

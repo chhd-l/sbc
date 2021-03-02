@@ -5,7 +5,7 @@ import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,7 +16,7 @@ const InputGroup = Input.Group;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
     relaxProps?: {
       onSearch: Function;
@@ -29,6 +29,7 @@ export default class SearchHead extends Component<any, any> {
       onExportModalHide: Function;
       exportModalData: IMap;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -86,7 +87,7 @@ export default class SearchHead extends Component<any, any> {
           <Menu.Item>
             <AuthWrapper functionName="fOrderList002">
               <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
-                <FormattedMessage id="order.batchReview" />
+                <FormattedMessage id="Order.Batchreview" />
               </a>
             </AuthWrapper>
           </Menu.Item>
@@ -94,7 +95,7 @@ export default class SearchHead extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExport" />
+              <FormattedMessage id="Order.Batchexport" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -103,7 +104,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="order.orderList" />} />
+        <Headline title={<FormattedMessage id="Order.Orderlist" />} />
         <div>
           <Form className="filter-content" layout="inline">
             <Row>
@@ -209,18 +210,20 @@ export default class SearchHead extends Component<any, any> {
                         value={tradeState.payState}
                       >
                         <Option value="">
-                          <FormattedMessage id="all" />
+                          <FormattedMessage id="Order.All" />
                         </Option>
                         <Option value="NOT_PAID">
-                          <FormattedMessage id="order.unpaid" />
+                          <FormattedMessage id="Order.Unpaid" />
                         </Option>
                         {/*<Option value="UNCONFIRMED">
                           <FormattedMessage id="order.toBeConfirmed" />
                         </Option>*/}
                         <Option value="PAID">
-                          <FormattedMessage id="order.paid" />
+                          <FormattedMessage id="Order.Paid" />
                         </Option>
-                        <Option value="PAYING">Paying</Option>
+                        <Option value="PAYING">
+                          <FormattedMessage id="Order.Paying" />
+                        </Option>
                       </Select>
                     ) : (
                       <Select
@@ -238,16 +241,16 @@ export default class SearchHead extends Component<any, any> {
                         }}
                       >
                         <Option value="">
-                          <FormattedMessage id="all" />
+                          <FormattedMessage id="Order.All" />
                         </Option>
                         <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="order.notShipped" />
+                          <FormattedMessage id="Order.notshipped" />
                         </Option>
                         <Option value="PART_SHIPPED">
-                          <FormattedMessage id="order.partialShipment" />
+                          <FormattedMessage id="Order.Partialshipment" />
                         </Option>
                         <Option value="SHIPPED">
-                          <FormattedMessage id="order.allShipments" />
+                          <FormattedMessage id="Order.Allshipments" />
                         </Option>
                       </Select>
                     )}
@@ -258,7 +261,13 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue="Order Category" />
+                    <Input
+                      style={styles.leftLabel}
+                      disabled
+                      defaultValue={this.props.intl.formatMessage({
+                        id: 'Order.OrderCategory'
+                      })}
+                    />
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
@@ -270,16 +279,16 @@ export default class SearchHead extends Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="all" />
+                        <FormattedMessage id="Order.All" />
                       </Option>
                       <Option value="SINGLE" title="Single purchase">
-                        Single purchase
+                        <FormattedMessage id="Order.Singlepurchase" />
                       </Option>
                       <Option value="FIRST_AUTOSHIP" title="1st autoship order">
-                        1st autoship order
+                        <FormattedMessage id="Order.1stautoshiporder" />
                       </Option>
                       <Option value="RECURRENT_AUTOSHIP" title="Recurrent orders of autoship">
-                        Recurrent orders of autoship
+                        <FormattedMessage id="Order.Recurrentordersofautoship" />
                       </Option>
                     </Select>
                   </InputGroup>
@@ -381,7 +390,7 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Order.Search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -393,7 +402,7 @@ export default class SearchHead extends Component<any, any> {
             <div className="handle-bar">
               <Dropdown overlay={menu} placement="bottomLeft" getPopupContainer={() => document.getElementById('page-content')}>
                 <Button>
-                  <FormattedMessage id="order.bulkOperations" /> <Icon type="down" />
+                  <FormattedMessage id="Order.Bulkoperations" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
@@ -418,10 +427,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Consumer name" value="buyerName">
-          <FormattedMessage id="consumerName" />
+          <FormattedMessage id="Order.Consumername" />
         </Option>
         <Option title="Consumer account" value="buyerAccount">
-          <FormattedMessage id="consumerAccount" />
+          <FormattedMessage id="Order.Consumeraccount" />
         </Option>
       </Select>
     );
@@ -440,10 +449,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Product name" value="skuName">
-          <FormattedMessage id="productName" />
+          <FormattedMessage id="Order.Productname" />
         </Option>
         <Option title="Sku code" value="skuNo">
-          <FormattedMessage id="skuCode" />
+          <FormattedMessage id="Order.Skucode" />
         </Option>
       </Select>
     );
@@ -462,10 +471,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Recipient" value="consigneeName">
-          <FormattedMessage id="recipient" />
+          <FormattedMessage id="Order.Recipient" />
         </Option>
         <Option title="Recipient phone" value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
+          <FormattedMessage id="Order.Recipientphone" />
         </Option>
       </Select>
     );
@@ -484,10 +493,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Auditor name" value="clinicsName">
-          <FormattedMessage id="clinicName" />
+          <FormattedMessage id="Order.Auditorname" />
         </Option>
         <Option title="Auditor ID" value="clinicsIds">
-          <FormattedMessage id="clinicID" />
+          <FormattedMessage id="Order.AuditorID" />
         </Option>
       </Select>
     );
@@ -505,10 +514,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Order number" value="orderNumber">
-          <FormattedMessage id="order.orderNumber" />
+          <FormattedMessage id="Order.Ordernumber" />
         </Option>
         <Option title="Subscriptio number" value="subscriptioNumber">
-          <FormattedMessage id="order.subscriptioNumber" />
+          <FormattedMessage id="Order.Subscriptionumber" />
         </Option>
       </Select>
     );
@@ -526,10 +535,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Recommender id" value="recommenderId">
-          <FormattedMessage id="recommenderId" />
+          <FormattedMessage id="Order.Recommenderid" />
         </Option>
         <Option title="Recommender name" value="recommenderName">
-          <FormattedMessage id="recommenderName" />
+          <FormattedMessage id="Order.Recommendername" />
         </Option>
       </Select>
     );
@@ -548,10 +557,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Payment status" value="paymentStatus">
-          <FormattedMessage id="order.paymentStatus" />
+          <FormattedMessage id="Order.Paymentstatus" />
         </Option>
         <Option title="Shipping status" value="shippingStatus">
-          <FormattedMessage id="order.shippingStatus" />
+          <FormattedMessage id="Order.Shippingstatus" />
         </Option>
       </Select>
     );
@@ -575,8 +584,12 @@ export default class SearchHead extends Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: this.props.intl.formatMessage({
+        id: 'Order.Audit'
+      }),
+      content: this.props.intl.formatMessage({
+        id: 'Order.ConfirmAudit'
+      }),
       onOk() {
         onBatchAudit();
       },
@@ -588,14 +601,14 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export filtered orders',
-      byIdsTitle: 'Export selected orders',
+      byParamsTitle: this.props.intl.formatMessage({ id: 'Order.Exportfilteredorders' }),
+      byIdsTitle: this.props.intl.formatMessage({ id: 'Order.Exportselectedorders' }),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });
   }
 }
-
+export default injectIntl(SearchHead);
 const styles = {
   formItemStyle: {
     width: 335

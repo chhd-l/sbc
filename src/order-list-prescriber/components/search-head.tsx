@@ -87,7 +87,6 @@ class SearchHead extends Component<any, any> {
             <AuthWrapper functionName="fOrderList002_prescriber">
               <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
                 <FormattedMessage id="Order.Batchreview" />
-                2222
               </a>
             </AuthWrapper>
           </Menu.Item>
@@ -395,7 +394,7 @@ class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Order.Search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -542,7 +541,7 @@ class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Order number" value="orderNumber">
-          <FormattedMessage id="Order.Ordernumer" />
+          <FormattedMessage id="Order.Ordernumber" />
         </Option>
         <Option title="Subscriptio number" value="subscriptioNumber">
           <FormattedMessage id="Order.Subscriptionumber" />

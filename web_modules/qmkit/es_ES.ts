@@ -1,5 +1,6 @@
 import {FormattedMessage} from "react-intl";
 import React from "react";
+import { Button } from 'antd';
 // 'Home.':'',
 /**
  * 多语言英文
@@ -255,7 +256,7 @@ export default {
   /*---order-list-prescriber yxy---*/
   'Order.order': 'order',
   'Order.Orderlist': 'Order list',
-  'Order.Ordernumer': 'Order number',
+  'Order.Ordernumber': 'Order number',
   'Order.Subscriptionumber': 'Subscription number',
   'Order.Petownername': 'Pet owner name',
   'Order.Petowneraccount': 'Pet owner account',
@@ -286,6 +287,7 @@ export default {
   'Order.Quantity': 'Quantity',
   'Order.Seedetails': 'See details',
   'Order.DeliveryRecord': 'Delivery Record',
+  'Order.PaymentRecords': 'Payment Records',
   'Order.Ordertime': 'Order time',
   'Order.Consumertype': 'Consumer type',
   'Order.Phonenumber': 'Phone number',
@@ -314,9 +316,8 @@ export default {
   'Order.No.': 'No.',
   'Order.Shipped': 'Shipped',
   'Order.ThisShipment': 'This Shipment',
-  'Order.PaymentRecords': 'Payment Records',
   'Order.Amountreceivable': 'Amount receivable',
-  'Order.CollectionSerial Number': 'Collection Serial Number',
+  'Order.CollectionSerialNumber': 'Collection Serial Number',
   'Order.CollectionTime': 'Collection Time',
   'Order.AmountReceived': 'Amount Received',
   'Order.AccountsReceivable': 'Accounts Receivable',
@@ -355,6 +356,7 @@ export default {
   'Order.Recurrentorders of autoship': 'Recurrent orders of autoship',
   'Order.Export': 'Export',
   'Order.Cancel': 'Cancel',
+  'Order.Search': 'Search',
   'Order.Pleaseselectanexportmethod': 'Please select an export method',
   'Order.Orderstatus': 'Order status',
   'Order.Doyouconfirmthat': 'Do you confirm that the order has been approved?',
@@ -374,8 +376,24 @@ export default {
   'Order.ConfirmReceipt': 'Confirm Receipt',
   'Order.Confirmtoreturntheselected': 'Confirm to return the selected order for re approval ?',
   'Order.Confirmreceiptofallitems': 'Confirm receipt of all items?',
-
-
+  'Order.Valetorder': 'Valet order',
+  'Order.Fighttogether': 'Fight together',
+  'Order.ConfirmAudit': 'Confirm to review the selected order?',
+  'Order.Modify': 'Modify',
+  'Order.Consumer': 'Consumer',
+  'Order.Promotion': 'Promotion',
+  'Order.Back': 'Back',
+  'Order.Whethertoinvalidate': 'Whether to invalidate this delivery record',
+  'Order.Turndown': 'Turn down',
+  'Order.Items': 'Items',
+  'Order.Piece': 'Piece',
+  'Order.Review': 'Review',
+  'Order.ConfirmReview': 'Are you sure you want to return the selected order for reconsideration?',
+  'Order.Trackdelivery': 'Track delivery',
+  'Order.Refresh': 'Refresh',
+  'Order.Confirm': 'Confirm',
+  'Order.PetOwner': 'Pet Owner',
+  'Order.OrderNumber': 'Order Number',
 
   /*-----------------------------  Task  ----------------------------------------------*/
 

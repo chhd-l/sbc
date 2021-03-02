@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Popconfirm } from 'antd';
+import { Table, Popconfirm, Button } from 'antd';
 import { getAddressListByType } from '../webapi';
 import { getCityList, getCountryList } from './webapi';
 
@@ -7,6 +7,7 @@ interface Iprop {
   startDate: string;
   endDate: string;
   customerId: string;
+  type: 'DELIVERY' | 'BILLING';
 }
 
 export default class DeliveryList extends React.Component<Iprop, any> {
@@ -31,7 +32,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     this.setState({
       loading: true
     });
-    getAddressListByType(this.props.customerId, 'DELIVERY')
+    getAddressListByType(this.props.customerId, this.props.type)
       .then((data) => {
         this.setState({
           loading: false,
@@ -89,6 +90,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
 
     return (
       <div>
+        <Button type="primary">Add new</Button>
         <Table rowKey="id" loading={loading} columns={columns} dataSource={list} pagination={false} />
       </div>
     );

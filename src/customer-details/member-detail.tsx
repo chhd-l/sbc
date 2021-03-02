@@ -51,7 +51,7 @@ export default class CustomerDetails extends React.Component<any, any> {
         this.setState({
           basic: {
             ...res.context,
-            customerAccount: res.context.customerVO.customerAccount
+            customerAccount: this.state.customerAccount
           }
         });
       }
@@ -92,7 +92,7 @@ export default class CustomerDetails extends React.Component<any, any> {
     webapi
       .delCustomer(params)
       .then((data) => {
-        if (data.res.code === 'K-000000') {
+        if (data.res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           history.push('/customer-list');
         } else {
@@ -102,6 +102,28 @@ export default class CustomerDetails extends React.Component<any, any> {
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
+  handleDeletePet = (petsId: string) => {
+    this.setState({ loading: true });
+    webapi
+      .delPets({ petsIds: [petsId] })
+      .then((data) => {
+        message.success(data.res.message);
+        this.setState(
+          {
+            loading: false
+          },
+          () => {
+            this.getPetsList();
+          }
+        );
+      })
+      .catch(() => {
         this.setState({
           loading: false
         });
@@ -162,9 +184,14 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <Col span={4}>
                     <Icon type="calendar" /> Age
                   </Col>
-                  <Col span={16} className="text-align-right" style={{ padding: '0 35px' }}>
+                  <Col span={16} className="text-align-right" style={{ padding: '0 20px' }}>
                     <Button type="link" onClick={() => this.changeDisplayPage('editbasic')}>
                       <i className="iconfont iconEdit"></i> Edit
+                    </Button>
+                    <Button type="link">
+                      <Link>
+                        <i className="iconfont iconfenxiang"></i> Overviewiew
+                      </Link>
                     </Button>
                   </Col>
                 </Row>
@@ -250,7 +277,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               <Row gutter={16}>
                 {pets.map((pet) => (
                   <Col span={8}>
-                    <Card bodyStyle={{ padding: '10px 20px' }}>
+                    <Card bodyStyle={{ margin: '10px 0', padding: '10px 20px' }}>
                       <div className="text-align-right">
                         <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
                           <Button type="link">
@@ -299,7 +326,10 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <PrescribInformation startDate={startDate} endDate={endDate} />
                 </TabPane>
                 <TabPane tab="Delivery information" key="delivery">
-                  <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
+                  <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="DELIVERY" />
+                </TabPane>
+                <TabPane tab="Delivery information" key="billing">
+                  <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="BILLING" />
                 </TabPane>
                 <TabPane tab="Payment methods" key="payment">
                   <PaymentList startDate={startDate} endDate={endDate} customerId={this.state.customerId} />

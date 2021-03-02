@@ -71,7 +71,7 @@ export default class LoginForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <Button type="primary" size="large" htmlType="submit" style={styles.loginBtn} loading={this.state.loading} onClick={(e) => this._handleLogin(e)}>
-            Login
+            <FormattedMessage id="Public.Login" />
           </Button>
         </FormItem>
         <FormItem style={{ marginBottom: 0 }}>

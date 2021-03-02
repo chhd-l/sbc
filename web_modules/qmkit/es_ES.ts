@@ -21,10 +21,20 @@ export default {
   'Public.LoginAccount':'Login Account',
   'Public.RoyalCaninSAS2020':'Royal Canin SAS 2020',
   'Public.Pleaseinputyour':'Please input your login account',
-  'Public.aaaa':'aaa1111aaa1234',
-  'Public.aaaa1':'aaa1111aaa1234',
-  'Public.aaaa1':'aaa1111aaa1234',
+  'Public.Login':'Login',
+  'Public.UnderReview':'Under Review',
+  'Public.Yourapplication':'Your application has been sent to the related prescriber and the user account is under audit.\n' +
+    '                  We will notify you of the result by email.',
+  'Public.Return':'Return',
+  'Public.Thisserviceis':'This service is dedicated to our customers only.',
+  'Public.YourclientID':'Your client ID is specified on your Royal Canin invoice. It can be an e-mail address or a client number',
+  'Public.Proceed':'Proceed',
   'Public.aaaa2':'aaa1111aaa1234',
+
+
+
+
+
   /*-----------------------------  Home ------ ----------------------------------------*/
   'Home.Overview':'Overview',
   'Home.Revenue':'Revenue',
@@ -58,15 +68,6 @@ export default {
   'Home.Prescriberreward':'Prescriber reward',
   'Home.Activerate':'Active rate',
   'Home.Transaction':'Transaction',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-  'Home.':'',
-
-
-
-
-
 
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",

@@ -6,6 +6,7 @@ import Activity from './components/activity';
 import './style.less';
 import * as webapi from './webapi';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -261,7 +262,7 @@ class TaskUpdate extends Component<any, any> {
               const { res } = data;
               if (res.code === 'K-000000') {
                 message.success('Operate successfully');
-                history.push({ pathname: '/tasks' });
+                history.goBack();
               } else {
                 message.error(res.message || 'Update Failed');
               }
@@ -598,7 +599,7 @@ class TaskUpdate extends Component<any, any> {
                             ))}
                           </Select>
                         ) : (
-                          <span>{task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''}</span>
+                          <Link to={`/customer-details/Member/${id}/${task.customerAccount}`}>{task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''}</Link>
                         )
                       )}
                     </FormItem>
@@ -625,7 +626,7 @@ class TaskUpdate extends Component<any, any> {
                             ))}
                           </Select>
                         ) : (
-                          <span>{task.petName}</span>
+                          <Link to={`/customer-details/Member/${id}/${task.customerAccount}`}>{task.petName}</Link>
                         )
                       )}
                     </FormItem>
@@ -654,7 +655,7 @@ class TaskUpdate extends Component<any, any> {
                             ))}
                           </Select>
                         ) : (
-                          <span>{task.orderCode}</span>
+                          <Link to={`/order-detail/${task.orderCode}`}>{task.orderCode}</Link>
                         )
                       )}
                     </FormItem>
@@ -710,7 +711,7 @@ class TaskUpdate extends Component<any, any> {
                             ))}
                           </Select>
                         ) : (
-                          <span>{task.subscriptionNumber}</span>
+                          <Link to={`/subscription-detail/${task.subscriptionNumber}`}>{task.subscriptionNumber}</Link>
                         )
                       )}
                     </FormItem>
@@ -770,7 +771,7 @@ class TaskUpdate extends Component<any, any> {
             <Button type="primary" style={{ marginRight: '10px' }} onClick={(e) => this.updateTask(e)}>
               Save
             </Button>
-            <Button type="primary" onClick={() => (history as any).go(-1)}>
+            <Button type="primary" onClick={() => history.goBack()}>
               Back
             </Button>
           </div>

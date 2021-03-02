@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline } from 'antd';
+import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline, TreeSelect } from 'antd';
 import { replaceLink } from '../common';
+
+const { SHOW_ALL } = TreeSelect;
 
 export default class Activities extends Component<any, any> {
   constructor(props) {
@@ -32,44 +34,97 @@ export default class Activities extends Component<any, any> {
           id: 8157,
           tenantId: 4
         }
+      ],
+      treeData: [
+        {
+          title: 'Pet Owner INTEGRATION',
+          value: 'CONTACTS INTEGRATION',
+          key: 'CONTACTS INTEGRATION'
+        },
+        {
+          title: 'UPDATES',
+          value: 'UPDATES',
+          key: 'UPDATES'
+        },
+        {
+          title: 'COMMUNICATION',
+          value: 'COMMUNICATION',
+          key: 'COMMUNICATION',
+          children: [
+            { value: 'COMMUNICATION.Emails', key: 'COMMUNICATION.Emails', title: 'Emails' },
+            { value: 'COMMUNICATION.Calls', key: 'COMMUNICATION.Emails', title: 'Calls' }
+          ]
+        },
+        {
+          title: 'SEGMENTATION',
+          value: 'SEGMENTATION',
+          key: 'SEGMENTATION'
+        },
+        {
+          title: 'COMMUNICATION',
+          value: 'COMMUNICATION',
+          key: 'COMMUNICATION',
+          children: [
+            { value: 'CAMPAIGN ACTIVITY.Campaign Status', key: 'CAMPAIGN ACTIVITY.Campaign Status', title: 'Campaign Status' },
+            { value: 'CAMPAIGN ACTIVITY.Emails', key: 'CAMPAIGN ACTIVITY.Campaign Status', title: 'Campaign Emails' }
+          ]
+        },
+        {
+          title: 'COMMENTS',
+          value: 'COMMENTS',
+          key: 'COMMENTS',
+          children: [
+            { value: 'COMMENTS.Notes', key: 'COMMENTS.Notes', title: 'Notes' },
+            { value: 'COMMENTS.Feedback', key: 'COMMENTS.Notes', title: 'Feedback' }
+          ]
+        },
+        {
+          title: 'TASKS',
+          value: 'TASKS',
+          key: 'TASKS'
+        },
+        {
+          title: 'Clinic',
+          value: 'Clinic',
+          key: 'Clinic'
+        }
       ]
     };
     this.activitiesSort = this.activitiesSort.bind(this);
+    this.getActivities = this.getActivities.bind(this);
+    this.onActivityTypeChange = this.onActivityTypeChange.bind(this);
   }
   activitiesSort() {}
+
+  getActivities() {}
+
+  onActivityTypeChange = (value) => {};
+
   render() {
-    const { activityLoading, activityList } = this.state;
+    const { activityLoading, activityList, treeData } = this.state;
     const menu = (
       <Menu>
         <Menu.Item key={1}>Add Comment</Menu.Item>
         <Menu.Item key={2}>Add Task</Menu.Item>
       </Menu>
     );
+    const tProps = {
+      treeData,
+      onChange: this.onActivityTypeChange,
+      treeCheckable: true,
+      showCheckedStrategy: SHOW_ALL,
+      searchPlaceholder: 'Activity Type',
+      style: {
+        width: '150px'
+      },
+      maxTagCount: 0,
+      allowClear: true
+    };
     return (
       <Row>
         <Col span={9}></Col>
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-          {/* <Dropdown trigger={['click']} overlayClassName="dropdown-custom" style={{marginRight: '10px'}}>
-                  <Button className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                    Email Type
-                    <Icon type="down" />
-                  </Button>
-                  <Menu slot="overlay">
-                    <Checkbox
-                      :indeterminate="indeterminateEmail"
-                      @change="onCheckAllEamil"
-                      :checked="checkEmailAll"
-                    >{{ $t('public.selectAll') }}</Checkbox>
-                    <Divider />
-                    <CheckboxGroup v-model="emailCheckedList" @change="emailChange">
-                      <Row :gutter="24" v-for="(item, i) in emailFilter" :key="i">
-                        <Col span={24}>
-                          <Checkbox :value="item.value">{{ item.label }}</Checkbox>
-                        </Col>
-                      </Row>
-                    </CheckboxGroup>
-                  </Menu>
-                </Dropdown> */}
+          <TreeSelect className="filter" {...tProps} />
           <Button className="sortBtn" onClick={this.activitiesSort}>
             <span className="icon iconfont iconbianzu8" style={{ fontSize: '22px' }} />
           </Button>

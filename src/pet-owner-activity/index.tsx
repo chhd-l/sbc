@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
-import { Row, Col, Tabs, Card, Breadcrumb } from 'antd';
+import { BreadCrumb, SelectGroup, Const, Headline, history } from 'qmkit';
+import { Row, Col, Tabs, Card, Breadcrumb, Button, message } from 'antd';
 import PetOwner from './components/petowner';
 import Pets from './components/pets';
 import Tasks from './components/tasks';
 import Emails from './components/emails';
 import Activities from './components/activities';
-import Orders from './components/orders';
-import Bookings from './components/bookings';
+import Orders from './components/order';
+import Bookings from './components/subscriptions';
+import * as webapi from './webapi';
 
 import './style.less';
 
@@ -19,23 +20,65 @@ export default class PetOwnerActivity extends Component<any, any> {
     this.state = {
       activityKey: '1',
       id: this.props.match.params.id ? this.props.match.params.id : '',
-      title: 'Pet Owner activity'
+      title: 'Pet Owner activity',
+      petOwner: {}
     };
   }
+
+  componentDidMount() {
+    webapi
+      .getPetOwner(this.state.id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            petOwner: res.context
+          });
+        } else {
+          message.error('Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+  }
+
+  quickSend = () => {
+    history.push({
+      pathname: '/message-quick-send'
+    });
+  };
   render() {
-    const { title, id } = this.state;
+    const { title, id, petOwner } = this.state;
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>Pet Owner Activity</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title={title} />
+          <Row>
+            <Col span={12}>
+              <Headline title={title} />
+            </Col>
+            <Col span={12} style={{ textAlign: 'right' }}>
+              <Button
+                shape="round"
+                onClick={() => {
+                  this.quickSend();
+                }}
+                style={{
+                  borderColor: '#e2001a'
+                }}
+              >
+                <p style={{ color: '#e2001a' }}>Quick Send</p>
+              </Button>
+            </Col>
+          </Row>
         </div>
         <div className="container petOwnerActivity">
           <Row gutter={10} style={{ marginBottom: '20px' }}>
             <Col span={7}>
-              <PetOwner petOwnerId={id} />
+              <PetOwner petOwner={petOwner} />
               <div style={{ marginTop: '20px' }}></div>
               <Pets petOwnerId={id} />
             </Col>
@@ -63,8 +106,8 @@ export default class PetOwnerActivity extends Component<any, any> {
             </Col>
             <Col span={8}>
               <Orders petOwnerId={id} />
-              {/* <div style={{ marginTop: '20px' }}></div>
-              <Bookings petOwnerId={id} /> */}
+              <div style={{ marginTop: '20px' }}></div>
+              <Bookings customerAccount={petOwner.customerAccount} />
             </Col>
           </Row>
         </div>

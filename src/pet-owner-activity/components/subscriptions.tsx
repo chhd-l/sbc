@@ -1,79 +1,53 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Tooltip, Table, Input, Menu, Checkbox, Dropdown, Button } from 'antd';
+import { Card, Icon, Row, Col, message, Tooltip, Table, Input, DatePicker } from 'antd';
 import * as webapi from '../webapi';
 import { history, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
-const { Divider } = Menu;
-const { Item } = Menu;
-const CheckboxGroup = Checkbox.Group;
 
-export default class orders extends Component<any, any> {
+export default class bookings extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      orderStatus: [],
-      orderCategories: [
-        { label: 'Single purchase', value: 'SINGLE' },
-        { label: '1st autoship order', value: 'FIRST_AUTOSHIP' },
-        { label: 'Recurrent orders of autoship', value: 'RECURRENT_AUTOSHIP' }
-      ],
-      orderList: [
+      subscriptionList: [
         {
-          businessType: 'B2C',
-          contactName: 'Morgane Lucas',
-          contactUuid: '00uod83hrdUTgu6il0x6',
-          creationDate: '2020-10-06 16:59:35',
-          id: 1196,
-          orderNo: '99933863',
-          orderType: 'Single order',
-          status: 'failed'
+          bookingDate: '2021-01-29',
+          bookingTime: '9:31 AM-10:31 AM',
+          clinicsName: 'Вега',
+          id: 4,
+          pet: 'Doudou',
+          petId: '44750',
+          relationId: 6
         },
         {
-          businessType: 'B2C',
-          contactName: 'Morgane Lucas',
-          contactUuid: '00uod83hrdUTgu6il0x6',
-          creationDate: '2020-10-06 17:03:30',
-          id: 1197,
-          orderNo: '99933864',
-          orderType: 'Single order',
-          status: 'failed'
+          bookingDate: '2021-01-27',
+          bookingTime: '2:19 PM-8:19 PM',
+          clinicsName: 'Вега',
+          id: 3,
+          pet: 'Doudou',
+          petId: '44750',
+          relationId: 6
         },
         {
-          businessType: 'B2C',
-          contactName: 'Morgane Lucas',
-          contactUuid: '00uod83hrdUTgu6il0x6',
-          creationDate: '2020-10-06 17:14:22',
-          id: 1198,
-          orderNo: '99933865',
-          orderType: 'Single order',
-          status: 'failed'
-        },
-        {
-          businessType: 'B2C',
-          contactName: 'Morgane Lucas',
-          contactUuid: '00uod83hrdUTgu6il0x6',
-          creationDate: '2020-10-06 17:16:25',
-          id: 1199,
-          orderNo: '99933866',
-          orderType: 'Single order',
-          status: 'failed'
+          bookingDate: '2021-01-19',
+          bookingTime: '12:19 PM-7:19 PM',
+          clinicsName: 'Вега',
+          id: 2,
+          pet: 'Doudou',
+          petId: '44750',
+          relationId: 6
         }
       ],
       pagination: {
         current: 1,
-        pageSize: 20,
+        pageSize: 4,
         total: 0
       },
       formData: {},
-      loading: false,
-      categoryVisible: false
+      loading: false
     };
-    this.handleTableChange = this.handleTableChange.bind(this);
-    this.getOrderList = this.getOrderList.bind(this);
   }
-
   componentDidMount() {
-    // this.getOrderList();
+    // this.getSubscriptionList();
   }
 
   handleTableChange = (pagination: any) => {
@@ -81,7 +55,7 @@ export default class orders extends Component<any, any> {
       {
         pagination: pagination
       },
-      () => this.getOrderList()
+      () => this.getSubscriptionList()
     );
   };
   onFormChange = ({ field, value }) => {
@@ -91,23 +65,24 @@ export default class orders extends Component<any, any> {
       formData: data
     });
   };
-  getOrderList = () => {
+  getSubscriptionList = () => {
     const { formData, pagination } = this.state;
     let params = Object.assign(formData, {
       pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize
+      pageSize: pagination.pageSize,
+      customerAccount: this.props.customerAccount
     });
     this.setState({
       loading: true
     });
     webapi
-      .getOrderList(params)
+      .getSubscriptionList(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           this.setState({
-            orderList: res.context.orderList,
+            subscriptionList: res.context.subscriptionResponses,
             pagination: pagination,
             loading: false
           });
@@ -126,53 +101,11 @@ export default class orders extends Component<any, any> {
       });
   };
   render() {
-    const { orderList, orderCategories, categoryVisible } = this.state;
-    const filterMenu = (
-      <Menu>
-        <Checkbox>Select All</Checkbox>
-        <a className="closeFilter" onClick={() => this.setState({ categoryVisible: false })}>
-          {' '}
-          X
-        </a>
-        <Divider />
-        <CheckboxGroup>
-          {orderCategories.map((item, index) => (
-            <Row gutter={24} key={index}>
-              <Col span={24}>
-                <Checkbox value={item.value}>{item.label}</Checkbox>
-              </Col>
-            </Row>
-          ))}
-        </CheckboxGroup>
-      </Menu>
-    );
+    const { subscriptionList } = this.state;
     const columns = [
-      {
-        title: 'Order Type',
-        dataIndex: 'businessType',
-        width: '15%'
-      },
       {
         title: 'Pet',
         dataIndex: 'pet',
-        width: '10%',
-        render: (text) => {
-          return (
-            <Tooltip
-              overlayStyle={{
-                overflowY: 'auto'
-              }}
-              placement="bottomLeft"
-              title={<div>{text}</div>}
-            >
-              <p className="overFlowtext">{text}</p>
-            </Tooltip>
-          );
-        }
-      },
-      {
-        title: 'Order No',
-        dataIndex: 'orderNo',
         width: '15%',
         render: (text) => {
           return (
@@ -189,8 +122,13 @@ export default class orders extends Component<any, any> {
         }
       },
       {
-        title: 'Order Time',
-        dataIndex: 'creationDate',
+        title: 'Booking Date',
+        dataIndex: 'bookingDate',
+        width: '25%'
+      },
+      {
+        title: 'Prescriber Name',
+        dataIndex: 'clinicsName',
         width: '25%',
         render: (text) => {
           return (
@@ -207,31 +145,44 @@ export default class orders extends Component<any, any> {
         }
       },
       {
-        title: 'Order Status',
-        dataIndex: 'status',
-        width: '25%'
+        title: 'Booking Time',
+        dataIndex: 'bookingTime',
+        width: '25%',
+        render: (text) => {
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{text}</div>}
+            >
+              <p className="overFlowtext">{text}</p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: '',
         key: 'operation',
-        width: '10%',
+        width: '15%',
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Details">
-              <Link to={'/order-detail-prescriber/' + record.orderNumber} className="iconfont iconDetails"></Link>
+              <Link to={'/test/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
         )
       }
     ];
     return (
-      <Card title="Order" className="orderCard">
+      <Card title="Prescriber Booking" className="topCard">
         <Row>
           <Col span={9}>
             <Input
               className="searchInput"
               placeholder="Search Keyword"
-              onPressEnter={() => this.getOrderList()}
+              onPressEnter={() => this.getSubscriptionList()}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 this.onFormChange({
@@ -239,25 +190,27 @@ export default class orders extends Component<any, any> {
                   value
                 });
               }}
-              prefix={<Icon type="search" onClick={() => this.getOrderList()} />}
+              prefix={<Icon type="search" onClick={() => this.getSubscriptionList()} />}
             />
           </Col>
           <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-            <div style={{ marginRight: '10px' }}>
-              <Dropdown overlay={filterMenu} trigger={['click']} overlayClassName="dropdown-custom" visible={categoryVisible}>
-                <Button className="ant-dropdown-link" onClick={(e) => this.setState({ categoryVisible: true })}>
-                  Order Category
-                  <Icon type="down" />
-                </Button>
-              </Dropdown>
-            </div>
+            <DatePicker
+              style={{ width: '60%' }}
+              format="DD/MM/YYYY"
+              onChange={(date, dateString) => {
+                this.onFormChange({
+                  field: 'date',
+                  value: dateString
+                });
+              }}
+            />
           </Col>
           <Col span={24}>
             <Table
               rowKey="id"
               size="small"
               columns={columns}
-              dataSource={orderList}
+              dataSource={subscriptionList}
               pagination={this.state.pagination}
               loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
               scroll={{ x: '100%' }}

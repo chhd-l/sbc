@@ -219,7 +219,7 @@ export default class MyHeader extends React.Component {
           }):<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         </ul>
         <div style={styles.linkMore}>
-          <Link to="/tasks" style={{ color: 'red', fontSize: 18, textDecoration: 'underline' }}>View all task</Link>
+          <Link to="/tasks" style={{ color: 'red', fontSize: 16, textDecoration: 'underline' }}>View all task</Link>
           <Icon type="right" />
         </div>
       </div>
@@ -261,8 +261,8 @@ export default class MyHeader extends React.Component {
             <div style={{ marginRight: 30, marginTop: 15 }}>
               <Badge count={this.state.taskList.length}>
                 <Popover style={{ padding: 0 }}
-                  visible={this.state.visible}
-                  onVisibleChange={this.handleVisibleChange}
+                  // visible={this.state.visible}
+                  // onVisibleChange={this.handleVisibleChange}
                   placement="bottomRight" content={content} trigger="click">
                   <Icon type="bell" style={{ fontSize: 25 }} />
                 </Popover>
@@ -318,7 +318,7 @@ const styles = {
     borderBottom: '1px solid #ccc'
   },
   linkMore: {
-    padding: '20px 16px',
+    padding: '10px 16px',
     background: '#f3f3f3',
     display: 'flex',
     justifyContent: 'space-between',

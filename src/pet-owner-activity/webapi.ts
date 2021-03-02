@@ -45,8 +45,44 @@ export function getOrderList(filterParams = {}) {
   });
 }
 
-export function getBookingList(filterParams = {}) {
-  return Fetch<TResult>('/booking/list', {
+export function getSubscriptionList(filterParams = {}) {
+  return Fetch<TResult>('/sub/findPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getRecentEamils(filterParams = {}) {
+  return Fetch<TResult>('/biz/contactActivity/listRecentEmails', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getAllEamils(filterParams = {}) {
+  return Fetch<TResult>('/biz/contactActivity/listAllEmails', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getRecentActivities(filterParams = {}) {
+  return Fetch<TResult>('/biz/contactActivity/listRecent', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getAllActivities(filterParams = {}) {
+  return Fetch<TResult>('/biz/contactActivity/listAll', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

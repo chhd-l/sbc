@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline } from 'antd';
+import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline, Select } from 'antd';
 const { Divider } = Menu;
 const { Item } = Menu;
 const CheckboxGroup = Checkbox.Group;
 import { replaceLink } from '../common';
 import TemplateConponent from './template-conponent';
 
+const Option = Select.Option;
 export default class emails extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -30,54 +31,36 @@ export default class emails extends Component<any, any> {
       emailFilter: [
         { value: 'COMMUNICATION.Emails', label: 'Communication Email' },
         { value: 'CAMPAIGN ACTIVITY.Emails', label: 'Automation Email' }
-      ],
-      filterVisible: false
+      ]
     };
     this.activitiesEmailSort = this.activitiesEmailSort.bind(this);
+    this.getEmails = this.getEmails.bind(this);
   }
 
   componentDidMount() {}
 
+  getEmails() {}
+
   activitiesEmailSort() {}
   render() {
-    const { emailLoading, emailList, emailFilter, filterVisible } = this.state;
+    const { emailLoading, emailList, emailFilter } = this.state;
     const menu = (
       <Menu>
         <Menu.Item key={1}>Add Comment</Menu.Item>
         <Menu.Item key={2}>Add Task</Menu.Item>
       </Menu>
     );
-    const filterMenu = (
-      <Menu>
-        <Checkbox>Select All</Checkbox>
-        <a className="closeFilter" onClick={() => this.setState({ filterVisible: false })}>
-          {' '}
-          X
-        </a>
-        <Divider />
-        <CheckboxGroup>
-          {emailFilter.map((item, index) => (
-            <Row gutter={24} key={index}>
-              <Col span={24}>
-                <Checkbox value={item.value}>{item.label}</Checkbox>
-              </Col>
-            </Row>
-          ))}
-        </CheckboxGroup>
-      </Menu>
-    );
     return (
       <Row>
         <Col span={9}></Col>
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-          <div style={{ marginRight: '10px' }}>
-            <Dropdown overlay={filterMenu} trigger={['click']} overlayClassName="dropdown-custom" visible={filterVisible}>
-              <Button className="ant-dropdown-link" onClick={(e) => this.setState({ filterVisible: true })}>
-                Email Type
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </div>
+          <Select className="filter" placeholder="Email Type" allowClear={true} dropdownMatchSelectWidth={false} maxTagCount={0} style={{ width: '120px' }} mode="multiple" onChange={(value) => this.getEmails()}>
+            {emailFilter.map((item) => (
+              <Option value={item.value} key={item.label}>
+                {item.label}
+              </Option>
+            ))}
+          </Select>
           <Button className="sortBtn" onClick={this.activitiesEmailSort}>
             <span className="icon iconfont iconbianzu8" style={{ fontSize: '22px' }} />
           </Button>

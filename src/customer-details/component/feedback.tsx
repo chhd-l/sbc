@@ -54,12 +54,13 @@ class FeedBack extends React.Component<Iprop, any> {
         this.setState({ loading: true });
         saveFeedback({
           ...fields,
-          customerId: this.props.customerId
+          petOwnerId: this.props.customerId
         })
           .then((data) => {
             message.success('Save feedback successfully');
             this.setState({
-              loading: false
+              loading: false,
+              editable: false
             });
           })
           .catch(() => {

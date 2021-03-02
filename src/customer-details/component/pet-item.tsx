@@ -3,33 +3,56 @@ import { Form, Row, Col, Input, Select, Radio, Spin, DatePicker, Button, Popconf
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline } from 'qmkit';
 import moment from 'moment';
+import { querySysDictionary } from '../webapi';
 
 const { Option } = Select;
 
-type TPet = {
-  id: number;
-  picture: string;
-  petsType: string;
-  petsName: string;
-  petsSex: number;
-  petsBreed: string;
-  petsSizeValueName: string;
-  sterilized: number;
-  birthOfPets: string;
-  customerPetsPropRelations: Array<string>;
-};
-
 interface Iprop extends FormComponentProps {
-  pet: TPet;
+  pet: any;
 }
 
 class PetItem extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
+      petType: this.props.pet.petsType || 'dog',
+      catBreed: [],
+      dogBreed: []
     };
   }
+
+  componentDidMount() {
+    this.getBreedListByType('dogBreed');
+    this.getBreedListByType('catBreed');
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.pet.petsType !== prevState.petType) {
+      return {
+        petType: nextProps.pet.petsType
+      };
+    }
+    return null;
+  }
+
+  onChangePetType = (petType: string) => {
+    this.setState({
+      petType: petType
+    });
+  };
+
+  getBreedListByType = (type: string) => {
+    querySysDictionary({
+      delFlag: 0,
+      storeId: 123456858,
+      type: type
+    }).then((data) => {
+      this.setState({
+        [type]: data.res.context.sysDictionaryVOS
+      });
+    });
+  };
 
   render() {
     const { pet } = this.props;
@@ -44,6 +67,7 @@ class PetItem extends React.Component<Iprop, any> {
         sm: { span: 12 }
       }
     };
+    const breedOptions = this.state.petType === 'dog' ? this.state.dogBreed : this.state.catBreed;
     return (
       <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
         <Headline title="Edit pet information" />
@@ -64,7 +88,16 @@ class PetItem extends React.Component<Iprop, any> {
                     {getFieldDecorator('petsType', {
                       initialValue: pet.petsType,
                       rules: [{ required: true, message: 'Pet category is required' }]
-                    })(<Select />)}
+                    })(
+                      <Select onChange={this.onChangePetType}>
+                        <Option value="dog" key="dog">
+                          Dog
+                        </Option>
+                        <Option value="cat" key="cat">
+                          Cat
+                        </Option>
+                      </Select>
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -82,7 +115,16 @@ class PetItem extends React.Component<Iprop, any> {
                     {getFieldDecorator('petsSex', {
                       initialValue: pet.petsSex,
                       rules: [{ required: true, message: 'Gender is required' }]
-                    })(<Select />)}
+                    })(
+                      <Select>
+                        <Option value={0} key="0">
+                          male
+                        </Option>
+                        <Option value={1} key="1">
+                          female
+                        </Option>
+                      </Select>
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -90,7 +132,15 @@ class PetItem extends React.Component<Iprop, any> {
                     {getFieldDecorator('petsBreed', {
                       initialValue: pet.petsBreed,
                       rules: [{ required: true, message: 'Breed is required' }]
-                    })(<Select />)}
+                    })(
+                      <Select showSearch>
+                        {breedOptions.map((breedItem) => (
+                          <Option value={breedItem.name} key={breedItem.id}>
+                            {breedItem.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
                   </Form.Item>
                 </Col>
               </Row>
@@ -100,7 +150,15 @@ class PetItem extends React.Component<Iprop, any> {
                     {getFieldDecorator('petsSizeValueName', {
                       initialValue: pet.petsSizeValueName,
                       rules: [{ required: true, message: 'Weight is required' }]
-                    })(<Select />)}
+                    })(
+                      <Select>
+                        {['Xsmall', 'Mini', 'Medium', 'Maxi', 'Giant'].map((size, idx) => (
+                          <Option value={size} key={idx}>
+                            {size}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -121,9 +179,16 @@ class PetItem extends React.Component<Iprop, any> {
                 <Col span={12}>
                   <Form.Item label="Birthday">
                     {getFieldDecorator('birthOfPets', {
-                      initialValue: moment(pet.birthOfPets),
+                      initialValue: moment(pet.birthOfPets, 'DD/MM/YYYY'),
                       rules: [{ required: true, message: 'Birthday is required' }]
-                    })(<DatePicker />)}
+                    })(
+                      <DatePicker
+                        format="DD/MM/YYYY"
+                        disabledDate={(current) => {
+                          return current && current > moment().endOf('day');
+                        }}
+                      />
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>

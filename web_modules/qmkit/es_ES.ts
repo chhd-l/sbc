@@ -21,8 +21,10 @@ export default {
   'Public.LoginAccount':'Login Account',
   'Public.RoyalCaninSAS2020':'Royal Canin SAS 2020',
   'Public.Pleaseinputyour':'Please input your login account',
-  'Public.':'',
-
+  'Public.aaaa':'aaa1111aaa1234',
+  'Public.aaaa1':'aaa1111aaa1234',
+  'Public.aaaa1':'aaa1111aaa1234',
+  'Public.aaaa2':'aaa1111aaa1234',
   /*-----------------------------  Home ------ ----------------------------------------*/
   'Home.Overview':'Overview',
   'Home.Revenue':'Revenue',

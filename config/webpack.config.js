@@ -226,7 +226,7 @@ module.exports = function (webpackEnv, envCode) {
       strictExportPresence: true,
       rules: [
         {
-          test:  /\.ts$/,
+          test:  /\.js$/,
           //把对.js 的文件处理交给id为happyBabel 的HappyPack 的实例执行
           loader: 'happypack/loader?id=happyBabel',
           //排除node_modules 目录下的文件

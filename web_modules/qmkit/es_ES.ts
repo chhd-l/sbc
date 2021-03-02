@@ -287,7 +287,6 @@ export default {
   'Order.Seedetails': 'See details',
   'Order.DeliveryRecord': 'Delivery Record',
   'Order.Ordertime': 'Order time',
-  'Order.Order.Consumertype:  Member': 'Consumer type:  Member',
   'Order.Consumertype': 'Consumer type',
   'Order.Phonenumber': 'Phone number',
   'Order.ProductName': 'Product Name',

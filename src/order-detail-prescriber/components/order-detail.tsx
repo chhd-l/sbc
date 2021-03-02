@@ -111,7 +111,7 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create()(RejectForm);
 
 /**
- * 订单详情
+ * 订单详情 yxy
  */
 @Relax
 export default class OrderDetailTab extends React.Component<any, any> {
@@ -284,7 +284,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (text, record) => <>{record.petsInfo && record.petsInfo.petsName ? <p>{record.petsInfo.petsName}</p> : null}</>
       },
       {
-        title: 'Pet details',
         title: <FormattedMessage id="Order.Petdetails" />,
         dataIndex: 'petDetails',
         key: 'petDetails',
@@ -300,13 +299,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
         )
       },
       {
-        title: 'Quantity',
         title: <FormattedMessage id="Order.Quantity" />,
         dataIndex: 'num',
         key: 'num'
       },
       {
-        title: 'Price',
         title: <FormattedMessage id="Order.Price" />,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
@@ -330,7 +327,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )
       },
       {
-        title: 'Subtotal',
         title: <FormattedMessage id="Order.Subtotal" />,
         render: (row) => (
           <span>
@@ -465,18 +461,18 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="orderNumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
+                {<FormattedMessage id="Order.Ordernumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
                 {/*<span style={styles.platform}>代下单</span>*/}
                 {/* <span style={styles.platform}>{orderType}</span> */}
                 {detail.get('grouponFlag') && <span style={styles.platform}>拼团</span>}
                 {/*)}*/}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="orderTime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
+                {<FormattedMessage id="Order.Ordertime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
               {detail.get('isAutoSub') ? (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="order.subscriptioNumber" /> : {detail.get('subscribeId')}
+                  <FormattedMessage id="Order.Subscriptionumber" /> : {detail.get('subscribeId')}
                 </p>
               ) : (
                 ''
@@ -492,7 +488,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <p style={styles.darkText}>
                 {<FormattedMessage id="Order.Consumeraccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
-              {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}</p>}
+              {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Consumer type' + ':  ' + detail.getIn(['buyer', 'levelName'])}</p>}
               {/* <p style={styles.darkText}>
                 {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
               </p>

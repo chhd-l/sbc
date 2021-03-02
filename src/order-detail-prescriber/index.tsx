@@ -11,7 +11,7 @@ import { Headline, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 /**
- * 订单详情
+ * 订单详情 yxy
  */
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class OrderDetail extends React.Component<any, any> {

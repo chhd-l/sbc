@@ -5,7 +5,7 @@ import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-import { Const, Headline } from 'qmkit';
+import { Const, Headline, history } from 'qmkit';
 import _ from 'lodash';
 import { getCountryList, getCityList } from './webapi';
 
@@ -26,18 +26,20 @@ class BasicEdit extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      customer: {},
       countryList: [],
       cityList: [],
       currentBirthDay: '2020-01-01',
       clinicList: [],
       currentForm: {},
-      loading: true,
+      loading: false,
       objectFetching: false,
       initCityName: '',
       initPreferChannel: []
     };
   }
   componentDidMount() {
+    this.getBasicDetails();
     this.getDict();
     this.getClinicList();
   }
@@ -61,84 +63,22 @@ class BasicEdit extends React.Component<any, any> {
     return clinics;
   };
   getBasicDetails = () => {
+    this.setState({ loading: true });
     webapi
       .getBasicDetails(this.props.customerId)
       .then((data) => {
-        let res = data.res;
-        if (!(res.code && res.code !== Const.SUCCESS_CODE)) {
-          let res2 = JSON.stringify(data.res);
-
-          let resObj = JSON.parse(res2);
-          let clinicsVOS = this.getSelectedClinic(resObj.clinicsVOS);
-          let defaultClinicsId = '';
-          if (resObj.defaultClinics && resObj.defaultClinics.clinicsId) {
-            defaultClinicsId = resObj.defaultClinics.clinicsId;
-          }
-
-          let basicForm = {
-            customerAccount: resObj.customerVO.customerAccount,
-            createTime: resObj.createTime,
-            firstName: resObj.firstName,
-            lastName: resObj.lastName,
-            birthDay: resObj.birthDay ? resObj.birthDay : this.state.currentBirthDay,
-            email: resObj.email,
-            contactPhone: resObj.contactPhone,
-            postalCode: resObj.postalCode,
-            cityId: resObj.cityId,
-            countryId: resObj.countryId,
-            address1: resObj.address1,
-            address2: resObj.address2,
-            communicationPhone: resObj.communicationPhone,
-            communicationEmail: resObj.communicationEmail,
-            reference: resObj.reference,
-            selectedClinics: resObj.clinicsVOS,
-            defaultClinicsId: defaultClinicsId,
-            defaultClinics: resObj.defaultClinics,
-            preferredMethods: []
-          };
-          if (basicForm.cityId) {
-            this.getCityNameById(basicForm.cityId);
-          }
-          let initPreferChannel = [];
-          if (+basicForm.communicationPhone) {
-            initPreferChannel.push('Phone');
-          }
-          if (+basicForm.communicationEmail) {
-            initPreferChannel.push('Email');
-          }
-          basicForm.preferredMethods = initPreferChannel;
-
-          this.setState(
-            {
-              currentBirthDay: resObj.birthDay ? resObj.birthDay : this.state.currentBirthDay,
-              basicForm: basicForm,
-              currentForm: resObj,
-              initPreferChannel: initPreferChannel
-            },
-            () => {
-              this.props.form.setFieldsValue({
-                firstName: resObj.firstName,
-                lastName: resObj.lastName,
-                email: resObj.email,
-                contactPhone: resObj.contactPhone,
-                postalCode: resObj.postalCode,
-                // city: resObj.cityId,
-                country: resObj.countryId,
-                address1: resObj.address1,
-                address2: resObj.address2,
-                // preferredMethods: resObj.contactMethod,
-                reference: resObj.reference,
-                selectedClinics: clinicsVOS,
-                defaultClinicsId: defaultClinicsId
-              });
-              this.setState({
-                loading: false
-              });
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false,
+            customer: {
+              ...res.context,
+              customerAccount: this.props.customerAccount
             }
-          );
+          });
         }
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({
           loading: false
         });
@@ -154,23 +94,29 @@ class BasicEdit extends React.Component<any, any> {
   };
   handleSubmit = (e) => {
     e.preventDefault();
-    const { customer, onEdit } = this.props;
+    const { customer } = this.state;
     this.props.form.validateFields((err, fieldsValue) => {
       if (!err) {
         //this.saveBasicInfomation();
+        this.setState({ loading: true });
         const params = {
           ...fieldsValue,
           customerDetailId: customer.customerDetailId,
           communicationEmail: fieldsValue['preferredMethods'].indexOf('communicationEmail') > -1 ? 1 : 0,
           communicationPhone: fieldsValue['preferredMethods'].indexOf('communicationPhone') > -1 ? 1 : 0
         };
-        webapi.basicDetailsUpdate(params).then((data) => {
-          const res = data.res;
-          if (res.code === Const.SUCCESS_CODE) {
-            message.success('Operate successfully');
-            onEdit();
-          }
-        });
+        webapi
+          .basicDetailsUpdate(params)
+          .then((data) => {
+            const res = data.res;
+            if (res.code === Const.SUCCESS_CODE) {
+              message.success('Operate successfully');
+              history.go(-1);
+            }
+          })
+          .catch(() => {
+            this.setState({ loading: false });
+          });
       }
     });
   };
@@ -293,8 +239,7 @@ class BasicEdit extends React.Component<any, any> {
   };
 
   render() {
-    const { countryList, cityList, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
-    const { customer, onChangePage } = this.props;
+    const { customer, countryList, cityList, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
     const options = [
       {
         label: 'Phone',
@@ -319,181 +264,179 @@ class BasicEdit extends React.Component<any, any> {
     return (
       <div>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-          <Headline title="Edit basic information" />
-          <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <FormItem label="Pet owner account">
-                  {getFieldDecorator('customerAccount', {
-                    initialValue: customer.customerAccount
-                  })(<Input disabled={true} />)}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem label="Registration date">
-                  {getFieldDecorator('createTime', {
-                    initialValue: moment(customer.createTime)
-                  })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" disabled={true} />)}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <FormItem label="First name">
-                  {getFieldDecorator('firstName', {
-                    initialValue: customer.firstName,
-                    rules: [
-                      { required: true, message: 'Please input First Name!' },
-                      {
-                        max: 50,
-                        message: 'Exceed maximum length!'
-                      }
-                    ]
-                  })(<Input />)}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem label="Last name">
-                  {getFieldDecorator('lastName', {
-                    initialValue: customer.lastName,
-                    rules: [
-                      { required: true, message: 'Please input Last Name!' },
-                      {
-                        max: 50,
-                        message: 'Exceed maximum length!'
-                      }
-                    ]
-                  })(<Input />)}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem label="Birth Date">
-                  {getFieldDecorator('birthDay', {
-                    rules: [{ required: true, message: 'Please input Birth Date!' }],
-                    initialValue: customer.birthDay ? moment(customer.birthDay) : null
-                  })(
-                    <DatePicker
-                      style={{ width: '100%' }}
-                      format="YYYY-MM-DD"
-                      disabledDate={(current) => {
-                        return current && current > moment().endOf('day');
-                      }}
-                    />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem label="Email">
-                  {getFieldDecorator('email', {
-                    initialValue: customer.email,
-                    rules: [{ required: true, message: 'Please input Email!' }, { validator: this.compareEmail }, { max: 50, message: 'Exceed maximum length!' }]
-                  })(<Input disabled />)}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem label="Phone number">
-                  {getFieldDecorator('contactPhone', {
-                    initialValue: customer.contactPhone,
-                    rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }]
-                  })(<Input />)}
-                </FormItem>
-              </Col>
+          <div className="container">
+            <Headline title="Edit basic information" />
+            <Form {...formItemLayout}>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <FormItem label="Pet owner account">
+                    {getFieldDecorator('customerAccount', {
+                      initialValue: customer.customerAccount
+                    })(<Input disabled={true} />)}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label="Registration date">
+                    {getFieldDecorator('createTime', {
+                      initialValue: moment(customer.createTime)
+                    })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" disabled={true} />)}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <FormItem label="First name">
+                    {getFieldDecorator('firstName', {
+                      initialValue: customer.firstName,
+                      rules: [
+                        { required: true, message: 'Please input First Name!' },
+                        {
+                          max: 50,
+                          message: 'Exceed maximum length!'
+                        }
+                      ]
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label="Last name">
+                    {getFieldDecorator('lastName', {
+                      initialValue: customer.lastName,
+                      rules: [
+                        { required: true, message: 'Please input Last Name!' },
+                        {
+                          max: 50,
+                          message: 'Exceed maximum length!'
+                        }
+                      ]
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label="Birth Date">
+                    {getFieldDecorator('birthDay', {
+                      rules: [{ required: true, message: 'Please input Birth Date!' }],
+                      initialValue: customer.birthDay ? moment(customer.birthDay) : null
+                    })(
+                      <DatePicker
+                        style={{ width: '100%' }}
+                        format="YYYY-MM-DD"
+                        disabledDate={(current) => {
+                          return current && current > moment().endOf('day');
+                        }}
+                      />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label="Email">
+                    {getFieldDecorator('email', {
+                      initialValue: customer.email,
+                      rules: [{ required: true, message: 'Please input Email!' }, { validator: this.compareEmail }, { max: 50, message: 'Exceed maximum length!' }]
+                    })(<Input disabled />)}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label="Phone number">
+                    {getFieldDecorator('contactPhone', {
+                      initialValue: customer.contactPhone,
+                      rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }]
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
 
-              <Col span={12}>
-                <FormItem label="Postal code">
-                  {getFieldDecorator('postalCode', {
-                    initialValue: customer.postalCode,
-                    rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
-                  })(<Input />)}
-                </FormItem>
-              </Col>
+                <Col span={12}>
+                  <FormItem label="Postal code">
+                    {getFieldDecorator('postalCode', {
+                      initialValue: customer.postalCode,
+                      rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
 
-              <Col span={12}>
-                <FormItem label="Country">
-                  {getFieldDecorator('countryId', {
-                    initialValue: customer.country,
-                    rules: [{ required: true, message: 'Please input Country!' }]
-                  })(
-                    <Select optionFilterProp="children">
-                      {countryList.map((item) => (
-                        <Option value={item.id} key={item.id}>
-                          {item.name}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </FormItem>
-              </Col>
+                <Col span={12}>
+                  <FormItem label="Country">
+                    {getFieldDecorator('countryId', {
+                      initialValue: customer.country,
+                      rules: [{ required: true, message: 'Please input Country!' }]
+                    })(
+                      <Select optionFilterProp="children">
+                        {countryList.map((item) => (
+                          <Option value={item.id} key={item.id}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
 
-              <Col span={12}>
-                <FormItem label="City">
-                  {getFieldDecorator('city', {
-                    rules: [{ required: true, message: 'Please select City!' }],
-                    initialValue: customer.city
-                  })(<AutoComplete dataSource={cityList.map((city) => city.name)} />)}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem label="Address reference">
-                  {getFieldDecorator('address1', {
-                    initialValue: customer.address1,
-                    rules: [
-                      { required: true, message: 'Please input Address 1!' },
-                      {
-                        max: 200,
-                        message: 'Exceed maximum length!'
-                      }
-                    ]
-                  })(<Input />)}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem label="Consent">
-                  {getFieldDecorator('consent', {
-                    valuePropName: 'checked',
-                    initialValue: true
-                  })(<Radio>Email communication</Radio>)}
-                </FormItem>
-              </Col>
+                <Col span={12}>
+                  <FormItem label="City">
+                    {getFieldDecorator('city', {
+                      rules: [{ required: true, message: 'Please select City!' }],
+                      initialValue: customer.city
+                    })(<AutoComplete dataSource={cityList.map((city) => city.name)} />)}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label="Address reference">
+                    {getFieldDecorator('address1', {
+                      initialValue: customer.address1,
+                      rules: [
+                        { required: true, message: 'Please input Address 1!' },
+                        {
+                          max: 200,
+                          message: 'Exceed maximum length!'
+                        }
+                      ]
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label="Consent">
+                    {getFieldDecorator('consent', {
+                      valuePropName: 'checked',
+                      initialValue: true
+                    })(<Radio>Email communication</Radio>)}
+                  </FormItem>
+                </Col>
 
-              <Col span={12}>
-                <FormItem label="Prefer channel">
-                  {getFieldDecorator('preferredMethods', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please Select Preferred methods of communication!'
-                      }
-                    ],
-                    initialValue: ['communicationPhone', 'communicationEmail'].reduce((prev, curr) => {
-                      if (+customer[curr]) {
-                        prev.push(curr);
-                      }
-                      return prev;
-                    }, [])
-                  })(<Checkbox.Group options={options} />)}
-                </FormItem>
-              </Col>
+                <Col span={12}>
+                  <FormItem label="Prefer channel">
+                    {getFieldDecorator('preferredMethods', {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please Select Preferred methods of communication!'
+                        }
+                      ],
+                      initialValue: ['communicationPhone', 'communicationEmail'].reduce((prev, curr) => {
+                        if (+customer[curr]) {
+                          prev.push(curr);
+                        }
+                        return prev;
+                      }, [])
+                    })(<Checkbox.Group options={options} />)}
+                  </FormItem>
+                </Col>
+              </Row>
+            </Form>
+          </div>
+          <div className="bar-button">
+            <Button type="primary" onClick={this.handleSubmit}>
+              Save
+            </Button>
 
-              <Col span={12}></Col>
-              <Col span={24}>
-                <FormItem>
-                  <Button type="primary" htmlType="submit">
-                    Save
-                  </Button>
-
-                  <Button
-                    style={{ marginLeft: '20px' }}
-                    onClick={() => {
-                      onChangePage('detail');
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </FormItem>
-              </Col>
-            </Row>
-          </Form>
+            <Button
+              style={{ marginLeft: '20px' }}
+              onClick={() => {
+                history.go(-1);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </Spin>
       </div>
     );

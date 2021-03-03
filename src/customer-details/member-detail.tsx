@@ -12,10 +12,8 @@ import PrescribInformation from './component/prescrib-information';
 import DeliveryList from './component/delivery-list';
 import PaymentList from './component/payment-list';
 import Feedback from './component/feedback';
-import BasicEdit from './component/basic-edit';
 
 import './index.less';
-import basicEdit from './component/basic-edit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -137,11 +135,6 @@ export default class CustomerDetails extends React.Component<any, any> {
     });
   };
 
-  handleEditBasic = () => {
-    this.getBasicInformation();
-    this.changeDisplayPage('detail');
-  };
-
   changeDisplayPage = (page: string) => {
     this.setState(
       {
@@ -184,15 +177,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <Col span={4}>
                     <Icon type="calendar" /> Age
                   </Col>
-                  <Col span={16} className="text-align-right" style={{ padding: '0 20px' }}>
-                    <Button type="link" onClick={() => this.changeDisplayPage('editbasic')}>
+                  <Col span={16} className="text-align-right" style={{ padding: '0 35px' }}>
+                    <Link to={`/edit-petowner/${this.state.customerId}/${this.state.customerAccount}`}>
                       <i className="iconfont iconEdit"></i> Edit
-                    </Button>
-                    <Button type="link">
-                      <Link>
-                        <i className="iconfont iconfenxiang"></i> Overviewiew
-                      </Link>
-                    </Button>
+                    </Link>
+                    <Link to={`/pet-owner-activity/${this.state.customerId}`} style={{ marginLeft: '20px' }}>
+                      <i className="iconfont iconfenxiang"></i> Overview
+                    </Link>
                   </Col>
                 </Row>
                 <Row className="text-highlight" style={{ marginTop: 5 }}>
@@ -303,7 +294,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}>Breed</Col>
                           </Row>
                           <Row style={{ fontSize: 16 }}>
-                            <Col span={12}>{moment().diff(moment(pet.birthOfPets, 'DD/MM/YYYY'), 'months')} months</Col>
+                            <Col span={12}>{moment().diff(moment(pet.birthOfPets, 'YYYY-MM-DD'), 'months')} months</Col>
                             <Col span={12}>{pet.breederId}</Col>
                           </Row>
                         </Col>
@@ -338,17 +329,6 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <Feedback customerId={this.state.customerId} />
           </Spin>
-        </div>
-        <div style={{ display: displayPage === 'editbasic' ? 'block' : 'none' }}>
-          <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>
-              <FormattedMessage id="consumer.consumerDetails" />
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>Edit basic information</Breadcrumb.Item>
-          </BreadCrumb>
-          <div className="container-search">
-            <BasicEdit customer={basic} onChangePage={this.changeDisplayPage} onEdit={this.handleEditBasic} />
-          </div>
         </div>
       </>
     );

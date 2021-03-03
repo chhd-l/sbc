@@ -315,6 +315,10 @@ const routes = [
     asyncComponent: () => import('./customer-details/member-detail')
   },
   {
+    path: '/edit-petowner/:id/:account',
+    asyncComponent: () => import('./customer-details/edit-basic-information')
+  },
+  {
     path: '/edit-pet/:id',
     asyncComponent: () => import('./customer-details/edit-pet-item')
   },

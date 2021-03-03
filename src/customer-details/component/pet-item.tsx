@@ -69,27 +69,30 @@ class PetItem extends React.Component<Iprop, any> {
     this.props.form.validateFields((err, fields) => {
       if (!err) {
         this.setState({ loading: true });
+        const customerPetsPropRelations = fields.customerPetsPropRelations.reduce((prev, curr, idx) => {
+          prev.push({
+            delFlag: 0,
+            detailId: 0,
+            indexFlag: 0,
+            petsId: this.props.petId,
+            propId: 100 + idx,
+            propName: curr,
+            relationId: '10086',
+            sort: 0
+          });
+          return prev;
+        }, []);
         const params = {
           customerPets: {
             ...fields,
+            petsId: this.props.petId,
             petsImg: this.state.petImg,
             birthOfPets: fields.birthOfPets.format('YYYY-MM-DD'),
+            customerPetsPropRelations: customerPetsPropRelations,
             petsSizeValueId: '0',
             storeId: 123456858
           },
-          customerPetsPropRelations: fields.customerPetsPropRelations.reduce((prev, curr, idx) => {
-            prev.push({
-              delFlag: 0,
-              detailId: 0,
-              indexFlag: 0,
-              petsId: this.props.petId,
-              propId: 100 + idx,
-              propName: curr,
-              relationId: '10086',
-              sort: 0
-            });
-            return prev;
-          }, []),
+          customerPetsPropRelations: customerPetsPropRelations,
           storeId: 123456858,
           userId: this.state.pet.consumerAccount
         };

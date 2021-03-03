@@ -55,11 +55,13 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
 
   getSubscriptionList = () => {
     const { pagination } = this.state;
-    const { customerAccount } = this.props;
+    const { customerAccount, startDate, endDate } = this.props;
     this.setState({
       loading: true
     });
     getSubscriptionList({
+      startTime: startDate,
+      endTime: endDate,
       customerAccount,
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize

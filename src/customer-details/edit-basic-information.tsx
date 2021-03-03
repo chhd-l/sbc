@@ -1,18 +1,22 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
 import { BreadCrumb } from 'qmkit';
-import BasicInfomation from './component/basic-infomation';
+import { FormattedMessage } from 'react-intl';
+import BasicEdit from './component/basic-edit';
 
 export default function EditBasicInfo(props: any) {
   const customerId = props.match.params.id || '';
+  const customerAccount = props.match.params.account || '';
   return (
     <div>
       <BreadCrumb thirdLevel={true}>
-        <Breadcrumb.Item>Detail</Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <FormattedMessage id="consumer.consumerDetails" />
+        </Breadcrumb.Item>
         <Breadcrumb.Item>Edit basic information</Breadcrumb.Item>
       </BreadCrumb>
-      <div className="container-search">
-        <BasicInfomation customerId={customerId} />
+      <div>
+        <BasicEdit customerId={customerId} customerAccount={customerAccount} />
       </div>
     </div>
   );

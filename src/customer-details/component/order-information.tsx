@@ -3,6 +3,7 @@ import { Pagination, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { fetchOrderList } from '../../order-list/webapi';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { Const, cache } from 'qmkit';
 const defaultImg = require('../../goods-list/img/none.png');
 
@@ -138,12 +139,15 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                 <tr>
                   <td colSpan={7}>
                     <div style={styles.orderCon}>
-                      <span key="1" style={styles.orderId}>
+                      <Link to={`/order-detail/${item.id}`} style={styles.orderId}>
                         {item.id}
-                      </span>
-                      <span key="2" style={styles.orderNo}>
-                        {item.parentId}
-                      </span>
+                      </Link>
+                      {item.isAutoSub && (
+                        <span key="2" style={styles.orderNo}>
+                          <span style={styles.platform}>S</span>
+                          {item.subscribeId}
+                        </span>
+                      )}
                       <span key="3" style={styles.orderTime}>
                         Order time: {moment(item.tradeState.createTime).format(Const.TIME_FORMAT)}
                       </span>
@@ -325,5 +329,14 @@ const styles: Istyle = {
     borderRadius: 3,
     fontSize: 9,
     color: '#fff'
+  },
+  platform: {
+    fontSize: 12,
+    padding: '1px 3px',
+    display: 'inline-block',
+    marginLeft: 5,
+    border: ' 1px solid #F56C1D',
+    color: '#F56C15',
+    borderRadius: 5
   }
 };

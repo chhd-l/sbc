@@ -1,6 +1,6 @@
 import React from 'react';
-import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip } from 'antd';
-import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
+import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip, TreeSelect } from 'antd';
+import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, TreeSelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -8,6 +8,7 @@ import * as webapi from './webapi';
 const { confirm } = Modal;
 const FormItem = Form.Item;
 const Option = Select.Option;
+const TreeNode = TreeSelect.TreeNode;
 
 export default class Customer extends React.Component<any, any> {
   constructor(props: any) {
@@ -314,7 +315,7 @@ export default class Customer extends React.Component<any, any> {
                     <SelectGroup
                       defaultValue=""
                       label={<p style={styles.label}>Pet owner type</p>}
-                      style={{ width: 80 }}
+                      style={{ width: 177 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -370,25 +371,24 @@ export default class Customer extends React.Component<any, any> {
                 </Col>
                 <Col span={8}>
                   <FormItem>
-                    <SelectGroup
-                      defaultValue=""
+                    <TreeSelectGroup
+                      allowClear
+                      getPopupContainer={() => document.getElementById('page-content')}
                       label={<p style={styles.label}>Subscription type</p>}
-                      style={{ width: 80 }}
+                      dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth: 200 }}
+                      treeDefaultExpandAll
                       onChange={(value) => {
-                        value = value === '' ? null : value;
-                        this.onFormChange({
-                          field: 'subscriptionType',
-                          value
-                        });
+                        this.onFormChange({ field: 'subscriptionType', value });
                       }}
                     >
-                      <Option value="">All</Option>
-                      {subscriptionTypeList.map((item) => (
-                        <Option value={item.name} key={item.id}>
-                          {item.name}
-                        </Option>
-                      ))}
-                    </SelectGroup>
+                      <TreeNode value="Product" title="Product" key="product">
+                        <TreeNode value="Food dispenser" title="Food dispenser" key="food" />
+                      </TreeNode>
+                      <TreeNode value="Pet" title="Pet" key="pet">
+                        <TreeNode value="Club" title="Club" key="club" />
+                      </TreeNode>
+                      <TreeNode value="Normal" title="Normal" key="normal" />
+                    </TreeSelectGroup>
                   </FormItem>
                 </Col>
                 <Col span={24} style={{ textAlign: 'center' }}>

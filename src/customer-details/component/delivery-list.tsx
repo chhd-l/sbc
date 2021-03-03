@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Popconfirm, Button } from 'antd';
-import { getAddressListByType } from '../webapi';
+import { getAddressListByType, delAddress } from '../webapi';
 import { getCityList, getCountryList } from './webapi';
 
 interface Iprop {
@@ -8,6 +8,7 @@ interface Iprop {
   endDate: string;
   customerId: string;
   type: 'DELIVERY' | 'BILLING';
+  onEdit?: Function;
 }
 
 export default class DeliveryList extends React.Component<Iprop, any> {
@@ -46,8 +47,24 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       });
   };
 
+  onDeleteAddress = (id: string) => {
+    this.setState({
+      loading: true
+    });
+    delAddress(id)
+      .then((data) => {
+        this.getAddressList();
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
   render() {
     const { loading, list } = this.state;
+    const { onEdit } = this.props;
     const columns = [
       {
         title: 'Receiver name',
@@ -79,9 +96,13 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         key: 'oper',
         render: (_, record) => (
           <div>
-            <a className="iconfont iconEdit" style={{ marginRight: 10 }}></a>
-            <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
-              <a className="iconfont iconDelete"></a>
+            <Button type="link" size="small" onClick={() => onEdit(record)}>
+              <i className="iconfont iconEdit"></i>
+            </Button>
+            <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText="Confirm" cancelText="Cancel">
+              <Button type="link" size="small">
+                <i className="iconfont iconDelete"></i>
+              </Button>
             </Popconfirm>
           </div>
         )
@@ -90,7 +111,9 @@ export default class DeliveryList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <Button type="primary">Add new</Button>
+        <Button type="primary" onClick={() => onEdit({})}>
+          Add new
+        </Button>
         <Table rowKey="id" loading={loading} columns={columns} dataSource={list} pagination={false} />
       </div>
     );

@@ -295,7 +295,7 @@ class BasicEdit extends React.Component<any, any> {
                           message: 'Exceed maximum length!'
                         }
                       ]
-                    })(<Input />)}
+                    })(<Input disabled />)}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -309,7 +309,7 @@ class BasicEdit extends React.Component<any, any> {
                           message: 'Exceed maximum length!'
                         }
                       ]
-                    })(<Input />)}
+                    })(<Input disabled />)}
                   </FormItem>
                 </Col>
                 <Col span={12}>

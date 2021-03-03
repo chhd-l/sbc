@@ -10,6 +10,7 @@ import OrderInformation from './component/order-information';
 import SubscribInformation from './component/subscrib-information';
 import PrescribInformation from './component/prescrib-information';
 import DeliveryList from './component/delivery-list';
+import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
 import Feedback from './component/feedback';
 
@@ -33,6 +34,8 @@ export default class CustomerDetails extends React.Component<any, any> {
       loading: false,
       basic: {},
       pets: [],
+      delivery: {},
+      addressType: 'delivery',
       startDate: moment().format('YYYY-MM-DD'),
       endDate: moment().format('YYYY-MM-DD')
     };
@@ -135,6 +138,19 @@ export default class CustomerDetails extends React.Component<any, any> {
     });
   };
 
+  openDeliveryPage = (addressType, delivery) => {
+    console.log('delivery:', delivery);
+    this.setState({
+      displayPage: 'delivery',
+      addressType: addressType,
+      delivery: delivery
+    });
+  };
+
+  backToDetail = () => {
+    this.changeDisplayPage('detail');
+  };
+
   changeDisplayPage = (page: string) => {
     this.setState(
       {
@@ -147,7 +163,7 @@ export default class CustomerDetails extends React.Component<any, any> {
   };
 
   render() {
-    const { displayPage, basic, pets, pet, startDate, endDate } = this.state;
+    const { displayPage, basic, pets, delivery, addressType, startDate, endDate } = this.state;
     return (
       <>
         <div style={{ display: displayPage === 'detail' ? 'block' : 'none' }}>
@@ -317,10 +333,10 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <PrescribInformation startDate={startDate} endDate={endDate} />
                 </TabPane>
                 <TabPane tab="Delivery information" key="delivery">
-                  <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="DELIVERY" />
+                  <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />
                 </TabPane>
-                <TabPane tab="Delivery information" key="billing">
-                  <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="BILLING" />
+                <TabPane tab="Billing information" key="billing">
+                  <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />
                 </TabPane>
                 <TabPane tab="Payment methods" key="payment">
                   <PaymentList startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
@@ -329,6 +345,15 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <Feedback customerId={this.state.customerId} />
           </Spin>
+        </div>
+        <div style={{ display: displayPage === 'delivery' ? 'block' : 'none' }}>
+          <BreadCrumb thirdLevel={true}>
+            <Breadcrumb.Item>
+              <FormattedMessage id="consumer.consumerDetails" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
+          </BreadCrumb>
+          <DeliveryItem delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
         </div>
       </>
     );

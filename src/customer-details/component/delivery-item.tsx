@@ -2,25 +2,28 @@ import React from 'react';
 import { Form, Input, Select, Spin, Breadcrumb, Row, Col, Button } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, BreadCrumb } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 import { getCountryList } from './webapi';
 
 const { Option } = Select;
 
 type TDelivery = {
-  id?: number | undefined;
-  firstName: string;
-  lastName: string;
-  consigneeNumber: string;
-  postCode: string;
-  countryId: number;
-  cityId: number;
-  address1: string;
-  address2: string;
-  rfc: string;
+  deliveryAddressId?: string;
+  firstName?: string;
+  lastName?: string;
+  consigneeNumber?: string;
+  postCode?: string;
+  countryId?: number;
+  cityId?: number;
+  address1?: string;
+  address2?: string;
+  rfc?: string;
 };
 
 interface Iprop extends FormComponentProps {
   delivery: TDelivery;
+  addressType: string;
+  backToDetail?: Function;
 }
 
 class DeliveryItem extends React.Component<Iprop, any> {
@@ -44,7 +47,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
   };
 
   render() {
-    const { delivery } = this.props;
+    const { delivery, addressType, backToDetail } = this.props;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -58,13 +61,9 @@ class DeliveryItem extends React.Component<Iprop, any> {
     };
     return (
       <div>
-        <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Detail</Breadcrumb.Item>
-          <Breadcrumb.Item>{delivery.id ? 'Edit delivery information' : 'Add delivery information'}</Breadcrumb.Item>
-        </BreadCrumb>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
-          <div className="container-search">
-            <Headline title={delivery.id ? 'Edit delivery information' : 'Add delivery information'} />
+          <div className="container">
+            <Headline title={`${delivery.deliveryAddressId ? 'Edit' : 'Add'} ${addressType === 'delivery' ? 'delivery' : 'billing'} information`} />
             <Form {...formItemLayout}>
               <Row gutter={16}>
                 <Col span={12}>
@@ -155,10 +154,12 @@ class DeliveryItem extends React.Component<Iprop, any> {
                 </Col>
               </Row>
             </Form>
-            <div>
-              <Button type="primary">Save</Button>
-              <Button>Cancel</Button>
-            </div>
+          </div>
+          <div className="bar-button">
+            <Button type="primary">Save</Button>
+            <Button onClick={() => backToDetail()} style={{ marginLeft: '20px' }}>
+              Cancel
+            </Button>
           </div>
         </Spin>
       </div>
@@ -166,4 +167,4 @@ class DeliveryItem extends React.Component<Iprop, any> {
   }
 }
 
-export default Form.create()(DeliveryItem);
+export default Form.create<Iprop>()(DeliveryItem);

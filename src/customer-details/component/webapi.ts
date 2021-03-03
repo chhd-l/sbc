@@ -49,3 +49,13 @@ export async function getCityList() {
       });
   }
 }
+
+export function getTaggingList() {
+  return Fetch<TResult>('/customer/segment/segment/query', {
+    method: 'POST',
+    body: JSON.stringify({
+      pageNum: 0,
+      pageSize: 1000
+    })
+  });
+}

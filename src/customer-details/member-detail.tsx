@@ -13,6 +13,7 @@ import DeliveryList from './component/delivery-list';
 import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
 import Feedback from './component/feedback';
+import { getTaggingList } from './component/webapi';
 
 import './index.less';
 
@@ -32,7 +33,9 @@ export default class CustomerDetails extends React.Component<any, any> {
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
       customerAccount: this.props.match.params.account ? this.props.match.params.account : '',
       loading: false,
+      tagList: [],
       basic: {},
+      petOwnerTag: [],
       pets: [],
       delivery: {},
       addressType: 'delivery',
@@ -43,6 +46,7 @@ export default class CustomerDetails extends React.Component<any, any> {
   componentDidMount() {
     this.getBasicInformation();
     this.getPetsList();
+    this.getTagList();
   }
 
   getBasicInformation = () => {
@@ -53,7 +57,8 @@ export default class CustomerDetails extends React.Component<any, any> {
           basic: {
             ...res.context,
             customerAccount: this.state.customerAccount
-          }
+          },
+          petOwnerTag: res.context.segmentList ? res.context.segmentList.map((t) => t.id) : []
         });
       }
     });
@@ -65,6 +70,27 @@ export default class CustomerDetails extends React.Component<any, any> {
       this.setState({
         pets: data.res.context.context
       });
+    });
+  };
+
+  getTagList = () => {
+    getTaggingList().then((data) => {
+      this.setState({
+        tagList: data.res.context.segmentList
+      });
+    });
+  };
+
+  setPetOwnerTagging = (values) => {
+    webapi
+      .setTagging({
+        relationId: this.state.customerId,
+        segmentIdList: values,
+        segmentType: 0
+      })
+      .then(() => {});
+    this.setState({
+      petOwnerTag: values
     });
   };
 
@@ -139,7 +165,6 @@ export default class CustomerDetails extends React.Component<any, any> {
   };
 
   openDeliveryPage = (addressType, delivery) => {
-    console.log('delivery:', delivery);
     this.setState({
       displayPage: 'delivery',
       addressType: addressType,
@@ -204,7 +229,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </Row>
                 <Row className="text-highlight" style={{ marginTop: 5 }}>
                   <Col span={4}>{basic.customerName}</Col>
-                  <Col span={4}>{basic.age}</Col>
+                  <Col span={4}>{moment().diff(moment(basic.birthDay, 'YYYY-MM-DD'), 'years')}</Col>
                 </Row>
               </div>
               <div className="basic-info-detail">
@@ -213,7 +238,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     Registration date
                   </Col>
                   <Col span={6} className="text-highlight">
-                    {basic.createTime}
+                    {moment(basic.createTime, 'YYYY-MM-DD').format('YYYY-MM-DD')}
                   </Col>
                   <Col span={4} className="text-tip">
                     Email address
@@ -233,7 +258,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     Prefer channel
                   </Col>
                   <Col span={6} className="text-highlight">
-                    {basic.preferredMethods}
+                    {basic.communicationEmail && 'Email'} {basic.communicationPhone && 'Phone'}
                   </Col>
                 </Row>
                 <Row type="flex" align="middle">
@@ -247,7 +272,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     Address reference
                   </Col>
                   <Col span={6} className="text-highlight">
-                    {basic.address}
+                    {basic.address1}
                   </Col>
                 </Row>
                 <Row type="flex" align="middle">
@@ -255,7 +280,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     Consent
                   </Col>
                   <Col span={6} className="text-highlight">
-                    {basic.consent}
+                    Email communication
                   </Col>
                 </Row>
               </div>
@@ -266,13 +291,14 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <Col span={20}>
                   <Form layout="vertical">
                     <FormItem label="Tag name">
-                      <Select mode="multiple">
-                        <Option key="1" value="a">
-                          Active User
-                        </Option>
-                        <Option key="2" value="b">
-                          Student
-                        </Option>
+                      <Select value={this.state.petOwnerTag} mode="multiple" onChange={this.setPetOwnerTagging}>
+                        {this.state.tagList
+                          .filter((item) => item.segmentType == 0)
+                          .map((v, idx) => (
+                            <Option value={v.id} key={idx}>
+                              {v.name}
+                            </Option>
+                          ))}
                       </Select>
                     </FormItem>
                   </Form>

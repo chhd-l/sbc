@@ -1,6 +1,6 @@
 import React from 'react';
-import { Table, Popconfirm } from 'antd';
-import { getPaymentMethods } from '../webapi';
+import { Table, Popconfirm, message } from 'antd';
+import { getPaymentMethods, deleteCard } from '../webapi';
 import { cache } from 'qmkit';
 
 interface Iprop {
@@ -63,23 +63,48 @@ export default class PaymentList extends React.Component<Iprop, any> {
       });
   };
 
+  deleteCard = (id) => {
+    this.setState({ loading: true });
+    deleteCard({ id })
+      .then((data) => {
+        message.success(data.res.message);
+        this.getCardList();
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
   render() {
     const { list, pagination } = this.state;
     const columns = [
       {
         title: 'Card number',
         dataIndex: 'cardno',
-        key: 'cardno'
+        key: 'cardno',
+        render: (_, record) => (
+          <>
+            {record.paymentType === 'PAYU' ? (
+              <div>{record.payuPaymentMethod && record.payuPaymentMethod.last_4_digits ? '**** **** **** ' + record.payuPaymentMethod.last_4_digits : ''}</div>
+            ) : (
+              <div>{record.adyenPaymentMethod && record.adyenPaymentMethod.lastFour ? '**** **** **** ' + record.adyenPaymentMethod.lastFour : ''}</div>
+            )}
+          </>
+        )
       },
       {
         title: 'Card type',
         dataIndex: 'type',
-        key: 'type'
+        key: 'type',
+        render: (_, record) => <>{record.paymentType === 'PAYU' ? <div>{record.payuPaymentMethod && record.payuPaymentMethod.card_type}</div> : <div>{record.adyenPaymentMethod && record.adyenPaymentMethod.card_type}</div>}</>
       },
       {
         title: 'Card holder',
         dataIndex: 'holder',
-        key: 'holder'
+        key: 'holder',
+        render: (_, record) => <>{record.paymentType === 'PAYU' ? <div>{record.payuPaymentMethod && record.payuPaymentMethod.holder_name}</div> : <div>{record.adyenPaymentMethod && record.adyenPaymentMethod.holder_name}</div>}</>
       },
       {
         title: 'E-mail address',
@@ -88,14 +113,14 @@ export default class PaymentList extends React.Component<Iprop, any> {
       },
       {
         title: 'Phone number',
-        dataIndex: 'phone',
-        key: 'phone'
+        dataIndex: 'phoneNumber',
+        key: 'phoneNumber'
       },
       {
         title: 'Operation',
         key: 'oper',
         render: (_, record) => (
-          <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
+          <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.deleteCard(record.id)} okText="Confirm" cancelText="Cancel">
             <a className="iconfont iconDelete"></a>
           </Popconfirm>
         )

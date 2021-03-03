@@ -1,4 +1,4 @@
-import { Fetch } from 'qmkit';
+import { Fetch, cache } from 'qmkit';
 
 type TResult = {
   code: string;
@@ -234,6 +234,16 @@ export function saveFeedback(params = {}) {
   return Fetch<TResult>('/customer/feedback/save', {
     method: 'POST',
     body: JSON.stringify(params)
+  });
+}
+
+export function setTagging(params = {}) {
+  return Fetch<TResult>('/customer/segment/segment/segmentRelation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || 0
+    })
   });
 }
 

@@ -262,7 +262,7 @@ export default class List extends React.Component<any, any> {
                     }
                   >
                     <span className="left">
-                      <img src={images.full_03} />
+                      <img src={images.full_001} />
                     </span>
                     <div className="info">
                       <h5>First order discount</h5>
@@ -286,7 +286,7 @@ export default class List extends React.Component<any, any> {
                     }
                   >
                     <span className="left">
-                      <img src={images.full_03} />
+                      <img src={images.full_001} />
                     </span>
                     <div className="info">
                       <h5>Gift</h5>

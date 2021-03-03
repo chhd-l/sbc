@@ -4,6 +4,7 @@ import { FormComponentProps } from 'antd/lib/form';
 import { Headline, history, AssetManagement } from 'qmkit';
 import moment from 'moment';
 import { querySysDictionary, petsById, editPets, delPets } from '../webapi';
+import { getTaggingList } from './webapi';
 
 const { Option } = Select;
 
@@ -21,6 +22,7 @@ class PetItem extends React.Component<Iprop, any> {
       petImg: '',
       catBreed: [],
       dogBreed: [],
+      tagList: [],
       customerPetsPropRelationList: [
         'Age support',
         'Cardiac support',
@@ -46,6 +48,7 @@ class PetItem extends React.Component<Iprop, any> {
     this.getPet();
     this.getBreedListByType('dogBreed');
     this.getBreedListByType('catBreed');
+    this.getTaggingList();
   }
 
   getPet = () => {
@@ -142,6 +145,14 @@ class PetItem extends React.Component<Iprop, any> {
     }).then((data) => {
       this.setState({
         [type]: data.res.context.sysDictionaryVOS
+      });
+    });
+  };
+
+  getTaggingList = () => {
+    getTaggingList().then((data) => {
+      this.setState({
+        tagList: data.res.context.segmentList
       });
     });
   };
@@ -306,6 +317,23 @@ class PetItem extends React.Component<Iprop, any> {
                               {p}
                             </Option>
                           ))}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Pet tagging">
+                      {getFieldDecorator('segmentList', {
+                        initialValue: pet.segmentList ? pet.segmentList.map((v) => v.id) : []
+                      })(
+                        <Select mode="multiple">
+                          {this.state.tagList
+                            .filter((t) => t.segmentType == 1)
+                            .map((v, idx) => (
+                              <Option value={v.id} key={idx}>
+                                {v.name}
+                              </Option>
+                            ))}
                         </Select>
                       )}
                     </Form.Item>

@@ -784,6 +784,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <InputNumber
+              disabled
               min={1}
               max={100}
               onChange={(value) => {
@@ -807,6 +808,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <Select
+              disabled
               style={{ width: '70%' }}
               value={record.periodTypeId}
               onChange={(value) => {

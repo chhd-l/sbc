@@ -210,6 +210,31 @@ export default {
   "Product.Replycomments":"Reply comments",
   "Product.Enteruptocharacters":"Enter up to 500 characters",
 
+  'Product.Productimport':'Product import',
+  'Product.OperationDescription':'Operation Description',
+  'Product.OperationDescription-1':'1、Please download the product import template first, and input the product data according to the requirements in the annotation. Failure to input the requirements will cause the product import to fail.',
+  'Product.OperationDescription-2':'2、Please choose .xlsx or .xls file, the file size is ≤ 2M, only one file can be imported at a time, it is recommended that no more than 500 product data are imported at a time.',
+  'Product.Downloadproductimporttemplate':'Download product import template',
+  'Product.Uploaddata':'Upload data',
+  'Product.Finish':'Finish',
+  'Product.Thenextstep':'The next step',
+  'Product. import':'',
+  'Product. import':'',
+  'Product. import':'',
+  'Product. import':'',
+  'Product. import':'',
+  'Product. import':'',
+
+
+
+
+
+
+
+
+
+
+
 
   "Product.Productcategorydesc": "Product category is set by RC staff, you can associate attribute to product category.",
   "Product.Categoryimages": "Category images",
@@ -225,7 +250,7 @@ export default {
   "Product.Choosetype": "Choose type",
   "Product.Singlechoice": "Single choice",
   "Product.Multiplechoice": "Multiple choice",
-
+  
   "Product.FilterSortsetting": "Filter & Sort setting",
   "Product.FilterSortsettingdesc": `
   1. Filter attributes can be chosen from attributes, which are associated with product category
@@ -433,6 +458,15 @@ export default {
 
   /*-----------------------------  Setting  ----------------------------------------*/
 
+  /*-----------------------------  Fetch  ----------------------------------------*/
+  'Fetch.Timeout': 'Service  timeout , try again later',
+  'Fetch.Notfind': 'Request interface failed or interface does not exist, please check it',
+  'Fetch.notificationPopTitle':'System Notification',
+  'Fetch.K-000005':'Your account is disabled',
+  'Fetch.K-000002':'Login expired',
+  'Fetch.K-000015':'Failed to obtain authorization',
+  'Fetch.MethodNotAllowed':'You do not have permission to access this feature',
+  'Fetch.500-502-503':'System is deploying, if it does not recovery after 10 mins, please contact the administrator.',
 
 
 

@@ -27,16 +27,143 @@ export default {
   'Public.Yourapplication':'Your application has been sent to the related prescriber and the user account is under audit.\n' +
     '                  We will notify you of the result by email.',
   'Public.Return':'Return',
+  'Public.Password':'Password',
   'Public.Thisserviceis':'This service is dedicated to our customers only.',
   'Public.YourclientID':'Your client ID is specified on your Royal Canin invoice. It can be an e-mail address or a client number',
   'Public.Proceed':'Proceed',
-  'Public.aaaa2':'aaa1111aaa1234',
+  'Public.Passwordcannotbeempty':'Password cannot be empty',
 
 
 
+  /*-----------------------------  Menu -----------------------------------------------*/
+  'Menu.Home':'Home',
+  'Menu.Product':'Product',
+  'Menu.Product management':'Product management',
+  'Menu.Product list':'Product list',
+  'Menu.Pending product':'Pending product',
+  'Menu.Publish product':'Publish product',
+  'Menu.Consumer Review':'Consumer Review',
+  'Menu.Product tagging':'Product tagging',
+  'Menu.Inventory warning':'Inventory warning',
+  'Menu.Category management':'Category management',
+  'Menu.Sales category':'Sales category',
+  'Menu.Product category':'Product category',
+  'Menu.Attribute library':'Attribute library',
+  'Menu.Filter & Sort setting':'Filter & Sort setting',
+  'Menu.Search':'Search',
+  'Menu.Description management':'Description management',
+  'Menu.Product sales setting':'Product sales setting',
+  'Menu.Review management':'Review management',
 
 
-  /*-----------------------------  Home ------ ----------------------------------------*/
+  'Menu.Order':'Order',
+  'Menu.Sales order':'Sales order',
+  'Menu.Order list(Prescriber)':'Order list(Prescriber)',
+  'Menu.Order list(3PL)':'Order list(3PL)',
+  'Menu.Order list':'Order list',
+  'Menu.Manual order':'Manual order',
+  'Menu.Return Order':'Return Order',
+  'Menu.Order setting':'Order setting',
+  'Menu.Audit setting':'Audit setting',
+  'Menu.Order management':'Order management',
+  'Menu.Order Setting':'Order Setting',
+  'Menu.Return order':'Return order',
+  'Menu.Manual return order':'Manual return order',
+  'Menu.积分订单':'积分订单 ',
+  'Menu.External order':'External order',
+
+
+  'Menu.Task':'Task',
+  'Menu.Task Management':'Task Management',
+  'Menu.Task board':'Task board',
+
+
+  'Menu.Subscription':'Subscription',
+  'Menu.Subscription Manage':'Subscription Manage',
+  'Menu.Subscription List':'Subscription List',
+  'Menu.Subscription setting':'Subscription setting',
+  'Menu.Subscription Plan':'Subscription Plan',
+
+
+  'Menu.Pet owner':'Pet owner',
+  'Menu.Pet owner management':'Pet owner management',
+  'Menu.Pet owner list':'Pet owner list',
+  'Menu.Pet owner tagging':'Pet owner tagging',
+  'Menu.Pet owner type':'Pet owner type',
+  'Menu.Pet owner list(Prescriber)':'Pet owner list(Prescriber)',
+  'Menu.企业会员':'企业会员',
+
+
+  'Menu.Finance':'Finance',
+  'Menu.Finance management':'Finance management',
+  'Menu.Finance reconciliation':'Finance reconciliation',
+  'Menu.Finance settlement':'Finance settlement',
+  'Menu.Reward':'Reward',
+  'Menu.Reward List':'Reward List',
+  'Menu.Invoice':'Invoice',
+  'Menu.Invoice list':'Invoice list',
+
+
+  'Menu.Marketing':'Marketing',
+  'Menu.Marketing Settings':'Marketing Settings',
+  'Menu.Marketing Center':'Marketing Center',
+  'Menu.Marketing List':'Marketing List',
+  'Menu.Activity List':'Activity List',
+  'Menu.Coupon List':'Coupon List',
+  'Menu.Message Center':'Message Center',
+  'Menu.Email Task List':'Email Task List',
+  'Menu.Notification Auto':'Notification Auto',
+  'Menu.Market Automation':'Market Automation',
+  'Menu.Automations':'Automations',
+  'Menu.Recommendation':'Recommendation',
+  'Menu.Product Finder List':'Product Finder List',
+  'Menu.Prescriber recommendation':'Prescriber recommendation',
+
+
+  'Menu.Prescriber':'Prescriber',
+  'Menu.Prescriber List':'Prescriber List',
+  'Menu.Prescriber Type':'Prescriber Type',
+
+
+  'Menu.Analysis':'Analysis',
+  'Menu.Statistics Report':'Statistics Report',
+  'Menu.Product report':'Product report',
+  'Menu.Traffic report':'Traffic report',
+  'Menu.Transaction report':'Transaction report',
+
+
+  'Menu.Content':'Content',
+  'Menu.Front Navigation':'Front Navigation',
+  'Menu.Navigation list':'Navigation list',
+
+
+  'Menu.Setting':'Setting',
+  'Menu.Store setting':'Store setting',
+  'Menu.Shop information':'Shop information',
+  'Menu.Dictionary':'Dictionary',
+  'Menu.Payment':'Payment',
+  'Menu.Payment Setting':'Payment Setting',
+  'Menu.Address Management':'Address Management',
+  'Menu.Validation setting':'Validation setting',
+  'Menu.SEO':'SEO',
+  'Menu.SEO setting':'SEO setting',
+  'Menu.Site map':'Site map',
+  'Menu.Organization':'Organization',
+  'Menu.User list':'User list',
+  'Menu.Group managment':'Group managment',
+  'Menu.Role permissions':'Role permissions',
+  'Menu.Logistics Settings':'Logistics Settings',
+  'Menu.Logistics Company Settings':'Logistics Company Settings',
+  'Menu.Freight Template':'Freight Template',
+  'Menu.Asset management':'Asset management',
+  'Menu.Image asset':'Image asset',
+  'Menu.Video asset':'Video asset',
+  'Menu.Asset type':'Asset type',
+  'Menu.Operation log':'Operation log',
+  'Menu.Set Banner':'Set Banner',
+
+
+  /*-----------------------------  Home -----------------------------------------------*/
   'Home.Overview':'Overview',
   'Home.Revenue':'Revenue',
   'Home.Averagebasket':'Average basket',

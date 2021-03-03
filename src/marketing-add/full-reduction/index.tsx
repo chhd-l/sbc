@@ -7,12 +7,9 @@ import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import MarketingAddForm from '../common-components/marketing-add-form';
 import * as Enum from '../common-components/marketing-enum';
-
+import '../index.less';
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class MarketingFullReductionAdd extends React.Component<
-  any,
-  any
-> {
+export default class MarketingFullReductionAdd extends React.Component<any, any> {
   store: AppStore;
   _form;
 
@@ -39,9 +36,7 @@ export default class MarketingFullReductionAdd extends React.Component<
             {/* <Breadcrumb.Item>
               {source == 'marketCenter' ? '营销中心' : '促销活动'}
             </Breadcrumb.Item> */}
-            <Breadcrumb.Item>
-              {marketingId ? 'Edit' : 'Create'} reduction activity
-            </Breadcrumb.Item>
+            <Breadcrumb.Item>{marketingId ? 'Edit' : 'Create'} reduction activity</Breadcrumb.Item>
           </BreadCrumb>
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>营销</Breadcrumb.Item>
@@ -54,19 +49,9 @@ export default class MarketingFullReductionAdd extends React.Component<
             </Breadcrumb.Item>
           </Breadcrumb> */}
 
-          <div className="container-search" style={{ paddingBottom: 20 }}>
-            <Headline
-              title={
-                marketingId
-                  ? 'Edit reduction activity'
-                  : 'Create reduction activity'
-              }
-            />
-            <Alert
-              message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full reduction activity;"
-              type="info"
-              showIcon
-            />
+          <div className="container-search marketing-container" style={{ paddingBottom: 20 }}>
+            <Headline title={marketingId ? 'Edit reduction activity' : 'Create reduction activity'} />
+            <Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full reduction activity;" type="info" showIcon />
 
             <WrappedForm
               ref={(form) => (this._form = form)}

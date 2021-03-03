@@ -300,8 +300,35 @@ export default class MarketingAddForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        <div className="bold-title">Gift type:</div>
-        {isFullCount != null && (
+        {marketingType === Enum.MARKETING_TYPE.FIRST_DISCOUNT && (
+          <>
+            <div className="bold-title">Discount type:</div>
+            <FormItem {...formItemLayout} labelAlign="left">
+              {getFieldDecorator('subType', {
+                // rules: [
+                //   {
+                //     required: true,
+                //     message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
+                //   }
+                // ],
+                initialValue: 1
+              })(
+                <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
+                  <Radio value={1}>Direct discount</Radio>
+                </RadioGroup>
+              )}
+            </FormItem>
+          </>
+        )}
+        {marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION ? (
+          <div className="bold-title">Reduction type:</div>
+        ) : marketingType === Enum.MARKETING_TYPE.FULL_GIFT ? (
+          <div className="bold-title">Gift type:</div>
+        ) : marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT ? (
+          <div className="bold-title">Discount type:</div>
+        ) : null}
+        {marketingType === Enum.MARKETING_TYPE.FULL_GIFT && <div className="bold-title">Gift type:</div>}
+        {isFullCount != null && marketingType !== Enum.MARKETING_TYPE.FIRST_DISCOUNT && (
           <FormItem {...formItemLayout} label={`full ${Enum.GET_MARKETING_STRING(marketingType)} type`} labelAlign="left">
             {getFieldDecorator('subType', {
               rules: [
@@ -313,19 +340,39 @@ export default class MarketingAddForm extends React.Component<any, any> {
               initialValue: isFullCount
             })(
               <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                {marketingType === Enum.MARKETING_TYPE.FULL_GIFT ? <Radio value={2}>Direct gift</Radio> : null}
-                {marketingType === Enum.MARKETING_TYPE.FULL_GIFT && this.state.PromotionTypeValue === 1 ? (
+                {marketingType === Enum.MARKETING_TYPE.FULL_GIFT && <Radio value={2}>Direct gift</Radio>}
+                {marketingType === Enum.MARKETING_TYPE.FULL_GIFT && this.state.PromotionTypeValue === 1 && (
                   <Radio value={3}>
                     For <Input /> refill
                   </Radio>
-                ) : null}
+                )}
+                {marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION && (
+                  <Radio value={3}>
+                    Direct reduction&nbsp;&nbsp;
+                    <Input
+                      style={{ width: 200 }}
+                      // placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
+                    />
+                    &nbsp;&nbsp; $
+                  </Radio>
+                )}
+
+                {marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT && (
+                  <Radio value={3}>
+                    Direct discount &nbsp;&nbsp;
+                    <Input
+                      style={{ width: 200 }}
+                      // placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
+                    />
+                  </Radio>
+                )}
                 {this.state.PromotionTypeValue === 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : null}
                 {this.state.PromotionTypeValue === 0 ? <Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : null}
               </RadioGroup>
             )}
           </FormItem>
         )}
-        {isFullCount != null && (
+        {isFullCount != null && marketingType !== Enum.MARKETING_TYPE.FIRST_DISCOUNT && (
           <FormItem {...settingRuleFrom} label={settingLabel} required={true} labelAlign="left">
             {marketingType == Enum.MARKETING_TYPE.FULL_GIFT &&
               getFieldDecorator(

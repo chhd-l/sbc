@@ -254,7 +254,7 @@ export default class List extends React.Component<any, any> {
                     className="createMarket"
                     onClick={() =>
                       history.push({
-                        pathname: './marketing-add/first-order-discount',
+                        pathname: './marketing-first-order-discount',
                         state: {
                           source: 'marketCenter'
                         }

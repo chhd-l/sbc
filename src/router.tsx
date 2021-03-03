@@ -486,7 +486,7 @@ const routes = [
   },
   //新增 / 编辑营销-首次折扣
   {
-    path: '/marketing-first-order-discount/:marketingId',
+    path: '/marketing-first-order-discount/:marketingId?',
     asyncComponent: () => import('./marketing-add/first-order-discount')
   },
   //营销列表

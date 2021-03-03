@@ -12,38 +12,9 @@ export default class pets extends Component<any, any> {
     super(props);
     this.state = {
       petList: [
-        {
-          birthday: '2019-02-01',
-          breedCode: 'mixed_breed',
-          clubStatus: false,
-          petOwnerId: 256,
-          createdAt: '2020-10-28',
-          currentWeight: '4kg',
-          dateAdded: '2020-10-28',
-          dateModified: '2020-10-28',
-          genderCode: 'female',
-          id: 29739,
-          isPurebred: true,
-          lastPetStatus: '10',
-          lifestyle: 'outdoor',
-          maineCoon: false,
-          name: 'Tiruy',
-          needs: '[{"name":"Özel ihtiyacı yok"}]',
-          ownerId: '00uoe3flxDuU6H1EN0x6',
-          petActivityCode: 'moderate',
-          petAge: 24,
-          petAgeMonth: 0,
-          petAgeYear: 2,
-          petId: 'a3ec2942-37b8-4144-ac2b-0e54c1341cba',
-          sensitivity: 'false',
-          sterillizationStatus: false,
-          tenantId: 6,
-          updatedAt: '2020-10-28 17:21:46',
-          weightCategory: ''
-        }
       ],
       petPagination: {
-        total: 1,
+        total: 0,
         current: 1,
         pageSize: 1
       }
@@ -124,7 +95,7 @@ export default class pets extends Component<any, any> {
       });
   }
   render() {
-    const { id } = this.props;
+    const { petOwner } = this.props;
     const { petList, petPagination, loading } = this.state;
     petList.map((item) => {
       if (item.petsType === 'dog' && (item.genderCode === 'male' || item.genderCode === 'other')) {
@@ -151,7 +122,7 @@ export default class pets extends Component<any, any> {
           title={
             <div className="title">
               <span>Pets</span>
-              <span className="viewAll" onClick={() => history.push('/pet-all/' + id)}>
+              <span className="viewAll" onClick={() => history.push(`/customer-details/Member/${petOwner.customerId}/${petOwner.customerAccount}`)}>
                 View All
                 <Icon type="right" />
               </span>

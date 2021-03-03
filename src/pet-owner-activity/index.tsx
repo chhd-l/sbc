@@ -92,7 +92,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               <Col span={7}>
                 <PetOwner petOwner={petOwner} />
                 <div style={{ marginTop: '20px' }}></div>
-                <Pets petOwnerId={id} />
+                <Pets petOwnerId={id} petOwner={petOwner}/>
               </Col>
               <Col span={9} id="middle">
                 <Card>

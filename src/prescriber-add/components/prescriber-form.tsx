@@ -220,7 +220,8 @@ class ClinicForm extends React.Component<any, any> {
         // auditStatus: res.context.auditStatus,
         prescriberCode: res.context.prescriberCode,
         parentPrescriberId: res.context.parentPrescriberId,
-        auditAuthority: res.context.auditAuthority
+        auditAuthority: res.context.auditAuthority,
+        website: res.context.website
       });
       this.getClinicsReward(res.context.prescriberId);
     }

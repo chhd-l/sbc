@@ -102,6 +102,12 @@ class TaskUpdate extends Component<any, any> {
               task: res.context.task,
               taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled'
             });
+            let customerAccount = res.context.task.customerAccount;
+            if (customerAccount) {
+              this.getPetOwnerPets(customerAccount);
+              this.getPetOwnerOrders(customerAccount);
+              this.getPetOwnerSubscriptions(customerAccount);
+            }
           } else {
             message.error(res.message || 'Get data failed');
           }
@@ -607,7 +613,7 @@ class TaskUpdate extends Component<any, any> {
                   <Col span={12}>
                     <FormItem {...formItemLayout} label="Associated Pet">
                       {getFieldDecorator('petId', {
-                        initialValue: task.petName
+                        initialValue: task.petId
                       })(
                         editable ? (
                           <Select

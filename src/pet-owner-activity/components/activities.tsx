@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline, TreeSelect, Empty, Spin } from 'antd';
+import { Const, history } from 'qmkit';
+import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline, TreeSelect, Empty, Spin, Input } from 'antd';
 import { replaceLink } from '../common';
+import { Link } from 'react-router-dom';
+import * as webapi from '../webapi';
 
 const { SHOW_ALL } = TreeSelect;
 
@@ -88,24 +91,66 @@ export default class Activities extends Component<any, any> {
           value: 'Clinic',
           key: 'Clinic'
         }
-      ]
+      ],
+      isRecent: true,
+      orderType: 'asc',
+      filters: [],
+      keyword: ''
     };
-    this.activitiesSort = this.activitiesSort.bind(this);
     this.getActivities = this.getActivities.bind(this);
     this.onActivityTypeChange = this.onActivityTypeChange.bind(this);
   }
-  activitiesSort() {}
 
-  getActivities() {}
+  componentDidMount() {
+    this.getActivities()
+  }
+
+  getActivities() {
+    this.setState({
+      activityLoading: true
+    });
+    const { isRecent, orderType, filters, keyword } = this.state;
+    let param = {
+      customerId: '291', // this.props.petOwnerId,
+      orderType: orderType,
+      recent: isRecent,
+      filters: filters,
+      keyword: keyword
+    };
+    webapi
+      .getActivities(param, isRecent)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            activityList: res.context || [],
+            activityLoading: false
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+          this.setState({
+            activityLoading: false
+          });
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+        this.setState({
+          activityLoading: false
+        });
+      });
+  }
 
   onActivityTypeChange = (value) => {};
 
   render() {
-    const { activityLoading, activityList, treeData } = this.state;
+    const { activityLoading, activityList, treeData, orderType, isRecent } = this.state;
     const menu = (
       <Menu>
         <Menu.Item key={1}>Add Comment</Menu.Item>
-        <Menu.Item key={2}>Add Task</Menu.Item>
+        <Menu.Item key={2}>
+          <Link to={'/add-task'}>Add Task</Link>
+        </Menu.Item>
       </Menu>
     );
     const tProps = {
@@ -122,15 +167,29 @@ export default class Activities extends Component<any, any> {
     };
     return (
       <Row>
-        <Col span={9}></Col>
+        <Col span={9}>
+        <Input
+            className="searchInput"
+            placeholder="Keyword"
+            onPressEnter={() => this.getActivities()}
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              this.setState({
+                keyword: value
+              });
+            }}
+            style={{ width: '140px' }}
+            prefix={<Icon type="search" onClick={() => this.getActivities()} />}
+          />
+        </Col>
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-          <TreeSelect className="filter" {...tProps} />
-          <Button className="sortBtn" onClick={this.activitiesSort}>
-            <span className="icon iconfont iconbianzusort" style={{ fontSize: '22px' }} />
+          <TreeSelect className="filter" {...tProps} onChange={(value) => this.setState({ filters: value }, () => this.getActivities())} />
+          <Button className="sortBtn" onClick={() => this.setState({ orderType: orderType === 'asc' ? 'desc' : 'asc' }, () => this.getActivities())}>
+            <span className="icon iconfont iconbianzusort" style={{ fontSize: '20px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">
-              <span className="icon iconfont iconbianzu9" style={{ fontSize: '22px' }} />
+              <span className="icon iconfont iconbianzu9" style={{ fontSize: '20px' }} />
             </Button>
           </Dropdown>
         </Col>
@@ -165,8 +224,8 @@ export default class Activities extends Component<any, any> {
                 ))}
               </Timeline>
               <div style={{ textAlign: 'center' }}>
-                <Button type="link" className="jump-link">
-                  View More
+                <Button type="link" className="jump-link" onClick={() => this.setState({ isRecent: false }, () => this.getActivities())}>
+                  <span>{isRecent ? 'View More' : ''}</span>
                 </Button>
               </div>
             </Spin>

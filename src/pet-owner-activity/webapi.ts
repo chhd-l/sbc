@@ -57,40 +57,41 @@ export function getSubscriptionList(filterParams = {}) {
   });
 }
 
-export function getRecentEamils(filterParams = {}) {
-  return Fetch<TResult>('/biz/contactActivity/listRecentEmails', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
+export function getEamils(filterParams = {}, isRecent) {
+  if(isRecent) {
+    return Fetch<TResult>('/biz/contactActivity/listRecentEmails', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...filterParams
+      })
+    });
+  } else {
+    return Fetch<TResult>('/biz/contactActivity/listAllEmails', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...filterParams
+      })
+    });
+  }
 }
 
-export function getAllEamils(filterParams = {}) {
-  return Fetch<TResult>('/biz/contactActivity/listAllEmails', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
 
-export function getRecentActivities(filterParams = {}) {
-  return Fetch<TResult>('/biz/contactActivity/listRecent', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
-
-export function getAllActivities(filterParams = {}) {
-  return Fetch<TResult>('/biz/contactActivity/listAll', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
+export function getActivities(filterParams = {}, isRecent) {
+  if(isRecent) {
+    return Fetch<TResult>('/biz/contactActivity/listRecent', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...filterParams
+      })
+    });
+  } else {
+    return Fetch<TResult>('/biz/contactActivity/listAll', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...filterParams
+      })
+    });
+  }
 }
 
 

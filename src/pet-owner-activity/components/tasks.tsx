@@ -4,6 +4,7 @@ import { Input, Icon, Row, Col, Select, message, Dropdown, Button, Menu, Timelin
 import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
 import { assign } from 'lodash';
+import moment from 'moment';
 
 const Option = Select.Option;
 
@@ -183,7 +184,7 @@ export default class tasks extends Component<any, any> {
         </Menu.Item>
         <Menu.Item key={2}>
           {' '}
-          <Link to={'/add-task'} /> Add Task
+          <Link to={'/add-task'} >Add Task</Link>
         </Menu.Item>
       </Menu>
     );
@@ -260,11 +261,11 @@ export default class tasks extends Component<any, any> {
               );
             }}
           >
-            <span className="icon iconfont iconbianzusort" style={{ fontSize: '22px' }} />
+            <span className="icon iconfont iconbianzusort" style={{ fontSize: '20px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">
-              <span className="icon iconfont iconbianzu9" style={{ fontSize: '22px' }} />
+              <span className="icon iconfont iconbianzu9" style={{ fontSize: '20px' }} />
             </Button>
           </Dropdown>
         </Col>
@@ -328,14 +329,14 @@ export default class tasks extends Component<any, any> {
                                 <span className="iconshizhong icon iconfont addTaskIcon" />
                                 Start Time
                               </div>
-                              <div>{item.startTime}</div>
+                              <div>{moment(item.startTime).format('YYYY-MM-DD')}</div>
                             </Col>
                             <Col span={12}>
                               <div className="taskContactLable">
                                 <span className="iconshizhong icon iconfont addTaskIcon" />
                                 Due Time
                               </div>
-                              <div>{item.dueTime}</div>
+                              <div>{moment(item.dueTime).format('YYYY-MM-DD')}</div>
                             </Col>
                           </Row>
                           <Row className="padding">

@@ -21,7 +21,7 @@ export default class petowner extends Component<any, any> {
           title={
             <div className="title">
               <span>Pet Owner Overview</span>
-              <span className="viewAll" onClick={() => history.push(`/customer-details/Member/${petOwner.customerId}/${petOwner.customerVO.customerAccount}` + petOwnerId)}>
+              <span className="viewAll" onClick={() => history.push(`/customer-details/Member/${petOwner.customerId}/${petOwner.customerAccount}`)}>
                 View All
                 <Icon type="right" />
               </span>

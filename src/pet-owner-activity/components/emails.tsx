@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { Row, Col, Dropdown, Button, Menu, Checkbox, Timeline, Select, Empty, Spin } from 'antd';
+import { Const, history } from 'qmkit';
+import { Row, Col, Dropdown, Button, Menu, Checkbox, Timeline, Select, Empty, Spin, message } from 'antd';
 import { replaceLink } from '../common';
 import TemplateConponent from './template-conponent';
+import { Link } from 'react-router-dom';
+import * as webapi from '../webapi';
+import value from '*.json';
 
 const Option = Select.Option;
 export default class emails extends Component<any, any> {
@@ -10,66 +14,98 @@ export default class emails extends Component<any, any> {
     this.state = {
       emailLoading: false,
       emailList: [
-        {
-          activityName: "New booking in /'clinics name' from /'2021-01-29T09:31 to /'2021-01-29T10:31'",
-          activityType: 'Clinic Booking',
-          auditId: 8018,
-          category: 'Clinic',
-          clinicId: 6,
-          clinicName: 'Вега',
-          petOwnerId: 229,
-          createdBy: 138,
-          createdByUser: 'Mia Lin',
-          dateAdded: '2021-01-28 12:32:26',
-          id: 8196,
-          tenantId: 4
-        }
       ],
-      emailFilter: [
+      emailFilters: [
         { value: 'COMMUNICATION.Emails', label: 'Communication Email' },
         { value: 'CAMPAIGN ACTIVITY.Emails', label: 'Automation Email' }
-      ]
+      ],
+      isRecent: true,
+      orderType: 'asc',
+      filters: []
     };
-    this.activitiesEmailSort = this.activitiesEmailSort.bind(this);
     this.getEmails = this.getEmails.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getEmails();
+  }
 
-  getEmails() {}
-
-  activitiesEmailSort() {}
+  getEmails() {
+    this.setState({
+      emailLoading: true
+    });
+    const { isRecent, orderType, filters } = this.state;
+    let param = {
+      customerId: '291', // this.props.petOwnerId,
+      orderType: orderType,
+      recent: isRecent,
+      filters: filters
+    };
+    webapi
+      .getEamils(param, isRecent)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            emailList: res.context || [],
+            emailLoading: false
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+          this.setState({
+            emailLoading: false
+          });
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+        this.setState({
+          emailLoading: false
+        });
+      });
+  }
   render() {
-    const { emailLoading, emailList, emailFilter } = this.state;
+    const { emailLoading, emailList, emailFilters, orderType, isRecent } = this.state;
     const menu = (
       <Menu>
         <Menu.Item key={1}>Add Comment</Menu.Item>
-        <Menu.Item key={2}>Add Task</Menu.Item>
+        <Menu.Item key={2}>
+          <Link to={'/add-task'}>Add Task</Link>
+        </Menu.Item>
       </Menu>
     );
     return (
       <Row>
         <Col span={9}></Col>
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-          <Select className="filter" placeholder="Email Type" allowClear={true} dropdownMatchSelectWidth={false} maxTagCount={0} style={{ width: '120px' }} mode="multiple" onChange={() => this.getEmails()}>
-            {emailFilter.map((item) => (
+          <Select
+            className="filter"
+            placeholder="Email Type"
+            allowClear={true}
+            dropdownMatchSelectWidth={false}
+            maxTagCount={0}
+            style={{ width: '120px' }}
+            mode="multiple"
+            onChange={(value) => this.setState({ filters: value }, () => this.getEmails())}
+          >
+            {emailFilters.map((item) => (
               <Option value={item.value} key={item.label}>
                 {item.label}
               </Option>
             ))}
           </Select>
-          <Button className="sortBtn" onClick={this.activitiesEmailSort}>
-            <span className="icon iconfont iconbianzusort" style={{ fontSize: '22px' }} />
+          <Button className="sortBtn" onClick={() => this.setState({ orderType: orderType === 'asc' ? 'desc' : 'asc' }, () => this.getEmails())}>
+            <span className="icon iconfont iconbianzusort" style={{ fontSize: '20px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">
-              <span className="icon iconfont iconbianzu9" style={{ fontSize: '22px' }} />
+              <span className="icon iconfont iconbianzu9" style={{ fontSize: '20px' }} />
             </Button>
           </Dropdown>
         </Col>
         <Col span={24}>
           {emailList && emailList.length > 0 ? (
-             <Spin spinning={emailLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Spin spinning={emailLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
               <Timeline>
                 {emailList.map((item, index) => (
                   <Timeline.Item key={index}>
@@ -97,8 +133,8 @@ export default class emails extends Component<any, any> {
                 ))}
               </Timeline>
               <div style={{ textAlign: 'center' }}>
-                <Button type="link" className="jump-link">
-                  View More
+                <Button type="link" className="jump-link" onClick={() => this.setState({ isRecent: false }, () => this.getEmails())}>
+                <span>{ isRecent ? 'View More' : ''}</span>
                 </Button>
               </div>
             </Spin>

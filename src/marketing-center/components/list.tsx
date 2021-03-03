@@ -246,6 +246,31 @@ export default class List extends React.Component<any, any> {
                   </a>
                 </Col>
               </AuthWrapper>
+            </Row>
+            <Row>
+              <AuthWrapper functionName="f_marketing_gift_add">
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: './marketing-add/first-order-discount',
+                        state: {
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.full_03} />
+                    </span>
+                    <div className="info">
+                      <h5>First order discount</h5>
+                      <p>Create discount for first order</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
 
               <AuthWrapper functionName="f_marketing_gift_add">
                 <Col span={6}>
@@ -264,8 +289,8 @@ export default class List extends React.Component<any, any> {
                       <img src={images.full_03} />
                     </span>
                     <div className="info">
-                      <h5>满赠</h5>
-                      <p>满足指定条件获得赠品</p>
+                      <h5>Gift</h5>
+                      <p>Define main product and gift</p>
                     </div>
                   </a>
                 </Col>

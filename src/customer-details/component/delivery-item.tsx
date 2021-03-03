@@ -1,9 +1,10 @@
 import React from 'react';
-import { Form, Input, Select, Spin, Breadcrumb, Row, Col, Button } from 'antd';
+import { Form, Input, Select, Spin, Breadcrumb, Row, Col, Button, message } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { getCountryList } from './webapi';
+import { updateAddress, addAddress } from '../webapi';
 
 const { Option } = Select;
 
@@ -43,6 +44,27 @@ class DeliveryItem extends React.Component<Iprop, any> {
     const countries = await getCountryList();
     this.setState({
       countryList: countries
+    });
+  };
+
+  saveAddress = () => {
+    const { delivery, backToDetail } = this.props;
+    this.props.form.validateFields((err, fields) => {
+      if (!err) {
+        this.setState({ loading: true });
+        const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
+        handlerFunc({
+          ...delivery,
+          ...fields
+        })
+          .then((data) => {
+            message.success(data.res.message);
+            backToDetail();
+          })
+          .catch(() => {
+            this.setState({ loading: false });
+          });
+      }
     });
   };
 
@@ -156,7 +178,9 @@ class DeliveryItem extends React.Component<Iprop, any> {
             </Form>
           </div>
           <div className="bar-button">
-            <Button type="primary">Save</Button>
+            <Button type="primary" onClick={() => this.saveAddress()}>
+              Save
+            </Button>
             <Button onClick={() => backToDetail()} style={{ marginLeft: '20px' }}>
               Cancel
             </Button>

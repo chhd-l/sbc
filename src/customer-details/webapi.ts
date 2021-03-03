@@ -86,6 +86,19 @@ export function delAddress(id = null) {
   });
 }
 
+/**
+ * 新增客户地址
+ * @param filterParams
+ */
+export function addAddress(filterParams = {}) {
+  return Fetch<TResult>('/customer/address', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
 //设置客户收货地址为默认
 export function defaultAddress(filterParams = {}) {
   return Fetch<TResult>('/customer/defaultAddress', {

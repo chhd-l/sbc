@@ -333,10 +333,10 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <PrescribInformation startDate={startDate} endDate={endDate} />
                 </TabPane>
                 <TabPane tab="Delivery information" key="delivery">
-                  <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />
+                  {displayPage === 'detail' && <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
                 <TabPane tab="Billing information" key="billing">
-                  <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />
+                  {displayPage === 'detail' && <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
                 </TabPane>
                 <TabPane tab="Payment methods" key="payment">
                   <PaymentList startDate={startDate} endDate={endDate} customerId={this.state.customerId} />

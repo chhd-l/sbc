@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline, history } from 'qmkit';
-import { Row, Col, Tabs, Card, Breadcrumb, Button, message } from 'antd';
+import { Row, Col, Tabs, Card, Breadcrumb, Button, message, Spin } from 'antd';
 import PetOwner from './components/petowner';
 import Pets from './components/pets';
 import Tasks from './components/tasks';
@@ -21,25 +21,36 @@ export default class PetOwnerActivity extends Component<any, any> {
       activityKey: '1',
       id: this.props.match.params.id ? this.props.match.params.id : '',
       title: 'Pet Owner activity',
-      petOwner: {}
+      petOwner: {},
+      loading: false
     };
   }
 
   componentDidMount() {
+    this.setState({
+      loading: true
+    });
     webapi
       .getPetOwner(this.state.id)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            petOwner: res.context
+            petOwner: res.context,
+            loading: false
           });
         } else {
           message.error('Get data failed');
+          this.setState({
+            loading: false
+          });
         }
       })
       .catch(() => {
         message.error('Get data failed');
+        this.setState({
+          loading: false
+        });
       });
   }
 
@@ -49,7 +60,7 @@ export default class PetOwnerActivity extends Component<any, any> {
     });
   };
   render() {
-    const { title, id, petOwner } = this.state;
+    const { title, id, petOwner, loading } = this.state;
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -76,40 +87,44 @@ export default class PetOwnerActivity extends Component<any, any> {
           </Row>
         </div>
         <div className="container petOwnerActivity">
-          <Row gutter={10} style={{ marginBottom: '20px' }}>
-            <Col span={7}>
-              <PetOwner petOwner={petOwner} />
-              <div style={{ marginTop: '20px' }}></div>
-              <Pets petOwnerId={id} />
-            </Col>
-            <Col span={9} id="task">
-              <Card>
-                <Tabs
-                  defaultActiveKey="1"
-                  onChange={(key) =>
-                    this.setState({
-                      activityKey: key
-                    })
-                  }
-                >
-                  <TabPane tab="Task" key="1">
-                    <Tasks petOwnerId={id} />
-                  </TabPane>
-                  <TabPane tab="Emails" key="2">
-                    <Emails petOwnerId={id} />
-                  </TabPane>
-                  <TabPane tab="Activities" key="3">
-                    <Activities petOwnerId={id} />
-                  </TabPane>
-                </Tabs>
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Orders petOwnerId={id} />
-              <div style={{ marginTop: '20px' }}></div>
-              <Bookings customerAccount={petOwner.customerAccount} />
-            </Col>
-          </Row>
+          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Row gutter={10} style={{ marginBottom: '20px' }}>
+              <Col span={7}>
+                <PetOwner petOwner={petOwner} />
+                <div style={{ marginTop: '20px' }}></div>
+                <Pets petOwnerId={id} />
+              </Col>
+              <Col span={9} id="task">
+                <Card>
+                  <Tabs
+                    defaultActiveKey="1"
+                    onChange={(key) =>
+                      this.setState({
+                        activityKey: key
+                      })
+                    }
+                  >
+                    <TabPane tab="Task" key="1">
+                      <Tasks petOwnerId={id} />
+                    </TabPane>
+                    <TabPane tab="Emails" key="2">
+                      <Emails petOwnerId={id} />
+                    </TabPane>
+                    <TabPane tab="Activities" key="3">
+                      <Activities petOwnerId={id} />
+                    </TabPane>
+                  </Tabs>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Orders customerAccount={petOwner.email} />
+                <div style={{ marginTop: '20px' }}></div>
+                <Bookings customerAccount={petOwner.email} />
+                {/* todo email */}
+              </Col>
+              )
+            </Row>
+          </Spin>
         </div>
       </div>
     );

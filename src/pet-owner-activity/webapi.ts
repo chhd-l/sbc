@@ -21,9 +21,12 @@ export function getPetList(filterParams = {}) {
   });
 }
 
-export function getPetOwnerTasks(customerId) {
-  return Fetch<TResult>('/customer/tasks/list' + '?customerId=' + customerId, {
-    method: 'GET'
+export function getPetOwnerTasks(filterParams = {}) {
+  return Fetch<TResult>('/customer/tasks/list', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
   });
 }
 
@@ -37,10 +40,10 @@ export function getGlodenMomentList() {
 }
 
 export function getOrderList(filterParams = {}) {
-  return Fetch<TResult>('/order/list', {
+  return Fetch<TResult>('/trade', {
     method: 'POST',
     body: JSON.stringify({
-      ...filterParams
+     ...filterParams
     })
   });
 }
@@ -89,3 +92,5 @@ export function getAllActivities(filterParams = {}) {
     })
   });
 }
+
+

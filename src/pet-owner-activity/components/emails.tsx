@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline, Select } from 'antd';
-const { Divider } = Menu;
-const { Item } = Menu;
-const CheckboxGroup = Checkbox.Group;
+import { Row, Col, Dropdown, Button, Menu, Checkbox, Timeline, Select } from 'antd';
 import { replaceLink } from '../common';
 import TemplateConponent from './template-conponent';
 
@@ -54,7 +51,7 @@ export default class emails extends Component<any, any> {
       <Row>
         <Col span={9}></Col>
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-          <Select className="filter" placeholder="Email Type" allowClear={true} dropdownMatchSelectWidth={false} maxTagCount={0} style={{ width: '120px' }} mode="multiple" onChange={(value) => this.getEmails()}>
+          <Select className="filter" placeholder="Email Type" allowClear={true} dropdownMatchSelectWidth={false} maxTagCount={0} style={{ width: '120px' }} mode="multiple" onChange={() => this.getEmails()}>
             {emailFilter.map((item) => (
               <Option value={item.value} key={item.label}>
                 {item.label}
@@ -62,7 +59,7 @@ export default class emails extends Component<any, any> {
             ))}
           </Select>
           <Button className="sortBtn" onClick={this.activitiesEmailSort}>
-            <span className="icon iconfont iconbianzu8" style={{ fontSize: '22px' }} />
+            <span className="icon iconfont iconbianzusort" style={{ fontSize: '22px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">

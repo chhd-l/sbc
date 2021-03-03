@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Tooltip, Table, Input, Menu, Checkbox, Dropdown, Button } from 'antd';
+import { Card, Icon, Row, Col, message, Tooltip, Table, Input, Menu, Checkbox, Select } from 'antd';
 import * as webapi from '../webapi';
-import { history, Const } from 'qmkit';
+import { Const } from 'qmkit';
 import { Link } from 'react-router-dom';
-const { Divider } = Menu;
-const { Item } = Menu;
-const CheckboxGroup = Checkbox.Group;
+import { FormattedMessage } from 'react-intl';
+
+const Option = Select.Option;
 
 export default class orders extends Component<any, any> {
   constructor(props) {
@@ -61,19 +61,18 @@ export default class orders extends Component<any, any> {
       ],
       pagination: {
         current: 1,
-        pageSize: 20,
+        pageSize: 4,
         total: 0
       },
       formData: {},
-      loading: false,
-      categoryVisible: false
+      loading: false
     };
     this.handleTableChange = this.handleTableChange.bind(this);
     this.getOrderList = this.getOrderList.bind(this);
   }
 
   componentDidMount() {
-    // this.getOrderList();
+    this.getOrderList();
   }
 
   handleTableChange = (pagination: any) => {
@@ -87,15 +86,20 @@ export default class orders extends Component<any, any> {
   onFormChange = ({ field, value }) => {
     let data = this.state.formData;
     data[field] = value;
-    this.setState({
-      formData: data
-    });
+    this.setState(
+      {
+        formData: data
+      },
+      () => this.getOrderList()
+    );
   };
   getOrderList = () => {
     const { formData, pagination } = this.state;
     let params = Object.assign(formData, {
       pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize
+      pageSize: pagination.pageSize,
+      orderType: 'NORMAL_ORDER',
+      buyerAccount: this.props.customerAccount
     });
     this.setState({
       loading: true
@@ -107,7 +111,7 @@ export default class orders extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           this.setState({
-            orderList: res.context.orderList,
+            orderList: res.context.content,
             pagination: pagination,
             loading: false
           });
@@ -126,36 +130,25 @@ export default class orders extends Component<any, any> {
       });
   };
   render() {
-    const { orderList, orderCategories, categoryVisible } = this.state;
-    const filterMenu = (
-      <Menu>
-        <Checkbox>Select All</Checkbox>
-        <a className="closeFilter" onClick={() => this.setState({ categoryVisible: false })}>
-          {' '}
-          X
-        </a>
-        <Divider />
-        <CheckboxGroup>
-          {orderCategories.map((item, index) => (
-            <Row gutter={24} key={index}>
-              <Col span={24}>
-                <Checkbox value={item.value}>{item.label}</Checkbox>
-              </Col>
-            </Row>
-          ))}
-        </CheckboxGroup>
-      </Menu>
-    );
+    const { orderList, orderCategories } = this.state;
+    const deliverStatus = (status) => {
+      if (status == 'NOT_YET_SHIPPED') {
+        return <FormattedMessage id="order.notShipped" />;
+      } else if (status == 'SHIPPED') {
+        return <FormattedMessage id="order.allShipments" />;
+      } else if (status == 'PART_SHIPPED') {
+        return <FormattedMessage id="order.partialShipment" />;
+      } else if (status == 'VOID') {
+        return <FormattedMessage id="order.invalid" />;
+      } else {
+        return <FormattedMessage id="order.unknown" />;
+      }
+    };
     const columns = [
       {
-        title: 'Order Type',
-        dataIndex: 'businessType',
-        width: '15%'
-      },
-      {
-        title: 'Pet',
-        dataIndex: 'pet',
-        width: '10%',
+        title: 'Order Category',
+        dataIndex: 'orderCategory',
+        width: '20%',
         render: (text) => {
           return (
             <Tooltip
@@ -172,8 +165,8 @@ export default class orders extends Component<any, any> {
       },
       {
         title: 'Order No',
-        dataIndex: 'orderNo',
-        width: '15%',
+        dataIndex: 'id',
+        width: '20%',
         render: (text) => {
           return (
             <Tooltip
@@ -209,7 +202,20 @@ export default class orders extends Component<any, any> {
       {
         title: 'Order Status',
         dataIndex: 'status',
-        width: '25%'
+        width: '25%',
+        render: (text, record) => {
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{deliverStatus(record.tradeState ? record.tradeState.deliverStatus : '')}</div>}
+            >
+              <p className="overFlowtext">{deliverStatus(record.tradeState ? record.tradeState.deliverStatus : '')}</p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: '',
@@ -218,39 +224,52 @@ export default class orders extends Component<any, any> {
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Details">
-              <Link to={'/order-detail-prescriber/' + record.orderNumber} className="iconfont iconDetails"></Link>
+              <Link to={'/order-detail/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
         )
       }
     ];
     return (
-      <Card title="Subscription" className="rightCard">
+      <Card title="Order" className="rightCard">
         <Row>
-          <Col span={9}>
+          <Col span={10}>
             <Input
               className="searchInput"
-              placeholder="Search Keyword"
+              placeholder="Order Number"
               onPressEnter={() => this.getOrderList()}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 this.onFormChange({
-                  field: 'name',
+                  field: 'id',
                   value
                 });
               }}
               prefix={<Icon type="search" onClick={() => this.getOrderList()} />}
             />
           </Col>
-          <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-            <div style={{ marginRight: '10px' }}>
-              <Dropdown overlay={filterMenu} trigger={['click']} overlayClassName="dropdown-custom" visible={categoryVisible}>
-                <Button className="ant-dropdown-link" onClick={(e) => this.setState({ categoryVisible: true })}>
-                  Order Category
-                  <Icon type="down" />
-                </Button>
-              </Dropdown>
-            </div>
+          <Col span={14} className="activities-right" style={{ marginBottom: '20px' }}>
+            <Select
+              className="filter"
+              placeholder="Email Type"
+              allowClear={true}
+              dropdownMatchSelectWidth={false}
+              maxTagCount={0}
+              style={{ width: '120px' }}
+              mode="multiple"
+              onChange={(value) =>
+                this.onFormChange({
+                  field: 'orderCategory',
+                  value: value ? (value as []).join(',') : ''
+                })
+              }
+            >
+              {orderCategories.map((item) => (
+                <Option value={item.value} key={item.label}>
+                  {item.label}
+                </Option>
+              ))}
+            </Select>
           </Col>
           <Col span={24}>
             <Table

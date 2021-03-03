@@ -47,9 +47,9 @@ export default class Activities extends Component<any, any> {
           key: 'UPDATES'
         },
         {
-          title: 'COMMUNICATION',
-          value: 'COMMUNICATION',
-          key: 'COMMUNICATION',
+          title: 'CAMPAIGN ACTIVITY',
+          value: 'CAMPAIGN ACTIVITY',
+          key: 'CAMPAIGN ACTIVITY',
           children: [
             { value: 'COMMUNICATION.Emails', key: 'COMMUNICATION.Emails', title: 'Emails' },
             { value: 'COMMUNICATION.Calls', key: 'COMMUNICATION.Emails', title: 'Calls' }
@@ -126,7 +126,7 @@ export default class Activities extends Component<any, any> {
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
           <TreeSelect className="filter" {...tProps} />
           <Button className="sortBtn" onClick={this.activitiesSort}>
-            <span className="icon iconfont iconbianzu8" style={{ fontSize: '22px' }} />
+            <span className="icon iconfont iconbianzusort" style={{ fontSize: '22px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">

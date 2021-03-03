@@ -3,6 +3,7 @@ import { Const, history } from 'qmkit';
 import { Input, Icon, Row, Col, Select, message, Dropdown, Button, Menu, Timeline, Tooltip } from 'antd';
 import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
+import { assign } from 'lodash';
 
 const Option = Select.Option;
 
@@ -63,7 +64,9 @@ export default class tasks extends Component<any, any> {
         { type: 'On-going', color: 'rgba(57, 173, 255)' },
         { type: 'Completed', color: 'rgba(114, 198, 127)' },
         { type: 'Cancelled', color: 'rgba(172, 176, 180)' }
-      ]
+      ],
+      isAll: false,
+      orderBy: 0
     };
     this.taskSort = this.taskSort.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -92,9 +95,14 @@ export default class tasks extends Component<any, any> {
   }
 
   getPetOwnerTasks() {
-    const { taskForm } = this.state;
+    const { taskForm, isAll, orderBy } = this.state;
+    let param = Object.assign(taskForm, {
+      customerId: this.props.petOwnerId,
+      isAll: isAll,
+      orderBy: orderBy
+    })
     webapi
-      .getPetOwnerTasks(this.props.petOwnerId)
+      .getPetOwnerTasks(param)
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
@@ -170,15 +178,20 @@ export default class tasks extends Component<any, any> {
     return (
       <Row>
         <Col span={7}>
-          <Input
-            onChange={(e: any) =>
-              this.onChange({
-                field: 'name',
-                value: e.target.value
-              })
-            }
-            style={{ width: '140px' }}
-          />
+            <Input
+              className="searchInput"
+              placeholder="Keyword"
+              onPressEnter={() => this.getPetOwnerTasks()}
+              onChange={(e) => {
+                const value = (e.target as any).value;
+                this.onChange({
+                  field: 'keyword',
+                  value: value
+                })
+              }}
+              style={{ width: '140px' }}
+              prefix={<Icon type="search" onClick={() => this.getPetOwnerTasks()} />}
+            />
         </Col>
         <Col span={17} className="activities-right" style={{ marginBottom: '20px' }}>
           <Select
@@ -191,7 +204,7 @@ export default class tasks extends Component<any, any> {
             mode="multiple"
             onChange={(value) =>
               this.onChange({
-                field: 'status',
+                field: 'statuses',
                 value: value
               })
             }
@@ -212,7 +225,7 @@ export default class tasks extends Component<any, any> {
             mode="multiple"
             onChange={(value) =>
               this.onChange({
-                field: 'goldenMoment',
+                field: 'goldenMoments',
                 value: value
               })
             }

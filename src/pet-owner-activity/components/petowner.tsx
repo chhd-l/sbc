@@ -8,42 +8,11 @@ export default class petowner extends Component<any, any> {
     super(props);
     this.state = {
       loading: false,
-      allocatedSegments: [
-        {
-          id: 216,
-          isPublished: true,
-          name: 'cxcx'
-        },
-        {
-          id: 221,
-          isPublished: true,
-          name: 'Cute'
-        },
-        {
-          id: 216,
-          isPublished: true,
-          name: 'cxcxsssssssssssssss'
-        },
-        {
-          id: 221,
-          isPublished: true,
-          name: 'Cutedddddddddddddddddddddd'
-        }
+      allocatedTaggings: [
       ]
     };
   }
-
-  componentDidMount() {
-    this.getPetOwner();
-  }
-
-  getPetOwner() {
-    this.setState({
-      loading: true
-    });
-  }
   render() {
-    const { allocatedSegments } = this.state;
     const { petOwnerId, petOwner } = this.props;
     return (
       <div>
@@ -117,7 +86,7 @@ export default class petowner extends Component<any, any> {
                   <span className="ui-lighter">Phone</span>
                 </Col>
                 <Col span={18}>
-                  <span className="content">{petOwner.primaryPhone}</span>
+                  <span className="content">{petOwner.contactPhone}</span>
                 </Col>
               </Row>
             </div>
@@ -128,11 +97,11 @@ export default class petowner extends Component<any, any> {
             <div className="detail-content">
               <Row>
                 <Col span={6}>
-                  <span className="ui-lighter">Segments</span>
+                  <span className="ui-lighter">Taggings</span>
                 </Col>
                 <Col span={18}>
                   <div className="contactSegments">
-                    {allocatedSegments.map((item) => (
+                    {petOwner.segmentList && petOwner.segmentList.map((item) => (
                       <div className="segment-item" key={item.id}>
                         {item.name}
                       </div>

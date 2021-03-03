@@ -18,46 +18,6 @@ export default class orders extends Component<any, any> {
         { label: 'Recurrent orders of autoship', value: 'RECURRENT_AUTOSHIP' }
       ],
       orderList: [
-        {
-          businessType: 'B2C',
-          contactName: 'Morgane Lucas',
-          contactUuid: '00uod83hrdUTgu6il0x6',
-          creationDate: '2020-10-06 16:59:35',
-          id: 1196,
-          orderNo: '99933863',
-          orderType: 'Single order',
-          status: 'failed'
-        },
-        {
-          businessType: 'B2C',
-          contactName: 'Morgane Lucas',
-          contactUuid: '00uod83hrdUTgu6il0x6',
-          creationDate: '2020-10-06 17:03:30',
-          id: 1197,
-          orderNo: '99933864',
-          orderType: 'Single order',
-          status: 'failed'
-        },
-        {
-          businessType: 'B2C',
-          contactName: 'Morgane Lucas',
-          contactUuid: '00uod83hrdUTgu6il0x6',
-          creationDate: '2020-10-06 17:14:22',
-          id: 1198,
-          orderNo: '99933865',
-          orderType: 'Single order',
-          status: 'failed'
-        },
-        {
-          businessType: 'B2C',
-          contactName: 'Morgane Lucas',
-          contactUuid: '00uod83hrdUTgu6il0x6',
-          creationDate: '2020-10-06 17:16:25',
-          id: 1199,
-          orderNo: '99933866',
-          orderType: 'Single order',
-          status: 'failed'
-        }
       ],
       pagination: {
         current: 1,

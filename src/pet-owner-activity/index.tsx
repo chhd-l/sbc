@@ -94,7 +94,7 @@ export default class PetOwnerActivity extends Component<any, any> {
                 <div style={{ marginTop: '20px' }}></div>
                 <Pets petOwnerId={id} />
               </Col>
-              <Col span={9} id="task">
+              <Col span={9} id="middle">
                 <Card>
                   <Tabs
                     defaultActiveKey="1"
@@ -116,13 +116,14 @@ export default class PetOwnerActivity extends Component<any, any> {
                   </Tabs>
                 </Card>
               </Col>
-              <Col span={8}>
-                <Orders customerAccount={petOwner.email} />
-                <div style={{ marginTop: '20px' }}></div>
-                <Bookings customerAccount={petOwner.email} />
-                {/* todo email */}
-              </Col>
-              )
+              {petOwner.email ? (
+                <Col span={8}>
+                  <Orders customerAccount={petOwner.email} />
+                  <div style={{ marginTop: '20px' }}></div>
+                  <Bookings customerAccount={petOwner.email} />
+                  {/* todo email */}
+                </Col>
+              ) : null}
             </Row>
           </Spin>
         </div>

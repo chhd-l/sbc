@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Const, history } from 'qmkit';
-import { Input, Icon, Row, Col, Select, message, Dropdown, Button, Menu, Timeline, Tooltip } from 'antd';
+import { Input, Icon, Row, Col, Select, message, Dropdown, Button, Menu, Timeline, Tooltip, Empty, Spin } from 'antd';
 import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
 import { assign } from 'lodash';
@@ -68,7 +68,6 @@ export default class tasks extends Component<any, any> {
       isAll: false,
       orderBy: 0
     };
-    this.taskSort = this.taskSort.bind(this);
     this.onChange = this.onChange.bind(this);
     this.moreClick = this.moreClick.bind(this);
     this.getPetOwnerTasks = this.getPetOwnerTasks.bind(this);
@@ -95,12 +94,15 @@ export default class tasks extends Component<any, any> {
   }
 
   getPetOwnerTasks() {
+    this.setState({
+      taskLoading: true
+    });
     const { taskForm, isAll, orderBy } = this.state;
     let param = Object.assign(taskForm, {
       customerId: this.props.petOwnerId,
       isAll: isAll,
       orderBy: orderBy
-    })
+    });
     webapi
       .getPetOwnerTasks(param)
       .then((data) => {
@@ -110,18 +112,23 @@ export default class tasks extends Component<any, any> {
             item.showBasicInfo = item.status !== 'Completed';
           });
           this.setState({
-            taskList: res.context.tasks || []
+            taskList: res.context.tasks || [],
+            taskLoading: false
           });
         } else {
           message.error(res.message || 'Get data failed');
+          this.setState({
+            taskLoading: false
+          });
         }
       })
       .catch(() => {
         message.error('Get data failed');
+        this.setState({
+          taskLoading: false
+        });
       });
   }
-
-  taskSort() {}
   redirectDetail(id) {
     history.push(`/edit-task/${id}`);
   }
@@ -166,32 +173,38 @@ export default class tasks extends Component<any, any> {
     });
   }
   render() {
-    const { taskLoading, taskList } = this.state;
-    const { associatedPetList } = this.state;
+    const { taskLoading, taskList, isAll, orderBy } = this.state;
     const { goldenMomentList, statusList } = this.state;
     const menu = (
       <Menu>
-        <Menu.Item key={1}>Add Comment</Menu.Item>
-        <Menu.Item key={2}>Add Task</Menu.Item>
+        <Menu.Item key={1}>
+          {' '}
+          <Link to={'/add-task'} /> Add Comment
+        </Menu.Item>
+        <Menu.Item key={2}>
+          {' '}
+          <Link to={'/add-task'} /> Add Task
+        </Menu.Item>
       </Menu>
     );
     return (
       <Row>
         <Col span={7}>
-            <Input
-              className="searchInput"
-              placeholder="Keyword"
-              onPressEnter={() => this.getPetOwnerTasks()}
-              onChange={(e) => {
-                const value = (e.target as any).value;
-                this.onChange({
-                  field: 'keyword',
-                  value: value
-                })
-              }}
-              style={{ width: '140px' }}
-              prefix={<Icon type="search" onClick={() => this.getPetOwnerTasks()} />}
-            />
+          <Input
+            className="searchInput"
+            placeholder="Keyword"
+            onPressEnter={() => this.getPetOwnerTasks()}
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              let data = this.state.taskForm;
+              data['keyword'] = value;
+              this.setState({
+                taskForm: data
+              });
+            }}
+            style={{ width: '140px' }}
+            prefix={<Icon type="search" onClick={() => this.getPetOwnerTasks()} />}
+          />
         </Col>
         <Col span={17} className="activities-right" style={{ marginBottom: '20px' }}>
           <Select
@@ -236,7 +249,17 @@ export default class tasks extends Component<any, any> {
               </Option>
             ))}
           </Select>
-          <Button className="sortBtn" onClick={this.taskSort}>
+          <Button
+            className="sortBtn"
+            onClick={() => {
+              this.setState(
+                {
+                  orderBy: orderBy === 0 ? 1 : 0
+                },
+                () => this.getPetOwnerTasks()
+              );
+            }}
+          >
             <span className="icon iconfont iconbianzusort" style={{ fontSize: '22px' }} />
           </Button>
           <Dropdown overlay={menu}>
@@ -246,161 +269,178 @@ export default class tasks extends Component<any, any> {
           </Dropdown>
         </Col>
         <Col span={24}>
-          <Timeline pending={taskLoading} className="contactTaskList">
-            {taskList.map((item, index) => (
-              <Timeline.Item key={index} className="listitem">
-                <div className="contactTaskCard">
-                  <Row className="taskHeader padding">
-                    <Col span={12}>
-                      <Row>
-                        <Col span={2}>
-                          <div>
-                            <span style={{ background: this.getBackground(item.status) }} className="point" />
-                          </div>
-                        </Col>
-                        <Col span={16}>
-                          <span className="tasksLable">Tasks</span>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col span={12}>
-                      <Row style={{ textAlign: 'right' }}>
-                        {item.status}
-                        <span className="icontiaozhuan icon iconfont" style={{ marginLeft: '15px', cursor: 'pointer' }} onClick={() => this.redirectDetail(item.id)} />
-                      </Row>
-                    </Col>
-                  </Row>
-                  {item.showBasicInfo ? (
-                    <div>
-                      <Row className="padding">
+          {taskList && taskList.length > 0 ? (
+            <Spin spinning={taskLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Timeline className="contactTaskList">
+                {taskList.map((item, index) => (
+                  <Timeline.Item key={index} className="listitem">
+                    <div className="contactTaskCard">
+                      <Row className="taskHeader padding">
                         <Col span={12}>
-                          <div className="taskContactLable">
-                            {' '}
-                            <span className="icontaskName icon iconfont addTaskIcon" />
-                            Name
-                          </div>
-                          <div>{item.name}</div>
-                        </Col>
-                        <Col span={12}>
-                          <div className="taskContactLable">
-                            <span className="iconxingzhuang icon iconfont addTaskIcon" />
-                            Assigned to
-                          </div>
-                          <Tooltip
-                            overlayStyle={{
-                              overflowY: 'auto'
-                            }}
-                            placement="bottomLeft"
-                            title={<div> {item.assistantName ? item.assistantName + '(' + item.assistantEmail + ')' : ''}</div>}
-                          >
-                            <p style={styles.text}> {item.assistantName ? item.assistantName + '(' + item.assistantEmail + ')' : ''}</p>
-                          </Tooltip>
-                        </Col>
-                      </Row>
-                      <Row className="padding">
-                        <Col span={12}>
-                          <div className="taskContactLable">
-                            <span className="iconshizhong icon iconfont addTaskIcon" />
-                            Start Time
-                          </div>
-                          <div>{item.startTime}</div>
-                        </Col>
-                        <Col span={12}>
-                          <div className="taskContactLable">
-                            <span className="iconshizhong icon iconfont addTaskIcon" />
-                            Due Time
-                          </div>
-                          <div>{item.dueTime}</div>
-                        </Col>
-                      </Row>
-                      <Row className="padding">
-                        <Col span={12}>
-                          <div className="taskContactLable">
-                            <span className="iconbianzu7 icon iconfont addTaskIcon" />
-                            Golden Moment
-                          </div>
-                          <div>{item.goldenMoment}</div>
-                        </Col>
-                      </Row>
-                    </div>
-                  ) : null}
-                  {item.showBasicInfo ? (
-                    <div>
-                      <div className="upborder"></div>
-                    </div>
-                  ) : null}
-                  {item.showMore ? (
-                    <Row>
-                      <div>
-                        <div className="padding">
-                          <div className="taskContactLable">
-                            <span className="icondescribe icon iconfont addTaskIcon" />
-                            Task Description
-                          </div>
                           <Row>
-                            <div dangerouslySetInnerHTML={{ __html: item.description }}></div>
+                            <Col span={2}>
+                              <div>
+                                <span style={{ background: this.getBackground(item.status) }} className="point" />
+                              </div>
+                            </Col>
+                            <Col span={16}>
+                              <span className="tasksLable">Tasks</span>
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Col span={12}>
+                          <Row style={{ textAlign: 'right' }}>
+                            {item.status}
+                            <span className="icontiaozhuan icon iconfont" style={{ marginLeft: '15px', cursor: 'pointer' }} onClick={() => this.redirectDetail(item.id)} />
+                          </Row>
+                        </Col>
+                      </Row>
+                      {item.showBasicInfo ? (
+                        <div>
+                          <Row className="padding">
+                            <Col span={12}>
+                              <div className="taskContactLable">
+                                {' '}
+                                <span className="icontaskName icon iconfont addTaskIcon" />
+                                Name
+                              </div>
+                              <div>{item.name}</div>
+                            </Col>
+                            <Col span={12}>
+                              <div className="taskContactLable">
+                                <span className="iconxingzhuang icon iconfont addTaskIcon" />
+                                Assigned to
+                              </div>
+                              <Tooltip
+                                overlayStyle={{
+                                  overflowY: 'auto'
+                                }}
+                                placement="bottomLeft"
+                                title={<div> {item.assistantName ? item.assistantName + '(' + item.assistantEmail + ')' : ''}</div>}
+                              >
+                                <p style={styles.text}> {item.assistantName ? item.assistantName + '(' + item.assistantEmail + ')' : ''}</p>
+                              </Tooltip>
+                            </Col>
+                          </Row>
+                          <Row className="padding">
+                            <Col span={12}>
+                              <div className="taskContactLable">
+                                <span className="iconshizhong icon iconfont addTaskIcon" />
+                                Start Time
+                              </div>
+                              <div>{item.startTime}</div>
+                            </Col>
+                            <Col span={12}>
+                              <div className="taskContactLable">
+                                <span className="iconshizhong icon iconfont addTaskIcon" />
+                                Due Time
+                              </div>
+                              <div>{item.dueTime}</div>
+                            </Col>
+                          </Row>
+                          <Row className="padding">
+                            <Col span={12}>
+                              <div className="taskContactLable">
+                                <span className="iconbianzu7 icon iconfont addTaskIcon" />
+                                Golden Moment
+                              </div>
+                              <div>{item.goldenMoment}</div>
+                            </Col>
                           </Row>
                         </div>
-                        <Row className="padding">
-                          <Col span={12}>
-                            <div className="taskContactLable">
-                              <span className="iconpaixu icon iconfont addTaskIcon" />
-                              Priority
+                      ) : null}
+                      {item.showBasicInfo ? (
+                        <div>
+                          <div className="upborder"></div>
+                        </div>
+                      ) : null}
+                      {item.showMore ? (
+                        <Row>
+                          <div>
+                            <div className="padding">
+                              <div className="taskContactLable">
+                                <span className="icondescribe icon iconfont addTaskIcon" />
+                                Task Description
+                              </div>
+                              <Row>
+                                <div dangerouslySetInnerHTML={{ __html: item.description }}></div>
+                              </Row>
                             </div>
-                            <div>{item.priority}</div>
-                          </Col>
-                          <Col span={12}>
-                            <div className="taskContactLable">
-                              <span className="iconorder icon iconfont addTaskIcon" />
-                              Action Type
-                            </div>
-                            <div>{item.actionType}</div>
-                          </Col>
+                            <Row className="padding">
+                              <Col span={12}>
+                                <div className="taskContactLable">
+                                  <span className="iconpaixu icon iconfont addTaskIcon" />
+                                  Priority
+                                </div>
+                                <div>{item.priority}</div>
+                              </Col>
+                              <Col span={12}>
+                                <div className="taskContactLable">
+                                  <span className="iconorder icon iconfont addTaskIcon" />
+                                  Action Type
+                                </div>
+                                <div>{item.actionType}</div>
+                              </Col>
+                            </Row>
+                            <Row className="padding">
+                              <Col span={12}>
+                                <div className="taskContactLable">
+                                  <span className="iconbianzu icon iconfont addTaskIcon" />
+                                  Associated Pet
+                                </div>
+                                <Link to={`/customer-details/Member/${this.props.petOwnerId}/${item.customerAccount}`}>{item.associatedPet}</Link>
+                              </Col>
+                              <Col span={12}>
+                                <div className="taskContactLable">
+                                  <span className="iconjishiben icon iconfont addTaskIcon" />
+                                  Associated Order
+                                </div>
+                                <Link to={`/order-detail/${item.orderCode}`}>{item.orderCode}</Link>
+                              </Col>
+                            </Row>
+                            <Row className="padding">
+                              <Col span={12}>
+                                <div className="taskContactLable">
+                                  <span className="iconbianzu icon iconfont addTaskIcon" />
+                                  Associated Subscription
+                                </div>
+                                <Link to={`/subscription-detail/${item.subscriptionNumber}`}>{item.subscriptionNumber}</Link>
+                              </Col>
+                            </Row>
+                          </div>
                         </Row>
-                        <Row className="padding">
-                          <Col span={12}>
-                            <div className="taskContactLable">
-                              <span className="iconbianzu icon iconfont addTaskIcon" />
-                              Associated Pet
-                            </div>
-                            <Link to={`/customer-details/Member/${this.props.petOwnerId}/${item.customerAccount}`}>{item.associatedPet}</Link>
-                          </Col>
-                          <Col span={12}>
-                            <div className="taskContactLable">
-                              <span className="iconjishiben icon iconfont addTaskIcon" />
-                              Associated Order
-                            </div>
-                            <Link to={`/order-detail/${item.orderCode}`}>{item.orderCode}</Link>
-                          </Col>
-                        </Row>
-                        <Row className="padding">
-                          <Col span={12}>
-                            <div className="taskContactLable">
-                              <span className="iconbianzu icon iconfont addTaskIcon" />
-                              Associated Subscription
-                            </div>
-                            <Link to={`/subscription-detail/${item.subscriptionNumber}`}>{item.subscriptionNumber}</Link>
-                          </Col>
-                        </Row>
+                      ) : null}
+                      <div className={item.showMore ? 'upborder' : ''}>
+                        <div className="more">
+                          <a onClick={() => this.moreClick(item)}>
+                            <Icon type={item.showMore ? 'up' : 'down'} /> {item.showMore ? 'Less' : 'More'}{' '}
+                          </a>
+                        </div>
                       </div>
-                    </Row>
-                  ) : null}
-                  <div className={item.showMore ? 'upborder' : ''}>
-                    <div className="more">
-                      <a onClick={() => this.moreClick(item)}>
-                        <Icon type={item.showMore ? 'up' : 'down'} /> {item.showMore ? 'Less' : 'More'}{' '}
-                      </a>
                     </div>
-                  </div>
-                </div>
-              </Timeline.Item>
-            ))}
-          </Timeline>
-          <div style={{ textAlign: 'center' }}>
-            <Button type="link" className="jump-link">
-              View More
-            </Button>
-          </div>
+                  </Timeline.Item>
+                ))}
+              </Timeline>
+              <div style={{ textAlign: 'center' }}>
+                <Button
+                  type="link"
+                  className="jump-link"
+                  onClick={() => {
+                    this.setState(
+                      {
+                        isAll: !this.state.isAll
+                      },
+                      () => this.getPetOwnerTasks()
+                    );
+                  }}
+                >
+                  <span>{isAll ? '' : 'View More'}</span>
+                </Button>
+              </div>
+            </Spin>
+          ) : (
+            <Empty />
+          )}
         </Col>
       </Row>
     );

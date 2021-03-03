@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline, TreeSelect } from 'antd';
+import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline, TreeSelect, Empty, Spin } from 'antd';
 import { replaceLink } from '../common';
 
 const { SHOW_ALL } = TreeSelect;
@@ -135,38 +135,44 @@ export default class Activities extends Component<any, any> {
           </Dropdown>
         </Col>
         <Col span={24}>
-          <Timeline pending={activityLoading}>
-            {activityList.map((item, index) => (
-              <Timeline.Item key={index}>
-                <Row className="activities-timeline">
-                  <Col span={19}>
-                    <div className="activity-name">{replaceLink(item.activityName, item)}</div>
-                    <div className="activity-type">{item.activityType}</div>
-                  </Col>
-                  <Col span={5}>
-                    <div>
-                      By
-                      <span className="jump-link" style={{ marginLeft: '5px' }}>
-                        {item.createdByUser}
-                      </span>
-                    </div>
-                    <div style={{ marginBottom: '10px' }} className="activity-type">
-                      {item.dateAdded}
-                    </div>
-                  </Col>
-                  <Col span={24}>{/* <template-conponent
+          {activityList && activityList.length > 0 ? (
+            <Spin spinning={activityLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Timeline>
+                {activityList.map((item, index) => (
+                  <Timeline.Item key={index}>
+                    <Row className="activities-timeline">
+                      <Col span={19}>
+                        <div className="activity-name">{replaceLink(item.activityName, item)}</div>
+                        <div className="activity-type">{item.activityType}</div>
+                      </Col>
+                      <Col span={5}>
+                        <div>
+                          By
+                          <span className="jump-link" style={{ marginLeft: '5px' }}>
+                            {item.createdByUser}
+                          </span>
+                        </div>
+                        <div style={{ marginBottom: '10px' }} className="activity-type">
+                          {item.dateAdded}
+                        </div>
+                      </Col>
+                      <Col span={24}>{/* <template-conponent
                   templateType="email"
                   width="95%"
                 ></template-conponent> */}</Col>
-                </Row>
-              </Timeline.Item>
-            ))}
-          </Timeline>
-          <div style={{ textAlign: 'center' }}>
-            <Button type="link" className="jump-link">
-              View More
-            </Button>
-          </div>
+                    </Row>
+                  </Timeline.Item>
+                ))}
+              </Timeline>
+              <div style={{ textAlign: 'center' }}>
+                <Button type="link" className="jump-link">
+                  View More
+                </Button>
+              </div>
+            </Spin>
+          ) : (
+            <Empty />
+          )}
         </Col>
       </Row>
     );

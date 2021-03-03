@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Dropdown, Button, Menu, Checkbox, Timeline, Select } from 'antd';
+import { Row, Col, Dropdown, Button, Menu, Checkbox, Timeline, Select, Empty, Spin } from 'antd';
 import { replaceLink } from '../common';
 import TemplateConponent from './template-conponent';
 
@@ -68,37 +68,43 @@ export default class emails extends Component<any, any> {
           </Dropdown>
         </Col>
         <Col span={24}>
-          <Timeline pending={emailLoading}>
-            {emailList.map((item, index) => (
-              <Timeline.Item key={index}>
-                <Row className="activities-timeline">
-                  <Col span={19}>
-                    <div className="activity-name">{replaceLink(item.activityName, item)}</div>
-                    <div className="activity-type">{item.activityType}</div>
-                  </Col>
-                  <Col span={5}>
-                    <div>
-                      By
-                      <span className="jump-link" style={{ marginLeft: '5px' }}>
-                        {item.createdByUser}
-                      </span>
-                    </div>
-                    <div style={{ marginBottom: '10px' }} className="activity-type">
-                      {item.dateAdded}
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <TemplateConponent avtivity={item} />
-                  </Col>
-                </Row>
-              </Timeline.Item>
-            ))}
-          </Timeline>
-          <div style={{ textAlign: 'center' }}>
-            <Button type="link" className="jump-link">
-              View More
-            </Button>
-          </div>
+          {emailList && emailList.length > 0 ? (
+             <Spin spinning={emailLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Timeline>
+                {emailList.map((item, index) => (
+                  <Timeline.Item key={index}>
+                    <Row className="activities-timeline">
+                      <Col span={19}>
+                        <div className="activity-name">{replaceLink(item.activityName, item)}</div>
+                        <div className="activity-type">{item.activityType}</div>
+                      </Col>
+                      <Col span={5}>
+                        <div>
+                          By
+                          <span className="jump-link" style={{ marginLeft: '5px' }}>
+                            {item.createdByUser}
+                          </span>
+                        </div>
+                        <div style={{ marginBottom: '10px' }} className="activity-type">
+                          {item.dateAdded}
+                        </div>
+                      </Col>
+                      <Col span={24}>
+                        <TemplateConponent avtivity={item} />
+                      </Col>
+                    </Row>
+                  </Timeline.Item>
+                ))}
+              </Timeline>
+              <div style={{ textAlign: 'center' }}>
+                <Button type="link" className="jump-link">
+                  View More
+                </Button>
+              </div>
+            </Spin>
+          ) : (
+            <Empty />
+          )}
         </Col>
       </Row>
     );

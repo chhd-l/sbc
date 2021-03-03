@@ -47,7 +47,7 @@ export default class addConsent extends Component<any, any> {
       loading: true
     });
     webapi
-      .getConsents(serchForm)
+      .getConsents({ ...serchForm, consentGroup: 'subscription-plan', openFlag: 1 })
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -60,14 +60,12 @@ export default class addConsent extends Component<any, any> {
           });
           this.props.getAllConsent(res.context.consentVOList);
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
+      .catch(() => {
         this.setState({
           loading: false
         });

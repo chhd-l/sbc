@@ -197,16 +197,8 @@ class BasicInfomation extends React.Component<any, any> {
 
   onFormChange = ({ field, value }) => {
     let data = this.state.basicForm;
-    if (field === 'selectedBind') {
-      let temp = [];
-      for (let i = 0; i < value.length; i++) {
-        const element = value[i].value;
-        temp.push(element);
-      }
-      data[field] = temp;
-    } else {
-      data[field] = value;
-    }
+
+    data[field] = value;
 
     this.setState({
       basicForm: data

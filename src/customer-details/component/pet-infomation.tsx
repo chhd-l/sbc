@@ -101,16 +101,7 @@ class PetInfomation extends React.Component<any, any> {
   onOpenChange = (value) => {};
   onFormChange = ({ field, value }) => {
     let data = this.state.petForm;
-    if (field === 'selectedBind') {
-      let temp = [];
-      for (let i = 0; i < value.length; i++) {
-        const element = value[i].value;
-        temp.push(element);
-      }
-      data[field] = temp;
-    } else {
-      data[field] = value;
-    }
+    data[field] = value;
     this.setState({
       petForm: data
     });
@@ -180,7 +171,6 @@ class PetInfomation extends React.Component<any, any> {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
-            debugger;
 
             let selectedBind = [];
             if (currentPet.segmentList) {
@@ -454,8 +444,6 @@ class PetInfomation extends React.Component<any, any> {
         sm: { span: 12 }
       }
     };
-    console.log(petForm);
-    debugger;
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>

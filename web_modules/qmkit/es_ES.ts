@@ -216,8 +216,9 @@ export default {
   "Product.Batchonshelves": "Batch on shelves",
   "Product.Batchoffshelves": "Batch off shelves",
   "Product.Batchdelete": "Batch delete",
-
-
+  "Product.DeleteConfirmTip": "Are you sure you want to delete this product?",
+  "Product.OffshelvesConfirmTip": "Are you sure you want off to shelves this product?",
+ 
 
   "Product.Pending": "Pending",
   "Product.Pendingreview": "Pending review",
@@ -245,13 +246,9 @@ export default {
   "Product.Relatedproduct": "Related product",
   "Product.SEOsetting": "SEO setting",
   "Product.Operationinstruction": `Operation instruction：
-
   1、Until filled all required fields, the product could be published.
-  
   2、 The product information tab, product price tab, product inventory tab must be filled before published.
-  
   3、If you do not need to set the related product or SEO, you can click 'Next' directly after editing the inventory information.`,
-
   "Product.InternalSPU": "Internal SPU",
   "Product.Subscriptionstatus": "Subscription status",
   "Product.Productcardintro": "Product card intro",
@@ -280,15 +277,10 @@ export default {
   "Product.Inventory Alert": "Inventory Alert",
 
   "Product.SEOsettingalert": `You can delete these fields, including { name }-Royal Canin, { name }, { subtitle }, { sales category }, { tagging }, { description }, but can not edit the field
-
     1、{ name } means the name of the product which enters in the product information tab page
-    
     2、{subtitle } means the subtitle of the product which enters in the product information tab page
-    
     3、{ sales category } means the sales category of the product which was chosen in the product information tab page
-    
     4、{ tagging } means the sales category of the product which was chosen in the product information
-    
     5、{description } means the description of the product which enters in the product information tab page`,
   "Product.MetaKeywords": "Meta Keywords",
   "Product.MetaDescription": "Meta Description",
@@ -324,6 +316,52 @@ export default {
   "Product.Categorydescription": "Category description",
   "Product.Categorydescriptionplaceholder": "Please input the product description",
 
+  "Product.Commoditylibraryimport":"Commodity library import",
+  "Product.Instructions":"Instructions",
+  "Product.Instructionstip":"The products imported from the commodity library are initially reviewed / off the shelf. Please add the information before selling them;",
+  "Product.Signedclassification":"Signed classification",
+  "Product.BatchImport":"Batch Import",
+  // "Product.Reviewmanagement":"Review management",
+  "Product.Reviewoverview":"Review overview shows the summary of review data in the past 180 days  ",
+  "Product.Ratingrule":"Rating rule",
+  "Product.ReviewOverallrating":"Overview：Overall rating   -    Shopping rating   -    Purchase experience rating   -    Logistic rating   -",
+  "Product.Reviewlist":"Review list",
+  "Product.Ordernumber":"Order number",
+  // "Product.Consumername":"Consumer name",
+  "Product.Productrating":"Product rating",
+  "Product.Anonymousstatus":"Anonymous status",
+  "Product.Reviewtime":"Review time",
+  "Product.Startdate":"Start date",
+  "Product.Enddate":"End date",
+  "Product.regular-product-shop":"regular-product-shop",
+  "Product.Replycomments":"Reply comments",
+  "Product.Enteruptocharacters":"Enter up to 500 characters",
+
+  'Product.Productimport':'Product import',
+  'Product.OperationDescription':'Operation Description',
+  'Product.OperationDescription-1':'1、Please download the product import template first, and input the product data according to the requirements in the annotation. Failure to input the requirements will cause the product import to fail.',
+  'Product.OperationDescription-2':'2、Please choose .xlsx or .xls file, the file size is ≤ 2M, only one file can be imported at a time, it is recommended that no more than 500 product data are imported at a time.',
+  'Product.Downloadproductimporttemplate':'Download product import template',
+  'Product.Uploaddata':'Upload data',
+  'Product.Finish':'Finish',
+  'Product.Thenextstep':'The next step',
+  'Product. import':'',
+  'Product. import':'',
+  'Product. import':'',
+  'Product. import':'',
+  'Product. import':'',
+  'Product. import':'',
+
+
+
+
+
+
+
+
+
+
+
 
   "Product.Productcategorydesc": "Product category is set by RC staff, you can associate attribute to product category.",
   "Product.Categoryimages": "Category images",
@@ -339,7 +377,7 @@ export default {
   "Product.Choosetype": "Choose type",
   "Product.Singlechoice": "Single choice",
   "Product.Multiplechoice": "Multiple choice",
-
+  
   "Product.FilterSortsetting": "Filter & Sort setting",
   "Product.FilterSortsettingdesc": `
   1. Filter attributes can be chosen from attributes, which are associated with product category
@@ -547,6 +585,15 @@ export default {
 
   /*-----------------------------  Setting  ----------------------------------------*/
 
+  /*-----------------------------  Fetch  ----------------------------------------*/
+  'Fetch.Timeout': 'Service  timeout , try again later',
+  'Fetch.Notfind': 'Request interface failed or interface does not exist, please check it',
+  'Fetch.notificationPopTitle':'System Notification',
+  'Fetch.K-000005':'Your account is disabled',
+  'Fetch.K-000002':'Login expired',
+  'Fetch.K-000015':'Failed to obtain authorization',
+  'Fetch.MethodNotAllowed':'You do not have permission to access this feature',
+  'Fetch.500-502-503':'System is deploying, if it does not recovery after 10 mins, please contact the administrator.',
 
 
 

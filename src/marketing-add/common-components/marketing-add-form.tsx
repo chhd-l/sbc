@@ -47,7 +47,11 @@ const largeformItemLayout = {
     span: 10
   }
 };
-
+const radioStyle = {
+  display: 'block',
+  height: '40px',
+  lineHeight: '40px'
+};
 export default class MarketingAddForm extends React.Component<any, any> {
   props;
 
@@ -144,7 +148,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
     const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked } = this.state;
-    let settingLabel = 'setting rules';
+    let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
@@ -314,64 +318,154 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 initialValue: 1
               })(
                 <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                  <Radio value={1}>Direct discount</Radio>
+                  <Radio style={radioStyle} value={2}>
+                    Direct discount
+                  </Radio>
                 </RadioGroup>
               )}
             </FormItem>
           </>
         )}
-        {marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION ? (
-          <div className="bold-title">Reduction type:</div>
-        ) : marketingType === Enum.MARKETING_TYPE.FULL_GIFT ? (
-          <div className="bold-title">Gift type:</div>
-        ) : marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT ? (
-          <div className="bold-title">Discount type:</div>
-        ) : null}
-        {marketingType === Enum.MARKETING_TYPE.FULL_GIFT && <div className="bold-title">Gift type:</div>}
-        {isFullCount != null && marketingType !== Enum.MARKETING_TYPE.FIRST_DISCOUNT && (
-          <FormItem {...formItemLayout} label={`full ${Enum.GET_MARKETING_STRING(marketingType)} type`} labelAlign="left">
-            {getFieldDecorator('subType', {
-              rules: [
-                {
-                  required: true,
-                  message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
-                }
-              ],
-              initialValue: isFullCount
-            })(
-              <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                {marketingType === Enum.MARKETING_TYPE.FULL_GIFT && <Radio value={2}>Direct gift</Radio>}
-                {marketingType === Enum.MARKETING_TYPE.FULL_GIFT && this.state.PromotionTypeValue === 1 && (
-                  <Radio value={3}>
-                    For <Input /> refill
-                  </Radio>
-                )}
-                {marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION && (
-                  <Radio value={3}>
-                    Direct reduction&nbsp;&nbsp;
-                    <Input
-                      style={{ width: 200 }}
-                      // placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
-                    />
-                    &nbsp;&nbsp; $
-                  </Radio>
-                )}
 
-                {marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT && (
-                  <Radio value={3}>
-                    Direct discount &nbsp;&nbsp;
-                    <Input
-                      style={{ width: 200 }}
-                      // placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
-                    />
+        {marketingType === Enum.MARKETING_TYPE.FULL_GIFT && (
+          <>
+            <div className="bold-title">Gift type:</div>
+            <FormItem {...formItemLayout} labelAlign="left">
+              {getFieldDecorator('subType', {
+                // rules: [
+                //   {
+                //     required: true,
+                //     message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
+                //   }
+                // ],
+                initialValue: 1
+              })(
+                <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
+                  <Radio style={radioStyle} value={2}>
+                    Direct gift
                   </Radio>
-                )}
-                {this.state.PromotionTypeValue === 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : null}
-                {this.state.PromotionTypeValue === 0 ? <Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : null}
-              </RadioGroup>
-            )}
-          </FormItem>
+                  {this.state.PromotionTypeValue === 1 && (
+                    <Radio value={3} style={radioStyle}>
+                      For <Input /> refill
+                    </Radio>
+                  )}
+                  {this.state.PromotionTypeValue === 0 && (
+                    <Radio value={0} style={radioStyle}>
+                      Full amount gift
+                    </Radio>
+                  )}
+                  {this.state.PromotionTypeValue === 0 && (
+                    <Radio value={1} style={radioStyle}>
+                      Full quantity gift{' '}
+                    </Radio>
+                  )}
+                  {/*{this.state.PromotionTypeValue === 0 && <Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>}*/}
+                </RadioGroup>
+              )}
+            </FormItem>
+          </>
         )}
+
+        {marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT && (
+          <>
+            <div className="bold-title">Discount type:</div>
+            <FormItem {...formItemLayout} labelAlign="left">
+              {getFieldDecorator('subType', {
+                // rules: [
+                //   {
+                //     required: true,
+                //     message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
+                //   }
+                // ],
+                initialValue: 1
+              })(
+                <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
+                  <Radio style={radioStyle} value={2}>
+                    Direct discount
+                  </Radio>
+                  <Radio value={0} style={radioStyle}>
+                    Full amount discount
+                  </Radio>
+                  <Radio value={1} style={radioStyle}>
+                    Full quantity discount{' '}
+                  </Radio>
+                  {/*{this.state.PromotionTypeValue === 0 && <Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>}*/}
+                </RadioGroup>
+              )}
+            </FormItem>
+          </>
+        )}
+
+        {marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION && (
+          <>
+            <div className="bold-title">Reduction type:</div>
+            <FormItem {...formItemLayout} labelAlign="left">
+              {getFieldDecorator('subType', {
+                // rules: [
+                //   {
+                //     required: true,
+                //     message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
+                //   }
+                // ],
+                initialValue: 1
+              })(
+                <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
+                  <Radio style={radioStyle} value={2}>
+                    Direct reduction
+                  </Radio>
+                  {this.state.PromotionTypeValue === 0 && (
+                    <Radio value={0} style={radioStyle}>
+                      Full amount reduction
+                    </Radio>
+                  )}
+                  {this.state.PromotionTypeValue === 0 && (
+                    <Radio value={1} style={radioStyle}>
+                      Full quantity reduction{' '}
+                    </Radio>
+                  )}
+                  {/*{this.state.PromotionTypeValue === 0 && <Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>}*/}
+                </RadioGroup>
+              )}
+            </FormItem>
+          </>
+        )}
+        {/*{isFullCount != null && marketingType !== Enum.MARKETING_TYPE.FIRST_DISCOUNT &&  marketingType !== Enum.MARKETING_TYPE.FULL_GIFT && (*/}
+        {/*  <FormItem {...formItemLayout} label={`full ${Enum.GET_MARKETING_STRING(marketingType)} type`} labelAlign="left">*/}
+        {/*    {getFieldDecorator('subType', {*/}
+        {/*      rules: [*/}
+        {/*        {*/}
+        {/*          required: true,*/}
+        {/*          message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`*/}
+        {/*        }*/}
+        {/*      ],*/}
+        {/*      initialValue: isFullCount*/}
+        {/*    })(*/}
+        {/*      <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>*/}
+
+        {/*        {marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION && (*/}
+        {/*          <Radio value={3}>*/}
+        {/*            Direct reduction&nbsp;&nbsp;*/}
+        {/*            <Input*/}
+        {/*              style={{ width: 200 }}*/}
+        {/*              // placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}*/}
+        {/*            />*/}
+        {/*            &nbsp;&nbsp; $*/}
+        {/*          </Radio>*/}
+        {/*        )}*/}
+
+        {/*        {marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT && (*/}
+        {/*          <Radio value={3}>*/}
+        {/*            Direct discount &nbsp;&nbsp;*/}
+        {/*            <Input*/}
+        {/*              style={{ width: 200 }}*/}
+        {/*              // placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}*/}
+        {/*            />*/}
+        {/*          </Radio>*/}
+        {/*        )}*/}
+        {/*      </RadioGroup>*/}
+        {/*    )}*/}
+        {/*  </FormItem>*/}
+        {/*)}*/}
         {isFullCount != null && marketingType !== Enum.MARKETING_TYPE.FIRST_DISCOUNT && (
           <FormItem {...settingRuleFrom} label={settingLabel} required={true} labelAlign="left">
             {marketingType == Enum.MARKETING_TYPE.FULL_GIFT &&

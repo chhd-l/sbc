@@ -163,3 +163,12 @@ export const checkFunctionAuth = (urlPath: string, requestType: string) => {
     })
   });
 };
+
+export function getSubscriptionPlanTypes() {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'SubscriptionPlanType'
+    })
+  });
+}

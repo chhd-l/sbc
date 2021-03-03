@@ -1,4 +1,4 @@
-import { Fetch } from 'qmkit';
+import { Fetch, cache } from 'qmkit';
 
 type TResult = {
   code: string;
@@ -20,7 +20,7 @@ export function queryClinicsDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function getBasicDetails(id = null) {
-  return Fetch<TResult>('/customer/detail/' + id, {
+  return Fetch<TResult>('/customer/detail2/' + id, {
     method: 'Get'
   });
 }
@@ -83,6 +83,19 @@ export function getAddressListByType(id = null, type = '') {
 export function delAddress(id = null) {
   return Fetch<TResult>('/customer/address/' + id, {
     method: 'DELETE'
+  });
+}
+
+/**
+ * 新增客户地址
+ * @param filterParams
+ */
+export function addAddress(filterParams = {}) {
+  return Fetch<TResult>('/customer/address', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
   });
 }
 
@@ -208,6 +221,32 @@ export function queryCityListByName(filterParams = {}) {
   });
 }
 
+export function getFeedbackByCustomerId(customerId) {
+  return Fetch<TResult>('/customer/feedback/getByCustomerId', {
+    method: 'POST',
+    body: JSON.stringify({
+      customerId
+    })
+  });
+}
+
+export function saveFeedback(params = {}) {
+  return Fetch<TResult>('/customer/feedback/save', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+export function setTagging(params = {}) {
+  return Fetch<TResult>('/customer/segment/segment/segmentRelation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || 0
+    })
+  });
+}
+
 // import axios from '@/utils/request'
 // import { register } from '../serviceWorker'
 
@@ -320,4 +359,3 @@ export function bindTagging(filterParams = {}) {
     })
   });
 }
-

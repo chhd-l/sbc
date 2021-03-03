@@ -32,7 +32,9 @@ export default {
   'Public.YourclientID':'Your client ID is specified on your Royal Canin invoice. It can be an e-mail address or a client number',
   'Public.Proceed':'Proceed',
   'Public.Passwordcannotbeempty':'Password cannot be empty',
-
+  'Public.save':'save',
+  'Public.cancel':'cancel',
+  'Public.more':'more',
 
 
   /*-----------------------------  Menu -----------------------------------------------*/
@@ -55,7 +57,6 @@ export default {
   'Menu.Product sales setting':'Product sales setting',
   'Menu.Review management':'Review management',
 
-
   'Menu.Order':'Order',
   'Menu.Sales order':'Sales order',
   'Menu.Order list(Prescriber)':'Order list(Prescriber)',
@@ -72,18 +73,15 @@ export default {
   'Menu.积分订单':'积分订单 ',
   'Menu.External order':'External order',
 
-
   'Menu.Task':'Task',
   'Menu.Task Management':'Task Management',
   'Menu.Task board':'Task board',
-
 
   'Menu.Subscription':'Subscription',
   'Menu.Subscription Manage':'Subscription Manage',
   'Menu.Subscription List':'Subscription List',
   'Menu.Subscription setting':'Subscription setting',
   'Menu.Subscription Plan':'Subscription Plan',
-
 
   'Menu.Pet owner':'Pet owner',
   'Menu.Pet owner management':'Pet owner management',
@@ -93,7 +91,6 @@ export default {
   'Menu.Pet owner list(Prescriber)':'Pet owner list(Prescriber)',
   'Menu.企业会员':'企业会员',
 
-
   'Menu.Finance':'Finance',
   'Menu.Finance management':'Finance management',
   'Menu.Finance reconciliation':'Finance reconciliation',
@@ -102,7 +99,6 @@ export default {
   'Menu.Reward List':'Reward List',
   'Menu.Invoice':'Invoice',
   'Menu.Invoice list':'Invoice list',
-
 
   'Menu.Marketing':'Marketing',
   'Menu.Marketing Settings':'Marketing Settings',
@@ -119,11 +115,9 @@ export default {
   'Menu.Product Finder List':'Product Finder List',
   'Menu.Prescriber recommendation':'Prescriber recommendation',
 
-
   'Menu.Prescriber':'Prescriber',
   'Menu.Prescriber List':'Prescriber List',
   'Menu.Prescriber Type':'Prescriber Type',
-
 
   'Menu.Analysis':'Analysis',
   'Menu.Statistics Report':'Statistics Report',
@@ -131,11 +125,9 @@ export default {
   'Menu.Traffic report':'Traffic report',
   'Menu.Transaction report':'Transaction report',
 
-
   'Menu.Content':'Content',
   'Menu.Front Navigation':'Front Navigation',
   'Menu.Navigation list':'Navigation list',
-
 
   'Menu.Setting':'Setting',
   'Menu.Store setting':'Store setting',
@@ -345,23 +337,6 @@ export default {
   'Product.Uploaddata':'Upload data',
   'Product.Finish':'Finish',
   'Product.Thenextstep':'The next step',
-  'Product. import':'',
-  'Product. import':'',
-  'Product. import':'',
-  'Product. import':'',
-  'Product. import':'',
-  'Product. import':'',
-
-
-
-
-
-
-
-
-
-
-
 
   "Product.Productcategorydesc": "Product category is set by RC staff, you can associate attribute to product category.",
   "Product.Categoryimages": "Category images",
@@ -404,7 +379,6 @@ export default {
   "Product.SearchNumber": "Search No.",
   "Product.SearchTime": "Search Time",
   "Product.ConsumerType": "Consumer Type",
-  "Product.ConsumerAccount": "Consumer Account",
   "Product.ConsumerName": "Consumer Name",
   "Product.Back": "Back",
 
@@ -565,7 +539,84 @@ export default {
   'Order.Refresh': 'Refresh',
   'Order.Confirm': 'Confirm',
   'Order.PetOwner': 'Pet Owner',
-  'Order.OrderNumber': 'Order Number',
+  'Order.orderList': 'Order list',
+  'Order.orderNumber': 'Order number',
+  'Order.subscriptioNumber': 'Subscription number',
+  'Order.shippingStatus': 'Shipping status',
+  'Order.paymentStatus': 'Payment status',
+  'Order.orderStatus': 'Order status',
+  'Order.orderSource': 'Order source',
+  'Order.startDate': 'Start date',
+  'Order.endDate': 'End date',
+  'Order.bulkOperations': 'Bulk operations',
+  'Order.pendingReview': 'Pending review',
+  'Order.toBeFormed': 'To be formed',
+  'Order.notShipped': 'not shipped',
+  'Order.toBeDelivered': 'To be delivered',
+  'Order.toBeReceived': 'To be received',
+  'Order.paid': 'Paid',
+  'Order.unpaid': 'Unpaid',
+  'Order.toBeConfirmed': 'To be confirmed',
+  'Order.received': 'Received',
+  'Order.confirmReceipt': 'Confirm receipt',
+  'Order.completed': 'Completed',
+  'Order.outOfDate': 'Out of date',
+  'Order.ship': 'Ship',
+  'Order.allShipments': 'All shipments',
+  'Order.partialShipment': 'Partial shipment',
+  'Order.invalid': 'Invalid',
+  'Order.unknown': 'Unknown',
+  'Order.seeDetails': 'See details',
+  'Order.PCOrder': 'PC order',
+  'Order.H5Order': 'H5 order',
+  'Order.AppOrder': 'APP order',
+  'Order.miniProgramOrder': 'Mini Program order',
+  'Order.rejectionReasonTip': 'Please enter the reason for rejection',
+  'Order.100charactersLimitTip': 'Please input less than 100 characters',
+  'Order.valetOrder': 'Valet order',
+  'Order.fightTogether': 'Fight together',
+  'Order.audit': 'Audit',
+  'Order.turnDown': 'Turn down',
+  'Order.review': 'Review',
+  'Order.confirmReceivedAllProducts':
+    'Confirm that all products have been received?',
+  'Order.confirmReview':
+    'Are you sure you want to return the selected order for reconsideration?',
+  'Order.confirmAudit': 'Confirm to review the selected order?',
+  'Order.exportFilterOrder': 'Export filtered orders',
+  'Order.exportSelectedOrder': 'Export selected order',
+  'Order.pleaseSelectOrderToOperate':
+    'Please select the order that needs to be operated',
+  'Order.batchReview': 'Batch review',
+  'Order.batchExport': 'Batch export',
+  'Order.editOrder': 'Edit order',
+  'Order.mustSelectAMember': 'Must select a member',
+  'Order.noAddressAvailable':
+    'No address available, please input temporary address',
+  'Order.mustChooseAShippingAddress': 'Must choose a shipping address',
+  'Order.pleaseSelectProvinceOrCityOrDistrict':
+    'Please select province/city/district',
+  'Order.inputDetailAddressTip1': 'Please input the detailed address',
+  'Order.inputDetailAddressTip2':
+    'Detailed address length must be between 5-60 characters',
+  'Order.inputReceiverTip': 'Please input the receiver',
+  'Order.uploadValidateTip':
+    'Supported picture formats: jpg, jpeg, png, gif, file size no more than 5M, maximum upload 10',
+  'Order.uploadValidateTip2': 'Image size cannot exceed 5MB',
+  'Order.orderPriceChange': 'Order price change',
+  'Order.deliveryInformation': 'Delivery information',
+  'Order.receiver': 'Receiver',
+  'Order.phoneNumber': 'Phone number',
+  'Order.defaultAddress': 'Default address',
+  'Order.area': 'Area',
+  'Order.detailAddress': 'Detail address',
+  'Order.phoneNumber2': 'Phone number',
+  'Order.inputPhoneNumberTip': 'Please enter the phone number',
+  'Order.inputPhoneNumberTip2': 'Please enter the correct phone number',
+
+
+
+
 
   /*-----------------------------  Task  ----------------------------------------------*/
 
@@ -611,7 +662,7 @@ export default {
   inputPhoneNumberTip: 'Please enter the phone number',
   inputPhoneNumberTip2: 'Please enter the correct phone number',
   more: 'More',
-  receiver: 'Receiver',
+
   defaultAddress: 'Default address',
   phoneNumber2: 'Phone number',
   piece: 'Piece',
@@ -935,8 +986,8 @@ export default {
   orderNumber: '   Order number  ',
   payWay: 'Pay Way',
   consumer: 'Consumer',
-  consumerAccount: 'Consumer account',
-  consumerInfo: 'Consumer information',
+
+
   orderTime: 'Order time',
   skuCode: 'SKU code',
   spuCode: 'SPU code',
@@ -967,7 +1018,6 @@ export default {
   invoiceReceivingAddress: 'Invoice receiving address',
   deliveryMethod: 'Delivery method',
   expressDelivery: 'Express delivery',
-  deliveryInformation: 'delivery information',
   confirm: 'Confirm',
   productFirstLetterUpperCase: 'Product',
   recipient: 'Recipient',
@@ -976,71 +1026,7 @@ export default {
   cateImage: 'Category image',
   cateDsc: 'Category description',
 
-  'order.orderList': 'Order list',
-  'order.orderNumber': 'Order number',
-  'order.subscriptioNumber': 'Subscription number',
-  'order.shippingStatus': 'Shipping status',
-  'order.paymentStatus': 'Payment status',
-  'order.orderStatus': 'Order status',
-  'order.orderSource': 'Order source',
-  'order.startDate': 'Start date',
-  'order.endDate': 'End date',
-  'order.bulkOperations': 'Bulk operations',
-  'order.pendingReview': 'Pending review',
-  'order.toBeFormed': 'To be formed',
-  'order.notShipped': 'not shipped',
-  'order.toBeDelivered': 'To be delivered',
-  'order.toBeReceived': 'To be received',
-  'order.paid': 'Paid',
-  'order.unpaid': 'Unpaid',
-  'order.toBeConfirmed': 'To be confirmed',
-  'order.received': 'Received',
-  'order.confirmReceipt': 'Confirm receipt',
-  'order.completed': 'Completed',
-  'order.outOfDate': 'Out of date',
-  'order.ship': 'Ship',
-  'order.allShipments': 'All shipments',
-  'order.partialShipment': 'Partial shipment',
-  'order.invalid': 'Invalid',
-  'order.unknown': 'Unknown',
-  'order.seeDetails': 'See details',
-  'order.PCOrder': 'PC order',
-  'order.H5Order': 'H5 order',
-  'order.AppOrder': 'APP order',
-  'order.miniProgramOrder': 'Mini Program order',
-  'order.rejectionReasonTip': 'Please enter the reason for rejection',
-  'order.100charactersLimitTip': 'Please input less than 100 characters',
-  'order.valetOrder': 'Valet order',
-  'order.fightTogether': 'Fight together',
-  'order.audit': 'Audit',
-  'order.turnDown': 'Turn down',
-  'order.review': 'Review',
-  'order.confirmReceivedAllProducts':
-    'Confirm that all products have been received?',
-  'order.confirmReview':
-    'Are you sure you want to return the selected order for reconsideration?',
-  'order.confirmAudit': 'Confirm to review the selected order?',
-  'order.exportFilterOrder': 'Export filtered orders',
-  'order.exportSelectedOrder': 'Export selected order',
-  'order.pleaseSelectOrderToOperate':
-    'Please select the order that needs to be operated',
-  'order.batchReview': 'Batch review',
-  'order.batchExport': 'Batch export',
-  'order.editOrder': 'Edit order',
-  'order.mustSelectAMember': 'Must select a member',
-  'order.noAddressAvailable':
-    'No address available, please input temporary address',
-  'order.mustChooseAShippingAddress': 'Must choose a shipping address',
-  'order.pleaseSelectProvinceOrCityOrDistrict':
-    'Please select province/city/district',
-  'order.inputDetailAddressTip1': 'Please input the detailed address',
-  'order.inputDetailAddressTip2':
-    'Detailed address length must be between 5-60 characters',
-  'order.inputReceiverTip': 'Please input the receiver',
-  'order.uploadValidateTip':
-    'Supported picture formats: jpg, jpeg, png, gif, file size no more than 5M, maximum upload 10',
-  'order.uploadValidateTip2': 'Image size cannot exceed 5MB',
-  'order.orderPriceChange': 'Order price change',
+
 
   'invoice.invoiceInformation': 'Invoice information',
   'invoice.noInvoiceRequired': 'No invoice required',
@@ -1335,7 +1321,6 @@ export default {
   'subscription.sub': 'Sub-',
   'subscription.operation': 'Operation',
   'subscription.subscriptionDate': 'Subscription date',
-  items: 'Items',
   petCategory: 'Pet Category',
   petName: 'Pet Name',
   gender: 'Gender',
@@ -1354,7 +1339,6 @@ export default {
   star: 'star',
   yes: 'Yes',
   no: 'No',
-  description: '',
   reviewTip:
     'Review overview shows the summary of review data in the past 180 days',
   ratingRule: 'Rating rule',
@@ -1408,5 +1392,4 @@ export default {
   footerConfig:'Footer Config',
   seoSetting: 'SEO Setting',
   siteMap: 'Site map',
-  export: 'Export'
 };

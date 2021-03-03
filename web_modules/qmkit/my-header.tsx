@@ -1,6 +1,6 @@
 import React from 'react';
 //import { Link } from 'react-router-dom';
-import { Layout, Menu, Dropdown, Icon, message, Button, Select } from 'antd';
+import { Layout, Menu, Dropdown, Icon, message, Button, Select, notification } from 'antd';
 const { Header } = Layout;
 import { history, cache, util } from 'qmkit';
 import QRCode from 'qrcode';
@@ -249,7 +249,12 @@ export default class MyHeader extends React.Component {
 
   languageChange = (value) => {
     sessionStorage.setItem(cache.LANGUAGE, value);
+
     history.go(0)
+
+    notification['info']({
+      message: 'Language switching, please wait...',
+    });
   };
 
 }

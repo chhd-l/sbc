@@ -892,7 +892,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   style={styles.pr20}
                   className="iconfont iconaudit"
                 >
-                  {/*<FormattedMessage id="order.audit" />*/}
+                  {/*<FormattedMessage id="Order.audit" />*/}
                 </a>
               </Tooltip>
             </AuthWrapper>
@@ -902,7 +902,7 @@ class OrderDetailTab extends React.Component<any, any> {
             <AuthWrapper functionName="fOrderList002_prescriber">
               <Tooltip placement="top" title="Reject">
                 <a onClick={() => showRejectModal()} href="javascript:void(0)" style={styles.pr20} className="iconfont iconbtn-cancelall">
-                  {/*<FormattedMessage id="order.turnDown" />*/}
+                  {/*<FormattedMessage id="Order.turnDown" />*/}
                 </a>
               </Tooltip>
             </AuthWrapper>

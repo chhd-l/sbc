@@ -254,10 +254,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option value="orderNumber">
-          <FormattedMessage id="order.orderNumber" />
+          <FormattedMessage id="Order.orderNumber" />
         </Option>
         <Option value="subscriptioNumber">
-          <FormattedMessage id="order.subscriptioNumber" />
+          <FormattedMessage id="Order.subscriptioNumber" />
         </Option>
       </Select>
     );
@@ -275,10 +275,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option value="paymentStatus">
-          <FormattedMessage id="order.paymentStatus" />
+          <FormattedMessage id="Order.paymentStatus" />
         </Option>
         <Option value="shippingStatus">
-          <FormattedMessage id="order.shippingStatus" />
+          <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
     );
@@ -302,8 +302,8 @@ export default class SearchHead extends Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: <FormattedMessage id="Order.audit" />,
+      content: <FormattedMessage id="Order.confirmAudit" />,
       onOk() {
         onBatchAudit();
       },

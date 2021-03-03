@@ -195,11 +195,20 @@ class ValidationSetting extends Component<any, any> {
                     <Col span={8} key={item.id}>
                       {+item.isCustom ? (
                         <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-                          <div style={{ textAlign: 'center' }}>
-                            <i className="icon iconfont iconSetting" style={{ color: '#e2001a', fontSize: 60 }}></i>
+                          <div style={{ textAlign: 'center', margin: '12px 0' }}>
+                            <h1
+                              style={{
+                                fontSize: 30,
+                                fontWeight: 'bold',
+                                color: '#e2001a'
+                              }}
+                            >
+                              FGS
+                            </h1>
+                            <p>Set up your own rule</p>
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
-                            <Popconfirm title={'Are you sure to enable this?'} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                            <Popconfirm title={'Are you sure to enable this?'} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
                               <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                             </Popconfirm>
                           </div>
@@ -210,7 +219,7 @@ class ValidationSetting extends Component<any, any> {
                             <img src={item.imgUrl} style={{ width: '200px', height: '90px' }} />
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
-                            <Popconfirm title={'Are you sure to enable this?'} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                            <Popconfirm title={'Are you sure to enable this?'} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
                               <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                             </Popconfirm>
                             {item.isOpen ? (

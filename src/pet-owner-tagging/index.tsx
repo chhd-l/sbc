@@ -16,7 +16,7 @@ class PetOwnerTagging extends Component<any, any> {
       title: 'Pet owner tagging',
       searchForm: {
         taggingName: '',
-        tagDescription: ''
+        taggingType: null
       },
       pagination: {
         current: 1,
@@ -26,7 +26,7 @@ class PetOwnerTagging extends Component<any, any> {
       taggingForm: {
         taggingName: '',
         taggingDescription: '',
-        taggingType: 'pet'
+        taggingType: 0
       },
       taggingList: [],
       loading: false
@@ -65,6 +65,11 @@ class PetOwnerTagging extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'Operation successful');
+          this.setState({
+            visible: false,
+            loading: false
+          })
+          
           this.getTaggingList();
           this.props.form.resetFields();
         }
@@ -134,7 +139,7 @@ class PetOwnerTagging extends Component<any, any> {
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize,
       name: searchForm.taggingName,
-      segementType: searchForm.taggingType
+      segmentType: searchForm.taggingType
     };
     this.setState({
       loading: true
@@ -171,7 +176,7 @@ class PetOwnerTagging extends Component<any, any> {
     let taggingForm = {
       taggingName: '',
       taggingDescription: '',
-      taggingType: 'pet'
+      taggingType: 0
     };
     this.setState({
       modalName: 'Add new tagging',
@@ -183,9 +188,9 @@ class PetOwnerTagging extends Component<any, any> {
   };
   openEditPage = (row) => {
     let taggingForm = {
-      taggingName: row.taggingName,
-      taggingType: row.taggingType,
-      taggingDescription: row.taggingDescription
+      taggingName: row.name,
+      taggingType: row.segmentType,
+      taggingDescription: row.description
     };
     this.setState({
       modalName: 'Edit tagging',
@@ -201,9 +206,9 @@ class PetOwnerTagging extends Component<any, any> {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let params = {
-          taggingName: taggingForm.taggingName,
-          taggingType: taggingForm.taggingType,
-          taggingDescription: taggingForm.taggingDescription
+          name: taggingForm.taggingName,
+          segmentType: taggingForm.taggingType,
+          description: taggingForm.taggingDescription
         };
         if (isEdit) {
           params = Object.assign(params, {
@@ -261,7 +266,7 @@ class PetOwnerTagging extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, taggingList, pagination, taggingForm, modalName, visible } = this.state;
+    const { loading, title, taggingList, pagination, taggingForm, modalName, visible,isEdit } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -291,15 +296,18 @@ class PetOwnerTagging extends Component<any, any> {
       },
       {
         title: 'Tagging type',
-        dataIndex: 'type',
-        key: 'type',
-        width: '15%'
+        dataIndex: 'segmentType',
+        key: 'segmentType',
+        width: '15%',
+        render:(text) =>(
+          <p>{+text?'Pet':'Pet owner'}</p>
+        )
       },
 
       {
         title: 'Count',
-        dataIndex: 'petOwner',
-        key: 'count',
+        dataIndex: 'customerNum',
+        key: 'customerNum',
         width: '10%'
       },
 
@@ -367,8 +375,9 @@ class PetOwnerTagging extends Component<any, any> {
                             });
                           }}
                         >
-                          <Option value={'pet'}>Pet</Option>
-                          <Option value={'petOwner'}>Pet owner</Option>
+                          <Option value={null}>All</Option>
+                          <Option value={0}>Pet owner</Option>
+                          <Option value={1}>Pet</Option>
                         </Select>
                       </InputGroup>
                     </FormItem>
@@ -475,6 +484,7 @@ class PetOwnerTagging extends Component<any, any> {
                     initialValue: taggingForm.taggingType
                   })(
                     <Radio.Group
+                      disabled={isEdit}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onTaggingFormChange({
@@ -483,8 +493,8 @@ class PetOwnerTagging extends Component<any, any> {
                         });
                       }}
                     >
-                      <Radio value={'pet'}>Pet</Radio>
-                      <Radio value={'petOwner'}>Pet owner</Radio>
+                      <Radio value={0}>Pet owner</Radio>
+                      <Radio value={1}>Pet</Radio>
                     </Radio.Group>
                   )}
                 </FormItem>

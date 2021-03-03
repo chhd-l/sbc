@@ -552,13 +552,6 @@
       "unicode_decimal": 58962
     },
     {
-      "icon_id": "14259892",
-      "name": "编组 8",
-      "font_class": "bianzusort",
-      "unicode": "e653",
-      "unicode_decimal": 58963
-    },
-    {
       "icon_id": "14259894",
       "name": "编组 9",
       "font_class": "bianzu9",
@@ -984,6 +977,13 @@
       "font_class": "iconfontzhizuobiaozhun13",
       "unicode": "e69a",
       "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "20157237",
+      "name": "编组 8",
+      "font_class": "bianzusort",
+      "unicode": "e88c",
+      "unicode_decimal": 59532
     },
     {
       "icon_id": "8062961",

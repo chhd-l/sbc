@@ -35,6 +35,10 @@ export default {
   'Public.save':'save',
   'Public.cancel':'cancel',
   'Public.more':'more',
+  'Public.all':'all',
+  'Public.Search':'Search',
+
+
 
 
   /*-----------------------------  Menu -----------------------------------------------*/
@@ -632,6 +636,7 @@ export default {
   'Order.invoiceHeaderValidateTip2':
     'Invoice header can enter up to 50 characters',
   'Order.taxpayerIdentificationNumber': 'Taxpayer Identification Number',
+  'Order.taxpayerIdentificationNumber': 'Taxpayer Identification Number',
   'Order.taxpayerIdentificationNumberValidateTip':
     'Please enter the correct taxpayer identification number and must be 15-20 characters',
   'Order.taxpayerIdentificationNumberValidateTip2':
@@ -647,8 +652,10 @@ export default {
   'Order.address': 'Address',
   'Order.fillInTheRemarks': 'Fill in the remarks',
   'Order.enterUpTo100Characters': 'Enter up to 100 characters',
-
-
+  'Order.skuCode': 'SKU code',
+  'Order.spuCode': 'SPU code',
+  'Order.brand': 'Brand',
+  'Order.catogery': 'Catogery',
 
 
 

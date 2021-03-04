@@ -5,9 +5,9 @@ import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-import { Const, Headline, history } from 'qmkit';
+import { Const, Headline, history, cache } from 'qmkit';
 import _ from 'lodash';
-import { getCountryList, getCityList } from './webapi';
+import { getCountryList, getStateList, getCityList } from './webapi';
 
 const { TextArea } = Input;
 
@@ -26,8 +26,10 @@ class BasicEdit extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '',
       customer: {},
       countryList: [],
+      stateList: [],
       cityList: [],
       currentBirthDay: '2020-01-01',
       clinicList: [],
@@ -46,9 +48,11 @@ class BasicEdit extends React.Component<any, any> {
 
   getDict = async () => {
     const countryList = await getCountryList();
+    const stateList = await getStateList();
     const cityList = await getCityList();
     this.setState({
       countryList: countryList,
+      stateList: stateList,
       cityList: cityList
     });
   };
@@ -239,7 +243,7 @@ class BasicEdit extends React.Component<any, any> {
   };
 
   render() {
-    const { customer, countryList, cityList, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
+    const { customer, countryList, stateList, cityList, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
     const options = [
       {
         label: 'Phone',
@@ -358,7 +362,7 @@ class BasicEdit extends React.Component<any, any> {
                   <FormItem label="Country">
                     {getFieldDecorator('countryId', {
                       initialValue: customer.country,
-                      rules: [{ required: true, message: 'Please input Country!' }]
+                      rules: [{ required: true, message: 'Please select country!' }]
                     })(
                       <Select optionFilterProp="children">
                         {countryList.map((item) => (
@@ -370,6 +374,25 @@ class BasicEdit extends React.Component<any, any> {
                     )}
                   </FormItem>
                 </Col>
+
+                {this.state.storeId == 123457910 && (
+                  <Col span={12}>
+                    <FormItem label="State">
+                      {getFieldDecorator('province', {
+                        initialValue: customer.province,
+                        rules: [{ required: true, message: 'Please select state!' }]
+                      })(
+                        <Select showSearch>
+                          {stateList.map((item) => (
+                            <Option value={item.stateName} key={item.id}>
+                              {item.stateName}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                )}
 
                 <Col span={12}>
                   <FormItem label="City">

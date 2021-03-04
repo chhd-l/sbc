@@ -96,6 +96,7 @@ class PetItem extends React.Component<Iprop, any> {
             storeId: 123456858
           },
           customerPetsPropRelations: customerPetsPropRelations,
+          segmentIdList: fields.segmentIdList,
           storeId: 123456858,
           userId: this.state.pet.consumerAccount
         };
@@ -323,7 +324,7 @@ class PetItem extends React.Component<Iprop, any> {
                   </Col>
                   <Col span={12}>
                     <Form.Item label="Pet tagging">
-                      {getFieldDecorator('segmentList', {
+                      {getFieldDecorator('segmentIdList', {
                         initialValue: pet.segmentList ? pet.segmentList.map((v) => v.id) : []
                       })(
                         <Select mode="multiple">

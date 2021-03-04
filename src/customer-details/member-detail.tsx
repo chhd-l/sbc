@@ -351,6 +351,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                     </Card>
                   </Col>
                 ))}
+                {pets.length === 0 && (
+                  <div style={{ textAlign: 'center', padding: '10px 0' }}>
+                    <span>
+                      <FormattedMessage id="noData" />
+                    </span>
+                  </div>
+                )}
               </Row>
             </div>
             <div className="container">

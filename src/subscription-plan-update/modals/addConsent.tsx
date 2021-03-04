@@ -60,14 +60,14 @@ export default class addConsent extends Component<any, any> {
           });
           this.props.getAllConsent(res.context.consentVOList);
         } else {
-          message.error(res.message || 'Get Data Failed');
+          message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.GetDataFailed" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
+        message.error(err || <FormattedMessage id="SubscriptionPlanUpdate.GetDataFailed" />);
         this.setState({
           loading: false
         });
@@ -95,7 +95,7 @@ export default class addConsent extends Component<any, any> {
     const { visible, loading, consentList, selectedRowKeys } = this.state;
     const columns = [
       {
-        title: 'Consent title',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.ConsentTitle" />,
         dataIndex: 'consentTitle',
         key: 'consentTitle',
         render: (text) => {
@@ -104,27 +104,27 @@ export default class addConsent extends Component<any, any> {
         }
       },
       {
-        title: 'Consent Id',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.addConsent.ConsentId" />,
         dataIndex: 'consentId',
         key: 'consentId'
       },
       {
-        title: 'Consent code',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.addConsent.ConsentCode" />,
         dataIndex: 'consentCode',
         key: 'consentCode'
       },
       {
-        title: 'Consent type',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.addConsent.ConsentType" />,
         dataIndex: 'consentType',
         key: 'consentType'
       },
       {
-        title: 'Category',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.addConsent.Category" />,
         dataIndex: 'consentCategory',
         key: 'consentCategory'
       },
       {
-        title: 'Field type',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.addConsent.FieldType" />,
         dataIndex: 'filedType',
         key: 'filedType'
       }
@@ -135,21 +135,39 @@ export default class addConsent extends Component<any, any> {
     };
     return (
       <div>
-        <Modal className="addTargetProductModal" width="1100px" maskClosable={false} title="Add consents" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel} okText="Confirm" cancelText="Cancel">
+        <Modal
+          className="addTargetProductModal"
+          width="1100px"
+          maskClosable={false}
+          title={<FormattedMessage id="SubscriptionPlanUpdate.addConsent.AddConsents" />}
+          visible={visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          okText={<FormattedMessage id="SubscriptionPlanUpdate.addConsent.Confirm" />}
+          cancelText={<FormattedMessage id="SubscriptionPlanUpdate.addConsent.Cancel" />}
+        >
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
                 <FormItem>
                   <SelectGroup
-                    label={<p className="formLable">Category</p>}
+                    label={
+                      <p className="formLable">
+                        <FormattedMessage id="SubscriptionPlanUpdate.addConsent.Category" />
+                      </p>
+                    }
                     allowClear={true}
                     style={{ width: 280 }}
                     onChange={(value) => {
                       this.onFormFieldChange('consentCategory', value);
                     }}
                   >
-                    <Option value="Prescriber">Prescriber</Option>
-                    <Option value="Consumer">Consumer</Option>
+                    <Option value="Prescriber">
+                      <FormattedMessage id="SubscriptionPlanUpdate.addConsent.Prescriber" />
+                    </Option>
+                    <Option value="Consumer">
+                      <FormattedMessage id="SubscriptionPlanUpdate.addConsent.Consumer" />
+                    </Option>
                   </SelectGroup>
                 </FormItem>
               </Col>
@@ -157,15 +175,23 @@ export default class addConsent extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     allowClear={true}
-                    label={<p className="formLable">Field type</p>}
+                    label={
+                      <p className="formLable">
+                        <FormattedMessage id="SubscriptionPlanUpdate.addConsent.FieldType" />
+                      </p>
+                    }
                     style={{ width: 280 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormFieldChange('filedType', value);
                     }}
                   >
-                    <Option value="Optional">Optional</Option>
-                    <Option value="Required">Required</Option>
+                    <Option value="Optional">
+                      <FormattedMessage id="SubscriptionPlanUpdate.addConsent.Optional" />
+                    </Option>
+                    <Option value="Required">
+                      <FormattedMessage id="SubscriptionPlanUpdate.addConsent.Required" />
+                    </Option>
                   </SelectGroup>
                 </FormItem>
               </Col>
@@ -173,7 +199,11 @@ export default class addConsent extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     allowClear={true}
-                    label={<p className="formLable">Consent type</p>}
+                    label={
+                      <p className="formLable">
+                        <FormattedMessage id="SubscriptionPlanUpdate.addConsent.ConsentType" />
+                      </p>
+                    }
                     style={{ width: 280 }}
                     onChange={(value, index) => {
                       value = value === '' ? null : value;
@@ -181,15 +211,23 @@ export default class addConsent extends Component<any, any> {
                       this.onFormFieldChange('consentType', value);
                     }}
                   >
-                    <Option value="E-mail in">Email in</Option>
-                    <Option value="E-mail out">Email out</Option>
+                    <Option value="E-mail in">
+                      <FormattedMessage id="SubscriptionPlanUpdate.addConsent.EmailIn" />
+                    </Option>
+                    <Option value="E-mail out">
+                      <FormattedMessage id="SubscriptionPlanUpdate.addConsent.EmailOut" />
+                    </Option>
                   </SelectGroup>
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p className="formLable">Consent id</p>}
+                    addonBefore={
+                      <p className="formLable">
+                        <FormattedMessage id="SubscriptionPlanUpdate.addConsent.ConsentId" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormFieldChange('consentId', value);
@@ -200,7 +238,11 @@ export default class addConsent extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p className="formLable">Consent code</p>}
+                    addonBefore={
+                      <p className="formLable">
+                        <FormattedMessage id="SubscriptionPlanUpdate.addConsent.ConsentCode" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormFieldChange('consentCode', value);
@@ -211,7 +253,11 @@ export default class addConsent extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p className="formLable">Consent title</p>}
+                    addonBefore={
+                      <p className="formLable">
+                        <FormattedMessage id="SubscriptionPlanUpdate.addConsent.ConsentTitle" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormFieldChange('consentTitle', value);
@@ -232,7 +278,7 @@ export default class addConsent extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="product.search" />
+                      <FormattedMessage id="SubscriptionPlanUpdate.addConsent.search" />
                     </span>
                   </Button>
                 </FormItem>

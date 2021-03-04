@@ -61,21 +61,13 @@ export default class SearchForm extends React.Component<any, any> {
         <Form className="filter-content" layout="inline">
           <FormItem>
             <RangePicker
-              getCalendarContainer={() =>
-                document.getElementById('page-content')
-              }
+              getCalendarContainer={() => document.getElementById('page-content')}
               allowClear={false}
               format="YYYY-MM-DD"
               placeholder={['Start Time', 'End Time']}
               defaultPickerValue={[moment('2020-08-05'), moment('2020-08-05')]}
-              onChange={(date, dateString) =>
-                this._handleDateParams(date, dateString)
-              }
-              renderExtraFooter={() =>
-                pickErrorInfo != '' && (
-                  <span style={{ color: 'red' }}>{pickErrorInfo}</span>
-                )
-              }
+              onChange={(date, dateString) => this._handleDateParams(date, dateString)}
+              renderExtraFooter={() => pickErrorInfo != '' && <span style={{ color: 'red' }}>{pickErrorInfo}</span>}
               value={[beginTime, endTime]}
               open={pickOpen}
               onOpenChange={() => this.setState({ pickErrorInfo: '' })}
@@ -94,7 +86,7 @@ export default class SearchForm extends React.Component<any, any> {
               }}
             >
               <span>
-                <FormattedMessage id="search" />
+                <FormattedMessage id="FinanceManageCheck.search" />
               </span>
             </Button>
           </FormItem>
@@ -121,8 +113,7 @@ export default class SearchForm extends React.Component<any, any> {
     } else {
       this.setState({
         pickOpen: true,
-        pickErrorInfo:
-          'The start time and end time should be within three months'
+        pickErrorInfo: 'The start time and end time should be within three months'
       });
     }
   };

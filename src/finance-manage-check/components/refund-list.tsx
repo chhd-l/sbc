@@ -98,7 +98,7 @@ export default class RefundList extends React.Component<any, any> {
           pagination={false}
         >
           <Column
-            title="NO."
+            title={<FormattedMessage id="FinanceManageCheck.NO" />}
             dataIndex="index"
             key="index"
             width="50"
@@ -151,7 +151,7 @@ export default class RefundList extends React.Component<any, any> {
               return <span>{rowData.payItemAmountMap.UNIONPAY_B2B}</span>;
             }}
           /> */}
-          <Column title="Total revenue" dataIndex="totalAmount" key="totalAmount" />
+          <Column title={<FormattedMessage id="FinanceManageCheck.TotalRevenue" />} dataIndex="totalAmount" key="totalAmount" />
 
           {/*<Column
             title={<FormattedMessage id="balance" />}
@@ -191,14 +191,14 @@ export default class RefundList extends React.Component<any, any> {
           {/*/>*/}
           <Column title={payWay} dataIndex="totalAmount" key="supplierId" />
           <Column
-            title={<FormattedMessage id="operation" />}
+            title={<FormattedMessage id="FinanceManageCheck.Operation" />}
             dataIndex="operate"
             key="storeId"
             width="100"
             render={(_text, record: any, _index) => {
               return (
                 <AuthWrapper functionName="f_finance_manage_refund">
-                  <Tooltip placement="top" title="Details">
+                  <Tooltip placement="top" title={<FormattedMessage id="FinanceManageCheck.Details" />}>
                     <a
                       onClick={() =>
                         history.push({

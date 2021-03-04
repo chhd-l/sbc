@@ -42,11 +42,11 @@ export default class SubscriptionPlan extends Component<any, any> {
             typeList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error('Get plan type list failed!');
+          message.error(<FormattedMessage id="SubscriptionPlan.GetPlanFailed" />);
         }
       })
       .catch(() => {
-        message.error('Get plan type list failed!');
+        message.error(<FormattedMessage id="SubscriptionPlan.GetPlanFailed" />);
       });
   }
 
@@ -98,14 +98,14 @@ export default class SubscriptionPlan extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
+          message.error(res.message || <FormattedMessage id="SubscriptionPlan.GetDataFailed" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
+        message.error(err || <FormattedMessage id="SubscriptionPlan.GetDataFailed" />);
         this.setState({
           loading: false
         });
@@ -130,12 +130,12 @@ export default class SubscriptionPlan extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Update Data Failed');
+          message.error(res.message || <FormattedMessage id="SubscriptionPlan.UpdateDataFailed" />);
           this.setState({ loading: false });
         }
       })
       .catch((err) => {
-        message.error(err || 'Update Data Failed');
+        message.error(err || <FormattedMessage id="SubscriptionPlan.UpdateDataFailed" />);
         this.setState({
           loading: false
         });
@@ -146,50 +146,50 @@ export default class SubscriptionPlan extends Component<any, any> {
     const { title, typeList, subscriptionPlanList } = this.state;
     const columns = [
       {
-        title: 'Subscription Plan ID',
+        title: <FormattedMessage id="SubscriptionPlan.Table.SubscriptionPlanID" />,
         dataIndex: 'planId',
         key: 'planId',
         width: '18%'
       },
       {
-        title: 'Subscription Plan Name',
+        title: <FormattedMessage id="SubscriptionPlan.Table.SubscriptionPlanName" />,
         dataIndex: 'planName',
         key: 'planName',
         width: '18%'
       },
       {
-        title: 'Subscription Plan Type',
+        title: <FormattedMessage id="SubscriptionPlan.Table.SubscriptionPlanType" />,
         dataIndex: 'planType',
         key: 'planType',
         width: '12%'
       },
       {
-        title: 'Quantity',
+        title: <FormattedMessage id="SubscriptionPlan.Table.Quantity" />,
         dataIndex: 'quantity',
         key: 'quantity',
         width: '8%'
       },
       {
-        title: 'Offer Time Period',
+        title: <FormattedMessage id="SubscriptionPlan.Table.OfferTimePeriod" />,
         key: 'timePeriod',
         width: '13%',
         render: (text, record) => moment(record.startDate).format('YYYY.MM.DD') + '-' + moment(record.endDate).format('YYYY.MM.DD')
       },
       {
-        title: 'Number of Delivery',
+        title: <FormattedMessage id="SubscriptionPlan.Table.NumberofDelivery" />,
         dataIndex: 'deliveryTimes',
         key: 'deliveryTimes',
         width: '10%'
       },
       {
-        title: 'Status',
+        title: <FormattedMessage id="SubscriptionPlan.Table.Status" />,
         dataIndex: 'status',
         key: 'status',
         width: '7%',
         render: (text) => (text === 0 ? 'Draft' : 'Publish')
       },
       {
-        title: 'Enable',
+        title: <FormattedMessage id="SubscriptionPlan.Table.Enable" />,
         dataIndex: 'enableFlag',
         key: 'enable',
         width: '8%',
@@ -205,16 +205,16 @@ export default class SubscriptionPlan extends Component<any, any> {
         )
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="SubscriptionPlan.Table.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) =>
           record.status === 0 ? (
             <div>
-              <Tooltip placement="top" title="Detail">
+              <Tooltip placement="top" title={<FormattedMessage id="SubscriptionPlan.Detail" />}>
                 <Link to={'/subscription-plan-detail/' + record.id} className="iconfont iconDetails" style={{ paddingRight: 10 }}></Link>
               </Tooltip>
-              <Tooltip placement="top" title="Edit">
+              <Tooltip placement="top" title={<FormattedMessage id="SubscriptionPlan.Edit" />}>
                 <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit"></Link>
               </Tooltip>
             </div>
@@ -231,7 +231,11 @@ export default class SubscriptionPlan extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Subscription Plan Name</p>}
+                    addonBefore={
+                      <p style={styles.label}>
+                        <FormattedMessage id="SubscriptionPlan.SubscriptionPlanName" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -245,7 +249,11 @@ export default class SubscriptionPlan extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Subscription Plan ID</p>}
+                    addonBefore={
+                      <p style={styles.label}>
+                        <FormattedMessage id="SubscriptionPlan.SubscriptionPlanID" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -260,7 +268,11 @@ export default class SubscriptionPlan extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}>Subscription Plan Type</p>}
+                    label={
+                      <p style={styles.label}>
+                        <FormattedMessage id="SubscriptionPlan.SubscriptionPlanType" />
+                      </p>
+                    }
                     style={{ width: 195 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -271,7 +283,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                     }}
                   >
                     <Option value="">
-                      <FormattedMessage id="all" />
+                      <FormattedMessage id="SubscriptionPlan.all" />
                     </Option>
                     {typeList &&
                       typeList.map((item, index) => (
@@ -297,7 +309,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="SubscriptionPlan.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -307,7 +319,9 @@ export default class SubscriptionPlan extends Component<any, any> {
         </div>
         <div className="container">
           <Button type="primary" htmlType="submit" style={{ marginBottom: '20px' }}>
-            <Link to={{ pathname: '/subscription-plan-add' }}>Add New Plan</Link>
+            <Link to={{ pathname: '/subscription-plan-add' }}>
+              <FormattedMessage id="SubscriptionPlan.AddNewPlan" />
+            </Link>
           </Button>
           <Table
             rowKey="id"

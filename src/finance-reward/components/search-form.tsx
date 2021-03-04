@@ -70,16 +70,22 @@ export default class SearchForm extends React.Component<any, any> {
                 defaultValue={'60'}
               >
                 <Option value={null}></Option>
-                <Option value="180">Last 180 days</Option>
-                <Option value="90">Last 90 days</Option>
-                <Option value="60">Last 60 days</Option>
+                <Option value="180">
+                  <FormattedMessage id="FinanceManageReward.LastDays180" />
+                </Option>
+                <Option value="90">
+                  <FormattedMessage id="FinanceManageReward.LastDays90" />
+                </Option>
+                <Option value="60">
+                  <FormattedMessage id="FinanceManageReward.LastDays60" />
+                </Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="8">
             <FormItem>
               <Input
-                addonBefore={<FormattedMessage id="PrescriberID" />}
+                addonBefore={<FormattedMessage id="FinanceManageReward.PrescriberID" />}
                 disabled={employeeData ? true : false}
                 onChange={(e) => {
                   const value = (e.target as any).value;
@@ -95,7 +101,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8">
             <FormItem>
               <Input
-                addonBefore={<FormattedMessage id="prescriberName" />}
+                addonBefore={<FormattedMessage id="FinanceManageReward.PrescriberName" />}
                 disabled={employeeData ? true : false}
                 onChange={(e) => {
                   const value = (e.target as any).value;
@@ -121,7 +127,7 @@ export default class SearchForm extends React.Component<any, any> {
                   onSearch();
                 }}
               >
-                <FormattedMessage id="search" />
+                <FormattedMessage id="FinanceManageReward.search" />
               </Button>
             </FormItem>
           </Col>

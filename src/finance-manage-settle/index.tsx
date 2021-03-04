@@ -32,12 +32,8 @@ export default class FinancialSettlement extends React.Component<any, any> {
           </Breadcrumb> */}
           <div className="container-search">
             <Headline
-              title={<FormattedMessage id="financialSettlement" />}
-              smallTitle={`Your settlement date is ${this.store
-                .state()
-                .get(
-                  'accountDay'
-                )}th of each month, when the month does not include the set date, it will be postponed to the next settlement date`}
+              title={<FormattedMessage id="FinanceManagesettle.financialSettlement" />}
+              smallTitle={`Your settlement date is ${this.store.state().get('accountDay')}th of each month, when the month does not include the set date, it will be postponed to the next settlement date`}
             />
 
             <SearchForm />

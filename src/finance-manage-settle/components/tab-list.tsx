@@ -41,11 +41,11 @@ export default class TabList extends React.Component<any, any> {
           }}
           activeKey={queryParams.get('settleStatus').toString()}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="unSettlement" />} key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="FinanceManagesettle.unSettlement" />} key="0">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab={<FormattedMessage id="settlement" />} key="1">
+          <Tabs.TabPane tab={<FormattedMessage id="FinanceManagesettle.settlement" />} key="1">
             <List />
           </Tabs.TabPane>
         </Tabs>

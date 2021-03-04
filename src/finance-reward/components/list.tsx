@@ -70,21 +70,33 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         }}
         dataSource={dataList.toJS()}
       >
-        <Column title={<FormattedMessage id="PrescriberType" />} key="prescriberType" width="12%" dataIndex="prescriberType" />
-        <Column title={<FormattedMessage id="PrescriberID" />} key="prescriberId" dataIndex="prescriberId" width="11%" />
-        <Column title={<FormattedMessage id="PrescriberName" />} key="prescriberName" dataIndex="prescriberName" width="20%" />
-        <Column title={<FormattedMessage id="OrderQuantity" />} key="orderQuantity" dataIndex="orderQuantity" width="10%" />
-        <Column title={<FormattedMessage id="OrderAmount" />} dataIndex="orderAmount" width="11%" key="orderAmount" render={(orderPrice) => <span>{orderPrice != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + orderPrice.toFixed(2)}` : '-'}</span>} />
+        <Column title={<FormattedMessage id="FinanceManageReward.PrescriberType" />} key="prescriberType" width="12%" dataIndex="prescriberType" />
+        <Column title={<FormattedMessage id="FinanceManageReward.PrescriberID" />} key="prescriberId" dataIndex="prescriberId" width="11%" />
+        <Column title={<FormattedMessage id="FinanceManageReward.PrescriberName" />} key="prescriberName" dataIndex="prescriberName" width="20%" />
+        <Column title={<FormattedMessage id="FinanceManageReward.OrderQuantity" />} key="orderQuantity" dataIndex="orderQuantity" width="10%" />
+        <Column
+          title={<FormattedMessage id="FinanceManageReward.OrderAmount" />}
+          dataIndex="orderAmount"
+          width="11%"
+          key="orderAmount"
+          render={(orderPrice) => <span>{orderPrice != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + orderPrice.toFixed(2)}` : '-'}</span>}
+        />
 
-        <Column title={<FormattedMessage id="RewardType" />} dataIndex="rewardType" key="rewardType" width="11%" />
-        <Column title={<FormattedMessage id="RewardAmount" />} dataIndex="rewardAmount" key="rewardAmount" width="11%" render={(rewardAmount) => <span>{rewardAmount != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + rewardAmount.toFixed(2)}` : '-'}</span>} />
+        <Column title={<FormattedMessage id="FinanceManageReward.RewardType" />} dataIndex="rewardType" key="rewardType" width="11%" />
+        <Column
+          title={<FormattedMessage id="FinanceManageReward.RewardAmount" />}
+          dataIndex="rewardAmount"
+          key="rewardAmount"
+          width="11%"
+          render={(rewardAmount) => <span>{rewardAmount != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + rewardAmount.toFixed(2)}` : '-'}</span>}
+        />
 
         <Column
-          title={<FormattedMessage id="operation" />}
+          title={<FormattedMessage id="FinanceManageReward.operation" />}
           width="10%"
           render={(text, record: any, i) => {
             return (
-              <Tooltip placement="top" title="Details">
+              <Tooltip placement="top" title={<FormattedMessage id="FinanceManageReward.Details" />}>
                 <a href="javascript:void(0)" onClick={() => this._renderOperate(text)} className="iconfont iconDetails"></a>
               </Tooltip>
             );
@@ -128,18 +140,18 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       <div className="operation-box">
         <AuthWrapper functionName="fetchOrderInovices">
           <a href="javascript:void(0);" onClick={() => onSearchByInvoiceId(id)}>
-            {<FormattedMessage id="view" />}
+            {<FormattedMessage id="FinanceManageReward.view" />}
           </a>
         </AuthWrapper>
 
         <AuthWrapper functionName="destoryOpenOrderInvoice">
           <Popconfirm
-            title={invoiceState == 0 ? 'Do you confirm to bill？' : 'Do you confirm to cancel bill record？'}
+            title={invoiceState == 0 ? <FormattedMessage id="FinanceManageReward.ConfirmToBill" /> : <FormattedMessage id="FinanceManageReward.CancelBillRecord" />}
             onConfirm={() => {
               invoiceState == 0 ? onConfirm(id) : onDestory(id);
             }}
-            okText="Confirm"
-            cancelText="Cancel"
+            okText={<FormattedMessage id="FinanceManageReward.Confirm" />}
+            cancelText={<FormattedMessage id="FinanceManageReward.Cancel" />}
           >
             <a href="javascript:void(0);">{invoiceState == 0 ? 'Billing' : 'Cancellation'}</a>
           </Popconfirm>

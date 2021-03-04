@@ -613,6 +613,40 @@ export default {
   'Order.phoneNumber2': 'Phone number',
   'Order.inputPhoneNumberTip': 'Please enter the phone number',
   'Order.inputPhoneNumberTip2': 'Please enter the correct phone number',
+  'Order.deliveryMethod': 'Delivery method',
+  'Order.extraInformation': 'Extra information',
+  'Order.expressDelivery': 'Express delivery',
+  'Order.paymentMethod': 'Payment method',
+  'Order.onlinePayment': 'Online payment',
+  'Order.offlinePayment': 'Offline payment',
+  'Order.invoiceInformation': 'Invoice information',
+  'Order.noInvoiceRequired': 'No invoice required',
+  'Order.personal': 'Personal',
+  'Order.company': 'Company',
+  'Order.pleaseSelectInvoiceItem': 'Please select invoice item',
+  'Order.mustSelectInvoiceItem': 'Must select invoice item',
+  'Order.invoiceHeader': 'Invoice header',
+  'Order.mustFillInTheInvoiceHeader': 'Must input the invoice header',
+  'Order.invoiceHeaderValidateTip1':
+    'Invoice header must be at least 1 character',
+  'Order.invoiceHeaderValidateTip2':
+    'Invoice header can enter up to 50 characters',
+  'Order.taxpayerIdentificationNumber': 'Taxpayer Identification Number',
+  'Order.taxpayerIdentificationNumberValidateTip':
+    'Please enter the correct taxpayer identification number and must be 15-20 characters',
+  'Order.taxpayerIdentificationNumberValidateTip2':
+    'Wrong filling will not be used as tax certificate or cannot be reimbursed',
+  'Order.companyFullName': 'Full name of company',
+  'Order.companyTaxpayerIdentificationNumber':
+    'Company taxpayer identification number',
+  'Order.companyPhone': 'Company phone ',
+  'Order.basicBankAccountNumber': 'Basic bank account number',
+  'Order.bank': 'Bank',
+  'Order.useSeparateInvoiceReceiptInformation':
+    'Use separate invoice receipt information',
+  'Order.address': 'Address',
+  'Order.fillInTheRemarks': 'Fill in the remarks',
+  'Order.enterUpTo100Characters': 'Enter up to 100 characters',
 
 
 

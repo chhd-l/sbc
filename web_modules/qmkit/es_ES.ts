@@ -387,6 +387,7 @@ export default {
   'order.shippingStatus': 'Shipping status',
   'order.paymentStatus': 'Payment status',
   'order.orderStatus': 'Order status',
+  'order.createBy':'CreateBy',
   'order.orderSource': 'Order source',
   'order.startDate': 'Start date',
   'order.endDate': 'End date',

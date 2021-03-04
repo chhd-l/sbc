@@ -170,7 +170,7 @@ export default class ListView extends React.Component<any, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '5%' }}>
+                      <th style={{ width: '3%' }}>
                         <Checkbox
                           style={{ borderSpacing: 0 }}
                           checked={allChecked}
@@ -202,6 +202,9 @@ export default class ListView extends React.Component<any, any> {
                       </th>
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="order.orderStatus" />
+                      </th>
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="order.createBy" />
                       </th>
                       <th className="operation-th" style={{ width: '12%' }}>
                         <FormattedMessage id="order.paymentStatus" />
@@ -521,6 +524,8 @@ export default class ListView extends React.Component<any, any> {
                     {/*发货状态*/}
                     <td style={{ width: '12%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*订单状态*/}
+                    <td style={{ width: '12%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
+                    {/*创建人类型 cc / po*/}
                     <td style={{ width: '12%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
                     {/*支付状态*/}
                     <td style={{ width: '12%', paddingRight: 22 }} className="operation-td">

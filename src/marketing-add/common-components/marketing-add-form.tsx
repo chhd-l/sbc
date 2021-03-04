@@ -95,8 +95,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       PromotionTypeChecked: true,
       timeZone: moment,
       isClubChecked: false,
-      productType: 1, //1:All 2:Custom
-      targetCustomer: 1 // 1:All 2:Select group
+      allGroups: relaxProps.get('allGroups')
     };
   }
 
@@ -136,20 +135,25 @@ export default class MarketingAddForm extends React.Component<any, any> {
   };
 
   productTypeOnChange = (value) => {
-    this.setState({
-      productType: value
-    });
+    this.onBeanChange({ productType: value });
   };
   targetCustomerRadioChange = (value) => {
-    this.setState({
-      targetCustomer: value
-    });
+    this.onBeanChange({ joinLevel: value });
+  };
+
+  selectGroupOnChange = (value) => {
+    let segmentIds = [];
+    segmentIds.push(value);
+    this.onBeanChange({ segmentIds });
   };
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked } = this.state;
+    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
+
+    console.log(marketingBean.toJS(), 'marketingBean---------');
+
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
@@ -659,7 +663,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             //     }
             //   }
             // ],
-            initialValue: 1
+            initialValue: marketingBean.get('productType') ? marketingBean.get('productType') : 1
           })(
             <Radio.Group onChange={(e) => this.productTypeOnChange(e.target.value)} value={this.state.productType}>
               <Radio value={1}>All</Radio>
@@ -667,7 +671,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             </Radio.Group>
           )}
         </FormItem>
-        {this.state.productType === 2 ? (
+        {marketingBean.get('productType') === 2 ? (
           <FormItem {...formItemLayout} required={true}>
             {getFieldDecorator(
               'goods',
@@ -685,9 +689,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
         ) : null}
         <div className="bold-title">Target consumer:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
-          {getFieldDecorator('targetCustomer', {
-            // rules: [{required: true, message: '请选择目标客户'}],
-            initialValue: 1
+          {getFieldDecorator('joinLevel', {
+            // rules: [{required: true, message: 'Please select target consumer'}],
           })(
             <div>
               <RadioGroup
@@ -698,12 +701,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 onChange={(e) => {
                   this.targetCustomerRadioChange(e.target.value);
                 }}
-                value={this.state.targetCustomer}
+                value={marketingBean.get('joinLevel') ? Number(marketingBean.get('joinLevel')) : -1}
               >
                 {/*<Radio value={-1}>Full platform consumer</Radio>*/}
                 {/*{util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}*/}
-                <Radio value={1}>All</Radio>
-                <Radio value={2}>Select group</Radio>
+                <Radio value={-1}>All</Radio>
+                <Radio value={-3}>Select group</Radio>
               </RadioGroup>
               {/*{level._levelPropsShow && (*/}
               {/*  <div>*/}
@@ -716,19 +719,23 @@ export default class MarketingAddForm extends React.Component<any, any> {
             </div>
           )}
         </FormItem>
-        {this.state.targetCustomer === 2 ? (
+        {marketingBean.get('joinLevel') == -3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
-            {getFieldDecorator('targetCustomer', {
-              // rules: [{required: true, message: '请选择目标客户'}], onChange={handleChange}
-            })(
-              <Select defaultValue="lucy" style={{ width: 520 }}>
-                <Select.Option value="jack">Jack</Select.Option>
-                <Select.Option value="lucy">Lucy</Select.Option>
-                <Select.Option value="Yiminghe">yiminghe</Select.Option>
-              </Select>
-            )}
+            <Select
+              style={{ width: 520 }}
+              onChange={this.selectGroupOnChange}
+              // defaultValue={232}
+              defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').length > 0 ? marketingBean.get('segmentIds')[0] : null}
+            >
+              {allGroups.size > 0 &&
+                allGroups.map((item) => (
+                  <Select.Option key={item.get('id')} value={item.get('id')}>
+                    {item.get('name')}
+                  </Select.Option>
+                ))}
+            </Select>
           </FormItem>
-        ) : null}
+        )}
         <Row type="flex" justify="start">
           {/*<Col span={3} />*/}
           <Col span={10}>
@@ -1000,21 +1007,21 @@ export default class MarketingAddForm extends React.Component<any, any> {
     }
 
     //判断目标等级
-    if (level._allCustomer) {
-      marketingBean = marketingBean.set('joinLevel', -1);
-    } else {
-      if (level._checkAll) {
-        marketingBean = marketingBean.set('joinLevel', 0);
-      } else {
-        if (level._checkedLevelList.length != 0) {
-          marketingBean = marketingBean.set('joinLevel', level._checkedLevelList.join(','));
-        } else {
-          errorObject['targetCustomer'] = {
-            errors: [new Error('Please select target customers')]
-          };
-        }
-      }
-    }
+    // if (level._allCustomer) {
+    //   marketingBean = marketingBean.set('joinLevel', -1);
+    // } else {
+    //   if (level._checkAll) {
+    //     marketingBean = marketingBean.set('joinLevel', 0);
+    //   } else {
+    //     if (level._checkedLevelList.length != 0) {
+    //       marketingBean = marketingBean.set('joinLevel', level._checkedLevelList.join(','));
+    //     } else {
+    //       errorObject['targetCustomer'] = {
+    //         errors: [new Error('Please select target customers')]
+    //       };
+    //     }
+    //   }
+    // }
 
     //判断选择商品
     if (selectedSkuIds.length > 0) {

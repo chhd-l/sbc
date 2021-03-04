@@ -69,7 +69,6 @@ export default class ReductionLevels extends React.Component<any, any> {
 
   render() {
     const { isFullCount, fullReductionLevelList } = this.state;
-    debugger;
     const { form } = this.props;
 
     const { getFieldDecorator } = form;

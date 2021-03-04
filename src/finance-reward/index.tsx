@@ -45,11 +45,11 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
             <Breadcrumb.Item>订单开票</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="Reward" />} />
+            <Headline title={<FormattedMessage id="FinanceManagesettle.Reward" />} />
             <SearchForm />
             <AuthWrapper functionName={'financeRewardExport'}>
               <div style={{ paddingBottom: '16px' }} className="ant-form-inline filter-content">
-                <Button onClick={() => this.store.bulkExport()}>{<FormattedMessage id="bulkExport" />}</Button>
+                <Button onClick={() => this.store.bulkExport()}>{<FormattedMessage id="FinanceManagesettle.bulkExport" />}</Button>
               </div>
             </AuthWrapper>
           </div>

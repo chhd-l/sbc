@@ -4,6 +4,7 @@ import AddProduct from '../modals/addProduct';
 import { Spin, Popconfirm, Tooltip, Input, Icon, InputNumber } from 'antd';
 import moment from 'moment';
 import { cache } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const intReg = /^[0-9]*$/;
 export default class details extends Component<any, any> {
@@ -109,15 +110,22 @@ export default class details extends Component<any, any> {
     const currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
     return (
       <div>
-        <h3>Step5</h3>
+        <h3>
+          <FormattedMessage id="SubscriptionPlanUpdate.Step5" />
+        </h3>
         <Row>
           <Col span={20}>
-            <h4>Details</h4>
+            <h4>
+              <FormattedMessage id="SubscriptionPlanUpdate.Details" />
+            </h4>
           </Col>
           <Col span={4}>
             {editable ? (
               <div className="addProduct" onClick={this.showAddMainProduct} style={{ marginTop: '10px', marginRight: '0px' }}>
-                <span> + Add product</span>
+                <span>
+                  {' '}
+                  + <FormattedMessage id="SubscriptionPlanUpdate.Addproduct" />
+                </span>
               </div>
             ) : null}
           </Col>
@@ -132,13 +140,27 @@ export default class details extends Component<any, any> {
                       <table>
                         <thead className="ant-table-thead">
                           <tr>
-                            <th style={{ width: '10%' }}>Package ID</th>
-                            <th style={{ width: '10%' }}>Image</th>
-                            <th style={{ width: '20%' }}>Product Name</th>
-                            <th style={{ width: '10%', textAlign: 'center' }}>Qty</th>
-                            <th style={{ width: '10%' }}>Market Price</th>
-                            <th style={{ width: '12%' }}>Setting Price</th>
-                            <th style={{ width: '10%' }}>Operation</th>
+                            <th style={{ width: '10%' }}>
+                              <FormattedMessage id="SubscriptionPlanUpdate.PackageID" />
+                            </th>
+                            <th style={{ width: '10%' }}>
+                              <FormattedMessage id="SubscriptionPlanUpdate.Image1" />
+                            </th>
+                            <th style={{ width: '20%' }}>
+                              <FormattedMessage id="SubscriptionPlanUpdate.ProductName1" />
+                            </th>
+                            <th style={{ width: '10%', textAlign: 'center' }}>
+                              <FormattedMessage id="SubscriptionPlanUpdate.Qty" />
+                            </th>
+                            <th style={{ width: '10%' }}>
+                              <FormattedMessage id="SubscriptionPlanUpdate.MarketPrice" />
+                            </th>
+                            <th style={{ width: '12%' }}>
+                              <FormattedMessage id="SubscriptionPlanUpdate.SettingPrice" />
+                            </th>
+                            <th style={{ width: '10%' }}>
+                              <FormattedMessage id="SubscriptionPlanUpdate.Operation" />
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="ant-table-tbody">
@@ -193,8 +215,14 @@ export default class details extends Component<any, any> {
                             </td>
                             <td>
                               {editable && (
-                                <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
-                                  <Tooltip placement="top" title="Delete">
+                                <Popconfirm
+                                  placement="topLeft"
+                                  title={<FormattedMessage id="SubscriptionPlanUpdate.deleteThisProduct" />}
+                                  onConfirm={() => this.deleteProduct(item.goodsInfoId)}
+                                  okText={<FormattedMessage id="SubscriptionPlanUpdate.Confirm" />}
+                                  cancelText={<FormattedMessage id="SubscriptionPlanUpdate.Cancel" />}
+                                >
+                                  <Tooltip placement="top" title={<FormattedMessage id="SubscriptionPlanUpdate.Delete" />}>
                                     <a className="iconfont iconDelete"></a>
                                   </Tooltip>
                                 </Popconfirm>

@@ -31,14 +31,11 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="Order.All" />} key="0">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.pendingReview" />}
-            key="flowState-INIT"
-          >
+          <Tabs.TabPane tab={<FormattedMessage id="Order.Pendingreview" />} key="flowState-INIT">
             <List />
           </Tabs.TabPane>
           {/* <Tabs.TabPane
@@ -48,17 +45,11 @@ export default class SearchList extends React.Component<any, any> {
             <List />
           </Tabs.TabPane> */}
 
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.toBeDelivered" />}
-            key="flowState-AUDIT"
-          >
+          <Tabs.TabPane tab={<FormattedMessage id="Order.Tobedelivered" />} key="flowState-AUDIT">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.toBeReceived" />}
-            key="flowState-DELIVERED"
-          >
+          <Tabs.TabPane tab={<FormattedMessage id="Order.Tobereceived" />} key="flowState-DELIVERED">
             <List />
           </Tabs.TabPane>
 
@@ -69,17 +60,11 @@ export default class SearchList extends React.Component<any, any> {
             <List />
           </Tabs.TabPane> */}
 
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.completed" />}
-            key="flowState-COMPLETED"
-          >
+          <Tabs.TabPane tab={<FormattedMessage id="Order.Completed" />} key="flowState-COMPLETED">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.outOfDate" />}
-            key="flowState-VOID"
-          >
+          <Tabs.TabPane tab={<FormattedMessage id="Order.Outofdate" />} key="flowState-VOID">
             <List />
           </Tabs.TabPane>
         </Tabs>

@@ -10,7 +10,7 @@ export default class SubscriptionSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Subscription setting',
+      title: <FormattedMessage id="SubscriptionSetting.SubscriptionSetting" />,
       settingForm: {
         newOrdersId: null,
         newOrdersStatus: 0,
@@ -82,7 +82,7 @@ export default class SubscriptionSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operation successful');
+          message.success(<FormattedMessage id="SubscriptionSetting.OperationSuccessful" />);
         }
       })
       .catch((err) => {});
@@ -177,7 +177,7 @@ export default class SubscriptionSetting extends Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateSetting()}>
-            {<FormattedMessage id="save" />}
+            {<FormattedMessage id="SubscriptionSetting.save" />}
           </Button>
         </div>
       </div>

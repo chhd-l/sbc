@@ -5,6 +5,7 @@ const logo = require('../img/logo.png');
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
 import { history, Const, login, cache } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 //import { TIMEOUT } from 'dns';
 const pcLogo = require('../../../public/images/login/logo1.png');
 export default class LoginForm extends React.Component<any, any> {
@@ -32,13 +33,17 @@ export default class LoginForm extends React.Component<any, any> {
           <div style={styles.header}>
             <img style={styles.logo} src={loginLogo ? loginLogo : logo} />
           </div>
-          <strong style={styles.title}>Store portal</strong>
+          <strong style={styles.title}>
+            <FormattedMessage id="Public.Storeportal" />
+          </strong>
         </FormItem>
-        <label style={styles.label}>Login Account</label>
+        <label style={styles.label}>
+          <FormattedMessage id="Public.LoginAccount" />
+        </label>
         <FormItem style={{ marginTop: 10 }}>
           {getFieldDecorator('account', {
             rules: [{ required: true, message: 'Account cannot be empty' }]
-          })(<Input size="large" prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="Please input your login account" />)}
+          })(<Input size="large" prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder={<FormattedMessage id="Public.Pleaseinputyour" />} />)}
         </FormItem>
         <label style={styles.label}>Password</label>
         <FormItem style={{ marginTop: 10 }}>
@@ -66,12 +71,14 @@ export default class LoginForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <Button type="primary" size="large" htmlType="submit" style={styles.loginBtn} loading={this.state.loading} onClick={(e) => this._handleLogin(e)}>
-            Login
+            <FormattedMessage id="Public.Login" />
           </Button>
         </FormItem>
         <FormItem style={{ marginBottom: 0 }}>
           <div>
-            <p style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}>{/* © 2017-2019 南京万米信息技术有限公司 */}© Royal Canin SAS 2020</p>
+            <p style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}>
+              {/* © 2017-2019 南京万米信息技术有限公司 */}© <FormattedMessage id="Public.RoyalCaninSAS2020" />
+            </p>
             {/* <p
               style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}
             >

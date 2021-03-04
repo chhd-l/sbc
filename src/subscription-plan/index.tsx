@@ -98,14 +98,14 @@ export default class SubscriptionPlan extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
+          message.error(res.message || <FormattedMessage id="SubscriptionPlan.GetDataFailed" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
+        message.error(err || <FormattedMessage id="SubscriptionPlan.GetDataFailed" />);
         this.setState({
           loading: false
         });
@@ -130,12 +130,12 @@ export default class SubscriptionPlan extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Update Data Failed');
+          message.error(res.message || <FormattedMessage id="SubscriptionPlan.UpdateDataFailed" />);
           this.setState({ loading: false });
         }
       })
       .catch((err) => {
-        message.error(err || 'Update Data Failed');
+        message.error(err || <FormattedMessage id="SubscriptionPlan.UpdateDataFailed" />);
         this.setState({
           loading: false
         });
@@ -211,10 +211,10 @@ export default class SubscriptionPlan extends Component<any, any> {
         render: (text, record) =>
           record.status === 0 ? (
             <div>
-              <Tooltip placement="top" title="Detail">
+              <Tooltip placement="top" title={<FormattedMessage id="SubscriptionPlan.Detail" />}>
                 <Link to={'/subscription-plan-detail/' + record.id} className="iconfont iconDetails" style={{ paddingRight: 10 }}></Link>
               </Tooltip>
-              <Tooltip placement="top" title="Edit">
+              <Tooltip placement="top" title={<FormattedMessage id="SubscriptionPlan.Edit" />}>
                 <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit"></Link>
               </Tooltip>
             </div>

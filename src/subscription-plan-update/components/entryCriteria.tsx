@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Checkbox, Row, Col, Select, Button, Tooltip } from 'antd';
 import AddConsent from '../modals/addConsent';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -64,11 +65,15 @@ export default class entryCriteria extends Component<any, any> {
     const { visible, allConsents } = this.state;
     return (
       <div>
-        <h3>Step3</h3>
-        <h4>Entry Criteria</h4>
+        <h3>
+          <FormattedMessage id="SubscriptionPlanUpdate.Step3" />
+        </h3>
+        <h4>
+          <FormattedMessage id="SubscriptionPlanUpdate.EntryCriteria" />
+        </h4>
         <div className="entryCriteria">
           <Form>
-            <FormItem {...layout} label="Subscription Plan name">
+            <FormItem {...layout} label={<FormattedMessage id="SubscriptionPlanUpdate.SubscriptionPlan" />}>
               <Checkbox
                 disabled={!editable}
                 checked={subscriptionPlan.signOnSubscriptionFlag}
@@ -77,16 +82,18 @@ export default class entryCriteria extends Component<any, any> {
                   addField('signOnSubscriptionFlag', subscriptionPlan.signOnSubscriptionFlag);
                 }}
               >
-                <span className="checkBoxTip">Consumers need consent to sign on subscription</span>
+                <span className="checkBoxTip">
+                  <FormattedMessage id="SubscriptionPlanUpdate.ConsumersNeed" />
+                </span>
               </Checkbox>
             </FormItem>
             {subscriptionPlan.signOnSubscriptionFlag ? (
-              <FormItem {...layout} label="Consent">
+              <FormItem {...layout} label={<FormattedMessage id="SubscriptionPlanUpdate.Consent" />}>
                 <Row>
                   <Col span={16}>
                     {getFieldDecorator('consentIds', {
                       initialValue: subscriptionPlan.consentIds.map((cons) => parseInt(cons)),
-                      rules: [{ required: true, message: 'Please add Consent' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PleaseAddConsent" /> }]
                     })(
                       <Select
                         disabled={!editable}
@@ -124,7 +131,7 @@ export default class entryCriteria extends Component<any, any> {
               </FormItem>
             ) : null}
 
-            <FormItem {...layout} label="Subscription Plan">
+            <FormItem {...layout} label={<FormattedMessage id="SubscriptionPlanUpdate.SubscriptionPlan" />}>
               <Checkbox
                 disabled={!editable}
                 checked={subscriptionPlan.subscriptionPlanFlag}
@@ -133,7 +140,9 @@ export default class entryCriteria extends Component<any, any> {
                   addField('subscriptionPlanFlag', subscriptionPlan.subscriptionPlanFlag);
                 }}
               >
-                <span className="checkBoxTip">Subscription plan can be applied with other promotions</span>
+                <span className="checkBoxTip">
+                  <FormattedMessage id="SubscriptionPlanUpdate.SubscriptionPlanOtherPromotions" />
+                </span>
               </Checkbox>
             </FormItem>
           </Form>

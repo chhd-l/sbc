@@ -101,7 +101,7 @@ export default class RevenueList extends React.Component<any, any> {
             pagination={false}
           >
             <Column
-              title="NO."
+              title={<FormattedMessage id="FinanceManageCheck.NO" />}
               dataIndex="index"
               key="index"
               width="50"
@@ -110,7 +110,7 @@ export default class RevenueList extends React.Component<any, any> {
               }}
             />
             <Column
-              title="Total revenue"
+              title={<FormattedMessage id="FinanceManageCheck.TotalRevenue" />}
               dataIndex="totalAmount"
               key="totalAmount"
               render={(_text, rowData: any) => {
@@ -172,7 +172,7 @@ export default class RevenueList extends React.Component<any, any> {
               }}
             /> */}
             <Column
-              title="Payment Source"
+              title={<FormattedMessage id="FinanceManageCheck.PaymentSource" />}
               dataIndex="syncTotalAmount"
               key="syncTotalAmount"
               render={(_text, rowData: any) => {
@@ -222,13 +222,13 @@ export default class RevenueList extends React.Component<any, any> {
               width="100"
             />*/}
             <Column
-              title={<FormattedMessage id="operation" />}
+              title={<FormattedMessage id="FinanceManageCheck.Operation" />}
               dataIndex="operate"
               key="storeId"
               render={(_text, record: any) => {
                 return (
                   <AuthWrapper functionName="f_finance_manage_refund">
-                    <Tooltip placement="top" title="Details">
+                    <Tooltip placement="top" title={<FormattedMessage id="FinanceManageCheck.Details" />}>
                       <a
                         onClick={() =>
                           history.push({

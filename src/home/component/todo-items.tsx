@@ -13,7 +13,7 @@ import Funnel from 'web_modules/biz/funnel/funnel.tsx';
 import BarLine from 'web_modules/biz/BarLine/index.tsx';
 import CountUp from 'react-countup';
 import nodataImg from '../images/no-data.jpg';
-import {FormattedMessage} from "react-intl";
+import { FormattedMessage, injectIntl } from 'react-intl';
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
 const icon2 =
@@ -27,7 +27,7 @@ const countUpProps = {
   separator: ','
 };
 @Relax
-export default class TodoItems extends React.Component<any, any> {
+class TodoItems extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,6 +57,7 @@ export default class TodoItems extends React.Component<any, any> {
       conversionFunnelDashboardView: any;
       cleanRedux: Function;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -129,10 +130,14 @@ export default class TodoItems extends React.Component<any, any> {
           <div className="item-top space-between">
             <div className="item-top-l flex-content">
               <div className="item-top-l-top">
-                <div className="top-text"><FormattedMessage id="home.overview" /></div>
+                <div className="top-text">
+                  <FormattedMessage id="Home.Overview" />
+                </div>
                 <div className="content space-between">
                   <div className="mode">
-                    <div className="mode-text">Revenue</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Revenue" />
+                    </div>
                     <div className="mode-num">
                       <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} decimals={2} {...countUpProps} /> : '--'}</span>
@@ -146,7 +151,9 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                   <div className="line"></div>
                   <div className="mode">
-                    <div className="mode-text">Average basket</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Averagebasket" />
+                    </div>
                     <div className="mode-num">
                       <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.averageBasket != null ? <CountUp end={tradeCustomerView.averageBasket} decimals={2} {...countUpProps} /> : '--'}</span>
@@ -160,7 +167,9 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                   <div className="line"></div>
                   <div className="mode">
-                    <div className="mode-text">Conversion</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Conversion" />
+                    </div>
                     <div className="mode-num">
                       <span>{tradeCustomerView && tradeCustomerView.conversion != null ? <CountUp end={tradeCustomerView.conversion} {...countUpProps} /> : '--'}</span>
                     </div>
@@ -173,7 +182,9 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                   <div className="line"></div>
                   <div className="mode">
-                    <div className="mode-text">Traffic</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Traffic" />
+                    </div>
                     <div className="mode-num">{tradeCustomerView && tradeCustomerView.traffic != null ? <CountUp end={tradeCustomerView.traffic} {...countUpProps} /> : '--'}</div>
                     <div className="mode-per">
                       {tradeCustomerView && tradeCustomerView.trafficRate != null ? <img src={tradeCustomerView.trafficRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -185,7 +196,9 @@ export default class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
               <div className="item-top-l-btm">
-                <div className="top-text">Conversion Funnel</div>
+                <div className="top-text">
+                  <FormattedMessage id="Home.Conversionfunnel" />
+                </div>
                 <div className="Funnel">
                   <Funnel data={conversionFunnelDashboardView && conversionFunnelDashboardView.dataList} />
                   <div className="Funnel-l">
@@ -213,7 +226,9 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="Funnel-r">
                     <div className="Funnel-r-top"></div>
                     <div className="Funnel-r-mid">
-                      <div className="text1">Conversion rate</div>
+                      <div className="text1">
+                        <FormattedMessage id="Home.Conversionrate" />
+                      </div>
                       <div className="text2">
                         {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} decimals={2} {...countUpProps} /> : '--'}
                         <i>%</i>
@@ -245,9 +260,13 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-m flex-content">
               <div className="item-top-m-top">
                 <div className="top-text space-between">
-                  <span>Traffic</span>
                   <span>
-                    <Link to="/report-traffic">more &gt;</Link>
+                    <FormattedMessage id="Home.Traffic" />
+                  </span>
+                  <span>
+                    <Link to="/report-traffic">
+                      <FormattedMessage id="Home.more" /> &gt;
+                    </Link>
                   </span>
                 </div>
                 <div className="traffic space-between">
@@ -262,7 +281,9 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="traffic-r flex-content">
                     <div className="traffic-r-top flex-start">
                       <div className="mode">
-                        <div className="mode-text">Page view</div>
+                        <div className="mode-text">
+                          <FormattedMessage id="Home.Pageview" />
+                        </div>
                         <div className="mode-num">
                           <span>{trafficDashboardView && trafficDashboardView.pageView != null ? <CountUp end={trafficDashboardView.pageView} {...countUpProps} /> : '--'}</span>
                         </div>
@@ -288,14 +309,18 @@ export default class TodoItems extends React.Component<any, any> {
                     </div>
                     <div className="traffic-r-btm flex-content">
                       <div className="mode">
-                        <div className="mode-text">VET traffic</div>
+                        <div className="mode-text">
+                          <FormattedMessage id="Home.VET traffic" />
+                        </div>
                         <div className="mode-num">
                           <span> {trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
                         </div>
                       </div>
                       <div className="line"></div>
                       <div className="mode">
-                        <div className="mode-text">VET traffic rate</div>
+                        <div className="mode-text">
+                          <FormattedMessage id="Home.VETtrafficrate" />
+                        </div>
                         <div className="mode-num num">
                           {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
                           <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
@@ -309,13 +334,17 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="top-text space-between">
                   <span>Transaction</span>
                   <span>
-                    <Link to="/report-transaction">more &gt;</Link>
+                    <Link to="/report-transaction">
+                      <FormattedMessage id="Home.more" /> &gt;
+                    </Link>
                   </span>
                 </div>
                 <div className="m-content flex-content">
                   <div className="transaction space-between">
                     <div className="transaction-l space-around">
-                      <div className="text">Order Number</div>
+                      <div className="text">
+                        <FormattedMessage id="Home.OrderNumber" />
+                      </div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
@@ -327,7 +356,9 @@ export default class TodoItems extends React.Component<any, any> {
                       </div>
                     </div>
                     <div className="transaction-l space-around">
-                      <div className="text">Sales volume</div>
+                      <div className="text">
+                        <FormattedMessage id="Home.Salesvolume" />
+                      </div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.salesVolume != null ? <CountUp end={tradeCustomerView.salesVolume} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
@@ -341,7 +372,9 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                   <div className="transaction space-between">
                     <div className="transaction-l space-around">
-                      <div className="text">Units sold</div>
+                      <div className="text">
+                        <FormattedMessage id="Home.Unitssold" />
+                      </div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.unitsSold != null ? <CountUp end={tradeCustomerView.unitsSold} decimals={2} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
@@ -353,7 +386,9 @@ export default class TodoItems extends React.Component<any, any> {
                       </div>
                     </div>
                     <div className="transaction-l space-around">
-                      <div className="text">Retention rate</div>
+                      <div className="text">
+                        <FormattedMessage id="Home.Retentionrate" />
+                      </div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.retentionRate != null ? <CountUp end={tradeCustomerView.retentionRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
@@ -370,11 +405,15 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
             <div className="item-top-r flex-content">
               <div className="item-top-r-top">
-                <div className="top-text">Consumer</div>
+                <div className="top-text">
+                  <FormattedMessage id="Home.Consumer" />
+                </div>
                 <div className="consumer flex-content">
                   <div className="consumer-top flex-start">
                     <div className="mode">
-                      <div className="mode-text">Active consumers</div>
+                      <div className="mode-text">
+                        <FormattedMessage id="Home.Activeconsumers" />
+                      </div>
                       <div className="mode-num">
                         {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
                         <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
@@ -387,7 +426,9 @@ export default class TodoItems extends React.Component<any, any> {
                       </div>
                     </div>
                     <div className="mode">
-                      <div className="mode-text">Active consumer rate</div>
+                      <div className="mode-text">
+                        <FormattedMessage id="Home.Activeconsumerrate" />
+                      </div>
                       <div className="mode-num">
                         <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} suffix={'%'} decimals={2} {...countUpProps} /> : '--'}</span>
                       </div>
@@ -401,7 +442,9 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                   <div className="consumer-btm flex-content">
                     <div className="mode">
-                      <div className="mode-text">Total consumers</div>
+                      <div className="mode-text">
+                        <FormattedMessage id="Home.Totalconsumers" />
+                      </div>
                       <div className="mode-num">
                         <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
                       </div>
@@ -410,14 +453,18 @@ export default class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
               <div className="item-top-r-btm">
-                <div className="top-text">Subscription</div>
+                <div className="top-text">
+                  <FormattedMessage id="Home.Subscription" />
+                </div>
                 <div className="subscription space-between">
                   <div className="subscription-l">
                     <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />
                   </div>
                   <div className="subscription-r flex-content">
                     <div className="subscription-content space-around">
-                      <div className="text">Order Number</div>
+                      <div className="text">
+                        <FormattedMessage id="Home.OrderNumber" />
+                      </div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
@@ -429,7 +476,9 @@ export default class TodoItems extends React.Component<any, any> {
                       </div>
                     </div>
                     <div className="subscription-content space-around">
-                      <div className="text">Sales volume</div>
+                      <div className="text">
+                        <FormattedMessage id="Home.Salesvolume" />
+                      </div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
@@ -447,11 +496,15 @@ export default class TodoItems extends React.Component<any, any> {
           </div>
           <div className="item-mid space-between">
             <div className="item-mid-l">
-              <div className="top-text">Prescriber</div>
+              <div className="top-text">
+                <FormattedMessage id="Home.Prescriber" />
+              </div>
               <div className="prescriber space-between">
                 <div className="item-mid-l-l flex-content">
                   <div className="mode mid-l-l-content">
-                    <div className="mode-text">Active prescriber rates</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Activeprescriberrates" />
+                    </div>
                     <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescriberRates != null ? <CountUp end={prescriberTopView.activePrescriberRates} suffix={'%'} decimals={2} {...countUpProps} /> : '--'}</div>
                     <div className="mode-per">
                       {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <img src={prescriberTopView.activePrescriberRatesRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -462,7 +515,9 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                   <div className="line-1 mode-line"></div>
                   <div className="mode mid-l-l-content">
-                    <div className="mode-text">Active prescribers</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Activeprescribers" />
+                    </div>
                     <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescribers != null ? <CountUp end={prescriberTopView.activePrescribers} {...countUpProps} /> : '--'}</div>
                     <div className="mode-per">
                       {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <img src={prescriberTopView.activePrescribersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -473,7 +528,9 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                 </div>
                 <div className="item-mid-l-r">
-                  <div className="r-text">Prescriber reward Top 3</div>
+                  <div className="r-text">
+                    <FormattedMessage id="Home.PrescriberrewardTop3" />
+                  </div>
                   <div className="r-content">
                     {prescriberTopView && prescriberTopView.prescriberDashboardViewItemList && prescriberTopView.prescriberDashboardViewItemList.length != 0 ? (
                       prescriberTopView.prescriberDashboardViewItemList.map((item, i) => {
@@ -503,9 +560,13 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-mid-r">
               <div className="top-text">
                 <div className="top-text space-between">
-                  <span>Best seller</span>
                   <span>
-                    <Link to="/report-product">more &gt;</Link>
+                    <FormattedMessage id="Home.Bestseller" />
+                  </span>
+                  <span>
+                    <Link to="/report-product">
+                      <FormattedMessage id="Home.more" /> &gt;
+                    </Link>
                   </span>
                 </div>
               </div>
@@ -537,9 +598,13 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-btm-l">
               <div className="top-text">
                 <div className="top-text space-between">
-                  <span>Traffic Trend</span>
                   <span>
-                    <Link to="/report-traffic">more &gt;</Link>
+                    <FormattedMessage id="Home.TrafficTrend" />
+                  </span>
+                  <span>
+                    <Link to="/report-traffic">
+                      <FormattedMessage id="Home.more" /> &gt;
+                    </Link>
                   </span>
                 </div>
               </div>
@@ -557,7 +622,7 @@ export default class TodoItems extends React.Component<any, any> {
               ) : (
                 <div className="line">
                   <BarLine
-                    yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                    yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Traffic' }), y2: this.props.intl.formatMessage({ id: 'Home.Conversionrate' }) }}
                     unit={{ unit1: '', unit2: '%' }}
                     nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
                     data={{
@@ -570,7 +635,9 @@ export default class TodoItems extends React.Component<any, any> {
               )}
             </div>
             <div className="item-btm-m">
-              <div className="top-text">Prescribers Trend</div>
+              <div className="top-text">
+                <FormattedMessage id="Home.PrescribersTrend" />
+              </div>
               {!prescriberTrendView ||
               ((!prescriberTrendView.weekNumList || prescriberTrendView.weekNumList.length === 0) && (!prescriberTrendView.reward || prescriberTrendView.reward.length === 0) && (!prescriberTrendView.activeRate || prescriberTrendView.activeRate.length === 0)) ? (
                 <div className="data-img">
@@ -580,9 +647,9 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="line">
                   {prescriberTrendView && (
                     <BarLine
-                      yName={{ y1: 'Prescriber reward', y2: 'Active rate' }}
+                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Prescriberreward' }), y2: this.props.intl.formatMessage({ id: 'Home.Activerate' }) }}
                       unit={{ unit1: '', unit2: '%' }}
-                      nameTextStyle={{ y1: [0, 0, 0, 42], y2: [0, 0, 0, 22] }}
+                      nameTextStyle={{ y1: [0, 0, 0, 42], y2: [0, 0, 0, 20] }}
                       data={{
                         x: prescriberTrendView.weekNumList,
                         y1: prescriberTrendView.reward,
@@ -595,9 +662,13 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
             <div className="item-btm-r">
               <div className="top-text space-between">
-                <span>Transaction Trend</span>
                 <span>
-                  <Link to="/report-transaction">more &gt;</Link>
+                  <FormattedMessage id="Home.TransactionTrend" />
+                </span>
+                <span>
+                  <Link to="/report-transaction">
+                    <FormattedMessage id="Home.more" /> &gt;
+                  </Link>
                 </span>
               </div>
               {!transactionTrendView ||
@@ -609,7 +680,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="line">
                   {transactionTrendView && (
                     <BarLine
-                      yName={{ y1: 'Revenue', y2: 'Transaction' }}
+                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Revenue' }), y2: this.props.intl.formatMessage({ id: 'Home.Transaction' }) }}
                       unit={{ unit1: '', unit2: '' }}
                       nameTextStyle={{ y1: [0, 52, 0, 0], y2: [0, 22, 0, 0] }}
                       data={{
@@ -628,3 +699,5 @@ export default class TodoItems extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(TodoItems);

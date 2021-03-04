@@ -8,6 +8,7 @@ import copy from 'copy-to-clipboard';
 //import value from '*.json';
 const Option = Select.Option;
 import OktaLogout from './okta/okta-logout';
+import {FormattedMessage} from "react-intl";
 
 export default class MyHeader extends React.Component {
   constructor(props) {
@@ -184,7 +185,7 @@ export default class MyHeader extends React.Component {
               (!prescriberId ? (
                 <a className="ant-dropdown-link" href={`${baseConfig.pcWebsite}`} target="_blank">
                   <Icon type="eye-o" />
-                  <span style={styles.dropdownText}>Preview</span>
+                  <span style={styles.dropdownText}><FormattedMessage id="Public.Overview" /></span>
                   {/* <Icon type="down" /> */}
                 </a>
               ) : null

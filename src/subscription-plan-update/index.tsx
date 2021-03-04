@@ -9,6 +9,7 @@ import ExitRules from './components/exitRules';
 import Details from './components/details';
 import * as webapi from './webapi';
 import { edit } from '@/regular-product-add/webapi';
+import { FormattedMessage } from 'react-intl';
 
 const { Step } = Steps;
 
@@ -24,7 +25,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId;
     this.state = {
       id,
-      title: id ? 'Edit Plan (Food Dispenser)' : 'Add New Plan (Food Dispenser)',
+      title: id ? <FormattedMessage id="SubscriptionPlanUpdate.index.EditPlan" /> : <FormattedMessage id="SubscriptionPlanUpdate.index.AddNewPlan" />,
       current: 0,
       storeId,
       subscriptionPlan: {
@@ -63,11 +64,11 @@ class SubscriptionPlanUpdate extends Component<any, any> {
             frequencyList: res.context.sysDictionaryVOS.filter((x) => parseInt(x.valueEn) >= 3 && parseInt(x.valueEn) <= 5)
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(<FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
       });
     webapi
       .getSubscriptionPlanTypes()
@@ -82,11 +83,11 @@ class SubscriptionPlanUpdate extends Component<any, any> {
             planTypeList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(<FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
       });
     if (id) {
       webapi
@@ -101,11 +102,11 @@ class SubscriptionPlanUpdate extends Component<any, any> {
               subscriptionPlan: res.context
             });
           } else {
-            message.error(res.message || 'Get Data Failed');
+            message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
           }
         })
         .catch((err) => {
-          message.error(err || 'Get Data Failed');
+          message.error(err || <FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
         });
     }
   }
@@ -150,14 +151,14 @@ class SubscriptionPlanUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success('Operate successfully');
+                message.success(<FormattedMessage id="SubscriptionPlanUpdate.index.OperateSuccessfully" />);
                 history.push({ pathname: '/subscription-plan' });
               } else {
-                message.error(res.message || 'Update Failed');
+                message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.UpdateFailed" />);
               }
             })
             .catch((err) => {
-              message.error(err || 'Update Failed');
+              message.error(err || <FormattedMessage id="SubscriptionPlanUpdate.index.UpdateFailed" />);
             });
         } else {
           webapi
@@ -165,14 +166,14 @@ class SubscriptionPlanUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success('Operate successfully');
+                message.success(<FormattedMessage id="SubscriptionPlanUpdate.index.OperateSuccessfully" />);
                 history.push({ pathname: '/subscription-plan' });
               } else {
-                message.error(res.message || 'Add Failed');
+                message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.AddFailed" />);
               }
             })
             .catch((err) => {
-              message.error(err || 'Add Failed');
+              message.error(err || <FormattedMessage id="SubscriptionPlanUpdate.index.AddFailed" />);
             });
         }
       }
@@ -191,23 +192,23 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     }
     const steps = [
       {
-        title: 'Basic Information',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.index.BasicInformation" />,
         controller: <BasicInformation subscriptionPlan={subscriptionPlan} frequencyList={frequencyList} planTypeList={planTypeList} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: 'Target Product',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.index.TargetProduct" />,
         controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       },
       {
-        title: 'Entry Criteria',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.index.EntryCriteria" />,
         controller: <EntryCriteria subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: 'Exit Rules',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.index.ExitRules" />,
         controller: <ExitRules subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: 'Details',
+        title: <FormattedMessage id="SubscriptionPlanUpdate.index.Details" />,
         controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       }
     ];
@@ -229,21 +230,21 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           <div className="steps-action">
             {current > 0 && (
               <Button style={{ marginRight: 15 }} onClick={() => this.prev()}>
-                <Icon type="left" /> Return
+                <Icon type="left" /> <FormattedMessage id="SubscriptionPlanUpdate.index.Return" />
               </Button>
             )}
             {current < steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.next(e)} disabled={targetDisabled}>
-                Next step <Icon type="right" />
+                <FormattedMessage id="SubscriptionPlanUpdate.index.NextStep" /> <Icon type="right" />
               </Button>
             )}
             {current === steps.length - 1 && editable ? (
               <div className="saveBtn">
                 <Button disabled={saveDisabled} style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, true)}>
-                  Save <Icon type="right" />
+                  <FormattedMessage id="SubscriptionPlanUpdate.index.Save" /> <Icon type="right" />
                 </Button>
                 <Button disabled={saveDisabled} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, false)}>
-                  Publish <Icon type="right" />
+                  <FormattedMessage id="SubscriptionPlanUpdate.index.Publish" /> <Icon type="right" />
                 </Button>
               </div>
             ) : null}

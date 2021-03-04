@@ -17,29 +17,29 @@ enum operatorDic {
 
 const columns = [
   {
-    title: 'Operator Type',
+    title: <FormattedMessage id="Order.Operatorype" />,
     dataIndex: 'operator.platform',
     key: 'operator.platform',
     render: (val) => operatorDic[val] || val
   },
   {
-    title: 'Operator',
+    title: <FormattedMessage id="Order.Operator" />,
     dataIndex: 'operator.name',
     key: 'operator.name'
   },
   {
-    title: 'Time',
+    title: <FormattedMessage id="Order.Time" />,
     dataIndex: 'eventTime',
     key: 'eventTime',
     render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
   },
   {
-    title: 'Operation Category',
+    title: <FormattedMessage id="Order.OperationCategory" />,
     dataIndex: 'eventType',
     key: 'eventType'
   },
   {
-    title: 'Operation Log',
+    title: <FormattedMessage id="Order.OperationLog" />,
     dataIndex: 'eventDetail',
     key: 'eventDetail',
     width: '50%'
@@ -67,7 +67,7 @@ export default class OperateLog extends React.Component<any, any> {
       <div>
         <div style={styles.backItem}>
           <Collapse>
-            <Panel header={<FormattedMessage id="operationLog" />} key="1" style={customPanelStyle}>
+            <Panel header={<FormattedMessage id="Order.OperationLog" />} key="1" style={customPanelStyle}>
               <Row>
                 <Col span={24}>
                   <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={log.toJS()} pagination={false} bordered />
@@ -78,7 +78,7 @@ export default class OperateLog extends React.Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="back" />}
+            {<FormattedMessage id="Order.Back" />}
           </Button>
         </div>
       </div>

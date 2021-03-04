@@ -1309,7 +1309,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <Tooltip placement="top" title="Change">
+                    <Tooltip placement="top" title={<FormattedMessage id="SubscriptionEdit.Active.Change" />}>
                       <a style={styles.edit} onClick={() => this.deliveryOpen()} className="iconfont iconEdit"></a>
                     </Tooltip>
                   </Col>
@@ -1348,7 +1348,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     </label>
                   </Col>
                   <Col span={12}>
-                    <Tooltip placement="top" title="Change">
+                    <Tooltip placement="top" title={<FormattedMessage id="SubscriptionEdit.Active.Change" />}>
                       <a style={styles.edit} onClick={() => this.billingOpen()} className="iconfont iconEdit"></a>
                     </Tooltip>
                   </Col>

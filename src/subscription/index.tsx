@@ -232,7 +232,7 @@ export default class SubscriptionList extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="f_subscription_export">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExport" />
+              <FormattedMessage id="Subscription.batchExport" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -319,7 +319,11 @@ export default class SubscriptionList extends Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={{ width: 110 }}>Frequency</p>}
+                      label={
+                        <p style={{ width: 110 }}>
+                          <FormattedMessage id="Subscription.Frequency" />
+                        </p>
+                      }
                       style={{ width: 180 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -330,7 +334,7 @@ export default class SubscriptionList extends Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="all" />
+                        <FormattedMessage id="Subscription.all" />
                       </Option>
                       {frequencyList &&
                         frequencyList.map((item, index) => (
@@ -382,7 +386,11 @@ export default class SubscriptionList extends Component<any, any> {
                         disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds ? true : false}
                         value={clinicsIds ? prescriberType : searchForm.prescriber}
                         // value={searchForm.prescriber}
-                        label={<p style={styles.label}>Prescriber</p>}
+                        label={
+                          <p style={styles.label}>
+                            <FormattedMessage id="Subscription.Prescriber" />
+                          </p>
+                        }
                         onChange={(value) => {
                           value = value === '' ? null : value;
                           this.onFormChange({
@@ -391,7 +399,9 @@ export default class SubscriptionList extends Component<any, any> {
                           });
                         }}
                       >
-                        <Option value="all">All</Option>
+                        <Option value="all">
+                          <FormattedMessage id="Subscription.all" />
+                        </Option>
                         {prescriberList &&
                           prescriberList.map((item, index) => (
                             <Option value={item.id} key={index}>

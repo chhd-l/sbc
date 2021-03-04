@@ -33,19 +33,13 @@ export default class ButtonGroup extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      onShow,
-      onHideExportModal,
-      exportModalData,
-      onRewardExport,
-      onRewardExportData
-    } = this.props.relaxProps;
+    const { onShow, onHideExportModal, exportModalData, onRewardExport, onRewardExportData } = this.props.relaxProps;
     return (
       <div className="handle-bar">
         <AuthWrapper functionName={'financeRewardExport'}>
           <Button type="primary">
             <a href="javascript;" onClick={() => onRewardExport()}>
-              {<FormattedMessage id="BulkExport" />}
+              {<FormattedMessage id="FinanceManagesettle.bulkExport" />}
             </a>
             {/*<a
               href="javascript:void(0);"

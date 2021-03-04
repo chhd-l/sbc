@@ -4,6 +4,7 @@ import { noop } from 'qmkit';
 import { IMap } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Button from 'antd/lib/button/button';
+import { FormattedMessage } from 'react-intl';
 
 const RadioGroup = Radio.Group;
 
@@ -56,12 +57,12 @@ export default class ExportModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={'Batch Export'}
+        title={<FormattedMessage id="Order.BatchExport"/>}
         visible={visible}
         onCancel={() => onHide()}
         footer={[
           <Button key="back" size="large" onClick={() => onHide()}>
-            Cancel
+            <FormattedMessage id="Order.Cancel"/>
           </Button>,
           <Button
             key="submit"
@@ -70,7 +71,7 @@ export default class ExportModal extends React.Component<any, any> {
             loading={this.state.posting}
             onClick={() => this._handleOk()}
           >
-            Export
+            <FormattedMessage id="Order.Export"/>
           </Button>
         ]}
       >
@@ -122,7 +123,7 @@ class ExportForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: 'Please select an export method'
+                message: <FormattedMessage id="Order.Pleaseselectanexportmethod" />
               }
             ]
           })(

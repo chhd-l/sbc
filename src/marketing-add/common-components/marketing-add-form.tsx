@@ -401,12 +401,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
             <div className="bold-title">Reduction type:</div>
             <FormItem {...formItemLayout} labelAlign="left">
               {getFieldDecorator('subType', {
-                // rules: [
-                //   {
-                //     required: true,
-                //     message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
-                //   }
-                // ],
+                rules: [
+                  {
+                    required: true,
+                    message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
+                  }
+                ],
                 initialValue: 1
               })(
                 <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
@@ -1075,6 +1075,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (marketingType, e) => {
+    debugger;
     const _thisRef = this;
     let levelType = '';
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {

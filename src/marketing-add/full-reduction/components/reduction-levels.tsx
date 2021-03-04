@@ -113,11 +113,12 @@ export default class ReductionLevels extends React.Component<any, any> {
                           onChange={(e) => {
                             this.ruleValueChange(index, e.target.value);
                           }}
+                          disabled={isFullCount === 2}
                         />
                       )}
                       <span>
                         &nbsp;
-                        {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}，333
+                        {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}，
                       </span>
                     </FormItem>
                   </div>
@@ -160,7 +161,7 @@ export default class ReductionLevels extends React.Component<any, any> {
             </div>
           );
         })}
-        {this.state.isNormal ? (
+        {this.state.isNormal && isFullCount !== 2 ? (
           <div>
             <Button onClick={this.addLevels} disabled={fullReductionLevelList.length >= 5}>
               Add multi-level promotions

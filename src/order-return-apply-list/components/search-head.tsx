@@ -45,10 +45,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline
-          title={<FormattedMessage id="initiateApplication" />}
-          number={total.toString()}
-        />
+        <Headline title={<FormattedMessage id="initiateApplication" />} number={total.toString()} />
 
         <div>
           <Form className="filter-content" layout="inline">
@@ -56,7 +53,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span="8">
                 <FormItem>
                   <Input
-                    addonBefore={<FormattedMessage id="order.orderNumber" />}
+                    addonBefore={<FormattedMessage id="Order.orderNumber" />}
                     onChange={(e) => {
                       this.setState({
                         id: (e.target as any).value
@@ -113,15 +110,7 @@ export default class SearchHead extends Component<any, any> {
                     icon="search"
                     onClick={(e) => {
                       e.preventDefault();
-                      let {
-                        goodsOptions,
-                        buyerSelect,
-                        receiverSelect,
-                        id,
-                        goodsOptionsValue,
-                        buyerSelectValue,
-                        receiverSelectValue
-                      } = this.state;
+                      let { goodsOptions, buyerSelect, receiverSelect, id, goodsOptionsValue, buyerSelectValue, receiverSelectValue } = this.state;
 
                       let params = {
                         id,
@@ -165,12 +154,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerSelect}
         style={{ width: 100 }}
       >
-        <Option value="buyerName">
-          {<FormattedMessage id="consumerName" />}
-        </Option>
-        <Option value="buyerAccount">
-          {<FormattedMessage id="consumerAccount" />}
-        </Option>
+        <Option value="buyerName">{<FormattedMessage id="consumerName" />}</Option>
+        <Option value="buyerAccount">{<FormattedMessage id="consumerAccount" />}</Option>
       </Select>
     );
   };
@@ -192,12 +177,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={{ width: 100 }}
       >
-        <Option value="consigneeName">
-          {<FormattedMessage id="recipient" />}
-        </Option>
-        <Option value="consigneePhone">
-          {<FormattedMessage id="recipientPhone" />}
-        </Option>
+        <Option value="consigneeName">{<FormattedMessage id="recipient" />}</Option>
+        <Option value="consigneePhone">{<FormattedMessage id="recipientPhone" />}</Option>
       </Select>
     );
   };

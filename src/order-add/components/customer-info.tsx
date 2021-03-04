@@ -66,11 +66,7 @@ const formItemLayoutTwo = {
  * @returns {any}
  */
 function renderOption(item) {
-  return (
-    <Option key={item.get('customerAccount')}>
-      {item.get('customerAccount')}
-    </Option>
-  );
+  return <Option key={item.get('customerAccount')}>{item.get('customerAccount')}</Option>;
 }
 
 @Relax
@@ -161,17 +157,7 @@ class CustomerInfo extends Component<any, any> {
   }
 
   render() {
-    const {
-      customers,
-      addrs,
-      selected,
-      showType,
-      onSelectAddress,
-      customerTempAddressVisiable,
-      showMore,
-      settingTempAddress,
-      consignee
-    } = this.props.relaxProps;
+    const { customers, addrs, selected, showType, onSelectAddress, customerTempAddressVisiable, showMore, settingTempAddress, consignee } = this.props.relaxProps;
 
     const { getFieldDecorator } = this.props.form;
     const customerAccountList = (customers || fromJS([]))
@@ -182,19 +168,10 @@ class CustomerInfo extends Component<any, any> {
     //地址数组
     let addsArray = [];
     //根据地质id是否存在来判断是否是临时地址
-    if (
-      consignee.get('provinceId') != null &&
-      consignee.get('id') == 'tempId'
-    ) {
-      addsArray.push(
-        consignee.get('provinceId') && consignee.get('provinceId').toString()
-      );
-      addsArray.push(
-        consignee.get('cityId') && consignee.get('cityId').toString()
-      );
-      addsArray.push(
-        consignee.get('areaId') && consignee.get('areaId').toString()
-      );
+    if (consignee.get('provinceId') != null && consignee.get('id') == 'tempId') {
+      addsArray.push(consignee.get('provinceId') && consignee.get('provinceId').toString());
+      addsArray.push(consignee.get('cityId') && consignee.get('cityId').toString());
+      addsArray.push(consignee.get('areaId') && consignee.get('areaId').toString());
     }
 
     const addressInit = {
@@ -202,18 +179,15 @@ class CustomerInfo extends Component<any, any> {
     };
 
     const phone = {
-      initialValue:
-        consignee.get('id') == 'tempId' ? consignee.get('phone') : null
+      initialValue: consignee.get('id') == 'tempId' ? consignee.get('phone') : null
     };
 
     const name = {
-      initialValue:
-        consignee.get('id') == 'tempId' ? consignee.get('name') : null
+      initialValue: consignee.get('id') == 'tempId' ? consignee.get('name') : null
     };
 
     const detailAddress = {
-      initialValue:
-        consignee.get('id') == 'tempId' ? consignee.get('address') : null
+      initialValue: consignee.get('id') == 'tempId' ? consignee.get('address') : null
     };
     if (customerTempAddressVisiable && !this.props.selectedAddrId) {
       onSelectAddress('tempId');
@@ -224,15 +198,11 @@ class CustomerInfo extends Component<any, any> {
     return (
       <div>
         <strong style={styles.title}>
-          <FormattedMessage id="consumerInfo" />:{' '}
+          <FormattedMessage id="Order.OrderNumber" />:{' '}
         </strong>
         <Row type="flex" align="top">
           <Col span={10}>
-            <FormItem
-              {...formItemLayoutOne}
-              label={<FormattedMessage id="consumerAccount" />}
-              hasFeedback
-            >
+            <FormItem {...formItemLayoutOne} label={<FormattedMessage id="Order.consumerAccount" />} hasFeedback>
               {this.props.edit ? (
                 <label>{this.props.selectedCustomerInfo}</label>
               ) : (
@@ -241,19 +211,10 @@ class CustomerInfo extends Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: <FormattedMessage id="order.mustSelectAMember" />
+                      message: <FormattedMessage id="Order.mustSelectAMember" />
                     }
                   ]
-                })(
-                  <AutoComplete
-                    size="large"
-                    style={{ width: '100%' }}
-                    dataSource={customerAccountList}
-                    onSelect={(value) => this._selectCustomerName(value)}
-                    onChange={(value) => this.handleSearch(value)}
-                    allowClear={true}
-                  />
-                )
+                })(<AutoComplete size="large" style={{ width: '100%' }} dataSource={customerAccountList} onSelect={(value) => this._selectCustomerName(value)} onChange={(value) => this.handleSearch(value)} allowClear={true} />)
               )}
             </FormItem>
           </Col>
@@ -261,11 +222,7 @@ class CustomerInfo extends Component<any, any> {
 
         {!selected ? null : (
           <div>
-            <FormItem
-              label={<FormattedMessage id="deliveryInformation" />}
-              hasFeedback
-              {...formItemLayout}
-            >
+            <FormItem label={<FormattedMessage id="Order.deliveryInformation" />} hasFeedback {...formItemLayout}>
               {
                 <Radio.Group
                   value={this.props.selectedAddrId}
@@ -284,24 +241,10 @@ class CustomerInfo extends Component<any, any> {
                     showType === 2 || k < 10 ? (
                       <div key={k} className="addressDisplay">
                         <Radio value={v.get('deliveryAddressId')}>
-                          <FormattedMessage id="receiver" />：
-                          {v.get('consigneeName')}&nbsp;{' '}
-                          <FormattedMessage id="phoneNumber" />：
-                          {v.get('consigneeNumber')}&nbsp;{' '}
-                          <FormattedMessage id="deliveryInformation" />：
-                          {FindArea.addressInfo(
-                            v.get('provinceId')
-                              ? v.get('provinceId').toString()
-                              : '',
-                            v.get('cityId') ? v.get('cityId').toString() : '',
-                            v.get('areaId') ? v.get('areaId').toString() : ''
-                          )}
+                          <FormattedMessage id="Order.receiver" />：{v.get('consigneeName')}&nbsp; <FormattedMessage id="Order.phoneNumber" />：{v.get('consigneeNumber')}&nbsp; <FormattedMessage id="Order.deliveryInformation" />：
+                          {FindArea.addressInfo(v.get('provinceId') ? v.get('provinceId').toString() : '', v.get('cityId') ? v.get('cityId').toString() : '', v.get('areaId') ? v.get('areaId').toString() : '')}
                           {v.get('deliveryAddress')}&nbsp;
-                          {v.get('isDefaltAddress') === 1 ? (
-                            <FormattedMessage id="defaultAddress" />
-                          ) : (
-                            ''
-                          )}
+                          {v.get('isDefaltAddress') === 1 ? <FormattedMessage id="Order.defaultAddress" /> : ''}
                         </Radio>
                       </div>
                     ) : null
@@ -313,7 +256,7 @@ class CustomerInfo extends Component<any, any> {
                         showMore(2);
                       }}
                     >
-                      <FormattedMessage id="more" />
+                      <FormattedMessage id="Public.more" />
                     </a>
                   ) : (
                     ''
@@ -321,7 +264,7 @@ class CustomerInfo extends Component<any, any> {
                   <div className="addressDisplay">
                     <Radio value="tempId">
                       <span style={{ color: '#F56C1D' }}>
-                        <FormattedMessage id="order.noAddressAvailable" />
+                        <FormattedMessage id="Order.noAddressAvailable" />
                       </span>
                     </Radio>
                   </div>
@@ -337,9 +280,7 @@ class CustomerInfo extends Component<any, any> {
                     rules: [
                       {
                         required: selected ? true : false,
-                        message: (
-                          <FormattedMessage id="order.mustChooseAShippingAddress" />
-                        )
+                        message: <FormattedMessage id="Order.mustChooseAShippingAddress" />
                       }
                     ]
                   })(<input type="hidden" />)}
@@ -353,26 +294,18 @@ class CustomerInfo extends Component<any, any> {
             <Col span={10}>
               <Col offset={5}>
                 <AreaSelectBox>
-                  <FormItem
-                    label={<FormattedMessage id="area" />}
-                    {...formItemLayoutTwo}
-                    hasFeedback
-                  >
+                  <FormItem label={<FormattedMessage id="Order.area" />} {...formItemLayoutTwo} hasFeedback>
                     {getFieldDecorator('consigneeAddressIds', {
                       ...addressInit,
                       rules: [
                         {
                           required: true,
-                          message: (
-                            <FormattedMessage id="order.pleaseSelectProvinceOrCityOrDistrict" />
-                          )
+                          message: <FormattedMessage id="Order.pleaseSelectProvinceOrCityOrDistrict" />
                         }
                       ]
                     })(
                       <AreaSelect
-                        getPopupContainer={() =>
-                          document.getElementById('page-content')
-                        }
+                        getPopupContainer={() => document.getElementById('page-content')}
                         onChange={(val) => {
                           this.forceUpdate();
                           settingTempAddress('tempAddress', val);
@@ -381,71 +314,45 @@ class CustomerInfo extends Component<any, any> {
                     )}
                   </FormItem>
                 </AreaSelectBox>
-                <FormItem
-                  label={<FormattedMessage id="detailAddress" />}
-                  hasFeedback
-                  {...formItemLayoutTwo}
-                >
+                <FormItem label={<FormattedMessage id="Order.detailAddress" />} hasFeedback {...formItemLayoutTwo}>
                   {getFieldDecorator('consigneeAddress', {
                     ...detailAddress,
                     rules: [
                       {
                         required: true,
                         whitespace: true,
-                        message: (
-                          <FormattedMessage id="inputDetailAddressTip1" />
-                        )
+                        message: <FormattedMessage id="Order.inputDetailAddressTip1" />
                       },
                       {
                         min: 5,
-                        message: (
-                          <FormattedMessage id="inputDetailAddressTip2" />
-                        )
+                        message: <FormattedMessage id="Order.inputDetailAddressTip2" />
                       },
                       {
                         max: 60,
-                        message: (
-                          <FormattedMessage id="inputDetailAddressTip2" />
-                        )
+                        message: <FormattedMessage id="Order.inputDetailAddressTip2" />
                       }
                     ]
                   })(
                     <Input
                       onChange={(val) => {
                         this.forceUpdate();
-                        settingTempAddress(
-                          'address',
-                          (val.target as any).value
-                        );
+                        settingTempAddress('address', (val.target as any).value);
                       }}
                     />
                   )}
                 </FormItem>
-                <FormItem
-                  label={<FormattedMessage id="receiver" />}
-                  hasFeedback
-                  {...formItemLayoutTwo}
-                >
+                <FormItem label={<FormattedMessage id="Order.receiver" />} hasFeedback {...formItemLayoutTwo}>
                   {getFieldDecorator('consigneeName', {
                     ...name,
                     rules: [
                       {
                         required: true,
                         whitespace: true,
-                        message: (
-                          <FormattedMessage id="order.inputReceiverTip" />
-                        )
+                        message: <FormattedMessage id="Order.inputReceiverTip" />
                       },
                       {
                         validator: (rule, value, callback) => {
-                          QMMethod.validatorMinAndMax(
-                            rule,
-                            value,
-                            callback,
-                            <FormattedMessage id="receiver" />,
-                            2,
-                            15
-                          );
+                          QMMethod.validatorMinAndMax(rule, value, callback, <FormattedMessage id="Order.receiver" />, 2, 15);
                         }
                       }
                     ]
@@ -458,21 +365,17 @@ class CustomerInfo extends Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem
-                  label={<FormattedMessage id="phoneNumber2" />}
-                  hasFeedback
-                  {...formItemLayoutTwo}
-                >
+                <FormItem label={<FormattedMessage id="Order.phoneNumber2" />} hasFeedback {...formItemLayoutTwo}>
                   {getFieldDecorator('consigneeDetailAddress', {
                     ...phone,
                     rules: [
                       {
                         required: true,
-                        message: <FormattedMessage id="inputPhoneNumberTip" />
+                        message: <FormattedMessage id="Order.inputPhoneNumberTip" />
                       },
                       {
                         pattern: ValidConst.phone,
-                        message: <FormattedMessage id="inputPhoneNumberTip2" />
+                        message: <FormattedMessage id="Order.inputPhoneNumberTip2" />
                       }
                     ]
                   })(

@@ -5,10 +5,11 @@ const logo = require('../img/logo.png');
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
 import { history, Const, login, cache } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
 //import { TIMEOUT } from 'dns';
 const pcLogo = require('../../../public/images/login/logo1.png');
-export default class LoginForm extends React.Component<any, any> {
+import { FormattedMessage, injectIntl } from 'react-intl';
+
+class LoginForm extends React.Component<any, any> {
   form;
 
   //声明上下文依赖
@@ -22,6 +23,10 @@ export default class LoginForm extends React.Component<any, any> {
       loading: false
     };
   }
+
+  props: {
+    intl: any;
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -42,14 +47,14 @@ export default class LoginForm extends React.Component<any, any> {
         </label>
         <FormItem style={{ marginTop: 10 }}>
           {getFieldDecorator('account', {
-            rules: [{ required: true, message: 'Account cannot be empty' }]
-          })(<Input size="large" prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder={<FormattedMessage id="Public.Pleaseinputyour" />} />)}
+            rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Public.Passwordcannotbeempty' }) }]
+          })(<Input size="large" prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder={this.props.intl.formatMessage({ id: 'Public.Pleaseinputyour' })} />)}
         </FormItem>
         <label style={styles.label}>Password</label>
         <FormItem style={{ marginTop: 10 }}>
           {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Password cannot be empty' }]
-          })(<Input size="large" prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="Password" />)}
+            rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Public.Passwordcannotbeempty' }) }]
+          })(<Input size="large" prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder={this.props.intl.formatMessage({ id: 'Public.Password' })} />)}
         </FormItem>
         <FormItem>
           {/*{getFieldDecorator('isRemember', {
@@ -117,6 +122,8 @@ export default class LoginForm extends React.Component<any, any> {
     // }, 20000);
   };
 }
+
+export default injectIntl(LoginForm);
 
 const styles = {
   loginForm: {

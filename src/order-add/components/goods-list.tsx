@@ -1,16 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { IList } from 'typings/globalType';
-import {
-  Button,
-  Checkbox,
-  InputNumber,
-  Modal,
-  Table,
-  message,
-  Form,
-  Input
-} from 'antd';
+import { Button, Checkbox, InputNumber, Modal, Table, message, Form, Input } from 'antd';
 import GoodsAdd from './goods-add';
 import { fromJS } from 'immutable';
 import { noop, ValidConst, QMFloat, QMMethod } from 'qmkit';
@@ -158,10 +149,7 @@ export default class GoodsList extends React.Component<any, any> {
 
   UNSAFE_componentWillReceiveProps(nextProps: any) {
     // 如果customerId被清空,则清空下面的值
-    if (
-      !nextProps.selectedCustomerId ||
-      this.props.selectedCustomerId != nextProps.selectedCustomerId
-    ) {
+    if (!nextProps.selectedCustomerId || this.props.selectedCustomerId != nextProps.selectedCustomerId) {
       this.setState({
         //显示添加商品
         addAddressVisible: false,
@@ -227,10 +215,7 @@ export default class GoodsList extends React.Component<any, any> {
 
         <FormItem>
           {getFieldDecorator('goodsChoose', {
-            initialValue:
-              dataSource && fromJS(dataSource).count() > 0
-                ? fromJS(dataSource).count()
-                : '',
+            initialValue: dataSource && fromJS(dataSource).count() > 0 ? fromJS(dataSource).count() : '',
             rules: [
               {
                 required: selectedCustomerId ? true : false,
@@ -250,19 +235,9 @@ export default class GoodsList extends React.Component<any, any> {
           dataSource={dataSource.concat(giftDataSource)}
           pagination={false}
         >
-          <Column
-            title={<FormattedMessage id="serialNumber" />}
-            key="index"
-            width="61px"
-            render={(_text, _record, index) => <span>{index + 1}</span>}
-          />
+          <Column title={<FormattedMessage id="serialNumber" />} key="index" width="61px" render={(_text, _record, index) => <span>{index + 1}</span>} />
 
-          <Column
-            title={<FormattedMessage id="skuCode" />}
-            dataIndex="goodsInfoNo"
-            width="140px"
-            key="goodsInfoNo"
-          />
+          <Column title={<FormattedMessage id="skuCode" />} dataIndex="goodsInfoNo" width="140px" key="goodsInfoNo" />
 
           <Column
             width="20%"
@@ -270,12 +245,7 @@ export default class GoodsList extends React.Component<any, any> {
             key="goodsInfoName"
             render={(rowInfo) => {
               if (rowInfo.gift) {
-                return (
-                  '【' +
-                  <FormattedMessage id="giveaway" /> +
-                  '】' +
-                  rowInfo.goodsInfoName
-                );
+                return '【' + <FormattedMessage id="giveaway" /> + '】' + rowInfo.goodsInfoName;
               }
               return rowInfo.goodsInfoName;
             }}
@@ -292,47 +262,27 @@ export default class GoodsList extends React.Component<any, any> {
             }}
           />
           <Column
-            title={
-              this.props.edit ? (
-                <FormattedMessage id="price" />
-              ) : (
-                <FormattedMessage id="memberPrice" />
-              )
-            }
+            title={this.props.edit ? <FormattedMessage id="price" /> : <FormattedMessage id="memberPrice" />}
             width="110px"
             key="salePrice"
             render={(rowInfo) => {
               if (rowInfo.gift) return '$0.00';
               if (this.props.edit) return rowInfo.levelPrice.toFixed(2);
-              const goodsIntervalPrices = this.props.relaxProps
-                .goodsIntervalPrices;
-              let price =
-                sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                rowInfo.salePrice.toFixed(2);
+              const goodsIntervalPrices = this.props.relaxProps.goodsIntervalPrices;
+              let price = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + rowInfo.salePrice.toFixed(2);
               if (rowInfo.priceType === 1) {
                 const buyCount = rowInfo.buyCount;
                 if (buyCount == 0) {
                   const minPrice = rowInfo.intervalMinPrice;
                   const maxPrice = rowInfo.intervalMaxPrice;
-                  price =
-                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                    minPrice.toFixed(2) +
-                    '-' +
-                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                    maxPrice.toFixed(2);
+                  price = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + minPrice.toFixed(2) + '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + maxPrice.toFixed(2);
                 } else {
                   const prices = fromJS(rowInfo.intervalPriceIds || [])
-                    .map((id) =>
-                      goodsIntervalPrices
-                        .filter((price) => price.get('intervalPriceId') == id)
-                        .first()
-                    )
+                    .map((id) => goodsIntervalPrices.filter((price) => price.get('intervalPriceId') == id).first())
                     .filter((f) => f && f.get('count') <= buyCount)
                     .maxBy((f) => f.get('count'));
                   if (prices) {
-                    price =
-                      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                      prices.get('price').toFixed(2);
+                    price = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + prices.get('price').toFixed(2);
                   }
                 }
               }
@@ -354,18 +304,11 @@ export default class GoodsList extends React.Component<any, any> {
               if (record.gift) {
                 return record.num;
               }
-              const buySku = fromJS(
-                oldBuyCount.find(
-                  (sku) => fromJS(sku).get('skuId') == record.goodsInfoId
-                )
-              );
+              const buySku = fromJS(oldBuyCount.find((sku) => fromJS(sku).get('skuId') == record.goodsInfoId));
               return (
                 <FormItem>
                   {getFieldDecorator(record.goodsInfoId + '_buyCount', {
-                    initialValue:
-                      record && record.buyCount
-                        ? record.buyCount.toString()
-                        : '0',
+                    initialValue: record && record.buyCount ? record.buyCount.toString() : '0',
                     rules: [
                       {
                         required: true,
@@ -373,8 +316,7 @@ export default class GoodsList extends React.Component<any, any> {
                       },
                       {
                         pattern: ValidConst.noZeroNumber,
-                        message:
-                          'Purchase volume can only be an integer greater than 0'
+                        message: 'Purchase volume can only be an integer greater than 0'
                       },
                       {
                         validator: (_rule, value, callback) => {
@@ -383,10 +325,7 @@ export default class GoodsList extends React.Component<any, any> {
                           let stock = 0;
                           if (this.props.edit) {
                             if (buySku) {
-                              stock = QMFloat.accAdd(
-                                record.stock,
-                                buySku.get('buyCount')
-                              );
+                              stock = QMFloat.accAdd(record.stock, buySku.get('buyCount'));
                             } else {
                               stock = record.stock;
                             }
@@ -395,13 +334,9 @@ export default class GoodsList extends React.Component<any, any> {
                           }
                           if (stock < value) {
                             if (this.props.edit) {
-                              callback(
-                                'The purchase volume cannot be greater than the remaining inventory'
-                              );
+                              callback('The purchase volume cannot be greater than the remaining inventory');
                             } else {
-                              callback(
-                                'Purchase volume cannot be greater than inventory'
-                              );
+                              callback('Purchase volume cannot be greater than inventory');
                             }
                             return;
                           }
@@ -409,15 +344,11 @@ export default class GoodsList extends React.Component<any, any> {
                             const maxCount = record.maxCount;
                             const count = record.count;
                             if (maxCount && maxCount < value) {
-                              callback(
-                                'The purchase volume cannot be greater than the limit order quantity'
-                              );
+                              callback('The purchase volume cannot be greater than the limit order quantity');
                               return;
                             }
                             if (count && count > value) {
-                              callback(
-                                'The purchase volume cannot be less than the minimum quantity'
-                              );
+                              callback('The purchase volume cannot be less than the minimum quantity');
                               return;
                             }
                           }
@@ -434,21 +365,9 @@ export default class GoodsList extends React.Component<any, any> {
                     />
                   )}
                   <p>
-                    {this.props.edit &&
-                    (record.initBuyCount || (buySku && buySku.get('buyCount')))
+                    {this.props.edit && (record.initBuyCount || (buySku && buySku.get('buyCount')))
                       ? null
-                      : `${(<FormattedMessage id="stock" />)}: ${
-                          record.stock
-                        } ${
-                          record.priceType === 0
-                            ? (record.count
-                                ? 'Minimum order quantity: ' + record.count
-                                : '') +
-                              (record.maxCount
-                                ? 'Maximum amount: ' + record.maxCount
-                                : '')
-                            : ''
-                        }`}
+                      : `${(<FormattedMessage id="stock" />)}: ${record.stock} ${record.priceType === 0 ? (record.count ? 'Minimum order quantity: ' + record.count : '') + (record.maxCount ? 'Maximum amount: ' + record.maxCount : '') : ''}`}
                   </p>
                 </FormItem>
               );
@@ -461,40 +380,20 @@ export default class GoodsList extends React.Component<any, any> {
             key="subtotal"
             render={(_text, record: any) => {
               if (record.gift) return '$0.00';
-              if (this.props.edit)
-                return (record.buyCount * record.levelPrice).toFixed(2);
+              if (this.props.edit) return (record.buyCount * record.levelPrice).toFixed(2);
               const { goodsIntervalPrices } = this.props.relaxProps;
               let price = record.salePrice;
-              if (
-                record.priceType === 1 &&
-                goodsIntervalPrices &&
-                goodsIntervalPrices.count() > 0 &&
-                goodsIntervalPrices.get(0) != null
-              ) {
+              if (record.priceType === 1 && goodsIntervalPrices && goodsIntervalPrices.count() > 0 && goodsIntervalPrices.get(0) != null) {
                 const buyCount = record.buyCount;
                 const prices = goodsIntervalPrices
-                  .filter((intervalPrice) =>
-                    fromJS(record.intervalPriceIds).includes(
-                      intervalPrice.get('intervalPriceId')
-                    )
-                  )
-                  .filter(
-                    (intervalPrice) => intervalPrice.get('count') <= buyCount
-                  )
+                  .filter((intervalPrice) => fromJS(record.intervalPriceIds).includes(intervalPrice.get('intervalPriceId')))
+                  .filter((intervalPrice) => intervalPrice.get('count') <= buyCount)
                   .maxBy((intervalPrice) => intervalPrice.get('count'));
                 if (prices) {
                   price = prices.get('price');
                 }
               }
-              return (
-                <span>
-                  $
-                  {(price * record.buyCount
-                    ? price * record.buyCount
-                    : 0.0
-                  ).toFixed(2)}{' '}
-                </span>
-              );
+              return <span>${(price * record.buyCount ? price * record.buyCount : 0.0).toFixed(2)} </span>;
             }}
           />
 
@@ -548,15 +447,13 @@ export default class GoodsList extends React.Component<any, any> {
                       this._enableSpecVal(checked);
                     }}
                   >
-                    <FormattedMessage id="order.orderPriceChange" />
+                    <FormattedMessage id="Order.orderPriceChange" />
                     :$
                   </Checkbox>
                 }
               >
                 {getFieldDecorator('specVal', {
-                  initialValue: goodsList.get('isEnableSpecVal')
-                    ? (goodsList.get('specVal') || 0).toFixed(2)
-                    : '',
+                  initialValue: goodsList.get('isEnableSpecVal') ? (goodsList.get('specVal') || 0).toFixed(2) : '',
                   rules: [
                     {
                       required: goodsList.get('isEnableSpecVal'),
@@ -569,13 +466,7 @@ export default class GoodsList extends React.Component<any, any> {
                   ]
                 })(
                   <Input
-                    disabled={
-                      selectedCustomerId
-                        ? goodsList.get('isEnableSpecVal')
-                          ? false
-                          : true
-                        : true
-                    }
+                    disabled={selectedCustomerId ? (goodsList.get('isEnableSpecVal') ? false : true) : true}
                     onChange={(e) => {
                       onChangeSpecVal(parseFloat((e.target as any).value || 0));
                       this.setState({});
@@ -616,9 +507,7 @@ export default class GoodsList extends React.Component<any, any> {
                 }
               >
                 {getFieldDecorator('deliverFee', {
-                  initialValue: goodsList.get('isEnableDeliverFee')
-                    ? goodsList.get('deliverFee')
-                    : '',
+                  initialValue: goodsList.get('isEnableDeliverFee') ? goodsList.get('deliverFee') : '',
                   rules: [
                     {
                       required: goodsList.get('isEnableDeliverFee'),
@@ -631,17 +520,9 @@ export default class GoodsList extends React.Component<any, any> {
                   ]
                 })(
                   <Input
-                    disabled={
-                      selectedCustomerId
-                        ? goodsList.get('isEnableDeliverFee')
-                          ? false
-                          : true
-                        : true
-                    }
+                    disabled={selectedCustomerId ? (goodsList.get('isEnableDeliverFee') ? false : true) : true}
                     onChange={(e) => {
-                      onChangeDeliverFee(
-                        parseFloat((e.target as any).value || 0)
-                      );
+                      onChangeDeliverFee(parseFloat((e.target as any).value || 0));
                       this.setState({});
                     }}
                     style={{ width: 80, marginLeft: 0 }}
@@ -678,7 +559,7 @@ export default class GoodsList extends React.Component<any, any> {
               )}
               {goodsList.get('isEnableSpecVal') && (
                 <span style={styles.itemsText}>
-                  <FormattedMessage id="order.orderPriceChange" />:
+                  <FormattedMessage id="Order.orderPriceChange" />:
                 </span>
               )}
               <span style={styles.itemsText}>
@@ -691,31 +572,11 @@ export default class GoodsList extends React.Component<any, any> {
             <div style={styles.priceCom}>
               <div style={styles.priceCol}>
                 <span style={styles.itemsText}>${totalMoney}</span>
-                {reductionPrice != 0 && (
-                  <span style={styles.itemsText}>
-                    -${reductionPrice.toFixed(2)}
-                  </span>
-                )}
-                {discountPrice != 0 && (
-                  <span style={styles.itemsText}>
-                    -${discountPrice.toFixed(2)}
-                  </span>
-                )}
-                {couponPrice != 0 && (
-                  <span style={styles.itemsText}>
-                    -${couponPrice.toFixed(2)}
-                  </span>
-                )}
-                {pointsPrice != 0 && (
-                  <span style={styles.itemsText}>
-                    -${pointsPrice.toFixed(2)}
-                  </span>
-                )}
-                {goodsList.get('isEnableSpecVal') && (
-                  <span style={styles.itemsText}>
-                    ${(goodsList.get('specVal') || 0).toFixed(2)}
-                  </span>
-                )}
+                {reductionPrice != 0 && <span style={styles.itemsText}>-${reductionPrice.toFixed(2)}</span>}
+                {discountPrice != 0 && <span style={styles.itemsText}>-${discountPrice.toFixed(2)}</span>}
+                {couponPrice != 0 && <span style={styles.itemsText}>-${couponPrice.toFixed(2)}</span>}
+                {pointsPrice != 0 && <span style={styles.itemsText}>-${pointsPrice.toFixed(2)}</span>}
+                {goodsList.get('isEnableSpecVal') && <span style={styles.itemsText}>${(goodsList.get('specVal') || 0).toFixed(2)}</span>}
                 <span style={styles.itemsText}>${deliverFee}</span>
                 <span style={styles.itemsText}>${payTotal}</span>
               </div>
@@ -730,30 +591,17 @@ export default class GoodsList extends React.Component<any, any> {
             width={1100}
             visible={this.state.addAddressVisible}
             onOk={async () => {
-              let selectedRows = fromJS(
-                (await this['_goodsAdd'].getSelectRows()) || []
-              );
-              selectedRows = QMMethod.distinct(
-                fromJS(dataSource),
-                selectedRows,
-                'goodsInfoId'
-              );
+              let selectedRows = fromJS((await this['_goodsAdd'].getSelectRows()) || []);
+              selectedRows = QMMethod.distinct(fromJS(dataSource), selectedRows, 'goodsInfoId');
               const selectedKeys = await this['_goodsAdd'].getSelectKeys();
-              const newKeys = selectedKeys
-                .map((key) => key.substring(4))
-                .filter((key) => oldSkuIds.findIndex((o) => o == key) < 0);
-              const wholeKeys = newSkuIds
-                .toSet()
-                .concat(newKeys.toSet())
-                .toList();
+              const newKeys = selectedKeys.map((key) => key.substring(4)).filter((key) => oldSkuIds.findIndex((o) => o == key) < 0);
+              const wholeKeys = newSkuIds.toSet().concat(newKeys.toSet()).toList();
               if (wholeKeys.count() > 50) {
                 message.error('No more than 50 types of purchased goods');
                 return;
               }
               saveNewSkuIds(wholeKeys);
-              const intervalPricesNew = await this[
-                '_goodsAdd'
-              ].getIntervalPrices();
+              const intervalPricesNew = await this['_goodsAdd'].getIntervalPrices();
 
               const { goodsIntervalPrices } = this.props.relaxProps;
               let intervalPricesOld = goodsIntervalPrices;
@@ -762,10 +610,7 @@ export default class GoodsList extends React.Component<any, any> {
                 let buyCount = v.get('buyCount') || 1;
                 //如果有最小起订量
                 if (v.get('priceType') === 0 && v.get('count')) {
-                  buyCount =
-                    v.get('count') > v.get('stock')
-                      ? v.get('stock')
-                      : v.get('count');
+                  buyCount = v.get('count') > v.get('stock') ? v.get('stock') : v.get('count');
                 }
                 return v.set('buyCount', buyCount);
               });
@@ -778,14 +623,7 @@ export default class GoodsList extends React.Component<any, any> {
                 selectedKeys: selectedKeys,
                 selectedRows: selectedRows
               });
-              onSelectGoodList(
-                selectedRow,
-                QMMethod.distinct(
-                  fromJS(intervalPricesNew),
-                  fromJS(intervalPricesOld),
-                  'intervalPriceId'
-                )
-              );
+              onSelectGoodList(selectedRow, QMMethod.distinct(fromJS(intervalPricesNew), fromJS(intervalPricesOld), 'intervalPriceId'));
             }}
             onCancel={() => {
               this.setState({ addAddressVisible: false });
@@ -793,14 +631,7 @@ export default class GoodsList extends React.Component<any, any> {
             okText={<FormattedMessage id="confirm" />}
             cancelText={<FormattedMessage id="cancel" />}
           >
-            {
-              <GoodsAdd
-                selectedCustomerId={selectedCustomerId}
-                selectedKeys={this.state.selectedKeys}
-                selectedRows={this.state.selectedRows}
-                ref={(goodsAdd) => (this['_goodsAdd'] = goodsAdd)}
-              />
-            }
+            {<GoodsAdd selectedCustomerId={selectedCustomerId} selectedKeys={this.state.selectedKeys} selectedRows={this.state.selectedRows} ref={(goodsAdd) => (this['_goodsAdd'] = goodsAdd)} />}
           </Modal>
         )}
       </TableSet>
@@ -825,7 +656,7 @@ export default class GoodsList extends React.Component<any, any> {
     return (
       <label style={styles.priceItem as any}>
         <span style={styles.name}>
-          <FormattedMessage id="order.orderPriceChange" />:{' '}
+          <FormattedMessage id="Order.orderPriceChange" />:{' '}
         </span>
         <strong>${(specVal || 0).toFixed(2)}</strong>
       </label>
@@ -853,9 +684,7 @@ export default class GoodsList extends React.Component<any, any> {
     } = this.props.relaxProps;
     let { selectedRows, selectedKeys } = this.state;
     selectedKeys = selectedKeys.filter((key) => key != 'add_' + goodsInfoId);
-    selectedRows = selectedRows.filter(
-      (sku) => sku.get('goodsInfoId') != goodsInfoId
-    );
+    selectedRows = selectedRows.filter((sku) => sku.get('goodsInfoId') != goodsInfoId);
     this.setState({
       selectedKeys: selectedKeys,
       selectedRows: selectedRows

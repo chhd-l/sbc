@@ -113,8 +113,7 @@ const updateFreight = (params) => {
  */
 const syncProduct = () => {
   return Fetch<TResult>('/goods/updateProductFromIntegration', {
-    method: 'POST',
-    body: JSON.stringify('{}')
+    method: 'POST'
   });
 };
 

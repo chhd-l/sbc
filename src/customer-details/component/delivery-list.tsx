@@ -1,11 +1,8 @@
 import React from 'react';
 import { Table, Popconfirm, Button } from 'antd';
 import { getAddressListByType, delAddress } from '../webapi';
-import { getCityList, getCountryList } from './webapi';
 
 interface Iprop {
-  startDate: string;
-  endDate: string;
   customerId: string;
   type: 'DELIVERY' | 'BILLING';
   onEdit?: Function;
@@ -16,12 +13,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     super(props);
     this.state = {
       loading: false,
-      list: [],
-      pagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0
-      }
+      list: []
     };
   }
 
@@ -78,7 +70,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       },
       {
         title: 'Post code',
-        dataIndex: 'postcode',
+        dataIndex: 'postCode',
         key: 'postcode'
       },
       {
@@ -114,7 +106,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         <Button type="primary" onClick={() => onEdit({})}>
           Add new
         </Button>
-        <Table rowKey="id" loading={loading} columns={columns} dataSource={list} pagination={false} />
+        <Table rowKey="deliveryAddressId" loading={loading} columns={columns} dataSource={list} pagination={false} />
       </div>
     );
   }

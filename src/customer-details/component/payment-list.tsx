@@ -4,8 +4,6 @@ import { getPaymentMethods, deleteCard } from '../webapi';
 import { cache } from 'qmkit';
 
 interface Iprop {
-  startDate: string;
-  endDate: string;
   customerId: string;
 }
 
@@ -14,29 +12,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
     super(props);
     this.state = {
       loading: false,
-      list: [
-        {
-          id: 5678,
-          cardno: '**** **** **** 3213',
-          type: 'test',
-          holder: 'test',
-          phone: '4321432',
-          email: 'xx@xx.com'
-        },
-        {
-          id: 5678,
-          cardno: '**** **** **** 3213',
-          type: 'test',
-          holder: 'test',
-          phone: '4321432',
-          email: 'xx@xx.com'
-        }
-      ],
-      pagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0
-      }
+      list: []
     };
   }
 
@@ -78,7 +54,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
   };
 
   render() {
-    const { list, pagination } = this.state;
+    const { list } = this.state;
     const columns = [
       {
         title: 'Card number',
@@ -129,7 +105,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <Table rowKey="id" columns={columns} dataSource={list} pagination={pagination} />
+        <Table rowKey="id" columns={columns} dataSource={list} pagination={false} />
       </div>
     );
   }

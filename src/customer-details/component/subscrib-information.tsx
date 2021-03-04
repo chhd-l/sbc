@@ -164,7 +164,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
               ) : null}
             </div>
           </div>
-          {pagination.total > 0 ? <Pagination current={pagination.current} total={pagination.total} pageSize={pagination.pageSize} onChange={(pageNum, pageSize) => {}} /> : null}
+          {pagination.total > 0 ? <Pagination current={pagination.current} total={pagination.total} pageSize={pagination.pageSize} onChange={this.onPageChange} /> : null}
         </div>
       </div>
     );

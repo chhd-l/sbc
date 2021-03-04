@@ -247,6 +247,16 @@ export function setTagging(params = {}) {
   });
 }
 
+export function getPrescriberList(params = {}) {
+  return Fetch<TResult>('/prescriber/query/listByCustomer', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
+    })
+  });
+}
+
 // import axios from '@/utils/request'
 // import { register } from '../serviceWorker'
 

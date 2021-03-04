@@ -5,9 +5,9 @@ import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-import { Const, Headline, history } from 'qmkit';
+import { Const, Headline, history, cache } from 'qmkit';
 import _ from 'lodash';
-import { getCountryList, getCityList } from './webapi';
+import { getCountryList, getStateList, getCityList, searchCity } from './webapi';
 
 const { TextArea } = Input;
 
@@ -26,8 +26,10 @@ class BasicEdit extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '',
       customer: {},
       countryList: [],
+      stateList: [],
       cityList: [],
       currentBirthDay: '2020-01-01',
       clinicList: [],
@@ -46,10 +48,18 @@ class BasicEdit extends React.Component<any, any> {
 
   getDict = async () => {
     const countryList = await getCountryList();
-    const cityList = await getCityList();
+    const stateList = await getStateList();
     this.setState({
       countryList: countryList,
-      cityList: cityList
+      stateList: stateList
+    });
+  };
+
+  searchCity = (txt: string) => {
+    searchCity(txt).then((data) => {
+      this.setState({
+        cityList: data.res.context.systemCityVO
+      });
     });
   };
 
@@ -101,9 +111,12 @@ class BasicEdit extends React.Component<any, any> {
         this.setState({ loading: true });
         const params = {
           ...fieldsValue,
+          birthDay: fieldsValue.birthDay.format('YYYY-MM-DD'),
           customerDetailId: customer.customerDetailId,
           communicationEmail: fieldsValue['preferredMethods'].indexOf('communicationEmail') > -1 ? 1 : 0,
-          communicationPhone: fieldsValue['preferredMethods'].indexOf('communicationPhone') > -1 ? 1 : 0
+          communicationPhone: fieldsValue['preferredMethods'].indexOf('communicationPhone') > -1 ? 1 : 0,
+          preferredMethods: undefined,
+          createTime: undefined
         };
         webapi
           .basicDetailsUpdate(params)
@@ -239,7 +252,7 @@ class BasicEdit extends React.Component<any, any> {
   };
 
   render() {
-    const { customer, countryList, cityList, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
+    const { customer, countryList, stateList, cityList, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
     const options = [
       {
         label: 'Phone',
@@ -357,8 +370,8 @@ class BasicEdit extends React.Component<any, any> {
                 <Col span={12}>
                   <FormItem label="Country">
                     {getFieldDecorator('countryId', {
-                      initialValue: customer.country,
-                      rules: [{ required: true, message: 'Please input Country!' }]
+                      initialValue: customer.countryId,
+                      rules: [{ required: true, message: 'Please select country!' }]
                     })(
                       <Select optionFilterProp="children">
                         {countryList.map((item) => (
@@ -371,12 +384,31 @@ class BasicEdit extends React.Component<any, any> {
                   </FormItem>
                 </Col>
 
+                {this.state.storeId == 123457910 && (
+                  <Col span={12}>
+                    <FormItem label="State">
+                      {getFieldDecorator('province', {
+                        initialValue: customer.province,
+                        rules: [{ required: true, message: 'Please select state!' }]
+                      })(
+                        <Select showSearch>
+                          {stateList.map((item) => (
+                            <Option value={item.stateName} key={item.id}>
+                              {item.stateName}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                )}
+
                 <Col span={12}>
                   <FormItem label="City">
                     {getFieldDecorator('city', {
                       rules: [{ required: true, message: 'Please select City!' }],
                       initialValue: customer.city
-                    })(<AutoComplete dataSource={cityList.map((city) => city.name)} />)}
+                    })(<AutoComplete dataSource={cityList.map((city) => city.cityName)} onSearch={_.debounce(this.searchCity, 500)} />)}
                   </FormItem>
                 </Col>
                 <Col span={12}>

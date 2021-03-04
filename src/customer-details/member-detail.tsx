@@ -258,7 +258,14 @@ export default class CustomerDetails extends React.Component<any, any> {
                     Prefer channel
                   </Col>
                   <Col span={6} className="text-highlight">
-                    {basic.communicationEmail && 'Email'} {basic.communicationPhone && 'Phone'}
+                    {['Email', 'Phone']
+                      .reduce((prev, curr) => {
+                        if (+basic[`communication${curr}`]) {
+                          prev.push(curr);
+                        }
+                        return prev;
+                      }, [])
+                      .join(' ')}
                   </Col>
                 </Row>
                 <Row type="flex" align="middle">
@@ -309,8 +316,8 @@ export default class CustomerDetails extends React.Component<any, any> {
               <Headline title="Pet information" />
               <Row gutter={16}>
                 {pets.map((pet) => (
-                  <Col span={8}>
-                    <Card bodyStyle={{ margin: '10px 0', padding: '10px 20px' }}>
+                  <Col span={8} style={{ margin: '10px 0' }}>
+                    <Card bodyStyle={{ padding: '10px 20px' }}>
                       <div className="text-align-right">
                         <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
                           <Button type="link">
@@ -348,28 +355,28 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <div className="container">
               <Headline title="Other information" extra={<RangePicker defaultValue={[moment(), moment()]} onChange={this.handleChangeDateRange} />} />
-              <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
+              <Tabs defaultActiveKey="order" onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
                   <OrderInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
                 <TabPane tab="Subscription information" key="subscrib">
-                  <SubscribInformation startDate={startDate} endDate={endDate} customerAccount="" />
+                  <SubscribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
                 <TabPane tab="Prescriber information" key="prescrib">
-                  <PrescribInformation startDate={startDate} endDate={endDate} />
+                  <PrescribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
                 <TabPane tab="Delivery information" key="delivery">
-                  {displayPage === 'detail' && <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
+                  {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
                 <TabPane tab="Billing information" key="billing">
-                  {displayPage === 'detail' && <DeliveryList startDate={startDate} endDate={endDate} customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
+                  {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
                 </TabPane>
                 <TabPane tab="Payment methods" key="payment">
-                  <PaymentList startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
+                  <PaymentList customerId={this.state.customerId} />
                 </TabPane>
               </Tabs>
             </div>
-            <Feedback customerId={this.state.customerId} />
+            {/* <Feedback customerId={this.state.customerId} /> */}
           </Spin>
         </div>
         <div style={{ display: displayPage === 'delivery' ? 'block' : 'none' }}>
@@ -379,7 +386,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             </Breadcrumb.Item>
             <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
           </BreadCrumb>
-          <DeliveryItem delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
+          <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
         </div>
       </>
     );

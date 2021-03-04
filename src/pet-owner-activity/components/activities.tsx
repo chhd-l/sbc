@@ -123,7 +123,7 @@ export default class Activities extends Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            activityList: res.context || [],
+            activityList: res.context.activityVOList || [],
             activityLoading: false
           });
         } else {

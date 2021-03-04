@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse } from 'antd';
+import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse, Breadcrumb } from 'antd';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import ListView from './components/list-view';
@@ -57,7 +57,11 @@ export default class Task extends Component<any, any> {
     const { title, goldenMomentList, taskStatus, priorityList, isCardView, taskForm, queryType } = this.state;
     return (
       <div>
-        <BreadCrumb />
+        <Breadcrumb>
+          <Breadcrumb.Item><a href="/">Home</a></Breadcrumb.Item>
+          <Breadcrumb.Item>Task board</Breadcrumb.Item>
+        </Breadcrumb>
+
         <div className="container-search">
           <Headline title={title} />
           <Collapse style={{ marginBottom: '20px', background: '#fff' }}>

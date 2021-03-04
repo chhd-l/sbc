@@ -47,7 +47,7 @@ export default class emails extends Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            emailList: res.context || [],
+            emailList: res.context.activityVOList || [],
             emailLoading: false
           });
         } else {

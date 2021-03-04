@@ -860,12 +860,8 @@ const routes = [
     asyncComponent: () => import('./automations')
   },
   {
-    path: '/add-automation',
-    asyncComponent: () => import('./automation-update')
-  },
-  {
-    path: '/edit-automation/:id',
-    asyncComponent: () => import('./automation-update')
+    path: '/automation-node/:id',
+    asyncComponent: () => import('./automation-node')
   },
   {
     path: '/tag-management-list',

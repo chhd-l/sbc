@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import { Const, Headline, history, cache } from 'qmkit';
 import _ from 'lodash';
-import { getCountryList, getStateList, getCityList } from './webapi';
+import { getCountryList, getStateList, getCityList, searchCity } from './webapi';
 
 const { TextArea } = Input;
 
@@ -49,11 +49,17 @@ class BasicEdit extends React.Component<any, any> {
   getDict = async () => {
     const countryList = await getCountryList();
     const stateList = await getStateList();
-    const cityList = await getCityList();
     this.setState({
       countryList: countryList,
-      stateList: stateList,
-      cityList: cityList
+      stateList: stateList
+    });
+  };
+
+  searchCity = (txt: string) => {
+    searchCity(txt).then((data) => {
+      this.setState({
+        cityList: data.res.context.systemCityVO
+      });
     });
   };
 
@@ -105,9 +111,12 @@ class BasicEdit extends React.Component<any, any> {
         this.setState({ loading: true });
         const params = {
           ...fieldsValue,
+          birthDay: fieldsValue.birthDay.format('YYYY-MM-DD'),
           customerDetailId: customer.customerDetailId,
           communicationEmail: fieldsValue['preferredMethods'].indexOf('communicationEmail') > -1 ? 1 : 0,
-          communicationPhone: fieldsValue['preferredMethods'].indexOf('communicationPhone') > -1 ? 1 : 0
+          communicationPhone: fieldsValue['preferredMethods'].indexOf('communicationPhone') > -1 ? 1 : 0,
+          preferredMethods: undefined,
+          createTime: undefined
         };
         webapi
           .basicDetailsUpdate(params)
@@ -361,7 +370,7 @@ class BasicEdit extends React.Component<any, any> {
                 <Col span={12}>
                   <FormItem label="Country">
                     {getFieldDecorator('countryId', {
-                      initialValue: customer.country,
+                      initialValue: customer.countryId,
                       rules: [{ required: true, message: 'Please select country!' }]
                     })(
                       <Select optionFilterProp="children">
@@ -399,7 +408,7 @@ class BasicEdit extends React.Component<any, any> {
                     {getFieldDecorator('city', {
                       rules: [{ required: true, message: 'Please select City!' }],
                       initialValue: customer.city
-                    })(<AutoComplete dataSource={cityList.map((city) => city.name)} />)}
+                    })(<AutoComplete dataSource={cityList.map((city) => city.cityName)} onSearch={_.debounce(this.searchCity, 500)} />)}
                   </FormItem>
                 </Col>
                 <Col span={12}>

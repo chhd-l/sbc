@@ -85,6 +85,21 @@ export async function getCityList() {
 }
 
 /**
+ * 根据searchTxt搜索城市列表
+ * @param searchTxt
+ */
+export function searchCity(searchTxt: string) {
+  return Fetch<TResult>('/system-city/query-system-city-by-name', {
+    method: 'POST',
+    body: JSON.stringify({
+      cityName: searchTxt,
+      pageNum: 0,
+      pageSize: 30
+    })
+  });
+}
+
+/**
  * 获取候选tagging
  */
 export function getTaggingList() {

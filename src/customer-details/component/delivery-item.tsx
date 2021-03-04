@@ -1,10 +1,10 @@
 import React from 'react';
-import { Form, Input, Select, Spin, Breadcrumb, Row, Col, Button, message } from 'antd';
+import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Headline, BreadCrumb } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
-import { getCountryList } from './webapi';
+import { Headline, cache } from 'qmkit';
+import { getCountryList, getStateList, getCityList, searchCity } from './webapi';
 import { updateAddress, addAddress } from '../webapi';
+import _ from 'lodash';
 
 const { Option } = Select;
 
@@ -15,7 +15,8 @@ type TDelivery = {
   consigneeNumber?: string;
   postCode?: string;
   countryId?: number;
-  cityId?: number;
+  province?: string;
+  city?: string;
   address1?: string;
   address2?: string;
   rfc?: string;
@@ -23,6 +24,7 @@ type TDelivery = {
 
 interface Iprop extends FormComponentProps {
   delivery: TDelivery;
+  customerId: string;
   addressType: string;
   backToDetail?: Function;
 }
@@ -31,19 +33,24 @@ class DeliveryItem extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
     super(props);
     this.state = {
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '',
       loading: false,
-      countryList: []
+      countryList: [],
+      stateList: [],
+      cityList: []
     };
   }
 
   componentDidMount() {
-    this.getCountries();
+    this.getDics();
   }
 
-  getCountries = async () => {
+  getDics = async () => {
     const countries = await getCountryList();
+    const states = await getStateList();
     this.setState({
-      countryList: countries
+      countryList: countries,
+      stateList: states
     });
   };
 
@@ -55,7 +62,12 @@ class DeliveryItem extends React.Component<Iprop, any> {
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
         handlerFunc({
           ...delivery,
-          ...fields
+          ...fields,
+          customerId: this.props.customerId,
+          consigneeName: fields.firstName + ' ' + fields.lastName,
+          deliveryAddress: fields.address1 + fields.address2,
+          isDefaltAddress: 0,
+          type: this.props.addressType.toUpperCase()
         })
           .then((data) => {
             message.success(data.res.message);
@@ -65,6 +77,14 @@ class DeliveryItem extends React.Component<Iprop, any> {
             this.setState({ loading: false });
           });
       }
+    });
+  };
+
+  searchCity = (txt: string) => {
+    searchCity(txt).then((data) => {
+      this.setState({
+        cityList: data.res.context.systemCityVO
+      });
     });
   };
 
@@ -104,8 +124,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
                     })(<Input />)}
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item label="Phone number">
                     {getFieldDecorator('consigneeNumber', {
@@ -122,8 +140,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
                     })(<Input />)}
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item label="Country">
                     {getFieldDecorator('countryId', {
@@ -140,16 +156,32 @@ class DeliveryItem extends React.Component<Iprop, any> {
                     )}
                   </Form.Item>
                 </Col>
+                {this.state.storeId == 123457910 && (
+                  <Col span={12}>
+                    <Form.Item label="State">
+                      {getFieldDecorator('province', {
+                        initialValue: delivery.province,
+                        rules: [{ required: true, message: 'State is required' }]
+                      })(
+                        <Select showSearch>
+                          {this.state.stateList.map((item) => (
+                            <Option value={item.stateName} key={item.id}>
+                              {item.stateName}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                )}
                 <Col span={12}>
                   <Form.Item label="City">
-                    {getFieldDecorator('cityId', {
-                      initialValue: delivery.cityId,
-                      rules: [{ required: true, message: 'City is required' }]
-                    })(<Input />)}
+                    {getFieldDecorator('city', {
+                      rules: [{ required: true, message: 'City is required' }],
+                      initialValue: delivery.city
+                    })(<AutoComplete dataSource={this.state.cityList.map((city) => city.cityName)} onSearch={_.debounce(this.searchCity, 500)} />)}
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={12}>
                 <Col span={12}>
                   <Form.Item label="Address 1">
                     {getFieldDecorator('address1', {
@@ -165,8 +197,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
                     })(<Input />)}
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item label="Reference">
                     {getFieldDecorator('rfc', {

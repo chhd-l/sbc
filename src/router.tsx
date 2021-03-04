@@ -488,6 +488,11 @@ const routes = [
     path: '/marketing-full-reduction/:marketingId?',
     asyncComponent: () => import('./marketing-add/full-reduction')
   },
+  //新增 / 编辑营销-首次折扣
+  {
+    path: '/marketing-first-order-discount/:marketingId?',
+    asyncComponent: () => import('./marketing-add/first-order-discount')
+  },
   //营销列表
   {
     path: '/marketing-list',

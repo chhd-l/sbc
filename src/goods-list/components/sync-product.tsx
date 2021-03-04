@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
+import { Const } from 'qmkit';
 import { syncProduct } from '../webapi';
 
 export default class SyncButton extends React.Component<any, any> {
@@ -32,8 +33,14 @@ export default class SyncButton extends React.Component<any, any> {
       loading: true
     });
     syncProduct()
-      .then(() => {
-        this.startCountDown();
+      .then((data) => {
+        if (data.res.code === Const.SUCCESS_CODE) {
+          this.startCountDown();
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
       })
       .catch(() => {
         this.setState({

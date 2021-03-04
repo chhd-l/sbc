@@ -4,7 +4,9 @@ export enum MARKETING_TYPE {
   //满折
   FULL_DISCOUNT,
   //满赠
-  FULL_GIFT
+  FULL_GIFT,
+  //首次折扣
+  FIRST_DISCOUNT
 }
 
 export enum SUB_TYPE {

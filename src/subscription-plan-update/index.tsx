@@ -31,7 +31,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
         canCancelPlan: true,
         subscriptionPlanFlag: true,
         changeDeliveryDateFlag: true,
-        skipNextDeliveryFlag: true,
+        skipNextDeliveryFlag: false,
         mainGoods: [],
         mainGoodsIds: [],
         frequency: [],

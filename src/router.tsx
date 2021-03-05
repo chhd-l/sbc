@@ -914,6 +914,18 @@ const routes = [
   {
     path: '/validation-setting',
     asyncComponent: () => import('./validation-setting')
+  },
+  {
+    path: '/automation-detail/:id',
+    asyncComponent: () => import('./automation-detail')
+  },
+  {
+    path: '/automation-edit/:id',
+    asyncComponent: () => import('./automation-form')
+  },
+  {
+    path: '/automation-add',
+    asyncComponent: () => import('./automation-form')
   }
 ];
 

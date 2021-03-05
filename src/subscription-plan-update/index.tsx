@@ -116,6 +116,10 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         const { subscriptionPlan, id } = this.state;
+        if (subscriptionPlan.mainGoods.findIndex((g) => !g.settingPrice || g.settingPrice <= 0) > -1) {
+          message.warning('Setting price is required');
+          return;
+        }
         if (isDraft) {
           subscriptionPlan.status = 0; // Draft
         } else {

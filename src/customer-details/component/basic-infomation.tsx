@@ -36,8 +36,8 @@ class BasicInfomation extends React.Component<any, any> {
         defaultClinics: {
           clinicsId: 0,
           clinicsName: ''
-        },
-        selectedBind: []
+        }
+        // selectedBind: []
       },
       countryArr: [],
       cityArr: [],
@@ -49,8 +49,8 @@ class BasicInfomation extends React.Component<any, any> {
       initCityName: '',
       initPreferChannel: [],
       storeId: '',
-      stateList: [],
-      taggingList: []
+      stateList: []
+      // taggingList: []
     };
   }
   componentDidMount() {
@@ -63,7 +63,7 @@ class BasicInfomation extends React.Component<any, any> {
     this.getDict();
     this.getBasicDetails();
     this.getClinicList();
-    this.getTaggingList();
+    // this.getTaggingList();
   }
 
   getDict = () => {
@@ -129,13 +129,13 @@ class BasicInfomation extends React.Component<any, any> {
           if (resObj.defaultClinics && resObj.defaultClinics.clinicsId) {
             defaultClinicsId = resObj.defaultClinics.clinicsId;
           }
-          let selectedBind = [];
-          if (resObj.segmentList) {
-            for (let i = 0; i < resObj.segmentList.length; i++) {
-              const element = resObj.segmentList[i].id;
-              selectedBind.push(element);
-            }
-          }
+          // let selectedBind = [];
+          // if (resObj.segmentList) {
+          //   for (let i = 0; i < resObj.segmentList.length; i++) {
+          //     const element = resObj.segmentList[i].id;
+          //     selectedBind.push(element);
+          //   }
+          // }
 
           let basicForm = {
             firstName: resObj.firstName,
@@ -156,8 +156,8 @@ class BasicInfomation extends React.Component<any, any> {
             selectedClinics: resObj.clinicsVOS,
             defaultClinicsId: defaultClinicsId,
             defaultClinics: resObj.defaultClinics,
-            preferredMethods: [],
-            selectedBind: selectedBind
+            preferredMethods: []
+            // selectedBind: selectedBind
           };
 
           let initPreferChannel = [];
@@ -209,7 +209,7 @@ class BasicInfomation extends React.Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         this.saveBasicInfomation();
-        this.bindTagging();
+        // this.bindTagging();
       }
     });
   };
@@ -346,65 +346,75 @@ class BasicInfomation extends React.Component<any, any> {
     });
   };
 
-  loopTagging = (taggingTotalTree) => {
-    return (
-      taggingTotalTree &&
-      taggingTotalTree.map((item, index) => {
-        return <TreeNode key={index} value={item.id} title={item.name} />;
-      })
-    );
-  };
-  getTaggingList = () => {
-    let params = {
-      pageNum: 0,
-      pageSize: 1000,
-      segmentType: 0
-    };
-    webapi
-      .getTaggingList(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          let taggingList = res.context.segmentList;
-          this.setState({
-            taggingList
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          loading: false
-        });
-        message.error(err.toString() || 'Operation failure');
-      });
-  };
-  bindTagging = () => {
-    const { basicForm, currentForm } = this.state;
-    let params = {
-      relationId: currentForm.customerId,
-      segmentType: 0,
-      segmentIdList: basicForm.selectedBind
-    };
-    webapi
-      .bindTagging(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            loading: false
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          loading: false
-        });
-        message.error(err.toString() || 'Operation failure');
-      });
-  };
+  // loopTagging = (taggingTotalTree) => {
+  //   return (
+  //     taggingTotalTree &&
+  //     taggingTotalTree.map((item, index) => {
+  //       return <TreeNode key={index} value={item.id} title={item.name} />;
+  //     })
+  //   );
+  // };
+  // getTaggingList = () => {
+  //   let params = {
+  //     pageNum: 0,
+  //     pageSize: 1000,
+  //     segmentType: 0
+  //   };
+  //   webapi
+  //     .getTaggingList(params)
+  //     .then((data) => {
+  //       const { res } = data;
+  //       if (res.code === Const.SUCCESS_CODE) {
+  //         let taggingList = res.context.segmentList;
+  //         this.setState({
+  //           taggingList
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       this.setState({
+  //         loading: false
+  //       });
+  //       message.error(err.toString() || 'Operation failure');
+  //     });
+  // };
+  // bindTagging = () => {
+  //   const { basicForm, currentForm } = this.state;
+  //   let params = {
+  //     relationId: currentForm.customerId,
+  //     segmentType: 0,
+  //     segmentIdList: basicForm.selectedBind
+  //   };
+  //   webapi
+  //     .bindTagging(params)
+  //     .then((data) => {
+  //       const { res } = data;
+  //       if (res.code === Const.SUCCESS_CODE) {
+  //         this.setState({
+  //           loading: false
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       this.setState({
+  //         loading: false
+  //       });
+  //       message.error(err.toString() || 'Operation failure');
+  //     });
+  // };
 
   render() {
-    const { countryArr, cityArr, clinicList, loading, initPreferChannel, storeId, stateList, basicForm, taggingList } = this.state;
+    const {
+      countryArr,
+      cityArr,
+      clinicList,
+      loading,
+      initPreferChannel,
+      storeId,
+      stateList,
+      basicForm
+      // taggingList
+    } = this.state;
     const options = [
       {
         label: 'Phone',
@@ -824,7 +834,8 @@ class BasicInfomation extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
-              <Col span={12}>
+
+              {/* <Col span={12}>
                 <FormItem {...formItemLayout} label="Pet owner tagging">
                   {getFieldDecorator('selectedBind', {
                     rules: [
@@ -856,6 +867,8 @@ class BasicInfomation extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
+               */}
+
               <Col span={24}>
                 <FormItem>
                   <Button type="primary" htmlType="submit" loading={loading}>

@@ -13,43 +13,7 @@ export default class tasks extends Component<any, any> {
     super(props);
     this.state = {
       taskLoading: false,
-      taskList: [
-        {
-          assistantEmail: 'morgane.daum@royalcanin.com',
-          assistantId: 139,
-          assistantName: 'Morgane DAUM',
-          contactEmail: 'morgane.lucas1@ibm.com',
-          petOwnerId: 229,
-          contactName: 'Morgane Lucas',
-          description: '<p>need to call PO</p>',
-          dueTime: '2021-01-20',
-          goldenMoment: 'Subscription program cancelation by PO',
-          id: 1267,
-          name: 'Test 1',
-          priority: 'High',
-          startTime: '2021-01-19',
-          status: 'To Do',
-          showMore: false
-        },
-        {
-          assistantEmail: 'morgane.daum@royalcanin.com',
-          assistantId: 139,
-          assistantName: 'Morgane DAUM',
-          contactEmail: 'morgane.lucas1@ibm.com',
-          petOwnerId: 229,
-          contactName: 'Morgane Lucas',
-          description: '<p>need to call PO</p>',
-          dueTime: '2021-01-20',
-          goldenMoment: 'First month of Subscription',
-          id: 1267,
-          name: 'Test 2',
-          priority: 'Low',
-          startTime: '2021-01-19',
-          status: 'Completed',
-          showMore: false,
-          orderCode: 'O202007231029424838'
-        }
-      ],
+      taskList: [],
       assignedUsers: [],
       goldenMomentList: [],
       actionTypeList: ['Call', 'Email', 'N/A'],
@@ -184,7 +148,7 @@ export default class tasks extends Component<any, any> {
         </Menu.Item>
         <Menu.Item key={2}>
           {' '}
-          <Link to={'/add-task'} >Add Task</Link>
+          <Link to={'/add-task'}>Add Task</Link>
         </Menu.Item>
       </Menu>
     );

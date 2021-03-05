@@ -47,6 +47,11 @@ class AutomationNode extends Component<any, any> {
   }
 
   saveProperties(formData) {
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+
+    debugger
+
     const { currentItem } = this.state;
     if (currentItem) {
       var tmpParam = { name: formData.name };
@@ -81,6 +86,7 @@ class AutomationNode extends Component<any, any> {
           tmpParam = { ...tmpParam, ...formData.vetData };
           break;
       }
+      debugger
       this.props.propsAPI.update(currentItem, tmpParam);
     }
   }
@@ -110,17 +116,25 @@ class AutomationNode extends Component<any, any> {
                     }
                     onNodeDoubleClick={this.handleNodeDoubleClick}
                     // onNodeClick="handleNodeClick"
-                    // noEndEdge="false"
+                    noEndEdge={false}
                     // onAfterChange="onAfterChange"
                   />
                 </div>
                 <div className="demo-chart__sidebar user-select-none">
-                  <Tabs activeKey={activeKey} style={{ width: '100%' }} tabPosition="top" className="tabs-custom">
+                  <Tabs
+                    activeKey={activeKey}
+                    onChange={(key) => {
+                      this.setState({ activeKey: key });
+                    }}
+                    style={{ width: '100%' }}
+                    tabPosition="top"
+                    className="tabs-custom"
+                  >
                     <TabPane tab="Builder" key="Builder">
                       <FlowItemPanel />
                     </TabPane>
                     <TabPane tab="Item Properties" key="Item Properties">
-                      <NodeProperties model={currentItem && currentItem.model}/>
+                      <NodeProperties model={currentItem && currentItem.model} saveProperties={this.saveProperties}/>
                     </TabPane>
                   </Tabs>
                 </div>
@@ -142,4 +156,4 @@ class AutomationNode extends Component<any, any> {
   }
 }
 
-export default withPropsAPI(AutomationUpdate);
+export default withPropsAPI(AutomationNode);

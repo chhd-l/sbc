@@ -5,6 +5,7 @@ import { IList } from 'typings/globalType';
 import { withRouter } from 'react-router';
 import { noop, AuthWrapper, checkAuth } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import SyncButton from './sync-product';
 const confirm = Modal.confirm;
 
 @withRouter
@@ -37,6 +38,9 @@ export default class Tool extends React.Component<any, any> {
 
     return (
       <div className="handle-bar">
+        <AuthWrapper functionName="f_goods_sync">
+          <SyncButton />
+        </AuthWrapper>
         {hasMenu && (
           <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
             <Button>

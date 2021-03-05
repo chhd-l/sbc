@@ -16,8 +16,8 @@ export default class emails extends Component<any, any> {
       emailList: [
       ],
       emailFilters: [
-        { value: 'COMMUNICATION.Emails', label: 'Communication Email' },
-        { value: 'CAMPAIGN ACTIVITY.Emails', label: 'Automation Email' }
+        { value: 'Communication Email', label: 'Communication Email' },
+        { value: 'Automation Email', label: 'Automation Email' }
       ],
       isRecent: true,
       orderType: 'asc',
@@ -36,7 +36,7 @@ export default class emails extends Component<any, any> {
     });
     const { isRecent, orderType, filters } = this.state;
     let param = {
-      customerId: '291', // this.props.petOwnerId,
+      customerId: this.props.petOwnerId, // this.props.petOwnerId,
       orderType: orderType,
       recent: isRecent,
       filters: filters

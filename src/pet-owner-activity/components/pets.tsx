@@ -95,7 +95,7 @@ export default class pets extends Component<any, any> {
       });
   }
   render() {
-    const { petOwner } = this.props;
+    const { petOwnerId, customerAccount } = this.props;
     const { petList, petPagination, loading } = this.state;
     petList.map((item) => {
       if (item.petsType === 'dog' && (item.genderCode === 'male' || item.genderCode === 'other')) {
@@ -122,7 +122,7 @@ export default class pets extends Component<any, any> {
           title={
             <div className="title">
               <span>Pets</span>
-              <span className="viewAll" onClick={() => history.push(`/customer-details/Member/${petOwner.customerId}/${petOwner.customerAccount}`)}>
+              <span className="viewAll" onClick={() => history.push(`/customer-details/Member/${petOwnerId}/${customerAccount}`)}>
                 View All
                 <Icon type="right" />
               </span>

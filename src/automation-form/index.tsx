@@ -9,6 +9,7 @@ import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { TextArea } = Input;
 
 class AutomationForm extends Component<any, any> {
   constructor(props: any) {
@@ -33,13 +34,60 @@ class AutomationForm extends Component<any, any> {
   componentDidMount() {}
   init = () => {};
   getAutomationDetail = () => {};
-  handleSubmit = () => {};
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        this.saveAutomation();
+      }
+    });
+  };
+  saveAutomation = () => {
+    const { automationForm } = this.state;
+    console.log(automationForm);
+  };
   onFormChange = ({ field, value }) => {
-    let data = this.state.searchForm;
+    let data = this.state.automationForm;
     data[field] = value;
     this.setState({
-      searchForm: data
+      automationForm: data
     });
+  };
+
+  disabledEventStartDate = (startValue) => {
+    const { automationForm } = this.state;
+    let endValue = automationForm.eventEndTime;
+    if (!startValue || !endValue) {
+      return false;
+    }
+    return startValue.valueOf() > endValue.valueOf();
+  };
+
+  disabledEventEndDate = (endValue) => {
+    const { automationForm } = this.state;
+    let startValue = automationForm.eventStartTime;
+    if (!endValue || !startValue) {
+      return false;
+    }
+    return endValue.valueOf() <= startValue.valueOf();
+  };
+
+  disabledTrackingStartDate = (startValue) => {
+    const { automationForm } = this.state;
+    let endValue = automationForm.trackingEndTime;
+    if (!startValue || !endValue) {
+      return false;
+    }
+    return startValue.valueOf() > endValue.valueOf();
+  };
+
+  disabledTrackingEndDate = (endValue) => {
+    const { automationForm } = this.state;
+    let startValue = automationForm.trackingStartTime;
+    if (!endValue || !startValue) {
+      return false;
+    }
+    return endValue.valueOf() <= startValue.valueOf();
   };
 
   render() {
@@ -87,11 +135,17 @@ class AutomationForm extends Component<any, any> {
             </BreadCrumb>
             <div className="container">
               <Headline title={title} />
-              <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+              <Form {...formItemLayout}>
                 <Row gutter={16}>
                   <Col span={12}>
                     <FormItem label="Automation name">
                       {getFieldDecorator('automationName', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please enter automation name!'
+                          }
+                        ],
                         initialValue: automationForm.automationName
                       })(
                         <Input
@@ -114,11 +168,12 @@ class AutomationForm extends Component<any, any> {
                         initialValue: automationForm.automationCategory
                       })(
                         <Select
+                          allowClear
                           style={{ width: '80%' }}
                           onChange={(value) => {
                             this.onFormChange({
                               field: 'automationCategory',
-                              value: value ? value : ''
+                              value: value
                             });
                           }}
                         >
@@ -133,18 +188,52 @@ class AutomationForm extends Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
+                </Row>
+                <Row>
+                  <Col span={12}>
+                    <FormItem label="Automation description">
+                      {getFieldDecorator('automationDescription', {
+                        initialValue: automationForm.automationDescription
+                      })(<TextArea style={{ width: '80%' }} placeholder="Please input automation description" autoSize={{ minRows: 4, maxRows: 4 }} />)}
+                    </FormItem>
+                  </Col>
 
                   <Col span={12}>
+                    <FormItem label="Automation type">
+                      {getFieldDecorator('automationType', {
+                        initialValue: automationForm.automationType
+                      })(
+                        <Select
+                          allowClear
+                          style={{ width: '80%' }}
+                          onChange={(value) => {
+                            this.onFormChange({
+                              field: 'automationType',
+                              value: value
+                            });
+                          }}
+                        >
+                          {automationTypeList
+                            ? automationTypeList.map((item, index) => (
+                                <Option value={item.value} key={index}>
+                                  {item.name}
+                                </Option>
+                              ))
+                            : null}
+                        </Select>
+                      )}
+                    </FormItem>
                     <FormItem label="Automation goal">
                       {getFieldDecorator('automationGoal', {
                         initialValue: automationForm.automationGoal
                       })(
                         <Select
+                          allowClear
                           style={{ width: '80%' }}
                           onChange={(value) => {
                             this.onFormChange({
                               field: 'automationGoal',
-                              value: value ? value : ''
+                              value: value
                             });
                           }}
                         >
@@ -161,16 +250,23 @@ class AutomationForm extends Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <FormItem label="Automation category">
-                      {getFieldDecorator('automationCategory', {
-                        initialValue: automationForm.automationCategory
+                    <FormItem label="Event start time">
+                      {getFieldDecorator('eventStartTime', {
+                        rules: [{ required: true, message: 'Please select event start time!' }],
+                        initialValue: automationForm.eventStartTime ? moment(new Date(automationForm.eventStartTime), 'YYYY-MM-DD HH:mm:ss') : null
                       })(
-                        <Input
+                        <DatePicker
+                          disabledDate={this.disabledEventStartDate}
                           style={{ width: '80%' }}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
+                          showTime
+                          format="YYYY-MM-DD HH:mm:ss"
+                          onChange={(value) => {
                             this.onFormChange({
-                              field: 'automationCategory',
+                              field: 'eventStartTime',
+                              value
+                            });
+                            this.onFormChange({
+                              field: 'trackingStartTime',
                               value
                             });
                           }}
@@ -179,11 +275,100 @@ class AutomationForm extends Component<any, any> {
                     </FormItem>
                   </Col>
 
-                  <Col span={24}>
-                    <FormItem label="Automation Description">
-                      {getFieldDecorator('createTime', {
-                        initialValue: moment(this.state.basicForm.createTime)
-                      })(<DatePicker style={{ width: '80%' }} format="YYYY-MM-DD HH:mm:ss" disabled={true} />)}
+                  <Col span={12}>
+                    <FormItem label="Event end time">
+                      {getFieldDecorator('eventEndTime', {
+                        rules: [{ required: true, message: 'Please select event end time!' }],
+                        initialValue: automationForm.eventEndTime ? moment(new Date(automationForm.eventEndTime), 'YYYY-MM-DD HH:mm:ss') : null
+                      })(
+                        <DatePicker
+                          disabledDate={this.disabledEventEndDate}
+                          style={{ width: '80%' }}
+                          showTime
+                          format="YYYY-MM-DD HH:mm:ss"
+                          onChange={(value) => {
+                            this.onFormChange({
+                              field: 'eventEndTime',
+                              value
+                            });
+                            this.onFormChange({
+                              field: 'trackingEndTime',
+                              value: moment(value).add(3, 'days')
+                            });
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+
+                  <Col span={12}>
+                    <FormItem label="Tracking start time">
+                      {getFieldDecorator('trackingStartTime', {
+                        rules: [{ required: true, message: 'Please select tracking start time!' }],
+                        initialValue: automationForm.trackingStartTime ? moment(new Date(automationForm.trackingStartTime), 'YYYY-MM-DD HH:mm:ss') : null
+                      })(
+                        <DatePicker
+                          disabledDate={this.disabledTrackingStartDate}
+                          style={{ width: '80%' }}
+                          showTime
+                          format="YYYY-MM-DD HH:mm:ss"
+                          onChange={(value) => {
+                            this.onFormChange({
+                              field: 'trackingStartTime',
+                              value
+                            });
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+
+                  <Col span={12}>
+                    <FormItem label="Tracking end time">
+                      {getFieldDecorator('trackingEndTime', {
+                        rules: [{ required: true, message: 'Please select tracking end time!' }],
+                        initialValue: automationForm.trackingEndTime ? moment(new Date(automationForm.trackingEndTime), 'YYYY-MM-DD HH:mm:ss') : null
+                      })(
+                        <DatePicker
+                          disabledDate={this.disabledTrackingEndDate}
+                          style={{ width: '80%' }}
+                          showTime
+                          format="YYYY-MM-DD HH:mm:ss"
+                          onChange={(value) => {
+                            this.onFormChange({
+                              field: 'trackingEndTime',
+                              value
+                            });
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+
+                  <Col span={12}>
+                    <FormItem label="Communication channel">
+                      {getFieldDecorator('communicationChannel', {
+                        initialValue: automationForm.communicationChannel ? automationForm.communicationChannel : []
+                      })(
+                        <Select
+                          style={{ width: '80%' }}
+                          mode="tags"
+                          onChange={(value) => {
+                            this.onFormChange({
+                              field: 'communicationChannel',
+                              value: value ? value : ''
+                            });
+                          }}
+                        >
+                          {communicationChannelList
+                            ? communicationChannelList.map((item, index) => (
+                                <Option value={item.value} key={index}>
+                                  {item.name}
+                                </Option>
+                              ))
+                            : null}
+                        </Select>
+                      )}
                     </FormItem>
                   </Col>
                 </Row>
@@ -192,12 +377,7 @@ class AutomationForm extends Component<any, any> {
           </Spin>
         </div>
         <div className="bar-button">
-          <Button
-            type="primary"
-            onClick={() => {
-              console.log('save');
-            }}
-          >
+          <Button type="primary" onClick={this.handleSubmit}>
             {<FormattedMessage id="save" />}
           </Button>
           <Button style={{ marginLeft: 20 }} onClick={() => (history as any).go(-1)}>

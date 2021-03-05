@@ -82,7 +82,11 @@ class SubscriptionPlanUpdate extends Component<any, any> {
             history.push('/subscription-plan');
           }
           this.setState({
-            subscriptionPlan: res.context
+            subscriptionPlan: {
+              ...res.context,
+              canCancelPlan: true,
+              skipNextDeliveryFlag: false
+            }
           });
         }
       });

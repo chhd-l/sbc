@@ -14,26 +14,36 @@ import store from './redux/store';
 import './index.less';
 import Main from './main';
 import { ConfigProvider } from 'antd';
-//import zhCN from 'antd/lib/locale-provider/zh_CN';
-import enUS from 'antd/lib/locale-provider/en_US';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import 'moment/locale/ru';
 import { IntlProvider } from 'react-intl';
+
+import ruRU from 'antd/es/locale/ru_RU';
+import enUS from 'antd/es/locale/en_US';
+import deDE from 'antd/es/locale/de_DE';
 import es_ES from '../web_modules/qmkit/es_ES';
 import es_RUS from '../web_modules/qmkit/es_RUS';
+
 import configOkta from '../web_modules/qmkit/config-okta';
 moment.locale('zh-cn');
 
 let language = es_ES;
-if(sessionStorage.getItem(cache.LANGUAGE) == 'English') {
-  language = es_ES
-}else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
-  language = es_RUS
+let antLanguage = enUS;
+if (sessionStorage.getItem(cache.LANGUAGE) == 'English') {
+  language = es_ES;
+  antLanguage = enUS;
+} else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
+  language = es_RUS;
+  antLanguage = ruRU;
+} else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
+  language = es_RUS;
+  antLanguage = deDE;
 }
 
 const PrescriberRouter = () => (
   <IntlProvider locale="es" messages={language}>
-    <ConfigProvider locale={enUS}>
+    <ConfigProvider locale={antLanguage}>
       <Provider store={store}>
         <Router history={history}>
           <Security {...configOkta.prescrberOidc}>
@@ -52,7 +62,7 @@ const PrescriberRouter = () => (
 
 const RcRouter = () => (
   <IntlProvider locale="es" messages={language}>
-    <ConfigProvider locale={enUS}>
+    <ConfigProvider locale={antLanguage}>
       <Provider store={store}>
         <Router history={history}>
           <Security {...configOkta.RcOidc}>

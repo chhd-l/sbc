@@ -18,7 +18,7 @@ const HasError = styled.div`
     color: #d9d9d9;
   }
 `;
-export default class DiscountLevels extends React.Component<any, any> {
+export default class FirstDiscountLevels extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -83,50 +83,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                   {}
                 )(
                   <HasError>
-                    {this.state.isNormal ? (
-                      <div>
-                        <span>Full&nbsp;</span>
-                        <FormItem style={{ display: 'inline-block' }}>
-                          {getFieldDecorator(`level_rule_value_${index}`, {
-                            rules: [
-                              { required: true, message: 'Must enter rules' },
-                              {
-                                validator: (_rule, value, callback) => {
-                                  if (value) {
-                                    if (!isFullCount) {
-                                      if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                        callback('0.01-99999999.99');
-                                      }
-                                    } else {
-                                      if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                                        callback('1-9999');
-                                      }
-                                    }
-                                  }
-                                  callback();
-                                }
-                              }
-                            ],
-                            initialValue: !isFullCount ? level.fullAmount : level.fullCount
-                          })(
-                            <Input
-                              style={{ width: 200 }}
-                              placeholder={isFullCount === 0 ? '0.01-99999999.99' : isFullCount === 1 ? '1-9999' : 0}
-                              onChange={(e) => {
-                                this.ruleValueChange(index, e.target.value);
-                              }}
-                              disabled={isFullCount === 2}
-                            />
-                          )}
-                        </FormItem>
-                        <span>
-                          {' '}
-                          &nbsp;
-                          {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
-                          ，&nbsp;&nbsp;&nbsp;&nbsp;discount price&nbsp;&nbsp;
-                        </span>
-                      </div>
-                    ) : null}
+                    <span>discount&nbsp;</span>
                     <FormItem>
                       {getFieldDecorator(`level_rule_discount_${index}`, {
                         rules: [
@@ -148,7 +105,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                         initialValue: level.discount
                       })(
                         <Input
-                          style={{ width: 300 }}
+                          style={{ width: 200 }}
                           title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
@@ -165,14 +122,6 @@ export default class DiscountLevels extends React.Component<any, any> {
             </div>
           );
         })}
-        {this.state.isNormal && isFullCount !== 2 ? (
-          <div>
-            <Button onClick={this.addLevels} disabled={fullDiscountLevelList.length >= 5}>
-              Add multi-level promotions
-            </Button>
-            &nbsp;&nbsp;up to 5 levels can be set
-          </div>
-        ) : null}
       </div>
     );
   }

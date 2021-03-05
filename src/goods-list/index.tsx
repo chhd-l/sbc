@@ -35,7 +35,9 @@ export default class GoodsView extends React.Component<any, any> {
                 <Headline title={<FormattedMessage id="product.productList" />} />
               </Col>
               <Col span={6} style={{ textAlign: 'right' }}>
-                <SyncButton />
+                <AuthWrapper functionName="f_goods_sync">
+                  <SyncButton />
+                </AuthWrapper>
               </Col>
             </Row>
 

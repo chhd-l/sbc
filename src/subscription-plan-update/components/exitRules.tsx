@@ -155,7 +155,7 @@ export default class exitRules extends Component<any, any> {
                     initialValue: subscriptionPlan.skipNextDeliveryFlag
                   })(
                     <Radio.Group
-                      disabled={!editable}
+                      disabled
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         addField('skipNextDeliveryFlag', value);

@@ -3,6 +3,7 @@ import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table } from '
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
 import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 export default class ListView extends Component<any, any> {
   constructor(props) {
@@ -24,7 +25,7 @@ export default class ListView extends Component<any, any> {
   }
 
   componentDidMount() {
-    this.getTaskList(this.state.queryType);
+    this.getTaskList(this.props.queryType);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -136,14 +137,14 @@ export default class ListView extends Component<any, any> {
       },
       {
         title: 'Pet Owner',
-        dataIndex: 'contactName',
-        scopedSlots: { customRender: 'contactName' },
+        dataIndex: 'petOwner',
         width: '10%'
       },
       {
         title: 'Due Time',
         dataIndex: 'dueTime',
-        width: '15%'
+        width: '15%',
+        render: (text, record) => (moment(text) < moment(new Date()) && (record.status === 'To Do' || record.status === 'On-going') ? <div style={{ color: 'rgba(239,28,51)' }}>{text}</div> : text)
       },
       {
         title: 'Operation',

@@ -32,3 +32,13 @@ export function getGlodenMomentList() {
     })
   });
 }
+export function getHomeTaskListAndCount() {
+  return Fetch<TResult>('/remindertask/list');
+}
+
+export function getTaskRead(params = {}) {
+  return Fetch<TResult>('/remindertask/read', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

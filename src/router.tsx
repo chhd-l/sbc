@@ -865,16 +865,12 @@ const routes = [
     asyncComponent: () => import('./subscription-setting')
   },
   {
-    path: '/campaigns',
-    asyncComponent: () => import('./campaigns')
+    path: '/automations',
+    asyncComponent: () => import('./automations')
   },
   {
-    path: '/add-campaign',
-    asyncComponent: () => import('./campaign-update')
-  },
-  {
-    path: '/edit-campaign/:id',
-    asyncComponent: () => import('./campaign-update')
+    path: '/automation-node/:id',
+    asyncComponent: () => import('./automation-node')
   },
   {
     path: '/pet-owner-tagging',
@@ -915,6 +911,18 @@ const routes = [
   {
     path: '/validation-setting',
     asyncComponent: () => import('./validation-setting')
+  },
+  {
+    path: '/automation-detail/:id',
+    asyncComponent: () => import('./automation-detail')
+  },
+  {
+    path: '/automation-edit/:id',
+    asyncComponent: () => import('./automation-form')
+  },
+  {
+    path: '/automation-add',
+    asyncComponent: () => import('./automation-form')
   }
 ];
 

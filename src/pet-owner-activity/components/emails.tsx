@@ -1,124 +1,146 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline } from 'antd';
-const { Divider } = Menu;
-const { Item } = Menu;
-const CheckboxGroup = Checkbox.Group;
+import { Const, history } from 'qmkit';
+import { Row, Col, Dropdown, Button, Menu, Checkbox, Timeline, Select, Empty, Spin, message } from 'antd';
 import { replaceLink } from '../common';
 import TemplateConponent from './template-conponent';
+import { Link } from 'react-router-dom';
+import * as webapi from '../webapi';
+import value from '*.json';
 
+const Option = Select.Option;
 export default class emails extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
       emailLoading: false,
       emailList: [
-        {
-          activityName: "New booking in /'clinics name' from /'2021-01-29T09:31 to /'2021-01-29T10:31'",
-          activityType: 'Clinic Booking',
-          auditId: 8018,
-          category: 'Clinic',
-          clinicId: 6,
-          clinicName: 'Вега',
-          contactId: 229,
-          createdBy: 138,
-          createdByUser: 'Mia Lin',
-          dateAdded: '2021-01-28 12:32:26',
-          id: 8196,
-          tenantId: 4
-        }
       ],
-      emailFilter: [
-        { value: 'COMMUNICATION.Emails', label: 'Communication Email' },
-        { value: 'CAMPAIGN ACTIVITY.Emails', label: 'Campaign Email' }
+      emailFilters: [
+        { value: 'Communication Email', label: 'Communication Email' },
+        { value: 'Automation Email', label: 'Automation Email' }
       ],
-      filterVisible: false
+      isRecent: true,
+      orderType: 'asc',
+      filters: []
     };
-    this.activitiesEmailSort = this.activitiesEmailSort.bind(this);
+    this.getEmails = this.getEmails.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getEmails();
+  }
 
-  activitiesEmailSort() {}
+  getEmails() {
+    this.setState({
+      emailLoading: true
+    });
+    const { isRecent, orderType, filters } = this.state;
+    let param = {
+      customerId: this.props.petOwnerId, // this.props.petOwnerId,
+      orderType: orderType,
+      recent: isRecent,
+      filters: filters
+    };
+    webapi
+      .getEamils(param, isRecent)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            emailList: res.context.activityVOList || [],
+            emailLoading: false
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+          this.setState({
+            emailLoading: false
+          });
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+        this.setState({
+          emailLoading: false
+        });
+      });
+  }
   render() {
-    const { emailLoading, emailList, emailFilter, filterVisible } = this.state;
+    const { emailLoading, emailList, emailFilters, orderType, isRecent } = this.state;
     const menu = (
       <Menu>
         <Menu.Item key={1}>Add Comment</Menu.Item>
-        <Menu.Item key={2}>Add Task</Menu.Item>
-      </Menu>
-    );
-    const filterMenu = (
-      <Menu>
-        <Checkbox>Select All</Checkbox>
-        <a className="closeFilter" onClick={() => this.setState({ filterVisible: false })}>
-          {' '}
-          X
-        </a>
-        <Divider />
-        <CheckboxGroup>
-          {emailFilter.map((item, index) => (
-            <Row gutter={24} key={index}>
-              <Col span={24}>
-                <Checkbox value={item.value}>{item.label}</Checkbox>
-              </Col>
-            </Row>
-          ))}
-        </CheckboxGroup>
+        <Menu.Item key={2}>
+          <Link to={'/add-task'}>Add Task</Link>
+        </Menu.Item>
       </Menu>
     );
     return (
       <Row>
         <Col span={9}></Col>
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-          <div style={{ marginRight: '10px' }}>
-            <Dropdown overlay={filterMenu} trigger={['click']} overlayClassName="dropdown-custom" visible={filterVisible}>
-              <Button className="ant-dropdown-link" onClick={(e) => this.setState({ filterVisible: true })}>
-                Email Type
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </div>
-          <Button className="sortBtn" onClick={this.activitiesEmailSort}>
-            <span className="icon iconfont iconbianzu8" style={{ fontSize: '22px' }} />
+          <Select
+            className="filter"
+            placeholder="Email Type"
+            allowClear={true}
+            dropdownMatchSelectWidth={false}
+            maxTagCount={0}
+            style={{ width: '120px' }}
+            mode="multiple"
+            onChange={(value) => this.setState({ filters: value }, () => this.getEmails())}
+          >
+            {emailFilters.map((item) => (
+              <Option value={item.value} key={item.label}>
+                {item.label}
+              </Option>
+            ))}
+          </Select>
+          <Button className="sortBtn" onClick={() => this.setState({ orderType: orderType === 'asc' ? 'desc' : 'asc' }, () => this.getEmails())}>
+            <span className="icon iconfont iconbianzusort" style={{ fontSize: '20px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">
-              <span className="icon iconfont iconbianzu9" style={{ fontSize: '22px' }} />
+              <span className="icon iconfont iconbianzu9" style={{ fontSize: '20px' }} />
             </Button>
           </Dropdown>
         </Col>
         <Col span={24}>
-          <Timeline pending={emailLoading}>
-            {emailList.map((item, index) => (
-              <Timeline.Item key={index}>
-                <Row className="activities-timeline">
-                  <Col span={19}>
-                    <div className="activity-name">{replaceLink(item.activityName, item)}</div>
-                    <div className="activity-type">{item.activityType}</div>
-                  </Col>
-                  <Col span={5}>
-                    <div>
-                      By
-                      <span className="jump-link" style={{ marginLeft: '5px' }}>
-                        {item.createdByUser}
-                      </span>
-                    </div>
-                    <div style={{ marginBottom: '10px' }} className="activity-type">
-                      {item.dateAdded}
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <TemplateConponent avtivity={item} />
-                  </Col>
-                </Row>
-              </Timeline.Item>
-            ))}
-          </Timeline>
-          <div style={{ textAlign: 'center' }}>
-            <Button type="link" className="jump-link">
-              View More
-            </Button>
-          </div>
+          {emailList && emailList.length > 0 ? (
+            <Spin spinning={emailLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Timeline>
+                {emailList.map((item, index) => (
+                  <Timeline.Item key={index}>
+                    <Row className="activities-timeline">
+                      <Col span={19}>
+                        <div className="activity-name">{replaceLink(item.activityName, item)}</div>
+                        <div className="activity-type">{item.activityType}</div>
+                      </Col>
+                      <Col span={5}>
+                        <div>
+                          By
+                          <span className="jump-link" style={{ marginLeft: '5px' }}>
+                            {item.createdByUser}
+                          </span>
+                        </div>
+                        <div style={{ marginBottom: '10px' }} className="activity-type">
+                          {item.dateAdded}
+                        </div>
+                      </Col>
+                      <Col span={24}>
+                        <TemplateConponent avtivity={item} />
+                      </Col>
+                    </Row>
+                  </Timeline.Item>
+                ))}
+              </Timeline>
+              <div style={{ textAlign: 'center' }}>
+                <Button type="link" className="jump-link" onClick={() => this.setState({ isRecent: false }, () => this.getEmails())}>
+                <span>{ isRecent ? 'View More' : ''}</span>
+                </Button>
+              </div>
+            </Spin>
+          ) : (
+            <Empty />
+          )}
         </Col>
       </Row>
     );

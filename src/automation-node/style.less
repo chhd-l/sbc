@@ -68,6 +68,7 @@
 .item-icon {
   font-size: 35px;
 }
+
 .item-text {
   padding-top: 7px;
   font-size: 12px;
@@ -76,19 +77,35 @@
   color: #595959;
   width: 86px;
 }
+
 .panel-custom /deep/ .ant-collapse-content-box {
   display: flex;
   justify-content: space-around;
   text-align: center;
 }
-.panel-custom#sendEmailItem  /deep/ .ant-collapse-content-box {
-    justify-content: start;
-    margin-left: 35px
+
+.panel-custom#sendEmailItem /deep/ .ant-collapse-content-box {
+  justify-content: start;
+  margin-left: 35px;
 }
 
 #itemPanel {
- .ant-collapse .panel-custom {
+  .ant-collapse .panel-custom {
     background: #fff;
   }
 }
 
+.user-select-none {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+
+.ui-form-custom {
+  padding: 0 10px;
+  /deep/ .ant-form-item {
+    margin-bottom: 0px;
+  }
+}

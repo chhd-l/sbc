@@ -725,7 +725,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               style={{ width: 520 }}
               onChange={this.selectGroupOnChange}
               // defaultValue={232}
-              defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').length > 0 ? marketingBean.get('segmentIds')[0] : null}
+              defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
             >
               {allGroups.size > 0 &&
                 allGroups.map((item) => (

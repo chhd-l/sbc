@@ -452,7 +452,39 @@ export default {
   'OrderSetting.TheMerchantAutomatically':'After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.',
   'OrderSetting.save':'Save',
 
-  'ExternalOrderPage':'',
+  'OrderReturnList.all':'All',
+  'OrderReturnList.pendingReview':'Pending review',
+  'OrderReturnList.toBeFilledOutLogisticsInformation':'To be filled out logistics information',
+  'OrderReturnList.waitingForTheMerchantToReceiveTheGoods':'Waiting for the merchant to receive the goods',
+  'OrderReturnList.pendingRefund':'Pending refund',
+  'OrderReturnList.rejected':'Rejected',
+  'OrderReturnList.refusedToRefund':'Refused to refund',
+  'OrderReturnList.refundFailed':'Refund failed',
+  
+
+  
+
+
+
+  /* --External-Order-Page--*/
+  'ExternalOrderPage.ClinicsCRM':'Clinics CRM id',
+  'ExternalOrderPage.ClinicsName':'Clinics name',
+  'ExternalOrderPage.ClinicsRegion':'Clinics region',
+  'ExternalOrderPage.PrescriptionId':'Prescription id',
+  'ExternalOrderPage.OrderTime':'Order time',
+  'ExternalOrderPage.OrderNumber':'Order number',
+  'ExternalOrderPage.ProductId':'Product id',
+  'ExternalOrderPage.UnitPrice':'Unit price',
+  'ExternalOrderPage.Qty':'Qty',
+  'ExternalOrderPage.OrderProductAmount':'Order product amount',
+  'ExternalOrderPage.TotalOrderAmount':'Total Order Amount',
+  'ExternalOrderPage.OrderStatus':'Order status',
+  'ExternalOrderPage.view':'View',
+  'ExternalOrderPage.Confirm':'Do you confirm to bill？',
+  'ExternalOrderPage.Cancel':'Do you confirm to cancel bill record？',
+  'ExternalOrderPage.btnConfirm':'Confirm',
+  'ExternalOrderPage.btnCancel':'Cancel',
+  
 
   /*---order-list-prescriber yxy---*/
   'Order.order': 'order',
@@ -714,22 +746,22 @@ export default {
   'Subscription.searchForm.ProductName':'Product Name',
   'Subscription.searchForm.Receiver':'Receiver',
   'Subscription.searchForm.AuditorName':'Auditor Name',
-  // 'Subscription.subscriptionOption.SubscriptionNumber':'Subscription Number',
-  // 'Subscription.subscriptionOption.OrderNumber':'Order Number',
-  // 'Subscription.consumerOption.ConsumerName':'Consumer Name',
-  // 'Subscription.consumerOption.ConsumerAccount':'Consumer Account',
-  // 'Subscription.productOption.ProductName':'Product Name',
-  // 'Subscription.productOption.SKUCode':'SKU Code',
-  // 'Subscription.recipientOption.Receiver':'Receiver',
-  // 'Subscription.recipientOption.ReceiverPhone':'Receiver Phone',
-  // 'Subscription.prescriberOption.AuditorName':'Auditor Name',
-  // 'Subscription.prescriberOption.AuditorID':'Auditor ID',
+  'Subscription.subscriptionOption.SubscriptionNumber':'Subscription Number',
+  'Subscription.subscriptionOption.OrderNumber':'Order Number',
+  'Subscription.consumerOption.ConsumerName':'Consumer Name',
+  'Subscription.consumerOption.ConsumerAccount':'Consumer Account',
+  'Subscription.productOption.ProductName':'Product Name',
+  'Subscription.productOption.SKUCode':'SKU Code',
+  'Subscription.recipientOption.Receiver':'Receiver',
+  'Subscription.recipientOption.ReceiverPhone':'Receiver Phone',
+  'Subscription.prescriberOption.AuditorName':'Auditor Name',
+  'Subscription.prescriberOption.AuditorID':'Auditor ID',
 
   'Subscription.batchExport': 'Batch export',
   'Subscription.Frequency': 'Frequency',
   'Subscription.all': 'All',
   'Subscription.Prescriber': 'Prescriber',
-  'Subscription.search':'search',
+  'Subscription.search':'Search',
   'Subscription.TabPane.all':'all',
   'Subscription.TabPane.Active':'Active',
   'Subscription.TabPane.Inactive':'Inactive',
@@ -747,6 +779,7 @@ export default {
   'SubscriptionDetail.order.unknown': 'Unknown',
   'SubscriptionDetail.AreYouSureDelivery': 'Are you sure skip next delivery?',
 
+  'SubscriptionDetail.Subscriptiondetails':'Subscription details',
   'SubscriptionDetail.SubscriptionDetails':'Subscription Details',
   'SubscriptionDetail.SkipNextDelivery':'Skip Next Delivery',
   'SubscriptionDetail.OperateSuccessfully':'Operate successfully',
@@ -820,6 +853,8 @@ export default {
   'SubscriptionDetail.ColSpan.PaymentMethod.CardNumber':'Card Number',
   'SubscriptionDetail.operationLog':'Operation log',
   'SubscriptionDetail.back':'back',
+  'SubscriptionDetail.Active':'Active',
+  'SubscriptionDetail.Inactive':'Inactive',
 
   'SubscriptionSetting.RemindOfNewOrders':'Remind of new orders',
   'SubscriptionSetting.Days1':'Days ahead new orders being created, an email will be sent to pet owners to remind them of new orders.',
@@ -833,7 +868,7 @@ export default {
   'SubscriptionPlan.SubscriptionPlanID':'Subscription Plan ID',
   'SubscriptionPlan.SubscriptionPlanType':'Subscription Plan Type',
   'SubscriptionPlan.all':'all',
-  'SubscriptionPlan.search':'search',
+  'SubscriptionPlan.search':'Search',
   'SubscriptionPlan.AddNewPlan':'Add New Plan',
   'SubscriptionPlan.Table.SubscriptionPlanID':'Subscription Plan ID',
   'SubscriptionPlan.Table.SubscriptionPlanName':'Subscription Plan Name',
@@ -1103,6 +1138,9 @@ export default {
   'FinanceManageReward.CancelBillRecord':'Do you confirm to cancel bill record？',
   'FinanceManageReward.Confirm':'Confirm',
   'FinanceManageReward.Cancel':'Cancel',
+  'FinanceManageReward.OrderNumber':'   Order number  ',
+  
+
   
   'FinanceManageRewardDetails.back':'Back',
   'FinanceManageRewardDetails.RewardAmount':'Reward amount',

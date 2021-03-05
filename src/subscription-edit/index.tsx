@@ -36,7 +36,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Subscription edit',
+      title: <FormattedMessage id="Subscription.Subscriptionedit" />,
       subscriptionId: this.props.match.params.subId,
       loading: false,
       orderInfo: {},

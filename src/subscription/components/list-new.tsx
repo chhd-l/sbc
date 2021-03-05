@@ -274,7 +274,7 @@ export default class ListView extends React.Component<any, any> {
                         ))}
                     </td>
                     {/*subscription status*/}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscribeStatus === '0' ? 'Active' : 'Inactive'}</td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscribeStatus === '0' ? <FormattedMessage id="SubscriptionDetail.Active" /> : <FormattedMessage id="SubscriptionDetail.Inactive" />}</td>
                     {/* consumerName */}
                     <td style={{ width: '10%', paddingLeft: 20 }}>{v.customerName ? v.customerName : ''}</td>
                     {/* Recipient */}

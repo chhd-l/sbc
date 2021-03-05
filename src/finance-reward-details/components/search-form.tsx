@@ -57,12 +57,7 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      onFormChange,
-      searchForm,
-      onSearch,
-      bulkExport
-    } = this.props.relaxProps;
+    const { onFormChange, searchForm, onSearch, bulkExport } = this.props.relaxProps;
     const { searchByDate } = this.props.relaxProps;
     const { beginTime, endTime, pickOpen, pickErrorInfo } = this.state;
     const options = {
@@ -81,14 +76,8 @@ export default class SearchForm extends React.Component<any, any> {
             allowClear={false}
             format="YYYY-MM-DD"
             placeholder={['Start Time', 'End Time']}
-            onChange={(date, dateString) =>
-              this._handleDateParams(date, dateString)
-            }
-            renderExtraFooter={() =>
-              pickErrorInfo != '' && (
-                <span style={{ color: 'red' }}>{pickErrorInfo}</span>
-              )
-            }
+            onChange={(date, dateString) => this._handleDateParams(date, dateString)}
+            renderExtraFooter={() => pickErrorInfo != '' && <span style={{ color: 'red' }}>{pickErrorInfo}</span>}
             value={[beginTime, endTime]}
             open={pickOpen}
             onOpenChange={() => this.setState({ pickErrorInfo: '' })}
@@ -97,7 +86,7 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <Input
-            addonBefore={<FormattedMessage id="OrderNumber" />}
+            addonBefore={<FormattedMessage id="FinanceManageReward.OrderNumber" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -130,9 +119,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <AuthWrapper functionName={'rewardDetailListExport'}>
             <div style={{ paddingBottom: '16px' }}>
-              <Button onClick={() => bulkExport()}>
-                {<FormattedMessage id="bulkExport" />}
-              </Button>
+              <Button onClick={() => bulkExport()}>{<FormattedMessage id="bulkExport" />}</Button>
             </div>
           </AuthWrapper>
           {/*<Button
@@ -167,8 +154,7 @@ export default class SearchForm extends React.Component<any, any> {
     } else {
       this.setState({
         pickOpen: true,
-        pickErrorInfo:
-          'The start time and end time should be within three months'
+        pickErrorInfo: 'The start time and end time should be within three months'
       });
     }
   };

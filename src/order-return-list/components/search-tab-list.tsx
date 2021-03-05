@@ -31,21 +31,21 @@ export default class SearchTabList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="OrderReturnList.all" />} key="0">
             {tab.get('key') === '0' ? <List /> : null}
           </Tabs.TabPane>
-          <Tabs.TabPane tab={<FormattedMessage id="pendingReview" />} key="flowState-INIT">
+          <Tabs.TabPane tab={<FormattedMessage id="OrderReturnList.pendingReview" />} key="flowState-INIT">
             {tab.get('key') === 'flowState-INIT' ? <List /> : null}
           </Tabs.TabPane>
           {/*{<FormattedMessage id="pendingReview" />}*/}
-          <Tabs.TabPane tab={<FormattedMessage id="toBeFilledOutLogisticsInformation" />} key="flowState-AUDIT">
+          <Tabs.TabPane tab={<FormattedMessage id="OrderReturnList.toBeFilledOutLogisticsInformation" />} key="flowState-AUDIT">
             {tab.get('key') === 'flowState-AUDIT' ? <List /> : null}
           </Tabs.TabPane>
-          <Tabs.TabPane tab={<FormattedMessage id="waitingForTheMerchantToReceiveTheGoods" />} key="flowState-DELIVERED">
+          <Tabs.TabPane tab={<FormattedMessage id="OrderReturnList.waitingForTheMerchantToReceiveTheGoods" />} key="flowState-DELIVERED">
             {tab.get('key') === 'flowState-DELIVERED' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab={<FormattedMessage id="pendingRefund" />} key="flowState-RECEIVED">
+          <Tabs.TabPane tab={<FormattedMessage id="OrderReturnList.pendingRefund" />} key="flowState-RECEIVED">
             {tab.get('key') === 'flowState-RECEIVED' ? <List /> : null}
           </Tabs.TabPane>
 
@@ -53,18 +53,18 @@ export default class SearchTabList extends React.Component<any, any> {
             {tab.get('key') === 'flowState-COMPLETED' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab={<FormattedMessage id="rejected" />} key="flowState-REJECT_RECEIVE">
+          <Tabs.TabPane tab={<FormattedMessage id="OrderReturnList.rejected" />} key="flowState-REJECT_RECEIVE">
             {tab.get('key') === 'flowState-REJECT_RECEIVE' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab={<FormattedMessage id="refusedToRefund" />} key="flowState-REJECT_REFUND">
+          <Tabs.TabPane tab={<FormattedMessage id="OrderReturnList.refusedToRefund" />} key="flowState-REJECT_REFUND">
             {tab.get('key') === 'flowState-REJECT_REFUND' ? <List /> : null}
           </Tabs.TabPane>
           <Tabs.TabPane tab={<FormattedMessage id="Order.outOfDate" />} key="flowState-VOID">
             {tab.get('key') === 'flowState-VOID' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab={<FormattedMessage id="refundFailed" />} key="flowState-REFUND_FAILED">
+          <Tabs.TabPane tab={<FormattedMessage id="OrderReturnList.refundFailed" />} key="flowState-REFUND_FAILED">
             {tab.get('key') === 'flowState-REFUND_FAILED' ? <List /> : null}
           </Tabs.TabPane>
         </Tabs>

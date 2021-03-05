@@ -16,7 +16,7 @@ export default class SubscriptionPlan extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Subscription Plan',
+      title: <FormattedMessage id="Subscription.SubscriptionPlan" />,
       subscriptionForm: {},
       typeList: [],
       subscriptionPlanList: [],

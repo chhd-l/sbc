@@ -29,6 +29,10 @@ export default {
   'Public.save':'save',
   'Public.cancel':'cancel',
   'Public.more':'more',
+  'Public.all':'all',
+  'Public.Search':'Search',
+
+
 
 
   /*-----------------------------  Menu -----------------------------------------------*/
@@ -204,7 +208,7 @@ export default {
   "Product.Batchdelete": "Batch delete",
   "Product.DeleteConfirmTip": "Are you sure you want to delete this product?",
   "Product.OffshelvesConfirmTip": "Are you sure you want off to shelves this product?",
- 
+
 
   "Product.Pending": "Pending",
   "Product.Pendingreview": "Pending review",
@@ -287,7 +291,7 @@ export default {
   "Product.Inventorywarning": "Inventory warning",
   "Product.Inventorywarningdesc": "Set a quantity that when products are below this certain quantity, they are considered as ‘Low inventory’ and will be shown in the list below.",
   "Product.Bulkexport": "Bulk export",
- 
+
   "Product.Addnewcategory": "Add new category",
   "Product.Numberofproduct": "Number of product",
   "Product.Salescategorydesc": "Sales category is the classification of products within the scope of your store. Up to 3 levels can be added. When there is No categories, all products will be classified into the default classification",
@@ -346,7 +350,7 @@ export default {
   "Product.Choosetype": "Choose type",
   "Product.Singlechoice": "Single choice",
   "Product.Multiplechoice": "Multiple choice",
-  
+
   "Product.FilterSortsetting": "Filter & Sort setting",
   "Product.FilterSortsettingdesc": `
   1. Filter attributes can be chosen from attributes, which are associated with product category
@@ -627,7 +631,7 @@ export default {
   'Order.Confirm': 'Confirm',
   'Order.PetOwner': 'Pet Owner',
   'Order.orderList': 'Order list',
-  'Order.orderNumber': 'Order number',
+  'Order.OrderNumber': 'Order number',
   'Order.subscriptioNumber': 'Subscription number',
   'Order.shippingStatus': 'Shipping status',
   'Order.paymentStatus': 'Payment status',
@@ -734,6 +738,34 @@ export default {
   'Order.address': 'Address',
   'Order.fillInTheRemarks': 'Fill in the remarks',
   'Order.enterUpTo100Characters': 'Enter up to 100 characters',
+  'Order.skuCode': 'SKU code',
+  'Order.spuCode': 'SPU code',
+  'Order.brand': 'Brand',
+  'Order.catogery': 'Catogery',
+  'Order.Pleaseselectmember': 'Please select member',
+  'Order.addProduct': 'Add product',
+  'Order.Mustselectaproduct': 'Must select a product',
+  'Order.serialNumber': 'Serial number',
+  'Order.giveaway': 'Giveaway',
+  'Order.memberPrice': 'member price',
+  'Order.Purchasequantity': 'Purchase quantity must be entered',
+  'Order.Purchasevolume': 'Purchasevolume',
+  'Order.Thepurchasevolume': 'The purchase volume cannot be greater than the remaining inventory',
+  'Order.Purchasevolumecannot': 'Purchase volume cannot be greater than inventory',
+  'Order.Thepurchasevolumecannot': 'The purchase volume cannot be greater than the limit order quantity',
+  'Order.Thepurchasevolumecannotbeless ': 'The purchase volume cannot be less than the minimum quantity',
+  'Order.stock ': 'Stock',
+  'Order.Minimumorderquantity ': 'Minimum order quantity',
+  'Order.Pleaseentertheamount': 'Please enter the amount',
+  'Order.Pleaseenterthecorrectamount': ' Please enter the correct amount',
+  'Order.shippingFees': 'Shipping fees',
+  'Order.fullReductionAmount': 'Full reduction amount',
+  'Order.fullDiscountAmount': 'Full discount amount',
+  'Order.coupon': 'Coupon',
+  'Order.pointsDeduction': 'Points deduction',
+  'Order.totalPayable': 'Total payable',
+  'Order.Nomorethan50': 'No more than 50 types of purchased goods',
+  'Order.Selectproduct': 'Select product',
 
 
   /*-----------------------------  Task  ----------------------------------------------*/

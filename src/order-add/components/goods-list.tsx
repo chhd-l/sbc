@@ -6,7 +6,7 @@ import GoodsAdd from './goods-add';
 import { fromJS } from 'immutable';
 import { noop, ValidConst, QMFloat, QMMethod } from 'qmkit';
 import './goods-list-style.css';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 // import UUID from 'uuid-js';
 import { cache } from 'qmkit';
 
@@ -45,7 +45,7 @@ const formItemLayout = {
 };
 
 @Relax
-export default class GoodsList extends React.Component<any, any> {
+class GoodsList extends React.Component<any, any> {
   props: {
     form?: any;
     edit?: boolean;
@@ -78,6 +78,7 @@ export default class GoodsList extends React.Component<any, any> {
     };
     //当前选中的会员
     selectedCustomerId: string;
+    intl: any;
   };
 
   static relaxProps = {
@@ -200,7 +201,7 @@ export default class GoodsList extends React.Component<any, any> {
             type="primary"
             onClick={() => {
               if (!selectedCustomerId) {
-                message.error('Please select member');
+                message.error(this.props.intl.formatMessage({ id: 'Order.Pleaseselectmember' }));
                 return;
               }
 
@@ -209,7 +210,7 @@ export default class GoodsList extends React.Component<any, any> {
               });
             }}
           >
-            <FormattedMessage id="addProduct" />
+            <FormattedMessage id="Order.addProduct" />
           </Button>
         )}
 
@@ -219,7 +220,7 @@ export default class GoodsList extends React.Component<any, any> {
             rules: [
               {
                 required: selectedCustomerId ? true : false,
-                message: 'Must select a product'
+                message: this.props.intl.formatMessage({ id: 'Order.Mustselectaproduct' })
               }
             ]
           })(<input type="hidden" />)}
@@ -235,23 +236,23 @@ export default class GoodsList extends React.Component<any, any> {
           dataSource={dataSource.concat(giftDataSource)}
           pagination={false}
         >
-          <Column title={<FormattedMessage id="serialNumber" />} key="index" width="61px" render={(_text, _record, index) => <span>{index + 1}</span>} />
+          <Column title={<FormattedMessage id="Order.serialNumber" />} key="index" width="61px" render={(_text, _record, index) => <span>{index + 1}</span>} />
 
-          <Column title={<FormattedMessage id="skuCode" />} dataIndex="goodsInfoNo" width="140px" key="goodsInfoNo" />
+          <Column title={<FormattedMessage id="Order.skuCode" />} dataIndex="goodsInfoNo" width="140px" key="goodsInfoNo" />
 
           <Column
             width="20%"
-            title={<FormattedMessage id="productName" />}
+            title={<FormattedMessage id="Order.ProductName" />}
             key="goodsInfoName"
             render={(rowInfo) => {
               if (rowInfo.gift) {
-                return '【' + <FormattedMessage id="giveaway" /> + '】' + rowInfo.goodsInfoName;
+                return '【' + <FormattedMessage id="Order.giveaway" /> + '】' + rowInfo.goodsInfoName;
               }
               return rowInfo.goodsInfoName;
             }}
           />
           <Column
-            title={<FormattedMessage id="weight" />}
+            title={<FormattedMessage id="Order.Weight" />}
             width="10%"
             key="goodsSpecs"
             render={(rowInfo) => {
@@ -262,11 +263,11 @@ export default class GoodsList extends React.Component<any, any> {
             }}
           />
           <Column
-            title={this.props.edit ? <FormattedMessage id="price" /> : <FormattedMessage id="memberPrice" />}
+            title={this.props.edit ? <FormattedMessage id="Order.Price" /> : <FormattedMessage id="Order.memberPrice" />}
             width="110px"
             key="salePrice"
             render={(rowInfo) => {
-              if (rowInfo.gift) return '$0.00';
+              if (rowInfo.gift) return sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '0.00';
               if (this.props.edit) return rowInfo.levelPrice.toFixed(2);
               const goodsIntervalPrices = this.props.relaxProps.goodsIntervalPrices;
               let price = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + rowInfo.salePrice.toFixed(2);
@@ -298,7 +299,7 @@ export default class GoodsList extends React.Component<any, any> {
             width="175px"
             className="centerItem"
             key="num"
-            title={<FormattedMessage id="quantity" />}
+            title={<FormattedMessage id="Order.Quantity" />}
             render={(_text, record: any) => {
               //赠品数量显示
               if (record.gift) {
@@ -312,11 +313,11 @@ export default class GoodsList extends React.Component<any, any> {
                     rules: [
                       {
                         required: true,
-                        message: 'Purchase quantity must be entered'
+                        message: this.props.intl.formatMessage({ id: 'Order.Purchasequantity' })
                       },
                       {
                         pattern: ValidConst.noZeroNumber,
-                        message: 'Purchase volume can only be an integer greater than 0'
+                        message: this.props.intl.formatMessage({ id: 'Order.Purchasevolume' })
                       },
                       {
                         validator: (_rule, value, callback) => {
@@ -334,9 +335,9 @@ export default class GoodsList extends React.Component<any, any> {
                           }
                           if (stock < value) {
                             if (this.props.edit) {
-                              callback('The purchase volume cannot be greater than the remaining inventory');
+                              callback(this.props.intl.formatMessage({ id: 'Order.Thepurchasevolume' }));
                             } else {
-                              callback('Purchase volume cannot be greater than inventory');
+                              callback(this.props.intl.formatMessage({ id: 'Order.Purchasevolumecannot' }));
                             }
                             return;
                           }
@@ -344,11 +345,11 @@ export default class GoodsList extends React.Component<any, any> {
                             const maxCount = record.maxCount;
                             const count = record.count;
                             if (maxCount && maxCount < value) {
-                              callback('The purchase volume cannot be greater than the limit order quantity');
+                              callback(this.props.intl.formatMessage({ id: 'Order.Thepurchasevolumecannot' }));
                               return;
                             }
                             if (count && count > value) {
-                              callback('The purchase volume cannot be less than the minimum quantity');
+                              callback(this.props.intl.formatMessage({ id: 'Order.Thepurchasevolumecannotbeless' }));
                               return;
                             }
                           }
@@ -367,7 +368,9 @@ export default class GoodsList extends React.Component<any, any> {
                   <p>
                     {this.props.edit && (record.initBuyCount || (buySku && buySku.get('buyCount')))
                       ? null
-                      : `${(<FormattedMessage id="stock" />)}: ${record.stock} ${record.priceType === 0 ? (record.count ? 'Minimum order quantity: ' + record.count : '') + (record.maxCount ? 'Maximum amount: ' + record.maxCount : '') : ''}`}
+                      : `${(<FormattedMessage id="Order.stock" />)}: ${record.stock} ${
+                          record.priceType === 0 ? (record.count ? this.props.intl.formatMessage({ id: 'Order.Minimumorderquantity' }) + ': ' + record.count : '') + (record.maxCount ? 'Maximum amount: ' + record.maxCount : '') : ''
+                        }`}
                   </p>
                 </FormItem>
               );
@@ -375,11 +378,11 @@ export default class GoodsList extends React.Component<any, any> {
           />
 
           <Column
-            title={<FormattedMessage id="total" />}
+            title={<FormattedMessage id="Order.Total" />}
             width="110px"
             key="subtotal"
             render={(_text, record: any) => {
-              if (record.gift) return '$0.00';
+              if (record.gift) return sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '0.00';
               if (this.props.edit) return (record.buyCount * record.levelPrice).toFixed(2);
               const { goodsIntervalPrices } = this.props.relaxProps;
               let price = record.salePrice;
@@ -393,13 +396,13 @@ export default class GoodsList extends React.Component<any, any> {
                   price = prices.get('price');
                 }
               }
-              return <span>${(price * record.buyCount ? price * record.buyCount : 0.0).toFixed(2)} </span>;
+              return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (price * record.buyCount ? price * record.buyCount : 0.0).toFixed(2)} </span>;
             }}
           />
 
           {!this.props.edit && (
             <Column
-              title={<FormattedMessage id="operation" />}
+              title={<FormattedMessage id="Order.Operatio" />}
               key="opt"
               width="61px"
               render={(_text, record: any) => (
@@ -413,7 +416,7 @@ export default class GoodsList extends React.Component<any, any> {
                     }
                   }}
                 >
-                  <FormattedMessage id="delete" />
+                  <FormattedMessage id="Order.Delete" />
                 </a>
               )}
             />
@@ -439,7 +442,7 @@ export default class GoodsList extends React.Component<any, any> {
                     disabled={selectedCustomerId ? false : true}
                     onChange={(e: any) => {
                       if (!selectedCustomerId) {
-                        message.error('Please select member');
+                        message.error(this.props.intl.formatMessage({ id: 'Order.Pleaseselectmember' }));
                         return;
                       }
                       //开启或者取消特价
@@ -447,8 +450,7 @@ export default class GoodsList extends React.Component<any, any> {
                       this._enableSpecVal(checked);
                     }}
                   >
-                    <FormattedMessage id="Order.orderPriceChange" />
-                    :$
+                    <FormattedMessage id="Order.orderPriceChange" />:{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   </Checkbox>
                 }
               >
@@ -457,11 +459,11 @@ export default class GoodsList extends React.Component<any, any> {
                   rules: [
                     {
                       required: goodsList.get('isEnableSpecVal'),
-                      message: 'Please enter the amount'
+                      message: this.props.intl.formatMessage({ id: 'Order.Pleaseentertheamount' })
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: 'Please enter the correct amount'
+                      message: this.props.intl.formatMessage({ id: 'Order.Pleaseenterthecorrectamount' })
                     }
                   ]
                 })(
@@ -494,14 +496,14 @@ export default class GoodsList extends React.Component<any, any> {
                     disabled={selectedCustomerId ? false : true}
                     onChange={(e) => {
                       if (!selectedCustomerId) {
-                        message.error('Please select member');
+                        message.error(this.props.intl.formatMessage({ id: 'Order.Pleaseselectmember' }));
                         return;
                       }
                       const checked = (e.target as any).checked;
                       this._enableDeliverFee(checked);
                     }}
                   >
-                    <FormattedMessage id="shippingFees" />
+                    <FormattedMessage id="Order.shippingFees" />
                     :$
                   </Checkbox>
                 }
@@ -511,11 +513,11 @@ export default class GoodsList extends React.Component<any, any> {
                   rules: [
                     {
                       required: goodsList.get('isEnableDeliverFee'),
-                      message: 'Please enter the amount'
+                      message: this.props.intl.formatMessage({ id: 'Order.Pleaseentertheamount' })
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: 'Please enter the correct amount'
+                      message: this.props.intl.formatMessage({ id: 'Order.Pleaseenterthecorrectamount' })
                     }
                   ]
                 })(
@@ -535,26 +537,26 @@ export default class GoodsList extends React.Component<any, any> {
           <div style={styles.bottomPrice}>
             <div style={styles.title}>
               <span style={styles.itemsText}>
-                <FormattedMessage id="productAmount" />:
+                <FormattedMessage id="Order.Productamount" />:
               </span>
               {reductionPrice != 0 && (
                 <span style={styles.itemsText}>
-                  <FormattedMessage id="fullReductionAmount" />:
+                  <FormattedMessage id="Order.fullReductionAmount" />:
                 </span>
               )}
               {discountPrice != 0 && (
                 <span style={styles.itemsText}>
-                  <FormattedMessage id="fullDiscountAmount" />:
+                  <FormattedMessage id="Order.fullDiscountAmount" />:
                 </span>
               )}
               {couponPrice != 0 && (
                 <span style={styles.itemsText}>
-                  <FormattedMessage id="coupon" />:
+                  <FormattedMessage id="Order.coupon" />:
                 </span>
               )}
               {pointsPrice != 0 && (
                 <span style={styles.itemsText}>
-                  <FormattedMessage id="pointsDeduction" />:
+                  <FormattedMessage id="Order.pointsDeduction" />:
                 </span>
               )}
               {goodsList.get('isEnableSpecVal') && (
@@ -563,10 +565,10 @@ export default class GoodsList extends React.Component<any, any> {
                 </span>
               )}
               <span style={styles.itemsText}>
-                <FormattedMessage id="shippingFees" />:
+                <FormattedMessage id="Order.shippingFees" />:
               </span>
               <span style={styles.itemsText}>
-                <FormattedMessage id="totalPayable" />:
+                <FormattedMessage id="Order.totalPayable" />:
               </span>
             </div>
             <div style={styles.priceCom}>
@@ -587,7 +589,7 @@ export default class GoodsList extends React.Component<any, any> {
         {this.state.addAddressVisible && (
           <Modal
             maskClosable={false}
-            title="Select product"
+            title={this.props.intl.formatMessage({ id: 'Order.Selectproduct' })}
             width={1100}
             visible={this.state.addAddressVisible}
             onOk={async () => {
@@ -597,7 +599,7 @@ export default class GoodsList extends React.Component<any, any> {
               const newKeys = selectedKeys.map((key) => key.substring(4)).filter((key) => oldSkuIds.findIndex((o) => o == key) < 0);
               const wholeKeys = newSkuIds.toSet().concat(newKeys.toSet()).toList();
               if (wholeKeys.count() > 50) {
-                message.error('No more than 50 types of purchased goods');
+                message.error(this.props.intl.formatMessage({ id: 'Order.Nomorethan50' }));
                 return;
               }
               saveNewSkuIds(wholeKeys);
@@ -628,8 +630,8 @@ export default class GoodsList extends React.Component<any, any> {
             onCancel={() => {
               this.setState({ addAddressVisible: false });
             }}
-            okText={<FormattedMessage id="confirm" />}
-            cancelText={<FormattedMessage id="cancel" />}
+            okText={<FormattedMessage id="Order.Confirm" />}
+            cancelText={<FormattedMessage id="Order.Cancel" />}
           >
             {<GoodsAdd selectedCustomerId={selectedCustomerId} selectedKeys={this.state.selectedKeys} selectedRows={this.state.selectedRows} ref={(goodsAdd) => (this['_goodsAdd'] = goodsAdd)} />}
           </Modal>
@@ -704,6 +706,7 @@ export default class GoodsList extends React.Component<any, any> {
     this.props.form.resetFields([key]);
   }
 }
+export default injectIntl(GoodsList);
 
 const styles = {
   giftBox: {

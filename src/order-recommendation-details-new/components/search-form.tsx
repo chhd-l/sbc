@@ -254,7 +254,7 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option value="orderNumber">
-          <FormattedMessage id="Order.orderNumber" />
+          <FormattedMessage id="Order.OrderNumber" />
         </Option>
         <Option value="subscriptioNumber">
           <FormattedMessage id="Order.subscriptioNumber" />

@@ -202,7 +202,7 @@ class CustomerInfo extends Component<any, any> {
         </strong>
         <Row type="flex" align="top">
           <Col span={10}>
-            <FormItem {...formItemLayoutOne} label={<FormattedMessage id="Order.consumerAccount" />} hasFeedback>
+            <FormItem {...formItemLayoutOne} label={<FormattedMessage id="Order.Consumeraccount" />} hasFeedback>
               {this.props.edit ? (
                 <label>{this.props.selectedCustomerInfo}</label>
               ) : (

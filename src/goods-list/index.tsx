@@ -8,7 +8,6 @@ import SearchForm from './components/search-form';
 import Tab from './components/tab';
 import FreightModal from './components/freight-modal';
 import { FormattedMessage } from 'react-intl';
-import SyncButton from './components/sync-product';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsView extends React.Component<any, any> {
@@ -30,16 +29,7 @@ export default class GoodsView extends React.Component<any, any> {
             <Breadcrumb.Item>商品列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Row>
-              <Col span={18}>
-                <Headline title={<FormattedMessage id="product.productList" />} />
-              </Col>
-              <Col span={6} style={{ textAlign: 'right' }}>
-                <AuthWrapper functionName="f_goods_sync">
-                  <SyncButton />
-                </AuthWrapper>
-              </Col>
-            </Row>
+            <Headline title={<FormattedMessage id="product.productList" />} />
 
             {/*搜索*/}
             <SearchForm />

@@ -85,6 +85,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
             subscriptionPlan: {
               ...res.context,
               canCancelPlan: true,
+              subscriptionPlanFlag: true,
               skipNextDeliveryFlag: false
             }
           });

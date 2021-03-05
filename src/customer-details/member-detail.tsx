@@ -12,7 +12,6 @@ import PrescribInformation from './component/prescrib-information';
 import DeliveryList from './component/delivery-list';
 import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
-import Feedback from './component/feedback';
 import { getTaggingList } from './component/webapi';
 
 import './index.less';
@@ -383,7 +382,6 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </TabPane>
               </Tabs>
             </div>
-            {/* <Feedback customerId={this.state.customerId} /> */}
           </Spin>
         </div>
         <div style={{ display: displayPage === 'delivery' ? 'block' : 'none' }}>

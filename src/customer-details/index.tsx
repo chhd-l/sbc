@@ -16,7 +16,6 @@ import SubscribInformation from './component/subscrib-information';
 import PrescribInformation from './component/prescrib-information';
 import DeliveryList from './component/delivery-list';
 import PaymentList from './component/payment-list';
-import Feedback from './component/feedback';
 
 import './index.less';
 
@@ -373,7 +372,6 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Tabs>
             )}
           </div>
-          {this.state.customerType !== 'Guest' && <Feedback />}
         </Spin>
       </div>
     );

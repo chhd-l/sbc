@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, Select, message, DatePicker, Table, InputNumber, Collapse, Modal, Radio, Checkbox, Tag, Spin, Tooltip, Popconfirm, Popover, Calendar } from 'antd';
 import { StoreProvider } from 'plume2';
-
+import FeedBack from '../subscription-detail/component/feedback';
 import { Headline, BreadCrumb, SelectGroup, Const, cache } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -1481,6 +1481,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </TabPane>
             </Tabs>
           </div>
+          <FeedBack subscriptionId={this.state.subscriptionId} />
           <div className="bar-button">
             <Button type="primary" onClick={() => this.updateSubscription()} loading={this.state.saveLoading}>
               {<FormattedMessage id="save" />}

@@ -1,15 +1,16 @@
 import React from 'react';
 import { Icon, Button, Form, Row, Col, Input, Select, Radio, message } from 'antd';
 import { Headline } from 'qmkit';
-import { getFeedbackByCustomerId, saveFeedback } from '../webapi';
+import { getFeedbackBySubscriptionId, saveFeedback } from '../webapi';
 import { FormComponentProps } from 'antd/lib/form';
+import './feedback.less';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
 
 interface Iprop extends FormComponentProps {
-  customerId: string;
+  subscriptionId: string;
 }
 
 class FeedBack extends React.Component<Iprop, any> {
@@ -28,8 +29,8 @@ class FeedBack extends React.Component<Iprop, any> {
   }
 
   getFeedback = () => {
-    const { customerId } = this.props;
-    getFeedbackByCustomerId(customerId).then((data) => {
+    const { subscriptionId } = this.props;
+    getFeedbackBySubscriptionId(subscriptionId).then((data) => {
       this.setState({
         feedback: data.res.context
       });
@@ -54,7 +55,7 @@ class FeedBack extends React.Component<Iprop, any> {
         this.setState({ loading: true });
         saveFeedback({
           ...fields,
-          petOwnerId: this.props.customerId
+          subscriptionId: this.props.subscriptionId
         })
           .then((data) => {
             message.success('Save feedback successfully');
@@ -77,7 +78,7 @@ class FeedBack extends React.Component<Iprop, any> {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <div className="detail-container">
+      <div className="container-search feedback-container">
         <div>
           <Headline
             title="Feedback"

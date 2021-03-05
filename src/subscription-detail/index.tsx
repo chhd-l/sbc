@@ -2,7 +2,7 @@ import React from 'react';
 import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, Select, message, DatePicker, Table, InputNumber, Modal, Popconfirm, Radio, Collapse, Spin, Tooltip } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
-
+import FeedBack from './component/feedback';
 import { Headline, BreadCrumb, SelectGroup, Const, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
@@ -768,9 +768,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: ' ', // cover last th text align right
+        title: ' ' // cover last th text align right
       }
-    ]
+    ];
 
     const columns_foodDispenser_completed = [
       {
@@ -798,9 +798,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: ' ', // cover last th text align right
+        title: ' ' // cover last th text align right
       }
-    ]
+    ];
 
     const styles = {
       backItem: {
@@ -994,6 +994,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Collapse>
             </Row>
           </div>
+          <FeedBack subscriptionId={this.state.subscriptionId} />
         </Spin>
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>

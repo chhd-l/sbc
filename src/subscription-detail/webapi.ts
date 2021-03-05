@@ -100,3 +100,19 @@ export function queryCityById(filterParams = {}) {
     })
   });
 }
+
+export function getFeedbackBySubscriptionId(subscriptionId) {
+  return Fetch<TResult>('/subscription/feedback/getBySubscriptionId', {
+    method: 'POST',
+    body: JSON.stringify({
+      subscriptionId
+    })
+  });
+}
+
+export function saveFeedback(params = {}) {
+  return Fetch<TResult>('/subscription/feedback/save', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

@@ -33,8 +33,8 @@ class PetInfomation extends React.Component<any, any> {
         petsSizeValueName: '',
         sterilized: 0,
         birthOfPets: '',
-        customerPetsPropRelations: []
-        // selectedBind: []
+        customerPetsPropRelations: [],
+        selectedBind: []
       },
       taggingList: [],
       petList: [],
@@ -95,7 +95,7 @@ class PetInfomation extends React.Component<any, any> {
     this.petsByConsumer();
     this.querySysDictionary('dogBreed');
     this.querySysDictionary('catBreed');
-    // this.getTaggingList();
+    this.getTaggingList();
   }
   handleChange = (value) => {};
   onOpenChange = (value) => {};
@@ -112,7 +112,7 @@ class PetInfomation extends React.Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         this.editPets();
-        // this.bindTagging();
+        this.bindTagging();
       }
     });
   };
@@ -172,14 +172,14 @@ class PetInfomation extends React.Component<any, any> {
           if (petList.length > 0) {
             let currentPet = petList[0];
 
-            // let selectedBind = [];
-            // if (currentPet.segmentList) {
-            //   for (let i = 0; i < currentPet.segmentList.length; i++) {
-            //     const element = currentPet.segmentList[i].id;
-            //     selectedBind.push(element);
-            //   }
-            // }
-            // currentPet.selectedBind = selectedBind;
+            let selectedBind = [];
+            if (currentPet.segmentList) {
+              for (let i = 0; i < currentPet.segmentList.length; i++) {
+                const element = currentPet.segmentList[i].id;
+                selectedBind.push(element);
+              }
+            }
+            currentPet.selectedBind = selectedBind;
             currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
 
             if (currentPet.petsType === 'dog') {
@@ -190,8 +190,8 @@ class PetInfomation extends React.Component<any, any> {
                 petsBreed: currentPet.petsBreed,
                 sterilized: +currentPet.sterilized,
                 petsSizeValueName: currentPet.petsSizeValueName,
-                customerPetsPropRelations: currentPet.customerPetsPropRelations
-                // selectedBind: currentPet.selectedBind
+                customerPetsPropRelations: currentPet.customerPetsPropRelations,
+                selectedBind: currentPet.selectedBind
               });
             } else {
               this.props.form.setFieldsValue({
@@ -201,8 +201,8 @@ class PetInfomation extends React.Component<any, any> {
                 petsBreed: currentPet.petsBreed,
 
                 sterilized: +currentPet.sterilized,
-                customerPetsPropRelations: currentPet.customerPetsPropRelations
-                // selectedBind: currentPet.segmentList
+                customerPetsPropRelations: currentPet.customerPetsPropRelations,
+                selectedBind: currentPet.segmentList
               });
             }
             this.setState({
@@ -296,14 +296,14 @@ class PetInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let currentPet = res.context.context;
-          // let selectedBind = [];
-          // if (currentPet.segmentList) {
-          //   for (let i = 0; i < currentPet.segmentList.length; i++) {
-          //     const element = currentPet.segmentList[i].id;
-          //     selectedBind.push(element);
-          //   }
-          // }
-          // currentPet.selectedBind = selectedBind;
+          let selectedBind = [];
+          if (currentPet.segmentList) {
+            for (let i = 0; i < currentPet.segmentList.length; i++) {
+              const element = currentPet.segmentList[i].id;
+              selectedBind.push(element);
+            }
+          }
+          currentPet.selectedBind = selectedBind;
           currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
           if (currentPet.petsType === 'dog') {
             this.props.form.setFieldsValue({
@@ -313,8 +313,8 @@ class PetInfomation extends React.Component<any, any> {
               petsBreed: currentPet.petsBreed,
               sterilized: +currentPet.sterilized,
               petsSizeValueName: currentPet.petsSizeValueName,
-              customerPetsPropRelations: currentPet.customerPetsPropRelations
-              // selectedBind: currentPet.selectedBind
+              customerPetsPropRelations: currentPet.customerPetsPropRelations,
+              selectedBind: currentPet.selectedBind
             });
           } else {
             this.props.form.setFieldsValue({
@@ -324,8 +324,8 @@ class PetInfomation extends React.Component<any, any> {
               petsBreed: currentPet.petsBreed,
 
               sterilized: +currentPet.sterilized,
-              customerPetsPropRelations: currentPet.customerPetsPropRelations
-              // selectedBind: currentPet.selectedBind
+              customerPetsPropRelations: currentPet.customerPetsPropRelations,
+              selectedBind: currentPet.selectedBind
             });
           }
 
@@ -375,74 +375,65 @@ class PetInfomation extends React.Component<any, any> {
     // }
   };
 
-  // loopTagging = (taggingTotalTree) => {
-  //   return (
-  //     taggingTotalTree &&
-  //     taggingTotalTree.map((item) => {
-  //       return <TreeNode key={item.id} value={item.id} title={item.name} />;
-  //     })
-  //   );
-  // };
-  // getTaggingList = () => {
-  //   let params = {
-  //     pageNum: 0,
-  //     pageSize: 1000,
-  //     segmentType: 1
-  //   };
-  //   webapi
-  //     .getTaggingList(params)
-  //     .then((data) => {
-  //       const { res } = data;
-  //       if (res.code === Const.SUCCESS_CODE) {
-  //         let taggingList = res.context.segmentList;
-  //         this.setState({
-  //           taggingList
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       this.setState({
-  //         loading: false
-  //       });
-  //       message.error(err.toString() || 'Operation failure');
-  //     });
-  // };
-  // bindTagging = () => {
-  //   const { petForm } = this.state;
-  //   let params = {
-  //     relationId: petForm.petsId,
-  //     segmentType: 1,
-  //     segmentIdList: petForm.selectedBind
-  //   };
-  //   webapi
-  //     .bindTagging(params)
-  //     .then((data) => {
-  //       const { res } = data;
-  //       if (res.code === Const.SUCCESS_CODE) {
-  //         this.setState({
-  //           loading: false
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       this.setState({
-  //         loading: false
-  //       });
-  //       message.error(err.toString() || 'Operation failure');
-  //     });
-  // };
+  loopTagging = (taggingTotalTree) => {
+    return (
+      taggingTotalTree &&
+      taggingTotalTree.map((item) => {
+        return <TreeNode key={item.id} value={item.id} title={item.name} />;
+      })
+    );
+  };
+  getTaggingList = () => {
+    let params = {
+      pageNum: 0,
+      pageSize: 1000,
+      segmentType: 1
+    };
+    webapi
+      .getTaggingList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let taggingList = res.context.segmentList;
+          this.setState({
+            taggingList
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  bindTagging = () => {
+    const { petForm } = this.state;
+    let params = {
+      relationId: petForm.petsId,
+      segmentType: 1,
+      segmentIdList: petForm.selectedBind
+    };
+    webapi
+      .bindTagging(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
 
   render() {
-    const {
-      petsType,
-      petGender,
-      sizeArr,
-      customerPetsPropRelations,
-      catBreed,
-      dogBreed,
-      petForm
-      // taggingList
-    } = this.state;
+    const { petsType, petGender, sizeArr, customerPetsPropRelations, catBreed, dogBreed, petForm, taggingList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -751,7 +742,7 @@ class PetInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
 
-                  {/* <Col span={12}>
+                  <Col span={12}>
                     <FormItem {...formItemLayout} label="Pet owner tagging">
                       {getFieldDecorator('selectedBind', {
                         rules: [
@@ -762,7 +753,7 @@ class PetInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <TreeSelect
-                          getPopupContainer={() => document.getElementById('page-content')}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           treeCheckable={true}
                           showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                           // treeCheckStrictly={true}
@@ -782,7 +773,7 @@ class PetInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
-                   */}
+
                   <Col span={24}>
                     <FormItem>
                       <Button type="primary" htmlType="submit">

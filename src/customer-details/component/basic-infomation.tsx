@@ -36,8 +36,8 @@ class BasicInfomation extends React.Component<any, any> {
         defaultClinics: {
           clinicsId: 0,
           clinicsName: ''
-        }
-        // selectedBind: []
+        },
+        selectedBind: []
       },
       countryArr: [],
       cityArr: [],
@@ -49,8 +49,8 @@ class BasicInfomation extends React.Component<any, any> {
       initCityName: '',
       initPreferChannel: [],
       storeId: '',
-      stateList: []
-      // taggingList: []
+      stateList: [],
+      taggingList: []
     };
   }
   componentDidMount() {
@@ -63,7 +63,7 @@ class BasicInfomation extends React.Component<any, any> {
     this.getDict();
     this.getBasicDetails();
     this.getClinicList();
-    // this.getTaggingList();
+    this.getTaggingList();
   }
 
   getDict = () => {
@@ -129,13 +129,13 @@ class BasicInfomation extends React.Component<any, any> {
           if (resObj.defaultClinics && resObj.defaultClinics.clinicsId) {
             defaultClinicsId = resObj.defaultClinics.clinicsId;
           }
-          // let selectedBind = [];
-          // if (resObj.segmentList) {
-          //   for (let i = 0; i < resObj.segmentList.length; i++) {
-          //     const element = resObj.segmentList[i].id;
-          //     selectedBind.push(element);
-          //   }
-          // }
+          let selectedBind = [];
+          if (resObj.segmentList) {
+            for (let i = 0; i < resObj.segmentList.length; i++) {
+              const element = resObj.segmentList[i].id;
+              selectedBind.push(element);
+            }
+          }
 
           let basicForm = {
             firstName: resObj.firstName,
@@ -156,8 +156,8 @@ class BasicInfomation extends React.Component<any, any> {
             selectedClinics: resObj.clinicsVOS,
             defaultClinicsId: defaultClinicsId,
             defaultClinics: resObj.defaultClinics,
-            preferredMethods: []
-            // selectedBind: selectedBind
+            preferredMethods: [],
+            selectedBind: selectedBind
           };
 
           let initPreferChannel = [];
@@ -209,7 +209,7 @@ class BasicInfomation extends React.Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         this.saveBasicInfomation();
-        // this.bindTagging();
+        this.bindTagging();
       }
     });
   };
@@ -346,75 +346,65 @@ class BasicInfomation extends React.Component<any, any> {
     });
   };
 
-  // loopTagging = (taggingTotalTree) => {
-  //   return (
-  //     taggingTotalTree &&
-  //     taggingTotalTree.map((item, index) => {
-  //       return <TreeNode key={index} value={item.id} title={item.name} />;
-  //     })
-  //   );
-  // };
-  // getTaggingList = () => {
-  //   let params = {
-  //     pageNum: 0,
-  //     pageSize: 1000,
-  //     segmentType: 0
-  //   };
-  //   webapi
-  //     .getTaggingList(params)
-  //     .then((data) => {
-  //       const { res } = data;
-  //       if (res.code === Const.SUCCESS_CODE) {
-  //         let taggingList = res.context.segmentList;
-  //         this.setState({
-  //           taggingList
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       this.setState({
-  //         loading: false
-  //       });
-  //       message.error(err.toString() || 'Operation failure');
-  //     });
-  // };
-  // bindTagging = () => {
-  //   const { basicForm, currentForm } = this.state;
-  //   let params = {
-  //     relationId: currentForm.customerId,
-  //     segmentType: 0,
-  //     segmentIdList: basicForm.selectedBind
-  //   };
-  //   webapi
-  //     .bindTagging(params)
-  //     .then((data) => {
-  //       const { res } = data;
-  //       if (res.code === Const.SUCCESS_CODE) {
-  //         this.setState({
-  //           loading: false
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       this.setState({
-  //         loading: false
-  //       });
-  //       message.error(err.toString() || 'Operation failure');
-  //     });
-  // };
+  loopTagging = (taggingTotalTree) => {
+    return (
+      taggingTotalTree &&
+      taggingTotalTree.map((item, index) => {
+        return <TreeNode key={index} value={item.id} title={item.name} />;
+      })
+    );
+  };
+  getTaggingList = () => {
+    let params = {
+      pageNum: 0,
+      pageSize: 1000,
+      segmentType: 0
+    };
+    webapi
+      .getTaggingList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let taggingList = res.context.segmentList;
+          this.setState({
+            taggingList
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  bindTagging = () => {
+    const { basicForm, currentForm } = this.state;
+    let params = {
+      relationId: currentForm.customerId,
+      segmentType: 0,
+      segmentIdList: basicForm.selectedBind
+    };
+    webapi
+      .bindTagging(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
 
   render() {
-    const {
-      countryArr,
-      cityArr,
-      clinicList,
-      loading,
-      initPreferChannel,
-      storeId,
-      stateList,
-      basicForm
-      // taggingList
-    } = this.state;
+    const { countryArr, cityArr, clinicList, loading, initPreferChannel, storeId, stateList, basicForm, taggingList } = this.state;
     const options = [
       {
         label: 'Phone',
@@ -499,7 +489,7 @@ class BasicInfomation extends React.Component<any, any> {
                     <DatePicker
                       style={{ width: '100%' }}
                       format="YYYY-MM-DD"
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       disabledDate={(current) => {
                         return current && current > moment().endOf('day');
                       }}
@@ -579,7 +569,7 @@ class BasicInfomation extends React.Component<any, any> {
                   })(
                     <Select
                       optionFilterProp="children"
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.onFormChange({
                           field: 'countryId',
@@ -608,7 +598,7 @@ class BasicInfomation extends React.Component<any, any> {
                     })(
                       <Select
                         showSearch
-                        getPopupContainer={() => document.getElementById('page-content')}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         optionFilterProp="children"
                         onChange={(value) => {
                           this.onFormChange({
@@ -638,7 +628,7 @@ class BasicInfomation extends React.Component<any, any> {
                   })(
                     <AutoComplete
                       placeholder="Please input or select City"
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onSearch={_.debounce(this.getCityList, 500)}
                       onChange={(value) => {
                         this.onFormChange({
@@ -764,7 +754,7 @@ class BasicInfomation extends React.Component<any, any> {
                   )(
                     <Select
                       showSearch
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       placeholder="Please select"
                       style={{ width: '100%' }}
                       onChange={(value, Option) => {
@@ -799,7 +789,7 @@ class BasicInfomation extends React.Component<any, any> {
                   )(
                     <Select
                       mode="multiple"
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       placeholder="Please select"
                       style={{ width: '100%' }}
                       onChange={(value, Option) => {
@@ -835,7 +825,7 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
 
-              {/* <Col span={12}>
+              <Col span={12}>
                 <FormItem {...formItemLayout} label="Pet owner tagging">
                   {getFieldDecorator('selectedBind', {
                     rules: [
@@ -847,7 +837,7 @@ class BasicInfomation extends React.Component<any, any> {
                     initialValue: basicForm.selectedBind
                   })(
                     <TreeSelect
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       treeCheckable={true}
                       showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                       // treeCheckStrictly={true}
@@ -867,7 +857,6 @@ class BasicInfomation extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
-               */}
 
               <Col span={24}>
                 <FormItem>

@@ -29,7 +29,7 @@ export default class exitRules extends Component<any, any> {
                     initialValue: subscriptionPlan.canCancelPlan
                   })(
                     <Radio.Group
-                      disabled={!editable}
+                      disabled={true}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         addField('canCancelPlan', value);

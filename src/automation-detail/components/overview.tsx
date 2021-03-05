@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
-import * as webapi from './webapi';
+import * as webapi from './../webapi';
 import { Button, Form, Row, Col, Breadcrumb } from 'antd';
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/toolbox';
-import './index.less';
+import './../index.less';
 import { FormattedMessage } from 'react-intl';
 
 class Overview extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Email Task Overview',
       dateList: [],
       requestsList: [],
       deliveredList: [],
@@ -214,77 +213,63 @@ class Overview extends Component<any, any> {
   };
 
   render() {
-    const { title, overviewTotal } = this.state;
+    const { overviewTotal } = this.state;
 
     return (
-      <div>
-        <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Overview</Breadcrumb.Item>
-        </BreadCrumb>
-        {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline title={title} />
-        </div>
-        <div className="container">
-          <Row style={{ paddingTop: 20 }}>
-            <Col span={4}>
-              <div className="overview-item-border">
-                <p className="overview-item-name">REQUESTS</p>
-                <p className="overview-item-value" style={{ color: '#246201' }}>
-                  {overviewTotal.requestsCount}
-                </p>
-              </div>
-            </Col>
-            <Col span={4}>
-              <div className="overview-item-border">
-                <p className="overview-item-name">DELIVERED</p>
-                <p className="overview-item-value" style={{ color: '#bcd514' }}>
-                  {overviewTotal.deliveredRate}
-                </p>
-              </div>
-            </Col>
-            <Col span={4}>
-              <div className="overview-item-border">
-                <p className="overview-item-name">OPENED</p>
-                <p className="overview-item-value" style={{ color: '#028690' }}>
-                  {overviewTotal.opensRate}
-                </p>
-              </div>
-            </Col>
-            <Col span={4}>
-              <div className="overview-item-border">
-                <p className="overview-item-name">CLICKED</p>
-                <p className="overview-item-value" style={{ color: '#59c1ca' }}>
-                  {overviewTotal.clicksRate}
-                </p>
-              </div>
-            </Col>
-            <Col span={4}>
-              <div className="overview-item-border">
-                <p className="overview-item-name">BOUNCES</p>
-                <p className="overview-item-value" style={{ color: '#c042be' }}>
-                  {overviewTotal.bounceRate}
-                </p>
-              </div>
-            </Col>
-            <Col span={4}>
-              <div className="overview-item-border">
-                <p className="overview-item-name">SPAM REPORTS</p>
-                <p className="overview-item-value" style={{ color: '#e04427' }}>
-                  {overviewTotal.spamReportRate}
-                </p>
-              </div>
-            </Col>
-            <Col span={24}>
-              <div id="main" style={{ width: '100%', height: 400, margin: '0 auto' }}></div>
-            </Col>
-          </Row>
-        </div>
-        <div className="bar-button">
-          <Button type="primary" onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="back" />}
-          </Button>
-        </div>
+      <div className="container">
+        <Row style={{ paddingTop: 20 }}>
+          <Col span={4}>
+            <div className="overview-item-border">
+              <p className="overview-item-name">REQUESTS</p>
+              <p className="overview-item-value" style={{ color: '#246201' }}>
+                {overviewTotal.requestsCount}
+              </p>
+            </div>
+          </Col>
+          <Col span={4}>
+            <div className="overview-item-border">
+              <p className="overview-item-name">DELIVERED</p>
+              <p className="overview-item-value" style={{ color: '#bcd514' }}>
+                {overviewTotal.deliveredRate}
+              </p>
+            </div>
+          </Col>
+          <Col span={4}>
+            <div className="overview-item-border">
+              <p className="overview-item-name">OPENED</p>
+              <p className="overview-item-value" style={{ color: '#028690' }}>
+                {overviewTotal.opensRate}
+              </p>
+            </div>
+          </Col>
+          <Col span={4}>
+            <div className="overview-item-border">
+              <p className="overview-item-name">CLICKED</p>
+              <p className="overview-item-value" style={{ color: '#59c1ca' }}>
+                {overviewTotal.clicksRate}
+              </p>
+            </div>
+          </Col>
+          <Col span={4}>
+            <div className="overview-item-border">
+              <p className="overview-item-name">BOUNCES</p>
+              <p className="overview-item-value" style={{ color: '#c042be' }}>
+                {overviewTotal.bounceRate}
+              </p>
+            </div>
+          </Col>
+          <Col span={4}>
+            <div className="overview-item-border">
+              <p className="overview-item-name">SPAM REPORTS</p>
+              <p className="overview-item-value" style={{ color: '#e04427' }}>
+                {overviewTotal.spamReportRate}
+              </p>
+            </div>
+          </Col>
+          <Col span={24}>
+            <div id="main" style={{ width: '100%', height: 400, margin: '0 auto' }}></div>
+          </Col>
+        </Row>
       </div>
     );
   }

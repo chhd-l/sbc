@@ -69,6 +69,7 @@ class AutomationList extends Component<any, any> {
       () => this.getAutomationList()
     );
   };
+  deleteAutomation = (id) => {};
 
   render() {
     const { loading, title, pagination, automationList } = this.state;
@@ -151,6 +152,11 @@ class AutomationList extends Component<any, any> {
             <Tooltip placement="top" title="Detail">
               <Link to={`/automation-detail/${record.id}`} className="iconfont iconDetails" style={{ marginRight: 10 }}></Link>
             </Tooltip>
+            <Popconfirm placement="topLeft" title="Are you sure to do this?" onConfirm={() => this.deleteAutomation(record.id)} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title="Delete">
+                <a className="iconfont iconDelete"></a>
+              </Tooltip>
+            </Popconfirm>
           </div>
         )
       }

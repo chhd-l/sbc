@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon } from 'antd';
+import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, Tag, Tabs, Descriptions } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
+import Overview from './components/overview';
+import AutomationExecution from './components/automation-execution';
+import PetOwnerCommunication from './components/pet-owner-communication';
+
+const ButtonGroup = Button.Group;
+const { TabPane } = Tabs;
 
 class AutomationDetail extends Component<any, any> {
   constructor(props: any) {
@@ -12,14 +18,41 @@ class AutomationDetail extends Component<any, any> {
     this.state = {
       automationId: this.props.match.params.id ? this.props.match.params.id : '',
       title: 'Automation Detail',
-      loading: false
+      loading: false,
+      automationDetail: {
+        automationName: 'Test',
+        automationStatus: 'Draft',
+        testStatus: 'Not Tested',
+        automationType: '',
+        automationGoal: '',
+        automationDescription: '',
+        automationOwner: '',
+        eventStartTime: '',
+        eventEndTime: '',
+        trackingStartTime: '',
+        trackingEndTime: '',
+        communicationChannel: ''
+      }
     };
   }
   componentDidMount() {}
   init = () => {};
 
   render() {
-    const { loading, title } = this.state;
+    const { loading, title, automationId, automationDetail } = this.state;
+    const cardTitle = (
+      <div>
+        <span style={{ marginRight: 10 }}>{automationDetail.automationName}</span>
+        {automationDetail.automationStatus === 'Draft' ? <Tag color="#A6A6A6">{automationDetail.automationStatus}</Tag> : null}
+        {automationDetail.automationStatus === 'Published' ? <Tag color="#00B0F0">{automationDetail.automationStatus}</Tag> : null}
+        {automationDetail.automationStatus === 'Executing' ? <Tag color="#92D050">{automationDetail.automationStatus}</Tag> : null}
+        {automationDetail.automationStatus === 'Completed' ? <Tag color="#333F50">{automationDetail.automationStatus}</Tag> : null}
+        {automationDetail.automationStatus === 'Terminated' ? <Tag color="#EF1C33">{automationDetail.automationStatus}</Tag> : null}
+        {automationDetail.testStatus === 'Not Tested' ? <Tag color="#A6A6A6">{automationDetail.testStatus}</Tag> : null}
+        {automationDetail.testStatus === 'Tested' ? <Tag color="#92D050">{automationDetail.testStatus}</Tag> : null}
+        {automationDetail.testStatus === 'Testing' ? <Tag color="#00B0F0">{automationDetail.testStatus}</Tag> : null}
+      </div>
+    );
 
     return (
       <AuthWrapper functionName="f_automation_detail">
@@ -28,17 +61,84 @@ class AutomationDetail extends Component<any, any> {
             <BreadCrumb thirdLevel={true}>
               <Breadcrumb.Item>{title}</Breadcrumb.Item>
             </BreadCrumb>
-            <div className="container"></div>
+
+            <Card
+              title={cardTitle}
+              bordered={false}
+              bodyStyle={{ paddingBottom: 0 }}
+              style={{ margin: 12 }}
+              extra={
+                <ButtonGroup>
+                  <Button disabled={!(automationDetail.automationStatus === 'Draft')}>Test</Button>
+                  <Button disabled={automationDetail.automationStatus === 'Terminate' || automationDetail.automationStatus === 'Draft'}>Terminate</Button>
+                  <Button disabled={automationDetail.automationStatus === 'Published' || automationDetail.automationStatus === 'Executing'}>Published</Button>
+                </ButtonGroup>
+              }
+            >
+              <Tabs defaultActiveKey="1">
+                <TabPane tab="Basic information" key="1">
+                  <Descriptions title={'Automation info'}>
+                    <Descriptions.Item label="Automation name" span={1}>
+                      {automationDetail.automationName}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Automation status" span={1}>
+                      {automationDetail.automationStatus}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Test status" span={1}>
+                      {automationDetail.testStatus}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Automation category" span={1}>
+                      {automationDetail.automationCategory}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Automation type" span={1}>
+                      {automationDetail.automationType}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Automation goal" span={1}>
+                      {automationDetail.automationGoal}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Automation description" span={3}>
+                      {automationDetail.automationDescription}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Communication channel" span={1.5}>
+                      {automationDetail.communicationChannel}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Automation owner" span={1.5}>
+                      {automationDetail.automationOwner}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Event start time" span={1.5}>
+                      {automationDetail.eventStartTime}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Event end time" span={1.5}>
+                      {automationDetail.eventEndTime}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Tracking start time" span={1.5}>
+                      {automationDetail.trackingStartTime}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Tracking end time" span={1.5}>
+                      {automationDetail.trackingEndTime}
+                    </Descriptions.Item>
+                  </Descriptions>
+                  <Card title={'Workflow'} headStyle={{ padding: 0 }} bordered={false}></Card>
+                </TabPane>
+                <TabPane tab="Executing & Tracking" key="2">
+                  <Card title={'Activity Chart'} headStyle={{ padding: 0 }} bordered={false}>
+                    <Overview></Overview>
+                  </Card>
+                  <AutomationExecution />
+                  <PetOwnerCommunication />
+
+                  <Card title={'Pet Owner Communication'} headStyle={{ padding: 0 }} bordered={false}></Card>
+                </TabPane>
+                <TabPane tab="Audit Log" key="3">
+                  Content of Tab Pane 3
+                </TabPane>
+              </Tabs>
+            </Card>
           </Spin>
         </div>
         <div className="bar-button">
-          <Button
-            type="primary"
-            onClick={() => {
-              console.log('save');
-            }}
-          >
-            {<FormattedMessage id="save" />}
+          <Button type="primary" disabled={automationDetail.automationStatus === 'Published' || automationDetail.automationStatus === 'Executing'}>
+            <Link to={`/automation-edit/${automationId}`}>{<FormattedMessage id="edit" />}</Link>
           </Button>
           <Button style={{ marginLeft: 20 }} onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="back" />}

@@ -599,7 +599,7 @@ export default {
   'Order.Confirm': 'Confirm',
   'Order.PetOwner': 'Pet Owner',
   'Order.orderList': 'Order list',
-  'Order.orderNumber': 'Order number',
+  'Order.OrderNumber': 'Order number',
   'Order.subscriptioNumber': 'Subscription number',
   'Order.shippingStatus': 'Shipping status',
   'Order.paymentStatus': 'Payment status',

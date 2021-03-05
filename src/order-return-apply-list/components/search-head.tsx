@@ -45,7 +45,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="initiateApplication" />} number={total.toString()} />
+        <Headline title={<FormattedMessage id="initiateApplication" />} number={total} />
 
         <div>
           <Form className="filter-content" layout="inline">
@@ -53,7 +53,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span="8">
                 <FormItem>
                   <Input
-                    addonBefore={<FormattedMessage id="Order.orderNumber" />}
+                    addonBefore={<FormattedMessage id="Order.OrderNumber" />}
                     onChange={(e) => {
                       this.setState({
                         id: (e.target as any).value

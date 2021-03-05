@@ -102,130 +102,133 @@ export default class SearchList extends React.Component<any, any> {
   }
 
   _renderContent(orderList, apply) {
-    return orderList.map((v) => {
-      const id = v.get('id');
-      const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
-      const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
-      const num =
-        v
-          .get('tradeItems')
-          .concat(gifts)
-          .map((v) => v.get('num'))
-          .reduce((a, b) => {
-            a = a + b;
-            return a;
-          }, 0) || 0;
+    return (
+      orderList &&
+      orderList.map((v) => {
+        const id = v.get('id');
+        const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
+        const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
+        const num =
+          v
+            .get('tradeItems')
+            .concat(gifts)
+            .map((v) => v.get('num'))
+            .reduce((a, b) => {
+              a = a + b;
+              return a;
+            }, 0) || 0;
 
-      return (
-        <tr className="ant-table-row  ant-table-row-level-0" key={id}>
-          <td colSpan={8} style={{ padding: 0 }}>
-            <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
-              <thead>
-                <tr>
-                  <td colSpan={12} style={{ color: '#999' }}>
-                    <div
+        return (
+          <tr className="ant-table-row  ant-table-row-level-0" key={id}>
+            <td colSpan={8} style={{ padding: 0 }}>
+              <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
+                <thead>
+                  <tr>
+                    <td colSpan={12} style={{ color: '#999' }}>
+                      <div
+                        style={{
+                          marginTop: 12,
+                          borderBottom: '1px solid #ddd',
+                          height: 36
+                        }}
+                      >
+                        <span style={{ marginLeft: 20, color: '#000' }}>{id}</span>
+                        <span style={{ marginLeft: 60 }}>
+                          {<FormattedMessage id="orderTime" />}:{moment(v.getIn(['tradeState', 'createTime'])).format(Const.TIME_FORMAT)}
+                        </span>
+                        <span style={{ marginRight: 20, float: 'right' }}>
+                          <Tooltip placement="top" title="Application">
+                            <a
+                              href="javascript:void(0)"
+                              onClick={() => {
+                                apply(id);
+                              }}
+                              className="iconfont iconApplication"
+                            >
+                              {/*{<FormattedMessage id="application" />}*/}
+                            </a>
+                          </Tooltip>
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ width: '1%' }} />
+                    <td
                       style={{
-                        marginTop: 12,
-                        borderBottom: '1px solid #ddd',
-                        height: 36
+                        textAlign: 'left',
+                        width: '300',
+                        padding: '16px 0'
                       }}
                     >
-                      <span style={{ marginLeft: 20, color: '#000' }}>{id}</span>
-                      <span style={{ marginLeft: 60 }}>
-                        {<FormattedMessage id="orderTime" />}:{moment(v.getIn(['tradeState', 'createTime'])).format(Const.TIME_FORMAT)}
-                      </span>
-                      <span style={{ marginRight: 20, float: 'right' }}>
-                        <Tooltip placement="top" title="Application">
-                          <a
-                            href="javascript:void(0)"
-                            onClick={() => {
-                              apply(id);
-                            }}
-                            className="iconfont iconApplication"
-                          >
-                            {/*{<FormattedMessage id="application" />}*/}
-                          </a>
-                        </Tooltip>
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ width: '1%' }} />
-                  <td
-                    style={{
-                      textAlign: 'left',
-                      width: '300',
-                      padding: '16px 0'
-                    }}
-                  >
-                    {/*商品图片*/}
-                    {v
-                      .get('tradeItems')
-                      .concat(gifts)
-                      .map((v, k) => {
-                        if (k < 3) {
-                          const imageSrc = v.get('pic') ? v.get('pic') : defaultImg;
-                          return <img src={imageSrc} key={k} style={styles.imgItem} />;
-                        } else if (k == 4) {
-                          return <label>...</label>;
-                        }
-                      })}
+                      {/*商品图片*/}
+                      {v
+                        .get('tradeItems')
+                        .concat(gifts)
+                        .map((v, k) => {
+                          if (k < 3) {
+                            const imageSrc = v.get('pic') ? v.get('pic') : defaultImg;
+                            return <img src={imageSrc} key={k} style={styles.imgItem} />;
+                          } else if (k == 4) {
+                            return <label>...</label>;
+                          }
+                        })}
 
-                    {
-                      /*第4张特殊处理*/
-                      //@ts-ignore
-                      v.get('tradeItems').concat(gifts).size > 3 ? (
-                        <div style={styles.imgBg}>
-                          <img
+                      {
+                        /*第4张特殊处理*/
+                        //@ts-ignore
+                        v.get('tradeItems').concat(gifts).size > 3 ? (
+                          <div style={styles.imgBg}>
+                            <img
+                              //@ts-ignore
+                              src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? v.get('tradeItems').concat(gifts).get(3).get('pic') : defaultImg}
+                              style={styles.imgFourth}
+                            />
                             //@ts-ignore
-                            src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? v.get('tradeItems').concat(gifts).get(3).get('pic') : defaultImg}
-                            style={styles.imgFourth}
-                          />
-                          //@ts-ignore
-                          <div style={styles.imgNum}>total {v.get('tradeItems').concat(gifts).size}</div>
-                        </div>
-                      ) : null
-                    }
-                  </td>
-                  <td style={{ width: '10%' }}>
-                    {/*客户名称*/}
-                    {v.getIn(['buyer', 'name'])}
-                  </td>
-                  <td style={{ width: '15%' }}>
-                    {/*收件人姓名*/}
-                    {<FormattedMessage id="recipient" />}：{v.getIn(['consignee', 'name'])}
-                    <br />
-                    {/*收件人手机号码*/}
-                    {v.getIn(['consignee', 'phone'])}
-                  </td>
-                  <td style={{ width: '10%' }}>
-                    {tradePrice.toFixed(2)}
-                    <br />( total {num})
-                  </td>
-                  {/*发货状态*/}
-                  <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td>
-                  {/*订单状态*/}
-                  <td style={{ width: '10%' }}>{Const.flowState[v.getIn(['tradeState', 'flowState'])]}</td>
-                  {/*支付状态*/}
-                  <td
-                    style={{
-                      width: '10%',
-                      textAlign: 'right',
-                      paddingRight: 20
-                    }}
-                  >
-                    {Const.payState[v.getIn(['tradeState', 'payState'])]}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-        </tr>
-      );
-    });
+                            <div style={styles.imgNum}>total {v.get('tradeItems').concat(gifts).size}</div>
+                          </div>
+                        ) : null
+                      }
+                    </td>
+                    <td style={{ width: '10%' }}>
+                      {/*客户名称*/}
+                      {v.getIn(['buyer', 'name'])}
+                    </td>
+                    <td style={{ width: '15%' }}>
+                      {/*收件人姓名*/}
+                      {<FormattedMessage id="recipient" />}：{v.getIn(['consignee', 'name'])}
+                      <br />
+                      {/*收件人手机号码*/}
+                      {v.getIn(['consignee', 'phone'])}
+                    </td>
+                    <td style={{ width: '10%' }}>
+                      {tradePrice.toFixed(2)}
+                      <br />( total {num})
+                    </td>
+                    {/*发货状态*/}
+                    <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td>
+                    {/*订单状态*/}
+                    <td style={{ width: '10%' }}>{Const.flowState[v.getIn(['tradeState', 'flowState'])]}</td>
+                    {/*支付状态*/}
+                    <td
+                      style={{
+                        width: '10%',
+                        textAlign: 'right',
+                        paddingRight: 20
+                      }}
+                    >
+                      {Const.payState[v.getIn(['tradeState', 'payState'])]}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        );
+      })
+    );
   }
 }
 

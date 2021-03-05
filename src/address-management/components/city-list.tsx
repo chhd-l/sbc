@@ -157,6 +157,10 @@ export default class CityList extends Component<any, any> {
                     this.getCityList(pageNum, pageSize);
                   }}
                 />
+              ) : !loading ? (
+                <div className="ant-table-placeholder">
+                  <img src={nodataImg} width="80" className="no-data-img" />
+                </div>
               ) : null}
             </div>
           </div>

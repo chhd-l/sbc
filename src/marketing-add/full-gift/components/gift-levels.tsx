@@ -132,20 +132,20 @@ export default class GiftLevels extends React.Component<any, any> {
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   </span>
                   <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5 }}>
-                    Add a free gift
+                    Add gift
                   </Button>
-                  &nbsp;&nbsp;
-                  <Select
-                    value={level.giftType}
-                    style={{ width: 120, marginTop: 3.5 }}
-                    onChange={(val) => {
-                      this.onChange(index, 'giftType', val);
-                    }}
-                    getPopupContainer={(triggerNode) => triggerNode.parentElement}
-                  >
-                    <Option value={1}>An optional one</Option>
-                    <Option value={0}>The default all give</Option>
-                  </Select>
+                  {/*&nbsp;&nbsp;*/}
+                  {/*<Select*/}
+                  {/*  value={level.giftType}*/}
+                  {/*  style={{ width: 120, marginTop: 3.5 }}*/}
+                  {/*  onChange={(val) => {*/}
+                  {/*    this.onChange(index, 'giftType', val);*/}
+                  {/*  }}*/}
+                  {/*  getPopupContainer={(triggerNode) => triggerNode.parentElement}*/}
+                  {/*>*/}
+                  {/*  <Option value={1}>An optional one</Option>*/}
+                  {/*  <Option value={0}>The default all give</Option>*/}
+                  {/*</Select>*/}
                   &nbsp;&nbsp;&nbsp;
                   {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
                 </HasError>

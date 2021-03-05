@@ -21,7 +21,8 @@ export default class FormActor extends Actor {
         metaKeywordsSource: '', //{name}, {subtitle}, {sales category}, {tagging}
         metaDescriptionSource: '', //{description}
         headingTag: ''
-      }
+      },
+      updateNumbers: 0 //0：新增seo, 大于0：编辑seo
     };
   }
 
@@ -33,6 +34,11 @@ export default class FormActor extends Actor {
   @Action('seoActor: setSeoForm')
   setSeoForm(state: IMap, form) {
     return state.set('seoForm', form);
+  }
+
+  @Action('seoActor: updateNumbers')
+  setSeoUpdateNumbers(state: IMap, updateNumbers) {
+    return state.set('updateNumbers', updateNumbers);
   }
 
   @Action('formActor:goods')

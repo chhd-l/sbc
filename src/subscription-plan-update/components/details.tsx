@@ -33,7 +33,7 @@ export default class details extends Component<any, any> {
       selectedGoods.map((item) => {
         item.packageId = 'PK' + moment(new Date()).format('YYMMDDHHmmSSS');
         item.quantity = 1;
-        item.settingPrice = null;
+        item.settingPrice = item.marketPrice ? +item.marketPrice : 0.01;
       });
       subscriptionPlan.mainGoods.push(...selectedGoods);
       //subscriptionPlan.mainGoodsIds.push(...selectedRowKeys);
@@ -67,7 +67,7 @@ export default class details extends Component<any, any> {
     }
     const { subscriptionPlan, addField } = this.props;
     subscriptionPlan.mainGoods.map((item) => {
-      if (item.goodsInfoId === goodsInfoId) {
+      if (item.goodsInfoId === goodsInfoId && qty <= item.stock) {
         item.quantity = qty;
       }
       return item;
@@ -184,7 +184,7 @@ export default class details extends Component<any, any> {
                               <InputNumber
                                 disabled={!editable}
                                 precision={2}
-                                min={0}
+                                min={0.01}
                                 value={item.settingPrice}
                                 onChange={(value) => {
                                   this.updateSettingPrice(item.goodsInfoId, value);

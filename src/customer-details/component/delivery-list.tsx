@@ -1,9 +1,11 @@
 import React from 'react';
-import { Table, Popconfirm } from 'antd';
+import { Table, Popconfirm, Button } from 'antd';
+import { getAddressListByType, delAddress } from '../webapi';
 
 interface Iprop {
-  startDate: string;
-  endDate: string;
+  customerId: string;
+  type: 'DELIVERY' | 'BILLING';
+  onEdit?: Function;
 }
 
 export default class DeliveryList extends React.Component<Iprop, any> {
@@ -11,58 +13,74 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     super(props);
     this.state = {
       loading: false,
-      list: [
-        {
-          id: 5678,
-          name: 'test',
-          phone: '4321432',
-          postcode: '32143',
-          address: 'test',
-          reference: ''
-        },
-        {
-          id: 5678,
-          name: 'test',
-          phone: '4321432',
-          postcode: '32143',
-          address: 'test',
-          reference: ''
-        }
-      ],
-      pagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0
-      }
+      list: []
     };
   }
 
+  componentDidMount() {
+    this.getAddressList();
+  }
+
+  getAddressList = () => {
+    this.setState({
+      loading: true
+    });
+    getAddressListByType(this.props.customerId, this.props.type)
+      .then((data) => {
+        this.setState({
+          loading: false,
+          list: data.res.context.customerDeliveryAddressVOList
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
+  onDeleteAddress = (id: string) => {
+    this.setState({
+      loading: true
+    });
+    delAddress(id)
+      .then((data) => {
+        this.getAddressList();
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
   render() {
-    const { list, pagination } = this.state;
+    const { loading, list } = this.state;
+    const { onEdit } = this.props;
     const columns = [
       {
         title: 'Receiver name',
-        dataIndex: 'name',
+        dataIndex: 'consigneeName',
         key: 'name'
       },
       {
         title: 'Phone number',
-        dataIndex: 'phone',
+        dataIndex: 'consigneeNumber',
         key: 'phone'
       },
       {
         title: 'Post code',
-        dataIndex: 'postcode',
+        dataIndex: 'postCode',
         key: 'postcode'
       },
       {
         title: 'Address',
-        dataIndex: 'address',
+        dataIndex: 'address1',
         key: 'address'
       },
       {
         title: 'Reference',
-        dataIndex: 'reference',
+        dataIndex: 'rfc',
         key: 'reference'
       },
       {
@@ -70,9 +88,13 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         key: 'oper',
         render: (_, record) => (
           <div>
-            <a className="iconfont iconEdit" style={{ marginRight: 10 }}></a>
-            <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
-              <a className="iconfont iconDelete"></a>
+            <Button type="link" size="small" onClick={() => onEdit(record)}>
+              <i className="iconfont iconEdit"></i>
+            </Button>
+            <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText="Confirm" cancelText="Cancel">
+              <Button type="link" size="small">
+                <i className="iconfont iconDelete"></i>
+              </Button>
             </Popconfirm>
           </div>
         )
@@ -81,7 +103,10 @@ export default class DeliveryList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <Table rowKey="id" columns={columns} dataSource={list} pagination={pagination} />
+        <Button type="primary" onClick={() => onEdit({})}>
+          Add new
+        </Button>
+        <Table rowKey="deliveryAddressId" loading={loading} columns={columns} dataSource={list} pagination={false} />
       </div>
     );
   }

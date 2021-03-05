@@ -350,3 +350,37 @@ export function changeTaxZoneStatus(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+export function getTaxSetting(param = {}) {
+  return Fetch<TResult>('/taxApiSetting/queryByStoreId', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function addTaxSetting(param = {}) {
+  return Fetch<TResult>('/taxApiSetting/addTaxApiSetting', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function editTaxApiSetting(param = {}) {
+  return Fetch<TResult>('/taxApiSetting/editTaxApiSetting', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function deleteTaxApiSetting(param = {}) {
+  return Fetch<TResult>('/taxApiSetting/deleteTaxApiSetting', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+export function changeTaxApiSettingStatus(param = {}) {
+  return Fetch<TResult>('/taxApiSetting/changeTaxApiSettingStatus', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

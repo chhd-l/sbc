@@ -34,7 +34,9 @@ export default class AppStore extends Store {
       pageNum,
       pageSize
     });
-    const { res: roleRes } = await webapi.fetchAllRoles();
+    const {
+      res: { context: roleRes }
+    } = await webapi.fetchAllRoles();
     //部门树
     await this.departTree();
     //没有部门的人数

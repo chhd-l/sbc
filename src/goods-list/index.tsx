@@ -1,6 +1,6 @@
 import React from 'react';
 import { StoreProvider } from 'plume2';
-
+import { Row, Col } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';

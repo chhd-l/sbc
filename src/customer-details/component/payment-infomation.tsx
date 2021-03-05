@@ -57,12 +57,14 @@ class PaymentInformation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
+        message.error(err.toString() || 'Operation failure');
       });
   }
 
@@ -74,9 +76,13 @@ class PaymentInformation extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.getList();
+        } else {
+          message.error(res.message || 'Delete failed');
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        message.error('Delete failed');
+      });
   };
   clickDefault = () => {
     let isDefault = !this.state.isDefault;

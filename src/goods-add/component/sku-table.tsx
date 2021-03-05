@@ -151,6 +151,7 @@ class SkuForm extends React.Component<any, any> {
     if (!specSingleFlag) {
       columns = goodsSpecs
         .map((item) => {
+          console.log(item,1111111111);
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),

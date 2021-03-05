@@ -1,4 +1,4 @@
-import { Fetch } from 'qmkit';
+import { Fetch, cache } from 'qmkit';
 
 type TResult = {
   code: string;
@@ -20,7 +20,7 @@ export function queryClinicsDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function getBasicDetails(id = null) {
-  return Fetch<TResult>('/customer/detail/' + id, {
+  return Fetch<TResult>('/customer/detail2/' + id, {
     method: 'Get'
   });
 }
@@ -83,6 +83,19 @@ export function getAddressListByType(id = null, type = '') {
 export function delAddress(id = null) {
   return Fetch<TResult>('/customer/address/' + id, {
     method: 'DELETE'
+  });
+}
+
+/**
+ * 新增客户地址
+ * @param filterParams
+ */
+export function addAddress(filterParams = {}) {
+  return Fetch<TResult>('/customer/address', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
   });
 }
 
@@ -188,7 +201,7 @@ export function delCustomer(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
-  }); 
+  });
 }
 
 export function queryCityById(filterParams = {}) {
@@ -204,6 +217,26 @@ export function queryCityListByName(filterParams = {}) {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
+    })
+  });
+}
+
+export function setTagging(params = {}) {
+  return Fetch<TResult>('/customer/segment/segment/segmentRelation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || 0
+    })
+  });
+}
+
+export function getPrescriberList(params = {}) {
+  return Fetch<TResult>('/prescriber/query/listByCustomer', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
     })
   });
 }
@@ -289,3 +322,34 @@ export function queryCityListByName(filterParams = {}) {
 //     data: parameter
 //   })
 // }
+
+//查询州地址
+
+export function queryStateList() {
+  return Fetch<TResult>('systemState/queryByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...{ storeId: 123457910 }
+    })
+  });
+}
+
+// 分页获取 tag list
+export function getTaggingList(filterParams = {}) {
+  return Fetch<TResult>('/customer/segment/segment/query', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// bindTagging
+export function bindTagging(filterParams = {}) {
+  return Fetch<TResult>('/customer/segment/segment/segmentRelation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

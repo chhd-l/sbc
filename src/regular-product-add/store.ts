@@ -362,17 +362,25 @@ export default class AppStore extends Store {
     this.onGoodsTaggingRelList(taggingIds);
 
     goodsDetail = fromJS(tmpContext);
-
-    let addSkUProduct =
-      tmpContext.goodsInfos &&
-      tmpContext.goodsInfos.map((item) => {
+    if (tmpContext && tmpContext.goodsInfos && tmpContext.goodsInfos.length > 0) {
+      let addSkUProduct = tmpContext.goodsInfos.map((item) => {
         return {
           pid: item.goodsInfoNo,
           targetGoodsIds: item.goodsInfoBundleRels,
           minStock: item.stock
         };
       });
-    this.dispatch('sku:addSkUProduct', addSkUProduct);
+      this.dispatch('sku:addSkUProduct', addSkUProduct);
+    }
+    // let addSkUProduct =
+    //   tmpContext.goodsInfos &&
+    //   tmpContext.goodsInfos.map((item) => {
+    //     return {
+    //       pid: item.goodsInfoNo,
+    //       targetGoodsIds: item.goodsInfoBundleRels,
+    //       minStock: item.stock
+    //     };
+    //   });
     this.transaction(() => {
       // 可能只保存了基本信息没有设价方式，价格tab中由需要默认选中按客户设价
       // 这里给一个默认值2，保存基本信息的时候不能传这个值，要过滤掉 priceType-mark
@@ -455,10 +463,10 @@ export default class AppStore extends Store {
         let goodsSpecs = goodsDetail.get('goodsSpecs').sort((o1, o2) => {
           return o1.get('specId') - o2.get('specId');
         });
-
         const goodsSpecDetails = goodsDetail.get('goodsSpecDetails');
         goodsSpecs = goodsSpecs.map((item) => {
           // 规格值列表，按照id升序排列
+          console.log(goodsSpecDetails, 11111111111);
           const specValues = goodsSpecDetails
             .filter((detailItem) => detailItem.get('specId') == item.get('specId'))
             .map((detailItem) => detailItem.set('isMock', false))
@@ -2114,24 +2122,27 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '', //{name}-Royal Canin
-          metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '', //{name}, {subtitle}, {sales category}, {tagging}
-          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '', //{description}
+          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : '{name} | Royal Canin Shop',
+          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}', //{name}, {subtitle}, {sales category}, {tagging}
+          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : '{description}', //{description}
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );
+      this.dispatch('seoActor: updateNumbers', res.context.seoSettingVO.updateNumbers);
     }
   };
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
     this.dispatch('loading:start');
+    const updateNumbers = this.state().get('updateNumbers') + 1;
     const params = {
       type: 1,
       goodsId,
       metaDescriptionSource: seoObj.metaDescriptionSource,
       metaKeywordsSource: seoObj.metaKeywordsSource,
       titleSource: seoObj.titleSource,
-      headingTag: seoObj.headingTag
+      headingTag: seoObj.headingTag,
+      updateNumbers
     };
     const { res } = (await editSeo(params)) as any;
     this.dispatch('loading:end');

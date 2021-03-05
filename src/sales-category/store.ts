@@ -522,7 +522,6 @@ export default class AppStore extends Store {
   };
 
   getSeo = async (storeCateId, type = 2) => {
-    this.clear();
     this.setCurrentStoreCateId(storeCateId);
     this.setSeoModalVisible(true);
     this.dispatch('loading:start');
@@ -532,19 +531,21 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '',
-          metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '',
-          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '',
+          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : 'Royal Canin | {name}s',
+          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : '',
+          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : '',
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );
+      this.dispatch('seoActor: updateNumbers', res.context.seoSettingVO.updateNumbers);
     } else {
       this.dispatch('loading:end');
     }
   };
   editSeo = async (params) => {
     this.dispatch('loading:start');
-    const { res } = (await editSeo(params)) as any;
+    const updateNumbers = this.state().get('updateNumbers') + 1;
+    const { res } = (await editSeo({ ...params, updateNumbers })) as any;
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
       message.success('Save successfully.');

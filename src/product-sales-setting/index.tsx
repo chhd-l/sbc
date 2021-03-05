@@ -13,7 +13,8 @@ class ProductSearchSetting extends Component<any, any> {
     options: [],
     defaultPurchaseType: '',
     defaultSubscriptionFrequencyId: '',
-    language: []
+    language: [],
+    purchaseType: []
   };
   onFinish = (e: any) => {
     e.preventDefault();
@@ -58,14 +59,14 @@ class ProductSearchSetting extends Component<any, any> {
    * 获取更新频率月｜ 周
    */
   async querySysDictionary() {
-    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), querySysDictionary({ type: 'language' })]);
+    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), querySysDictionary({ type: 'language' }), querySysDictionary({ type: 'purchase_type' })]);
     let { defaultPurchaseType, defaultSubscriptionFrequencyId, languageId } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
-    let weeks = result[0].res.context.sysDictionaryVOS;
-    let months = result[1].res.context.sysDictionaryVOS;
-    let languageList = result[2].res.context.sysDictionaryVOS;
+    let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
+    let months = result[1].res?.context?.sysDictionaryVOS ?? [];
+    let languageList = result[2].res?.context?.sysDictionaryVOS ?? [];
+    let purchaseType = result[3].res?.context?.sysDictionaryVOS ?? [];
     let options = [...months, ...weeks];
     let d = languageId.split(',');
-
     let language = languageList.filter((item) => {
       if (d.includes(item.id.toString())) {
         return item;
@@ -76,13 +77,14 @@ class ProductSearchSetting extends Component<any, any> {
       options,
       defaultPurchaseType,
       defaultSubscriptionFrequencyId,
-      language
+      language,
+      purchaseType
     });
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { disabled, defaultPurchaseType, visible, defaultSubscriptionFrequencyId, options, language } = this.state;
+    const { disabled, defaultPurchaseType, visible, defaultSubscriptionFrequencyId, options, language, purchaseType } = this.state;
     return (
       <div style={styles.container}>
         <BreadCrumb />
@@ -99,17 +101,31 @@ class ProductSearchSetting extends Component<any, any> {
                 ]
               })(
                 <Radio.Group disabled={disabled}>
-                  <Radio.Button value="One-off" style={{ width: 150, textAlign: 'center' }}>
+                  {purchaseType.map((item) => {
+                    return (
+                      <Radio.Button value={item.id} style={{ width: 150, textAlign: 'center' }}>
+                        {item.valueEn}
+                      </Radio.Button>
+                    );
+                  })}
+                  {/* <Radio.Button value="One-off" style={{ width: 150, textAlign: 'center' }}>
                     One-off
                   </Radio.Button>
                   <Radio.Button value="Subscription" style={{ width: 150, textAlign: 'center' }}>
                     Subscription
-                  </Radio.Button>
+                  </Radio.Button> */}
                 </Radio.Group>
               )}
             </Form.Item>
 
-            <Form.Item label={<span style={{ color: '#666' }}>Default subscription frequency</span>} style={{ marginBottom: 0 }}>
+            <Form.Item
+              label={
+                <span className="ant-form-item-required" style={{ color: '#666' }}>
+                  Default subscription frequency
+                </span>
+              }
+              style={{ marginBottom: 0 }}
+            >
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
                 {getFieldDecorator('defaultSubscriptionFrequencyId', {
                   initialValue: defaultSubscriptionFrequencyId,

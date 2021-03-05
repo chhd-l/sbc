@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, Select, message, DatePicker, Table, InputNumber, Collapse, Modal, Radio, Checkbox, Tag, Spin, Tooltip, Popconfirm, Popover, Calendar } from 'antd';
 import { StoreProvider } from 'plume2';
-
+import FeedBack from '../subscription-detail/component/feedback';
 import { Headline, BreadCrumb, SelectGroup, Const, cache } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -68,6 +68,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       promotionCodeShow: '',
       promotionCodeInput: '',
       deliveryPrice: 0,
+      taxFeePrice: 0,
       discountsPrice: '',
 
       isPromotionCodeValid: false,
@@ -434,7 +435,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           for (let i = 0; i < addressList.length; i++) {
             cityIds.push(addressList[i].cityId);
           }
-          this.getCityNameById(cityIds, 'DELIVERY');
+
           this.setState({
             deliveryList: addressList,
             customerAccount: customerAccount
@@ -446,7 +447,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           for (let i = 0; i < addressList.length; i++) {
             cityIds.push(addressList[i].cityId);
           }
-          this.getCityNameById(cityIds, 'BILLING');
 
           this.setState({
             billingList: addressList,
@@ -593,6 +593,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       totalPrice: this.subTotal(),
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode ? promotionCode : promotionCodeInput,
+      deliveryAddressId: this.state.deliveryAddressId,
       isAutoSub: true
     };
     webapi
@@ -604,6 +605,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             deliveryPrice: res.context.deliveryPrice,
             discountsPrice: res.context.discountsPrice,
             promotionCodeShow: res.context.promotionCode,
+            taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0,
             isPromotionCodeValid: res.context.promotionFlag,
             promotionDesc: res.context.promotionDesc,
             loading: false
@@ -710,37 +712,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       currentOrder: record
     });
   };
-  getCityNameById = (ids, type) => {
-    let params = {
-      id: ids
-    };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (type === 'BILLING') {
-            let billingCityArr = [];
-            if (res.context.systemCityVO) {
-              billingCityArr = res.context.systemCityVO;
-            }
-            this.setState({
-              billingCityArr
-            });
-          }
-          if (type === 'DELIVERY') {
-            let deliveryCityArr = [];
-            if (res.context.systemCityVO) {
-              deliveryCityArr = res.context.systemCityVO;
-            }
-            this.setState({
-              deliveryCityArr
-            });
-          }
-        }
-      })
-      .catch((err) => {});
-  };
+
   getCurrencySymbol = () => {
     let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
     this.setState({
@@ -812,6 +784,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <InputNumber
+              disabled
               min={1}
               max={100}
               onChange={(value) => {
@@ -835,6 +808,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <Select
+              disabled
               style={{ width: '70%' }}
               value={record.periodTypeId}
               onChange={(value) => {
@@ -1204,6 +1178,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>Shipping</span>
                   <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
+                {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
+                  <div className="flex-between">
+                    <span>Tax</span>
+                    <span style={styles.priceStyle}>{currencySymbol + (this.state.taxFeePrice ? this.state.taxFeePrice : 0).toFixed(2)}</span>
+                  </div>
+                ) : null}
                 <div className="flex-between">
                   <span>
                     <span>Total</span> (IVA Include):
@@ -1231,9 +1211,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{this.getCityName(deliveryAddressInfo.cityId) + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                    <p style={{ width: 140 }}>City: </p>
+                    <p>{deliveryAddressInfo.city}</p>
                   </Col>
+                  {deliveryAddressInfo.province ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>State: </p>
+                      <p>{deliveryAddressInfo.province}</p>
+                    </Col>
+                  ) : null}
+
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Country: </p>
+                    <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                  </Col>
+
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
@@ -1259,10 +1251,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p style={{ width: 140 }}>Name: </p>
                     <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
                   </Col>
+
                   <Col span={24}>
-                    <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{billingAddressInfo ? this.getCityName(billingAddressInfo.cityId) + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
+                    <p style={{ width: 140 }}>City: </p>
+                    <p>{billingAddressInfo.city}</p>
                   </Col>
+                  {billingAddressInfo.province ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>State: </p>
+                      <p>{billingAddressInfo.province}</p>
+                    </Col>
+                  ) : null}
+
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Country: </p>
+                    <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                  </Col>
+
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
                     <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
@@ -1318,9 +1323,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 value={this.state.deliveryAddressId}
                 onChange={(e) => {
                   let value = e.target.value;
-                  this.setState({
-                    deliveryAddressId: value
-                  });
+                  this.setState(
+                    {
+                      deliveryAddressId: value
+                    },
+                    () => {
+                      this.applyPromotionCode();
+                    }
+                  );
                 }}
               >
                 {this.state.isUnfoldedDelivery
@@ -1329,7 +1339,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
-                            <p>{this.getCityName(item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
+                            <p>{item.city}</p>
+                            {item.province ? <p>{item.province}</p> : null}
+
+                            <p>{this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
                           </div>
@@ -1342,7 +1355,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
-                              <p>{this.getCityName(item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
+                              <p>{item.city}</p>
+                              {item.province ? <p>{item.province}</p> : null}
+                              <p>{this.getDictValue(countryArr, item.countryId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
                             </div>
@@ -1460,6 +1475,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </TabPane>
             </Tabs>
           </div>
+          <FeedBack subscriptionId={this.state.subscriptionId} />
           <div className="bar-button">
             <Button type="primary" onClick={() => this.updateSubscription()} loading={this.state.saveLoading}>
               {<FormattedMessage id="save" />}

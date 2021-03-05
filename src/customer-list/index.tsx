@@ -1,6 +1,6 @@
 import React from 'react';
-import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip } from 'antd';
-import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, Const } from 'qmkit';
+import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip, TreeSelect } from 'antd';
+import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, TreeSelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -8,6 +8,7 @@ import * as webapi from './webapi';
 const { confirm } = Modal;
 const FormItem = Form.Item;
 const Option = Select.Option;
+const TreeNode = TreeSelect.TreeNode;
 
 export default class Customer extends React.Component<any, any> {
   constructor(props: any) {
@@ -15,20 +16,20 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Consumer account',
+          title: 'Pet owner account',
           dataIndex: 'customerAccount',
           key: 'consumerAccount',
           width: '15%'
         },
         {
-          title: 'Consumer name',
+          title: 'Pet owner name',
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
           render: (text, record) => <p>{record.firstName + ' ' + record.lastName}</p>
         },
         {
-          title: 'Consumer type',
+          title: 'Pet owner type',
           dataIndex: 'customerLevelName',
           key: 'consumerType',
           width: '15%'
@@ -66,7 +67,7 @@ export default class Customer extends React.Component<any, any> {
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title="Details">
-                <Link to={'/customer-details/' + (record.customerLevelName ? record.customerLevelName : 'Guest') + '/' + record.customerId + '/' + record.customerAccount} className="iconfont iconDetails"></Link>
+                <Link to={record.customerLevelName === 'Member' ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
               </Tooltip>
               {record.customerLevelName === 'Member' ? (
                 <span>
@@ -102,7 +103,8 @@ export default class Customer extends React.Component<any, any> {
         phoneNumber: '',
         //选中的诊所
         selectedPrescriberId: '',
-        defaultPrescriberName: ''
+        defaultPrescriberName: '',
+        subscriptionType: ''
       },
       customerTypeArr: [
         {
@@ -116,6 +118,7 @@ export default class Customer extends React.Component<any, any> {
           id: 233
         }
       ],
+      subscriptionTypeList: [],
       loading: false
     };
     this.onFormChange = this.onFormChange.bind(this);
@@ -125,7 +128,16 @@ export default class Customer extends React.Component<any, any> {
 
   componentDidMount() {
     this.init();
+    this.getSubscriptionTypeList();
   }
+
+  getSubscriptionTypeList = () => {
+    webapi.getSubscriptionPlanTypes().then((data) => {
+      this.setState({
+        subscriptionTypeList: data.res.context.sysDictionaryVOS
+      });
+    });
+  };
 
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -165,7 +177,7 @@ export default class Customer extends React.Component<any, any> {
       })
       .then((data) => {
         const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           let pagination = this.state.pagination;
           let searchList = res.context.detailResponseList;
           if (searchList.length > 0) {
@@ -225,7 +237,7 @@ export default class Customer extends React.Component<any, any> {
   //   webapi
   //     .delCustomer(params)
   //     .then((data) => {
-  //       if (data.res.code === Const.SUCCESS_CODE) {
+  //       if (data.res.code === 'K-000000') {
   //         message.success('Operate successfully');
   //         this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
   //       } else {
@@ -255,7 +267,7 @@ export default class Customer extends React.Component<any, any> {
   // }
 
   render() {
-    const { customerTypeArr, columns } = this.state;
+    const { customerTypeArr, columns, subscriptionTypeList } = this.state;
     return (
       <AuthWrapper functionName="f_customer_0">
         <div>
@@ -310,8 +322,8 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={styles.label}>Customer type</p>}
-                      style={{ width: 80 }}
+                      label={<p style={styles.label}>Pet owner type</p>}
+                      style={{ width: 177 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -363,6 +375,28 @@ export default class Customer extends React.Component<any, any> {
                         });
                       }}
                     />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <TreeSelectGroup
+                      allowClear
+                      getPopupContainer={() => document.getElementById('page-content')}
+                      label={<p style={styles.label}>Subscription type</p>}
+                      dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth: 200 }}
+                      treeDefaultExpandAll
+                      onChange={(value) => {
+                        this.onFormChange({ field: 'subscriptionType', value });
+                      }}
+                    >
+                      <TreeNode value="Product" title="Product" key="product">
+                        <TreeNode value="Food dispenser" title="Food dispenser" key="food" />
+                      </TreeNode>
+                      <TreeNode value="Pet" title="Pet" key="pet">
+                        <TreeNode value="Club" title="Club" key="club" />
+                      </TreeNode>
+                      <TreeNode value="Normal" title="Normal" key="normal" />
+                    </TreeSelectGroup>
                   </FormItem>
                 </Col>
                 <Col span={24} style={{ textAlign: 'center' }}>

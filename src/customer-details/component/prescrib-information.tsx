@@ -1,9 +1,11 @@
 import React from 'react';
 import { Table, Popconfirm } from 'antd';
+import { getPrescriberList } from '../webapi';
 
 interface Iprop {
   startDate: string;
   endDate: string;
+  customerAccount: string;
 }
 
 export default class PrescribInformation extends React.Component<Iprop, any> {
@@ -11,24 +13,7 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
     super(props);
     this.state = {
       loading: false,
-      list: [
-        {
-          id: 5678,
-          name: 'test',
-          phone: '4321432',
-          city: 'test',
-          type: 'test',
-          attribute: 'default'
-        },
-        {
-          id: 5679,
-          name: 'test',
-          phone: '4321432',
-          city: 'test',
-          type: 'test',
-          attribute: 'default'
-        }
-      ],
+      list: [],
       pagination: {
         current: 1,
         pageSize: 10,
@@ -36,6 +21,52 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
       }
     };
   }
+
+  componentDidMount() {
+    this.getPrescriberList();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.startDate !== prevProps.startDate || this.props.endDate !== prevProps.endDate) {
+      this.getPrescriberList();
+    }
+  }
+
+  getPrescriberList = () => {
+    const { pagination } = this.state;
+    this.setState({ loading: true });
+    getPrescriberList({
+      beginTime: this.props.startDate,
+      endTime: this.props.endDate,
+      customerAccount: this.props.customerAccount,
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
+    })
+      .then((data) => {
+        this.setState({
+          loading: false,
+          list: data.res.context.content,
+          pagination: {
+            ...pagination,
+            total: data.res.context.total
+          }
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
+  onTableChange = (pagination) => {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.getPrescriberList()
+    );
+  };
 
   render() {
     const { list, pagination } = this.state;
@@ -47,7 +78,7 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
       },
       {
         title: 'Prescriber name',
-        dataIndex: 'name',
+        dataIndex: 'prescriberName',
         key: 'name'
       },
       {
@@ -57,33 +88,19 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
       },
       {
         title: 'Prescriber city',
-        dataIndex: 'city',
+        dataIndex: 'primaryCity',
         key: 'city'
       },
       {
         title: 'Prescriber type',
-        dataIndex: 'type',
+        dataIndex: 'prescriberType',
         key: 'type'
-      },
-      {
-        title: 'Attribute',
-        dataIndex: 'attribute',
-        key: 'attribute'
-      },
-      {
-        title: 'Operation',
-        key: 'oper',
-        render: (_, record) => (
-          <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
-            <a className="iconfont iconDelete"></a>
-          </Popconfirm>
-        )
       }
     ];
 
     return (
       <div>
-        <Table rowKey="id" columns={columns} dataSource={list} pagination={pagination} />
+        <Table rowKey="id" columns={columns} dataSource={list} pagination={pagination} onChange={this.onTableChange} />
       </div>
     );
   }

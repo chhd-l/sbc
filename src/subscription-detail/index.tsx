@@ -2,7 +2,7 @@ import React from 'react';
 import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, Select, message, DatePicker, Table, InputNumber, Modal, Popconfirm, Radio, Collapse, Spin, Tooltip } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
-
+import FeedBack from './component/feedback';
 import { Headline, BreadCrumb, SelectGroup, Const, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
@@ -54,6 +54,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       operationLog: [],
       promotionCode: '',
       deliveryPrice: '',
+      taxFeePrice: '',
       discountsPrice: '',
       frequencyList: [],
       promotionDesc: 'Promotion',
@@ -150,12 +151,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             },
             () => {
               this.applyPromationCode(this.state.promotionCode);
-              if (subscriptionDetail.consignee && subscriptionDetail.consignee.cityId) {
-                this.getCityNameById([subscriptionDetail.consignee.cityId], 'BILLING');
-              }
-              if (subscriptionDetail.invoice && subscriptionDetail.invoice.cityId) {
-                this.getCityNameById([subscriptionDetail.invoice.cityId], 'DELIVERY');
-              }
             }
           );
         }
@@ -397,7 +392,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let params = {
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode,
-      isAutoSub: true
+      isAutoSub: true,
+      deliveryAddressId: this.state.deliveryAddressId
     };
     webapi
       .getPromotionPrice(params)
@@ -408,7 +404,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             deliveryPrice: res.context.deliveryPrice,
             discountsPrice: res.context.discountsPrice,
             promotionCodeShow: res.context.promotionCode,
-            promotionDesc: res.context.promotionDesc
+            promotionDesc: res.context.promotionDesc,
+            taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0
           });
         }
       })
@@ -416,33 +413,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
   handleYearChange = (value) => {};
   tabChange = (key) => {};
-  getCityNameById = (ids, type) => {
-    let params = {
-      id: ids
-    };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (type === 'BILLING') {
-            if (res.context.systemCityVO[0].cityName) {
-              this.setState({
-                billingCityName: res.context.systemCityVO[0].cityName
-              });
-            }
-          }
-          if (type === 'DELIVERY') {
-            if (res.context.systemCityVO[0].cityName) {
-              this.setState({
-                deliveryCityName: res.context.systemCityVO[0].cityName
-              });
-            }
-          }
-        }
-      })
-      .catch((err) => {});
-  };
+
   getCurrencySymbol = () => {
     let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
     this.setState({
@@ -854,11 +825,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>Shipping</span>
                   <span style={styles.priceStyle}>{currencySymbol + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
+                {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
+                  <div className="flex-between">
+                    <span>Tax</span>
+                    <span style={styles.priceStyle}>{currencySymbol + (this.state.taxFeePrice ? this.state.taxFeePrice : 0).toFixed(2)}</span>
+                  </div>
+                ) : null}
+
                 <div className="flex-between">
                   <span>
                     <span>Total</span> (IVA Include):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice).toFixed(2)}</span>
                 </div>
               </Col>
             </Row>
@@ -874,8 +852,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{deliveryAddressInfo ? deliveryCityName + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId) : ''}</p>
+                    <p style={{ width: 140 }}>City: </p>
+                    <p>{deliveryAddressInfo.city}</p>
+                  </Col>
+                  {deliveryAddressInfo.province ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>State: </p>
+                      <p>{deliveryAddressInfo.province}</p>
+                    </Col>
+                  ) : null}
+
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Country: </p>
+                    <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
@@ -898,9 +887,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{billingAddressInfo ? billingCityName + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
+                    <p style={{ width: 140 }}>City: </p>
+                    <p>{billingAddressInfo.city}</p>
                   </Col>
+                  {billingAddressInfo.province ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>State: </p>
+                      <p>{billingAddressInfo.province}</p>
+                    </Col>
+                  ) : null}
+
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Country: </p>
+                    <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                  </Col>
+
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
                     <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
@@ -973,6 +974,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Collapse>
             </Row>
           </div>
+          <FeedBack subscriptionId={this.state.subscriptionId} />
         </Spin>
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>

@@ -3,7 +3,8 @@ import { Actor, Action, IMap } from 'plume2';
 export default class LoadingActor extends Actor {
   defaultState() {
     return {
-      loading: true
+      loading: true,
+      confirmLoading: false
     };
   }
 
@@ -15,5 +16,15 @@ export default class LoadingActor extends Actor {
   @Action('loading:end')
   end(state: IMap) {
     return state.set('loading', false);
+  }
+
+  @Action('confirmLoading:start')
+  confirmLoadingStart(state: IMap) {
+    return state.set('confirmLoading', true);
+  }
+
+  @Action('confirmLoading:end')
+  confirmLoadingEnd(state: IMap) {
+    return state.set('confirmLoading', false);
   }
 }

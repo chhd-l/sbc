@@ -38,6 +38,7 @@ export default class SeoForm extends Component<any, any> {
     relaxProps?: {
       seoForm: any;
       getGoodsId: any;
+      updateNumbers: any;
       updateSeoForm: Function;
       getSeo: Function;
     };
@@ -47,14 +48,13 @@ export default class SeoForm extends Component<any, any> {
     updateSeoForm: noop,
     getSeo: noop,
     seoForm: 'seoForm',
-    getGoodsId: 'getGoodsId'
+    getGoodsId: 'getGoodsId',
+    updateNumbers: 'updateNumbers'
   };
   componentDidMount() {
-    const { getSeo, getGoodsId } = this.props.relaxProps;
+    const { getSeo, getGoodsId, updateNumbers } = this.props.relaxProps;
     if (getGoodsId) {
       getSeo(getGoodsId);
-    } else {
-      getSeo();
     }
   }
 
@@ -116,46 +116,46 @@ export default class SeoForm extends Component<any, any> {
         {/*    </Select>*/}
         {/*  )}*/}
         {/*</Form.Item>*/}
-        <Form.Item label="Meta Keywords">
-          {getFieldDecorator('metaKeywordsSource', {
-            initialValue: seoObj.metaKeywordsSource
-          })(
-            <TextArea
-              rows={4}
-              onChange={(e) =>
-                updateSeoForm({
-                  field: 'metaKeywordsSource',
-                  value: e.target.value
-                })
-              }
-            />
-          )}
-        </Form.Item>
-        <Form.Item label="Meta Description">
-          {getFieldDecorator('metaDescriptionSource', {
-            initialValue: seoObj.metaDescriptionSource
-          })(
-            <TextArea
-              rows={4}
-              onChange={(e) =>
-                updateSeoForm({
-                  field: 'metaDescriptionSource',
-                  value: e.target.value
-                })
-              }
-            />
-          )}
-        </Form.Item>
-        <Form.Item label="H1">
-          {getFieldDecorator('h1', {
-            initialValue: '{ name }'
-          })(<Input style={{ width: 300 }} disabled />)}
-        </Form.Item>
-        <Form.Item label="H2">
-          {getFieldDecorator('h2', {
-            initialValue: '{ subtitle }'
-          })(<Input style={{ width: 300 }} disabled />)}
-        </Form.Item>
+        {/*<Form.Item label="Meta Keywords">*/}
+        {/*  {getFieldDecorator('metaKeywordsSource', {*/}
+        {/*    initialValue: seoObj.metaKeywordsSource*/}
+        {/*  })(*/}
+        {/*    <TextArea*/}
+        {/*      rows={4}*/}
+        {/*      onChange={(e) =>*/}
+        {/*        updateSeoForm({*/}
+        {/*          field: 'metaKeywordsSource',*/}
+        {/*          value: e.target.value*/}
+        {/*        })*/}
+        {/*      }*/}
+        {/*    />*/}
+        {/*  )}*/}
+        {/*</Form.Item>*/}
+        {/*<Form.Item label="Meta Description">*/}
+        {/*  {getFieldDecorator('metaDescriptionSource', {*/}
+        {/*    initialValue: seoObj.metaDescriptionSource*/}
+        {/*  })(*/}
+        {/*    <TextArea*/}
+        {/*      rows={4}*/}
+        {/*      onChange={(e) =>*/}
+        {/*        updateSeoForm({*/}
+        {/*          field: 'metaDescriptionSource',*/}
+        {/*          value: e.target.value*/}
+        {/*        })*/}
+        {/*      }*/}
+        {/*    />*/}
+        {/*  )}*/}
+        {/*</Form.Item>*/}
+        {/*<Form.Item label="H1">*/}
+        {/*  {getFieldDecorator('h1', {*/}
+        {/*    initialValue: '{ name }'*/}
+        {/*  })(<Input style={{ width: 300 }} disabled />)}*/}
+        {/*</Form.Item>*/}
+        {/*<Form.Item label="H2">*/}
+        {/*  {getFieldDecorator('h2', {*/}
+        {/*    initialValue: '{ subtitle }'*/}
+        {/*  })(<Input style={{ width: 300 }} disabled />)}*/}
+        {/*</Form.Item>*/}
       </Form>
     );
   }

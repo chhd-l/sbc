@@ -12,7 +12,7 @@ type TResult = {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function fetchPayOrderList(params = {}) {
-  return Fetch('/account/payOrders', {
+  return Fetch<TResult>('/account/payOrders', {
     method: 'POST',
     body: JSON.stringify({
       ...params
@@ -38,7 +38,7 @@ export const checkFunctionAuth = (urlPath: string, requestType: string) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function offlineAccounts() {
-  return Fetch<TResult>(`/account/offlineAccounts`);
+  return Fetch<TResult>('/account/offlineAccounts');
 }
 
 /**
@@ -47,7 +47,7 @@ export function offlineAccounts() {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function confirm(payOrderIds: string[]) {
-  return Fetch<TResult>(`/account/confirm`, {
+  return Fetch<TResult>('/account/confirm', {
     method: 'POST',
     body: JSON.stringify({
       payOrderIds: payOrderIds
@@ -61,7 +61,7 @@ export function confirm(payOrderIds: string[]) {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function destory(payOrderIds: string[]) {
-  return Fetch<TResult>(`/account/payOrder/destory`, {
+  return Fetch<TResult>('/account/payOrder/destory', {
     method: 'PUT',
     body: JSON.stringify({
       payOrderIds: payOrderIds
@@ -84,7 +84,7 @@ export function fetchAccountsByCustomerId(customerId: string) {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function addReceivable(receivableForm: any) {
-  return Fetch<TResult>(`/account/receivable`, {
+  return Fetch<TResult>('/account/receivable', {
     method: 'POST',
     body: JSON.stringify(receivableForm)
   });

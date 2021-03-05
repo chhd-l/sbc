@@ -315,11 +315,15 @@ const routes = [
     asyncComponent: () => import('./customer-details')
   },
   {
-    path: '/edit-customer-basicinfo/:id',
+    path: '/petowner-details/:id/:account',
+    asyncComponent: () => import('./customer-details/member-detail')
+  },
+  {
+    path: '/edit-petowner/:id/:account',
     asyncComponent: () => import('./customer-details/edit-basic-information')
   },
   {
-    path: '/edit-customer-pet/:id',
+    path: '/edit-pet/:id',
     asyncComponent: () => import('./customer-details/edit-pet-item')
   },
   // 客户等级
@@ -483,6 +487,11 @@ const routes = [
   {
     path: '/marketing-full-reduction/:marketingId?',
     asyncComponent: () => import('./marketing-add/full-reduction')
+  },
+  //新增 / 编辑营销-首次折扣
+  {
+    path: '/marketing-first-order-discount/:marketingId?',
+    asyncComponent: () => import('./marketing-add/first-order-discount')
   },
   //营销列表
   {
@@ -864,20 +873,8 @@ const routes = [
     asyncComponent: () => import('./automation-node')
   },
   {
-    path: '/tag-management-list',
-    asyncComponent: () => import('./tag-management-list')
-  },
-  {
-    path: '/tag-management-detail/:id',
-    asyncComponent: () => import('./tag-management-detail')
-  },
-  {
-    path: '/tag-management-edit/:id',
-    asyncComponent: () => import('./tag-management-edit')
-  },
-  {
-    path: '/tag-management-add',
-    asyncComponent: () => import('./tag-management-edit')
+    path: '/pet-owner-tagging',
+    asyncComponent: () => import('./pet-owner-tagging')
   },
   {
     path: '/tasks',

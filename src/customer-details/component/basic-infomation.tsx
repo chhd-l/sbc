@@ -1,40 +1,31 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin, Checkbox } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin, Checkbox, AutoComplete, TreeSelect } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
-import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-import { Const, Headline } from 'qmkit';
+import { Const } from 'qmkit';
 import _ from 'lodash';
 
 const { TextArea } = Input;
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const { TabPane } = Tabs;
-
-const { Column } = Table;
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
-};
+const { TreeNode } = TreeSelect;
 
 class BasicInfomation extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       basicForm: {
-        customerAccount: '',
-        createTime: '',
         firstName: '',
         lastName: '',
         birthDay: '',
         email: '',
         contactPhone: '',
         postalCode: '',
-        cityId: '',
+        city: '',
+        state: '',
         countryId: '',
         address1: '',
         address2: '',
@@ -45,7 +36,8 @@ class BasicInfomation extends React.Component<any, any> {
         defaultClinics: {
           clinicsId: 0,
           clinicsName: ''
-        }
+        },
+        selectedBind: []
       },
       countryArr: [],
       cityArr: [],
@@ -55,13 +47,23 @@ class BasicInfomation extends React.Component<any, any> {
       loading: true,
       objectFetching: false,
       initCityName: '',
-      initPreferChannel: []
+      initPreferChannel: [],
+      storeId: '',
+      stateList: [],
+      taggingList: []
     };
   }
   componentDidMount() {
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let storeId = loginInfo ? loginInfo.storeId : '';
+    this.setState({ storeId });
+    if (storeId.toString() === '123457910') {
+      this.getStateList();
+    }
     this.getDict();
     this.getBasicDetails();
     this.getClinicList();
+    this.getTaggingList();
   }
 
   getDict = () => {
@@ -97,9 +99,13 @@ class BasicInfomation extends React.Component<any, any> {
             });
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
+        } else {
+          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
   };
 
   getSelectedClinic = (array) => {
@@ -115,20 +121,23 @@ class BasicInfomation extends React.Component<any, any> {
     webapi
       .getBasicDetails(this.props.customerId)
       .then((data) => {
-        let res = data.res;
+        const { res } = data;
         if (res.code && res.code === Const.SUCCESS_CODE) {
-          let res2 = JSON.stringify(data.res);
-
-          let resObj = JSON.parse(res2);
+          let resObj = res.context;
           let clinicsVOS = this.getSelectedClinic(resObj.clinicsVOS);
-          let defaultClinicsId = '';
+          let defaultClinicsId = null;
           if (resObj.defaultClinics && resObj.defaultClinics.clinicsId) {
             defaultClinicsId = resObj.defaultClinics.clinicsId;
           }
+          let selectedBind = [];
+          if (resObj.segmentList) {
+            for (let i = 0; i < resObj.segmentList.length; i++) {
+              const element = resObj.segmentList[i].id;
+              selectedBind.push(element);
+            }
+          }
 
           let basicForm = {
-            customerAccount: resObj.customerVO.customerAccount,
-            createTime: resObj.createTime,
             firstName: resObj.firstName,
             lastName: resObj.lastName,
             birthDay: resObj.birthDay ? resObj.birthDay : this.state.currentBirthDay,
@@ -136,6 +145,8 @@ class BasicInfomation extends React.Component<any, any> {
             contactPhone: resObj.contactPhone,
             postalCode: resObj.postalCode,
             cityId: resObj.cityId,
+            city: resObj.city,
+            state: resObj.province,
             countryId: resObj.countryId,
             address1: resObj.address1,
             address2: resObj.address2,
@@ -145,11 +156,10 @@ class BasicInfomation extends React.Component<any, any> {
             selectedClinics: resObj.clinicsVOS,
             defaultClinicsId: defaultClinicsId,
             defaultClinics: resObj.defaultClinics,
-            preferredMethods: []
+            preferredMethods: [],
+            selectedBind: selectedBind
           };
-          if (basicForm.cityId) {
-            this.getCityNameById(basicForm.cityId);
-          }
+
           let initPreferChannel = [];
           if (+basicForm.communicationPhone) {
             initPreferChannel.push('Phone');
@@ -168,17 +178,6 @@ class BasicInfomation extends React.Component<any, any> {
             },
             () => {
               this.props.form.setFieldsValue({
-                firstName: resObj.firstName,
-                lastName: resObj.lastName,
-                email: resObj.email,
-                contactPhone: resObj.contactPhone,
-                postalCode: resObj.postalCode,
-                // city: resObj.cityId,
-                country: resObj.countryId,
-                address1: resObj.address1,
-                address2: resObj.address2,
-                // preferredMethods: resObj.contactMethod,
-                reference: resObj.reference,
                 selectedClinics: clinicsVOS,
                 defaultClinicsId: defaultClinicsId
               });
@@ -198,7 +197,9 @@ class BasicInfomation extends React.Component<any, any> {
 
   onFormChange = ({ field, value }) => {
     let data = this.state.basicForm;
+
     data[field] = value;
+
     this.setState({
       basicForm: data
     });
@@ -208,6 +209,7 @@ class BasicInfomation extends React.Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         this.saveBasicInfomation();
+        this.bindTagging();
       }
     });
   };
@@ -217,7 +219,9 @@ class BasicInfomation extends React.Component<any, any> {
     let params = {
       birthDay: basicForm.birthDay ? basicForm.birthDay : this.state.currentBirthDay,
       cityId: basicForm.cityId ? basicForm.cityId : currentForm.cityId,
+      city: basicForm.city ? basicForm.city : currentForm.city,
       clinicsVOS: basicForm.selectedClinics,
+      province: basicForm.state,
       // contactMethod: basicForm.preferredMethods,
       contactPhone: basicForm.contactPhone,
       countryId: basicForm.countryId ? basicForm.countryId : currentForm.countryId,
@@ -240,16 +244,20 @@ class BasicInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
+        } else {
+          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
   };
 
   getClinicList = () => {
     webapi
       .fetchClinicList({
         enabled: true,
-        storeId: 123456858
+        storeId: this.state.storeId
       })
       .then((data) => {
         const res = data.res;
@@ -262,12 +270,14 @@ class BasicInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
+        message.error(err.message || 'Unsuccessful');
       });
   };
   //手机校验
@@ -315,31 +325,86 @@ class BasicInfomation extends React.Component<any, any> {
             cityArr: res.context.systemCityVO,
             objectFetching: false
           });
+        } else {
+          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
   };
-  getCityNameById = (id) => {
+
+  getStateList = () => {
+    webapi.queryStateList().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let stateList = res.context.systemStates;
+        this.setState({
+          stateList
+        });
+      }
+    });
+  };
+
+  loopTagging = (taggingTotalTree) => {
+    return (
+      taggingTotalTree &&
+      taggingTotalTree.map((item, index) => {
+        return <TreeNode key={index} value={item.id} title={item.name} />;
+      })
+    );
+  };
+  getTaggingList = () => {
     let params = {
-      id: [id]
+      pageNum: 0,
+      pageSize: 1000,
+      segmentType: 0
     };
     webapi
-      .queryCityById(params)
+      .getTaggingList(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
-            this.setState({
-              initCityName: res.context.systemCityVO[0].cityName
-            });
-          }
+          let taggingList = res.context.segmentList;
+          this.setState({
+            taggingList
+          });
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  bindTagging = () => {
+    const { basicForm, currentForm } = this.state;
+    let params = {
+      relationId: currentForm.customerId,
+      segmentType: 0,
+      segmentIdList: basicForm.selectedBind
+    };
+    webapi
+      .bindTagging(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
 
   render() {
-    const { countryArr, cityArr, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
+    const { countryArr, cityArr, clinicList, loading, initPreferChannel, storeId, stateList, basicForm, taggingList } = this.state;
     const options = [
       {
         label: 'Phone',
@@ -363,25 +428,8 @@ class BasicInfomation extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-          <Headline title="Edit basic information" />
+        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <FormItem label="Consumer account">
-                  {getFieldDecorator('customerAccount', {
-                    initialValue: this.state.basicForm.customerAccount
-                  })(<Input disabled={true} />)}
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem label="Registration date">
-                  {getFieldDecorator('createTime', {
-                    initialValue: moment(this.state.basicForm.createTime)
-                  })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" disabled={true} />)}
-                </FormItem>
-              </Col>
-            </Row>
             <Row gutter={16}>
               <Col span={12}>
                 <FormItem label="First Name">
@@ -392,7 +440,8 @@ class BasicInfomation extends React.Component<any, any> {
                         max: 50,
                         message: 'Exceed maximum length!'
                       }
-                    ]
+                    ],
+                    initialValue: basicForm.firstName
                   })(
                     <Input
                       style={{ width: '100%' }}
@@ -416,7 +465,8 @@ class BasicInfomation extends React.Component<any, any> {
                         max: 50,
                         message: 'Exceed maximum length!'
                       }
-                    ]
+                    ],
+                    initialValue: basicForm.lastName
                   })(
                     <Input
                       onChange={(e) => {
@@ -439,6 +489,7 @@ class BasicInfomation extends React.Component<any, any> {
                     <DatePicker
                       style={{ width: '100%' }}
                       format="YYYY-MM-DD"
+                      getPopupContainer={() => document.getElementById('page-content')}
                       disabledDate={(current) => {
                         return current && current > moment().endOf('day');
                       }}
@@ -456,7 +507,8 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Email">
                   {getFieldDecorator('email', {
-                    rules: [{ required: true, message: 'Please input Email!' }, { validator: this.compareEmail }, { max: 50, message: 'Exceed maximum length!' }]
+                    rules: [{ required: true, message: 'Please input Email!' }, { validator: this.compareEmail }, { max: 50, message: 'Exceed maximum length!' }],
+                    initialValue: basicForm.email
                   })(
                     <Input
                       disabled
@@ -472,9 +524,10 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Phone number">
+                <FormItem label="Phone Number">
                   {getFieldDecorator('contactPhone', {
-                    rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }]
+                    rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }],
+                    initialValue: basicForm.contactPhone
                   })(
                     <Input
                       onChange={(e) => {
@@ -490,9 +543,10 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem label="Postal code">
+                <FormItem label="Postal Code">
                   {getFieldDecorator('postalCode', {
-                    rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
+                    rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }],
+                    initialValue: basicForm.postalCode
                   })(
                     <Input
                       onChange={(e) => {
@@ -510,10 +564,12 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Country">
                   {getFieldDecorator('country', {
-                    rules: [{ required: true, message: 'Please input Country!' }]
+                    rules: [{ required: true, message: 'Please input Country!' }],
+                    initialValue: basicForm.countryId
                   })(
                     <Select
                       optionFilterProp="children"
+                      getPopupContainer={() => document.getElementById('page-content')}
                       onChange={(value) => {
                         this.onFormChange({
                           field: 'countryId',
@@ -522,8 +578,8 @@ class BasicInfomation extends React.Component<any, any> {
                       }}
                     >
                       {countryArr
-                        ? countryArr.map((item) => (
-                            <Option value={item.id} key={item.id}>
+                        ? countryArr.map((item, index) => (
+                            <Option value={item.id} key={index}>
                               {item.name}
                             </Option>
                           ))
@@ -533,38 +589,68 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
 
+              {storeId.toString() === '123457910' ? (
+                <Col span={12}>
+                  <FormItem label="State">
+                    {getFieldDecorator('state', {
+                      rules: [{ required: true, message: 'Please input State!' }],
+                      initialValue: basicForm.state
+                    })(
+                      <Select
+                        showSearch
+                        getPopupContainer={() => document.getElementById('page-content')}
+                        optionFilterProp="children"
+                        onChange={(value) => {
+                          this.onFormChange({
+                            field: 'state',
+                            value: value ? value : ''
+                          });
+                        }}
+                      >
+                        {stateList
+                          ? stateList.map((item, index) => (
+                              <Option value={item.stateName} key={index}>
+                                {item.stateName}
+                              </Option>
+                            ))
+                          : null}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+              ) : null}
+
               <Col span={12}>
                 <FormItem label="City">
                   {getFieldDecorator('city', {
-                    rules: [{ required: true, message: 'Please select City!' }],
-                    initialValue: initCityName
+                    rules: [{ required: true, message: 'Please input or select City!' }],
+                    initialValue: basicForm.city ? [basicForm.city] : []
                   })(
-                    <Select
-                      showSearch
-                      placeholder="Select a Order number"
-                      notFoundContent={objectFetching ? <Spin size="small" /> : null}
+                    <AutoComplete
+                      placeholder="Please input or select City"
+                      getPopupContainer={() => document.getElementById('page-content')}
                       onSearch={_.debounce(this.getCityList, 500)}
-                      filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                       onChange={(value) => {
                         this.onFormChange({
-                          field: 'cityId',
+                          field: 'city',
                           value: value ? value : ''
                         });
                       }}
                     >
-                      {cityArr
-                        ? cityArr.map((item) => (
-                            <Option value={item.id} key={item.id}>
-                              {item.cityName}
-                            </Option>
-                          ))
-                        : null}
-                    </Select>
+                      {cityArr &&
+                        cityArr.map((item, index) => (
+                          <Option value={item.cityName} key={index}>
+                            {item.cityName}
+                          </Option>
+                        ))}
+                    </AutoComplete>
                   )}
                 </FormItem>
               </Col>
+            </Row>
+            <Row>
               <Col span={12}>
-                <FormItem label="Address reference">
+                <FormItem label="Address 1">
                   {getFieldDecorator('address1', {
                     rules: [
                       { required: true, message: 'Please input Address 1!' },
@@ -572,9 +658,11 @@ class BasicInfomation extends React.Component<any, any> {
                         max: 200,
                         message: 'Exceed maximum length!'
                       }
-                    ]
+                    ],
+                    initialValue: basicForm.address1
                   })(
-                    <Input
+                    <TextArea
+                      autoSize={{ minRows: 3, maxRows: 3 }}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -587,11 +675,27 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Consent">
-                  {getFieldDecorator('consent', {
-                    valuePropName: 'checked',
-                    initialValue: true
-                  })(<Radio>Email communication</Radio>)}
+                <FormItem label="Address 2">
+                  {getFieldDecorator('address2', {
+                    rules: [
+                      {
+                        max: 200,
+                        message: 'Exceed maximum length!'
+                      }
+                    ],
+                    initialValue: basicForm.address2
+                  })(
+                    <TextArea
+                      autoSize={{ minRows: 3, maxRows: 3 }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'address2',
+                          value
+                        });
+                      }}
+                    />
+                  )}
                 </FormItem>
               </Col>
 
@@ -620,33 +724,141 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem label="Tag name">
+                <FormItem label="Reference">
                   {getFieldDecorator('reference', {
                     rules: [
                       {
-                        required: true,
-                        message: 'Tag name is required'
+                        max: 200,
+                        message: 'Exceed maximum length!'
                       }
-                    ]
+                    ],
+                    initialValue: basicForm.reference
                   })(
-                    <Select
-                      mode="multiple"
-                      onChange={(value) => {
+                    <Input
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
                         this.onFormChange({
                           field: 'reference',
                           value
                         });
                       }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Default Prescriber">
+                  {getFieldDecorator(
+                    'defaultClinicsId',
+                    {}
+                  )(
+                    <Select
+                      showSearch
+                      getPopupContainer={() => document.getElementById('page-content')}
+                      placeholder="Please select"
+                      style={{ width: '100%' }}
+                      onChange={(value, Option) => {
+                        let tempArr = Option.props.children.split(',');
+                        let clinic = {
+                          clinicsId: tempArr[0],
+                          clinicsName: tempArr[1]
+                        };
+
+                        this.onFormChange({
+                          field: 'defaultClinics',
+                          value: clinic
+                        });
+                      }}
                     >
-                      <Option value="1">Active user</Option>
-                      <Option value="2">Student</Option>
+                      {clinicList
+                        ? clinicList.map((item, index) => (
+                            <Option value={item.prescriberId.toString()} key={index}>
+                              {item.prescriberId + ',' + item.prescriberName}
+                            </Option>
+                          ))
+                        : null}
                     </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Select Prescriber">
+                  {getFieldDecorator(
+                    'selectedClinics',
+                    {}
+                  )(
+                    <Select
+                      mode="multiple"
+                      getPopupContainer={() => document.getElementById('page-content')}
+                      placeholder="Please select"
+                      style={{ width: '100%' }}
+                      onChange={(value, Option) => {
+                        let clinics = [];
+                        for (let i = 0; i < Option.length; i++) {
+                          let tempArr = Option[i].props.children.split(',');
+                          let clinic = {
+                            clinicsId: tempArr[0],
+                            clinicsName: tempArr[1]
+                          };
+                          clinics.push(clinic);
+                        }
+
+                        this.onFormChange({
+                          field: 'selectedClinics',
+                          value: clinics
+                        });
+                      }}
+                    >
+                      {/* {
+                      clinicList.map((item) => (
+                        <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
+                      ))} */}
+                      {clinicList
+                        ? clinicList.map((item, index) => (
+                            <Option value={item.prescriberId.toString()} key={index}>
+                              {item.prescriberId + ',' + item.prescriberName}
+                            </Option>
+                          ))
+                        : null}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem {...formItemLayout} label="Pet owner tagging">
+                  {getFieldDecorator('selectedBind', {
+                    rules: [
+                      {
+                        required: false,
+                        message: 'Please select product tagging'
+                      }
+                    ],
+                    initialValue: basicForm.selectedBind
+                  })(
+                    <TreeSelect
+                      getPopupContainer={() => document.getElementById('page-content')}
+                      treeCheckable={true}
+                      showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                      // treeCheckStrictly={true}
+                      placeholder="Please select product tagging"
+                      notFoundContent="No classification"
+                      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                      showSearch={false}
+                      onChange={(value) =>
+                        this.onFormChange({
+                          field: 'selectedBind',
+                          value
+                        })
+                      }
+                    >
+                      {this.loopTagging(taggingList)}
+                    </TreeSelect>
                   )}
                 </FormItem>
               </Col>
               <Col span={24}>
                 <FormItem>
-                  <Button type="primary" htmlType="submit">
+                  <Button type="primary" htmlType="submit" loading={loading}>
                     Save
                   </Button>
 
@@ -662,4 +874,4 @@ class BasicInfomation extends React.Component<any, any> {
     );
   }
 }
-export default Form.create<any>()(BasicInfomation);
+export default Form.create()(BasicInfomation);

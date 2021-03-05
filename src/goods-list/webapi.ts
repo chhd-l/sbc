@@ -10,12 +10,12 @@ type TResult = {
  * 商品列表
  * @param params
  */
-const goodsList = params => {
+const goodsList = (params) => {
   const request = {
     method: 'POST',
     body: JSON.stringify(params)
   };
-  return Fetch<TResult>(`/goods/spus`, request);
+  return Fetch<TResult>('/goods/spus', request);
 };
 
 /**
@@ -78,33 +78,29 @@ const getProductCategories = () => {
  * @param params
  */
 const freightList = () => {
-  return Fetch<TResult>(`/freightTemplate/freightTemplateGoods`);
+  return Fetch<TResult>('/freightTemplate/freightTemplateGoods');
 };
 
 /**
  * 查询单个运费模板信息
  * @param freightTempId
  */
-const goodsFreight = freightTempId => {
-  return Fetch<TResult>(
-    `/freightTemplate/freightTemplateGoods/${freightTempId}`
-  );
+const goodsFreight = (freightTempId) => {
+  return Fetch<TResult>(`/freightTemplate/freightTemplateGoods/${freightTempId}`);
 };
 
 /**
  * 查询单个运费模板信息
  * @param freightTempId
  */
-const goodsFreightExpress = freightTempId => {
-  return Fetch<TResult>(
-    `/freightTemplate/freightTemplateExpress/${freightTempId}`
-  );
+const goodsFreightExpress = (freightTempId) => {
+  return Fetch<TResult>(`/freightTemplate/freightTemplateExpress/${freightTempId}`);
 };
 
 /**
  * 编辑运费模板(批量)
  */
-const updateFreight = params => {
+const updateFreight = (params) => {
   const request = {
     method: 'PUT',
     body: JSON.stringify(params)
@@ -112,16 +108,13 @@ const updateFreight = params => {
   return Fetch('/goods/spu/freight', request);
 };
 
-export {
-  goodsList,
-  spuOnSale,
-  spuOffSale,
-  spuDelete,
-  getBrandList,
-  getCateList,
-  getProductCategories,
-  freightList,
-  goodsFreight,
-  goodsFreightExpress,
-  updateFreight
+/**
+ * 同步产品
+ */
+const syncProduct = () => {
+  return Fetch<TResult>('/goods/updateProductFromIntegration', {
+    method: 'POST'
+  });
 };
+
+export { goodsList, spuOnSale, spuOffSale, spuDelete, getBrandList, getCateList, getProductCategories, freightList, goodsFreight, goodsFreightExpress, updateFreight, syncProduct };

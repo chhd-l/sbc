@@ -93,7 +93,7 @@ export default class TaxesTable extends React.Component<any, any> {
         }
       },
       {
-        title: 'Operation',
+        title: 'Operation1111111',
         dataIndex: 'operation',
         className: 'drag-visible',
         width: '8%',

@@ -69,7 +69,7 @@ export default class ReductionLevels extends React.Component<any, any> {
 
   render() {
     const { isFullCount, fullReductionLevelList } = this.state;
-
+    debugger;
     const { form } = this.props;
 
     const { getFieldDecorator } = form;
@@ -117,7 +117,7 @@ export default class ReductionLevels extends React.Component<any, any> {
                       )}
                       <span>
                         &nbsp;
-                        {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}，
+                        {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}，333
                       </span>
                     </FormItem>
                   </div>

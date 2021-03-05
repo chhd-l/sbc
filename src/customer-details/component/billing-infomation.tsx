@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, Checkbox, Empty, Spin, Popconfirm } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, Checkbox, Empty, Spin, Popconfirm, AutoComplete } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
@@ -34,7 +34,8 @@ class BillingInfomation extends React.Component<any, any> {
         lastName: '',
         consigneeNumber: '',
         postCode: '',
-        cityId: '',
+        city: '',
+        state: '',
         countryId: '',
         address1: '',
         address2: '',
@@ -51,10 +52,19 @@ class BillingInfomation extends React.Component<any, any> {
       currentId: '',
       loading: true,
       objectFetching: false,
-      initCityName: ''
+      initCityName: '',
+      storeId: '',
+      stateList: ''
     };
   }
   componentDidMount() {
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let storeId = loginInfo ? loginInfo.storeId : '';
+    if (storeId.toString() === '123457910') {
+      this.setState({ storeId });
+      this.getStateList();
+    }
+
     this.getDict();
     this.getAddressList();
     // this.getClinicList();
@@ -77,16 +87,20 @@ class BillingInfomation extends React.Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
             });
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
+        } else {
+          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -103,6 +117,8 @@ class BillingInfomation extends React.Component<any, any> {
       address1: billingForm.address1,
       address2: billingForm.address2,
       cityId: billingForm.cityId,
+      city: billingForm.city,
+      province: billingForm.state,
       consigneeName: billingForm.firstName + ' ' + billingForm.lastName,
       consigneeNumber: billingForm.consigneeNumber,
       countryId: billingForm.countryId,
@@ -114,7 +130,6 @@ class BillingInfomation extends React.Component<any, any> {
       isDefaltAddress: this.state.isDefault ? 1 : 0,
       lastName: billingForm.lastName,
       postCode: billingForm.postCode,
-      provinceId: billingForm.provinceId,
       rfc: billingForm.rfc,
       type: billingForm.type
     };
@@ -122,12 +137,16 @@ class BillingInfomation extends React.Component<any, any> {
       .updateAddress(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           this.getAddressList();
           message.success('Operate successfully');
+        } else {
+          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
   };
 
   getSelectedClinic = (array) => {
@@ -145,7 +164,7 @@ class BillingInfomation extends React.Component<any, any> {
       .getAddressListByType(this.props.customerId, 'BILLING')
       .then((data) => {
         const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           this.setState({
             loading: false
           });
@@ -161,9 +180,6 @@ class BillingInfomation extends React.Component<any, any> {
             }
 
             let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
-            if (billingForm.cityId) {
-              this.getCityNameById(billingForm.cityId);
-            }
 
             this.setState(
               {
@@ -183,11 +199,12 @@ class BillingInfomation extends React.Component<any, any> {
                   lastName: billingForm.lastName,
                   consigneeNumber: billingForm.consigneeNumber,
                   postCode: billingForm.postCode,
-                  // cityId: billingForm.cityId,
+                  city: billingForm.city,
                   countryId: billingForm.countryId,
                   address1: billingForm.address1,
                   address2: billingForm.address2,
-                  rfc: billingForm.rfc
+                  rfc: billingForm.rfc,
+                  state: billingForm.province
                 });
               }
             );
@@ -200,12 +217,14 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -222,12 +241,16 @@ class BillingInfomation extends React.Component<any, any> {
       .delAddress(this.state.billingForm.deliveryAddressId)
       .then((data) => {
         const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           message.success('Operate successfully');
           this.getAddressList();
+        } else {
+          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
   };
   clickDefault = () => {
     let isDefault = !this.state.isDefault;
@@ -243,7 +266,7 @@ class BillingInfomation extends React.Component<any, any> {
       })
       .then((data) => {
         const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
+        if (res.code === 'K-000000') {
           this.setState({
             loading: false,
             clinicList: res.context.content
@@ -252,12 +275,14 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -272,9 +297,6 @@ class BillingInfomation extends React.Component<any, any> {
     let billingForm = addressList.find((item) => {
       return item.deliveryAddressId === id;
     });
-    if (billingForm.cityId) {
-      this.getCityNameById(billingForm.cityId);
-    }
 
     this.setState(
       {
@@ -290,9 +312,11 @@ class BillingInfomation extends React.Component<any, any> {
           consigneeNumber: billingForm.consigneeNumber,
           postCode: billingForm.postCode,
           countryId: billingForm.countryId,
+          city: billingForm.city,
           address1: billingForm.address1,
           address2: billingForm.address2,
-          rfc: billingForm.rfc
+          rfc: billingForm.rfc,
+          state: billingForm.province
         });
       }
     );
@@ -300,9 +324,8 @@ class BillingInfomation extends React.Component<any, any> {
 
   //手机校验
   comparePhone = (rule, value, callback) => {
-    const { form } = this.props;
-    let reg = /^[0-9+-\s]{6,20}$/;
-    if (!reg.test(form.getFieldValue('consigneeNumber'))) {
+    let reg = /^[0-9+-\s\(\)]{6,20}$/;
+    if (!reg.test(value)) {
       callback('Please enter the correct phone');
     } else {
       callback();
@@ -310,9 +333,8 @@ class BillingInfomation extends React.Component<any, any> {
   };
 
   compareZip = (rule, value, callback) => {
-    const { form } = this.props;
     let reg = /^[0-9]{3,10}$/;
-    if (!reg.test(form.getFieldValue('postCode'))) {
+    if (!reg.test(value)) {
       callback('Please enter the correct Post Code');
     } else {
       callback();
@@ -337,38 +359,31 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
+        message.error(err.toString() || 'Operation failure');
       });
   };
-  getCityNameById = (id) => {
-    let params = {
-      id: [id]
-    };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0] && res.context.systemCityVO[0].cityName) {
-            this.setState({
-              initCityName: res.context.systemCityVO[0].cityName
-            });
-            this.props.form.setFieldsValue({
-              cityId: res.context.systemCityVO[0].cityName
-            });
-          }
-        }
-      })
-      .catch((err) => {});
+
+  getStateList = () => {
+    webapi.queryStateList().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let stateList = res.context.systemStates;
+        this.setState({
+          stateList
+        });
+      }
+    });
   };
 
   render() {
-    const { countryArr, cityArr, clinicList, objectFetching, initCityName } = this.state;
+    const { countryArr, cityArr, clinicList, storeId, stateList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -429,7 +444,7 @@ class BillingInfomation extends React.Component<any, any> {
                       })(<Input disabled={true} />)}
                     </FormItem>
                   </Col>
-                  <Col
+                  {/* <Col
                     span={12}
                     style={{
                       display: this.props.customerType !== 'Guest' ? 'none' : 'block'
@@ -462,21 +477,18 @@ class BillingInfomation extends React.Component<any, any> {
                             this.onClinicChange(clinics);
                           }}
                         >
-                          {/* {
-                          clinicList.map((item) => (
-                            <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
-                          ))} */}
+       
                           {clinicList
                             ? clinicList.map((item) => (
-                                <Option value={item.prescriberId.toString()} key={item.prescriberId}>
-                                  {item.prescriberId + ',' + item.prescriberName}
-                                </Option>
-                              ))
+                              <Option value={item.prescriberId.toString()} key={item.prescriberId}>
+                                {item.prescriberId + ',' + item.prescriberName}
+                              </Option>
+                            ))
                             : null}
                         </Select>
                       )}
                     </FormItem>
-                  </Col>
+                  </Col> */}
                   <Col span={12}>
                     <FormItem label="First Name">
                       {getFieldDecorator('firstName', {
@@ -605,38 +617,62 @@ class BillingInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
+                  {storeId.toString() === '123457910' ? (
+                    <Col span={12}>
+                      <FormItem label="State">
+                        {getFieldDecorator('state', {
+                          rules: [{ required: true, message: 'Please select State!' }]
+                        })(
+                          <Select
+                            showSearch
+                            optionFilterProp="children"
+                            onChange={(value) => {
+                              this.onFormChange({
+                                field: 'state',
+                                value: value ? value : ''
+                              });
+                            }}
+                          >
+                            {stateList
+                              ? stateList.map((item) => (
+                                  <Option value={item.stateName} key={item.id}>
+                                    {item.stateName}
+                                  </Option>
+                                ))
+                              : null}
+                          </Select>
+                        )}
+                      </FormItem>
+                    </Col>
+                  ) : null}
+
                   <Col span={12}>
                     <FormItem label="City">
-                      {getFieldDecorator('cityId', {
-                        rules: [{ required: true, message: 'Please input City!' }],
-                        initialValue: initCityName
+                      {getFieldDecorator('city', {
+                        rules: [{ required: true, message: 'Please input or select City!' }]
                       })(
-                        <Select
-                          showSearch
-                          placeholder="Select a Order number"
-                          notFoundContent={objectFetching ? <Spin size="small" /> : null}
+                        <AutoComplete
+                          placeholder="Please input or select City"
                           onSearch={_.debounce(this.getCityList, 500)}
-                          filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                          disabled={this.props.customerType === 'Guest'}
                           onChange={(value) => {
-                            value = value === '' ? null : value;
                             this.onFormChange({
-                              field: 'cityId',
-                              value
+                              field: 'city',
+                              value: value ? value : ''
                             });
                           }}
                         >
-                          {cityArr
-                            ? cityArr.map((item) => (
-                                <Option value={item.id} key={item.id}>
-                                  {item.cityName}
-                                </Option>
-                              ))
-                            : null}
-                        </Select>
+                          {cityArr &&
+                            cityArr.map((item) => (
+                              <Option value={item.cityName} key={item.id}>
+                                {item.cityName}
+                              </Option>
+                            ))}
+                        </AutoComplete>
                       )}
                     </FormItem>
                   </Col>
+                </Row>
+                <Row>
                   <Col span={12}>
                     <FormItem label="Address 1">
                       {getFieldDecorator('address1', {

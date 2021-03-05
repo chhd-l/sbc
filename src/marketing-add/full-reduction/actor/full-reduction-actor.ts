@@ -7,8 +7,7 @@ import { fromJS } from 'immutable';
 export default class FullReductionActor extends Actor {
   defaultState() {
     return {
-      marketingBean: {},
-      allGroups: []
+      marketingBean: {}
     };
   }
 
@@ -19,10 +18,5 @@ export default class FullReductionActor extends Actor {
   @Action('marketing:reductionBean')
   getReductionBean(state: IMap, res) {
     return state.set('marketingBean', fromJS(res));
-  }
-
-  @Action('marketing:allGroups')
-  getAllGroups(state, allGroups) {
-    return state.set('allGroups', fromJS(allGroups));
   }
 }

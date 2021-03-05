@@ -111,18 +111,17 @@ export default class DiscountLevels extends React.Component<any, any> {
                           })(
                             <Input
                               style={{ width: 200 }}
-                              placeholder={isFullCount === 0 ? '0.01-99999999.99' : isFullCount === 1 ? '1-9999' : 0}
+                              placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
                               onChange={(e) => {
                                 this.ruleValueChange(index, e.target.value);
                               }}
-                              disabled={isFullCount === 2}
                             />
                           )}
                         </FormItem>
                         <span>
                           {' '}
                           &nbsp;
-                          {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
+                          {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
                           ，&nbsp;&nbsp;&nbsp;&nbsp;discount price&nbsp;&nbsp;
                         </span>
                       </div>
@@ -148,7 +147,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                         initialValue: level.discount
                       })(
                         <Input
-                          style={{ width: 300 }}
+                          style={{ width: 200 }}
                           title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
@@ -165,7 +164,7 @@ export default class DiscountLevels extends React.Component<any, any> {
             </div>
           );
         })}
-        {this.state.isNormal && isFullCount !== 2 ? (
+        {this.state.isNormal ? (
           <div>
             <Button onClick={this.addLevels} disabled={fullDiscountLevelList.length >= 5}>
               Add multi-level promotions

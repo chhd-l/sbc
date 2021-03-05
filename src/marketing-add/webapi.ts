@@ -72,11 +72,3 @@ export const timeZone = () => {
     method: 'POST'
   });
 };
-
-/*获取Group*/
-export const getAllGroups = (params) => {
-  return Fetch('/customer/segment/segment/query', {
-    method: 'POST',
-    body: JSON.stringify({ ...params })
-  });
-};

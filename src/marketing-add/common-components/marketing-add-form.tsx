@@ -1,20 +1,18 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
 
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
 import DiscountLevels from '../full-discount/components/discount-levels';
-import FirstDiscountLevels from '../first-order-discount/components/discount-levels';
 import ReductionLevels from '../full-reduction/components/reduction-levels';
-// import ReductionSubscritionLevels from '../full-reduction/components/reduction-subscrition-levels';
+import ReductionSubscritionLevels from '../full-reduction/components/reduction-subscrition-levels';
 import { GoodsModal } from 'biz';
 import SelectedGoodsGrid from './selected-goods-grid';
 
 import * as webapi from '../webapi';
 import * as Enum from './marketing-enum';
-
 import { doc } from 'prettier';
 // import debug = doc.debug;
 
@@ -43,17 +41,13 @@ const smallformItemLayout = {
 
 const largeformItemLayout = {
   labelCol: {
-    span: 5
+    span: 6
   },
   wrapperCol: {
     span: 10
   }
 };
-const radioStyle = {
-  display: 'block',
-  height: '40px',
-  lineHeight: '40px'
-};
+
 export default class MarketingAddForm extends React.Component<any, any> {
   props;
 
@@ -93,9 +87,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       promotionCode2: '', //记录初始自动生成的promotionCode
       PromotionTypeValue: 0,
       PromotionTypeChecked: true,
-      timeZone: moment,
-      isClubChecked: false,
-      allGroups: relaxProps.get('allGroups')
+      timeZone: moment
     };
   }
 
@@ -127,45 +119,22 @@ export default class MarketingAddForm extends React.Component<any, any> {
       }
     }
   };
-
-  clubChecked = (isClubChecked) => {
-    this.setState({
-      isClubChecked
-    });
-  };
-
-  productTypeOnChange = (value) => {
-    this.onBeanChange({ productType: value });
-  };
-  targetCustomerRadioChange = (value) => {
-    this.onBeanChange({ joinLevel: value });
-  };
-
-  selectGroupOnChange = (value) => {
-    let segmentIds = [];
-    segmentIds.push(value);
-    this.onBeanChange({ segmentIds });
-  };
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
-
-    console.log(marketingBean.toJS(), 'marketingBean---------');
-
-    let settingLabel = '';
+    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue } = this.state;
+    let settingLabel = 'setting rules';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
     if (this.state.PromotionTypeValue === 1) {
+      settingRuleFrom = { ...largeformItemLayout };
       if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
-        settingRuleFrom = { ...largeformItemLayout };
         settingLabel = 'For the first subscription order,discount';
         settingLabel1 = 'For the rest subscription order,discount';
         settingType = 'discount';
       } else if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
-        settingRuleFrom = { ...largeformItemLayout };
         settingLabel = 'For the first subscription order,reduction';
         settingLabel1 = 'For the rest subscription order,reduction';
         settingType = 'reduction';
@@ -174,27 +143,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
     //this.onBeanChange({publicStatus: 1});
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        {/*<FormItem {...formItemLayout} label="Promotion type:">*/}
-        {/*  <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>*/}
-        {/*    <Radio value={0}>Normal promotion</Radio>*/}
-        {/*    <Radio value={1}>Subscription promotion</Radio>*/}
-        {/*  </Radio.Group>*/}
-        {/*</FormItem>*/}
-        <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
-          <div className="ant-form-inline">
-            <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>
-              <Radio value={0}>Normal promotion</Radio>
-              <Radio value={1}>Subscription promotion</Radio>
-            </Radio.Group>
-            {this.state.PromotionTypeValue === 1 ? (
-              <Checkbox onChange={(e) => this.clubChecked(e.target.checked)} checked={isClubChecked}>
-                Club
-              </Checkbox>
-            ) : null}
-          </div>
+        <FormItem {...formItemLayout} label="Promotion type:">
+          <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>
+            <Radio value={0}>Normal promotion</Radio>
+            <Radio value={1}>Subscription promotion</Radio>
+          </Radio.Group>
         </FormItem>
-        <div className="bold-title">Basic Setting</div>
-        <FormItem {...smallformItemLayout} label="Promotion Code" labelAlign="left">
+        <FormItem {...smallformItemLayout} label="Promotion Code">
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode(),
             rules: [
@@ -251,7 +206,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
           </Checkbox>
         </FormItem>
 
-        <FormItem {...smallformItemLayout} label="Promotion Name" labelAlign="left">
+        <FormItem {...smallformItemLayout} label="Promotion Name">
           {getFieldDecorator('marketingName', {
             rules: [
               {
@@ -270,7 +225,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             initialValue: marketingBean.get('marketingName')
           })(<Input placeholder="Please input promotion name ,no  more than 40 words." style={{ width: 360 }} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Start and end time" labelAlign="left">
+        <FormItem {...formItemLayout} label="Start and end time">
           {getFieldDecorator('time', {
             rules: [
               {
@@ -311,181 +266,31 @@ export default class MarketingAddForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        {marketingType === Enum.MARKETING_TYPE.FIRST_DISCOUNT && (
-          <>
-            <div className="bold-title">Discount type:</div>
-            <FormItem {...formItemLayout} labelAlign="left">
-              {getFieldDecorator('subType', {
-                rules: [
-                  {
-                    required: true,
-                    message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
-                  }
-                ],
-                initialValue: isFullCount
-              })(
-                <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                  <Radio style={radioStyle} value={0}>
-                    Direct discount
-                  </Radio>
-                  {/*{this.state.PromotionTypeValue == 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : <div></div>}*/}
-                  {/*<Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>*/}
-                </RadioGroup>
-              )}
-            </FormItem>
-          </>
-        )}
-        {marketingType === Enum.MARKETING_TYPE.FULL_GIFT && (
-          <>
-            <div className="bold-title">Gift type:</div>
-            <FormItem {...formItemLayout} labelAlign="left">
-              {getFieldDecorator('subType', {
-                rules: [
-                  {
-                    required: true,
-                    message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
-                  }
-                ],
-                initialValue: isFullCount
-              })(
-                <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                  <Radio style={radioStyle} value={2}>
-                    Direct gift
-                  </Radio>
-                  {this.state.PromotionTypeValue === 1 && (
-                    <Radio value={3} style={radioStyle}>
-                      For <Input /> refill
-                    </Radio>
-                  )}
-                  {this.state.PromotionTypeValue === 0 && (
-                    <Radio value={0} style={radioStyle}>
-                      Full amount gift
-                    </Radio>
-                  )}
-                  {this.state.PromotionTypeValue === 0 && (
-                    <Radio value={1} style={radioStyle}>
-                      Full quantity gift{' '}
-                    </Radio>
-                  )}
-                  {/*{this.state.PromotionTypeValue == 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : <div></div>}*/}
-                  {/*<Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>*/}
-                </RadioGroup>
-              )}
-            </FormItem>
-          </>
-        )}
-        {marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT && (
-          <>
-            <div className="bold-title">Discount type:</div>
-            {this.state.PromotionTypeValue === 0 && (
-              <FormItem {...formItemLayout} labelAlign="left">
-                {getFieldDecorator('subType', {
-                  rules: [
-                    {
-                      required: true,
-                      message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
-                    }
-                  ],
-                  initialValue: isFullCount
-                })(
-                  <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                    <Radio style={radioStyle} value={2}>
-                      Direct discount
-                    </Radio>
-                    <Radio value={0} style={radioStyle}>
-                      Full amount discount
-                    </Radio>
-                    <Radio value={1} style={radioStyle}>
-                      Full quantity discount{' '}
-                    </Radio>
-                    {/*{this.state.PromotionTypeValue == 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : <div></div>}*/}
-                    {/*<Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>*/}
-                  </RadioGroup>
-                )}
-              </FormItem>
+        {isFullCount != null && this.state.PromotionTypeValue === 0 && (
+          <FormItem {...formItemLayout} label={`full ${Enum.GET_MARKETING_STRING(marketingType)} type`}>
+            {getFieldDecorator('subType', {
+              rules: [
+                {
+                  required: true,
+                  message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
+                }
+              ],
+              initialValue: isFullCount
+            })(
+              <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
+                {this.state.PromotionTypeValue == 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : <div></div>}
+                <Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>
+              </RadioGroup>
             )}
-          </>
+          </FormItem>
         )}
-
-        {marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION && (
-          <>
-            <div className="bold-title">Reduction type:</div>
-            {this.state.PromotionTypeValue === 0 && (
-              <FormItem {...formItemLayout} labelAlign="left">
-                {getFieldDecorator('subType', {
-                  rules: [
-                    {
-                      required: true,
-                      message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
-                    }
-                  ],
-                  initialValue: isFullCount
-                })(
-                  <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                    <Radio style={radioStyle} value={2}>
-                      Direct reduction
-                    </Radio>
-                    <Radio value={0} style={radioStyle}>
-                      Full amount reduction
-                    </Radio>
-                    <Radio value={1} style={radioStyle}>
-                      Full quantity reduction{' '}
-                    </Radio>
-                    {/*{this.state.PromotionTypeValue == 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : <div></div>}*/}
-                    {/*<Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>*/}
-                  </RadioGroup>
-                )}
-              </FormItem>
-            )}
-          </>
-        )}
-        {/*{isFullCount != null && this.state.PromotionTypeValue === 0 && (*/}
-        {/*  <FormItem {...formItemLayout} label={`full ${Enum.GET_MARKETING_STRING(marketingType)} type`}>*/}
-        {/*    {getFieldDecorator('subType', {*/}
-        {/*      rules: [*/}
-        {/*        {*/}
-        {/*          required: true,*/}
-        {/*          message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`*/}
-        {/*        }*/}
-        {/*      ],*/}
-        {/*      initialValue: isFullCount*/}
-        {/*    })(*/}
-        {/*      <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>*/}
-        {/*        {this.state.PromotionTypeValue == 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : <div></div>}*/}
-        {/*        <Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>*/}
-        {/*      </RadioGroup>*/}
-        {/*    )}*/}
-        {/*  </FormItem>*/}
-        {/*)}*/}
         {isFullCount != null && (
-          <FormItem {...settingRuleFrom} label={settingLabel} required={true} labelAlign="left">
-            {marketingType == Enum.MARKETING_TYPE.FIRST_DISCOUNT &&
-              getFieldDecorator(
-                'rules',
-                {}
-              )(
-                <FirstDiscountLevels
-                  form={this.props.form}
-                  fullDiscountLevelList={marketingBean.get('fullDiscountLevelList') && marketingBean.get('fullDiscountLevelList').toJS()}
-                  onChangeBack={this.onRulesChange}
-                  isFullCount={isFullCount}
-                  isNormal={this.state.PromotionTypeValue === 0}
-                />
-              )}
+          <FormItem {...settingRuleFrom} label={settingLabel} required={true}>
             {marketingType == Enum.MARKETING_TYPE.FULL_GIFT &&
               getFieldDecorator(
                 'rules',
                 {}
-              )(
-                <GiftLevels
-                  form={this.props.form}
-                  selectedRows={this.makeSelectedRows(null)}
-                  isNormal={this.state.PromotionTypeValue === 0}
-                  fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()}
-                  onChangeBack={this.onRulesChange}
-                  isFullCount={isFullCount}
-                />
-              )}
+              )(<GiftLevels form={this.props.form} selectedRows={this.makeSelectedRows(null)} fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()} onChangeBack={this.onRulesChange} isFullCount={isFullCount} />)}
             {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT &&
               getFieldDecorator(
                 'rules',
@@ -501,7 +306,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   />
                 ) : (
                   <div>
-                    <FormItem labelAlign="left">
+                    <FormItem>
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
                       {getFieldDecorator('firstSubscriptionOrderDiscount', {
                         rules: [
@@ -520,8 +325,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                         initialValue: marketingBean.get('firstSubscriptionOrderDiscount')
                       })(
                         <Input
-                          style={{ width: 300 }}
-                          title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                          style={{ width: 200 }}
                           placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
                             this.onBeanChange({ firstSubscriptionOrderDiscount: e.target.value });
@@ -549,7 +353,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   />
                 ) : (
                   <div>
-                    <FormItem labelAlign="left">
+                    <FormItem>
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
                       {getFieldDecorator('firstSubscriptionOrderReduction', {
                         rules: [
@@ -567,15 +371,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
                         ],
                         initialValue: marketingBean.get('firstSubscriptionOrderReduction')
                       })(
-                        <>
-                          <Input
-                            style={{ width: 200 }}
-                            placeholder={'0.01-99999999.99'}
-                            onChange={(e) => {
-                              this.onBeanChange({ firstSubscriptionOrderReduction: e.target.value });
-                            }}
-                          />
-                        </>
+                        <Input
+                          style={{ width: 200 }}
+                          placeholder={'0.01-99999999.99'}
+                          onChange={(e) => {
+                            this.onBeanChange({ firstSubscriptionOrderReduction: e.target.value });
+                          }}
+                        />
                       )}
                     </FormItem>
                   </div>
@@ -585,7 +387,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         )}
 
         {marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION && PromotionTypeValue == 1 && (
-          <FormItem {...settingRuleFrom} label={settingLabel1} required={true} labelAlign="left" style={{ marginTop: '-50px' }}>
+          <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }}>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
             {getFieldDecorator('restSubscriptionOrderReduction', {
               rules: [
@@ -603,20 +405,18 @@ export default class MarketingAddForm extends React.Component<any, any> {
               ],
               initialValue: marketingBean.get('restSubscriptionOrderReduction')
             })(
-              <>
-                <Input
-                  style={{ width: 200 }}
-                  placeholder="0.01-99999999.99"
-                  onChange={(e) => {
-                    this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
-                  }}
-                />
-              </>
+              <Input
+                style={{ width: 200 }}
+                placeholder="0.01-99999999.99"
+                onChange={(e) => {
+                  this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
+                }}
+              />
             )}
           </FormItem>
         )}
         {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT && PromotionTypeValue == 1 && (
-          <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
+          <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }}>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
             {getFieldDecorator('restSubscriptionOrderDiscount', {
               rules: [
@@ -635,8 +435,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               initialValue: marketingBean.get('restSubscriptionOrderDiscount')
             })(
               <Input
-                style={{ width: 300 }}
-                title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                style={{ width: 200 }}
                 placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                 onChange={(e) => {
                   this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
@@ -647,97 +446,47 @@ export default class MarketingAddForm extends React.Component<any, any> {
           </FormItem>
         )}
 
-        <div className="bold-title">Select products:</div>
-        <FormItem {...formItemLayout} required={true} labelAlign="left">
-          {getFieldDecorator('productType', {
-            // rules: [
-            //   { required: true, message: 'Amount must be entered' },
-            //   {
-            //     validator: (_rule, value, callback) => {
-            //       if (value) {
-            //         if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-            //           callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
-            //         }
-            //       }
-            //       callback();
-            //     }
-            //   }
-            // ],
-            initialValue: marketingBean.get('productType') ? marketingBean.get('productType') : 1
-          })(
-            <Radio.Group onChange={(e) => this.productTypeOnChange(e.target.value)} value={this.state.productType}>
-              <Radio value={1}>All</Radio>
-              <Radio value={2}>Custom</Radio>
-            </Radio.Group>
-          )}
-        </FormItem>
-        {marketingBean.get('productType') === 2 ? (
-          <FormItem {...formItemLayout} required={true}>
-            {getFieldDecorator(
-              'goods',
-              {}
-            )(
-              <div>
-                <Button type="primary" icon="plus" onClick={this.openGoodsModal}>
-                  Add products
-                </Button>
-                &nbsp;&nbsp;
-                <SelectedGoodsGrid selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={this.deleteSelectedSku} />
-              </div>
-            )}
-          </FormItem>
-        ) : null}
-        <div className="bold-title">Target consumer:</div>
-        <FormItem {...formItemLayout} required={true} labelAlign="left">
-          {getFieldDecorator('joinLevel', {
-            // rules: [{required: true, message: 'Please select target consumer'}],
-          })(
+        <FormItem {...formItemLayout} label="Select products" required={true}>
+          {getFieldDecorator(
+            'goods',
+            {}
+          )(
             <div>
-              <RadioGroup
-                // onChange={(e) => {
-                //   this.levelRadioChange(e.target.value);
-                // }}
-                // value={level._allCustomer ? -1 : 0}
-                onChange={(e) => {
-                  this.targetCustomerRadioChange(e.target.value);
-                }}
-                value={marketingBean.get('joinLevel') ? Number(marketingBean.get('joinLevel')) : -1}
-              >
-                {/*<Radio value={-1}>Full platform consumer</Radio>*/}
-                {/*{util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}*/}
-                <Radio value={-1}>All</Radio>
-                <Radio value={-3}>Select group</Radio>
-              </RadioGroup>
-              {/*{level._levelPropsShow && (*/}
-              {/*  <div>*/}
-              {/*    <Checkbox indeterminate={level._indeterminate} onChange={(e) => this.allLevelChecked(e.target.checked)} checked={level._checkAll}>*/}
-              {/*      All Leave*/}
-              {/*    </Checkbox>*/}
-              {/*    <CheckboxGroup options={this.renderCheckboxOptions(customerLevel)} onChange={this.levelGroupChange} value={level._checkedLevelList} />*/}
-              {/*  </div>*/}
-              {/*)}*/}
+              <Button type="primary" icon="plus" onClick={this.openGoodsModal}>
+                Add products
+              </Button>
+              &nbsp;&nbsp;
+              <SelectedGoodsGrid selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={this.deleteSelectedSku} />
             </div>
           )}
         </FormItem>
-        {marketingBean.get('joinLevel') == -3 && (
-          <FormItem {...formItemLayout} required={true} labelAlign="left">
-            <Select
-              style={{ width: 520 }}
-              onChange={this.selectGroupOnChange}
-              // defaultValue={232}
-              defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').length > 0 ? marketingBean.get('segmentIds')[0] : null}
-            >
-              {allGroups.size > 0 &&
-                allGroups.map((item) => (
-                  <Select.Option key={item.get('id')} value={item.get('id')}>
-                    {item.get('name')}
-                  </Select.Option>
-                ))}
-            </Select>
-          </FormItem>
-        )}
+        <FormItem {...formItemLayout} label="Target consumer" required={true}>
+          {getFieldDecorator('targetCustomer', {
+            // rules: [{required: true, message: '请选择目标客户'}],
+          })(
+            <div>
+              <RadioGroup
+                onChange={(e) => {
+                  this.levelRadioChange(e.target.value);
+                }}
+                value={level._allCustomer ? -1 : 0}
+              >
+                <Radio value={-1}>Full platform consumer</Radio>
+                {util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}
+              </RadioGroup>
+              {level._levelPropsShow && (
+                <div>
+                  <Checkbox indeterminate={level._indeterminate} onChange={(e) => this.allLevelChecked(e.target.checked)} checked={level._checkAll}>
+                    All Leave
+                  </Checkbox>
+                  <CheckboxGroup options={this.renderCheckboxOptions(customerLevel)} onChange={this.levelGroupChange} value={level._checkedLevelList} />
+                </div>
+              )}
+            </div>
+          )}
+        </FormItem>
         <Row type="flex" justify="start">
-          {/*<Col span={3} />*/}
+          <Col span={3} />
           <Col span={10}>
             <Button type="primary" htmlType="submit" loading={saveLoading}>
               Save
@@ -1007,21 +756,21 @@ export default class MarketingAddForm extends React.Component<any, any> {
     }
 
     //判断目标等级
-    // if (level._allCustomer) {
-    //   marketingBean = marketingBean.set('joinLevel', -1);
-    // } else {
-    //   if (level._checkAll) {
-    //     marketingBean = marketingBean.set('joinLevel', 0);
-    //   } else {
-    //     if (level._checkedLevelList.length != 0) {
-    //       marketingBean = marketingBean.set('joinLevel', level._checkedLevelList.join(','));
-    //     } else {
-    //       errorObject['targetCustomer'] = {
-    //         errors: [new Error('Please select target customers')]
-    //       };
-    //     }
-    //   }
-    // }
+    if (level._allCustomer) {
+      marketingBean = marketingBean.set('joinLevel', -1);
+    } else {
+      if (level._checkAll) {
+        marketingBean = marketingBean.set('joinLevel', 0);
+      } else {
+        if (level._checkedLevelList.length != 0) {
+          marketingBean = marketingBean.set('joinLevel', level._checkedLevelList.join(','));
+        } else {
+          errorObject['targetCustomer'] = {
+            errors: [new Error('Please select target customers')]
+          };
+        }
+      }
+    }
 
     //判断选择商品
     if (selectedSkuIds.length > 0) {
@@ -1097,7 +846,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (marketingType, e) => {
-    debugger;
     const _thisRef = this;
     let levelType = '';
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {

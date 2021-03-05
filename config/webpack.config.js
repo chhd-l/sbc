@@ -105,7 +105,7 @@ module.exports = function (webpackEnv, envCode) {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
-    devtool: isEnvProduction ? 'nosources-source-map' : false, //prod: cheap-module-source-map eval-source-map
+    devtool: isEnvProduction ? 'nosources-source-map' : 'eval-source-map', //prod: cheap-module-source-map eval-source-map
     entry: [
       isEnvDevelopment ? require.resolve('react-dev-utils/webpackHotDevClient') : undefined,
       paths.appIndexJs,

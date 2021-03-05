@@ -13,83 +13,50 @@ export default class Activities extends Component<any, any> {
     this.state = {
       activityLoading: false,
       activityList: [
-        {
-          activityName: "/'feedback contents''",
-          activityType: 'Feedback',
-          category: 'Comments',
-          petOwnerId: 229,
-          contents: 'GOOD',
-          createdBy: 138,
-          createdByUser: 'Mia Lin',
-          dateAdded: '2021-01-28 12:30:31',
-          id: 8195,
-          noteId: 12,
-          tenantId: 4
-        },
-        {
-          activityName: 'Contact data exported',
-          activityType: '',
-          category: 'Contacts integration',
-          petOwnerId: 229,
-          createdBy: 139,
-          createdByUser: 'Morgane DAUM',
-          dateAdded: '2021-01-22 12:53:32',
-          id: 8157,
-          tenantId: 4
-        }
       ],
       treeData: [
         {
-          title: 'Pet Owner INTEGRATION',
-          value: 'CONTACTS INTEGRATION',
-          key: 'CONTACTS INTEGRATION'
+          title: 'Pet Owner',
+          value: 'Pet Owner',
+          key: 'Pet Owner'
         },
         {
-          title: 'UPDATES',
-          value: 'UPDATES',
-          key: 'UPDATES'
+          title: 'Updates',
+          value: 'Updates',
+          key: 'Updates'
         },
         {
-          title: 'CAMPAIGN ACTIVITY',
-          value: 'CAMPAIGN ACTIVITY',
-          key: 'CAMPAIGN ACTIVITY',
+          title: 'Tagging',
+          value: 'Tagging',
+          key: 'Tagging'
+        },
+        {
+          title: 'Communication',
+          value: 'Communication',
+          key: 'Communication',
           children: [
-            { value: 'COMMUNICATION.Emails', key: 'COMMUNICATION.Emails', title: 'Emails' },
-            { value: 'COMMUNICATION.Calls', key: 'COMMUNICATION.Emails', title: 'Calls' }
+            { value: 'Automation Email', key: 'Automation Email', title: 'Automation Email' },
+            { value: 'Communication Email', key: 'Communication Email', title: 'Communication Email' }
           ]
         },
         {
-          title: 'SEGMENTATION',
-          value: 'SEGMENTATION',
-          key: 'SEGMENTATION'
-        },
-        {
-          title: 'COMMUNICATION',
-          value: 'COMMUNICATION',
-          key: 'COMMUNICATION',
+          title: 'Comments',
+          value: 'Comments',
+          key: 'Comments',
           children: [
-            { value: 'CAMPAIGN ACTIVITY.Campaign Status', key: 'CAMPAIGN ACTIVITY.Campaign Status', title: 'Campaign Status' },
-            { value: 'CAMPAIGN ACTIVITY.Emails', key: 'CAMPAIGN ACTIVITY.Campaign Status', title: 'Campaign Emails' }
+            { value: 'Comments.Notes', key: 'Comments.Notes', title: 'Notes' },
+            { value: 'Comments.Feedback', key: 'Comments.Feedback', title: 'Feedback' }
           ]
         },
         {
-          title: 'COMMENTS',
-          value: 'COMMENTS',
-          key: 'COMMENTS',
-          children: [
-            { value: 'COMMENTS.Notes', key: 'COMMENTS.Notes', title: 'Notes' },
-            { value: 'COMMENTS.Feedback', key: 'COMMENTS.Notes', title: 'Feedback' }
-          ]
+          title: 'Task',
+          value: 'Task',
+          key: 'Task'
         },
         {
-          title: 'TASKS',
-          value: 'TASKS',
-          key: 'TASKS'
-        },
-        {
-          title: 'Clinic',
-          value: 'Clinic',
-          key: 'Clinic'
+          title: 'Presciber',
+          value: 'Presciber',
+          key: 'Presciber'
         }
       ],
       isRecent: true,
@@ -111,7 +78,7 @@ export default class Activities extends Component<any, any> {
     });
     const { isRecent, orderType, filters, keyword } = this.state;
     let param = {
-      customerId: '291', // this.props.petOwnerId,
+      customerId: this.props.petOwnerId, // this.props.petOwnerId,
       orderType: orderType,
       recent: isRecent,
       filters: filters,

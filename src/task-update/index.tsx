@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, Headline, ReactEditor, history } from 'qmkit';
-import { Form, Input, Button, Col, Row, Select, message, DatePicker, Tabs, Popconfirm, Tooltip, InputNumber } from 'antd';
+import { Const, Headline, ReactEditor, history } from 'qmkit';
+import { Form, Input, Button, Col, Row, Select, message, DatePicker, Tabs, Breadcrumb, Tooltip, InputNumber } from 'antd';
 import ServiceList from './components/service-list';
 import Activity from './components/activity';
 import './style.less';
@@ -303,7 +303,15 @@ class TaskUpdate extends Component<any, any> {
     const { goldenMomentList, actionTypeList, priorityList, statusList, reminderTypes, associatedSubscriptionList } = this.state;
     return (
       <div>
-        <BreadCrumb />
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <a href="/">Home</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="/tasks">Task board</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>{title}</Breadcrumb.Item>
+        </Breadcrumb>
         <div className="container-search">
           <Row>
             <Col span={12}>
@@ -773,7 +781,7 @@ class TaskUpdate extends Component<any, any> {
           </Tabs>
         </div>
         {tabKey !== 'activity' ? (
-          <div className="bar-button">
+          <div className="bar-button" style={{ left:'134px' }}>
             <Button type="primary" style={{ marginRight: '10px' }} onClick={(e) => this.updateTask(e)}>
               Save
             </Button>

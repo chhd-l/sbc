@@ -120,16 +120,16 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </Popconfirm>
                 }
               >
-                <TabPane tab="Basic infomation" key="basic">
+                <TabPane tab="Basic information" key="basic">
                   <BasicInfomation customerId={this.state.customerId}></BasicInfomation>
                 </TabPane>
-                <TabPane tab="Pet infomation" key="pet">
+                <TabPane tab="Pet information" key="pet">
                   <PetInfomation customerId={this.state.customerId} customerAccount={this.state.customerAccount}></PetInfomation>
                 </TabPane>
-                <TabPane tab="Delivery infomation" key="delivery">
+                <TabPane tab="Delivery information" key="delivery">
                   <DeliveryInformation customerId={this.state.customerId}></DeliveryInformation>
                 </TabPane>
-                <TabPane tab="Billing infomation" key="billing">
+                <TabPane tab="Billing information" key="billing">
                   <BillingInfomation customerId={this.state.customerId}></BillingInfomation>
                 </TabPane>
                 <TabPane tab="Payment methods" key="payment">
@@ -138,10 +138,10 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Tabs>
             ) : (
               <Tabs defaultActiveKey="delivery" onChange={this.clickTabs}>
-                <TabPane tab="Delivery infomation" key="vistor-delivery">
+                <TabPane tab="Delivery information" key="vistor-delivery">
                   <DeliveryInformation customerId={this.state.customerId} customerType="Guest"></DeliveryInformation>
                 </TabPane>
-                <TabPane tab="Billing infomation" key="vistor-billing">
+                <TabPane tab="Billing information" key="vistor-billing">
                   <BillingInfomation customerId={this.state.customerId} customerType="Guest"></BillingInfomation>
                 </TabPane>
               </Tabs>

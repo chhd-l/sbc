@@ -200,7 +200,7 @@ export function refresh(settleId) {
 }
 
 export function getPaymentInfo(tid: string) {
-  return Fetch(`/trade/record/${tid}`);
+  return Fetch(`/trade/payment/record/${tid}`);
 }
 
 export function queryCityById(filterParams = {}) {

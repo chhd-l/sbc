@@ -81,15 +81,16 @@ export default class Detail extends React.Component<any, any> {
                 disabled = true;
               if (resource !== 1) {
                 disabled = item.editable;
-                if (item.contentType === 'json') {
-                  item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content}</xmp></code></pre>`;
-                }
+              }
+              if (item.contentType.toUpperCase() === 'JSON') {
+                item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content}</xmp></code></pre>`;
               }
 
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
                   <ErrorBoundary>
                     <ReactEditor
+                      key={item.descriptionId + +new Date()}
                       id={'main-' + item.descriptionId}
                       cateId={item.goodsCateId}
                       content={item.content}

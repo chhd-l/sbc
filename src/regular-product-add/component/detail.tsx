@@ -80,7 +80,7 @@ export default class Detail extends React.Component<any, any> {
               let resource = goods.get('resource'),
                 disabled = true;
               if (resource !== 1) {
-                disabled = item.editable;
+                disabled = item?.editable ?? false;
               }
               if (item.contentType.toUpperCase() === 'JSON') {
                 item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content}</xmp></code></pre>`;

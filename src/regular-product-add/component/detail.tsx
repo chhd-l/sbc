@@ -47,12 +47,12 @@ export default class Detail extends React.Component<any, any> {
   };
 
   onContentChange = (html: string, name: string) => {
-    const { goods } = this.props.relaxProps;
-    let resource = goods.get('resource');
-    if (resource !== 1 && goodsDetailTabObj[name].contentType === 'json') {
-      const reg = /[^><]+(?=<\/xmp>)/gim;
-      let _html = html.match(reg);
-      goodsDetailTabObj[name].content = _html ? _html.toString() : '';
+    const reg = /\<[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
+    if (goodsDetailTabObj[name].contentType.toUpperCase() === 'JSON') {
+      let _html = html.replace(reg, function () {
+        return arguments[1];
+      });
+      goodsDetailTabObj[name].content = _html;
     } else {
       goodsDetailTabObj[name].content = html;
     }

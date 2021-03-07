@@ -33,17 +33,11 @@ export default class MarketingFullGiftAdd extends React.Component<any, any> {
       <AuthWrapper functionName="f_marketing_gift_add">
         <div>
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>
-              {marketingId ? '编辑' : '创建'}满赠活动
-            </Breadcrumb.Item>
+            <Breadcrumb.Item>{marketingId ? '编辑' : '创建'}满赠活动</Breadcrumb.Item>
           </BreadCrumb>
           <div className="container">
             <Headline title={marketingId ? '编辑满赠活动' : '创建满赠活动'} />
-            <Alert
-              message="同一商品同一时间可参加不同类型的促销活动，但只可参加一个满赠活动；"
-              type="info"
-              showIcon
-            />
+            <Alert message="同一商品同一时间可参加不同类型的促销活动，但只可参加一个满赠活动；" type="info" showIcon />
 
             <WrappedForm
               ref={(form) => (this._form = form)}

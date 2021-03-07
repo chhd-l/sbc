@@ -1931,7 +1931,7 @@ export default class AppStore extends Store {
           descriptionId: item.id,
           descriptionName: item.descriptionName,
           contentType: item.contentType,
-          content: ' ',
+          content: '',
           sort: item.sort,
           editable: true
         };

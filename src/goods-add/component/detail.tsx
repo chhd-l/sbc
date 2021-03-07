@@ -48,18 +48,20 @@ export default class Detail extends React.Component<any, any> {
   };
 
   onContentChange = (html: string, name: string) => {
-    const reg = /\<[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
     if (goodsDetailTabObj[name].contentType.toUpperCase() === 'JSON') {
-      let _html = html.replace(reg, function () {
-        return arguments[1];
-      });
-      goodsDetailTabObj[name].content = _html;
+      goodsDetailTabObj[name].content = this.functionTurnJson(html);
     } else {
       goodsDetailTabObj[name].content = html;
     }
     this.sortDetailTab();
   };
-
+  functionTurnJson = (content) => {
+    const reg = /\<[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
+    let _html = content.replace(reg, function () {
+      return arguments[1];
+    });
+    return _html;
+  };
   sortDetailTab = () => {
     const { editEditorContent } = this.props.relaxProps;
     let arr = [];
@@ -84,7 +86,8 @@ export default class Detail extends React.Component<any, any> {
                 disabled = item?.editable ?? false;
               }
               if (item.contentType.toUpperCase() === 'JSON') {
-                item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content}</xmp></code></pre>`;
+                item.content = this.functionTurnJson(item.content);
+                item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content || '{tip:"请输入json格式"}'}</xmp></code></pre>`;
               }
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>

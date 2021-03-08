@@ -314,14 +314,18 @@ const routes = [
     path: '/customer-details/:type/:id/:account',
     asyncComponent: () => import('./customer-details')
   },
-  // {
-  //   path: '/edit-customer-basicinfo/:id',
-  //   asyncComponent: () => import('./customer-details/edit-basic-information')
-  // },
-  // {
-  //   path: '/edit-customer-pet/:id',
-  //   asyncComponent: () => import('./customer-details/edit-pet-item')
-  // },
+  {
+    path: '/petowner-details/:id/:account',
+    asyncComponent: () => import('./customer-details/member-detail')
+  },
+  {
+    path: '/edit-petowner/:id/:account',
+    asyncComponent: () => import('./customer-details/edit-basic-information')
+  },
+  {
+    path: '/edit-pet/:id',
+    asyncComponent: () => import('./customer-details/edit-pet-item')
+  },
   // 客户等级
   {
     path: '/customer-level',
@@ -483,6 +487,11 @@ const routes = [
   {
     path: '/marketing-full-reduction/:marketingId?',
     asyncComponent: () => import('./marketing-add/full-reduction')
+  },
+  //新增 / 编辑营销-首次折扣
+  {
+    path: '/marketing-first-order-discount/:marketingId?',
+    asyncComponent: () => import('./marketing-add/first-order-discount')
   },
   //营销列表
   {
@@ -856,16 +865,12 @@ const routes = [
     asyncComponent: () => import('./subscription-setting')
   },
   {
-    path: '/campaigns',
-    asyncComponent: () => import('./campaigns')
+    path: '/automations',
+    asyncComponent: () => import('./automations')
   },
   {
-    path: '/add-campaign',
-    asyncComponent: () => import('./campaign-update')
-  },
-  {
-    path: '/edit-campaign/:id',
-    asyncComponent: () => import('./campaign-update')
+    path: '/automation-node/:id',
+    asyncComponent: () => import('./automation-node')
   },
   {
     path: '/pet-owner-tagging',
@@ -906,6 +911,18 @@ const routes = [
   {
     path: '/validation-setting',
     asyncComponent: () => import('./validation-setting')
+  },
+  {
+    path: '/automation-detail/:id',
+    asyncComponent: () => import('./automation-detail')
+  },
+  {
+    path: '/automation-edit/:id',
+    asyncComponent: () => import('./automation-form')
+  },
+  {
+    path: '/automation-add',
+    asyncComponent: () => import('./automation-form')
   }
 ];
 

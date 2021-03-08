@@ -38,12 +38,7 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      onFormChange,
-      onSearch,
-      customerLevels,
-      defaultLocalDateTime
-    } = this.props.relaxProps;
+    const { onFormChange, onSearch, customerLevels, defaultLocalDateTime } = this.props.relaxProps;
     const { startValue, endValue } = this.state;
     return (
       <Form className="filter-content" layout="inline">
@@ -51,7 +46,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8">
             <FormItem>
               <Input
-                addonBefore="Campaign name"
+                addonBefore="Automation name"
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -65,9 +60,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8" id="select-group-width">
             <FormItem>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 label="Promotion type"
                 // style={{ width: 170 }}
                 defaultValue="All"
@@ -90,10 +83,8 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8" id="select-group-width">
             <FormItem>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label="Campaign Type"
+                getPopupContainer={() => document.getElementById('page-content')}
+                label="Automation Type"
                 // style={{ width: 160 }}
                 defaultValue="All"
                 onChange={(value) => {

@@ -333,6 +333,15 @@
     }
   }
 
+  .orderCard {
+    min-height: 810px;
+    max-height: 810px;
+
+    /deep/ .ant-card-body .ant-pagination {
+      top: 627px;
+    }
+  }
+
   .viewMore {
     border: 0;
     color: #999999;
@@ -343,7 +352,7 @@
   .footer-btn {
     display: flex;
     justify-content: flex-end;
-    margin-right: 50px;
+    margin-right: 20px;
   }
 
   .ant-table-small > .ant-table-content > .ant-table-scroll > .ant-table-body > table > .ant-table-thead > tr > th {
@@ -362,8 +371,35 @@
     top: 211px;
   }
 
-  #task .ant-card-body {
+  #middle .ant-card-body {
     padding-top: 4px;
+
+    .point {
+      border-radius: 8px;
+      width: 8px;
+      height: 8px;
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 2px;
+    }
+
+    .ant-empty {
+       min-height: 672px;
+       max-height: 672px;
+       overflow-y: auto;
+       .ant-empty-image {
+        margin-top: 200px;
+       }
+    }
+  }
+
+  .filter {
+    margin-right: 10px;
+    font-size: 11px;
+  }
+
+  .searchInput .ant-input {
+    font-size: 11px;
   }
 }
 
@@ -551,14 +587,6 @@
 .activities-right {
   display: flex;
   justify-content: flex-end;
-}
-
-.goldenMomentPanel {
-  background-color: #ffccc6;
-  color: #ffffff;
-  border-radius: 3px;
-  text-align: center;
-  width: 60%;
 }
 
 .dropdown-custom {

@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline } from 'antd';
+import { Const, history } from 'qmkit';
+import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeline, TreeSelect, Empty, Spin, Input } from 'antd';
 import { replaceLink } from '../common';
+import { Link } from 'react-router-dom';
+import * as webapi from '../webapi';
+
+const { SHOW_ALL } = TreeSelect;
 
 export default class Activities extends Component<any, any> {
   constructor(props) {
@@ -8,110 +13,192 @@ export default class Activities extends Component<any, any> {
     this.state = {
       activityLoading: false,
       activityList: [
+      ],
+      treeData: [
         {
-          activityName: "/'feedback contents''",
-          activityType: 'Feedback',
-          category: 'Comments',
-          contactId: 229,
-          contents: 'GOOD',
-          createdBy: 138,
-          createdByUser: 'Mia Lin',
-          dateAdded: '2021-01-28 12:30:31',
-          id: 8195,
-          noteId: 12,
-          tenantId: 4
+          title: 'Pet Owner',
+          value: 'Pet Owner',
+          key: 'Pet Owner'
         },
         {
-          activityName: 'Contact data exported',
-          activityType: '',
-          category: 'Contacts integration',
-          contactId: 229,
-          createdBy: 139,
-          createdByUser: 'Morgane DAUM',
-          dateAdded: '2021-01-22 12:53:32',
-          id: 8157,
-          tenantId: 4
+          title: 'Updates',
+          value: 'Updates',
+          key: 'Updates'
+        },
+        {
+          title: 'Tagging',
+          value: 'Tagging',
+          key: 'Tagging'
+        },
+        {
+          title: 'Communication',
+          value: 'Communication',
+          key: 'Communication',
+          children: [
+            { value: 'Automation Email', key: 'Automation Email', title: 'Automation Email' },
+            { value: 'Communication Email', key: 'Communication Email', title: 'Communication Email' }
+          ]
+        },
+        {
+          title: 'Comments',
+          value: 'Comments',
+          key: 'Comments',
+          children: [
+            { value: 'Comments.Notes', key: 'Comments.Notes', title: 'Notes' },
+            { value: 'Comments.Feedback', key: 'Comments.Feedback', title: 'Feedback' }
+          ]
+        },
+        {
+          title: 'Task',
+          value: 'Task',
+          key: 'Task'
+        },
+        {
+          title: 'Presciber',
+          value: 'Presciber',
+          key: 'Presciber'
         }
-      ]
+      ],
+      isRecent: true,
+      orderType: 'asc',
+      filters: [],
+      keyword: ''
     };
-    this.activitiesSort = this.activitiesSort.bind(this);
+    this.getActivities = this.getActivities.bind(this);
+    this.onActivityTypeChange = this.onActivityTypeChange.bind(this);
   }
-  activitiesSort() {}
+
+  componentDidMount() {
+    this.getActivities()
+  }
+
+  getActivities() {
+    this.setState({
+      activityLoading: true
+    });
+    const { isRecent, orderType, filters, keyword } = this.state;
+    let param = {
+      customerId: this.props.petOwnerId, // this.props.petOwnerId,
+      orderType: orderType,
+      recent: isRecent,
+      filters: filters,
+      keyword: keyword
+    };
+    webapi
+      .getActivities(param, isRecent)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            activityList: res.context.activityVOList || [],
+            activityLoading: false
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+          this.setState({
+            activityLoading: false
+          });
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+        this.setState({
+          activityLoading: false
+        });
+      });
+  }
+
+  onActivityTypeChange = (value) => {};
+
   render() {
-    const { activityLoading, activityList } = this.state;
+    const { activityLoading, activityList, treeData, orderType, isRecent } = this.state;
     const menu = (
       <Menu>
         <Menu.Item key={1}>Add Comment</Menu.Item>
-        <Menu.Item key={2}>Add Task</Menu.Item>
+        <Menu.Item key={2}>
+          <Link to={'/add-task'}>Add Task</Link>
+        </Menu.Item>
       </Menu>
     );
+    const tProps = {
+      treeData,
+      onChange: this.onActivityTypeChange,
+      treeCheckable: true,
+      showCheckedStrategy: SHOW_ALL,
+      searchPlaceholder: 'Activity Type',
+      style: {
+        width: '150px'
+      },
+      maxTagCount: 0,
+      allowClear: true
+    };
     return (
       <Row>
-        <Col span={9}></Col>
+        <Col span={9}>
+        <Input
+            className="searchInput"
+            placeholder="Keyword"
+            onPressEnter={() => this.getActivities()}
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              this.setState({
+                keyword: value
+              });
+            }}
+            style={{ width: '140px' }}
+            prefix={<Icon type="search" onClick={() => this.getActivities()} />}
+          />
+        </Col>
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-          {/* <Dropdown trigger={['click']} overlayClassName="dropdown-custom" style={{marginRight: '10px'}}>
-                  <Button className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                    Email Type
-                    <Icon type="down" />
-                  </Button>
-                  <Menu slot="overlay">
-                    <Checkbox
-                      :indeterminate="indeterminateEmail"
-                      @change="onCheckAllEamil"
-                      :checked="checkEmailAll"
-                    >{{ $t('public.selectAll') }}</Checkbox>
-                    <Divider />
-                    <CheckboxGroup v-model="emailCheckedList" @change="emailChange">
-                      <Row :gutter="24" v-for="(item, i) in emailFilter" :key="i">
-                        <Col span={24}>
-                          <Checkbox :value="item.value">{{ item.label }}</Checkbox>
-                        </Col>
-                      </Row>
-                    </CheckboxGroup>
-                  </Menu>
-                </Dropdown> */}
-          <Button className="sortBtn" onClick={this.activitiesSort}>
-            <span className="icon iconfont iconbianzu8" style={{ fontSize: '22px' }} />
+          <TreeSelect className="filter" {...tProps} onChange={(value) => this.setState({ filters: value }, () => this.getActivities())} />
+          <Button className="sortBtn" onClick={() => this.setState({ orderType: orderType === 'asc' ? 'desc' : 'asc' }, () => this.getActivities())}>
+            <span className="icon iconfont iconbianzusort" style={{ fontSize: '20px' }} />
           </Button>
           <Dropdown overlay={menu}>
             <Button className="addCommentBtn">
-              <span className="icon iconfont iconbianzu9" style={{ fontSize: '22px' }} />
+              <span className="icon iconfont iconbianzu9" style={{ fontSize: '20px' }} />
             </Button>
           </Dropdown>
         </Col>
         <Col span={24}>
-          <Timeline pending={activityLoading}>
-            {activityList.map((item, index) => (
-              <Timeline.Item key={index}>
-                <Row className="activities-timeline">
-                  <Col span={19}>
-                    <div className="activity-name">{replaceLink(item.activityName, item)}</div>
-                    <div className="activity-type">{item.activityType}</div>
-                  </Col>
-                  <Col span={5}>
-                    <div>
-                      By
-                      <span className="jump-link" style={{ marginLeft: '5px' }}>
-                        {item.createdByUser}
-                      </span>
-                    </div>
-                    <div style={{ marginBottom: '10px' }} className="activity-type">
-                      {item.dateAdded}
-                    </div>
-                  </Col>
-                  <Col span={24}>{/* <template-conponent
+          {activityList && activityList.length > 0 ? (
+            <Spin spinning={activityLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Timeline>
+                {activityList.map((item, index) => (
+                  <Timeline.Item key={index}>
+                    <Row className="activities-timeline">
+                      <Col span={19}>
+                        <div className="activity-name">{replaceLink(item.activityName, item)}</div>
+                        <div className="activity-type">{item.activityType}</div>
+                      </Col>
+                      <Col span={5}>
+                        <div>
+                          By
+                          <span className="jump-link" style={{ marginLeft: '5px' }}>
+                            {item.createdByUser}
+                          </span>
+                        </div>
+                        <div style={{ marginBottom: '10px' }} className="activity-type">
+                          {item.dateAdded}
+                        </div>
+                      </Col>
+                      <Col span={24}>{/* <template-conponent
                   templateType="email"
                   width="95%"
                 ></template-conponent> */}</Col>
-                </Row>
-              </Timeline.Item>
-            ))}
-          </Timeline>
-          <div style={{ textAlign: 'center' }}>
-            <Button type="link" className="jump-link">
-              View More
-            </Button>
-          </div>
+                    </Row>
+                  </Timeline.Item>
+                ))}
+              </Timeline>
+              <div style={{ textAlign: 'center' }}>
+                <Button type="link" className="jump-link" onClick={() => this.setState({ isRecent: false }, () => this.getActivities())}>
+                  <span>{isRecent ? 'View More' : ''}</span>
+                </Button>
+              </div>
+            </Spin>
+          ) : (
+            <Empty />
+          )}
         </Col>
       </Row>
     );

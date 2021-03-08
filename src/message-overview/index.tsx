@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
 import * as webapi from './webapi';
-import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb } from 'antd';
+import { Button, Form, Row, Col, Breadcrumb } from 'antd';
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
@@ -10,7 +10,6 @@ import 'echarts/lib/component/toolbox';
 import './index.less';
 import { FormattedMessage } from 'react-intl';
 
-const FormItem = Form.Item;
 class Overview extends Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -290,6 +289,5 @@ class Overview extends Component<any, any> {
     );
   }
 }
-const styles = {} as any;
 
 export default Form.create()(Overview);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { history, Const } from 'qmkit';
-import { Card, Icon, Row, Col, message } from 'antd';
+import { Card, Icon, Row, Col, message, Tooltip } from 'antd';
 import * as webapi from '../webapi';
 
 export default class petowner extends Component<any, any> {
@@ -8,77 +8,20 @@ export default class petowner extends Component<any, any> {
     super(props);
     this.state = {
       loading: false,
-      contactDetails: {
-        email: 'morgane.lucas1@ibm.com',
-        firstName: 'Morgane',
-        lastName: 'Lucas',
-        uuid: '00uod83hrdUTgu6il0x6',
-        primaryPhone: '(+33) 6 43 21 34 44',
-        city: 'paris',
-        countryCode: 'FR'
-      },
-      allocatedSegments: [
-        {
-          id: 216,
-          isPublished: true,
-          name: 'cxcx'
-        },
-        {
-          id: 221,
-          isPublished: true,
-          name: 'Cute'
-        },
-        {
-          id: 216,
-          isPublished: true,
-          name: 'cxcxsssssssssssssss'
-        },
-        {
-          id: 221,
-          isPublished: true,
-          name: 'Cutedddddddddddddddddddddd'
-        }
+      allocatedTaggings: [
       ]
     };
   }
-  getPetOwner() {
-    this.setState({
-      loading: true
-    });
-    webapi
-      .getPetOwner()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            contactDetails: res.context,
-            loading: false
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-          this.setState({
-            loading: false
-          });
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-        this.setState({
-          loading: false
-        });
-      });
-  }
   render() {
-    const { contactDetails, allocatedSegments } = this.state;
-    const { contactId } = this.props;
+    const { petOwnerId, petOwner } = this.props;
     return (
       <div>
         <Card
           className="topCard"
           title={
             <div className="title">
-              <span>About This Pet Owner</span>
-              <span className="viewAll" onClick={() => history.push('/pet-owner-all/' + contactId)}>
+              <span>Pet Owner Overview</span>
+              <span className="viewAll" onClick={() => history.push(`/customer-details/Member/${petOwner.customerId}/${petOwner.customerAccount}`)}>
                 View All
                 <Icon type="right" />
               </span>
@@ -88,10 +31,10 @@ export default class petowner extends Component<any, any> {
           <Row type="flex" align="middle" className="ui-row-detail userBase">
             <div className="detail-content" style={{ width: '100%' }}>
               <div>
-                <span className="contactName">{contactDetails.firstName + ' ' + contactDetails.lastName}</span>
+                <span className="contactName">{petOwner.contactName}</span>
               </div>
               <span className="ui-lighter">
-                <span style={{ whiteSpace: 'break-spaces' }}>Pet Owner ID</span>:<span className="content">{contactDetails.uuid}</span>
+                <span style={{ whiteSpace: 'break-spaces' }}>Pet Owner ID</span>:<span className="content">{petOwner.customerId}</span>
               </span>
             </div>
           </Row>
@@ -104,7 +47,7 @@ export default class petowner extends Component<any, any> {
                 </Col>
                 <Col span={18}>
                   <span className="content">
-                    {contactDetails.city} , {contactDetails.countryCode}
+                    {petOwner.city} , {petOwner.country}
                   </span>
                 </Col>
               </Row>
@@ -119,7 +62,17 @@ export default class petowner extends Component<any, any> {
                   <span className="ui-lighter">Email</span>
                 </Col>
                 <Col span={18}>
-                  <span className="content">{contactDetails.email}</span>
+                  <span className="content">
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div> {petOwner.email}</div>}
+                    >
+                      <p style={styles.text}> {petOwner.email}</p>
+                    </Tooltip>
+                  </span>
                 </Col>
               </Row>
             </div>
@@ -133,7 +86,7 @@ export default class petowner extends Component<any, any> {
                   <span className="ui-lighter">Phone</span>
                 </Col>
                 <Col span={18}>
-                  <span className="content">{contactDetails.primaryPhone}</span>
+                  <span className="content">{petOwner.contactPhone}</span>
                 </Col>
               </Row>
             </div>
@@ -144,11 +97,11 @@ export default class petowner extends Component<any, any> {
             <div className="detail-content">
               <Row>
                 <Col span={6}>
-                  <span className="ui-lighter">Segments</span>
+                  <span className="ui-lighter">Taggings</span>
                 </Col>
                 <Col span={18}>
                   <div className="contactSegments">
-                    {allocatedSegments.map((item) => (
+                    {petOwner.segmentList && petOwner.segmentList.map((item) => (
                       <div className="segment-item" key={item.id}>
                         {item.name}
                       </div>
@@ -163,3 +116,12 @@ export default class petowner extends Component<any, any> {
     );
   }
 }
+const styles = {
+  text: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 200,
+    display: 'inline-block'
+  }
+};

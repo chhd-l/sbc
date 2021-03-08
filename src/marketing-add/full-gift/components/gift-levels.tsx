@@ -93,59 +93,63 @@ export default class GiftLevels extends React.Component<any, any> {
             return (
               <div key={level.key ? level.key : level.giftLevelId}>
                 <HasError>
-                  <span>Full&nbsp;</span>
-                  <FormItem>
-                    {getFieldDecorator(`level_rule_value_${index}`, {
-                      rules: [
-                        { required: true, message: 'Must enter rules' },
-                        {
-                          validator: (_rule, value, callback) => {
-                            if (value) {
-                              if (!isFullCount) {
-                                if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                  callback('0.01-99999999.99');
+                  {this.props.isNormal && (
+                    <>
+                      <span>Full&nbsp;</span>
+                      <FormItem>
+                        {getFieldDecorator(`level_rule_value_${index}`, {
+                          rules: [
+                            { required: true, message: 'Must enter rules' },
+                            {
+                              validator: (_rule, value, callback) => {
+                                if (value) {
+                                  if (!isFullCount) {
+                                    if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                                      callback('0.01-99999999.99');
+                                    }
+                                  } else {
+                                    if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                      callback('1-9999');
+                                    }
+                                  }
                                 }
-                              } else {
-                                if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                                  callback('1-9999');
-                                }
+                                callback();
                               }
                             }
-                            callback();
-                          }
-                        }
-                      ],
-                      initialValue: !isFullCount ? level.fullAmount : level.fullCount
-                    })(
-                      <Input
-                        style={{ width: 200 }}
-                        placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
-                        onChange={(e) => {
-                          this.ruleValueChange(index, e.target.value);
-                        }}
-                      />
-                    )}
-                  </FormItem>
-                  <span>
-                    &nbsp;
-                    {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  </span>
+                          ],
+                          initialValue: !isFullCount ? level.fullAmount : level.fullCount
+                        })(
+                          <Input
+                            style={{ width: 200 }}
+                            placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
+                            onChange={(e) => {
+                              this.ruleValueChange(index, e.target.value);
+                            }}
+                          />
+                        )}
+                      </FormItem>
+                      <span>
+                        &nbsp;
+                        {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      </span>
+                    </>
+                  )}
                   <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5 }}>
-                    Add a free gift
+                    Add gift
                   </Button>
-                  &nbsp;&nbsp;
-                  <Select
-                    value={level.giftType}
-                    style={{ width: 120, marginTop: 3.5 }}
-                    onChange={(val) => {
-                      this.onChange(index, 'giftType', val);
-                    }}
-                    getPopupContainer={(triggerNode) => triggerNode.parentElement}
-                  >
-                    <Option value={1}>An optional one</Option>
-                    <Option value={0}>The default all give</Option>
-                  </Select>
+                  {/*&nbsp;&nbsp;*/}
+                  {/*<Select*/}
+                  {/*  value={level.giftType}*/}
+                  {/*  style={{ width: 120, marginTop: 3.5 }}*/}
+                  {/*  onChange={(val) => {*/}
+                  {/*    this.onChange(index, 'giftType', val);*/}
+                  {/*  }}*/}
+                  {/*  getPopupContainer={(triggerNode) => triggerNode.parentElement}*/}
+                  {/*>*/}
+                  {/*  <Option value={1}>An optional one</Option>*/}
+                  {/*  <Option value={0}>The default all give</Option>*/}
+                  {/*</Select>*/}
                   &nbsp;&nbsp;&nbsp;
                   {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
                 </HasError>

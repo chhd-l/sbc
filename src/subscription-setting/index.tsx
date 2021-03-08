@@ -6,11 +6,11 @@ import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
-export default class SubscriptionSetting extends Component<any, any> {
+export default class Subscription extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: <FormattedMessage id="SubscriptionSetting.SubscriptionSetting" />,
+      title: <FormattedMessage id="Subscription.Subscription" />,
       settingForm: {
         newOrdersId: null,
         newOrdersStatus: 0,
@@ -82,7 +82,7 @@ export default class SubscriptionSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(<FormattedMessage id="SubscriptionSetting.OperationSuccessful" />);
+          message.success(<FormattedMessage id="Subscription.OperationSuccessful" />);
         }
       })
       .catch((err) => {});
@@ -96,7 +96,7 @@ export default class SubscriptionSetting extends Component<any, any> {
         <div className="container-search">
           <Headline title={title} />
           <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-            <FormItem label={<FormattedMessage id="SubscriptionSetting.RemindOfNewOrders" />}>
+            <FormItem label={<FormattedMessage id="Subscription.RemindOfNewOrders" />}>
               <Row>
                 <Col span={1}>
                   <Switch
@@ -127,7 +127,7 @@ export default class SubscriptionSetting extends Component<any, any> {
                         }
                       />
                       <span style={{ marginLeft: 10 }}>
-                        <FormattedMessage id="SubscriptionSetting.Days1" />
+                        <FormattedMessage id="Subscription.Days1" />
                       </span>
                     </div>
                   </Col>
@@ -135,7 +135,7 @@ export default class SubscriptionSetting extends Component<any, any> {
               </Row>
             </FormItem>
 
-            <FormItem label={<FormattedMessage id="SubscriptionSetting.RemindOfCardExpiration" />}>
+            <FormItem label={<FormattedMessage id="Subscription.RemindOfCardExpiration" />}>
               <Row>
                 <Col span={1}>
                   <Switch
@@ -166,7 +166,7 @@ export default class SubscriptionSetting extends Component<any, any> {
                         }
                       />
                       <span style={{ marginLeft: 10 }}>
-                        <FormattedMessage id="SubscriptionSetting.Days2" />
+                        <FormattedMessage id="Subscription.Days2" />
                       </span>
                     </div>
                   </Col>
@@ -177,7 +177,7 @@ export default class SubscriptionSetting extends Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateSetting()}>
-            {<FormattedMessage id="SubscriptionSetting.save" />}
+            {<FormattedMessage id="Subscription.save" />}
           </Button>
         </div>
       </div>

@@ -39,7 +39,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         <AuthWrapper functionName={'financeRewardExport'}>
           <Button type="primary">
             <a href="javascript;" onClick={() => onRewardExport()}>
-              {<FormattedMessage id="FinanceManagesettle.bulkExport" />}
+              {<FormattedMessage id="Finance.bulkExport" />}
             </a>
             {/*<a
               href="javascript:void(0);"

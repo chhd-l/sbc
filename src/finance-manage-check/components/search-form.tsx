@@ -86,7 +86,7 @@ export default class SearchForm extends React.Component<any, any> {
               }}
             >
               <span>
-                <FormattedMessage id="FinanceManageCheck.search" />
+                <FormattedMessage id="Finance.search" />
               </span>
             </Button>
           </FormItem>

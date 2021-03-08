@@ -115,7 +115,7 @@ export default class SearchForm extends React.Component<any, any> {
               }}
             >
               <span>
-                <FormattedMessage id="FinanceManagesettle.search" />
+                <FormattedMessage id="Finance.search" />
               </span>
             </Button>
           </FormItem>
@@ -142,7 +142,7 @@ export default class SearchForm extends React.Component<any, any> {
     } else {
       this.setState({
         pickOpen: true,
-        pickErrorInfo: <FormattedMessage id="FinanceManagesettle.TheStartTime" />
+        pickErrorInfo: <FormattedMessage id="Finance.TheStartTime" />
       });
     }
   };

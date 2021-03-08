@@ -8,11 +8,11 @@ import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-class OrderSetting extends Component<any, any> {
+class Order extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: <FormattedMessage id="OrderAuditSetting.AuditSetting" />,
+      title: <FormattedMessage id="Order.AuditSetting" />,
       auditMethod: '',
       isPetInfo: false,
 
@@ -60,7 +60,7 @@ class OrderSetting extends Component<any, any> {
               if (configList[i].configType && configList[i].configType === 'no_audit_required') {
                 configForm.autoAuditId = configList[i].id;
                 //判断自动审核是否开启
-                auditMethod = configList[i].status === 1 ? <FormattedMessage id="OrderAuditSetting.AutoAudit" /> : <FormattedMessage id="OrderAuditSetting.ManualAudit" />;
+                auditMethod = configList[i].status === 1 ? <FormattedMessage id="Order.AutoAudit" /> : <FormattedMessage id="Order.ManualAudit" />;
               }
               if (configList[i].configType && configList[i].configType === 'audit_according_to_product_category') {
                 configForm.manualAuditId = configList[i].id;
@@ -95,7 +95,7 @@ class OrderSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(<FormattedMessage id="OrderAuditSetting.OperateSuccessfully" />);
+          message.success(<FormattedMessage id="Order.OperateSuccessfully" />);
         }
       })
       .catch((err) => {});
@@ -132,7 +132,7 @@ class OrderSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getGoodsCategory();
-          message.success(<FormattedMessage id="OrderAuditSetting.OperateSuccessfully" />);
+          message.success(<FormattedMessage id="Order.OperateSuccessfully" />);
         } else {
           this.setState({
             categoryLoading: false
@@ -156,7 +156,7 @@ class OrderSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getGoodsCategory();
-          message.success(<FormattedMessage id="OrderAuditSetting.OperateSuccessfully" />);
+          message.success(<FormattedMessage id="Order.OperateSuccessfully" />);
         } else {
           this.setState({
             categoryLoading: false
@@ -261,20 +261,20 @@ class OrderSetting extends Component<any, any> {
     };
     const columns = [
       {
-        title: <FormattedMessage id="OrderAuditSetting.Category" />,
+        title: <FormattedMessage id="Order.Category" />,
         dataIndex: 'parentCateName',
         key: 'parentCateName',
         width: '33%'
       },
       {
-        title: <FormattedMessage id="OrderAuditSetting.ParentCategory" />,
+        title: <FormattedMessage id="Order.ParentCategory" />,
         dataIndex: 'cateName',
         key: 'cateName',
         width: '33%'
       },
 
       {
-        title: <FormattedMessage id="OrderAuditSetting.NeedAudit" />,
+        title: <FormattedMessage id="Order.NeedAudit" />,
         dataIndex: 'status',
         key: 'status',
         width: '33%',
@@ -295,20 +295,20 @@ class OrderSetting extends Component<any, any> {
 
     const columnsPresciber = [
       {
-        title: <FormattedMessage id="OrderAuditSetting.Category" />,
+        title: <FormattedMessage id="Order.Category" />,
         dataIndex: 'parentCateName',
         key: 'parentCateName',
         width: '33%'
       },
       {
-        title: <FormattedMessage id="OrderAuditSetting.ParentCategory" />,
+        title: <FormattedMessage id="Order.ParentCategory" />,
         dataIndex: 'cateName',
         key: 'cateName',
         width: '33%'
       },
 
       {
-        title: <FormattedMessage id="OrderAuditSetting.NeedPrescriber" />,
+        title: <FormattedMessage id="Order.NeedPrescriber" />,
         dataIndex: 'prescriberFlag',
         key: 'prescriberFlag',
         width: '33%',
@@ -336,14 +336,14 @@ class OrderSetting extends Component<any, any> {
           <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <div style={{ margin: 20 }}>
               <span style={{ marginRight: 20 }}>
-                <FormattedMessage id="OrderAuditSetting.AuditMethod" />:
+                <FormattedMessage id="Order.AuditMethod" />:
               </span>
               <Radio.Group onChange={this.onAuditMethodChange} value={auditMethod}>
                 <Radio value="Auto audit">
-                  <FormattedMessage id="OrderAuditSetting.AutoAudit" />
+                  <FormattedMessage id="Order.AutoAudit" />
                 </Radio>
                 {auditMethod === 'Auto audit' ? (
-                  <Tooltip placement="top" title={<FormattedMessage id="OrderAuditSetting.Edit" />}>
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>
                     <span
                       onClick={() => {
                         this.setState({
@@ -356,10 +356,10 @@ class OrderSetting extends Component<any, any> {
                   </Tooltip>
                 ) : null}
                 <Radio value="Manual audit">
-                  <FormattedMessage id="OrderAuditSetting.ManualAudit" />
+                  <FormattedMessage id="Order.ManualAudit" />
                 </Radio>
                 {auditMethod === 'Manual audit' ? (
-                  <Tooltip placement="top" title={<FormattedMessage id="OrderAuditSetting.Edit" />}>
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>
                     <span
                       onClick={() => {
                         this.setState({
@@ -378,7 +378,7 @@ class OrderSetting extends Component<any, any> {
         {/* prescriber */}
         <Modal
           width="800px"
-          title={<FormattedMessage id="OrderAuditSetting.SelectRequiresPrescriber" />}
+          title={<FormattedMessage id="Order.SelectRequiresPrescriber" />}
           visible={visiblePrescriberConfig}
           footer={[
             <Button
@@ -389,7 +389,7 @@ class OrderSetting extends Component<any, any> {
                 });
               }}
             >
-              <FormattedMessage id="OrderAuditSetting.Close" />
+              <FormattedMessage id="Order.Close" />
             </Button>
           ]}
           onOk={() => {
@@ -406,7 +406,7 @@ class OrderSetting extends Component<any, any> {
           <Table loading={categoryLoading} rowKey="id" columns={columnsPresciber} dataSource={configData} pagination={false}></Table>
           <div style={{ marginTop: 20 }}>
             <span style={{ marginRight: 20 }}>
-              <FormattedMessage id="OrderAuditSetting.PetInformationAs" />
+              <FormattedMessage id="Order.PetInformationAs" />
             </span>
             <Switch size="small" disabled={true} checked={isPetInfo}></Switch>
           </div>
@@ -414,7 +414,7 @@ class OrderSetting extends Component<any, any> {
         {/* audit */}
         <Modal
           width="800px"
-          title={<FormattedMessage id="OrderAuditSetting.selectBeReviewed" />}
+          title={<FormattedMessage id="Order.selectBeReviewed" />}
           visible={visibleAuditConfig}
           footer={[
             <Button
@@ -425,7 +425,7 @@ class OrderSetting extends Component<any, any> {
                 });
               }}
             >
-              <FormattedMessage id="OrderAuditSetting.Close" />
+              <FormattedMessage id="Order.Close" />
             </Button>
           ]}
           onOk={() => {
@@ -450,14 +450,14 @@ class OrderSetting extends Component<any, any> {
             >
               *
             </span>
-            {<FormattedMessage id="OrderAuditSetting.SignedCategory" />}
+            {<FormattedMessage id="Order.SignedCategory" />}
             {configData.length}
-            {<FormattedMessage id="OrderAuditSetting.categoriesHave" />}
+            {<FormattedMessage id="Order.categoriesHave" />}
           </p>
           <Table loading={categoryLoading} rowKey="id" columns={columns} dataSource={configData} pagination={false}></Table>
           <div style={{ marginTop: 20 }}>
             <span style={{ marginRight: 20 }}>
-              <FormattedMessage id="OrderAuditSetting.PetInformation" />:
+              <FormattedMessage id="Order.PetInformation" />:
             </span>
             <Switch size="small" disabled={false} checked={isPetInfo} onClick={(checked) => this.onPetInfoChange(checked)}></Switch>
           </div>
@@ -473,4 +473,4 @@ class OrderSetting extends Component<any, any> {
   }
 }
 
-export default Form.create()(OrderSetting);
+export default Form.create()(Order);

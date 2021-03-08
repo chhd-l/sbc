@@ -34,6 +34,6 @@ export const addApply = (param: any) => {
 /**
  * 查询退单列表
  */
-export const fetchOrderReturnList = (tid) => {
+export const fetchOrder = (tid) => {
   return Fetch(`/return/findCompletedByTid/${tid}`);
 };

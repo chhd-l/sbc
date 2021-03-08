@@ -86,7 +86,7 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <Input
-            addonBefore={<FormattedMessage id="FinanceManageReward.OrderNumber" />}
+            addonBefore={<FormattedMessage id="Finance.OrderNumber" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({

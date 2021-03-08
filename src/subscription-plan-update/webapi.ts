@@ -6,20 +6,20 @@ type TResult = {
   context: any;
 };
 
-export function getSubscriptionPlanById(id) {
+export function getSubscriptionById(id) {
   return Fetch<TResult>('/sub/plan/detail/' + id, {
     method: 'GET'
   });
 }
 
-export function addSubscriptionPlan(plan) {
+export function addSubscription(plan) {
   return Fetch<TResult>('/sub/plan/save', {
     method: 'POST',
     body: JSON.stringify(plan)
   });
 }
 
-export function updateSubscriptionPlan(plan) {
+export function updateSubscription(plan) {
   return Fetch<TResult>('/sub/plan/update', {
     method: 'PUT',
     body: JSON.stringify(plan)
@@ -45,11 +45,11 @@ export function getWeekFrequency() {
   });
 }
 
-export function getSubscriptionPlanTypes() {
+export function getSubscriptionTypes() {
   return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',
     body: JSON.stringify({
-      type: 'SubscriptionPlanType'
+      type: 'SubscriptionType'
     })
   });
 }

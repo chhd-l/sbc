@@ -91,13 +91,13 @@ export default class ListChart extends React.Component<any, any> {
         <div className="chartDetails1">
           <div className="chartDetailsList flex-content">
             <div className="btn">
-              <FormattedMessage id="FinanceManageRewardDetails.RewardAmount" /> <br /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {getPeriodAmount.totalRewardAmount}
+              <FormattedMessage id="Finance.RewardAmount" /> <br /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {getPeriodAmount.totalRewardAmount}
             </div>
             <div className="btn">
-              <FormattedMessage id="FinanceManageRewardDetails.OrderAmount" /> <br /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {getPeriodAmount.totalOrderAmount}
+              <FormattedMessage id="Finance.OrderAmount" /> <br /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {getPeriodAmount.totalOrderAmount}
             </div>
             <div className="btn">
-              <FormattedMessage id="FinanceManageRewardDetails.OrderQuantity" />
+              <FormattedMessage id="Finance.OrderQuantity" />
               <br /> {getPeriodAmount.totalOrderQuantity}
             </div>
           </div>

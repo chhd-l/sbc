@@ -45,7 +45,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="OrderReturnApplyList.initiateApplication" />} number={total} />
+        <Headline title={<FormattedMessage id="Order.initiateApplication" />} number={total} />
 
         <div>
           <Form className="filter-content" layout="inline">
@@ -124,7 +124,7 @@ export default class SearchHead extends Component<any, any> {
                   >
                     {
                       <span>
-                        <FormattedMessage id="OrderReturnApplyList.search" />
+                        <FormattedMessage id="Order.search" />
                       </span>
                     }
                   </Button>
@@ -154,8 +154,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerSelect}
         style={{ width: 100 }}
       >
-        <Option value="buyerName">{<FormattedMessage id="OrderReturnApplyList.consumerName" />}</Option>
-        <Option value="buyerAccount">{<FormattedMessage id="OrderReturnApplyList.consumerAccount" />}</Option>
+        <Option value="buyerName">{<FormattedMessage id="Order.consumerName" />}</Option>
+        <Option value="buyerAccount">{<FormattedMessage id="Order.consumerAccount" />}</Option>
       </Select>
     );
   };
@@ -177,8 +177,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={{ width: 100 }}
       >
-        <Option value="consigneeName">{<FormattedMessage id="OrderReturnApplyList.recipient" />}</Option>
-        <Option value="consigneePhone">{<FormattedMessage id="OrderReturnApplyList.recipientPhone" />}</Option>
+        <Option value="consigneeName">{<FormattedMessage id="Order.recipient" />}</Option>
+        <Option value="consigneePhone">{<FormattedMessage id="Order.recipientPhone" />}</Option>
       </Select>
     );
   };
@@ -200,8 +200,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={{ width: 100 }}
       >
-        <Option value="skuName">{<FormattedMessage id="OrderReturnApplyList.productName" />}</Option>
-        <Option value="skuNo">{<FormattedMessage id="OrderReturnApplyList.skuCode" />}</Option>
+        <Option value="skuName">{<FormattedMessage id="Order.productName" />}</Option>
+        <Option value="skuNo">{<FormattedMessage id="Order.skuCode" />}</Option>
       </Select>
     );
   };

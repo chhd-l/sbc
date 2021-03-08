@@ -74,13 +74,13 @@ export default class AppStore extends Store {
       const deliverStatus = trade.getIn(['context', 'tradeState', 'deliverStatus']);
 
       // 获取该订单所有的待处理及已完成的退单列表
-      let orderReturnListRes = await webapi.fetchOrderReturnList(tid);
+      let OrderRes = await webapi.fetchOrder(tid);
 
-      if (orderReturnListRes.res) {
+      if (OrderRes.res) {
         canApply = true;
 
         // 如果有未处理完的，则不允许再次申请
-        orderReturnListRes.res['context'].forEach((v) => {
+        OrderRes.res['context'].forEach((v) => {
           if (v.returnFlowState != 'REFUNDED' && v.returnFlowState != 'COMPLETED' && v.returnFlowState != 'REJECT_REFUND' && v.returnFlowState != 'REJECT_RECEIVE' && v.returnFlowState != 'VOID') {
             // 有未处理完的
             canApply = false;
@@ -92,7 +92,7 @@ export default class AppStore extends Store {
         if (canApply) {
           // 退款申请，如果有已完成的则不允许再次申请
           if (flowState == 'AUDIT' && payState == 'PAID' && deliverStatus == 'NOT_YET_SHIPPED') {
-            orderReturnListRes.res['context'].forEach((v) => {
+            OrderRes.res['context'].forEach((v) => {
               // 已完成申请的
               if (v.returnFlowState == 'COMPLETED') {
                 canApply = false;
@@ -107,7 +107,7 @@ export default class AppStore extends Store {
             } else if (trade.getIn(['context', 'payInfo', 'payTypeId']) == '0') {
               // 在线支付需判断退款金额
               let totalApplyPrice = 0;
-              orderReturnListRes.res['context'].forEach((v) => {
+              OrderRes.res['context'].forEach((v) => {
                 // 计算已完成的申请单退款总额
                 if (v.returnFlowState == 'COMPLETED') {
                   totalApplyPrice = QMFloat.accAdd(totalApplyPrice, v.returnPrice.applyStatus ? v.returnPrice.applyPrice : v.returnPrice.totalPrice);
@@ -122,7 +122,7 @@ export default class AppStore extends Store {
           }
         }
       } else {
-        errMsg = orderReturnListRes.err;
+        errMsg = OrderRes.err;
       }
     }
     //  可以申请，进入申请页面，否则提示错误信息

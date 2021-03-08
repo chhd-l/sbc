@@ -29,17 +29,17 @@ export default class details extends Component<any, any> {
   }
 
   updateTable(selectedGoods) {
-    const { addField, subscriptionPlan } = this.props;
+    const { addField, Subscription } = this.props;
     if (selectedGoods) {
       selectedGoods.map((item) => {
         item.packageId = 'PK' + moment(new Date()).format('YYMMDDHHmmSSS');
         item.quantity = 1;
         item.settingPrice = null;
       });
-      subscriptionPlan.mainGoods.push(...selectedGoods);
-      //subscriptionPlan.mainGoodsIds.push(...selectedRowKeys);
-      addField('mainGoods', subscriptionPlan.mainGoods);
-      //addField('mainGoodsIds', subscriptionPlan.mainGoodsIds);
+      Subscription.mainGoods.push(...selectedGoods);
+      //Subscription.mainGoodsIds.push(...selectedRowKeys);
+      addField('mainGoods', Subscription.mainGoods);
+      //addField('mainGoodsIds', Subscription.mainGoodsIds);
     }
     this.setState({
       visible: false
@@ -47,10 +47,10 @@ export default class details extends Component<any, any> {
   }
 
   deleteProduct(key) {
-    const { subscriptionPlan, addField } = this.props;
+    const { Subscription, addField } = this.props;
 
     let newMainProducts = [];
-    subscriptionPlan.mainGoods.forEach((item) => {
+    Subscription.mainGoods.forEach((item) => {
       if (item.goodsInfoId !== key) {
         newMainProducts.push(item);
       }
@@ -66,22 +66,22 @@ export default class details extends Component<any, any> {
     if (qty <= 0) {
       return;
     }
-    const { subscriptionPlan, addField } = this.props;
-    subscriptionPlan.mainGoods.map((item) => {
+    const { Subscription, addField } = this.props;
+    Subscription.mainGoods.map((item) => {
       if (item.goodsInfoId === goodsInfoId) {
         item.quantity = qty;
       }
       return item;
     });
-    addField('mainGoods', subscriptionPlan.mainGoods);
+    addField('mainGoods', Subscription.mainGoods);
   }
 
   onBlurQty(goodsInfoId, qty) {
-    const { subscriptionPlan, addField } = this.props;
+    const { Subscription, addField } = this.props;
     if (!qty) {
       addField(
         'mainGoods',
-        subscriptionPlan.mainGoods.map((item) => {
+        Subscription.mainGoods.map((item) => {
           if (item.goodsInfoId === goodsInfoId) {
             item.quantity = 1;
           }
@@ -92,10 +92,10 @@ export default class details extends Component<any, any> {
   }
 
   updateSettingPrice(goodsInfoId, settingPrice) {
-    const { subscriptionPlan, addField } = this.props;
+    const { Subscription, addField } = this.props;
     addField(
       'mainGoods',
-      subscriptionPlan.mainGoods.map((item) => {
+      Subscription.mainGoods.map((item) => {
         if (item.goodsInfoId === goodsInfoId) {
           item.settingPrice = settingPrice;
         }
@@ -106,17 +106,17 @@ export default class details extends Component<any, any> {
 
   render() {
     const { loading, visible } = this.state;
-    const { editable, subscriptionPlan } = this.props;
+    const { editable, Subscription } = this.props;
     const currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
     return (
       <div>
         <h3>
-          <FormattedMessage id="SubscriptionPlanUpdate.Step5" />
+          <FormattedMessage id="Subscription.Step5" />
         </h3>
         <Row>
           <Col span={20}>
             <h4>
-              <FormattedMessage id="SubscriptionPlanUpdate.Details" />
+              <FormattedMessage id="Subscription.Details" />
             </h4>
           </Col>
           <Col span={4}>
@@ -124,15 +124,15 @@ export default class details extends Component<any, any> {
               <div className="addProduct" onClick={this.showAddMainProduct} style={{ marginTop: '10px', marginRight: '0px' }}>
                 <span>
                   {' '}
-                  + <FormattedMessage id="SubscriptionPlanUpdate.Addproduct" />
+                  + <FormattedMessage id="Subscription.Addproduct" />
                 </span>
               </div>
             ) : null}
           </Col>
         </Row>
         <div className="details">
-          {subscriptionPlan.mainGoods &&
-            subscriptionPlan.mainGoods.map((item) => (
+          {Subscription.mainGoods &&
+            Subscription.mainGoods.map((item) => (
               <div className="ant-table-wrapper" key={item.packageId}>
                 <div className="ant-table ant-table-large ant-table-scroll-position-left">
                   <div className="ant-table-content">
@@ -141,25 +141,25 @@ export default class details extends Component<any, any> {
                         <thead className="ant-table-thead">
                           <tr>
                             <th style={{ width: '10%' }}>
-                              <FormattedMessage id="SubscriptionPlanUpdate.PackageID" />
+                              <FormattedMessage id="Subscription.PackageID" />
                             </th>
                             <th style={{ width: '10%' }}>
-                              <FormattedMessage id="SubscriptionPlanUpdate.Image1" />
+                              <FormattedMessage id="Subscription.Image1" />
                             </th>
                             <th style={{ width: '20%' }}>
-                              <FormattedMessage id="SubscriptionPlanUpdate.ProductName1" />
+                              <FormattedMessage id="Subscription.ProductName1" />
                             </th>
                             <th style={{ width: '10%', textAlign: 'center' }}>
-                              <FormattedMessage id="SubscriptionPlanUpdate.Qty" />
+                              <FormattedMessage id="Subscription.Qty" />
                             </th>
                             <th style={{ width: '10%' }}>
-                              <FormattedMessage id="SubscriptionPlanUpdate.MarketPrice" />
+                              <FormattedMessage id="Subscription.MarketPrice" />
                             </th>
                             <th style={{ width: '12%' }}>
-                              <FormattedMessage id="SubscriptionPlanUpdate.SettingPrice" />
+                              <FormattedMessage id="Subscription.SettingPrice" />
                             </th>
                             <th style={{ width: '10%' }}>
-                              <FormattedMessage id="SubscriptionPlanUpdate.Operation" />
+                              <FormattedMessage id="Subscription.Operation" />
                             </th>
                           </tr>
                         </thead>
@@ -217,12 +217,12 @@ export default class details extends Component<any, any> {
                               {editable && (
                                 <Popconfirm
                                   placement="topLeft"
-                                  title={<FormattedMessage id="SubscriptionPlanUpdate.deleteThisProduct" />}
+                                  title={<FormattedMessage id="Subscription.deleteThisProduct" />}
                                   onConfirm={() => this.deleteProduct(item.goodsInfoId)}
-                                  okText={<FormattedMessage id="SubscriptionPlanUpdate.Confirm" />}
-                                  cancelText={<FormattedMessage id="SubscriptionPlanUpdate.Cancel" />}
+                                  okText={<FormattedMessage id="Subscription.Confirm" />}
+                                  cancelText={<FormattedMessage id="Subscription.Cancel" />}
                                 >
-                                  <Tooltip placement="top" title={<FormattedMessage id="SubscriptionPlanUpdate.Delete" />}>
+                                  <Tooltip placement="top" title={<FormattedMessage id="Subscription.Delete" />}>
                                     <a className="iconfont iconDelete"></a>
                                   </Tooltip>
                                 </Popconfirm>
@@ -237,7 +237,7 @@ export default class details extends Component<any, any> {
               </div>
             ))}
         </div>
-        {visible ? <AddProduct visible={visible} clearExsit={true} updateTable={this.updateTable} exsit={subscriptionPlan.mainGoods} /> : null}
+        {visible ? <AddProduct visible={visible} clearExsit={true} updateTable={this.updateTable} exsit={Subscription.mainGoods} /> : null}
       </div>
     );
   }

@@ -9,14 +9,14 @@ import FormModalActor from '@/order-add/actor/form-modal-actor';
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
 
-class OrderSetting extends Component<any, any> {
+class Order extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: <FormattedMessage id="OrderSetting.OrderSetting" />,
-      message: <FormattedMessage id="OrderSetting.OperationTips" />,
-      paymentSequence: <FormattedMessage id="OrderSetting.PaymentBeforeDelivery" />,
-      paymentCategory: <FormattedMessage id="OrderSetting.OnlinePayment" />,
+      title: <FormattedMessage id="Order.Order" />,
+      message: <FormattedMessage id="Order.OperationTips" />,
+      paymentSequence: <FormattedMessage id="Order.PaymentBeforeDelivery" />,
+      paymentCategory: <FormattedMessage id="Order.OnlinePayment" />,
       paymentOnlineForm: {
         orderExpirationTimeStatus: false,
         orderExpirationTimeValue: 1,
@@ -59,7 +59,7 @@ class OrderSetting extends Component<any, any> {
     };
   }
   componentDidMount() {
-    this.getOrderSettingConfig();
+    this.getOrderConfig();
   }
 
   handleCategoryChange = (e) => {
@@ -109,9 +109,9 @@ class OrderSetting extends Component<any, any> {
     });
   };
 
-  getOrderSettingConfig = () => {
+  getOrderConfig = () => {
     webapi
-      .getOrderSettingConfig()
+      .getOrderConfig()
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -231,7 +231,7 @@ class OrderSetting extends Component<any, any> {
       .catch((err) => {});
   };
 
-  updateOrderSettingConfig = () => {
+  updateOrderConfig = () => {
     const { pcashList, ponlineList, unLimitedList, paymentOnlineForm, paymentCashForm, unlimitedForm } = this.state;
     ponlineList.map((item) => {
       //订单失效时间
@@ -368,11 +368,11 @@ class OrderSetting extends Component<any, any> {
       unLimitedList: unLimitedList
     };
     webapi
-      .updateOrderSettingConfig(params)
+      .updateOrderConfig(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || <FormattedMessage id="OrderSetting.SaveSuccessful" />);
+          message.success(res.message || <FormattedMessage id="Order.SaveSuccessful" />);
         }
       })
       .catch((err) => {});
@@ -383,19 +383,19 @@ class OrderSetting extends Component<any, any> {
     const description = (
       <div>
         <p>
-          <FormattedMessage id="OrderSetting.OrderSettingsution" />
+          <FormattedMessage id="Order.Ordersution" />
         </p>
         <p>
-          <FormattedMessage id="OrderSetting.IfTheCustomer" />
+          <FormattedMessage id="Order.IfTheCustomer" />
         </p>
         <p>
-          <FormattedMessage id="OrderSetting.IfTheCmpleted" />
+          <FormattedMessage id="Order.IfTheCmpleted" />
         </p>
         <p>
-          <FormattedMessage id="OrderSetting.ThePending" />
+          <FormattedMessage id="Order.ThePending" />
         </p>
         <p>
-          <FormattedMessage id="OrderSetting.TheMerchant" />
+          <FormattedMessage id="Order.TheMerchant" />
         </p>
       </div>
     );
@@ -409,26 +409,26 @@ class OrderSetting extends Component<any, any> {
           <Alert message={message} description={description} type="error" />
 
           <p style={styles.tipsStyle}>
-            <FormattedMessage id="OrderSetting.Select" />
+            <FormattedMessage id="Order.Select" />
           </p>
           <Tabs defaultActiveKey="Payment before delivery">
-            <TabPane tab={<FormattedMessage id="OrderSetting.PaymentBeforeDelivery" />} key="Payment before delivery">
+            <TabPane tab={<FormattedMessage id="Order.PaymentBeforeDelivery" />} key="Payment before delivery">
               <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-                <FormItem label={<FormattedMessage id="OrderSetting.PaymentCategory" />}>
+                <FormItem label={<FormattedMessage id="Order.PaymentCategory" />}>
                   <div>
                     <Radio.Group onChange={this.handleCategoryChange} value={paymentCategory}>
                       <Radio.Button style={{ width: 140, textAlign: 'center' }} value="Online payment">
-                        <FormattedMessage id="OrderSetting.OnlinePayment" />
+                        <FormattedMessage id="Order.OnlinePayment" />
                       </Radio.Button>
                       <Radio.Button style={{ width: 140, textAlign: 'center' }} value="Cash">
-                        <FormattedMessage id="OrderSetting.Cash" />
+                        <FormattedMessage id="Order.Cash" />
                       </Radio.Button>
                     </Radio.Group>
                   </div>
                 </FormItem>
                 {paymentCategory === 'Online payment' ? (
                   <>
-                    <FormItem label={<FormattedMessage id="OrderSetting.OrderExpirationTime" />}>
+                    <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -459,7 +459,7 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}>
-                                <FormattedMessage id="OrderSetting.AfterHours" />
+                                <FormattedMessage id="Order.AfterHours" />
                               </span>
                             </div>
                           </Col>
@@ -467,7 +467,7 @@ class OrderSetting extends Component<any, any> {
                       </Row>
                     </FormItem>
 
-                    <FormItem label={<FormattedMessage id="OrderSetting.Automatically" />}>
+                    <FormItem label={<FormattedMessage id="Order.Automatically" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -498,7 +498,7 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}>
-                                <FormattedMessage id="OrderSetting.AfterDays" />
+                                <FormattedMessage id="Order.AfterDays" />
                               </span>
                             </div>
                           </Col>
@@ -506,7 +506,7 @@ class OrderSetting extends Component<any, any> {
                       </Row>
                     </FormItem>
 
-                    <FormItem label={<FormattedMessage id="OrderSetting.CompletedOrders" />}>
+                    <FormItem label={<FormattedMessage id="Order.CompletedOrders" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -537,7 +537,7 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}>
-                                <FormattedMessage id="OrderSetting.WithinDays" />
+                                <FormattedMessage id="Order.WithinDays" />
                               </span>
                             </div>
                           </Col>
@@ -545,7 +545,7 @@ class OrderSetting extends Component<any, any> {
                       </Row>
                     </FormItem>
 
-                    <FormItem label={<FormattedMessage id="OrderSetting.Automatic" />}>
+                    <FormItem label={<FormattedMessage id="Order.Automatic" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -576,7 +576,7 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}>
-                                <FormattedMessage id="OrderSetting.AfterDaysMerchant" />
+                                <FormattedMessage id="Order.AfterDaysMerchant" />
                               </span>
                             </div>
                           </Col>
@@ -584,7 +584,7 @@ class OrderSetting extends Component<any, any> {
                       </Row>
                     </FormItem>
 
-                    <FormItem label={<FormattedMessage id="OrderSetting.AutomaticConfirmation" />}>
+                    <FormItem label={<FormattedMessage id="Order.AutomaticConfirmation" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -616,7 +616,7 @@ class OrderSetting extends Component<any, any> {
                               />
                               <span style={{ marginLeft: 10 }}>
                                 {' '}
-                                <FormattedMessage id="OrderSetting.AfterDaysAutomatically" />
+                                <FormattedMessage id="Order.AfterDaysAutomatically" />
                               </span>
                             </div>
                           </Col>
@@ -627,7 +627,7 @@ class OrderSetting extends Component<any, any> {
                 ) : null}
                 {paymentCategory === 'Cash' ? (
                   <>
-                    <FormItem label={<FormattedMessage id="OrderSetting.OrderExpirationTime" />}>
+                    <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -658,7 +658,7 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}>
-                                <FormattedMessage id="OrderSetting.AfterHoursCustomer" />
+                                <FormattedMessage id="Order.AfterHoursCustomer" />
                               </span>
                             </div>
                           </Col>
@@ -666,7 +666,7 @@ class OrderSetting extends Component<any, any> {
                       </Row>
                     </FormItem>
 
-                    <FormItem label={<FormattedMessage id="OrderSetting.AutomaticallyConfirm" />}>
+                    <FormItem label={<FormattedMessage id="Order.AutomaticallyConfirm" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -697,7 +697,7 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}>
-                                <FormattedMessage id="OrderSetting.AfterDaysCustomer" />
+                                <FormattedMessage id="Order.AfterDaysCustomer" />
                               </span>
                             </div>
                           </Col>
@@ -705,7 +705,7 @@ class OrderSetting extends Component<any, any> {
                       </Row>
                     </FormItem>
 
-                    <FormItem label={<FormattedMessage id="OrderSetting.CompletedOrdersAllowed" />}>
+                    <FormItem label={<FormattedMessage id="Order.CompletedOrdersAllowed" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -736,7 +736,7 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}>
-                                <FormattedMessage id="OrderSetting.WithinDaysCustomers" />
+                                <FormattedMessage id="Order.WithinDaysCustomers" />
                               </span>
                             </div>
                           </Col>
@@ -744,7 +744,7 @@ class OrderSetting extends Component<any, any> {
                       </Row>
                     </FormItem>
 
-                    <FormItem label={<FormattedMessage id="OrderSetting.AutomaticReview" />}>
+                    <FormItem label={<FormattedMessage id="Order.AutomaticReview" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -775,7 +775,7 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}>
-                                <FormattedMessage id="OrderSetting.AfterDaysTheMerchant" />
+                                <FormattedMessage id="Order.AfterDaysTheMerchant" />
                               </span>
                             </div>
                           </Col>
@@ -783,7 +783,7 @@ class OrderSetting extends Component<any, any> {
                       </Row>
                     </FormItem>
 
-                    <FormItem label={<FormattedMessage id="OrderSetting.AutomaticReceipt" />}>
+                    <FormItem label={<FormattedMessage id="Order.AutomaticReceipt" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -815,7 +815,7 @@ class OrderSetting extends Component<any, any> {
                               />
                               <span style={{ marginLeft: 10 }}>
                                 {' '}
-                                <FormattedMessage id="OrderSetting.AfterTheMerchant" />
+                                <FormattedMessage id="Order.AfterTheMerchant" />
                               </span>
                             </div>
                           </Col>
@@ -826,9 +826,9 @@ class OrderSetting extends Component<any, any> {
                 ) : null}
               </Form>
             </TabPane>
-            <TabPane tab={<FormattedMessage id="OrderSetting.Unlimited" />} key="Unlimited">
+            <TabPane tab={<FormattedMessage id="Order.Unlimited" />} key="Unlimited">
               <Form style={{ marginTop: 20 }} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-                <FormItem label={<FormattedMessage id="OrderSetting.OrderExpirationTime" />}>
+                <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -859,7 +859,7 @@ class OrderSetting extends Component<any, any> {
                             }
                           />
                           <span style={{ marginLeft: 10 }}>
-                            <FormattedMessage id="OrderSetting.HoursCustomer" />
+                            <FormattedMessage id="Order.HoursCustomer" />
                           </span>
                         </div>
                       </Col>
@@ -867,7 +867,7 @@ class OrderSetting extends Component<any, any> {
                   </Row>
                 </FormItem>
 
-                <FormItem label={<FormattedMessage id="OrderSetting.AutomaticallyConfirm" />}>
+                <FormItem label={<FormattedMessage id="Order.AutomaticallyConfirm" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -898,7 +898,7 @@ class OrderSetting extends Component<any, any> {
                             }
                           />
                           <span style={{ marginLeft: 10 }}>
-                            <FormattedMessage id="OrderSetting.CustomerOverdue" />
+                            <FormattedMessage id="Order.CustomerOverdue" />
                           </span>
                         </div>
                       </Col>
@@ -906,7 +906,7 @@ class OrderSetting extends Component<any, any> {
                   </Row>
                 </FormItem>
 
-                <FormItem label={<FormattedMessage id="OrderSetting.CompletedAllowed" />}>
+                <FormItem label={<FormattedMessage id="Order.CompletedAllowed" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -937,7 +937,7 @@ class OrderSetting extends Component<any, any> {
                             }
                           />
                           <span style={{ marginLeft: 10 }}>
-                            <FormattedMessage id="OrderSetting.AllowedToInitiate" />
+                            <FormattedMessage id="Order.AllowedToInitiate" />
                           </span>
                         </div>
                       </Col>
@@ -945,7 +945,7 @@ class OrderSetting extends Component<any, any> {
                   </Row>
                 </FormItem>
 
-                <FormItem label={<FormattedMessage id="OrderSetting.AutomaticReview" />}>
+                <FormItem label={<FormattedMessage id="Order.AutomaticReview" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -976,7 +976,7 @@ class OrderSetting extends Component<any, any> {
                             }
                           />
                           <span style={{ marginLeft: 10 }}>
-                            <FormattedMessage id="OrderSetting.AfterOverdueAndPending" />
+                            <FormattedMessage id="Order.AfterOverdueAndPending" />
                           </span>
                         </div>
                       </Col>
@@ -984,7 +984,7 @@ class OrderSetting extends Component<any, any> {
                   </Row>
                 </FormItem>
 
-                <FormItem label={<FormattedMessage id="OrderSetting.ConfirmationOfReceipt" />}>
+                <FormItem label={<FormattedMessage id="Order.ConfirmationOfReceipt" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -1016,7 +1016,7 @@ class OrderSetting extends Component<any, any> {
                           />
                           <span style={{ marginLeft: 10 }}>
                             {' '}
-                            <FormattedMessage id="OrderSetting.TheMerchantAutomatically" />
+                            <FormattedMessage id="Order.TheMerchantAutomatically" />
                           </span>
                         </div>
                       </Col>
@@ -1028,8 +1028,8 @@ class OrderSetting extends Component<any, any> {
           </Tabs>
         </div>
         <div className="bar-button">
-          <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateOrderSettingConfig()}>
-            {<FormattedMessage id="OrderSetting.save" />}
+          <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateOrderConfig()}>
+            {<FormattedMessage id="Order.save" />}
           </Button>
         </div>
       </div>
@@ -1048,4 +1048,4 @@ const styles = {
   }
 } as any;
 
-export default Form.create()(OrderSetting);
+export default Form.create()(Order);

@@ -26,7 +26,7 @@ export default class Bottom extends React.Component<any, any> {
       <div>
         <div style={{ marginTop: 20 }}>
           <Button style={{ marginLeft: 10 }} onClick={() => history.goBack()}>
-            {<FormattedMessage id="FinanceManageRewardDetails.back" />}
+            {<FormattedMessage id="Finance.back" />}
           </Button>
         </div>
 

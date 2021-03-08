@@ -10,7 +10,7 @@ type TResult = {
  * get list
  * @param filterParams
  */
-export function getSubscriptionPlanList(filterParams = {}) {
+export function getSubscriptionList(filterParams = {}) {
   return Fetch<TResult>('/sub/plan/find', {
     method: 'POST',
     body: JSON.stringify({
@@ -19,7 +19,7 @@ export function getSubscriptionPlanList(filterParams = {}) {
   });
 }
 
-export function setSubscriptionPlanEnableFlag(id, enableFlag) {
+export function setSubscriptionEnableFlag(id, enableFlag) {
   return Fetch<TResult>('/sub/plan/updateStatus', {
     method: 'PUT',
     body: JSON.stringify({ id, enableFlag })

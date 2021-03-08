@@ -71,13 +71,13 @@ export default class SearchForm extends React.Component<any, any> {
               >
                 <Option value={null}></Option>
                 <Option value="180">
-                  <FormattedMessage id="FinanceManageReward.LastDays180" />
+                  <FormattedMessage id="Finance.LastDays180" />
                 </Option>
                 <Option value="90">
-                  <FormattedMessage id="FinanceManageReward.LastDays90" />
+                  <FormattedMessage id="Finance.LastDays90" />
                 </Option>
                 <Option value="60">
-                  <FormattedMessage id="FinanceManageReward.LastDays60" />
+                  <FormattedMessage id="Finance.LastDays60" />
                 </Option>
               </Select>
             </FormItem>
@@ -85,7 +85,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8">
             <FormItem>
               <Input
-                addonBefore={<FormattedMessage id="FinanceManageReward.PrescriberID" />}
+                addonBefore={<FormattedMessage id="Finance.PrescriberID" />}
                 disabled={employeeData ? true : false}
                 onChange={(e) => {
                   const value = (e.target as any).value;
@@ -101,7 +101,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8">
             <FormItem>
               <Input
-                addonBefore={<FormattedMessage id="FinanceManageReward.PrescriberName" />}
+                addonBefore={<FormattedMessage id="Finance.PrescriberName" />}
                 disabled={employeeData ? true : false}
                 onChange={(e) => {
                   const value = (e.target as any).value;
@@ -127,7 +127,7 @@ export default class SearchForm extends React.Component<any, any> {
                   onSearch();
                 }}
               >
-                <FormattedMessage id="FinanceManageReward.search" />
+                <FormattedMessage id="Finance.search" />
               </Button>
             </FormItem>
           </Col>

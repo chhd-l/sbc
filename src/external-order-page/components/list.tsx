@@ -79,7 +79,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         ]}*/
       >
         <Column
-          title={<FormattedMessage id="ExternalOrderPage.ClinicsCRM" />}
+          title={<FormattedMessage id="Order.ClinicsCRM" />}
           key="clientId"
           dataIndex="clientId"
           /*render={(invoiceTime) => (
@@ -90,11 +90,11 @@ export default class OrderInvoiceList extends React.Component<any, any> {
             </span>
           )}*/
         />
-        <Column title={<FormattedMessage id="ExternalOrderPage.ClinicsName" />} key="clinicsName" dataIndex="clinicsName" />
-        <Column title={<FormattedMessage id="ExternalOrderPage.ClinicsRegion" />} key="clinicsCity" dataIndex="clinicsCity" />
-        <Column title={<FormattedMessage id="ExternalOrderPage.PrescriptionId" />} key="prescriptionId" dataIndex="prescriptionId" />
+        <Column title={<FormattedMessage id="Order.ClinicsName" />} key="clinicsName" dataIndex="clinicsName" />
+        <Column title={<FormattedMessage id="Order.ClinicsRegion" />} key="clinicsCity" dataIndex="clinicsCity" />
+        <Column title={<FormattedMessage id="Order.PrescriptionId" />} key="prescriptionId" dataIndex="prescriptionId" />
         <Column
-          title={<FormattedMessage id="ExternalOrderPage.OrderTime" />}
+          title={<FormattedMessage id="Order.OrderTime" />}
           dataIndex="date"
           key="date"
           render={(text, _rowData: any) => {
@@ -103,31 +103,31 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         />
 
         <Column
-          title={<FormattedMessage id="ExternalOrderPage.OrderNumber" />}
+          title={<FormattedMessage id="Order.OrderNumber" />}
           dataIndex="orderId"
           key="orderId"
           //render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
         />
-        <Column title={<FormattedMessage id="ExternalOrderPage.ProductId" />} dataIndex="productId" key="productId" />
-        <Column title={<FormattedMessage id="ExternalOrderPage.UnitPrice" />} key="price" dataIndex="price" render={(orderPrice) => <span>{orderPrice != null ? `${orderPrice.toFixed(2) + ' ' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}` : '-'}</span>} />
+        <Column title={<FormattedMessage id="Order.ProductId" />} dataIndex="productId" key="productId" />
+        <Column title={<FormattedMessage id="Order.UnitPrice" />} key="price" dataIndex="price" render={(orderPrice) => <span>{orderPrice != null ? `${orderPrice.toFixed(2) + ' ' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}` : '-'}</span>} />
 
-        <Column title={<FormattedMessage id="ExternalOrderPage.Qty" />} width="3%" key="quantity" dataIndex="quantity" />
+        <Column title={<FormattedMessage id="Order.Qty" />} width="3%" key="quantity" dataIndex="quantity" />
         <Column
-          title={<FormattedMessage id="ExternalOrderPage.OrderProductAmount" />}
+          title={<FormattedMessage id="Order.OrderProductAmount" />}
           key="totalIncome"
           dataIndex="totalIncome"
           width="11%"
           render={(orderPrice) => <span>{orderPrice != null ? `${orderPrice.toFixed(2) + ' ' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}` : '-'}</span>}
         />
         <Column
-          title={<FormattedMessage id="ExternalOrderPage.TotalOrderAmount" />}
+          title={<FormattedMessage id="Order.TotalOrderAmount" />}
           key="orderTotalIncome"
           width="11%"
           dataIndex="orderTotalIncome"
           render={(orderTotalIncome) => <span>{orderTotalIncome != null ? `${orderTotalIncome.toFixed(2) + ' ' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}` : '-'}</span>}
         />
 
-        <Column title={<FormattedMessage id="ExternalOrderPage.OrderStatus" />} key="orderStatus" dataIndex="orderStatus" />
+        <Column title={<FormattedMessage id="Order.OrderStatus" />} key="orderStatus" dataIndex="orderStatus" />
         {/*<Column
           title='Unit price'
           width="8%"
@@ -177,18 +177,18 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       <div className="operation-box">
         <AuthWrapper functionName="fetchOrderInovices">
           <a href="javascript:void(0);" onClick={() => onSearchByInvoiceId(id)}>
-            {<FormattedMessage id="ExternalOrderPage.view" />}
+            {<FormattedMessage id="Order.view" />}
           </a>
         </AuthWrapper>
 
         <AuthWrapper functionName="destoryOpenOrderInvoice">
           <Popconfirm
-            title={invoiceState == 0 ? <FormattedMessage id="ExternalOrderPage.Confirm" /> : <FormattedMessage id="ExternalOrderPage.Cancel" />}
+            title={invoiceState == 0 ? <FormattedMessage id="Order.Confirm" /> : <FormattedMessage id="Order.Cancel" />}
             onConfirm={() => {
               invoiceState == 0 ? onConfirm(id) : onDestory(id);
             }}
-            okText={<FormattedMessage id="ExternalOrderPage.btnConfirm" />}
-            cancelText={<FormattedMessage id="ExternalOrderPage.btnCancel" />}
+            okText={<FormattedMessage id="Order.btnConfirm" />}
+            cancelText={<FormattedMessage id="Order.btnCancel" />}
           >
             <a href="javascript:void(0);">{invoiceState == 0 ? 'Billing' : 'Cancellation'}</a>
           </Popconfirm>

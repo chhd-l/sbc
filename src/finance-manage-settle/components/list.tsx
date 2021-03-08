@@ -69,7 +69,7 @@ export default class List extends React.Component<any, any> {
       >
         {queryParams.get('settleStatus') == 1 && (
           <Column
-            title={<FormattedMessage id="FinanceManagesettle.statementTime" />}
+            title={<FormattedMessage id="Finance.statementTime" />}
             key="settleTime"
             dataIndex="settleTime"
             render={(value) => {
@@ -79,7 +79,7 @@ export default class List extends React.Component<any, any> {
         )}
 
         <Column
-          title={<FormattedMessage id="FinanceManagesettle.SettlementStatementTime" />}
+          title={<FormattedMessage id="Finance.SettlementStatementTime" />}
           key="createTime"
           dataIndex="createTime"
           render={(value) => {
@@ -87,20 +87,20 @@ export default class List extends React.Component<any, any> {
           }}
         />
 
-        <Column title={<FormattedMessage id="FinanceManagesettle.statementNumber" />} key="statementNo" dataIndex="settlementCode" />
+        <Column title={<FormattedMessage id="Finance.statementNumber" />} key="statementNo" dataIndex="settlementCode" />
 
         <Column
-          title={<FormattedMessage id="FinanceManagesettle.statementPeriod" />}
+          title={<FormattedMessage id="Finance.statementPeriod" />}
           key="statementTime"
           render={(row) => {
             return `${row.startTime}～${row.endTime}`;
           }}
         />
 
-        <Column title={<FormattedMessage id="FinanceManagesettle.storeName" />} key="storeName" dataIndex="storeName" />
+        <Column title={<FormattedMessage id="Finance.storeName" />} key="storeName" dataIndex="storeName" />
 
         <Column
-          title={<FormattedMessage id="FinanceManagesettle.Paymentamount" />}
+          title={<FormattedMessage id="Finance.Paymentamount" />}
           key="splitPayPrice"
           dataIndex="splitPayPrice"
           render={(value) => {
@@ -163,12 +163,12 @@ export default class List extends React.Component<any, any> {
         /> */}
 
         <Column
-          title={<FormattedMessage id="FinanceManagesettle.operation" />}
+          title={<FormattedMessage id="Finance.operation" />}
           key="operation"
           render={(row) => {
             return (
               <AuthWrapper functionName="f_billing_details">
-                <Tooltip placement="top" title={<FormattedMessage id="FinanceManagesettle.Details" />}>
+                <Tooltip placement="top" title={<FormattedMessage id="Finance.Details" />}>
                   <a
                     onClick={() =>
                       history.push({

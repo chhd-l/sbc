@@ -13,7 +13,7 @@ import { FormattedMessage } from 'react-intl';
 
 const { Step } = Steps;
 
-class SubscriptionPlanUpdate extends Component<any, any> {
+class Subscription extends Component<any, any> {
   static propTypes = {};
   static defaultProps = {
     id: null,
@@ -25,12 +25,12 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId;
     this.state = {
       id,
-      title: id ? <FormattedMessage id="SubscriptionPlanUpdate.index.EditPlan" /> : <FormattedMessage id="SubscriptionPlanUpdate.index.AddNewPlan" />,
+      title: id ? <FormattedMessage id="Subscription.index.EditPlan" /> : <FormattedMessage id="Subscription.index.AddNewPlan" />,
       current: 0,
       storeId,
-      subscriptionPlan: {
+      Subscription: {
         canCancelPlan: true,
-        subscriptionPlanFlag: true,
+        SubscriptionFlag: true,
         changeDeliveryDateFlag: true,
         skipNextDeliveryFlag: true,
         mainGoods: [],
@@ -64,14 +64,14 @@ class SubscriptionPlanUpdate extends Component<any, any> {
             frequencyList: res.context.sysDictionaryVOS.filter((x) => parseInt(x.valueEn) >= 3 && parseInt(x.valueEn) <= 5)
           });
         } else {
-          message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
+          message.error(res.message || <FormattedMessage id="Subscription.index.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
+        message.error(<FormattedMessage id="Subscription.index.GetDataFailed" />);
       });
     webapi
-      .getSubscriptionPlanTypes()
+      .getSubscriptionTypes()
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
@@ -83,15 +83,15 @@ class SubscriptionPlanUpdate extends Component<any, any> {
             planTypeList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
+          message.error(res.message || <FormattedMessage id="Subscription.index.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
+        message.error(<FormattedMessage id="Subscription.index.GetDataFailed" />);
       });
     if (id) {
       webapi
-        .getSubscriptionPlanById(id)
+        .getSubscriptionById(id)
         .then((data) => {
           const { res } = data;
           if (res.code === 'K-000000') {
@@ -99,14 +99,14 @@ class SubscriptionPlanUpdate extends Component<any, any> {
               history.push('/subscription-plan');
             }
             this.setState({
-              subscriptionPlan: res.context
+              Subscription: res.context
             });
           } else {
-            message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
+            message.error(res.message || <FormattedMessage id="Subscription.index.GetDataFailed" />);
           }
         })
         .catch((err) => {
-          message.error(err || <FormattedMessage id="SubscriptionPlanUpdate.index.GetDataFailed" />);
+          message.error(err || <FormattedMessage id="Subscription.index.GetDataFailed" />);
         });
     }
   }
@@ -127,53 +127,53 @@ class SubscriptionPlanUpdate extends Component<any, any> {
   }
 
   addField(field, value) {
-    let data = this.state.subscriptionPlan;
+    let data = this.state.Subscription;
     data[field] = value;
     this.setState({
-      subscriptionPlan: data
+      Subscription: data
     });
   }
-  updateSubscriptionPlan(e, isDraft) {
+  updateSubscription(e, isDraft) {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
-        const { subscriptionPlan, id } = this.state;
+        const { Subscription, id } = this.state;
         if (isDraft) {
-          subscriptionPlan.status = 0; // Draft
+          Subscription.status = 0; // Draft
         } else {
-          subscriptionPlan.status = 1; // Publish
+          Subscription.status = 1; // Publish
         }
-        subscriptionPlan.storeId = this.state.storeId;
+        Subscription.storeId = this.state.storeId;
         if (id) {
-          subscriptionPlan.id = id; // edit by id
+          Subscription.id = id; // edit by id
           webapi
-            .updateSubscriptionPlan(subscriptionPlan)
+            .updateSubscription(Subscription)
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success(<FormattedMessage id="SubscriptionPlanUpdate.index.OperateSuccessfully" />);
+                message.success(<FormattedMessage id="Subscription.index.OperateSuccessfully" />);
                 history.push({ pathname: '/subscription-plan' });
               } else {
-                message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.UpdateFailed" />);
+                message.error(res.message || <FormattedMessage id="Subscription.index.UpdateFailed" />);
               }
             })
             .catch((err) => {
-              message.error(err || <FormattedMessage id="SubscriptionPlanUpdate.index.UpdateFailed" />);
+              message.error(err || <FormattedMessage id="Subscription.index.UpdateFailed" />);
             });
         } else {
           webapi
-            .addSubscriptionPlan(subscriptionPlan)
+            .addSubscription(Subscription)
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success(<FormattedMessage id="SubscriptionPlanUpdate.index.OperateSuccessfully" />);
+                message.success(<FormattedMessage id="Subscription.index.OperateSuccessfully" />);
                 history.push({ pathname: '/subscription-plan' });
               } else {
-                message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.index.AddFailed" />);
+                message.error(res.message || <FormattedMessage id="Subscription.index.AddFailed" />);
               }
             })
             .catch((err) => {
-              message.error(err || <FormattedMessage id="SubscriptionPlanUpdate.index.AddFailed" />);
+              message.error(err || <FormattedMessage id="Subscription.index.AddFailed" />);
             });
         }
       }
@@ -181,44 +181,44 @@ class SubscriptionPlanUpdate extends Component<any, any> {
   }
   render() {
     const editable = this.props.editable;
-    const { current, title, subscriptionPlan, allSkuProduct, frequencyList, planTypeList } = this.state;
+    const { current, title, Subscription, allSkuProduct, frequencyList, planTypeList } = this.state;
     let targetDisabled = false;
     let saveDisabled = false;
     if (current === 1) {
-      targetDisabled = !subscriptionPlan.targetGoods || subscriptionPlan.targetGoods.length === 0;
+      targetDisabled = !Subscription.targetGoods || Subscription.targetGoods.length === 0;
     }
     if (current === 4) {
-      saveDisabled = !subscriptionPlan.mainGoods || subscriptionPlan.mainGoods.length === 0;
+      saveDisabled = !Subscription.mainGoods || Subscription.mainGoods.length === 0;
     }
     const steps = [
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.index.BasicInformation" />,
-        controller: <BasicInformation subscriptionPlan={subscriptionPlan} frequencyList={frequencyList} planTypeList={planTypeList} addField={this.addField} form={this.props.form} editable={editable} />
+        title: <FormattedMessage id="Subscription.index.BasicInformation" />,
+        controller: <BasicInformation Subscription={Subscription} frequencyList={frequencyList} planTypeList={planTypeList} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.index.TargetProduct" />,
-        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
+        title: <FormattedMessage id="Subscription.index.TargetProduct" />,
+        controller: <TargetProduct Subscription={Subscription} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.index.EntryCriteria" />,
-        controller: <EntryCriteria subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
+        title: <FormattedMessage id="Subscription.index.EntryCriteria" />,
+        controller: <EntryCriteria Subscription={Subscription} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.index.ExitRules" />,
-        controller: <ExitRules subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
+        title: <FormattedMessage id="Subscription.index.ExitRules" />,
+        controller: <ExitRules Subscription={Subscription} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.index.Details" />,
-        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
+        title: <FormattedMessage id="Subscription.index.Details" />,
+        controller: <Details Subscription={Subscription} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       }
     ];
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{editable ? title : subscriptionPlan.name}</Breadcrumb.Item>
+          <Breadcrumb.Item>{editable ? title : Subscription.name}</Breadcrumb.Item>
         </BreadCrumb>
 
-        <div className="container-search" id="subscriptionPlanStep">
+        <div className="container-search" id="SubscriptionStep">
           <Headline title={title} />
           <Steps current={current} labelPlacement="vertical">
             {steps.map((item) => (
@@ -230,21 +230,21 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           <div className="steps-action">
             {current > 0 && (
               <Button style={{ marginRight: 15 }} onClick={() => this.prev()}>
-                <Icon type="left" /> <FormattedMessage id="SubscriptionPlanUpdate.index.Return" />
+                <Icon type="left" /> <FormattedMessage id="Subscription.index.Return" />
               </Button>
             )}
             {current < steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.next(e)} disabled={targetDisabled}>
-                <FormattedMessage id="SubscriptionPlanUpdate.index.NextStep" /> <Icon type="right" />
+                <FormattedMessage id="Subscription.index.NextStep" /> <Icon type="right" />
               </Button>
             )}
             {current === steps.length - 1 && editable ? (
               <div className="saveBtn">
-                <Button disabled={saveDisabled} style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, true)}>
-                  <FormattedMessage id="SubscriptionPlanUpdate.index.Save" /> <Icon type="right" />
+                <Button disabled={saveDisabled} style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscription(e, true)}>
+                  <FormattedMessage id="Subscription.index.Save" /> <Icon type="right" />
                 </Button>
-                <Button disabled={saveDisabled} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, false)}>
-                  <FormattedMessage id="SubscriptionPlanUpdate.index.Publish" /> <Icon type="right" />
+                <Button disabled={saveDisabled} type="primary" onClick={(e) => this.updateSubscription(e, false)}>
+                  <FormattedMessage id="Subscription.index.Publish" /> <Icon type="right" />
                 </Button>
               </div>
             ) : null}
@@ -254,4 +254,4 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     );
   }
 }
-export default Form.create()(SubscriptionPlanUpdate);
+export default Form.create()(Subscription);

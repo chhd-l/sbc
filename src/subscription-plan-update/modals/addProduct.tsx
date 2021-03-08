@@ -49,11 +49,11 @@ export default class addTargetProduct extends Component<any, any> {
             brandList: res.context
           });
         } else {
-          message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.GetDataFailed" />);
+          message.error(res.message || <FormattedMessage id="Subscription.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="SubscriptionPlanUpdate.GetDataFailed" />);
+        message.error(<FormattedMessage id="Subscription.GetDataFailed" />);
       });
 
     webapi
@@ -73,11 +73,11 @@ export default class addTargetProduct extends Component<any, any> {
             productCategories: treeData
           });
         } else {
-          message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.GetDataFailed" />);
+          message.error(res.message || <FormattedMessage id="Subscription.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="SubscriptionPlanUpdate.GetDataFailed" />);
+        message.error(<FormattedMessage id="Subscription.GetDataFailed" />);
       });
 
     this.getSkuProductList();
@@ -131,14 +131,14 @@ export default class addTargetProduct extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || <FormattedMessage id="SubscriptionPlanUpdate.GetDataFailed" />);
+          message.error(res.message || <FormattedMessage id="Subscription.GetDataFailed" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || <FormattedMessage id="SubscriptionPlanUpdate.GetDataFailed" />);
+        message.error(err || <FormattedMessage id="Subscription.GetDataFailed" />);
         this.setState({
           loading: false
         });
@@ -186,44 +186,44 @@ export default class addTargetProduct extends Component<any, any> {
     const { visible } = this.props;
     const columns = [
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.addProduct.Image" />,
+        title: <FormattedMessage id="Subscription.addProduct.Image" />,
         dataIndex: 'goodsInfoImg',
         key: 'goodsInfoImg',
         render: (text) => <img src={text} alt="" style={{ width: 20 }} />,
         width: '10%'
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.addProduct.SKU" />,
+        title: <FormattedMessage id="Subscription.addProduct.SKU" />,
         dataIndex: 'goodsInfoNo',
         key: 'goodsInfoNo',
         width: '15%'
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.addProduct.ProductName" />,
+        title: <FormattedMessage id="Subscription.addProduct.ProductName" />,
         dataIndex: 'goodsInfoName',
         key: 'goodsInfoName',
         width: '20%'
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.addProduct.Specification" />,
+        title: <FormattedMessage id="Subscription.addProduct.Specification" />,
         dataIndex: 'specName',
         key: 'specName',
         width: '15%'
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.addProduct.ProductCategory" />,
+        title: <FormattedMessage id="Subscription.addProduct.ProductCategory" />,
         dataIndex: 'goodsCateName',
         key: 'goodsCateName',
         width: '15%'
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.addProduct.Brand" />,
+        title: <FormattedMessage id="Subscription.addProduct.Brand" />,
         dataIndex: 'brandName',
         key: 'brandName',
         width: '15%'
       },
       {
-        title: <FormattedMessage id="SubscriptionPlanUpdate.addProduct.Price" />,
+        title: <FormattedMessage id="Subscription.addProduct.Price" />,
         dataIndex: 'marketPrice',
         key: 'marketPrice',
         width: '10%'
@@ -244,12 +244,12 @@ export default class addTargetProduct extends Component<any, any> {
           className="addTargetProductModal"
           width="1100px"
           maskClosable={false}
-          title={<FormattedMessage id="SubscriptionPlanUpdate.addProduct.AddProducts" />}
+          title={<FormattedMessage id="Subscription.addProduct.AddProducts" />}
           visible={visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          okText={<FormattedMessage id="SubscriptionPlanUpdate.addProduct.Confirm" />}
-          cancelText={<FormattedMessage id="SubscriptionPlanUpdate.addProduct.Cancel" />}
+          okText={<FormattedMessage id="Subscription.addProduct.Confirm" />}
+          cancelText={<FormattedMessage id="Subscription.addProduct.Cancel" />}
         >
           <Form className="filter-content" layout="inline">
             <Row>
@@ -258,7 +258,7 @@ export default class addTargetProduct extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="formLable">
-                        <FormattedMessage id="SubscriptionPlanUpdate.addProduct.SKU" />
+                        <FormattedMessage id="Subscription.addProduct.SKU" />
                       </p>
                     }
                     style={{ width: 300 }}
@@ -273,7 +273,7 @@ export default class addTargetProduct extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="formLable">
-                        <FormattedMessage id="SubscriptionPlanUpdate.addProduct.ProductName" />
+                        <FormattedMessage id="Subscription.addProduct.ProductName" />
                       </p>
                     }
                     style={{ width: 300 }}
@@ -291,7 +291,7 @@ export default class addTargetProduct extends Component<any, any> {
                       getPopupContainer={() => document.getElementById('page-content')}
                       label={
                         <p className="formLable">
-                          <FormattedMessage id="SubscriptionPlanUpdate.addProduct.Brand" />
+                          <FormattedMessage id="Subscription.addProduct.Brand" />
                         </p>
                       }
                       defaultValue="All"
@@ -321,7 +321,7 @@ export default class addTargetProduct extends Component<any, any> {
                       getPopupContainer={() => document.getElementById('page-content')}
                       label={
                         <p className="formLable">
-                          <FormattedMessage id="SubscriptionPlanUpdate.addProduct.ProductCategory" />
+                          <FormattedMessage id="Subscription.addProduct.ProductCategory" />
                         </p>
                       }
                       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -348,7 +348,7 @@ export default class addTargetProduct extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="SubscriptionPlanUpdate.addProduct.search" />
+                      <FormattedMessage id="Subscription.addProduct.search" />
                     </span>
                   </Button>
                 </FormItem>

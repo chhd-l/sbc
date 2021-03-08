@@ -15,10 +15,10 @@ export default class targetProduct extends Component<any, any> {
   }
 
   deleteProduct(key) {
-    const { subscriptionPlan, addField, allSkuProduct } = this.props;
+    const { Subscription, addField, allSkuProduct } = this.props;
 
     let newTargetProductIds = [];
-    subscriptionPlan.targetGoodsIds.map((item) => {
+    Subscription.targetGoodsIds.map((item) => {
       if (item !== key) {
         newTargetProductIds.push(item);
       }
@@ -47,14 +47,14 @@ export default class targetProduct extends Component<any, any> {
 
   render() {
     const { loading, visible } = this.state;
-    const { editable, subscriptionPlan } = this.props;
+    const { editable, Subscription } = this.props;
     return (
       <div>
         <h3>
-          <FormattedMessage id="SubscriptionPlanUpdate.Step2" />
+          <FormattedMessage id="Subscription.Step2" />
         </h3>
         <h4>
-          <FormattedMessage id="SubscriptionPlanUpdate.TargetProduct" />
+          <FormattedMessage id="Subscription.TargetProduct" />
         </h4>
         <div className="targetProduct">
           <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -66,31 +66,31 @@ export default class targetProduct extends Component<any, any> {
                       <thead className="ant-table-thead">
                         <tr>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage id="SubscriptionPlanUpdate.Image" />
+                            <FormattedMessage id="Subscription.Image" />
                           </th>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage id="SubscriptionPlanUpdate.SKU" />
+                            <FormattedMessage id="Subscription.SKU" />
                           </th>
                           <th style={{ width: '20%' }}>
-                            <FormattedMessage id="SubscriptionPlanUpdate.ProductName" />
+                            <FormattedMessage id="Subscription.ProductName" />
                           </th>
                           <th style={{ width: '15%' }}>
-                            <FormattedMessage id="SubscriptionPlanUpdate.Specification" />
+                            <FormattedMessage id="Subscription.Specification" />
                           </th>
                           <th style={{ width: '25%' }}>
-                            <FormattedMessage id="SubscriptionPlanUpdate.ProductCategory" />
+                            <FormattedMessage id="Subscription.ProductCategory" />
                           </th>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage id="SubscriptionPlanUpdate.Brand" />
+                            <FormattedMessage id="Subscription.Brand" />
                           </th>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage id="SubscriptionPlanUpdate.Price" />
+                            <FormattedMessage id="Subscription.Price" />
                           </th>
                         </tr>
                       </thead>
                       <tbody className="ant-table-tbody">
-                        {subscriptionPlan.targetGoods &&
-                          subscriptionPlan.targetGoods.map((item) => (
+                        {Subscription.targetGoods &&
+                          Subscription.targetGoods.map((item) => (
                             <tr key={item.goodsInfoId}>
                               <td>
                                 <img src={item.goodsInfoImg} />
@@ -120,7 +120,7 @@ export default class targetProduct extends Component<any, any> {
                       <div className="noProduct">
                         <div className="addProduct" onClick={this.showAddTargetProduct}>
                           <span>
-                            <FormattedMessage id="SubscriptionPlanUpdate.AddProduct" />
+                            <FormattedMessage id="Subscription.AddProduct" />
                           </span>
                         </div>
                       </div>

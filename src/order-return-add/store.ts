@@ -7,7 +7,7 @@ import FormActor from './actor/form-actor';
 import TradeActor from './actor/trade-actor';
 import PriceActor from './actor/price-actor';
 import ImageActor from './actor/image-actor';
-import { addApply, fetchOrderReturnList, getReturnReasons, getReturnWays, getTradeDetail } from './webapi';
+import { addApply, fetchOrder, getReturnReasons, getReturnWays, getTradeDetail } from './webapi';
 
 const confirm = Modal.confirm;
 
@@ -37,10 +37,10 @@ export default class AppStore extends Store {
 
     let isOnLine = tradeDetail.res.context.payInfo.payTypeId == '0';
 
-    let orderReturnListRes = await fetchOrderReturnList(tid);
+    let OrderRes = await fetchOrder(tid);
     let returnOrderList = [];
-    if (orderReturnListRes.res && orderReturnListRes.res['context']) {
-      returnOrderList = orderReturnListRes.res['context'];
+    if (OrderRes.res && OrderRes.res['context']) {
+      returnOrderList = OrderRes.res['context'];
     }
 
     // 在线支付订单，计算剩余退款金额

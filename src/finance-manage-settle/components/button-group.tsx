@@ -36,7 +36,7 @@ export default class ButtonGroup extends React.Component<any, any> {
           getPopupContainer={() => document.getElementById('page-content')}
         >
           <Button>
-            <FormattedMessage id="FinanceManagesettle.BatchOperation" />
+            <FormattedMessage id="Finance.BatchOperation" />
             <Icon type="down" />
           </Button>
         </Dropdown>
@@ -52,14 +52,14 @@ export default class ButtonGroup extends React.Component<any, any> {
         {(settleStatus == '0' || settleStatus == 2) && (
           <Menu.Item>
             <a onClick={() => this._handleBatchOption(1)}>
-              <FormattedMessage id="FinanceManagesettle.SetAsSettled" />
+              <FormattedMessage id="Finance.SetAsSettled" />
             </a>
           </Menu.Item>
         )}
         {(settleStatus == '0' || settleStatus == 1) && (
           <Menu.Item>
             <a onClick={() => bulkExport()}>
-              <FormattedMessage id="FinanceManagesettle.BulkExport" />
+              <FormattedMessage id="Finance.BulkExport" />
             </a>
           </Menu.Item>
         )}
@@ -77,7 +77,7 @@ export default class ButtonGroup extends React.Component<any, any> {
     if (checkedSettleIds && checkedSettleIds.size != 0) {
       changeSettleStatus(checkedSettleIds.toJS(), status);
     } else {
-      message.error(<FormattedMessage id="FinanceManagesettle.NotCheckedAnyRecords" />);
+      message.error(<FormattedMessage id="Finance.NotCheckedAnyRecords" />);
     }
   };
 }

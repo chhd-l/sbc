@@ -36,10 +36,7 @@ class FinancialSettlement extends React.Component<any, any> {
             <Breadcrumb.Item>财务结算</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline
-              title={<FormattedMessage id="FinanceManagesettle.financialSettlement" />}
-              smallTitle={this.props.intl.formatMessage({ id: 'FinanceManagesettle.YourSettlementDate' }) + `${this.store.state().get('accountDay')}` + this.props.intl.formatMessage({ id: 'FinanceManagesettle.EachMonth' })}
-            />
+            <Headline title={<FormattedMessage id="Finance.financialSettlement" />} smallTitle={this.props.intl.formatMessage({ id: 'Finance.YourSettlementDate' }) + `${this.store.state().get('accountDay')}` + this.props.intl.formatMessage({ id: 'Finance.EachMonth' })} />
 
             <SearchForm />
 

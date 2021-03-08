@@ -1188,8 +1188,7 @@ export default class AppStore extends Store {
     // }
 
     param = param.set('goodsTabRelas', tabs);
-
-    goods = goods.set('goodsType', 0);
+    goods = goods.set('goodsType', goods.get('goodsType') == 3 ? goods.get('goodsType') : 0);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');

@@ -32,18 +32,17 @@ export default class GoodsGrid extends React.Component<any, any> {
     };
   }
 
-   props: {
+  props: {
     relaxProps?: {
       productTooltip: any;
-      goodsId: any
+      goodsId: any;
     };
   };
 
   static relaxProps = {
     productTooltip: 'productTooltip',
-    goodsId: 'goodsId',
+    goodsId: 'goodsId'
   };
-
 
   componentDidMount() {
     this.init(this.props.searchParams ? this.props.searchParams : {});
@@ -53,13 +52,13 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: nextProps.searchParams ? nextProps.searchParams : {},
-        goodsInfoPage: nextProps.productTooltip,
+        goodsInfoPage: nextProps.productTooltip
       });
       this.init(nextProps.searchParams ? nextProps.searchParams : {});
     }
     this.setState({
       selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
-      selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : [],
+      selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
     });
   }
 
@@ -93,6 +92,7 @@ export default class GoodsGrid extends React.Component<any, any> {
               const sRows = fromJS(selectedRows).filter((f) => f);
               let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
               let rowsArr = [];
+              console.log(selectedRowKeys, 11111);
               rows.toJS().map((item) => {
                 rowsArr.push(item.goodsId);
               });
@@ -105,7 +105,7 @@ export default class GoodsGrid extends React.Component<any, any> {
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps: (record) => {
-              return {defaultChecked:record.selectedFlag}
+              return { defaultChecked: record.selectedFlag };
             }
           }}
         >

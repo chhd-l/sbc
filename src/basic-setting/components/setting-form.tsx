@@ -178,7 +178,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="contactEmails" />}>
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Setting.contactEmails" />}>
               {getFieldDecorator('contactEmail', {
                 initialValue: contactEmail
               })(<Input />)}
@@ -188,7 +188,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="address" />}>
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Setting.address" />}>
               {getFieldDecorator('addressDetail', {
                 initialValue: addressDetail
               })(<Input />)}
@@ -198,7 +198,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <div className="bar-button">
           <Button type="primary" htmlType="submit">
-            {<FormattedMessage id="save" />}
+            {<FormattedMessage id="Setting.save" />}
           </Button>
         </div>
       </Form>

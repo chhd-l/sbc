@@ -1194,6 +1194,9 @@ export default {
   'Setting.storeName': 'Store name',
   'Setting.Contact': 'Contact',
   'Setting.phoneNumber': 'Phone number',
+  'Setting.contactEmails': 'Contact emails',
+  'Setting.address': 'Address',
+  'Setting.save': 'Save',
 
 
 

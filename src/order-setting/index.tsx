@@ -826,7 +826,7 @@ class OrderSetting extends Component<any, any> {
                 ) : null}
               </Form>
             </TabPane>
-            <TabPane tab={<FormattedMessage id="Unlimited" />} key="Unlimited">
+            <TabPane tab={<FormattedMessage id="OrderSetting.Unlimited" />} key="Unlimited">
               <Form style={{ marginTop: 20 }} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
                 <FormItem label={<FormattedMessage id="OrderSetting.OrderExpirationTime" />}>
                   <Row>

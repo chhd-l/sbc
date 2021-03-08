@@ -45,7 +45,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="initiateApplication" />} number={total} />
+        <Headline title={<FormattedMessage id="OrderReturnApplyList.initiateApplication" />} number={total} />
 
         <div>
           <Form className="filter-content" layout="inline">
@@ -124,7 +124,7 @@ export default class SearchHead extends Component<any, any> {
                   >
                     {
                       <span>
-                        <FormattedMessage id="search" />
+                        <FormattedMessage id="OrderReturnApplyList.search" />
                       </span>
                     }
                   </Button>
@@ -154,8 +154,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerSelect}
         style={{ width: 100 }}
       >
-        <Option value="buyerName">{<FormattedMessage id="consumerName" />}</Option>
-        <Option value="buyerAccount">{<FormattedMessage id="consumerAccount" />}</Option>
+        <Option value="buyerName">{<FormattedMessage id="OrderReturnApplyList.consumerName" />}</Option>
+        <Option value="buyerAccount">{<FormattedMessage id="OrderReturnApplyList.consumerAccount" />}</Option>
       </Select>
     );
   };
@@ -177,8 +177,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={{ width: 100 }}
       >
-        <Option value="consigneeName">{<FormattedMessage id="recipient" />}</Option>
-        <Option value="consigneePhone">{<FormattedMessage id="recipientPhone" />}</Option>
+        <Option value="consigneeName">{<FormattedMessage id="OrderReturnApplyList.recipient" />}</Option>
+        <Option value="consigneePhone">{<FormattedMessage id="OrderReturnApplyList.recipientPhone" />}</Option>
       </Select>
     );
   };
@@ -200,8 +200,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={{ width: 100 }}
       >
-        <Option value="skuName">{<FormattedMessage id="productName" />}</Option>
-        <Option value="skuNo">{<FormattedMessage id="skuCode" />}</Option>
+        <Option value="skuName">{<FormattedMessage id="OrderReturnApplyList.productName" />}</Option>
+        <Option value="skuNo">{<FormattedMessage id="OrderReturnApplyList.skuCode" />}</Option>
       </Select>
     );
   };

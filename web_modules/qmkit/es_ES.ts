@@ -455,6 +455,7 @@ export default {
   'OrderSetting.ConfirmationOfReceipt':'Automatic confirmation of receipt of return order',
   'OrderSetting.TheMerchantAutomatically':'After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.',
   'OrderSetting.save':'Save',
+  
 
   'OrderReturnList.all':'All',
   'OrderReturnList.pendingReview':'Pending review',
@@ -465,10 +466,21 @@ export default {
   'OrderReturnList.refusedToRefund':'Refused to refund',
   'OrderReturnList.refundFailed':'Refund failed',
   
-
-  
-
-
+  'OrderReturnApplyList.initiateApplication':'Initiate after-sales application',
+  'OrderReturnApplyList.search':'Search',
+  'OrderReturnApplyList.consumerName':'Consumer name',
+  'OrderReturnApplyList.consumerAccount':'Consumer account',
+  'OrderReturnApplyList.recipient':'Recipient',
+  'OrderReturnApplyList.recipientPhone':'Recipient phone',
+  'OrderReturnApplyList.productName':'Product name',
+  'OrderReturnApplyList.skuCode':'SKU code',
+  'OrderReturnApplyList.commodity':'Commodity',
+  'OrderReturnApplyList.amount':'Amount',
+  'OrderReturnApplyList.quantity':'Quantity',
+  'OrderReturnApplyList.noData':'no data',
+  'OrderReturnApplyList.Application':'Application',
+  'OrderReturnApplyList.ignore':'//@ts-ignore',
+  'OrderReturnApplyList.total':'total',
 
   /* --External-Order-Page--*/
   'ExternalOrderPage.ClinicsCRM':'Clinics CRM id',
@@ -788,6 +800,16 @@ export default {
   'Subscription.recipientOption.ReceiverPhone':'Receiver Phone',
   'Subscription.prescriberOption.AuditorName':'Auditor Name',
   'Subscription.prescriberOption.AuditorID':'Auditor ID',
+  'Subscription.TagManagementDetail':'Tag management detail',
+  'Subscription.OperationFailure':'Operation failure',
+  'Subscription.OperationSuccessful':'Operation successful',
+  'Subscription.TagDescription':'Tag description',
+  'Subscription.CreatedOn':'Created on',
+  'Subscription.LastModified':'Last Modified',
+  'Subscription.PetOwnerList':'Pet owner list (',
+  'Subscription.SubscriptionPlan':'Subscription plan',
+  'Subscription.Subscriptionedit':'Subscription edit',
+  'Subscription.PleaseInputKeyword':'Please input keyword',
 
   'Subscription.batchExport': 'Batch export',
   'Subscription.Frequency': 'Frequency',
@@ -1040,6 +1062,7 @@ export default {
   'SubscriptionEdit.quantityAndFrequency':'Please enter the correct quantity and frequency!',
   'SubscriptionEdit.OperateSuccessfully':'Operate successfully',
   'SubscriptionEdit.OperationSuccessful':'Operation successful',
+  'SubscriptionEdit.AutNoStartoshipOrder.EnjoyDiscount':'Enjoy discount',
 
   'SubscriptionEdit.Product':'Product',
   'SubscriptionEdit.Price':'Price',
@@ -1142,6 +1165,13 @@ export default {
   'FinanceManagesettle.financialSettlement':'Finance settlement',
   'FinanceManagesettle.Reward':'Reward',
   'FinanceManagesettle.bulkExport':'Bulk export',
+  'FinanceManagesettle.search':'Search',
+  'FinanceManagesettle.TheStartTime':'The start time and end time should be within three months',
+  'FinanceManagesettle.YourSettlementDate':'Your settlement date is',
+  'FinanceManagesettle.EachMonth':'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
+  'FinanceManagesettle.Reward':'Reward',
+  'FinanceManagesettle.Reward':'Reward',
+  'FinanceManagesettle.Reward':'Reward',
   
   'FinanceManageReward.invoiceStatus':'Invoice Status',
   'FinanceManageReward.orderNumber':'   Order number  ',
@@ -1188,7 +1218,7 @@ export default {
   'FinanceManageRewardDetails.RepeatOrder':'Repeat order',
   'FinanceManageRewardDetails.view':'View',
   
-
+  'FinanceInvoiceList':'',
   
 
   /*-----------------------------  Marketing  ----------------------------------------*/

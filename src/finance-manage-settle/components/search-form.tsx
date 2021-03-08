@@ -58,20 +58,12 @@ export default class SearchForm extends React.Component<any, any> {
         <Form className="filter-content" layout="inline">
           <FormItem>
             <RangePicker
-              getCalendarContainer={() =>
-                document.getElementById('page-content')
-              }
+              getCalendarContainer={() => document.getElementById('page-content')}
               allowClear={false}
               format="YYYY-MM-DD"
               placeholder={['起始时间', '结束时间']}
-              onChange={(date, dateString) =>
-                this._handleDateParams(date, dateString)
-              }
-              renderExtraFooter={() =>
-                pickErrorInfo != '' && (
-                  <span style={{ color: 'red' }}>{pickErrorInfo}</span>
-                )
-              }
+              onChange={(date, dateString) => this._handleDateParams(date, dateString)}
+              renderExtraFooter={() => pickErrorInfo != '' && <span style={{ color: 'red' }}>{pickErrorInfo}</span>}
               value={[startTime, endTime]}
               open={pickOpen}
               onOpenChange={() => this.setState({ pickErrorInfo: '' })}
@@ -123,7 +115,7 @@ export default class SearchForm extends React.Component<any, any> {
               }}
             >
               <span>
-                <FormattedMessage id="search" />
+                <FormattedMessage id="FinanceManagesettle.search" />
               </span>
             </Button>
           </FormItem>
@@ -142,11 +134,7 @@ export default class SearchForm extends React.Component<any, any> {
     let startTime = date[0];
     let endTime = date[1];
     let endTimeClone = endTime.clone().subtract(3, 'months');
-    if (
-      moment(startTime.format('YYYY-MM-DD')).isSameOrAfter(
-        moment(endTimeClone.format('YYYY-MM-DD'))
-      )
-    ) {
+    if (moment(startTime.format('YYYY-MM-DD')).isSameOrAfter(moment(endTimeClone.format('YYYY-MM-DD')))) {
       this.setState({ pickOpen: false, pickErrorInfo: '', startTime, endTime });
       const { storeQueryParams } = this.props.relaxProps;
       storeQueryParams('startTime', startTime);
@@ -154,8 +142,7 @@ export default class SearchForm extends React.Component<any, any> {
     } else {
       this.setState({
         pickOpen: true,
-        pickErrorInfo:
-          'The start time and end time should be within three months'
+        pickErrorInfo: <FormattedMessage id="FinanceManagesettle.TheStartTime" />
       });
     }
   };
@@ -200,10 +187,7 @@ export default class SearchForm extends React.Component<any, any> {
       return false;
     }
     let endTimeClone: any = endTime.clone();
-    return (
-      startTime.valueOf() > endTimeClone.valueOf() ||
-      startTime.valueOf() < endTimeClone.subtract(3, 'months').valueOf()
-    );
+    return startTime.valueOf() > endTimeClone.valueOf() || startTime.valueOf() < endTimeClone.subtract(3, 'months').valueOf();
   };
 
   /**
@@ -218,10 +202,7 @@ export default class SearchForm extends React.Component<any, any> {
       return false;
     }
     let startTimeClone: any = startTime.clone();
-    return (
-      endTime.valueOf() <= startTimeClone.valueOf() ||
-      endTime.valueOf() > startTimeClone.add(3, 'months').valueOf()
-    );
+    return endTime.valueOf() <= startTimeClone.valueOf() || endTime.valueOf() > startTimeClone.add(3, 'months').valueOf();
   };
 
   onChange = (field: any, value: any) => {

@@ -10,12 +10,17 @@ import AppStore from './store';
 import SearchForm from './components/search-form';
 import TabList from './components/tab-list';
 import ButtonGroup from './components/button-group';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class FinancialSettlement extends React.Component<any, any> {
+class FinancialSettlement extends React.Component<any, any> {
   store: AppStore;
-
+  constructor(props) {
+    super(props);
+  }
+  props: {
+    intl: any;
+  };
   componentDidMount() {
     this.store.init();
   }
@@ -33,12 +38,12 @@ export default class FinancialSettlement extends React.Component<any, any> {
           <div className="container-search">
             <Headline
               title={<FormattedMessage id="FinanceManagesettle.financialSettlement" />}
-              smallTitle={`Your settlement date is ${this.store.state().get('accountDay')}th of each month, when the month does not include the set date, it will be postponed to the next settlement date`}
+              smallTitle={this.props.intl.formatMessage({ id: 'FinanceManagesettle.YourSettlementDate' }) + `${this.store.state().get('accountDay')}` + this.props.intl.formatMessage({ id: 'FinanceManagesettle.EachMonth' })}
             />
 
             <SearchForm />
 
-            {/*<AuthWrapper functionName="f_settle_export">
+            {/*<AuthWrapper functionName="f_settle_export">s
               <div style={{ paddingBottom: '16px' }}>
                 <Button onClick={() => this.store.bulkExport()}>
                   {<FormattedMessage id="bulkExport" />}
@@ -56,3 +61,4 @@ export default class FinancialSettlement extends React.Component<any, any> {
     );
   }
 }
+export default injectIntl(FinancialSettlement);

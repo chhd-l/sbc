@@ -26,11 +26,11 @@ export default class SubscriptionList extends Component<any, any> {
         prescriberOption: <FormattedMessage id="Subscription.searchForm.AuditorName" />,
         prescriber: ''
       },
-      subscriptionOption: [<FormattedMessage id="Subscription.subscriptionOption.SubscriptionNumber" />, <FormattedMessage id="Subscription.subscriptionOption.OrderNumber" />],
-      consumerOption: ['Consumer Name', 'Consumer Account'],
-      productOption: ['Product Name', 'SKU Code'],
-      recipientOption: ['Receiver', 'Receiver Phone'],
-      prescriberOption: ['Auditor Name', 'Auditor ID'],
+      subscriptionOption: ['Subscription.subscriptionOption.SubscriptionNumber', 'Subscription.subscriptionOption.OrderNumber'],
+      consumerOption: ['Subscription.consumerOption.ConsumerName', 'Subscription.consumerOption.ConsumerAccount'],
+      productOption: ['Subscription.productOption.ProductName', 'Subscription.productOption.SKUCode'],
+      recipientOption: ['Subscription.recipientOption.Receiver', 'Subscription.recipientOption.ReceiverPhone'],
+      prescriberOption: ['Subscription.prescriberOption.AuditorName', 'Subscription.prescriberOption.AuditorID'],
       frequencyList: [],
       activeKey: 'all',
       subscriptionList: [],
@@ -258,7 +258,7 @@ export default class SubscriptionList extends Component<any, any> {
                           style={{ width: 170 }}
                           defaultValue={searchForm.subscriptionOption}
                           onChange={(value) => {
-                            value = value === '' ? null : value;
+                            value = value == '' ? null : value;
                             this.onFormChange({
                               field: 'subscriptionOption',
                               value
@@ -267,7 +267,7 @@ export default class SubscriptionList extends Component<any, any> {
                         >
                           {subscriptionOption.map((item) => (
                             <Option value={item} key={item}>
-                              {item}
+                              {<FormattedMessage id={item} />}
                             </Option>
                           ))}
                         </Select>
@@ -300,7 +300,7 @@ export default class SubscriptionList extends Component<any, any> {
                         >
                           {productOption.map((item) => (
                             <Option value={item} key={item}>
-                              {item}
+                              {<FormattedMessage id={item} />}
                             </Option>
                           ))}
                         </Select>
@@ -363,7 +363,7 @@ export default class SubscriptionList extends Component<any, any> {
                         >
                           {consumerOption.map((item) => (
                             <Option value={item} key={item}>
-                              {item}
+                              {<FormattedMessage id={item} />}
                             </Option>
                           ))}
                         </Select>
@@ -427,7 +427,7 @@ export default class SubscriptionList extends Component<any, any> {
                           >
                             {prescriberOption.map((item) => (
                               <Option value={item} key={item}>
-                                {item}
+                                {<FormattedMessage id={item} />}
                               </Option>
                             ))}
                           </Select>

@@ -7,13 +7,17 @@ const spec = {
       name: props.name
     };
   },
-  endDrag(props, monitor) {}
+  endDrag(props, monitor) {
+    console.log(props, monitor, monitor.getDropResult());
+  }
 };
 
 @DragSource('box', spec, (connect, monitor) => ({ connectDragSource: connect.dragSource(), isDragging: monitor.isDragging() }))
 class DragField extends React.Component<any, any> {
   render() {
-    const { connectDragSource } = this.props;
-    return connectDragSource && connectDragSource(<span className="field-item">First name</span>);
+    const { name, connectDragSource } = this.props;
+    return connectDragSource && connectDragSource(<span className="field-item">{name}</span>);
   }
 }
+
+export default DragField;

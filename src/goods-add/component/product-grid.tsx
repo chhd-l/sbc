@@ -91,21 +91,15 @@ export default class GoodsGrid extends React.Component<any, any> {
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
               const sRows = fromJS(selectedRows).filter((f) => f);
               let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
-              let rowsArr = [];
-              console.log(selectedRowKeys, 11111);
-              rows.toJS().map((item) => {
-                rowsArr.push(item.goodsId);
-              });
-              //rows = selectedRowKeys.map((key) => {rows.filter((row) => row.get('goodsId') == key).first()}).filter((f) => f);
+              rows = selectedRowKeys.map((key) => rows.filter((row) => row.get('goodsId') == key).first()).filter((f) => f);
               this.setState({
-                selectedRows: rowsArr,
+                selectedRows: rows,
                 selectedRowKeys
               });
-
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps: (record) => {
-              return { defaultChecked: record.selectedFlag };
+              return { defaultChecked: record.selectedFlag, disabled: record.selectedFlag };
             }
           }}
         >

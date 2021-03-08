@@ -72,12 +72,13 @@ class PetOwnerTagging extends Component<any, any> {
 
           this.getTaggingList();
           this.props.form.resetFields();
+        } else {
+          this.setState({
+            loading: false
+          });
         }
       })
       .catch((err) => {
-        this.setState({
-          loading: false
-        });
         message.error(err.toString() || 'Operation failure');
       });
   };
@@ -94,6 +95,10 @@ class PetOwnerTagging extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'Operation successful');
           this.getTaggingList();
+        } else {
+          this.setState({
+            loading: false
+          });
         }
       })
       .catch((err) => {

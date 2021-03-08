@@ -26,7 +26,7 @@ export default class BasicSetting extends React.Component<any, any> {
         <div>
           <BreadCrumb />
           <div className="container-search">
-            <Headline title={<FormattedMessage id="storeSetting" />} />
+            <Headline title={<FormattedMessage id="Setting.storeSetting" />} />
             <SettingFormDetail />
           </div>
         </div>

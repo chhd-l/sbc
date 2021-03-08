@@ -1167,7 +1167,7 @@ export default {
   'Finance.CancelBillRecord':'Do you confirm to cancel bill record？',
   'Finance.Confirm':'Confirm',
   'Finance.Cancel':'Cancel',
-  'Finance.OrderNumber':'   Order number  ',
+  'Finance.OrderNumber':'Order number  ',
   'Finance.back':'Back',
   'Finance.orderTime':'Order time',
   'Finance.RewardRate':'Reward Rate',
@@ -1185,6 +1185,18 @@ export default {
   /*-----------------------------  Content  ----------------------------------------*/
 
   /*-----------------------------  Setting  ----------------------------------------*/
+
+  'Setting.storeSetting': 'Store setting',
+  'Setting.storeLogo': 'Store logo',
+  'Setting.storeSettingInfo2':
+    'PC mall store shop, you can add up to one, the picture format is limited to jpg, jpeg, png, gif, the recommended size is 1920px * 120px, and the size does not exceed 2M',
+  'Setting.storeAccount': 'Store account',
+  'Setting.storeName': 'Store name',
+  'Setting.Contact': 'Contact',
+  'Setting.phoneNumber': 'Phone number',
+
+
+
 
   /*-----------------------------  Fetch  ----------------------------------------*/
   'Fetch.Timeout': 'Service  timeout , try again later',

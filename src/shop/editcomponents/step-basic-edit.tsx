@@ -153,7 +153,7 @@ export default class StepOneEdit extends React.Component<any, any> {
         <Form>
           <Row className="storeLogoUpdate">
             <Col span={8}>
-              <FormItem required={false} {...formItemLayout} label={<FormattedMessage id="shopLogo" />}>
+              <FormItem required={false} {...formItemLayout} label={<FormattedMessage id="Setting.shopLogo" />}>
                 <Row>
                   <Col span={6}>
                     <div className="clearfix logoImg">
@@ -182,7 +182,7 @@ export default class StepOneEdit extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={16}>
-              <Tips title={<FormattedMessage id="storeSettingInfo1" />} />
+              <Tips title={<FormattedMessage id="Setting.storeSettingInfo1" />} />
             </Col>
           </Row>
         </Form>
@@ -190,26 +190,28 @@ export default class StepOneEdit extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <span>
-                <FormattedMessage id="reviewStatus" />：
+                <FormattedMessage id="Setting.reviewStatus" />：
               </span>{' '}
               {storeInfo.get('auditState') != null ? AUDIT_STATE[storeInfo.get('auditState')] : '-'}
             </Col>
             <Col span={8}>
               <span>
-                <FormattedMessage id="accountStatus" />：
+                <FormattedMessage id="Setting.accountStatus" />：
               </span>{' '}
               {storeInfo.get('accountState') != null ? ACCOUNT_STATE[storeInfo.get('accountState')] : '-'}
             </Col>
             <Col span={8}>
               <span>
-                <FormattedMessage id="storeStatus" />：
+                <FormattedMessage id="Setting.storeStatus" />：
               </span>{' '}
               {storeInfo.get('storeState') != null ? STORE_STATE[storeInfo.get('storeState')] : '-'}
             </Col>
             {storeInfo.get('auditState') != null && storeInfo.get('auditState') == 2 ? (
               <Col span={8}>
                 <p className="reason">
-                  <span>Reasons for review rejection:</span>
+                  <span>
+                    <FormattedMessage id="Setting.Reasonsforreviewrejection" />:
+                  </span>
                   {storeInfo.get('auditReason') ? storeInfo.get('auditReason') : '-'}
                 </p>
               </Col>
@@ -217,7 +219,9 @@ export default class StepOneEdit extends React.Component<any, any> {
             {storeInfo.get('accountState') != null && storeInfo.get('accountState') == 1 ? (
               <Col span={8}>
                 <p className="reason">
-                  <span>Reasons for disabling the account:</span>
+                  <span>
+                    <FormattedMessage id="Setting.Reasonsfordisablingtheaccount" />:
+                  </span>
                   {storeInfo.get('accountDisableReason') ? storeInfo.get('accountDisableReason') : '-'}
                 </p>
               </Col>
@@ -225,7 +229,9 @@ export default class StepOneEdit extends React.Component<any, any> {
             {storeInfo.get('storeState') != null && storeInfo.get('storeState') == 1 ? (
               <Col span={8}>
                 <p className="reason">
-                  <span>Reasons for store closure:</span>
+                  <span>
+                    <FormattedMessage id="Setting.Reasonsforstoreclosure" />:
+                  </span>
                   {storeInfo.get('storeClosedReason') ? storeInfo.get('storeClosedReason') : '-'}
                 </p>
               </Col>
@@ -237,7 +243,7 @@ export default class StepOneEdit extends React.Component<any, any> {
             <Row>
               <Col span={12}>
                 <span style={{ position: 'absolute', left: '86px', top: '35px' }} className="ant-form-item-required">
-                  The first is the default language
+                  <FormattedMessage id="Setting.Thefirstisthedefaultlanguage" />
                 </span>
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeLanguage" />}>
                   {getFieldDecorator('languageId', {

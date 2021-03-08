@@ -1,4 +1,5 @@
 import {FormattedMessage} from "react-intl";
+import React from "react";
 
 /**
  * 多语言英文
@@ -1197,6 +1198,28 @@ export default {
   'Setting.contactEmails': 'Contact emails',
   'Setting.address': 'Address',
   'Setting.save': 'Save',
+  'Setting.storeInformation': 'Shop information',
+  'Setting.basicInformation': 'Basic information',
+  'Setting.ssoSetting': 'SSO setting',
+  'Setting.signedInformation': 'Signed information',
+  'Setting.footer': 'Footer',
+  'Setting.consent': 'Consent',
+  'Setting.Edit': 'Edit',
+  'Setting.Submit': 'Submit',
+  'Setting.storeInformationEdit': 'Shop Information Edit',
+  'Setting.Taxes': 'Taxes',
+  'Setting.shopLogo': 'Shop logo',
+  'Setting.storeSettingInfo1':
+    'PC mall home page logo, mobile terminal login page logo, management terminal logo, up to 1 can be added, only jpg, jpeg, png, gif, recommended size 100px * 100px, size not more than 1M',
+  'Setting.reviewStatus': 'Review status',
+  'Setting.accountStatus': 'Account status',
+  'Setting.storeStatus': 'Shop status',
+  'Setting.Reasonsforreviewrejection': 'Reasons for review rejection',
+  'Setting.Reasonsfordisablingtheaccount': 'Reasons for disabling the account',
+  'Setting.Reasonsforstoreclosure': 'Reasons for store closure',
+  'Setting.Thefirstisthedefaultlanguage': 'The first is the default language',
+
+
 
 
 

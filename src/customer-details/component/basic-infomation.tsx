@@ -358,7 +358,8 @@ class BasicInfomation extends React.Component<any, any> {
     let params = {
       pageNum: 0,
       pageSize: 1000,
-      segmentType: 0
+      segmentType: 0,
+      isPublished: 1
     };
     webapi
       .getTaggingList(params)

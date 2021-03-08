@@ -26,7 +26,8 @@ class PetOwnerTagging extends Component<any, any> {
       taggingForm: {
         taggingName: '',
         taggingDescription: '',
-        taggingType: 0
+        taggingType: 0,
+        taggingStatus: 0
       },
       taggingList: [],
       loading: false
@@ -45,8 +46,7 @@ class PetOwnerTagging extends Component<any, any> {
         },
         searchForm: {
           taggingName: '',
-          tagDescription: '',
-          publishedStatus: null
+          taggingType: null
         }
       },
       () => {
@@ -68,8 +68,8 @@ class PetOwnerTagging extends Component<any, any> {
           this.setState({
             visible: false,
             loading: false
-          })
-          
+          });
+
           this.getTaggingList();
           this.props.form.resetFields();
         }
@@ -176,7 +176,8 @@ class PetOwnerTagging extends Component<any, any> {
     let taggingForm = {
       taggingName: '',
       taggingDescription: '',
-      taggingType: 0
+      taggingType: 0,
+      taggingStatus: 0
     };
     this.setState({
       modalName: 'Add new tagging',
@@ -190,7 +191,8 @@ class PetOwnerTagging extends Component<any, any> {
     let taggingForm = {
       taggingName: row.name,
       taggingType: row.segmentType,
-      taggingDescription: row.description
+      taggingDescription: row.description,
+      taggingStatus: row.isPublished
     };
     this.setState({
       modalName: 'Edit tagging',
@@ -208,7 +210,8 @@ class PetOwnerTagging extends Component<any, any> {
         let params = {
           name: taggingForm.taggingName,
           segmentType: taggingForm.taggingType,
-          description: taggingForm.taggingDescription
+          description: taggingForm.taggingDescription,
+          isPublished: taggingForm.taggingStatus
         };
         if (isEdit) {
           params = Object.assign(params, {
@@ -266,7 +269,7 @@ class PetOwnerTagging extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, taggingList, pagination, taggingForm, modalName, visible,isEdit } = this.state;
+    const { loading, title, taggingList, pagination, taggingForm, modalName, visible, isEdit } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -299,9 +302,7 @@ class PetOwnerTagging extends Component<any, any> {
         dataIndex: 'segmentType',
         key: 'segmentType',
         width: '15%',
-        render:(text) =>(
-          <p>{+text?'Pet':'Pet owner'}</p>
-        )
+        render: (text) => <p>{+text ? 'Pet' : 'Pet owner'}</p>
       },
 
       {
@@ -309,6 +310,14 @@ class PetOwnerTagging extends Component<any, any> {
         dataIndex: 'customerNum',
         key: 'customerNum',
         width: '10%'
+      },
+
+      {
+        title: 'Tagging Status',
+        dataIndex: 'isPublished',
+        key: 'isPublished',
+        width: '15%',
+        render: (text) => <p>{+text ? 'Enable' : 'Disabled'}</p>
       },
 
       {
@@ -481,7 +490,7 @@ class PetOwnerTagging extends Component<any, any> {
 
                 <FormItem label="Tagging type">
                   {getFieldDecorator('taggingType', {
-                    initialValue: taggingForm.taggingType
+                    initialValue: +taggingForm.taggingType
                   })(
                     <Radio.Group
                       disabled={isEdit}
@@ -495,6 +504,25 @@ class PetOwnerTagging extends Component<any, any> {
                     >
                       <Radio value={0}>Pet owner</Radio>
                       <Radio value={1}>Pet</Radio>
+                    </Radio.Group>
+                  )}
+                </FormItem>
+
+                <FormItem label="Tagging status">
+                  {getFieldDecorator('taggingStatus', {
+                    initialValue: +taggingForm.taggingStatus
+                  })(
+                    <Radio.Group
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onTaggingFormChange({
+                          field: 'taggingStatus',
+                          value
+                        });
+                      }}
+                    >
+                      <Radio value={0}>Disabled</Radio>
+                      <Radio value={1}>Enable</Radio>
                     </Radio.Group>
                   )}
                 </FormItem>

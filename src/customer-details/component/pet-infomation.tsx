@@ -387,7 +387,8 @@ class PetInfomation extends React.Component<any, any> {
     let params = {
       pageNum: 0,
       pageSize: 1000,
-      segmentType: 1
+      segmentType: 1,
+      isPublished: 1
     };
     webapi
       .getTaggingList(params)

@@ -22,6 +22,7 @@ export default class MarketingFullReductionAdd extends React.Component<any, any>
     if (marketingId) {
       this.store.init(marketingId);
     }
+    this.store.getAllGroups();
   }
 
   render() {

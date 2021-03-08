@@ -108,6 +108,7 @@ class ReactEditor extends Component<any, any> {
             }, 350)()
 
         }
+        this.editor.config.focus = false
         this.editor.config.menus = toolbars
         this.editor.config.fontNames =fontNames
         this.editor.config.zIndex = 90

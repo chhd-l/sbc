@@ -1105,7 +1105,7 @@ export default class AppStore extends Store {
   /**
    * 保存基本信息和价格
    */
-  saveAll = async () => {
+  saveAll = async (nextTab = null) => {
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1188,8 +1188,7 @@ export default class AppStore extends Store {
     // }
 
     param = param.set('goodsTabRelas', tabs);
-
-    goods = goods.set('goodsType', 0);
+    goods = goods.set('goodsType', goods.get('goodsType') == 3 ? goods.get('goodsType') : 0);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
@@ -1445,7 +1444,11 @@ export default class AppStore extends Store {
       }
       message.success('Operate successfully');
       this.dispatch('goodsActor:saveSuccessful', true);
-      this.onMainTabChange('related');
+      if (!nextTab) {
+        this.onMainTabChange('related');
+      } else {
+        this.onMainTabChange('seo');
+      }
       //history.push('/goods-list');
     } else {
       return false;
@@ -1834,6 +1837,8 @@ export default class AppStore extends Store {
     } else if (nextKey === 'seo') {
       if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew() || !this.state().get('getGoodsId')) {
         return;
+      } else {
+        this.saveAll('seo');
       }
     }
     if (nextKey !== 'related') {

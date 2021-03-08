@@ -1,37 +1,29 @@
 import React, { Component } from 'react';
-import GGEditor, { withPropsAPI } from 'gg-editor';
-import { Tabs, Breadcrumb } from 'antd';
-import { BreadCrumb, Headline } from 'qmkit';
+import GGEditor from 'gg-editor';
+import { Breadcrumb } from 'antd';
+import { BreadCrumb } from 'qmkit';
 import './style.less';
-import WorkFlow from './work-flow'
+import WorkFlow from './work-flow';
 
-
-
-export default withPropsAPI(class AutomationNode extends Component<any, any> {
+export default class AutomationNode extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      id: this.props.match.params.id,
-      title: 'Automation node'
+      id: this.props.match.params.id
     };
   }
 
   render() {
-    const { title } = this.state;
+    const { title, id } = this.state;
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{title}</Breadcrumb.Item>
         </BreadCrumb>
-        <div className="container-search">
-          <Headline title={title} />
-        </div>
-        <div className="container">
-          <GGEditor>
-            <WorkFlow />
-          </GGEditor>
-        </div>
+        <GGEditor>
+          <WorkFlow id={id} />
+        </GGEditor>
       </div>
     );
   }
-})
+}

@@ -52,7 +52,7 @@ export default class Logistics extends React.Component<any, any> {
     return (
       <div>
         <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 10 }}>
-          <FormattedMessage id="product.logisticsInformation" />
+          <FormattedMessage id="Product.logisticsInformation" />
         </div>
         <div>
           <WrapperForm
@@ -93,12 +93,12 @@ class LogisticsForm extends React.Component<any, any> {
         }
       });
     }
-    console.log(goods.get('freightTempId'), 'freightTempId');
+
     return (
       <Form>
         <Row type="flex" justify="start" gutter={16}>
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.shippinTemplate" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.shippinTemplate" />}>
               <div>
                 {getFieldDecorator(
                   'freightTempId',
@@ -107,7 +107,7 @@ class LogisticsForm extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please select shipping template'
+                            message: <FormattedMessage id="Product.shippingTemplate" />
                           }
                         ],
                         onChange: this._editGoods.bind(this, 'freightTempId'),
@@ -117,7 +117,7 @@ class LogisticsForm extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please select shipping template'
+                            message: <FormattedMessage id="Product.shippingTemplate" />
                           }
                         ],
                         onChange: this._editGoods.bind(this, 'freightTempId')
@@ -158,21 +158,21 @@ class LogisticsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start" gutter={16}>
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.logisticsWeight" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.logisticsWeight" />}>
               {getFieldDecorator('goodsWeight', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input logistics weight'
+                    message: <FormattedMessage id="Product.LogisticsWeight" />
                   },
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,3})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,2})?$)/,
-                    message: 'Please input the legal number with three decimal places'
+                    message: <FormattedMessage id="Product.threeDecimalPlaces" />
                   },
                   {
                     type: 'number',
                     min: 0.001,
-                    message: 'The minimum value is 0.001',
+                    message: <FormattedMessage id="Product.minimum1" />,
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0.001 : parseFloat(value);
                     }
@@ -180,7 +180,7 @@ class LogisticsForm extends React.Component<any, any> {
                   {
                     type: 'number',
                     max: 9999.999,
-                    message: 'The maximum value is 9999.999',
+                    message: <FormattedMessage id="Product.maximum9" />,
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0.001 : parseFloat(value);
                     }
@@ -197,21 +197,21 @@ class LogisticsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start" gutter={16}>
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.logisticsVolumn" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.logisticsVolumn" />}>
               {getFieldDecorator('goodsCubage', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input logistics volume'
+                    message: <FormattedMessage id="Product.logisticsVolume" />
                   },
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,6})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,5})?$)/,
-                    message: 'Please input the legal number of six decimal places'
+                    message: <FormattedMessage id="Product.sixDecimalPlaces" />
                   },
                   {
                     type: 'number',
                     min: 0.000001,
-                    message: 'The minimum value is 0.000001',
+                    message: <FormattedMessage id="Product.TheMinimum1" />,
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0.000001 : parseFloat(value);
                     }
@@ -219,7 +219,7 @@ class LogisticsForm extends React.Component<any, any> {
                   {
                     type: 'number',
                     max: 999.999999,
-                    message: 'The maximum value is 999.999999',
+                    message: <FormattedMessage id="Product.TheMaximum9" />,
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0.000001 : parseFloat(value);
                     }

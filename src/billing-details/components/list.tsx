@@ -48,19 +48,13 @@ export default class List extends React.Component<any, any> {
   }
 
   render() {
-    const settleList = this.props.relaxProps.settleList
-      ? this.props.relaxProps.settleList.toJS()
-      : [];
+    const settleList = this.props.relaxProps.settleList ? this.props.relaxProps.settleList.toJS() : [];
     const { exportSettlementDetailList } = this.props.relaxProps;
     return (
       <div>
         <AuthWrapper functionName="f_sett_det_exp">
-          <Button
-            style={{ marginBottom: 20, marginTop: 20 }}
-            disabled={settleList.length == 0}
-            onClick={() => exportSettlementDetailList(this.props.settleId)}
-          >
-            {<FormattedMessage id="exportDetails" />}
+          <Button style={{ marginBottom: 20, marginTop: 20 }} disabled={settleList.length == 0} onClick={() => exportSettlementDetailList(this.props.settleId)}>
+            {<FormattedMessage id="Finance.exportDetails" />}
           </Button>
         </AuthWrapper>
         <DateTable>
@@ -90,7 +84,7 @@ export default class List extends React.Component<any, any> {
     const currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '$';
     return [
       {
-        title: 'Order number',
+        title: <FormattedMessage id="Finance.OrderNumber" />,
         key: 'tradeCode',
         dataIndex: 'tradeCode',
         /*render: (value, row) => {
@@ -99,11 +93,11 @@ export default class List extends React.Component<any, any> {
         width: 160
       },
       {
-        title: 'Payment credited',
+        title: <FormattedMessage id="Finance.PaymentCredited" />,
         dataIndex: 'practicalPrice',
         key: 'practicalPrice',
         render: (value) => {
-          return <p>{currencySymbol +''+ value}</p>
+          return <p>{currencySymbol + '' + value}</p>;
         },
         width: 120
       },
@@ -117,7 +111,7 @@ export default class List extends React.Component<any, any> {
         width: 110
       },*/
       {
-        title: 'Product name',
+        title: <FormattedMessage id="Finance.Productame" />,
         dataIndex: 'goodsName',
         key: 'goodsName',
         render: (value, row, a) => {
@@ -145,7 +139,7 @@ export default class List extends React.Component<any, any> {
         width: 160
       },
       {
-        title: 'Product SKU',
+        title: <FormattedMessage id="Finance.ProductSKU" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (value, row) => {
@@ -219,7 +213,7 @@ export default class List extends React.Component<any, any> {
         }
       },*/
       {
-        title: 'Product quantity',
+        title: <FormattedMessage id="Finance.ProductQuantity" />,
         dataIndex: 'num',
         key: 'num',
         render: (value, row) => {

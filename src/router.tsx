@@ -911,6 +911,10 @@ const routes = [
   {
     path: '/validation-setting',
     asyncComponent: () => import('./validation-setting')
+  },
+  {
+    path: '/address-field-setting',
+    asyncComponent: () => import('./address-field-setting')
   }
 ];
 

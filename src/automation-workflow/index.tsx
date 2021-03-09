@@ -9,7 +9,8 @@ export default class AutomationNode extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      id: this.props.match.params.id
+      id: this.props.match.params.id,
+      title: 'Workflow'
     };
   }
 

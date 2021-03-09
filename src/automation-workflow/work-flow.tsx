@@ -29,7 +29,7 @@ export default withPropsAPI(
         currentItem: null,
         activeKey: 'Builder',
         saveLoading: false,
-        title: 'Automation node'
+        title: 'Canvs'
       };
       this.handleNodeDoubleClick = this.handleNodeDoubleClick.bind(this);
       this.saveProperties = this.saveProperties.bind(this);

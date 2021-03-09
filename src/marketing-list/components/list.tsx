@@ -55,6 +55,7 @@ export default class MarketingList extends React.Component<any, any> {
       customerLevels: TList;
       onStart: Function;
       close: Function;
+      download: Function;
     };
   };
 
@@ -70,11 +71,12 @@ export default class MarketingList extends React.Component<any, any> {
     onPause: noop,
     customerLevels: ['customerLevels'],
     onStart: noop,
-    close: noop
+    close: noop,
+    download: noop
   };
 
   render() {
-    const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart } = this.props.relaxProps;
+    const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart, download } = this.props.relaxProps;
     return (
       <DataGrid
         loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
@@ -224,6 +226,9 @@ export default class MarketingList extends React.Component<any, any> {
                   </Tooltip>
                 </AuthWrapper>
                 <AuthWrapper functionName="f_marketing_operate">
+                  <Tooltip placement="top" title="Download">
+                    <a style={{ marginRight: 5 }} onClick={() => download(rowInfo['marketingId'])} className="iconfont iconbtn-offshelf"></a>
+                  </Tooltip>
                   {rowInfo['marketingStatus'] == 3 && (
                     <Tooltip placement="top" title="Edit">
                       <a

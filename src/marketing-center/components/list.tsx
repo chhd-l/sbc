@@ -296,7 +296,55 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>
             </Row>
+            <Row>
+              <AuthWrapper functionName="f_marketing_gift_add">
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: '/marketing-free-shipping',
+                        state: {
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.full_001} />
+                    </span>
+                    <div className="info">
+                      <h5>Free shipping</h5>
+                      <p>Free shipping when order meets specific conditions</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
 
+              <AuthWrapper functionName="f_marketing_gift_add">
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: '/marketing-fixed-price',
+                        state: {
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.full_001} />
+                    </span>
+                    <div className="info">
+                      <h5>Fixed price</h5>
+                      <p>Set fixed price for products</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
+            </Row>
             {/*<h3>*/}
             {/*  Increase Repeat purchase<span>Improve consumer loyalty</span>*/}
             {/*</h3>*/}

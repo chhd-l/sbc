@@ -52,9 +52,6 @@ export default class ListChart extends React.Component<any, any> {
     PeriodAmountTotal: 'PeriodAmountTotal'
   };
   componentDidMount() {
-    setTimeout(() => {
-      //console.log(chartData,'=============================');
-    }, 500);
     this.setState({ chartData: chartData });
   }
 

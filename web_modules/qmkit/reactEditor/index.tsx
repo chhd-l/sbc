@@ -130,26 +130,22 @@ class ReactEditor extends Component<any, any> {
             },
             // 图片上传并返回了结果，图片插入已成功
             success: function (xhr) {
-                console.log('success', xhr)
 
             },
             // 图片上传并返回了结果，但图片插入时出错了
             fail: function (xhr, editor, resData) {
-                console.log('fail', resData)
                 _this.setState({
                     loading: false
                 })
             },
             // 上传图片出错，一般为 http 请求的错误
             error: function (xhr, editor, resData) {
-                console.log('error', xhr, resData)
                 _this.setState({
                     loading: false
                 })
             },
             // 上传图片超时
             timeout: function (xhr) {
-                console.log('timeout')
                 _this.setState({
                     loading: false
                 })

@@ -466,7 +466,6 @@ export default class AppStore extends Store {
         const goodsSpecDetails = goodsDetail.get('goodsSpecDetails');
         goodsSpecs = goodsSpecs.map((item) => {
           // 规格值列表，按照id升序排列
-          console.log(goodsSpecDetails, 11111111111);
           const specValues = goodsSpecDetails
             .filter((detailItem) => detailItem.get('specId') == item.get('specId'))
             .map((detailItem) => detailItem.set('isMock', false))
@@ -1292,6 +1291,7 @@ export default class AppStore extends Store {
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
+          externalSku: item.get('externalSku'),
           stock: item.get('stock'),
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,

@@ -157,7 +157,6 @@ class CateModalForm extends React.Component<any, any> {
     const goodsCateId = formData.get('goodsCateId');
     const goodsDescription = formData.get('cateDescription');
     const { getFieldDecorator } = this.props.form;
-    // console.log(formData.get('children'), 'children')
     //处理分类的树形图结构数据
     const loop = (cateList) =>
       cateList.map((item) => {

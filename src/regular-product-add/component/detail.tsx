@@ -73,7 +73,6 @@ export default class Detail extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     // Store prevId in state so we can compare when props change.
     // Clear out previously-loaded data (so we don't render stale stuff).
-    console.log(nextProps, prevState);
     // if (nextProps.id !== prevState.prevId) {
     //   return {
     //     externalData: null,

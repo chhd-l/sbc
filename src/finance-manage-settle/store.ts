@@ -72,7 +72,6 @@ export default class AppStore extends Store {
   };
 
   /*onChecked = (index: number, checked: boolean, a: any) => {
-    console.log(checked, index, a);
     this.dispatch('list:check', { index, checked });
   };*/
   /**

@@ -153,7 +153,7 @@ export default class Info extends React.Component<any, any> {
             fontWeight: 'bold'
           }}
         >
-          <FormattedMessage id="product.basicInformation" />
+          <FormattedMessage id="Product.basicInformation" />
         </div>
         <div>
           <WrapperForm
@@ -285,18 +285,18 @@ class GoodsForm extends React.Component<any, any> {
       <Form>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.SPU" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.SPU" />}>
               {getFieldDecorator('goodsNo', {
                 rules: [
                   {
                     required: true,
                     whitespace: true,
-                    message: 'Please fill in the SPU code'
+                    message: <FormattedMessage id="Product.PleaseFill" />
                   },
                   {
                     min: 1,
                     max: 20,
-                    message: '1-20 characters'
+                    message: <FormattedMessage id="Product.characters" />
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -310,18 +310,18 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.InternalSPU" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.InternalSPU" />}>
               {getFieldDecorator('internalGoodsNo', {
                 rules: [
                   {
                     required: true,
                     whitespace: true,
-                    message: 'Please fill in the SPU code'
+                    message: <FormattedMessage id="Product.PleaseFill" />
                   },
                   {
                     min: 1,
                     max: 20,
-                    message: '1-20 characters'
+                    message: <FormattedMessage id="Product.characters" />
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -337,18 +337,18 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.productName" />}>
               {getFieldDecorator('goodsName', {
                 rules: [
                   {
                     required: true,
                     whitespace: true,
-                    message: 'Please input product name'
+                    message: <FormattedMessage id="Product.PleaseInputProductName" />
                   },
                   {
                     min: 1,
                     max: 225,
-                    message: '1-225 characters'
+                    message: <FormattedMessage id="Product.characters5" />
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -362,12 +362,12 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.onOrOffShelves" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.onOrOffShelves" />}>
               {getFieldDecorator('addedFlag', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select the status'
+                    message: <FormattedMessage id="Product.PleaseSelect" />
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'addedFlag'),
@@ -375,10 +375,10 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <RadioGroup>
                   <Radio value={1}>
-                    <FormattedMessage id="product.onShelves" />
+                    <FormattedMessage id="Product.onShelves" />
                   </Radio>
                   <Radio value={0}>
-                    <FormattedMessage id="product.offShelves" />
+                    <FormattedMessage id="Product.offShelves" />
                   </Radio>
                   {/* {isEditGoods && (
                     <Radio value={2} disabled={true}>
@@ -392,7 +392,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.subscriptionStatus" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.subscriptionStatus" />}>
               {getFieldDecorator('subscriptionStatus', {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
@@ -412,7 +412,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: false,
-                    message: 'Please select product tagging'
+                    message: <FormattedMessage id="Product.PleaseSelectProductTagging" />
                   }
                 ],
                 initialValue: taggingRelListValues
@@ -437,14 +437,14 @@ class GoodsForm extends React.Component<any, any> {
         <Row type="flex" justify="start">
           {purchaseTypeList && purchaseTypeList.length > 0 ? (
             <Col span={8}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Product.defaultPurchaseType" />}>
                 {getFieldDecorator('defaultPurchaseType', {
                   rules: [],
                   onChange: this._editGoods.bind(this, 'defaultPurchaseType'),
                   // initialValue: 'Y'
                   initialValue: goods.get('defaultPurchaseType')
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default purchase type" disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                  <Select getPopupContainer={() => document.getElementById('page-content')} placeholder={<FormattedMessage id="Product.DefaultPurchaseType" />} disabled={Number(goods.get('subscriptionStatus')) === 0}>
                     {purchaseTypeList.map((option) => (
                       <Option value={option.id} key={option.id}>
                         {option.name}
@@ -457,7 +457,7 @@ class GoodsForm extends React.Component<any, any> {
           ) : null}
           {frequencyList && frequencyList.length > 0 ? (
             <Col span={8}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Product.defaultFrequency" />}>
                 {getFieldDecorator('defaultFrequencyId', {
                   // rules: [
                   //   {
@@ -468,7 +468,7 @@ class GoodsForm extends React.Component<any, any> {
                   initialValue: goods.get('defaultFrequencyId'),
                   onChange: this._editGoods.bind(this, 'defaultFrequencyId')
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder="please select Default frequency" disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                  <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder={<FormattedMessage id="Product.DefaultFrequency" />} disabled={Number(goods.get('subscriptionStatus')) === 0}>
                     {frequencyList.map((option) => (
                       <Option value={option.id} key={option.id}>
                         {option.name}
@@ -487,7 +487,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select platform product category'
+                    message: <FormattedMessage id="Product.platformProductCategory" />
                   },
                   {
                     validator: (_rule, value, callback) => {
@@ -516,7 +516,7 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
-                  placeholder="Please select product category"
+                  placeholder={<FormattedMessage id="Product.productCategory" />}
                   notFoundContent="No classification"
                   // disabled={cateDisabled}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -546,7 +546,7 @@ class GoodsForm extends React.Component<any, any> {
                   treeCheckStrictly={true}
                   //treeData ={getGoodsCate}
                   // showCheckedStrategy = {SHOW_PARENT}
-                  placeholder="Please select sales category"
+                  placeholder={<FormattedMessage id="Product.salesCategory" />}
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   onChange={this.storeCateChange}
@@ -569,7 +569,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.brand" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.brand" />}>
               {getFieldDecorator(
                 'brandId',
                 brandExists
@@ -623,7 +623,7 @@ class GoodsForm extends React.Component<any, any> {
                   {
                     min: 1,
                     max: 225,
-                    message: '1-225 characters'
+                    message: <FormattedMessage id="Product.characters5" />
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -651,14 +651,14 @@ class GoodsForm extends React.Component<any, any> {
                 xs: { span: 24 },
                 sm: { span: 18 }
               }}
-              label={<FormattedMessage id="product.productSubtitle" />}
+              label={<FormattedMessage id="Product.productSubtitle" />}
             >
               {getFieldDecorator('goodsNewSubtitle', {
                 rules: [
                   {
                     min: 1,
                     max: 225,
-                    message: '1-225 characters'
+                    message: <FormattedMessage id="Product.characters5" />
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -709,7 +709,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select the status'
+                    message: <FormattedMessage id="Product.PleaseSelect" />
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'saleableFlag'),
@@ -717,10 +717,14 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <RadioGroup>
                   <span>
-                    <Radio value={1}>Saleable</Radio>
+                    <Radio value={1}>
+                      <FormattedMessage id="Product.Saleable" />
+                    </Radio>
                   </span>
                   <span>
-                    <Radio value={0}>Not–Saleable</Radio>
+                    <Radio value={0}>
+                      <FormattedMessage id="Product.Not–Saleable" />
+                    </Radio>
                   </span>
                 </RadioGroup>
               )}
@@ -733,7 +737,7 @@ class GoodsForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please select the status'
+                      message: <FormattedMessage id="Product.PleaseSelect" />
                     }
                   ],
                   onChange: this._editGoods.bind(this, 'displayFlag'),
@@ -782,24 +786,24 @@ class GoodsForm extends React.Component<any, any> {
               {...formItemLayout}
               label={
                 <span>
-                  <FormattedMessage id="product.productImage" />
+                  <FormattedMessage id="Product.productImage" />
                 </span>
               }
             >
               <div style={{ width: 550 }}>
                 <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
               </div>
-              <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
+              <Tips title={<FormattedMessage id="Product.recommendedSizeImg" />} />
             </FormItem>
           </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.productVideo" />}>
               <div style={{ width: 550 }}>
                 <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
               </div>
-              <Tips title={<FormattedMessage id="product.recommendedSizeVideo" />} />
+              <Tips title={<FormattedMessage id="Product.recommendedSizeVideo" />} />
             </FormItem>
           </Col>
         </Row>
@@ -858,7 +862,7 @@ class GoodsForm extends React.Component<any, any> {
 
     if (key === 'saleType' && e == 0) {
       if (!flashsaleGoods.isEmpty()) {
-        message.error('This product is participating in a spike event, and the sales type cannot be changed!', 3, () => {
+        message.error(<FormattedMessage id="Product.ThisProductIsParticipating" />, 3, () => {
           let goods = Map({
             [key]: fromJS(1)
           });
@@ -898,8 +902,8 @@ class GoodsForm extends React.Component<any, any> {
               editGoods(goods);
               setFieldsValue({ saleType: 1 });
             },
-            okText: 'OK',
-            cancelText: 'Cancel'
+            okText: <FormattedMessage id="Product.OK" />,
+            cancelText: <FormattedMessage id="Product.Cancel" />
           });
         } else {
           let goods = Map({
@@ -1029,7 +1033,7 @@ class GoodsForm extends React.Component<any, any> {
       <Select
         showSearch
         getPopupContainer={() => document.getElementById('page-content')}
-        placeholder="please select brand"
+        placeholder={<FormattedMessage id="Product.pleaseSelectBrand" />}
         notFoundContent="No brand"
         allowClear={true}
         optionFilterProp="children"
@@ -1058,11 +1062,11 @@ class GoodsForm extends React.Component<any, any> {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('File size cannot exceed 2M');
+        message.error(<FormattedMessage id="Product.exceed2M" />);
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(<FormattedMessage id="Product.FileFormatError" />);
       return false;
     }
   };

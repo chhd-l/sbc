@@ -88,7 +88,7 @@ export default class settingForm extends React.Component<any, any> {
       <Form style={{ paddingBottom: 50, maxWidth: 900 }} onSubmit={this._handleSubmit}>
         <Row className="logoUpdate">
           <Col span={24}>
-            <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.storeLogo" />}>
+            <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeLogo" />}>
               <Row>
                 <Col span={6}>
                   <div className="clearfix bannerImg">
@@ -114,7 +114,7 @@ export default class settingForm extends React.Component<any, any> {
                   </div>
                 </Col>
                 <Col span={18}>
-                  <Tips title={<FormattedMessage id="Setting.storeSettingInfo2" />} />
+                  <Tips title={<FormattedMessage id="storeSettingInfo2" />} />
                 </Col>
               </Row>
             </FormItem>
@@ -132,7 +132,7 @@ export default class settingForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={24}>
-            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Setting.storeAccount" />}>
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="storeAccount" />}>
               {getFieldDecorator('accountName', {
                 initialValue: accountName
               })(<Input disabled={true} />)}
@@ -141,7 +141,7 @@ export default class settingForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={24}>
-            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Setting.storeName" />}>
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="storeName" />}>
               {getFieldDecorator('storeName', {
                 initialValue: storeName
               })(<Input />)}
@@ -151,7 +151,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Setting.Contact" />}>
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Contact" />}>
               {getFieldDecorator('contactPerson', {
                 initialValue: contactPerson
               })(<Input />)}
@@ -161,7 +161,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Setting.phoneNumber" />}>
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="phoneNumber" />}>
               {getFieldDecorator('contactMobile', {
                 initialValue: contactMobile,
                 rules: [
@@ -178,7 +178,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Setting.contactEmails" />}>
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="contactEmails" />}>
               {getFieldDecorator('contactEmail', {
                 initialValue: contactEmail
               })(<Input />)}
@@ -188,7 +188,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Setting.address" />}>
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="address" />}>
               {getFieldDecorator('addressDetail', {
                 initialValue: addressDetail
               })(<Input />)}
@@ -198,7 +198,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <div className="bar-button">
           <Button type="primary" htmlType="submit">
-            {<FormattedMessage id="Setting.save" />}
+            {<FormattedMessage id="save" />}
           </Button>
         </div>
       </Form>

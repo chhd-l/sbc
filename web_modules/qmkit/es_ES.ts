@@ -1356,6 +1356,22 @@ export default {
   'Setting.uploadfailed':'upload failed',
   'Setting.Filesizecannotexceed':'File size cannot exceed',
   'Setting.Fileformaterror':'File format error',
+  'Setting.contactUsUrl': 'About us',
+  'Setting.PleaseinputContactUsUrl': 'Please input Contact Us Url',
+  'Setting.ourValues': 'Our values',
+  'Setting.qualityAndSafety': 'Quality and safety',
+  'Setting.specificNutrition': 'Specific nutrition',
+  'Setting.informationForParents': 'Information for parents',
+  'Setting.cookies': 'Cookies collection policy/Cookie',
+  'Setting.storeContactEmail': 'Contact email',
+  'Setting.PleaseinputStoreContactEmail': 'Please input Store Contact Email',
+  'Setting.storeContactPhoneNumber': 'Contact phone',
+  'Setting. PleaseinputStoreContactPhoneNumber': ' Please input Store Contact Phone Number',
+  'Setting.contactTimePeriod': 'Contact period',
+  'Setting.PleaseinputContactTimePeriodEamil': 'Please input Contact Time Period Eamil',
+  'Setting.confirmationEmail': 'Confirmation email',
+  'Setting.PleaseinputConfirmationEmail': 'Please input Confirmation Email',
+  'Setting.Operatesuccessfully': 'Operate successfully',
 
 
 

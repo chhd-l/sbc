@@ -14,7 +14,7 @@ export default class Manage extends React.Component<any, any> {
         {
           row: 1,
           col: 1,
-          field: 'First name'
+          field: ''
         },
         {
           row: 1,
@@ -55,6 +55,28 @@ export default class Manage extends React.Component<any, any> {
     };
   }
 
+  onAddDragItem = (row: number, col: number, field: string) => {
+    const { result } = this.state;
+    const idx = result.findIndex((o) => o.row === row && o.col === col);
+    if (result.findIndex((o) => o.field === field) > -1) {
+      return;
+    }
+    if (idx > -1) {
+      result[idx]['field'] = field;
+    }
+    this.setState({
+      result: result
+    });
+  };
+
+  onRemoveDragItem = (idx: number) => {
+    const { result } = this.state;
+    result[idx]['field'] = '';
+    this.setState({
+      result: result
+    });
+  };
+
   render() {
     const { result } = this.state;
     return (
@@ -66,8 +88,8 @@ export default class Manage extends React.Component<any, any> {
             <Col span={8}>
               <div>Select field</div>
               <div className="field-item-container">
-                <DragField key="1" name="First name" />
-                <DragField key="2" name="Last name" />
+                <DragField key="1" name="First name" onDragEnd={this.onAddDragItem} />
+                <DragField key="2" name="Last name" onDragEnd={this.onAddDragItem} />
               </div>
             </Col>
             <Col span={16}>
@@ -76,7 +98,12 @@ export default class Manage extends React.Component<any, any> {
                 {result.map((ro, idx) => (
                   <Col span={12} key={idx}>
                     <DropField result={result} row={ro.row} col={ro.col} field={ro.field}>
-                      {ro.field}
+                      {ro.field && (
+                        <>
+                          <div className="display-field-drag-item">{ro.field}</div>
+                          <i onClick={() => this.onRemoveDragItem(idx)} className="iconfont iconDelete"></i>
+                        </>
+                      )}
                     </DropField>
                   </Col>
                 ))}

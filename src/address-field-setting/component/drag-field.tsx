@@ -9,6 +9,10 @@ const spec = {
   },
   endDrag(props, monitor) {
     console.log(props, monitor, monitor.getDropResult());
+    const dropItem = monitor.getDropResult();
+    if (dropItem && props.onDragEnd) {
+      props.onDragEnd(dropItem.row, dropItem.col, props.name);
+    }
   }
 };
 

@@ -4,12 +4,10 @@ import { DropTarget } from 'react-dnd';
 const spec = {
   drop: (props) => ({ row: props.row, col: props.col, field: props.field }),
   canDrop: (props) => {
-    let rvt = true;
-    const dropItemInResult = props.result.find((o) => o.row === props.row && o.col === props.col);
-    if (props.field || (dropItemInResult && dropItemInResult.field)) {
-      rvt = false;
+    if (props.field) {
+      return false;
     }
-    return rvt;
+    return true;
   }
 };
 

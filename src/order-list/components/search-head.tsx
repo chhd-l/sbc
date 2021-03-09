@@ -784,7 +784,7 @@ export default class SearchHead extends Component<any, any> {
       orderType,
       orderSource,
       tradeState: ts,
-      subscriptionType,
+      subscriptionTypeQuery: subscriptionType,
       beginTime,
       endTime,
       [recommenderSelect]: recommenderSelectValue,

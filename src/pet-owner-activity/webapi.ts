@@ -43,7 +43,7 @@ export function getOrderList(filterParams = {}) {
   return Fetch<TResult>('/trade', {
     method: 'POST',
     body: JSON.stringify({
-     ...filterParams
+      ...filterParams
     })
   });
 }
@@ -58,7 +58,7 @@ export function getSubscriptionList(filterParams = {}) {
 }
 
 export function getEamils(filterParams = {}, isRecent) {
-  if(isRecent) {
+  if (isRecent) {
     return Fetch<TResult>('/biz/contactActivity/listRecentEmails', {
       method: 'POST',
       body: JSON.stringify({
@@ -75,9 +75,8 @@ export function getEamils(filterParams = {}, isRecent) {
   }
 }
 
-
 export function getActivities(filterParams = {}, isRecent) {
-  if(isRecent) {
+  if (isRecent) {
     return Fetch<TResult>('/biz/contactActivity/listRecent', {
       method: 'POST',
       body: JSON.stringify({
@@ -94,4 +93,11 @@ export function getActivities(filterParams = {}, isRecent) {
   }
 }
 
-
+export function addComment(filterParams = {}) {
+  return Fetch<TResult>('/petOwner/detailComments/add', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

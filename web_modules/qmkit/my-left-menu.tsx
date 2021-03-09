@@ -32,7 +32,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
       this.setState({
         level2OpenedKeys: Object.keys(Array.from({ length: this.state.allGradeMenus.size }))
       });
-      if(nextProps.matchedPath.indexOf('/pet-owner-activity') >= 0) {
+      if(nextProps.matchedPath.indexOf('/pet-owner-activity') || nextProps.matchedPath.indexOf('/automation-workflow')  >= 0) {
         this.setState({
           showSubMenu: false
         });

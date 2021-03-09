@@ -14,6 +14,7 @@ export default class ChooseEventForm extends Component<any, any> {
     updateValue('eventType', value);
   }
   render() {
+    const { eventType } = this.props;
     const treeData = [
       {
         title: 'Order',
@@ -175,7 +176,18 @@ export default class ChooseEventForm extends Component<any, any> {
     ];
     return (
       <FormItem label="Choose an event" colon={false}>
-        <TreeSelect placeholder="Please select a event" onChange={this.onChange} style={{ width: '100%' }} dropdownStyle={{ maxHeight: '400px', overflow: 'auto' }} treeData={treeData} treeDefaultExpandAll showSearch allowClear searchPlaceholder="Search"></TreeSelect>
+        <TreeSelect
+          defaultValue={eventType ? eventType : undefined}
+          placeholder="Please select a event"
+          onChange={this.onChange}
+          style={{ width: '100%' }}
+          dropdownStyle={{ maxHeight: '400px', overflow: 'auto' }}
+          treeData={treeData}
+          treeDefaultExpandAll
+          showSearch
+          allowClear
+          searchPlaceholder="Search"
+        ></TreeSelect>
       </FormItem>
     );
   }

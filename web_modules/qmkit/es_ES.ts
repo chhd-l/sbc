@@ -1218,6 +1218,31 @@ export default {
   'Setting.Reasonsfordisablingtheaccount': 'Reasons for disabling the account',
   'Setting.Reasonsforstoreclosure': 'Reasons for store closure',
   'Setting.Thefirstisthedefaultlanguage': 'The first is the default language',
+  'Setting.storeLanguage': 'Shop language',
+  'Setting.PleaseselectLanguage': 'Please select Language',
+  'Setting.timeZone': 'Time zone',
+  'Setting.PleaseselectTimeZone': 'Please select TimeZone',
+  'Setting.targetCountry': 'Target country',
+  'Setting.PleaseselectCountry': 'Please select Country',
+  'Setting.targetCity': 'Target city',
+  'Setting.PleaseselectCity': 'Please select City',
+  'Setting.currency': 'Currency',
+  'Setting.PleaseselectCurrency': 'Please select Currency',
+  'Setting.taxRate': 'Tax rate',
+  'Setting.PleaseinputTaxRate': 'Please input Tax Rate',
+  'Setting.domainName': 'Domain name',
+  'Setting.PleaseinputDomainName': 'Please input Domain Name',
+  'Setting.miniCharge': 'Minimum charge',
+  'Setting.PleaseinputMinimumCharge': 'Please input Minimum Charge',
+  'Setting.prescriberMap': 'Prescriber Map',
+  'Setting.PleaseinputPrescriberMap': 'Please input Prescriber Map',
+  'Setting.onePageCheckout':'One-Page Checkout',
+  'Setting.CitySelect':'City Select',
+  'Setting.uploadfailed':'upload failed',
+  'Setting.Filesizecannotexceed':'File size cannot exceed',
+  'Setting.Fileformaterror':'File format error',
+
+
 
 
 

@@ -70,6 +70,21 @@ export default class Detail extends React.Component<any, any> {
     editEditorContent(arr);
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // Store prevId in state so we can compare when props change.
+    // Clear out previously-loaded data (so we don't render stale stuff).
+    console.log(nextProps, prevState);
+    // if (nextProps.id !== prevState.prevId) {
+    //   return {
+    //     externalData: null,
+    //     prevId: nextProps.id,
+    //   };
+    // }
+
+    // No state update necessary
+    return null;
+  }
+
   render() {
     const { goods, goodsDescriptionDetailList } = this.props.relaxProps;
     goodsDetailTabObj = {};
@@ -91,19 +106,17 @@ export default class Detail extends React.Component<any, any> {
 
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
-                  <ErrorBoundary>
-                    <ReactEditor
-                      key={item.descriptionId + +new Date()}
-                      id={'main-' + item.descriptionId}
-                      cateId={item.goodsCateId}
-                      content={item.content}
-                      onContentChange={this.onContentChange}
-                      contentType={item.contentType}
-                      tabNanme={item.descriptionName + '_' + item.descriptionId}
-                      disabled={!disabled}
-                      height={320}
-                    />
-                  </ErrorBoundary>
+                  <ReactEditor
+                    key={item.key}
+                    id={'main-' + item.descriptionId}
+                    cateId={item.goodsCateId}
+                    content={item.content}
+                    onContentChange={this.onContentChange}
+                    contentType={item.contentType}
+                    tabNanme={item.descriptionName + '_' + item.descriptionId}
+                    disabled={!disabled}
+                    height={320}
+                  />
                 </Tabs.TabPane>
               );
             })}

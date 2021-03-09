@@ -23,7 +23,7 @@ class ReactEditor extends Component<any, any> {
         count?: number
         contentType?: string
         cateId?: any
-        fontNames?:any
+        fontNames?: any
     }
     constructor(props) {
         super(props);
@@ -55,7 +55,7 @@ class ReactEditor extends Component<any, any> {
             'undo',  // 撤销
             'redo'  // 重复
         ],
-        fontNames : [
+        fontNames: [
             // '黑体',
             // '仿宋',
             // '楷体',
@@ -77,21 +77,11 @@ class ReactEditor extends Component<any, any> {
             this.initEditor()
         }
     };
-     throttle (fn, delay) {
-        var timer = null;
-        return function () {
-            var args = arguments; //参数集合
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                fn.apply(this, args);
-            }, delay);
-        }
-    }
     /**
      * 初始化编辑器
      */
     initEditor() {
-        const { id, tabNanme, disabled, onContentChange, toolbars,fontNames,content } = this.props
+        const { id, tabNanme, disabled, onContentChange, toolbars, fontNames, content } = this.props
         const elemMenu = ".editorElem-menu-" + id;
         const elemBody = ".editorElem-body-" + id;
 
@@ -103,22 +93,21 @@ class ReactEditor extends Component<any, any> {
                 message.info('More than 1000 words, please delete some after retry')
                 return
             }
-            this.throttle( function(){
-                onContentChange(html, tabNanme);
-            }, 350)()
+            onContentChange(html, tabNanme);
 
         }
         this.editor.config.focus = false
         this.editor.config.menus = toolbars
-        this.editor.config.fontNames =fontNames
+        this.editor.config.fontNames = fontNames
         this.editor.config.zIndex = 90
         this.editor.config.onchangeTimeout = 500
         this.uploadImage();
         this.editor.config.lang = 'en'
         this.editor.i18next = i18next
         this.editor.create()
-        disabled && this.editor.disable()
+
         this.editor.txt.html(content)
+        disabled && this.editor.disable()
     }
     uploadImage = () => {
         const _this = this;
@@ -126,7 +115,7 @@ class ReactEditor extends Component<any, any> {
         this.editor.config.uploadImgMaxLength = 1;
         this.editor.config.uploadImgServer = Const.HOST + `/store/uploadStoreResource?cateId=${this.props.cateId}&storeId=${userInfo.storeId}&companyInfoId=${userInfo.companyInfoId}&resourceType=IMAGE`;
         this.editor.config.uploadImgAccept = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-        this.editor.config.uploadImgMaxSize = 10*1024*1024;
+        this.editor.config.uploadImgMaxSize = 10 * 1024 * 1024;
         this.editor.config.withCredentials = true
         this.editor.config.uploadImgHeaders = {
             Authorization: `Bearer ${userInfo.token}`

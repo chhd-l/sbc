@@ -1846,6 +1846,7 @@ export default class AppStore extends Store {
       let content = result.res.context;
       let res = content.map((item) => {
         return {
+          key: +new Date(),
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,

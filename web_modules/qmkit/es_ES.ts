@@ -1463,7 +1463,17 @@ export default {
   'Setting.Consentdetail': 'Consent detail',
   'Setting.Pleaseenterkeywords': 'Please enter keywords',
   'Setting.Detail': 'Detail',
-
+  'Setting.Page': 'Page',
+  'Setting.Landingpage': 'Landing page',
+  'Setting.checkout': 'Check out',
+  'Setting.Pleaseenterthetext': 'Please enter the text',
+  'Setting.Newdetail': 'New detail',
+  'Setting.ConsentId': 'Consent Id',
+  'Setting.Operation': 'Operation',
+  'Setting.canceled': 'canceled',
+  'Setting.Confirmdeletion': 'Confirm deletion?',
+  'Setting.Areyousuredisable': 'Are you sure disable this consent?',
+  'Setting.Areyousureable': 'Are you sure able this consent?',
 
 
 

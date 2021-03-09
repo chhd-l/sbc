@@ -164,7 +164,7 @@ class SearchForm extends React.Component<any, any> {
                 <Input
                   addonBefore={
                     <p style={styles.label}>
-                      <FormattedMessage id="product.productName" />
+                      <FormattedMessage id="Product.ProductName" />
                     </p>
                   }
                   value={likeGoodsName}
@@ -183,7 +183,7 @@ class SearchForm extends React.Component<any, any> {
             <FormItem>
               {getFieldDecorator('likeGoodsNo')(
                 <Input
-                  addonBefore={<p style={styles.label}>{this.props.sku ? <FormattedMessage id="product.SKU" /> : <FormattedMessage id="product.SPU" />}</p>}
+                  addonBefore={<p style={styles.label}>{this.props.sku ? <FormattedMessage id="Product.SKU" /> : <FormattedMessage id="Product.SPU" />}</p>}
                   value={likeGoodsNo}
                   style={{ width: 300 }}
                   onChange={(e: any) => {
@@ -202,7 +202,11 @@ class SearchForm extends React.Component<any, any> {
                 <TreeSelectGroup
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
-                  label={<p style={styles.label}>Product category</p>}
+                  label={
+                    <p style={styles.label}>
+                      <FormattedMessage id="Product.ProductCategory" />
+                    </p>
+                  }
                   /* defaultValue="全部"*/
                   // style={styles.wrapper}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -222,7 +226,11 @@ class SearchForm extends React.Component<any, any> {
                 <TreeSelectGroup
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
-                  label={<p style={styles.label}>Sales category</p>}
+                  label={
+                    <p style={styles.label}>
+                      <FormattedMessage id="Product.SalesCategory" />
+                    </p>
+                  }
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                   onChange={(value) => {
@@ -244,7 +252,7 @@ class SearchForm extends React.Component<any, any> {
                   style={styles.wrapper}
                   label={
                     <p style={styles.label}>
-                      <FormattedMessage id="product.brand" />
+                      <FormattedMessage id="Product.brand" />
                     </p>
                   }
                   defaultValue="All"
@@ -279,7 +287,7 @@ class SearchForm extends React.Component<any, any> {
                 }}
               >
                 <span>
-                  <FormattedMessage id="product.search" />
+                  <FormattedMessage id="Product.search" />
                 </span>
               </Button>
             </FormItem>

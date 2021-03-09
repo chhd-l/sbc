@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
 import { Const, DataGrid } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 import RelatedForm from './related-form';
 import * as webapi from '../webapi';
 import { Select, Table } from 'antd';
@@ -35,10 +35,10 @@ export default class ProductGridSKU extends React.Component<any, any> {
   }
 
   props: {
-    rowChangeBackFun:Function,
-    visible:Boolean,
-    searchParams:Object,
-    pid:String,
+    rowChangeBackFun: Function;
+    visible: Boolean;
+    searchParams: Object;
+    pid: String;
     relaxProps?: {
       addSkUProduct: any;
     };
@@ -91,9 +91,6 @@ export default class ProductGridSKU extends React.Component<any, any> {
     return tempList;
   };
 
-
-
-
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, goodsNo } = this.state;
     const { rowChangeBackFun } = this.props;
@@ -121,13 +118,13 @@ export default class ProductGridSKU extends React.Component<any, any> {
           rowSelection={{
             selectedRowKeys: selectedRowKeys,
             onChange: (selectedRowKeys, selectedTableRows) => {
-              let tempSelectedRowKeys = [...new Set(selectedRowKeys)]
+              let tempSelectedRowKeys = [...new Set(selectedRowKeys)];
               let { selectedRows } = this.state;
               selectedRows = selectedRows.concat(selectedTableRows);
               selectedRows = this.arrayFilter(tempSelectedRowKeys, selectedRows);
               this.setState({
                 selectedRows: selectedRows,
-                selectedRowKeys:tempSelectedRowKeys
+                selectedRowKeys: tempSelectedRowKeys
               });
 
               rowChangeBackFun(selectedRowKeys, selectedRows);
@@ -153,11 +150,10 @@ export default class ProductGridSKU extends React.Component<any, any> {
                 defaultChecked: b // 配置默认勾选的列
               };
             }
-
           }}
         >
           <Column
-            title="Image"
+            title={<FormattedMessage id="Product.Image" />}
             dataIndex="goodsInfoImg"
             key="goodsInfoImg"
             render={(rowInfo, i) => {
@@ -168,13 +164,13 @@ export default class ProductGridSKU extends React.Component<any, any> {
               }
             }}
           />
-          <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title="Product name" dataIndex="goodsInfoName" key="goodsInfoName" width="200px" />
-          <Column title="Sales category" key="storeCateName" dataIndex="storeCateName" />
-          <Column title="Specification" dataIndex="specName" key="specName" />
-          <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
-          <Column title="Brand" key="brandName" dataIndex="brandName" />
-          <Column title="Price" key="marketPrice" dataIndex="marketPrice" />
+          <Column title={<FormattedMessage id="Product.SKU" />} dataIndex="goodsInfoNo" key="goodsInfoNo" />
+          <Column title={<FormattedMessage id="Product.ProductName" />} dataIndex="goodsInfoName" key="goodsInfoName" width="200px" />
+          <Column title={<FormattedMessage id="Product.SalesCategory" />} key="storeCateName" dataIndex="storeCateName" />
+          <Column title={<FormattedMessage id="Product.Specification" />} dataIndex="specName" key="specName" />
+          <Column title={<FormattedMessage id="Product.ProductCategory" />} dataIndex="goodsCateName" key="goodsCateName" />
+          <Column title={<FormattedMessage id="Product.Brand" />} key="brandName" dataIndex="brandName" />
+          <Column title={<FormattedMessage id="Product.Price" />} key="marketPrice" dataIndex="marketPrice" />
         </DataGrid>
       </div>
     );

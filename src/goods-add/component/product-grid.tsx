@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
 import { Const, DataGrid, noop, SelectGroup } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 import RelatedForm from './related-form';
 import * as webapi from '../webapi';
 import { Select, Table } from 'antd';
@@ -32,18 +32,17 @@ export default class GoodsGrid extends React.Component<any, any> {
     };
   }
 
-   props: {
+  props: {
     relaxProps?: {
       productTooltip: any;
-      goodsId: any
+      goodsId: any;
     };
   };
 
   static relaxProps = {
     productTooltip: 'productTooltip',
-    goodsId: 'goodsId',
+    goodsId: 'goodsId'
   };
-
 
   componentDidMount() {
     this.init(this.props.searchParams ? this.props.searchParams : {});
@@ -53,13 +52,13 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: nextProps.searchParams ? nextProps.searchParams : {},
-        goodsInfoPage: nextProps.productTooltip,
+        goodsInfoPage: nextProps.productTooltip
       });
       this.init(nextProps.searchParams ? nextProps.searchParams : {});
     }
     this.setState({
       selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
-      selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : [],
+      selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
     });
   }
 
@@ -105,12 +104,12 @@ export default class GoodsGrid extends React.Component<any, any> {
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps: (record) => {
-              return {defaultChecked:record.selectedFlag}
+              return { defaultChecked: record.selectedFlag };
             }
           }}
         >
           <Column
-            title="Image"
+            title={<FormattedMessage id="Product.Image" />}
             dataIndex="Image"
             key="Image"
             render={(rowInfo, i) => {
@@ -123,18 +122,18 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="SPU"
+            title={<FormattedMessage id="Product.SKU" />}
             dataIndex="goodsNo"
             key="goodsNo"
             //ellipsis
           />
 
-          <Column title="Product name" dataIndex="goodsName" key="goodsName" width="200px" />
+          <Column title={<FormattedMessage id="Product.ProductName" />} dataIndex="goodsName" key="goodsName" width="200px" />
 
-          <Column title="Sales category" key="storeCateName" dataIndex="storeCateName" />
+          <Column title={<FormattedMessage id="Product.SalesCategory" />} key="storeCateName" dataIndex="storeCateName" />
 
-          <Column title="Product category" key="goodsCateName" dataIndex="goodsCateName" />
-          <Column title="Brand" key="brandName" dataIndex="brandName" />
+          <Column title={<FormattedMessage id="Product.ProductCategory" />} key="goodsCateName" dataIndex="goodsCateName" />
+          <Column title={<FormattedMessage id="Product.Brand" />} key="brandName" dataIndex="brandName" />
         </DataGrid>
       </div>
     );

@@ -38,12 +38,7 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      onFormChange,
-      onSearch,
-      customerLevels,
-      defaultLocalDateTime
-    } = this.props.relaxProps;
+    const { onFormChange, onSearch, customerLevels, defaultLocalDateTime } = this.props.relaxProps;
     const { startValue, endValue } = this.state;
     return (
       <Form className="filter-content" layout="inline">
@@ -65,9 +60,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8" id="select-group-width">
             <FormItem>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 label="Promotion type"
                 // style={{ width: 170 }}
                 defaultValue="All"
@@ -90,9 +83,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8" id="select-group-width">
             <FormItem>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 label="Campaign Type"
                 // style={{ width: 160 }}
                 defaultValue="All"
@@ -114,6 +105,22 @@ export default class SearchForm extends React.Component<any, any> {
               </SelectGroup>
             </FormItem>
           </Col>{' '}
+        </Row>
+        <Row id="input-lable-wwidth">
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore="Promotion code"
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'promotionCode',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
           <Col span="8">
             <FormItem>
               <DatePicker
@@ -144,7 +151,9 @@ export default class SearchForm extends React.Component<any, any> {
               />
             </FormItem>
           </Col>
-          <Col span="8">
+        </Row>
+        <Row id="input-lable-wwidth">
+          <Col span="24" style={{ textAlign: 'center' }}>
             <FormItem>
               <Button
                 type="primary"

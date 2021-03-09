@@ -74,22 +74,10 @@ export default class MarketingList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      dataList,
-      pageSize,
-      total,
-      currentPage,
-      init,
-      onDelete,
-      customerLevels,
-      onPause,
-      close,
-      onStart
-    } = this.props.relaxProps;
+    const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         rowKey={(record) => record.marketingId}
         isScroll={false}
         dataSource={dataList.toJS()}
@@ -116,11 +104,7 @@ export default class MarketingList extends React.Component<any, any> {
             );
           }}
         />*/}
-        <Column
-          title="Campaign name"
-          key="marketingName"
-          dataIndex="marketingName"
-        />
+        <Column title="Campaign name" key="marketingName" dataIndex="marketingName" />
         <Column
           title="Promotion type"
           key="promotionType"
@@ -137,19 +121,16 @@ export default class MarketingList extends React.Component<any, any> {
             return SUB_TYPE[subType];
           }}
         />
+        <Column title="Promotion code" key="promotionCode" dataIndex="promotionCode" />
         <Column
           title="Time"
           width="15%"
           render={(rowData) => {
             return (
               <div>
-                {moment(rowData['beginTime'])
-                  .format(Const.TIME_FORMAT)
-                  .toString()}
+                {moment(rowData['beginTime']).format(Const.TIME_FORMAT).toString()}
                 <br />
-                {moment(rowData['endTime'])
-                  .format(Const.TIME_FORMAT)
-                  .toString()}
+                {moment(rowData['endTime']).format(Const.TIME_FORMAT).toString()}
               </div>
             );
           }}
@@ -218,17 +199,9 @@ export default class MarketingList extends React.Component<any, any> {
           className={'operation-th'}
           render={(rowInfo) => {
             let url = '';
-            if (
-              rowInfo['subType'] === 0 ||
-              rowInfo['subType'] === 1 ||
-              rowInfo['subType'] === 6
-            ) {
+            if (rowInfo['subType'] === 0 || rowInfo['subType'] === 1 || rowInfo['subType'] === 6) {
               url = `/marketing-full-reduction/${rowInfo['marketingId']}`;
-            } else if (
-              rowInfo['subType'] === 2 ||
-              rowInfo['subType'] === 3 ||
-              rowInfo['subType'] === 7
-            ) {
+            } else if (rowInfo['subType'] === 2 || rowInfo['subType'] === 3 || rowInfo['subType'] === 7) {
               url = `/marketing-full-discount/${rowInfo['marketingId']}`;
             } else if (rowInfo['subType'] === 4 || rowInfo['subType'] === 5) {
               url = `/marketing-full-gift/${rowInfo['marketingId']}`;
@@ -267,46 +240,23 @@ export default class MarketingList extends React.Component<any, any> {
                   )}
                   {rowInfo['marketingStatus'] == 2 && (
                     <Tooltip placement="top" title="Open">
-                      <a
-                        href="javascript:void(0);"
-                        style={{ marginRight: 5 }}
-                        onClick={() => onStart(rowInfo['marketingId'])}
-                        className="iconfont iconbtn-open"
-                      ></a>
+                      <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onStart(rowInfo['marketingId'])} className="iconfont iconbtn-open"></a>
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
                     <Tooltip placement="top" title="Stop">
-                      <a
-                        href="javascript:void(0);"
-                        style={{ marginRight: 5 }}
-                        onClick={() => onPause(rowInfo['marketingId'])}
-                        className="iconfont iconbtn-stop"
-                      ></a>
+                      <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onPause(rowInfo['marketingId'])} className="iconfont iconbtn-stop"></a>
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
                     <Tooltip placement="top" title="Close">
-                      <a
-                        style={{ marginRight: 5 }}
-                        onClick={() => close(rowInfo['marketingId'])}
-                        className="iconfont iconbtn-cancelall"
-                      ></a>
+                      <a style={{ marginRight: 5 }} onClick={() => close(rowInfo['marketingId'])} className="iconfont iconbtn-cancelall"></a>
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 3 && (
-                    <Popconfirm
-                      title="Are you sure to delete the activity?"
-                      onConfirm={() => onDelete(rowInfo['marketingId'])}
-                      okText="Confirm"
-                      cancelText="Cancel"
-                    >
+                    <Popconfirm title="Are you sure to delete the activity?" onConfirm={() => onDelete(rowInfo['marketingId'])} okText="Confirm" cancelText="Cancel">
                       <Tooltip placement="top" title="Delete">
-                        <a
-                          href="javascript:void(0);"
-                          style={{ marginRight: 5 }}
-                          className="iconfont iconDelete"
-                        ></a>
+                        <a href="javascript:void(0);" style={{ marginRight: 5 }} className="iconfont iconDelete"></a>
                       </Tooltip>
                     </Popconfirm>
                   )}

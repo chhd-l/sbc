@@ -3,6 +3,7 @@ import { fromJS, List } from 'immutable';
 
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
+import ShippingTypeForm from '../free-shipping/components/shipping-type-form';
 import moment from 'moment';
 import { GoodsModal } from 'biz';
 
@@ -43,11 +44,7 @@ const largeformItemLayout = {
     span: 10
   }
 };
-const radioStyle = {
-  display: 'block',
-  height: '40px',
-  lineHeight: '40px'
-};
+
 export default class FreeShippingAddForm extends React.Component<any, any> {
   props;
 
@@ -158,11 +155,40 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     this.onBeanChange({ segmentIds });
   };
 
+  shippingRadioOnChange = (e, key) => {
+    switch (key) {
+      case 'shippingType':
+        this.props.form.setFieldsValue({
+          shippingItems: null,
+          shippingValue: null
+        });
+        this.onBeanChange({
+          shippingValue: null,
+          shippingItems: null,
+          shippingType: e.target.value
+        });
+        break;
+      case 'shippingValue':
+        this.onBeanChange({
+          shippingValue: e.target.value,
+          shippingItems: null
+        });
+        break;
+      case 'shippingItems':
+        this.onBeanChange({
+          shippingItems: e.target.value,
+          shippingValue: null
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
     const { marketingBean, saveLoading, allGroups } = this.state;
-
     console.log(marketingBean.toJS(), 'marketingBean---------');
 
     return (
@@ -227,6 +253,17 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
               onOpenChange={this.handleEndOpenChange}
             />
           )}
+        </FormItem>
+        <div className="bold-title">Free shipping type</div>
+        <FormItem {...smallformItemLayout} labelAlign="left">
+          {/*{getFieldDecorator('shippingType', {*/}
+          {/*  onChange: (e) => this.onBeanChange({ shippingType: e.target.value }),*/}
+          {/*  initialValue: 1//marketingBean.get('marketingName')*/}
+          {/*})(*/}
+          {/*  <ShippingTypeForm form={this.props.form}/>*/}
+          {/*)}*/}
+
+          <ShippingTypeForm form={this.props.form} shippingType={marketingBean.get('shippingType')} onChange={(e, key) => this.shippingRadioOnChange(e, key)} />
         </FormItem>
         <div className="bold-title">Target consumer:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">

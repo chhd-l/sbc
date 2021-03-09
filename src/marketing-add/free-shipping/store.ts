@@ -5,7 +5,7 @@ import { Const, history } from 'qmkit';
 
 import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
-import FullDiscountActor from './actor/full-discount-actor';
+import FreeShippingActor from './actor/free-shipping-actor';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -16,7 +16,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new FullDiscountActor()];
+    return [new FreeShippingActor()];
   }
 
   init = async (marketingId) => {

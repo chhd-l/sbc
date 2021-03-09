@@ -4,7 +4,7 @@
 import { Action, Actor, IMap } from 'plume2';
 import { fromJS } from 'immutable';
 
-export default class FullDiscountActor extends Actor {
+export default class FreeShippingActor extends Actor {
   defaultState() {
     return {
       marketingBean: {},

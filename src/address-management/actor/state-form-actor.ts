@@ -10,6 +10,7 @@ export default class StateFormActor extends Actor {
         id: null,
         country: '',
         state: '',
+        abbreviation: '',
         postCodeArr: [
           {
             value: new Date().getTime(),

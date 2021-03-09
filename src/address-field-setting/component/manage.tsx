@@ -50,6 +50,36 @@ export default class Manage extends React.Component<any, any> {
           row: 4,
           col: 2,
           field: ''
+        },
+        {
+          row: 5,
+          col: 1,
+          field: ''
+        },
+        {
+          row: 5,
+          col: 2,
+          field: ''
+        },
+        {
+          row: 6,
+          col: 1,
+          field: ''
+        },
+        {
+          row: 6,
+          col: 2,
+          field: ''
+        },
+        {
+          row: 7,
+          col: 1,
+          field: ''
+        },
+        {
+          row: 7,
+          col: 2,
+          field: ''
         }
       ]
     };
@@ -80,20 +110,20 @@ export default class Manage extends React.Component<any, any> {
   render() {
     const { result } = this.state;
     return (
-      <div className="container-search">
-        <Headline title="Address field setting / Manage field display" />
-        <Alert type="info" message="Address setting is for address adding and address edit of shop and store portal" />
+      <div>
         <DragDropContextProvider backend={HTML5Backend}>
-          <Row gutter={8}>
-            <Col span={8}>
-              <div>Select field</div>
+          <Row gutter={16}>
+            <Col span={10}>
+              <div>
+                <span className="field-bar-title">Select field</span> <span>select the drag field to the specified position on the right</span>
+              </div>
               <div className="field-item-container">
                 <DragField key="1" name="First name" onDragEnd={this.onAddDragItem} />
                 <DragField key="2" name="Last name" onDragEnd={this.onAddDragItem} />
               </div>
             </Col>
-            <Col span={16}>
-              <div>Basic information</div>
+            <Col span={14}>
+              <div className="field-bar-title">Basic information</div>
               <Row className="display-field-item-container">
                 {result.map((ro, idx) => (
                   <Col span={12} key={idx}>

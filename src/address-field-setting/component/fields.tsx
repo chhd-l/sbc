@@ -66,12 +66,7 @@ export default class Fields extends React.Component<any, any> {
       }
     ];
     return (
-      <div className="container-search">
-        <Headline title="Address setting" />
-        <Alert type="info" message="Address setting is for address adding and address edit of shop and store portal" />
-        <Button type="primary" style={{ marginBottom: 10 }}>
-          Manage display
-        </Button>
+      <div>
         <Table rowKey="id" loading={loading} columns={columns} dataSource={list} />
         <Modal title="Edit field" visible={visible} okText="Save" cancelText="Cancel" onOk={this.handleOk} onCancel={this.handleCancel}>
           <Form>

@@ -77,7 +77,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       completedOrder: [],
       visibleDate: false,
       currentOrder: {},
-      currencySymbol: ''
+      currencySymbol: '',
+      currentDateId: ''
 
       // operationLog: []
     };
@@ -708,6 +709,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   handleVisibleDateChange = (record) => {
     const { visibleDate } = this.state;
     this.setState({
+      currentDateId: record.tradeItems[0].skuId,
       visibleDate: !visibleDate,
       currentOrder: record
     });
@@ -738,7 +740,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       noStartOrder,
       completedOrder,
       currentOrder,
-      currencySymbol
+      currencySymbol,
+      currentDateId,
+      visibleDate
       // operationLog
     } = this.state;
     const menu = (
@@ -1002,7 +1006,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
-            <Popover content={content} trigger="click" visible={this.state.visibleDate} onVisibleChange={() => this.handleVisibleDateChange(record)}>
+            <Popover content={content} trigger="click" visible={visibleDate && currentDateId === record.tradeItems[0].skuId} onVisibleChange={() => this.handleVisibleDateChange(record)}>
               <Tooltip placement="top" title="Select Date">
                 <a style={styles.edit} className="iconfont icondata"></a>
               </Tooltip>

@@ -151,7 +151,6 @@ class SkuForm extends React.Component<any, any> {
     if (!specSingleFlag) {
       columns = goodsSpecs
         .map((item) => {
-          console.log(item,1111111111);
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
@@ -331,6 +330,37 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
+
+    //External SKU
+    columns = columns.push({
+      title: 'External SKU',
+      key: 'externalSku',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('externalSku' + rowInfo.id, {
+                  rules: [
+                    /*{
+                      required: true,
+                      message: 'Please input EAN code'
+                    },*/
+                    /*{
+                      pattern: ValidConst.noMinus,
+                      message: 'Please enter the correct value'
+                    }*/
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
+                  initialValue: rowInfo.externalSku
+                })(<Input style={{ width: '180px' }} maxLength={45}/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
 
     //EAN
     columns = columns.push({
@@ -549,9 +579,6 @@ class SkuForm extends React.Component<any, any> {
       e = e.target.value;
     }
 
-    // console.log(id);
-    //console.log(key);
-    //console.log(e,44444);
     editGoodsItem(id, key, e);
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
@@ -616,9 +643,6 @@ class SkuForm extends React.Component<any, any> {
 
   onDel = (item, pid, id) => {
     const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
-    // console.log(item,11111);
-    // console.log(pid);
-    // console.log(addSkUProduct,2222);
     let a = [];
     let b = [];
     let c = [];

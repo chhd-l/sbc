@@ -90,7 +90,6 @@ class TagManagementDetail extends Component<any, any> {
     );
   };
   onPageChange = (page, pageSize) => {
-    console.log(page, pageSize);
   };
   deletePetOwner = (id) => {
     webapi

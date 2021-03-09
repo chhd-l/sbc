@@ -93,7 +93,6 @@ class LogisticsForm extends React.Component<any, any> {
         }
       });
     }
-    console.log(goods.get('freightTempId'), 'freightTempId');
     return (
       <Form>
         <Row type="flex" justify="start" gutter={16}>

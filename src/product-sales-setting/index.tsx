@@ -72,7 +72,6 @@ class ProductSearchSetting extends Component<any, any> {
         return item;
       }
     });
-    // debugger
     this.setState({
       options,
       defaultPurchaseType,

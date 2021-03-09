@@ -218,6 +218,9 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="order.orderStatus" />
                       </th>
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="order.createBy" />
+                      </th>
                       <th className="operation-th" style={{ width: '12%' }}>
                         <FormattedMessage id="order.paymentStatus" />
                       </th>
@@ -565,6 +568,8 @@ export default class ListView extends React.Component<any, any> {
                     <td style={{ width: '12%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*订单状态*/}
                     <td style={{ width: '12%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
+                    {/*创建人类型 cc / po*/}
+                    <td style={{ width: '12%' }}>{v.get('orderCreateBy')}</td>
                     {/*支付状态*/}
                     <td style={{ width: '12%', paddingRight: 22 }} className="operation-td">
                       {payStatus(v.getIn(['tradeState', 'payState']))}

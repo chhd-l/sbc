@@ -128,7 +128,7 @@ export default class Customer extends React.Component<any, any> {
 
   componentDidMount() {
     this.init();
-    this.getSubscriptionTypeList();
+    //this.getSubscriptionTypeList();
   }
 
   getSubscriptionTypeList = () => {
@@ -160,6 +160,7 @@ export default class Customer extends React.Component<any, any> {
     const query = this.state.searchForm;
 
     let params = {
+      subscriptionType: query.subscriptionType,
       contactPhone: query.phoneNumber,
       customerAccount: query.customerAccount,
       customerLevelId: query.customerTypeId,

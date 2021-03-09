@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import Overview from './components/overview';
 import AutomationExecution from './components/automation-execution';
 import PetOwnerCommunication from './components/pet-owner-communication';
+import AuditLog from './components/audit-log';
 
 const ButtonGroup = Button.Group;
 const { TabPane } = Tabs;
@@ -126,11 +127,9 @@ class AutomationDetail extends Component<any, any> {
                   </Card>
                   <AutomationExecution />
                   <PetOwnerCommunication />
-
-                  <Card title={'Pet Owner Communication'} headStyle={{ padding: 0 }} bordered={false}></Card>
                 </TabPane>
                 <TabPane tab="Audit Log" key="3">
-                  Content of Tab Pane 3
+                  <AuditLog />
                 </TabPane>
               </Tabs>
             </Card>

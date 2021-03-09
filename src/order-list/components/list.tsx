@@ -203,6 +203,11 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="order.orderStatus" />
                       </th>
+
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="order.createBy" />
+                      </th>
+
                       <th className="operation-th" style={{ width: '12%' }}>
                         <FormattedMessage id="order.paymentStatus" />
                       </th>

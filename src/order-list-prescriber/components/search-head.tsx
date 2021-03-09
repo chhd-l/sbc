@@ -77,9 +77,9 @@ export default class SearchHead extends Component<any, any> {
       codeSelect: 'promotionCode',
       codeSelectValue: '',
       planTypeList: [
-        { value: 'cat ', name: 'Cat', rel: 'club' },
-        { value: 'dog', name: 'Dog', rel: 'club' },
-        { value: 'smartFeeder', name: 'Smart feeder', rel: 'contractProduct' }
+        { value: 'Cat ', name: 'Cat', rel: 'club' },
+        { value: 'Dog', name: 'Dog', rel: 'club' },
+        { value: 'SmartFeeder', name: 'Smart feeder', rel: 'contractProduct' }
       ]
     };
   }
@@ -97,24 +97,24 @@ export default class SearchHead extends Component<any, any> {
       hasMenu = true;
     }
     const refillNumberList = [
-      { value: 'first', name: 'First' },
-      { value: 'recurrent', name: 'Recurrent' }
+      { value: 'First', name: 'First' },
+      { value: 'Recurrent', name: 'Recurrent' }
     ];
 
     const orderTypeList = [
-      { value: 'singlePurchase', name: 'Single purchase' },
-      { value: 'subscription', name: 'Subscription' }
+      { value: 'SinglePurchase', name: 'Single purchase' },
+      { value: 'Subscription', name: 'Subscription' }
     ];
 
     const subscriptionTypeList = [
-      { value: 'contractProduct', name: 'Contract product' },
-      { value: 'club', name: 'Club' },
-      { value: 'autoship', name: 'Autoship' }
+      { value: 'ContractProduct', name: 'Contract product' },
+      { value: 'Club', name: 'Club' },
+      { value: 'Autoship', name: 'Autoship' }
     ];
 
     const orderSourceList = [
       { value: 'FGS', name: 'FGS' },
-      { value: 'atelierFeline', name: "L'Atelier Feline" }
+      { value: 'L_Atelier_Feline', name: "L'Atelier Feline" }
     ];
 
     const menu = (
@@ -210,7 +210,7 @@ export default class SearchHead extends Component<any, any> {
                       allowClear
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
-                        if (value === 'singlePurchase') {
+                        if (value === 'SinglePurchase') {
                           this.setState({
                             orderType: value,
                             subscriptionType: '',
@@ -329,7 +329,7 @@ export default class SearchHead extends Component<any, any> {
                       style={styles.wrapper}
                       allowClear
                       value={subscriptionType}
-                      disabled={orderType === 'singlePurchase'}
+                      disabled={orderType === 'SinglePurchase'}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.setState(
@@ -394,7 +394,7 @@ export default class SearchHead extends Component<any, any> {
                       style={styles.wrapper}
                       allowClear
                       value={subscriptionPlanType}
-                      disabled={orderType === 'singlePurchase'}
+                      disabled={orderType === 'SinglePurchase'}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.setState({
@@ -412,7 +412,7 @@ export default class SearchHead extends Component<any, any> {
                   </InputGroup>
                 </FormItem>
               </Col>
-              <Col span={8}>
+              {/* <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
                     {this._renderClinicSelect()}
@@ -428,7 +428,7 @@ export default class SearchHead extends Component<any, any> {
                     />
                   </InputGroup>
                 </FormItem>
-              </Col>
+              </Col> */}
 
               <Col span={8}>
                 <FormItem>
@@ -702,9 +702,9 @@ export default class SearchHead extends Component<any, any> {
   };
   getPlanType = (rel) => {
     const subscriptionPlanTypeList = [
-      { value: 'cat ', name: 'Cat', rel: 'club' },
-      { value: 'dog', name: 'Dog', rel: 'club' },
-      { value: 'smartFeeder', name: 'Smart feeder', rel: 'contractProduct' }
+      { value: 'Cat ', name: 'Cat', rel: 'club' },
+      { value: 'Dog', name: 'Dog', rel: 'club' },
+      { value: 'SmartFeeder', name: 'Smart feeder', rel: 'contractProduct' }
     ];
     if (rel) {
       let planTypeList = subscriptionPlanTypeList.filter((item) => item.rel === rel);
@@ -724,21 +724,26 @@ export default class SearchHead extends Component<any, any> {
       buyerOptions,
       goodsOptions,
       receiverSelect,
-      clinicSelect,
+      // clinicSelect,
       numberSelect,
-      id,
-      subscribeId,
       buyerOptionsValue,
       goodsOptionsValue,
       receiverSelectValue,
-      clinicSelectValue,
+      // clinicSelectValue,
       numberSelectValue,
       tradeState,
       beginTime,
       endTime,
       orderCategory,
       recommenderSelect,
-      recommenderSelectValue
+      recommenderSelectValue,
+      refillNumber,
+      orderType,
+      orderSource,
+      subscriptionType,
+      subscriptionPlanType,
+      codeSelect,
+      codeSelectValue
     } = this.state;
 
     const ts = {} as any;
@@ -754,18 +759,42 @@ export default class SearchHead extends Component<any, any> {
       ts.orderSource = tradeState.orderSource;
     }
 
+    // const params = {
+    //   id: numberSelect === 'orderNumber' ? numberSelectValue : '',
+    //   subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+    //   [buyerOptions]: buyerOptionsValue,
+    //   tradeState: ts,
+    //   [goodsOptions]: goodsOptionsValue,
+    //   [receiverSelect]: receiverSelectValue,
+    //   [clinicSelect]: clinicSelect === 'clinicsName' ? (clinicSelectValue ? clinicSelectValue : '') : clinicSelectValue ? clinicSelectValue : null,
+    //   [recommenderSelect]: recommenderSelectValue,
+    //   beginTime,
+    //   endTime,
+    //   orderCategory,
+
+    //   refillNumber,
+    //   orderType,
+    //   orderSource,
+    //   subscriptionType,
+    //   subscriptionPlanType,
+    //   [codeSelect]:codeSelectValue,
+
+    // };
     const params = {
       id: numberSelect === 'orderNumber' ? numberSelectValue : '',
       subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
-      [buyerOptions]: buyerOptionsValue,
-      tradeState: ts,
+      refillNumber,
       [goodsOptions]: goodsOptionsValue,
-      [receiverSelect]: receiverSelectValue,
-      [clinicSelect]: clinicSelect === 'clinicsName' ? (clinicSelectValue ? clinicSelectValue : '') : clinicSelectValue ? clinicSelectValue : null,
-      [recommenderSelect]: recommenderSelectValue,
+      orderType,
+      orderSource,
+      tradeState: ts,
+      subscriptionType,
       beginTime,
       endTime,
-      orderCategory
+      [recommenderSelect]: recommenderSelectValue,
+      // [clinicSelect]: clinicSelectValue,
+      subscriptionPlanType,
+      [codeSelect]: codeSelectValue
     };
 
     onSearch(params);

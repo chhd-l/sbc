@@ -59,7 +59,31 @@ class AutomationList extends Component<any, any> {
   };
   getAutomationList = () => {
     const { searchForm, pagination } = this.state;
-    console.log(searchForm, pagination);
+    let params = {
+      automationName: searchForm.automationName,
+      automationCategory: searchForm.automationCategory,
+      automationStatus: searchForm.automationStatus,
+      testStatus: searchForm.testStatus,
+      automationPeriod: searchForm.automationPeriod
+    };
+    webapi
+      .getAutomationList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   handleTableChange = (pagination: any) => {
     this.setState(

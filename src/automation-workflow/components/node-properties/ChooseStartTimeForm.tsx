@@ -5,7 +5,6 @@ import ChooseRecurrenceMonthlyForm from './start-components/ChooseRecurrenceMont
 import ChooseRecurrenceYearlyForm from './start-components/ChooseRecurrenceYearlyForm';
 import moment from 'moment';
 import { Form, Row, Col, Input, Radio, TimePicker, DatePicker } from 'antd';
-import value from '*.json';
 
 const FormItem = Form.Item;
 
@@ -23,6 +22,7 @@ export default class ChooseStartTimeForm extends Component<any, any> {
     this.onChange = this.onChange.bind(this);
     this.onTimePickerChange = this.onTimePickerChange.bind(this);
     this.updateEndInfo = this.updateEndInfo.bind(this);
+    this.updateParentValue = this.updateParentValue.bind(this);
   }
 
   componentDidMount() {
@@ -39,41 +39,87 @@ export default class ChooseStartTimeForm extends Component<any, any> {
     }
   }
 
-  onChange(value) {
+  onChange(field, value) {
+    let data = this.state.form;
+    data[field] = value;
+    this.setState(
+      {
+        form: data
+      },
+      () => this.updateParentValue()
+    );
+  }
+
+  updateParentValue() {
     const { updateValue } = this.props;
-    updateValue('eventType', value);
+    const { form } = this.state;
+    const params = { timeType: form.timeType, time: '', recurrenceType: '', recurrenceValue: '' };
+    switch (form.timeType) {
+      case 'specificTime':
+        params.time = form.specificTime;
+        break;
+      case 'recurrence':
+        params.recurrenceType = form.recurrenceType;
+        params.recurrenceValue = form.endInfo;
+        break;
+    }
+    updateValue('startCampaignTime', params);
   }
+
   onTimePickerChange(time, timeString) {
-    this.setState({
-      endInfo: {
-        pointTime: timeString
-      }
-    });
+    const { form } = this.state;
+    form.endInfo = form.endInfo || {};
+    form.endInfo.pointTime = timeString;
+    form.timeType = 'recurrence';
+    this.setState(
+      {
+        form
+      },
+      () => this.updateParentValue()
+    );
   }
+
   updateEndInfo(data) {
     const { form } = this.state;
     const tmp = { pointTime: form.endInfo && form.endInfo.pointTime ? form.endInfo.pointTime : '' };
-    this.setState({
-      form: {
-        endInfo: Object.assign({}, tmp, data)
-      }
-    });
+    form.endInfo = Object.assign({}, tmp, data);
+    this.setState(
+      {
+        form
+      },
+      () => this.updateParentValue()
+    );
   }
   render() {
     const { form } = this.state;
+    const { startCampaignTime } = this.props;
     let momentedSpecificTime = form && form.specificTime ? moment(form.specificTime) : null;
+    let momentedPointTime = form && form.endInfo && form.endInfo.pointTime ? moment(form.endInfo.pointTime, 'HH:mm:ss') : null;
     return (
       <React.Fragment>
         <FormItem label="Choose when to start campaign" colon={false}>
           <Row gutter={24} className="ui-radio-group-custom">
-            <Radio.Group v-model="form.timeType">
+            <Radio.Group
+              onChange={(e) => {
+                const value = (e.target as any).value;
+                this.onChange('timeType', value);
+                if (value !== 'specificTime') {
+                  this.onChange('specificTime', null);
+                }
+                if (value !== 'recurrence') {
+                  this.onChange('recurrenceType', '');
+                  this.onChange('endInfo', null);
+                }
+              }}
+              value={form.timeType}
+            >
               <Col span={24}>
                 <Radio value="immediately">Immediately</Radio>
               </Col>
               <Col span={24}>
                 <Radio value="recurrence">
                   Recurrence at {'  '}
-                  <TimePicker use12Hours onChange={this.onTimePickerChange} />
+                  <TimePicker value={momentedPointTime} use12Hours onChange={this.onTimePickerChange} />
                 </Radio>
               </Col>
               <Col span={23} push={1}>
@@ -82,8 +128,14 @@ export default class ChooseStartTimeForm extends Component<any, any> {
                     <Radio.Group
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        this.setState({ form: { recurrenceType: value } });
+                        if (!startCampaignTime.recurrenceValue) {
+                          this.onChange('endInfo', null);
+                        }
+                        this.onChange('recurrenceType', value);
+                        this.onChange('timeType', 'recurrence');
+                        this.onChange('endInfo', null);
                       }}
+                      value={form.recurrenceType}
                     >
                       <Radio value="daily">Daily</Radio>
                       <Radio value="weekly">Weekly</Radio>
@@ -95,10 +147,10 @@ export default class ChooseStartTimeForm extends Component<any, any> {
                     <Col span="16" push={1} className="ui-border-left">
                       <Row gutter={24}>
                         <Col span="23" push={1}>
-                          {form.recurrenceType === 'daily' ? <ChooseRecurrenceDailyForm recurrenceType="daily" key={1} endInfo={form.endInfo} updateValue={this.updateEndInfo} /> : null}
-                          {form.recurrenceType === 'weekly' ? <ChooseRecurrenceWeeklyForm recurrenceType="weekly" key={2} endInfo={form.endInfo} updateValue={this.updateEndInfo} /> : null}
-                          {form.recurrenceType === 'monthly' ? <ChooseRecurrenceMonthlyForm recurrenceType="monthly" key={3} endInfo={form.endInfo} updateValue={this.updateEndInfo} /> : null}
-                          {form.recurrenceType === 'yearly' ? <ChooseRecurrenceYearlyForm recurrenceType="yearly" key={4} endInfo={form.endInfo} updateValue={this.updateEndInfo} /> : null}
+                          {form.recurrenceType === 'daily' ? <ChooseRecurrenceDailyForm endInfo={form.endInfo} updateEndInfo={this.updateEndInfo} /> : null}
+                          {form.recurrenceType === 'weekly' ? <ChooseRecurrenceWeeklyForm endInfo={form.endInfo} updateEndInfo={this.updateEndInfo} /> : null}
+                          {form.recurrenceType === 'monthly' ? <ChooseRecurrenceMonthlyForm endInfo={form.endInfo} updateEndInfo={this.updateEndInfo} /> : null}
+                          {form.recurrenceType === 'yearly' ? <ChooseRecurrenceYearlyForm endInfo={form.endInfo} updateEndInfo={this.updateEndInfo} /> : null}
                         </Col>
                       </Row>
                     </Col>
@@ -112,12 +164,13 @@ export default class ChooseStartTimeForm extends Component<any, any> {
                 <DatePicker
                   showTime
                   placeholder="Select Time"
-                  defaultValue={momentedSpecificTime}
                   onChange={(value, dateString) => {
-                    this.setState({
-                      specificTime: dateString
-                    });
+                    this.onChange('specificTime', dateString);
+                    this.onChange('timeType', 'specificTime');
+                    this.onChange('recurrenceType', '');
+                    this.onChange('endInfo', null);
                   }}
+                  value={momentedSpecificTime}
                 />
               </Col>
             </Radio.Group>

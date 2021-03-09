@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Row, Col, Input } from 'antd';
 import ChooseEventForm from './ChooseEventForm';
 import ChooseStartTimeForm from './ChooseStartTimeForm';
+import ChooseWaitForm from './ChooseWaitForm';
 
 const FormItem = Form.Item;
 
@@ -118,6 +119,7 @@ export default class NodeProperties extends Component<any, any> {
           </FormItem>
           {model.nodeType === 'EventTrigger' ? <ChooseEventForm updateValue={this.updateValue} eventType={formParam.eventType} /> : null}
           {model.nodeType === 'TimeTrigger' ? <ChooseStartTimeForm updateValue={this.updateValue} startCampaignTime={formParam.startCampaignTime} /> : null}
+          {model.nodeType === 'Wait' ? <ChooseWaitForm updateValue={this.updateValue} startCampaignTime={formParam.waitCampaignTime} /> : null}
         </Form>
       </div>
     );

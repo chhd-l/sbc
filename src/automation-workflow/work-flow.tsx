@@ -78,7 +78,6 @@ export default withPropsAPI(
             tmpParam = { ...tmpParam, ...formData.vetData };
             break;
         }
-        console.log(tmpParam);
         this.props.propsAPI.update(currentItem, tmpParam);
       }
     }

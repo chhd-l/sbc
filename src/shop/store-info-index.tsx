@@ -52,16 +52,16 @@ export default class ShopInfo extends React.Component<any, any> {
         <div>
           <BreadCrumb />
           <div className="container-search">
-            <Headline title={<FormattedMessage id="storeInformation" />} />
+            <Headline title={<FormattedMessage id="Setting.storeInformation" />} />
           </div>
           <div className="container">
             <Tabs onChange={(key) => this.store.setCurrentTab(key)} activeKey={currentTab}>
-              <Tabs.TabPane tab={<FormattedMessage id="basicInformation" />} key="0" />
-              <Tabs.TabPane tab={<FormattedMessage id="ssoSetting" />} key="1" />
-              <Tabs.TabPane tab={<FormattedMessage id="signedInformation" />} key="2" />
-              <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
-              <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
-              <Tabs.TabPane tab="Taxes" key="5" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.basicInformation" />} key="0" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.ssoSetting" />} key="1" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.signedInformation" />} key="2" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.footer" />} key="3" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.consent" />} key="4" />
+              <Tabs.TabPane tab={<FormattedMessage id="Setting.Taxes" />} key="5" />
               {/* <Tabs.TabPane
                 tab={<FormattedMessage id="footerConfig" />}
                 key="6"
@@ -75,7 +75,7 @@ export default class ShopInfo extends React.Component<any, any> {
             {!(+currentTab === 4 || +currentTab === 5) ? (
               <div className="bar-button">
                 <Button type="primary" onClick={() => this._edit()}>
-                  <FormattedMessage id="edit" />
+                  <FormattedMessage id="Setting.Edit" />
                 </Button>
               </div>
             ) : (
@@ -83,7 +83,7 @@ export default class ShopInfo extends React.Component<any, any> {
                 {this.store.state().get('pageChangeType') == 'List' ? null : (
                   <div className="bar-button">
                     <Button type="primary" onClick={() => this.store.consentSubmit(this.store.state().get('consentForm'), this.store.state().get('editId'))}>
-                      Submit
+                      <FormattedMessage id="Setting.Submit" />
                     </Button>
                   </div>
                 )}

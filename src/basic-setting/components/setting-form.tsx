@@ -73,48 +73,28 @@ export default class settingForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const storeId = this._store.state().getIn(['settings', 'storeId']); //店铺标识
-    const supplierCode = this._store
-      .state()
-      .getIn(['settings', 'supplierCode']);
+    const supplierCode = this._store.state().getIn(['settings', 'supplierCode']);
     const accountName = this._store.state().getIn(['settings', 'accountName']);
     const storeName = this._store.state().getIn(['settings', 'storeName']);
-    const contactPerson = this._store
-      .state()
-      .getIn(['settings', 'contactPerson']);
-    const contactMobile = this._store
-      .state()
-      .getIn(['settings', 'contactMobile']);
-    const contactEmail = this._store
-      .state()
-      .getIn(['settings', 'contactEmail']);
-    const addressDetail = this._store
-      .state()
-      .getIn(['settings', 'addressDetail']);
+    const contactPerson = this._store.state().getIn(['settings', 'contactPerson']);
+    const contactMobile = this._store.state().getIn(['settings', 'contactMobile']);
+    const contactEmail = this._store.state().getIn(['settings', 'contactEmail']);
+    const addressDetail = this._store.state().getIn(['settings', 'addressDetail']);
 
     const companyInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     const companyInfoId = companyInfo.companyInfoId; //从缓存中获取商家标识
 
     return (
-      <Form
-        style={{ paddingBottom: 50, maxWidth: 900 }}
-        onSubmit={this._handleSubmit}
-      >
+      <Form style={{ paddingBottom: 50, maxWidth: 900 }} onSubmit={this._handleSubmit}>
         <Row className="logoUpdate">
           <Col span={24}>
-            <FormItem
-              {...formItemLayout}
-              required={false}
-              label={<FormattedMessage id="storeLogo" />}
-            >
+            <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeLogo" />}>
               <Row>
                 <Col span={6}>
                   <div className="clearfix bannerImg">
                     <QMUpload
                       style={styles.box}
-                      action={
-                        Const.HOST +
-                        '/store/uploadStoreResource?resourceType=IMAGE'
-                      }
+                      action={Const.HOST + '/store/uploadStoreResource?resourceType=IMAGE'}
                       listType="picture-card"
                       name="uploadFile"
                       onChange={this._editStoreSign}
@@ -152,11 +132,7 @@ export default class settingForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={24}>
-            <FormItem
-              {...inputItemLayout}
-              required={false}
-              label={<FormattedMessage id="storeAccount" />}
-            >
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="storeAccount" />}>
               {getFieldDecorator('accountName', {
                 initialValue: accountName
               })(<Input disabled={true} />)}
@@ -165,11 +141,7 @@ export default class settingForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={24}>
-            <FormItem
-              {...inputItemLayout}
-              required={false}
-              label={<FormattedMessage id="storeName" />}
-            >
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="storeName" />}>
               {getFieldDecorator('storeName', {
                 initialValue: storeName
               })(<Input />)}
@@ -179,11 +151,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem
-              {...inputItemLayout}
-              required={false}
-              label={<FormattedMessage id="Contact" />}
-            >
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="Contact" />}>
               {getFieldDecorator('contactPerson', {
                 initialValue: contactPerson
               })(<Input />)}
@@ -193,24 +161,13 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem
-              {...inputItemLayout}
-              required={false}
-              label={<FormattedMessage id="phoneNumber" />}
-            >
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="phoneNumber" />}>
               {getFieldDecorator('contactMobile', {
                 initialValue: contactMobile,
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorTrimMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        'Phone Number',
-                        1,
-                        11
-                      );
+                      QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Phone Number', 1, 11);
                     }
                   }
                 ]
@@ -221,11 +178,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem
-              {...inputItemLayout}
-              required={false}
-              label={<FormattedMessage id="contactEmails" />}
-            >
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="contactEmails" />}>
               {getFieldDecorator('contactEmail', {
                 initialValue: contactEmail
               })(<Input />)}
@@ -235,11 +188,7 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
-            <FormItem
-              {...inputItemLayout}
-              required={false}
-              label={<FormattedMessage id="address" />}
-            >
+            <FormItem {...inputItemLayout} required={false} label={<FormattedMessage id="address" />}>
               {getFieldDecorator('addressDetail', {
                 initialValue: addressDetail
               })(<Input />)}
@@ -301,12 +250,7 @@ export default class settingForm extends React.Component<any, any> {
   _checkUploadFile = (size: number, file) => {
     let fileName = file.name.toLowerCase();
     // 支持的图片格式：jpg、jpeg、png、gif
-    if (
-      fileName.endsWith('.jpg') ||
-      fileName.endsWith('.jpeg') ||
-      fileName.endsWith('.png') ||
-      fileName.endsWith('.gif')
-    ) {
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif')) {
       if (file.size <= size * 1024 * 1024) {
         return true;
       } else {

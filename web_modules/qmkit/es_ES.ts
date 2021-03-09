@@ -1,4 +1,6 @@
 import {FormattedMessage} from "react-intl";
+import React from "react";
+import {Button, Checkbox, Radio} from "antd";
 
 /**
  * 多语言英文
@@ -395,7 +397,7 @@ export default {
   "Product.Reviewmanagement": "Review management",
   "Product.Categorymanagement": "Category management",
   "Product.Productmanagement": "Product management",
-  
+
   "Product.operationInstruction": "Operation instruction",
   "Product.operationInstructionFirst": "Until filled all required fields, the product could be published. ",
   "Product.operationInstructionSecond": " The product information tab, product price tab, product inventory tab must be filled before published.",
@@ -610,6 +612,10 @@ export default {
   
 
   
+
+
+
+
 
   /*-----------------------------  Order  --------------------------------------------*/
   'Order.AuditSetting':'Audit Setting',
@@ -1429,7 +1435,7 @@ export default {
   'Finance.PleaseSelectOrderNumber':'Please Select orderNumber!',
   'Finance.SelectOrderNumber':'Select a Order number',
   'Finance.BillingAddress':'Billing address',
-  
+
 
 
   /*-----------------------------  Marketing  ----------------------------------------*/
@@ -1441,6 +1447,173 @@ export default {
   /*-----------------------------  Content  ----------------------------------------*/
 
   /*-----------------------------  Setting  ----------------------------------------*/
+
+  'Setting.storeSetting': 'Store setting',
+  'Setting.storeLogo': 'Store logo',
+  'Setting.storeSettingInfo2':
+    'PC mall store shop, you can add up to one, the picture format is limited to jpg, jpeg, png, gif, the recommended size is 1920px * 120px, and the size does not exceed 2M',
+  'Setting.storeAccount': 'Store account',
+  'Setting.storeName': 'Store name',
+  'Setting.Contact': 'Contact',
+  'Setting.phoneNumber': 'Phone number',
+  'Setting.contactEmails': 'Contact emails',
+  'Setting.address': 'Address',
+  'Setting.save': 'Save',
+  'Setting.storeInformation': 'Shop information',
+  'Setting.basicInformation': 'Basic information',
+  'Setting.ssoSetting': 'SSO setting',
+  'Setting.signedInformation': 'Signed information',
+  'Setting.footer': 'Footer',
+  'Setting.consent': 'Consent',
+  'Setting.Edit': 'Edit',
+  'Setting.Submit': 'Submit',
+  'Setting.storeInformationEdit': 'Shop Information Edit',
+  'Setting.Taxes': 'Taxes',
+  'Setting.shopLogo': 'Shop logo',
+  'Setting.storeSettingInfo1':
+    'PC mall home page logo, mobile terminal login page logo, management terminal logo, up to 1 can be added, only jpg, jpeg, png, gif, recommended size 100px * 100px, size not more than 1M',
+  'Setting.reviewStatus': 'Review status',
+  'Setting.accountStatus': 'Account status',
+  'Setting.storeStatus': 'Shop status',
+  'Setting.Reasonsforreviewrejection': 'Reasons for review rejection',
+  'Setting.Reasonsfordisablingtheaccount': 'Reasons for disabling the account',
+  'Setting.Reasonsforstoreclosure': 'Reasons for store closure',
+  'Setting.Thefirstisthedefaultlanguage': 'The first is the default language',
+  'Setting.storeLanguage': 'Shop language',
+  'Setting.PleaseselectLanguage': 'Please select Language',
+  'Setting.timeZone': 'Time zone',
+  'Setting.PleaseselectTimeZone': 'Please select TimeZone',
+  'Setting.targetCountry': 'Target country',
+  'Setting.PleaseselectCountry': 'Please select Country',
+  'Setting.targetCity': 'Target city',
+  'Setting.PleaseselectCity': 'Please select City',
+  'Setting.currency': 'Currency',
+  'Setting.PleaseselectCurrency': 'Please select Currency',
+  'Setting.taxRate': 'Tax rate',
+  'Setting.PleaseinputTaxRate': 'Please input Tax Rate',
+  'Setting.domainName': 'Domain name',
+  'Setting.PleaseinputDomainName': 'Please input Domain Name',
+  'Setting.miniCharge': 'Minimum charge',
+  'Setting.PleaseinputMinimumCharge': 'Please input Minimum Charge',
+  'Setting.prescriberMap': 'Prescriber Map',
+  'Setting.PleaseinputPrescriberMap': 'Please input Prescriber Map',
+  'Setting.onePageCheckout':'One-Page Checkout',
+  'Setting.CitySelect':'City Select',
+  'Setting.uploadfailed':'upload failed',
+  'Setting.Filesizecannotexceed':'File size cannot exceed',
+  'Setting.Fileformaterror':'File format error',
+  'Setting.contactUsUrl': 'About us',
+  'Setting.PleaseinputContactUsUrl': 'Please input Contact Us Url',
+  'Setting.ourValues': 'Our values',
+  'Setting.qualityAndSafety': 'Quality and safety',
+  'Setting.specificNutrition': 'Specific nutrition',
+  'Setting.informationForParents': 'Information for parents',
+  'Setting.cookies': 'Cookies collection policy/Cookie',
+  'Setting.storeContactEmail': 'Contact email',
+  'Setting.PleaseinputStoreContactEmail': 'Please input Store Contact Email',
+  'Setting.storeContactPhoneNumber': 'Contact phone',
+  'Setting. PleaseinputStoreContactPhoneNumber': ' Please input Store Contact Phone Number',
+  'Setting.contactTimePeriod': 'Contact period',
+  'Setting.PleaseinputContactTimePeriodEamil': 'Please input Contact Time Period Eamil',
+  'Setting.confirmationEmail': 'Confirmation email',
+  'Setting.PleaseinputConfirmationEmail': 'Please input Confirmation Email',
+  'Setting.Operatesuccessfully': 'Operate successfully',
+  'Setting.SigningCategories': 'Signing Categories',
+  'Setting.Signed': 'Signed',
+  'Setting.CategoriesCansignup': 'Categories, Can sign up to 200 categories',
+  'Setting.EditContractCategory': 'Edit Contract Category',
+  'Setting.Productcategory': 'Product category',
+  'Setting.Superiorcategory': 'Superior category',
+  'Setting.CategoryDeductionRate': 'Category Deduction Rate',
+  'Setting.BusinessQualification': 'Business Qualification',
+  'Setting.SignedBrand': 'Signed Brand',
+  'Setting.brandUpto50': 'brand, Up to 50 brands can be signed',
+  'Setting.EditContractedBrand': 'Edit Contracted Brand',
+  'Setting.BrandAlias': 'Brand Alias',
+  'Setting.BrandLogo': 'Brand Logo',
+  'Setting.AuthorizationDocument': 'Authorization Document',
+  'Setting.Shopincrease': 'Shopincrease',
+  'Setting.SigningPeriod': 'Signing Period',
+  'Setting.Merchantstorevalidity': 'Merchant store validity',
+  'Setting.shopType': 'shop Type',
+  'Setting.Self-employedShop': 'Self-employed Shop',
+  'Setting.Third-partyShop': 'Third-party Shop',
+  'Setting.Custombrandrepeats': 'Custom brand repeats with platform brand',
+  'Setting.Login': 'Log in',
+  'Setting.userinfoURL': 'Userinfo URL',
+  'Setting.clientID': 'Client id',
+  'Setting.issuer': 'Issuer',
+  'Setting.pedirectURL': 'Pedirect url',
+  'Setting.registration': 'Registration',
+  'Setting.registerPrefix': 'Register prefix',
+  'Setting.registerCallback': 'Register callback',
+  'Setting.agree': 'agree',
+  'Setting.businessEnter': 'businessEnter',
+  'Setting.Youdonthave': 'You don`t have a store. Please submit your application for opening a store',
+  'Setting.Toapplyforopen': 'To apply for open a shop',
+  'Setting.Ihavereadandagree': 'I have read and agree to the Merchant Settlement Agreement',
+  'Setting.Next': 'Next',
+  'Setting.brandVisible': 'brand Visible',
+  'Setting.allBrands': 'allBrands',
+  'Setting.company': 'company',
+  'Setting.otherBrands': 'other Brands',
+  'Setting.BrandUpto50brands': 'Brand，Up to 50 brands can be signed, and the approval rate for uploading authorization documents is higher.',
+  'Setting.Pleaseenterthebrandname': 'Please enter the brand name',
+  'Setting.ChoosePlatformBrand': 'Choose Platform Brand',
+  'Setting.BrandName': 'Brand Name',
+  'Setting.BranAlias': 'Brand Alias',
+  'Setting.AliasorEnglishname': 'Alias or English name',
+  'Setting.Size': 'Size',
+  'Setting.support': 'support',
+  'Setting.nomorethan': 'no more than',
+  'Setting.Supportjpgjpegpng': 'Support jpg, jpeg, png, gif, single sheet no more than 2M, maximum upload 2 sheets',
+  'Setting.Trademarkregistration': 'Trademark registration certificate / acceptance letter / brand authorization letter',
+  'Setting.Operating': 'Operating',
+  'Setting.Delete': 'Delete',
+  'Setting.CustomBrand': 'Custom Brand',
+  'Setting.Addcustombrand': 'Add custom brand',
+  'Setting.Specialcharactersarenotallowed': 'Special characters are not allowed',
+  'Setting.Brandalias': 'Brand alias',
+  'Setting.New': 'New',
+  'Setting.UploadFailed': 'Upload Failed',
+  'Setting.Filesizecannotexceedkb': 'File size cannot exceed 50kb',
+  'Setting.Filesizecannotexceed2M': 'File size cannot exceed 2M',
+  'Setting.Pleaseaddatleastonecontractedbrand': 'Please add at least one contracted brand',
+  'Setting.Pleaseuploadthebrandauthorization': 'Please upload the brand authorization file',
+  'Setting.Pleaseuploadthebrandauthorizationfile': 'Please upload the brand authorization file',
+  'Setting.Pleaseuploadthebrandlogo': 'Please upload the brand logo',
+  'Setting.Pleaseinputthebrandname': 'Please input the brand name',
+  'Setting.Brandlengthisbetween': 'Brand length is between 1-30 characters',
+  'Setting.Brandnameduplicates': 'Brand name duplicates existing brand name on the platform',
+  'Setting.Duplicatecustombrandname': 'Duplicate custom brand name',
+  'Setting.Deletionsucceeded': 'Deletion succeeded',
+  'Setting.Pleaseselect': 'Please select',
+  'Setting.Prescriber': 'Prescriber',
+  'Setting.Consumer': 'Consumer',
+  'Setting.Consentid': 'Consent id',
+  'Setting.Fieldtype': 'Field type',
+  'Setting.Optional': 'Optional',
+  'Setting.Required': 'Required',
+  'Setting.Consentcode': 'Consent code',
+  'Setting.Category': 'Category',
+  'Setting.E-mailin': 'E-mail in',
+  'Setting.Emailout': 'Email out',
+  'Setting.Emailin': 'Email in',
+  'Setting.Consenttype': 'Consent type',
+  'Setting.Consenttitle': 'Consent title',
+  'Setting.Content': 'Content',
+  'Setting.URL': 'URL',
+  'Setting.PleaseenterURLaddress': 'Please enter URL address',
+  'Setting.Consentdetail': 'Consent detail',
+  'Setting.Pleaseenterkeywords': 'Please enter keywords',
+  'Setting.Detail': 'Detail',
+
+
+
+
+
+
+
 
   /*-----------------------------  Fetch  ----------------------------------------*/
   'Fetch.Timeout': 'Service  timeout , try again later',

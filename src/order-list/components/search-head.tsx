@@ -100,8 +100,8 @@ export default class SearchHead extends Component<any, any> {
     ];
 
     const orderTypeList = [
-      { value: 'SinglePurchase', name: 'Single purchase' },
-      { value: 'Subscription', name: 'Subscription' }
+      { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
+      { value: 'SUBSCRIPTION', name: 'Subscription' }
     ];
 
     const subscriptionTypeList = [
@@ -112,7 +112,7 @@ export default class SearchHead extends Component<any, any> {
 
     const orderSourceList = [
       { value: 'FGS', name: 'FGS' },
-      { value: 'L_Atelier_Feline', name: "L'Atelier Feline" }
+      { value: 'L_ATELIER_FELINE', name: "L'Atelier Feline" }
     ];
 
     const menu = (
@@ -208,7 +208,7 @@ export default class SearchHead extends Component<any, any> {
                       allowClear
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
-                        if (value === 'SinglePurchase') {
+                        if (value === 'SINGLE_PURCHASE') {
                           this.setState({
                             orderType: value,
                             subscriptionType: '',
@@ -327,7 +327,7 @@ export default class SearchHead extends Component<any, any> {
                       style={styles.wrapper}
                       allowClear
                       value={subscriptionType}
-                      disabled={orderType === 'SinglePurchase'}
+                      disabled={orderType === 'SINGLE_PURCHASE'}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.setState(
@@ -392,7 +392,7 @@ export default class SearchHead extends Component<any, any> {
                       style={styles.wrapper}
                       allowClear
                       value={subscriptionPlanType}
-                      disabled={orderType === 'SinglePurchase'}
+                      disabled={orderType === 'SINGLE_PURCHASE'}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.setState({
@@ -698,9 +698,9 @@ export default class SearchHead extends Component<any, any> {
   };
   getPlanType = (rel) => {
     const subscriptionPlanTypeList = [
-      { value: 'Cat ', name: 'Cat', rel: 'club' },
-      { value: 'Dog', name: 'Dog', rel: 'club' },
-      { value: 'SmartFeeder', name: 'Smart feeder', rel: 'contractProduct' }
+      { value: 'Cat ', name: 'Cat', rel: 'Club' },
+      { value: 'Dog', name: 'Dog', rel: 'Club' },
+      { value: 'SmartFeeder', name: 'Smart feeder', rel: 'ContractProduct' }
     ];
     if (rel) {
       let planTypeList = subscriptionPlanTypeList.filter((item) => item.rel === rel);
@@ -779,7 +779,7 @@ export default class SearchHead extends Component<any, any> {
     const params = {
       id: numberSelect === 'orderNumber' ? numberSelectValue : '',
       subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
-      refillNumber,
+      subscriptionRefillType: refillNumber,
       [goodsOptions]: goodsOptionsValue,
       orderType,
       orderSource,

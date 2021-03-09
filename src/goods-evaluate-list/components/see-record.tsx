@@ -50,16 +50,7 @@ export default class SeeRecord extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      serviceModalVisible,
-      storeEvaluateNumList,
-      storeDataList,
-      storeTotal,
-      storePageSize,
-      storeCurrentPage,
-      initStoreEvaluate,
-      storeEvaluateSum
-    } = this.props.relaxProps as any;
+    const { serviceModalVisible, storeEvaluateNumList, storeDataList, storeTotal, storePageSize, storeCurrentPage, initStoreEvaluate, storeEvaluateSum } = this.props.relaxProps as any;
     if (!serviceModalVisible) {
       return null;
     }
@@ -74,10 +65,10 @@ export default class SeeRecord extends React.Component<any, any> {
         title={
           <div>
             <div style={{ width: '22%', float: 'left' }}>
-              <FormattedMessage id="shopRatingDetail" />
+              <FormattedMessage id="Product.shopRatingDetail" />
             </div>
             <div style={{ fontSize: '13px', color: 'grey' }}>
-              <FormattedMessage id="evaluationNextDay" />
+              <FormattedMessage id="Product.evaluationNextDay" />
             </div>
           </div>
         }
@@ -89,68 +80,41 @@ export default class SeeRecord extends React.Component<any, any> {
         <div className="see-service-record">
           <div className="up-content">
             <div className="personal">
-              <FormattedMessage id="consumerNumber" />：
-              {storeEvaluateSum.orderNum}
+              <FormattedMessage id="Product.consumerNumber" />：{storeEvaluateSum.orderNum}
             </div>
             <div className="score">
-              <FormattedMessage id="overallRating" />：
-              {storeEvaluateSum.sumCompositeScore
-                ? storeEvaluateSum.sumCompositeScore.toFixed(2)
-                : '-'}
+              <FormattedMessage id="Product.overallRating" />：{storeEvaluateSum.sumCompositeScore ? storeEvaluateSum.sumCompositeScore.toFixed(2) : '-'}
             </div>
             <div className="score">
-              <FormattedMessage id="reviewTime" />：
-              <FormattedMessage id="lastest180" />
+              <FormattedMessage id="Product.reviewTime" />：
+              <FormattedMessage id="Product.lastest180" />
             </div>
           </div>
           <div className="center-table">
             <DataGrid dataSource={storeEvaluateNumList} pagination={false}>
               <Column
-                title={<FormattedMessage id="reviewDetail" />}
+                title={<FormattedMessage id="Product.reviewDetail" />}
                 key="numType"
                 dataIndex="numType"
                 render={(value) => {
                   if (value == 0) {
-                    return <FormattedMessage id="productRatings" />;
+                    return <FormattedMessage id="Product.productRatings" />;
                   } else if (value == 1) {
-                    return <FormattedMessage id="experienceRating" />;
+                    return <FormattedMessage id="Product.experienceRating" />;
                   } else {
-                    return <FormattedMessage id="logisticRating" />;
+                    return <FormattedMessage id="Product.logisticRating" />;
                   }
                 }}
               />
-              <Column
-                title={
-                  <FormattedMessage id="detailScore" values={{ name: '4-5' }} />
-                }
-                dataIndex="excellentNum"
-                key="excellentNum"
-              />
-              <Column
-                title={
-                  <FormattedMessage id="detailScore" values={{ name: '3' }} />
-                }
-                dataIndex="mediumNum"
-                key="mediumNum"
-              />
-              <Column
-                title={
-                  <FormattedMessage id="detailScore" values={{ name: '1-2' }} />
-                }
-                dataIndex="differenceNum"
-                key="differenceNum"
-              />
-              <Column
-                title={<FormattedMessage id="averageScore" />}
-                dataIndex="sumCompositeScore"
-                key="sumCompositeScore"
-                render={(text) => parseFloat(text).toFixed(2)}
-              />
+              <Column title={<FormattedMessage id="Product.detailScore" values={{ name: '4-5' }} />} dataIndex="excellentNum" key="excellentNum" />
+              <Column title={<FormattedMessage id="Product.detailScore" values={{ name: '3' }} />} dataIndex="mediumNum" key="mediumNum" />
+              <Column title={<FormattedMessage id="Product.detailScore" values={{ name: '1-2' }} />} dataIndex="differenceNum" key="differenceNum" />
+              <Column title={<FormattedMessage id="Product.averageScore" />} dataIndex="sumCompositeScore" key="sumCompositeScore" render={(text) => parseFloat(text).toFixed(2)} />
             </DataGrid>
           </div>
           <div className="down-table">
             <label className="evalu-title">
-              <FormattedMessage id="evaluationHistory" />（{storeTotal}）
+              <FormattedMessage id="Product.evaluationHistory" />（{storeTotal}）
             </label>
             <DataGrid
               dataSource={storeDataList}
@@ -163,45 +127,13 @@ export default class SeeRecord extends React.Component<any, any> {
                 }
               }}
             >
-              <Column
-                title={<FormattedMessage id="consumerName" />}
-                dataIndex="customerName"
-                key="customerName"
-              />
-              <Column
-                title={<FormattedMessage id="orderNumber" />}
-                dataIndex="orderNo"
-                key="orderNo"
-              />
-              <Column
-                title={<FormattedMessage id="reviewTime" />}
-                dataIndex="createTime"
-                key="createTime"
-                render={(text) => moment(text).format(Const.TIME_FORMAT)}
-              />
-              <Column
-                title={<FormattedMessage id="productRatings" />}
-                dataIndex="goodsScore"
-                style={styles.tdWidth}
-                key="goodsScore"
-              />
-              <Column
-                title={<FormattedMessage id="experienceRating" />}
-                style={styles.tdWidth}
-                dataIndex="serverScore"
-                key="serverScore"
-              />
-              <Column
-                title={<FormattedMessage id="logisticRating" />}
-                dataIndex="logisticsScore"
-                key="logisticsScore"
-              />
-              <Column
-                title={<FormattedMessage id="overallRating" />}
-                dataIndex="compositeScore"
-                key="compositeScore"
-                render={(text) => parseFloat(text).toFixed(2)}
-              />
+              <Column title={<FormattedMessage id="Product.consumerName" />} dataIndex="customerName" key="customerName" />
+              <Column title={<FormattedMessage id="Product.orderNumber" />} dataIndex="orderNo" key="orderNo" />
+              <Column title={<FormattedMessage id="Product.reviewTime" />} dataIndex="createTime" key="createTime" render={(text) => moment(text).format(Const.TIME_FORMAT)} />
+              <Column title={<FormattedMessage id="Product.productRatings" />} dataIndex="goodsScore" style={styles.tdWidth} key="goodsScore" />
+              <Column title={<FormattedMessage id="Product.experienceRating" />} style={styles.tdWidth} dataIndex="serverScore" key="serverScore" />
+              <Column title={<FormattedMessage id="Product.logisticRating" />} dataIndex="logisticsScore" key="logisticsScore" />
+              <Column title={<FormattedMessage id="Product.overallRating" />} dataIndex="compositeScore" key="compositeScore" render={(text) => parseFloat(text).toFixed(2)} />
             </DataGrid>
           </div>
         </div>

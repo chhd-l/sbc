@@ -32,7 +32,7 @@ export default class GoodsCheck extends React.Component<any, any> {
             <Breadcrumb.Item>待审核商品</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="pendingProducts" />} />
+            <Headline title={<FormattedMessage id="Product.pendingProducts" />} />
 
             {/*搜索*/}
             <SearchForm />

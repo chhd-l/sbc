@@ -153,7 +153,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: <FormattedMessage id="product.SKU" />,
+      title: <FormattedMessage id="Product.SKU" />,
       key: 'goodsInfoNo',
       render: (rowInfo) => {
         //let a = addSkUProduct[rowInfo.index-1]?addSkUProduct[rowInfo.index-1].pid:''
@@ -180,7 +180,7 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          <FormattedMessage id="product.inventory" />
+          <FormattedMessage id="Product.inventory" />
         </div>
       ),
       key: 'stock',
@@ -209,11 +209,11 @@ class SkuForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input inventory'
+                      message: <FormattedMessage id="Product.PleaseInputInventory" />
                     },
                     {
                       pattern: ValidConst.number,
-                      message: 'Please enter the correct value'
+                      message: <FormattedMessage id="Product.PleaseEnterTheCorrect" />
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
@@ -226,7 +226,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
     columns = columns.push({
-      title: 'Virtual inventory',
+      title: <FormattedMessage id="Product.VirtualInventory" />,
       key: 'virtualInventory',
       render: (rowInfo) => (
         <Row>
@@ -240,7 +240,7 @@ class SkuForm extends React.Component<any, any> {
                   // },
                   {
                     pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
+                    message: <FormattedMessage id="Product.PleaseEnterTheCorrect" />
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualInventory'),
@@ -252,7 +252,7 @@ class SkuForm extends React.Component<any, any> {
       )
     });
     columns = columns.push({
-      title: 'UOM',
+      title: <FormattedMessage id="Product.UOM" />,
       key: 'goodsMeasureUnit',
       render: (rowInfo) => {
         return (
@@ -264,7 +264,7 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input UOM'
+                      message: <FormattedMessage id="Product.PleaseInputUOM" />
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsMeasureUnit'),
@@ -278,7 +278,11 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: <div>Inventory Alert</div>,
+      title: (
+        <div>
+          <FormattedMessage id="Product.InventoryAlert" />
+        </div>
+      ),
       key: 'virtualAlert',
       render: (rowInfo) => (
         <Row>
@@ -292,7 +296,7 @@ class SkuForm extends React.Component<any, any> {
                   // },
                   {
                     pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
+                    message: <FormattedMessage id="Product.PleaseEnterTheCorrect" />
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualAlert'),

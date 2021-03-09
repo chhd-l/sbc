@@ -35,7 +35,7 @@ export default class Tool extends React.Component<any, any> {
       <div className="handle-bar">
         <AuthWrapper functionName="f_goods_del">
           <Button onClick={this._spuCheckedFunc}>
-            <FormattedMessage id="batchDeletion" />
+            <FormattedMessage id="Product.batchDeletion" />
           </Button>
         </AuthWrapper>
       </div>
@@ -45,7 +45,7 @@ export default class Tool extends React.Component<any, any> {
   _spuCheckedFunc = () => {
     const { onSpuDelete, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+      message.error(<FormattedMessage id="Product.atLeastOneItem" />);
       return;
     }
     confirm({

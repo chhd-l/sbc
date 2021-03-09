@@ -66,56 +66,18 @@ export default class SearchHead extends Component<any, any> {
         payState: '',
         orderSource: ''
       },
-      orderCategory: '',
-
-      // 21/3/3 新增字段
-      refillNumber: '',
-      orderType: '',
-      orderSource: '',
-      subscriptionType: '',
-      subscriptionPlanType: '',
-      codeSelect: 'promotionCode',
-      codeSelectValue: '',
-      planTypeList: [
-        { value: 'Cat ', name: 'Cat', rel: 'Club' },
-        { value: 'Dog', name: 'Dog', rel: 'Club' },
-        { value: 'SmartFeeder', name: 'Smart feeder', rel: 'ContractProduct' }
-      ]
+      orderCategory: ''
     };
   }
 
   render() {
     const { onSearch, tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState, orderType, subscriptionType, subscriptionPlanType, planTypeList } = this.state;
+    const { tradeState } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002_prescriber')) || checkAuth('fOrderList004_prescriber')) {
       hasMenu = true;
     }
-
-    if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
-      hasMenu = true;
-    }
-    const refillNumberList = [
-      { value: 'First', name: 'First' },
-      { value: 'Recurrent', name: 'Recurrent' }
-    ];
-
-    const orderTypeList = [
-      { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
-      { value: 'SUBSCRIPTION', name: 'Subscription' }
-    ];
-
-    const subscriptionTypeList = [
-      { value: 'ContractProduct', name: 'Contract product' },
-      { value: 'Club', name: 'Club' },
-      { value: 'Autoship', name: 'Autoship' }
-    ];
-
-    const orderSourceList = [
-      { value: 'FGS', name: 'FGS' },
-      { value: 'L_Atelier_Feline', name: "L'Atelier Feline" }
-    ];
 
     const menu = (
       <Menu>
@@ -163,24 +125,15 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Refill number'} />
-                    <Select
+                    {this._renderBuyerOptionSelect()}
+                    <Input
                       style={styles.wrapper}
-                      allowClear
-                      getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value) => {
+                      onChange={(e) => {
                         this.setState({
-                          refillNumber: value
+                          buyerOptionsValue: (e.target as any).value
                         });
                       }}
-                    >
-                      {refillNumberList &&
-                        refillNumberList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </Select>
+                    />
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -204,32 +157,15 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Order type'} />
-                    <Select
+                    {this._renderReceiverSelect()}
+                    <Input
                       style={styles.wrapper}
-                      allowClear
-                      getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value) => {
-                        if (value === 'SINGLE_PURCHASE') {
-                          this.setState({
-                            orderType: value,
-                            subscriptionType: '',
-                            subscriptionPlanType: ''
-                          });
-                        } else {
-                          this.setState({
-                            orderType: value
-                          });
-                        }
+                      onChange={(e) => {
+                        this.setState({
+                          receiverSelectValue: (e.target as any).value
+                        });
                       }}
-                    >
-                      {orderTypeList &&
-                        orderTypeList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </Select>
+                    />
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -237,24 +173,21 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Order source'} />
-                    <Select
-                      style={styles.wrapper}
-                      allowClear
-                      getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value) => {
-                        this.setState({
-                          orderSource: value
-                        });
-                      }}
-                    >
-                      {orderSourceList &&
-                        orderSourceList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </Select>
+                    {this._renderClinicSelect()}
+                    {sessionStorage.getItem('PrescriberSelect') ? (
+                      <Input style={styles.wrapper} value={this.state.clinicSelectValue} disabled />
+                    ) : (
+                      <Input
+                        style={styles.wrapper}
+                        onChange={(e) => {
+                          let a = e.target.value ? e.target.value.split(',') : null;
+
+                          this.setState({
+                            clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
+                          });
+                        }}
+                      />
+                    )}
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -266,7 +199,6 @@ export default class SearchHead extends Component<any, any> {
                     {this.state.statusSelect === 'paymentStatus' ? (
                       <Select
                         style={styles.wrapper}
-                        allowClear
                         getPopupContainer={(trigger: any) => trigger.parentNode}
                         onChange={(value) =>
                           this.setState({
@@ -279,12 +211,15 @@ export default class SearchHead extends Component<any, any> {
                         }
                         value={tradeState.payState}
                       >
+                        <Option value="">
+                          <FormattedMessage id="all" />
+                        </Option>
                         <Option value="NOT_PAID">
                           <FormattedMessage id="order.unpaid" />
                         </Option>
-                        {/*<Option value="UNCONFIRMED">
+                        <Option value="UNCONFIRMED">
                           <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>*/}
+                        </Option>
                         <Option value="PAID">
                           <FormattedMessage id="order.paid" />
                         </Option>
@@ -294,7 +229,6 @@ export default class SearchHead extends Component<any, any> {
                       <Select
                         value={tradeState.deliverStatus}
                         style={styles.wrapper}
-                        allowClear
                         getPopupContainer={(trigger: any) => trigger.parentNode}
                         onChange={(value) => {
                           this.setState({
@@ -306,6 +240,9 @@ export default class SearchHead extends Component<any, any> {
                           });
                         }}
                       >
+                        <Option value="">
+                          <FormattedMessage id="all" />
+                        </Option>
                         <Option value="NOT_YET_SHIPPED">
                           <FormattedMessage id="order.notShipped" />
                         </Option>
@@ -324,30 +261,29 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Subscription type'} />
+                    <Input style={styles.leftLabel} disabled defaultValue="Order Category" />
                     <Select
                       style={styles.wrapper}
-                      allowClear
-                      value={subscriptionType}
-                      disabled={orderType === 'SINGLE_PURCHASE'}
+                      defaultValue=""
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
-                        this.setState(
-                          {
-                            subscriptionType: value
-                          },
-                          () => {
-                            this.getPlanType(value);
-                          }
-                        );
+                        this.setState({
+                          orderCategory: value
+                        });
                       }}
                     >
-                      {subscriptionTypeList &&
-                        subscriptionTypeList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
+                      <Option value="">
+                        <FormattedMessage id="all" />
+                      </Option>
+                      <Option value="SINGLE" title="Single purchase">
+                        Single purchase
+                      </Option>
+                      <Option value="FIRST_AUTOSHIP" title="1st autoship order">
+                        1st autoship order
+                      </Option>
+                      <Option value="RECURRENT_AUTOSHIP" title="Recurrent orders of autoship">
+                        Recurrent orders of autoship
+                      </Option>
                     </Select>
                   </InputGroup>
                 </FormItem>
@@ -370,6 +306,7 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
+
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
@@ -386,66 +323,6 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Plan type'} />
-                    <Select
-                      style={styles.wrapper}
-                      allowClear
-                      value={subscriptionPlanType}
-                      disabled={orderType === 'SINGLE_PURCHASE'}
-                      getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value) => {
-                        this.setState({
-                          subscriptionPlanType: value
-                        });
-                      }}
-                    >
-                      {planTypeList &&
-                        planTypeList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </Select>
-                  </InputGroup>
-                </FormItem>
-              </Col>
-              {/* <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderClinicSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        let a = e.target.value ? e.target.value.split(',') : null;
-
-                        this.setState({
-                          clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col> */}
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderCodeSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          codeSelectValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
                   <Button
@@ -455,7 +332,56 @@ export default class SearchHead extends Component<any, any> {
                     shape="round"
                     style={{ textAlign: 'center' }}
                     onClick={(e) => {
-                      this.handleSearch(e);
+                      e.preventDefault();
+                      const {
+                        buyerOptions,
+                        goodsOptions,
+                        receiverSelect,
+                        clinicSelect,
+                        numberSelect,
+                        id,
+                        subscribeId,
+                        buyerOptionsValue,
+                        goodsOptionsValue,
+                        receiverSelectValue,
+                        clinicSelectValue,
+                        numberSelectValue,
+                        tradeState,
+                        beginTime,
+                        endTime,
+                        orderCategory,
+                        recommenderSelect,
+                        recommenderSelectValue
+                      } = this.state;
+
+                      const ts = {} as any;
+                      if (tradeState.deliverStatus) {
+                        ts.deliverStatus = tradeState.deliverStatus;
+                      }
+
+                      if (tradeState.payState) {
+                        ts.payState = tradeState.payState;
+                      }
+
+                      if (tradeState.orderSource) {
+                        ts.orderSource = tradeState.orderSource;
+                      }
+
+                      const params = {
+                        id: numberSelect === 'orderNumber' ? numberSelectValue : '',
+                        subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+                        [buyerOptions]: buyerOptionsValue,
+                        tradeState: ts,
+                        [goodsOptions]: goodsOptionsValue,
+                        [receiverSelect]: receiverSelectValue,
+                        clinicsIds: sessionStorage.getItem('PrescriberSelect') && JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId.split(',') : null,
+                        [recommenderSelect]: recommenderSelectValue,
+                        beginTime,
+                        endTime,
+                        orderCategory
+                      };
+
+                      onSearch(params);
                     }}
                   >
                     <span>
@@ -674,131 +600,6 @@ export default class SearchHead extends Component<any, any> {
       exportByIds: onExportByIds
     });
   }
-
-  _renderCodeSelect = () => {
-    const codeTypeList = [
-      { value: 'promotionCode', name: 'Promotion code' },
-      { value: 'couponCode', name: 'Coupon code' }
-    ];
-    return (
-      <Select
-        onChange={(val) =>
-          this.setState({
-            codeSelect: val
-          })
-        }
-        getPopupContainer={() => document.getElementById('page-content')}
-        value={this.state.codeSelect}
-        style={styles.label}
-      >
-        {codeTypeList &&
-          codeTypeList.map((item, index) => (
-            <Option value={item.value} title={item.name} key={index}>
-              {item.name}
-            </Option>
-          ))}
-      </Select>
-    );
-  };
-  getPlanType = (rel) => {
-    const subscriptionPlanTypeList = [
-      { value: 'Cat ', name: 'Cat', rel: 'club' },
-      { value: 'Dog', name: 'Dog', rel: 'club' },
-      { value: 'SmartFeeder', name: 'Smart feeder', rel: 'contractProduct' }
-    ];
-    if (rel) {
-      let planTypeList = subscriptionPlanTypeList.filter((item) => item.rel === rel);
-      this.setState({
-        planTypeList
-      });
-    } else {
-      this.setState({
-        planTypeList: subscriptionPlanTypeList
-      });
-    }
-  };
-  handleSearch = (e) => {
-    const { onSearch } = this.props.relaxProps;
-    e.preventDefault();
-    const {
-      buyerOptions,
-      goodsOptions,
-      receiverSelect,
-      // clinicSelect,
-      numberSelect,
-      buyerOptionsValue,
-      goodsOptionsValue,
-      receiverSelectValue,
-      // clinicSelectValue,
-      numberSelectValue,
-      tradeState,
-      beginTime,
-      endTime,
-      orderCategory,
-      recommenderSelect,
-      recommenderSelectValue,
-      refillNumber,
-      orderType,
-      orderSource,
-      subscriptionType,
-      subscriptionPlanType,
-      codeSelect,
-      codeSelectValue
-    } = this.state;
-
-    const ts = {} as any;
-    if (tradeState.deliverStatus) {
-      ts.deliverStatus = tradeState.deliverStatus;
-    }
-
-    if (tradeState.payState) {
-      ts.payState = tradeState.payState;
-    }
-
-    if (tradeState.orderSource) {
-      ts.orderSource = tradeState.orderSource;
-    }
-
-    // const params = {
-    //   id: numberSelect === 'orderNumber' ? numberSelectValue : '',
-    //   subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
-    //   [buyerOptions]: buyerOptionsValue,
-    //   tradeState: ts,
-    //   [goodsOptions]: goodsOptionsValue,
-    //   [receiverSelect]: receiverSelectValue,
-    //   [clinicSelect]: clinicSelect === 'clinicsName' ? (clinicSelectValue ? clinicSelectValue : '') : clinicSelectValue ? clinicSelectValue : null,
-    //   [recommenderSelect]: recommenderSelectValue,
-    //   beginTime,
-    //   endTime,
-    //   orderCategory,
-
-    //   refillNumber,
-    //   orderType,
-    //   orderSource,
-    //   subscriptionType,
-    //   subscriptionPlanType,
-    //   [codeSelect]:codeSelectValue,
-
-    // };
-    const params = {
-      id: numberSelect === 'orderNumber' ? numberSelectValue : '',
-      subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
-      subscriptionRefillType: refillNumber,
-      [goodsOptions]: goodsOptionsValue,
-      orderType,
-      orderSource,
-      tradeState: ts,
-      subscriptionTypeQuery: subscriptionType,
-      beginTime,
-      endTime,
-      [recommenderSelect]: recommenderSelectValue,
-      // [clinicSelect]: clinicSelectValue,
-      subscriptionPlanType,
-      [codeSelect]: codeSelectValue
-    };
-
-    onSearch(params);
-  };
 }
 
 const styles = {

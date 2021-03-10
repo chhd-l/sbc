@@ -22,6 +22,7 @@ class AutomationForm extends Component<any, any> {
       automationForm: {
         automationName: '',
         automationCategory: '',
+        automationDescription: '',
         automationType: '',
         automationGoal: '',
         eventStartTime: '',
@@ -32,21 +33,122 @@ class AutomationForm extends Component<any, any> {
       }
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    if (this.props.match.params.id) {
+      this.getAutomationDetail(this.props.match.params.id);
+    }
+  }
   init = () => {};
-  getAutomationDetail = () => {};
+  getAutomationDetail = (id) => {
+    webapi
+      .getAutomationById(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let automationForm = {
+            automationName: res.context.name,
+            automationCategory: res.context.category,
+            automationDescription: res.context.description,
+            automationType: res.context.type,
+            automationGoal: res.context.goal,
+            eventStartTime: res.context.eventStartTime,
+            eventEndTime: res.context.eventEndTime,
+            trackingStartTime: res.context.trackingStartTime,
+            trackingEndTime: res.context.trackingEndTime,
+            communicationChannel: res.context.communicationChannel ? res.context.communicationChannel.split(';') : ''
+          };
+          this.setState({
+            loading: false,
+            automationForm
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
-        this.saveAutomation();
+        const { automationForm, automationId } = this.state;
+        let params = {
+          tenantId: 0,
+          name: automationForm.automationName,
+          category: automationForm.automationCategory,
+          description: automationForm.automationDescription,
+          type: automationForm.automationType,
+          goal: automationForm.automationGoal,
+          eventStartTime: moment(automationForm.eventStartTime).format('YYYY-MM-DD HH:mm:ss'),
+          eventEndTime: moment(automationForm.eventEndTime).format('YYYY-MM-DD HH:mm:ss'),
+          trackingStartTime: moment(automationForm.eventEndtrackingStartTimeTime).format('YYYY-MM-DD HH:mm:ss'),
+          trackingEndTime: moment(automationForm.trackingEndTime).format('YYYY-MM-DD HH:mm:ss'),
+          communicationChannel: automationForm.communicationChannel.join(';')
+        };
+        if (automationId) {
+          params = Object.assign(params, {
+            id: automationId,
+            deleteStatus: false
+          });
+          this.updateAutomation(params);
+        } else {
+          this.createAutomation(params);
+        }
       }
     });
   };
-  saveAutomation = () => {
-    const { automationForm } = this.state;
-    history.push('/automation-workflow/1'); //todo
-    console.log(automationForm);
+  createAutomation = (params) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .createAutomation(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          history.push('/automation-workflow/1'); //todo
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
+  updateAutomation = (params) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .updateAutomation(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          history.push('/automation-workflow/1'); //todo
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.automationForm;
@@ -196,7 +298,20 @@ class AutomationForm extends Component<any, any> {
                     <FormItem label="Automation description">
                       {getFieldDecorator('automationDescription', {
                         initialValue: automationForm.automationDescription
-                      })(<TextArea style={{ width: '80%' }} placeholder="Please input automation description" autoSize={{ minRows: 4, maxRows: 4 }} />)}
+                      })(
+                        <TextArea
+                          style={{ width: '80%' }}
+                          placeholder="Please input automation description"
+                          autoSize={{ minRows: 4, maxRows: 4 }}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onFormChange({
+                              field: 'automationDescription',
+                              value
+                            });
+                          }}
+                        />
+                      )}
                     </FormItem>
                   </Col>
 
@@ -379,7 +494,7 @@ class AutomationForm extends Component<any, any> {
           </Spin>
         </div>
         <div className="bar-button">
-          <Button type="primary" onClick={this.handleSubmit}>
+          <Button type="primary" onClick={this.handleSubmit} loading={loading}>
             {saveButtonText}
           </Button>
           <Button style={{ marginLeft: 20 }} onClick={() => (history as any).go(-1)}>

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Row, Col, Input, Radio, TimePicker, DatePicker, InputNumber, Select } from 'antd';
+import moment from 'moment';
+
 const FormItem = Form.Item;
 const { Option } = Select;
+
 export default class ChooseWaitForm extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -26,17 +29,29 @@ export default class ChooseWaitForm extends Component<any, any> {
     this.onChange = this.onChange.bind(this);
   }
   componentDidMount() {
-    const { form } = this.props;
-    if (form) {
-      this.setState({
-        form: {
-          radioType: form.radioType,
-          whichDay: form.whichDay,
-          months1: form.radioType === '1' ? form.months : '',
-          months2: form.radioType === '2' ? form.months : '',
-          whichOne: form.whichOne,
-          whichWeek: form.whichWeek
+    const { waitCampaignTime } = this.props;
+    const { form } = this.state;
+    if (waitCampaignTime) {
+      if (waitCampaignTime.atSpecialTime === undefined) {
+        return;
+      }
+      form.atSpecialTime = waitCampaignTime.atSpecialTime;
+      form.timeAmountType = waitCampaignTime.timeAmountType;
+      form.timeAmountValue = waitCampaignTime.timeAmountValue;
+      if (waitCampaignTime.specialTime) {
+        let dateArray = waitCampaignTime.specialTime.split(' ');
+        let date = dateArray[0];
+        form.specialDate = moment(date);
+        let time = dateArray[1];
+        if (time) {
+          let timeArray = time.split(':');
+          form.specialHours = parseInt(timeArray[0]) > 12 ? parseInt(timeArray[0]) - 12 : parseInt(timeArray[0]);
+          form.specialMins = timeArray[1];
+          form.specialAm = parseInt(timeArray[0]) >= 12 ? 'PM' : 'AM';
         }
+      }
+      this.setState({
+        form: form
       });
     }
   }
@@ -50,11 +65,46 @@ export default class ChooseWaitForm extends Component<any, any> {
       () => this.updateParentValue()
     );
   }
-  updateParentValue() {
-    const { updateform } = this.props;
+
+  getSpecialDate() {
     const { form } = this.state;
-    const params = {};
-    updateform(params);
+    if (form.specialDate === null) {
+      return '';
+    }
+    let dateTimeString = form.specialDate + ' ' + form.specialHours + ':' + form.specialMins + ' ' + form.specialAm;
+    let dateTime = new Date(dateTimeString);
+    let datetimeFormat = moment(dateTime).format('YYYY-MM-DD HH:mm:ss');
+    return datetimeFormat;
+  }
+
+  updateParentValue() {
+    const { updateValue } = this.props;
+    const { form } = this.state;
+    const data = {
+      atSpecialTime: form.atSpecialTime,
+      specialTime: this.getSpecialDate(),
+      timeAmountValue: form.timeAmountValue,
+      timeAmountType: form.timeAmountType,
+      totalMinutes: 0
+    };
+    switch (form.timeAmountType) {
+      case 'Minutes':
+        data.totalMinutes = form.timeAmountValue;
+        break;
+      case 'Hours':
+        data.totalMinutes = form.timeAmountValue * 60;
+        break;
+      case 'Days':
+        data.totalMinutes = form.timeAmountValue * 60 * 24;
+        break;
+      case 'Weeks':
+        data.totalMinutes = form.timeAmountValue * 60 * 24 * 7;
+        break;
+      case 'Months':
+        data.totalMinutes = form.timeAmountValue * 60 * 24 * 30;
+        break;
+    }
+    updateValue('waitCampaignTime', data);
   }
   render() {
     const { form, timeTypes } = this.state;
@@ -63,21 +113,40 @@ export default class ChooseWaitForm extends Component<any, any> {
         <FormItem label="Choose how long should be waited" colon={false}>
           <Row gutter={24}>
             <Radio.Group
-              value="form.atSpecialTime"
-              onChange={(value) => {
+              value={form.atSpecialTime}
+              onChange={(e) => {
+                const value = (e.target as any).value;
                 this.onChange('atSpecialTime', value);
               }}
             >
               <Col span={24}>
-                <Radio value={true}>Wait for a set amount of time</Radio>
+                <Radio value={false}>Wait for a set amount of time</Radio>
               </Col>
               <Col span={24}>
                 <Row gutter={16}>
                   <Col span={6}>
-                    <InputNumber min={0} placeholder="Number" value={form.timeAmountValue} disabled={form.atSpecialTime} size="small" style={{ fontSize: '10px' }} />
+                    <InputNumber
+                      onChange={(value) => {
+                        this.onChange('timeAmountValue', value);
+                      }}
+                      min={0}
+                      placeholder="Number"
+                      value={form.timeAmountValue}
+                      disabled={form.atSpecialTime}
+                      size="small"
+                      style={{ fontSize: '10px' }}
+                    />
                   </Col>
                   <Col span={8}>
-                    <Select value="form.timeAmountType" disabled={!form.atSpecialTime} size="small" style={{ fontSize: '10px' }} dropdownStyle={{ fontSize: '10px' }}>
+                    <Select
+                      onChange={(value) => {
+                        this.onChange('timeAmountType', value);
+                      }}
+                      value={form.timeAmountType}
+                      disabled={form.atSpecialTime}
+                      size="small"
+                      style={{ fontSize: '10px' }}
+                    >
                       {timeTypes.map((item, index) => (
                         <Option value={item.value} key={index}>
                           {item.name}
@@ -88,26 +157,66 @@ export default class ChooseWaitForm extends Component<any, any> {
                 </Row>
               </Col>
               <Col span={24}>
-                <Radio value={false}>Wait until a specific date and time</Radio>
+                <Radio value={true}>Wait until a specific date and time</Radio>
               </Col>
               <Col span={24}>
                 <Row gutter={10}>
                   <Col span={11}>
-                    <DatePicker value={form.specialDate} disabled={form.atSpecialTime} size="small" style={{ fontSize: '10px' }} />
+                    <DatePicker
+                      onChange={(value, dateString) => {
+                        this.onChange('specialDate', dateString);
+                      }}
+                      format="YYYY-MM-DD"
+                      value={form.specialDate ? moment(form.specialDate) : null}
+                      disabled={!form.atSpecialTime}
+                      size="small"
+                      style={{ fontSize: '10px' }}
+                    />
                   </Col>
                   <Col span={13}>
                     <Row gutter={2}>
                       <Col span={8}>
-                        <InputNumber placeholder="Hours" min={0} max={12} value={form.specialHours} disabled={form.atSpecialTime} size="small" style={{ fontSize: '10px', width: '65px' }} />
+                        <InputNumber
+                          onChange={(value) => {
+                            this.onChange('specialHours', value);
+                          }}
+                          placeholder="Hours"
+                          min={0}
+                          max={12}
+                          value={form.specialHours}
+                          disabled={!form.atSpecialTime}
+                          size="small"
+                          style={{ fontSize: '10px', width: '65px' }}
+                        />
                       </Col>
                       <Col span={1}>
                         <span>:</span>
                       </Col>
                       <Col span={8}>
-                        <InputNumber placeholder="Minutes" min={0} max={59} value={form.specialMins} disabled={form.atSpecialTime} size="small" style={{ fontSize: '10px', width: '65px' }} />
+                        <InputNumber
+                          onChange={(value) => {
+                            this.onChange('specialMins', value);
+                          }}
+                          placeholder="Minutes"
+                          min={0}
+                          max={59}
+                          value={form.specialMins}
+                          disabled={!form.atSpecialTime}
+                          size="small"
+                          style={{ fontSize: '10px', width: '65px' }}
+                        />
                       </Col>
                       <Col span={7}>
-                        <Select value={form.specialAm} disabled={form.atSpecialTime} size="small" style={{ fontSize: '10px' }} dropdownstyle={{ fontSize: '10px' }}>
+                        <Select
+                          onChange={(value) => {
+                            this.onChange('specialAm', value);
+                          }}
+                          value={form.specialAm}
+                          disabled={!form.atSpecialTime}
+                          size="small"
+                          style={{ fontSize: '10px' }}
+                          dropdownStyle={{ fontSize: '10px' }}
+                        >
                           <Option value="AM" key="AM">
                             AM
                           </Option>

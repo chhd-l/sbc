@@ -21,9 +21,9 @@ class AutomationDetail extends Component<any, any> {
       title: 'Automation Detail',
       loading: false,
       automationDetail: {
-        automationName: 'Test',
-        automationStatus: 'Draft',
-        testStatus: 'Not Tested',
+        automationName: '',
+        automationStatus: '',
+        testStatus: '',
         automationType: '',
         automationGoal: '',
         automationDescription: '',
@@ -36,11 +36,115 @@ class AutomationDetail extends Component<any, any> {
       }
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getAutomationDetail(this.props.match.params.id);
+  }
   init = () => {};
+
+  getAutomationDetail = (id) => {
+    webapi
+      .getAutomationById(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let automationDetail = {
+            automationName: res.context.name,
+            automationStatus: res.context.status,
+            automationCategory: res.context.category,
+            testStatus: res.context.testStatus,
+            automationDescription: res.context.description,
+            automationType: res.context.type,
+            automationGoal: res.context.goal,
+            eventStartTime: res.context.eventStartTime,
+            eventEndTime: res.context.eventEndTime,
+            trackingStartTime: res.context.trackingStartTime,
+            trackingEndTime: res.context.trackingEndTime,
+            communicationChannel: res.context.communicationChannel
+          };
+          this.setState({
+            loading: false,
+            automationDetail
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+  testAutomation = () => {
+    const { automationId } = this.state;
+    webapi
+      .testAutomation({ id: automationId })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+  terminateAutomation = () => {
+    const { automationId } = this.state;
+    webapi
+      .terminateAutomation({ id: automationId })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+  publishAutomation = () => {
+    const { automationId } = this.state;
+    webapi
+      .publishAutomation({ id: automationId })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
 
   render() {
     const { loading, title, automationId, automationDetail } = this.state;
+    const testStatusList = [
+      { name: 'Not Tested', value: 'NotTested' },
+      { name: 'Testing', value: 'Testing' },
+      { name: 'Tested', value: 'Tested' }
+    ];
     const cardTitle = (
       <div>
         <span style={{ marginRight: 10 }}>{automationDetail.automationName}</span>
@@ -49,9 +153,9 @@ class AutomationDetail extends Component<any, any> {
         {automationDetail.automationStatus === 'Executing' ? <Tag color="#92D050">{automationDetail.automationStatus}</Tag> : null}
         {automationDetail.automationStatus === 'Completed' ? <Tag color="#333F50">{automationDetail.automationStatus}</Tag> : null}
         {automationDetail.automationStatus === 'Terminated' ? <Tag color="#EF1C33">{automationDetail.automationStatus}</Tag> : null}
-        {automationDetail.testStatus === 'Not Tested' ? <Tag color="#A6A6A6">{automationDetail.testStatus}</Tag> : null}
-        {automationDetail.testStatus === 'Tested' ? <Tag color="#92D050">{automationDetail.testStatus}</Tag> : null}
-        {automationDetail.testStatus === 'Testing' ? <Tag color="#00B0F0">{automationDetail.testStatus}</Tag> : null}
+        {automationDetail.testStatus === 'NotTested' ? <Tag color="#A6A6A6">{testStatusList.find((item) => item.value === automationDetail.testStatus).name}</Tag> : null}
+        {automationDetail.testStatus === 'Tested' ? <Tag color="#92D050">{testStatusList.find((item) => item.value === automationDetail.testStatus).name}</Tag> : null}
+        {automationDetail.testStatus === 'Testing' ? <Tag color="#00B0F0">{testStatusList.find((item) => item.value === automationDetail.testStatus).name}</Tag> : null}
       </div>
     );
 
@@ -70,9 +174,15 @@ class AutomationDetail extends Component<any, any> {
               style={{ margin: 12 }}
               extra={
                 <ButtonGroup>
-                  <Button disabled={!(automationDetail.automationStatus === 'Draft')}>Test</Button>
-                  <Button disabled={automationDetail.automationStatus === 'Terminate' || automationDetail.automationStatus === 'Draft'}>Terminate</Button>
-                  <Button disabled={automationDetail.automationStatus === 'Published' || automationDetail.automationStatus === 'Executing'}>Published</Button>
+                  <Popconfirm placement="topLeft" title="This automation (start with time trigger) will be tested immediately." onConfirm={this.testAutomation} okText="Confirm" cancelText="Cancel">
+                    <Button disabled={!(automationDetail.automationStatus === 'Draft')}>Test</Button>
+                  </Popconfirm>
+                  <Popconfirm placement="topLeft" title="This campaign will be terminated." onConfirm={this.terminateAutomation} okText="Confirm" cancelText="Cancel">
+                    <Button disabled={automationDetail.automationStatus === 'Terminate' || automationDetail.automationStatus === 'Draft'}>Terminate</Button>
+                  </Popconfirm>
+                  <Popconfirm placement="topLeft" title="This campaign will be published." onConfirm={this.publishAutomation} okText="Confirm" cancelText="Cancel">
+                    <Button disabled={automationDetail.automationStatus === 'Published' || automationDetail.automationStatus === 'Executing'}>Published</Button>
+                  </Popconfirm>
                 </ButtonGroup>
               }
             >

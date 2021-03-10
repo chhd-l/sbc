@@ -17,7 +17,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: 'Product Finder Details',
+      title: <FormattedMessage id="Product.ProductFinderDetails" />,
       loading: false,
       details: {},
       chartRecords: []
@@ -57,13 +57,17 @@ export default class ProductFinderDetails extends React.Component<any, any> {
             <div className="garyContainer">
               <Row>
                 <img className="productNo-Image" src={img_productNo} alt="Product No" />
-                <strong>Product Finder NO. {details.finderNumber}</strong>
+                <strong>
+                  <FormattedMessage id="Product.ProductFinderNO" />. {details.finderNumber}
+                </strong>
               </Row>
               <Row>
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      <p>Generated data</p>
+                      <p>
+                        <FormattedMessage id="Product.GeneratedData" />
+                      </p>
                     </Col>
                     <Col span={12}>
                       <strong>{moment(details.createTime).format('YYYY-MM-DD')}</strong>
@@ -75,10 +79,12 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      <p>Consumer type</p>
+                      <p>
+                        <FormattedMessage id="Product.ConsumerType" />
+                      </p>
                     </Col>
                     <Col span={12}>
-                      <strong>{details.consumerType === 0 ? 'Guest' : 'Member'}</strong>
+                      <strong>{details.consumerType === 0 ? <FormattedMessage id="Product.Guest" /> : <FormattedMessage id="Product.Member" />}</strong>
                     </Col>
                   </Row>
                 </Col>
@@ -86,7 +92,9 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                   <Row>
                     <Col span={12}>
                       {' '}
-                      <p>Pet type</p>
+                      <p>
+                        <FormattedMessage id="Product.PetType" />
+                      </p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.petType}</strong>
@@ -98,7 +106,9 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      <p>Consumer account</p>
+                      <p>
+                        <FormattedMessage id="Product.ConsumerAccount" />
+                      </p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.consumerAccount}</strong>
@@ -109,7 +119,9 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                   <Row>
                     <Col span={12}>
                       {' '}
-                      <p>Pet age</p>
+                      <p>
+                        <FormattedMessage id="Product.PetAge" />
+                      </p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.petAge}</strong>
@@ -121,7 +133,9 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      <p>Consumer name</p>
+                      <p>
+                        <FormattedMessage id="Product.Consumername" />
+                      </p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.consumerName}</strong>
@@ -132,7 +146,9 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                   <Row>
                     <Col span={12}>
                       {' '}
-                      <p>Breed</p>
+                      <p>
+                        <FormattedMessage id="Product.Breed" />
+                      </p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.petBreed}</strong>
@@ -148,7 +164,9 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                     </Col>
                     <Col span={20}>
                       <h4 style={{ marginBottom: '10px' }}>{details.productName}</h4>
-                      <p>Product SKU: {details.spuCode}</p>
+                      <p>
+                        <FormattedMessage id="Product.ProductSKU" />: {details.spuCode}
+                      </p>
                     </Col>
                   </Row>
                 </div>
@@ -174,7 +192,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
         </Spin>
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="back" />}
+            {<FormattedMessage id="Product.back" />}
           </Button>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { Table, Tooltip, Popconfirm } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
+import { FormattedMessage } from 'react-intl';
 
 type AlignType = 'left' | 'center' | 'right';
 
@@ -19,12 +20,12 @@ class SortList extends Component<any, any> {
 
   _columns = [
     {
-      title: 'Description name',
+      title: <FormattedMessage id="Product.DescriptionName" />,
       dataIndex: 'descriptionName',
       key: 'descName'
     },
     {
-      title: 'Display name',
+      title: <FormattedMessage id="Product.DisplayName" />,
       key: 'dipName',
       render: (text, record) => (
         <div>
@@ -38,11 +39,11 @@ class SortList extends Component<any, any> {
       )
     },
     {
-      title: 'Operation',
+      title: <FormattedMessage id="Product.Operation" />,
       align: 'center' as AlignType,
       key: 'action',
       render: (_text, _record, _index) => (
-        <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteRow(_index)} okText="Confirm" cancelText="Cancel">
+        <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.deleteThisItem" />} onConfirm={() => this.deleteRow(_index)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
           <Tooltip placement="top" title="Delete">
             <a className="iconfont iconDelete"></a>
           </Tooltip>

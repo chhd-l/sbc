@@ -38,7 +38,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
   componentDidMount() {
     this.setState(
       {
-        title: this.state.type === 'all' ? 'Search Result Details' : 'No-Result Search Details'
+        title: this.state.type === 'all' ? <FormattedMessage id="Product.SearchResultDetails" /> : <FormattedMessage id="Product.NoResultSearchDetails" />
       },
       () => this.getSearchResultDetails()
     );
@@ -119,31 +119,31 @@ export default class ProductSearchDetails extends React.Component<any, any> {
     let test = searchForm;
     const columns = [
       {
-        title: 'Search No.',
+        title: <FormattedMessage id="Product.SearchNo" />,
         dataIndex: 'searchNo',
         key: 'searchNo',
         width: '15%'
       },
       {
-        title: 'Search Time',
+        title: <FormattedMessage id="Product.SearchTime" />,
         dataIndex: 'searchTime',
         key: 'searchTime',
         width: '15%'
       },
       {
-        title: 'Consumer Type',
+        title: <FormattedMessage id="Product.ConsumerType" />,
         dataIndex: 'consumerType',
         key: 'consumerType',
         width: '15%'
       },
       {
-        title: 'Consumer Account',
+        title: <FormattedMessage id="Product.ConsumerAccount" />,
         dataIndex: 'consumerAccount',
         key: 'consumerAccount',
         width: '15%'
       },
       {
-        title: 'Consumer Name',
+        title: <FormattedMessage id="Product.ConsumerName" />,
         dataIndex: 'consumerName',
         key: 'consumerName',
         width: '15%'
@@ -151,7 +151,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
     ];
     if (type === 'all') {
       columns.push({
-        title: 'Total # of pdt. found',
+        title: <FormattedMessage id="Product.TotalFound" />,
         dataIndex: 'resultNo',
         key: 'resultNo',
         width: '15%'
@@ -169,7 +169,11 @@ export default class ProductSearchDetails extends React.Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Consumer account</p>}
+                    addonBefore={
+                      <p style={styles.label}>
+                        <FormattedMessage id="Product.ConsumerAccount" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -206,7 +210,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Product.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -219,7 +223,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="back" />}
+            {<FormattedMessage id="Product.back" />}
           </Button>
         </div>
       </div>

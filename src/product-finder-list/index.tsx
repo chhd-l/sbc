@@ -15,7 +15,7 @@ class ProductFinderList extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Product Finder List',
+      title: <FormattedMessage id="Product.ProductFinderList" />,
       searchForm: {},
       productFinderList: [],
       pagination: {
@@ -103,50 +103,50 @@ class ProductFinderList extends Component<any, any> {
     const { title, productFinderList, consumerTypeList, petTypeList } = this.state;
     const columns = [
       {
-        title: 'Image',
+        title: <FormattedMessage id="Product.Image" />,
         dataIndex: 'productImage',
         key: 'productImage',
         width: '10%',
         render: (text, record) => (text ? <img style={styles.tableImage} src={text} alt="Image" /> : null)
       },
       {
-        title: 'Product Finder Number',
+        title: <FormattedMessage id="Product.ProductFinderNumber" />,
         dataIndex: 'finderNumber',
         key: 'finderNumber',
         width: '15%'
       },
       {
-        title: 'Product Name',
+        title: <FormattedMessage id="Product.ProductName" />,
         dataIndex: 'productName',
         key: 'productName',
         width: '10%'
       },
       {
-        title: 'Consumer account',
+        title: <FormattedMessage id="Product.ConsumerAccount" />,
         dataIndex: 'consumerAccount',
         key: 'consumerAccount',
         width: '10%'
       },
       {
-        title: 'Consumer Type',
+        title: <FormattedMessage id="Product.ConsumerType" />,
         dataIndex: 'consumerType',
         key: 'consumerType',
         width: '10%',
         render: (text, record) => (text === 0 ? 'Guest' : 'Member')
       },
       {
-        title: 'Pet Type',
+        title: <FormattedMessage id="Product.PetType" />,
         dataIndex: 'petType',
         key: 'petType',
         width: '10%'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Details">
+            <Tooltip placement="top" title={<FormattedMessage id="Details" />}>
               <Link to={'/product-finder-details/' + record.finderNumber} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
@@ -163,7 +163,11 @@ class ProductFinderList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Product finder number</p>}
+                    addonBefore={
+                      <p style={styles.label}>
+                        <FormattedMessage id="Product.ProductFinderNumber" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -177,7 +181,11 @@ class ProductFinderList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Product name</p>}
+                    addonBefore={
+                      <p style={styles.label}>
+                        <FormattedMessage id="Product.ProductName" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -192,7 +200,11 @@ class ProductFinderList extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}>Consumer type</p>}
+                    label={
+                      <p style={styles.label}>
+                        <FormattedMessage id="Product.ConsumerType" />
+                      </p>
+                    }
                     style={{ width: 195 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -203,7 +215,7 @@ class ProductFinderList extends Component<any, any> {
                     }}
                   >
                     <Option value="">
-                      <FormattedMessage id="all" />
+                      <FormattedMessage id="Product.all" />
                     </Option>
                     {consumerTypeList &&
                       consumerTypeList.map((item, index) => (
@@ -219,7 +231,12 @@ class ProductFinderList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Consumer account</p>}
+                    addonBefore={
+                      <p style={styles.label}>
+                        {' '}
+                        <FormattedMessage id="Product.ConsumerAccount" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -234,7 +251,11 @@ class ProductFinderList extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}>Pet type</p>}
+                    label={
+                      <p style={styles.label}>
+                        <FormattedMessage id="Product.PetType" />
+                      </p>
+                    }
                     style={{ width: 195 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -245,7 +266,7 @@ class ProductFinderList extends Component<any, any> {
                     }}
                   >
                     <Option value="">
-                      <FormattedMessage id="all" />
+                      <FormattedMessage id="Product.all" />
                     </Option>
                     {petTypeList &&
                       petTypeList.map((item, index) => (
@@ -271,7 +292,7 @@ class ProductFinderList extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Product.search" />
                     </span>
                   </Button>
                 </FormItem>

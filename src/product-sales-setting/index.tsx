@@ -88,35 +88,48 @@ class ProductSearchSetting extends Component<any, any> {
         <BreadCrumb />
         <div style={styles.formContainer}>
           <Form name="complex" onSubmit={this.onFinish} labelAlign="left" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }}>
-            <Form.Item label={<span style={{ color: '#666' }}>Default purchase type</span>}>
+            <Form.Item
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.DefaultPurchaseType" />
+                </span>
+              }
+            >
               {getFieldDecorator('defaultPurchaseType', {
                 initialValue: defaultPurchaseType,
                 rules: [
                   {
                     required: true,
-                    message: 'Please select purchase type!'
+                    message: <FormattedMessage id="Product.PleaseSelectPurchaseType" />
                   }
                 ]
               })(
                 <Radio.Group disabled={disabled}>
                   <Radio.Button value="One-off" style={{ width: 150, textAlign: 'center' }}>
-                    One-off
+                    <FormattedMessage id="Product.Oneoff" />
                   </Radio.Button>
                   <Radio.Button value="Subscription" style={{ width: 150, textAlign: 'center' }}>
-                    Subscription
+                    <FormattedMessage id="Product.Subscription" />
                   </Radio.Button>
                 </Radio.Group>
               )}
             </Form.Item>
 
-            <Form.Item label={<span style={{ color: '#666' }}>Default subscription frequency</span>} style={{ marginBottom: 0 }}>
+            <Form.Item
+              label={
+                <span style={{ color: '#666' }}>
+                  <FormattedMessage id="Product.DefaultSubscriptionFrequency" />
+                </span>
+              }
+              style={{ marginBottom: 0 }}
+            >
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
                 {getFieldDecorator('defaultSubscriptionFrequencyId', {
                   initialValue: defaultSubscriptionFrequencyId,
                   rules: [
                     {
                       required: true,
-                      message: 'Please select subscription frequency !'
+                      message: <FormattedMessage id="Product.PleaseSelectSubscriptionFrequency" />
                     }
                   ]
                 })(
@@ -131,13 +144,13 @@ class ProductSearchSetting extends Component<any, any> {
               </Form.Item>
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
                 <Button type="danger" size="default" onClick={this.showModal} disabled={disabled}>
-                  Add new frequency
+                  <FormattedMessage id="Product.AddNewFrequency" />
                 </Button>
               </Form.Item>
             </Form.Item>
             <div className="bar-button">
               <Button type="primary" htmlType="submit">
-                Save
+                <FormattedMessage id="Product.Save" />
               </Button>
             </div>
           </Form>

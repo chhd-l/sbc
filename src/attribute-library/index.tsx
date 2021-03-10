@@ -14,7 +14,7 @@ class AttributeLibrary extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Attribute library',
+      title: <FormattedMessage id="Product.AttributeLibrary" />,
       searchForm: {
         attributeName: '',
         attributeValue: ''
@@ -304,7 +304,7 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
 
           this.setState(
             {
@@ -328,7 +328,7 @@ class AttributeLibrary extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getAttributes();
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
         } else {
         }
       })
@@ -359,7 +359,7 @@ class AttributeLibrary extends Component<any, any> {
             loading: false
           });
           this.getAttributes();
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
         } else {
         }
       })
@@ -418,7 +418,7 @@ class AttributeLibrary extends Component<any, any> {
                         {' '}
                         *
                       </span>
-                      Attribute value
+                      <FormattedMessage id="Product.AttributeValue" />
                     </span>
                   ) : (
                     ''
@@ -434,7 +434,7 @@ class AttributeLibrary extends Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input attribute value.'
+                      message: <FormattedMessage id="Product.PleaseInputAttributeValue" />
                     }
                   ]
                 })(
@@ -457,7 +457,7 @@ class AttributeLibrary extends Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input display value.'
+                      message: <FormattedMessage id="Product.PleaseInputDisplayValue" />
                     }
                   ]
                 })(
@@ -477,11 +477,11 @@ class AttributeLibrary extends Component<any, any> {
                 {obj.length > 1 ? (
                   <>
                     {k.id ? (
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
+                      <Popconfirm placement="topRight" title={<FormattedMessage id="Product.deleteThisItem" />} onConfirm={() => this.removeRemote(k.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
                         <Icon className="dynamic-delete-button" type="minus-circle-o" />
                       </Popconfirm>
                     ) : (
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeTemp(k.tempId)} okText="Confirm" cancelText="Cancel">
+                      <Popconfirm placement="topRight" title={<FormattedMessage id="Product.deleteThisItem" />} onConfirm={() => this.removeTemp(k.tempId)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
                         <Icon className="dynamic-delete-button" type="minus-circle-o" />
                       </Popconfirm>
                     )}
@@ -508,8 +508,12 @@ class AttributeLibrary extends Component<any, any> {
         value={this.state.nameSelect}
         style={styles.label}
       >
-        <Option value="attributeName">Attribute name</Option>
-        <Option value="displayName">Display name</Option>
+        <Option value="attributeName">
+          <FormattedMessage id="Product.AttributeName" />
+        </Option>
+        <Option value="displayName">
+          <FormattedMessage id="Product.DisplayName" />
+        </Option>
       </Select>
     );
   };
@@ -525,8 +529,12 @@ class AttributeLibrary extends Component<any, any> {
         value={this.state.valueSelect}
         style={styles.label}
       >
-        <Option value="attributeValue">Attribute value</Option>
-        <Option value="displayValue">Display value</Option>
+        <Option value="attributeValue">
+          <FormattedMessage id="Product.AttributeName" />
+        </Option>
+        <Option value="displayValue">
+          <FormattedMessage id="Product.DisplayName" />
+        </Option>
       </Select>
     );
   };
@@ -538,51 +546,57 @@ class AttributeLibrary extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Attribute name',
+        title: <FormattedMessage id="Product.AttributeName" />,
         dataIndex: 'attributeName',
         key: 'attributeName'
       },
       {
-        title: 'Display name',
+        title: <FormattedMessage id="Product.DisplayName" />,
         dataIndex: 'attributeNameEn',
         key: 'attributeNameEn'
       },
       {
-        title: 'Attribute value',
+        title: <FormattedMessage id="Product.AttributeValue" />,
         dataIndex: 'attributeValue',
         key: 'attributeValue',
         width: '20%',
         render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList, 'attrbuite') : ''}</p>
       },
       {
-        title: 'Display value',
+        title: <FormattedMessage id="Product.DisplayValue" />,
         dataIndex: 'displayValue',
         key: 'displayValue',
         width: '20%',
         render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList, 'display') : ''}</p>
       },
       {
-        title: 'Status',
+        title: <FormattedMessage id="Product.Status" />,
         dataIndex: 'attributeStatus',
         key: 'attributeStatus',
         width: '10%',
         render: (text, record) => (
-          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? ' disable' : 'enable') + ' this attribute?'} onConfirm={() => this.updateAttributeStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+          <Popconfirm
+            placement="topLeft"
+            title={'Are you sure to ' + (+text ? ' disable' : 'enable') + ' this attribute?'}
+            onConfirm={() => this.updateAttributeStatus(!+text, record)}
+            okText={<FormattedMessage id="Product.Confirm" />}
+            cancelText={<FormattedMessage id="Product.Cancel" />}
+          >
             <Switch checked={+text ? true : false}></Switch>
           </Popconfirm>
         )
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         dataIndex: '',
         key: 'x',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
               <a style={styles.edit} onClick={() => this.openEditPage(record)} className="iconfont iconEdit"></a>
             </Tooltip>
-            <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteAttributes(record.id)} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Delete">
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.deleteThisItem" />} onConfirm={() => this.deleteAttributes(record.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+              <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
                 <a className="iconfont iconDelete"></a>
               </Tooltip>
             </Popconfirm>
@@ -650,7 +664,7 @@ class AttributeLibrary extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Product.search" />
                     </span>
                   </Button>
                 </Col>
@@ -660,7 +674,9 @@ class AttributeLibrary extends Component<any, any> {
 
           <div className="container-search">
             <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-              <span>Add new attribute</span>
+              <span>
+                <FormattedMessage id="Product.AddNewAttribute" />
+              </span>
             </Button>
             <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={attributeList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
           </div>
@@ -685,10 +701,10 @@ class AttributeLibrary extends Component<any, any> {
                   });
                 }}
               >
-                Close
+                <FormattedMessage id="Product.Close" />
               </Button>,
               <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-                Submit
+                <FormattedMessage id="Product.Submit" />
               </Button>
             ]}
           >
@@ -698,11 +714,11 @@ class AttributeLibrary extends Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please enter attribute name'
+                      message: <FormattedMessage id="Product.PleaseEnterAttributeName" />
                     },
                     {
                       max: 50,
-                      message: 'Exceed maximum length!'
+                      message: <FormattedMessage id="Product.ExceedMaximumLength" />
                     }
                   ]
                 })(
@@ -723,11 +739,11 @@ class AttributeLibrary extends Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please enter display name'
+                      message: <FormattedMessage id="Product.PleaseEnterDisplayName" />
                     },
                     {
                       max: 50,
-                      message: 'Exceed maximum length!'
+                      message: <FormattedMessage id="Product.ExceedMaximumLength" />
                     }
                   ]
                 })(
@@ -757,8 +773,12 @@ class AttributeLibrary extends Component<any, any> {
                     }}
                     style={{ width: '80%' }}
                   >
-                    <Radio value="Single choice">Single choice</Radio>
-                    <Radio value="Multiple choice">Multiple choice</Radio>
+                    <Radio value="Single choice">
+                      <FormattedMessage id="Product.SingleChoice" />
+                    </Radio>
+                    <Radio value="Multiple choice">
+                      <FormattedMessage id="Product.MultipleChoice" />
+                    </Radio>
                   </Radio.Group>
                 )}
               </FormItem>

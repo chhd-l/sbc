@@ -31,7 +31,9 @@ class AutomationList extends Component<any, any> {
       automationList: []
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.init();
+  }
   init = () => {
     this.getAutomationList();
   };
@@ -60,11 +62,13 @@ class AutomationList extends Component<any, any> {
   getAutomationList = () => {
     const { searchForm, pagination } = this.state;
     let params = {
-      automationName: searchForm.automationName,
-      automationCategory: searchForm.automationCategory,
-      automationStatus: searchForm.automationStatus,
+      name: searchForm.automationName,
+      category: searchForm.automationCategory,
+      status: searchForm.automationStatus,
       testStatus: searchForm.testStatus,
-      automationPeriod: searchForm.automationPeriod
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
+      // automationPeriod: searchForm.automationPeriod
     };
     webapi
       .getAutomationList(params)

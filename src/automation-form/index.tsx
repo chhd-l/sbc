@@ -21,6 +21,7 @@ class AutomationForm extends Component<any, any> {
       automationForm: {
         automationName: '',
         automationCategory: '',
+        automationDescription: '',
         automationType: '',
         automationGoal: '',
         eventStartTime: '',
@@ -44,7 +45,37 @@ class AutomationForm extends Component<any, any> {
   };
   saveAutomation = () => {
     const { automationForm } = this.state;
-    console.log(automationForm);
+    let params = {
+      tenantId: 0,
+      name: automationForm.automationName,
+      category: automationForm.automationCategory,
+      description: automationForm.automationDescription,
+      type: automationForm.automationType,
+      goal: automationForm.automationGoal,
+      eventEndTime: moment(automationForm.eventStartTime).format('YYYY-MM-DD HH:mm:ss'),
+      eventStartTime: moment(automationForm.eventEndTime).format('YYYY-MM-DD HH:mm:ss'),
+      trackingEndTime: moment(automationForm.trackingEndTime).format('YYYY-MM-DD HH:mm:ss'),
+      trackingStartTime: moment(automationForm.eventEndtrackingStartTimeTime).format('YYYY-MM-DD HH:mm:ss'),
+      communicationChannel: automationForm.communicationChannel.join(';')
+    };
+    debugger;
+    webapi
+      .createAutomation(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.automationForm;
@@ -194,7 +225,20 @@ class AutomationForm extends Component<any, any> {
                     <FormItem label="Automation description">
                       {getFieldDecorator('automationDescription', {
                         initialValue: automationForm.automationDescription
-                      })(<TextArea style={{ width: '80%' }} placeholder="Please input automation description" autoSize={{ minRows: 4, maxRows: 4 }} />)}
+                      })(
+                        <TextArea
+                          style={{ width: '80%' }}
+                          placeholder="Please input automation description"
+                          autoSize={{ minRows: 4, maxRows: 4 }}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onFormChange({
+                              field: 'automationDescription',
+                              value
+                            });
+                          }}
+                        />
+                      )}
                     </FormItem>
                   </Col>
 

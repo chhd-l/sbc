@@ -1,17 +1,10 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
-
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
-import GiftLevels from '../full-gift/components/gift-levels';
-import DiscountLevels from '../full-discount/components/discount-levels';
-import FirstDiscountLevels from '../first-order-discount/components/discount-levels';
-import ReductionLevels from '../full-reduction/components/reduction-levels';
-// import ReductionSubscritionLevels from '../full-reduction/components/reduction-subscrition-levels';
 import { GoodsModal } from 'biz';
-import SelectedGoodsGrid from './selected-goods-grid';
-
+import SelectedFixedPriceProducts from './selected-fixed-price-products';
 import * as webapi from '../webapi';
 import * as Enum from './marketing-enum';
 
@@ -145,6 +138,22 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
     let segmentIds = [];
     segmentIds.push(value);
     this.onBeanChange({ segmentIds });
+  };
+
+  selectedProductQuantityOnChange = (val, record) => {
+    console.log(val, 'val---------');
+    // let { selectedRows } = this.state
+    // selectedRows.forEach(item => {
+    //   if(item.id === record.id) {
+    //     item.set('quantity', val)
+    //   }
+    // })
+    // console.log(selectedRows.toJS(), 'selectedRows---------');
+    // this.setState({
+    //   selectedRows
+    // }, () => {
+    //   console.log(selectedRows.get('quantity'), 'quantity---------');
+    // })
   };
   // @ts-ignore
   render() {
@@ -285,7 +294,7 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
                 Add products
               </Button>
               &nbsp;&nbsp;
-              <SelectedGoodsGrid selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={this.deleteSelectedSku} />
+              <SelectedFixedPriceProducts selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={this.deleteSelectedSku} form={this.props.form} selectedProductQuantityOnChange={this.selectedProductQuantityOnChange} />
             </div>
           )}
         </FormItem>
@@ -335,7 +344,7 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
             <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
           </Col>
         </Row>
-        <GoodsModal visible={this.state.goodsModal._modalVisible} skuLimit={5} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
+        <GoodsModal visible={this.state.goodsModal._modalVisible} skuLimit={1} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
       </Form>
     );
   }

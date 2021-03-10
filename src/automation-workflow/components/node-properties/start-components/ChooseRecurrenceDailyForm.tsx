@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { endInfo, Row, Col, Radio, Input, InputNumber } from 'antd';
+import { Form, Row, Col, Radio, Input, InputNumber } from 'antd';
 
 export default class ChooseRecurrenceDailyendInfo extends Component<any, any> {
   constructor(props) {

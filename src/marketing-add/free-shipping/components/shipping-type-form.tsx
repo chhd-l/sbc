@@ -12,8 +12,7 @@ export default class ShippingTypeForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      shippingType: null,
-      shippingValue: null
+      shippingType: null
     };
   }
 

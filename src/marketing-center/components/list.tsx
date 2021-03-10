@@ -303,7 +303,7 @@ export default class List extends React.Component<any, any> {
                     className="createMarket"
                     onClick={() =>
                       history.push({
-                        pathname: '/marketing-free-shipping',
+                        pathname: '/marketing-full-discount', ///marketing-free-shipping
                         state: {
                           source: 'marketCenter'
                         }

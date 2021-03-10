@@ -500,7 +500,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                     isNormal={this.state.PromotionTypeValue === 0}
                   />
                 ) : (
-                  <div>
+                  <div style={{ display: 'flex' }}>
                     <FormItem labelAlign="left">
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
                       {getFieldDecorator('firstSubscriptionOrderDiscount', {
@@ -520,7 +520,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                         initialValue: marketingBean.get('firstSubscriptionOrderDiscount')
                       })(
                         <Input
-                          style={{ width: 300 }}
+                          style={{ width: 100 }}
                           title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
@@ -528,7 +528,38 @@ export default class MarketingAddForm extends React.Component<any, any> {
                           }}
                         />
                       )}
-                      <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+                      <span>&nbsp;of orginal price,&nbsp;</span>
+                    </FormItem>
+
+                    <FormItem>
+                      <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                      {getFieldDecorator('subscriptionFirstLimit', {
+                        rules: [
+                          // { required: true, message: 'Must enter rules' },
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (value) {
+                                if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                  callback('1-9999');
+                                }
+                              }
+                              callback();
+                            }
+                            // callback();
+                          }
+                        ],
+                        initialValue: marketingBean.get('subscriptionFirstLimit')
+                      })(
+                        <Input
+                          style={{ width: 100 }}
+                          title={'1-9999'}
+                          placeholder={'1-9999'}
+                          onChange={(e) => {
+                            this.onBeanChange({ subscriptionFirstLimit: e.target.value });
+                          }}
+                        />
+                      )}
+                      &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </FormItem>
                   </div>
                 )
@@ -606,7 +637,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               <>
                 <Input
                   style={{ width: 200 }}
-                  placeholder="0.01-99999999.99"
+                  placeholder="0.01-99999999.9922222"
                   onChange={(e) => {
                     this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
                   }}
@@ -617,33 +648,67 @@ export default class MarketingAddForm extends React.Component<any, any> {
         )}
         {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT && PromotionTypeValue == 1 && (
           <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
-            {getFieldDecorator('restSubscriptionOrderDiscount', {
-              rules: [
-                { required: true, message: 'Amount must be entered' },
-                {
-                  validator: (_rule, value, callback) => {
-                    if (value) {
-                      if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                        callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+            <div style={{ display: 'flex' }}>
+              <FormItem>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
+                {getFieldDecorator('restSubscriptionOrderDiscount', {
+                  rules: [
+                    { required: true, message: 'Amount must be entered' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
+                            callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+                          }
+                        }
+                        callback();
                       }
                     }
-                    callback();
-                  }
-                }
-              ],
-              initialValue: marketingBean.get('restSubscriptionOrderDiscount')
-            })(
-              <Input
-                style={{ width: 300 }}
-                title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
-                placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
-                onChange={(e) => {
-                  this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
-                }}
-              />
-            )}
-            <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+                  ],
+                  initialValue: marketingBean.get('restSubscriptionOrderDiscount')
+                })(
+                  <Input
+                    style={{ width: 100 }}
+                    title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                    placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                    onChange={(e) => {
+                      this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
+                    }}
+                  />
+                )}
+                <span>&nbsp;of orginal price,&nbsp;</span>
+              </FormItem>
+              <FormItem>
+                <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                {getFieldDecorator('subscriptionRestLimit', {
+                  rules: [
+                    // { required: true, message: 'Must enter rules' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                            callback('1-9999');
+                          }
+                        }
+                        callback();
+                      }
+                      // callback();
+                    }
+                  ],
+                  initialValue: marketingBean.get('subscriptionRestLimit')
+                })(
+                  <Input
+                    style={{ width: 100 }}
+                    title={'1-9999'}
+                    placeholder={'1-9999'}
+                    onChange={(e) => {
+                      this.onBeanChange({ subscriptionRestLimit: e.target.value });
+                    }}
+                  />
+                )}
+                &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+              </FormItem>
+            </div>
           </FormItem>
         )}
 
@@ -707,6 +772,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 {/*{util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}*/}
                 <Radio value={-1}>All</Radio>
                 <Radio value={-3}>Select group</Radio>
+                <Radio value={-4}>By email</Radio>
               </RadioGroup>
               {/*{level._levelPropsShow && (*/}
               {/*  <div>*/}
@@ -721,19 +787,60 @@ export default class MarketingAddForm extends React.Component<any, any> {
         </FormItem>
         {marketingBean.get('joinLevel') == -3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
-            <Select
-              style={{ width: 520 }}
-              onChange={this.selectGroupOnChange}
-              // defaultValue={232}
-              defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
-            >
-              {allGroups.size > 0 &&
-                allGroups.map((item) => (
-                  <Select.Option key={item.get('id')} value={item.get('id')}>
-                    {item.get('name')}
-                  </Select.Option>
-                ))}
-            </Select>
+            {getFieldDecorator('segmentIds', {
+              rules: [
+                {
+                  validator: (_rule, value, callback) => {
+                    if (!value && marketingBean.get('joinLevel') == -3) {
+                      callback('Please select group.');
+                    }
+                  }
+                }
+              ]
+            })(
+              <Select
+                style={{ width: 520 }}
+                onChange={this.selectGroupOnChange}
+                // defaultValue={232}
+                defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
+              >
+                {allGroups.size > 0 &&
+                  allGroups.map((item) => (
+                    <Select.Option key={item.get('id')} value={item.get('id')}>
+                      {item.get('name')}
+                    </Select.Option>
+                  ))}
+              </Select>
+            )}
+          </FormItem>
+        )}
+        {marketingBean.get('joinLevel') == -4 && (
+          <FormItem {...formItemLayout} required={true} labelAlign="left">
+            {getFieldDecorator('targetEmail', {
+              rules: [
+                {
+                  validator: (_rule, value, callback) => {
+                    if (!value && marketingBean.get('joinLevel') == -4) {
+                      callback('Please enter email.');
+                    }
+                    if (value) {
+                      if (!ValidConst.email.test(value)) {
+                        callback('Please enter correct email.');
+                      }
+                    } else callback();
+                  }
+                }
+              ],
+              initialValue: marketingBean.get('targetEmail')
+            })(
+              <Input
+                style={{ width: 300 }}
+                onChange={(e) => {
+                  this.onBeanChange({ targetEmail: e.target.value });
+                }}
+                maxLength={30}
+              />
+            )}
           </FormItem>
         )}
         <Row type="flex" justify="start">

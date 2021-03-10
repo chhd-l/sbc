@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { cache, Const, noop, SelectGroup } from 'qmkit';
 import * as webapi from '../webapi';
 import { Form, Select, Input, Button, Table, Divider, message, Checkbox, Pagination, Spin, Tooltip, Modal, Rate, TreeSelect, Icon, Upload, Tree } from 'antd';
@@ -30,7 +30,7 @@ const formItemLayout = {
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 @Relax
-export default class NewStateModal extends Component<any, any> {
+class NewStateModal extends Component<any, any> {
   // new edit
   _rejectForm;
 
@@ -57,6 +57,7 @@ export default class NewStateModal extends Component<any, any> {
       addState: Function;
       editState: Function;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -104,11 +105,11 @@ export default class NewStateModal extends Component<any, any> {
     this.props.form.validateFields((err) => {
       if (this._validateCode()) {
         this.setState({
-          codeValidateStatus: 'success'
+          codeValidateStatus: <FormattedMessage id="Setting.success" />
         });
       } else {
         this.setState({
-          codeValidateStatus: 'error'
+          codeValidateStatus: <FormattedMessage id="Setting.error" />
         });
         return;
       }
@@ -211,7 +212,7 @@ export default class NewStateModal extends Component<any, any> {
     this.props.form.resetFields();
     const { onResetStateForm } = this.props.relaxProps;
     this.setState({
-      codeValidateStatus: 'success'
+      codeValidateStatus: <FormattedMessage id="Setting.success" />
     });
     onResetStateForm();
   };
@@ -220,12 +221,11 @@ export default class NewStateModal extends Component<any, any> {
     const { modalVisible, onStateFormChange, stateForm } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     const { country, state, postCodeArr } = stateForm.toJS();
-    console.log(postCodeArr, 'postCodeArr------------');
     return (
-      <Modal maskClosable={false} title="Add state" visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
+      <Modal maskClosable={false} title={<FormattedMessage id="Setting.Addstate" />} visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>
           <Form>
-            <FormItem {...formItemLayout} label="Country name">
+            <FormItem {...formItemLayout} label={this.props.intl.formatMessage({ id: 'Setting.Countryname' })}>
               {getFieldDecorator('country', {
                 initialValue: country
                 // rules: [{ required: true, message: 'Please select country name.' }]
@@ -242,10 +242,10 @@ export default class NewStateModal extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="State name">
+            <FormItem {...formItemLayout} label={this.props.intl.formatMessage({ id: 'Setting.Statename' })}>
               {getFieldDecorator('state', {
                 initialValue: state,
-                rules: [{ required: true, message: 'Please enter state name.' }]
+                rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Pleaseenterstatename' }) }]
               })(
                 <Input
                   value={state}
@@ -260,7 +260,7 @@ export default class NewStateModal extends Component<any, any> {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label="Code"
+              label={this.props.intl.formatMessage({ id: 'Setting.Code' })}
               validateStatus={codeValidateStatus === 'success' ? 'success' : 'error'}
               // validateStatus="success"
             >
@@ -275,7 +275,9 @@ export default class NewStateModal extends Component<any, any> {
                     </span>
                   ))
                 : null}
-              <span className={`${codeValidateStatus === 'success' ? 'hide' : 'codeStr'}`}>If you fill in one of them, you haveto complete the other.</span>
+              <span className={`${codeValidateStatus === 'success' ? 'hide' : 'codeStr'}`}>
+                <FormattedMessage id="Setting.Ifyoufillin" />
+              </span>
             </FormItem>
           </Form>
         </div>
@@ -283,3 +285,4 @@ export default class NewStateModal extends Component<any, any> {
     );
   }
 }
+export default injectIntl(NewStateModal);

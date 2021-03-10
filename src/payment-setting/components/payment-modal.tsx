@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Button, message, Input, Modal, Switch, Select } from 'antd';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import * as webapi from '../webapi';
@@ -30,6 +30,11 @@ class PaymentModal extends React.Component<any, any> {
       enabled: null
     };
   }
+
+  props: {
+    intl: any;
+  };
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.paymentForm.config) {
       let config = nextProps.paymentForm.config;
@@ -64,51 +69,51 @@ class PaymentModal extends React.Component<any, any> {
     }
 
     return (
-      <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()}>
+      <Modal maskClosable={false} title={this.props.intl.formatMessage({ id: 'Setting.EditPaymentSetting' })} visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()}>
         <Form>
           <Row>
             <Col span={24}>
-              <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="apiKey" />}>
+              <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="Setting.apiKey" />}>
                 {getFieldDecorator('apiKey', {
                   initialValue: this.state.paymentForm.apiKey,
-                  rules: [{ required: true, message: 'Please input Api Key!' }]
+                  rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.PleaseinputApiKey' }) }]
                 })(<Input />)}
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="appID" />}>
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.appID" />}>
                 {getFieldDecorator('appId', {
                   initialValue: this.state.paymentForm.appId,
-                  rules: [{ required: false, message: 'Please input App ID!' }]
+                  rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseinputAppID' }) }]
                 })(<Input />)}
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="privateKey" />}>
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.privateKey" />}>
                 {getFieldDecorator('privateKey', {
                   initialValue: this.state.paymentForm.privateKey,
-                  rules: [{ required: false, message: 'Please input Private Key!' }]
+                  rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseinputPrivateKey' }) }]
                 })(<Input.TextArea />)}
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="publicKey" />}>
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.publicKey" />}>
                 {getFieldDecorator('publicKey', {
                   initialValue: this.state.paymentForm.publicKey,
-                  rules: [{ required: false, message: 'Please input Public Key!' }]
+                  rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseinputPublicKey' }) }]
                 })(<Input.TextArea />)}
               </FormItem>
             </Col>
 
             {/*新增*/}
             <Col span={24}>
-              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.paymentMethod" />}>
                 {getFieldDecorator('paymentMethod', {
                   initialValue: this.state.paymentForm.paymentMethod,
                   rules: [
                     {
                       required: false,
-                      message: 'Please select Payment Method.'
+                      message: this.props.intl.formatMessage({ id: 'Setting.PleaseselectPayment' })
                     }
                   ]
                 })(
@@ -122,7 +127,7 @@ class PaymentModal extends React.Component<any, any> {
                           marginRight: '10px'
                         }}
                       />
-                      VISA
+                      <FormattedMessage id="Setting.VISA" />
                     </Option>
                     <Option value="MasterCard">
                       <img
@@ -133,7 +138,7 @@ class PaymentModal extends React.Component<any, any> {
                           marginRight: '10px'
                         }}
                       />
-                      MasterCard
+                      <FormattedMessage id="Setting.MasterCard" />
                     </Option>
                     <Option value="AmericanExpress">
                       <img
@@ -144,7 +149,7 @@ class PaymentModal extends React.Component<any, any> {
                           marginRight: '10px'
                         }}
                       />
-                      American Express
+                      <FormattedMessage id="Setting.AmericanExpress" />
                     </Option>
                     <Option value="OXXO">
                       <img
@@ -155,7 +160,7 @@ class PaymentModal extends React.Component<any, any> {
                           marginRight: '10px'
                         }}
                       />
-                      OXXO
+                      <FormattedMessage id="Setting.OXXO" />
                     </Option>
                     <Option value="JCB">
                       <img
@@ -166,7 +171,7 @@ class PaymentModal extends React.Component<any, any> {
                           marginRight: '10px'
                         }}
                       />
-                      JCB
+                      <FormattedMessage id="Setting.JCB" />
                     </Option>
                     <Option value="Discover">
                       <img
@@ -177,7 +182,7 @@ class PaymentModal extends React.Component<any, any> {
                           marginRight: '10px'
                         }}
                       />
-                      Discover
+                      <FormattedMessage id="Setting.Discover" />
                     </Option>
                     <Option value="ChinaUnionPay">
                       <img
@@ -188,7 +193,7 @@ class PaymentModal extends React.Component<any, any> {
                           marginRight: '10px'
                         }}
                       />
-                      China Union Pay
+                      <FormattedMessage id="Setting.ChinaUnionPay" />
                     </Option>
                     <Option value="Maestro">
                       <img
@@ -199,14 +204,14 @@ class PaymentModal extends React.Component<any, any> {
                           marginRight: '10px'
                         }}
                       />
-                      Maestro
+                      <FormattedMessage id="Setting.Maestro" />
                     </Option>
                   </Select>
                 )}
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.enabled" />}>
                 {getFieldDecorator('enabled', {
                   initialValue: this.state.paymentForm.enabled
                 })(<Switch checked={checked} onChange={(value) => this.onFormChange(value)} />)}
@@ -259,7 +264,7 @@ class PaymentModal extends React.Component<any, any> {
           })
         });
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(this.props.intl.formatMessage({ id: 'Setting.Operatesuccessfully' }));
           this.props.reflash();
           this.cancel();
         }
@@ -267,4 +272,4 @@ class PaymentModal extends React.Component<any, any> {
     });
   };
 }
-export default Form.create()(PaymentModal);
+export default Form.create()(injectIntl(PaymentModal));

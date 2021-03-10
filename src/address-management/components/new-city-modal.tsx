@@ -6,6 +6,7 @@ import { noop } from 'qmkit';
 import { IMap } from 'plume2';
 import { List, fromJS, Map } from 'immutable';
 import { Form, Icon, Input, Button, Checkbox, Modal, Select } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const { Option } = Select;
 const formItemLayout = {
@@ -23,7 +24,7 @@ const formItemLayout = {
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 @Relax
-export default class NewCityModal extends Component<any, any> {
+class NewCityModal extends Component<any, any> {
   // new edit
   _rejectForm;
 
@@ -52,6 +53,7 @@ export default class NewCityModal extends Component<any, any> {
       addCity: Function;
       editCity: Function;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -99,11 +101,11 @@ export default class NewCityModal extends Component<any, any> {
     this.props.form.validateFields((err) => {
       if (this._validateCode()) {
         this.setState({
-          codeValidateStatus: 'success'
+          codeValidateStatus: <FormattedMessage id="Setting.success" />
         });
       } else {
         this.setState({
-          codeValidateStatus: 'error'
+          codeValidateStatus: <FormattedMessage id="Setting.error" />
         });
         return;
       }
@@ -211,7 +213,7 @@ export default class NewCityModal extends Component<any, any> {
   _afterClose = () => {
     this.props.form.resetFields();
     this.setState({
-      codeValidateStatus: 'success'
+      codeValidateStatus: <FormattedMessage id="Setting.success" />
     });
     const { onResetCityForm } = this.props.relaxProps;
     onResetCityForm();
@@ -222,15 +224,14 @@ export default class NewCityModal extends Component<any, any> {
     const { onCityFormChange, cityForm, cityModalVisible, stateNameList, searchState } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     const { country, state, postCodeArr, city } = cityForm.toJS();
-    console.log(postCodeArr, 'postCodeArr------------');
     return (
-      <Modal maskClosable={false} title="Add City" visible={cityModalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
+      <Modal maskClosable={false} title={<FormattedMessage id="Setting.AddCity" />} visible={cityModalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>
           <Form>
-            <FormItem {...formItemLayout} label="Country name">
+            <FormItem {...formItemLayout} label={this.props.intl.formatMessage({ id: 'Setting.Countryname' })}>
               {getFieldDecorator('country', {
                 initialValue: country,
-                rules: [{ required: true, message: 'Please select country name.' }]
+                rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Pleaseselectcountryname' }) }]
               })(
                 <Input
                   // onChange={(e) =>
@@ -245,10 +246,10 @@ export default class NewCityModal extends Component<any, any> {
               )}
             </FormItem>
             {stateNameList.size > 0 ? (
-              <FormItem {...formItemLayout} label="State name">
+              <FormItem {...formItemLayout} label={this.props.intl.formatMessage({ id: 'Setting.Statename' })}>
                 {getFieldDecorator('state', {
                   initialValue: state,
-                  rules: [{ required: true, message: 'Please enter state name.' }]
+                  rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Pleaseenterstatename' }) }]
                 })(
                   <Select
                     // style={{ width: 160 }}
@@ -275,10 +276,10 @@ export default class NewCityModal extends Component<any, any> {
               </FormItem>
             ) : null}
 
-            <FormItem {...formItemLayout} label="City name">
+            <FormItem {...formItemLayout} label={this.props.intl.formatMessage({ id: 'Setting.Cityname' })}>
               {getFieldDecorator('city', {
                 initialValue: city,
-                rules: [{ required: true, message: 'Please enter city name.' }]
+                rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Pleaseentercityname' }) }]
               })(
                 <Input
                   value={city}
@@ -292,7 +293,7 @@ export default class NewCityModal extends Component<any, any> {
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="Code" validateStatus={codeValidateStatus === 'success' ? 'success' : 'error'}>
+            <FormItem {...formItemLayout} label={this.props.intl.formatMessage({ id: 'Setting.Code' })} validateStatus={codeValidateStatus === 'success' ? 'success' : 'error'}>
               {postCodeArr.length > 0
                 ? postCodeArr.map((item) => (
                     <div className="code-container" key={item.value}>
@@ -304,7 +305,9 @@ export default class NewCityModal extends Component<any, any> {
                     </div>
                   ))
                 : null}
-              <span className={`${codeValidateStatus === 'success' ? 'hide' : 'codeStr'}`}>If you fill in one of them, you haveto complete the other.</span>
+              <span className={`${codeValidateStatus === 'success' ? 'hide' : 'codeStr'}`}>
+                <FormattedMessage id="Setting.Ifyoufillin" />
+              </span>
             </FormItem>
           </Form>
         </div>
@@ -312,3 +315,5 @@ export default class NewCityModal extends Component<any, any> {
     );
   }
 }
+
+export default injectIntl(NewCityModal);

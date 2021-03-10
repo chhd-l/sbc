@@ -100,7 +100,7 @@ const routes = [
   {
     path: '/order-add',
     exact: true,
-    asyncComponent: () => import('./order-add')
+    asyncComponent: () => import('./manual-order')
   },
   //订单-详情
   {

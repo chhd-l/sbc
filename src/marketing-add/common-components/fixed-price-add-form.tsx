@@ -262,7 +262,6 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                whitespace: true,
                 message: 'Please input Fixed price'
               },
               {
@@ -271,7 +270,7 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
                 }
               }
             ],
-            onChange: (e) => this.onBeanChange({ marketingName: e.target.value }),
+            onChange: (e) => this.onBeanChange({ fixedPrice: e.target.value }),
             initialValue: marketingBean.get('fixedPrice')
           })(<Input placeholder="Please input fixed price" style={{ width: 360 }} />)}
         </FormItem>
@@ -298,28 +297,14 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
           })(
             <div>
               <RadioGroup
-                // onChange={(e) => {
-                //   this.levelRadioChange(e.target.value);
-                // }}
-                // value={level._allCustomer ? -1 : 0}
                 onChange={(e) => {
                   this.targetCustomerRadioChange(e.target.value);
                 }}
                 value={marketingBean.get('joinLevel') ? Number(marketingBean.get('joinLevel')) : -1}
               >
-                {/*<Radio value={-1}>Full platform consumer</Radio>*/}
-                {/*{util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}*/}
                 <Radio value={-1}>All</Radio>
                 <Radio value={-3}>Select group</Radio>
               </RadioGroup>
-              {/*{level._levelPropsShow && (*/}
-              {/*  <div>*/}
-              {/*    <Checkbox indeterminate={level._indeterminate} onChange={(e) => this.allLevelChecked(e.target.checked)} checked={level._checkAll}>*/}
-              {/*      All Leave*/}
-              {/*    </Checkbox>*/}
-              {/*    <CheckboxGroup options={this.renderCheckboxOptions(customerLevel)} onChange={this.levelGroupChange} value={level._checkedLevelList} />*/}
-              {/*  </div>*/}
-              {/*)}*/}
             </div>
           )}
         </FormItem>
@@ -350,7 +335,7 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
             <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
           </Col>
         </Row>
-        <GoodsModal visible={this.state.goodsModal._modalVisible} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
+        <GoodsModal visible={this.state.goodsModal._modalVisible} skuLimit={5} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
       </Form>
     );
   }

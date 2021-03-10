@@ -40,7 +40,7 @@ export default class MarketingFixedPriceAdd extends React.Component<any, any> {
 
           <div className="container-search marketing-container">
             <Headline title={marketingId ? 'Edit discount activity' : 'Create discount activity'} />
-            <Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity;" type="info" showIcon />
+            {/*<Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity;" type="info" showIcon />*/}
             <WrappedForm
               ref={(form) => (this._form = form)}
               {...{

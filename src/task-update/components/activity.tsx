@@ -66,7 +66,7 @@ export default class Activity extends Component<any, any> {
       <div className="panel">
         {activities.map((item, index) => (
           <div key={item.id}>
-            {item.type === 1 ? (
+            {item.type === 0 ? (
               <div className="log" key={index}>
                 <Row>
                   <Col span={14}>
@@ -88,7 +88,7 @@ export default class Activity extends Component<any, any> {
               </div>
             ) : null}
 
-            {item.type === 0 ? (
+            {item.type === 1 ? (
               <div className="log" key={index}>
                 <Row>
                   <Col span={14}>

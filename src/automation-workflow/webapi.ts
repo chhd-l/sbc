@@ -17,3 +17,21 @@ export function updateAutomationNodes(filterParams = {}) {
     })
   });
 }
+
+export function getSendGridTemplateById(filterParams = {}) {
+  return Fetch<TResult>('/automation/campaign/updateCampaign', {
+    method: 'GET',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getSendGirdTemplates(filterParams = {}) {
+  return Fetch<TResult>('/automation/campaign/updateCampaign', {
+    method: 'GET',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

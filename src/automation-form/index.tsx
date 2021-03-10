@@ -16,7 +16,8 @@ class AutomationForm extends Component<any, any> {
     super(props);
     this.state = {
       automationId: this.props.match.params.id ? this.props.match.params.id : '',
-      title: this.props.match.params.id ? 'Automation edit' : 'New Automation',
+      title: this.props.match.params.id ? 'Automation Edit' : 'New Automation',
+      saveButtonText: this.props.match.params.id ? 'Workflow Edit' : 'New Workflow',
       loading: false,
       automationForm: {
         automationName: '',
@@ -44,6 +45,7 @@ class AutomationForm extends Component<any, any> {
   };
   saveAutomation = () => {
     const { automationForm } = this.state;
+    history.push('/automation-workflow/1'); //todo
     console.log(automationForm);
   };
   onFormChange = ({ field, value }) => {
@@ -91,7 +93,7 @@ class AutomationForm extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, automationForm } = this.state;
+    const { loading, title, automationForm, saveButtonText } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -378,7 +380,7 @@ class AutomationForm extends Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" onClick={this.handleSubmit}>
-            {<FormattedMessage id="save" />}
+            {saveButtonText}
           </Button>
           <Button style={{ marginLeft: 20 }} onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="back" />}

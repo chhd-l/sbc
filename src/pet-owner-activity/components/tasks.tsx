@@ -5,6 +5,7 @@ import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
 import { assign } from 'lodash';
 import moment from 'moment';
+import AddComment from './add-comment';
 
 const Option = Select.Option;
 
@@ -31,7 +32,8 @@ export default class tasks extends Component<any, any> {
         { type: 'Cancelled', color: 'rgba(172, 176, 180)' }
       ],
       isAll: false,
-      orderBy: 0
+      orderBy: 0,
+      visible: false
     };
     this.onChange = this.onChange.bind(this);
     this.moreClick = this.moreClick.bind(this);
@@ -139,16 +141,17 @@ export default class tasks extends Component<any, any> {
   }
   render() {
     const { taskLoading, taskList, isAll, orderBy } = this.state;
-    const { goldenMomentList, statusList } = this.state;
+    const { goldenMomentList, statusList, visible } = this.state;
+    const { petOwner } = this.props;
     const menu = (
       <Menu>
         <Menu.Item key={1}>
           {' '}
-          <Link to={'/add-task'} /> Add Comment
+          <a onClick={() => this.setState({ visible: true })}> Add Comment</a>
         </Menu.Item>
         <Menu.Item key={2}>
           {' '}
-          <Link to={'/add-task'}>Add Task</Link>
+          <a onClick={() => history.push('/add-task', { petOwner: { contactId: this.props.petOwnerId, petOwnerName: petOwner.contactName, customerAccount: petOwner.customerAccount } })}>Add Task</a>
         </Menu.Item>
       </Menu>
     );
@@ -407,6 +410,7 @@ export default class tasks extends Component<any, any> {
             <Empty />
           )}
         </Col>
+        {visible ? <AddComment visible={visible} closeModel={() => this.setState({ visible: false })} /> : null}
       </Row>
     );
   }

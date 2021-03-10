@@ -92,7 +92,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               <Col span={7}>
                 <PetOwner petOwner={petOwner} />
                 <div style={{ marginTop: '20px' }}></div>
-                <Pets petOwnerId={id} customerAccount={petOwner.customerAccount}/>
+                <Pets petOwnerId={id} customerAccount={petOwner.customerAccount} />
               </Col>
               <Col span={9} id="middle">
                 <Card>
@@ -105,7 +105,7 @@ export default class PetOwnerActivity extends Component<any, any> {
                     }
                   >
                     <TabPane tab="Task" key="1">
-                      <Tasks petOwnerId={id} />
+                      <Tasks petOwnerId={id} petOwner={petOwner} />
                     </TabPane>
                     <TabPane tab="Emails" key="2">
                       <Emails petOwnerId={id} />

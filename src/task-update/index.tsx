@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Const, Headline, ReactEditor, history } from 'qmkit';
+import { Const, Headline, ReactEditor, history, cache } from 'qmkit';
 import { Form, Input, Button, Col, Row, Select, message, DatePicker, Tabs, Breadcrumb, Tooltip, InputNumber } from 'antd';
 import ServiceList from './components/service-list';
 import Activity from './components/activity';
@@ -115,6 +115,32 @@ class TaskUpdate extends Component<any, any> {
         .catch(() => {
           message.error('Get data failed');
         });
+    } else {
+      let currentUser = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+      if (currentUser) {
+        this.setState({
+          task: {
+            assistantId: currentUser.employeeId,
+            assistantName: currentUser.employeeName,
+            assistantEmail: currentUser.accountName
+          }
+        });
+      }
+    }
+    if (this.props.location.state && this.props.location.state.petOwner) {
+      let petOwner = this.props.location.state.petOwner;
+      this.setState({
+        task: {
+          contactId: petOwner.contactId,
+          petOwner: petOwner.petOwnerName,
+          customerAccount: petOwner.customerAccount
+        }
+      });
+      if (petOwner.customerAccount) {
+        this.getPetOwnerPets(petOwner.customerAccount);
+        this.getPetOwnerOrders(petOwner.customerAccount);
+        this.getPetOwnerSubscriptions(petOwner.customerAccount);
+      }
     }
     this.getPetOwners();
     this.getEmployees();
@@ -422,7 +448,7 @@ class TaskUpdate extends Component<any, any> {
                             ))}
                           </Select>
                         ) : (
-                          <span>{task.assistantName ? task.assistantName + '(' + task.assistantEmail + ')' : null}</span>
+                          <span>{task.assistantName ? task.assistantName + (task.assistantEmail ? '(' + task.assistantEmail + ')' : '') : null}</span>
                         )
                       )}
                     </FormItem>
@@ -781,7 +807,7 @@ class TaskUpdate extends Component<any, any> {
           </Tabs>
         </div>
         {tabKey !== 'activity' ? (
-          <div className="bar-button" style={{ left:'134px' }}>
+          <div className="bar-button" style={{ left: '134px' }}>
             <Button type="primary" style={{ marginRight: '10px' }} onClick={(e) => this.updateTask(e)}>
               Save
             </Button>

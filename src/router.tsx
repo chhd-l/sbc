@@ -869,8 +869,8 @@ const routes = [
     asyncComponent: () => import('./automations')
   },
   {
-    path: '/automation-node/:id',
-    asyncComponent: () => import('./automation-node')
+    path: '/automation-workflow/:id',
+    asyncComponent: () => import('./automation-workflow')
   },
   {
     path: '/pet-owner-tagging',

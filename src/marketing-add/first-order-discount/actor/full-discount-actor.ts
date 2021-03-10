@@ -7,7 +7,8 @@ import { fromJS } from 'immutable';
 export default class FullDiscountActor extends Actor {
   defaultState() {
     return {
-      marketingBean: {}
+      marketingBean: {},
+      allGroups: []
     };
   }
 
@@ -24,5 +25,10 @@ export default class FullDiscountActor extends Actor {
         .map((item) => item.set('discount', (item.get('discount') * 10).toFixed(1)))
     );
     return state.set('marketingBean', bean);
+  }
+
+  @Action('marketing:allGroups')
+  getAllGroups(state, allGroups) {
+    return state.set('allGroups', fromJS(allGroups));
   }
 }

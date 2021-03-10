@@ -1,10 +1,10 @@
 import React from 'react';
 import { Popconfirm, Switch, Tooltip, Table } from 'antd';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 /**
  * 订单收款单列表
  */
-export default class TaxesTable extends React.Component<any, any> {
+class TaxesTable extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +16,10 @@ export default class TaxesTable extends React.Component<any, any> {
       }
     };
   }
+
+  props: {
+    intl: any;
+  };
 
   static getDerivedStateFromProps(props, state) {
     // 当传入的值发生变化的时候，更新state
@@ -52,59 +56,70 @@ export default class TaxesTable extends React.Component<any, any> {
     const { dataList, pagination } = this.state;
     const columns = [
       {
-        title: 'No.',
+        title: this.props.intl.formatMessage({ id: 'Setting.Nod' }),
         key: 'index',
         width: '6%',
         render: (text, row, index) => <p>{index + 1}</p>
       },
       {
-        title: 'Zone Name',
+        title: this.props.intl.formatMessage({ id: 'Setting.ZoneName' }),
         key: 'zoneName',
         dataIndex: 'taxZoneName',
         width: '10%'
       },
       {
-        title: 'Zone Type',
+        title: this.props.intl.formatMessage({ id: 'Setting.ZoneType' }),
         key: 'zoneType',
         dataIndex: 'taxZoneType',
         width: '10%',
         render: (text) => {
-          return <p>{text ? 'Country based' : 'States based'}</p>;
+          return <p>{text ? this.props.intl.formatMessage({ id: 'Setting.Countrybased' }) : this.props.intl.formatMessage({ id: 'Setting.Statesbased' })}</p>;
         }
       },
       {
-        title: 'Rate(range 0-1)',
+        title: this.props.intl.formatMessage({ id: 'Setting.Raterange' }),
         key: 'taxRate',
         dataIndex: 'taxRate',
         width: '10%'
       },
       {
-        title: 'Status',
+        title: this.props.intl.formatMessage({ id: 'Setting.Status' }),
         key: 'taxZoneStatus',
         dataIndex: 'taxZoneStatus',
         width: '10%',
         render: (text, row) => {
           let check = +text ? true : false;
           return (
-            <Popconfirm title={'Are you sure to ' + (check ? ' disable' : 'enable') + ' this?'} onConfirm={() => this.updateStatus(!check, row)} okText="Yes" cancelText="No">
+            <Popconfirm
+              title={this.props.intl.formatMessage({ id: 'Setting.Areyousureto' }) + (check ? this.props.intl.formatMessage({ id: 'Setting.disable' }) : this.props.intl.formatMessage({ id: 'Setting.enable' })) + this.props.intl.formatMessage({ id: 'Setting.this' }) + ' ?'}
+              onConfirm={() => this.updateStatus(!check, row)}
+              okText={this.props.intl.formatMessage({ id: 'Setting.Yes' })}
+              cancelText={this.props.intl.formatMessage({ id: 'Setting.No' })}
+            >
               <Switch checked={check} />
             </Popconfirm>
           );
         }
       },
       {
-        title: 'Operation',
+        title: this.props.intl.formatMessage({ id: 'Setting.Operation' }),
         dataIndex: 'operation',
         className: 'drag-visible',
         width: '8%',
         render: (text, row) => (
           <div>
-            <Tooltip placement="top" title="Edit">
+            <Tooltip placement="top" title={this.props.intl.formatMessage({ id: 'Setting.Edit' })}>
               <a style={{ marginRight: 10 }} className="iconfont iconEdit" onClick={() => this.openEditPage(row)}></a>
             </Tooltip>
 
-            <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTax(row.id)} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Delete">
+            <Popconfirm
+              placement="topLeft"
+              title={this.props.intl.formatMessage({ id: 'Setting.Areyousuretodelete' })}
+              onConfirm={() => this.deleteTax(row.id)}
+              okText={this.props.intl.formatMessage({ id: 'Setting.Confirm' })}
+              cancelText={this.props.intl.formatMessage({ id: 'Setting.Cancel' })}
+            >
+              <Tooltip placement="top" title={this.props.intl.formatMessage({ id: 'Setting.Delete' })}>
                 <a className="iconfont iconDelete"></a>
               </Tooltip>
             </Popconfirm>
@@ -115,3 +130,5 @@ export default class TaxesTable extends React.Component<any, any> {
     return <Table rowKey="id" columns={columns} dataSource={dataList} pagination={pagination} onChange={this.handleTableChange}></Table>;
   }
 }
+
+export default injectIntl(TaxesTable);

@@ -1653,6 +1653,22 @@ export default {
   'Setting.Exclusiveoftax': 'Exclusive of tax',
   'Setting.Promotioncalculation': 'Promotion calculation',
   'Setting.Pleaseselectedpromotion': 'Please selected promotion calculation',
+  'Setting.Nod': 'No.',
+  'Setting.ZoneName': 'Zone Name',
+  'Setting.ZoneType': 'Zone Type',
+  'Setting.Countrybased': 'Country based',
+  'Setting.Statesbased': 'States based',
+  'Setting.Raterange': 'Rate(range 0-1)',
+  'Setting.Status': 'Status',
+  'Setting.Areyousureto': 'Are you sure to',
+  'Setting.disable': 'disable',
+  'Setting.enable': 'enable',
+  'Setting.this': 'this',
+  'Setting.Yes': 'Yes',
+  'Setting.No': 'No',
+  'Setting.Areyousuretodelete': 'Are you sure to delete this item?',
+  'Setting.Confirm': 'Confirm',
+  'Setting.Cancel': 'Cancel',
 
 
 

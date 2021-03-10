@@ -1812,7 +1812,7 @@ export default {
   'Setting.Cityname': 'City name',
   'Setting.Pleaseentercityname': 'Please enter city name.',
   'Setting.Code': 'Code',
-  'Setting.Ifyoufillin': 'If you fill in one of them, you haveto complete the other.',
+  'Setting.Ifyoufillin': 'If you fill in one of them, you have to complete the other.',
   'Setting.Addstate': 'Add state',
 
 

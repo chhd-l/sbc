@@ -8,6 +8,7 @@ import { IList } from 'typings/globalType';
 
 const TreeNode = Tree.TreeNode;
 import { Table } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const Column = Table.Column;
 const GreyText = styled.span`
@@ -30,7 +31,7 @@ const TreeBox = styled.div`
 `;
 
 @Relax
-export default class SortModal extends React.Component<any, any> {
+class SortModal extends React.Component<any, any> {
   constructor(props) {
     super(props);
   }
@@ -51,6 +52,7 @@ export default class SortModal extends React.Component<any, any> {
       changeImg: Function;
       save: Function;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -80,14 +82,7 @@ export default class SortModal extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      sortsVisible,
-      cateSize,
-      cates,
-      allCates,
-      delCate,
-      sortModalLoading
-    } = this.props.relaxProps;
+    const { sortsVisible, cateSize, cates, allCates, delCate, sortModalLoading } = this.props.relaxProps;
     // 选中的品台分类
     const chooseIds = cates
       .toJS()
@@ -101,11 +96,10 @@ export default class SortModal extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div>
-            Edit Contract Category{' '}
+            <FormattedMessage id="Setting.EditContractCategory" />
             <GreyText>
-              lease select the last level category to sign the contract, already
-              signed <strong>{cateSize}</strong> categories，Can sign up{' '}
-              <strong>200</strong> categories
+              <FormattedMessage id="Setting.leaseselect" /> <strong>{cateSize}</strong> <FormattedMessage id="Setting.categoriesCansignup" />
+              <strong>200</strong> <FormattedMessage id="Setting.categories" />
             </GreyText>
           </div>
         }
@@ -118,64 +112,28 @@ export default class SortModal extends React.Component<any, any> {
         <Row>
           <Col span={6}>
             <TreeBox>
-              <Tree
-                showLine
-                checkable
-                defaultCheckedKeys={chooseIds}
-                checkedKeys={chooseIds}
-                onCheck={this._handleCheck}
-              >
+              <Tree showLine checkable defaultCheckedKeys={chooseIds} checkedKeys={chooseIds} onCheck={this._handleCheck}>
                 {this._loop(allCates.toJS())}
               </Tree>
             </TreeBox>
           </Col>
           <Col span={18}>
             <TableBox>
-              <DataGrid
-                dataSource={cates.toJS()}
-                scroll={{ y: 400 }}
-                pagination={false}
-                rowKey={(record) => record.cateId}
-              >
-                <Column
-                  title="Category"
-                  dataIndex="cateName"
-                  key="cateName"
-                  width="12%"
-                />
-                <Column
-                  title="Superior Category"
-                  dataIndex="parentGoodCateNames"
-                  key="parentGoodCateNames"
-                  width="20%"
-                />
-                <Column
-                  title="Category Deduction Rate"
-                  dataIndex="cateRate"
-                  key="cateRate"
-                  width="20%"
-                  render={(text, record: any) =>
-                    (text
-                      ? text
-                      : record.platformCateRate
-                      ? record.platformCateRate
-                      : 0) + '%'
-                  }
-                />
+              <DataGrid dataSource={cates.toJS()} scroll={{ y: 400 }} pagination={false} rowKey={(record) => record.cateId}>
+                <Column title={this.props.intl.formatMessage({ id: 'Setting.Category' })} dataIndex="cateName" key="cateName" width="12%" />
+                <Column title={this.props.intl.formatMessage({ id: 'Setting.SuperiorCategory' })} dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
+                <Column title={this.props.intl.formatMessage({ id: 'Setting.CategoryDeductionRate' })} dataIndex="cateRate" key="cateRate" width="20%" render={(text, record: any) => (text ? text : record.platformCateRate ? record.platformCateRate : 0) + '%'} />
                 <Column
                   title={
                     <div>
                       <p>
                         Business Qualification&nbsp;
-                        <Tooltip title="Support jpg, jpeg, png, gif, single sheet no more than 2M, maximum upload 10 sheets">
-                          <Icon
-                            style={{ color: '#F56C1D' }}
-                            type="question-circle-o"
-                          />
+                        <Tooltip title={this.props.intl.formatMessage({ id: 'Setting.Supportjpg' })}>
+                          <Icon style={{ color: '#F56C1D' }} type="question-circle-o" />
                         </Tooltip>
                       </p>
                       <GreyText>
-                        Sign business licenses related to the category
+                        <FormattedMessage id="Setting.Signbusinesslicenses" />
                       </GreyText>
                     </div>
                   }
@@ -189,31 +147,24 @@ export default class SortModal extends React.Component<any, any> {
                         name="uploadFile"
                         style={styles.box}
                         fileList={text ? JSON.parse(text) : []}
-                        action={
-                          Const.HOST +
-                          '/store/uploadStoreResource?resourceType=IMAGE'
-                        }
+                        action={Const.HOST + '/store/uploadStoreResource?resourceType=IMAGE'}
                         listType="picture-card"
                         accept={'.jpg,.jpeg,.png,.gif'}
-                        onChange={(info) =>
-                          this._editImages(info, record.cateId)
-                        }
+                        onChange={(info) => this._editImages(info, record.cateId)}
                       >
-                        {(text ? JSON.parse(text) : []).length < 10 && (
-                          <Icon type="plus" style={styles.plus} />
-                        )}
+                        {(text ? JSON.parse(text) : []).length < 10 && <Icon type="plus" style={styles.plus} />}
                       </QMUpload>
                     );
                   }}
                 />
                 <Column
-                  title="Operating"
+                  title={this.props.intl.formatMessage({ id: 'Setting.Operating' })}
                   dataIndex="operation"
                   key="operation"
                   width="13%"
                   render={(_text, record: any) => (
                     <a href="#" onClick={() => delCate(record.cateId)}>
-                      Delete
+                      <FormattedMessage id="Setting.Delete" />
                     </a>
                   )}
                 />
@@ -241,32 +192,12 @@ export default class SortModal extends React.Component<any, any> {
       const childCates = item.goodsCateList;
       if (childCates && childCates.length) {
         return (
-          <TreeNode
-            disableCheckbox={item.cateGrade != 3}
-            key={item.cateId.toString()}
-            value={item.cateId.toString()}
-            title={
-              item.cateName.toString() +
-              ' ' +
-              `${item.cateRate ? item.cateRate.toString() + '%' : ''}`
-            }
-          >
+          <TreeNode disableCheckbox={item.cateGrade != 3} key={item.cateId.toString()} value={item.cateId.toString()} title={item.cateName.toString() + ' ' + `${item.cateRate ? item.cateRate.toString() + '%' : ''}`}>
             {this._loop(childCates)}
           </TreeNode>
         );
       }
-      return (
-        <TreeNode
-          disableCheckbox={item.cateGrade != 3}
-          key={item.cateId.toString()}
-          value={item.cateId.toString()}
-          title={
-            item.cateName.toString() +
-            ' ' +
-            `${item.cateRate ? item.cateRate.toString() + '%' : ''}`
-          }
-        />
-      );
+      return <TreeNode disableCheckbox={item.cateGrade != 3} key={item.cateId.toString()} value={item.cateId.toString()} title={item.cateName.toString() + ' ' + `${item.cateRate ? item.cateRate.toString() + '%' : ''}`} />;
     });
 
   /**
@@ -304,20 +235,16 @@ export default class SortModal extends React.Component<any, any> {
   _editImages = (info, cateId) => {
     const { file, fileList } = info;
     if (fileList.length > 10) {
-      message.error('You can only upload up to 10 pictures');
+      message.error(this.props.intl.formatMessage({ id: 'Setting.Youcanonlyupload' }));
       return;
     }
     const { changeImg } = this.props.relaxProps;
-    if (
-      file.status == 'removed' ||
-      fileList.length == 0 ||
-      (fileList.length > 0 && this._checkUploadFile(file))
-    ) {
+    if (file.status == 'removed' || fileList.length == 0 || (fileList.length > 0 && this._checkUploadFile(file))) {
       const status = file.status;
       if (status === 'done') {
-        message.success(`${file.name} Uploaded successfully!`);
+        message.success(`${file.name} ${this.props.intl.formatMessage({ id: 'Setting.Uploadedsuccessfully' })}!`);
       } else if (status === 'error') {
-        message.error(`${file.name} Uploaded failed!`);
+        message.error(`${file.name} ${this.props.intl.formatMessage({ id: 'Setting.Uploadedfailed' })}!`);
       }
       changeImg({ cateId, imgs: JSON.stringify(fileList) });
     }
@@ -329,24 +256,21 @@ export default class SortModal extends React.Component<any, any> {
   _checkUploadFile = (file) => {
     let fileName = file.name.toLowerCase();
     // 支持的图片格式：jpg、jpeg、png、gif
-    if (
-      fileName.endsWith('.jpg') ||
-      fileName.endsWith('.jpeg') ||
-      fileName.endsWith('.png') ||
-      fileName.endsWith('.gif')
-    ) {
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif')) {
       if (file.size <= Const.fileSize.TWO) {
         return true;
       } else {
-        message.error('File size cannot exceed 2M');
+        message.error(this.props.intl.formatMessage({ id: 'Setting.Filesizecannotexceed2M' }));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(this.props.intl.formatMessage({ id: 'Setting.Fileformaterror' }));
       return false;
     }
   };
 }
+
+export default injectIntl(SortModal);
 
 const styles = {
   box: {

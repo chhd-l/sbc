@@ -707,9 +707,11 @@ export default {
   "Product.OperationFailed": "Operation failed",
   "Product.AddCustomizedFilter": "Add customized filter",
   "Product.EditCustomizedFilter": "Edit customized filter",
-  
 
-  
+
+
+
+
 
 
   /*-----------------------------  Order  --------------------------------------------*/
@@ -730,7 +732,7 @@ export default {
   'Order.SignedCategory':'Signed category ',
   'Order.categoriesHave':' categories have been signed then maximum is 200 categories',
   'Order.PetInformation':'Pet information as a reference',
-  
+
   'Order.Order':'Order Setting',
   'Order.OperationTips':'Operation tips',
   'Order.PaymentBeforeDelivery':'Payment before delivery',
@@ -772,7 +774,7 @@ export default {
   'Order.ConfirmationOfReceipt':'Automatic confirmation of receipt of return order',
   'Order.TheMerchantAutomatically':'After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.',
   'Order.save':'Save',
-  
+
 
   'Order.all':'All',
   'Order.pendingReview':'Pending review',
@@ -782,7 +784,7 @@ export default {
   'Order.rejected':'Rejected',
   'Order.refusedToRefund':'Refused to refund',
   'Order.refundFailed':'Refund failed',
-  
+
   'Order.initiateApplication':'Initiate after-sales application',
   'Order.search':'Search',
   'Order.consumerName':'Consumer name',
@@ -817,7 +819,7 @@ export default {
   'Order.Cancel':'Do you confirm to cancel bill record？',
   'Order.btnConfirm':'Confirm',
   'Order.btnCancel':'Cancel',
-  
+
 
   /*---order-list-prescriber yxy---*/
   'Order.order': 'order',
@@ -1095,7 +1097,7 @@ export default {
   /*-----------------------------  Task  ----------------------------------------------*/
 
   /*-----------------------------  Subscription  ---------------------------------------*/
-  
+
   'Subscription.SubscriptionList':'Subscription list',
   'Subscription.searchForm.SubscriptionNumber':'Subscription Number',
   'Subscription.searchForm.ConsumerName':'Consumer Name',
@@ -1244,7 +1246,7 @@ export default {
   'Subscription.Detail':'Detail',
 
   'Subscription.GetPlanFailed':'Get plan type list failed!',
-  
+
   'Subscription.Step1':'Step1',
   'Subscription.BasicInformation':'Basic Information',
   'Subscription.PlanType':'Subscription Plan type',
@@ -1329,7 +1331,7 @@ export default {
   'Subscription.addConsent.EmailOut':'Email out',
   'Subscription.addConsent.ConsentTitle':'Consent title',
   'Subscription.addConsent.search': 'Search',
-  
+
   'Subscription.addProduct.Image': 'Image',
   'Subscription.addProduct.SKU': 'SKU',
   'Subscription.addProduct.ProductName': 'Product name',
@@ -1377,7 +1379,7 @@ export default {
   'Subscription.NoStart.Amount':'Amount',
   'Subscription.NoStart.ShipmentDate':'Shipment date',
   'Subscription.NoStart.Operation':'Operation',
-  
+
   'Subscription.completed.Quantity':'Quantity',
   'Subscription.completed.EnjoyDiscount':'Enjoy discount',
   'Subscription.completed.Amount':'Amount',
@@ -1422,7 +1424,7 @@ export default {
   'Subscription.Active.ChooseBillingAddress':'Choose From Saved Billing Address',
   'Subscription.Active.UnfoldedAllDeliveryAddresses':'Unfolded all delivery addresses',
 
-  
+
 
 
   /*-----------------------------  Pet owner  ----------------------------------------*/
@@ -1459,7 +1461,7 @@ export default {
   'Finance.YourSettlementDate':'Your settlement date is',
   'Finance.EachMonth':'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
 
-  
+
   'Finance.invoiceStatus':'Invoice Status',
   'Finance.orderNumber':'   Order number  ',
   'Finance.consumerName':'Consumer name',
@@ -1713,6 +1715,59 @@ export default {
   'Setting.Confirmdeletion': 'Confirm deletion?',
   'Setting.Areyousuredisable': 'Are you sure disable this consent?',
   'Setting.Areyousureable': 'Are you sure able this consent?',
+  'Setting.leaseselect': 'lease select the last level category to sign the contract, already signed',
+  'Setting.categoriesCansignup': 'categories，Can sign up',
+  'Setting.categories': 'categories',
+  'Setting.SuperiorCategory': 'Superior Category',
+  'Setting.Supportjpg': 'Support jpg, jpeg, png, gif, single sheet no more than 2M, maximum upload 10 sheets',
+  'Setting.Signbusinesslicenses': 'Sign business licenses related to the category',
+  'Setting.Uploadedsuccessfully': 'Uploaded successfully',
+  'Setting.Youcanonlyupload': 'You can only upload up to 10 pictures',
+  'Setting.Uploadedfailed': 'Uploaded failed',
+  'Setting.Operationsuccessful': 'Operation successful',
+  'Setting.Operationfailure': 'Operation failure',
+  'Setting.Edittaxzone': 'Edit tax zone',
+  'Setting.Newtaxzone': 'New tax zone',
+  'Setting.Taxzonename': 'Tax zone name',
+  'Setting.Taxzonenameisrequired': 'Tax zone name is required',
+  'Setting.Exceedmaximumlength': 'Exceed maximum length!',
+  'Setting.Taxzonedescription': 'Tax zone description',
+  'Setting.Taxzonetype': 'Tax zone type',
+  'Setting.Taxzonetypeisrequired': 'Tax zone type is required',
+  'Setting.Zoneincludes': 'Zone includes',
+  'Setting.PleaseSelectzone': 'Please Select zone!',
+  'Setting.Selectzone': 'Select zone',
+  'Setting.Taxrates': 'Tax rates',
+  'Setting.Taxratesisrequired': 'Tax rates is required',
+  'Setting.Taxsetting': 'Tax setting',
+  'Setting.CalculateTaxBasedon': 'Calculate Tax Based on',
+  'Setting.PleaseselectedCalculateTaxBasedon': 'Please selected Calculate Tax Based on',
+  'Setting.Shippingaddress': 'Shipping address',
+  'Setting.Billingaddress': 'Billing address',
+  'Setting.Enterprice': 'Enter price',
+  'Setting.Pleaseselectedenterprice': 'Please selected enter price',
+  'Setting.Inclusiveoftax': 'Inclusive of tax',
+  'Setting.Exclusiveoftax': 'Exclusive of tax',
+  'Setting.Promotioncalculation': 'Promotion calculation',
+  'Setting.Pleaseselectedpromotion': 'Please selected promotion calculation',
+  'Setting.Nod': 'No.',
+  'Setting.ZoneName': 'Zone Name',
+  'Setting.ZoneType': 'Zone Type',
+  'Setting.Countrybased': 'Country based',
+  'Setting.Statesbased': 'States based',
+  'Setting.Raterange': 'Rate(range 0-1)',
+  'Setting.Status': 'Status',
+  'Setting.Areyousureto': 'Are you sure to',
+  'Setting.disable': 'disable',
+  'Setting.enable': 'enable',
+  'Setting.this': 'this',
+  'Setting.Yes': 'Yes',
+  'Setting.No': 'No',
+  'Setting.Areyousuretodelete': 'Are you sure to delete this item?',
+  'Setting.Confirm': 'Confirm',
+  'Setting.Cancel': 'Cancel',
+
+
 
 
 

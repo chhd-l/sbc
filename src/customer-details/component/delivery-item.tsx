@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, cache } from 'qmkit';
-import { getCountryList, getStateList, getCityList, searchCity } from './webapi';
+import { getAddressFieldList, getCountryList, getStateList, getCityList, searchCity } from './webapi';
 import { updateAddress, addAddress } from '../webapi';
 import _ from 'lodash';
 
@@ -29,15 +29,33 @@ interface Iprop extends FormComponentProps {
   backToDetail?: Function;
 }
 
+const FORM_FIELD_MAP = {
+  'First name': 'firstName',
+  'Last name': 'lastName',
+  Country: 'countryId',
+  Region: 'region',
+  State: 'province',
+  City: 'city',
+  Address1: 'address1',
+  Address2: 'address2',
+  'Phone number': 'consigneeNumber',
+  'Post code': 'postCode',
+  Entrance: 'entrance',
+  Apartment: 'apartment',
+  Comment: 'rfc'
+};
+
 class DeliveryItem extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
     super(props);
     this.state = {
       storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '',
       loading: false,
+      formFieldList: [],
       countryList: [],
       stateList: [],
-      cityList: []
+      cityList: [],
+      searchCityList: []
     };
   }
 
@@ -46,17 +64,24 @@ class DeliveryItem extends React.Component<Iprop, any> {
   }
 
   getDics = async () => {
+    const fields = await getAddressFieldList();
     const countries = await getCountryList();
+    const cities = await getCityList();
     const states = await getStateList();
+    console.log(fields);
     this.setState({
+      formFieldList: fields,
       countryList: countries,
-      stateList: states
+      stateList: states.map((t) => ({ id: t.id, name: t.stateName })),
+      cityList: cities
     });
   };
 
   saveAddress = () => {
     const { delivery, backToDetail } = this.props;
     this.props.form.validateFields((err, fields) => {
+      console.log(fields);
+      return;
       if (!err) {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
@@ -83,128 +108,87 @@ class DeliveryItem extends React.Component<Iprop, any> {
   searchCity = (txt: string) => {
     searchCity(txt).then((data) => {
       this.setState({
-        cityList: data.res.context.systemCityVO
+        searchCityList: data.res.context.systemCityVO
       });
     });
+  };
+
+  renderField = (field: any) => {
+    if (field.fieldName === 'Address1') {
+      if (field.inputSearchBoxFlag === 1) {
+        return <AutoComplete />;
+      } else {
+        return <Input />;
+      }
+    }
+    if (field.fieldCity === 'City') {
+      if (field.inputDropDownBoxFlag === 1) {
+        return (
+          <Select showSearch>
+            {this.state.cityList.map((city, idx) => (
+              <Option value={city.name} key={idx}>
+                {city.name}
+              </Option>
+            ))}
+          </Select>
+        );
+      } else {
+        return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={_.debounce(this.searchCity, 500)} />;
+      }
+    }
+    const optionList = field.fieldName === 'Country' ? this.state.countryList : field.fieldName === 'State' ? this.state.stateList : [];
+    if (field.inputDropDownBoxFlag === 1) {
+      return (
+        <Select showSearch>
+          {optionList.map((item, idx) => (
+            <Option value={field.fieldName === 'Country' ? item.id : item.name} key={idx}>
+              {item.name}
+            </Option>
+          ))}
+        </Select>
+      );
+    }
+    if (field.inputFreeTextFlag === 1) {
+      return <Input />;
+    }
+    return null;
   };
 
   render() {
     const { delivery, addressType, backToDetail } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
+    const formItemLayout = (col: number) => ({
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: col === 2 ? 8 : 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 12 }
+        sm: { span: col === 2 ? 12 : 16 }
       }
-    };
+    });
     return (
       <div>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
           <div className="container">
             <Headline title={`${delivery.deliveryAddressId ? 'Edit' : 'Add'} ${addressType === 'delivery' ? 'delivery' : 'billing'} information`} />
-            <Form {...formItemLayout}>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item label="First name">
-                    {getFieldDecorator('firstName', {
-                      initialValue: delivery.firstName,
-                      rules: [{ required: true, message: 'First name is required' }]
-                    })(<Input />)}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Last name">
-                    {getFieldDecorator('lastName', {
-                      initialValue: delivery.lastName,
-                      rules: [{ required: true, message: 'Last name is required' }]
-                    })(<Input />)}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Phone number">
-                    {getFieldDecorator('consigneeNumber', {
-                      initialValue: delivery.consigneeNumber,
-                      rules: [{ required: true, message: 'Phone number is required' }]
-                    })(<Input />)}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Post code">
-                    {getFieldDecorator('postCode', {
-                      initialValue: delivery.postCode,
-                      rules: [{ required: true, message: 'Post code is required' }]
-                    })(<Input />)}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Country">
-                    {getFieldDecorator('countryId', {
-                      initialValue: delivery.countryId,
-                      rules: [{ required: true, message: 'Country is required' }]
-                    })(
-                      <Select>
-                        {this.state.countryList.map((item) => (
-                          <Option value={item.id} key={item.id}>
-                            {item.name}
-                          </Option>
-                        ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                {this.state.storeId == 123457910 && (
-                  <Col span={12}>
-                    <Form.Item label="State">
-                      {getFieldDecorator('province', {
-                        initialValue: delivery.province,
-                        rules: [{ required: true, message: 'State is required' }]
-                      })(
-                        <Select showSearch>
-                          {this.state.stateList.map((item) => (
-                            <Option value={item.stateName} key={item.id}>
-                              {item.stateName}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                )}
-                <Col span={12}>
-                  <Form.Item label="City">
-                    {getFieldDecorator('city', {
-                      rules: [{ required: true, message: 'City is required' }],
-                      initialValue: delivery.city
-                    })(<AutoComplete dataSource={this.state.cityList.map((city) => city.cityName)} onSearch={_.debounce(this.searchCity, 500)} />)}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Address 1">
-                    {getFieldDecorator('address1', {
-                      initialValue: delivery.address1,
-                      rules: [{ required: true, message: 'Address is required' }]
-                    })(<Input />)}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Address 2">
-                    {getFieldDecorator('address2', {
-                      initialValue: delivery.address2
-                    })(<Input />)}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="Reference">
-                    {getFieldDecorator('rfc', {
-                      initialValue: delivery.rfc
-                    })(<Input />)}
-                  </Form.Item>
-                </Col>
-              </Row>
+            <Form>
+              {this.state.formFieldList.map((fieldRow, rowIdx) => (
+                <Row key={rowIdx}>
+                  {fieldRow &&
+                    fieldRow.length &&
+                    fieldRow.map((field, colIdx) => (
+                      <Col span={24 / fieldRow.length} key={colIdx}>
+                        <Form.Item {...formItemLayout(fieldRow.length)} label={field.fieldName}>
+                          {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`, {
+                            initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
+                            rules: [{ required: field.requiredFlag === 1, message: `${field.fieldName} is required` }]
+                          })(this.renderField(field))}
+                        </Form.Item>
+                      </Col>
+                    ))}
+                </Row>
+              ))}
             </Form>
           </div>
           <div className="bar-button">

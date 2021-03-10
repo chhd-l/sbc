@@ -89,7 +89,7 @@ class AutomationForm extends Component<any, any> {
           eventEndTime: moment(automationForm.eventEndTime).format('YYYY-MM-DD HH:mm:ss'),
           trackingStartTime: moment(automationForm.eventEndtrackingStartTimeTime).format('YYYY-MM-DD HH:mm:ss'),
           trackingEndTime: moment(automationForm.trackingEndTime).format('YYYY-MM-DD HH:mm:ss'),
-          communicationChannel: automationForm.communicationChannel.join(';')
+          communicationChannel: automationForm.communicationChannel ? automationForm.communicationChannel.join(';') : null
         };
         if (automationId) {
           params = Object.assign(params, {

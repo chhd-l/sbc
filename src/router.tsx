@@ -923,6 +923,10 @@ const routes = [
   {
     path: '/automation-add',
     asyncComponent: () => import('./automation-form')
+  },
+  {
+    path: '/address-field-setting',
+    asyncComponent: () => import('./address-field-setting')
   }
 ];
 

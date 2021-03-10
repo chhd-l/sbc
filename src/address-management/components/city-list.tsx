@@ -74,12 +74,14 @@ export default class CityList extends Component<any, any> {
         const state = item.get('state');
         const city = item.get('city');
         const postCode = item.get('postCode');
+        const region = item.get('region');
 
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={index}>
             <td style={{ wordBreak: 'break-all' }}>{country}</td>
             <td style={{ wordBreak: 'break-all' }}>{state}</td>
             <td style={{ wordBreak: 'break-all' }}>{city}</td>
+            <td style={{ wordBreak: 'break-all' }}>{region}</td>
             <td style={{ wordBreak: 'break-all' }}>{postCode}</td>
             <td>
               <Tooltip placement="top" title="Edit">
@@ -139,6 +141,7 @@ export default class CityList extends Component<any, any> {
                           <th style={{ width: '10%' }}>Country</th>
                           <th style={{ width: '10%' }}>State</th>
                           <th style={{ width: '10%' }}>City</th>
+                          <th style={{ width: '10%' }}>Region</th>
                           <th style={{ width: '10%' }}>Post code</th>
                           <th style={{ width: '10%' }}>Operation</th>
                         </tr>

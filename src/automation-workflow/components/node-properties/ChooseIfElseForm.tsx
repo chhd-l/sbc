@@ -339,7 +339,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
                 )}
 
                 <Col span="2">
-                  <span className="user-select-none item-icon icon iconfont iconbianzu9" onClick={() => this.addCondidtion(condition.id)} />
+                  <span className="user-select-none item-icon icon iconfont iconbianzu9" style={{ fontSize: '25px' }} onClick={() => this.addCondidtion(condition.id)} />
                 </Col>
               </Row>
             </Row>

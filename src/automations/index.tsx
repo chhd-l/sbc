@@ -5,7 +5,7 @@ import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, P
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
-import moment from '_moment@2.29.1@moment';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

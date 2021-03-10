@@ -4,6 +4,7 @@ import { Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker } fro
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as webapi from './webapi';
+import { FormattedMessage } from 'react-intl';
 import './index.less';
 
 const TabPane = Tabs.TabPane;
@@ -261,19 +262,19 @@ export default class ProductSearchList extends React.Component<any, any> {
     const { title, tabKey, dateRange, statistics, allSerchResults, allPagination, allLoading, noSearchResult, noResultPagination, noResultLoading } = this.state;
     const columnsAll = [
       {
-        title: 'Search Term',
+        title: <FormattedMessage id="Product.SearchTerm" />,
         dataIndex: 'searchTerm',
         key: 'searchTerm',
         width: '20%'
       },
       {
-        title: 'Searches With Results',
+        title: <FormattedMessage id="Product.SearchesWithResults" />,
         dataIndex: 'searchesCount',
         key: 'searchesCount',
         width: '15%'
       },
       {
-        title: 'Percent',
+        title: <FormattedMessage id="Product.Percent" />,
         dataIndex: 'percent',
         key: 'percent',
         width: '15%',
@@ -282,19 +283,19 @@ export default class ProductSearchList extends React.Component<any, any> {
         render: (text, record) => text.toFixed(2) + '%'
       },
       {
-        title: 'Total # of pdt. found',
+        title: <FormattedMessage id="Product.TotalFound" />,
         dataIndex: 'resultNo',
         key: 'resultNo',
         width: '15%'
       },
       {
-        title: 'Avg. pdt found per search',
+        title: <FormattedMessage id="Product.AvgSearch" />,
         dataIndex: 'resultCount',
         key: 'resultCount',
         width: '15%'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
@@ -308,19 +309,19 @@ export default class ProductSearchList extends React.Component<any, any> {
     ];
     const columnsNoResult = [
       {
-        title: 'Search Term',
+        title: <FormattedMessage id="Product.SearchTerm" />,
         dataIndex: 'searchTerm',
         key: 'searchTerm',
         width: '20%'
       },
       {
-        title: 'Searches With No-Result',
+        title: <FormattedMessage id="Product.SearchesWithNoResult" />,
         dataIndex: 'searchesCount',
         key: 'searchesCount',
         width: '15%'
       },
       {
-        title: 'Percent',
+        title: <FormattedMessage id="Product.Percent" />,
         dataIndex: 'percent',
         key: 'percent',
         width: '15%',
@@ -329,24 +330,24 @@ export default class ProductSearchList extends React.Component<any, any> {
         render: (text, record) => text.toFixed(2) + '%'
       },
       {
-        title: 'Last Not Found Date',
+        title: <FormattedMessage id="Product.LastNotFoundDate" />,
         dataIndex: 'lastNotFoundDate',
         key: 'lastNotFoundDate',
         width: '15%'
       },
       {
-        title: 'Last Found Date',
+        title: <FormattedMessage id="Product.LastFoundDate" />,
         dataIndex: 'lastFoundDate',
         key: 'lastFoundDate',
         width: '15%'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Details">
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Details" />}>
               <Link to={{ pathname: '/product-search-details', state: { type: 'noResult', searchTerm: record.searchTerm, startDate: dateRange[0], endDate: dateRange[1] } }} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
@@ -375,7 +376,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Searches With Results</strong>
+                      <strong>
+                        <FormattedMessage id="Product.SearchesWithResults" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.searchesWithResults}</strong>
@@ -390,7 +393,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Total # of pdt. found</strong>
+                      <strong>
+                        <FormattedMessage id="Product.TotalFound" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.resultNo}</strong>
@@ -405,7 +410,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Avg. pdt found per search</strong>
+                      <strong>
+                        <FormattedMessage id="Product.AvgSearch" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.resultCount}</strong>
@@ -422,7 +429,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Searches With No-Result</strong>
+                      <strong>
+                        <FormattedMessage id="Product.SearchesWithNoResult" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.searchesWithNoResults}</strong>
@@ -437,7 +446,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>No-result Rate</strong>
+                      <strong>
+                        <FormattedMessage id="Product.NoResultRate" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.noResultRate}%</strong>
@@ -452,7 +463,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>No-Result Term Count</strong>
+                      <strong>
+                        <FormattedMessage id="Product.NoResultTermCount" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.noResultTermCount}</strong>
@@ -472,7 +485,7 @@ export default class ProductSearchList extends React.Component<any, any> {
                   this.onExport();
                 }}
               >
-                Export
+                <FormattedMessage id="Product.Export" />
               </Button>
             </div>
             <Tabs

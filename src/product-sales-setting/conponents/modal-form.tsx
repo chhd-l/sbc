@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Form, Input, Select, Modal, Button, Radio } from 'antd';
 import { cache } from 'qmkit';
 import { translateAddBatch, addSysDictionary } from '../webapi';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { stringify } from 'querystring';
 
 interface Props {
   visible: boolean;
@@ -78,15 +80,15 @@ class ModalForm extends Component<Props, any> {
     const { visible, languageList } = this.props;
     return (
       <Modal
-        title="Add new frequency"
+        title={<FormattedMessage id="Product.AddNewFrequency" />}
         visible={visible}
         onCancel={this.handleCancel}
         footer={[
           <Button key="back" onClick={this.handleCancel}>
-            Cancel
+            <FormattedMessage id="Product.Cancel" />
           </Button>,
           <Button key="submit" type="primary" loading={this.state.loading} onClick={this.handleOk}>
-            OK
+            <FormattedMessage id="Product.OK" />
           </Button>
         ]}
       >
@@ -96,13 +98,17 @@ class ModalForm extends Component<Props, any> {
               rules: [
                 {
                   required: true,
-                  message: 'Please input  frequency type!'
+                  message: <FormattedMessage id="Product.PleaseInputFrequencyType" />
                 }
               ]
             })(
               <Select placeholder="Please input  frequency type!">
-                <Select.Option value="Frequency_month">Frequency Month</Select.Option>
-                <Select.Option value="Frequency_week">Frequency Week</Select.Option>
+                <Select.Option value="Frequency_month">
+                  <FormattedMessage id="Product.FrequencyMonth" />
+                </Select.Option>
+                <Select.Option value="Frequency_week">
+                  <FormattedMessage id="Product.FrequencyWeek" />
+                </Select.Option>
               </Select>
             )}
           </Form.Item>
@@ -111,7 +117,7 @@ class ModalForm extends Component<Props, any> {
               rules: [
                 {
                   required: true,
-                  message: 'Please input  frequency name!'
+                  message: <FormattedMessage id="Product.PleaseInputFrequency" />
                 }
               ]
             })(<Input placeholder="Please input  frequency name!" />)}
@@ -121,12 +127,19 @@ class ModalForm extends Component<Props, any> {
               rules: [
                 {
                   required: true,
-                  message: 'Please input  frequency value!'
+                  message: <FormattedMessage id="Product.PleaseInputFrequencyValue" />
                 }
               ]
             })(<Input placeholder="Please input  frequency value!" />)}
           </Form.Item>
-          <Form.Item label={<span className="ant-form-item-required">Display name</span>} style={{ marginBottom: 0 }}>
+          <Form.Item
+            label={
+              <span className="ant-form-item-required">
+                <FormattedMessage id="Product.DisplayName" />
+              </span>
+            }
+            style={{ marginBottom: 0 }}
+          >
             {languageList &&
               languageList.map((item, i) => (
                 <Form.Item key={item.id}>

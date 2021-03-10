@@ -6,93 +6,55 @@ import { DragDropContextProvider } from 'react-dnd';
 import DragField from './drag-field';
 import DropField from './drop-field';
 
+const genContainerTable = (row: number, col: number) => {
+  const arr = [];
+  for (let i = 1; i <= row; i++) {
+    for (let j = 1; j <= col; j++) {
+      arr.push({ row: i, col: j, field: '' });
+    }
+  }
+  return arr;
+};
+
 export default class Manage extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      result: [
-        {
-          row: 1,
-          col: 1,
-          field: ''
-        },
-        {
-          row: 1,
-          col: 2,
-          field: ''
-        },
-        {
-          row: 2,
-          col: 1,
-          field: ''
-        },
-        {
-          row: 2,
-          col: 2,
-          field: ''
-        },
-        {
-          row: 3,
-          col: 1,
-          field: ''
-        },
-        {
-          row: 3,
-          col: 2,
-          field: ''
-        },
-        {
-          row: 4,
-          col: 1,
-          field: ''
-        },
-        {
-          row: 4,
-          col: 2,
-          field: ''
-        },
-        {
-          row: 5,
-          col: 1,
-          field: ''
-        },
-        {
-          row: 5,
-          col: 2,
-          field: ''
-        },
-        {
-          row: 6,
-          col: 1,
-          field: ''
-        },
-        {
-          row: 6,
-          col: 2,
-          field: ''
-        },
-        {
-          row: 7,
-          col: 1,
-          field: ''
-        },
-        {
-          row: 7,
-          col: 2,
-          field: ''
-        }
-      ]
+      result: genContainerTable(10, 2)
     };
   }
 
+  componentDidMount() {
+    this.initRowAndColField();
+  }
+
+  initRowAndColField = () => {
+    const { fieldList } = this.props;
+    const { result } = this.state;
+    result.forEach((item) => {
+      const tar = fieldList.find((t) => t.pageRow === item.row && t.pageCol === item.col);
+      if (tar) {
+        item.field = tar.fieldName;
+      }
+    });
+    this.setState({
+      result: result
+    });
+  };
+
   onAddDragItem = (row: number, col: number, field: string) => {
     const { result } = this.state;
-    const idx = result.findIndex((o) => o.row === row && o.col === col);
     if (result.findIndex((o) => o.field === field) > -1) {
       return;
     }
+    const idx = result.findIndex((o) => o.row === row && o.col === col);
     if (idx > -1) {
       result[idx]['field'] = field;
+    }
+    const { onFieldChange, fieldList } = this.props;
+    const fieldInFieldList = fieldList.find((o) => o.fieldName === field);
+    if (fieldInFieldList) {
+      onFieldChange(fieldInFieldList.id, { pageRow: row, pageCol: col });
     }
     this.setState({
       result: result
@@ -101,6 +63,11 @@ export default class Manage extends React.Component<any, any> {
 
   onRemoveDragItem = (idx: number) => {
     const { result } = this.state;
+    const { fieldList, onFieldChange } = this.props;
+    const fieldInFieldList = fieldList.find((o) => o.fieldName === result[idx]['field']);
+    if (fieldInFieldList) {
+      onFieldChange(fieldInFieldList.id, { pageRow: 0, pageCol: 0 });
+    }
     result[idx]['field'] = '';
     this.setState({
       result: result
@@ -109,6 +76,7 @@ export default class Manage extends React.Component<any, any> {
 
   render() {
     const { result } = this.state;
+    const { fieldList } = this.props;
     return (
       <div>
         <DragDropContextProvider backend={HTML5Backend}>
@@ -118,8 +86,11 @@ export default class Manage extends React.Component<any, any> {
                 <span className="field-bar-title">Select field</span> <span>select the drag field to the specified position on the right</span>
               </div>
               <div className="field-item-container">
-                <DragField key="1" name="First name" onDragEnd={this.onAddDragItem} />
-                <DragField key="2" name="Last name" onDragEnd={this.onAddDragItem} />
+                {fieldList
+                  .filter((item) => item.enableFlag === 1)
+                  .map((field) => (
+                    <DragField key={field.id} name={field.fieldName} onDragEnd={this.onAddDragItem} />
+                  ))}
               </div>
             </Col>
             <Col span={14}>
@@ -131,7 +102,13 @@ export default class Manage extends React.Component<any, any> {
                       {ro.field && (
                         <>
                           <div className="display-field-drag-item">{ro.field}</div>
-                          <i onClick={() => this.onRemoveDragItem(idx)} className="iconfont iconDelete"></i>
+                          <a
+                            onClick={(e) => {
+                              e.preventDefault();
+                              this.onRemoveDragItem(idx);
+                            }}
+                            className="iconfont iconDelete"
+                          ></a>
                         </>
                       )}
                     </DropField>

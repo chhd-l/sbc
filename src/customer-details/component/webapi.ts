@@ -107,7 +107,8 @@ export function getTaggingList() {
     method: 'POST',
     body: JSON.stringify({
       pageNum: 0,
-      pageSize: 1000
+      pageSize: 1000,
+      isPublished: 1
     })
   });
 }

@@ -521,7 +521,7 @@ export default class ListView extends React.Component<any, any> {
                     {/*发货状态*/}
                     <td style={{ width: '12%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*订单状态*/}
-                    <td style={{ width: '12%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
+                    <td style={{ width: '12%' }}>{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>
                     {/*支付状态*/}
                     <td style={{ width: '12%', paddingRight: 22 }} className="operation-td">
                       {payStatus(v.getIn(['tradeState', 'payState']))}

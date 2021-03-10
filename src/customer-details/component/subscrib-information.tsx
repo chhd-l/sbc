@@ -113,11 +113,12 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 {item.goodsInfo.map((v, k) => (
                   <>
                     <tr key={k}>
-                      <td style={{ width: '40%' }}>
+                      <td style={{ width: '35%' }}>
                         <img src={v.goodsPic ? v.goodsPic : defaultImg} className="img-item" />
                       </td>
                       <td style={{ width: '20%' }}>{v.goodsName}</td>
-                      <td style={{ width: '20%' }}>{v.frequency || ''}</td>
+                      <td style={{ width: '10%' }}>{v.subscriptionType}</td>
+                      <td style={{ width: '15%' }}>{v.frequency || ''}</td>
                       {k === 0 && (
                         <td rowSpan={item.goodsInfo.length} style={{ width: '20%' }}>
                           {item.subscribeStatus === '0' ? 'Active' : 'Inactive'}
@@ -145,9 +146,10 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '40%' }}>Product</th>
+                      <th style={{ width: '35%' }}>Product</th>
                       <th style={{ width: '20%' }}>Product name</th>
-                      <th style={{ width: '20%' }}>Frequency</th>
+                      <th style={{ width: '10%' }}>Subscription type</th>
+                      <th style={{ width: '15%' }}>Frequency</th>
                       <th style={{ width: '20%', textAlign: 'left' }}>Subscription status</th>
                     </tr>
                   </thead>

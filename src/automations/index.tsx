@@ -5,6 +5,7 @@ import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, P
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
+import moment from '_moment@2.29.1@moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -62,20 +63,25 @@ class AutomationList extends Component<any, any> {
   getAutomationList = () => {
     const { searchForm, pagination } = this.state;
     let params = {
-      name: searchForm.automationName,
-      category: searchForm.automationCategory,
-      status: searchForm.automationStatus,
-      testStatus: searchForm.testStatus,
+      name: searchForm.automationName || null,
+      category: searchForm.automationCategory || null,
+      status: searchForm.automationStatus || null,
+      testStatus: searchForm.testStatus || null,
       pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize
-      // automationPeriod: searchForm.automationPeriod
+      pageSize: pagination.pageSize,
+      period: searchForm.automationPeriod || searchForm.automationPeriod === 0 ? searchForm.automationPeriod : null
     };
+    this.setState({ loading: true });
     webapi
       .getAutomationList(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
+          let automationList = res.context.campaignList;
+          this.setState({
+            automationList,
+            loading: false
+          });
         } else {
           this.setState({
             loading: false
@@ -97,7 +103,30 @@ class AutomationList extends Component<any, any> {
       () => this.getAutomationList()
     );
   };
-  deleteAutomation = (id) => {};
+  deleteAutomation = (id) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .deleteAutomation({ idList: [id] })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operation successful');
+          this.getAutomationList();
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
 
   render() {
     const { loading, title, pagination, automationList } = this.state;
@@ -118,54 +147,58 @@ class AutomationList extends Component<any, any> {
     ];
     const testStatusList = [
       { name: 'All', value: '' },
-      { name: 'Not Tested', value: 'Not Tested' },
+      { name: 'Not Tested', value: 'NotTested' },
       { name: 'Testing', value: 'Testing' },
       { name: 'Tested', value: 'Tested' }
     ];
     const automationPeriodList = [
       { name: 'All', value: '' },
-      { name: 'Within 1 year', value: 'Within 1 year' },
-      { name: 'Within 3 months', value: 'Within 3 months' },
-      { name: 'Within 6 months', value: 'Within 6 months' }
+
+      { name: 'Within 3 months', value: 0 },
+      { name: 'Within 6 months', value: 1 },
+      { name: 'Within 1 year', value: 2 }
     ];
 
     const columns = [
       {
         title: 'Automation name',
-        dataIndex: 'automationName',
-        key: 'automationName',
+        dataIndex: 'name',
+        key: 'name',
         width: '15%'
       },
       {
         title: 'Automation category',
-        dataIndex: 'automationCategory',
-        key: 'automationCategory',
+        dataIndex: 'category',
+        key: 'category',
         width: '15%'
       },
       {
         title: 'Automation status',
-        dataIndex: 'automationStatus',
-        key: 'automationStatus',
+        dataIndex: 'status',
+        key: 'status',
         width: '10%'
       },
       {
         title: 'Test status',
         dataIndex: 'testStatus',
         key: 'testStatus',
-        width: '10%'
+        width: '10%',
+        render: (text, record) => <p>{testStatusList.find((item) => item.value === text).name}</p>
       },
 
       {
         title: 'Start time',
-        dataIndex: 'startTime',
-        key: 'startTime',
-        width: '10%'
+        dataIndex: 'trackingStartTime',
+        key: 'trackingStartTime',
+        width: '10%',
+        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
       },
       {
         title: 'End time',
-        dataIndex: 'endTime',
-        key: 'endTime',
-        width: '10%'
+        dataIndex: 'trackingEndTime',
+        key: 'trackingEndTime',
+        width: '10%',
+        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
       },
 
       {
@@ -175,7 +208,7 @@ class AutomationList extends Component<any, any> {
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Edit">
-              <Link to={`/automation-edit/${record.id}`} className="iconfont iconDetails" style={{ marginRight: 10 }}></Link>
+              <Link to={`/automation-edit/${record.id}`} className="iconfont iconEdit" style={{ marginRight: 10 }}></Link>
             </Tooltip>
             <Tooltip placement="top" title="Detail">
               <Link to={`/automation-detail/${record.id}`} className="iconfont iconDetails" style={{ marginRight: 10 }}></Link>

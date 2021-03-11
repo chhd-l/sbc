@@ -29,8 +29,8 @@ class MessageDetails extends Component<any, any> {
       isAdd: this.props.location.pathname === '/message-quick-send' ? true : false,
       emailStatus: 'Draft',
       loading: false,
-      objectTypeList: [],
-      categoryList: [],
+      // objectTypeList: [],
+      // categoryList: [],
       basicForm: {
         taskId: '',
         emailCategory: '',
@@ -48,9 +48,11 @@ class MessageDetails extends Component<any, any> {
         consumerAccount: '',
         consumerName: '',
         consumerType: '',
-        email: ''
+        email: '',
+        petId: '',
+        petName: '',
+        ccList: ''
       },
-      detailsList: [],
       emailTemplateList: [],
       objectNoList: [],
       objectFetching: false,
@@ -69,44 +71,45 @@ class MessageDetails extends Component<any, any> {
         }
       ],
       previewHtml: '',
-      consumerList: []
+      consumerList: [],
+      petList: []
     };
   }
   componentDidMount() {
-    this.querySysDictionary('objectType');
-    this.querySysDictionary('messageCategory');
+    // this.querySysDictionary('objectType');
+    // this.querySysDictionary('messageCategory');
     this.initPage();
   }
 
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({ type: type })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (type === 'objectType') {
-            let objectTypeList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              objectTypeList
-            });
-          }
-          if (type === 'messageCategory') {
-            let categoryList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              categoryList
-            });
-          }
-          if (type === 'messageStatus') {
-            let statusList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              statusList
-            });
-          }
-        } else {
-        }
-      })
-      .catch((err) => {});
-  };
+  // querySysDictionary = (type: String) => {
+  //   webapi
+  //     .querySysDictionary({ type: type })
+  //     .then((data) => {
+  //       const { res } = data;
+  //       if (res.code === Const.SUCCESS_CODE) {
+  //         if (type === 'objectType') {
+  //           let objectTypeList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             objectTypeList
+  //           });
+  //         }
+  //         if (type === 'messageCategory') {
+  //           let categoryList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             categoryList
+  //           });
+  //         }
+  //         if (type === 'messageStatus') {
+  //           let statusList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             statusList
+  //           });
+  //         }
+  //       } else {
+  //       }
+  //     })
+  //     .catch((err) => {});
+  // };
 
   initPage = () => {
     if (this.state.isAdd) {
@@ -138,17 +141,6 @@ class MessageDetails extends Component<any, any> {
         objectNo: '',
         objectNoList: []
       });
-      // } else {
-      //   data['objectNoDisable'] = true;
-      //   data['objectNo'] = ""
-      //   this.setState({
-      //     objectNoList: []
-      //   })
-      //   this.props.form.setFieldsValue({
-      //     objectNo: '',
-      //     objectNoList: []
-      //   });
-      // }
     }
     if (field === 'sendType' && data['sendType'] !== value) {
       data['sendTime'] = '';
@@ -167,10 +159,12 @@ class MessageDetails extends Component<any, any> {
       data['consumerAccount'] = '';
       data['consumerName'] = '';
       data['email'] = '';
+      data['relatedPet'] = '';
       this.props.form.setFieldsValue({
         consumerAccount: '',
         consumerName: '',
-        email: ''
+        email: '',
+        relatedPet: ''
       });
     }
     data[field] = value;
@@ -236,7 +230,10 @@ class MessageDetails extends Component<any, any> {
             consumerAccount: detailForm.consumerAccount,
             consumerName: detailForm.consumerName,
             consumerType: detailForm.consumerType,
-            email: detailForm.email
+            email: detailForm.email,
+            petId: detailForm.petId,
+            petName: detailForm.petName,
+            ccList: detailForm.ccList
           }
         };
         if (params.id) {
@@ -268,9 +265,13 @@ class MessageDetails extends Component<any, any> {
             consumerAccount: detailForm.consumerAccount,
             consumerName: detailForm.consumerName,
             consumerType: detailForm.consumerType,
-            email: detailForm.email
+            email: detailForm.email,
+            petId: detailForm.petId,
+            petName: detailForm.petName,
+            ccList: detailForm.ccList
           }
         };
+        debugger;
         if (params.id) {
           this.updateEmailTask(params, 'submit');
         } else {
@@ -428,8 +429,14 @@ class MessageDetails extends Component<any, any> {
           consumerAccount: consumerDetail.consumerAccount,
           consumerName: consumerDetail.consumerName,
           consumerType: consumerDetail.consumerType,
-          email: consumerDetail.email
+          email: consumerDetail.email,
+          ccList: consumerDetail.ccList,
+          petId: consumerDetail.petId,
+          petName: consumerDetail.petName
         };
+        if (consumerDetail.consumerAccount) {
+          this.getPetList(consumerDetail.consumerAccount);
+        }
         this.setState(
           {
             basicForm,
@@ -450,7 +457,9 @@ class MessageDetails extends Component<any, any> {
                 consumerAccount: detailForm.consumerAccount,
                 consumerName: detailForm.consumerName,
                 consumerType: detailForm.consumerType,
-                email: detailForm.email
+                email: detailForm.email,
+                ccList: detailForm.ccList,
+                pet: detailForm.petId
               });
             } else {
               this.props.form.setFieldsValue({
@@ -463,7 +472,9 @@ class MessageDetails extends Component<any, any> {
                 consumerAccount: detailForm.consumerAccount,
                 consumerName: detailForm.consumerName,
                 consumerType: detailForm.consumerType,
-                email: detailForm.email
+                email: detailForm.email,
+                ccList: detailForm.ccList,
+                pet: detailForm.petId
               });
             }
           }
@@ -492,7 +503,6 @@ class MessageDetails extends Component<any, any> {
     };
   }
   getConsumerList = (value) => {
-    const { detailForm } = this.state;
     this.setState({
       consumerFetching: true
     });
@@ -512,53 +522,46 @@ class MessageDetails extends Component<any, any> {
       }
     });
   };
+  getPetList = (value) => {
+    let params = {
+      consumerAccount: value
+    };
+    webapi.petsByConsumer(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          petList: res.context.context
+        });
+      }
+    });
+  };
 
   render() {
-    const { title, emailStatus, objectTypeList, categoryList, detailsList, emailTemplateList, basicForm, detailForm, objectFetching, consumerFetching, templateFetching, objectNoList, customerTypeArr, previewHtml, consumerList } = this.state;
+    const { title, emailStatus, emailTemplateList, basicForm, detailForm, objectFetching, consumerFetching, templateFetching, objectNoList, customerTypeArr, previewHtml, consumerList, petList } = this.state;
     const { getFieldDecorator } = this.props.form;
 
-    const columns = [
+    const objectTypeList = [
       {
-        title: 'Consumer Account',
-        dataIndex: 'consumerAccount',
-        key: 'consumerAccount',
-        width: '15%'
+        value: 'Order',
+        name: 'Order'
       },
       {
-        title: 'Consumer Name',
-        dataIndex: 'consumerName',
-        key: 'consumerName',
-        width: '15%'
+        value: 'Subscription',
+        name: 'Subscription'
       },
       {
-        title: 'Consumer Type',
-        dataIndex: 'consumerType',
-        key: 'consumerType',
-        width: '15%'
+        value: 'Recommendation',
+        name: 'Recommendation'
       },
       {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
-        width: '15%'
-      },
+        value: 'Prescriber creation',
+        name: 'Prescriber creation'
+      }
+    ];
+    const categoryList = [
       {
-        title: 'Sent Time',
-        dataIndex: 'sentTime',
-        key: 'sentTime',
-        width: '15%'
-      },
-      {
-        title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
-        width: '10%'
-      },
-      {
-        title: 'Requests Time',
-        dataIndex: 'requestsTime',
-        key: 'requestsTime',
-        width: '15%'
+        value: 'Notification',
+        name: 'Notification'
       }
     ];
 
@@ -607,6 +610,7 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                           disabled={this.state.isDetail}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                         >
                           {categoryList &&
                             categoryList.map((item, index) => (
@@ -629,7 +633,7 @@ class MessageDetails extends Component<any, any> {
                         ]
                       })(
                         <Select
-                          onChange={(value, option) => {
+                          onChange={(value, option: any) => {
                             let name = option.props.children;
                             value = value === '' ? null : value;
                             this.onBasicFormChange({
@@ -642,6 +646,7 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                           notFoundContent={templateFetching ? <Spin size="small" /> : null}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           disabled={this.state.isDetail}
                         >
                           {emailTemplateList &&
@@ -673,6 +678,7 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                           disabled={this.state.isDetail}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                         >
                           {objectTypeList &&
                             objectTypeList.map((item, index) => (
@@ -703,6 +709,7 @@ class MessageDetails extends Component<any, any> {
                           showSearch
                           placeholder="Select a Object No"
                           optionFilterProp="children"
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.onBasicFormChange({
                               field: 'objectNo',
@@ -778,19 +785,6 @@ class MessageDetails extends Component<any, any> {
               </Form>
             </div>
 
-            {/* {this.state.isDetail ?
-            <div>
-              <div style={styles.title}>
-                <span style={styles.titleText}>Recipient details</span>
-              </div>
-              <Table
-                style={{ marginTop: 20 }}
-                columns={columns}
-                dataSource={detailsList}
-                pagination={false}
-              />
-            </div>
-            : */}
             <div>
               <div style={styles.title}>
                 <span style={styles.titleText}>Recipient details</span>
@@ -810,6 +804,7 @@ class MessageDetails extends Component<any, any> {
                       })(
                         <Select
                           disabled={this.state.isDetail}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onDetailsFormChange({
@@ -835,10 +830,11 @@ class MessageDetails extends Component<any, any> {
                       )(
                         <Select
                           disabled={detailForm.consumerType !== 'Member' || this.state.isDetail}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           showSearch
                           placeholder="Select a consumer"
                           optionFilterProp="children"
-                          onChange={(value, option) => {
+                          onChange={(value, option: any) => {
                             let consumer = option.props['data-consumer'];
                             let consumerName = consumer.customerName;
                             let email = consumer.email;
@@ -858,9 +854,10 @@ class MessageDetails extends Component<any, any> {
                               consumerName: consumerName,
                               email: email
                             });
+                            this.getPetList(value);
                           }}
                           notFoundContent={consumerFetching ? <Spin size="small" /> : null}
-                          onSearch={this.getConsumerList}
+                          onSearch={_.debounce(this.getConsumerList, 500)}
                           filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                           {consumerList &&
@@ -918,6 +915,84 @@ class MessageDetails extends Component<any, any> {
                             const value = (e.target as any).value;
                             this.onDetailsFormChange({
                               field: 'email',
+                              value
+                            });
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem
+                      label={
+                        <span>
+                          Related pet&nbsp;
+                          <Tooltip title="Please select consumer account first!">
+                            <Icon type="question-circle-o" />
+                          </Tooltip>
+                        </span>
+                      }
+                    >
+                      {getFieldDecorator(
+                        'pet',
+                        {}
+                      )(
+                        <Select
+                          disabled={detailForm.consumerAccount === '' || this.state.isDetail}
+                          placeholder="Please select pet"
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value, option: any) => {
+                            let name = option.props.children;
+                            value = value === '' ? null : value;
+                            this.onDetailsFormChange({
+                              field: 'petId',
+                              value
+                            });
+
+                            this.onDetailsFormChange({
+                              field: 'petName',
+                              value: name
+                            });
+
+                            this.props.form.setFieldsValue({
+                              pet: name
+                            });
+                          }}
+                        >
+                          {petList &&
+                            petList.map((item) => (
+                              <Option value={item.petsId} key={item.id}>
+                                {item.petsName}
+                              </Option>
+                            ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem
+                      label={
+                        <span>
+                          CC List&nbsp;
+                          <Tooltip title="If you have multiple mailboxes, use a semicolon to separate them!">
+                            <Icon type="question-circle-o" />
+                          </Tooltip>
+                        </span>
+                      }
+                    >
+                      {getFieldDecorator(
+                        'ccList',
+                        {}
+                      )(
+                        <Input
+                          disabled={this.state.isDetail}
+                          title={detailForm.ccList}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onDetailsFormChange({
+                              field: 'ccList',
                               value
                             });
                           }}

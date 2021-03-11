@@ -24,6 +24,7 @@ const RadioGroup = Radio.Group;
 const RangePicker = DatePicker.RangePicker;
 const CheckboxGroup = Checkbox.Group;
 const Confirm = Modal.confirm;
+const { SHOW_PARENT } = TreeSelect;
 
 const formItemLayout = {
   labelCol: {
@@ -55,6 +56,43 @@ const radioStyle = {
   height: '40px',
   lineHeight: '40px'
 };
+
+const treeData = [
+  {
+    title: 'Node1',
+    value: '0-0',
+    key: '0-0',
+    children: [
+      {
+        title: 'Child Node1',
+        value: '0-0-0',
+        key: '0-0-0'
+      }
+    ]
+  },
+  {
+    title: 'Node2',
+    value: '0-1',
+    key: '0-1',
+    children: [
+      {
+        title: 'Child Node3',
+        value: '0-1-0',
+        key: '0-1-0'
+      },
+      {
+        title: 'Child Node4',
+        value: '0-1-1',
+        key: '0-1-1'
+      },
+      {
+        title: 'Child Node5',
+        value: '0-1-2',
+        key: '0-1-2'
+      }
+    ]
+  }
+];
 const TreeNode = Tree.TreeNode;
 export default class MarketingAddForm extends React.Component<any, any> {
   props;
@@ -98,7 +136,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
       timeZone: moment,
       isClubChecked: false,
       allGroups: relaxProps.get('allGroups'),
-      getGoodsCate: []
+      storeCateList: relaxProps.get('storeCateList'),
+      sourceStoreCateList: relaxProps.get('sourceStoreCateList')
     };
   }
 
@@ -138,7 +177,20 @@ export default class MarketingAddForm extends React.Component<any, any> {
   };
 
   productTypeOnChange = (value) => {
-    this.onBeanChange({ productType: value });
+    this.setState({
+      selectedRows: fromJS([]),
+      goodsModal: {
+        _modalVisible: false,
+        _selectedSkuIds: [],
+        _selectedRows: []
+      },
+      selectedSkuIds: [],
+      selectedRows: fromJS([])
+    });
+    this.onBeanChange({
+      productType: value,
+      storeCateIds: []
+    });
   };
   targetCustomerRadioChange = (value) => {
     this.onBeanChange({ joinLevel: value });
@@ -149,8 +201,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
     segmentIds.push(value);
     this.onBeanChange({ segmentIds });
   };
+
   storeCateChange = (value, _label, extra) => {
-    const { editGoods, sourceGoodCateList } = this.props.relaxProps;
+    const sourceGoodCateList = this.state.sourceStoreCateList;
+
     // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
     // 店铺分类列表
 
@@ -193,11 +247,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
       });
     });
     const storeCateIds = originValues;
-    const goods = Map({
-      ['storeCateIds']: storeCateIds
+    console.log(storeCateIds.toJS(), 'storeCateIds---------------');
+    this.onBeanChange({
+      storeCateIds
     });
-
-    editGoods(goods);
   };
 
   /**
@@ -220,24 +273,23 @@ export default class MarketingAddForm extends React.Component<any, any> {
     );
   };
 
-  getGoodsCate = async () => {
-    debugger;
-    const { res } = await webapi.getGoodsCate();
-    if (res && res.code === Const.SUCCESS_CODE) {
-      this.setState({
-        getGoodsCate: res.context
-      });
-    }
-  };
-
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, selectedRows, marketingBean, getGoodsCate, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
-
+    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
     console.log(marketingBean.toJS(), 'marketingBean---------');
 
+    const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
+    const storeCateValues = [];
+    const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
+    if (storeCateIds) {
+      storeCateIds.toJS().map((id) => {
+        if (!parentIds.includes(id)) {
+          storeCateValues.push({ value: id });
+        }
+      });
+    }
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
@@ -831,7 +883,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 // }
               ],
 
-              initialValue: marketingBean.get('storeCateIds')
+              initialValue: storeCateValues
             })(
               <TreeSelect
                 getPopupContainer={() => document.getElementById('page-content')}
@@ -840,14 +892,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 treeCheckStrictly={true}
                 //treeData ={getGoodsCate}
                 // showCheckedStrategy = {SHOW_PARENT}
-                placeholder="Please select sales category"
+                placeholder="Please select category"
                 notFoundContent="No sales category"
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 showSearch={false}
                 onChange={this.storeCateChange}
+                style={{ width: 500 }}
                 treeDefaultExpandAll
               >
-                {this.generateStoreCateTree(getGoodsCate)}
+                {this.generateStoreCateTree(storeCateList)}
               </TreeSelect>
             )}
           </FormItem>
@@ -1047,7 +1100,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
       });
     }
     sessionStorage.setItem('PromotionTypeValue', 0);
-    this.getGoodsCate();
   };
 
   /**

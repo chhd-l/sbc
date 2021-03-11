@@ -80,11 +80,3 @@ export const getAllGroups = (params) => {
     body: JSON.stringify({ ...params })
   });
 };
-
-/**
- * Category
- * @returns {Promise<IAsyncResult<T>>}
- */
-export const getGoodsCate = () => {
-  return Fetch('/store_cate/batch/cate');
-};

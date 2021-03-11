@@ -971,6 +971,7 @@ class GoodsForm extends React.Component<any, any> {
       });
     });
     const storeCateIds = originValues;
+    console.log(storeCateIds.toJS(), 'storeCateIds---------------');
     const goods = Map({
       ['storeCateIds']: storeCateIds
     });
@@ -1069,6 +1070,10 @@ class GoodsForm extends React.Component<any, any> {
    * @param storeCateList
    */
   generateStoreCateTree = (storeCateList) => {
+    debugger;
+    console.log(storeCateList, 'storeCateList-------------');
+    const { sourceStoreCateList } = this.props.relaxProps;
+    console.log(sourceStoreCateList, 'sourceStoreCateList-------------');
     return (
       storeCateList &&
       storeCateList.map((item) => {

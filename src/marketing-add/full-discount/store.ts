@@ -6,6 +6,7 @@ import { Const, history } from 'qmkit';
 import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
 import FullDiscountActor from './actor/full-discount-actor';
+import { fromJS } from 'immutable';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -60,5 +61,18 @@ export default class AppStore extends Store {
       response = await webapi.addFullDiscount(discountBean);
     }
     return response;
+  };
+  //
+
+  /**
+   * 店铺分类
+   * @param discountBean
+   * @returns {Promise<void>}
+   */
+  initCategory = async () => {
+    const { res } = await webapi.getGoodsCate();
+    if (res && res.code === Const.SUCCESS_CODE) {
+      this.dispatch('goodsActor: initStoreCateList', fromJS(res.context));
+    }
   };
 }

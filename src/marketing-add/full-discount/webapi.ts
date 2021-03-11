@@ -27,3 +27,11 @@ export const updateFullDiscount = (discountBean) => {
     body: JSON.stringify(discountBean)
   });
 };
+
+/**
+ * Category
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const getGoodsCate = () => {
+  return Fetch('/store_cate/batch/cate');
+};

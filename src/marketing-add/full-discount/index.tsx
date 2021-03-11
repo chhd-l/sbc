@@ -2,12 +2,14 @@ import React from 'react';
 
 import { StoreProvider } from 'plume2';
 import { Breadcrumb, Alert, Form } from 'antd';
-import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, BreadCrumb, Const } from 'qmkit';
 
 import AppStore from './store';
 import MarketingAddForm from '../common-components/marketing-add-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
+import * as webapi from '@/marketing-add/webapi';
+import { fromJS } from 'immutable';
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class MarketingFullDiscountAdd extends React.Component<any, any> {
   store: AppStore;
@@ -23,6 +25,7 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
       this.store.init(marketingId);
     }
     this.store.getAllGroups();
+    this.store.initCategory();
   }
 
   render() {

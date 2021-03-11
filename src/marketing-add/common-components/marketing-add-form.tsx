@@ -98,7 +98,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       timeZone: moment,
       isClubChecked: false,
       allGroups: relaxProps.get('allGroups'),
-      getGoodsCate: IList
+      getGoodsCate: []
     };
   }
 
@@ -220,11 +220,21 @@ export default class MarketingAddForm extends React.Component<any, any> {
     );
   };
 
+  getGoodsCate = async () => {
+    debugger;
+    const { res } = await webapi.getGoodsCate();
+    if (res && res.code === Const.SUCCESS_CODE) {
+      this.setState({
+        getGoodsCate: res.context
+      });
+    }
+  };
+
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
+    const { customerLevel, selectedRows, marketingBean, getGoodsCate, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
 
     console.log(marketingBean.toJS(), 'marketingBean---------');
 
@@ -1037,6 +1047,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       });
     }
     sessionStorage.setItem('PromotionTypeValue', 0);
+    this.getGoodsCate();
   };
 
   /**

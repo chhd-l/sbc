@@ -49,18 +49,27 @@ export default class CustomerDetails extends React.Component<any, any> {
   }
 
   getBasicInformation = () => {
-    webapi.getBasicDetails(this.state.customerId).then((data) => {
-      const { res } = data;
-      if (res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          basic: {
-            ...res.context,
-            customerAccount: this.state.customerAccount
-          },
-          petOwnerTag: res.context.segmentList ? res.context.segmentList.map((t) => t.id) : []
-        });
-      }
-    });
+    this.setState({ loading: true });
+    webapi
+      .getBasicDetails(this.state.customerId)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false,
+            basic: {
+              ...res.context,
+              customerAccount: this.state.customerAccount
+            },
+            petOwnerTag: res.context.segmentList ? res.context.segmentList.map((t) => t.id) : []
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      })
+      .catch(() => {
+        this.setState({ loading: false });
+      });
   };
 
   getPetsList = () => {
@@ -287,6 +296,12 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </Col>
                   <Col span={6} className="text-highlight">
                     Email communication
+                  </Col>
+                  <Col span={4} className="text-tip">
+                    City
+                  </Col>
+                  <Col span={6} className="text-highlight">
+                    {basic.city}
                   </Col>
                 </Row>
               </div>

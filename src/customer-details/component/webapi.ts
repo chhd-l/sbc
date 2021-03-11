@@ -9,6 +9,35 @@ type TResult = {
 };
 
 /**
+ * 获取地址form的排列设置
+ * @returns
+ */
+export async function getAddressFieldList() {
+  return await Fetch<TResult>('/addressDisplaySetting/queryByStoreId', {
+    method: 'GET'
+  })
+    .then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        return data.res.context.addressDisplaySettings
+          .filter((field) => field.enableFlag === 1 && field.pageRow > 0 && field.pageCol > 0)
+          .sort((a, b) => a.pageRow - b.pageRow || a.pageCol - b.pageCol)
+          .reduce((prev, curr) => {
+            if (!prev[curr.pageRow]) {
+              prev[curr.pageRow] = [];
+            }
+            prev[curr.pageRow].push(curr);
+            return prev;
+          }, []);
+      } else {
+        return [];
+      }
+    })
+    .catch(() => {
+      return [];
+    });
+}
+
+/**
  * 获取国家列表
  */
 export async function getCountryList() {

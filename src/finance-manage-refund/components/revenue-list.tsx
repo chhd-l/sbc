@@ -4,6 +4,7 @@ import { Relax } from 'plume2';
 import { DataGrid, noop, cache, util, Const } from 'qmkit';
 import moment from 'moment';
 import { Table, message, Button } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const Column = Table.Column;
 
@@ -47,7 +48,7 @@ export default class RevenueList extends React.Component<any, any> {
               exportIncomeDetail();
             }}
           >
-            Export
+            <FormattedMessage id="Finance.Export" />
           </Button>
         </div>
         <DataGrid
@@ -62,7 +63,7 @@ export default class RevenueList extends React.Component<any, any> {
           onChange={(pagination, filters, sorter) => this._getData(pagination, filters, sorter)}
         >
           <Column
-            title="No"
+            title={<FormattedMessage id="Finance.No" />}
             dataIndex="index"
             key="index"
             width="5%"
@@ -71,14 +72,14 @@ export default class RevenueList extends React.Component<any, any> {
             }}
           />
           <Column
-            title="Order time"
+            title={<FormattedMessage id="Finance.OrderTime" />}
             dataIndex="orderTime"
             key="orderTime"
             render={(text, _rowData: any, _index) => {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-          <Column title="Order number" dataIndex="orderCode" key="orderCode" width="12%" />
+          <Column title={<FormattedMessage id="Finance.OrderNumber" />} dataIndex="orderCode" key="orderCode" width="12%" />
 
           {/*<Column
             title="Transaction serial number"
@@ -86,9 +87,9 @@ export default class RevenueList extends React.Component<any, any> {
             width="15%"
             key="tradeNo"
           />*/}
-          <Column title="Consumer name" dataIndex="customerName" key="customerName" />
+          <Column title={<FormattedMessage id="Finance.ConsumerName" />} dataIndex="customerName" key="customerName" />
           <Column
-            title="Order Revenue"
+            title={<FormattedMessage id="Finance.OrderRevenue" />}
             dataIndex="amount"
             key="amount"
             render={(text, _rowData: any) => {
@@ -96,7 +97,7 @@ export default class RevenueList extends React.Component<any, any> {
             }}
           />
           <Column
-            title="Real Revenue"
+            title={<FormattedMessage id="Finance.RealRevenue" />}
             dataIndex="paymentOSActualPrice"
             key="paymentOSActualPrice"
             render={(text, _rowData: any) => {
@@ -104,7 +105,7 @@ export default class RevenueList extends React.Component<any, any> {
             }}
           />
           <Column
-            title="Payment time"
+            title={<FormattedMessage id="Finance.PaymentTime" />}
             dataIndex="tradeTime"
             key="tradeTime"
             render={(text, _rowData: any) => {
@@ -133,11 +134,11 @@ export default class RevenueList extends React.Component<any, any> {
           {/*<span>{text}</span> :'￥0.00'*/}
           {/*}}/>*/}
           {/*/>*/}
-          <Column title="Transaction id" dataIndex="transactionId" key="transactionId" />
-          <Column title="Payment type" dataIndex="payWay" key="payWay" />
+          <Column title={<FormattedMessage id="Finance.TransactionId" />} dataIndex="transactionId" key="transactionId" />
+          <Column title={<FormattedMessage id="Finance.PaymentType" />} dataIndex="payWay" key="payWay" />
           {/*<Column title="Payment method" dataIndex="vendor" key="vendor" />*/}
-          <Column title="Syn status" dataIndex="syncPayStatus" key="syncPayStatus" width="7%" />
-          <Column title="Credit status" dataIndex="payStatus" key="payStatus" width="8%" />
+          <Column title={<FormattedMessage id="Finance.SynStatus" />} dataIndex="syncPayStatus" key="syncPayStatus" width="7%" />
+          <Column title={<FormattedMessage id="Finance.CreditStatus" />} dataIndex="payStatus" key="payStatus" width="8%" />
         </DataGrid>
         {/*<Table columns={columns} dataSource={data} />*/}
       </div>

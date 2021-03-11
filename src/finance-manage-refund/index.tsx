@@ -2,7 +2,7 @@
 import React from 'react';
 import { StoreProvider } from 'plume2';
 import { Breadcrumb } from 'antd';
-
+import { FormattedMessage } from 'react-intl';
 import { Headline, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
@@ -40,7 +40,7 @@ export default class FinancialRefund extends React.Component<any, any> {
             this.store.state().get('kind') == 'income' ? (
               <div>
                 <div className="container-search">
-                  <Headline title="Revenue reconciliation detail" />
+                  <Headline title={<FormattedMessage id="Finance.RevenueReconciliationDetail" />} />
                   <SearchForm name="Payment method" />
                 </div>
                 <div className="container">
@@ -50,7 +50,7 @@ export default class FinancialRefund extends React.Component<any, any> {
             ) : (
               <div>
                 <div className="container-search">
-                  <Headline title="Refund reconciliation detail" />
+                  <Headline title={<FormattedMessage id="Finance.RefundReconciliationDetail" />} />
                   <SearchForm name="Payment method" />
                 </div>
                 <div className="container">

@@ -123,7 +123,7 @@ class DeliveryInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           this.getAddressList();
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="PetOwner.OperateSuccessfully" />);
         }
       })
       .catch((err) => {});
@@ -221,7 +221,7 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="PetOwner.OperateSuccessfully" />);
           this.getAddressList();
         }
       })
@@ -300,7 +300,7 @@ class DeliveryInfomation extends React.Component<any, any> {
     const { form } = this.props;
     let reg = /^[0-9+-\s]{6,20}$/;
     if (!reg.test(form.getFieldValue('consigneeNumber'))) {
-      callback('Please enter the correct phone');
+      callback(<FormattedMessage id="PetOwner.theCorrectPhone" />);
     } else {
       callback();
     }
@@ -310,7 +310,7 @@ class DeliveryInfomation extends React.Component<any, any> {
     const { form } = this.props;
     let reg = /^[0-9]{3,10}$/;
     if (!reg.test(form.getFieldValue('postCode'))) {
-      callback('Please enter the correct Post Code');
+      callback(<FormattedMessage id="PetOwner.theCorrectPostCode" />);
     } else {
       callback();
     }
@@ -374,7 +374,9 @@ class DeliveryInfomation extends React.Component<any, any> {
       <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
         <Row>
           <Col span={3}>
-            <h3>All Address( {this.state.addressList.length} )</h3>
+            <h3>
+              <FormattedMessage id="PetOwner.AllAddress" />( {this.state.addressList.length} )
+            </h3>
             <ul>
               {this.state.addressList
                 ? this.state.addressList.map((item) => (
@@ -406,7 +408,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   }}
                 >
                   <Checkbox checked={this.state.isDefault} onChange={() => this.clickDefault()}>
-                    Set default delivery address
+                    <FormattedMessage id="PetOwner.SetDefaultDeliveryAddress" />
                   </Checkbox>
                 </div>
               }
@@ -419,12 +421,12 @@ class DeliveryInfomation extends React.Component<any, any> {
                       display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
-                    <FormItem label="Consumer account">
+                    <FormItem label={<FormattedMessage id="Product.Consumeraccount" />}>
                       {getFieldDecorator('customerAccount', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input First Name!'
+                            message: <FormattedMessage id="Product.PleaseInputFirstName" />
                           }
                         ]
                       })(<Input disabled={true} />)}
@@ -436,12 +438,12 @@ class DeliveryInfomation extends React.Component<any, any> {
                       display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
-                    <FormItem label="Selected Prescriber">
+                    <FormItem label={<FormattedMessage id="Product.SelectedPrescriber" />}>
                       {getFieldDecorator('clinicsVOS', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please Select Prescriber!'
+                            message: <FormattedMessage id="Product.PleaseSelectPrescriber" />
                           }
                         ]
                       })(
@@ -479,17 +481,17 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="First Name">
+                    <FormItem label={<FormattedMessage id="PetOwner.FirstName" />}>
                       {getFieldDecorator('firstName', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input First Name!'
+                            message: <FormattedMessage id="PetOwner.PleaseInputFirstName" />
                           },
 
                           {
                             max: 50,
-                            message: 'Exceed maximum length!'
+                            message: <FormattedMessage id="PetOwner.ExceedMaximumLength" />
                           }
                         ]
                       })(
@@ -507,16 +509,16 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Last Name">
+                    <FormItem label={<FormattedMessage id="PetOwner.LastName" />}>
                       {getFieldDecorator('lastName', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Last Name!'
+                            message: <FormattedMessage id="PetOwner.PleaseInputLastName" />
                           },
                           {
                             max: 50,
-                            message: 'Exceed maximum length!'
+                            message: <FormattedMessage id="PetOwner.ExceedMaximumLength" />
                           }
                         ]
                       })(
@@ -534,12 +536,12 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Phone Number">
+                    <FormItem label={<FormattedMessage id="PetOwner.PhoneNumber" />}>
                       {getFieldDecorator('consigneeNumber', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Phone Number!'
+                            message: <FormattedMessage id="PetOwner.PleaseInputPhoneNumber" />
                           },
                           { validator: this.comparePhone }
                         ]
@@ -558,12 +560,12 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Post Code">
+                    <FormItem label={<FormattedMessage id="PetOwner.PostCode" />}>
                       {getFieldDecorator('postCode', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Post Code!'
+                            message: <FormattedMessage id="PetOwner.PleaseInputPostCode" />
                           },
                           { validator: this.compareZip }
                         ]
@@ -584,7 +586,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="Country">
                       {getFieldDecorator('countryId', {
-                        rules: [{ required: true, message: 'Please input Country!' }]
+                        rules: [{ required: true, message: <FormattedMessage id="PetOwner.PleaseInputCountry" /> }]
                       })(
                         <Select
                           disabled={this.props.customerType === 'Guest'}
@@ -608,9 +610,9 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="City">
+                    <FormItem label={<FormattedMessage id="PetOwner.City" />}>
                       {getFieldDecorator('cityId', {
-                        rules: [{ required: true, message: 'Please input City!' }],
+                        rules: [{ required: true, message: <FormattedMessage id="PetOwner.PleaseInputCity" /> }],
                         initialValue: initCityName
                       })(
                         <Select
@@ -640,16 +642,16 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Address 1">
+                    <FormItem label={<FormattedMessage id="PetOwner.Address1" />}>
                       {getFieldDecorator('address1', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Address 1!'
+                            message: <FormattedMessage id="PetOwner.PleaseInputAddress1" />
                           },
                           {
                             max: 200,
-                            message: 'Exceed maximum length!'
+                            message: <FormattedMessage id="PetOwner.ExceedMaximumLength" />
                           }
                         ]
                       })(
@@ -668,12 +670,12 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Address 2">
+                    <FormItem label={<FormattedMessage id="PetOwner.Address2" />}>
                       {getFieldDecorator('address2', {
                         rules: [
                           {
                             max: 200,
-                            message: 'Exceed maximum length!'
+                            message: <FormattedMessage id="PetOwner.ExceedMaximumLength" />
                           }
                         ]
                       })(
@@ -692,12 +694,12 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Reference">
+                    <FormItem label={<FormattedMessage id="PetOwner.Reference" />}>
                       {getFieldDecorator('rfc', {
                         rules: [
                           {
                             max: 200,
-                            message: 'Exceed maximum length!'
+                            message: <FormattedMessage id="PetOwner.ExceedMaximumLength" />
                           }
                         ]
                       })(
@@ -725,7 +727,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                           display: this.props.customerType === 'Guest' ? 'none' : null
                         }}
                       >
-                        Save
+                        <FormattedMessage id="PetOwner.Save" />
                       </Button>
 
                       {/* <Button
@@ -739,14 +741,14 @@ class DeliveryInfomation extends React.Component<any, any> {
                         Delete
                       </Button> */}
 
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delAddress()} okText="Confirm" cancelText="Cancel">
+                      <Popconfirm placement="topRight" title={<FormattedMessage id="PetOwner.DeleteThisItem" />} onConfirm={() => this.delAddress()} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
                         <Button
                           style={{
                             marginRight: '20px',
                             display: this.props.customerType === 'Guest' ? 'none' : null
                           }}
                         >
-                          <FormattedMessage id="delete" />
+                          <FormattedMessage id="PetOwner.delete" />
                         </Button>
                       </Popconfirm>
 
@@ -755,7 +757,9 @@ class DeliveryInfomation extends React.Component<any, any> {
                           marginRight: '20px'
                         }}
                       >
-                        <Link to="/customer-list">Cancel</Link>
+                        <Link to="/customer-list">
+                          <FormattedMessage id="PetOwner.Cancel" />
+                        </Link>
                       </Button>
                     </FormItem>
                   </Col>

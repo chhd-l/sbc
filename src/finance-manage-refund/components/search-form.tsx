@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Form, Select, Button, Input } from 'antd';
-
+import { FormattedMessage } from 'react-intl';
 import { SelectGroup, noop, AuthWrapper } from 'qmkit';
 
 const FormItem = Form.Item;
@@ -105,7 +105,7 @@ export default class SearchForm extends React.Component<any, any> {
                       onSearch();
                     }}
                   >
-                    Search
+                    <FormattedMessage id="Finance.Search" />
                   </Button>
                 ) : (
                   <Button
@@ -118,7 +118,7 @@ export default class SearchForm extends React.Component<any, any> {
                       //exportRefundDetail();
                     }}
                   >
-                    Search
+                    <FormattedMessage id="Finance.Search" />
                   </Button>
                 )}
               </FormItem>

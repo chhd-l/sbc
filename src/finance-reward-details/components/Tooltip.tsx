@@ -41,24 +41,20 @@ export default class List extends React.Component<any, any> {
   }
 
   render() {
-    const getEcharts = this.props.relaxProps.echarts
-      ? this.props.relaxProps.echarts
-      : [];
-    const getPeriodAmount = this.props.relaxProps.PeriodAmountTotal
-      ? this.props.relaxProps.PeriodAmountTotal
-      : [];
+    const getEcharts = this.props.relaxProps.echarts ? this.props.relaxProps.echarts : [];
+    const getPeriodAmount = this.props.relaxProps.PeriodAmountTotal ? this.props.relaxProps.PeriodAmountTotal : [];
     return (
       <div className="chart space-between">
         <div className="chartDetails1">
           <div className="chartDetailsList flex-content">
             <div className="btn">
-              Reward amount <br /> $ {getPeriodAmount.totalRewardAmount}
+              <FormattedMessage id="Finance.RewardAmount" /> <br /> $ {getPeriodAmount.totalRewardAmount}
             </div>
             <div className="btn">
-              Order amount <br /> $ {getPeriodAmount.totalOrderAmount}
+              <FormattedMessage id="Finance.OrderAmount" /> <br /> $ {getPeriodAmount.totalOrderAmount}
             </div>
             <div className="btn">
-              Order quantity
+              <FormattedMessage id="Finance.OrderQuantity" />
               <br /> {getPeriodAmount.totalOrderQuantity}
             </div>
           </div>

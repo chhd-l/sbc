@@ -73,7 +73,7 @@ export default class SelectAttribute extends React.Component<any, any> {
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'Operation failed');
+        message.error(err.toString() || <FormattedMessage id="Product.OperationFailed" />);
       });
   };
 
@@ -117,7 +117,7 @@ export default class SelectAttribute extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
           this.setState({
             confirmLoading: false,
             visible: false
@@ -199,17 +199,17 @@ export default class SelectAttribute extends React.Component<any, any> {
     const { confirmLoading, selectedRowKeys, oldSelectedRowKeys, attributeList, pagination, searchForm } = this.state;
     const columns_attribute = [
       {
-        title: 'Attribute name',
+        title: <FormattedMessage id="Product.AttributeName" />,
         dataIndex: 'attributeName',
         key: 'attributeName'
       },
       {
-        title: 'Display name',
+        title: <FormattedMessage id="Product.DisplayName" />,
         dataIndex: 'attributeNameEn',
         key: 'attributeNameEn'
       },
       {
-        title: 'Attribute value',
+        title: <FormattedMessage id="Product.AttributeValue" />,
         dataIndex: 'attributeValue',
         key: 'attributeValue',
         width: '30%',
@@ -228,9 +228,11 @@ export default class SelectAttribute extends React.Component<any, any> {
     return (
       <div>
         <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openSelectAttribute()}>
-          <span>Select attribute</span>
+          <span>
+            <FormattedMessage id="Product.SelectAttribute" />
+          </span>
         </Button>
-        <Modal title="Select attribute" visible={this.state.visible} width="800px" confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal title={<FormattedMessage id="Product.SelectAttribute" />} visible={this.state.visible} width="800px" confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>
             <div style={{ marginBottom: 16 }}>
               <Form className="filter-content" layout="inline">
@@ -238,7 +240,11 @@ export default class SelectAttribute extends React.Component<any, any> {
                   <Col span={10}>
                     <FormItem>
                       <Input
-                        addonBefore={<p style={styles.label}>Attribute name</p>}
+                        addonBefore={
+                          <p style={styles.label}>
+                            <FormattedMessage id="Product.AttributeName" />
+                          </p>
+                        }
                         value={searchForm.attributeName}
                         onChange={(e) => {
                           const value = (e.target as any).value;
@@ -253,7 +259,11 @@ export default class SelectAttribute extends React.Component<any, any> {
                   <Col span={10}>
                     <FormItem>
                       <Input
-                        addonBefore={<p style={styles.label}>Attribute value</p>}
+                        addonBefore={
+                          <p style={styles.label}>
+                            <FormattedMessage id="Product.AttributeValue" />
+                          </p>
+                        }
                         value={searchForm.attributeValue}
                         onChange={(e) => {
                           const value = (e.target as any).value;
@@ -278,7 +288,7 @@ export default class SelectAttribute extends React.Component<any, any> {
                         }}
                       >
                         <span>
-                          <FormattedMessage id="search" />
+                          <FormattedMessage id="Product.search" />
                         </span>
                       </Button>
                     </FormItem>

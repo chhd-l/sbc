@@ -15,39 +15,39 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Consumer account',
+          title: <FormattedMessage id="PetOwner.ConsumerAccount" />,
           dataIndex: 'customerAccount',
           key: 'consumerAccount',
           width: '15%'
         },
         {
-          title: 'Consumer name',
+          title: <FormattedMessage id="PetOwner.ConsumerName" />,
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
           render: (text, record) => <p>{record.firstName + ' ' + record.lastName}</p>
         },
         {
-          title: 'Consumer type',
+          title: <FormattedMessage id="PetOwner.ConsumerType" />,
           dataIndex: 'customerLevelName',
           key: 'consumerType',
           width: '15%'
         },
         {
-          title: 'Email',
+          title: <FormattedMessage id="PetOwner.Email" />,
           dataIndex: 'email',
           key: 'email',
           width: '15%'
         },
 
         {
-          title: 'Phone number',
+          title: <FormattedMessage id="PetOwner.PhoneNumber" />,
           dataIndex: 'contactPhone',
           key: 'phoneNumber',
           width: '15%'
         },
         {
-          title: 'Default prescriber name',
+          title: <FormattedMessage id="PetOwner.DefaultPrescriberName" />,
           dataIndex: 'defaultClinics',
           key: 'defaultClinics',
           width: '15%',
@@ -60,16 +60,16 @@ export default class Customer extends React.Component<any, any> {
         //   width: 200
         // },
         {
-          title: 'Operation',
+          title: <FormattedMessage id="PetOwner.Operation" />,
           key: 'operation',
           width: '10%',
           render: (text, record) => (
             <span>
-              <Tooltip placement="top" title="Details">
+              <Tooltip placement="top" title={<FormattedMessage id="PetOwner.Details" />}>
                 <Link to={'/customer-details/' + (record.customerLevelName ? record.customerLevelName : 'Guest') + '/' + record.customerId + '/' + record.customerAccount} className="iconfont iconDetails"></Link>
               </Tooltip>
               <Divider type="vertical" />
-              <Tooltip placement="top" title="Activity">
+              <Tooltip placement="top" title={<FormattedMessage id="PetOwner.Activity" />}>
                 <Link to={'/pet-owner-activity/' + record.customerId} className="iconfont iconhuanjie"></Link>
               </Tooltip>
               {/* <Divider type="vertical" />
@@ -263,7 +263,7 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>客户列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="consumerList" />} />
+            <Headline title={<FormattedMessage id="PetOwner.consumerList" />} />
             <Form className="filter-content" layout="inline">
               <Row>
                 <Col span={8}>
@@ -271,7 +271,7 @@ export default class Customer extends React.Component<any, any> {
                     <Input
                       addonBefore={
                         <p style={styles.label}>
-                          <FormattedMessage id="consumerAccount" />
+                          <FormattedMessage id="PetOwner.ConsumerAccount" />
                         </p>
                       }
                       onChange={(e) => {
@@ -289,7 +289,7 @@ export default class Customer extends React.Component<any, any> {
                     <Input
                       addonBefore={
                         <p style={styles.label}>
-                          <FormattedMessage id="consumerName" />
+                          <FormattedMessage id="PetOwner.ConsumerName" />
                         </p>
                       }
                       onChange={(e) => {
@@ -306,7 +306,11 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={styles.label}>Customer type</p>}
+                      label={
+                        <p style={styles.label}>
+                          <FormattedMessage id="PetOwner.ConsumerType" />
+                        </p>
+                      }
                       style={{ width: 80 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -316,7 +320,9 @@ export default class Customer extends React.Component<any, any> {
                         });
                       }}
                     >
-                      <Option value="">All</Option>
+                      <Option value="">
+                        <FormattedMessage id="PetOwner.All" />
+                      </Option>
                       {customerTypeArr.map((item) => (
                         <Option value={item.id} key={item.id}>
                           {item.name}
@@ -330,7 +336,7 @@ export default class Customer extends React.Component<any, any> {
                     <Input
                       addonBefore={
                         <p style={styles.label}>
-                          <FormattedMessage id="email" />
+                          <FormattedMessage id="PetOwner.Email" />
                         </p>
                       }
                       onChange={(e) => {
@@ -348,7 +354,7 @@ export default class Customer extends React.Component<any, any> {
                     <Input
                       addonBefore={
                         <p style={styles.label}>
-                          <FormattedMessage id="phoneNumber" />
+                          <FormattedMessage id="PetOwner.phoneNumber" />
                         </p>
                       }
                       onChange={(e) => {
@@ -374,7 +380,7 @@ export default class Customer extends React.Component<any, any> {
                       }}
                     >
                       <span>
-                        <FormattedMessage id="search" />
+                        <FormattedMessage id="PetOwner.search" />
                       </span>
                     </Button>
                   </FormItem>

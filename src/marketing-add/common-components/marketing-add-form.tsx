@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { fromJS, List } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
@@ -16,6 +16,7 @@ import * as webapi from '../webapi';
 import * as Enum from './marketing-enum';
 
 import { doc } from 'prettier';
+import { IList } from '../../../typings/globalType';
 // import debug = doc.debug;
 
 const FormItem = Form.Item;
@@ -54,6 +55,7 @@ const radioStyle = {
   height: '40px',
   lineHeight: '40px'
 };
+const TreeNode = Tree.TreeNode;
 export default class MarketingAddForm extends React.Component<any, any> {
   props;
 
@@ -95,7 +97,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
       PromotionTypeChecked: true,
       timeZone: moment,
       isClubChecked: false,
-      allGroups: relaxProps.get('allGroups')
+      allGroups: relaxProps.get('allGroups'),
+      getGoodsCate: IList
     };
   }
 
@@ -146,6 +149,77 @@ export default class MarketingAddForm extends React.Component<any, any> {
     segmentIds.push(value);
     this.onBeanChange({ segmentIds });
   };
+  storeCateChange = (value, _label, extra) => {
+    const { editGoods, sourceGoodCateList } = this.props.relaxProps;
+    // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
+    // 店铺分类列表
+
+    // 勾选的店铺分类列表
+    let originValues = fromJS(value.map((v) => v.value));
+
+    // 如果是点x清除某个节点或者是取消勾选某个节点，判断清除的是一级还是二级，如果是二级可以直接清；如果是一级，连带把二级的清了
+    if (extra.clear || !extra.checked) {
+      sourceGoodCateList.forEach((cate) => {
+        // 删的是某个一级的
+        if (extra.triggerValue == cate.get('storeCateId') && cate.get('cateParentId') == 0) {
+          // 找到此一级节点下的二级节点
+          const children = sourceGoodCateList.filter((ss) => ss.get('cateParentId') == extra.triggerValue);
+          // 把一级的子节点也都删了
+          originValues = originValues.filter((v) => children.findIndex((c) => c.get('storeCateId') == v) == -1);
+        }
+      });
+    }
+
+    // 如果子节点被选中，上级节点也要被选中
+    // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
+    originValues.forEach((v) => {
+      sourceGoodCateList.forEach((cate) => {
+        // 找到选中的分类，判断是否有上级r
+        if (v == cate.get('storeCateId') && cate.get('cateParentId') != 0) {
+          // 判断上级是否已添加过，如果没有添加过，添加
+          let secondLevel = sourceGoodCateList.find((x) => x.get('storeCateId') === cate.get('cateParentId'));
+          if (secondLevel && secondLevel.get('cateParentId') !== 0) {
+            let exsit = originValues.toJS().includes(secondLevel.get('cateParentId'));
+            if (!exsit) {
+              originValues = originValues.push(secondLevel.get('cateParentId')); // first level
+            }
+          }
+
+          let exsit = originValues.toJS().includes(cate.get('cateParentId'));
+          if (!exsit) {
+            originValues = originValues.push(cate.get('cateParentId')); // second level
+          }
+        }
+      });
+    });
+    const storeCateIds = originValues;
+    const goods = Map({
+      ['storeCateIds']: storeCateIds
+    });
+
+    editGoods(goods);
+  };
+
+  /**
+   * 店铺分类树形下拉框
+   * @param storeCateList
+   */
+  generateStoreCateTree = (storeCateList) => {
+    return (
+      storeCateList &&
+      storeCateList.map((item) => {
+        if (item.get('children') && item.get('children').count()) {
+          return (
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
+              {this.generateStoreCateTree(item.get('children'))}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+      })
+    );
+  };
+
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
@@ -732,11 +806,43 @@ export default class MarketingAddForm extends React.Component<any, any> {
           })(
             <Radio.Group onChange={(e) => this.productTypeOnChange(e.target.value)} value={this.state.productType}>
               <Radio value={1}>All</Radio>
-              <Radio value={2}>Custom</Radio>
+              <Radio value={2}>Category</Radio>
+              <Radio value={3}>Custom</Radio>
             </Radio.Group>
           )}
         </FormItem>
-        {marketingBean.get('productType') === 2 ? (
+        {marketingBean.get('productType') === 2 && (
+          <FormItem {...formItemLayout}>
+            {getFieldDecorator('storeCateIds', {
+              rules: [
+                // {
+                //   required: true,
+                //   message: 'Please select sales category'
+                // }
+              ],
+
+              initialValue: marketingBean.get('storeCateIds')
+            })(
+              <TreeSelect
+                getPopupContainer={() => document.getElementById('page-content')}
+                treeCheckable={true}
+                showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                treeCheckStrictly={true}
+                //treeData ={getGoodsCate}
+                // showCheckedStrategy = {SHOW_PARENT}
+                placeholder="Please select sales category"
+                notFoundContent="No sales category"
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                showSearch={false}
+                onChange={this.storeCateChange}
+                treeDefaultExpandAll
+              >
+                {this.generateStoreCateTree(getGoodsCate)}
+              </TreeSelect>
+            )}
+          </FormItem>
+        )}
+        {marketingBean.get('productType') === 3 ? (
           <FormItem {...formItemLayout} required={true}>
             {getFieldDecorator(
               'goods',

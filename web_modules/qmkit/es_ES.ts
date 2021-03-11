@@ -1820,6 +1820,8 @@ export default {
 
 
 
+
+
   /*-----------------------------  Fetch  ----------------------------------------*/
   'Fetch.Timeout': 'Service  timeout , try again later',
   'Fetch.Notfind': 'Request interface failed or interface does not exist, please check it',

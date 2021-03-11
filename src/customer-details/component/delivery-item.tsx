@@ -81,7 +81,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
     const { delivery, backToDetail } = this.props;
     this.props.form.validateFields((err, fields) => {
       console.log(fields);
-      return;
       if (!err) {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
@@ -90,7 +89,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
           ...fields,
           customerId: this.props.customerId,
           consigneeName: fields.firstName + ' ' + fields.lastName,
-          deliveryAddress: fields.address1 + fields.address2,
+          deliveryAddress: [fields.address1, fields.address2].join(''),
           isDefaltAddress: 0,
           type: this.props.addressType.toUpperCase()
         })
@@ -121,7 +120,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
         return <Input />;
       }
     }
-    if (field.fieldCity === 'City') {
+    if (field.fieldName === 'City') {
       if (field.inputDropDownBoxFlag === 1) {
         return (
           <Select showSearch>
@@ -164,7 +163,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: col === 2 ? 12 : 16 }
+        sm: { span: col === 2 ? 12 : 18 }
       }
     });
     return (

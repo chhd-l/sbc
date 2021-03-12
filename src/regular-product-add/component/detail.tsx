@@ -98,7 +98,8 @@ export default class Detail extends React.Component<any, any> {
               if (resource !== 1) {
                 disabled = item?.editable ?? false;
               }
-              if (item.contentType.toUpperCase() === 'JSON') {
+              item.content = item?.content ?? '';
+              if (item.contentType && item.contentType.toUpperCase() === 'JSON') {
                 item.content = this.functionTurnJson(item.content);
                 item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content || '{tip:"请输入json格式"}'}</xmp></code></pre>`;
               }

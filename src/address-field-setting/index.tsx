@@ -3,6 +3,7 @@ import { BreadCrumb, Headline, Const } from 'qmkit';
 import { Alert, Button, Spin, message } from 'antd';
 import Fields from './component/fields';
 import Manage from './component/manage';
+import RuleSetting from './component/rule-setting';
 import { getFieldList, saveFieldList } from './webapi';
 import './index.less';
 
@@ -11,6 +12,7 @@ export default class AddressFieldSetting extends React.Component<any, any> {
     super(props);
     this.state = {
       loading: false,
+      visible: false,
       step: 1,
       fieldList: []
     };
@@ -27,6 +29,18 @@ export default class AddressFieldSetting extends React.Component<any, any> {
           fieldList: data.res.context.addressDisplaySettings
         });
       }
+    });
+  };
+
+  onCloseModal = () => {
+    this.setState({
+      visible: false
+    });
+  };
+
+  onOpenModal = () => {
+    this.setState({
+      visible: true
     });
   };
 
@@ -67,7 +81,7 @@ export default class AddressFieldSetting extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, step, fieldList } = this.state;
+    const { loading, visible, step, fieldList } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -76,9 +90,14 @@ export default class AddressFieldSetting extends React.Component<any, any> {
             <Headline title={step === 1 ? 'Address field setting' : 'Manage field display'} />
             <Alert type="info" message="Address setting is for address adding and address edit of shop and store portal" />
             {step === 1 && (
-              <Button type="primary" onClick={() => this.onStepChange(2)} style={{ marginBottom: 10 }}>
-                Manage display
-              </Button>
+              <>
+                <Button onClick={() => this.onOpenModal()} style={{ marginRight: 20 }}>
+                  Rule setting
+                </Button>
+                <Button type="primary" onClick={() => this.onStepChange(2)} style={{ marginBottom: 10 }}>
+                  Display
+                </Button>
+              </>
             )}
             {step === 1 ? <Fields fieldList={fieldList} onFieldChange={this.onFieldChange} /> : <Manage fieldList={fieldList} onFieldChange={this.onFieldChange} />}
           </div>
@@ -90,6 +109,7 @@ export default class AddressFieldSetting extends React.Component<any, any> {
             </div>
           )}
         </Spin>
+        <RuleSetting visible={visible} onCloseModal={this.onCloseModal} />
       </div>
     );
   }

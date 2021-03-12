@@ -270,8 +270,8 @@ class AutomationDetail extends Component<any, any> {
                   <Card title={'Activity Chart'} headStyle={{ padding: 0 }} bordered={false}>
                     <Overview></Overview>
                   </Card>
-                  <AutomationExecution />
-                  <PetOwnerCommunication />
+                  <AutomationExecution automationId={automationId} />
+                  <PetOwnerCommunication automationId={automationId} />
                 </TabPane>
                 <TabPane tab="Audit Log" key="3">
                   <AuditLog />

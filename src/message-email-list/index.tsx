@@ -22,11 +22,12 @@ export default class ClinicList extends Component<any, any> {
         emailTemplate: '',
         category: '',
         status: '',
-        templateId: ''
+        templateId: '',
+        recipient: ''
       },
-      objectTypeList: [],
-      categoryList: [],
-      statusList: [],
+      // objectTypeList: [],
+      // categoryList: [],
+      // statusList: [],
       taskList: [],
       pagination: {
         current: 1,
@@ -37,9 +38,9 @@ export default class ClinicList extends Component<any, any> {
     };
   }
   componentDidMount() {
-    this.querySysDictionary('objectType');
-    this.querySysDictionary('messageCategory');
-    this.querySysDictionary('messageStatus');
+    // this.querySysDictionary('objectType');
+    // this.querySysDictionary('messageCategory');
+    // this.querySysDictionary('messageStatus');
     this.getTemplateList();
     this.getEmailTaskList();
   }
@@ -56,8 +57,9 @@ export default class ClinicList extends Component<any, any> {
     this.setState(
       {
         pagination: {
-          ...pagination,
-          current: 1
+          current: 1,
+          pageSize: 10,
+          total: 0
         }
       },
       () => this.getEmailTaskList()
@@ -73,7 +75,8 @@ export default class ClinicList extends Component<any, any> {
       objectNo: searchForm.objectNo,
       templateId: searchForm.templateId,
       category: searchForm.category,
-      status: searchForm.status
+      status: searchForm.status,
+      toEmail: searchForm.recipient
     };
     this.setState({
       loading: true
@@ -101,34 +104,34 @@ export default class ClinicList extends Component<any, any> {
         });
       });
   };
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({ type: type })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (type === 'objectType') {
-            let objectTypeList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              objectTypeList
-            });
-          }
-          if (type === 'messageCategory') {
-            let categoryList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              categoryList
-            });
-          }
-          if (type === 'messageStatus') {
-            let statusList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              statusList
-            });
-          }
-        }
-      })
-      .catch((err) => {});
-  };
+  // querySysDictionary = (type: String) => {
+  //   webapi
+  //     .querySysDictionary({ type: type })
+  //     .then((data) => {
+  //       const { res } = data;
+  //       if (res.code === Const.SUCCESS_CODE) {
+  //         if (type === 'objectType') {
+  //           let objectTypeList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             objectTypeList
+  //           });
+  //         }
+  //         if (type === 'messageCategory') {
+  //           let categoryList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             categoryList
+  //           });
+  //         }
+  //         if (type === 'messageStatus') {
+  //           let statusList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             statusList
+  //           });
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => { });
+  // };
   handleTableChange = (pagination: any) => {
     this.setState(
       {
@@ -182,11 +185,54 @@ export default class ClinicList extends Component<any, any> {
   };
 
   render() {
-    const { title, searchForm, objectTypeList, categoryList, statusList, taskList, emailTemplateList } = this.state;
+    const { title, searchForm, taskList, emailTemplateList } = this.state;
+
+    const objectTypeList = [
+      {
+        value: 'Order',
+        name: 'Order'
+      },
+      {
+        value: 'Subscription',
+        name: 'Subscription'
+      },
+      {
+        value: 'Recommendation',
+        name: 'Recommendation'
+      },
+      {
+        value: 'Prescriber creation',
+        name: 'Prescriber creation'
+      },
+      {
+        value: 'Automation',
+        name: 'Automation'
+      }
+    ];
+    const categoryList = [
+      {
+        value: 'Notification',
+        name: 'Notification'
+      }
+    ];
+    const statusList = [
+      {
+        value: '0',
+        name: 'Draft'
+      },
+      {
+        value: '1',
+        name: 'To do'
+      },
+      {
+        value: '2',
+        name: 'Finish'
+      }
+    ];
 
     const columns = [
       {
-        title: 'Task ID',
+        title: 'Email Task ID',
         dataIndex: 'taskId',
         key: 'taskId',
         width: '10%'
@@ -195,7 +241,7 @@ export default class ClinicList extends Component<any, any> {
         title: 'Object Type',
         dataIndex: 'objectType',
         key: 'objectType',
-        width: '15%',
+        width: '10%',
         ellipsis: true
       },
       {
@@ -230,7 +276,6 @@ export default class ClinicList extends Component<any, any> {
         width: '5%',
         render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'To do' : +text === 2 ? 'Finish' : ''}</span>
       },
-
       {
         title: 'Operation',
         key: 'operation',
@@ -318,7 +363,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Task ID" />
+                    <Input style={styles.label} disabled defaultValue="Email Task ID" />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -338,6 +383,7 @@ export default class ClinicList extends Component<any, any> {
                     <Input style={styles.label} disabled defaultValue="Object Type" />
                     <Select
                       style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       defaultValue=""
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -352,7 +398,7 @@ export default class ClinicList extends Component<any, any> {
                       </Option>
                       {objectTypeList &&
                         objectTypeList.map((item, index) => (
-                          <Option value={item.valueEn} key={index}>
+                          <Option value={item.value} key={index}>
                             {item.name}
                           </Option>
                         ))}
@@ -383,6 +429,7 @@ export default class ClinicList extends Component<any, any> {
                     <Input style={styles.label} disabled defaultValue="Email Template" />
                     <Select
                       style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -402,29 +449,6 @@ export default class ClinicList extends Component<any, any> {
                         ))}
                     </Select>
                   </InputGroup>
-
-                  {/* <SelectGroup
-                    defaultValue=""
-                    label={<p style={styles.label}>Email Template</p>}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'templateId',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {emailTemplateList &&
-                      emailTemplateList.map((item, index) => (
-                        <Option value={item.templateId} key={index}>
-                          {item.emailTemplate}
-                        </Option>
-                      ))}
-                  </SelectGroup>
-                 */}
                 </FormItem>
               </Col>
 
@@ -434,6 +458,7 @@ export default class ClinicList extends Component<any, any> {
                     <Input style={styles.label} disabled defaultValue="Category" />
                     <Select
                       style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       defaultValue=""
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -448,7 +473,7 @@ export default class ClinicList extends Component<any, any> {
                       </Option>
                       {categoryList &&
                         categoryList.map((item, index) => (
-                          <Option value={item.valueEn} key={index}>
+                          <Option value={item.value} key={index}>
                             {item.name}
                           </Option>
                         ))}
@@ -462,6 +487,7 @@ export default class ClinicList extends Component<any, any> {
                     <Input style={styles.label} disabled defaultValue="Status" />
                     <Select
                       style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       defaultValue=""
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -476,11 +502,28 @@ export default class ClinicList extends Component<any, any> {
                       </Option>
                       {statusList &&
                         statusList.map((item, index) => (
-                          <Option value={item.valueEn} key={index}>
+                          <Option value={item.value} key={index}>
                             {item.name}
                           </Option>
                         ))}
                     </Select>
+                  </InputGroup>
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Recipient" />
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'recipient',
+                          value
+                        });
+                      }}
+                    />
                   </InputGroup>
                 </FormItem>
               </Col>

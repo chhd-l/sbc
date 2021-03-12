@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, history, checkMenu, checkAuth } from 'qmkit';
 import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber, Tabs, Popconfirm } from 'antd';
 
 import * as webapi from './webapi';
@@ -418,7 +418,10 @@ class AttributeLibrary extends Component<any, any> {
                         {' '}
                         *
                       </span>
-                      Attribute value
+                      Attribute value&nbsp;
+                      <Tooltip title="Attribute value' is input from other system, which can not be modified, but you can modify 'display name'. If you want to modify 'attribute value', you could contact us.">
+                        <Icon type="question-circle-o" />
+                      </Tooltip>
                     </span>
                   ) : (
                     ''
@@ -440,6 +443,7 @@ class AttributeLibrary extends Component<any, any> {
                 })(
                   <Input
                     placeholder="Attribute value"
+                    disabled={!checkAuth('f_attribute_value_edit')}
                     style={{ marginRight: 8 }}
                     onChange={(e) => {
                       const value = (e.target as any).value;
@@ -464,6 +468,7 @@ class AttributeLibrary extends Component<any, any> {
                   <Input
                     placeholder="Display value"
                     style={{ marginRight: 8 }}
+                    disabled={!checkAuth('f_attribute_value_edit')}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onChangeValue(k.id || k.tempId, value, 'display');
@@ -472,24 +477,26 @@ class AttributeLibrary extends Component<any, any> {
                 )}
               </FormItem>
             </Col>
-            <Col span={2} style={{ marginTop: '10px' }}>
-              <span>
-                {obj.length > 1 ? (
-                  <>
-                    {k.id ? (
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
-                        <Icon className="dynamic-delete-button" type="minus-circle-o" />
-                      </Popconfirm>
-                    ) : (
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeTemp(k.tempId)} okText="Confirm" cancelText="Cancel">
-                        <Icon className="dynamic-delete-button" type="minus-circle-o" />
-                      </Popconfirm>
-                    )}
-                  </>
-                ) : null}
-                <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
-              </span>
-            </Col>
+            {checkAuth('f_attribute_value_edit') ? (
+              <Col span={2} style={{ marginTop: '10px' }}>
+                <span>
+                  {obj.length > 1 ? (
+                    <>
+                      {k.id ? (
+                        <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
+                          <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                        </Popconfirm>
+                      ) : (
+                        <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeTemp(k.tempId)} okText="Confirm" cancelText="Cancel">
+                          <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                        </Popconfirm>
+                      )}
+                    </>
+                  ) : null}
+                  <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
+                </span>
+              </Col>
+            ) : null}
           </Row>
         </div>
       ));

@@ -490,7 +490,7 @@ class BasicInfomation extends React.Component<any, any> {
                     <DatePicker
                       style={{ width: '100%' }}
                       format="YYYY-MM-DD"
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       disabledDate={(current) => {
                         return current && current > moment().endOf('day');
                       }}
@@ -570,7 +570,7 @@ class BasicInfomation extends React.Component<any, any> {
                   })(
                     <Select
                       optionFilterProp="children"
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.onFormChange({
                           field: 'countryId',
@@ -599,7 +599,7 @@ class BasicInfomation extends React.Component<any, any> {
                     })(
                       <Select
                         showSearch
-                        getPopupContainer={() => document.getElementById('page-content')}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         optionFilterProp="children"
                         onChange={(value) => {
                           this.onFormChange({
@@ -629,7 +629,7 @@ class BasicInfomation extends React.Component<any, any> {
                   })(
                     <AutoComplete
                       placeholder="Please input or select City"
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onSearch={_.debounce(this.getCityList, 500)}
                       onChange={(value) => {
                         this.onFormChange({
@@ -755,7 +755,7 @@ class BasicInfomation extends React.Component<any, any> {
                   )(
                     <Select
                       showSearch
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       placeholder="Please select"
                       style={{ width: '100%' }}
                       onChange={(value, Option) => {
@@ -790,7 +790,7 @@ class BasicInfomation extends React.Component<any, any> {
                   )(
                     <Select
                       mode="multiple"
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       placeholder="Please select"
                       style={{ width: '100%' }}
                       onChange={(value, Option) => {
@@ -825,6 +825,7 @@ class BasicInfomation extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
+
               <Col span={12}>
                 <FormItem {...formItemLayout} label="Pet owner tagging">
                   {getFieldDecorator('selectedBind', {
@@ -837,7 +838,7 @@ class BasicInfomation extends React.Component<any, any> {
                     initialValue: basicForm.selectedBind
                   })(
                     <TreeSelect
-                      getPopupContainer={() => document.getElementById('page-content')}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       treeCheckable={true}
                       showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                       // treeCheckStrictly={true}
@@ -857,6 +858,7 @@ class BasicInfomation extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
+
               <Col span={24}>
                 <FormItem>
                   <Button type="primary" htmlType="submit" loading={loading}>

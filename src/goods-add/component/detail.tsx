@@ -48,18 +48,20 @@ export default class Detail extends React.Component<any, any> {
   };
 
   onContentChange = (html: string, name: string) => {
-    const { goods } = this.props.relaxProps;
-    let resource = goods.get('resource');
-    if (resource !== 1 && goodsDetailTabObj[name].contentType === 'json') {
-      const reg = /[^><]+(?=<\/xmp>)/gim;
-      let _html = html.match(reg);
-      goodsDetailTabObj[name].content = _html ? _html.toString() : '';
+    if (goodsDetailTabObj[name].contentType.toUpperCase() === 'JSON') {
+      goodsDetailTabObj[name].content = this.functionTurnJson(html);
     } else {
       goodsDetailTabObj[name].content = html;
     }
     this.sortDetailTab();
   };
-
+  functionTurnJson = (content) => {
+    const reg = /\<[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
+    let _html = content.replace(reg, function () {
+      return arguments[1];
+    });
+    return _html;
+  };
   sortDetailTab = () => {
     const { editEditorContent } = this.props.relaxProps;
     let arr = [];
@@ -81,26 +83,25 @@ export default class Detail extends React.Component<any, any> {
               let resource = goods.get('resource'),
                 disabled = true;
               if (resource !== 1) {
-                disabled = item.editable;
-                if (item.contentType === 'json') {
-                  item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content}</xmp></code></pre>`;
-                }
+                disabled = item?.editable ?? false;
               }
-
+              if (item.contentType.toUpperCase() === 'JSON') {
+                item.content = this.functionTurnJson(item.content);
+                item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content || '{tip:"请输入json格式"}'}</xmp></code></pre>`;
+              }
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
-                  <ErrorBoundary>
-                    <ReactEditor
-                      id={'main-' + item.descriptionId}
-                      cateId={item.goodsCateId}
-                      content={item.content}
-                      onContentChange={this.onContentChange}
-                      contentType={item.contentType}
-                      tabNanme={item.descriptionName + '_' + item.descriptionId}
-                      disabled={!disabled}
-                      height={320}
-                    />
-                  </ErrorBoundary>
+                  <ReactEditor
+                    key={item.key}
+                    id={'main-' + item.descriptionId}
+                    cateId={item.goodsCateId}
+                    content={item.content}
+                    onContentChange={this.onContentChange}
+                    contentType={item.contentType}
+                    tabNanme={item.descriptionName + '_' + item.descriptionId}
+                    disabled={!disabled}
+                    height={320}
+                  />
                 </Tabs.TabPane>
               );
             })}

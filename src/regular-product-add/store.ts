@@ -415,7 +415,7 @@ export default class AppStore extends Store {
 
       this.dispatch('goodsActor: editGoods', goods);
 
-      this.dispatch('goodsActor: goodsDetailTabContentOld', goods.get('goodsDetail'));
+      //this.dispatch('goodsActor: goodsDetailTabContentOld', goods.get('goodsDetail'));
       this.dispatch('goodsSpecActor: editSpecSingleFlag', goodsDetail.getIn(['goods', 'moreSpecFlag']) == 0);
 
       // 商品图片
@@ -438,23 +438,23 @@ export default class AppStore extends Store {
       });
       this.dispatch('imageActor: editVideo', videoObj);
 
-      const tabs = [];
-      if (goodsDetail.get('storeGoodsTabs')) {
-        goodsDetail.get('storeGoodsTabs').forEach((info) => {
-          tabs.push({
-            tabId: info.get('tabId'),
-            tabName: info.get('tabName'),
-            tabDetail:
-              goodsDetail.get('goodsTabRelas').find((tabInfo) => tabInfo.get('tabId') === info.get('tabId')) &&
-              goodsDetail
-                .get('goodsTabRelas')
-                .find((tabInfo) => tabInfo.get('tabId') === info.get('tabId'))
-                .get('tabDetail')
-          });
-        });
-      }
+      // const tabs = [];
+      // if (goodsDetail.get('storeGoodsTabs')) {
+      //   goodsDetail.get('storeGoodsTabs').forEach((info) => {
+      //     tabs.push({
+      //       tabId: info.get('tabId'),
+      //       tabName: info.get('tabName'),
+      //       tabDetail:
+      //         goodsDetail.get('goodsTabRelas').find((tabInfo) => tabInfo.get('tabId') === info.get('tabId')) &&
+      //         goodsDetail
+      //           .get('goodsTabRelas')
+      //           .find((tabInfo) => tabInfo.get('tabId') === info.get('tabId'))
+      //           .get('tabDetail')
+      //     });
+      //   });
+      // }
 
-      this.dispatch('goodsActor: goodsTabs', tabs);
+      // this.dispatch('goodsActor: goodsTabs', tabs);
       // 属性信息
       this.showGoodsPropDetail(goodsDetail.getIn(['goods', 'cateId']), goodsDetail.get('goodsPropDetailRels'));
       // 是否为多规格
@@ -466,7 +466,6 @@ export default class AppStore extends Store {
         const goodsSpecDetails = goodsDetail.get('goodsSpecDetails');
         goodsSpecs = goodsSpecs.map((item) => {
           // 规格值列表，按照id升序排列
-          console.log(goodsSpecDetails, 11111111111);
           const specValues = goodsSpecDetails
             .filter((detailItem) => detailItem.get('specId') == item.get('specId'))
             .map((detailItem) => detailItem.set('isMock', false))
@@ -1105,7 +1104,7 @@ export default class AppStore extends Store {
   /**
    * 保存基本信息和价格
    */
-  saveAll = async () => {
+  saveAll = async (nextTab = null) => {
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1188,8 +1187,7 @@ export default class AppStore extends Store {
     // }
 
     param = param.set('goodsTabRelas', tabs);
-
-    goods = goods.set('goodsType', 0);
+    goods = goods.set('goodsType', goods.get('goodsType') == 3 ? goods.get('goodsType') : 0);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
@@ -1293,6 +1291,7 @@ export default class AppStore extends Store {
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
+          externalSku: item.get('externalSku'),
           stock: item.get('stock'),
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
@@ -1445,7 +1444,11 @@ export default class AppStore extends Store {
       }
       message.success('Operate successfully');
       this.dispatch('goodsActor:saveSuccessful', true);
-      this.onMainTabChange('related');
+      if (!nextTab) {
+        this.onMainTabChange('related');
+      } else {
+        this.onMainTabChange('seo');
+      }
       //history.push('/goods-list');
     } else {
       return false;
@@ -1834,6 +1837,8 @@ export default class AppStore extends Store {
     } else if (nextKey === 'seo') {
       if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew() || !this.state().get('getGoodsId')) {
         return;
+      } else {
+        this.saveAll('seo');
       }
     }
     if (nextKey !== 'related') {
@@ -1921,17 +1926,19 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeDescriptionTab = async (cateId) => {
+    if (!cateId) return;
     const result: any = await getDescriptionTab(cateId);
 
     if (result.res.code === Const.SUCCESS_CODE) {
       let content = result.res.context;
       let res = content.map((item) => {
         return {
+          key: +new Date(),
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
           contentType: item.contentType,
-          content: ' ',
+          content: '',
           sort: item.sort,
           editable: true
         };

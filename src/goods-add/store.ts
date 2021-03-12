@@ -1002,7 +1002,7 @@ export default class AppStore extends Store {
   /**
    * 保存基本信息和价格
    */
-  saveAll = async () => {
+  saveAll = async (nextTab = null) => {
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1199,6 +1199,7 @@ export default class AppStore extends Store {
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
+          externalSku: item.get('externalSku'),
           stock: item.get('stock') || c,
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
@@ -1310,7 +1311,6 @@ export default class AppStore extends Store {
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
     param = param.set('goodsDescriptionDetailList', this.state().get('goodsDescriptionDetailList'));
 
-    //console.log(this.state().get('productFilter'), 2222);
 
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)
@@ -1340,7 +1340,6 @@ export default class AppStore extends Store {
       result = await save(param && param.toJS());
     }
 
-    //console.log(param.toJS(), 'param.toJS(),----------------');
 
     // this.dispatch('goodsActor: saveLoading', false);
     this.dispatch('loading:end');
@@ -1357,7 +1356,11 @@ export default class AppStore extends Store {
       }
       message.success('Operate successfully');
       this.dispatch('goodsActor:saveSuccessful', true);
-      this.onMainTabChange('related');
+      if (!nextTab) {
+        this.onMainTabChange('related');
+      } else {
+        this.onMainTabChange('seo');
+      }
       //history.push('/goods-list');
     } else {
     }
@@ -1746,6 +1749,8 @@ export default class AppStore extends Store {
     } else if (nextKey === 'seo') {
       if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew() || !this.state().get('getGoodsId')) {
         return;
+      } else {
+        this.saveAll('seo');
       }
     }
     if (nextKey !== 'related') {
@@ -1840,11 +1845,12 @@ export default class AppStore extends Store {
       let content = result.res.context;
       let res = content.map((item) => {
         return {
+          key: +new Date(),
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
           contentType: item.contentType,
-          content: ' ',
+          content: '',
           sort: item.sort,
           editable: true
         };
@@ -2075,7 +2081,6 @@ export default class AppStore extends Store {
       headingTag: seoObj.headingTag,
       updateNumbers
     };
-    // console.log(params, 'params-------------');
     const { res } = (await editSeo(params)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {

@@ -93,15 +93,6 @@ class SkuForm extends React.Component<any, any> {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
-    // if(this.state.count < 100) {
-    //   let count = this.state.count + 1
-    //   this.setState({count: count})
-    // }else {
-    //   return false
-    // }
-    setTimeout(()=>{
-      console.log(goodsList.toJS(),1111111111);
-    })
     return (
       <div style={{ marginBottom: 20 }}>
         {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
@@ -127,13 +118,11 @@ class SkuForm extends React.Component<any, any> {
 
       columns = goodsSpecs
         .map((item, i) => {
-          //debugger
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
-              console.log(rowInfo,11111111111);
               return rowInfo
             }
           };
@@ -217,6 +206,36 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
+
+    //External SKU
+    /*columns = columns.push({
+      title: 'External SKU',
+      key: 'externalSku',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('externalSku' + rowInfo.id, {
+                  rules: [
+                    /!*{
+                      required: true,
+                      message: 'Please input EAN code'
+                    },*!/
+                    /!*{
+                      pattern: ValidConst.noMinus,
+                      message: 'Please enter the correct value'
+                    }*!/
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
+                  initialValue: rowInfo.externalSku
+                })(<Input style={{ width: '180px' }} maxLength={45}/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });*/
 
     //EAN
     columns = columns.push({

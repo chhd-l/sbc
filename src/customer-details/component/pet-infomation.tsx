@@ -742,6 +742,7 @@ class PetInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
+
                   <Col span={12}>
                     <FormItem {...formItemLayout} label="Pet owner tagging">
                       {getFieldDecorator('selectedBind', {
@@ -753,7 +754,7 @@ class PetInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <TreeSelect
-                          getPopupContainer={() => document.getElementById('page-content')}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           treeCheckable={true}
                           showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                           // treeCheckStrictly={true}
@@ -773,6 +774,7 @@ class PetInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
+
                   <Col span={24}>
                     <FormItem>
                       <Button type="primary" htmlType="submit">

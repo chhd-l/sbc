@@ -6,7 +6,7 @@ import ItemCommunicationNode from './components/nodes/ItemCommunicationNode';
 import ItemEndNode from './components/nodes/ItemEndNode';
 import ItemIfElseNode from './components/nodes/ItemIfElseNode';
 import ItemOrderNode from './components/nodes/ItemOrderNode';
-import ItemSegmentNode from './components/nodes/ItemSegmentNode';
+import ItemSegmentNode from './components/nodes/ItemTaggingNode';
 import ItemStartNode from './components/nodes/ItemStartNode';
 import ItemTaskNode from './components/nodes/ItemTaskNode';
 import ItemVetCheckUpNode from './components/nodes/ItemVetCheckUpNode';
@@ -14,6 +14,8 @@ import ItemWaitNode from './components/nodes/ItemWaitNode';
 import NodeProperties from './components/node-properties/index';
 import { history, Headline } from 'qmkit';
 import * as webapi from './webapi';
+import { Const } from 'qmkit';
+import json from 'web_modules/qmkit/json';
 
 const { TabPane } = Tabs;
 
@@ -35,6 +37,27 @@ export default withPropsAPI(
       this.saveProperties = this.saveProperties.bind(this);
       this.doSave = this.doSave.bind(this);
     }
+
+    componentDidMount() {
+      webapi
+        .getAutomationById(this.props.id)
+        .then((data) => {
+          const res = data.res;
+          if (res.code === Const.SUCCESS_CODE) {
+            if (res.context.workflow) {
+              this.setState({
+                flowdata: JSON.parse(res.context.workflow)
+              });
+            }
+          } else {
+            message.error(res.message || 'Get data failed');
+          }
+        })
+        .catch(() => {
+          message.error('Get data failed');
+        });
+    }
+
     handleNodeDoubleClick(e) {
       if (e.item.model.nodeType === 'End') {
         return;
@@ -68,8 +91,8 @@ export default withPropsAPI(
           case 'Task':
             tmpParam = { ...tmpParam, ...formData.taskData };
             break;
-          case 'Segment':
-            tmpParam = { ...tmpParam, ...formData.segmentData };
+          case 'Tagging':
+            tmpParam = { ...tmpParam, ...formData.taggingData };
             break;
           case 'Order':
             tmpParam = { ...tmpParam, ...formData.orderData };
@@ -90,7 +113,7 @@ export default withPropsAPI(
       console.log(flowdata);
       console.log(JSON.stringify(flowdata));
       webapi
-        .updateAutomationNodes({ workflow: flowdata, id: this.props.id })
+        .updateAutomationNodes({ workflow: JSON.stringify(flowdata), id: this.props.id, updateWorkflow: true })
         .then((data) => {
           const { res } = data;
           if (res.code === 'K-000000') {
@@ -112,6 +135,15 @@ export default withPropsAPI(
             saveLoading: false
           });
         });
+    }
+    onAfterChange(e) {
+      if (e.action === 'add' && e.item.type === 'edge' && e.item.source.model.nodeType === 'IfAndElse') {
+        if (e.item.source._anchorPoints[0].id) {
+          e.item.model.lable = 'true';
+        } else {
+          e.item.model.lable = 'false';
+        }
+      }
     }
     render() {
       const { flowdata, activeKey, currentItem, title } = this.state;
@@ -135,7 +167,7 @@ export default withPropsAPI(
               <div className="demo-chart__container">
                 <div className="demo-chart__main">
                   <Flow
-                    style={{ height: '620px' }}
+                    style={{ height: '720px' }}
                     className="flow"
                     data={flowdata}
                     graphConfig={{ defaultNode: { type: 'customNode' } }}
@@ -144,9 +176,8 @@ export default withPropsAPI(
                       { edgeDefaultShape: 'flow-polyline-round' } // 连线方式
                     }
                     onNodeDoubleClick={this.handleNodeDoubleClick}
-                    // onNodeClick="handleNodeClick"
                     noEndEdge={false}
-                    // onAfterChange="onAfterChange"
+                    onAfterChange={this.onAfterChange}
                   />
                 </div>
                 <div className="demo-chart__sidebar user-select-none">

@@ -410,7 +410,7 @@ export default class tasks extends Component<any, any> {
             <Empty />
           )}
         </Col>
-        {visible ? <AddComment visible={visible} closeModel={() => this.setState({ visible: false })} /> : null}
+        {visible ? <AddComment visible={visible} getActivities={() => {}} petOwnerId={this.props.petOwnerId} closeModel={() => this.setState({ visible: false })} /> : null}
       </Row>
     );
   }

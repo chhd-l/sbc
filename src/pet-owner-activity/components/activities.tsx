@@ -4,6 +4,7 @@ import { Card, Icon, Row, Col, message, Dropdown, Button, Menu, Checkbox, Timeli
 import { replaceLink } from '../common';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
+import AddComment from './add-comment';
 
 const { SHOW_ALL } = TreeSelect;
 
@@ -12,8 +13,7 @@ export default class Activities extends Component<any, any> {
     super(props);
     this.state = {
       activityLoading: false,
-      activityList: [
-      ],
+      activityList: [],
       treeData: [
         {
           title: 'Pet Owner',
@@ -62,14 +62,15 @@ export default class Activities extends Component<any, any> {
       isRecent: true,
       orderType: 'asc',
       filters: [],
-      keyword: ''
+      keyword: '',
+      visible: false
     };
     this.getActivities = this.getActivities.bind(this);
     this.onActivityTypeChange = this.onActivityTypeChange.bind(this);
   }
 
   componentDidMount() {
-    this.getActivities()
+    this.getActivities();
   }
 
   getActivities() {
@@ -90,7 +91,7 @@ export default class Activities extends Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            activityList: res.context.activityVOList || [],
+            activityList: res.context.customerActivity || [],
             activityLoading: false
           });
         } else {
@@ -111,10 +112,12 @@ export default class Activities extends Component<any, any> {
   onActivityTypeChange = (value) => {};
 
   render() {
-    const { activityLoading, activityList, treeData, orderType, isRecent } = this.state;
+    const { activityLoading, activityList, treeData, orderType, isRecent, visible } = this.state;
     const menu = (
       <Menu>
-        <Menu.Item key={1}>Add Comment</Menu.Item>
+        <Menu.Item key={1}>
+          <a onClick={() => this.setState({ visible: true })}> Add Comment</a>
+        </Menu.Item>
         <Menu.Item key={2}>
           <Link to={'/add-task'}>Add Task</Link>
         </Menu.Item>
@@ -135,7 +138,7 @@ export default class Activities extends Component<any, any> {
     return (
       <Row>
         <Col span={9}>
-        <Input
+          <Input
             className="searchInput"
             placeholder="Keyword"
             onPressEnter={() => this.getActivities()}
@@ -200,6 +203,16 @@ export default class Activities extends Component<any, any> {
             <Empty />
           )}
         </Col>
+        {visible ? (
+          <AddComment
+            visible={visible}
+            getActivities={() => {
+              this.getActivities();
+            }}
+            petOwnerId={this.props.petOwnerId}
+            closeModel={() => this.setState({ visible: false })}
+          />
+        ) : null}
       </Row>
     );
   }

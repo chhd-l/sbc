@@ -17,7 +17,7 @@ class AutomationForm extends Component<any, any> {
     this.state = {
       automationId: this.props.match.params.id ? this.props.match.params.id : '',
       title: this.props.match.params.id ? 'Automation Edit' : 'New Automation',
-      saveButtonText: this.props.match.params.id ? 'Workflow Edit' : 'New Workflow',
+      saveButtonText: this.props.match.params.id ? 'Save & Edit Workflow ' : 'Save & New Workflow',
       loading: false,
       automationForm: {
         automationName: '',
@@ -29,7 +29,8 @@ class AutomationForm extends Component<any, any> {
         eventEndTime: '',
         trackingStartTime: '',
         trackingEndTime: '',
-        communicationChannel: ''
+        communicationChannel: '',
+        workflow: null
       }
     };
   }
@@ -55,7 +56,8 @@ class AutomationForm extends Component<any, any> {
             eventEndTime: res.context.eventEndTime,
             trackingStartTime: res.context.trackingStartTime,
             trackingEndTime: res.context.trackingEndTime,
-            communicationChannel: res.context.communicationChannel ? res.context.communicationChannel.split(';') : ''
+            communicationChannel: res.context.communicationChannel ? res.context.communicationChannel.split(';') : '',
+            workflow: res.context.workflow
           };
           this.setState({
             loading: false,
@@ -89,7 +91,8 @@ class AutomationForm extends Component<any, any> {
           eventEndTime: moment(automationForm.eventEndTime).format('YYYY-MM-DD HH:mm:ss'),
           trackingStartTime: moment(automationForm.eventEndtrackingStartTimeTime).format('YYYY-MM-DD HH:mm:ss'),
           trackingEndTime: moment(automationForm.trackingEndTime).format('YYYY-MM-DD HH:mm:ss'),
-          communicationChannel: automationForm.communicationChannel ? automationForm.communicationChannel.join(';') : null
+          communicationChannel: automationForm.communicationChannel ? automationForm.communicationChannel.join(';') : null,
+          workflow: automationForm.workflow
         };
         if (automationId) {
           params = Object.assign(params, {
@@ -113,7 +116,7 @@ class AutomationForm extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'Operation successful');
-          history.push('/automation-workflow/1'); //todo
+          history.push('/automation-workflow/' + this.state.automationId);
         } else {
           this.setState({
             loading: false
@@ -137,8 +140,7 @@ class AutomationForm extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'Operation successful');
-          history.push('/automation-workflow/1'); //todo
-        } else {
+          history.push('/automation-workflow/' + this.state.automationId);
           this.setState({
             loading: false
           });

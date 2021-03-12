@@ -27,7 +27,7 @@ class AddComment extends Component<any, any> {
           confirmLoading: true
         });
         webapi
-          .addComment({ id: petOwnerId, content: comment })
+          .addComment({ customerId: petOwnerId, content: comment, module: 'customer' })
           .then((data) => {
             const { res } = data;
             if (res.code === 'K-000000') {
@@ -37,6 +37,7 @@ class AddComment extends Component<any, any> {
                 confirmLoading: false
               });
               this.props.getActivities();
+              this.props.closeModel();
             } else {
               message.error(res.message || 'Add Failed');
               this.setState({

@@ -60,7 +60,7 @@ export default class PetOwnerActivity extends Component<any, any> {
     });
   };
   render() {
-    const { title, id, petOwner, loading } = this.state;
+    const { title, id, petOwner, loading, activityKey } = this.state;
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -72,7 +72,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               <Headline title={title} />
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <Button
+              {/* <Button
                 shape="round"
                 onClick={() => {
                   this.quickSend();
@@ -82,7 +82,7 @@ export default class PetOwnerActivity extends Component<any, any> {
                 }}
               >
                 <p style={{ color: '#e2001a' }}>Quick Send</p>
-              </Button>
+              </Button> */}
             </Col>
           </Row>
         </div>
@@ -111,7 +111,7 @@ export default class PetOwnerActivity extends Component<any, any> {
                       <Emails petOwnerId={id} />
                     </TabPane>
                     <TabPane tab="Activities" key="3">
-                      <Activities petOwnerId={id} />
+                      {activityKey === '3' ? <Activities petOwnerId={id} /> : null}
                     </TabPane>
                   </Tabs>
                 </Card>

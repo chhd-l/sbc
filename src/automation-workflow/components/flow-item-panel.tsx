@@ -174,19 +174,19 @@ export default class FlowItemPanel extends Component {
                 type="node"
                 model={{
                   size: [40, 40],
-                  shape: 'item-segment-node',
-                  label: 'Segment',
-                  labelBottom: 'Segment',
+                  shape: 'item-tagging-node',
+                  label: 'Tagging',
+                  labelBottom: 'Tagging',
                   labelOffsetY: 25,
                   labelOffsetX: 63,
                   name: 'Item Name',
                   color: color.green,
-                  nodeType: 'Segment'
+                  nodeType: 'Tagging'
                 }}
               >
                 <span className="icon iconfont iconai-connection item-icon" style={{ color: color.green }} />
                 <br />
-                <span className="item-text">Segment</span>
+                <span className="item-text">Tagging</span>
               </Item>
               <Item
                 type="node"

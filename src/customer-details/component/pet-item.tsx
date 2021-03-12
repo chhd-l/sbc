@@ -3,6 +3,7 @@ import { Form, Row, Col, Input, Select, Radio, Spin, DatePicker, Button, Popconf
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline } from 'qmkit';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 const { Option } = Select;
 
@@ -46,7 +47,7 @@ class PetItem extends React.Component<Iprop, any> {
     };
     return (
       <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
-        <Headline title="Edit pet information" />
+        <Headline title={<FormattedMessage id="PetOwner.EditPetInformation" />} />
         <Form {...formItemLayout}>
           <Row gutter={16}>
             <Col span={4} style={{ textAlign: 'center' }}>
@@ -54,64 +55,70 @@ class PetItem extends React.Component<Iprop, any> {
                 <Avatar size={120} icon="people" />
               </div>
               <div>
-                <Button type="link">Change picture</Button>
+                <Button type="link">
+                  <FormattedMessage id="PetOwner.ChangePicture" />
+                </Button>
               </div>
             </Col>
             <Col span={20}>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="Pet category">
+                  <Form.Item label={<FormattedMessage id="PetOwner.PetCategory" />}>
                     {getFieldDecorator('petsType', {
                       initialValue: pet.petsType,
-                      rules: [{ required: true, message: 'Pet category is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.PetCategoryIsRequired" /> }]
                     })(<Select />)}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="Pet name">
+                  <Form.Item label={<FormattedMessage id="PetOwner.PetName" />}>
                     {getFieldDecorator('petsName', {
                       initialValue: pet.petsName,
-                      rules: [{ required: true, message: 'Pet name is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.PetNameIsRequired" /> }]
                     })(<Input />)}
                   </Form.Item>
                 </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="Gender">
+                  <Form.Item label={<FormattedMessage id="PetOwner.Gender" />}>
                     {getFieldDecorator('petsSex', {
                       initialValue: pet.petsSex,
-                      rules: [{ required: true, message: 'Gender is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.GenderIsRequired" /> }]
                     })(<Select />)}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="Breed">
+                  <Form.Item label={<FormattedMessage id="PetOwner.Breed" />}>
                     {getFieldDecorator('petsBreed', {
                       initialValue: pet.petsBreed,
-                      rules: [{ required: true, message: 'Breed is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.BreedIsRequired" /> }]
                     })(<Select />)}
                   </Form.Item>
                 </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="Weight">
+                  <Form.Item label={<FormattedMessage id="PetOwner.Weight" />}>
                     {getFieldDecorator('petsSizeValueName', {
                       initialValue: pet.petsSizeValueName,
-                      rules: [{ required: true, message: 'Weight is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.WeightIsRequired" /> }]
                     })(<Select />)}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="Sterilized status">
+                  <Form.Item label={<FormattedMessage id="PetOwner.SterilizedStatus" />}>
                     {getFieldDecorator('sterilized', {
                       initialValue: pet.sterilized,
-                      rules: [{ required: true, message: 'Sterilized status is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.SterilizedStatusIsRequired" /> }]
                     })(
                       <Radio.Group>
-                        <Radio value={1}>Yes</Radio>
-                        <Radio value={0}>No</Radio>
+                        <Radio value={1}>
+                          <FormattedMessage id="PetOwner.Yes" />
+                        </Radio>
+                        <Radio value={0}>
+                          <FormattedMessage id="PetOwner.No" />
+                        </Radio>
                       </Radio.Group>
                     )}
                   </Form.Item>
@@ -119,18 +126,18 @@ class PetItem extends React.Component<Iprop, any> {
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="Birthday">
+                  <Form.Item label={<FormattedMessage id="PetOwner.Birthday" />}>
                     {getFieldDecorator('birthOfPets', {
                       initialValue: moment(pet.birthOfPets),
-                      rules: [{ required: true, message: 'Birthday is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.BirthdayIsRequired" /> }]
                     })(<DatePicker />)}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="Special needs">
+                  <Form.Item label={<FormattedMessage id="PetOwner.SpecialNeeds" />}>
                     {getFieldDecorator('customerPetsPropRelations', {
                       initialValue: pet.customerPetsPropRelations,
-                      rules: [{ required: true, message: 'Special needs is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.SpecialNeedsIsRequired" /> }]
                     })(<Select mode="tags" />)}
                   </Form.Item>
                 </Col>
@@ -139,12 +146,18 @@ class PetItem extends React.Component<Iprop, any> {
           </Row>
           <Row gutter={30} type="flex" align="middle" style={{ padding: '30px 0' }}>
             <Col span={16}>
-              <Button type="primary">Save</Button>
-              <Button style={{ marginLeft: '20px' }}>Cancel</Button>
+              <Button type="primary">
+                <FormattedMessage id="PetOwner.Save" />
+              </Button>
+              <Button style={{ marginLeft: '20px' }}>
+                <FormattedMessage id="PetOwner.Cancel" />
+              </Button>
             </Col>
             <Col span={8} style={{ textAlign: 'right' }}>
-              <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
-                <Button type="link">Delete pet profile</Button>
+              <Popconfirm placement="topRight" title={<FormattedMessage id="PetOwner.deleteThisItem" />} onConfirm={() => {}} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
+                <Button type="link">
+                  <FormattedMessage id="PetOwner.DeletePetProfile" />
+                </Button>
               </Popconfirm>
             </Col>
           </Row>

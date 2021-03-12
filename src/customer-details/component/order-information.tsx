@@ -47,19 +47,29 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                     <div style={styles.orderCon}>
                       <span style={styles.orderId}>432143213243</span>
                       <span style={styles.orderNo}>4321543154335</span>
-                      <span style={styles.orderTime}>Order time: 2020-07-10</span>
+                      <span style={styles.orderTime}>
+                        <FormattedMessage id="PetOwner.OrderTime" />: 2020-07-10
+                      </span>
                     </div>
                   </td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ width: '30%' }}>images</td>
-                  <td style={{ width: '10%' }}>Tom</td>
+                  <td style={{ width: '30%' }}>
+                    <FormattedMessage id="PetOwner.images" />
+                  </td>
+                  <td style={{ width: '10%' }}>
+                    <FormattedMessage id="PetOwner.Tom" />
+                  </td>
                   <td style={{ width: '10%' }}>$1312.00</td>
                   <td style={{ width: '10%' }}>12</td>
-                  <td style={{ width: '20%' }}>PRESCRIP TIMD</td>
-                  <td style={{ width: '10%' }}>Not shipped</td>
+                  <td style={{ width: '20%' }}>
+                    <FormattedMessage id="PetOwner.PRESCRIPTIMD" />
+                  </td>
+                  <td style={{ width: '10%' }}>
+                    <FormattedMessage id="PetOwner.NotShipped" />
+                  </td>
                   <td style={{ width: '10%' }}>
                     <Badge color="green" text="To be received" />
                   </td>
@@ -83,13 +93,27 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '30%' }}>Product</th>
-                      <th style={{ width: '10%' }}>Recipient</th>
-                      <th style={{ width: '10%' }}>Amount</th>
-                      <th style={{ width: '10%' }}>Quantity</th>
-                      <th style={{ width: '20%' }}>Prescriber name</th>
-                      <th style={{ width: '10%' }}>Shipping status</th>
-                      <th style={{ width: '10%' }}>Order status</th>
+                      <th style={{ width: '30%' }}>
+                        <FormattedMessage id="PetOwner.Product" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="PetOwner.Recipient" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="PetOwner.Amount" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="PetOwner.Quantity" />
+                      </th>
+                      <th style={{ width: '20%' }}>
+                        <FormattedMessage id="PetOwner.PrescriberName" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="PetOwner.ShippingStatus" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="PetOwner.OrderStatus" />
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList)}</tbody>
@@ -99,7 +123,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="PetOwner.noData" />
                   </span>
                 </div>
               ) : null}

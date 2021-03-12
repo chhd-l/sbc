@@ -7,6 +7,7 @@ import { List, Map } from 'immutable';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Store from '../store';
 import '../style.css';
+import { FormattedMessage } from 'react-intl';
 declare type IList = List<any>;
 
 const TreeNode = Tree.TreeNode;
@@ -63,13 +64,7 @@ export default class CateModal extends React.Component<any, any> {
     }
     const WrapperForm = this.WrapperForm;
     return (
-      <Modal
-        maskClosable={false}
-        title="Add Category"
-        visible={visible}
-        onCancel={this._handleCancel}
-        onOk={this._handleOk}
-      >
+      <Modal maskClosable={false} title={<FormattedMessage id="Setting.AddCategory" />} visible={visible} onCancel={this._handleCancel} onOk={this._handleOk}>
         <WrapperForm ref={(form) => (this._form = form)} />
       </Modal>
     );
@@ -133,51 +128,25 @@ class PicCateForm extends React.Component<any, any> {
         .map((item) => {
           if (item.get('children') && item.get('children').count()) {
             return (
-              <TreeNode
-                key={item.get('cateId')}
-                value={item.get('cateId').toString()}
-                title={item.get('cateName')}
-              >
+              <TreeNode key={item.get('cateId')} value={item.get('cateId').toString()} title={item.get('cateName')}>
                 {item.get('children').map((item) => {
-                  return (
-                    <TreeNode
-                      key={item.get('cateId')}
-                      value={item.get('cateId').toString()}
-                      title={item.get('cateName')}
-                    />
-                  );
+                  return <TreeNode key={item.get('cateId')} value={item.get('cateId').toString()} title={item.get('cateName')} />;
                 })}
               </TreeNode>
             );
           }
-          return (
-            <TreeNode
-              key={item.get('cateId')}
-              value={item.get('cateId').toString()}
-              title={item.get('cateName')}
-            />
-          );
+          return <TreeNode key={item.get('cateId')} value={item.get('cateId').toString()} title={item.get('cateName')} />;
         });
 
     return (
       <Form>
-        <FormItem
-          style={{ marginBottom: '50px' }}
-          className={'c-tree-select'}
-          {...formItemLayout}
-          label="Parent category"
-          hasFeedback
-        >
+        <FormItem style={{ marginBottom: '50px' }} className={'c-tree-select'} {...formItemLayout} label={<FormattedMessage id="Setting.ParentCategory" />} hasFeedback>
           {getFieldDecorator('cateParentId', {
-            rules: [{ required: true, message: 'Select parent category' }]
+            rules: [{ required: true, message: <FormattedMessage id="Setting.SelectParentCategory" /> }]
           })(
             <TreeSelect
               showSearch
-              filterTreeNode={(input, treeNode) =>
-                treeNode.props.title
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) >= 0
-              }
+              filterTreeNode={(input, treeNode) => treeNode.props.title.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               style={{ width: 300 }}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
               placeholder="Please select a category"
@@ -188,16 +157,13 @@ class PicCateForm extends React.Component<any, any> {
               {loop(cateList)}
             </TreeSelect>
           )}
-          <Tips
-            style={{ position: 'absolute' }}
-            title="To add a new category, please select the parent category first"
-          />
+          <Tips style={{ position: 'absolute' }} title={<FormattedMessage id="Setting.selectTheParentCategoryFirst" />} />
         </FormItem>
-        <FormItem {...formItemLayout} label="Category name" hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.CategoryName" />} hasFeedback>
           {getFieldDecorator('cateName', {
             rules: [
-              { required: true, message: 'Please input the category name' },
-              { max: 10, message: 'Up to 10 characters' }
+              { required: true, message: <FormattedMessage id="Setting.PleaseInputTheCategoryName" /> },
+              { max: 10, message: <FormattedMessage id="Setting.UpTo10Characters" /> }
             ]
           })(<Input onChange={this._changeCateName} />)}
         </FormItem>

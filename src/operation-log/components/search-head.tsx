@@ -78,7 +78,7 @@ export default class SearchHead extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p>
-                        <FormattedMessage id="operatorAccount" />
+                        <FormattedMessage id="Setting.operatorAccount" />
                       </p>
                     }
                     onChange={(e) => {
@@ -93,7 +93,7 @@ export default class SearchHead extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p>
-                        <FormattedMessage id="operatorName" />
+                        <FormattedMessage id="Setting.operatorName" />
                       </p>
                     }
                     // addonBefore={<FormattedMessage id="operatorName" />}
@@ -107,33 +107,51 @@ export default class SearchHead extends Component<any, any> {
               <Col span="8" id="select-group-width">
                 <FormItem>
                   <SelectGroup
-                    getPopupContainer={() =>
-                      document.getElementById('page-content')
-                    }
+                    getPopupContainer={() => document.getElementById('page-content')}
                     defaultValue=""
-                    label={<FormattedMessage id="module" />}
+                    label={<FormattedMessage id="Setting.module" />}
                     onChange={(value) => {
                       search.opModule = value;
                       this.setState({ search: search });
                     }}
                   >
-                    <Option value="">All</Option>
-                    <Option value="Login">Login</Option>
-                    <Option value="Goods">Goods</Option>
-                    <Option value="Order">Order</Option>
-                    <Option value="Prescriber">Prescriber</Option>
-                    <Option value="Marketing">Marketing</Option>
-                    <Option value="Finance">Finance</Option>
-                    <Option value="Setting">Setting</Option>
-                    <Option value="Customer Delivery">Customer Delivery</Option>
-                    <Option value="Customer Billing">Customer Billing</Option>
+                    <Option value="">
+                      <FormattedMessage id="Setting.All" />
+                    </Option>
+                    <Option value="Login">
+                      <FormattedMessage id="Setting.Login" />
+                    </Option>
+                    <Option value="Goods">
+                      <FormattedMessage id="Setting.Goods" />
+                    </Option>
+                    <Option value="Order">
+                      <FormattedMessage id="Setting.Order" />
+                    </Option>
+                    <Option value="Prescriber">
+                      <FormattedMessage id="Setting.Prescriber" />
+                    </Option>
+                    <Option value="Marketing">
+                      <FormattedMessage id="Setting.Marketing" />
+                    </Option>
+                    <Option value="Finance">
+                      <FormattedMessage id="Setting.Finance" />
+                    </Option>
+                    <Option value="Setting">
+                      <FormattedMessage id="Setting.Setting" />
+                    </Option>
+                    <Option value="Customer Delivery">
+                      <FormattedMessage id="Setting.CustomerDelivery" />
+                    </Option>
+                    <Option value="Customer Billing">
+                      <FormattedMessage id="Setting.CustomerBilling" />
+                    </Option>
                   </SelectGroup>
                 </FormItem>
               </Col>
               <Col span="8">
                 <FormItem>
                   <Input
-                    addonBefore={<FormattedMessage id="operatorType" />}
+                    addonBefore={<FormattedMessage id="Setting.operatorType" />}
                     onChange={(e) => {
                       search.opCode = (e.target as any).value;
                       this.setState({ search: search });
@@ -144,7 +162,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span="8">
                 <FormItem>
                   <Input
-                    addonBefore={<FormattedMessage id="operatorContent" />}
+                    addonBefore={<FormattedMessage id="Setting.operatorContent" />}
                     onChange={(e) => {
                       search.opContext = (e.target as any).value;
                       this.setState({ search: search });
@@ -156,20 +174,14 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <RangePicker
                     // style={{ width: '294px' }}
-                    getCalendarContainer={() =>
-                      document.getElementById('page-content')
-                    }
+                    getCalendarContainer={() => document.getElementById('page-content')}
                     defaultValue={[search.beginTime, search.endTime]}
                     value={[search.beginTime, search.endTime]}
                     format={Const.DATE_FORMAT}
                     showTime={{ format: 'HH:mm' }}
                     open={pickOpen}
                     allowClear={false}
-                    renderExtraFooter={() =>
-                      pickErrorInfo != '' && (
-                        <span style={{ color: 'red' }}>{pickErrorInfo}</span>
-                      )
-                    }
+                    renderExtraFooter={() => pickErrorInfo != '' && <span style={{ color: 'red' }}>{pickErrorInfo}</span>}
                     onChange={this._handleDateParams}
                     onOk={this._dateOkBtn}
                     {...options}
@@ -186,15 +198,7 @@ export default class SearchHead extends Component<any, any> {
                     onClick={(e) => {
                       e.preventDefault();
                       //将搜索条件复制到导出条件
-                      const {
-                        opAccount,
-                        opName,
-                        opCode,
-                        opModule,
-                        opContext,
-                        beginTime,
-                        endTime
-                      } = this.state.search;
+                      const { opAccount, opName, opCode, opModule, opContext, beginTime, endTime } = this.state.search;
 
                       this.setState({
                         export: {
@@ -222,7 +226,7 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Setting.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -234,15 +238,7 @@ export default class SearchHead extends Component<any, any> {
                       type="primary"
                       icon="download"
                       onClick={() => {
-                        const {
-                          opAccount,
-                          opName,
-                          opCode,
-                          opModule,
-                          opContext,
-                          beginTime,
-                          endTime
-                        } = this.state.export;
+                        const { opAccount, opName, opCode, opModule, opContext, beginTime, endTime } = this.state.export;
 
                         const params = {
                           opAccount,
@@ -256,7 +252,7 @@ export default class SearchHead extends Component<any, any> {
                         onExportByParams(params);
                       }}
                     >
-                      <FormattedMessage id="export" />
+                      <FormattedMessage id="Setting.Setting" />
                     </Button>
                   </FormItem>
                 </AuthWrapper>
@@ -288,8 +284,7 @@ export default class SearchHead extends Component<any, any> {
       search.beginTime = beginTime;
       search.endTime = beginTime.clone().add(3, 'months');
       this.setState({
-        pickErrorInfo:
-          'The start time and end time should be within three months',
+        pickErrorInfo: 'The start time and end time should be within three months',
         search: search
       });
     }

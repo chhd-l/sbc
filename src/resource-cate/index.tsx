@@ -28,12 +28,8 @@ export default class ResourceCate extends React.Component<any, any> {
             <Breadcrumb.Item>素材分类</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="assetCategory" />} />
-            <Alert
-              message={<FormattedMessage id="assetCategoryInfo" />}
-              type="info"
-              showIcon
-            />
+            <Headline title={<FormattedMessage id="Setting.assetCategory" />} />
+            <Alert message={<FormattedMessage id="Setting.assetCategoryInfo" />} type="info" showIcon />
             {/*工具条*/}
             <Tool />
           </div>

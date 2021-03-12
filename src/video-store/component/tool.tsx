@@ -42,27 +42,23 @@ export default class Tool extends React.Component<any, any> {
       <div className="handle-bar">
         <AuthWrapper functionName="f_videoStore_1">
           <Button type="primary" onClick={this._upload}>
-            <FormattedMessage id="uploadVideo" />
+            <FormattedMessage id="Setting.uploadVideo" />
           </Button>
         </AuthWrapper>
         <AuthWrapper functionName="f_resourceCate_2">
           <Button type="primary" onClick={this._showModal}>
-            <FormattedMessage id="addCategory" />
+            <FormattedMessage id="Setting.addCategory" />
           </Button>
         </AuthWrapper>
         <AuthWrapper functionName="f_videoStore_1">
           <Button type="primary" onClick={this._showMoveModal}>
-            <FormattedMessage id="move" />
+            <FormattedMessage id="Setting.move" />
           </Button>
         </AuthWrapper>
         <div style={{ float: 'right' }}>
           <Form layout="inline">
             <FormItem>
-              <Input
-                placeholder="Enter video name"
-                value={this.props.relaxProps.videoName}
-                onChange={this._editSearchData}
-              />
+              <Input placeholder="Enter video name" value={this.props.relaxProps.videoName} onChange={this._editSearchData} />
             </FormItem>
             <FormItem>
               <Button
@@ -77,7 +73,7 @@ export default class Tool extends React.Component<any, any> {
               >
                 {' '}
                 <span>
-                  <FormattedMessage id="search" />
+                  <FormattedMessage id="Setting.search" />
                 </span>{' '}
               </Button>
             </FormItem>
@@ -120,7 +116,7 @@ export default class Tool extends React.Component<any, any> {
   _showMoveModal = () => {
     const { videoList, showMoveVideoModal } = this.props.relaxProps;
     if (videoList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error('Please select the video to move first');
+      message.error(<FormattedMessage id="Setting.videoToMoveFirst" />);
       return;
     }
     showMoveVideoModal(true);

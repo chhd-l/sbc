@@ -31,32 +31,14 @@ export default class SelfListView extends React.Component<any, any> {
     return (
       <DataGrid
         isScroll={false}
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         rowKey="customerLevelId"
         pagination={false}
         dataSource={selfDataList.toJS()}
       >
-        <Column
-          title={<FormattedMessage id="levelName" />}
-          key="customerLevelName"
-          dataIndex="customerLevelName"
-        />
+        <Column title={<FormattedMessage id="PetOwner.levelName" />} key="customerLevelName" dataIndex="customerLevelName" />
 
-        <Column
-          title={<FormattedMessage id="levelBadge" />}
-          key="rankBadgeImg"
-          dataIndex="rankBadgeImg"
-          render={(rankBadgeImg) =>
-            rankBadgeImg ? (
-              <img
-                src={rankBadgeImg}
-                style={{ width: 40, height: 40, display: 'inline-block' }}
-              />
-            ) : (
-              '-'
-            )
-          }
-        />
+        <Column title={<FormattedMessage id="PetOwner.levelBadge" />} key="rankBadgeImg" dataIndex="rankBadgeImg" render={(rankBadgeImg) => (rankBadgeImg ? <img src={rankBadgeImg} style={{ width: 40, height: 40, display: 'inline-block' }} /> : '-')} />
 
         {/* <Column
           title="所需成长值"

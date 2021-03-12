@@ -245,7 +245,7 @@ class PetInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="PetOwner.OperateSuccessfully" />);
           this.petsByConsumer();
         }
       })
@@ -306,7 +306,7 @@ class PetInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="PetOwner.OperateSuccessfully" />);
           this.petsByConsumer();
         } else {
           this.setState({
@@ -371,12 +371,12 @@ class PetInfomation extends React.Component<any, any> {
               <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                 <Row gutter={16}>
                   <Col span={12}>
-                    <FormItem label="Pet Category">
+                    <FormItem label={<FormattedMessage id="PetOwner.PetCategory" />}>
                       {getFieldDecorator('petsType', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please select Pet Category!'
+                            message: <FormattedMessage id="PetOwner.selectPetCategory" />
                           }
                         ]
                       })(
@@ -401,14 +401,14 @@ class PetInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Pet Name">
+                    <FormItem label={<FormattedMessage id="PetOwner.PetName" />}>
                       {getFieldDecorator('petsName', {
                         rules: [
-                          { required: true, message: 'Please input Pet Name!' },
+                          { required: true, message: <FormattedMessage id="PetOwner.inputPetName" /> },
 
                           {
                             max: 50,
-                            message: 'Exceed maximum length!'
+                            message: <FormattedMessage id="PetOwner.ExceedMaximumLength" />
                           }
                         ]
                       })(
@@ -425,9 +425,9 @@ class PetInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Gender">
+                    <FormItem label={<FormattedMessage id="PetOwner.Gender" />}>
                       {getFieldDecorator('petsSex', {
-                        rules: [{ required: true, message: 'Please select Gender!' }]
+                        rules: [{ required: true, message: <FormattedMessage id="PetOwner.PleaseSelectGender" /> }]
                       })(
                         <Select
                           onChange={(value) => {
@@ -451,12 +451,12 @@ class PetInfomation extends React.Component<any, any> {
                   </Col>
                   {petForm.petsType === 'dog' ? (
                     <Col span={12}>
-                      <FormItem label="Breed">
+                      <FormItem label={<FormattedMessage id="PetOwner.Breed" />}>
                         {getFieldDecorator('petsBreed', {
                           rules: [
                             {
                               required: true,
-                              message: 'Please select Breed!'
+                              message: <FormattedMessage id="PetOwner.PleaseSelectBreed" />
                             }
                           ]
                         })(
@@ -483,12 +483,12 @@ class PetInfomation extends React.Component<any, any> {
                     </Col>
                   ) : (
                     <Col span={12}>
-                      <FormItem label="Breed">
+                      <FormItem label={<FormattedMessage id="PetOwner.Breed" />}>
                         {getFieldDecorator('petsBreed', {
                           rules: [
                             {
                               required: true,
-                              message: 'Please select Breed!'
+                              message: <FormattedMessage id="PetOwner.PleaseSelectBreed" />
                             }
                           ]
                         })(
@@ -521,9 +521,9 @@ class PetInfomation extends React.Component<any, any> {
                         display: petForm.petsType === 'cat' ? 'none' : 'block'
                       }}
                     >
-                      <FormItem label="Weight">
+                      <FormItem label={<FormattedMessage id="PetOwner.Weight" />}>
                         {getFieldDecorator('petsSizeValueName', {
-                          rules: [{ required: true, message: 'Please input Weight!' }],
+                          rules: [{ required: true, message: <FormattedMessage id="PetOwner.PleaseInputWeight" /> }],
                           initialValue: petForm.petsSizeValueName
                         })(
                           <Select
@@ -549,29 +549,33 @@ class PetInfomation extends React.Component<any, any> {
                   ) : null}
 
                   <Col span={12}>
-                    <FormItem label="Sterilized status">
+                    <FormItem label={<FormattedMessage id="PetOwner.SterilizedStatus" />}>
                       {getFieldDecorator('sterilized', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please Select Sterilized status!'
+                            message: <FormattedMessage id="PetOwner.SelectSterilizedStatus" />
                           }
                         ]
                       })(
                         <Radio.Group>
-                          <Radio value={0}>Yes</Radio>
-                          <Radio value={1}>No</Radio>
+                          <Radio value={0}>
+                            <FormattedMessage id="PetOwner.Yes" />
+                          </Radio>
+                          <Radio value={1}>
+                            <FormattedMessage id="PetOwner.No" />
+                          </Radio>
                         </Radio.Group>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Birthday">
+                    <FormItem label={<FormattedMessage id="PetOwner.Birthday" />}>
                       {getFieldDecorator('birthOfPets', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Birth Date!'
+                            message: <FormattedMessage id="PetOwner.PleaseInputBirthDate" />
                           }
                         ],
                         initialValue: moment(new Date(this.state.currentBirthDay), 'DD/MM/YYYY')
@@ -594,12 +598,12 @@ class PetInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Special needs">
+                    <FormItem label={<FormattedMessage id="PetOwner.SpecialNeeds" />}>
                       {getFieldDecorator('customerPetsPropRelations', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please Select Special needs!'
+                            message: <FormattedMessage id="PetOwner.SelectSpecialNeeds" />
                           }
                         ]
                       })(
@@ -629,22 +633,24 @@ class PetInfomation extends React.Component<any, any> {
                   <Col span={24}>
                     <FormItem>
                       <Button type="primary" htmlType="submit">
-                        Save
+                        <FormattedMessage id="PetOwner.Save" />
                       </Button>
 
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delPets(petForm.petsId)} okText="Confirm" cancelText="Cancel">
+                      <Popconfirm placement="topRight" title={<FormattedMessage id="PetOwner.deleteThisItem" />} onConfirm={() => this.delPets(petForm.petsId)} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
                         <Button
                           style={{
                             marginLeft: '20px',
                             display: this.props.customerType === 'Guest' ? 'none' : null
                           }}
                         >
-                          <FormattedMessage id="delete" />
+                          <FormattedMessage id="PetOwner.delete" />
                         </Button>
                       </Popconfirm>
 
                       <Button style={{ marginLeft: '20px' }}>
-                        <Link to="/customer-list">Cancel</Link>
+                        <Link to="/customer-list">
+                          <FormattedMessage id="PetOwner.Cancel" />
+                        </Link>
                       </Button>
                     </FormItem>
                   </Col>

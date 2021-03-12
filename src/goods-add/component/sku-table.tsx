@@ -332,7 +332,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     //External SKU
-    /*columns = columns.push({
+    columns = columns.push({
       title: 'External SKU',
       key: 'externalSku',
       render: (rowInfo) => {
@@ -342,14 +342,14 @@ class SkuForm extends React.Component<any, any> {
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('externalSku' + rowInfo.id, {
                   rules: [
-                    /!*{
+                    /*{
                       required: true,
                       message: 'Please input EAN code'
-                    },*!/
-                    /!*{
+                    },*/
+                    /*{
                       pattern: ValidConst.noMinus,
                       message: 'Please enter the correct value'
-                    }*!/
+                    }*/
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
                   initialValue: rowInfo.externalSku
@@ -359,7 +359,7 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         );
       }
-    });*/
+    });
 
 
     //EAN

@@ -967,12 +967,19 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
+        if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
+          tip = 3;
+          valid = false;
+          return;
+        }
       });
     }
     if (tip === 1) {
       message.error('Please input market price');
     } else if (tip === 2) {
       message.error('Please input subscription price');
+    } else if (tip === 3) {
+      message.error('Market price cannot be zero');
     }
     return valid;
   }

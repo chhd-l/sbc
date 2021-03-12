@@ -303,7 +303,7 @@ export default class List extends React.Component<any, any> {
                     className="createMarket"
                     onClick={() =>
                       history.push({
-                        pathname: '/marketing-full-discount', ///marketing-free-shipping
+                        pathname: '/marketing-free-shipping',
                         state: {
                           source: 'marketCenter'
                         }
@@ -321,29 +321,29 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>
 
-              <AuthWrapper functionName="f_marketing_gift_add">
-                <Col span={6}>
-                  <a
-                    className="createMarket"
-                    onClick={() =>
-                      history.push({
-                        pathname: '/marketing-fixed-price',
-                        state: {
-                          source: 'marketCenter'
-                        }
-                      })
-                    }
-                  >
-                    <span className="left">
-                      <img src={images.full_001} />
-                    </span>
-                    <div className="info">
-                      <h5>Fixed price</h5>
-                      <p>Set fixed price for products</p>
-                    </div>
-                  </a>
-                </Col>
-              </AuthWrapper>
+              {/*<AuthWrapper functionName="f_marketing_gift_add">*/}
+              {/*  <Col span={6}>*/}
+              {/*    <a*/}
+              {/*      className="createMarket"*/}
+              {/*      onClick={() =>*/}
+              {/*        history.push({*/}
+              {/*          pathname: '/marketing-fixed-price',*/}
+              {/*          state: {*/}
+              {/*            source: 'marketCenter'*/}
+              {/*          }*/}
+              {/*        })*/}
+              {/*      }*/}
+              {/*    >*/}
+              {/*      <span className="left">*/}
+              {/*        <img src={images.full_001} />*/}
+              {/*      </span>*/}
+              {/*      <div className="info">*/}
+              {/*        <h5>Fixed price</h5>*/}
+              {/*        <p>Set fixed price for products</p>*/}
+              {/*      </div>*/}
+              {/*    </a>*/}
+              {/*  </Col>*/}
+              {/*</AuthWrapper>*/}
             </Row>
             {/*<h3>*/}
             {/*  Increase Repeat purchase<span>Improve consumer loyalty</span>*/}

@@ -1373,9 +1373,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (marketingType, e) => {
-    debugger;
     const _thisRef = this;
     let levelType = '';
+    // Session 有状态登录，保存一个seesion, 返回相应的cookie，
+    // JWT无状态登录: 返回一个JWT加密文档(角色，权限，过期时间等)，前端保存起来
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
       levelType = 'fullReductionLevelList';
     } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {

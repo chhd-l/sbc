@@ -203,6 +203,7 @@ class DescriptionManagement extends Component<any, any> {
   updateDescriptionStatus = (row, status) => {
     let params = {
       id: row.id,
+      contentType: row.contentType,
       descriptionName: row.descriptionName,
       translateList: row.translateList,
       displayStatus: status

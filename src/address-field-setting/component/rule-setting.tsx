@@ -10,8 +10,7 @@ class RuleSetting extends React.Component<any, any> {
     super(props);
     this.state = {
       loading: false,
-      manual: false,
-      auto: false,
+      ruleId: 1,
       addressSettingList: [],
       addressSettingForm: {
         validationUrl: '',
@@ -26,6 +25,10 @@ class RuleSetting extends React.Component<any, any> {
         clientReferenceId: ''
       }
     };
+  }
+
+  componentDidMount() {
+    this.getAddressSettingList();
   }
 
   getAddressSettingList = () => {
@@ -43,7 +46,7 @@ class RuleSetting extends React.Component<any, any> {
   };
 
   render() {
-    const { manual, auto, loading, addressSettingForm } = this.state;
+    const { ruleId, loading, addressSettingList, addressSettingForm } = this.state;
     const {
       visible,
       form: { getFieldDecorator }
@@ -60,21 +63,19 @@ class RuleSetting extends React.Component<any, any> {
     };
     return (
       <Modal width={1200} visible={visible} title="Address rule setting" confirmLoading={loading} okText="Submit" cancelText="Cancel" onOk={this.onCancel} onCancel={this.onCancel}>
-        <Row>
-          <Col span={8}>Input manually</Col>
-          <Col span={16}>
-            <Switch checked={manual} />
-          </Col>
-          <Col span={8}>Input automatically</Col>
-          <Col span={16}>
-            <Switch checked={auto} />
-          </Col>
-        </Row>
-        {auto && (
-          <Radio.Group value="1">
-            <Radio value="1">DaData.ru</Radio>
-          </Radio.Group>
-        )}
+        <div style={{ marginBottom: 10, color: '#000' }}>
+          Input manually: <Switch checked={ruleId === 1} />
+        </div>
+        <div style={{ marginBottom: 10, color: '#000' }}>
+          Input automatically: <Switch checked={ruleId === 2} />
+        </div>
+        <Radio.Group value="1">
+          {addressSettingList.map((addressSettingItem) => (
+            <Radio value={addressSettingItem.id} key={addressSettingItem.id}>
+              <img src={addressSettingItem.imgUrl} style={{ width: '120px' }} />
+            </Radio>
+          ))}
+        </Radio.Group>
         <Form {...formItemLayout}>
           <Row>
             <Col span={12}>

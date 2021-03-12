@@ -1,8 +1,8 @@
 import React from 'react';
-import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete } from 'antd';
+import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete, Modal, Alert, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Headline, cache } from 'qmkit';
-import { getAddressFieldList, getCountryList, getStateList, getCityList, searchCity } from './webapi';
+import { Headline, cache, Const } from 'qmkit';
+import { getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress } from './webapi';
 import { updateAddress, addAddress } from '../webapi';
 import _ from 'lodash';
 
@@ -55,7 +55,10 @@ class DeliveryItem extends React.Component<Iprop, any> {
       countryList: [],
       stateList: [],
       cityList: [],
-      searchCityList: []
+      searchCityList: [],
+      isAddressValidation: false,
+      validationModalVisisble: false,
+      suggestionAddress: {}
     };
   }
 
@@ -68,13 +71,48 @@ class DeliveryItem extends React.Component<Iprop, any> {
     const countries = await getCountryList();
     const cities = await getCityList();
     const states = await getStateList();
-    console.log(fields);
+    const isAddressValidation = await getIsAddressValidation();
     this.setState({
       formFieldList: fields,
       countryList: countries,
       stateList: states.map((t) => ({ id: t.id, name: t.stateName })),
-      cityList: cities
+      cityList: cities,
+      isAddressValidation: isAddressValidation
     });
+  };
+
+  validateAddress = () => {
+    if (this.state.isAddressValidation) {
+      this.props.form.validateFields((err, fields) => {
+        if (!err) {
+          this.setState({ loading: true });
+          validateAddress({
+            ...fields,
+            deliveryAddress: [fields.address1, fields.address2].join('')
+          })
+            .then((data) => {
+              if (data.res.code === Const.SUCCESS_CODE) {
+                this.setState({
+                  loading: false,
+                  validationModalVisisble: true,
+                  suggestionAddress: data.res.context.suggestionAddress
+                });
+              } else {
+                this.setState({
+                  loading: false
+                });
+              }
+            })
+            .catch(() => {
+              this.setState({
+                loading: false
+              });
+            });
+        }
+      });
+    } else {
+      this.saveAddress();
+    }
   };
 
   saveAddress = () => {
@@ -198,6 +236,21 @@ class DeliveryItem extends React.Component<Iprop, any> {
               Cancel
             </Button>
           </div>
+          <Modal title="Verify your address" visible={this.state.validationModalVisisble}>
+            <Alert type="warning" message="We could not verify the address you provided, please confirm or edit your address to ensure prompt delivery." />
+            <Row gutter={16}>
+              <Col span={12}>
+                <Radio checked={false}>
+                  <div className="text-highlight">Original Address</div>
+                </Radio>
+              </Col>
+              <Col span={12}>
+                <Radio checked={false}>
+                  <div className="text-highlight">Suggested Address</div>
+                </Radio>
+              </Col>
+            </Row>
+          </Modal>
         </Spin>
       </div>
     );

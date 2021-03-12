@@ -38,6 +38,41 @@ export async function getAddressFieldList() {
 }
 
 /**
+ * 获取是否进行地址验证的设置
+ * @returns
+ */
+export async function getIsAddressValidation() {
+  return await Fetch<TResult>('/addressApiSetting/queryByStoreId', {
+    method: 'POST'
+  })
+    .then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        return data.res.context.addressApiSettings.findIndex((item) => item.isCustom === 0 && item.isOpen === 1) > -1;
+      } else {
+        return false;
+      }
+    })
+    .catch(() => {
+      return false;
+    });
+}
+
+/**
+ * 获取地址验证的结果
+ * @param params
+ * @returns
+ */
+export function validateAddress(params = {}) {
+  return Fetch<TResult>('/addressValidation/validation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
+    })
+  });
+}
+
+/**
  * 获取国家列表
  */
 export async function getCountryList() {

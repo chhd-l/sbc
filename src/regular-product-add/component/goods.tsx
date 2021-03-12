@@ -235,7 +235,6 @@ class GoodsForm extends React.Component<any, any> {
       filterList
     });
   }
-
   render() {
     const { getFieldDecorator } = this.props.form;
     const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter, purchaseTypeList, frequencyList } = this.props.relaxProps;
@@ -283,6 +282,11 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     }
+
+    setTimeout(() => {
+      console.log(goods.get('displayFlag'), 1111111111);
+    });
+
     return (
       <Form>
         <Row type="flex" justify="start">
@@ -399,9 +403,9 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
                 // initialValue: 'Y'
-                initialValue: goods.get('subscriptionStatus') === 0 || goods.get('subscriptionStatus') == null ? 'N' : 'Y'
+                initialValue: goods.get('subscriptionStatus') === 0 || goods.get('subscriptionStatus') == null ? 'N' : 'Y' || goods.get('displayFlag') == 0 ? '0' : '1'
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
+                <Select getPopupContainer={() => document.getElementById('page-content')} disabled={goods.get('displayFlag') == 0 ? true : false} placeholder="please select status">
                   <Option value="1">Y</Option>
                   <Option value="0">N</Option>
                 </Select>

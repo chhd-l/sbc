@@ -18,3 +18,10 @@ export const saveFieldList = (params = {}) => {
     body: JSON.stringify(params)
   });
 };
+
+export function getAddressSetting(param = {}) {
+  return Fetch<TResult>('/addressApiSetting/queryByStoreId', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

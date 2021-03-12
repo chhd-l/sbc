@@ -1,5 +1,7 @@
 import React from 'react';
+import { Const } from 'qmkit';
 import { Form, Modal, Input, Radio, Switch, Row, Col } from 'antd';
+import { getAddressSetting } from '../webapi';
 
 const FormItem = Form.Item;
 
@@ -10,6 +12,7 @@ class RuleSetting extends React.Component<any, any> {
       loading: false,
       manual: false,
       auto: false,
+      addressSettingList: [],
       addressSettingForm: {
         validationUrl: '',
         clientId: '',
@@ -24,6 +27,16 @@ class RuleSetting extends React.Component<any, any> {
       }
     };
   }
+
+  getAddressSettingList = () => {
+    getAddressSetting().then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          addressSettingList: data.res.context.addressApiSettings.filter((ad) => ad.isCustom === 0)
+        });
+      }
+    });
+  };
 
   onCancel = () => {
     this.props.onCloseModal();

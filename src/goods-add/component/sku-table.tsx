@@ -353,7 +353,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
                   initialValue: rowInfo.externalSku
-                })(<Input style={{ width: '180px' }} maxLength={45}/>)}
+                })(<Input style={{ width: '116px' }} maxLength={45}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -384,7 +384,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
                   initialValue: rowInfo.goodsInfoBarcode
-                })(<Input style={{ width: '180px' }} />)}
+                })(<Input style={{ width: '116px' }} />)}
               </FormItem>
             </Col>
           </Row>
@@ -481,7 +481,7 @@ class SkuForm extends React.Component<any, any> {
       title: (
         <div
           style={{
-            marginRight: '152px'
+            marginRight: '81px'
           }}
         >
           Subscription
@@ -495,7 +495,7 @@ class SkuForm extends React.Component<any, any> {
         return (
           <Row
             style={{
-              marginRight: '124px'
+              marginRight: '81px'
             }}
           >
             <Col span={12}>
@@ -504,7 +504,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0' : '1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>

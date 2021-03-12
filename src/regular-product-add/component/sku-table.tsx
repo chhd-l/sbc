@@ -199,7 +199,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
                   initialValue: rowInfo.goodsInfoNo
-                })(<Input style={{ width: '115px' }} />)}
+                })(<Input style={{ width: '116px' }} />)}
               </FormItem>
             </Col>
           </Row>
@@ -229,7 +229,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
                   initialValue: rowInfo.externalSku
-                })(<Input style={{ width: '180px' }} maxLength={45}/>)}
+                })(<Input style={{ width: '116px' }} maxLength={45}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -259,7 +259,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
                   initialValue: rowInfo.goodsInfoBarcode
-                })(<Input style={{ width: '180px' }} />)}
+                })(<Input style={{ width: '116px' }} />)}
               </FormItem>
             </Col>
           </Row>
@@ -288,7 +288,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
+                })(<Input type="number" style={{ width: '116px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
               </FormItem>
             </Col>
           </Row>
@@ -378,7 +378,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div style={{
-          marginRight: '152px',
+          marginRight: '81px',
         }}>
           Subscription
         </div>
@@ -388,7 +388,7 @@ class SkuForm extends React.Component<any, any> {
         goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
         return (
           <Row  style={{
-            marginRight: '124px',
+            marginRight: '81px',
           }}>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
@@ -396,7 +396,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0':'1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0?true:false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0?true:false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>

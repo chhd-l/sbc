@@ -695,7 +695,6 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (marketingType, e) => {
-    debugger;
     const _thisRef = this;
     let levelType = '';
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {

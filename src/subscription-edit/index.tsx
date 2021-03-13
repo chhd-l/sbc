@@ -132,7 +132,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           }
 
           let goodsInfo = subscriptionDetail.goodsInfo;
-          let paymentInfo = subscriptionDetail.paymentInfo;
+          let paymentInfo = subscriptionDetail.payPaymentInfo;
 
           let subscribeNumArr = [];
           let periodTypeArr = [];
@@ -1290,11 +1290,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}>Payment Method: </p>
-                    <p>{paymentInfo ? paymentInfo.paymentType : ''}</p>
+                    <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Card Number: </p>
-                    <p>{paymentInfo && paymentInfo.payuPaymentMethod ? '**** **** **** ' + paymentInfo.payuPaymentMethod.last_4_digits : paymentInfo && paymentInfo.adyenPaymentMethod ? '**** **** **** ' + paymentInfo.adyenPaymentMethod.lastFour : ''}</p>
+                    <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
                   </Col>
                 </Row>
               </Col>

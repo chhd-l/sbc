@@ -6,7 +6,11 @@ export enum MARKETING_TYPE {
   //满赠
   FULL_GIFT,
   //首次折扣
-  FIRST_DISCOUNT
+  FIRST_DISCOUNT,
+  //免运费
+  FREE_SHIPPING = 4,
+  //一口价
+  FIXED_PRICE = 5
 }
 
 export enum SUB_TYPE {

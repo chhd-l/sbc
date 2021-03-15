@@ -402,6 +402,7 @@ export default {
   'order.received': 'Received',
   'order.confirmReceipt': 'Confirm receipt',
   'order.completed': 'Completed',
+  'order.createBy':'Create by',
   'order.outOfDate': 'Out of date',
   'order.ship': 'Ship',
   'order.allShipments': 'All shipments',

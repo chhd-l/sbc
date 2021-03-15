@@ -110,7 +110,6 @@ export default class BindDescription extends Component<Iprop, any> {
   };
 
   onDragSortEnd = (sortList) => {
-    console.log(sortList);
     this.setState({
       bindList: sortList
     });

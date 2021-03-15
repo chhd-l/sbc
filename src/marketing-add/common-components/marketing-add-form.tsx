@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { fromJS, List } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
@@ -16,6 +16,7 @@ import * as webapi from '../webapi';
 import * as Enum from './marketing-enum';
 
 import { doc } from 'prettier';
+import { IList } from '../../../typings/globalType';
 // import debug = doc.debug;
 
 const FormItem = Form.Item;
@@ -23,6 +24,7 @@ const RadioGroup = Radio.Group;
 const RangePicker = DatePicker.RangePicker;
 const CheckboxGroup = Checkbox.Group;
 const Confirm = Modal.confirm;
+const { SHOW_PARENT } = TreeSelect;
 
 const formItemLayout = {
   labelCol: {
@@ -54,6 +56,44 @@ const radioStyle = {
   height: '40px',
   lineHeight: '40px'
 };
+
+const treeData = [
+  {
+    title: 'Node1',
+    value: '0-0',
+    key: '0-0',
+    children: [
+      {
+        title: 'Child Node1',
+        value: '0-0-0',
+        key: '0-0-0'
+      }
+    ]
+  },
+  {
+    title: 'Node2',
+    value: '0-1',
+    key: '0-1',
+    children: [
+      {
+        title: 'Child Node3',
+        value: '0-1-0',
+        key: '0-1-0'
+      },
+      {
+        title: 'Child Node4',
+        value: '0-1-1',
+        key: '0-1-1'
+      },
+      {
+        title: 'Child Node5',
+        value: '0-1-2',
+        key: '0-1-2'
+      }
+    ]
+  }
+];
+const TreeNode = Tree.TreeNode;
 export default class MarketingAddForm extends React.Component<any, any> {
   props;
 
@@ -95,7 +135,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
       PromotionTypeChecked: true,
       timeZone: moment,
       isClubChecked: false,
-      allGroups: relaxProps.get('allGroups')
+      allGroups: relaxProps.get('allGroups'),
+      storeCateList: relaxProps.get('storeCateList'),
+      sourceStoreCateList: relaxProps.get('sourceStoreCateList')
     };
   }
 
@@ -135,7 +177,20 @@ export default class MarketingAddForm extends React.Component<any, any> {
   };
 
   productTypeOnChange = (value) => {
-    this.onBeanChange({ productType: value });
+    this.setState({
+      selectedRows: fromJS([]),
+      goodsModal: {
+        _modalVisible: false,
+        _selectedSkuIds: [],
+        _selectedRows: []
+      },
+      selectedSkuIds: [],
+      selectedRows: fromJS([])
+    });
+    this.onBeanChange({
+      productType: value,
+      storeCateIds: []
+    });
   };
   targetCustomerRadioChange = (value) => {
     this.onBeanChange({ joinLevel: value });
@@ -146,14 +201,95 @@ export default class MarketingAddForm extends React.Component<any, any> {
     segmentIds.push(value);
     this.onBeanChange({ segmentIds });
   };
+
+  storeCateChange = (value, _label, extra) => {
+    const sourceGoodCateList = this.state.sourceStoreCateList;
+
+    // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
+    // 店铺分类列表
+
+    // 勾选的店铺分类列表
+    let originValues = fromJS(value.map((v) => v.value));
+
+    // 如果是点x清除某个节点或者是取消勾选某个节点，判断清除的是一级还是二级，如果是二级可以直接清；如果是一级，连带把二级的清了
+    if (extra.clear || !extra.checked) {
+      sourceGoodCateList.forEach((cate) => {
+        // 删的是某个一级的
+        if (extra.triggerValue == cate.get('storeCateId') && cate.get('cateParentId') == 0) {
+          // 找到此一级节点下的二级节点
+          const children = sourceGoodCateList.filter((ss) => ss.get('cateParentId') == extra.triggerValue);
+          // 把一级的子节点也都删了
+          originValues = originValues.filter((v) => children.findIndex((c) => c.get('storeCateId') == v) == -1);
+        }
+      });
+    }
+
+    // 如果子节点被选中，上级节点也要被选中
+    // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
+    originValues.forEach((v) => {
+      sourceGoodCateList.forEach((cate) => {
+        // 找到选中的分类，判断是否有上级r
+        if (v == cate.get('storeCateId') && cate.get('cateParentId') != 0) {
+          // 判断上级是否已添加过，如果没有添加过，添加
+          let secondLevel = sourceGoodCateList.find((x) => x.get('storeCateId') === cate.get('cateParentId'));
+          if (secondLevel && secondLevel.get('cateParentId') !== 0) {
+            let exsit = originValues.toJS().includes(secondLevel.get('cateParentId'));
+            if (!exsit) {
+              originValues = originValues.push(secondLevel.get('cateParentId')); // first level
+            }
+          }
+
+          let exsit = originValues.toJS().includes(cate.get('cateParentId'));
+          if (!exsit) {
+            originValues = originValues.push(cate.get('cateParentId')); // second level
+          }
+        }
+      });
+    });
+    const storeCateIds = originValues;
+    console.log(storeCateIds.toJS(), 'storeCateIds---------------');
+    this.onBeanChange({
+      storeCateIds
+    });
+  };
+
+  /**
+   * 店铺分类树形下拉框
+   * @param storeCateList
+   */
+  generateStoreCateTree = (storeCateList) => {
+    return (
+      storeCateList &&
+      storeCateList.map((item) => {
+        if (item.get('children') && item.get('children').count()) {
+          return (
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
+              {this.generateStoreCateTree(item.get('children'))}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+      })
+    );
+  };
+
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
-
+    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
     console.log(marketingBean.toJS(), 'marketingBean---------');
 
+    const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
+    const storeCateValues = [];
+    const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
+    if (storeCateIds) {
+      storeCateIds.toJS().map((id) => {
+        if (!parentIds.includes(id)) {
+          storeCateValues.push({ value: id });
+        }
+      });
+    }
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
@@ -500,7 +636,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                     isNormal={this.state.PromotionTypeValue === 0}
                   />
                 ) : (
-                  <div>
+                  <div style={{ display: 'flex' }}>
                     <FormItem labelAlign="left">
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
                       {getFieldDecorator('firstSubscriptionOrderDiscount', {
@@ -520,7 +656,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                         initialValue: marketingBean.get('firstSubscriptionOrderDiscount')
                       })(
                         <Input
-                          style={{ width: 300 }}
+                          style={{ width: 100 }}
                           title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
@@ -528,7 +664,38 @@ export default class MarketingAddForm extends React.Component<any, any> {
                           }}
                         />
                       )}
-                      <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+                      <span>&nbsp;of orginal price,&nbsp;</span>
+                    </FormItem>
+
+                    <FormItem>
+                      <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                      {getFieldDecorator('subscriptionFirstLimit', {
+                        rules: [
+                          // { required: true, message: 'Must enter rules' },
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (value) {
+                                if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                  callback('1-9999');
+                                }
+                              }
+                              callback();
+                            }
+                            // callback();
+                          }
+                        ],
+                        initialValue: marketingBean.get('subscriptionFirstLimit')
+                      })(
+                        <Input
+                          style={{ width: 100 }}
+                          title={'1-9999'}
+                          placeholder={'1-9999'}
+                          onChange={(e) => {
+                            this.onBeanChange({ subscriptionFirstLimit: e.target.value });
+                          }}
+                        />
+                      )}
+                      &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </FormItem>
                   </div>
                 )
@@ -606,7 +773,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               <>
                 <Input
                   style={{ width: 200 }}
-                  placeholder="0.01-99999999.99"
+                  placeholder="0.01-99999999.9922222"
                   onChange={(e) => {
                     this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
                   }}
@@ -617,33 +784,67 @@ export default class MarketingAddForm extends React.Component<any, any> {
         )}
         {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT && PromotionTypeValue == 1 && (
           <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
-            {getFieldDecorator('restSubscriptionOrderDiscount', {
-              rules: [
-                { required: true, message: 'Amount must be entered' },
-                {
-                  validator: (_rule, value, callback) => {
-                    if (value) {
-                      if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                        callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+            <div style={{ display: 'flex' }}>
+              <FormItem>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
+                {getFieldDecorator('restSubscriptionOrderDiscount', {
+                  rules: [
+                    { required: true, message: 'Amount must be entered' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
+                            callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+                          }
+                        }
+                        callback();
                       }
                     }
-                    callback();
-                  }
-                }
-              ],
-              initialValue: marketingBean.get('restSubscriptionOrderDiscount')
-            })(
-              <Input
-                style={{ width: 300 }}
-                title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
-                placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
-                onChange={(e) => {
-                  this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
-                }}
-              />
-            )}
-            <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+                  ],
+                  initialValue: marketingBean.get('restSubscriptionOrderDiscount')
+                })(
+                  <Input
+                    style={{ width: 100 }}
+                    title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                    placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                    onChange={(e) => {
+                      this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
+                    }}
+                  />
+                )}
+                <span>&nbsp;of orginal price,&nbsp;</span>
+              </FormItem>
+              <FormItem>
+                <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                {getFieldDecorator('subscriptionRestLimit', {
+                  rules: [
+                    // { required: true, message: 'Must enter rules' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                            callback('1-9999');
+                          }
+                        }
+                        callback();
+                      }
+                      // callback();
+                    }
+                  ],
+                  initialValue: marketingBean.get('subscriptionRestLimit')
+                })(
+                  <Input
+                    style={{ width: 100 }}
+                    title={'1-9999'}
+                    placeholder={'1-9999'}
+                    onChange={(e) => {
+                      this.onBeanChange({ subscriptionRestLimit: e.target.value });
+                    }}
+                  />
+                )}
+                &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+              </FormItem>
+            </div>
           </FormItem>
         )}
 
@@ -667,11 +868,44 @@ export default class MarketingAddForm extends React.Component<any, any> {
           })(
             <Radio.Group onChange={(e) => this.productTypeOnChange(e.target.value)} value={this.state.productType}>
               <Radio value={1}>All</Radio>
-              <Radio value={2}>Custom</Radio>
+              <Radio value={2}>Category</Radio>
+              <Radio value={3}>Custom</Radio>
             </Radio.Group>
           )}
         </FormItem>
-        {marketingBean.get('productType') === 2 ? (
+        {marketingBean.get('productType') === 2 && (
+          <FormItem {...formItemLayout}>
+            {getFieldDecorator('storeCateIds', {
+              rules: [
+                // {
+                //   required: true,
+                //   message: 'Please select sales category'
+                // }
+              ],
+
+              initialValue: storeCateValues
+            })(
+              <TreeSelect
+                getPopupContainer={() => document.getElementById('page-content')}
+                treeCheckable={true}
+                showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                treeCheckStrictly={true}
+                //treeData ={getGoodsCate}
+                // showCheckedStrategy = {SHOW_PARENT}
+                placeholder="Please select category"
+                notFoundContent="No sales category"
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                showSearch={false}
+                onChange={this.storeCateChange}
+                style={{ width: 500 }}
+                treeDefaultExpandAll
+              >
+                {this.generateStoreCateTree(storeCateList)}
+              </TreeSelect>
+            )}
+          </FormItem>
+        )}
+        {marketingBean.get('productType') === 3 ? (
           <FormItem {...formItemLayout} required={true}>
             {getFieldDecorator(
               'goods',
@@ -707,6 +941,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 {/*{util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}*/}
                 <Radio value={-1}>All</Radio>
                 <Radio value={-3}>Select group</Radio>
+                <Radio value={-4}>By email</Radio>
               </RadioGroup>
               {/*{level._levelPropsShow && (*/}
               {/*  <div>*/}
@@ -721,19 +956,60 @@ export default class MarketingAddForm extends React.Component<any, any> {
         </FormItem>
         {marketingBean.get('joinLevel') == -3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
-            <Select
-              style={{ width: 520 }}
-              onChange={this.selectGroupOnChange}
-              // defaultValue={232}
-              defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
-            >
-              {allGroups.size > 0 &&
-                allGroups.map((item) => (
-                  <Select.Option key={item.get('id')} value={item.get('id')}>
-                    {item.get('name')}
-                  </Select.Option>
-                ))}
-            </Select>
+            {getFieldDecorator('segmentIds', {
+              rules: [
+                {
+                  validator: (_rule, value, callback) => {
+                    if (!value && marketingBean.get('joinLevel') == -3) {
+                      callback('Please select group.');
+                    }
+                  }
+                }
+              ]
+            })(
+              <Select
+                style={{ width: 520 }}
+                onChange={this.selectGroupOnChange}
+                // defaultValue={232}
+                defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
+              >
+                {allGroups.size > 0 &&
+                  allGroups.map((item) => (
+                    <Select.Option key={item.get('id')} value={item.get('id')}>
+                      {item.get('name')}
+                    </Select.Option>
+                  ))}
+              </Select>
+            )}
+          </FormItem>
+        )}
+        {marketingBean.get('joinLevel') == -4 && (
+          <FormItem {...formItemLayout} required={true} labelAlign="left">
+            {getFieldDecorator('targetEmail', {
+              rules: [
+                {
+                  validator: (_rule, value, callback) => {
+                    if (!value && marketingBean.get('joinLevel') == -4) {
+                      callback('Please enter email.');
+                    }
+                    if (value) {
+                      if (!ValidConst.email.test(value)) {
+                        callback('Please enter correct email.');
+                      }
+                    } else callback();
+                  }
+                }
+              ],
+              initialValue: marketingBean.get('targetEmail')
+            })(
+              <Input
+                style={{ width: 300 }}
+                onChange={(e) => {
+                  this.onBeanChange({ targetEmail: e.target.value });
+                }}
+                maxLength={30}
+              />
+            )}
           </FormItem>
         )}
         <Row type="flex" justify="start">
@@ -1097,9 +1373,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (marketingType, e) => {
-    debugger;
     const _thisRef = this;
     let levelType = '';
+    // Session 有状态登录，保存一个seesion, 返回相应的cookie，
+    // JWT无状态登录: 返回一个JWT加密文档(角色，权限，过期时间等)，前端保存起来
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
       levelType = 'fullReductionLevelList';
     } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {

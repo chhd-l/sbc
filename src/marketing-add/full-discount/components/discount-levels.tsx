@@ -123,7 +123,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                           {' '}
                           &nbsp;
                           {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
-                          ，&nbsp;&nbsp;&nbsp;&nbsp;discount price&nbsp;&nbsp;
+                          ,&nbsp;discount price&nbsp;&nbsp;
                         </span>
                       </div>
                     ) : null}
@@ -156,7 +156,38 @@ export default class DiscountLevels extends React.Component<any, any> {
                           }}
                         />
                       )}
-                      <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+                      <span>&nbsp;of orginal price,</span>
+                    </FormItem>
+
+                    <FormItem>
+                      <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                      {getFieldDecorator(`level_rule_discount_limit${index}`, {
+                        rules: [
+                          // { required: true, message: 'Must enter rules' },
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (value) {
+                                if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                  callback('1-9999');
+                                }
+                              }
+                              callback();
+                            }
+                            // callback();
+                          }
+                        ],
+                        initialValue: level.limit
+                      })(
+                        <Input
+                          style={{ width: 300 }}
+                          title={'1-9999'}
+                          placeholder={'1-9999'}
+                          onChange={(e) => {
+                            this.onChange(index, 'limit', parseInt(e.target.value));
+                          }}
+                        />
+                      )}
+                      &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </FormItem>
                     {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
                   </HasError>
@@ -258,6 +289,7 @@ export default class DiscountLevels extends React.Component<any, any> {
     } else if (props == 'fullCount') {
       fullDiscountLevelList[index]['fullAmount'] = null;
     }
+
     this.setState({ fullDiscountLevelList: fullDiscountLevelList });
 
     //传递到父页面

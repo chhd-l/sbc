@@ -654,7 +654,6 @@ export default class StepTwo extends React.Component<any, any> {
     const status = file.status;
     if (status !== 'uploading') {
       if (__DEV__) {
-        console.log(file, fileList);
       }
     }
     if (status === 'done') {

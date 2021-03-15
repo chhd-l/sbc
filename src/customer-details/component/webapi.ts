@@ -43,7 +43,8 @@ export async function getAddressFieldList() {
  */
 export async function getIsAddressValidation() {
   return await Fetch<TResult>('/addressApiSetting/queryByStoreId', {
-    method: 'POST'
+    method: 'POST',
+    body: JSON.stringify({})
   })
     .then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {

@@ -58,6 +58,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
       searchCityList: [],
       isAddressValidation: false,
       validationModalVisisble: false,
+      checkedAddress: 0,
+      fields: {},
       suggestionAddress: {}
     };
   }
@@ -95,6 +97,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
                 this.setState({
                   loading: false,
                   validationModalVisisble: true,
+                  fields: fields,
+                  checkedAddress: 1,
                   suggestionAddress: data.res.context.suggestionAddress
                 });
               } else {
@@ -113,6 +117,19 @@ class DeliveryItem extends React.Component<Iprop, any> {
     } else {
       this.saveAddress();
     }
+  };
+
+  onChangeCheckedAddress = (checkedAddress: number) => {
+    this.setState({
+      checkedAddress: checkedAddress
+    });
+  };
+
+  onCancelSuggestionModal = () => {
+    this.setState({
+      checkedAddress: 0,
+      validationModalVisisble: false
+    });
   };
 
   saveAddress = () => {
@@ -193,6 +210,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   render() {
     const { delivery, addressType, backToDetail } = this.props;
+    const { fields, suggestionAddress, checkedAddress } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = (col: number) => ({
       labelCol: {
@@ -229,24 +247,31 @@ class DeliveryItem extends React.Component<Iprop, any> {
             </Form>
           </div>
           <div className="bar-button">
-            <Button type="primary" onClick={() => this.saveAddress()}>
+            <Button type="primary" onClick={() => this.validateAddress()}>
               Save
             </Button>
             <Button onClick={() => backToDetail()} style={{ marginLeft: '20px' }}>
               Cancel
             </Button>
           </div>
-          <Modal title="Verify your address" visible={this.state.validationModalVisisble}>
+          <Modal width={920} title="Verify your address" visible={this.state.validationModalVisisble}>
             <Alert type="warning" message="We could not verify the address you provided, please confirm or edit your address to ensure prompt delivery." />
-            <Row gutter={16}>
+            <Row gutter={32} style={{ marginTop: 20 }}>
               <Col span={12}>
-                <Radio checked={false}>
-                  <div className="text-highlight">Original Address</div>
+                <Radio checked={checkedAddress === 0} onClick={() => this.onChangeCheckedAddress(0)}>
+                  <span className="text-highlight">Original Address</span>
+                  <br />
+                  <span style={{ paddingLeft: 26, wordBreak: 'break-word' }}>{[[fields.address1, fields.address2].join(''), fields.city, fields.state, fields.postCode].filter((fd) => !!fd).join(',')}</span>
                 </Radio>
+                <div style={{ paddingLeft: 10 }}>
+                  <Button type="link">Edit</Button>
+                </div>
               </Col>
               <Col span={12}>
-                <Radio checked={false}>
-                  <div className="text-highlight">Suggested Address</div>
+                <Radio checked={checkedAddress === 1} onClick={() => this.onChangeCheckedAddress(1)}>
+                  <span className="text-highlight">Suggested Address</span>
+                  <br />
+                  <span style={{ paddingLeft: 26, wordBreak: 'break-word' }}>{[[suggestionAddress.address1, suggestionAddress.address2].join(''), suggestionAddress.city, suggestionAddress.provinceCode, suggestionAddress.postalCode].filter((fd) => !!fd).join(',')}</span>
                 </Radio>
               </Col>
             </Row>

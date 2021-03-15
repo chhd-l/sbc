@@ -4,7 +4,7 @@ import { Breadcrumb, Alert } from 'antd';
 import { StoreProvider } from 'plume2';
 
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 import AppStore from './store';
 import CompanyChoose from './components/company-choose';
 
@@ -30,12 +30,8 @@ export default class LogisticsManage extends React.Component<any, any> {
             <Breadcrumb.Item>物流公司设置</Breadcrumb.Item>
           </Breadcrumb> */}
         <div className="container-search">
-          <Headline title="Logistics company settings" />
-          <Alert
-            message="Manage your commonly used logistics companies, easy to choose when ordering and shipping, up to 20 logistics companies can be set up."
-            type="info"
-            showIcon
-          />
+          <Headline title={<FormattedMessage id="Setting.LogisticsCompanySettings" />} />
+          <Alert message={<FormattedMessage id="Setting.Manage" />} type="info" showIcon />
           <AuthWrapper functionName="f_expressManage_1">
             <CompanyChoose />
           </AuthWrapper>

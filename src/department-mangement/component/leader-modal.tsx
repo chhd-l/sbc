@@ -5,6 +5,7 @@ import { noop } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import { Map } from 'immutable';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = AutoComplete.Option;
@@ -70,17 +71,8 @@ export default class LeaderModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal
-        maskClosable={false}
-        title="Set supervisor"
-        visible={leaderModalVisible}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
-        <WrapperForm
-          ref={(form) => (this._form = form)}
-          relaxProps={this.props.relaxProps}
-        />
+      <Modal maskClosable={false} title={<FormattedMessage id="Setting.SetSupervisor" />} visible={leaderModalVisible} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
+        <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
   }
@@ -98,7 +90,7 @@ export default class LeaderModal extends React.Component<any, any> {
         if (newEmployeeId) {
           modifyLeader();
         } else {
-          message.error('Please choose the supervisor!');
+          message.error(<FormattedMessage id="Setting.PleaseChooseTheSupervisor" />);
         }
       } else {
         this.setState({});
@@ -133,12 +125,7 @@ class LeaderModalForm extends React.Component<any, any> {
   }
 
   render() {
-    const {
-      formData,
-      searchEmployee,
-      filterCustomerData,
-      saveCustomerFilter
-    } = this.props.relaxProps;
+    const { formData, searchEmployee, filterCustomerData, saveCustomerFilter } = this.props.relaxProps;
     const oldEmployeeName = formData.get('oldEmployeeName');
     const { getFieldDecorator } = this.props.form;
 
@@ -151,23 +138,17 @@ class LeaderModalForm extends React.Component<any, any> {
     return (
       <Form className="login-form">
         {formData.get('departmentParentName') ? (
-          <FormItem {...formItemLayout} label="Department">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.Department" />}>
             {formData.get('departmentParentName')}
           </FormItem>
         ) : null}
 
-        <FormItem {...formItemLayout} label="Select supervisor" hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.SelectSupervisor" />} hasFeedback>
           {getFieldDecorator('employeeId', {
             initialValue: oldEmployeeName,
-            rules: [{ required: true, message: 'Please select supervisor' }]
+            rules: [{ required: true, message: <FormattedMessage id="Setting.PleaseSelectSupervisor" /> }]
           })(
-            <AutoComplete
-              dataSource={[]}
-              allowClear={true}
-              value={oldEmployeeName}
-              onChange={(value) => searchEmployee(value)}
-              onSelect={(value) => saveCustomerFilter(value)}
-            >
+            <AutoComplete dataSource={[]} allowClear={true} value={oldEmployeeName} onChange={(value) => searchEmployee(value)} onSelect={(value) => saveCustomerFilter(value)}>
               {children as any}
             </AutoComplete>
           )}

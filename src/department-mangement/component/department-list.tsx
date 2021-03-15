@@ -70,7 +70,7 @@ class DepartmentList extends React.Component<any, any> {
 
   _columns = [
     {
-      title: <FormattedMessage id="departmentName" />,
+      title: <FormattedMessage id="Setting.departmentName" />,
       dataIndex: 'departmentName',
       key: 'departmentName',
       className: 'namerow'
@@ -81,12 +81,12 @@ class DepartmentList extends React.Component<any, any> {
       render: (rowInfo) => this._setDirector(rowInfo)
     },*/
     {
-      title: <FormattedMessage id="employeeNumber" />,
+      title: <FormattedMessage id="Setting.employeeNumber" />,
       dataIndex: 'employeeNum',
       key: 'employeeNum'
     },
     {
-      title: <FormattedMessage id="operation" />,
+      title: <FormattedMessage id="Setting.operation" />,
       key: 'option',
       render: (rowInfo) => this._getOption(rowInfo)
     }
@@ -105,7 +105,7 @@ class DepartmentList extends React.Component<any, any> {
       </AuthWrapper>
     ) : (
       <AuthWrapper functionName={'f_department_modify_leader'}>
-        <Tooltip placement="top" title="Set supervisor">
+        <Tooltip placement="top" title={<FormattedMessage id="Setting.SetSupervisor" />}>
           <a style={styles.edit} onClick={this._showLeadrModal.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('parentDepartmentId'), rowInfo.get('parentDepartmentIds'), '', '', rowInfo.get('employeeNum'))}>
             <Icon type="edit" />
           </a>
@@ -122,19 +122,19 @@ class DepartmentList extends React.Component<any, any> {
     return (
       <div>
         <AuthWrapper functionName={'f_department_add_node'}>
-          <Tooltip placement="top" title="Add subdivisions">
+          <Tooltip placement="top" title={<FormattedMessage id="Setting.AddSubdivisions" />}>
             <a style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('departmentGrade'))} className="iconfont iconbtn-addsubvisionsaddcategory"></a>
           </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_edit'}>
-          <Tooltip placement="top" title="Edit">
+          <Tooltip placement="top" title={<FormattedMessage id="Setting.Edit" />}>
             <a style={styles.edit} onClick={this._showEditModal.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('parentDepartmentId'))} className="iconfont iconEdit">
               {/*<FormattedMessage id="edit" />*/}
             </a>
           </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_delete'}>
-          <Tooltip placement="top" title="Delete">
+          <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
             <a onClick={this._delete.bind(this, rowInfo.get('departmentId'), rowInfo.get('employeeNum'))} className="iconfont iconDelete">
               {/*<FormattedMessage id="delete" />*/}
             </a>
@@ -177,9 +177,9 @@ class DepartmentList extends React.Component<any, any> {
       showLeaderModal(department);
     } else {
       Modal.warning({
-        title: 'Prompt',
-        content: 'If there is no employee in the current department or sub-department, no supervisor can be appointed.',
-        okText: 'Shut Down'
+        title: <FormattedMessage id="Setting.Prompt" />,
+        content: <FormattedMessage id="Setting.IfThere" />,
+        okText: <FormattedMessage id="Setting.ShutDown" />
       });
     }
   };
@@ -212,9 +212,9 @@ class DepartmentList extends React.Component<any, any> {
   _delete = async (departmentId: number, employeeNum: number) => {
     if (employeeNum > 0) {
       Modal.warning({
-        title: 'Prompt',
-        content: 'The existing staff in the current department and sub-department cannot be deleted.',
-        okText: 'Shut Down'
+        title: <FormattedMessage id="Setting.Prompt" />,
+        content: <FormattedMessage id="Setting.TheExisting" />,
+        okText: <FormattedMessage id="Setting.ShutDown" />
       });
     } else {
       this._confirm(departmentId);
@@ -228,10 +228,10 @@ class DepartmentList extends React.Component<any, any> {
     const { doDelete } = this.props.relaxProps;
 
     confirm({
-      title: 'Prompt',
-      content: 'Delete the current department, and all subdepartments under that department will also be deleted. Are you sure you want to delete?',
-      okText: 'Confirm',
-      cancelText: 'Close',
+      title: <FormattedMessage id="Setting.Prompt" />,
+      content: <FormattedMessage id="Setting.DeleteTheCurrent" />,
+      okText: <FormattedMessage id="Setting.Confirm" />,
+      cancelText: <FormattedMessage id="Setting.Close" />,
       iconType: 'exclamation-circle',
       onOk() {
         doDelete(departmentId);

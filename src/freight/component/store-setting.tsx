@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
-
+import { FormattedMessage } from 'react-intl';
 import { fromJS } from 'immutable';
 import { Button, Pagination } from 'antd';
 import { history, noop, checkAuth } from 'qmkit';
@@ -47,24 +47,12 @@ export default class StoreSetting extends React.Component<any, any> {
     ).toJS();
     return [
       checkAuth('f_store_temp_edit') ? (
-        <Button
-          type="primary"
-          onClick={() => history.push('/store-freight')}
-          key="button"
-        >
-          Add store shipping template
+        <Button type="primary" onClick={() => history.push('/store-freight')} key="button">
+          <FormattedMessage id="Setting.AddStoreShippingTemplate" />
         </Button>
       ) : null,
       <FreightList key="freightList" data={content} isStore={true} />,
-      <Pagination
-        key="Pagination"
-        onChange={(pageNum, pageSize) =>
-          freightTemplateStore(pageNum - 1, pageSize)
-        }
-        current={number}
-        total={totalElements}
-        pageSize={size}
-      />
+      <Pagination key="Pagination" onChange={(pageNum, pageSize) => freightTemplateStore(pageNum - 1, pageSize)} current={number} total={totalElements} pageSize={size} />
     ];
   }
 }

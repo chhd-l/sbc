@@ -90,19 +90,8 @@ export default class RoleModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal
-        maskClosable={false}
-        title={
-          isAdd ? <FormattedMessage id="add" /> : <FormattedMessage id="edit" />
-        }
-        visible={modalVisible}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
-        <WrapperForm
-          ref={(form) => (this._form = form)}
-          relaxProps={this.props.relaxProps}
-        />
+      <Modal maskClosable={false} title={isAdd ? <FormattedMessage id="Setting.add" /> : <FormattedMessage id="Setting.edit" />} visible={modalVisible} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
+        <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
   }
@@ -162,19 +151,15 @@ class CateModalForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form className="login-form">
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="roleName" />}
-          hasFeedback
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.roleName" />} hasFeedback>
           {getFieldDecorator('roleName', {
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please input a role name'
+                message: <FormattedMessage id="Setting.PleaseInputARoleName" />
               },
-              { max: 10, message: 'Up to 10 characters' },
+              { max: 10, message: <FormattedMessage id="Setting.UpTo10Characters" /> },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, 'Role Name');

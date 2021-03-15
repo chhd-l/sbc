@@ -43,9 +43,13 @@ export default class CustomerDetails extends React.Component<any, any> {
     };
   }
   componentDidMount() {
+    console.log('paaaaaaaram:', this.props.location.query);
     this.getBasicInformation();
     this.getPetsList();
     this.getTagList();
+    if (this.props.location.query && this.props.location.query.hash) {
+      document.getElementById('page-content').scrollTo(0, document.getElementById(this.props.location.query.hash).offsetTop + 40);
+    }
   }
 
   getBasicInformation = () => {
@@ -326,7 +330,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </Col>
               </Row>
             </div>
-            <div className="detail-container">
+            <div className="detail-container" id="pets-list">
               <Headline title="Pet information" />
               <Row gutter={16}>
                 {pets.map((pet) => (

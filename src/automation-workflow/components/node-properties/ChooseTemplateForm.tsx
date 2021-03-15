@@ -57,7 +57,6 @@ export default class ChooseTemplataeForm extends Component<any, any> {
 
   handlePreview() {
     const { form } = this.state;
-    debugger;
     if (!form.selectValue) {
       return;
     }
@@ -125,6 +124,7 @@ export default class ChooseTemplataeForm extends Component<any, any> {
             </Button>
           ]}
           title={title}
+          onCancel={() => this.setState({ modalVisible: false })}
           visible={modalVisible}
           maskClosable={false}
           className="previewModal"

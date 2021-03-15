@@ -830,14 +830,14 @@ class TaskUpdate extends Component<any, any> {
                 </Row>
               </Form>
             </TabPane>
-            <TabPane tab="Service List" key="services">
+            {/* <TabPane tab="Service List" key="services">
               <ServiceList goldenMomentList={goldenMomentList} goldenMoment={this.state.task.goldenMoment} />
-            </TabPane>
-            {/* {id ? (
+            </TabPane> */}
+            {id ? (
               <TabPane tab="Activity" key="activity">
                 <Activity taskId={id} taskCompleted={taskCompleted} />
               </TabPane>
-            ) : null} */}
+            ) : null}
           </Tabs>
         </div>
         {tabKey !== 'activity' ? (

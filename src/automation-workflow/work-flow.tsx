@@ -31,7 +31,7 @@ export default withPropsAPI(
         currentItem: null,
         activeKey: 'Builder',
         saveLoading: false,
-        title: 'Canvs'
+        title: 'Canvas'
       };
       this.handleNodeDoubleClick = this.handleNodeDoubleClick.bind(this);
       this.saveProperties = this.saveProperties.bind(this);
@@ -92,7 +92,7 @@ export default withPropsAPI(
             tmpParam = { ...tmpParam, ...formData.taskData };
             break;
           case 'Tagging':
-            tmpParam = { ...tmpParam, ...formData.taggingData };
+            tmpParam = { ...tmpParam, ...formData.segmentData };
             break;
           case 'Order':
             tmpParam = { ...tmpParam, ...formData.orderData };

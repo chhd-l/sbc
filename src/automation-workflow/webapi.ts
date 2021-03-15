@@ -55,10 +55,21 @@ export function getGlodenMomentList() {
 }
 
 export function getCountBySegments(filterParams = {}) {
-  return Fetch<TResult>('/customer/employee/getListByKeywords', {
+  return Fetch<TResult>('/customer/segment/segment/countByCondition', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
+    })
+  });
+}
+
+export function getAllPetOwnerTaggings() {
+  return Fetch<TResult>('/customer/segment/segment/query', {
+    method: 'POST',
+    body: JSON.stringify({
+      segmentType: 0,
+      pageNum: 0,
+      pageSize: 99999999
     })
   });
 }

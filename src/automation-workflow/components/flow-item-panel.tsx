@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Collapse } from 'antd';
 import GGEditor, { Flow, Item, ItemPanel } from 'gg-editor';
 const { Panel } = Collapse;
+import '../style.less';
 
 export default class FlowItemPanel extends Component {
   render() {

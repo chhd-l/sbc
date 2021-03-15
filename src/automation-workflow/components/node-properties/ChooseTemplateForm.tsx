@@ -12,10 +12,8 @@ export default class ChooseTemplataeForm extends Component<any, any> {
         selectValue: undefined
       },
       modalVisible: false,
-      lists: [],
       emailContent: '',
       previewLoading: false,
-      selectLoading: false,
       title: 'Preview' + ' ' + 'Template',
       nodeId: ''
     };
@@ -24,34 +22,7 @@ export default class ChooseTemplataeForm extends Component<any, any> {
   }
 
   componentDidMount() {
-    this.setState({
-      selectLoading: true
-    });
-    webapi
-      .getSendGirdTemplates()
-      .then((data) => {
-        const { res } = data;
-        if (res.code === 'K-000000') {
-          this.setState({
-            lists: res.context.emailTemplateResponseList ? res.context.emailTemplateResponseList : []
-          });
-          this.setState({
-            selectLoading: false
-          });
-          this.initData(this.props);
-        } else {
-          message.error(res.message || 'Get Data Failed');
-          this.setState({
-            selectLoading: false
-          });
-        }
-      })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
-        this.setState({
-          selectLoading: false
-        });
-      });
+    this.initData(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -77,7 +48,9 @@ export default class ChooseTemplataeForm extends Component<any, any> {
   onChange(value) {
     const { updateValue } = this.props;
     this.setState({
-      templateId: value
+      form: {
+        selectValue: value
+      }
     });
     updateValue('templateId', value);
   }
@@ -119,12 +92,14 @@ export default class ChooseTemplataeForm extends Component<any, any> {
     return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   }
   render() {
-    const { form, lists, title, modalVisible, previewLoading, emailContent, selectLoading } = this.state;
+    const { form, title, modalVisible, previewLoading, emailContent, selectLoading } = this.state;
+    const { templateList } = this.props;
     return (
       <React.Fragment>
         <FormItem label="Choose an Email template" colon={false}>
           <Icon type="eye" className={'icon-eye' + (!form.selectValue ? ' disable' : '')} onClick={() => this.handlePreview()} />
           <Select
+            allowClear
             onChange={(value) => {
               this.onChange(value);
             }}
@@ -136,7 +111,7 @@ export default class ChooseTemplataeForm extends Component<any, any> {
             optionFilterProp="children"
             filterOption={this.filterOption}
           >
-            {lists.map((item, index) => (
+            {templateList.map((item, index) => (
               <Option value={item.templateId} key={index}>
                 {item.emailTemplate}
               </Option>

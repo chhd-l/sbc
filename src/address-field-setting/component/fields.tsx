@@ -126,13 +126,13 @@ export default class Fields extends React.Component<any, any> {
         title: 'Required',
         dataIndex: 'requiredFlag',
         key: 'c6',
-        render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { requiredFlag: checked })} />
+        render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { requiredFlag: checked ? 1 : 0 })} />
       },
       {
         title: 'Enable',
         dataIndex: 'enableFlag',
         key: 'c7',
-        render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { enableFlag: checked })} />
+        render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { enableFlag: checked ? 1 : 0 })} />
       }
     ];
     const formItemLayout = {

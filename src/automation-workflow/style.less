@@ -4,7 +4,7 @@
   flex-direction: column;
 }
 
-.tabs-custom /deep/ .ant-tabs-bar {
+.tabs-custom .ant-tabs-bar {
   margin-bottom: 0;
 }
 
@@ -79,13 +79,13 @@
   width: 86px;
 }
 
-.panel-custom /deep/ .ant-collapse-content-box {
+.panel-custom .ant-collapse-content-box {
   display: flex;
   justify-content: space-around;
   text-align: center;
 }
 
-.panel-custom#sendEmailItem /deep/ .ant-collapse-content-box {
+.panel-custom#sendEmailItem .ant-collapse-content-box {
   justify-content: start;
   margin-left: 35px;
 }
@@ -107,7 +107,7 @@
 .ui-form-custom {
   padding: 0 10px;
 
-  /deep/ .ant-form-item {
+  .ant-form-item {
     margin-bottom: 0;
   }
 }
@@ -121,7 +121,7 @@
 }
 
 .ui-radio-group-custom {
-  /deep/ .ant-radio-wrapper {
+  .ant-radio-wrapper {
     display: inline-block;
     line-height: 2.8;
   }
@@ -155,13 +155,15 @@
   }
 }
 
-.ant-select-dropdown-menu-item {
-  font-size: 10px;
+.minSelect {
+  .ant-select-dropdown-menu-item {
+    font-size: 10px;
+  }
 }
 
 .normalSelect {
   .ant-select-dropdown-menu-item {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 

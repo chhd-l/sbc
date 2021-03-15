@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, Tag, Tabs, Descriptions, Empty } from 'antd';
+import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, Tag, Tabs, Descriptions, Empty, Modal } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -19,9 +19,29 @@ import ItemStartNode from '@/automation-workflow/components/nodes/ItemStartNode'
 import ItemTaskNode from '@/automation-workflow/components/nodes/ItemTaskNode';
 import ItemVetCheckUpNode from '@/automation-workflow/components/nodes/ItemVetCheckUpNode';
 import ItemWaitNode from '@/automation-workflow/components/nodes/ItemWaitNode';
+import _ from 'lodash';
 
 const ButtonGroup = Button.Group;
 const { TabPane } = Tabs;
+const Option = Select.Option;
+
+const subscriptionEventArr = [
+  { title: '1st month of Subscription', value: '1stMonthOfSubscription', key: '0-0-2' },
+  { title: 'Half-year subscription', value: 'halfYearSubscription', key: '0-0-3' },
+  { title: '1-year subscription', value: '1YearSubscription', key: '0-0-4' },
+  { title: 'Subscription program cancelation by PO', value: 'SubscriptionProgramCancelationByPO', key: '0-0-7' },
+  { title: 'Food transition (new life-stage)', value: 'foodTransition', key: '0-0-8' },
+  { title: '3 days before next refill order', value: '3DaysBeforeNextRefillOrder', key: '0-0-9' }
+];
+const orderEventArr = [
+  {
+    title: '1st purchase for order confirmation (Club)',
+    value: '1stPurchaseForOrderConfirmation',
+    key: '0-0-1'
+  },
+  { title: 'After 1st delivery', value: 'after1stDelivery', key: '0-0-5' },
+  { title: 'After 4th delivery', value: 'After4thDelivery', key: '0-0-6' }
+];
 
 class AutomationDetail extends Component<any, any> {
   constructor(props: any) {
@@ -44,7 +64,14 @@ class AutomationDetail extends Component<any, any> {
         trackingEndTime: '',
         communicationChannel: '',
         workflow: null
-      }
+      },
+      visibleTest: false,
+      startTrigger: '',
+      selectedObjectNo: '',
+      isEvent: false,
+      isOrderEvent: false,
+      objectFetching: false,
+      objectNoList: []
     };
   }
   componentDidMount() {
@@ -58,6 +85,18 @@ class AutomationDetail extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          let isEvent = false;
+          const tmpFlow = res.context.workflow ? JSON.parse(res.context.workflow) : {};
+          if (tmpFlow.nodes) {
+            let timeTriggerNodes = tmpFlow.nodes.find((x) => x.nodeType === 'TimeTrigger');
+            let eventTriggerNodes = tmpFlow.nodes.find((x) => x.nodeType === 'EventTrigger');
+            if (timeTriggerNodes) {
+              isEvent = false;
+            } else if (eventTriggerNodes) {
+              isEvent = true;
+            }
+          }
+
           let automationDetail = {
             automationName: res.context.name,
             automationStatus: res.context.status,
@@ -71,11 +110,13 @@ class AutomationDetail extends Component<any, any> {
             trackingStartTime: res.context.trackingStartTime,
             trackingEndTime: res.context.trackingEndTime,
             communicationChannel: res.context.communicationChannel,
-            workflow: res.context.workflow ? JSON.parse(res.context.workflow) : null
+            workflow: tmpFlow
           };
+
           this.setState({
             loading: false,
-            automationDetail
+            automationDetail,
+            isEvent
           });
         } else {
           this.setState({
@@ -90,12 +131,18 @@ class AutomationDetail extends Component<any, any> {
       });
   };
   testAutomation = () => {
-    const { automationId } = this.state;
+    const { automationId, selectedObjectNo } = this.state;
+    let params = {
+      id: automationId,
+      orderEventIds: [],
+      orderIds: selectedObjectNo ? [selectedObjectNo] : []
+    };
     webapi
-      .testAutomation({ id: automationId })
+      .testAutomation(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          this.getAutomationDetail(automationId);
           message.success(res.message || 'Operation successful');
         } else {
           this.setState({
@@ -116,6 +163,7 @@ class AutomationDetail extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          this.getAutomationDetail(automationId);
           message.success(res.message || 'Operation successful');
         } else {
           this.setState({
@@ -136,6 +184,7 @@ class AutomationDetail extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          this.getAutomationDetail(automationId);
           message.success(res.message || 'Operation successful');
         } else {
           this.setState({
@@ -149,9 +198,79 @@ class AutomationDetail extends Component<any, any> {
         });
       });
   };
+  openTestModal = () => {
+    const { isEvent, automationDetail } = this.state;
+    let startTrigger = '';
+    let isOrderEvent = false;
+    if (isEvent) {
+      const tempArr = automationDetail.workflow && automationDetail.workflow.nodes && automationDetail.workflow.nodes.filter((item) => item.nodeType === 'EventTrigger');
+      if (tempArr[0].eventType) {
+        startTrigger = tempArr[0].eventType;
+
+        let OrderEvent = orderEventArr.find((item) => item.value === startTrigger);
+        if (OrderEvent) {
+          isOrderEvent = true;
+        } else {
+          isOrderEvent = false;
+        }
+      }
+    }
+    this.setState({
+      visibleTest: true,
+      startTrigger: startTrigger,
+      selectedObjectNo: '',
+      isOrderEvent: isOrderEvent
+    });
+  };
+  handleClose = () => {
+    this.setState({
+      visibleTest: false,
+      startTrigger: '',
+      selectedObjectNo: '',
+      isEvent: false
+    });
+  };
+
+  getObjectNoList = (value) => {
+    const { isOrderEvent } = this.state;
+    this.setState({
+      objectFetching: true
+    });
+    if (isOrderEvent) {
+      let params = {
+        id: value,
+        pageSize: 30,
+        pageNum: 0
+      };
+      webapi.getOrderList(params).then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            objectNoList: res.context.content,
+            objectFetching: false
+          });
+        }
+      });
+    } else {
+      let params = {
+        subscribeId: value,
+        pageSize: 30,
+        pageNum: 0
+      };
+      webapi.getSubscriptionList(params).then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            objectNoList: res.context.subscriptionResponses,
+            objectFetching: false
+          });
+        }
+      });
+    }
+  };
 
   render() {
-    const { loading, title, automationId, automationDetail } = this.state;
+    const { loading, title, automationId, automationDetail, visibleTest, startTrigger, isOrderEvent, objectFetching, selectedObjectNo, isEvent, objectNoList } = this.state;
     const testStatusList = [
       { name: 'Not Tested', value: 'NotTested' },
       { name: 'Testing', value: 'Testing' },
@@ -186,14 +305,15 @@ class AutomationDetail extends Component<any, any> {
               style={{ margin: 12 }}
               extra={
                 <ButtonGroup>
-                  <Popconfirm placement="topLeft" title="This automation (start with time trigger) will be tested immediately." onConfirm={this.testAutomation} okText="Confirm" cancelText="Cancel">
-                    <Button disabled={!(automationDetail.automationStatus === 'Draft')}>Test</Button>
-                  </Popconfirm>
+                  <Button disabled={!(automationDetail.automationStatus === 'Draft')} onClick={this.openTestModal}>
+                    Test
+                  </Button>
+
                   <Popconfirm placement="topLeft" title="This campaign will be terminated." onConfirm={this.terminateAutomation} okText="Confirm" cancelText="Cancel">
                     <Button disabled={automationDetail.automationStatus === 'Terminate' || automationDetail.automationStatus === 'Draft'}>Terminate</Button>
                   </Popconfirm>
                   <Popconfirm placement="topLeft" title="This campaign will be published." onConfirm={this.publishAutomation} okText="Confirm" cancelText="Cancel">
-                    <Button disabled={automationDetail.automationStatus === 'Published' || automationDetail.automationStatus === 'Executing'}>Published</Button>
+                    <Button disabled={automationDetail.automationStatus === 'Published' || automationDetail.automationStatus === 'Executing'}>Publish</Button>
                   </Popconfirm>
                 </ButtonGroup>
               }
@@ -280,6 +400,77 @@ class AutomationDetail extends Component<any, any> {
             </Card>
           </Spin>
         </div>
+        <Modal
+          title={'Test automation'}
+          maskClosable={false}
+          width={600}
+          visible={visibleTest}
+          onCancel={() => this.handleClose()}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.handleClose();
+              }}
+            >
+              Cancle
+            </Button>,
+            <Button key="submit" onClick={this.testAutomation}>
+              Comfirm
+            </Button>
+          ]}
+        >
+          {isEvent ? (
+            <div>
+              <p>
+                Start Trigger: <span style={{ marginLeft: 10, color: '#a6a6a6' }}>{startTrigger}</span>
+              </p>
+              <span
+                style={{
+                  color: 'red',
+                  fontFamily: 'SimSun',
+                  marginRight: '4px',
+                  fontSize: '12px'
+                }}
+              >
+                *
+              </span>
+              <label
+                style={{
+                  minWidth: '200px',
+                  marginRight: '10px',
+                  fontSize: '16px',
+                  fontWeight: 500
+                }}
+              >
+                {isOrderEvent ? 'Select Order:' : 'Select Subscription'}
+              </label>
+              <Select
+                showSearch
+                placeholder={isOrderEvent ? 'Select a Order No' : 'Select a Subscription No'}
+                style={{ minWidth: '200px', marginLeft: '10px' }}
+                optionFilterProp="children"
+                getPopupContainer={(trigger: any) => trigger.parentNode}
+                onChange={(value) => {
+                  this.setState({
+                    selectedObjectNo: value
+                  });
+                }}
+                onSearch={_.debounce(this.getObjectNoList, 500)}
+                notFoundContent={objectFetching ? <Spin size="small" /> : null}
+                filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              >
+                {objectNoList &&
+                  objectNoList.map((item, index) => (
+                    <Option value={isOrderEvent ? item.id : item.subscribeId} key={index}>
+                      {isOrderEvent ? item.id : item.subscribeId}
+                    </Option>
+                  ))}
+              </Select>
+            </div>
+          ) : null}
+          <p style={{ display: 'inline-block', color: '#a6a6a6' }}>This automation (start with time trigger) will be tested immediately.</p>
+        </Modal>
         <div className="bar-button">
           <Button type="primary" disabled={automationDetail.automationStatus === 'Published' || automationDetail.automationStatus === 'Executing'}>
             <Link to={`/automation-edit/${automationId}`}>{<FormattedMessage id="edit" />}</Link>

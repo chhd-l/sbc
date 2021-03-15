@@ -106,7 +106,7 @@ class AutomationExecution extends Component<any, any> {
       campaignId: this.props.automationId,
       module: 'Test',
       pageSize: modalPagination.pageSize,
-      pageNum: modalPagination.current
+      pageNum: modalPagination.current - 1
     };
     this.setState({
       loading: true

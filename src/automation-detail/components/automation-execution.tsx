@@ -395,7 +395,7 @@ class AutomationExecution extends Component<any, any> {
         <Modal
           title={openModalTitle}
           maskClosable={false}
-          width={isDetail ? 1000 : 520}
+          width={isDetail ? 1000 : 600}
           visible={visible}
           onCancel={() => this.handleClose()}
           footer={[

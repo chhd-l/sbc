@@ -5,23 +5,28 @@ const { Option } = Select;
 import { getCustomerDetails } from '../webapi';
 class ConsumerInformation extends React.Component<any, any> {
   state = {
-    customerList: []
+    customerId: '',
+    customerList: [],
+    value: ''
   };
 
   constructor(props) {
     super(props);
   }
   componentDidMount() {}
-  _searchPetsName = (e) => {
-    console.log(e.target.value);
-  };
-  onChange = (value) => {
-    console.log(`selected ${value}`);
+  onChange = (customerId) => {
+    let obj = this.state.customerList.find((item) => item.customerId === customerId);
+    if (!obj) return;
+    this.props.getCustomerId(customerId);
+    this.setState({
+      value: obj.customerName
+    });
   };
   onSearch = async (value) => {
-    console.log(`onSearch ${value}`);
-    const { res } = await getCustomerDetails();
-    console.log(res);
+    const { res } = await getCustomerDetails({ keywords: value });
+    this.setState({
+      customerList: res.context
+    });
   };
 
   render() {
@@ -36,6 +41,7 @@ class ConsumerInformation extends React.Component<any, any> {
         sm: { span: 5 }
       }
     };
+    const options = this.state.customerList.map((d) => <Option key={d.customerId}>{d.customerAccount}</Option>);
     return (
       <div>
         <h3>Step1</h3>
@@ -53,16 +59,14 @@ class ConsumerInformation extends React.Component<any, any> {
                   }
                 ]
               })(
-                <Select showSearch placeholder="Select a person" optionFilterProp="children" onChange={this.onChange} onSearch={this.onSearch} filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="tom">Tom</Option>
+                <Select showSearch value={this.state.value} placeholder={this.props.placeholder} style={this.props.style} defaultActiveFirstOption={false} showArrow={false} filterOption={false} onSearch={this.onSearch} onChange={this.onChange} notFoundContent={null}>
+                  {options}
                 </Select>
               )}
             </Form.Item>
             <Form.Item label="Pet owner name">
               {getFieldDecorator('ownerName', {
-                initialValue: ''
+                initialValue: this.state.value
               })(<Input disabled />)}
             </Form.Item>
           </Form>

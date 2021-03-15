@@ -7,11 +7,11 @@ export default class SelectedProduct extends React.Component<any, any> {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    // const { getFieldDecorator } = this.props.form;
     const { noLanguageSelect } = this.props;
     return (
       <div>
-        <h3>{noLanguageSelect ? 'Step1' : 'Step2'}</h3>
+        <h3>Step2</h3>
         <h4>
           {this.props.stepName}
           <span className="ant-form-item-required"></span>

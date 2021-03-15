@@ -5,7 +5,6 @@ import './index.less';
 import ConsumerInformation from './components/consumerInformation';
 import SelectedProduct from './components/selectedProduct';
 import PaymentInformation from './components/paymentInformation';
-import * as webapi from './webapi';
 
 const { Step } = Steps;
 
@@ -18,25 +17,20 @@ class ManualOrder extends Component<any, any> {
       id: this.props.match.params.id,
       title: 'Valet order',
       current: 0,
-      type: this.props.location.state ? this.props.location.state.type : 'add',
-      navigation: {
-        language: this.props.location.state ? this.props.location.state.language : '',
-        enable: 1
-      },
-      noLanguageSelect: this.props.location.state && this.props.location.state.noLanguageSelect,
-      topNames: this.props.location.state ? this.props.location.state.topNames : [],
-      store: {}
+      customerId: ''
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
-    this.addField = this.addField.bind(this);
   }
   next(e) {
     e.preventDefault();
+
     this.props.form.validateFields((err) => {
-      if (!err) {
+      if (!err && this.state.customerId) {
         const current = this.state.current + 1;
         this.setState({ current });
+      } else {
+        message.info('please search pet owner account then next step.');
       }
     });
   }
@@ -48,28 +42,26 @@ class ManualOrder extends Component<any, any> {
 
   componentWillMount() {}
 
-  addField(field, value) {
-    let data = this.state.navigation;
-    data[field] = value;
+  getCustomerId = (customerId) => {
     this.setState({
-      navigation: data
+      customerId
     });
-  }
+  };
 
   render() {
-    const { id, current, title, navigation, store, noLanguageSelect, topNames } = this.state;
+    const { current, title, customerId } = this.state;
     const steps = [
       {
         title: 'Consumer information',
-        controller: <ConsumerInformation stepName={'Consumer information'} navigation={navigation} addField={this.addField} />
+        controller: <ConsumerInformation form={this.props.form} stepName={'Consumer information'} getCustomerId={this.getCustomerId} />
       },
       {
         title: 'Selected product',
-        controller: <SelectedProduct stepName={'Selected product'} navigation={navigation} addField={this.addField} form={this.props.form} noLanguageSelect={noLanguageSelect} store={store} topNames={topNames} />
+        controller: <SelectedProduct stepName={'Selected product'} customerId={customerId} />
       },
       {
         title: 'Delivery & payment information',
-        controller: <PaymentInformation stepName={'Delivery & payment information'} navigation={navigation} addField={this.addField} form={this.props.form} noLanguageSelect={noLanguageSelect} />
+        controller: <PaymentInformation stepName={'Delivery & payment information'} />
       }
     ];
     // if (noLanguageSelect) {

@@ -11,7 +11,7 @@ type TResult = {
  * @param filterParams
  */
 export function getCustomerDetails(filterParams = {}) {
-  return Fetch<TResult>('/customer/customerDetails', {
+  return Fetch<TResult>('/pet_owner/list', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

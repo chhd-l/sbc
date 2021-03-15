@@ -67,7 +67,7 @@ export default class Customer extends React.Component<any, any> {
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title="Details">
-                <Link to={{ pathname: `/petowner-details/${record.customerId}/${record.customerAccount}`, query: { hash: 'pets-list' } }}>Detail</Link>
+                <Link to={record.customerLevelName === 'Member' ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
               </Tooltip>
               {/* <Divider type="vertical" />
               <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}

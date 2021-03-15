@@ -382,13 +382,14 @@ export default class Customer extends React.Component<any, any> {
                         this.onFormChange({ field: 'subscriptionType', value });
                       }}
                     >
+                      <TreeNode value="club" title="Club" key="club">
+                        <TreeNode value="cat" title="Cat" key="cat" />
+                        <TreeNode value="dog" title="Dog" key="dog" />
+                      </TreeNode>
                       <TreeNode value="Product" title="Product" key="product">
-                        <TreeNode value="Food dispenser" title="Food dispenser" key="food" />
+                        <TreeNode value="food dispenser" title="Food dispenser" key="food" />
                       </TreeNode>
-                      <TreeNode value="Pet" title="Pet" key="pet">
-                        <TreeNode value="Club" title="Club" key="club" />
-                      </TreeNode>
-                      <TreeNode value="Normal" title="Normal" key="normal" />
+                      <TreeNode value="autoship" title="Autoship" key="autoship" />
                     </TreeSelectGroup>
                   </FormItem>
                 </Col>

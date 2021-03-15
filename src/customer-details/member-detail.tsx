@@ -406,7 +406,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             </Breadcrumb.Item>
             <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
           </BreadCrumb>
-          <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
+          {displayPage === 'delivery' && <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />}
         </div>
       </>
     );

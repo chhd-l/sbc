@@ -20,6 +20,7 @@ type TDelivery = {
   address1?: string;
   address2?: string;
   rfc?: string;
+  isDefaltAddress?: number;
 };
 
 interface Iprop extends FormComponentProps {
@@ -148,11 +149,12 @@ class DeliveryItem extends React.Component<Iprop, any> {
           customerId: this.props.customerId,
           consigneeName: rFields.firstName + ' ' + rFields.lastName,
           deliveryAddress: [rFields.address1, rFields.address2].join(''),
-          isDefaltAddress: 0,
+          isDefaltAddress: delivery.isDefaltAddress || 0,
           type: this.props.addressType.toUpperCase()
         })
           .then((data) => {
             message.success(data.res.message);
+            this.setState({ loading: false, validationModalVisisble: false });
             backToDetail();
           })
           .catch(() => {

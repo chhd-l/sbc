@@ -95,3 +95,22 @@ export function exportCommunicationList(filterParams = {}) {
     })
   });
 }
+
+// 获取订阅列表
+export function getSubscriptionList(filterParams = {}) {
+  return Fetch<TResult>('/sub/findPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+// 获取订单列表
+export function getOrderList(filterParams = {}) {
+  return Fetch<TResult>('/trade', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

@@ -78,6 +78,7 @@ class AutomationList extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let automationList = res.context.campaignList;
+          pagination.total = res.context.total;
           this.setState({
             automationList,
             loading: false

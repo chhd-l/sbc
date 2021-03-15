@@ -131,11 +131,11 @@ class AutomationDetail extends Component<any, any> {
       });
   };
   testAutomation = () => {
-    const { automationId, selectedObjectNo } = this.state;
+    const { automationId, selectedObjectNo, isOrderEvent } = this.state;
     let params = {
       id: automationId,
-      orderEventIds: [],
-      orderIds: selectedObjectNo ? [selectedObjectNo] : []
+      type: isOrderEvent ? 'Order' : 'Subscription',
+      objectId: selectedObjectNo ? selectedObjectNo : ''
     };
     webapi
       .testAutomation(params)
@@ -310,7 +310,7 @@ class AutomationDetail extends Component<any, any> {
                   </Button>
 
                   <Popconfirm placement="topLeft" title="This campaign will be terminated." onConfirm={this.terminateAutomation} okText="Confirm" cancelText="Cancel">
-                    <Button disabled={automationDetail.automationStatus === 'Terminate' || automationDetail.automationStatus === 'Draft'}>Terminate</Button>
+                    <Button disabled={automationDetail.automationStatus === 'Terminated' || automationDetail.automationStatus === 'Draft'}>Terminate</Button>
                   </Popconfirm>
                   <Popconfirm placement="topLeft" title="This campaign will be published." onConfirm={this.publishAutomation} okText="Confirm" cancelText="Cancel">
                     <Button disabled={automationDetail.automationStatus === 'Published' || automationDetail.automationStatus === 'Executing'}>Publish</Button>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
-import { Alert, Button, Spin, message } from 'antd';
+import { Alert, Button, Spin, message, Row, Col } from 'antd';
 import Fields from './component/fields';
 import Manage from './component/manage';
 import RuleSetting from './component/rule-setting';
@@ -14,7 +14,9 @@ export default class AddressFieldSetting extends React.Component<any, any> {
       loading: false,
       visible: false,
       step: 1,
-      fieldList: []
+      manualFieldList: [],
+      autoFieldList: [],
+      activeKey: 'MANUALLY'
     };
   }
 
@@ -22,13 +24,18 @@ export default class AddressFieldSetting extends React.Component<any, any> {
     this.getFieldList();
   }
 
-  getFieldList = () => {
-    getFieldList().then((data) => {
-      if (data.res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          fieldList: data.res.context.addressDisplaySettings
-        });
-      }
+  getFieldList = async () => {
+    const manual = await getFieldList('MANUALLY');
+    const auto = await getFieldList('AUTOMATICALLY');
+    this.setState({
+      manualFieldList: manual,
+      autoFieldList: auto
+    });
+  };
+
+  onChangeActiveKey = (key: string) => {
+    this.setState({
+      activeKey: key
     });
   };
 
@@ -51,19 +58,20 @@ export default class AddressFieldSetting extends React.Component<any, any> {
   };
 
   onFieldChange = (id: number, field: any) => {
-    const { fieldList } = this.state;
+    const { activeKey, manualFieldList, autoFieldList } = this.state;
+    const fieldList = activeKey === 'MANUALLY' ? manualFieldList : autoFieldList;
     const _idx = fieldList.findIndex((item) => item.id === id);
     if (_idx > -1) {
       fieldList[_idx] = { ...fieldList[_idx], ...field };
       this.setState({
-        fieldList: fieldList
+        [activeKey === 'MANUALLY' ? 'manualFieldList' : 'autoFieldList']: fieldList
       });
     }
   };
 
   saveFieldSetting = () => {
     this.setState({ loading: true });
-    saveFieldList({ batchAddressDisplaySettingEditItems: this.state.fieldList })
+    saveFieldList({ batchAddressDisplaySettingEditItems: this.state.manualFieldList.concat(this.state.autoFieldList) })
       .then((data) => {
         if (data.res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
@@ -81,25 +89,26 @@ export default class AddressFieldSetting extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, visible, step, fieldList } = this.state;
+    const { loading, visible, step, manualFieldList, autoFieldList, activeKey } = this.state;
     return (
       <div>
         <BreadCrumb />
         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <div className="container-search">
-            <Headline title={step === 1 ? 'Address field setting' : 'Manage field display'} />
+            <Row style={{ marginBottom: 10 }}>
+              <Col span={12}>
+                <Headline title={step === 1 ? 'Address field setting' : 'Manage field display'} />
+              </Col>
+              <Col span={12} className="text-align-right">
+                {step === 1 ? <Button onClick={() => this.onOpenModal()}>Rule setting</Button> : null}
+              </Col>
+            </Row>
             <Alert type="info" message="Address setting is for address adding and address edit of shop and store portal" />
-            {step === 1 && (
-              <>
-                <Button onClick={() => this.onOpenModal()} style={{ marginRight: 20 }}>
-                  Rule setting
-                </Button>
-                <Button type="primary" onClick={() => this.onStepChange(2)} style={{ marginBottom: 10 }}>
-                  Display
-                </Button>
-              </>
+            {step === 1 ? (
+              <Fields manualFieldList={manualFieldList} autoFieldList={autoFieldList} activeKey={activeKey} onChangeActiveKey={this.onChangeActiveKey} onFieldChange={this.onFieldChange} onStepChange={this.onStepChange} />
+            ) : (
+              <Manage fieldList={activeKey === 'MANUALLY' ? manualFieldList : autoFieldList} onFieldChange={this.onFieldChange} />
             )}
-            {step === 1 ? <Fields fieldList={fieldList} onFieldChange={this.onFieldChange} /> : <Manage fieldList={fieldList} onFieldChange={this.onFieldChange} />}
           </div>
           {step === 2 && (
             <div className="bar-button">

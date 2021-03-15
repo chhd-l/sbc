@@ -128,6 +128,8 @@ export default class ChooseRecurrenceMonthlyForm extends Component<any, any> {
               <Col span={4}>The</Col>
               <Col span={9}>
                 <Select
+                  allowClear
+                  dropdownClassName="minSelect"
                   onChange={(value) => {
                     this.onChange('radioType', '2');
                     this.onChange('whichOne', value);
@@ -144,6 +146,8 @@ export default class ChooseRecurrenceMonthlyForm extends Component<any, any> {
               </Col>
               <Col span={11}>
                 <Select
+                  allowClear
+                  dropdownClassName="minSelect"
                   onChange={(value) => {
                     this.onChange('radioType', '2');
                     this.onChange('whichWeek', value);

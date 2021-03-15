@@ -28,7 +28,6 @@ export default class ChooseTaskForm extends Component<any, any> {
         reminderType: undefined
       },
       assignedUsers: [],
-      goldenMomentList: [],
       priorityList: [
         { name: 'Low', value: 'Low' },
         { name: 'Medium', value: 'Medium' },
@@ -73,21 +72,6 @@ export default class ChooseTaskForm extends Component<any, any> {
   componentDidMount() {
     this.initData(this.props);
     this.getEmployees();
-    webapi
-      .getGlodenMomentList()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            goldenMomentList: res.context.sysDictionaryVOS
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -192,7 +176,8 @@ export default class ChooseTaskForm extends Component<any, any> {
   }
 
   render() {
-    const { form, assignedUsers, goldenMomentList, priorityList, actionTypeList, timeType, variableList, variableValueList } = this.state;
+    const { form, assignedUsers, priorityList, actionTypeList, timeType, variableList, variableValueList } = this.state;
+    const { goldenMomentList } = this.props;
     return (
       <React.Fragment>
         <div className="taskFrom">
@@ -210,6 +195,7 @@ export default class ChooseTaskForm extends Component<any, any> {
             <Row gutter={16}>
               <Col span={8}>
                 <Select
+                  allowClear
                   onChange={(value) => {
                     this.variableTypeChange(value);
                   }}
@@ -225,6 +211,7 @@ export default class ChooseTaskForm extends Component<any, any> {
               </Col>
               <Col span={16}>
                 <Select
+                  allowClear
                   onChange={(value) => {
                     this.variableValueChange(value);
                   }}
@@ -242,6 +229,7 @@ export default class ChooseTaskForm extends Component<any, any> {
           </FormItem>
           <FormItem label="Assigned To" colon={false}>
             <Select
+              allowClear
               dropdownClassName="normalSelect"
               placeholder="Please input email or name"
               showSearch
@@ -263,6 +251,7 @@ export default class ChooseTaskForm extends Component<any, any> {
           </FormItem>
           <FormItem label="GoldenMoment" colon={false}>
             <Select
+              allowClear
               onChange={(value) => {
                 this.onChange('goldenMoment', value);
               }}
@@ -279,6 +268,7 @@ export default class ChooseTaskForm extends Component<any, any> {
           </FormItem>
           <FormItem label="Priority" colon={false}>
             <Select
+              allowClear
               onChange={(value) => {
                 this.onChange('priority', value);
               }}
@@ -295,6 +285,7 @@ export default class ChooseTaskForm extends Component<any, any> {
           </FormItem>
           <FormItem label="Action Type" colon={false}>
             <Select
+              allowClear
               onChange={(value) => {
                 this.onChange('actionType', value);
               }}
@@ -335,6 +326,7 @@ export default class ChooseTaskForm extends Component<any, any> {
               </Col>
               <Col span={6}>
                 <Select
+                  allowClear
                   onChange={(value) => {
                     this.onChange('dueTimeType', value);
                   }}
@@ -349,7 +341,7 @@ export default class ChooseTaskForm extends Component<any, any> {
                 </Select>
               </Col>
               <Col span={8} className="horizontalLable">
-                after task started
+                before task due
               </Col>
             </Row>
             <Row gutter={24} type="flex" justify="start" align="middle">
@@ -369,6 +361,7 @@ export default class ChooseTaskForm extends Component<any, any> {
               </Col>
               <Col span={6}>
                 <Select
+                  allowClear
                   onChange={(value) => {
                     this.onChange('reminderType', value);
                   }}
@@ -383,7 +376,7 @@ export default class ChooseTaskForm extends Component<any, any> {
                 </Select>
               </Col>
               <Col span={8} className="horizontalLable">
-                after task started
+                before task due
               </Col>
             </Row>
           </FormItem>

@@ -127,6 +127,7 @@ export default class ChooseOrderForm extends Component<any, any> {
             </Col>
             <Col span={24} style={{ margin: '10px 0' }}>
               <Select
+                allowClear
                 dropdownClassName="normalSelect"
                 onChange={(value) => {
                   this.onChange('orderStatus', value);

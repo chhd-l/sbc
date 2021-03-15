@@ -190,6 +190,8 @@ export default class ChooseWaitForm extends Component<any, any> {
                   </Col>
                   <Col span={8}>
                     <Select
+                      allowClear
+                      dropdownClassName="minSelect"
                       onChange={(value) => {
                         this.onChange('timeAmountType', value);
                       }}
@@ -259,6 +261,8 @@ export default class ChooseWaitForm extends Component<any, any> {
                       </Col>
                       <Col span={7}>
                         <Select
+                          allowClear
+                          dropdownClassName="minSelect"
                           onChange={(value) => {
                             this.onChange('specialAm', value);
                           }}

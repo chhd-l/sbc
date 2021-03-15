@@ -43,18 +43,34 @@ export default class ChooseEventForm extends Component<any, any> {
     const { eventType } = this.state;
     const treeData = [
       {
-        title: '1st purchase for order confirmation (Club)',
-        value: '1stPurchaseForOrderConfirmation',
-        key: '0-0-1'
+        title: 'Order',
+        value: '0-0',
+        key: '0-0',
+        selectable: false,
+        children: [
+          {
+            title: '1st purchase for order confirmation (Club)',
+            value: '1stPurchaseForOrderConfirmation',
+            key: '0-0-1'
+          },
+          { title: 'After 1st delivery', value: 'after1stDelivery', key: '0-0-2' },
+          { title: 'After 4th delivery', value: 'After4thDelivery', key: '0-0-3' }
+        ]
       },
-      { title: '1st month of Subscription', value: '1stMonthOfSubscription', key: '0-0-2' },
-      { title: 'Half-year subscription', value: 'halfYearSubscription', key: '0-0-3' },
-      { title: '1-year subscription', value: '1YearSubscription', key: '0-0-4' },
-      { title: 'After 1st delivery', value: 'after1stDelivery', key: '0-0-5' },
-      { title: 'After 4th delivery', value: 'After4thDelivery', key: '0-0-6' },
-      { title: 'Subscription program cancelation by PO', value: 'SubscriptionProgramCancelationByPO', key: '0-0-7' },
-      { title: 'Food transition (new life-stage)', value: 'foodTransition', key: '0-0-8' },
-      { title: '3 days before next refill order', value: '3DaysBeforeNextRefillOrder', key: '0-0-9' }
+      {
+        title: 'Subscription',
+        value: '0-1',
+        key: '0-1',
+        selectable: false,
+        children: [
+          { title: '1st month of Subscription', value: '1stMonthOfSubscription', key: '0-1-1' },
+          { title: 'Half-year subscription', value: 'halfYearSubscription', key: '0-1-2' },
+          { title: '1-year subscription', value: '1YearSubscription', key: '0-1-3' },
+          { title: 'Subscription program cancelation by PO', value: 'SubscriptionProgramCancelationByPO', key: '0-1-4' },
+          { title: 'Food transition (new life-stage)', value: 'foodTransition', key: '0-1-5' },
+          { title: '3 days before next refill order', value: '3DaysBeforeNextRefillOrder', key: '0-1-6' }
+        ]
+      }
     ];
     return (
       <FormItem label="Choose an event" colon={false}>

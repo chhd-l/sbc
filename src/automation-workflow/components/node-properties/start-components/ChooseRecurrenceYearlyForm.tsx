@@ -113,6 +113,8 @@ export default class ChooseRecurrenceYearlyendInfo extends Component<any, any> {
                   <Col span={4}>On</Col>
                   <Col span={11}>
                     <Select
+                      allowClear
+                      dropdownClassName="minSelect"
                       onChange={(value) => {
                         this.onChange('radioType', '1');
                         this.onChange('whichMonth1', value);
@@ -147,6 +149,8 @@ export default class ChooseRecurrenceYearlyendInfo extends Component<any, any> {
                   <Col span={6}>On the</Col>
                   <Col span={13}>
                     <Select
+                      allowClear
+                      dropdownClassName="minSelect"
                       onChange={(value) => {
                         this.onChange('radioType', '2');
                         this.onChange('whichMonth2', value);
@@ -164,6 +168,8 @@ export default class ChooseRecurrenceYearlyendInfo extends Component<any, any> {
                   <Col span={5}></Col>
                   <Col span={11}>
                     <Select
+                      allowClear
+                      dropdownClassName="minSelect"
                       onChange={(value) => {
                         this.onChange('radioType', '2');
                         this.onChange('whichOne', value);
@@ -180,6 +186,8 @@ export default class ChooseRecurrenceYearlyendInfo extends Component<any, any> {
                   </Col>
                   <Col span={12}>
                     <Select
+                      allowClear
+                      dropdownClassName="minSelect"
                       onChange={(value) => {
                         this.onChange('radioType', '2');
                         this.onChange('whichWeek', value);

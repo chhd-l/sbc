@@ -12,42 +12,23 @@ export default class ChooseSegmentForm extends Component<any, any> {
     super(props);
     this.state = {
       form: {
-        chooseType: 1, // 1:Seed Segment 2:Test Segment
-        taggingList: [
-          { rowId: 1, taggingId: undefined, linkOp: '' } // linkOp: 1:union 2:intersection 3:difference
+        segmentList: [
+          { rowId: 1, segmentId: undefined, linkOp: '' } // linkOp: 1:union 2:intersection 3:difference
         ],
         abTestType: 1, // 1:Percentage 2:Counts
         percentageValue: 0,
         aCountValue: 0,
         bCountValue: 0
       },
-      taggingSource: [],
-      testTaggingId: undefined,
       estimatedContact: '',
       nodeId: ''
     };
     this.onChange = this.onChange.bind(this);
-    this.radioGroupOnChange = this.radioGroupOnChange.bind(this);
     this.addTagging = this.addTagging.bind(this);
   }
 
   componentDidMount() {
     this.initData(this.props);
-    webapi
-      .getAllTaggings()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            taggingSource: res.context.segmentList
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -55,7 +36,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
   }
 
   initData(nextProps) {
-    const { taggingData } = nextProps;
+    const { segmentData } = nextProps;
     const { form, nodeId } = this.state;
     if (nodeId === nextProps.nodeId) {
       return;
@@ -64,39 +45,27 @@ export default class ChooseSegmentForm extends Component<any, any> {
         nodeId: nextProps.nodeId
       });
     }
-    if (taggingData.chooseType === undefined) {
+    if (segmentData.segmentList === undefined) {
       this.setState({
         form: {
-          chooseType: 1,
-          taggingList: [{ rowId: 1, taggingId: undefined, linkOp: '' }],
+          segmentList: [{ rowId: 1, segmentId: undefined, linkOp: '' }],
           abTestType: 1,
           percentageValue: 0,
           aCountValue: 0,
           bCountValue: 0
         },
-        taggingSource: [],
-        testTaggingId: undefined,
         estimatedContact: ''
       });
     } else {
-      form.chooseType = taggingData.chooseType;
-      if (taggingData.chooseType === 1) {
-        form.taggingList = taggingData.taggingList;
-        form.abTestType = taggingData.abTestType;
-        form.percentageValue = taggingData.percentageValue;
-        form.aCountValue = taggingData.aCountValue;
-        form.bCountValue = taggingData.bCountValue;
+      form.segmentList = segmentData.segmentList;
+      form.abTestType = segmentData.abTestType;
+      form.percentageValue = segmentData.percentageValue;
+      form.aCountValue = segmentData.aCountValue;
+      form.bCountValue = segmentData.bCountValue;
 
-        this.setState({
-          form
-        });
-      } else {
-        let testTaggingId = taggingData.taggingList[0].taggingId;
-        this.setState({
-          testTaggingId,
-          form
-        });
-      }
+      this.setState({
+        form
+      });
     }
   }
 
@@ -114,27 +83,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
   updateParentValue() {
     const { updateValue } = this.props;
     const { form } = this.state;
-    updateValue('taggingData', form);
-  }
-
-  radioGroupOnChange(value) {
-    this.setState(
-      {
-        form: {
-          chooseType: value,
-          taggingList: [
-            { rowId: 1, taggingId: undefined, linkOp: '' } // linkOp: 1:union 2:intersection 3:difference
-          ],
-          abTestType: 1, // 1:Percentage 2:Counts
-          percentageValue: 0,
-          aCountValue: 0,
-          bCountValue: 0
-        },
-        testTaggingId: undefined,
-        estimatedContact: ''
-      },
-      () => this.updateParentValue()
-    );
+    updateValue('segmentData', form);
   }
 
   radioChangeStyle(link, linkType) {
@@ -145,7 +94,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
 
   deleteTagging(rowId) {
     const { form } = this.state;
-    form.taggingList = form.taggingList.filter((x) => x.rowId !== rowId);
+    form.segmentList = form.segmentList.filter((x) => x.rowId !== rowId);
     this.setState(
       {
         form
@@ -155,9 +104,9 @@ export default class ChooseSegmentForm extends Component<any, any> {
   }
   addTagging() {
     const { form } = this.state;
-    let rowIds = form.taggingList.map((x) => x.rowId);
+    let rowIds = form.segmentList.map((x) => x.rowId);
     let maxRowId = Math.max(...rowIds);
-    form.taggingList.push({ rowId: maxRowId + 1, taggingId: null, linkOp: '1' });
+    form.segmentList.push({ rowId: maxRowId + 1, segmentId: null, linkOp: '1' });
     this.setState(
       {
         form
@@ -166,15 +115,9 @@ export default class ChooseSegmentForm extends Component<any, any> {
     );
   }
   estimateContacts() {
-    const { form, testTaggingId } = this.state;
-    let parameter = [];
-    if (form.chooseType === 1) {
-      parameter = form.taggingList;
-    } else {
-      parameter = [{ rowId: 1, taggingId: testTaggingId, linkOp: '' }];
-    }
+    const { form } = this.state;
     webapi
-      .getCountBySegments(parameter)
+      .getCountBySegments({ segmentList: form.segmentList })
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
@@ -204,11 +147,22 @@ export default class ChooseSegmentForm extends Component<any, any> {
     );
   }
 
-  onTaggingChange(rowId, newTaggingIdId) {
+  onTaggingChange(rowId, newsegmentIdId) {
     const { form } = this.state;
-    form.taggingList.map((item) => {
+    form.segmentList.map((item) => {
       if (item.rowId === rowId) {
-        item.taggingId = newTaggingIdId;
+        item.segmentId = newsegmentIdId;
+      }
+    });
+
+    this.setState(form, () => this.updateParentValue());
+  }
+
+  onLinkOpChange(rowId, linkOp) {
+    const { form } = this.state;
+    form.segmentList.map((item) => {
+      if (item.rowId === rowId) {
+        item.linkOp = linkOp;
       }
     });
 
@@ -216,165 +170,124 @@ export default class ChooseSegmentForm extends Component<any, any> {
   }
 
   render() {
-    const { form, taggingSource, testTaggingId, estimatedContact } = this.state;
-    const { updateValue } = this.props;
+    const { form, estimatedContact } = this.state;
+    const { taggingSource } = this.props;
     return (
       <React.Fragment>
         <FormItem label="Choose a tagging" colon={false}>
-          <Radio.Group
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              this.radioGroupOnChange(value);
-            }}
-            value={form.chooseType}
-            style={{ width: '100%' }}
-          >
-            <Radio value={1}>Choose a tagging</Radio>
-            {form.taggingList.map((tagging) => (
-              <Row gutter={5} key={tagging.rowId}>
-                {tagging.linkOp ? (
-                  <Row>
-                    <Col span={10} style={{ marginLeft: '20px' }}>
-                      <Radio.Group
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onChange('linkOp', value);
-                        }}
-                        size="small"
-                        value={tagging.linkOp}
-                        className="linkStyle"
-                      >
-                        <Radio.Button value="1" style={{ backgroundColor: this.radioChangeStyle(tagging.linkOp, '1') }}>
-                          And
-                        </Radio.Button>
-                        <Radio.Button value="2" style={{ backgroundColor: this.radioChangeStyle(tagging.linkOp, '2') }}>
-                          Or
-                        </Radio.Button>
-                      </Radio.Group>
-                    </Col>
-                    <Col span={5}>
-                      <span className="user-select-none item-icon iconfont iconDelete" style={{ color: 'red', fontSize: '18px' }} onClick={() => this.deleteTagging(tagging.rowId)} />
-                    </Col>
-                  </Row>
-                ) : null}
-                <Col span={20}>
-                  <Select
-                    dropdownClassName="normalSelect"
-                    onChange={(value) => {
-                      this.onTaggingChange(tagging.rowId, value);
-                    }}
-                    placeholder="Please select tagging"
-                    value={tagging.taggingId}
-                    disabled={form.chooseType === 2}
-                  >
-                    {taggingSource.map((item) => (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
-                </Col>
-                {form.chooseType === 1 ? (
-                  <Col span={4} style={{ lineHeight: 1.8 }}>
-                    <span className="user-select-none item-icon icon iconfont iconbianzu9" style={{ fontSize: '25px' }} onClick={() => this.addTagging()} />
+          {form.segmentList.map((tagging) => (
+            <Row gutter={5} key={tagging.rowId}>
+              {tagging.linkOp ? (
+                <Row>
+                  <Col span={10} style={{ marginLeft: '20px' }}>
+                    <Radio.Group
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onLinkOpChange(tagging.rowId, value);
+                      }}
+                      size="small"
+                      value={tagging.linkOp}
+                      className="linkStyle"
+                    >
+                      <Radio.Button value="1" style={{ backgroundColor: this.radioChangeStyle(tagging.linkOp, '1') }}>
+                        And
+                      </Radio.Button>
+                      <Radio.Button value="2" style={{ backgroundColor: this.radioChangeStyle(tagging.linkOp, '2') }}>
+                        Or
+                      </Radio.Button>
+                    </Radio.Group>
                   </Col>
-                ) : null}
-              </Row>
-            ))}
-
-            <Radio value={2}>Test Segment</Radio>
-            <Row>
-              <Select
-                dropdownClassName="normalSelect"
-                onChange={(value) => {
-                  let testTaggingData = { taggingList: [], chooseType: 0 };
-                  testTaggingData.taggingList = [{ rowId: 1, taggingId: value, linkOp: '' }];
-                  testTaggingData.chooseType = 2;
-                  this.setState(
-                    {
-                      testTaggingId: value
-                    },
-                    () => updateValue('taggingData', testTaggingData)
-                  );
-                }}
-                placeholder="Please select tagging"
-                value={testTaggingId}
-                disabled={form.chooseType === 1}
-              >
-                {taggingSource.map((item) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))}
-              </Select>
-            </Row>
-            <Row>
-              <span style={{ marginRight: '10px' }}>Estimated pet owner counts</span>
-              <Icon type="reload" style={{ color: 'blue', fontSize: '18px' }} onClick={() => this.estimateContacts} />
-              <Input value={estimatedContact} disabled={true} />
-            </Row>
-            {form.chooseType === 1 ? (
-              <Row>
-                <span>A/B Test</span>
-                <Row gutter={20}>
-                  <Col span={12}>
-                    <Select dropdownClassName="normalSelect" value={form.abTestType} onChange={(value) => this.abTestTypeChange(value)}>
-                      <Option value={1} key={1}>
-                        Percentage
-                      </Option>
-                      <Option value={2} key={2}>
-                        Counts
-                      </Option>
-                    </Select>
+                  <Col span={5}>
+                    <span className="user-select-none item-icon iconfont iconDelete" style={{ color: 'red', fontSize: '18px' }} onClick={() => this.deleteTagging(tagging.rowId)} />
                   </Col>
-                  {form.abTestType === 1 ? (
-                    <Col span={12}>
-                      <Row>
-                        <Col span={13}>
-                          <InputNumber
-                            onChange={(value) => {
-                              this.onChange('percentageValue', value);
-                            }}
-                            placeholder="Number"
-                            value={form.percentageValue}
-                            max={100}
-                            min={0}
-                          />
-                        </Col>
-                        <Col span={4}>%</Col>
-                      </Row>
-                    </Col>
-                  ) : null}
-
-                  {form.abTestType === 2 ? (
-                    <Col span={6}>
-                      <InputNumber
-                        onChange={(value) => {
-                          this.onChange('aCountValue', value);
-                        }}
-                        value={form.aCountValue}
-                        placeholder="A"
-                        min={0}
-                      />
-                    </Col>
-                  ) : null}
-
-                  {form.abTestType === 2 ? (
-                    <Col span={6}>
-                      <InputNumber
-                        onChange={(value) => {
-                          this.onChange('bCountValue', value);
-                        }}
-                        value={form.bCountValue}
-                        placeholder="B"
-                        min={0}
-                      />
-                    </Col>
-                  ) : null}
                 </Row>
-              </Row>
-            ) : null}
-          </Radio.Group>
+              ) : null}
+              <Col span={20}>
+                <Select
+                  allowClear
+                  dropdownClassName="normalSelect"
+                  onChange={(value) => {
+                    this.onTaggingChange(tagging.rowId, value);
+                  }}
+                  placeholder="Please select tagging"
+                  value={tagging.segmentId}
+                >
+                  {taggingSource.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Col>
+              <Col span={4} style={{ lineHeight: 1.8 }}>
+                <span className="user-select-none item-icon icon iconfont iconbianzu9" style={{ fontSize: '25px' }} onClick={() => this.addTagging()} />
+              </Col>
+            </Row>
+          ))}
+          <Row>
+            <span style={{ marginRight: '10px' }}>Estimated pet owner counts</span>
+            <Icon type="reload" style={{ color: 'blue', fontSize: '18px' }} onClick={() => this.estimateContacts()} />
+            <Input value={estimatedContact} disabled={true} />
+          </Row>
+          <Row>
+            <span>A/B Test</span>
+            <Row gutter={20}>
+              <Col span={12}>
+                <Select allowClear dropdownClassName="normalSelect" value={form.abTestType} onChange={(value) => this.abTestTypeChange(value)}>
+                  <Option value={1} key={1}>
+                    Percentage
+                  </Option>
+                  <Option value={2} key={2}>
+                    Counts
+                  </Option>
+                </Select>
+              </Col>
+              {form.abTestType === 1 ? (
+                <Col span={12}>
+                  <Row>
+                    <Col span={13}>
+                      <InputNumber
+                        onChange={(value) => {
+                          this.onChange('percentageValue', value);
+                        }}
+                        placeholder="Number"
+                        value={form.percentageValue}
+                        max={100}
+                        min={0}
+                      />
+                    </Col>
+                    <Col span={4}>%</Col>
+                  </Row>
+                </Col>
+              ) : null}
+
+              {form.abTestType === 2 ? (
+                <Col span={6}>
+                  <InputNumber
+                    onChange={(value) => {
+                      this.onChange('aCountValue', value);
+                    }}
+                    value={form.aCountValue}
+                    placeholder="A"
+                    min={0}
+                  />
+                </Col>
+              ) : null}
+
+              {form.abTestType === 2 ? (
+                <Col span={6}>
+                  <InputNumber
+                    onChange={(value) => {
+                      this.onChange('bCountValue', value);
+                    }}
+                    value={form.bCountValue}
+                    placeholder="B"
+                    min={0}
+                  />
+                </Col>
+              ) : null}
+            </Row>
+          </Row>
         </FormItem>
       </React.Fragment>
     );

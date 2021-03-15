@@ -30,44 +30,30 @@ export default class ChooseIfElseForm extends Component<any, any> {
       style: {
         fontSize: '10px'
       },
-      orderNoSelect: [
-        { name: 1, value: 1 },
-        { name: 2, value: 2 },
-        { name: 3, value: 3 },
-        { name: 4, value: 4 },
-        { name: 5, value: 5 },
-        { name: 6, value: 6 },
-        { name: 7, value: 7 },
-        { name: 8, value: 8 },
-        { name: 9, value: 9 },
-        { name: 10, value: 10 },
-        { name: 11, value: 11 },
-        { name: 12, value: 12 }
-      ],
       judgeSelect: [
         { name: 'True', value: 'True' },
         { name: 'False', value: 'False' }
       ],
       mouths: 'Month(s)',
       orderFeildDict: [
-        { name: 'order status', value: 'orderStatus' },
-        { name: 'shipping status', value: 'shippingStatus' },
-        { name: 'payment status', value: 'paymentStatus' },
-        { name: 'order type', value: 'orderType' }
+        { name: 'Order Status', value: 'orderStatus' },
+        { name: 'Shipping Status', value: 'shippingStatus' },
+        { name: 'Payment Status', value: 'paymentStatus' },
+        { name: 'Order Type', value: 'orderType' }
       ],
       contactFeildDict: [
-        { name: 'city', value: 'city' },
-        { name: 'postal code', value: 'postalCode' },
-        { name: 'consumer type', value: 'consumerType' }
+        { name: 'City', value: 'city' },
+        { name: 'Postal Code', value: 'postalCode' },
+        { name: 'Consumer Type', value: 'consumerType' }
       ],
       petFeildDict: [
-        { name: 'gender', value: 'gender' },
-        { name: 'category', value: 'category' },
-        { name: 'weight', value: 'weight' },
-        { name: 'age', value: 'age' },
-        { name: 'breed', value: 'breed' },
-        { name: 'sterilization status', value: 'sterilizationStatus' },
-        { name: 'special needs', value: 'specialNeeds' }
+        { name: 'Gender', value: 'gender' },
+        { name: 'Category', value: 'category' },
+        { name: 'Weight', value: 'weight' },
+        { name: 'Age', value: 'age' },
+        { name: 'Breed', value: 'breed' },
+        { name: 'Sterilization Status', value: 'sterilizationStatus' },
+        { name: 'Special Needs', value: 'specialNeeds' }
       ],
       orderStatusDict: [
         { name: 'Init', value: 'INIT' },
@@ -78,6 +64,29 @@ export default class ChooseIfElseForm extends Component<any, any> {
         { name: 'Confirmed', value: 'CONFIRMED' },
         { name: 'Completed', value: 'COMPLETED' },
         { name: 'Void', value: 'VOID' }
+      ],
+      shippingStatusDict: [
+        { name: 'Not Yet Shipped', value: 'NOT_YET_SHIPPED' },
+        { name: 'Shipped', value: 'SHIPPED' },
+        { name: 'Part Shipped', value: 'PART_SHIPPED' },
+        { name: 'Void', value: 'VOID' },
+        { name: 'Unknow', value: '' }
+      ],
+      paymenStatusDict: [
+        { name: 'Not Paid', value: 'NOT_PAID' },
+        { name: 'Unconfirmed', value: 'UNCONFIRMED' },
+        { name: 'Paid', value: 'PAID' },
+        { name: 'Refund', value: 'REFUND' },
+        { name: 'Paying', value: 'PAYING' },
+        { name: 'Unknow', value: '' }
+      ],
+      orderTypeList: [
+        { name: 'Single purchase', value: 'SINGLE_PURCHASE' },
+        { name: 'Subscription', value: 'SUBSCRIPTION' }
+      ],
+      consumerTypeList: [
+        { name: 'Guest', value: 0 },
+        { name: 'Member', value: 1 }
       ],
       nodeId: ''
     };
@@ -196,53 +205,37 @@ export default class ChooseIfElseForm extends Component<any, any> {
   }
   colNameChange(condition) {
     const { conditionList } = this.state;
-    const { orderNoSelect, orderProductTypesDict, judgeSelect, businessTypeDict, channelTypeDict } = this.state;
-    const { orderStatusDict, genderDict, clubNameDict, breedDict, countryDict } = this.state;
+    const { judgeSelect, shippingStatusDict, paymenStatusDict } = this.state;
+    const { orderStatusDict, genderDict, orderTypeList, consumerTypeList } = this.state;
     const colName = condition.colName;
     let tmpType;
     let tmpArr = [];
     switch (colName) {
-      case 'orderSequence':
-      case 'consecutive':
-        tmpArr = orderNoSelect;
+      case 'shippingStatus':
+        tmpArr = shippingStatusDict;
         break;
-      case 'preProductCategory':
-      case 'productCategory':
-        tmpArr = orderProductTypesDict;
+      case 'paymentStatus':
+        tmpArr = paymenStatusDict;
         break;
-      case 'switchedProduct':
-      case 'firstRefillAfter':
-      case 'sterillizationStatus':
-      case 'subscriptionStatus':
-        tmpArr = judgeSelect;
+      case 'orderType':
+        tmpArr = orderTypeList;
         break;
-      case 'orderStatus':
-        tmpArr = orderStatusDict;
+      case 'consumerType':
+        tmpArr = consumerTypeList;
         break;
+
       case 'gender':
         tmpArr = genderDict;
         break;
-      case 'clubName':
-        tmpArr = clubNameDict;
+      case 'category':
+        tmpArr = [
+          { name: 'Dog', value: 'dog' },
+          { name: 'Cat', value: 'cat' }
+        ];
         break;
-      case 'pedigreeName':
-        tmpArr = breedDict.sort((a, b) => {
-          return a.name.charCodeAt(0) - b.name.charCodeAt(0);
-        });
+      case 'sterilizationStatus':
+        tmpArr = judgeSelect;
         break;
-      case 'primaryCountry':
-        tmpArr = countryDict.sort((a, b) => {
-          return a.name.charCodeAt(0) - b.name.charCodeAt(0);
-        });
-        break;
-    }
-
-    switch (colName) {
-      case 'intervalDay':
-      case 'petAge':
-      case 'petId':
-      case 'orderno':
-      case 'petOwnerId':
       default:
         tmpType = 'text';
     }
@@ -293,6 +286,8 @@ export default class ChooseIfElseForm extends Component<any, any> {
               <Row gutter={5}>
                 <Col span={4}>
                   <Select
+                    allowClear
+                    dropdownClassName="minSelect"
                     onChange={(value) => {
                       this.onChange('tableName', value, condition.id);
                     }}
@@ -311,6 +306,8 @@ export default class ChooseIfElseForm extends Component<any, any> {
                 </Col>
                 <Col span={6}>
                   <Select
+                    allowClear
+                    dropdownClassName="minSelect"
                     onChange={(value) => {
                       this.onChange('colName', value, condition.id);
                       this.colNameChange(condition);
@@ -331,6 +328,8 @@ export default class ChooseIfElseForm extends Component<any, any> {
                 </Col>
                 <Col span={6}>
                   <Select
+                    allowClear
+                    dropdownClassName="minSelect"
                     onChange={(value) => {
                       this.onChange('selOp', value, condition.id);
                     }}
@@ -349,6 +348,8 @@ export default class ChooseIfElseForm extends Component<any, any> {
                 {condition.valueSelect && condition.valueSelect.length > 0 ? (
                   <Col span={6}>
                     <Select
+                      allowClear
+                      dropdownClassName="minSelect"
                       onChange={(value) => {
                         this.onChange('colValue', value, condition.id);
                       }}

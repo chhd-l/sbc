@@ -104,7 +104,7 @@ class AutomationExecution extends Component<any, any> {
     const { modalPagination } = this.state;
     let params = {
       campaignId: this.props.automationId,
-      module: 'test',
+      module: 'Test',
       pageSize: modalPagination.pageSize,
       pageNum: modalPagination.current
     };

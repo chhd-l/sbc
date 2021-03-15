@@ -33,6 +33,21 @@ export default class ChooseSegmentForm extends Component<any, any> {
 
   componentDidMount() {
     this.initData(this.props);
+    webapi
+      .getAllTaggings()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            taggingSource: res.context.segmentList
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -67,17 +82,21 @@ export default class ChooseSegmentForm extends Component<any, any> {
       form.chooseType = taggingData.chooseType;
       if (taggingData.chooseType === 1) {
         form.taggingList = taggingData.taggingList;
-      } else {
-        form.testTaggingId = taggingData.taggingList[0].segmentId;
-      }
-      form.abTestType = taggingData.abTestType;
-      form.percentageValue = taggingData.percentageValue;
-      form.aCountValue = taggingData.aCountValue;
-      form.bCountValue = taggingData.bCountValue;
+        form.abTestType = taggingData.abTestType;
+        form.percentageValue = taggingData.percentageValue;
+        form.aCountValue = taggingData.aCountValue;
+        form.bCountValue = taggingData.bCountValue;
 
-      this.setState({
-        form
-      });
+        this.setState({
+          form
+        });
+      } else {
+        let testTaggingId = taggingData.taggingList[0].taggingId;
+        this.setState({
+          testTaggingId,
+          form
+        });
+      }
     }
   }
 
@@ -111,7 +130,6 @@ export default class ChooseSegmentForm extends Component<any, any> {
           aCountValue: 0,
           bCountValue: 0
         },
-        taggingSource: [],
         testTaggingId: undefined,
         estimatedContact: ''
       },
@@ -128,18 +146,24 @@ export default class ChooseSegmentForm extends Component<any, any> {
   deleteTagging(rowId) {
     const { form } = this.state;
     form.taggingList = form.taggingList.filter((x) => x.rowId !== rowId);
-    this.setState({
-      form
-    });
+    this.setState(
+      {
+        form
+      },
+      () => this.updateParentValue()
+    );
   }
   addTagging() {
     const { form } = this.state;
     let rowIds = form.taggingList.map((x) => x.rowId);
     let maxRowId = Math.max(...rowIds);
     form.taggingList.push({ rowId: maxRowId + 1, taggingId: null, linkOp: '1' });
-    this.setState({
-      form
-    });
+    this.setState(
+      {
+        form
+      },
+      () => this.updateParentValue()
+    );
   }
   estimateContacts() {
     const { form, testTaggingId } = this.state;
@@ -172,19 +196,23 @@ export default class ChooseSegmentForm extends Component<any, any> {
     form.aCountValue = 0;
     form.bCountValue = 0;
     form.abTestType = value;
-    this.setState({
-      form
-    });
+    this.setState(
+      {
+        form
+      },
+      () => this.updateParentValue()
+    );
   }
 
-  onTaggingChange(oldId, newId) {
+  onTaggingChange(rowId, newTaggingIdId) {
     const { form } = this.state;
     form.taggingList.map((item) => {
-      if (item.id === oldId) {
-        item.id = newId;
+      if (item.rowId === rowId) {
+        item.taggingId = newTaggingIdId;
       }
     });
-    this.setState(form);
+
+    this.setState(form, () => this.updateParentValue());
   }
 
   render() {
@@ -233,7 +261,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
                   <Select
                     dropdownClassName="normalSelect"
                     onChange={(value) => {
-                      this.onTaggingChange(tagging.taggingId, value);
+                      this.onTaggingChange(tagging.rowId, value);
                     }}
                     placeholder="Please select tagging"
                     value={tagging.taggingId}

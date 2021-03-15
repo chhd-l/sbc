@@ -9,7 +9,7 @@ import Overview from './components/overview';
 import AutomationExecution from './components/automation-execution';
 import PetOwnerCommunication from './components/pet-owner-communication';
 import AuditLog from './components/audit-log';
-import GGEditor, { Flow } from 'gg-editor';
+import GGEditor, { Flow, Minimap } from 'gg-editor';
 import ItemCommunicationNode from '@/automation-workflow/components/nodes/ItemCommunicationNode';
 import ItemEndNode from '@/automation-workflow/components/nodes/ItemEndNode';
 import ItemIfElseNode from '@/automation-workflow/components/nodes/ItemIfElseNode';
@@ -248,9 +248,12 @@ class AutomationDetail extends Component<any, any> {
                           graph={
                             { edgeDefaultShape: 'flow-polyline-round' } // 连线方式
                           }
-                          style={{ height: '600px' }}
+                          style={{ height: '600px', display: 'none' }}
                           data={this.state.automationDetail.workflow}
                         />
+                        <Row type="flex" justify="center">
+                          <Minimap width={300} height={300} />
+                        </Row>
                         <ItemCommunicationNode />
                         <ItemEndNode />
                         <ItemIfElseNode />

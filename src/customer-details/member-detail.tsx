@@ -43,7 +43,6 @@ export default class CustomerDetails extends React.Component<any, any> {
     };
   }
   componentDidMount() {
-    console.log('paaaaaaaram:', this.props.location.query);
     this.getBasicInformation();
     this.getPetsList();
     this.getTagList();

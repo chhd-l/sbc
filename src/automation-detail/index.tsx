@@ -86,8 +86,8 @@ class AutomationDetail extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let isEvent = false;
-          const tmpFlow = res.context.workflow ? JSON.parse(res.context.workflow) : {};
-          if (tmpFlow.nodes) {
+          const tmpFlow = res.context.workflow ? JSON.parse(res.context.workflow) : null;
+          if (tmpFlow && tmpFlow.nodes) {
             let timeTriggerNodes = tmpFlow.nodes.find((x) => x.nodeType === 'TimeTrigger');
             let eventTriggerNodes = tmpFlow.nodes.find((x) => x.nodeType === 'EventTrigger');
             if (timeTriggerNodes) {

@@ -193,9 +193,11 @@ export default withPropsAPI(
                     <TabPane tab="Builder" key="Builder">
                       <FlowItemPanel />
                     </TabPane>
-                    <TabPane tab="Item Properties" key="Item Properties">
-                      <NodeProperties model={currentItem && currentItem.model} saveProperties={this.saveProperties} />
-                    </TabPane>
+                    {activeKey === 'Item Properties' ? (
+                      <TabPane tab="Item Properties" key="Item Properties">
+                        <NodeProperties model={currentItem && currentItem.model} saveProperties={this.saveProperties} />
+                      </TabPane>
+                    ) : null}
                   </Tabs>
                 </div>
               </div>

@@ -38,3 +38,26 @@ export function getAddressSetting(param = {}) {
     })
   });
 }
+
+export function getAddressInputTypeSetting() {
+  return Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      configType: 'address_input_type'
+    })
+  });
+}
+
+export function saveAddressInputTypeSetting(params = {}) {
+  return Fetch<TResult>('/system/config/batchModifyConfig', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+export function editAddressApiSetting(param = {}) {
+  return Fetch<TResult>('/addressApiSetting/editAddressApiSetting', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

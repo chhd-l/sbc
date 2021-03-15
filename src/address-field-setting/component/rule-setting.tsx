@@ -1,7 +1,7 @@
 import React from 'react';
 import { Const } from 'qmkit';
-import { Form, Modal, Input, Radio, Switch, Row, Col } from 'antd';
-import { getAddressSetting } from '../webapi';
+import { Form, Modal, Input, Radio, Switch, Row, Col, message } from 'antd';
+import { getAddressSetting, saveAddressInputTypeSetting, editAddressApiSetting } from '../webapi';
 
 const FormItem = Form.Item;
 
@@ -10,8 +10,6 @@ class RuleSetting extends React.Component<any, any> {
     super(props);
     this.state = {
       loading: false,
-      ruleId: 1,
-      addressSettingList: [],
       addressSettingForm: {
         validationUrl: '',
         clientId: '',
@@ -35,7 +33,7 @@ class RuleSetting extends React.Component<any, any> {
     getAddressSetting().then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          addressSettingList: data.res.context.addressApiSettings.filter((ad) => ad.isCustom === 0)
+          addressSettingForm: data.res.context.addressApiSettings[0]
         });
       }
     });
@@ -45,8 +43,37 @@ class RuleSetting extends React.Component<any, any> {
     this.props.onCloseModal();
   };
 
+  onSave = () => {
+    const { setting } = this.props;
+    this.props.form.validateFields((err, fields) => {
+      if (!err) {
+        this.setState({ loading: true });
+        Promise.all([
+          saveAddressInputTypeSetting({
+            configRequestList: setting
+          }),
+          editAddressApiSetting({
+            ...this.state.addressSettingForm,
+            ...fields
+          })
+        ])
+          .then(([data1, data2]) => {
+            if (data1.res.code === Const.SUCCESS_CODE && data2.res.code === Const.SUCCESS_CODE) {
+              message.success('Operate successfully');
+            }
+            this.setState({ loading: false });
+            this.onCancel();
+          })
+          .catch(() => {
+            this.setState({ loading: false });
+          });
+      }
+    });
+  };
+
   render() {
-    const { ruleId, loading, addressSettingList, addressSettingForm } = this.state;
+    const { loading, addressSettingForm } = this.state;
+    const { setting, onChange } = this.props;
     const {
       visible,
       form: { getFieldDecorator }
@@ -54,112 +81,50 @@ class RuleSetting extends React.Component<any, any> {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 12 }
+        sm: { span: 16 }
       }
     };
     return (
-      <Modal width={1200} visible={visible} title="Address rule setting" confirmLoading={loading} okText="Submit" cancelText="Cancel" onOk={this.onCancel} onCancel={this.onCancel}>
-        <div style={{ marginBottom: 10, color: '#000' }}>
-          Input manually: <Switch checked={ruleId === 1} />
-        </div>
-        <div style={{ marginBottom: 10, color: '#000' }}>
-          Input automatically: <Switch checked={ruleId === 2} />
-        </div>
-        <Radio.Group value="1">
-          {addressSettingList.map((addressSettingItem) => (
-            <Radio value={addressSettingItem.id} key={addressSettingItem.id}>
-              <img src={addressSettingItem.imgUrl} style={{ width: '120px' }} />
-            </Radio>
+      <Modal width={1200} visible={visible} title="Address rule setting" confirmLoading={loading} okText="Submit" cancelText="Cancel" onOk={this.onSave} onCancel={this.onCancel}>
+        {setting.length &&
+          setting.map((setItem, idx) => (
+            <div key={idx} style={{ marginBottom: 20, color: '#000' }}>
+              {setItem.configKey === 'address_input_type_manually' ? 'Input manually' : 'Input automatically'}
+              :
+              <Switch checked={setItem.context === '1'} onChange={(checked) => onChange(idx, checked ? '1' : '0')} />
+            </div>
           ))}
-        </Radio.Group>
-        <Form {...formItemLayout}>
-          <Row>
-            <Col span={12}>
-              <FormItem label="Validation url">
-                {getFieldDecorator('validationUrl', {
-                  rules: [{ required: true, message: 'Validation url is required' }],
-                  initialValue: addressSettingForm.validationUrl
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Client id">
-                {getFieldDecorator('clientId', {
-                  rules: [{ required: true, message: 'Client id is required' }],
-                  initialValue: addressSettingForm.clientId
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Parent key">
-                {getFieldDecorator('parentKey', {
-                  rules: [{ required: true, message: 'Parent key is required' }],
-                  initialValue: addressSettingForm.parentKey
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Company code">
-                {getFieldDecorator('companyCode', {
-                  rules: [{ required: true, message: 'Company code is required' }],
-                  initialValue: addressSettingForm.companyCode
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Parent password">
-                {getFieldDecorator('parentPassword', {
-                  rules: [{ required: true, message: 'Parent password is required' }],
-                  initialValue: addressSettingForm.parentPassword
-                })(<Input.Password />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="User key">
-                {getFieldDecorator('userKey', {
-                  rules: [{ required: true, message: 'User key is required' }],
-                  initialValue: addressSettingForm.userKey
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="User password">
-                {getFieldDecorator('userPassword', {
-                  rules: [{ required: true, message: 'User password is required' }],
-                  initialValue: addressSettingForm.userPassword
-                })(<Input.Password />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Account number">
-                {getFieldDecorator('accountNumber', {
-                  rules: [{ required: true, message: 'Account number is required' }],
-                  initialValue: addressSettingForm.accountNumber
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Meter number">
-                {getFieldDecorator('meterNumber', {
-                  rules: [{ required: true, message: 'Meter number is required' }],
-                  initialValue: addressSettingForm.meterNumber
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Client reference id">
-                {getFieldDecorator('clientReferenceId', {
-                  rules: [{ required: true, message: 'Client reference id is required' }],
-                  initialValue: addressSettingForm.clientReferenceId
-                })(<Input />)}
-              </FormItem>
-            </Col>
-          </Row>
-        </Form>
+        {setting.findIndex((st) => st.configKey === 'address_input_type_automatically') > -1 && setting.find((st) => st.configKey === 'address_input_type_automatically')['context'] === '1' && (
+          <>
+            <Radio value={addressSettingForm.id} key={addressSettingForm.id} checked={true}>
+              <img src={addressSettingForm.imgUrl} style={{ width: '120px' }} />
+            </Radio>
+            <Form {...formItemLayout} style={{ marginTop: 20 }}>
+              <Row>
+                <Col span={24}>
+                  <FormItem label="Validation url">
+                    {getFieldDecorator('validationUrl', {
+                      rules: [{ required: true, message: 'Validation url is required' }],
+                      initialValue: addressSettingForm.validationUrl
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={24}>
+                  <FormItem label="Token">
+                    {getFieldDecorator('userKey', {
+                      rules: [{ required: true, message: 'Token is required' }],
+                      initialValue: addressSettingForm.userKey
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+              </Row>
+            </Form>
+          </>
+        )}
       </Modal>
     );
   }

@@ -4,7 +4,7 @@ import { Alert, Button, Spin, message, Row, Col } from 'antd';
 import Fields from './component/fields';
 import Manage from './component/manage';
 import RuleSetting from './component/rule-setting';
-import { getFieldList, saveFieldList } from './webapi';
+import { getFieldList, saveFieldList, getAddressInputTypeSetting } from './webapi';
 import './index.less';
 
 export default class AddressFieldSetting extends React.Component<any, any> {
@@ -14,6 +14,7 @@ export default class AddressFieldSetting extends React.Component<any, any> {
       loading: false,
       visible: false,
       step: 1,
+      setting: [],
       manualFieldList: [],
       autoFieldList: [],
       activeKey: 'MANUALLY'
@@ -22,6 +23,7 @@ export default class AddressFieldSetting extends React.Component<any, any> {
 
   componentDidMount() {
     this.getFieldList();
+    this.getAddressInputTypeSetting();
   }
 
   getFieldList = async () => {
@@ -30,6 +32,16 @@ export default class AddressFieldSetting extends React.Component<any, any> {
     this.setState({
       manualFieldList: manual,
       autoFieldList: auto
+    });
+  };
+
+  getAddressInputTypeSetting = () => {
+    getAddressInputTypeSetting().then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          setting: data.res.context
+        });
+      }
     });
   };
 
@@ -48,6 +60,17 @@ export default class AddressFieldSetting extends React.Component<any, any> {
   onOpenModal = () => {
     this.setState({
       visible: true
+    });
+  };
+
+  onChangeAddressInputTypeSetting = (idx: number, context: string) => {
+    const { setting } = this.state;
+    setting.forEach((st) => {
+      st.context = '0';
+    });
+    setting[idx]['context'] = context;
+    this.setState({
+      setting: setting
     });
   };
 
@@ -118,7 +141,7 @@ export default class AddressFieldSetting extends React.Component<any, any> {
             </div>
           )}
         </Spin>
-        <RuleSetting visible={visible} onCloseModal={this.onCloseModal} />
+        <RuleSetting visible={visible} setting={this.state.setting} onChange={this.onChangeAddressInputTypeSetting} onCloseModal={this.onCloseModal} />
       </div>
     );
   }

@@ -31,8 +31,8 @@ export default class ChooseIfElseForm extends Component<any, any> {
         fontSize: '10px'
       },
       judgeSelect: [
-        { name: 'True', value: 'True' },
-        { name: 'False', value: 'False' }
+        { name: 'Yes', value: 'True' },
+        { name: 'No', value: 'False' }
       ],
       mouths: 'Month(s)',
       orderFeildDict: [

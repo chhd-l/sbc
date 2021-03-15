@@ -83,6 +83,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               >
                 <p style={{ color: '#e2001a' }}>Quick Send</p>
               </Button> */}
+              <Button type="primary"> Create order</Button>
             </Col>
           </Row>
         </div>

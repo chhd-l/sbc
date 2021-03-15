@@ -142,6 +142,9 @@ class AutomationDetail extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            visibleTest: false
+          });
           this.getAutomationDetail(automationId);
           message.success(res.message || 'Operation successful');
         } else {

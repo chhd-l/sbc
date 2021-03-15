@@ -335,6 +335,24 @@ class TaskUpdate extends Component<any, any> {
     });
   }
 
+  disabledEventStartDate = (startValue) => {
+    const { task } = this.state;
+    let endValue = task.dueTime ? moment(task.dueTime) : null;
+    if (!startValue || !endValue) {
+      return false;
+    }
+    return startValue.valueOf() > endValue.valueOf();
+  };
+
+  disabledEventEndDate = (endValue) => {
+    const { task } = this.state;
+    let startValue = task.startTime ? moment(task.startTime) : null;
+    if (!endValue || !startValue) {
+      return false;
+    }
+    return endValue.valueOf() <= startValue.valueOf();
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { title, tabKey, editable, task, id, taskCompleted, assignedUsers } = this.state;
@@ -503,6 +521,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <DatePicker
+                            disabledDate={this.disabledEventStartDate}
                             disabled={taskCompleted || (!!task.startTime && id)}
                             style={{ width: '100%' }}
                             placeholder="Start Time"
@@ -529,6 +548,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <DatePicker
+                            disabledDate={this.disabledEventEndDate}
                             disabled={taskCompleted}
                             style={{ width: '100%' }}
                             placeholder="Due Time"

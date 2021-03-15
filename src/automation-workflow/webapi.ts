@@ -62,3 +62,13 @@ export function getCountBySegments(filterParams = {}) {
     })
   });
 }
+
+export function getAllTaggings() {
+  return Fetch<TResult>('/customer/segment/segment/query', {
+    method: 'POST',
+    body: JSON.stringify({
+      pageNum: 0,
+      pageSize: 99999999
+    })
+  });
+}

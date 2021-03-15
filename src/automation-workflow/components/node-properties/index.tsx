@@ -51,7 +51,7 @@ export default class NodeProperties extends Component<any, any> {
         specialTime,
         timeAmountValue,
         timeAmountType, // Wait
-        conditionDataList,
+        conditionDataList, //if-else
         chooseType,
         taggingList,
         abTestType,
@@ -81,7 +81,7 @@ export default class NodeProperties extends Component<any, any> {
         reminderNumber,
         reminderType,
         variableType,
-        variableValue,
+        variableValue, // task
         ...otherParam
       }
     } = nextProps;

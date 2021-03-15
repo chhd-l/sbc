@@ -49,9 +49,36 @@ export default class ChooseIfElseForm extends Component<any, any> {
         { name: 'False', value: 'False' }
       ],
       mouths: 'Month(s)',
-      orderFeildDict: [],
-      contactFeildDict: [],
-      petFeildDict: [],
+      orderFeildDict: [
+        { name: 'order status', value: 'orderStatus' },
+        { name: 'shipping status', value: 'shippingStatus' },
+        { name: 'payment status', value: 'paymentStatus' },
+        { name: 'order type', value: 'orderType' }
+      ],
+      contactFeildDict: [
+        { name: 'city', value: 'city' },
+        { name: 'postal code', value: 'postalCode' },
+        { name: 'consumer type', value: 'consumerType' }
+      ],
+      petFeildDict: [
+        { name: 'gender', value: 'gender' },
+        { name: 'category', value: 'category' },
+        { name: 'weight', value: 'weight' },
+        { name: 'age', value: 'age' },
+        { name: 'breed', value: 'breed' },
+        { name: 'sterilization status', value: 'sterilizationStatus' },
+        { name: 'special needs', value: 'specialNeeds' }
+      ],
+      orderStatusDict: [
+        { name: 'Init', value: 'INIT' },
+        { name: 'Groupon', value: 'GROUPON' },
+        { name: 'Audit', value: 'AUDIT' },
+        { name: 'Delivered_part', value: 'DELIVERED_PART' },
+        { name: 'Delivered', value: 'DELIVERED' },
+        { name: 'Confirmed', value: 'CONFIRMED' },
+        { name: 'Completed', value: 'COMPLETED' },
+        { name: 'Void', value: 'VOID' }
+      ],
       nodeId: ''
     };
     this.onChange = this.onChange.bind(this);
@@ -128,24 +155,25 @@ export default class ChooseIfElseForm extends Component<any, any> {
     let maxId = Math.max(...ids);
     let condition = { id: maxId + 1, tableName: undefined, colName: undefined, selOp: undefined, colValue: '', linkOp: 'And', valueSelect: [] };
     conditionList.push(condition);
-    this.setState({
-      conditionList
-    });
+    this.setState(
+      {
+        conditionList
+      },
+      () => this.updateParentValue()
+    );
   }
 
   deleteCondition(id) {
     const { conditionList } = this.state;
     let newConditionList = conditionList.filter((x) => x.id !== id);
-    this.setState({
-      conditionList: newConditionList
-    });
+    this.setState(
+      {
+        conditionList: newConditionList
+      },
+      () => this.updateParentValue()
+    );
   }
 
-  typeChange(condition) {
-    condition.colName = undefined;
-    condition.selOp = undefined;
-    condition.colValue = undefined;
-  }
   dropdownChange(tableName) {
     const { orderFeildDict, contactFeildDict, petFeildDict } = this.state;
     switch (tableName ? tableName.toLowerCase() : '') {
@@ -188,12 +216,6 @@ export default class ChooseIfElseForm extends Component<any, any> {
       case 'subscriptionStatus':
         tmpArr = judgeSelect;
         break;
-      case 'businessType':
-        tmpArr = businessTypeDict;
-        break;
-      case 'channelType':
-        tmpArr = channelTypeDict;
-        break;
       case 'orderStatus':
         tmpArr = orderStatusDict;
         break;
@@ -233,7 +255,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
       }
     });
 
-    this.setState({ conditionList });
+    this.setState({ conditionList }, () => this.updateParentValue());
   }
   render() {
     const { conditionList, types, fileds, conditionTypes, mouths } = this.state;
@@ -301,7 +323,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
                     onDropdownVisibleChange={() => this.dropdownChange(condition.tableName)}
                   >
                     {fileds.map((item) => (
-                      <Option value={item.value} key={item.id}>
+                      <Option value={item.value} key={item.value}>
                         {item.name}
                       </Option>
                     ))}

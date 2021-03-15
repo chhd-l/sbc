@@ -58,7 +58,7 @@ export default class NodeProperties extends Component<any, any> {
         timeAmountType, // Wait
         conditionDataList, //if-else
         chooseType,
-        segmentList,
+        taggingList,
         abTestType,
         percentageValue,
         aCountValue,
@@ -100,7 +100,7 @@ export default class NodeProperties extends Component<any, any> {
           { startCampaignTime: { timeType, time, recurrenceType, recurrenceValue } },
           { waitCampaignTime: { atSpecialTime, specialTime, timeAmountValue, timeAmountType } },
           { conditionDataList: conditionDataList },
-          { segmentData: { chooseType, segmentList, abTestType, percentageValue, aCountValue, bCountValue } },
+          { segmentData: { chooseType, taggingList, abTestType, percentageValue, aCountValue, bCountValue } },
           { orderData: { between, and, isOrderStatus, orderStatus, isBusinessType, businessType, isChannelType, channelType } },
           { vetData: { days, beforeOrAfter } },
           { taskData: { taskName, assistantId, assistantName, goldenMoment, contactPlan, priority, actionType, startTime, dueTimeNumber, dueTimeType, reminderNumber, reminderType, variableType, variableValue } }

@@ -12,8 +12,8 @@ export default class ChooseSegmentForm extends Component<any, any> {
     super(props);
     this.state = {
       form: {
-        segmentList: [
-          { rowId: 1, segmentId: undefined, linkOp: '' } // linkOp: 1:union 2:intersection 3:difference
+        taggingList: [
+          { rowId: 1, taggingId: undefined, linkOp: '' } // linkOp: 1:union 2:intersection 3:difference
         ],
         abTestType: 1, // 1:Percentage 2:Counts
         percentageValue: 0,
@@ -45,10 +45,10 @@ export default class ChooseSegmentForm extends Component<any, any> {
         nodeId: nextProps.nodeId
       });
     }
-    if (segmentData.segmentList === undefined) {
+    if (segmentData.taggingList === undefined) {
       this.setState({
         form: {
-          segmentList: [{ rowId: 1, segmentId: undefined, linkOp: '' }],
+          taggingList: [{ rowId: 1, taggingId: undefined, linkOp: '' }],
           abTestType: 1,
           percentageValue: 0,
           aCountValue: 0,
@@ -57,7 +57,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
         estimatedContact: ''
       });
     } else {
-      form.segmentList = segmentData.segmentList;
+      form.taggingList = segmentData.taggingList;
       form.abTestType = segmentData.abTestType;
       form.percentageValue = segmentData.percentageValue;
       form.aCountValue = segmentData.aCountValue;
@@ -94,7 +94,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
 
   deleteTagging(rowId) {
     const { form } = this.state;
-    form.segmentList = form.segmentList.filter((x) => x.rowId !== rowId);
+    form.taggingList = form.taggingList.filter((x) => x.rowId !== rowId);
     this.setState(
       {
         form
@@ -104,9 +104,9 @@ export default class ChooseSegmentForm extends Component<any, any> {
   }
   addTagging() {
     const { form } = this.state;
-    let rowIds = form.segmentList.map((x) => x.rowId);
+    let rowIds = form.taggingList.map((x) => x.rowId);
     let maxRowId = Math.max(...rowIds);
-    form.segmentList.push({ rowId: maxRowId + 1, segmentId: null, linkOp: '1' });
+    form.taggingList.push({ rowId: maxRowId + 1, taggingId: null, linkOp: '1' });
     this.setState(
       {
         form
@@ -117,7 +117,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
   estimateContacts() {
     const { form } = this.state;
     webapi
-      .getCountBySegments({ segmentList: form.segmentList })
+      .getCountBySegments({ taggingList: form.taggingList })
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
@@ -147,11 +147,11 @@ export default class ChooseSegmentForm extends Component<any, any> {
     );
   }
 
-  onTaggingChange(rowId, newsegmentIdId) {
+  onTaggingChange(rowId, newtaggingIdId) {
     const { form } = this.state;
-    form.segmentList.map((item) => {
+    form.taggingList.map((item) => {
       if (item.rowId === rowId) {
-        item.segmentId = newsegmentIdId;
+        item.taggingId = newtaggingIdId;
       }
     });
 
@@ -160,7 +160,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
 
   onLinkOpChange(rowId, linkOp) {
     const { form } = this.state;
-    form.segmentList.map((item) => {
+    form.taggingList.map((item) => {
       if (item.rowId === rowId) {
         item.linkOp = linkOp;
       }
@@ -175,7 +175,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
     return (
       <React.Fragment>
         <FormItem label="Choose a tagging" colon={false}>
-          {form.segmentList.map((tagging) => (
+          {form.taggingList.map((tagging) => (
             <Row gutter={5} key={tagging.rowId}>
               {tagging.linkOp ? (
                 <Row>
@@ -210,7 +210,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
                     this.onTaggingChange(tagging.rowId, value);
                   }}
                   placeholder="Please select tagging"
-                  value={tagging.segmentId}
+                  value={tagging.taggingId}
                 >
                   {taggingSource.map((item) => (
                     <Option value={item.id} key={item.id}>

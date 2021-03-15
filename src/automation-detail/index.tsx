@@ -425,7 +425,7 @@ class AutomationDetail extends Component<any, any> {
         >
           {isEvent ? (
             <div>
-              <p>
+              <p style={{ marginBottom: 10 }}>
                 Start Trigger: <span style={{ marginLeft: 10, color: '#a6a6a6' }}>{startTrigger}</span>
               </p>
               <span
@@ -451,7 +451,7 @@ class AutomationDetail extends Component<any, any> {
               <Select
                 showSearch
                 placeholder={isOrderEvent ? 'Select a Order No' : 'Select a Subscription No'}
-                style={{ minWidth: '200px', marginLeft: '10px' }}
+                style={{ minWidth: '300px', marginLeft: 10, marginBottom: 10 }}
                 optionFilterProp="children"
                 getPopupContainer={(trigger: any) => trigger.parentNode}
                 onChange={(value) => {

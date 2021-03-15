@@ -134,17 +134,20 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   saveAddress = () => {
     const { delivery, backToDetail } = this.props;
+    const { checkedAddress, suggestionAddress } = this.state;
+    const sugAddr = checkedAddress === 1 ? { province: suggestionAddress.provinceCode, city: suggestionAddress.city, address1: suggestionAddress.address1, address2: suggestionAddress.address2, postCode: suggestionAddress.postalCode } : {};
     this.props.form.validateFields((err, fields) => {
       console.log(fields);
       if (!err) {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
+        const rFields = { ...fields, ...sugAddr };
         handlerFunc({
           ...delivery,
-          ...fields,
+          ...rFields,
           customerId: this.props.customerId,
-          consigneeName: fields.firstName + ' ' + fields.lastName,
-          deliveryAddress: [fields.address1, fields.address2].join(''),
+          consigneeName: rFields.firstName + ' ' + rFields.lastName,
+          deliveryAddress: [rFields.address1, rFields.address2].join(''),
           isDefaltAddress: 0,
           type: this.props.addressType.toUpperCase()
         })
@@ -254,7 +257,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
               Cancel
             </Button>
           </div>
-          <Modal width={920} title="Verify your address" visible={this.state.validationModalVisisble}>
+          <Modal width={920} title="Verify your address" visible={this.state.validationModalVisisble} confirmLoading={this.state.loading} onCancel={this.onCancelSuggestionModal} onOk={this.saveAddress}>
             <Alert type="warning" message="We could not verify the address you provided, please confirm or edit your address to ensure prompt delivery." />
             <Row gutter={32} style={{ marginTop: 20 }}>
               <Col span={12}>
@@ -264,7 +267,9 @@ class DeliveryItem extends React.Component<Iprop, any> {
                   <span style={{ paddingLeft: 26, wordBreak: 'break-word' }}>{[[fields.address1, fields.address2].join(''), fields.city, fields.state, fields.postCode].filter((fd) => !!fd).join(',')}</span>
                 </Radio>
                 <div style={{ paddingLeft: 10 }}>
-                  <Button type="link">Edit</Button>
+                  <Button type="link" onClick={this.onCancelSuggestionModal}>
+                    Edit
+                  </Button>
                 </div>
               </Col>
               <Col span={12}>

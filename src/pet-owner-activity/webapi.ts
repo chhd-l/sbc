@@ -94,7 +94,7 @@ export function getActivities(filterParams = {}, isRecent) {
 }
 
 export function addComment(filterParams = {}) {
-  return Fetch<TResult>('/petOwner/detailComments/add', {
+  return Fetch<TResult>('/customer/note/addOrEdit', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

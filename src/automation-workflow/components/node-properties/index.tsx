@@ -5,8 +5,8 @@ import ChooseStartTimeForm from './ChooseStartTimeForm';
 import ChooseWaitForm from './ChooseWaitForm';
 import ChooseIfElseForm from './ChooseIfElseForm';
 import ChooseOrderForm from './ChooseOrderForm';
-import ChooseSegmentForm from './ChooseSegmentForm';
-import ChooseTaskForm from './ChooseTaskFormt';
+import ChooseTaggingForm from './ChooseTaggingForm';
+import ChooseTaskForm from './ChooseTaskForm';
 import ChooseTemplateForm from './ChooseTemplateForm';
 
 const FormItem = Form.Item;
@@ -53,11 +53,11 @@ export default class NodeProperties extends Component<any, any> {
         timeAmountType, // Wait
         conditionDataList,
         chooseType,
-        segmentList,
+        taggingList,
         abTestType,
         percentageValue,
         aCountValue,
-        bCountValue, // Segment
+        bCountValue, // Tagging
         between,
         and,
         isOrderStatus,
@@ -80,6 +80,8 @@ export default class NodeProperties extends Component<any, any> {
         dueTimeType,
         reminderNumber,
         reminderType,
+        variableType,
+        variableValue,
         ...otherParam
       }
     } = nextProps;
@@ -93,10 +95,10 @@ export default class NodeProperties extends Component<any, any> {
           { startCampaignTime: { timeType, time, recurrenceType, recurrenceValue } },
           { waitCampaignTime: { atSpecialTime, specialTime, timeAmountValue, timeAmountType } },
           { conditionDataList: conditionDataList },
-          { segmentData: { chooseType, segmentList, abTestType, percentageValue, aCountValue, bCountValue } },
+          { taggingData: { chooseType, taggingList, abTestType, percentageValue, aCountValue, bCountValue } },
           { orderData: { between, and, isOrderStatus, orderStatus, isBusinessType, businessType, isChannelType, channelType } },
           { vetData: { days, beforeOrAfter } },
-          { taskData: { taskName, assistantId, assistantName, goldenMoment, contactPlan, priority, actionType, startTime, dueTimeNumber, dueTimeType, reminderNumber, reminderType } }
+          { taskData: { taskName, assistantId, assistantName, goldenMoment, contactPlan, priority, actionType, startTime, dueTimeNumber, dueTimeType, reminderNumber, reminderType, variableType, variableValue } }
         )
       };
     }
@@ -122,14 +124,14 @@ export default class NodeProperties extends Component<any, any> {
               }}
             />
           </FormItem>
-          {model.nodeType === 'EventTrigger' ? <ChooseEventForm updateValue={this.updateValue} eventType={formParam.eventType} /> : null}
-          {model.nodeType === 'TimeTrigger' ? <ChooseStartTimeForm updateValue={this.updateValue} startCampaignTime={formParam.startCampaignTime} /> : null}
-          {model.nodeType === 'Wait' ? <ChooseWaitForm updateValue={this.updateValue} waitCampaignTime={formParam.waitCampaignTime} /> : null}
-          {model.nodeType === 'IfAndElse' ? <ChooseIfElseForm updateValue={this.updateValue} conditionData={formParam.conditionDataList} /> : null}
-          {model.nodeType === 'Task' ? <ChooseTaskForm updateValue={this.updateValue} taskData={formParam.taskData} /> : null}
-          {model.nodeType === 'Segment' ? <ChooseSegmentForm updateValue={this.updateValue} segmentData={formParam.segmentData} /> : null}
-          {model.nodeType === 'Order' ? <ChooseOrderForm updateValue={this.updateValue} orderData={formParam.orderData} /> : null}
-          {model.nodeType === 'SendEmail' ? <ChooseTemplateForm updateValue={this.updateValue} templateId={formParam.templateId} /> : null}
+          {model.nodeType === 'EventTrigger' ? <ChooseEventForm nodeId={model.id} updateValue={this.updateValue} eventType={formParam.eventType} /> : null}
+          {model.nodeType === 'TimeTrigger' ? <ChooseStartTimeForm nodeId={model.id} updateValue={this.updateValue} startCampaignTime={formParam.startCampaignTime} /> : null}
+          {model.nodeType === 'Wait' ? <ChooseWaitForm nodeId={model.id} updateValue={this.updateValue} waitCampaignTime={formParam.waitCampaignTime} /> : null}
+          {model.nodeType === 'IfAndElse' ? <ChooseIfElseForm nodeId={model.id} updateValue={this.updateValue} conditionData={formParam.conditionDataList} /> : null}
+          {model.nodeType === 'Task' ? <ChooseTaskForm nodeId={model.id} updateValue={this.updateValue} taskData={formParam.taskData} /> : null}
+          {model.nodeType === 'Tagging' ? <ChooseTaggingForm nodeId={model.id} updateValue={this.updateValue} taggingData={formParam.taggingData} /> : null}
+          {model.nodeType === 'Order' ? <ChooseOrderForm nodeId={model.id} updateValue={this.updateValue} orderData={formParam.orderData} /> : null}
+          {model.nodeType === 'SendEmail' ? <ChooseTemplateForm nodeId={model.id} updateValue={this.updateValue} templateId={formParam.templateId} /> : null}
         </Form>
       </div>
     );

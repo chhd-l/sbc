@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Const, history } from 'qmkit';
-import { Row, Col, Dropdown, Button, Menu, Checkbox, Timeline, Select, Empty, Spin, message } from 'antd';
+import { Const } from 'qmkit';
+import { Row, Col, Dropdown, Button, Menu, Timeline, Select, Empty, Spin, message } from 'antd';
 import { replaceLink } from '../common';
 import TemplateConponent from './template-conponent';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
-import value from '*.json';
+import AddComment from './add-comment';
 
 const Option = Select.Option;
 export default class emails extends Component<any, any> {
@@ -13,15 +13,15 @@ export default class emails extends Component<any, any> {
     super(props);
     this.state = {
       emailLoading: false,
-      emailList: [
-      ],
+      emailList: [],
       emailFilters: [
         { value: 'Communication Email', label: 'Communication Email' },
         { value: 'Automation Email', label: 'Automation Email' }
       ],
       isRecent: true,
       orderType: 'asc',
-      filters: []
+      filters: [],
+      visible: false
     };
     this.getEmails = this.getEmails.bind(this);
   }
@@ -47,7 +47,7 @@ export default class emails extends Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            emailList: res.context.activityVOList || [],
+            emailList: res.context.customerActivity || [],
             emailLoading: false
           });
         } else {
@@ -65,10 +65,12 @@ export default class emails extends Component<any, any> {
       });
   }
   render() {
-    const { emailLoading, emailList, emailFilters, orderType, isRecent } = this.state;
+    const { emailLoading, emailList, emailFilters, orderType, isRecent, visible } = this.state;
     const menu = (
       <Menu>
-        <Menu.Item key={1}>Add Comment</Menu.Item>
+        <Menu.Item key={1}>
+          <a onClick={() => this.setState({ visible: true })}> Add Comment</a>
+        </Menu.Item>
         <Menu.Item key={2}>
           <Link to={'/add-task'}>Add Task</Link>
         </Menu.Item>
@@ -78,16 +80,7 @@ export default class emails extends Component<any, any> {
       <Row>
         <Col span={9}></Col>
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
-          <Select
-            className="filter"
-            placeholder="Email Type"
-            allowClear={true}
-            dropdownMatchSelectWidth={false}
-            maxTagCount={0}
-            style={{ width: '120px' }}
-            mode="multiple"
-            onChange={(value) => this.setState({ filters: value }, () => this.getEmails())}
-          >
+          <Select className="filter" placeholder="Email Type" allowClear={true} dropdownMatchSelectWidth={false} maxTagCount={0} style={{ width: '120px' }} mode="multiple" onChange={(value) => this.setState({ filters: value }, () => this.getEmails())}>
             {emailFilters.map((item) => (
               <Option value={item.value} key={item.label}>
                 {item.label}
@@ -126,7 +119,7 @@ export default class emails extends Component<any, any> {
                         </div>
                       </Col>
                       <Col span={24}>
-                        <TemplateConponent avtivity={item} />
+                        <TemplateConponent avtivity={item.emailTaskMessage} />
                       </Col>
                     </Row>
                   </Timeline.Item>
@@ -134,7 +127,7 @@ export default class emails extends Component<any, any> {
               </Timeline>
               <div style={{ textAlign: 'center' }}>
                 <Button type="link" className="jump-link" onClick={() => this.setState({ isRecent: false }, () => this.getEmails())}>
-                <span>{ isRecent ? 'View More' : ''}</span>
+                  <span>{isRecent ? 'View More' : ''}</span>
                 </Button>
               </div>
             </Spin>
@@ -142,6 +135,7 @@ export default class emails extends Component<any, any> {
             <Empty />
           )}
         </Col>
+        {visible ? <AddComment visible={visible} getActivities={() => {}} petOwnerId={this.props.petOwnerId} closeModel={() => this.setState({ visible: false })} /> : null}
       </Row>
     );
   }

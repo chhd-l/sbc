@@ -48,12 +48,25 @@ class TaskUpdate extends Component<any, any> {
       task: {},
       assignedUsers: [],
       goldenMomentList: [],
-      actionTypeList: ['Call', 'Email', 'N/A'],
-      priorityList: ['Low', 'Medium', 'High'],
+      actionTypeList: [
+        { name: 'Call', value: 'Call' },
+        { name: 'Email', value: 'Email' },
+        { name: 'N/A', value: 'N/A' }
+      ],
+      priorityList: [
+        { name: 'Low', value: 'Low' },
+        { name: 'Medium', value: 'Medium' },
+        { name: 'High', value: 'High' }
+      ],
       associatedPetOwners: [],
       associatedPetList: [],
       associatedOrderList: [],
-      statusList: ['To Do', 'On-going', 'Completed', 'Cancelled'],
+      statusList: [
+        { name: 'To Do', value: 'To Do' },
+        { name: 'On-going', value: 'On-going' },
+        { name: 'Completed', value: 'Completed' },
+        { name: 'Cancelled', value: 'Cancelled' }
+      ],
       editable: !this.props.match.params.id,
       reminderTypes: [
         { value: 'Day', name: 'Days' },
@@ -409,8 +422,8 @@ class TaskUpdate extends Component<any, any> {
                               }
                             >
                               {statusList.map((item) => (
-                                <Option value={item} key={item}>
-                                  {item}
+                                <Option value={item.value} key={item.value}>
+                                  {item.name}
                                 </Option>
                               ))}
                             </Select>
@@ -600,11 +613,12 @@ class TaskUpdate extends Component<any, any> {
                               })
                             }
                           >
-                            {priorityList.map((item) => (
-                              <Option value={item} key={item}>
-                                {item}
-                              </Option>
-                            ))}
+                            {priorityList &&
+                              priorityList.map((item) => (
+                                <Option value={item.value} key={item.value}>
+                                  {item.name}
+                                </Option>
+                              ))}
                           </Select>
                         ) : (
                           <span>{task.priority}</span>
@@ -716,8 +730,8 @@ class TaskUpdate extends Component<any, any> {
                             }
                           >
                             {actionTypeList.map((item) => (
-                              <Option value={item} key={item}>
-                                {item}
+                              <Option value={item.value} key={item.value}>
+                                {item.name}
                               </Option>
                             ))}
                           </Select>
@@ -799,11 +813,11 @@ class TaskUpdate extends Component<any, any> {
             <TabPane tab="Service List" key="services">
               <ServiceList goldenMomentList={goldenMomentList} goldenMoment={this.state.task.goldenMoment} />
             </TabPane>
-            {id ? (
+            {/* {id ? (
               <TabPane tab="Activity" key="activity">
                 <Activity taskId={id} taskCompleted={taskCompleted} />
               </TabPane>
-            ) : null}
+            ) : null} */}
           </Tabs>
         </div>
         {tabKey !== 'activity' ? (

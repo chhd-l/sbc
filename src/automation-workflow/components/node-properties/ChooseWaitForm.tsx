@@ -24,46 +24,97 @@ export default class ChooseWaitForm extends Component<any, any> {
         specialAm: 'AM',
         timeAmountType: 'days',
         timeAmountValue: 0
-      }
+      },
+      nodeId: ''
     };
     this.onChange = this.onChange.bind(this);
   }
+
   componentDidMount() {
-    const { waitCampaignTime } = this.props;
-    const { form } = this.state;
+    this.initData(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.initData(nextProps);
+  }
+
+  initData(nextProps) {
+    const { waitCampaignTime } = nextProps;
+    const { form, nodeId } = this.state;
+    if (nodeId === nextProps.nodeId) {
+      return;
+    } else {
+      this.setState({
+        nodeId: nextProps.nodeId
+      });
+    }
+
     if (waitCampaignTime) {
       if (waitCampaignTime.atSpecialTime === undefined) {
-        return;
-      }
-      form.atSpecialTime = waitCampaignTime.atSpecialTime;
-      form.timeAmountType = waitCampaignTime.timeAmountType;
-      form.timeAmountValue = waitCampaignTime.timeAmountValue;
-      if (waitCampaignTime.specialTime) {
-        let dateArray = waitCampaignTime.specialTime.split(' ');
-        let date = dateArray[0];
-        form.specialDate = moment(date);
-        let time = dateArray[1];
-        if (time) {
-          let timeArray = time.split(':');
-          form.specialHours = parseInt(timeArray[0]) > 12 ? parseInt(timeArray[0]) - 12 : parseInt(timeArray[0]);
-          form.specialMins = timeArray[1];
-          form.specialAm = parseInt(timeArray[0]) >= 12 ? 'PM' : 'AM';
+        this.setState({
+          form: {
+            atSpecialTime: false,
+            specialDate: null,
+            specialHours: 0,
+            specialMins: 0,
+            specialAm: 'AM',
+            timeAmountType: 'days',
+            timeAmountValue: 0
+          }
+        });
+      } else {
+        form.atSpecialTime = waitCampaignTime.atSpecialTime;
+        form.timeAmountType = waitCampaignTime.timeAmountType;
+        form.timeAmountValue = waitCampaignTime.timeAmountValue;
+        if (waitCampaignTime.specialTime) {
+          let dateArray = waitCampaignTime.specialTime.split(' ');
+          let date = dateArray[0];
+          form.specialDate = moment(date);
+          let time = dateArray[1];
+          if (time) {
+            let timeArray = time.split(':');
+            form.specialHours = parseInt(timeArray[0]) > 12 ? parseInt(timeArray[0]) - 12 : parseInt(timeArray[0]);
+            form.specialMins = timeArray[1];
+            form.specialAm = parseInt(timeArray[0]) >= 12 ? 'PM' : 'AM';
+          }
+        } else {
+          form.specialDate = null;
+          form.specialHours = 0;
+          form.specialMins = 0;
+          form.specialAm = 'AM';
         }
+        this.setState({
+          form: form
+        });
       }
-      this.setState({
-        form: form
-      });
     }
   }
   onChange(field, value) {
     let data = this.state.form;
     data[field] = value;
-    this.setState(
-      {
-        form: data
-      },
-      () => this.updateParentValue()
-    );
+    if (field === 'atSpecialTime') {
+      this.setState(
+        {
+          form: {
+            atSpecialTime: value,
+            specialDate: null,
+            specialHours: 0,
+            specialMins: 0,
+            specialAm: 'AM',
+            timeAmountType: 'days',
+            timeAmountValue: 0
+          }
+        },
+        () => this.updateParentValue()
+      );
+    } else {
+      this.setState(
+        {
+          form: data
+        },
+        () => this.updateParentValue()
+      );
+    }
   }
 
   getSpecialDate() {
@@ -184,7 +235,7 @@ export default class ChooseWaitForm extends Component<any, any> {
                           min={0}
                           max={12}
                           value={form.specialHours}
-                          disabled={!form.atSpecialTime}
+                          disabled={!form.specialDate}
                           size="small"
                           style={{ fontSize: '10px', width: '65px' }}
                         />
@@ -201,7 +252,7 @@ export default class ChooseWaitForm extends Component<any, any> {
                           min={0}
                           max={59}
                           value={form.specialMins}
-                          disabled={!form.atSpecialTime}
+                          disabled={!form.specialDate}
                           size="small"
                           style={{ fontSize: '10px', width: '65px' }}
                         />
@@ -212,7 +263,7 @@ export default class ChooseWaitForm extends Component<any, any> {
                             this.onChange('specialAm', value);
                           }}
                           value={form.specialAm}
-                          disabled={!form.atSpecialTime}
+                          disabled={!form.specialDate}
                           size="small"
                           style={{ fontSize: '10px' }}
                           dropdownStyle={{ fontSize: '10px' }}

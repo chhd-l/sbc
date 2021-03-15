@@ -42,3 +42,56 @@ export function getOverview() {
     method: 'POST'
   });
 }
+
+export function getCommunicationList(filterParams = {}) {
+  return Fetch<TResult>('/automation/campaign/communicationSummary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getCommunicationDetailList(filterParams = {}) {
+  return Fetch<TResult>('/automation/campaign/communicationList', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getExecutionList(filterParams = {}) {
+  return Fetch<TResult>('/automation/campaign/executionSummary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getAuditLogList(filterParams = {}) {
+  return Fetch<TResult>('/automation/campaign/auditLog', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getTestList(filterParams = {}) {
+  return Fetch<TResult>('/automation/campaign/workflowInstance/testList', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+export function exportCommunicationList(filterParams = {}) {
+  return Fetch<TResult>('/automation/campaign/exportCommunicationList', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

@@ -5,13 +5,16 @@ type TResult = {
   message: string;
   context: any;
 };
-/**
- * 获取Dictionary列表
- * @param filterParams
- */
+
+export function getAutomationById(id) {
+  return Fetch<TResult>(`/automation/campaign/${id}`, {
+    method: 'GET'
+  });
+}
+
 export function updateAutomationNodes(filterParams = {}) {
   return Fetch<TResult>('/automation/campaign/updateCampaign', {
-    method: 'POST',
+    method: 'PUT',
     body: JSON.stringify({
       ...filterParams
     })
@@ -19,17 +22,41 @@ export function updateAutomationNodes(filterParams = {}) {
 }
 
 export function getSendGridTemplateById(filterParams = {}) {
-  return Fetch<TResult>('/automation/campaign/updateCampaign', {
-    method: 'GET',
+  return Fetch<TResult>('/message/getEmailTemplateById', {
+    method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })
   });
 }
 
-export function getSendGirdTemplates(filterParams = {}) {
-  return Fetch<TResult>('/automation/campaign/updateCampaign', {
-    method: 'GET',
+export function getSendGirdTemplates() {
+  return Fetch<TResult>('/message/listEmailTemplate', {
+    method: 'POST'
+  });
+}
+
+export function getEmployeesByKeyword(filterParams = {}) {
+  return Fetch<TResult>('/customer/employee/getListByKeywords', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getGlodenMomentList() {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'GoldenMoment'
+    })
+  });
+}
+
+export function getCountBySegments(filterParams = {}) {
+  return Fetch<TResult>('/customer/employee/getListByKeywords', {
+    method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })

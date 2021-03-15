@@ -12,11 +12,10 @@ export default class TemplateConponent extends Component<any, any> {
     const { avtivity } = this.props;
     const { viewVisible } = this.state;
     let viewParams = {
-      toEmail: avtivity.emailLogVo && avtivity.emailLogVo.toEmail ? avtivity.emailLogVo.toEmail : '',
-      ccList: avtivity.emailLogVo && avtivity.emailLogVo.ccEmailList ? avtivity.emailLogVo.ccEmailList : [],
-      bccList: avtivity.emailLogVo && avtivity.emailLogVo.bccEmailList ? avtivity.emailLogVo.bccEmailList : [],
-      templateName: avtivity.templateName,
-      templateContent: avtivity.contents ? avtivity.contents : ''
+      toEmail: avtivity.detailsResponse && avtivity.detailsResponse.email ? avtivity.detailsResponse.email : '',
+      ccList: avtivity.detailsResponse && avtivity.detailsResponse.ccList ? avtivity.detailsResponse.ccList : [],
+      templateName: avtivity.emailTemplate,
+      templateContent: avtivity.emailTemplateHtml ? avtivity.emailTemplateHtml : ''
     };
     return (
       <div className="template-component">
@@ -38,7 +37,7 @@ export default class TemplateConponent extends Component<any, any> {
         </div>
         <Modal
           visible={viewVisible}
-          width="700px"
+          width="850px"
           maskClosable={false}
           title={viewParams.templateName ? viewParams.templateName : 'View'}
           centered
@@ -77,16 +76,6 @@ export default class TemplateConponent extends Component<any, any> {
                 </Col>
                 <Col span={21}>
                   {viewParams.ccList.map((item, index) => (
-                    <Tag key={index}>{item.email}</Tag>
-                  ))}
-                </Col>
-              </Row>
-              <Row className="emailRow">
-                <Col span={3} className="templateLable">
-                  Bcc List
-                </Col>
-                <Col span={21}>
-                  {viewParams.bccList.map((item, index) => (
                     <Tag key={index}>{item.email}</Tag>
                   ))}
                 </Col>

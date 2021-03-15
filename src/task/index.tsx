@@ -20,8 +20,17 @@ export default class Task extends Component<any, any> {
       title: 'Task Board',
       isCardView: true,
       goldenMomentList: [],
-      taskStatus: ['To Do', 'On-going', 'Completed', 'Cancelled'],
-      priorityList: ['Low', '	Medium', 'High'],
+      taskStatus: [
+        { name: 'To Do', value: 'To Do' },
+        { name: 'On-going', value: 'On-going' },
+        { name: 'Completed', value: 'Completed' },
+        { name: 'Cancelled', value: 'Cancelled' }
+      ],
+      priorityList: [
+        { name: 'Low', value: 'Low' },
+        { name: 'Medium', value: 'Medium' },
+        { name: 'High', value: 'High' }
+      ],
       taskForm: {},
       queryType: '1'
     };
@@ -58,7 +67,9 @@ export default class Task extends Component<any, any> {
     return (
       <div>
         <Breadcrumb>
-          <Breadcrumb.Item><a href="/">Home</a></Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="/">Home</a>
+          </Breadcrumb.Item>
           <Breadcrumb.Item>Task board</Breadcrumb.Item>
         </Breadcrumb>
 
@@ -128,8 +139,8 @@ export default class Task extends Component<any, any> {
                         </Option>
                         {taskStatus &&
                           taskStatus.map((item, index) => (
-                            <Option value={item} key={index}>
-                              {item}
+                            <Option value={item.value} key={index}>
+                              {item.name}
                             </Option>
                           ))}
                       </SelectGroup>
@@ -154,10 +165,11 @@ export default class Task extends Component<any, any> {
                         <Option value="">
                           <FormattedMessage id="all" />
                         </Option>
+
                         {priorityList &&
-                          priorityList.map((item, index) => (
-                            <Option value={item} key={index}>
-                              {item}
+                          priorityList.map((item) => (
+                            <Option value={item.value} key={item.value}>
+                              {item.name}
                             </Option>
                           ))}
                       </SelectGroup>

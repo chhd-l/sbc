@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, Tag, Tabs, Descriptions } from 'antd';
+import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, Tag, Tabs, Descriptions, Empty } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -9,6 +9,16 @@ import Overview from './components/overview';
 import AutomationExecution from './components/automation-execution';
 import PetOwnerCommunication from './components/pet-owner-communication';
 import AuditLog from './components/audit-log';
+import GGEditor, { Flow } from 'gg-editor';
+import ItemCommunicationNode from '@/automation-workflow/components/nodes/ItemCommunicationNode';
+import ItemEndNode from '@/automation-workflow/components/nodes/ItemEndNode';
+import ItemIfElseNode from '@/automation-workflow/components/nodes/ItemIfElseNode';
+import ItemOrderNode from '@/automation-workflow/components/nodes/ItemOrderNode';
+import ItemSegmentNode from '@/automation-workflow/components/nodes/ItemTaggingNode';
+import ItemStartNode from '@/automation-workflow/components/nodes/ItemStartNode';
+import ItemTaskNode from '@/automation-workflow/components/nodes/ItemTaskNode';
+import ItemVetCheckUpNode from '@/automation-workflow/components/nodes/ItemVetCheckUpNode';
+import ItemWaitNode from '@/automation-workflow/components/nodes/ItemWaitNode';
 
 const ButtonGroup = Button.Group;
 const { TabPane } = Tabs;
@@ -32,7 +42,8 @@ class AutomationDetail extends Component<any, any> {
         eventEndTime: '',
         trackingStartTime: '',
         trackingEndTime: '',
-        communicationChannel: ''
+        communicationChannel: '',
+        workflow: null
       }
     };
   }
@@ -59,7 +70,8 @@ class AutomationDetail extends Component<any, any> {
             eventEndTime: res.context.eventEndTime,
             trackingStartTime: res.context.trackingStartTime,
             trackingEndTime: res.context.trackingEndTime,
-            communicationChannel: res.context.communicationChannel
+            communicationChannel: res.context.communicationChannel,
+            workflow: res.context.workflow ? JSON.parse(res.context.workflow) : null
           };
           this.setState({
             loading: false,
@@ -229,14 +241,37 @@ class AutomationDetail extends Component<any, any> {
                       {automationDetail.trackingEndTime}
                     </Descriptions.Item>
                   </Descriptions>
-                  <Card title={'Workflow'} headStyle={{ padding: 0 }} bordered={false}></Card>
+                  <Card title={'Workflow'} headStyle={{ padding: 0 }} bordered={false}>
+                    {this.state.automationDetail.workflow ? (
+                      <GGEditor>
+                        <Flow
+                          graph={
+                            { edgeDefaultShape: 'flow-polyline-round' } // 连线方式
+                          }
+                          style={{ height: '600px' }}
+                          data={this.state.automationDetail.workflow}
+                        />
+                        <ItemCommunicationNode />
+                        <ItemEndNode />
+                        <ItemIfElseNode />
+                        <ItemOrderNode />
+                        <ItemSegmentNode />
+                        <ItemStartNode />
+                        <ItemTaskNode />
+                        <ItemVetCheckUpNode />
+                        <ItemWaitNode />
+                      </GGEditor>
+                    ) : (
+                      <Empty />
+                    )}
+                  </Card>
                 </TabPane>
                 <TabPane tab="Executing & Tracking" key="2">
                   <Card title={'Activity Chart'} headStyle={{ padding: 0 }} bordered={false}>
                     <Overview></Overview>
                   </Card>
-                  <AutomationExecution />
-                  <PetOwnerCommunication />
+                  <AutomationExecution automationId={automationId} />
+                  <PetOwnerCommunication automationId={automationId} />
                 </TabPane>
                 <TabPane tab="Audit Log" key="3">
                   <AuditLog />

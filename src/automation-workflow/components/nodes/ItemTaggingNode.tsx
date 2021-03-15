@@ -54,6 +54,6 @@ export default class ItemSegmentNode extends Component {
         [0.5, 1]
       ]
     };
-    return <RegisterNode name="item-segment-node" config={config} extend="circle" />;
+    return <RegisterNode name="item-tagging-node" config={config} extend="circle" />;
   }
 }

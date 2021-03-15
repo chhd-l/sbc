@@ -6,15 +6,41 @@ const FormItem = Form.Item;
 export default class ChooseEventForm extends Component<any, any> {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      eventType: undefined,
+      nodeId: ''
+    };
     this.onChange = this.onChange.bind(this);
   }
+
+  componentDidMount() {
+    this.initData(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.initData(nextProps);
+  }
+
+  initData(nextProps) {
+    if (this.state.nodeId === nextProps.nodeId) {
+      return;
+    } else {
+      this.setState({
+        nodeId: nextProps.nodeId
+      });
+    }
+    this.setState({
+      eventType: nextProps.eventType
+    });
+  }
+
   onChange(value) {
     const { updateValue } = this.props;
+    this.setState({ eventType: value });
     updateValue('eventType', value);
   }
   render() {
-    const { eventType } = this.props;
+    const { eventType } = this.state;
     const treeData = [
       {
         title: 'Order',
@@ -177,7 +203,7 @@ export default class ChooseEventForm extends Component<any, any> {
     return (
       <FormItem label="Choose an event" colon={false}>
         <TreeSelect
-          defaultValue={eventType ? eventType : undefined}
+          value={eventType ? eventType : undefined}
           placeholder="Please select a event"
           onChange={this.onChange}
           style={{ width: '100%' }}

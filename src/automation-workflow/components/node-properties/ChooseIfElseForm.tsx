@@ -51,12 +51,29 @@ export default class ChooseIfElseForm extends Component<any, any> {
       mouths: 'Month(s)',
       orderFeildDict: [],
       contactFeildDict: [],
-      petFeildDict: []
+      petFeildDict: [],
+      nodeId: ''
     };
     this.onChange = this.onChange.bind(this);
   }
+
   componentDidMount() {
-    const { conditionData } = this.props;
+    this.initData(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.initData(nextProps);
+  }
+
+  initData(nextProps) {
+    if (this.state.nodeId === nextProps.nodeId) {
+      return;
+    } else {
+      this.setState({
+        nodeId: nextProps.nodeId
+      });
+    }
+    const { conditionData } = nextProps;
     if (conditionData && conditionData.length > 0) {
       this.setState(
         {
@@ -67,8 +84,13 @@ export default class ChooseIfElseForm extends Component<any, any> {
             this.dropdownChange(ele.tableName);
           })
       );
+    } else {
+      this.setState({
+        conditionList: [{ id: 1, tableName: undefined, colName: undefined, selOp: undefined, colValue: '', linkOp: '', valueSelect: [], valueType: 'text' }]
+      });
     }
   }
+
   onChange(field, value, id) {
     const { conditionList } = this.state;
     conditionList.map((item) => {

@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, history, util } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, Modal } from 'antd';
 
 import * as webapi from './../webapi';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
+
+const { Search } = Input;
 
 class AutomationExecution extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      loading: false,
       automationExecutionList: [],
       pagination: {
         current: 1,
@@ -25,11 +29,27 @@ class AutomationExecution extends Component<any, any> {
         total: 0
       },
       isDetail: false,
-      visible: false
+      visible: false,
+      currentRow: {},
+      keyword: ''
     };
   }
-  componentDidMount() {}
-  init = () => {};
+  componentDidMount() {
+    this.init();
+  }
+  init = () => {
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => this.getAutomationExecutionList()
+    );
+  };
+
   handleTableChange = (pagination) => {
     this.setState(
       {
@@ -52,22 +72,136 @@ class AutomationExecution extends Component<any, any> {
       }
     );
   };
-  getAutomationExecutionList = () => {};
-  getTestRecordList = () => {};
-  getExecutionDetailsList = () => {};
-  openModal = (isDetail, id?) => {
-    if (isDetail) {
-      this.setState({
-        openModalTitle: 'Records of Automation Tests',
-        isDetail,
-        visible: true
-      });
+  getAutomationExecutionList = () => {
+    const { pagination } = this.state;
+    let params = {
+      campaignId: this.props.automationId,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current - 1
+    };
+    this.setState({
+      loading: true
+    });
+    webapi.getExecutionList(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let automationExecutionList = res.context.workflowStatList;
+        pagination.total = res.context.total;
+        this.setState({
+          pagination,
+          automationExecutionList,
+          loading: false
+        });
+      } else {
+        this.setState({
+          loading: false
+        });
+      }
+    });
+  };
+
+  getTestRecordList = () => {
+    const { modalPagination } = this.state;
+    let params = {
+      campaignId: this.props.automationId,
+      module: 'test',
+      pageSize: modalPagination.pageSize,
+      pageNum: modalPagination.current
+    };
+    this.setState({
+      loading: true
+    });
+    webapi.getTestList(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let testRecordsList = res.context.workflowInstanceList;
+        modalPagination.total = res.context.total;
+        this.setState({
+          modalPagination,
+          testRecordsList,
+          loading: false
+        });
+      } else {
+        this.setState({
+          loading: false
+        });
+      }
+    });
+  };
+  getExecutionDetailsList = () => {
+    const { modalPagination, currentRow, keyword } = this.state;
+    let params = {
+      executionTime: currentRow.executionTime,
+      campaignId: this.props.automationId,
+      nodeName: currentRow.nodeName,
+      keyword: keyword,
+      pageSize: modalPagination.pageSize,
+      pageNum: modalPagination.current - 1
+    };
+    this.setState({
+      loading: true
+    });
+    webapi.getCommunicationDetailList(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let executionDetailsList = res.context.workflowDetailList;
+        modalPagination.total = res.context.total;
+        this.setState({
+          modalPagination,
+          executionDetailsList,
+          loading: false
+        });
+      } else {
+        this.setState({
+          loading: false
+        });
+      }
+    });
+  };
+
+  searchDetailList = (value) => {
+    this.setState(
+      {
+        keyword: value,
+        modalPagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => {
+        this.getExecutionDetailsList();
+      }
+    );
+  };
+  openModal = (isDetail, row?) => {
+    let modalPagination = {
+      current: 1,
+      pageSize: 10,
+      total: 0
+    };
+    if (!isDetail) {
+      this.setState(
+        {
+          openModalTitle: 'Records of Automation Tests',
+          isDetail,
+          visible: true,
+          modalPagination
+        },
+        () => this.getTestRecordList()
+      );
     } else {
-      this.setState({
-        openModalTitle: 'Execution details',
-        isDetail,
-        visible: true
-      });
+      this.setState(
+        {
+          openModalTitle: 'Execution details',
+          isDetail,
+          visible: true,
+          modalPagination,
+          currentRow: row,
+          keyword: ''
+        },
+        () => this.getExecutionDetailsList()
+      );
     }
   };
   handleClose = () => {
@@ -82,14 +216,44 @@ class AutomationExecution extends Component<any, any> {
       }
     });
   };
+  download = () => {
+    const { currentRow } = this.state;
+    let params = {
+      campaignId: this.props.automationId,
+      executionTime: moment(currentRow.executionTime).format('YYYY-MM-DD HH:mm:ss'),
+      nodeName: currentRow.nodeName
+    };
+    // webapi.exportCommunicationList(params)
+    this.onExport(params);
+  };
+  onExport = (params) => {
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        let base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          let result = JSON.stringify({ ...params, token: token });
+          let encrypted = base64.urlEncode(result);
+
+          // 新窗口下载
+          const exportHref = Const.HOST + `/automation/campaign/exportCommunicationList/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('Unsuccessful');
+        }
+        resolve();
+      }, 500);
+    });
+  };
   render() {
-    const { automationExecutionList, pagination, openModalTitle, testRecordsList, modalPagination, isDetail, executionDetailsList, visible } = this.state;
+    const { automationExecutionList, loading, pagination, openModalTitle, testRecordsList, modalPagination, isDetail, executionDetailsList, visible } = this.state;
 
     const automationExecutionColumns = [
       {
         title: 'Execution time',
         dataIndex: 'executionTime',
-        width: '20%'
+        width: '20%',
+        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
       },
       {
         title: 'Communication item',
@@ -125,7 +289,7 @@ class AutomationExecution extends Component<any, any> {
             <Tooltip placement="top" title="Detail">
               <a
                 onClick={() => {
-                  this.openModal(true, record.id);
+                  this.openModal(true, record);
                 }}
                 className="iconfont iconDetails"
                 style={{ marginRight: 10 }}
@@ -139,17 +303,17 @@ class AutomationExecution extends Component<any, any> {
     const executionDetailsColumns = [
       {
         title: 'Pet owner account',
-        dataIndex: 'petOwnerAccount',
+        dataIndex: 'contactId',
         width: '15%'
       },
       {
         title: 'Pet owner name',
-        dataIndex: 'petOwnerName',
+        dataIndex: 'contactName',
         width: '10%'
       },
       {
         title: 'Communication item',
-        dataIndex: 'communicationItem',
+        dataIndex: 'nodeName',
         width: '15%'
       },
       {
@@ -160,17 +324,20 @@ class AutomationExecution extends Component<any, any> {
       {
         title: 'Send time',
         dataIndex: 'sendTime',
-        width: '15%'
+        width: '15%',
+        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
       },
       {
         title: 'Delivered time',
         dataIndex: 'deliveredTime',
-        width: '15%'
+        width: '15%',
+        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
       },
       {
         title: 'openedTime',
         dataIndex: 'openedTime',
-        width: '15%'
+        width: '15%',
+        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
       }
     ];
 
@@ -178,12 +345,14 @@ class AutomationExecution extends Component<any, any> {
       {
         title: 'Start time',
         dataIndex: 'startTime',
-        width: '20%'
+        width: '20%',
+        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
       },
       {
         title: 'End time',
         dataIndex: 'endTime',
-        width: '20%'
+        width: '20%',
+        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
       },
       {
         title: 'Status',
@@ -212,7 +381,7 @@ class AutomationExecution extends Component<any, any> {
               <Tooltip placement="top" title="Refresh">
                 <a
                   onClick={() => {
-                    this.getAutomationExecutionList();
+                    this.init();
                   }}
                   className="iconfont iconReset"
                   style={{ marginRight: 10 }}
@@ -221,10 +390,12 @@ class AutomationExecution extends Component<any, any> {
             </div>
           }
         >
-          <Table rowKey="id" columns={automationExecutionColumns} dataSource={automationExecutionList} pagination={pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
+          <Table rowKey="id" loading={loading} columns={automationExecutionColumns} dataSource={automationExecutionList} pagination={pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
         </Card>
         <Modal
           title={openModalTitle}
+          maskClosable={false}
+          width={isDetail ? 1000 : 520}
           visible={visible}
           onCancel={() => this.handleClose()}
           footer={[
@@ -238,7 +409,13 @@ class AutomationExecution extends Component<any, any> {
             </Button>
           ]}
         >
-          <Table rowKey="id" columns={isDetail ? executionDetailsColumns : testRecordsColumns} dataSource={isDetail ? executionDetailsList : testRecordsList} pagination={modalPagination} scroll={{ x: '100%' }} onChange={this.handleModalTableChange} />
+          {isDetail ? (
+            <div>
+              <Search placeholder="input search text" onSearch={(value) => this.searchDetailList(value)} style={{ width: 200 }} />
+              <Button type="link" icon="download" size="large" style={{ marginLeft: 10 }} onClick={this.download} />
+            </div>
+          ) : null}
+          <Table rowKey="id" loading={loading} columns={isDetail ? executionDetailsColumns : testRecordsColumns} dataSource={isDetail ? executionDetailsList : testRecordsList} pagination={modalPagination} scroll={{ x: '100%' }} onChange={this.handleModalTableChange} />
         </Modal>
       </AuthWrapper>
     );

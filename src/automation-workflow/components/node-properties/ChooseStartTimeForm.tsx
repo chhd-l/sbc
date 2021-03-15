@@ -17,7 +17,8 @@ export default class ChooseStartTimeForm extends Component<any, any> {
         timeType: '', // immediately recurrence specificTime
         specificTime: null, // yyyy-mm-dd
         endInfo: null
-      }
+      },
+      nodeId: ''
     };
     this.onChange = this.onChange.bind(this);
     this.onTimePickerChange = this.onTimePickerChange.bind(this);
@@ -26,14 +27,38 @@ export default class ChooseStartTimeForm extends Component<any, any> {
   }
 
   componentDidMount() {
-    const { startCampaignTime } = this.props;
-    if (startCampaignTime) {
+    this.initData(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.initData(nextProps);
+  }
+
+  initData(nextProps) {
+    if (this.state.nodeId === nextProps.nodeId) {
+      return;
+    } else {
+      this.setState({
+        nodeId: nextProps.nodeId
+      });
+    }
+    const { startCampaignTime } = nextProps;
+    if (startCampaignTime && startCampaignTime.recurrenceType !== '') {
       this.setState({
         form: {
           timeType: startCampaignTime.timeType,
           recurrenceType: startCampaignTime.recurrenceType,
           specificTime: startCampaignTime.time,
           endInfo: startCampaignTime.recurrenceValue
+        }
+      });
+    } else {
+      this.setState({
+        form: {
+          recurrenceType: '',
+          timeType: '',
+          specificTime: null,
+          endInfo: null
         }
       });
     }

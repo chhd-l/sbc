@@ -46,6 +46,6 @@ export default class ItemTaskNode extends Component {
         [0.5, 1]
       ]
     };
-    return <RegisterNode name="item-task-node" config={config} extend="circle" />;
+    return <RegisterNode name="item-task-node" config={config} extend="flow-rect" />;
   }
 }

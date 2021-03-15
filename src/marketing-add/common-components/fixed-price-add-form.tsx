@@ -645,7 +645,7 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
         if (!err) {
           this.setState({ saveLoading: true });
           //组装营销类型
-          marketingBean = marketingBean.set('marketingType', marketingType).set('scopeType', 1);
+          marketingBean = marketingBean.set('marketingType', marketingType); //.set('scopeType', 1);
 
           //商品已经选择 + 时间已经选择 => 判断  同类型的营销活动下，商品是否重复
           if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {

@@ -1,50 +1,20 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, AuthWrapper, history, Const } from 'qmkit';
-import { Row, Col, Form, Modal, message, Button, Card, Tooltip } from 'antd';
+import { Row, Col, Form, Modal, message, Button, Card, Tooltip, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
-const FormItem = Form.Item;
 import * as webapi from './webapi';
 import styled from 'styled-components';
 import PaymentModel from './components/payment-modal';
+import MethodTips from './components/methodTips';
 
-const ContainerDiv = styled.div`
-  .methodItem {
-    width: 100%;
-    border: 1px solid #f5f5f5;
-    text-align: center;
-    padding: 20px 0;
-    img {
-      width: 86px;
-      height: 86px;
-    }
-    h4 {
-      font-size: 14px;
-      color: #333;
-      margin-top: 5px;
-    }
-  }
-  .bar {
-    flex-direction: row;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 8px 0;
-    .status {
-      font-size: 12px;
-      color: #666;
-    }
-    .links {
-      font-size: 12px;
-      margin-left: 15px;
-    }
-  }
-`;
+import './style.less';
 
 export default class PaymentSetting extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       paymentVisible: false,
+      switchVisible: false,
       enabled: true,
       paymentForm: {}, //edit
       paymentList: []
@@ -68,6 +38,14 @@ export default class PaymentSetting extends React.Component<any, any> {
       paymentVisible: false
     });
   };
+
+  onSwitchChange = () => {
+    console.log(111111111111);
+    this.setState({
+      switchVisible: true
+    });
+  };
+
   reflash() {
     this.getPaymentSetting();
   }
@@ -78,8 +56,13 @@ export default class PaymentSetting extends React.Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search" style={{ height: '100vh', background: '#fff' }}>
-          <ContainerDiv>
-            <Headline title={<FormattedMessage id="paymentSetting" />} />
+          <Headline title="Payment method" />
+          <div className="method">
+            <div className="method-title flex-start-align">
+              <span></span>
+              <span>Online payment</span>
+              <span>Set in payment method model</span>
+            </div>
             <Row>
               {paymentList &&
                 paymentList.map((item, index) => (
@@ -97,7 +80,9 @@ export default class PaymentSetting extends React.Component<any, any> {
                       </div>
                       <div className="bar">
                         <div className="status">{item.isOpen === 1 ? 'Enabled' : 'Disabled'}</div>
-                        <div>
+
+                        <div className={'flex-start-align'}>
+                          <Switch style={{ marginRight: 15 }} onChange={this.onSwitchChange} />
                           <Tooltip placement="top" title="Edit">
                             <a
                               style={{ color: 'red' }}
@@ -120,9 +105,10 @@ export default class PaymentSetting extends React.Component<any, any> {
                   </Col>
                 ))}
             </Row>
+          </div>
 
-            <PaymentModel paymentForm={this.state.paymentForm} visible={this.state.paymentVisible} parent={this} reflash={() => this.reflash()} />
-          </ContainerDiv>
+          <PaymentModel paymentForm={this.state.paymentForm} visible={this.state.paymentVisible} parent={this} reflash={() => this.reflash()} />
+          <MethodTips visible={this.state.switchVisible} parent={this} reflash={() => this.reflash()} />
         </div>
       </div>
     );

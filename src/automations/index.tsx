@@ -192,14 +192,14 @@ class AutomationList extends Component<any, any> {
         dataIndex: 'trackingStartTime',
         key: 'trackingStartTime',
         width: '10%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
         title: 'End time',
         dataIndex: 'trackingEndTime',
         key: 'trackingEndTime',
         width: '10%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
 
       {

@@ -110,7 +110,7 @@ class AuditLog extends Component<any, any> {
         title: 'Operation time',
         dataIndex: 'dateAdded',
         width: '20%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       }
     ];
 

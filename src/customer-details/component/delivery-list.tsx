@@ -95,11 +95,6 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         key: 'address'
       },
       {
-        title: 'Reference',
-        dataIndex: 'rfc',
-        key: 'reference'
-      },
-      {
         title: 'Operation',
         key: 'oper',
         render: (_, record) => (

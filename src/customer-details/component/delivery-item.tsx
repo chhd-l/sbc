@@ -158,7 +158,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
     const { checkedAddress, suggestionAddress } = this.state;
     const sugAddr = checkedAddress === 1 ? { province: suggestionAddress.provinceCode, city: suggestionAddress.city, address1: suggestionAddress.address1, address2: suggestionAddress.address2, postCode: suggestionAddress.postalCode } : {};
     this.props.form.validateFields((err, fields) => {
-      console.log(fields);
       if (!err) {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;

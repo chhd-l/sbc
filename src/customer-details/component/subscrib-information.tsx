@@ -130,7 +130,14 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                     </>
                   ))
                 ) : (
-                  <tr></tr>
+                  <tr>
+                    <td style={{ width: '25%' }}></td>
+                    <td style={{ width: '20%' }}></td>
+                    <td style={{ width: '10%' }}></td>
+                    <td style={{ width: '10%' }}></td>
+                    <td style={{ width: '15%' }}></td>
+                    <td style={{ width: '20%' }}>{item.subscribeStatus === '0' ? 'Active' : 'Inactive'}</td>
+                  </tr>
                 )}
               </tbody>
             </table>

@@ -16,7 +16,7 @@ class ManualOrder extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: 'Valet order',
-      current: 0,
+      current: 1,
       customerId: ''
     };
     this.next = this.next.bind(this);
@@ -29,8 +29,6 @@ class ManualOrder extends Component<any, any> {
       if (!err && this.state.customerId) {
         const current = this.state.current + 1;
         this.setState({ current });
-      } else {
-        message.info('please search pet owner account then next step.');
       }
     });
   }
@@ -57,7 +55,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Selected product',
-        controller: <SelectedProduct stepName={'Selected product'} customerId={customerId} />
+        controller: <SelectedProduct stepName={'Product list:'} customerId={customerId} />
       },
       {
         title: 'Delivery & payment information',

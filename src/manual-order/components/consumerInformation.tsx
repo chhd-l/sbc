@@ -76,5 +76,4 @@ class ConsumerInformation extends React.Component<any, any> {
   }
 }
 
-const WrappedConsumerInformation = Form.create()(ConsumerInformation);
-export default WrappedConsumerInformation;
+export default ConsumerInformation;

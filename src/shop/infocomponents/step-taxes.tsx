@@ -345,7 +345,6 @@ class StepTaxes extends Component<any, any> {
     let data = this.state.taxForm;
 
     if (field === 'taxZoneType') {
-      debugger;
       if (value) {
         data['zoneIncludes'] = this.state.statesZoneIncludes;
         this.props.form.setFieldsValue({

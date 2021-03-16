@@ -274,7 +274,6 @@ export default class AppStore extends Store {
   };
 
   searchState = (value) => {
-    console.log(value, '搜-----------------');
   };
   editStateForm = (form) => {
     if (form.systemStatePostCodes) {

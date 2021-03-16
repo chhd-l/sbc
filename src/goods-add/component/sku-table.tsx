@@ -151,7 +151,6 @@ class SkuForm extends React.Component<any, any> {
     if (!specSingleFlag) {
       columns = goodsSpecs
         .map((item) => {
-          console.log(item,1111111111);
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
@@ -332,6 +331,37 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
+    //External SKU
+    columns = columns.push({
+      title: 'External SKU',
+      key: 'externalSku',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('externalSku' + rowInfo.id, {
+                  rules: [
+                    /*{
+                      required: true,
+                      message: 'Please input EAN code'
+                    },*/
+                    /*{
+                      pattern: ValidConst.noMinus,
+                      message: 'Please enter the correct value'
+                    }*/
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
+                  initialValue: rowInfo.externalSku
+                })(<Input style={{ width: '116px' }} maxLength={45}/>)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+
     //EAN
     columns = columns.push({
       title: 'EAN',
@@ -354,7 +384,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
                   initialValue: rowInfo.goodsInfoBarcode
-                })(<Input style={{ width: '180px' }} />)}
+                })(<Input style={{ width: '116px' }} />)}
               </FormItem>
             </Col>
           </Row>
@@ -451,7 +481,7 @@ class SkuForm extends React.Component<any, any> {
       title: (
         <div
           style={{
-            marginRight: '152px'
+            marginRight: '81px'
           }}
         >
           Subscription
@@ -465,7 +495,7 @@ class SkuForm extends React.Component<any, any> {
         return (
           <Row
             style={{
-              marginRight: '124px'
+              marginRight: '81px'
             }}
           >
             <Col span={12}>
@@ -474,7 +504,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0' : '1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>
@@ -549,9 +579,6 @@ class SkuForm extends React.Component<any, any> {
       e = e.target.value;
     }
 
-    // console.log(id);
-    //console.log(key);
-    //console.log(e,44444);
     editGoodsItem(id, key, e);
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
@@ -616,9 +643,6 @@ class SkuForm extends React.Component<any, any> {
 
   onDel = (item, pid, id) => {
     const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
-    // console.log(item,11111);
-    // console.log(pid);
-    // console.log(addSkUProduct,2222);
     let a = [];
     let b = [];
     let c = [];

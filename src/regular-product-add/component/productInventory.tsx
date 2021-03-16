@@ -84,13 +84,11 @@ class SkuForm extends React.Component<any, any> {
     };
   }
   handleChange(value) {
-    console.log(`selected ${value}`);
   }
   render() {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
-    console.log(goodsList.toJS(), 'goodsList----------');
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>

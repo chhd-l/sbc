@@ -131,7 +131,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           }
 
           let goodsInfo = subscriptionDetail.goodsInfo;
-          let paymentInfo = subscriptionDetail.paymentInfo;
+          let paymentInfo = subscriptionDetail.payPaymentInfo;
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -609,7 +609,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
         key: 'shipmentDate',
         width: '10%',
-        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+        render: (text, record) => <div>{record.tradeItems[0] && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
       }
     ];
     const columns_completed = [
@@ -664,7 +664,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         width: '10%',
-        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+        render: (text, record) => <div>{record.tradeItems[0] && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Order status</span>,
@@ -921,11 +921,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}>Payment Method: </p>
-                    <p>{paymentInfo ? paymentInfo.paymentType : ''}</p>
+                    <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Card Number: </p>
-                    <p>{paymentInfo && paymentInfo.payuPaymentMethod ? '**** **** **** ' + paymentInfo.payuPaymentMethod.last_4_digits : paymentInfo && paymentInfo.adyenPaymentMethod ? '**** **** **** ' + paymentInfo.adyenPaymentMethod.lastFour : ''}</p>
+                    <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
                   </Col>
                 </Row>
               </Col>

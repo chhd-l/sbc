@@ -43,22 +43,22 @@ export default class ChooseStartTimeForm extends Component<any, any> {
       });
     }
     const { startCampaignTime } = nextProps;
-    if (startCampaignTime && startCampaignTime.recurrenceType !== '') {
-      this.setState({
-        form: {
-          timeType: startCampaignTime.timeType,
-          recurrenceType: startCampaignTime.recurrenceType,
-          specificTime: startCampaignTime.time,
-          endInfo: startCampaignTime.recurrenceValue
-        }
-      });
-    } else {
+    if (startCampaignTime.timeType === undefined) {
       this.setState({
         form: {
           recurrenceType: '',
           timeType: '',
           specificTime: null,
           endInfo: null
+        }
+      });
+    } else {
+      this.setState({
+        form: {
+          timeType: startCampaignTime.timeType,
+          recurrenceType: startCampaignTime.recurrenceType,
+          specificTime: startCampaignTime.time,
+          endInfo: startCampaignTime.recurrenceValue
         }
       });
     }

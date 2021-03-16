@@ -7,7 +7,7 @@ import { debug } from 'console';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-export default class ChooseSegmentForm extends Component<any, any> {
+export default class ChooseTaggingForm extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,7 +36,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
   }
 
   initData(nextProps) {
-    const { segmentData } = nextProps;
+    const { taggingData } = nextProps;
     const { form, nodeId } = this.state;
     if (nodeId === nextProps.nodeId) {
       return;
@@ -45,7 +45,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
         nodeId: nextProps.nodeId
       });
     }
-    if (segmentData.taggingList === undefined) {
+    if (taggingData.taggingList === undefined) {
       this.setState({
         form: {
           taggingList: [{ rowId: 1, taggingId: undefined, linkOp: '' }],
@@ -57,11 +57,11 @@ export default class ChooseSegmentForm extends Component<any, any> {
         estimatedContact: ''
       });
     } else {
-      form.taggingList = segmentData.taggingList;
-      form.abTestType = segmentData.abTestType;
-      form.percentageValue = segmentData.percentageValue;
-      form.aCountValue = segmentData.aCountValue;
-      form.bCountValue = segmentData.bCountValue;
+      form.taggingList = taggingData.taggingList;
+      form.abTestType = taggingData.abTestType;
+      form.percentageValue = taggingData.percentageValue;
+      form.aCountValue = taggingData.aCountValue;
+      form.bCountValue = taggingData.bCountValue;
 
       this.setState({
         form
@@ -83,7 +83,7 @@ export default class ChooseSegmentForm extends Component<any, any> {
   updateParentValue() {
     const { updateValue } = this.props;
     const { form } = this.state;
-    updateValue('segmentData', form);
+    updateValue('taggingData', form);
   }
 
   radioChangeStyle(link, linkType) {

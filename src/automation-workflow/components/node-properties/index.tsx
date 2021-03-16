@@ -100,7 +100,7 @@ export default class NodeProperties extends Component<any, any> {
           { startCampaignTime: { timeType, time, recurrenceType, recurrenceValue } },
           { waitCampaignTime: { atSpecialTime, specialTime, timeAmountValue, timeAmountType } },
           { conditionDataList: conditionDataList },
-          { segmentData: { chooseType, taggingList, abTestType, percentageValue, aCountValue, bCountValue } },
+          { taggingData: { chooseType, taggingList, abTestType, percentageValue, aCountValue, bCountValue } },
           { orderData: { between, and, isOrderStatus, orderStatus, isBusinessType, businessType, isChannelType, channelType } },
           { vetData: { days, beforeOrAfter } },
           { taskData: { taskName, assistantId, assistantName, goldenMoment, contactPlan, priority, actionType, startTime, dueTimeNumber, dueTimeType, reminderNumber, reminderType, variableType, variableValue } }
@@ -155,7 +155,7 @@ export default class NodeProperties extends Component<any, any> {
           {model.nodeType === 'Wait' ? <ChooseWaitForm nodeId={model.id} updateValue={this.updateValue} waitCampaignTime={formParam.waitCampaignTime} /> : null}
           {model.nodeType === 'IfAndElse' ? <ChooseIfElseForm nodeId={model.id} updateValue={this.updateValue} conditionData={formParam.conditionDataList} /> : null}
           {model.nodeType === 'Task' ? <ChooseTaskForm nodeId={model.id} updateValue={this.updateValue} taskData={formParam.taskData} goldenMomentList={goldenMomentList} /> : null}
-          {model.nodeType === 'Tagging' ? <ChooseTaggingForm nodeId={model.id} updateValue={this.updateValue} segmentData={formParam.segmentData} taggingSource={taggingSource} /> : null}
+          {model.nodeType === 'Tagging' ? <ChooseTaggingForm nodeId={model.id} updateValue={this.updateValue} taggingData={formParam.taggingData} taggingSource={taggingSource} /> : null}
           {model.nodeType === 'Order' ? <ChooseOrderForm nodeId={model.id} updateValue={this.updateValue} orderData={formParam.orderData} /> : null}
           {model.nodeType === 'SendEmail' ? <ChooseTemplateForm nodeId={model.id} updateValue={this.updateValue} templateId={formParam.templateId} templateList={templateList} /> : null}
         </Form>

@@ -92,7 +92,7 @@ export default withPropsAPI(
             tmpParam = { ...tmpParam, ...formData.taskData };
             break;
           case 'Tagging':
-            tmpParam = { ...tmpParam, ...formData.segmentData };
+            tmpParam = { ...tmpParam, ...formData.taggingData };
             break;
           case 'Order':
             tmpParam = { ...tmpParam, ...formData.orderData };

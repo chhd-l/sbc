@@ -64,6 +64,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       fields: {},
       suggestionAddress: {}
     };
+    this.searchCity = _.debounce(this.searchCity, 500);
   }
 
   componentDidMount() {
@@ -143,8 +144,17 @@ class DeliveryItem extends React.Component<Iprop, any> {
     });
   };
 
+  backToCustomerDetail = () => {
+    const {
+      backToDetail,
+      form: { resetFields }
+    } = this.props;
+    resetFields();
+    backToDetail();
+  };
+
   saveAddress = () => {
-    const { delivery, backToDetail } = this.props;
+    const { delivery } = this.props;
     const { checkedAddress, suggestionAddress } = this.state;
     const sugAddr = checkedAddress === 1 ? { province: suggestionAddress.provinceCode, city: suggestionAddress.city, address1: suggestionAddress.address1, address2: suggestionAddress.address2, postCode: suggestionAddress.postalCode } : {};
     this.props.form.validateFields((err, fields) => {
@@ -165,7 +175,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
           .then((data) => {
             message.success(data.res.message);
             this.setState({ loading: false, validationModalVisisble: false });
-            backToDetail();
+            this.backToCustomerDetail();
           })
           .catch(() => {
             this.setState({ loading: false });
@@ -202,7 +212,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
           </Select>
         );
       } else {
-        return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={_.throttle(this.searchCity, 500)} />;
+        return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={this.searchCity} />;
       }
     }
     const optionList = field.fieldName === 'Country' ? this.state.countryList : field.fieldName === 'State' ? this.state.stateList : [];
@@ -241,7 +251,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
   };
 
   render() {
-    const { delivery, addressType, backToDetail } = this.props;
+    const { delivery, addressType } = this.props;
     const { fields, suggestionAddress, checkedAddress } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = (col: number) => ({
@@ -286,7 +296,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
             <Button type="primary" onClick={() => this.validateAddress()}>
               Save
             </Button>
-            <Button onClick={() => backToDetail()} style={{ marginLeft: '20px' }}>
+            <Button onClick={this.backToCustomerDetail} style={{ marginLeft: '20px' }}>
               Cancel
             </Button>
           </div>

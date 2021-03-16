@@ -24,7 +24,7 @@ const { RangePicker } = DatePicker;
 const { Column } = Table;
 const { confirm } = Modal;
 
-const noPetImg = require('../goods-list/img/none.png');
+const dogImg = require('./img/dog.png');
 
 export default class CustomerDetails extends React.Component<any, any> {
   constructor(props: any) {
@@ -340,18 +340,18 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <Col span={8} style={{ margin: '10px 0' }}>
                     <Card bodyStyle={{ padding: '10px 20px' }}>
                       <div className="text-align-right">
-                        <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
+                        {/* <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
                           <Button type="link">
                             <span className="iconfont iconDelete"></span> Delete
                           </Button>
-                        </Popconfirm>
+                        </Popconfirm> */}
                         <Link to={`/edit-pet/${pet.petsId}`}>
                           <span className="iconfont iconEdit"></span> Edit
                         </Link>
                       </div>
                       <Row gutter={10}>
                         <Col span={6}>
-                          <Avatar size={70} src={pet.petsImg && pet.petsImg.startsWith('http') ? pet.petsImg : noPetImg} />
+                          <Avatar size={70} src={pet.petsImg && pet.petsImg.startsWith('http') ? pet.petsImg : dogImg} />
                         </Col>
                         <Col span={18}>
                           <Row>
@@ -413,7 +413,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             </Breadcrumb.Item>
             <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
           </BreadCrumb>
-          {displayPage === 'delivery' && <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />}
+          <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
         </div>
       </>
     );

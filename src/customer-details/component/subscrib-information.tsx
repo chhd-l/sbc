@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pagination, Spin, Row, Col } from 'antd';
+import { Pagination, Spin, Row, Col, Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { getSubscriptionList } from '../../subscription/webapi';
 import moment from 'moment';
@@ -110,24 +110,28 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 </tr>
               </thead>
               <tbody>
-                {item.goodsInfo.map((v, k) => (
-                  <>
-                    <tr key={k}>
-                      <td style={{ width: '25%' }}>
-                        <img src={v.goodsPic ? v.goodsPic : defaultImg} className="img-item" />
-                      </td>
-                      <td style={{ width: '20%' }}>{v.goodsName}</td>
-                      <td style={{ width: '10%' }}></td>
-                      <td style={{ width: '10%' }}>{v.subscriptionType}</td>
-                      <td style={{ width: '15%' }}>{v.frequency || ''}</td>
-                      {k === 0 && (
-                        <td rowSpan={item.goodsInfo.length} style={{ width: '20%' }}>
-                          {item.subscribeStatus === '0' ? 'Active' : 'Inactive'}
+                {item.goodsInfo && item.goodsInfo.length ? (
+                  item.goodsInfo.map((v, k) => (
+                    <>
+                      <tr key={k}>
+                        <td style={{ width: '25%' }}>
+                          <img src={v.goodsPic ? v.goodsPic : defaultImg} className="img-item" />
                         </td>
-                      )}
-                    </tr>
-                  </>
-                ))}
+                        <td style={{ width: '20%' }}>{v.goodsName}</td>
+                        <td style={{ width: '10%' }}></td>
+                        <td style={{ width: '10%' }}>{v.subscriptionType}</td>
+                        <td style={{ width: '15%' }}>{v.frequency || ''}</td>
+                        {k === 0 && (
+                          <td rowSpan={item.goodsInfo.length} style={{ width: '20%' }}>
+                            {item.subscribeStatus === '0' ? 'Active' : 'Inactive'}
+                          </td>
+                        )}
+                      </tr>
+                    </>
+                  ))
+                ) : (
+                  <tr></tr>
+                )}
               </tbody>
             </table>
           </td>
@@ -160,10 +164,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
               </div>
               {!loading && pagination.total === 0 ? (
                 <div className="ant-table-placeholder">
-                  <span>
-                    <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
-                  </span>
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 </div>
               ) : null}
             </div>

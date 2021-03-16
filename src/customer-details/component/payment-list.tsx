@@ -54,7 +54,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
   };
 
   render() {
-    const { list } = this.state;
+    const { list, loading } = this.state;
     const columns = [
       {
         title: 'Card number',
@@ -105,7 +105,13 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <Table rowKey="id" columns={columns} dataSource={list} pagination={false} />
+        <Table
+          rowKey="id"
+          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+          columns={columns}
+          dataSource={list}
+          pagination={false}
+        />
       </div>
     );
   }

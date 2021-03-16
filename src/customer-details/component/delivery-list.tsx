@@ -8,6 +8,22 @@ interface Iprop {
   onEdit?: Function;
 }
 
+const NEW_ADDRESS_TEMPLATE = {
+  firstName: '',
+  lastName: '',
+  consigneeNumber: '',
+  postCode: '',
+  countryId: null,
+  region: '',
+  province: '',
+  city: '',
+  address1: '',
+  address2: '',
+  entrance: '',
+  apartment: '',
+  rfc: ''
+};
+
 export default class DeliveryList extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
     super(props);
@@ -88,7 +104,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         key: 'oper',
         render: (_, record) => (
           <div>
-            <Button type="link" size="small" onClick={() => onEdit(record)}>
+            <Button type="link" size="small" onClick={() => onEdit({ ...NEW_ADDRESS_TEMPLATE, ...record })}>
               <i className="iconfont iconEdit"></i>
             </Button>
             <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText="Confirm" cancelText="Cancel">
@@ -103,10 +119,16 @@ export default class DeliveryList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <Button type="primary" onClick={() => onEdit({})} style={{ marginBottom: 10 }}>
+        <Button type="primary" onClick={() => onEdit(NEW_ADDRESS_TEMPLATE)} style={{ marginBottom: 10 }}>
           Add new
         </Button>
-        <Table rowKey="deliveryAddressId" loading={loading} columns={columns} dataSource={list} pagination={false} />
+        <Table
+          rowKey="deliveryAddressId"
+          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+          columns={columns}
+          dataSource={list}
+          pagination={false}
+        />
       </div>
     );
   }

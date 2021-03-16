@@ -10,7 +10,7 @@ import ReductionLevels from '../full-reduction/components/reduction-levels';
 import ReductionSubscritionLevels from '../full-reduction/components/reduction-subscrition-levels';
 import { GoodsModal } from 'biz';
 import SelectedGoodsGrid from './selected-goods-grid';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import * as webapi from '../webapi';
 import * as Enum from './marketing-enum';
 import { doc } from 'prettier';
@@ -48,8 +48,10 @@ const largeformItemLayout = {
   }
 };
 
-export default class MarketingAddForm extends React.Component<any, any> {
-  props;
+class MarketingAddForm extends React.Component<any, any> {
+  props: {
+    intl: any;
+  };
 
   constructor(props) {
     super(props);
@@ -143,22 +145,26 @@ export default class MarketingAddForm extends React.Component<any, any> {
     //this.onBeanChange({publicStatus: 1});
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <FormItem {...formItemLayout} label="Promotion type:">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionType" />}>
           <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>
-            <Radio value={0}>Normal promotion</Radio>
-            <Radio value={1}>Subscription promotion</Radio>
+            <Radio value={0}>
+              <FormattedMessage id="NormalPromotion" />
+            </Radio>
+            <Radio value={1}>
+              <FormattedMessage id="SubscriptionPromotion" />
+            </Radio>
           </Radio.Group>
         </FormItem>
-        <FormItem {...smallformItemLayout} label="Promotion Code">
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionCode" />}>
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode(),
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please input promotion code'
+                message: <FormattedMessage id="Marketing.PleaseInputPromotionCode" />
               },
-              { min: 4, max: 20, message: '4-20 words' },
+              { min: 4, max: 20, message: <FormattedMessage id="Marketing.words" /> },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, 'Promotion code');
@@ -202,19 +208,19 @@ export default class MarketingAddForm extends React.Component<any, any> {
               });
             }}
           >
-            Public
+            <FormattedMessage id="Marketing.Public" />
           </Checkbox>
         </FormItem>
 
-        <FormItem {...smallformItemLayout} label="Promotion Name">
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionName" />}>
           {getFieldDecorator('marketingName', {
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please input Promotion Name'
+                message: <FormattedMessage id="Marketing.PleaseInputPromotionName" />
               },
-              { min: 1, max: 40, message: '1-40 words' },
+              { min: 1, max: 40, message: <FormattedMessage id="Marketing.40Words" /> },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, 'Promotion Name');
@@ -223,21 +229,21 @@ export default class MarketingAddForm extends React.Component<any, any> {
             ],
             onChange: (e) => this.onBeanChange({ marketingName: e.target.value }),
             initialValue: marketingBean.get('marketingName')
-          })(<Input placeholder="Please input promotion name ,no  more than 40 words." style={{ width: 360 }} />)}
+          })(<Input placeholder={this.props.intl.formatMessage({ id: 'Marketing.noMoreThan40Words' })} style={{ width: 360 }} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Start and end time">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />}>
           {getFieldDecorator('time', {
             rules: [
               {
                 required: true,
-                message: 'Please select Starting and end time'
+                message: <FormattedMessage id="Marketing.PleaseSelectStartingAndEndTime" />
               },
               {
                 validator: (_rule, value, callback) => {
                   if (value[0]) {
                     callback();
                   } else {
-                    callback('Please select Starting and end time');
+                    callback(<FormattedMessage id="Marketing.PleaseSelectStartingAndEndTime" />);
                   }
                 }
               }
@@ -278,8 +284,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
               initialValue: isFullCount
             })(
               <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                {this.state.PromotionTypeValue == 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : <div></div>}
-                <Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>
+                {this.state.PromotionTypeValue == 0 ? (
+                  <Radio value={0}>
+                    <FormattedMessage id="Marketing.FullAmount" /> {Enum.GET_MARKETING_STRING(marketingType)}
+                  </Radio>
+                ) : (
+                  <div></div>
+                )}
+                <Radio value={1}>
+                  <FormattedMessage id="Marketing.FullQuantity" /> {Enum.GET_MARKETING_STRING(marketingType)}
+                </Radio>
               </RadioGroup>
             )}
           </FormItem>
@@ -310,12 +324,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
                       {getFieldDecorator('firstSubscriptionOrderDiscount', {
                         rules: [
-                          { required: true, message: 'Amount must be entered' },
+                          { required: true, message: <FormattedMessage id="Marketing.AmountMustBeEntered" /> },
                           {
                             validator: (_rule, value, callback) => {
                               if (value) {
                                 if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                                  callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+                                  callback(<FormattedMessage id="Marketing.InputValueBetween" />);
                                 }
                               }
                               callback();
@@ -332,7 +346,11 @@ export default class MarketingAddForm extends React.Component<any, any> {
                           }}
                         />
                       )}
-                      <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+                      <span>
+                        &nbsp;
+                        <FormattedMessage id="Marketing.ofOrginalPrice" />
+                        &nbsp;&nbsp;
+                      </span>
                     </FormItem>
                   </div>
                 )
@@ -354,10 +372,14 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 ) : (
                   <div>
                     <FormItem>
-                      <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
+                      <span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <FormattedMessage id="Marketing.reduction" />
+                        &nbsp;&nbsp;
+                      </span>
                       {getFieldDecorator('firstSubscriptionOrderReduction', {
                         rules: [
-                          { required: true, message: 'Amount must be entered' },
+                          { required: true, message: <FormattedMessage id="Marketing.AmountMustBeEntered" /> },
                           {
                             validator: (_rule, value, callback) => {
                               if (value) {
@@ -391,7 +413,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
             {getFieldDecorator('restSubscriptionOrderReduction', {
               rules: [
-                { required: true, message: 'Amount must be entered' },
+                { required: true, message: <FormattedMessage id="Marketing.AmountMustBeEntered" /> },
                 {
                   validator: (_rule, value, callback) => {
                     if (value) {
@@ -420,12 +442,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
             <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
             {getFieldDecorator('restSubscriptionOrderDiscount', {
               rules: [
-                { required: true, message: 'Amount must be entered' },
+                { required: true, message: <FormattedMessage id="Marketing.AmountMustBeEntered" /> },
                 {
                   validator: (_rule, value, callback) => {
                     if (value) {
                       if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                        callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+                        callback(<FormattedMessage id="Marketing.InputValueBetween" />);
                       }
                     }
                     callback();
@@ -436,31 +458,35 @@ export default class MarketingAddForm extends React.Component<any, any> {
             })(
               <Input
                 style={{ width: 200 }}
-                placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                placeholder={this.props.intl.formatMessage({ id: 'Marketing.InputValueBetween' })}
                 onChange={(e) => {
                   this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
                 }}
               />
             )}
-            <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+            <span>
+              &nbsp;
+              <FormattedMessage id="Marketing.ofOrginalPrice" />
+              &nbsp;&nbsp;
+            </span>
           </FormItem>
         )}
 
-        <FormItem {...formItemLayout} label="Select products" required={true}>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.SelectProducts" />} required={true}>
           {getFieldDecorator(
             'goods',
             {}
           )(
             <div>
               <Button type="primary" icon="plus" onClick={this.openGoodsModal}>
-                Add products
+                <FormattedMessage id="Marketing.AddProducts" />
               </Button>
               &nbsp;&nbsp;
               <SelectedGoodsGrid selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={this.deleteSelectedSku} />
             </div>
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label="Target consumer" required={true}>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.TargetConsumer" />} required={true}>
           {getFieldDecorator('targetCustomer', {
             // rules: [{required: true, message: '请选择目标客户'}],
           })(
@@ -471,13 +497,19 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 }}
                 value={level._allCustomer ? -1 : 0}
               >
-                <Radio value={-1}>Full platform consumer</Radio>
-                {util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}
+                <Radio value={-1}>
+                  <FormattedMessage id="Marketing.FullPlatformConsumer" />
+                </Radio>
+                {util.isThirdStore() && (
+                  <Radio value={0}>
+                    <FormattedMessage id="Marketing.In-storeCustomer" />
+                  </Radio>
+                )}
               </RadioGroup>
               {level._levelPropsShow && (
                 <div>
                   <Checkbox indeterminate={level._indeterminate} onChange={(e) => this.allLevelChecked(e.target.checked)} checked={level._checkAll}>
-                    All Leave
+                    <FormattedMessage id="Marketing.AllLeave" />
                   </Checkbox>
                   <CheckboxGroup options={this.renderCheckboxOptions(customerLevel)} onChange={this.levelGroupChange} value={level._checkedLevelList} />
                 </div>
@@ -489,10 +521,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
           <Col span={3} />
           <Col span={10}>
             <Button type="primary" htmlType="submit" loading={saveLoading}>
-              Save
+              <FormattedMessage id="Marketing.Save" />
             </Button>
             &nbsp;&nbsp;
-            <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
+            <Button onClick={() => history.push('/marketing-center')}>
+              <FormattedMessage id="Marketing.Cancel" />
+            </Button>
           </Col>
         </Row>
         <GoodsModal visible={this.state.goodsModal._modalVisible} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
@@ -684,7 +718,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     if (!levelList || (levelList.isEmpty() && this.state.PromotionTypeValue == 0)) {
       errorObject['rules'] = {
         value: null,
-        errors: [new Error('Please setting rules')]
+        errors: [new Error(this.props.intl.formatMessage({ id: 'Marketing.PleaseSettingRules' }))]
       };
     } else {
       let ruleArray = List();
@@ -701,14 +735,14 @@ export default class MarketingAddForm extends React.Component<any, any> {
           if (!isFullCount && +level.fullAmount <= +level.reduction) {
             if (this.state.PromotionTypeValue == 0) {
               errorObject[`level_rule_value_${index}`] = {
-                errors: [new Error('The conditional amount must be greater than the deductible amount')]
+                errors: [new Error(this.props.intl.formatMessage({ id: 'Marketing.TheConditional' }))]
               };
               errorObject[`level_rule_reduction_${index}`] = {
-                errors: [new Error('The deductible amount must be less than the conditional amount')]
+                errors: [new Error(this.props.intl.formatMessage({ id: 'Marketing.TheDeductible' }))]
               };
             } else {
               errorObject[`level_rule_reduction_${index}`] = {
-                errors: [new Error('The deductible amount must be less than the conditional amount')]
+                errors: [new Error(this.props.intl.formatMessage({ id: 'Marketing.TheDeductible' }))]
               };
             }
           }
@@ -737,7 +771,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
           if (!level.fullGiftDetailList || level.fullGiftDetailList.length == 0) {
             errorObject[`level_${index}`] = {
               value: null,
-              errors: [new Error('A full gift cannot be empty')]
+              errors: [new Error(this.props.intl.formatMessage({ id: 'Marketing.giftCannotBeEmpty' }))]
             };
           }
         });
@@ -749,7 +783,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         .forEach((item) => {
           item.forEach((level) => {
             errorObject[`level_rule_value_${(level as any).get('index')}`] = {
-              errors: [new Error('Multi-level promotion conditions are not the same')]
+              errors: [new Error(this.props.intl.formatMessage({ id: 'Marketing.Multi-levelPromotionConditions' }))]
             };
           });
         });
@@ -766,7 +800,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
           marketingBean = marketingBean.set('joinLevel', level._checkedLevelList.join(','));
         } else {
           errorObject['targetCustomer'] = {
-            errors: [new Error('Please select target customers')]
+            errors: [new Error(this.props.intl.formatMessage({ id: 'Marketing.PleaseSelectTargetCustomers' }))]
           };
         }
       }
@@ -778,7 +812,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     } else {
       errorObject['goods'] = {
         value: null,
-        errors: [new Error('Please select the product to be marketed')]
+        errors: [new Error(this.props.intl.formatMessage({ id: 'Marketing.theProductToBeMarketed' }))]
       };
     }
     if (this.state.promotionCode) {
@@ -859,8 +893,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
     if (levelType == '' || !marketingBean.get(levelType)) return;
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
-        title: 'Switch type',
-        content: 'Switching types will clear the set rules. Do you want to continue?',
+        title: <FormattedMessage id="Marketing.SwitchType" />,
+        content: <FormattedMessage id="Marketing.SwitchingTypes" />,
         onOk() {
           for (let i = 0; i < marketingBean.get(levelType).size; i++) {
             _thisRef.props.form.resetFields(`level_${i}`);
@@ -1086,9 +1120,11 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   _responseThen = (response) => {
     if (response.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(<FormattedMessage id="Marketing.OperateSuccessfully" />);
       history.push('/marketing-list');
     }
     this.setState({ saveLoading: false });
   };
 }
+
+export default injectIntl(MarketingAddForm);

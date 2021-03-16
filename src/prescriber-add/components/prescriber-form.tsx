@@ -130,7 +130,7 @@ class ClinicForm extends React.Component<any, any> {
     const { sectionList, rewardForm } = this.state;
 
     if (!id) {
-      message.error('Prescriber ID does not exist');
+      message.error(<FormattedMessage id="Prescriber.PrescriberIDDoesNotExist" />);
       return;
     }
 
@@ -148,7 +148,7 @@ class ClinicForm extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
           this.setState({
             saveLoading: false
           });
@@ -287,7 +287,7 @@ class ClinicForm extends React.Component<any, any> {
             });
             this.saveReward(prescriberForm.prescriberId);
           } else {
-            message.error('Prescriber ID does not exist');
+            message.error(<FormattedMessage id="Prescriber.PrescriberIDDoesNotExist" />);
           }
         } else {
           this.setState({
@@ -320,7 +320,7 @@ class ClinicForm extends React.Component<any, any> {
             this.setState({
               saveLoading: false
             });
-            message.error('Prescriber ID does not exist');
+            message.error(<FormattedMessage id="Prescriber.PrescriberIDDoesNotExist" />);
           }
         } else {
           this.setState({
@@ -341,7 +341,7 @@ class ClinicForm extends React.Component<any, any> {
       if (!err) {
         this.switchTab('reward');
       } else {
-        message.error('Prescriber basic infomation is not verified. Please modify!');
+        message.error(<FormattedMessage id="Prescriber.PleaseModify" />);
       }
     });
   };
@@ -354,7 +354,7 @@ class ClinicForm extends React.Component<any, any> {
           this.onCreate();
         }
       } else {
-        message.error('Prescriber basic infomation is not verified. Please modify!');
+        message.error(<FormattedMessage id="Prescriber.PleaseModify" />);
       }
     });
   };
@@ -384,7 +384,7 @@ class ClinicForm extends React.Component<any, any> {
     const { form } = this.props;
     let reg = /^[0-9+-\s]{6,20}$/;
     if (!reg.test(form.getFieldValue('phone'))) {
-      callback('Please enter the correct phone!');
+      callback(<FormattedMessage id="Prescriber.PleaseEnterTheCorrectPhone" />);
     } else {
       callback();
     }
@@ -397,7 +397,7 @@ class ClinicForm extends React.Component<any, any> {
     const { form } = this.props;
     let reg = /^[0-9]{3,10}$/;
     if (!reg.test(form.getFieldValue('primaryZip'))) {
-      callback('Please enter the correct Prescriber Zip!');
+      callback(<FormattedMessage id="Prescriber.theCorrectPrescriberZip" />);
     } else {
       callback();
     }
@@ -409,7 +409,7 @@ class ClinicForm extends React.Component<any, any> {
     }
     const { form } = this.props;
     if (isNaN(form.getFieldValue('longitude')) || form.getFieldValue('longitude') < -180 || form.getFieldValue('longitude') > 180) {
-      callback('Please enter the correct longitude!');
+      callback(<FormattedMessage id="Prescriber.theCorrectLongitude" />);
     } else {
       callback();
     }
@@ -422,7 +422,7 @@ class ClinicForm extends React.Component<any, any> {
     const { form } = this.props;
 
     if (isNaN(form.getFieldValue('latitude')) || form.getFieldValue('latitude') < -90 || form.getFieldValue('latitude') > 90) {
-      callback('Please enter the correct latitude!');
+      callback(<FormattedMessage id="Prescriber.theCorrectLatitude" />);
     } else {
       callback();
     }
@@ -439,7 +439,7 @@ class ClinicForm extends React.Component<any, any> {
   // };
   handleCopy = (value) => {
     if (copy(value)) {
-      message.success('Operate successfully');
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
     }
   };
 
@@ -452,15 +452,15 @@ class ClinicForm extends React.Component<any, any> {
   savePrescriber = () => {
     const { sectionList } = this.state;
     if (!this.state.timeZone) {
-      message.error('Period can not be empty!');
+      message.error(<FormattedMessage id="Prescriber.notBeEmpty" />);
       return;
     }
     if (!(sectionList[0].rewardRate || sectionList[0].rewardRate === 0)) {
-      message.error('Reward Rate can not be empty!');
+      message.error(<FormattedMessage id="Prescriber.RewardRate" />);
       return;
     }
     if (!(sectionList[1].rewardRate || sectionList[1].rewardRate === 0)) {
-      message.error('Reward Rate can not be empty!');
+      message.error(<FormattedMessage id="Prescriber.RewardRate" />);
       return;
     }
     if (!this.state.isPrescriber) {
@@ -538,11 +538,11 @@ class ClinicForm extends React.Component<any, any> {
 
     return (
       <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>
-        <TabPane tab="Basic Infomation" key="basic">
+        <TabPane tab={<FormattedMessage id="Prescriber.BasicInfomation" />} key="basic">
           <Row>
             <Col span={12}>
               <Form {...layout} onSubmit={this.handleSubmit}>
-                <FormItem label="Parent prescriber">
+                <FormItem label={<FormattedMessage id="Prescriber.ParentPrescriber" />}>
                   {getFieldDecorator(
                     'parentPrescriberId',
                     {}
@@ -564,9 +564,9 @@ class ClinicForm extends React.Component<any, any> {
                     </Select>
                   )}
                 </FormItem>
-                <FormItem label="Prescriber ID">
+                <FormItem label={<FormattedMessage id="Prescriber.PrescriberID" />}>
                   {getFieldDecorator('prescriberId', {
-                    rules: [{ required: true, message: 'Please input Prescriber id!' }]
+                    rules: [{ required: true, message: <FormattedMessage id="Prescriber.PleaseInputPrescriberId" /> }]
                   })(
                     <Input
                       disabled={this.state.isEdit}
@@ -580,16 +580,16 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Prescriber name">
+                <FormItem label={<FormattedMessage id="Prescriber.PrescriberName" />}>
                   {getFieldDecorator('prescriberName', {
                     rules: [
                       {
                         required: true,
-                        message: 'Please input Prescriber name!'
+                        message: <FormattedMessage id="Prescriber.PleaseInputPrescriberName" />
                       },
                       {
                         max: 200,
-                        message: 'Prescriber name exceed the maximum length!'
+                        message: <FormattedMessage id="Prescriber.theMaximumLength" />
                       }
                     ]
                   })(
@@ -631,9 +631,9 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
                  */}
 
-                {!this.state.isMapMode ? <FormItem label="Recommendation code">{getFieldDecorator('prescriberCode', {})(<Input addonAfter={<Icon onClick={() => this.reloadCode()} type="reload" />} disabled />)}</FormItem> : null}
+                {!this.state.isMapMode ? <FormItem label={<FormattedMessage id="Prescriber.RecommendationCode" />}>{getFieldDecorator('prescriberCode', {})(<Input addonAfter={<Icon onClick={() => this.reloadCode()} type="reload" />} disabled />)}</FormItem> : null}
 
-                <FormItem label="Prescriber phone number">
+                <FormItem label={<FormattedMessage id="Prescriber.PrescriberPhoneNumber" />}>
                   {getFieldDecorator('phone', {
                     rules: [{ validator: this.comparePhone }]
                   })(
@@ -649,7 +649,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Prescriber city">
+                <FormItem label={<FormattedMessage id="Prescriber.PrescriberCity" />}>
                   {getFieldDecorator(
                     'primaryCity',
                     {}
@@ -677,7 +677,7 @@ class ClinicForm extends React.Component<any, any> {
                     </Select>
                   )}
                 </FormItem>
-                <FormItem label="Prescriber zip">
+                <FormItem label={<FormattedMessage id="Prescriber.PrescriberZip" />}>
                   {getFieldDecorator('primaryZip', {
                     rules: [{ validator: this.compareZip }]
                   })(
@@ -693,12 +693,12 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Prescriber type">
+                <FormItem label={<FormattedMessage id="Prescriber.PrescriberType" />}>
                   {getFieldDecorator('prescriberType', {
                     rules: [
                       {
                         required: true,
-                        message: 'Please select Prescriber Type!'
+                        message: <FormattedMessage id="Prescriber.PleaseSelectPrescriberType" />
                       }
                     ]
                   })(
@@ -723,7 +723,7 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label="Latitude">
+                <FormItem label={<FormattedMessage id="Prescriber.Latitude" />}>
                   {getFieldDecorator('latitude', {
                     rules: [{ validator: this.compareLatitude }]
                   })(
@@ -740,7 +740,7 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label="Longitude">
+                <FormItem label={<FormattedMessage id="Prescriber.Longitude" />}>
                   {getFieldDecorator('longitude', {
                     rules: [{ validator: this.compareLongitude }]
                   })(
@@ -757,12 +757,12 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label="Prescriber address">
+                <FormItem label={<FormattedMessage id="Prescriber.PrescriberAddress" />}>
                   {getFieldDecorator('location', {
                     rules: [
                       {
                         max: 200,
-                        message: 'Prescriber Address exceed the maximum length!'
+                        message: <FormattedMessage id="Prescriber.PrescriberAddressExceed" />
                       }
                     ]
                   })(
@@ -778,7 +778,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Audit Authority">
+                <FormItem label={<FormattedMessage id="Prescriber.AuditAuthority" />}>
                   {getFieldDecorator(
                     'auditAuthority',
                     {}
@@ -796,12 +796,14 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
                 <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                   <Button type="primary" htmlType="submit">
-                    Proceed to set reward rules
+                    <FormattedMessage id="Prescriber.ProceedToSetRewardRules" />
                   </Button>
 
                   {!sessionStorage.getItem('PrescriberSelect') ? (
                     <Button style={{ marginLeft: '20px' }}>
-                      <Link to="/prescriber">Back to list</Link>
+                      <Link to="/prescriber">
+                        <FormattedMessage id="Prescriber.BackToList" />
+                      </Link>
                     </Button>
                   ) : null}
                 </FormItem>
@@ -814,7 +816,7 @@ class ClinicForm extends React.Component<any, any> {
                   <div>
                     {this.newUrl(this.state.url)}
                     <Button style={{ marginLeft: '10px' }} onClick={() => this.handleCopy(this.newUrl(this.state.url))} size="small">
-                      copy
+                      <FormattedMessage id="Prescriber.copy" />
                     </Button>
                   </div>
                 ) : null}
@@ -822,7 +824,7 @@ class ClinicForm extends React.Component<any, any> {
             </Col>
           </Row>
         </TabPane>
-        <TabPane tab="Reward Rate" key="reward">
+        <TabPane tab={<FormattedMessage id="Prescriber.RewardRate" />} key="reward">
           <Row>
             <Col span={24}>
               <span
@@ -843,18 +845,18 @@ class ClinicForm extends React.Component<any, any> {
                   fontWeight: 500
                 }}
               >
-                Period:
+                <FormattedMessage id="Prescriber.Period" />:
               </label>
-              Every
+              <FormattedMessage id="Prescriber.Every" />
               <Select disabled={this.state.isPrescriber} value={this.state.timeZone} onChange={(value) => this.selectTimeZone(value)} style={{ minWidth: '200px', marginLeft: '10px' }}>
                 <Option value="Year" key="year">
-                  Year
+                  <FormattedMessage id="Prescriber.Year" />
                 </Option>
                 <Option value="Month" key="month">
-                  Month
+                  <FormattedMessage id="Prescriber.Month" />
                 </Option>
                 <Option value="Week" key="week">
-                  Week
+                  <FormattedMessage id="Prescriber.Week" />
                 </Option>
               </Select>
             </Col>
@@ -877,7 +879,7 @@ class ClinicForm extends React.Component<any, any> {
                   fontWeight: 500
                 }}
               >
-                Reward mode:
+                <FormattedMessage id="Prescriber.RewardMode" />:
               </label>
               {/* <div style={{ marginTop: '20px' }}>
                 <Radio.Group
@@ -904,7 +906,7 @@ class ClinicForm extends React.Component<any, any> {
               <Divider type="horizontal" /> */}
               <Table style={{ paddingTop: '10px' }} pagination={false} rowKey="id" dataSource={this.state.sectionList}>
                 <Column
-                  title="Unique customer order type"
+                  title={<FormattedMessage id="Prescriber.UniqueCustomerOrderType" />}
                   key="orderType"
                   width={180}
                   render={(rowInfo) => {
@@ -924,7 +926,7 @@ class ClinicForm extends React.Component<any, any> {
                       >
                         *
                       </span>
-                      Reward rate
+                      <FormattedMessage id="Prescriber.RewardRate" />
                     </div>
                   }
                   key="rewardRate"
@@ -974,11 +976,13 @@ class ClinicForm extends React.Component<any, any> {
             </Col>
             <Col span={24} style={{ marginTop: '20px' }}>
               <Button type="primary" loading={this.state.saveLoading} onClick={() => this.savePrescriber()}>
-                Save
+                <FormattedMessage id="Prescriber.Save" />
               </Button>
               {!sessionStorage.getItem('PrescriberSelect') ? (
                 <Button style={{ marginLeft: '20px' }}>
-                  <Link to="/prescriber">Back to list</Link>
+                  <Link to="/prescriber">
+                    <FormattedMessage id="Prescriber.BackToList" />
+                  </Link>
                 </Button>
               ) : null}
 
@@ -988,7 +992,7 @@ class ClinicForm extends React.Component<any, any> {
             </Col>
           </Row>
         </TabPane>
-        <TabPane tab="User List" key="users">
+        <TabPane tab={<FormattedMessage id="Prescriber.UserList" />} key="users">
           <UserList prescriberKeyId={this.state.prescriberKeyId} alreadyHasPrescriber={this.state.isEdit} />
         </TabPane>
       </Tabs>

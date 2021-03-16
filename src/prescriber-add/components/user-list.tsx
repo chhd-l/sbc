@@ -159,7 +159,7 @@ class UserList extends Component<any, any> {
     };
     const { res } = await webapi.sendEmail(paramter);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('send successful');
+      message.success(<FormattedMessage id="Prescriber.sendSuccessful" />);
     }
   };
 
@@ -205,7 +205,7 @@ class UserList extends Component<any, any> {
 
   addUser = () => {
     if (!this.props.alreadyHasPrescriber) {
-      message.error('Please add prescriber first');
+      message.error(<FormattedMessage id="Prescriber.PleaseAddPrescriberFirst" />);
       return;
     }
     this.setState({
@@ -225,17 +225,17 @@ class UserList extends Component<any, any> {
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     const columns = [
       {
-        title: 'User name',
+        title: <FormattedMessage id="Prescriber.UserName" />,
         dataIndex: 'employeeName',
         key: 'employeeName'
       },
       {
-        title: 'User email',
+        title: <FormattedMessage id="Prescriber.UserEmail" />,
         dataIndex: 'email',
         key: 'email'
       },
       {
-        title: 'User status',
+        title: <FormattedMessage id="Prescriber.UserStatus" />,
         dataIndex: 'accountState',
         key: 'accountState',
         render: (text, record) => {
@@ -254,7 +254,7 @@ class UserList extends Component<any, any> {
         }
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Prescriber.Operation" />,
         dataIndex: 'operation',
         key: 'operation',
         render: (text, record) => {
@@ -265,23 +265,23 @@ class UserList extends Component<any, any> {
                   <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                 </Tooltip>
                 <Popconfirm
-                  title="Are you sure to remove the user?"
+                  title={<FormattedMessage id="Prescriber.removeTheUser" />}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText="OK"
-                  cancelText="Cancel"
+                  okText={<FormattedMessage id="Prescriber.OK" />}
+                  cancelText={<FormattedMessage id="Prescriber.Cancel" />}
                 >
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Delete" />}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 0 ? (
-                  <Tooltip placement="top" title="Disabled">
+                  <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Disabled" />}>
                     <a onClick={() => this.disabledUser(record)} className="iconfont iconbtn-disable"></a>
                   </Tooltip>
                 ) : (
-                  <Tooltip placement="top" title="Enabled">
+                  <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Enabled" />}>
                     <a onClick={() => this.enableUser(record)} className="iconfont iconEnabled"></a>
                   </Tooltip>
                 )}
@@ -293,28 +293,28 @@ class UserList extends Component<any, any> {
             return (
               <span className="operation-box">
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title="Edit">
+                  <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Edit" />}>
                     <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                   </Tooltip>
                 ) : null}
                 <Popconfirm
-                  title="Are you sure to remove the user?"
+                  title={<FormattedMessage id="Prescriber.removeTheUser" />}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText="OK"
-                  cancelText="Cancel"
+                  okText={<FormattedMessage id="Prescriber.OK" />}
+                  cancelText={<FormattedMessage id="Prescriber.Cancel" />}
                 >
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Delete" />}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title="Send">
+                  <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Send" />}>
                     <a onClick={() => this.sendEmail(record)} className="iconfont iconemail"></a>
                   </Tooltip>
                 ) : prescriberId ? (
-                  <Tooltip placement="top" title="Audit">
+                  <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Audit" />}>
                     <a onClick={() => this.auditUser(record)} className="iconfont iconaudit"></a>
                   </Tooltip>
                 ) : null}
@@ -326,7 +326,9 @@ class UserList extends Component<any, any> {
     ];
     return (
       <div>
-        <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*New added user still needs to register before logging in store portal</p>
+        <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>
+          *<FormattedMessage id="Prescriber.NewAdded" />
+        </p>
         <div className="container-search">
           <Form layout="inline">
             <FormItem>
@@ -370,11 +372,21 @@ class UserList extends Component<any, any> {
                 }}
                 style={{ width: 80 }}
               >
-                <Option value="">All</Option>
-                <Option value={'3'}>Inactivated</Option>
-                <Option value={'4'}>To be audit</Option>
-                <Option value={'0'}>Enabled</Option>
-                <Option value={'1'}>Disabled</Option>
+                <Option value="">
+                  <FormattedMessage id="Prescriber.All" />
+                </Option>
+                <Option value={'3'}>
+                  <FormattedMessage id="Prescriber.Inactivated" />
+                </Option>
+                <Option value={'4'}>
+                  <FormattedMessage id="Prescriber.ToBeAudit" />
+                </Option>
+                <Option value={'0'}>
+                  <FormattedMessage id="Prescriber.Enabled" />
+                </Option>
+                <Option value={'1'}>
+                  <FormattedMessage id="Prescriber.Disabled" />
+                </Option>
               </SelectGroup>
             </FormItem>
             <Form.Item>
@@ -389,20 +401,20 @@ class UserList extends Component<any, any> {
                 }}
               >
                 <span>
-                  <FormattedMessage id="search" />
+                  <FormattedMessage id="Prescriber.search" />
                 </span>
               </Button>
             </Form.Item>
           </Form>
           <Button type="primary" htmlType="submit" onClick={this.addUser} style={{ marginBottom: '10px', marginTop: '10px' }}>
-            <FormattedMessage id="add" />
+            <FormattedMessage id="Prescriber.add" />
           </Button>
         </div>
         <div className="container">
           <Table rowKey={(record, index) => index} dataSource={this.state.userData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
         </div>
         <UserModal userForm={this.state.userForm} visible={this.state.userVisible} parent={this} prescriberKeyId={this.props.prescriberKeyId} reflash={() => this.getUsers()} />
-        <Modal maskClosable={false} title="Please input the reason for disabling" visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
+        <Modal maskClosable={false} title={<FormattedMessage id="Prescriber.theReasonForDisabling" />} visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
           <Form>
             <FormItem>
               {getFieldDecorator('reason', {
@@ -430,7 +442,7 @@ class UserList extends Component<any, any> {
           maskClosable={false}
           visible={this.state.auditModalVisible}
           footer={null}
-          title="Agree or Reject?"
+          title={<FormattedMessage id="Prescriber.AgreeOrReject" />}
           onCancel={() =>
             this.setState({
               auditModalVisible: false
@@ -441,10 +453,10 @@ class UserList extends Component<any, any> {
             <Col span={12}></Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               <Button onClick={() => this.handleAudit(false)} style={{ marginRight: '10px' }}>
-                Reject
+                <FormattedMessage id="Prescriber.Reject" />
               </Button>
               <Button type="primary" onClick={() => this.handleAudit(true)}>
-                Agree
+                <FormattedMessage id="Prescriber.Agree" />
               </Button>
             </Col>
           </Row>

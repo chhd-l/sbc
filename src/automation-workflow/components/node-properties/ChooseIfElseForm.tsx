@@ -31,8 +31,8 @@ export default class ChooseIfElseForm extends Component<any, any> {
         fontSize: '10px'
       },
       judgeSelect: [
-        { name: 'Yes', value: 'True' },
-        { name: 'No', value: 'False' }
+        { name: 'Yes', value: 1 },
+        { name: 'No', value: 0 }
       ],
       mouths: 'Month(s)',
       orderFeildDict: [
@@ -59,7 +59,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
         { name: 'Init', value: 'INIT' },
         { name: 'Groupon', value: 'GROUPON' },
         { name: 'Audit', value: 'AUDIT' },
-        { name: 'Delivered_part', value: 'DELIVERED_PART' },
+        { name: 'Delivered Part', value: 'DELIVERED_PART' },
         { name: 'Delivered', value: 'DELIVERED' },
         { name: 'Confirmed', value: 'CONFIRMED' },
         { name: 'Completed', value: 'COMPLETED' },
@@ -211,6 +211,9 @@ export default class ChooseIfElseForm extends Component<any, any> {
     let tmpType;
     let tmpArr = [];
     switch (colName) {
+      case 'orderStatus':
+        tmpArr = orderStatusDict;
+        break;
       case 'shippingStatus':
         tmpArr = shippingStatusDict;
         break;

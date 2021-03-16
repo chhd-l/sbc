@@ -66,43 +66,25 @@ export default class Activity extends Component<any, any> {
       <div className="panel">
         {activities.map((item, index) => (
           <div key={item.id}>
-            {item.type === 0 ? (
-              <div className="log" key={index}>
-                <Row>
-                  <Col span={14}>
-                    <span>{item.content} </span>
-                  </Col>
-                  <Col span={10}>
-                    <span>by</span>
-                    <a>{item.createdByUser}</a>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={14}>
-                    <span>{item.action} </span>
-                  </Col>
-                  <Col span={10}>
-                    <span>{item.dateAdded}</span>
-                  </Col>
-                </Row>
-              </div>
-            ) : null}
-
-            {item.type === 1 ? (
-              <div className="log" key={index}>
-                <Row>
-                  <Col span={14}>
-                    <span>{item.createdByUser}</span>
-                  </Col>
-                  <Col span={10}>
-                    <a>{item.dateAdded}</a>
-                  </Col>
-                </Row>
-                <Row>
-                  <span>{item.content}</span>
-                </Row>
-              </div>
-            ) : null}
+            <div className="log" key={index}>
+              <Row>
+                <Col span={14}>
+                  <span>{item.content} </span>
+                </Col>
+                <Col span={10}>
+                  <span>by</span>
+                  <a>{item.createdByUser}</a>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={14}>
+                  <span>{item.type === 0 ? item.action : 'Feedback'} </span>
+                </Col>
+                <Col span={10}>
+                  <span>{item.dateAdded}</span>
+                </Col>
+              </Row>
+            </div>
           </div>
         ))}
 

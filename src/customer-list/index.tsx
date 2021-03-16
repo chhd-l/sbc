@@ -272,17 +272,13 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>客户列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="consumerList" />} />
+            <Headline title="Pet owner list" />
             <Form className="filter-content" layout="inline">
               <Row>
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={
-                        <p style={styles.label}>
-                          <FormattedMessage id="consumerAccount" />
-                        </p>
-                      }
+                      addonBefore={<p style={styles.label}>Pet owner account</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -296,11 +292,7 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={
-                        <p style={styles.label}>
-                          <FormattedMessage id="consumerName" />
-                        </p>
-                      }
+                      addonBefore={<p style={styles.label}>Pet owner name</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({

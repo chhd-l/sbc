@@ -36,7 +36,7 @@ export async function getAddressInputTypeSetting() {
  * @returns
  */
 export async function getAddressFieldList(type: string = 'MANUALLY') {
-  return await Fetch<TResult>('/addressDisplaySetting/queryByStoreId', {
+  return await Fetch<TResult>('/addressDisplaySetting/queryByStoreId/' + type, {
     method: 'GET'
   })
     .then((data) => {

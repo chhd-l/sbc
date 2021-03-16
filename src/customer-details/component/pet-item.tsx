@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row, Col, Input, Select, Radio, Spin, DatePicker, Button, Popconfirm, Icon, message } from 'antd';
+import { Form, Row, Col, Input, Select, Radio, Spin, DatePicker, Button, Popconfirm, Icon, message, Divider } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, history, AssetManagement } from 'qmkit';
 import moment from 'moment';
@@ -203,6 +203,11 @@ class PetItem extends React.Component<Iprop, any> {
               </Col>
               <Col span={20}>
                 <Row gutter={16}>
+                  <Col span={24}>
+                    <div style={{ fontSize: 16, color: '#666' }}>Basic information</div>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item label="Pet category">
                       {getFieldDecorator('petsType', {
@@ -340,12 +345,53 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                 </Row>
+                <Divider />
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <div style={{ fontSize: 16, color: '#666' }}>Life stage information</div>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item label="This stage name" required>
+                      <Input value="" disabled />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Stage duration" required>
+                      <Input value="" disabled />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Next stage name" required>
+                      <Input value="" disabled />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Stage duration" required>
+                      <Input value="" disabled />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Divider />
                 <div>
-                  <Button type="link" onClick={() => this.onShowOrHide(!show)}>
-                    <Icon type={show ? 'up' : 'down'} /> {show ? 'Hide more fields' : 'Show more fields'}
-                  </Button>
+                  <a
+                    style={{ fontSize: 16 }}
+                    className="ant-btn-link"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.onShowOrHide(!show);
+                    }}
+                  >
+                    {show ? 'Hide more fields' : 'Show more fields'} <Icon type={show ? 'up' : 'down'} />
+                  </a>
                   <div style={{ display: show ? 'block' : 'none' }}>
                     <Row gutter={16}>
+                      <Col span={12}>
+                        <Form.Item label="Pet source ID">
+                          <Input value={pet.petSourceId} disabled />
+                        </Form.Item>
+                      </Col>
                       <Col span={12}>
                         <Form.Item label="Pet activity level">
                           <Select value={pet.petActivityCode} disabled>

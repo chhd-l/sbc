@@ -202,7 +202,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
           </Select>
         );
       } else {
-        return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={_.debounce(this.searchCity, 500)} />;
+        return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={_.throttle(this.searchCity, 500)} />;
       }
     }
     const optionList = field.fieldName === 'Country' ? this.state.countryList : field.fieldName === 'State' ? this.state.stateList : [];
@@ -221,6 +221,23 @@ class DeliveryItem extends React.Component<Iprop, any> {
       return <Input />;
     }
     return null;
+  };
+
+  //手机校验
+  comparePhone = (rule, value, callback) => {
+    if (!/^[0-9+-\s]{6,20}$/.test(value)) {
+      callback('Please enter the correct phone');
+    } else {
+      callback();
+    }
+  };
+
+  compareZip = (rule, value, callback) => {
+    if (!/^[0-9]{3,10}$/.test(value)) {
+      callback('Please enter the correct Post Code');
+    } else {
+      callback();
+    }
   };
 
   render() {
@@ -252,7 +269,11 @@ class DeliveryItem extends React.Component<Iprop, any> {
                         <Form.Item {...formItemLayout(fieldRow.length)} label={field.fieldName}>
                           {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`, {
                             initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
-                            rules: [{ required: field.requiredFlag === 1, message: `${field.fieldName} is required` }]
+                            rules: [
+                              { required: field.requiredFlag === 1, message: `${field.fieldName} is required` },
+                              { validator: field.fieldName === 'Phone number' ? this.comparePhone : (rule, value, callback) => callback() },
+                              { validator: field.fieldName === 'Post code' ? this.compareZip : (rule, value, callback) => callback() }
+                            ]
                           })(this.renderField(field))}
                         </Form.Item>
                       </Col>

@@ -24,6 +24,8 @@ const { RangePicker } = DatePicker;
 const { Column } = Table;
 const { confirm } = Modal;
 
+const noPetImg = require('../goods-list/img/none.png');
+
 export default class CustomerDetails extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -38,7 +40,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       pets: [],
       delivery: {},
       addressType: 'delivery',
-      startDate: moment().format('YYYY-MM-DD'),
+      startDate: moment().subtract(3, 'months').format('YYYY-MM-DD'),
       endDate: moment().format('YYYY-MM-DD')
     };
   }
@@ -214,11 +216,14 @@ export default class CustomerDetails extends React.Component<any, any> {
               <Headline
                 title="Basic information"
                 extra={
-                  <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => this.removeConsumer(this.state.customerId)} okText="Confirm" cancelText="Cancel">
-                    <Button type="link">
-                      <FormattedMessage id="consumer.removeConsumer" />
-                    </Button>
-                  </Popconfirm>
+                  <>
+                    <Link to={`/edit-petowner/${this.state.customerId}/${this.state.customerAccount}`}>
+                      <i className="iconfont iconEdit"></i> Edit
+                    </Link>
+                    <Link to={`/pet-owner-activity/${this.state.customerId}`} style={{ marginLeft: '20px' }}>
+                      <i className="iconfont iconfenxiang"></i> Overview
+                    </Link>
+                  </>
                 }
               />
               <div style={{ margin: '20px 0' }}>
@@ -230,12 +235,11 @@ export default class CustomerDetails extends React.Component<any, any> {
                     <Icon type="calendar" /> Age
                   </Col>
                   <Col span={16} className="text-align-right" style={{ padding: '0 35px' }}>
-                    <Link to={`/edit-petowner/${this.state.customerId}/${this.state.customerAccount}`}>
-                      <i className="iconfont iconEdit"></i> Edit
-                    </Link>
-                    <Link to={`/pet-owner-activity/${this.state.customerId}`} style={{ marginLeft: '20px' }}>
-                      <i className="iconfont iconfenxiang"></i> Overview
-                    </Link>
+                    {/* <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => this.removeConsumer(this.state.customerId)} okText="Confirm" cancelText="Cancel">
+                      <Button type="link">
+                        <FormattedMessage id="consumer.removeConsumer" />
+                      </Button>
+                    </Popconfirm> */}
                   </Col>
                 </Row>
                 <Row className="text-highlight" style={{ marginTop: 5 }}>
@@ -347,7 +351,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                       </div>
                       <Row gutter={10}>
                         <Col span={6}>
-                          <Avatar size={70} src={pet.petsImg} />
+                          <Avatar size={70} src={pet.petsImg && pet.petsImg.startsWith('http') ? pet.petsImg : noPetImg} />
                         </Col>
                         <Col span={18}>
                           <Row>
@@ -378,7 +382,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Row>
             </div>
             <div className="container">
-              <Headline title="Other information" extra={<RangePicker defaultValue={[moment(), moment()]} onChange={this.handleChangeDateRange} />} />
+              <Headline title="Other information" extra={<RangePicker defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />} />
               <Tabs defaultActiveKey="order" onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
                   <OrderInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />

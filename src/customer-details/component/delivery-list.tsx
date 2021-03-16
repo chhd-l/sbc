@@ -103,7 +103,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <Button type="primary" onClick={() => onEdit({})}>
+        <Button type="primary" onClick={() => onEdit({})} style={{ marginBottom: 10 }}>
           Add new
         </Button>
         <Table rowKey="deliveryAddressId" loading={loading} columns={columns} dataSource={list} pagination={false} />

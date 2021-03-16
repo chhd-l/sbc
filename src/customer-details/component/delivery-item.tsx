@@ -1,8 +1,8 @@
 import React from 'react';
-import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete } from 'antd';
+import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete, Modal, Alert, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Headline, cache } from 'qmkit';
-import { getAddressFieldList, getCountryList, getStateList, getCityList, searchCity } from './webapi';
+import { Headline, cache, Const } from 'qmkit';
+import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress } from './webapi';
 import { updateAddress, addAddress } from '../webapi';
 import _ from 'lodash';
 
@@ -20,6 +20,7 @@ type TDelivery = {
   address1?: string;
   address2?: string;
   rfc?: string;
+  isDefaltAddress?: number;
 };
 
 interface Iprop extends FormComponentProps {
@@ -55,7 +56,13 @@ class DeliveryItem extends React.Component<Iprop, any> {
       countryList: [],
       stateList: [],
       cityList: [],
-      searchCityList: []
+      searchCityList: [],
+      addressInputType: '',
+      isAddressValidation: false,
+      validationModalVisisble: false,
+      checkedAddress: 0,
+      fields: {},
+      suggestionAddress: {}
     };
   }
 
@@ -64,37 +71,100 @@ class DeliveryItem extends React.Component<Iprop, any> {
   }
 
   getDics = async () => {
-    const fields = await getAddressFieldList();
+    const addressInputType = await getAddressInputTypeSetting();
+    let fields = [];
+    let isAddressValidation = false;
+    if (addressInputType) {
+      fields = await getAddressFieldList(addressInputType);
+    }
     const countries = await getCountryList();
     const cities = await getCityList();
     const states = await getStateList();
-    console.log(fields);
+    //MANUALLY类型的地址才去获取是否进行验证的配置
+    if (addressInputType === 'MANUALLY') {
+      isAddressValidation = await getIsAddressValidation();
+    }
     this.setState({
+      addressInputType: addressInputType,
       formFieldList: fields,
       countryList: countries,
       stateList: states.map((t) => ({ id: t.id, name: t.stateName })),
-      cityList: cities
+      cityList: cities,
+      isAddressValidation: isAddressValidation
+    });
+  };
+
+  validateAddress = () => {
+    if (this.state.isAddressValidation) {
+      this.props.form.validateFields((err, fields) => {
+        if (!err) {
+          this.setState({ loading: true });
+          validateAddress({
+            ...fields,
+            deliveryAddress: [fields.address1, fields.address2].join('')
+          })
+            .then((data) => {
+              if (data.res.code === Const.SUCCESS_CODE) {
+                this.setState({
+                  loading: false,
+                  validationModalVisisble: true,
+                  fields: fields,
+                  checkedAddress: 1,
+                  suggestionAddress: data.res.context.suggestionAddress
+                });
+              } else {
+                this.setState({
+                  loading: false
+                });
+              }
+            })
+            .catch(() => {
+              this.setState({
+                loading: false
+              });
+            });
+        }
+      });
+    } else {
+      this.saveAddress();
+    }
+  };
+
+  onChangeCheckedAddress = (checkedAddress: number) => {
+    this.setState({
+      checkedAddress: checkedAddress
+    });
+  };
+
+  onCancelSuggestionModal = () => {
+    this.setState({
+      checkedAddress: 0,
+      validationModalVisisble: false
     });
   };
 
   saveAddress = () => {
     const { delivery, backToDetail } = this.props;
+    const { checkedAddress, suggestionAddress } = this.state;
+    const sugAddr = checkedAddress === 1 ? { province: suggestionAddress.provinceCode, city: suggestionAddress.city, address1: suggestionAddress.address1, address2: suggestionAddress.address2, postCode: suggestionAddress.postalCode } : {};
     this.props.form.validateFields((err, fields) => {
       console.log(fields);
       if (!err) {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
+        const rFields = { ...fields, ...sugAddr };
         handlerFunc({
           ...delivery,
-          ...fields,
+          ...rFields,
           customerId: this.props.customerId,
-          consigneeName: fields.firstName + ' ' + fields.lastName,
-          deliveryAddress: [fields.address1, fields.address2].join(''),
-          isDefaltAddress: 0,
+          consigneeName: rFields.firstName + ' ' + rFields.lastName,
+          deliveryAddress: [rFields.address1, rFields.address2].join(''),
+          isDefaltAddress: delivery.isDefaltAddress || 0,
           type: this.props.addressType.toUpperCase()
         })
           .then((data) => {
             message.success(data.res.message);
+            this.setState({ loading: false, validationModalVisisble: false });
             backToDetail();
           })
           .catch(() => {
@@ -132,7 +202,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
           </Select>
         );
       } else {
-        return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={_.debounce(this.searchCity, 500)} />;
+        return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={_.throttle(this.searchCity, 500)} />;
       }
     }
     const optionList = field.fieldName === 'Country' ? this.state.countryList : field.fieldName === 'State' ? this.state.stateList : [];
@@ -153,8 +223,26 @@ class DeliveryItem extends React.Component<Iprop, any> {
     return null;
   };
 
+  //手机校验
+  comparePhone = (rule, value, callback) => {
+    if (!/^[0-9+-\s]{6,20}$/.test(value)) {
+      callback('Please enter the correct phone');
+    } else {
+      callback();
+    }
+  };
+
+  compareZip = (rule, value, callback) => {
+    if (!/^[0-9]{3,10}$/.test(value)) {
+      callback('Please enter the correct Post Code');
+    } else {
+      callback();
+    }
+  };
+
   render() {
     const { delivery, addressType, backToDetail } = this.props;
+    const { fields, suggestionAddress, checkedAddress } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = (col: number) => ({
       labelCol: {
@@ -181,7 +269,11 @@ class DeliveryItem extends React.Component<Iprop, any> {
                         <Form.Item {...formItemLayout(fieldRow.length)} label={field.fieldName}>
                           {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`, {
                             initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
-                            rules: [{ required: field.requiredFlag === 1, message: `${field.fieldName} is required` }]
+                            rules: [
+                              { required: field.requiredFlag === 1, message: `${field.fieldName} is required` },
+                              { validator: field.fieldName === 'Phone number' ? this.comparePhone : (rule, value, callback) => callback() },
+                              { validator: field.fieldName === 'Post code' ? this.compareZip : (rule, value, callback) => callback() }
+                            ]
                           })(this.renderField(field))}
                         </Form.Item>
                       </Col>
@@ -191,13 +283,37 @@ class DeliveryItem extends React.Component<Iprop, any> {
             </Form>
           </div>
           <div className="bar-button">
-            <Button type="primary" onClick={() => this.saveAddress()}>
+            <Button type="primary" onClick={() => this.validateAddress()}>
               Save
             </Button>
             <Button onClick={() => backToDetail()} style={{ marginLeft: '20px' }}>
               Cancel
             </Button>
           </div>
+          <Modal width={920} title="Verify your address" visible={this.state.validationModalVisisble} confirmLoading={this.state.loading} onCancel={this.onCancelSuggestionModal} onOk={this.saveAddress}>
+            <Alert type="warning" message="We could not verify the address you provided, please confirm or edit your address to ensure prompt delivery." />
+            <Row gutter={32} style={{ marginTop: 20 }}>
+              <Col span={12}>
+                <Radio checked={checkedAddress === 0} onClick={() => this.onChangeCheckedAddress(0)}>
+                  <span className="text-highlight">Original Address</span>
+                  <br />
+                  <span style={{ paddingLeft: 26, wordBreak: 'break-word' }}>{[[fields.address1, fields.address2].join(''), fields.city, fields.state, fields.postCode].filter((fd) => !!fd).join(',')}</span>
+                </Radio>
+                <div style={{ paddingLeft: 10 }}>
+                  <Button type="link" onClick={this.onCancelSuggestionModal}>
+                    Edit
+                  </Button>
+                </div>
+              </Col>
+              <Col span={12}>
+                <Radio checked={checkedAddress === 1} onClick={() => this.onChangeCheckedAddress(1)}>
+                  <span className="text-highlight">Suggested Address</span>
+                  <br />
+                  <span style={{ paddingLeft: 26, wordBreak: 'break-word' }}>{[[suggestionAddress.address1, suggestionAddress.address2].join(''), suggestionAddress.city, suggestionAddress.provinceCode, suggestionAddress.postalCode].filter((fd) => !!fd).join(',')}</span>
+                </Radio>
+              </Col>
+            </Row>
+          </Modal>
         </Spin>
       </div>
     );

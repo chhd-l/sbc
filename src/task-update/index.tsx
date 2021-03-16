@@ -432,6 +432,7 @@ class TaskUpdate extends Component<any, any> {
                         })(
                           editable ? (
                             <Select
+                              allowClear
                               onChange={(value) =>
                                 this.onChange({
                                   field: 'status',
@@ -461,6 +462,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <Select
+                            allowClear
                             disabled={taskCompleted}
                             placeholder="Please input email or name"
                             showSearch
@@ -491,6 +493,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <Select
+                            allowClear
                             disabled={taskCompleted}
                             onChange={(value) =>
                               this.onChange({
@@ -594,6 +597,7 @@ class TaskUpdate extends Component<any, any> {
                               initialValue: task.reminderType ? task.reminderType : ''
                             })(
                               <Select
+                                allowClear
                                 disabled={taskCompleted}
                                 onChange={(value) =>
                                   this.onChange({
@@ -625,6 +629,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <Select
+                            allowClear
                             disabled={taskCompleted}
                             onChange={(value) =>
                               this.onChange({
@@ -655,6 +660,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <Select
+                            allowClear
                             disabled={taskCompleted}
                             placeholder="Please input pet owner account"
                             showSearch
@@ -685,6 +691,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <Select
+                            allowClear
                             disabled={taskCompleted}
                             onChange={(value) =>
                               this.onChange({
@@ -700,7 +707,7 @@ class TaskUpdate extends Component<any, any> {
                             ))}
                           </Select>
                         ) : (
-                          <Link to={{ pathname: `/petowner-details/${task.contactId}/${task.customerAccount}`, query: { hash: 'pets-list' } }}>Pets list</Link>
+                          <Link to={{ pathname: `/petowner-details/${task.contactId}/${task.customerAccount}`, query: { hash: 'pets-list' } }}>{task.petName}</Link>
                         )
                       )}
                     </FormItem>
@@ -714,6 +721,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <Select
+                            allowClear
                             disabled={taskCompleted}
                             onChange={(value) =>
                               this.onChange({
@@ -741,6 +749,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <Select
+                            allowClear
                             disabled={taskCompleted}
                             onChange={(value) =>
                               this.onChange({
@@ -770,6 +779,7 @@ class TaskUpdate extends Component<any, any> {
                       })(
                         editable ? (
                           <Select
+                            allowClear
                             disabled={taskCompleted}
                             onChange={(value) =>
                               this.onChange({

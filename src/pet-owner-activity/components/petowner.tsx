@@ -46,7 +46,21 @@ export default class petowner extends Component<any, any> {
                 </Col>
                 <Col span={18}>
                   <span className="content">
-                    {petOwner.city} , {petOwner.country}
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={
+                        <div>
+                          {petOwner.city} , {petOwner.country}
+                        </div>
+                      }
+                    >
+                      <p style={styles.text}>
+                        {petOwner.city} , {petOwner.country}
+                      </p>
+                    </Tooltip>
                   </span>
                 </Col>
               </Row>

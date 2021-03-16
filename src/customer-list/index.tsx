@@ -26,7 +26,7 @@ export default class Customer extends React.Component<any, any> {
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
-          render: (text, record) => <p>{record.firstName + ' ' + record.lastName}</p>
+          render: (text, record) => <p>{[record.firstName, record.lastName].join(' ')}</p>
         },
         {
           title: 'Pet owner type',

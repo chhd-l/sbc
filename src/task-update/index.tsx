@@ -673,7 +673,7 @@ class TaskUpdate extends Component<any, any> {
                             ))}
                           </Select>
                         ) : (
-                          <Link to={`/customer-details/Member/${id}/${task.customerAccount}`}>{task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''}</Link>
+                          <Link to={`/petowner-details/${task.contactId}/${task.customerAccount}`}>{task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''}</Link>
                         )
                       )}
                     </FormItem>
@@ -700,7 +700,7 @@ class TaskUpdate extends Component<any, any> {
                             ))}
                           </Select>
                         ) : (
-                          <Link to={`/customer-details/Member/${id}/${task.customerAccount}`}>{task.petName}</Link>
+                          <Link to={{ pathname: `/petowner-details/${task.contactId}/${task.customerAccount}`, query: { hash: 'pets-list' } }}>Pets list</Link>
                         )
                       )}
                     </FormItem>

@@ -356,7 +356,7 @@ export default class tasks extends Component<any, any> {
                                   <span className="iconbianzu icon iconfont addTaskIcon" />
                                   Associated Pet
                                 </div>
-                                <Link to={`/customer-details/Member/${this.props.petOwnerId}/${item.customerAccount}`}>{item.associatedPet}</Link>
+                                <Link to={{ pathname: `/petowner-details/${this.props.petOwnerId}/${item.customerAccount}`, query: { hash: 'pets-list' } }}>{item.associatedPet}</Link>
                               </Col>
                               <Col span={12}>
                                 <div className="taskContactLable">

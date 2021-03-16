@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { history, Const } from 'qmkit';
-import { Card, Icon, Row, Col, Pagination, message, Empty } from 'antd';
+import { Card, Icon, Row, Col, Pagination, message, Empty, Tooltip } from 'antd';
 const cat = require('../components/image/cat.png');
 const catFemale = require('../components/image/cat2.png');
 const dog = require('../components/image/dog.png');
@@ -11,8 +11,7 @@ export default class pets extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      petList: [
-      ],
+      petList: [],
       petPagination: {
         total: 0,
         current: 1,
@@ -122,7 +121,7 @@ export default class pets extends Component<any, any> {
           title={
             <div className="title">
               <span>Pets</span>
-              <span className="viewAll" onClick={() => history.push(`/customer-details/Member/${petOwnerId}/${customerAccount}`)}>
+              <span className="viewAll" onClick={() => history.push(`/petowner-details/${petOwnerId}/${customerAccount}`, { query: { hash: 'pets-list' } })}>
                 View All
                 <Icon type="right" />
               </span>
@@ -143,7 +142,17 @@ export default class pets extends Component<any, any> {
                     </div>
                     <span className="ui-lighter">
                       ID:
-                      <span className="content"> {item.petsId || '&nbsp;'}</span>
+                      <span className="content">
+                        <Tooltip
+                          overlayStyle={{
+                            overflowY: 'auto'
+                          }}
+                          placement="bottomLeft"
+                          title={<div> {item.petSourceId}</div>}
+                        >
+                          <p style={styles.text}> {item.petSourceId}</p>
+                        </Tooltip>
+                      </span>
                     </span>
                   </div>
                 </Row>
@@ -169,7 +178,17 @@ export default class pets extends Component<any, any> {
                         <span className="ui-lighter">Breed</span>
                       </Col>
                       <Col span={18}>
-                        <span className="content">{item.petsBreed}</span>
+                        <span className="content">
+                          <Tooltip
+                            overlayStyle={{
+                              overflowY: 'auto'
+                            }}
+                            placement="bottomLeft"
+                            title={<div> {item.petsBreed}</div>}
+                          >
+                            <p style={styles.text}> {item.petsBreed}</p>
+                          </Tooltip>
+                        </span>
                       </Col>
                     </Row>
                   </div>
@@ -198,3 +217,13 @@ export default class pets extends Component<any, any> {
     );
   }
 }
+
+const styles = {
+  text: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 170,
+    display: 'inline-block'
+  }
+};

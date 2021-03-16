@@ -6,7 +6,7 @@ import ItemCommunicationNode from './components/nodes/ItemCommunicationNode';
 import ItemEndNode from './components/nodes/ItemEndNode';
 import ItemIfElseNode from './components/nodes/ItemIfElseNode';
 import ItemOrderNode from './components/nodes/ItemOrderNode';
-import ItemSegmentNode from './components/nodes/ItemTaggingNode';
+import ItemTaggingNode from './components/nodes/ItemTaggingNode';
 import ItemStartNode from './components/nodes/ItemStartNode';
 import ItemTaskNode from './components/nodes/ItemTaskNode';
 import ItemVetCheckUpNode from './components/nodes/ItemVetCheckUpNode';
@@ -15,7 +15,6 @@ import NodeProperties from './components/node-properties/index';
 import { history, Headline } from 'qmkit';
 import * as webapi from './webapi';
 import { Const } from 'qmkit';
-import json from 'web_modules/qmkit/json';
 
 const { TabPane } = Tabs;
 
@@ -30,8 +29,7 @@ export default withPropsAPI(
         },
         currentItem: null,
         activeKey: 'Builder',
-        saveLoading: false,
-        title: 'Canvas'
+        saveLoading: false
       };
       this.handleNodeDoubleClick = this.handleNodeDoubleClick.bind(this);
       this.saveProperties = this.saveProperties.bind(this);
@@ -71,7 +69,7 @@ export default withPropsAPI(
     saveProperties(formData) {
       const { currentItem } = this.state;
       if (currentItem) {
-        let tmpParam = { name: formData.name };
+        let tmpParam = { name: formData.name, eventType: null, templateId: null, conditionDataList: null };
         switch (formData.nodeType) {
           case 'TimeTrigger':
             tmpParam = { ...tmpParam, ...formData.startCampaignTime };
@@ -146,13 +144,14 @@ export default withPropsAPI(
       }
     }
     render() {
-      const { flowdata, activeKey, currentItem, title } = this.state;
+      const { flowdata, activeKey, currentItem } = this.state;
+      const { name } = this.props;
       return (
         <div>
           <div className="container-search">
             <Row>
               <Col span={12}>
-                <Headline title={title} />
+                <Headline title={name} />
               </Col>
               <Col span={12} style={{ textAlign: 'right' }}>
                 <Button type="primary" style={{ marginRight: '10px' }} onClick={() => this.doSave()}>
@@ -206,7 +205,7 @@ export default withPropsAPI(
             <ItemEndNode />
             <ItemIfElseNode />
             <ItemOrderNode />
-            <ItemSegmentNode />
+            <ItemTaggingNode />
             <ItemStartNode />
             <ItemTaskNode />
             <ItemVetCheckUpNode />

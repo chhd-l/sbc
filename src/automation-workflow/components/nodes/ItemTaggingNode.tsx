@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { substringName, getBrowserType, getIcon } from '../common';
 import GGEditor, { Flow, RegisterNode, setAnchorPointsState } from 'gg-editor';
 
-export default class ItemSegmentNode extends Component {
+export default class ItemTaggingNode extends Component {
   render() {
     const config = {
       draw(item) {

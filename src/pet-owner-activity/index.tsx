@@ -90,12 +90,12 @@ export default class PetOwnerActivity extends Component<any, any> {
         <div className="container petOwnerActivity">
           <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <Row gutter={10} style={{ marginBottom: '20px' }}>
-              <Col span={7}>
+              <Col span={6}>
                 <PetOwner petOwner={petOwner} />
                 <div style={{ marginTop: '20px' }}></div>
                 <Pets petOwnerId={id} customerAccount={petOwner.customerAccount} />
               </Col>
-              <Col span={9} id="middle">
+              <Col span={10} id="middle">
                 <Card>
                   <Tabs
                     defaultActiveKey="1"

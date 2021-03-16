@@ -200,11 +200,17 @@ export default class CustomerDetails extends React.Component<any, any> {
     return (
       <>
         <div style={{ display: displayPage === 'detail' ? 'block' : 'none' }}>
-          <BreadCrumb thirdLevel={true}>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <a href="/customer-list">Pet owner</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="/customer-list">Pet owner list</a>
+            </Breadcrumb.Item>
             <Breadcrumb.Item>
               <FormattedMessage id="consumer.consumerDetails" />
             </Breadcrumb.Item>
-          </BreadCrumb>
+          </Breadcrumb>
           {/*导航面包屑*/}
           <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <div className="detail-container">
@@ -400,12 +406,18 @@ export default class CustomerDetails extends React.Component<any, any> {
           </Spin>
         </div>
         <div style={{ display: displayPage === 'delivery' ? 'block' : 'none' }}>
-          <BreadCrumb thirdLevel={true}>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <a href="/customer-list">Pet owner</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="/customer-list">Pet owner list</a>
+            </Breadcrumb.Item>
             <Breadcrumb.Item>
               <FormattedMessage id="consumer.consumerDetails" />
             </Breadcrumb.Item>
             <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
-          </BreadCrumb>
+          </Breadcrumb>
           <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
         </div>
       </>

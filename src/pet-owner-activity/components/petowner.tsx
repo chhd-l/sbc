@@ -8,8 +8,7 @@ export default class petowner extends Component<any, any> {
     super(props);
     this.state = {
       loading: false,
-      allocatedTaggings: [
-      ]
+      allocatedTaggings: []
     };
   }
   render() {
@@ -21,7 +20,7 @@ export default class petowner extends Component<any, any> {
           title={
             <div className="title">
               <span>Pet Owner Overview</span>
-              <span className="viewAll" onClick={() => history.push(`/customer-details/Member/${petOwner.customerId}/${petOwner.customerAccount}`)}>
+              <span className="viewAll" onClick={() => history.push(`/petowner-details/${petOwner.customerId}/${petOwner.customerAccount}`)}>
                 View All
                 <Icon type="right" />
               </span>
@@ -34,7 +33,7 @@ export default class petowner extends Component<any, any> {
                 <span className="contactName">{petOwner.contactName}</span>
               </div>
               <span className="ui-lighter">
-                <span style={{ whiteSpace: 'break-spaces' }}>Pet Owner ID</span>:<span className="content">{petOwner.customerId}</span>
+                <span>Account: {petOwner.customerAccount}</span>
               </span>
             </div>
           </Row>
@@ -101,11 +100,12 @@ export default class petowner extends Component<any, any> {
                 </Col>
                 <Col span={18}>
                   <div className="contactSegments">
-                    {petOwner.segmentList && petOwner.segmentList.map((item) => (
-                      <div className="segment-item" key={item.id}>
-                        {item.name}
-                      </div>
-                    ))}
+                    {petOwner.segmentList &&
+                      petOwner.segmentList.map((item) => (
+                        <div className="segment-item" key={item.id}>
+                          {item.name}
+                        </div>
+                      ))}
                   </div>
                 </Col>
               </Row>
@@ -121,7 +121,7 @@ const styles = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-    width: 200,
+    width: 170,
     display: 'inline-block'
   }
 };

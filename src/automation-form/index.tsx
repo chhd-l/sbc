@@ -116,7 +116,7 @@ class AutomationForm extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'Operation successful');
-          history.push('/automation-workflow/' + res.context.id);
+          history.push('/automation-workflow/' + res.context.id, { name: res.context.name });
         } else {
           this.setState({
             loading: false
@@ -140,7 +140,7 @@ class AutomationForm extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'Operation successful');
-          history.push('/automation-workflow/' + this.state.automationId);
+          history.push('/automation-workflow/' + res.context.id, { name: res.context.name });
           this.setState({
             loading: false
           });

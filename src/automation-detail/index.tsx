@@ -422,7 +422,7 @@ class AutomationDetail extends Component<any, any> {
             >
               Cancle
             </Button>,
-            <Button key="submit" onClick={this.testAutomation}>
+            <Button key="submit" type="primary" onClick={this.testAutomation}>
               Comfirm
             </Button>
           ]}

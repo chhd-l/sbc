@@ -30,7 +30,10 @@ class PetOwnerTagging extends Component<any, any> {
         taggingStatus: 0
       },
       taggingList: [],
-      loading: false
+      loading: false,
+      isDisable: false,
+      isSubmit: false,
+      updateDisableTip: 'The tagging has been associated with pet owner or pet. Please unblind the relationship firstly'
     };
   }
   componentDidMount() {
@@ -189,7 +192,9 @@ class PetOwnerTagging extends Component<any, any> {
       visible: true,
       taggingForm,
       isEdit: false,
-      loading: false
+      loading: false,
+      isDisable: false,
+      isSubmit: false
     });
   };
   openEditPage = (row) => {
@@ -205,11 +210,17 @@ class PetOwnerTagging extends Component<any, any> {
       taggingForm,
       isEdit: true,
       currentEditTagging: row,
-      loading: false
+      loading: false,
+      isDisable: +row.customerNum > 0 ? true : false,
+      isSubmit: false
     });
   };
   handleSubmit = () => {
-    const { taggingForm, isEdit, currentEditTagging } = this.state;
+    const { taggingForm, isEdit, isDisable, currentEditTagging, updateDisableTip } = this.state;
+    if (isDisable) {
+      message.error(updateDisableTip);
+      return;
+    }
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let params = {
@@ -233,7 +244,10 @@ class PetOwnerTagging extends Component<any, any> {
   handleClose = () => {
     this.props.form.resetFields();
     this.setState({
-      visible: false
+      visible: false,
+      isDisable: false,
+      isEdit: false,
+      isSubmit: false
     });
   };
 
@@ -274,7 +288,7 @@ class PetOwnerTagging extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, taggingList, pagination, taggingForm, modalName, visible, isEdit } = this.state;
+    const { loading, title, taggingList, pagination, taggingForm, modalName, visible, isSubmit, isDisable, updateDisableTip } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -431,18 +445,9 @@ class PetOwnerTagging extends Component<any, any> {
               visible={visible}
               confirmLoading={loading}
               maskClosable={false}
-              onCancel={() =>
-                this.setState({
-                  visible: false
-                })
-              }
+              onCancel={this.handleClose}
               footer={[
-                <Button
-                  key="back"
-                  onClick={() => {
-                    this.handleClose();
-                  }}
-                >
+                <Button key="back" onClick={this.handleClose}>
                   Close
                 </Button>,
                 <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
@@ -498,7 +503,6 @@ class PetOwnerTagging extends Component<any, any> {
                     initialValue: +taggingForm.taggingType
                   })(
                     <Radio.Group
-                      disabled={isEdit}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onTaggingFormChange({
@@ -518,6 +522,7 @@ class PetOwnerTagging extends Component<any, any> {
                     initialValue: +taggingForm.taggingStatus
                   })(
                     <Radio.Group
+                      // disabled={isDisable}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onTaggingFormChange({

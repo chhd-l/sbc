@@ -383,11 +383,12 @@ export default {
 
   'order.orderList': 'Order list',
   'order.orderNumber': 'Order number',
+  'order.orderId': 'Order id',
+  'order.subscriptionId': 'Subscription id',
   'order.subscriptioNumber': 'Subscription number',
   'order.shippingStatus': 'Shipping status',
   'order.paymentStatus': 'Payment status',
   'order.orderStatus': 'Order status',
-  'order.createBy':'Create By',
   'order.orderSource': 'Order source',
   'order.startDate': 'Start date',
   'order.endDate': 'End date',

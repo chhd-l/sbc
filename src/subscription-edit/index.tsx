@@ -77,7 +77,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       completedOrder: [],
       visibleDate: false,
       currentOrder: {},
-      currencySymbol: ''
+      currencySymbol: '',
+      currentDateId: ''
 
       // operationLog: []
     };
@@ -131,7 +132,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           }
 
           let goodsInfo = subscriptionDetail.goodsInfo;
-          let paymentInfo = subscriptionDetail.paymentInfo;
+          let paymentInfo = subscriptionDetail.payPaymentInfo;
 
           let subscribeNumArr = [];
           let periodTypeArr = [];
@@ -540,7 +541,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   disabledStartDate = (endValue) => {
     let date = new Date(sessionStorage.getItem('defaultLocalDateTime'));
-    date.setDate(date.getDate() + 3);
+    //date.setDate(date.getDate() + 3);
     return endValue.valueOf() <= date.valueOf();
   };
   defaultValue = (nextDeliveryTime) => {
@@ -708,6 +709,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   handleVisibleDateChange = (record) => {
     const { visibleDate } = this.state;
     this.setState({
+      currentDateId: record.tradeItems[0].skuId,
       visibleDate: !visibleDate,
       currentOrder: record
     });
@@ -738,7 +740,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       noStartOrder,
       completedOrder,
       currentOrder,
-      currencySymbol
+      currencySymbol,
+      currentDateId,
+      visibleDate
       // operationLog
     } = this.state;
     const menu = (
@@ -926,7 +930,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             );
           }}
           disabledDate={this.disabledStartDate}
-          defaultValue={currentOrder && currentOrder.tradeState && currentOrder.tradeState.createTime ? moment(currentOrder.tradeState.createTime) : moment()}
+          defaultValue={currentOrder && currentOrder.tradeItems[0] && currentOrder.tradeItems[0].nextDeliveryTime ? moment(currentOrder.tradeItems[0].nextDeliveryTime) : moment()}
           onSelect={this.updateNextDeliveryTime}
         />
       </div>
@@ -993,7 +997,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
         key: 'shipmentDate',
         width: '10%',
-        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+        render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
         title: 'Operation',
@@ -1002,7 +1006,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
-            <Popover content={content} trigger="click" visible={this.state.visibleDate} onVisibleChange={() => this.handleVisibleDateChange(record)}>
+            <Popover content={content} trigger="click" visible={visibleDate && currentDateId === record.tradeItems[0].skuId} onVisibleChange={() => this.handleVisibleDateChange(record)}>
               <Tooltip placement="top" title="Select Date">
                 <a style={styles.edit} className="iconfont icondata"></a>
               </Tooltip>
@@ -1077,7 +1081,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         width: '10%',
-        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+        render: (text, record) => <div>{record.tradeItems[0] && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Order status</span>,
@@ -1286,11 +1290,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}>Payment Method: </p>
-                    <p>{paymentInfo ? paymentInfo.paymentType : ''}</p>
+                    <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Card Number: </p>
-                    <p>{paymentInfo && paymentInfo.payuPaymentMethod ? '**** **** **** ' + paymentInfo.payuPaymentMethod.last_4_digits : paymentInfo && paymentInfo.adyenPaymentMethod ? '**** **** **** ' + paymentInfo.adyenPaymentMethod.lastFour : ''}</p>
+                    <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
                   </Col>
                 </Row>
               </Col>

@@ -51,10 +51,8 @@ export default class ProductOverView extends Component<any, any> {
   };
   componentDidMount() {
     this.setState({
-      beginDate: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
-        .subtract(7, 'days')
-        .format('YYYY-MM-DD'),
-      endDate: sessionStorage.getItem(cache.CURRENT_YEAR)
+      beginDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days').format('YYYY-MM-DD'),
+      endDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').format('YYYY-MM-DD')
     });
   }
 
@@ -113,7 +111,7 @@ export default class ProductOverView extends Component<any, any> {
                   <RangePicker
                     onChange={(e) => this.datePickerChange(e)}
                     disabledDate={this.disabledDate}
-                    defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]}
+                    defaultValue={[moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days'), moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD')]}
                     format={'YYYY-MM-DD'}
                   />
                 </Form.Item>

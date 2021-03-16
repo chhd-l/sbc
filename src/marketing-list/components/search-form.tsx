@@ -46,7 +46,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8">
             <FormItem>
               <Input
-                addonBefore="Automation name"
+                addonBefore="Campaign name"
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -84,7 +84,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <SelectGroup
                 getPopupContainer={() => document.getElementById('page-content')}
-                label="Automation Type"
+                label="Campaign Type"
                 // style={{ width: 160 }}
                 defaultValue="All"
                 onChange={(value) => {
@@ -105,6 +105,22 @@ export default class SearchForm extends React.Component<any, any> {
               </SelectGroup>
             </FormItem>
           </Col>{' '}
+        </Row>
+        <Row id="input-lable-wwidth">
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore="Promotion code"
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'promotionCode',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
           <Col span="8">
             <FormItem>
               <DatePicker
@@ -135,7 +151,9 @@ export default class SearchForm extends React.Component<any, any> {
               />
             </FormItem>
           </Col>
-          <Col span="8">
+        </Row>
+        <Row id="input-lable-wwidth">
+          <Col span="24" style={{ textAlign: 'center' }}>
             <FormItem>
               <Button
                 type="primary"

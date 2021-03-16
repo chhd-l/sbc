@@ -235,7 +235,6 @@ class GoodsForm extends React.Component<any, any> {
       filterList
     });
   }
-
   render() {
     const { getFieldDecorator } = this.props.form;
     const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter, purchaseTypeList, frequencyList } = this.props.relaxProps;
@@ -283,6 +282,11 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     }
+
+    setTimeout(() => {
+      console.log(goods.get('displayFlag'), 1111111111);
+    });
+
     return (
       <Form>
         <Row type="flex" justify="start">
@@ -399,11 +403,11 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
                 // initialValue: 'Y'
-                initialValue: goods.get('subscriptionStatus') === 0 || goods.get('subscriptionStatus') == null ? 'N' : 'Y'
+                initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') == 0 ? goods.get('subscriptionStatus') : 1
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
-                  <Option value="1">Y</Option>
-                  <Option value="0">N</Option>
+                <Select getPopupContainer={() => document.getElementById('page-content')} disabled={goods.get('displayFlag') == 0 ? true : false} placeholder="please select status">
+                  <Option value={1}>Y</Option>
+                  <Option value={0}>N</Option>
                 </Select>
               )}
             </FormItem>
@@ -627,8 +631,8 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     min: 1,
-                    max: 225,
-                    message: '1-225 characters'
+                    max: 600,
+                    message: '1-600 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -638,7 +642,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsNewSubtitle'),
                 initialValue: goods.get('goodsNewSubtitle')
-              })(<Input placeholder="Please input the item card intro., no more than 225 words" />)}
+              })(<Input placeholder="Please input the item card intro., no more than 600 words" />)}
             </FormItem>
           </Col>
         </Row>
@@ -662,8 +666,8 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     min: 1,
-                    max: 225,
-                    message: '1-225 characters'
+                    max: 600,
+                    message: '1-600 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -673,7 +677,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(<Input placeholder="Please input the item subtitle, no more than 225 words" />)}
+              })(<Input placeholder="Please input the item subtitle, no more than 600 words" />)}
             </FormItem>
           </Col>
         </Row>
@@ -971,6 +975,7 @@ class GoodsForm extends React.Component<any, any> {
       });
     });
     const storeCateIds = originValues;
+    console.log(storeCateIds.toJS(), 'storeCateIds---------------');
     const goods = Map({
       ['storeCateIds']: storeCateIds
     });
@@ -1069,6 +1074,7 @@ class GoodsForm extends React.Component<any, any> {
    * @param storeCateList
    */
   generateStoreCateTree = (storeCateList) => {
+    const { sourceStoreCateList } = this.props.relaxProps;
     return (
       storeCateList &&
       storeCateList.map((item) => {

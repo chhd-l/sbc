@@ -109,6 +109,14 @@ export default class AppStore extends Store {
     }
     this.init();
   };
+
+  download = async (marketingId) => {
+    // const { res } = await webapi.close(marketingId);
+    // if (res.code == Const.SUCCESS_CODE) {
+    //   message.success('download successful');
+    // }
+    message.success('download successful');
+  };
   onStart = async (marketingId) => {
     const { res } = await webapi.start(marketingId);
     if (res.code == Const.SUCCESS_CODE) {

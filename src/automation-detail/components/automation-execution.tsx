@@ -253,7 +253,7 @@ class AutomationExecution extends Component<any, any> {
         title: 'Execution time',
         dataIndex: 'executionTime',
         width: '20%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
         title: 'Communication item',
@@ -325,19 +325,19 @@ class AutomationExecution extends Component<any, any> {
         title: 'Send time',
         dataIndex: 'sendTime',
         width: '15%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
         title: 'Delivered time',
         dataIndex: 'deliveredTime',
         width: '15%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
-        title: 'openedTime',
+        title: 'Opened time',
         dataIndex: 'openedTime',
         width: '15%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       }
     ];
 
@@ -346,13 +346,13 @@ class AutomationExecution extends Component<any, any> {
         title: 'Start time',
         dataIndex: 'startTime',
         width: '20%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
         title: 'End time',
         dataIndex: 'endTime',
         width: '20%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
         title: 'Status',

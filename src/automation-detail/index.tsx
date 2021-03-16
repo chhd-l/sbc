@@ -20,6 +20,7 @@ import ItemTaskNode from '@/automation-workflow/components/nodes/ItemTaskNode';
 import ItemVetCheckUpNode from '@/automation-workflow/components/nodes/ItemVetCheckUpNode';
 import ItemWaitNode from '@/automation-workflow/components/nodes/ItemWaitNode';
 import _ from 'lodash';
+import moment from 'moment';
 
 const ButtonGroup = Button.Group;
 const { TabPane } = Tabs;
@@ -352,16 +353,16 @@ class AutomationDetail extends Component<any, any> {
                       {automationDetail.automationOwner}
                     </Descriptions.Item>
                     <Descriptions.Item label="Event start time" span={1.5}>
-                      {automationDetail.eventStartTime}
+                      {automationDetail.eventStartTime ? moment(automationDetail.eventStartTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
                     <Descriptions.Item label="Event end time" span={1.5}>
-                      {automationDetail.eventEndTime}
+                      {automationDetail.eventEndTime ? moment(automationDetail.eventEndTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
                     <Descriptions.Item label="Tracking start time" span={1.5}>
-                      {automationDetail.trackingStartTime}
+                      {automationDetail.trackingStartTime ? moment(automationDetail.trackingStartTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
                     <Descriptions.Item label="Tracking end time" span={1.5}>
-                      {automationDetail.trackingEndTime}
+                      {automationDetail.trackingEndTime ? moment(automationDetail.trackingEndTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
                   </Descriptions>
                   <Card title={'Workflow'} headStyle={{ padding: 0 }} bordered={false}>
@@ -400,7 +401,7 @@ class AutomationDetail extends Component<any, any> {
                   <PetOwnerCommunication automationId={automationId} />
                 </TabPane>
                 <TabPane tab="Audit Log" key="3">
-                  <AuditLog />
+                  <AuditLog automationId={automationId} />
                 </TabPane>
               </Tabs>
             </Card>

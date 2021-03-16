@@ -42,24 +42,38 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                   <td colSpan={7}>
                     <div style={styles.orderCon}>
                       <span style={styles.orderId}>432143213243</span>
-                      <span style={styles.orderTime}>Subscription time: 2020-07-10</span>
+                      <span style={styles.orderTime}>
+                        <FormattedMessage id="PetOwner.SubscriptionTime" />: 2020-07-10
+                      </span>
                     </div>
                   </td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ width: '40%' }}>images</td>
-                  <td style={{ width: '20%' }}>TomTTT</td>
-                  <td style={{ width: '20%' }}>Every 4 Weeks</td>
+                  <td style={{ width: '40%' }}>
+                    <FormattedMessage id="PetOwner.images" />
+                  </td>
+                  <td style={{ width: '20%' }}>
+                    <FormattedMessage id="PetOwner.TomTTT" />
+                  </td>
+                  <td style={{ width: '20%' }}>
+                    <FormattedMessage id="PetOwner.Every4Weeks" />
+                  </td>
                   <td rowSpan={2} style={{ width: '20%' }}>
-                    Active
+                    <FormattedMessage id="PetOwner.Active" />
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ width: '40%' }}>images</td>
-                  <td style={{ width: '20%' }}>TomTTT</td>
-                  <td style={{ width: '20%' }}>Every 4 Weeks</td>
+                  <td style={{ width: '40%' }}>
+                    <FormattedMessage id="PetOwner.images" />
+                  </td>
+                  <td style={{ width: '20%' }}>
+                    <FormattedMessage id="PetOwner.TomTTT" />
+                  </td>
+                  <td style={{ width: '20%' }}>
+                    <FormattedMessage id="PetOwner.Every4Weeks" />
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -80,10 +94,18 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '40%' }}>Product</th>
-                      <th style={{ width: '20%' }}>Product name</th>
-                      <th style={{ width: '20%' }}>Frequency</th>
-                      <th style={{ width: '20%' }}>Subscription status</th>
+                      <th style={{ width: '40%' }}>
+                        <FormattedMessage id="PetOwner.Product" />
+                      </th>
+                      <th style={{ width: '20%' }}>
+                        <FormattedMessage id="PetOwner.ProductName" />
+                      </th>
+                      <th style={{ width: '20%' }}>
+                        <FormattedMessage id="PetOwner.Frequency" />
+                      </th>
+                      <th style={{ width: '20%' }}>
+                        <FormattedMessage id="PetOwner.SubscriptionStatus" />
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList)}</tbody>
@@ -93,7 +115,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="PetOwner.noData" />
                   </span>
                 </div>
               ) : null}

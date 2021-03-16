@@ -3,6 +3,7 @@ import { Form, Input, Select, Spin, Breadcrumb, Row, Col, Button } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, BreadCrumb } from 'qmkit';
 import { getCountryList } from './webapi';
+import { FormattedMessage } from 'react-intl';
 
 const { Option } = Select;
 
@@ -59,55 +60,57 @@ class DeliveryItem extends React.Component<Iprop, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Detail</Breadcrumb.Item>
-          <Breadcrumb.Item>{delivery.id ? 'Edit delivery information' : 'Add delivery information'}</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="PetOwner.Detail" />
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>{delivery.id ? <FormattedMessage id="PetOwner.EditDeliveryInformation" /> : <FormattedMessage id="PetOwner.AddDeliveryInformation" />}</Breadcrumb.Item>
         </BreadCrumb>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
           <div className="container-search">
-            <Headline title={delivery.id ? 'Edit delivery information' : 'Add delivery information'} />
+            <Headline title={delivery.id ? <FormattedMessage id="PetOwner.EditDeliveryInformation" /> : <FormattedMessage id="PetOwner.AddDeliveryInformation" />} />
             <Form {...formItemLayout}>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="First name">
+                  <Form.Item label={<FormattedMessage id="PetOwner.FirstName" />}>
                     {getFieldDecorator('firstName', {
                       initialValue: delivery.firstName,
-                      rules: [{ required: true, message: 'First name is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.FirstNameIsRequired" /> }]
                     })(<Input />)}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="Last name">
+                  <Form.Item label={<FormattedMessage id="PetOwner.LastName" />}>
                     {getFieldDecorator('lastName', {
                       initialValue: delivery.lastName,
-                      rules: [{ required: true, message: 'Last name is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.LastNameIsRequired" /> }]
                     })(<Input />)}
                   </Form.Item>
                 </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="Phone number">
+                  <Form.Item label={<FormattedMessage id="PetOwner.PhoneNumber" />}>
                     {getFieldDecorator('consigneeNumber', {
                       initialValue: delivery.consigneeNumber,
-                      rules: [{ required: true, message: 'Phone number is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.PhoneNumberIsRequired" /> }]
                     })(<Input />)}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="Post code">
+                  <Form.Item label={<FormattedMessage id="PetOwner.PostCode" />}>
                     {getFieldDecorator('postCode', {
                       initialValue: delivery.postCode,
-                      rules: [{ required: true, message: 'Post code is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.PostCodeIsRequired" /> }]
                     })(<Input />)}
                   </Form.Item>
                 </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="Country">
+                  <Form.Item label={<FormattedMessage id="PetOwner.Country" />}>
                     {getFieldDecorator('countryId', {
                       initialValue: delivery.countryId,
-                      rules: [{ required: true, message: 'Country is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.CountryIsRequired" /> }]
                     })(
                       <Select>
                         {this.state.countryList.map((item) => (
@@ -120,25 +123,25 @@ class DeliveryItem extends React.Component<Iprop, any> {
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="City">
+                  <Form.Item label={<FormattedMessage id="PetOwner.City" />}>
                     {getFieldDecorator('cityId', {
                       initialValue: delivery.cityId,
-                      rules: [{ required: true, message: 'City is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.CityIsRequired" /> }]
                     })(<Input />)}
                   </Form.Item>
                 </Col>
               </Row>
               <Row gutter={12}>
                 <Col span={12}>
-                  <Form.Item label="Address 1">
+                  <Form.Item label={<FormattedMessage id="PetOwner.Address1" />}>
                     {getFieldDecorator('address1', {
                       initialValue: delivery.address1,
-                      rules: [{ required: true, message: 'Address is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="PetOwner.AddressIsRequired" /> }]
                     })(<Input />)}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="Address 2">
+                  <Form.Item label={<FormattedMessage id="PetOwner.Address2" />}>
                     {getFieldDecorator('address2', {
                       initialValue: delivery.address2
                     })(<Input />)}
@@ -147,7 +150,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="Reference">
+                  <Form.Item label={<FormattedMessage id="PetOwner.Reference" />}>
                     {getFieldDecorator('rfc', {
                       initialValue: delivery.rfc
                     })(<Input />)}
@@ -156,8 +159,12 @@ class DeliveryItem extends React.Component<Iprop, any> {
               </Row>
             </Form>
             <div>
-              <Button type="primary">Save</Button>
-              <Button>Cancel</Button>
+              <Button type="primary">
+                <FormattedMessage id="PetOwner.Save" />
+              </Button>
+              <Button>
+                <FormattedMessage id="PetOwner.Cancel" />
+              </Button>
             </div>
           </div>
         </Spin>

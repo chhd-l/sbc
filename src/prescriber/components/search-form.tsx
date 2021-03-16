@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Select, Input, Button } from 'antd';
 import { SelectGroup, AreaSelect, noop, Const } from 'qmkit';
 import * as webapi from '../webapi';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -87,7 +88,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <SelectGroup
-            label="Prescriber city"
+            label={<FormattedMessage id="Prescriber.PrescriberCity" />}
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -97,9 +98,15 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="">All</Option>
-            <Option value="0">Mexico City</Option>
-            <Option value="1">Monterrey</Option>
+            <Option value="">
+              <FormattedMessage id="Prescriber.All" />
+            </Option>
+            <Option value="0">
+              <FormattedMessage id="Prescriber.MexicoCity" />
+            </Option>
+            <Option value="1">
+              <FormattedMessage id="Prescriber.Monterrey" />
+            </Option>
           </SelectGroup>
         </FormItem>
 
@@ -118,7 +125,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <SelectGroup
-            label="Prescriber type"
+            label={<FormattedMessage id="Prescriber.PrescriberType" />}
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -128,9 +135,15 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="">All</Option>
-            <Option value="0">Mexico City</Option>
-            <Option value="1">Monterrey</Option>
+            <Option value="">
+              <FormattedMessage id="Prescriber.All" />
+            </Option>
+            <Option value="0">
+              <FormattedMessage id="Prescriber.MexicoCity" />
+            </Option>
+            <Option value="1">
+              <FormattedMessage id="Prescriber.Monterrey" />
+            </Option>
           </SelectGroup>
         </FormItem>
 
@@ -145,7 +158,7 @@ export default class SearchForm extends React.Component<any, any> {
               this.onSearch();
             }}
           >
-            Search
+            <FormattedMessage id="Prescriber.Search" />
           </Button>
         </FormItem>
       </Form>

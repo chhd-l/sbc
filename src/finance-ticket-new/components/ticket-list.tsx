@@ -38,18 +38,11 @@ export default class TicketList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      dataList,
-      total,
-      pageSize,
-      init,
-      current
-    } = this.props.relaxProps;
+    const { loading, dataList, total, pageSize, init, current } = this.props.relaxProps;
 
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         rowKey="projectId"
         pagination={{
           pageSize,
@@ -61,16 +54,8 @@ export default class TicketList extends React.Component<any, any> {
         }}
         dataSource={dataList.toJS()}
       >
-        <Column
-          title={<FormattedMessage id="billingItems" />}
-          dataIndex="projectName"
-          key="ticket"
-        />
-        <Column
-          title={<FormattedMessage id="operation" />}
-          key="action"
-          render={(rowInfo) => this._renderOperate(rowInfo)}
-        />
+        <Column title={<FormattedMessage id="Finance.billingItems" />} dataIndex="projectName" key="ticket" />
+        <Column title={<FormattedMessage id="Finance.operation" />} key="action" render={(rowInfo) => this._renderOperate(rowInfo)} />
       </DataGrid>
     );
   }
@@ -84,18 +69,14 @@ export default class TicketList extends React.Component<any, any> {
       return (
         <span>
           <AuthWrapper functionName="editFinaceTicket">
-            <a
-              style={{ marginRight: '5px' }}
-              href="#"
-              onClick={() => onEdit(rowInfo.projectId)}
-            >
-              {<FormattedMessage id="edit" />}
+            <a style={{ marginRight: '5px' }} href="#" onClick={() => onEdit(rowInfo.projectId)}>
+              {<FormattedMessage id="Finance.edit" />}
             </a>
           </AuthWrapper>
           <span className="ant-divider" />
           <AuthWrapper functionName="deleteFinaceTicket">
             <a href="#" onClick={() => this._handleDelete(rowInfo.projectId)}>
-              {<FormattedMessage id="delete" />}
+              {<FormattedMessage id="Finance.delete" />}
             </a>
           </AuthWrapper>
         </span>

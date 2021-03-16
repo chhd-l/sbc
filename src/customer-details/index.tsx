@@ -64,7 +64,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code && res.code !== Const.SUCCESS_CODE) {
-          message.error(res.message || 'Get basic information failed');
+          message.error(res.message || <FormattedMessage id="PetOwner.GetBasicInformationFailed" />);
         } else {
           this.setState({
             basic: {
@@ -82,7 +82,7 @@ export default class CustomerDetails extends React.Component<any, any> {
         }
       })
       .catch((err) => {
-        message.error(err || 'Get basic information failed');
+        message.error(err || <FormattedMessage id="PetOwner.GetBasicInformationFailed" />);
       });
   };
 
@@ -111,7 +111,7 @@ export default class CustomerDetails extends React.Component<any, any> {
   showConfirm(id) {
     const that = this;
     confirm({
-      title: 'Are you sure to delete this item?',
+      title: <FormattedMessage id="PetOwner.deleteThisItem" />,
       onOk() {
         return that.removeConsumer(id);
       },
@@ -133,17 +133,17 @@ export default class CustomerDetails extends React.Component<any, any> {
       .delCustomer(params)
       .then((data) => {
         if (data.res.code === 'K-000000') {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="PetOwner.OperateSuccessfully" />);
           history.push('/customer-list');
         } else {
-          message.error(data.res.message || 'Unsuccessful');
+          message.error(data.res.message || <FormattedMessage id="PetOwner.Unsuccessful" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
+        message.error(err.message || <FormattedMessage id="PetOwner.Unsuccessful" />);
         this.setState({
           loading: false
         });
@@ -163,7 +163,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       <div>
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
-            <FormattedMessage id="consumer.consumerDetails" />
+            <FormattedMessage id="PetOwner.consumerDetails" />
           </Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
@@ -172,27 +172,27 @@ export default class CustomerDetails extends React.Component<any, any> {
             <div>
               <div className="detail-container">
                 <div className="text-align-right">
-                  <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => this.removeConsumer(this.state.customerId)} okText="Confirm" cancelText="Cancel">
+                  <Popconfirm placement="topRight" title={<FormattedMessage id="PetOwner.removeThisItem" />} onConfirm={() => this.removeConsumer(this.state.customerId)} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
                     <Button type="link">
-                      <FormattedMessage id="consumer.removeConsumer" />
+                      <FormattedMessage id="PetOwner.removeConsumer" />
                     </Button>
                   </Popconfirm>
                 </div>
                 <Headline
-                  title="Basic information"
+                  title={<FormattedMessage id="PetOwner.BasicInformation" />}
                   extra={
                     <Link to={`/edit-customer-basicinfo/${this.state.customerId}`}>
-                      <i className="iconfont iconEdit"></i> Edit
+                      <i className="iconfont iconEdit"></i> <FormattedMessage id="PetOwner.Edit" />
                     </Link>
                   }
                 />
                 <div style={{ margin: '20px 0' }}>
                   <Row className="text-tip">
                     <Col span="4">
-                      <Icon type="user" /> Name
+                      <Icon type="user" /> <FormattedMessage id="PetOwner.Name" />
                     </Col>
                     <Col span="4">
-                      <Icon type="calendar" /> Age
+                      <Icon type="calendar" /> <FormattedMessage id="PetOwner.Age" />
                     </Col>
                   </Row>
                   <Row className="text-highlight" style={{ marginTop: 5 }}>
@@ -203,13 +203,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <div className="basic-info-detail">
                   <Row type="flex" align="middle">
                     <Col span="4" className="text-tip">
-                      Registration date
+                      <FormattedMessage id="PetOwner.RegistrationDate" />
                     </Col>
                     <Col span="6" className="text-highlight">
                       {basic.createTime}
                     </Col>
                     <Col span="4" className="text-tip">
-                      Email address
+                      <FormattedMessage id="PetOwner.EmailAddress" />
                     </Col>
                     <Col span="6" className="text-highlight">
                       {basic.email}
@@ -217,13 +217,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </Row>
                   <Row type="flex" align="middle">
                     <Col span="4" className="text-tip">
-                      Phone number
+                      <FormattedMessage id="PetOwner.PhoneNumber" />
                     </Col>
                     <Col span="6" className="text-highlight">
                       {basic.contactPhone}
                     </Col>
                     <Col span="4" className="text-tip">
-                      Prefer channel
+                      <FormattedMessage id="PetOwner.PreferChannel" />
                     </Col>
                     <Col span="6" className="text-highlight">
                       {basic.preferredMethods}
@@ -231,13 +231,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </Row>
                   <Row type="flex" align="middle">
                     <Col span="4" className="text-tip">
-                      Country
+                      <FormattedMessage id="PetOwner.Country" />
                     </Col>
                     <Col span="6" className="text-highlight">
                       {basic.country}
                     </Col>
                     <Col span="4" className="text-tip">
-                      Address reference
+                      <FormattedMessage id="PetOwner.AddressReference" />
                     </Col>
                     <Col span="6" className="text-highlight">
                       {basic.address}
@@ -245,7 +245,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </Row>
                   <Row type="flex" align="middle">
                     <Col span="4" className="text-tip">
-                      Consent
+                      <FormattedMessage id="PetOwner.Consent" />
                     </Col>
                     <Col span="6" className="text-highlight">
                       {basic.consent}
@@ -254,17 +254,17 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </div>
               </div>
               <div className="detail-container">
-                <Headline title="Segment" />
+                <Headline title={<FormattedMessage id="PetOwner.Segment" />} />
                 <Row>
                   <Col span={20}>
                     <Form layout="vertical">
-                      <FormItem label="Tag name">
+                      <FormItem label={<FormattedMessage id="PetOwner.TagName" />}>
                         <Select mode="multiple">
                           <Option key="1" value="a">
-                            Active User
+                            <FormattedMessage id="PetOwner.ActiveUser" />
                           </Option>
                           <Option key="2" value="b">
-                            Student
+                            <FormattedMessage id="PetOwner.Student" />
                           </Option>
                         </Select>
                       </FormItem>
@@ -273,16 +273,16 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </Row>
               </div>
               <div className="detail-container">
-                <Headline title="Pet information" />
+                <Headline title={<FormattedMessage id="PetOwner.PetInformation" />} />
                 <Card style={{ width: 350 }} bodyStyle={{ padding: '10px 20px' }}>
                   <div className="text-align-right">
-                    <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
+                    <Popconfirm placement="topRight" title={<FormattedMessage id="PetOwner.removeThisItem" />} onConfirm={() => {}} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
                       <Button type="link">
-                        <span className="iconfont iconDelete"></span> Delete
+                        <span className="iconfont iconDelete"></span> <FormattedMessage id="PetOwner.Delete" />
                       </Button>
                     </Popconfirm>
                     <Link to={`/edit-customer-pet/${1}`}>
-                      <span className="iconfont iconEdit"></span> Edit
+                      <span className="iconfont iconEdit"></span> <FormattedMessage id="PetOwner.Edit" />
                     </Link>
                   </div>
                   <Row gutter={10}>
@@ -292,16 +292,26 @@ export default class CustomerDetails extends React.Component<any, any> {
                     <Col span={18}>
                       <Row>
                         <Col span={24}>
-                          <div className="text-highlight">Hanhan</div>
+                          <div className="text-highlight">
+                            <FormattedMessage id="PetOwner.Hanhan" />
+                          </div>
                         </Col>
                       </Row>
                       <Row className="text-tip">
-                        <Col span={12}>Age</Col>
-                        <Col span={12}>Breed</Col>
+                        <Col span={12}>
+                          <FormattedMessage id="PetOwner.Age" />
+                        </Col>
+                        <Col span={12}>
+                          <FormattedMessage id="PetOwner.Breed" />
+                        </Col>
                       </Row>
                       <Row style={{ fontSize: 16 }}>
-                        <Col span={12}>9 months</Col>
-                        <Col span={12}>Weimaranger</Col>
+                        <Col span={12}>
+                          9 <FormattedMessage id="PetOwner.months" />
+                        </Col>
+                        <Col span={12}>
+                          <FormattedMessage id="PetOwner.Weimaranger" />
+                        </Col>
                       </Row>
                     </Col>
                   </Row>
@@ -312,21 +322,21 @@ export default class CustomerDetails extends React.Component<any, any> {
           <div className="container">
             {this.state.customerType !== 'Guest' ? (
               <div>
-                <Headline title="Other information" extra={<RangePicker defaultValue={[moment(), moment()]} onChange={this.handleChangeDateRange} />} />
+                <Headline title={<FormattedMessage id="PetOwner.OtherInformation" />} extra={<RangePicker defaultValue={[moment(), moment()]} onChange={this.handleChangeDateRange} />} />
                 <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
-                  <TabPane tab="Order information" key="order">
+                  <TabPane tab={<FormattedMessage id="PetOwner.OrderInformation" />} key="order">
                     <OrderInformation startDate={startDate} endDate={endDate} />
                   </TabPane>
-                  <TabPane tab="Subscription information" key="subscrib">
+                  <TabPane tab={<FormattedMessage id="PetOwner.SubscriptionInformation" />} key="subscrib">
                     <SubscribInformation startDate={startDate} endDate={endDate} />
                   </TabPane>
-                  <TabPane tab="Prescriber information" key="prescrib">
+                  <TabPane tab={<FormattedMessage id="PetOwner.PrescriberInformation" />} key="prescrib">
                     <PrescribInformation startDate={startDate} endDate={endDate} />
                   </TabPane>
-                  <TabPane tab="Delivery information" key="delivery">
+                  <TabPane tab={<FormattedMessage id="PetOwner.DeliveryInformation" />} key="delivery">
                     <DeliveryList startDate={startDate} endDate={endDate} />
                   </TabPane>
-                  <TabPane tab="Payment methods" key="payment">
+                  <TabPane tab={<FormattedMessage id="PetOwner.PaymentMethods" />} key="payment">
                     <PaymentList startDate={startDate} endDate={endDate} />
                   </TabPane>
                   {/* <TabPane tab="Basic infomation" key="basic">
@@ -348,10 +358,10 @@ export default class CustomerDetails extends React.Component<any, any> {
               </div>
             ) : (
               <Tabs defaultActiveKey="delivery" onChange={this.clickTabs}>
-                <TabPane tab="Delivery infomation" key="vistor-delivery">
+                <TabPane tab={<FormattedMessage id="PetOwner.DeliveryInfomation" />} key="vistor-delivery">
                   <DeliveryInformation customerId={this.state.customerId} customerType="Guest"></DeliveryInformation>
                 </TabPane>
-                <TabPane tab="Billing infomation" key="vistor-billing">
+                <TabPane tab={<FormattedMessage id="PetOwner.BillingInfomation" />} key="vistor-billing">
                   <BillingInfomation customerId={this.state.customerId} customerType="Guest"></BillingInfomation>
                 </TabPane>
               </Tabs>

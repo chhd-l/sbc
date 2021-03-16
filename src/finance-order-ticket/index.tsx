@@ -45,7 +45,7 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
             <Breadcrumb.Item>订单开票</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title={<FormattedMessage id="orderInvoice" />} />
+            <Headline title={<FormattedMessage id="Finance.orderInvoice" />} />
             <SearchForm />
             <ButtonGroup />
             <OrderInvoiceList />

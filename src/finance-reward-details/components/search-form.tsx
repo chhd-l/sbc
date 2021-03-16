@@ -112,14 +112,14 @@ export default class SearchForm extends React.Component<any, any> {
             }}
           >
             <span>
-              <FormattedMessage id="search" />
+              <FormattedMessage id="Finance.search" />
             </span>
           </Button>
         </FormItem>
         <FormItem>
           <AuthWrapper functionName={'rewardDetailListExport'}>
             <div style={{ paddingBottom: '16px' }}>
-              <Button onClick={() => bulkExport()}>{<FormattedMessage id="bulkExport" />}</Button>
+              <Button onClick={() => bulkExport()}>{<FormattedMessage id="Finance.bulkExport" />}</Button>
             </div>
           </AuthWrapper>
           {/*<Button
@@ -154,7 +154,7 @@ export default class SearchForm extends React.Component<any, any> {
     } else {
       this.setState({
         pickOpen: true,
-        pickErrorInfo: 'The start time and end time should be within three months'
+        pickErrorInfo: <FormattedMessage id="Finance.TheStartTime" />
       });
     }
   };

@@ -28,7 +28,7 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
             <Breadcrumb.Item>开票项目</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title={<FormattedMessage id="billingItems" />} />
+            <Headline title={<FormattedMessage id="Finance.billingItems" />} />
 
             {/*开票类型*/}
             <Info />
@@ -36,7 +36,7 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
             <AuthWrapper functionName="editFinaceTicket">
               <div className="handle-bar">
                 <Button type="primary" onClick={() => this.store.onAdd()}>
-                  {<FormattedMessage id="add" />}
+                  {<FormattedMessage id="Finance.add" />}
                 </Button>
               </div>
             </AuthWrapper>

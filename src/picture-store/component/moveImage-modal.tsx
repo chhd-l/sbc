@@ -5,6 +5,7 @@ import { Relax, Store } from 'plume2';
 import { noop } from 'qmkit';
 import { List } from 'immutable';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { FormattedMessage } from 'react-intl';
 declare type IList = List<any>;
 
 const TreeNode = Tree.TreeNode;
@@ -54,13 +55,7 @@ export default class MoveImageModal extends React.Component<any, any> {
     }
     const WrapperForm = this.WrapperForm;
     return (
-      <Modal
-        maskClosable={false}
-        title="Moving Picture"
-        visible={moveVisible}
-        onCancel={this._handleCancel}
-        onOk={this._handleOk}
-      >
+      <Modal maskClosable={false} title={<FormattedMessage id="Setting.MovingPicture" />} visible={moveVisible} onCancel={this._handleCancel} onOk={this._handleOk}>
         <WrapperForm ref={(form) => (this._form = form)} />
       </Modal>
     );
@@ -120,42 +115,23 @@ class MoveImageForm extends React.Component<any, any> {
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              value={item.get('cateId').toString()}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} value={item.get('cateId').toString()} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId').toString()}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId').toString()} title={item.get('cateName')} />;
       });
 
     return (
       <Form>
-        <FormItem
-          {...formItemLayout}
-          label="Choose Category"
-          required={true}
-          hasFeedback
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.ChooseCategory" />} required={true} hasFeedback>
           {getFieldDecorator('cateId', {
-            rules: [{ required: true, message: 'Please select a type' }]
+            rules: [{ required: true, message: <FormattedMessage id="Setting.PleaseSelectAType" /> }]
           })(
             <TreeSelect
               showSearch
-              filterTreeNode={(input, treeNode) =>
-                treeNode.props.title
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) >= 0
-              }
+              filterTreeNode={(input, treeNode) => treeNode.props.title.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               style={{ width: 300 }}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
               placeholder="Please select a type"

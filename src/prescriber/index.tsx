@@ -112,7 +112,7 @@ export default class ClinicList extends Component<any, any> {
       id: id
     });
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     }
   };
@@ -120,7 +120,7 @@ export default class ClinicList extends Component<any, any> {
     // message.info('API under development');
     const { res } = await webapi.enableAndDisable(id);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     }
   };
@@ -189,7 +189,7 @@ export default class ClinicList extends Component<any, any> {
           const exportHref = Const.HOST + `/prescriber/exportPrescriber/${encrypted}`;
           window.open(exportHref);
         } else {
-          message.error('Unsuccessful');
+          message.error(<FormattedMessage id="Prescriber.Unsuccessful" />);
         }
 
         resolve();
@@ -200,7 +200,7 @@ export default class ClinicList extends Component<any, any> {
   showConfirm(id) {
     const that = this;
     confirm({
-      title: 'Are you sure to delete this item?',
+      title: <FormattedMessage id="Prescriber.deleteThisItem" />,
       onOk() {
         return that.delClinic(id);
       },

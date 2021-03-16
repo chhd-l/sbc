@@ -494,10 +494,10 @@ export default class ProductSearchList extends React.Component<any, any> {
                 this.onTabChange(key);
               }}
             >
-              <TabPane tab="All" key="1">
+              <TabPane tab={<FormattedMessage id="Product.All" />} key="1">
                 <Table rowKey="id" columns={columnsAll} dataSource={allSerchResults} pagination={allPagination} scroll={{ x: '100%' }} onChange={this.allTableChange} />
               </TabPane>
-              <TabPane tab="No results searches" key="2">
+              <TabPane tab={<FormattedMessage id="Product.NoResultsSearches" />} key="2">
                 <Table rowKey="id" columns={columnsNoResult} dataSource={noSearchResult} pagination={noResultPagination} loading={noResultLoading} scroll={{ x: '100%' }} onChange={this.noResultTableChange} />
               </TabPane>
             </Tabs>

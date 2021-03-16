@@ -33,7 +33,7 @@ export default class TransactionReport extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Transaction',
+      title: <FormattedMessage id="Analysis.Transaction" />,
       loading: true,
       overviewList: [],
       subscriptionList: [],
@@ -423,7 +423,7 @@ export default class TransactionReport extends Component<any, any> {
           const exportHref = Const.HOST + `/digitalStrategy/transactionReportPage/export/${encrypted}`;
           window.open(exportHref);
         } else {
-          message.error('Unsuccessful');
+          message.error(<FormattedMessage id="Analysis.Unsuccessful" />);
         }
 
         resolve();
@@ -436,34 +436,34 @@ export default class TransactionReport extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Date',
+        title: <FormattedMessage id="Analysis.Date" />,
         dataIndex: 'date',
         key: 'date'
       },
       {
-        title: 'Sales volume',
+        title: <FormattedMessage id="Analysis.SalesVolume" />,
         dataIndex: 'salesVolume',
         key: 'salesVolume'
       },
       {
-        title: 'Revenue',
+        title: <FormattedMessage id="Analysis.Revenue" />,
         dataIndex: 'revenue',
         key: 'revenue',
         render: (revenue) => <span>{revenue != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + revenue.toFixed(2) : null}</span>
       },
       {
-        title: 'Average basket',
+        title: <FormattedMessage id="Analysis.AverageBasket" />,
         dataIndex: 'averageBasket',
         key: 'averageBasket',
         render: (averageBasket) => <span>{averageBasket != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + averageBasket.toFixed(2) : null}</span>
       },
       {
-        title: 'Units sold',
+        title: <FormattedMessage id="Analysis.UnitsSold" />,
         dataIndex: 'unitsSold',
         key: 'unitsSold'
       },
       {
-        title: 'Consumers',
+        title: <FormattedMessage id="Analysis.Consumers" />,
         dataIndex: 'consumers',
         key: 'consumers'
       }
@@ -483,7 +483,9 @@ export default class TransactionReport extends Component<any, any> {
               }
             />
             <div>
-              <h4 style={styles.blodFont}>Sales Overview</h4>
+              <h4 style={styles.blodFont}>
+                <FormattedMessage id="Analysis.SalesOverview" />
+              </h4>
               <div className="data-statistics-transaction" style={{ width: 1200 }}>
                 {overviewList &&
                   overviewList.map((item, index) => (
@@ -515,7 +517,9 @@ export default class TransactionReport extends Component<any, any> {
             </div>
 
             <div style={styles.itemDisplay}>
-              <h4 style={styles.blodFont}>Subscription</h4>
+              <h4 style={styles.blodFont}>
+                <FormattedMessage id="Analysis.Subscription" />
+              </h4>
               <div className="data-statistics-transaction">
                 {subscriptionList &&
                   subscriptionList.map((item, index) => (
@@ -555,13 +559,21 @@ export default class TransactionReport extends Component<any, any> {
 
           <div className="container-search">
             <Headline
-              title={<p style={styles.blodFont}>Transaction trend</p>}
+              title={
+                <p style={styles.blodFont}>
+                  <FormattedMessage id="Analysis.TransactionTrend" />
+                </p>
+              }
               // title= "Transaction trend"
               extra={
                 <div>
                   <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
-                    <Option value="Week trend">Week trend</Option>
-                    <Option value="Day trend">Day trend</Option>
+                    <Option value="Week trend">
+                      <FormattedMessage id="Analysis.WeekTrend" />
+                    </Option>
+                    <Option value="Day trend">
+                      <FormattedMessage id="Analysis.DayTrend" />
+                    </Option>
                   </Select>
                 </div>
               }
@@ -571,12 +583,18 @@ export default class TransactionReport extends Component<any, any> {
 
           <div className="container-search">
             <Headline
-              title={<p style={styles.blodFont}>Transaction report</p>}
+              title={
+                <p style={styles.blodFont}>
+                  <FormattedMessage id="Analysis.TransactionReport" />
+                </p>
+              }
               // title="Transaction report"
               extra={
                 <AuthWrapper functionName="f_export_transaction_data">
                   <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
-                    <span style={{ color: '#ffffff' }}>Download the report</span>
+                    <span style={{ color: '#ffffff' }}>
+                      <FormattedMessage id="Analysis.DownloadTheReport" />
+                    </span>
                   </Button>
                 </AuthWrapper>
               }

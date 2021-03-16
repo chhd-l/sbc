@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, Popconfirm } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 interface Iprop {
   startDate: string;
@@ -41,37 +42,37 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     const { list, pagination } = this.state;
     const columns = [
       {
-        title: 'Receiver name',
+        title: <FormattedMessage id="PetOwner.ReceiverName" />,
         dataIndex: 'name',
         key: 'name'
       },
       {
-        title: 'Phone number',
+        title: <FormattedMessage id="PetOwner.PhoneNumber" />,
         dataIndex: 'phone',
         key: 'phone'
       },
       {
-        title: 'Post code',
+        title: <FormattedMessage id="PetOwner.PostCode" />,
         dataIndex: 'postcode',
         key: 'postcode'
       },
       {
-        title: 'Address',
+        title: <FormattedMessage id="PetOwner.Address" />,
         dataIndex: 'address',
         key: 'address'
       },
       {
-        title: 'Reference',
+        title: <FormattedMessage id="PetOwner.Reference" />,
         dataIndex: 'reference',
         key: 'reference'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="PetOwner.Operation" />,
         key: 'oper',
         render: (_, record) => (
           <div>
             <a className="iconfont iconEdit" style={{ marginRight: 10 }}></a>
-            <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
+            <Popconfirm placement="topRight" title={<FormattedMessage id="PetOwner.deleteThisItem" />} onConfirm={() => {}} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
               <a className="iconfont iconDelete"></a>
             </Popconfirm>
           </div>

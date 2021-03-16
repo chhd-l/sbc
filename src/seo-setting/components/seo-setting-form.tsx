@@ -58,11 +58,11 @@ export default class SeoSettingForm extends Component<any, any> {
       <div>
         {loading ? (
           <div className="spin-container">
-            <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+            <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
           </div>
         ) : null}
         <Form {...formItemLayout} className="login-form">
-          <Form.Item label="Title">
+          <Form.Item label={<FormattedMessage id="Setting.Title" />}>
             {getFieldDecorator('title', {
               initialValue: seoObj.title
             })(
@@ -77,7 +77,7 @@ export default class SeoSettingForm extends Component<any, any> {
               />
             )}
           </Form.Item>
-          <Form.Item label="Meta Keywords">
+          <Form.Item label={<FormattedMessage id="Setting.MetaKeywords" />}>
             {getFieldDecorator('metaKeywords', {
               initialValue: seoObj.metaKeywords
             })(
@@ -93,7 +93,7 @@ export default class SeoSettingForm extends Component<any, any> {
               />
             )}
           </Form.Item>
-          <Form.Item label="Meta Description">
+          <Form.Item label={<FormattedMessage id="Setting.MetaDescription" />}>
             {getFieldDecorator('description', {
               initialValue: seoObj.description
             })(

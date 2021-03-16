@@ -33,7 +33,7 @@ export default class TrafficReport extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Traffic',
+      title: <FormattedMessage id="Analysis.Traffic" />,
       loading: true,
       overviewList: [],
       // productTrafficList: [
@@ -245,17 +245,17 @@ export default class TrafficReport extends Component<any, any> {
         let context = res.context;
         let overviewList = [
           {
-            name: 'Page view',
+            name: <FormattedMessage id="Analysis.PageView" />,
             value: context.pageView,
             rate: context.pageViewQoQ
           },
           {
-            name: 'Traffic',
+            name: <FormattedMessage id="Analysis.Traffic" />,
             value: context.traffic,
             rate: context.trafficQoQ
           },
           {
-            name: 'Vet traffic',
+            name: <FormattedMessage id="Analysis.VetTraffic" />,
             value: context.vetTraffic,
             rate: context.vetTrafficQoQ
           }
@@ -357,7 +357,7 @@ export default class TrafficReport extends Component<any, any> {
           const exportHref = Const.HOST + `/digitalStrategy/trafficReportPage/export/${encrypted}`;
           window.open(exportHref);
         } else {
-          message.error('Unsuccessful');
+          message.error(<FormattedMessage id="Analysis.Unsuccessful" />);
         }
 
         resolve();
@@ -377,17 +377,17 @@ export default class TrafficReport extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Date',
+        title: <FormattedMessage id="Analysis.Date" />,
         dataIndex: 'date',
         key: 'date'
       },
       {
-        title: 'Traffic',
+        title: <FormattedMessage id="Analysis.Traffic" />,
         dataIndex: 'traffic',
         key: 'traffic'
       },
       {
-        title: 'Page view',
+        title: <FormattedMessage id="Analysis.PageView" />,
         dataIndex: 'pageView',
         key: 'pageView'
       }
@@ -428,7 +428,9 @@ export default class TrafficReport extends Component<any, any> {
               }
             />
             <div>
-              <h4 style={styles.blodFont}>Overview</h4>
+              <h4 style={styles.blodFont}>
+                <FormattedMessage id="Analysis.Overview" />
+              </h4>
               <div className="data-statistics-traffic" style={{ width: 1200 }}>
                 {overviewList &&
                   overviewList.map((item, index) => (
@@ -519,12 +521,20 @@ export default class TrafficReport extends Component<any, any> {
           <div className="container-search">
             <Headline
               // title= {"Traffic trend"}
-              title={<p style={styles.blodFont}>Traffic trend</p>}
+              title={
+                <p style={styles.blodFont}>
+                  <FormattedMessage id="Analysis.TrafficTrend" />
+                </p>
+              }
               extra={
                 <div>
                   <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
-                    <Option value="Week trend">Week trend</Option>
-                    <Option value="Day trend">Day trend</Option>
+                    <Option value="Week trend">
+                      <FormattedMessage id="Analysis.WeekTrend" />
+                    </Option>
+                    <Option value="Day trend">
+                      <FormattedMessage id="Analysis.DayTrend" />
+                    </Option>
                   </Select>
                 </div>
               }
@@ -534,13 +544,19 @@ export default class TrafficReport extends Component<any, any> {
 
           <div className="container-search">
             <Headline
-              title={<p style={styles.blodFont}>Traffic report</p>}
+              title={
+                <p style={styles.blodFont}>
+                  <FormattedMessage id="Analysis.TrafficReport" />
+                </p>
+              }
               // title="Traffic report"
               extra={
                 <div>
                   <AuthWrapper functionName="f_export_traffic_data">
                     <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
-                      <span style={{ color: '#ffffff' }}>Download the report</span>
+                      <span style={{ color: '#ffffff' }}>
+                        <FormattedMessage id="Analysis.DownloadTheReport" />
+                      </span>
                     </Button>
                   </AuthWrapper>
                 </div>

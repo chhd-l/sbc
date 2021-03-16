@@ -944,6 +944,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
           <FormItem {...formItemLayout} required={true} labelAlign="left">
             <Input
               style={{ width: 300 }}
+              defaultValue={marketingBean.get('emailSuffixList') ? marketingBean.get('emailSuffixList').toJS()[0] : null}
               onChange={(e) => {
                 const emailSuffixList = [e.target.value];
                 this.onBeanChange({ emailSuffixList });
@@ -1255,14 +1256,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
       if (!marketingBean.get('emailSuffixList') || marketingBean.get('emailSuffixList').length === 0) {
         errorObject['joinLevel'] = {
           value: null,
-          errors: [new Error('Please enter email.')]
-        };
-      } else if (!ValidConst.email.test(marketingBean.get('emailSuffixList').toJS()[0])) {
-        errorObject['joinLevel'] = {
-          value: null,
-          errors: [new Error('Please enter correct email.')]
+          errors: [new Error('Please enter email suffix.')]
         };
       }
+      // else if (!ValidConst.email.test(marketingBean.get('emailSuffixList').toJS()[0])) {
+      //   errorObject['joinLevel'] = {
+      //     value: null,
+      //     errors: [new Error('Please enter correct email.')]
+      //   };
+      // }
     }
     if (this.state.promotionCode) {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
@@ -1280,6 +1282,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
           //组装营销类型
           marketingBean = marketingBean.set('marketingType', marketingType); //.set('scopeType', 1);
 
+          if (!marketingBean.get('joinLevel')) {
+            marketingBean = marketingBean.set('joinLevel', -1); //.set('scopeType', 1);
+          }
+          if (!marketingBean.get('scopeType')) {
+            marketingBean = marketingBean.set('scopeType', 0); //.set('scopeType', 1);
+          }
           //商品已经选择 + 时间已经选择 => 判断  同类型的营销活动下，商品是否重复
           if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
             // webapi

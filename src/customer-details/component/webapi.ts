@@ -9,10 +9,33 @@ type TResult = {
 };
 
 /**
+ *
+ * @returns 获取地址输入类型
+ */
+export async function getAddressInputTypeSetting() {
+  return await Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      configType: 'address_input_type'
+    })
+  })
+    .then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE && data.res.context && data.res.context.length > 0) {
+        return data.res.context.findIndex((ad) => ad.configKey === 'address_input_type_manually' && ad.context === '1') > -1 ? 'MANUALLY' : 'AUTOMATICALLY';
+      } else {
+        return '';
+      }
+    })
+    .catch(() => {
+      return '';
+    });
+}
+
+/**
  * 获取地址form的排列设置
  * @returns
  */
-export async function getAddressFieldList() {
+export async function getAddressFieldList(type: string = 'MANUALLY') {
   return await Fetch<TResult>('/addressDisplaySetting/queryByStoreId', {
     method: 'GET'
   })

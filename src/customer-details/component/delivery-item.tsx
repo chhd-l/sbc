@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete, Modal, Alert, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, cache, Const } from 'qmkit';
-import { getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress } from './webapi';
+import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress } from './webapi';
 import { updateAddress, addAddress } from '../webapi';
 import _ from 'lodash';
 
@@ -57,6 +57,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       stateList: [],
       cityList: [],
       searchCityList: [],
+      addressInputType: '',
       isAddressValidation: false,
       validationModalVisisble: false,
       checkedAddress: 0,
@@ -70,12 +71,21 @@ class DeliveryItem extends React.Component<Iprop, any> {
   }
 
   getDics = async () => {
-    const fields = await getAddressFieldList();
+    const addressInputType = await getAddressInputTypeSetting();
+    let fields = [];
+    let isAddressValidation = false;
+    if (addressInputType) {
+      fields = await getAddressFieldList(addressInputType);
+    }
     const countries = await getCountryList();
     const cities = await getCityList();
     const states = await getStateList();
-    const isAddressValidation = await getIsAddressValidation();
+    //MANUALLY类型的地址才去获取是否进行验证的配置
+    if (addressInputType === 'MANUALLY') {
+      isAddressValidation = await getIsAddressValidation();
+    }
     this.setState({
+      addressInputType: addressInputType,
       formFieldList: fields,
       countryList: countries,
       stateList: states.map((t) => ({ id: t.id, name: t.stateName })),

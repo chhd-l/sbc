@@ -26,7 +26,7 @@ export default class Customer extends React.Component<any, any> {
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
-          render: (text, record) => <p>{record.firstName + ' ' + record.lastName}</p>
+          render: (text, record) => <p>{[record.firstName, record.lastName].join(' ')}</p>
         },
         {
           title: 'Pet owner type',
@@ -280,17 +280,13 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>客户列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="consumerList" />} />
+            <Headline title="Pet owner list" />
             <Form className="filter-content" layout="inline">
               <Row>
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={
-                        <p style={styles.label}>
-                          <FormattedMessage id="consumerAccount" />
-                        </p>
-                      }
+                      addonBefore={<p style={styles.label}>Pet owner account</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -304,11 +300,7 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={
-                        <p style={styles.label}>
-                          <FormattedMessage id="consumerName" />
-                        </p>
-                      }
+                      addonBefore={<p style={styles.label}>Pet owner name</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -390,13 +382,14 @@ export default class Customer extends React.Component<any, any> {
                         this.onFormChange({ field: 'subscriptionType', value });
                       }}
                     >
+                      <TreeNode value="club" title="Club" key="club">
+                        <TreeNode value="cat" title="Cat" key="cat" />
+                        <TreeNode value="dog" title="Dog" key="dog" />
+                      </TreeNode>
                       <TreeNode value="Product" title="Product" key="product">
-                        <TreeNode value="Food dispenser" title="Food dispenser" key="food" />
+                        <TreeNode value="food dispenser" title="Food dispenser" key="food" />
                       </TreeNode>
-                      <TreeNode value="Pet" title="Pet" key="pet">
-                        <TreeNode value="Club" title="Club" key="club" />
-                      </TreeNode>
-                      <TreeNode value="Normal" title="Normal" key="normal" />
+                      <TreeNode value="autoship" title="Autoship" key="autoship" />
                     </TreeSelectGroup>
                   </FormItem>
                 </Col>

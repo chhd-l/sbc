@@ -9,11 +9,34 @@ type TResult = {
 };
 
 /**
+ *
+ * @returns 获取地址输入类型
+ */
+export async function getAddressInputTypeSetting() {
+  return await Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      configType: 'address_input_type'
+    })
+  })
+    .then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE && data.res.context && data.res.context.length > 0) {
+        return data.res.context.findIndex((ad) => ad.configKey === 'address_input_type_manually' && ad.context === '1') > -1 ? 'MANUALLY' : 'AUTOMATICALLY';
+      } else {
+        return '';
+      }
+    })
+    .catch(() => {
+      return '';
+    });
+}
+
+/**
  * 获取地址form的排列设置
  * @returns
  */
-export async function getAddressFieldList() {
-  return await Fetch<TResult>('/addressDisplaySetting/queryByStoreId', {
+export async function getAddressFieldList(type: string = 'MANUALLY') {
+  return await Fetch<TResult>('/addressDisplaySetting/queryByStoreId/' + type, {
     method: 'GET'
   })
     .then((data) => {
@@ -35,6 +58,42 @@ export async function getAddressFieldList() {
     .catch(() => {
       return [];
     });
+}
+
+/**
+ * 获取是否进行地址验证的设置
+ * @returns
+ */
+export async function getIsAddressValidation() {
+  return await Fetch<TResult>('/addressApiSetting/queryByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({})
+  })
+    .then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        return data.res.context.addressApiSettings.findIndex((item) => item.isCustom === 0 && item.isOpen === 1) > -1;
+      } else {
+        return false;
+      }
+    })
+    .catch(() => {
+      return false;
+    });
+}
+
+/**
+ * 获取地址验证的结果
+ * @param params
+ * @returns
+ */
+export function validateAddress(params = {}) {
+  return Fetch<TResult>('/addressValidation/validation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
+    })
+  });
 }
 
 /**

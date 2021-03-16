@@ -313,12 +313,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     //this.onBeanChange({publicStatus: 1});
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        {/*<FormItem {...formItemLayout} label="Promotion type:">*/}
-        {/*  <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>*/}
-        {/*    <Radio value={0}>Normal promotion</Radio>*/}
-        {/*    <Radio value={1}>Subscription promotion</Radio>*/}
-        {/*  </Radio.Group>*/}
-        {/*</FormItem>*/}
         <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>
@@ -854,22 +848,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
         <div className="bold-title">Select products:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
           {getFieldDecorator('scopeType', {
-            // rules: [
-            //   { required: true, message: 'Amount must be entered' },
-            //   {
-            //     validator: (_rule, value, callback) => {
-            //       if (value) {
-            //         if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-            //           callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
-            //         }
-            //       }
-            //       callback();
-            //     }
-            //   }
-            // ],
             initialValue: marketingBean.get('scopeType') ? marketingBean.get('scopeType') : 0
           })(
-            <Radio.Group onChange={(e) => this.scopeTypeOnChange(e.target.value)}>
+            <Radio.Group onChange={(e) => this.scopeTypeOnChange(e.target.value)} value={marketingBean.get('scopeType')}>
               <Radio value={0}>All</Radio>
               <Radio value={2}>Category</Radio>
               <Radio value={1}>Custom</Radio>
@@ -877,27 +858,30 @@ export default class MarketingAddForm extends React.Component<any, any> {
           )}
         </FormItem>
         {marketingBean.get('scopeType') === 2 && (
-          <FormItem {...formItemLayout}>
-            <TreeSelect
-              id="storeCateIds"
-              defaultValue={storeCateValues}
-              getPopupContainer={() => document.getElementById('page-content')}
-              treeCheckable={true}
-              showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-              treeCheckStrictly={true}
-              //treeData ={getGoodsCate}
-              // showCheckedStrategy = {SHOW_PARENT}
-              placeholder="Please select category"
-              notFoundContent="No sales category"
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              showSearch={false}
-              onChange={this.storeCateChange}
-              style={{ width: 500 }}
-              treeDefaultExpandAll
-            >
-              {this.generateStoreCateTree(storeCateList)}
-            </TreeSelect>
-          </FormItem>
+          <>
+            <FormItem {...formItemLayout}>
+              <TreeSelect
+                id="storeCateIds"
+                defaultValue={storeCateValues}
+                getPopupContainer={() => document.getElementById('page-content')}
+                treeCheckable={true}
+                showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                treeCheckStrictly={true}
+                //treeData ={getGoodsCate}
+                // showCheckedStrategy = {SHOW_PARENT}
+                placeholder="Please select category"
+                notFoundContent="No sales category"
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                showSearch={false}
+                onChange={this.storeCateChange}
+                style={{ width: 500 }}
+                treeDefaultExpandAll
+              >
+                {this.generateStoreCateTree(storeCateList)}
+              </TreeSelect>
+            </FormItem>
+            <FormItem {...formItemLayout}>{getFieldDecorator('storeCateIds', {})(<span></span>)}</FormItem>
+          </>
         )}
         {marketingBean.get('scopeType') === 1 ? (
           <FormItem {...formItemLayout} required={true}>
@@ -922,10 +906,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
           })(
             <div>
               <RadioGroup
-                // onChange={(e) => {
-                //   this.levelRadioChange(e.target.value);
-                // }}
-                // value={level._allCustomer ? -1 : 0}
                 onChange={(e) => {
                   this.targetCustomerRadioChange(e.target.value);
                 }}
@@ -1021,9 +1001,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
           PromotionTypeValue: subType === 6 || subType === 7 ? 1 : 0
         },
         () => {
-          this.setState({
-            PromotionTypeChecked: this.state.PromotionTypeValue === 1 ? true : false
-          });
+          if (marketingBean.get('marketingId')) {
+            this.setState({
+              PromotionTypeChecked: marketingBean.get('publicStatus') == 1
+            });
+          } else {
+            this.setState({
+              PromotionTypeChecked: this.state.PromotionTypeValue === 1 ? true : false
+            });
+          }
+
           if (subType === 6) {
             let bean = marketingBean.get('fullReductionLevelList') ? marketingBean.get('fullReductionLevelList').toJS() : null;
             if (bean && this.state.PromotionTypeValue === 1) {
@@ -1244,7 +1231,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
     //判断选择商品
     if (selectedSkuIds.length > 0) {
-      debugger;
       marketingBean = marketingBean.set('skuIds', fromJS(selectedSkuIds));
     } else {
       if (marketingBean.get('scopeType') === 1) {
@@ -1253,13 +1239,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
           errors: [new Error('Please select the product to be marketed')]
         };
       } else if (marketingBean.get('scopeType') === 2 && (!marketingBean.get('storeCateIds') || marketingBean.get('storeCateIds').size === 0)) {
-        errorObject['scopeType'] = {
+        errorObject['storeCateIds'] = {
           value: null,
           errors: [new Error('Please select category')]
         };
       }
     }
-    if (marketingBean.get('joinLevel') == -3 && (!marketingBean.get('segmentIds') || marketingBean.get('segmentIds').length === 0)) {
+    if (marketingBean.get('joinLevel') == -3 && (!marketingBean.get('segmentIds') || marketingBean.get('segmentIds').size === 0)) {
       errorObject['joinLevel'] = {
         value: null,
         errors: [new Error('Please select group.')]
@@ -1315,7 +1301,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
               );
               let obj = {
                 firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') / 10,
-                restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10
+                restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10,
+                subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
+                subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
               };
 
               marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
@@ -1323,7 +1311,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
             } else {
               let obj = {
                 firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
-                restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
+                restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction'),
+                subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
+                subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
               };
               marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
               this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));

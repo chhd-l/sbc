@@ -272,25 +272,25 @@ class PetOwnerCommunication extends Component<any, any> {
         title: 'Send time',
         dataIndex: 'sendTime',
         width: '15%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
         title: 'Execution time',
         dataIndex: 'executionTime',
         width: '15%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
         title: 'Delivered time',
         dataIndex: 'deliveredTime',
         width: '15%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
-        title: 'openedTime',
+        title: 'Opened time',
         dataIndex: 'openedTime',
         width: '15%',
-        render: (text) => <p>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</p>
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       }
     ];
 

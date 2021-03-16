@@ -664,36 +664,36 @@ export default class MarketingAddForm extends React.Component<any, any> {
                       <span>&nbsp;of orginal price,&nbsp;</span>
                     </FormItem>
 
-                    <FormItem>
-                      <span>&nbsp;discount limit&nbsp;&nbsp;</span>
-                      {getFieldDecorator('subscriptionFirstLimit', {
-                        rules: [
-                          // { required: true, message: 'Must enter rules' },
-                          {
-                            validator: (_rule, value, callback) => {
-                              if (value) {
-                                if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                                  callback('1-9999');
-                                }
-                              }
-                              callback();
-                            }
-                            // callback();
-                          }
-                        ],
-                        initialValue: marketingBean.get('subscriptionFirstLimit')
-                      })(
-                        <Input
-                          style={{ width: 100 }}
-                          title={'1-9999'}
-                          placeholder={'1-9999'}
-                          onChange={(e) => {
-                            this.onBeanChange({ subscriptionFirstLimit: e.target.value });
-                          }}
-                        />
-                      )}
-                      &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                    </FormItem>
+                    {/*<FormItem>*/}
+                    {/*  <span>&nbsp;discount limit&nbsp;&nbsp;</span>*/}
+                    {/*  {getFieldDecorator('subscriptionFirstLimit', {*/}
+                    {/*    rules: [*/}
+                    {/*      // { required: true, message: 'Must enter rules' },*/}
+                    {/*      {*/}
+                    {/*        validator: (_rule, value, callback) => {*/}
+                    {/*          if (value) {*/}
+                    {/*            if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {*/}
+                    {/*              callback('1-9999');*/}
+                    {/*            }*/}
+                    {/*          }*/}
+                    {/*          callback();*/}
+                    {/*        }*/}
+                    {/*        // callback();*/}
+                    {/*      }*/}
+                    {/*    ],*/}
+                    {/*    initialValue: marketingBean.get('subscriptionFirstLimit')*/}
+                    {/*  })(*/}
+                    {/*    <Input*/}
+                    {/*      style={{ width: 100 }}*/}
+                    {/*      title={'1-9999'}*/}
+                    {/*      placeholder={'1-9999'}*/}
+                    {/*      onChange={(e) => {*/}
+                    {/*        this.onBeanChange({ subscriptionFirstLimit: e.target.value });*/}
+                    {/*      }}*/}
+                    {/*    />*/}
+                    {/*  )}*/}
+                    {/*  &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}*/}
+                    {/*</FormItem>*/}
                   </div>
                 )
               )}
@@ -811,36 +811,36 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 )}
                 <span>&nbsp;of orginal price,&nbsp;</span>
               </FormItem>
-              <FormItem>
-                <span>&nbsp;discount limit&nbsp;&nbsp;</span>
-                {getFieldDecorator('subscriptionRestLimit', {
-                  rules: [
-                    // { required: true, message: 'Must enter rules' },
-                    {
-                      validator: (_rule, value, callback) => {
-                        if (value) {
-                          if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                            callback('1-9999');
-                          }
-                        }
-                        callback();
-                      }
-                      // callback();
-                    }
-                  ],
-                  initialValue: marketingBean.get('subscriptionRestLimit')
-                })(
-                  <Input
-                    style={{ width: 100 }}
-                    title={'1-9999'}
-                    placeholder={'1-9999'}
-                    onChange={(e) => {
-                      this.onBeanChange({ subscriptionRestLimit: e.target.value });
-                    }}
-                  />
-                )}
-                &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              </FormItem>
+              {/*<FormItem>*/}
+              {/*  <span>&nbsp;discount limit&nbsp;&nbsp;</span>*/}
+              {/*  {getFieldDecorator('subscriptionRestLimit', {*/}
+              {/*    rules: [*/}
+              {/*      // { required: true, message: 'Must enter rules' },*/}
+              {/*      {*/}
+              {/*        validator: (_rule, value, callback) => {*/}
+              {/*          if (value) {*/}
+              {/*            if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {*/}
+              {/*              callback('1-9999');*/}
+              {/*            }*/}
+              {/*          }*/}
+              {/*          callback();*/}
+              {/*        }*/}
+              {/*        // callback();*/}
+              {/*      }*/}
+              {/*    ],*/}
+              {/*    initialValue: marketingBean.get('subscriptionRestLimit')*/}
+              {/*  })(*/}
+              {/*    <Input*/}
+              {/*      style={{ width: 100 }}*/}
+              {/*      title={'1-9999'}*/}
+              {/*      placeholder={'1-9999'}*/}
+              {/*      onChange={(e) => {*/}
+              {/*        this.onBeanChange({ subscriptionRestLimit: e.target.value });*/}
+              {/*      }}*/}
+              {/*    />*/}
+              {/*  )}*/}
+              {/*  &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}*/}
+              {/*</FormItem>*/}
             </div>
           </FormItem>
         )}

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Row, Col, Form, Input, Select } from 'antd';
-
-const { Option } = Select;
 import { getCustomerDetails } from '../webapi';
+const { Option } = Select;
+let timeout;
+let currentValue;
 class ConsumerInformation extends React.Component<any, any> {
   state = {
     customerId: '',
@@ -23,12 +24,29 @@ class ConsumerInformation extends React.Component<any, any> {
     });
   };
   onSearch = async (value) => {
-    const { res } = await getCustomerDetails({ keywords: value });
-    this.setState({
-      customerList: res.context
-    });
+    if (value) {
+      this.fetch(value, (data) => {
+        this.setState({
+          customerList: data
+        });
+      });
+    } else {
+      this.setState({ customerList: [] });
+    }
   };
+  fetch(value, callback) {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    currentValue = value;
+    async function fake(value) {
+      const { res } = await getCustomerDetails({ keywords: value });
+      callback(res.context);
+    }
 
+    timeout = setTimeout(fake, 300);
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -59,7 +77,7 @@ class ConsumerInformation extends React.Component<any, any> {
                   }
                 ]
               })(
-                <Select showSearch value={this.state.value} placeholder={this.props.placeholder} style={this.props.style} defaultActiveFirstOption={false} showArrow={false} filterOption={false} onSearch={this.onSearch} onChange={this.onChange} notFoundContent={null}>
+                <Select showSearch value={this.state.value} placeholder={this.props.placeholder} style={this.props.style} defaultActiveFirstOption={false} filterOption={false} onSearch={this.onSearch} onChange={this.onChange} notFoundContent={null}>
                   {options}
                 </Select>
               )}

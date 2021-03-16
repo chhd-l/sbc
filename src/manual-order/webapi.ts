@@ -19,46 +19,49 @@ export function getCustomerDetails(filterParams = {}) {
   });
 }
 
-export function getNavigationById(id) {
-  return Fetch<TResult>('/navigation/' + id, {
-    method: 'GET'
-  });
-}
-
-export function addNavigation(filterParams) {
-  return Fetch<TResult>('/navigation', {
+export function getGoodsSKUS(filterParams) {
+  return Fetch<TResult>('/goods/skus', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })
   });
 }
-
-export function updateNavigation(filterParams) {
-  return Fetch<TResult>('/navigation/' + filterParams.id, {
+//添加商品到购物车
+export function addGoodsIntoCarts(store_id, filterParams) {
+  return Fetch<TResult>(`/store/${store_id}/carts`, {
+    method: 'POST',
+    body: JSON.stringify({ ...filterParams })
+  });
+}
+//查询购物车商品
+export function getGoodsInfoCarts(store_id, cunstomer_id) {
+  return Fetch<TResult>(`/store/${store_id}/${cunstomer_id}/mini-carts`, {
+    method: 'GET'
+  });
+}
+//删除商品
+export function deleteGoodsInfoCarts(store_id, filterParams) {
+  return Fetch<TResult>(`/store/${store_id}/carts`, {
+    method: 'delete'
+  });
+}
+//删除商品
+export function updateGoodsInfoCarts(store_id, filterParams) {
+  return Fetch<TResult>(`/store/${store_id}/carts`, {
     method: 'PUT',
+    body: JSON.stringify({ ...filterParams })
+  });
+}
+/**
+ * get Dict
+ * @param filterParams
+ */
+export function querySysDictionary(filterParams = {}) {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })
-  });
-}
-
-export function getCategories() {
-  return Fetch<TResult>('/store_cate/batch/cate', {
-    method: 'GET'
-  });
-}
-
-export function getFilters() {
-  return Fetch<TResult>('/goods_filter/filters/total', {
-    method: 'POST',
-    body: JSON.stringify({})
-  });
-}
-
-export function getSorts() {
-  return Fetch<TResult>('/goods_sort/sorts/total', {
-    method: 'POST',
-    body: JSON.stringify({})
   });
 }

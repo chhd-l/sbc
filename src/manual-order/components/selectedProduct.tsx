@@ -1,13 +1,17 @@
-import { Button, Table } from 'antd';
+import { Button, Icon, Select, Table } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
-
+import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts } from '../webapi';
+const defaultImg = require('./img/none.png');
+const { Option } = Select;
 export default class SelectedProduct extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
-      confirmLoading: false
+      confirmLoading: false,
+      dataSource: [],
+      options: []
     };
   }
 
@@ -35,80 +39,137 @@ export default class SelectedProduct extends React.Component<any, any> {
       visible: false
     });
   };
+  componentDidMount() {
+    this.querySysDictionary();
+  }
+  async onSelectChange(e, index, row, name) {
+    if (name === 'subscriptionStatus' && e === 0) {
+      row['periodTypeId'] = null;
+    }
+    row[name] = e;
+    await updateGoodsInfoCarts(this.props.storeId, {
+      periodTypeId: row.periodTypeId,
+      subscriptionStatus: row.subscriptionStatus,
+      goodsInfoFlag: row.subscriptionStatus,
+      goodsNum: row.buyCount,
+      goodsInfoId: row.goodsInfoId
+    });
+
+    this.state.dataSource[index] = row;
+    this.setState({
+      dataSource: this.state.dataSource
+    });
+  }
+  /**
+   * 获取更新频率月｜ 周
+   */
+  async querySysDictionary() {
+    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), getGoodsInfoCarts(this.props.storeId, this.props.customerId)]);
+    let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
+    let months = result[1].res?.context?.sysDictionaryVOS ?? [];
+    let goodsList = result[2].res.context?.goodsList ?? [];
+    let options = [...months, ...weeks];
+    // debugger
+    this.setState({
+      options,
+      dataSource: goodsList
+    });
+  }
 
   render() {
     // const { getFieldDecorator } = this.props.form;
-    const { noLanguageSelect } = this.props;
-    const dataSource = [
-      {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号'
-      },
-      {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号'
-      }
-    ];
-
+    const { options, dataSource } = this.state;
+    const { storeId, customerId } = this.props;
     const columns = [
       {
         title: 'Image',
-        dataIndex: 'name',
-        key: 'name'
+        dataIndex: 'goodsInfoImg',
+        key: 'goodsInfoImg',
+        render: (img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
       },
       {
         title: 'SKU',
-        dataIndex: 'age',
-        key: 'age'
+        dataIndex: 'goodsInfoNo',
+        key: 'goodsInfoNo'
       },
       {
         title: 'Product name',
-        dataIndex: 'address',
-        key: 'address'
+        dataIndex: 'goodsInfoName',
+        key: 'goodsInfoName'
       },
       {
         title: 'Weight',
-        dataIndex: 'address',
-        key: 'address'
+        dataIndex: 'packSize',
+        key: 'packSize'
+      },
+      {
+        title: 'Stock availability',
+        dataIndex: 'stock',
+        key: 'stock'
       },
       {
         title: 'Marketing price',
-        dataIndex: 'address',
-        key: 'address'
+        dataIndex: 'marketPrice',
+        key: 'marketPrice'
       },
       {
         title: 'Subscription price',
-        dataIndex: 'address',
-        key: 'address'
+        dataIndex: 'subscriptionPrice',
+        key: 'subscriptionPrice'
       },
       {
         title: 'Selected Subscription',
-        dataIndex: 'address',
-        key: 'address'
+        dataIndex: 'subscriptionStatus',
+        key: 'subscriptionStatus',
+
+        render: (text, record, index) => {
+          return (
+            <Select style={{ width: 100 }} value={text} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
+              <Option value={1}>Y</Option>
+              <Option value={0}>N</Option>
+            </Select>
+          );
+        }
       },
       {
         title: 'Frequency',
-        dataIndex: 'address',
-        key: 'address'
+        dataIndex: 'periodTypeId',
+        key: 'periodTypeId',
+
+        render: (text, record, index) => {
+          return record.subscriptionStatus === 1 ? (
+            <Select style={{ width: 100 }} value={text} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
+              {options.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          ) : (
+            <span></span>
+          );
+        }
       },
+
       {
-        title: 'Quantity',
-        dataIndex: 'address',
-        key: 'address'
+        title: 'quantity',
+        dataIndex: 'buyCount',
+        key: 'buyCount'
       },
+
       {
-        title: 'Total amount',
-        dataIndex: 'address',
-        key: 'address'
+        title: ' Total amount',
+        dataIndex: 'amount',
+        key: 'amount',
+        return: (text, record) => <span>{record.buyCount * record.costPrice}</span>
       },
       {
         title: 'Operation',
-        dataIndex: 'address',
-        key: 'address'
+        dataIndex: 'Operation',
+        key: 'Operation',
+        render: () => {
+          return <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 25 }} className="icon iconfont iconDelete"></span>;
+        }
       }
     ];
     return (
@@ -122,9 +183,23 @@ export default class SelectedProduct extends React.Component<any, any> {
           Add product
         </Button>
         <div className="basicInformation">
-          <Table dataSource={dataSource} columns={columns} />;<AddProductModal visible={this.state.visible} handleCancel={this.handleCancel} handleOk={this.handleOk}></AddProductModal>
+          <Table pagination={false} rowKey="index" dataSource={dataSource} columns={columns} />
+          <AddProductModal storeId={storeId} customerId={customerId} visible={this.state.visible} handleCancel={this.handleCancel} handleOk={this.handleOk}></AddProductModal>
         </div>
       </div>
     );
   }
 }
+
+const styles = {
+  imgItem: {
+    width: 60,
+    height: 60,
+    padding: 5,
+    border: '1px solid #ddd',
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
+  }
+} as any;

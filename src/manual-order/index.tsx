@@ -13,11 +13,14 @@ class ManualOrder extends Component<any, any> {
   static defaultProps = {};
   constructor(props) {
     super(props);
+    let { storeId } = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+
     this.state = {
       id: this.props.match.params.id,
       title: 'Valet order',
-      current: 1,
-      customerId: ''
+      current: 0,
+      customerId: '',
+      storeId: storeId
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
@@ -47,7 +50,7 @@ class ManualOrder extends Component<any, any> {
   };
 
   render() {
-    const { current, title, customerId } = this.state;
+    const { current, title, customerId, storeId } = this.state;
     const steps = [
       {
         title: 'Consumer information',
@@ -55,7 +58,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Selected product',
-        controller: <SelectedProduct stepName={'Product list:'} customerId={customerId} />
+        controller: <SelectedProduct stepName={'Product list:'} storeId={storeId} customerId={customerId} />
       },
       {
         title: 'Delivery & payment information',

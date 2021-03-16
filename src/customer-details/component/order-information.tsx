@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pagination, Spin } from 'antd';
+import { Pagination, Spin, Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { fetchOrderList } from '../../order-list/webapi';
 import moment from 'moment';
@@ -256,10 +256,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
               </div>
               {!loading && pagination.total === 0 ? (
                 <div className="ant-table-placeholder">
-                  <span>
-                    <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
-                  </span>
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 </div>
               ) : null}
             </div>

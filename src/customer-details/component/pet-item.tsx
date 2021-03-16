@@ -7,6 +7,8 @@ import { querySysDictionary, petsById, editPets, delPets } from '../webapi';
 import { getTaggingList } from './webapi';
 
 const { Option } = Select;
+const dogImg = require('../img/dog.png');
+const catImg = require('../img/cat.png');
 
 interface Iprop extends FormComponentProps {
   petId: string;
@@ -198,7 +200,7 @@ class PetItem extends React.Component<Iprop, any> {
             <Row gutter={16}>
               <Col span={4} style={{ paddingLeft: '30px' }}>
                 <div>
-                  <AssetManagement images={petImg ? [petImg] : []} choosedImgCount={1} selectImgFunction={this.onChooseImg} deleteImgFunction={this.onDeleteImg} />
+                  <AssetManagement images={petImg && petImg.startsWith('http') ? [petImg] : [pet.petsType === 'dog' ? dogImg : catImg]} choosedImgCount={1} selectImgFunction={this.onChooseImg} deleteImgFunction={this.onDeleteImg} />
                 </div>
               </Col>
               <Col span={20}>
@@ -226,7 +228,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Pet name">
+                    <Form.Item label="Name">
                       {getFieldDecorator('petsName', {
                         initialValue: pet.petsName,
                         rules: [{ required: true, message: 'Pet name is required' }]
@@ -251,10 +253,10 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Breed">
+                    <Form.Item label="Breeder code">
                       {getFieldDecorator('petsBreed', {
                         initialValue: pet.petsBreed,
-                        rules: [{ required: true, message: 'Breed is required' }]
+                        rules: [{ required: true, message: 'Breeder code is required' }]
                       })(
                         <Select showSearch>
                           {breedOptions.map((breedItem) => (
@@ -296,10 +298,23 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Birthday">
+                    <Form.Item label="Pure-breed">
+                      {getFieldDecorator('isPurebred', {
+                        initialValue: pet.isPurebred,
+                        rules: [{ required: true, message: 'Pure-breed is required' }]
+                      })(
+                        <Radio.Group>
+                          <Radio value={1}>Yes</Radio>
+                          <Radio value={0}>No</Radio>
+                        </Radio.Group>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Birth">
                       {getFieldDecorator('birthOfPets', {
                         initialValue: moment(pet.birthOfPets, 'YYYY-MM-DD'),
-                        rules: [{ required: true, message: 'Birthday is required' }]
+                        rules: [{ required: true, message: 'Birth is required' }]
                       })(
                         <DatePicker
                           style={{ width: '100%' }}
@@ -312,10 +327,10 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Special needs">
+                    <Form.Item label="Needs">
                       {getFieldDecorator('customerPetsPropRelations', {
                         initialValue: pet.customerPetsPropRelations ? pet.customerPetsPropRelations.map((v) => v.propName) : null,
-                        rules: [{ required: true, message: 'Special needs is required' }]
+                        rules: [{ required: true, message: 'Needs is required' }]
                       })(
                         <Select mode="tags">
                           {this.state.customerPetsPropRelationList.map((p, i) => (
@@ -388,7 +403,7 @@ class PetItem extends React.Component<Iprop, any> {
                   <div style={{ display: show ? 'block' : 'none' }}>
                     <Row gutter={16}>
                       <Col span={12}>
-                        <Form.Item label="Pet source ID">
+                        <Form.Item label="Pet ID">
                           <Input value={pet.petSourceId} disabled />
                         </Form.Item>
                       </Col>

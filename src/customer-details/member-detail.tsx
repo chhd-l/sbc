@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm, Icon } from 'antd';
+import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm, Icon, Tooltip } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -24,7 +24,8 @@ const { RangePicker } = DatePicker;
 const { Column } = Table;
 const { confirm } = Modal;
 
-const noPetImg = require('../goods-list/img/none.png');
+const dogImg = require('./img/dog.png');
+const catImg = require('./img/cat.png');
 
 export default class CustomerDetails extends React.Component<any, any> {
   constructor(props: any) {
@@ -250,7 +251,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </Row>
                 <Row className="text-highlight" style={{ marginTop: 5 }}>
                   <Col span={4}>{basic.customerName}</Col>
-                  <Col span={4}>{moment().diff(moment(basic.birthDay, 'YYYY-MM-DD'), 'years')}</Col>
+                  <Col span={4}>{basic.birthDay ? moment().diff(moment(basic.birthDay, 'YYYY-MM-DD'), 'years') : ''}</Col>
                 </Row>
               </div>
               <div className="basic-info-detail">
@@ -320,7 +321,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               </div>
             </div>
             <div className="detail-container">
-              <Headline title="Segment" />
+              <Headline title="Tagging" />
               <Row>
                 <Col span={20}>
                   <Form layout="vertical">
@@ -346,18 +347,18 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <Col span={8} style={{ margin: '10px 0' }}>
                     <Card bodyStyle={{ padding: '10px 20px' }}>
                       <div className="text-align-right">
-                        <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
+                        {/* <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
                           <Button type="link">
                             <span className="iconfont iconDelete"></span> Delete
                           </Button>
-                        </Popconfirm>
+                        </Popconfirm> */}
                         <Link to={`/edit-pet/${pet.petsId}`}>
                           <span className="iconfont iconEdit"></span> Edit
                         </Link>
                       </div>
                       <Row gutter={10}>
                         <Col span={6}>
-                          <Avatar size={70} src={pet.petsImg && pet.petsImg.startsWith('http') ? pet.petsImg : noPetImg} />
+                          <Avatar size={70} src={pet.petsImg && pet.petsImg.startsWith('http') ? pet.petsImg : pet.petsType === 'dog' ? dogImg : catImg} />
                         </Col>
                         <Col span={18}>
                           <Row>
@@ -370,8 +371,16 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}>Breed</Col>
                           </Row>
                           <Row style={{ fontSize: 16 }}>
-                            <Col span={12}>{moment().diff(moment(pet.birthOfPets, 'YYYY-MM-DD'), 'months')} months</Col>
-                            <Col span={12}>{pet.breederId}</Col>
+                            <Col span={12}>{pet.birthOfPets && `${moment().diff(moment(pet.birthOfPets, 'YYYY-MM-DD'), 'months')} months`}</Col>
+                            <Col span={12}>
+                              {pet.petsBreed && (
+                                <Tooltip title={pet.petsBreed}>
+                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }} title={pet.petsBreed}>
+                                    {pet.petsBreed}
+                                  </div>
+                                </Tooltip>
+                              )}
+                            </Col>
                           </Row>
                         </Col>
                       </Row>
@@ -425,7 +434,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             </Breadcrumb.Item>
             <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
           </Breadcrumb>
-          {displayPage === 'delivery' && <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />}
+          <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
         </div>
       </>
     );

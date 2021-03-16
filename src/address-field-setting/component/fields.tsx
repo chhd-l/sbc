@@ -1,6 +1,6 @@
 import React from 'react';
 import { Headline, Const } from 'qmkit';
-import { Alert, Table, Button, Switch, Modal, Form, Input, Select } from 'antd';
+import { Alert, Table, Button, Switch, Modal, Form, Input, Select, Tabs } from 'antd';
 import { getAddressSetting } from '../../validation-setting/webapi';
 
 const Option = Select.Option;
@@ -75,7 +75,7 @@ export default class Fields extends React.Component<any, any> {
 
   render() {
     const { visible, field, apiName } = this.state;
-    const { fieldList } = this.props;
+    const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onStepChange } = this.props;
     const columns = [
       {
         title: 'Sequence',
@@ -105,7 +105,7 @@ export default class Fields extends React.Component<any, any> {
               }
               return prev;
             }, []).join('+')}{' '}
-            {text === 'Address1' || text === 'City' ? (
+            {text === 'City' ? (
               <a
                 onClick={(e) => {
                   e.preventDefault();
@@ -147,23 +147,27 @@ export default class Fields extends React.Component<any, any> {
     };
     return (
       <div>
-        <Table rowKey="id" columns={columns} dataSource={fieldList} pagination={false} />
+        <Tabs activeKey={activeKey} onChange={onChangeActiveKey}>
+          <Tabs.TabPane tab="Input manually" key="MANUALLY">
+            <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
+              Display
+            </Button>
+            <Table rowKey="id" columns={columns} dataSource={manualFieldList} pagination={false} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Input automatically" key="AUTOMATICALLY">
+            <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
+              Display
+            </Button>
+            <Table rowKey="id" columns={columns} dataSource={autoFieldList} pagination={false} />
+          </Tabs.TabPane>
+        </Tabs>
+
         <Modal title="Edit field" visible={visible} okText="Save" cancelText="Cancel" onOk={this.handleOk} onCancel={this.handleCancel}>
           <Form {...formItemLayout}>
             <Form.Item label="Field name">
               <Input value={field.fieldName} disabled />
             </Form.Item>
             <Form.Item label="Input type">
-              {field.fieldName === 'Address1' && (
-                <Select value={field.inputFreeTextFlag === 1 ? '1' : '2'} onChange={(v) => this.onChangeModalField(v === '1' ? { inputFreeTextFlag: 1, inputSearchBoxFlag: 0 } : { inputFreeTextFlag: 0, inputSearchBoxFlag: 1 })}>
-                  <Option value="1" key="1">
-                    Free text
-                  </Option>
-                  <Option value="2" key="2">
-                    Search box
-                  </Option>
-                </Select>
-              )}
               {field.fieldName === 'City' && (
                 <Select value={field.inputDropDownBoxFlag === 1 ? '2' : '1'} onChange={(v) => this.onChangeModalField(v === '1' ? { inputFreeTextFlag: 1, inputSearchBoxFlag: 1, inputDropDownBoxFlag: 0 } : { inputFreeTextFlag: 0, inputSearchBoxFlag: 0, inputDropDownBoxFlag: 1 })}>
                   <Option value="1" key="1">
@@ -175,14 +179,9 @@ export default class Fields extends React.Component<any, any> {
                 </Select>
               )}
             </Form.Item>
-            {field.fieldName === 'City' || field.inputSearchBoxFlag === 1 ? (
+            {field.fieldName === 'City' ? (
               <Form.Item label="Data source">
-                <Input value={field.fieldName === 'City' ? 'Address list' : 'API'} disabled />
-              </Form.Item>
-            ) : null}
-            {field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1 ? (
-              <Form.Item label="API name">
-                <Input value={apiName} disabled />
+                <Input value="Address list" disabled />
               </Form.Item>
             ) : null}
           </Form>

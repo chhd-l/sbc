@@ -9,7 +9,10 @@ type TResult = {
 export function getAddressSetting(param = {}) {
   return Fetch<TResult>('/addressApiSetting/queryByStoreId', {
     method: 'POST',
-    body: JSON.stringify(param)
+    body: JSON.stringify({
+      ...param,
+      addressApiType: 0
+    })
   });
 }
 

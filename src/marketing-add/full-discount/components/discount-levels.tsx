@@ -176,14 +176,14 @@ export default class DiscountLevels extends React.Component<any, any> {
                             // callback();
                           }
                         ],
-                        initialValue: level.limit
+                        initialValue: level.limitAmount
                       })(
                         <Input
                           style={{ width: 300 }}
                           title={'1-9999'}
                           placeholder={'1-9999'}
                           onChange={(e) => {
-                            this.onChange(index, 'limit', parseInt(e.target.value));
+                            this.onChange(index, 'limitAmount', parseInt(e.target.value));
                           }}
                         />
                       )}

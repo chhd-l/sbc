@@ -176,7 +176,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     });
   };
 
-  productTypeOnChange = (value) => {
+  scopeTypeOnChange = (value) => {
     this.setState({
       selectedRows: fromJS([]),
       goodsModal: {
@@ -188,12 +188,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
       selectedRows: fromJS([])
     });
     this.onBeanChange({
-      productType: value,
+      scopeType: value,
       storeCateIds: []
     });
   };
   targetCustomerRadioChange = (value) => {
-    this.onBeanChange({ joinLevel: value });
+    this.onBeanChange({
+      joinLevel: value,
+      emailSuffixList: [],
+      segmentIds: []
+    });
   };
 
   selectGroupOnChange = (value) => {
@@ -247,7 +251,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
       });
     });
     const storeCateIds = originValues;
-    console.log(storeCateIds.toJS(), 'storeCateIds---------------');
     this.onBeanChange({
       storeCateIds
     });
@@ -310,12 +313,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     //this.onBeanChange({publicStatus: 1});
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        {/*<FormItem {...formItemLayout} label="Promotion type:">*/}
-        {/*  <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>*/}
-        {/*    <Radio value={0}>Normal promotion</Radio>*/}
-        {/*    <Radio value={1}>Subscription promotion</Radio>*/}
-        {/*  </Radio.Group>*/}
-        {/*</FormItem>*/}
         <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>
@@ -850,42 +847,22 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
         <div className="bold-title">Select products:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
-          {getFieldDecorator('productType', {
-            // rules: [
-            //   { required: true, message: 'Amount must be entered' },
-            //   {
-            //     validator: (_rule, value, callback) => {
-            //       if (value) {
-            //         if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-            //           callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
-            //         }
-            //       }
-            //       callback();
-            //     }
-            //   }
-            // ],
-            initialValue: marketingBean.get('productType') ? marketingBean.get('productType') : 1
+          {getFieldDecorator('scopeType', {
+            initialValue: marketingBean.get('scopeType') ? marketingBean.get('scopeType') : 0
           })(
-            <Radio.Group onChange={(e) => this.productTypeOnChange(e.target.value)} value={this.state.productType}>
-              <Radio value={1}>All</Radio>
+            <Radio.Group onChange={(e) => this.scopeTypeOnChange(e.target.value)} value={marketingBean.get('scopeType')}>
+              <Radio value={0}>All</Radio>
               <Radio value={2}>Category</Radio>
-              <Radio value={3}>Custom</Radio>
+              <Radio value={1}>Custom</Radio>
             </Radio.Group>
           )}
         </FormItem>
-        {marketingBean.get('productType') === 2 && (
-          <FormItem {...formItemLayout}>
-            {getFieldDecorator('storeCateIds', {
-              rules: [
-                // {
-                //   required: true,
-                //   message: 'Please select sales category'
-                // }
-              ],
-
-              initialValue: storeCateValues
-            })(
+        {marketingBean.get('scopeType') === 2 && (
+          <>
+            <FormItem {...formItemLayout}>
               <TreeSelect
+                id="storeCateIds"
+                defaultValue={storeCateValues}
                 getPopupContainer={() => document.getElementById('page-content')}
                 treeCheckable={true}
                 showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
@@ -902,10 +879,11 @@ export default class MarketingAddForm extends React.Component<any, any> {
               >
                 {this.generateStoreCateTree(storeCateList)}
               </TreeSelect>
-            )}
-          </FormItem>
+            </FormItem>
+            <FormItem {...formItemLayout}>{getFieldDecorator('storeCateIds', {})(<span></span>)}</FormItem>
+          </>
         )}
-        {marketingBean.get('productType') === 3 ? (
+        {marketingBean.get('scopeType') === 1 ? (
           <FormItem {...formItemLayout} required={true}>
             {getFieldDecorator(
               'goods',
@@ -928,10 +906,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
           })(
             <div>
               <RadioGroup
-                // onChange={(e) => {
-                //   this.levelRadioChange(e.target.value);
-                // }}
-                // value={level._allCustomer ? -1 : 0}
                 onChange={(e) => {
                   this.targetCustomerRadioChange(e.target.value);
                 }}
@@ -956,62 +930,29 @@ export default class MarketingAddForm extends React.Component<any, any> {
         </FormItem>
         {marketingBean.get('joinLevel') == -3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
-            {getFieldDecorator('segmentIds', {
-              rules: [
-                {
-                  validator: (_rule, value, callback) => {
-                    if (!value && marketingBean.get('joinLevel') == -3) {
-                      callback('Please select group.');
-                    }
-                  }
-                }
-              ]
-            })(
-              <Select
-                style={{ width: 520 }}
-                onChange={this.selectGroupOnChange}
-                // defaultValue={232}
-                defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
-              >
-                {allGroups.size > 0 &&
-                  allGroups.map((item) => (
-                    <Select.Option key={item.get('id')} value={item.get('id')}>
-                      {item.get('name')}
-                    </Select.Option>
-                  ))}
-              </Select>
-            )}
+            <Select style={{ width: 520 }} onChange={this.selectGroupOnChange} defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}>
+              {allGroups.size > 0 &&
+                allGroups.map((item) => (
+                  <Select.Option key={item.get('id')} value={item.get('id')}>
+                    {item.get('name')}
+                  </Select.Option>
+                ))}
+            </Select>
           </FormItem>
         )}
         {marketingBean.get('joinLevel') == -4 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
-            {getFieldDecorator('targetEmail', {
-              rules: [
-                {
-                  validator: (_rule, value, callback) => {
-                    if (!value && marketingBean.get('joinLevel') == -4) {
-                      callback('Please enter email.');
-                    }
-                    if (value) {
-                      if (!ValidConst.email.test(value)) {
-                        callback('Please enter correct email.');
-                      }
-                    } else callback();
-                  }
-                }
-              ],
-              initialValue: marketingBean.get('targetEmail')
-            })(
-              <Input
-                style={{ width: 300 }}
-                onChange={(e) => {
-                  this.onBeanChange({ targetEmail: e.target.value });
-                }}
-                maxLength={30}
-              />
-            )}
+            <Input
+              style={{ width: 300 }}
+              onChange={(e) => {
+                const emailSuffixList = [e.target.value];
+                this.onBeanChange({ emailSuffixList });
+              }}
+              maxLength={30}
+            />
           </FormItem>
         )}
+
         <Row type="flex" justify="start">
           {/*<Col span={3} />*/}
           <Col span={10}>
@@ -1060,9 +1001,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
           PromotionTypeValue: subType === 6 || subType === 7 ? 1 : 0
         },
         () => {
-          this.setState({
-            PromotionTypeChecked: this.state.PromotionTypeValue === 1 ? true : false
-          });
+          if (marketingBean.get('marketingId')) {
+            this.setState({
+              PromotionTypeChecked: marketingBean.get('publicStatus') == 1
+            });
+          } else {
+            this.setState({
+              PromotionTypeChecked: this.state.PromotionTypeValue === 1 ? true : false
+            });
+          }
+
           if (subType === 6) {
             let bean = marketingBean.get('fullReductionLevelList') ? marketingBean.get('fullReductionLevelList').toJS() : null;
             if (bean && this.state.PromotionTypeValue === 1) {
@@ -1187,7 +1135,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     marketingBean = marketingBean.set('promotionType', PromotionTypeValue);
     const { marketingType, form } = this.props;
     form.resetFields();
-
     //判断设置规则
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
       levelList = marketingBean.get('fullReductionLevelList');
@@ -1282,31 +1229,40 @@ export default class MarketingAddForm extends React.Component<any, any> {
         });
     }
 
-    //判断目标等级
-    // if (level._allCustomer) {
-    //   marketingBean = marketingBean.set('joinLevel', -1);
-    // } else {
-    //   if (level._checkAll) {
-    //     marketingBean = marketingBean.set('joinLevel', 0);
-    //   } else {
-    //     if (level._checkedLevelList.length != 0) {
-    //       marketingBean = marketingBean.set('joinLevel', level._checkedLevelList.join(','));
-    //     } else {
-    //       errorObject['targetCustomer'] = {
-    //         errors: [new Error('Please select target customers')]
-    //       };
-    //     }
-    //   }
-    // }
-
     //判断选择商品
     if (selectedSkuIds.length > 0) {
       marketingBean = marketingBean.set('skuIds', fromJS(selectedSkuIds));
     } else {
-      errorObject['goods'] = {
+      if (marketingBean.get('scopeType') === 1) {
+        errorObject['goods'] = {
+          value: null,
+          errors: [new Error('Please select the product to be marketed')]
+        };
+      } else if (marketingBean.get('scopeType') === 2 && (!marketingBean.get('storeCateIds') || marketingBean.get('storeCateIds').size === 0)) {
+        errorObject['storeCateIds'] = {
+          value: null,
+          errors: [new Error('Please select category')]
+        };
+      }
+    }
+    if (marketingBean.get('joinLevel') == -3 && (!marketingBean.get('segmentIds') || marketingBean.get('segmentIds').size === 0)) {
+      errorObject['joinLevel'] = {
         value: null,
-        errors: [new Error('Please select the product to be marketed')]
+        errors: [new Error('Please select group.')]
       };
+    }
+    if (marketingBean.get('joinLevel') == -4) {
+      if (!marketingBean.get('emailSuffixList') || marketingBean.get('emailSuffixList').length === 0) {
+        errorObject['joinLevel'] = {
+          value: null,
+          errors: [new Error('Please enter email.')]
+        };
+      } else if (!ValidConst.email.test(marketingBean.get('emailSuffixList').toJS()[0])) {
+        errorObject['joinLevel'] = {
+          value: null,
+          errors: [new Error('Please enter correct email.')]
+        };
+      }
     }
     if (this.state.promotionCode) {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
@@ -1314,7 +1270,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     if (!marketingBean.get('publicStatus')) {
       marketingBean = marketingBean.set('publicStatus', '1');
     }
-
     form.validateFieldsAndScroll((err) => {
       if (Object.keys(errorObject).length != 0) {
         form.setFields(errorObject);
@@ -1323,7 +1278,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         if (!err) {
           this.setState({ saveLoading: true });
           //组装营销类型
-          marketingBean = marketingBean.set('marketingType', marketingType).set('scopeType', 1);
+          marketingBean = marketingBean.set('marketingType', marketingType); //.set('scopeType', 1);
 
           //商品已经选择 + 时间已经选择 => 判断  同类型的营销活动下，商品是否重复
           if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
@@ -1346,7 +1301,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
               );
               let obj = {
                 firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') / 10,
-                restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10
+                restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10,
+                subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
+                subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
               };
 
               marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
@@ -1354,7 +1311,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
             } else {
               let obj = {
                 firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
-                restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
+                restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction'),
+                subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
+                subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
               };
               marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
               this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));

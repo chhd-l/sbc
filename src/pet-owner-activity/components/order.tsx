@@ -191,7 +191,7 @@ export default class orders extends Component<any, any> {
       }
     ];
     return (
-      <Card title="Order" className="rightCard">
+      <Card title="Order" className="topCard">
         <Row>
           <Col span={10}>
             <Input

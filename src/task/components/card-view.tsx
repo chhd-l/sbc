@@ -106,7 +106,6 @@ export default class CardView extends Component<any, any> {
               let maxHeight = [todoHeight, ongoingHeight, completeHeight, canceleight].sort(function (a, b) {
                 return b - a;
               });
-              debugger;
               this.setState({
                 maxHeight: maxHeight[0]
               });

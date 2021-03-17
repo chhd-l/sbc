@@ -358,6 +358,7 @@ class TaskUpdate extends Component<any, any> {
     const { title, tabKey, editable, task, id, taskCompleted, assignedUsers } = this.state;
     const { associatedPetOwners, associatedPetList, associatedOrderList } = this.state;
     const { goldenMomentList, actionTypeList, priorityList, statusList, reminderTypes, associatedSubscriptionList } = this.state;
+    let taskStatus = statusList.find((x) => x.value === task.status);
     return (
       <div>
         <Breadcrumb>
@@ -447,7 +448,7 @@ class TaskUpdate extends Component<any, any> {
                               ))}
                             </Select>
                           ) : (
-                            <span>{task.status}</span>
+                            <span>{taskStatus ? taskStatus.name : ''}</span>
                           )
                         )}
                       </FormItem>

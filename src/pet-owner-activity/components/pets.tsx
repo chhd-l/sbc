@@ -121,7 +121,7 @@ export default class pets extends Component<any, any> {
           title={
             <div className="title">
               <span>Pets</span>
-              <span className="viewAll" onClick={() => history.push(`/petowner-details/${petOwnerId}/${customerAccount}`, { query: { hash: 'pets-list' } })}>
+              <span className="viewAll" onClick={() => history.push({ pathname: `/petowner-details/${petOwnerId}/${customerAccount}`, query: { hash: 'pets-list' } })}>
                 View All
                 <Icon type="right" />
               </span>

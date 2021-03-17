@@ -91,7 +91,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
     const { pagination } = this.state;
     this.setState({ loading: true });
     fetchOrderList({
-      orderType: 'NORMAL_ORDER',
+      orderType: 'ALL_ORDER',
       buyerAccount: customerAccount,
       beginTime: startDate,
       endTime: endDate,

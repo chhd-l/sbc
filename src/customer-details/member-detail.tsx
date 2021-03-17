@@ -298,12 +298,12 @@ export default class CustomerDetails extends React.Component<any, any> {
                     {basic.address1}
                   </Col>
                 </Row>
-                <Row type="flex" align="middle">
+                <Row>
                   <Col span={4} className="text-tip">
                     Consent
                   </Col>
                   <Col span={6} className="text-highlight">
-                    Email communication
+                    {basic.userConsentList && basic.userConsentList.length > 0 ? basic.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
                   </Col>
                   <Col span={4} className="text-tip">
                     City

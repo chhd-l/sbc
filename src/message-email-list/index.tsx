@@ -333,7 +333,6 @@ export default class ClinicList extends Component<any, any> {
             extra={
               <div>
                 <Button
-                  shape="round"
                   onClick={() => {
                     this.overview();
                   }}
@@ -345,7 +344,6 @@ export default class ClinicList extends Component<any, any> {
                   <p style={{ color: '#e2001a' }}>Overview</p>
                 </Button>
                 <Button
-                  shape="round"
                   onClick={() => {
                     this.quickSend();
                   }}

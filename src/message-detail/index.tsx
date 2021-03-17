@@ -1017,18 +1017,18 @@ class MessageDetails extends Component<any, any> {
 
         <div className="bar-button">
           {!this.state.isDetail ? (
-            <Button type="primary" shape="round" onClick={() => this.submit()} style={{ marginRight: 10 }}>
+            <Button type="primary" onClick={() => this.submit()} style={{ marginRight: 10 }}>
               Submit
             </Button>
           ) : null}
           {!this.state.isDetail ? (
-            <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.save()}>
+            <Button type="primary" style={{ marginRight: 10 }} onClick={() => this.save()}>
               {<FormattedMessage id="save" />}
             </Button>
           ) : null}
 
-          <Button shape="round" onClick={() => (history as any).go(-1)} style={{ marginRight: 10 }}>
-            {<FormattedMessage id="cancel" />}
+          <Button onClick={() => (history as any).go(-1)} style={{ marginRight: 10 }}>
+            {<FormattedMessage id="back" />}
           </Button>
         </div>
       </div>

@@ -42,3 +42,12 @@ export function getTaskRead(params = {}) {
     body: JSON.stringify(params)
   });
 }
+
+export function updateTask(filterParams = {}) {
+  return Fetch<TResult>('/task/updateTask', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

@@ -26,7 +26,9 @@ export default class CardView extends Component<any, any> {
         cancelledLength: 0
       },
       loading: false,
-      formData: {}
+      formData: {},
+      dragTask: {},
+      maxHeight: null
     };
     this.getTaskList = this.getTaskList.bind(this);
     this.overDueStyle = this.overDueStyle.bind(this);
@@ -82,19 +84,34 @@ export default class CardView extends Component<any, any> {
           let onGoingList = res.context.onGoingList ? res.context.onGoingList : [];
           let completedList = res.context.completedList ? res.context.completedList : [];
           let cancelledList = res.context.cancelledList ? res.context.cancelledList : [];
-          this.setState({
-            toDoList: toDoList,
-            onGoingList: onGoingList,
-            completedList: completedList,
-            cancelledList: cancelledList,
-            taskCardLength: {
-              toDoLength: toDoList.length,
-              onGoingLength: onGoingList.length,
-              completedLength: completedList.length,
-              cancelledLength: cancelledList.length
+          this.setState(
+            {
+              toDoList: toDoList,
+              onGoingList: onGoingList,
+              completedList: completedList,
+              cancelledList: cancelledList,
+              taskCardLength: {
+                toDoLength: toDoList.length,
+                onGoingLength: onGoingList.length,
+                completedLength: completedList.length,
+                cancelledLength: cancelledList.length
+              },
+              loading: false
             },
-            loading: false
-          });
+            () => {
+              let todoHeight = document.getElementById('todoView') ? document.getElementById('todoView').offsetHeight : 0;
+              let ongoingHeight = document.getElementById('ongoingView') ? document.getElementById('ongoingView').offsetHeight : 0;
+              let completeHeight = document.getElementById('completeView') ? document.getElementById('completeView').offsetHeight : 0;
+              let canceleight = document.getElementById('cancelView') ? document.getElementById('cancelView').offsetHeight : 0;
+              let maxHeight = [todoHeight, ongoingHeight, completeHeight, canceleight].sort(function (a, b) {
+                return b - a;
+              });
+              debugger;
+              this.setState({
+                maxHeight: maxHeight[0]
+              });
+            }
+          );
         } else {
           message.error(res.message || 'Get Data Failed');
           this.setState({
@@ -131,8 +148,35 @@ export default class CardView extends Component<any, any> {
   redirectDetail(id) {
     history.push('/edit-task/' + id);
   }
+  handleDragStart = (e, task) => {
+    this.setState({
+      dragTask: task
+    });
+  };
+
+  handleDrop = (e, status) => {
+    const { dragTask } = this.state;
+    if (dragTask.status === status) {
+      return;
+    }
+    dragTask.status = status;
+    webapi
+      .updateTask(dragTask)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          message.success('Operate successfully');
+          this.getTaskList(this.props.queryType);
+        } else {
+          message.error(res.message || 'Update Failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Update Failed');
+      });
+  };
   render() {
-    const { toDoList, onGoingList, completedList, cancelledList, taskCardLength, loading } = this.state;
+    const { toDoList, onGoingList, completedList, cancelledList, taskCardLength, loading, maxHeight } = this.state;
     return (
       <div className="cardViewList">
         <Row gutter={20} className="taskStatusList">
@@ -159,11 +203,11 @@ export default class CardView extends Component<any, any> {
         </Row>
         <Card loading={loading} bordered={false}>
           <Row className="taskCardViewClass" gutter={10}>
-            <Col span={6}>
-              <Row className="taskItem">
+            <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'To Do')} onDragOver={(e) => e.preventDefault()}>
+              <Row className="taskItem" id="todoView">
                 {toDoList.map((item) => (
                   <div className="taskCardItem">
-                    <Card className="taskCard" hoverable onClick={() => this.redirectDetail(item.id)}>
+                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} className="taskCard" hoverable onClick={() => this.redirectDetail(item.id)}>
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">
                           <div className="goldenMoment">
@@ -190,92 +234,98 @@ export default class CardView extends Component<any, any> {
                 ))}
               </Row>
             </Col>
-            <Col span={6}>
-              {onGoingList.map((item) => (
-                <div className="taskCardItem">
-                  <Card className="taskCard" hoverable onClick={() => this.redirectDetail(item.id)}>
-                    <Row gutter={10}>
-                      <Col span={24} className="contentPanel">
-                        <div className="goldenMoment">
-                          <span style={{ background: this.getBackground('onGoing') }} className="point" />
-                          {item.name}
-                          {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
-                        </div>
-                        <div className="contentInfo">
-                          <span className="icon iconfont addTaskIcon icontaskName" />
-                          {item.goldenMoment}
-                        </div>
-                        <div className="contentInfo">
-                          <span className=" icon iconfont addTaskIcon iconsingle-person" />
-                          {item.assistantName ? item.assistantName : 'No Assistant Name'}
-                        </div>
-                        <div style={{ color: this.overDueStyle(item) }} className="contentInfo">
-                          <span className="icon iconfont addTaskIcon iconshizhong" />
-                          {item.dueTime ? item.dueTime : 'No Due Time'}
-                        </div>
-                      </Col>
-                    </Row>
-                  </Card>
-                </div>
-              ))}
+            <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'On-going')} onDragOver={(e) => e.preventDefault()}>
+              <Row className="taskItem" id="ongoingView">
+                {onGoingList.map((item) => (
+                  <div className="taskCardItem">
+                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
+                      <Row gutter={10}>
+                        <Col span={24} className="contentPanel">
+                          <div className="goldenMoment">
+                            <span style={{ background: this.getBackground('onGoing') }} className="point" />
+                            {item.name}
+                            {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                          </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon icontaskName" />
+                            {item.goldenMoment}
+                          </div>
+                          <div className="contentInfo">
+                            <span className=" icon iconfont addTaskIcon iconsingle-person" />
+                            {item.assistantName ? item.assistantName : 'No Assistant Name'}
+                          </div>
+                          <div style={{ color: this.overDueStyle(item) }} className="contentInfo">
+                            <span className="icon iconfont addTaskIcon iconshizhong" />
+                            {item.dueTime ? item.dueTime : 'No Due Time'}
+                          </div>
+                        </Col>
+                      </Row>
+                    </Card>
+                  </div>
+                ))}
+              </Row>
             </Col>
-            <Col span={6}>
-              {completedList.map((item) => (
-                <div className="taskCardItem">
-                  <Card className="taskCard" hoverable onClick={() => this.redirectDetail(item.id)}>
-                    <Row gutter={10}>
-                      <Col span={24} className="contentPanel">
-                        <div className="goldenMoment">
-                          <span style={{ background: this.getBackground('completed') }} className="point" />
-                          {item.name}
-                          {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
-                        </div>
-                        <div className="contentInfo">
-                          <span className="icon iconfont addTaskIcon icontaskName" />
-                          {item.goldenMoment}
-                        </div>
-                        <div className="contentInfo">
-                          <span className=" icon iconfont addTaskIcon iconsingle-person" />
-                          {item.assistantName ? item.assistantName : 'No Assistant Name'}
-                        </div>
-                        <div className="contentInfo">
-                          <span className="icon iconfont addTaskIcon iconshizhong" />
-                          {item.dueTime ? item.dueTime : 'No Due Time'}
-                        </div>
-                      </Col>
-                    </Row>
-                  </Card>
-                </div>
-              ))}
+            <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'Completed')} onDragOver={(e) => e.preventDefault()}>
+              <Row className="taskItem" id="completeView">
+                {completedList.map((item) => (
+                  <div className="taskCardItem">
+                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
+                      <Row gutter={10}>
+                        <Col span={24} className="contentPanel">
+                          <div className="goldenMoment">
+                            <span style={{ background: this.getBackground('completed') }} className="point" />
+                            {item.name}
+                            {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                          </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon icontaskName" />
+                            {item.goldenMoment}
+                          </div>
+                          <div className="contentInfo">
+                            <span className=" icon iconfont addTaskIcon iconsingle-person" />
+                            {item.assistantName ? item.assistantName : 'No Assistant Name'}
+                          </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon iconshizhong" />
+                            {item.dueTime ? item.dueTime : 'No Due Time'}
+                          </div>
+                        </Col>
+                      </Row>
+                    </Card>
+                  </div>
+                ))}
+              </Row>
             </Col>
-            <Col span={6}>
-              {cancelledList.map((item) => (
-                <div className="taskCardItem">
-                  <Card className="taskCard" hoverable onClick={() => this.redirectDetail(item.id)}>
-                    <Row gutter={10}>
-                      <Col span={24} className="contentPanel">
-                        <div className="goldenMoment">
-                          <span style={{ background: this.getBackground('cancelled') }} className="point" />
-                          {item.name}
-                          {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
-                        </div>
-                        <div className="contentInfo">
-                          <span className="icon iconfont addTaskIcon icontaskName" />
-                          {item.goldenMoment}
-                        </div>
-                        <div className="contentInfo">
-                          <span className="icon iconfont addTaskIcon iconsingle-person" />
-                          {item.assistantName ? item.assistantName : 'No Assistant Name'}
-                        </div>
-                        <div className="contentInfo">
-                          <span className="icon iconfont addTaskIcon iconshizhong" />
-                          {item.dueTime ? item.dueTime : 'No Due Time'}
-                        </div>
-                      </Col>
-                    </Row>
-                  </Card>
-                </div>
-              ))}
+            <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'Cancelled')} onDragOver={(e) => e.preventDefault()}>
+              <Row className="taskItem" id="cancelView">
+                {cancelledList.map((item) => (
+                  <div className="taskCardItem">
+                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
+                      <Row gutter={10}>
+                        <Col span={24} className="contentPanel">
+                          <div className="goldenMoment">
+                            <span style={{ background: this.getBackground('cancelled') }} className="point" />
+                            {item.name}
+                            {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                          </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon icontaskName" />
+                            {item.goldenMoment}
+                          </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon iconsingle-person" />
+                            {item.assistantName ? item.assistantName : 'No Assistant Name'}
+                          </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon iconshizhong" />
+                            {item.dueTime ? item.dueTime : 'No Due Time'}
+                          </div>
+                        </Col>
+                      </Row>
+                    </Card>
+                  </div>
+                ))}
+              </Row>
             </Col>
           </Row>
         </Card>

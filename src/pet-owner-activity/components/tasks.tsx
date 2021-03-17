@@ -252,7 +252,7 @@ export default class tasks extends Component<any, any> {
                               </div>
                             </Col>
                             <Col span={16}>
-                              <span className="tasksLable">Tasks</span>
+                              <span className="tasksLable">Task</span>
                             </Col>
                           </Row>
                         </Col>

@@ -23,9 +23,9 @@ export default class ChooseTaskForm extends Component<any, any> {
         dueTime: '',
         reminderTime: '',
         dueTimeNumber: 1,
-        dueTimeType: undefined,
+        dueTimeType: 'Day',
         reminderNumber: 1,
-        reminderType: undefined
+        reminderType: 'Day'
       },
       assignedUsers: [],
       priorityList: [
@@ -102,9 +102,9 @@ export default class ChooseTaskForm extends Component<any, any> {
           dueTime: '',
           reminderTime: '',
           dueTimeNumber: 1,
-          dueTimeType: undefined,
+          dueTimeType: 'Day',
           reminderNumber: 1,
-          reminderType: undefined
+          reminderType: 'Day'
         }
       });
     } else {

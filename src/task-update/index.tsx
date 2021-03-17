@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Const, Headline, ReactEditor, history, cache } from 'qmkit';
 import { Form, Input, Button, Col, Row, Select, message, DatePicker, Tabs, Breadcrumb, Tooltip, InputNumber } from 'antd';
-import ServiceList from './components/service-list';
 import Activity from './components/activity';
 import './style.less';
 import * as webapi from './webapi';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -855,9 +855,7 @@ class TaskUpdate extends Component<any, any> {
             <Button type="primary" style={{ marginRight: '10px' }} onClick={(e) => this.updateTask(e)}>
               Save
             </Button>
-            <Button type="primary" onClick={() => history.goBack()}>
-              Back
-            </Button>
+            <Button onClick={() => history.goBack()}>{<FormattedMessage id="back" />}</Button>
           </div>
         ) : null}
       </div>

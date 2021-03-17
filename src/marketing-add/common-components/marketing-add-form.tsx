@@ -293,6 +293,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         }
       });
     }
+    console.log(storeCateValues, 'storeCateValues----');
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';

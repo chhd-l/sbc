@@ -48,7 +48,7 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
-
+const TreeNode = Tree.TreeNode;
 export default class CouponInfoForm extends Component<any, any> {
   props: {
     form: any;
@@ -97,7 +97,11 @@ export default class CouponInfoForm extends Component<any, any> {
       // 聚合分类Ids
       reducedCateIds: IList;
       loading: boolean;
-
+      sourceStoreCateList: any;
+      storeCateList: any;
+      joinLevel: any;
+      allGroups: any;
+      segmentIds: any;
       // 键值设置方法
       fieldsValue: Function;
       // 修改时间区间方法
@@ -139,7 +143,12 @@ export default class CouponInfoForm extends Component<any, any> {
     btnDisabled: 'btnDisabled',
     reducedCateIds: 'reducedCateIds',
     loading: 'loading',
-
+    sourceStoreCateList: 'sourceStoreCateList',
+    storeCateList: 'storeCateList',
+    cateIds: 'cateIds',
+    joinLevel: 'joinLevel',
+    allGroups: 'allGroups',
+    segmentIds: 'segmentIds',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -149,6 +158,97 @@ export default class CouponInfoForm extends Component<any, any> {
     onOkBackFun: noop,
     changeBtnDisabled: noop,
     dealErrorCode: noop
+  };
+
+  storeCateChange = (value, _label, extra) => {
+    const { fieldsValue, sourceStoreCateList } = this.props.relaxProps;
+    const sourceGoodCateList = sourceStoreCateList;
+
+    // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
+    // 店铺分类列表
+
+    // 勾选的店铺分类列表
+    let originValues = fromJS(value.map((v) => v.value));
+
+    // 如果是点x清除某个节点或者是取消勾选某个节点，判断清除的是一级还是二级，如果是二级可以直接清；如果是一级，连带把二级的清了
+    if (extra.clear || !extra.checked) {
+      sourceGoodCateList.forEach((cate) => {
+        // 删的是某个一级的
+        if (extra.triggerValue == cate.get('storeCateId') && cate.get('cateParentId') == 0) {
+          // 找到此一级节点下的二级节点
+          const children = sourceGoodCateList.filter((ss) => ss.get('cateParentId') == extra.triggerValue);
+          // 把一级的子节点也都删了
+          originValues = originValues.filter((v) => children.findIndex((c) => c.get('storeCateId') == v) == -1);
+        }
+      });
+    }
+
+    // 如果子节点被选中，上级节点也要被选中
+    // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
+    originValues.forEach((v) => {
+      sourceGoodCateList.forEach((cate) => {
+        // 找到选中的分类，判断是否有上级r
+        if (v == cate.get('storeCateId') && cate.get('cateParentId') != 0) {
+          // 判断上级是否已添加过，如果没有添加过，添加
+          let secondLevel = sourceGoodCateList.find((x) => x.get('storeCateId') === cate.get('cateParentId'));
+          if (secondLevel && secondLevel.get('cateParentId') !== 0) {
+            let exsit = originValues.toJS().includes(secondLevel.get('cateParentId'));
+            if (!exsit) {
+              originValues = originValues.push(secondLevel.get('cateParentId')); // first level
+            }
+          }
+
+          let exsit = originValues.toJS().includes(cate.get('cateParentId'));
+          if (!exsit) {
+            originValues = originValues.push(cate.get('cateParentId')); // second level
+          }
+        }
+      });
+    });
+    const storeCateIds = originValues;
+    fieldsValue({
+      field: 'storeCateIds',
+      value: storeCateIds
+    });
+  };
+
+  /**
+   * 店铺分类树形下拉框
+   * @param storeCateList
+   */
+  generateStoreCateTree = (storeCateList) => {
+    return (
+      storeCateList &&
+      storeCateList.map((item) => {
+        if (item.get('children') && item.get('children').count()) {
+          return (
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
+              {this.generateStoreCateTree(item.get('children'))}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+      })
+    );
+  };
+
+  targetCustomerRadioChange = (value) => {
+    debugger;
+    const { fieldsValue } = this.props.relaxProps;
+    fieldsValue({
+      field: 'joinLevel',
+      value: value
+    });
+  };
+
+  selectGroupOnChange = (value) => {
+    let segmentIds = [];
+    segmentIds.push(value);
+    const { fieldsValue } = this.props.relaxProps;
+    fieldsValue({
+      field: 'segmentIds',
+      value: segmentIds
+    });
   };
 
   render() {
@@ -174,8 +274,26 @@ export default class CouponInfoForm extends Component<any, any> {
       chooseSkuIds,
       goodsRows,
       btnDisabled,
-      loading
+      loading,
+      sourceStoreCateList,
+      storeCateList,
+      storeCateIds,
+      allGroups,
+      joinLevel,
+      segmentIds
     } = this.props.relaxProps;
+    console.log(sourceStoreCateList, 'sourceStoreCateList----');
+    console.log(storeCateList, 'storeCateList----');
+    const storeCateValues = [];
+    const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
+    if (storeCateIds) {
+      storeCateIds.toJS().map((id) => {
+        if (!parentIds.includes(id)) {
+          storeCateValues.push({ value: id });
+        }
+      });
+    }
+    console.log(storeCateValues, 'storeCateValues----');
     return (
       <RightContent>
         <Form>
@@ -414,23 +532,89 @@ export default class CouponInfoForm extends Component<any, any> {
               <Radio value={0}>
                 <span style={styles.darkColor}>All products</span>
               </Radio>
-              {/*<Radio value={1}>
-                    <span style={styles.darkColor}>按品牌</span>
-                  </Radio>*/}
-              {/*<Radio value={3}>*/}
-              {/*  <span style={styles.darkColor}>Base on category</span>*/}
-              {/*</Radio>*/}
+              <Radio value={5}>
+                <span style={styles.darkColor}>Category</span>
+              </Radio>
               <Radio value={4}>
                 <span style={styles.darkColor}>Custom</span>
               </Radio>
             </RadioGroup>
           </FormItem>
           {scopeType === 4 ? (
-            <FormItem {...this._scopeBoxStyle(scopeType)} label="Selected products" id={'page-content'}>
-              {/* {this.chooseGoods().dom} */}
+            <FormItem wrapperCol={{ offset: 4 }} id={'page-content'}>
+              {/* {this.chooseGoods().dom}  {...this._scopeBoxStyle(scopeType)}*/}
               <SelectedGoodsGrid />
             </FormItem>
           ) : null}
+          {scopeType === 5 ? (
+            <FormItem wrapperCol={{ offset: 4 }}>
+              {getFieldDecorator('storeCateIds', {
+                rules: [
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (!value && scopeType === 5) {
+                        callback('Please select store cate.');
+                      }
+                      callback();
+                    }
+                  }
+                ]
+              })(
+                <TreeSelect
+                  id="storeCateIds"
+                  defaultValue={storeCateValues}
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  //treeData ={getGoodsCate}
+                  // showCheckedStrategy = {SHOW_PARENT}
+                  placeholder="Please select category"
+                  notFoundContent="No sales category"
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  showSearch={false}
+                  onChange={this.storeCateChange}
+                  style={{ width: 500 }}
+                  treeDefaultExpandAll
+                >
+                  {this.generateStoreCateTree(storeCateList)}
+                </TreeSelect>
+              )}
+            </FormItem>
+          ) : null}
+
+          <FormItem {...formItemLayout} label="Target consumer:" required={true}>
+            <RadioGroup value={joinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
+              <Radio value={0}>All</Radio>
+              <Radio value={-3}>Select group</Radio>
+            </RadioGroup>
+          </FormItem>
+          {joinLevel === -3 && (
+            <FormItem wrapperCol={{ offset: 4 }}>
+              {getFieldDecorator('segmentIds', {
+                rules: [
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (!value && joinLevel === -3) {
+                        callback('Please select group.');
+                      }
+                      callback();
+                    }
+                  }
+                ]
+              })(
+                <Select style={{ width: 520 }} onChange={this.selectGroupOnChange} defaultValue={segmentIds && segmentIds.size > 0 ? segmentIds.toJS()[0] : null}>
+                  {allGroups.size > 0 &&
+                    allGroups.map((item) => (
+                      <Select.Option key={item.get('id')} value={item.get('id')}>
+                        {item.get('name')}
+                      </Select.Option>
+                    ))}
+                </Select>
+              )}
+            </FormItem>
+          )}
+
           <FormItem {...formItemLayout} label="Instructions for use">
             {getFieldDecorator('couponDesc', {
               initialValue: couponDesc,

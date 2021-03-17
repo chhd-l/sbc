@@ -6,7 +6,7 @@ import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import { Const, Headline, history, cache } from 'qmkit';
-import _ from 'lodash';
+import _, { divide } from 'lodash';
 import { getCountryList, getStateList, getCityList, searchCity } from './webapi';
 
 const { TextArea } = Input;
@@ -39,6 +39,7 @@ class BasicEdit extends React.Component<any, any> {
       initCityName: '',
       initPreferChannel: []
     };
+    this.searchCity = _.debounce(this.searchCity, 500);
   }
   componentDidMount() {
     this.getBasicDetails();
@@ -408,7 +409,7 @@ class BasicEdit extends React.Component<any, any> {
                     {getFieldDecorator('city', {
                       rules: [{ required: true, message: 'Please select City!' }],
                       initialValue: customer.city
-                    })(<AutoComplete dataSource={cityList.map((city) => city.cityName)} onSearch={_.debounce(this.searchCity, 500)} />)}
+                    })(<AutoComplete dataSource={cityList.map((city) => city.cityName)} onSearch={this.searchCity} />)}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -426,12 +427,7 @@ class BasicEdit extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem label="Consent">
-                    {getFieldDecorator('consent', {
-                      valuePropName: 'checked',
-                      initialValue: true
-                    })(<Radio>Email communication</Radio>)}
-                  </FormItem>
+                  <FormItem label="Consent">{customer.userConsentList && customer.userConsentList.length > 0 ? customer.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}</FormItem>
                 </Col>
 
                 <Col span={12}>

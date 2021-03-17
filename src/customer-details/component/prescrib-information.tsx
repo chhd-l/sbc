@@ -69,7 +69,7 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
   };
 
   render() {
-    const { list, pagination } = this.state;
+    const { list, pagination, loading } = this.state;
     const columns = [
       {
         title: 'Prescriber ID',
@@ -100,7 +100,14 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <Table rowKey="id" columns={columns} dataSource={list} pagination={pagination} onChange={this.onTableChange} />
+        <Table
+          rowKey="id"
+          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+          columns={columns}
+          dataSource={list}
+          pagination={pagination}
+          onChange={this.onTableChange}
+        />
       </div>
     );
   }

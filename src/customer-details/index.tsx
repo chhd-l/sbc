@@ -107,9 +107,7 @@ export default class CustomerDetails extends React.Component<any, any> {
           <Breadcrumb.Item>
             <a href="/customer-list">Pet owner list</a>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <FormattedMessage id="consumer.consumerDetails" />
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>Pet owner detail</Breadcrumb.Item>
         </Breadcrumb>
         {/*导航面包屑*/}
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>

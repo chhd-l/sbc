@@ -64,7 +64,7 @@ class AuditLog extends Component<any, any> {
     let params = {
       descs: 'dateAdded',
       keyword: keyword,
-      module: 'campaign',
+      module: 'Campaign',
       relationId: this.props.automationId,
       type: '',
       pageSize: pagination.pageSize,
@@ -116,7 +116,7 @@ class AuditLog extends Component<any, any> {
 
     return (
       <AuthWrapper functionName="f_automation_detail">
-        <Card title={'Pet owner communication'} bordered={false} extra={<Search placeholder="input search text" onSearch={(value) => this.searchAuditList(value)} style={{ width: 200 }} />}>
+        <Card bordered={false} extra={<Search placeholder="input search text" onSearch={(value) => this.searchAuditList(value)} style={{ width: 200 }} />}>
           <Table rowKey="id" loading={loading} columns={auditLogColumns} dataSource={auditList} pagination={pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
         </Card>
       </AuthWrapper>

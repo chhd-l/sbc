@@ -580,11 +580,11 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title="Order number" value="orderNumber">
-          <FormattedMessage id="order.orderNumber" />
+        <Option title="Order id" value="orderNumber">
+          <FormattedMessage id="order.orderId" />
         </Option>
-        <Option title="Subscriptio number" value="subscriptioNumber">
-          <FormattedMessage id="order.subscriptioNumber" />
+        <Option title="Subscriptio id" value="subscriptioNumber">
+          <FormattedMessage id="order.subscriptionId" />
         </Option>
       </Select>
     );

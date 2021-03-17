@@ -138,7 +138,9 @@ export default class AddressFieldSetting extends React.Component<any, any> {
               <Button type="primary" onClick={this.saveFieldSetting}>
                 Save
               </Button>
-              <Button onClick={() => this.onStepChange(1)}>Back</Button>
+              <Button onClick={() => this.onStepChange(1)} style={{ marginLeft: 20 }}>
+                Back
+              </Button>
             </div>
           )}
         </Spin>

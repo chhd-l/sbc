@@ -537,8 +537,8 @@ export default class CouponInfoForm extends Component<any, any> {
             </FormItem>
           )}
           <ErrorDiv>
-            <FormItem {...formItemLayout} label="Threshold" required={true}>
-              <RadioGroup value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)} style={{ marginTop: '20px' }}>
+            <FormItem {...formItemLayout} label="Threshold" required={true} style={{ marginTop: '40px' }}>
+              <RadioGroup value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)}>
                 <FormItem>
                   <Radio value={1}>
                     {/* <span style={styles.darkColor}>满&nbsp;&nbsp;</span> */}

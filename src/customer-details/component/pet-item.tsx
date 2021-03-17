@@ -359,9 +359,14 @@ class PetItem extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Divider />
-                <Row gutter={16}>
-                  <Col span={24}>
+                <Row gutter={16} type="flex" align="middle">
+                  <Col span={16}>
                     <div style={{ fontSize: 16, color: '#666' }}>Life stage information</div>
+                  </Col>
+                  <Col span={8} style={{ textAlign: 'right' }}>
+                    <Button type="link" size="small" icon="sync">
+                      Refresh
+                    </Button>
                   </Col>
                 </Row>
                 <Row gutter={16}>
@@ -371,7 +376,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Stage duration" required>
+                    <Form.Item label="Stage ending" required>
                       <Input value="" disabled />
                     </Form.Item>
                   </Col>
@@ -381,7 +386,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Stage duration" required>
+                    <Form.Item label="Stage ending" required>
                       <Input value="" disabled />
                     </Form.Item>
                   </Col>

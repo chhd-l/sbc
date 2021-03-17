@@ -10,9 +10,14 @@ type TResult = {
  * 获取Payment Setting
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export function getPaymentSetting() {
-  return Fetch<TResult>('/store/storePaymentSetting');
-}
+
+export const addStorePayment = (rids) => {
+  return Fetch<TResult>('/storePayment/addStorePayment', {
+    method: 'POST',
+    body: JSON.stringify(rids)
+  });
+};
+
 /**
  * 保存Payment Setting
  * @param info

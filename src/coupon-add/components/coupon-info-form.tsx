@@ -102,6 +102,8 @@ export default class CouponInfoForm extends Component<any, any> {
       joinLevel: any;
       allGroups: any;
       segmentIds: any;
+      couponPromotionType: number | string;
+      couponDiscount: number | string;
       // 键值设置方法
       fieldsValue: Function;
       // 修改时间区间方法
@@ -149,6 +151,8 @@ export default class CouponInfoForm extends Component<any, any> {
     joinLevel: 'joinLevel',
     allGroups: 'allGroups',
     segmentIds: 'segmentIds',
+    couponPromotionType: 'couponPromotionType',
+    couponDiscount: 'couponDiscount',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -250,7 +254,13 @@ export default class CouponInfoForm extends Component<any, any> {
       value: segmentIds
     });
   };
-
+  couponPromotionTypeOnChange = (value) => {
+    const { fieldsValue } = this.props.relaxProps;
+    fieldsValue({
+      field: 'couponPromotionType',
+      value
+    });
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
@@ -280,7 +290,9 @@ export default class CouponInfoForm extends Component<any, any> {
       storeCateIds,
       allGroups,
       joinLevel,
-      segmentIds
+      segmentIds,
+      couponPromotionType,
+      couponDiscount
     } = this.props.relaxProps;
     console.log(sourceStoreCateList, 'sourceStoreCateList----');
     console.log(storeCateList, 'storeCateList----');
@@ -296,7 +308,22 @@ export default class CouponInfoForm extends Component<any, any> {
     console.log(storeCateValues, 'storeCateValues----');
     return (
       <RightContent>
-        <Form>
+        <Form labelAlign={'left'}>
+          <FormItem {...formItemSmall} label="Coupon type" required={true}>
+            {getFieldDecorator('couponPromotionType', {
+              initialValue: couponPromotionType
+            })(
+              <RadioGroup value={couponPromotionType} onChange={(e) => this.couponPromotionTypeOnChange((e as any).target.value)}>
+                <Radio value={0}>
+                  <span style={styles.darkColor}>Amount</span>
+                </Radio>
+                <Radio value={1}>
+                  <span style={styles.darkColor}>Percentage</span>
+                </Radio>
+              </RadioGroup>
+            )}
+          </FormItem>
+          <div className="bold-title">Basic Setting</div>
           <FormItem {...formItemSmall} label="Coupon name" required={true}>
             {getFieldDecorator('couponName', {
               initialValue: couponName,
@@ -369,7 +396,7 @@ export default class CouponInfoForm extends Component<any, any> {
                 this.changeRangeDayType((e as any).target.value);
               }}
             > */}
-            <FormItem style={{ width: 800 }}>
+            <FormItem style={{ width: 800, marginBottom: 0 }}>
               {/* <Radio value={0} style={styles.radioStyle}> */}
               {getFieldDecorator('rangeDay', {
                 initialValue: startTime && endTime && [moment(startTime), moment(endTime)],
@@ -436,7 +463,7 @@ export default class CouponInfoForm extends Component<any, any> {
               </FormItem> */}
             {/* </RadioGroup> */}
           </FormItem>
-          <ErrorDiv>
+          {couponPromotionType === 0 && (
             <FormItem {...formItemSmall} label="Coupon value" required={true}>
               <Row>
                 {getFieldDecorator('denomination', {
@@ -473,10 +500,47 @@ export default class CouponInfoForm extends Component<any, any> {
                 {/*<span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
               </Row>
             </FormItem>
+          )}
+          {couponPromotionType === 1 && (
+            <FormItem {...formItemSmall} label="Coupon discount" required={true}>
+              <Row>
+                {getFieldDecorator('couponDiscount', {
+                  initialValue: couponDiscount,
+                  rules: [
+                    { required: true, message: 'Please input coupon discount.' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
+                            callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+                          }
+                        }
+                        callback();
+                      }
+                    }
+                  ]
+                })(
+                  <Input
+                    placeholder="0.1-9.9"
+                    maxLength={3}
+                    onChange={async (e) => {
+                      await fieldsValue({
+                        field: 'couponDiscount',
+                        value: e.currentTarget.value
+                      });
+                    }}
+                    style={{ width: 360 }}
+                  />
+                )}
+                {/*<span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
+              </Row>
+            </FormItem>
+          )}
+          <ErrorDiv>
             <FormItem {...formItemLayout} label="Threshold" required={true}>
-              <RadioGroup value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)}>
+              <RadioGroup value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)} style={{ marginTop: '20px' }}>
                 <FormItem>
-                  <Radio value={1} style={styles.radioStyle}>
+                  <Radio value={1}>
                     {/* <span style={styles.darkColor}>满&nbsp;&nbsp;</span> */}
                     {getFieldDecorator('fullBuyPrice', {
                       initialValue: fullBuyPrice,
@@ -516,18 +580,17 @@ export default class CouponInfoForm extends Component<any, any> {
                         }}
                       />
                     )}
-                    {/*<span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
                   </Radio>
-                </FormItem>
-                <FormItem>
-                  <Radio value={0} style={{ ...styles.lastRadioStyle, width: 80 }}>
+                  <Radio value={0}>
                     <span style={styles.darkColor}>No threshold</span>
                   </Radio>
                 </FormItem>
               </RadioGroup>
             </FormItem>
           </ErrorDiv>
-          <FormItem {...formItemLayout} label="Select product" required={true}>
+
+          <div className="bold-title">Select product</div>
+          <FormItem {...formItemLayout} required={true}>
             <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
                 <span style={styles.darkColor}>All products</span>
@@ -541,13 +604,15 @@ export default class CouponInfoForm extends Component<any, any> {
             </RadioGroup>
           </FormItem>
           {scopeType === 4 ? (
-            <FormItem wrapperCol={{ offset: 4 }} id={'page-content'}>
+            <FormItem id={'page-content'}>
               {/* {this.chooseGoods().dom}  {...this._scopeBoxStyle(scopeType)}*/}
-              <SelectedGoodsGrid />
+              <div style={{ width: 800 }}>
+                <SelectedGoodsGrid />
+              </div>
             </FormItem>
           ) : null}
           {scopeType === 5 ? (
-            <FormItem wrapperCol={{ offset: 4 }}>
+            <FormItem>
               {getFieldDecorator('storeCateIds', {
                 rules: [
                   {
@@ -583,14 +648,15 @@ export default class CouponInfoForm extends Component<any, any> {
             </FormItem>
           ) : null}
 
-          <FormItem {...formItemLayout} label="Target consumer:" required={true}>
+          <div className="bold-title">Target consumer</div>
+          <FormItem {...formItemLayout} required={true}>
             <RadioGroup value={joinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
               <Radio value={0}>All</Radio>
               <Radio value={-3}>Select group</Radio>
             </RadioGroup>
           </FormItem>
           {joinLevel === -3 && (
-            <FormItem wrapperCol={{ offset: 4 }}>
+            <FormItem>
               {getFieldDecorator('segmentIds', {
                 rules: [
                   {
@@ -614,14 +680,15 @@ export default class CouponInfoForm extends Component<any, any> {
               )}
             </FormItem>
           )}
-
-          <FormItem {...formItemLayout} label="Instructions for use">
+          <div className="bold-title">Instructions for use</div>
+          <FormItem {...formItemLayout}>
             {getFieldDecorator('couponDesc', {
               initialValue: couponDesc,
               rules: [{ max: 500, message: '使用说明最多500个字符' }]
             })(
               <TextArea
                 maxLength={500}
+                style={{ width: 800, marginTop: '10px' }}
                 placeholder={'0 to 500 Words'}
                 onChange={(e) => {
                   fieldsValue({

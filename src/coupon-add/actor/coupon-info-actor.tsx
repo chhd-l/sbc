@@ -59,7 +59,9 @@ export default class CouponInfoActor extends Actor {
       storeCateIds: [],
       joinLevel: 0,
       allGroups: [],
-      segmentIds: []
+      segmentIds: [],
+      couponPromotionType: 0, //Amount: 0 or Percentage: 1
+      couponDiscount: null
     };
   }
   /**

@@ -178,7 +178,28 @@ export default class AppStore extends Store {
    * 获取请求参数
    */
   fetchParams = () => {
-    const { couponName, couponType, storeCateIds, joinLevel, segmentIds, couponCateIds, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType, fullBuyPrice, scopeType, chooseBrandIds, chooseCateIds, couponDesc, chooseSkuIds } = this.state().toJS();
+    const {
+      couponName,
+      couponType,
+      storeCateIds,
+      joinLevel,
+      segmentIds,
+      couponPromotionType,
+      couponDiscount,
+      couponCateIds,
+      rangeDayType,
+      startTime,
+      endTime,
+      effectiveDays,
+      denomination,
+      fullBuyType,
+      fullBuyPrice,
+      scopeType,
+      chooseBrandIds,
+      chooseCateIds,
+      couponDesc,
+      chooseSkuIds
+    } = this.state().toJS();
 
     let params = {
       couponName,
@@ -191,7 +212,9 @@ export default class AppStore extends Store {
       denomination,
       fullBuyType,
       scopeType,
-      couponDesc
+      couponDesc,
+      couponPromotionType,
+      couponDiscount
     } as any;
 
     if (rangeDayType === 0) {

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Relax } from 'plume2';
 import { Button, DatePicker, Form, Input, Select } from 'antd';
 import { Const, noop, SelectGroup, util } from 'qmkit';
@@ -123,7 +123,7 @@ export default class SearchHead extends React.Component<any, any> {
               search();
             }}
           >
-            Search
+            <FormattedMessage id="Marketing.Search" />
           </Button>
         </FormItem>
       </Form>

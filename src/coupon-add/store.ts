@@ -362,7 +362,7 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('goodsActor: allGroups', res.context.segmentList);
     } else {
-      message.error('load group error.');
+      // message.error('load group error.');
     }
   };
 }

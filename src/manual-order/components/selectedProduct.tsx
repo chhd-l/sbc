@@ -1,7 +1,7 @@
 import { Button, Icon, Select, Table } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
-import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts } from '../webapi';
+import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
 const defaultImg = require('./img/none.png');
 const { Option } = Select;
 export default class SelectedProduct extends React.Component<any, any> {
@@ -11,7 +11,8 @@ export default class SelectedProduct extends React.Component<any, any> {
       visible: false,
       confirmLoading: false,
       dataSource: [],
-      options: []
+      options: [],
+      loading: false
     };
   }
 
@@ -21,24 +22,16 @@ export default class SelectedProduct extends React.Component<any, any> {
     });
   };
   handleOk = () => {
-    this.setState({
-      ModalText: 'The modal will be closed after two seconds',
-      confirmLoading: true
-    });
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false
-      });
-    }, 2000);
+    this.setState(
+      {
+        visible: false
+      },
+      () => {
+        this.querySysDictionary();
+      }
+    );
   };
 
-  handleCancel = () => {
-    console.log('Clicked cancel button');
-    this.setState({
-      visible: false
-    });
-  };
   componentDidMount() {
     this.querySysDictionary();
   }
@@ -64,6 +57,7 @@ export default class SelectedProduct extends React.Component<any, any> {
    * 获取更新频率月｜ 周
    */
   async querySysDictionary() {
+    this.setState({ loading: true });
     const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), getGoodsInfoCarts(this.props.storeId, this.props.customerId)]);
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
@@ -72,13 +66,25 @@ export default class SelectedProduct extends React.Component<any, any> {
     // debugger
     this.setState({
       options,
-      dataSource: goodsList
+      dataSource: goodsList,
+      loading: false
     });
   }
-
+  /**
+   *
+   * @param row 删除购物车的商品
+   */
+  async deleteCartsGood(row) {
+    const { storeId, customerId } = this.props;
+    await deleteGoodsInfoCarts(storeId, {
+      goodsInfoId: row.goodsInfoId,
+      customerId
+    });
+    this.querySysDictionary();
+  }
   render() {
     // const { getFieldDecorator } = this.props.form;
-    const { options, dataSource } = this.state;
+    const { options, dataSource, loading } = this.state;
     const { storeId, customerId } = this.props;
     const columns = [
       {
@@ -167,8 +173,8 @@ export default class SelectedProduct extends React.Component<any, any> {
         title: 'Operation',
         dataIndex: 'Operation',
         key: 'Operation',
-        render: () => {
-          return <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 25 }} className="icon iconfont iconDelete"></span>;
+        render: (text, record) => {
+          return <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 25 }} onClick={() => this.deleteCartsGood(record)} className="icon iconfont iconDelete"></span>;
         }
       }
     ];
@@ -183,8 +189,14 @@ export default class SelectedProduct extends React.Component<any, any> {
           Add product
         </Button>
         <div className="basicInformation">
-          <Table pagination={false} rowKey="index" dataSource={dataSource} columns={columns} />
-          <AddProductModal storeId={storeId} customerId={customerId} visible={this.state.visible} handleCancel={this.handleCancel} handleOk={this.handleOk}></AddProductModal>
+          <Table
+            pagination={false}
+            loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            rowKey="goodsInfoId"
+            dataSource={dataSource}
+            columns={columns}
+          />
+          <AddProductModal storeId={storeId} customerId={customerId} visible={this.state.visible} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>
         </div>
       </div>
     );

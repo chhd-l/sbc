@@ -43,7 +43,8 @@ export function getGoodsInfoCarts(store_id, cunstomer_id) {
 //删除商品
 export function deleteGoodsInfoCarts(store_id, filterParams) {
   return Fetch<TResult>(`/store/${store_id}/carts`, {
-    method: 'delete'
+    method: 'delete',
+    body: JSON.stringify({ ...filterParams })
   });
 }
 //删除商品

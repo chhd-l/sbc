@@ -1,5 +1,6 @@
 import { Button, Col, Form, Icon, Input, InputNumber, message, Modal, Pagination, Radio, Row, Table } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
+import { Const } from 'qmkit';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { getGoodsSKUS, addGoodsIntoCarts } from '../webapi';
@@ -70,14 +71,11 @@ export default class AddProductModal extends Component {
       pageNum: 1,
       pageSize: 5
     });
-    console.log(this.state);
   };
   inputNumberChange(e, key) {
-    console.log(e, key);
     this.state.goodsLists[key].buyCount = e;
   }
   async addCarts(row) {
-    console.log(row, '====');
     if (row.buyCount === 0) {
       message.info('please selected quantity');
       return;
@@ -87,6 +85,9 @@ export default class AddProductModal extends Component {
       goodsInfoId: row.goodsInfoId,
       goodsNum: row.buyCount
     });
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success('add success');
+    }
   }
 
   render() {

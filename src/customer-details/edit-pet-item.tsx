@@ -5,6 +5,9 @@ import { FormattedMessage } from 'react-intl';
 import PetItem from './component/pet-item';
 
 export default function EditPetItem(props: any) {
+  const customerId = props.match.params.id || '';
+  const customerAccount = props.match.params.account || '';
+  const petId = props.match.params.petid || '';
   return (
     <div>
       <Breadcrumb>
@@ -15,12 +18,12 @@ export default function EditPetItem(props: any) {
           <a href="/customer-list">Pet owner list</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <FormattedMessage id="consumer.consumerDetails" />
+          <a href={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Edit pet information</Breadcrumb.Item>
       </Breadcrumb>
       <div>
-        <PetItem petId={props.match.params.id} />
+        <PetItem petId={petId} />
       </div>
     </div>
   );

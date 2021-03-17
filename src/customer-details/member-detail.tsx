@@ -213,9 +213,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             <Breadcrumb.Item>
               <a href="/customer-list">Pet owner list</a>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <FormattedMessage id="consumer.consumerDetails" />
-            </Breadcrumb.Item>
+            <Breadcrumb.Item>Pet owner detail</Breadcrumb.Item>
           </Breadcrumb>
           {/*导航面包屑*/}
           <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -352,7 +350,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <span className="iconfont iconDelete"></span> Delete
                           </Button>
                         </Popconfirm> */}
-                        <Link to={`/edit-pet/${pet.petsId}`}>
+                        <Link to={`/edit-pet/${this.state.customerId}/${this.state.customerAccount}/${pet.petsId}`}>
                           <span className="iconfont iconEdit"></span> Edit
                         </Link>
                       </div>
@@ -430,7 +428,14 @@ export default class CustomerDetails extends React.Component<any, any> {
               <a href="/customer-list">Pet owner list</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <FormattedMessage id="consumer.consumerDetails" />
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.backToDetail();
+                }}
+              >
+                Pet owner detail
+              </a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
           </Breadcrumb>

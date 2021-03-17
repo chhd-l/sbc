@@ -373,9 +373,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}>
                               {pet.petsBreed && (
                                 <Tooltip title={pet.petsBreed}>
-                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }} title={pet.petsBreed}>
-                                    {pet.petsBreed}
-                                  </div>
+                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{pet.petsBreed}</div>
                                 </Tooltip>
                               )}
                             </Col>
@@ -395,7 +393,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Row>
             </div>
             <div className="container">
-              <Headline title="Other information" extra={<RangePicker defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />} />
+              <Headline title="Other information" extra={<RangePicker allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />} />
               <Tabs defaultActiveKey="order" onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
                   <OrderInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />

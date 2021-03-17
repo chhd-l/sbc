@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import { Const, Headline, history, cache } from 'qmkit';
 import _, { divide } from 'lodash';
-import { getCountryList, getStateList, getCityList, searchCity } from './webapi';
+import { getCountryList, getStateList, getCityList, searchCity, getManualAddressFieldList } from './webapi';
 
 const { TextArea } = Input;
 
@@ -31,6 +31,9 @@ class BasicEdit extends React.Component<any, any> {
       countryList: [],
       stateList: [],
       cityList: [],
+      cityType: 1, //1: free text + search box, 2: drop down
+      stateEnable: false,
+      dropDownCityList: [],
       currentBirthDay: '2020-01-01',
       clinicList: [],
       currentForm: {},
@@ -48,11 +51,27 @@ class BasicEdit extends React.Component<any, any> {
   }
 
   getDict = async () => {
+    const addressTypeList = await getManualAddressFieldList();
     const countryList = await getCountryList();
     const stateList = await getStateList();
+    let cityType = 2;
+    let stateEnable = false;
+    let cityList = [];
+    if (addressTypeList.length > 0 && addressTypeList.findIndex((fd) => fd.fieldName === 'City') > -1) {
+      cityType = addressTypeList.find((fd) => fd.fieldName === 'City').inputDropDownBoxFlag === 1 ? 2 : 1;
+    }
+    if (addressTypeList.length > 0 && addressTypeList.findIndex((fd) => fd.fieldName === 'State') > -1) {
+      stateEnable = addressTypeList.find((fd) => fd.fieldName === 'State').enableFlag === 1;
+    }
+    if (cityType === 2) {
+      cityList = await getCityList();
+    }
     this.setState({
       countryList: countryList,
-      stateList: stateList
+      stateList: stateList,
+      cityType: cityType,
+      dropDownCityList: cityList,
+      stateEnable: stateEnable
     });
   };
 
@@ -385,7 +404,7 @@ class BasicEdit extends React.Component<any, any> {
                   </FormItem>
                 </Col>
 
-                {this.state.storeId == 123457910 && (
+                {this.state.stateEnable && (
                   <Col span={12}>
                     <FormItem label="State">
                       {getFieldDecorator('province', {
@@ -409,7 +428,19 @@ class BasicEdit extends React.Component<any, any> {
                     {getFieldDecorator('city', {
                       rules: [{ required: true, message: 'Please select City!' }],
                       initialValue: customer.city
-                    })(<AutoComplete dataSource={cityList.map((city) => city.cityName)} onSearch={this.searchCity} />)}
+                    })(
+                      this.state.cityType === 1 ? (
+                        <AutoComplete dataSource={cityList.map((city) => city.cityName)} onSearch={this.searchCity} />
+                      ) : (
+                        <Select showSearch>
+                          {this.state.dropDownCityList.map((item) => (
+                            <Option value={item.name} key={item.id}>
+                              {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      )
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>

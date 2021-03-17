@@ -61,6 +61,26 @@ export async function getAddressFieldList(type: string = 'MANUALLY') {
 }
 
 /**
+ * 获取address字段的输入类型
+ * @returns
+ */
+export async function getManualAddressFieldList() {
+  return await Fetch<TResult>('/addressDisplaySetting/queryByStoreId/MANUALLY', {
+    method: 'GET'
+  })
+    .then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        return data.res.context.addressDisplaySettings;
+      } else {
+        return [];
+      }
+    })
+    .catch(() => {
+      return [];
+    });
+}
+
+/**
  * 获取是否进行地址验证的设置
  * @returns
  */

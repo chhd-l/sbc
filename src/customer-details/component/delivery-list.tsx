@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button, Tooltip } from 'antd';
 import { getAddressListByType, delAddress } from '../webapi';
 
 interface Iprop {
@@ -99,13 +99,17 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         key: 'oper',
         render: (_, record) => (
           <div>
-            <Button type="link" size="small" onClick={() => onEdit({ ...NEW_ADDRESS_TEMPLATE, ...record })}>
-              <i className="iconfont iconEdit"></i>
-            </Button>
-            <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText="Confirm" cancelText="Cancel">
-              <Button type="link" size="small">
-                <i className="iconfont iconDelete"></i>
+            <Tooltip title="Edit">
+              <Button type="link" size="small" onClick={() => onEdit({ ...NEW_ADDRESS_TEMPLATE, ...record })}>
+                <i className="iconfont iconEdit"></i>
               </Button>
+            </Tooltip>
+            <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText="Confirm" cancelText="Cancel">
+              <Tooltip title="Delete">
+                <Button type="link" size="small">
+                  <i className="iconfont iconDelete"></i>
+                </Button>
+              </Tooltip>
             </Popconfirm>
           </div>
         )

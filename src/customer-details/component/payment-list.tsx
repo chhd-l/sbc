@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Popconfirm, message } from 'antd';
+import { Table, Popconfirm, message, Button, Tooltip } from 'antd';
 import { getPaymentMethods, deleteCard } from '../webapi';
 import { cache } from 'qmkit';
 
@@ -97,7 +97,11 @@ export default class PaymentList extends React.Component<Iprop, any> {
         key: 'oper',
         render: (_, record) => (
           <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.deleteCard(record.id)} okText="Confirm" cancelText="Cancel">
-            <a className="iconfont iconDelete"></a>
+            <Tooltip title="Delete">
+              <Button type="link">
+                <a className="iconfont iconDelete"></a>
+              </Button>
+            </Tooltip>
           </Popconfirm>
         )
       }

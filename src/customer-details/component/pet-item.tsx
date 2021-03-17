@@ -7,8 +7,6 @@ import { querySysDictionary, petsById, editPets, delPets } from '../webapi';
 import { getTaggingList } from './webapi';
 
 const { Option } = Select;
-const dogImg = require('../img/dog.png');
-const catImg = require('../img/cat.png');
 
 interface Iprop extends FormComponentProps {
   petId: string;
@@ -199,8 +197,8 @@ class PetItem extends React.Component<Iprop, any> {
           <Form {...formItemLayout}>
             <Row gutter={16}>
               <Col span={4} style={{ paddingLeft: '30px' }}>
-                <div>
-                  <AssetManagement images={petImg && petImg.startsWith('http') ? [petImg] : [pet.petsType === 'dog' ? dogImg : catImg]} choosedImgCount={1} selectImgFunction={this.onChooseImg} deleteImgFunction={this.onDeleteImg} />
+                <div style={{ margin: 40 }}>
+                  <AssetManagement images={petImg && petImg.startsWith('http') ? [petImg] : []} choosedImgCount={1} selectImgFunction={this.onChooseImg} deleteImgFunction={this.onDeleteImg} />
                 </div>
               </Col>
               <Col span={20}>

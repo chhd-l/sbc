@@ -1,6 +1,7 @@
 import React from 'react';
 import { Headline, Const } from 'qmkit';
-import { Alert, Table, Button, Switch, Modal, Form, Input, Select, Tabs } from 'antd';
+import { Radio, Button, Switch, Modal, Form, Input, Select, Tabs } from 'antd';
+import SortFields from './sort-fields';
 import { getAddressSetting } from '../../validation-setting/webapi';
 
 const Option = Select.Option;
@@ -73,9 +74,16 @@ export default class Fields extends React.Component<any, any> {
     });
   };
 
+  onSortManualEnd = (sortList) => {
+    console.log(sortList);
+    this.setState({
+      manu
+    });
+  };
+
   render() {
     const { visible, field, apiName } = this.state;
-    const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onStepChange } = this.props;
+    const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onStepChange, onSortEnd } = this.props;
     const columns = [
       {
         title: 'Sequence',
@@ -123,6 +131,17 @@ export default class Fields extends React.Component<any, any> {
         key: 'c5'
       },
       {
+        title: 'Field columns',
+        dataIndex: 'occupancyNum',
+        key: 'c8',
+        render: (text, record) => (
+          <Radio.Group buttonStyle="solid" value={text} onChange={(e) => this.onChangeField(record.id, { occupancyNum: e.target.value })}>
+            <Radio.Button value={1}>1</Radio.Button>
+            <Radio.Button value={2}>2</Radio.Button>
+          </Radio.Group>
+        )
+      },
+      {
         title: 'Required',
         dataIndex: 'requiredFlag',
         key: 'c6',
@@ -149,16 +168,16 @@ export default class Fields extends React.Component<any, any> {
       <div>
         <Tabs activeKey={activeKey} onChange={onChangeActiveKey}>
           <Tabs.TabPane tab="Input manually" key="MANUALLY">
-            <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
+            {/* <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
               Display
-            </Button>
-            <Table rowKey="id" columns={columns} dataSource={manualFieldList} pagination={false} />
+            </Button> */}
+            <SortFields columns={columns} dataList={manualFieldList} onSortEnd={onSortEnd} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Input automatically" key="AUTOMATICALLY">
-            <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
+            {/* <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
               Display
-            </Button>
-            <Table rowKey="id" columns={columns} dataSource={autoFieldList} pagination={false} />
+            </Button> */}
+            <SortFields columns={columns} dataList={autoFieldList} onSortEnd={onSortEnd} />
           </Tabs.TabPane>
         </Tabs>
 

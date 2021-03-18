@@ -1318,7 +1318,6 @@ export default class AppStore extends Store {
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
     param = param.set('goodsDescriptionDetailList', this.state().get('goodsDescriptionDetailList'));
 
-
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)
     // this.dispatch('goodsActor: saveLoading', true);
@@ -1346,7 +1345,6 @@ export default class AppStore extends Store {
     } else {
       result = await save(param && param.toJS());
     }
-
 
     // this.dispatch('goodsActor: saveLoading', false);
     this.dispatch('loading:end');
@@ -2063,12 +2061,34 @@ export default class AppStore extends Store {
     const { res } = (await getSeo(goodsId, type)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      let title = '{name} | Royal Canin Shop';
+      let description = '{description}';
+      const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+      if (loginInfo) {
+        switch (loginInfo.storeId) {
+          case 123457910: //"美国"
+            title = '{name} | Royal Canin Shop';
+            description = '{description}';
+            break;
+          case 123457911: //"土耳其"
+            title = '{name} {subtitle} | Royal Canin Türkiye';
+            description = '{name} {subtitle} Royal Canin resmi mağazasında. "X" TL üzeri siparişlerinizde ücretsiz kargo. Sipariş verin veya mama aboneliğinizi başlatın!';
+            break;
+          case 123457907: //"俄罗斯"
+            title = 'Купить {technology} корм Royal Canin {name} в официальном интернет-магазине';
+            description = 'Купить {technology} корм Royal Canin {name} со скидкой 10% при оформлении подписки. Сделайте заказ в интернет-магазине Royal Canin уже сегодня!';
+            break;
+          default:
+            title = '{name} | Royal Canin Shop';
+            description = '{description}';
+        }
+      }
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : '{name} | Royal Canin Shop',
+          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : title,
           metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}', //{name}, {subtitle}, {sales category}, {tagging}
-          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : '{description}', //{description}
+          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : description, //{description}
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );

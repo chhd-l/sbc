@@ -35,7 +35,7 @@ export default class CouponInfo extends Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{id ? 'Edit ' : 'Create '}coupon</Breadcrumb.Item>
         </BreadCrumb>
-        <div className="container">
+        <div className="container" style={{ paddingLeft: 60 }}>
           <Headline title={id ? 'Edit coupon' : 'Create coupon'} />
           <div style={styles.container}>
             {/*<MobileShowBox />*/}

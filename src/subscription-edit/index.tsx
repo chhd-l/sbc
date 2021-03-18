@@ -930,7 +930,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             );
           }}
           disabledDate={this.disabledStartDate}
-          defaultValue={currentOrder && currentOrder.tradeItems[0] && currentOrder.tradeItems[0].nextDeliveryTime ? moment(currentOrder.tradeItems[0].nextDeliveryTime) : moment()}
+          defaultValue={currentOrder && currentOrder.tradeItems && currentOrder.tradeItems[0] && currentOrder.tradeItems[0].nextDeliveryTime ? moment(currentOrder.tradeItems[0].nextDeliveryTime) : moment()}
           onSelect={this.updateNextDeliveryTime}
         />
       </div>

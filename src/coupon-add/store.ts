@@ -6,6 +6,9 @@ import { message, Modal } from 'antd';
 import * as webApi from './webapi';
 import CouponInfoActor from './actor/coupon-info-actor';
 import LoadingActor from './actor/loading-actor';
+import * as webapi from '@/marketing-add/full-discount/webapi';
+import { fromJS } from 'immutable';
+import * as commonWebapi from '@/marketing-add/webapi';
 export default class AppStore extends Store {
   bindActor() {
     return [new CouponInfoActor(), new LoadingActor()];
@@ -22,6 +25,8 @@ export default class AppStore extends Store {
     }
 
     this.fetchCouponCate();
+    this.initCategory();
+    this.getAllGroups();
     if (couponType) {
       this.fieldsValue({ field: 'couponType', value: couponType });
     }
@@ -131,6 +136,10 @@ export default class AppStore extends Store {
         field: 'goodsRows',
         value: []
       });
+      this.dispatch('coupon: info: field: value', {
+        field: 'storeCateIds',
+        value: []
+      });
     });
   };
 
@@ -173,17 +182,43 @@ export default class AppStore extends Store {
    * 获取请求参数
    */
   fetchParams = () => {
-    const { couponName, couponType, couponCateIds, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType, fullBuyPrice, scopeType, chooseBrandIds, chooseCateIds, couponDesc, chooseSkuIds } = this.state().toJS();
+    const {
+      couponName,
+      couponType,
+      storeCateIds,
+      couponJoinLevel,
+      segmentIds,
+      couponPromotionType,
+      couponDiscount,
+      couponCateIds,
+      rangeDayType,
+      startTime,
+      endTime,
+      effectiveDays,
+      denomination,
+      fullBuyType,
+      fullBuyPrice,
+      scopeType,
+      chooseBrandIds,
+      chooseCateIds,
+      couponDesc,
+      chooseSkuIds
+    } = this.state().toJS();
 
     let params = {
       couponName,
       couponType,
       cateIds: couponCateIds,
+      storeCateIds,
+      couponJoinLevel,
+      segmentIds,
       rangeDayType,
       denomination,
       fullBuyType,
       scopeType,
-      couponDesc
+      couponDesc,
+      couponPromotionType,
+      couponDiscount
     } as any;
 
     if (rangeDayType === 0) {
@@ -324,5 +359,37 @@ export default class AppStore extends Store {
     });
     await this.fetchCouponCate();
     return new Promise((resolve) => resolve(ids));
+  };
+
+  /**
+   * 店铺分类
+   * @param discountBean
+   * @returns {Promise<void>}
+   */
+  initCategory = async () => {
+    const { res } = await webApi.getGoodsCate();
+    if (res && res.code === Const.SUCCESS_CODE) {
+      this.dispatch('goodsActor: initStoreCateList', fromJS(res.context));
+    }
+  };
+
+  /**
+   * 获取select groups
+   *
+   *
+   */
+
+  getAllGroups = async () => {
+    const { res } = await webApi.getAllGroups({
+      pageNum: 0,
+      pageSize: 1000000,
+      segmentType: 0
+    });
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('goodsActor: allGroups', res.context.segmentList);
+    } else {
+      // message.error('load group error.');
+    }
   };
 }

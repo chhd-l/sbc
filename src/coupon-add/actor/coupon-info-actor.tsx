@@ -2,6 +2,7 @@ import { Actor, Action } from 'plume2';
 import { fromJS } from 'immutable';
 import moment from 'moment';
 import { Const } from 'qmkit';
+import { IList } from '../../../typings/globalType';
 
 export default class CouponInfoActor extends Actor {
   defaultState() {
@@ -50,10 +51,19 @@ export default class CouponInfoActor extends Actor {
       btnDisabled: false,
       goodsModalVisible: false,
       // 聚合给选择分类使用
-      reducedCateIds: []
+      reducedCateIds: [],
+
+      // 店铺分类信息
+      storeCateList: [],
+      sourceStoreCateList: [],
+      storeCateIds: [],
+      couponJoinLevel: 0,
+      allGroups: [],
+      segmentIds: [],
+      couponPromotionType: 0, //Amount: 0 or Percentage: 1
+      couponDiscount: null
     };
   }
-
   /**
    * 键值设置
    * @param state
@@ -181,5 +191,39 @@ export default class CouponInfoActor extends Actor {
       return cate;
     });
     return state.set('reducedCateIds', cateList).set('cates', newCates);
+  }
+
+  /**
+   * 初始化店铺分类
+   * @param state
+   * @param dataList
+   */
+  @Action('goodsActor: initStoreCateList')
+  initStoreCateList(state, dataList: IList) {
+    // 改变数据形态，变为层级结构
+    const newDataList = dataList
+      .filter((item) => item.get('cateParentId') == 0)
+      .map((data) => {
+        const children = dataList
+          .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
+          .map((childrenData) => {
+            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
+            if (!lastChildren.isEmpty()) {
+              childrenData = childrenData.set('children', lastChildren);
+            }
+            return childrenData;
+          });
+
+        if (!children.isEmpty()) {
+          data = data.set('children', children);
+        }
+        return data;
+      });
+    return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
+  }
+
+  @Action('goodsActor: allGroups')
+  getAllGroups(state, allGroups) {
+    return state.set('allGroups', fromJS(allGroups));
   }
 }

@@ -11,6 +11,12 @@ type TResult = {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 
+export const queryByStoreId = (rids) => {
+  return Fetch<TResult>('/storePayment/queryByStoreId', {
+    method: 'GET'
+  });
+};
+
 export const addStorePayment = (rids) => {
   return Fetch<TResult>('/storePayment/addStorePayment', {
     method: 'POST',

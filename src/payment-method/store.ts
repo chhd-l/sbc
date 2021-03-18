@@ -4,6 +4,7 @@ import ListActor from './actor/list-actor';
 import * as webapi from './webapi';
 //import { message } from 'antd';
 import { Const, cache } from 'qmkit';
+import { fromJS } from 'immutable';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -17,23 +18,34 @@ export default class AppStore extends Store {
     return [new ListActor()];
   }
 
-  onShow = () => {
-    this.transaction(() => {
-      this.dispatch('modal:show');
-    });
+  onShow = (res) => {
+    this.dispatch('method:switchVisible', res);
   };
 
-  onHide = () => {
-    this.dispatch('modal:hide');
+  checked = (res) => {
+    this.dispatch('method:switchChecked', res);
   };
 
   init = async () => {
-    let payment = this.state().get('addStorePayment');
-    const { res } = await webapi.addStorePayment(payment);
+    const { res } = await webapi.queryByStoreId();
 
     this.transaction(() => {
       if (res.code === Const.SUCCESS_CODE) {
-        this.dispatch('Payment:addStorePayment', res.context.logVOList);
+        let storePaymentVOs = res.context.storePaymentVOs || [];
+        let List1 = [];
+        let List2 = [];
+        let List3 = [];
+        storePaymentVOs.map((item) => {
+          if (item.paymentType === 0) {
+            List1.push(item);
+          } else if (item.paymentType === 1) {
+            List2.push(item);
+          }
+          if (item.paymentType === 2) {
+            List3.push(item);
+          }
+        });
+        this.dispatch('Payment:queryByStoreId', { List1, List2, List3 });
       }
     });
   };

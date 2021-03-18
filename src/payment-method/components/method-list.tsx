@@ -14,45 +14,27 @@ export default class PaymentSetting extends React.Component<any, any> {
     super(props);
     this.state = {
       paymentVisible: false,
-      switchVisible: false,
       enabled: true,
-      paymentForm: {}, //edit
-      paymentList: []
+      paymentForm: {} //edit
     };
     this.closeModel = this.closeModel.bind(this);
   }
   props: {
     relaxProps?: {
-      onSearch: Function;
-      onBatchAudit: Function;
-      onBatchReceive: Function;
-      onSearchFormChange: Function;
-      selected: IList;
-      exportModalData: IMap;
-      onExportModalChange: Function;
-      onExportModalHide: Function;
-      onExportByParams: Function;
-      onExportByIds: Function;
-      tab: IMap;
+      queryByStoreId: any;
+      switchVisible: any;
+      onShow: Function;
+      switchChecked: any;
     };
   };
 
   static relaxProps = {
-    onSearch: noop,
-    onBatchAudit: noop,
-    onBatchReceive: noop,
-    onSearchFormChange: noop,
-    selected: 'selected',
-    exportModalData: 'exportModalData',
-    onExportModalChange: noop,
-    onExportModalHide: noop,
-    onExportByParams: noop,
-    onExportByIds: noop,
-    tab: 'tab'
+    queryByStoreId: 'queryByStoreId',
+    switchVisible: 'switchVisible',
+    onShow: noop,
+    switchChecked: 'checked'
   };
-  componentDidMount() {
-    this.getPaymentSetting();
-  }
+  componentDidMount() {}
   getPaymentSetting = async () => {
     /*const { res } = await webapi.getPaymentSetting();
     if (res.code === Const.SUCCESS_CODE) {
@@ -69,10 +51,8 @@ export default class PaymentSetting extends React.Component<any, any> {
   };
 
   onSwitchChange = () => {
-    console.log(111111111111);
-    this.setState({
-      switchVisible: true
-    });
+    const { onShow } = this.props.relaxProps;
+    onShow(true);
   };
 
   onChange = () => {
@@ -83,68 +63,175 @@ export default class PaymentSetting extends React.Component<any, any> {
     this.getPaymentSetting();
   }
   render() {
-    const { paymentList } = this.state;
+    const { queryByStoreId, switchChecked } = this.props.relaxProps;
+
+    setTimeout(() => {
+      console.log(queryByStoreId, 22222);
+    });
+
     return (
       <div>
-        <BreadCrumb />
-        {/*导航面包屑*/}
-        <div className="container-search" style={{ height: '100vh', background: '#fff' }}>
-          <Headline title="Payment method" />
-          <Switch style={{ marginRight: 15 }} onChange={this.onChange} />
-
-          <div className="method">
+        <div className="method">
+          {queryByStoreId.List1 && (
             <div className="method-title flex-start-align">
               <span></span>
               <span>Online payment</span>
               <span>Set in payment method model</span>
             </div>
-            <Row>
-              {paymentList &&
-                paymentList.map((item, index) => (
-                  <Col span={8} key={index}>
-                    <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
-                      <div className="methodItem">
-                        <img
-                          src={item.imgUrl}
-                          style={{
-                            width: '150px',
-                            height: '80px',
-                            marginTop: '10px'
-                          }}
-                        />
-                      </div>
-                      <div className="bar">
-                        <div className="status">{item.isOpen === 1 ? 'Enabled' : 'Disabled'}</div>
-
-                        <div className={'flex-start-align'}>
-                          <Switch style={{ marginRight: 15 }} onChange={this.onSwitchChange} />
-                          <Tooltip placement="top" title="Edit">
-                            <a
-                              style={{ color: 'red' }}
-                              type="link"
-                              onClick={() => {
-                                this.setState({
-                                  paymentVisible: true,
-                                  paymentForm: item
-                                });
-                              }}
-                              /* className="links"*/
-                              className="iconfont iconEdit"
-                            >
-                              {/* <FormattedMessage id="edit" />*/}
-                            </a>
-                          </Tooltip>
+          )}
+          <div className="method-list flex-start-align">
+            {queryByStoreId.List1 &&
+              queryByStoreId.List1.map((item, index) => {
+                return (
+                  <Row>
+                    <Col span={8} key={index}>
+                      <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
+                        <div className="methodItem">
+                          <img
+                            src={item.imgUrl}
+                            style={{
+                              width: '150px',
+                              height: '80px',
+                              marginTop: '10px'
+                            }}
+                          />
                         </div>
-                      </div>
-                    </Card>
-                  </Col>
-                ))}
-            </Row>
-          </div>
+                        <div className="bar">
+                          <div className="status">{item.name}</div>
 
-          <PaymentModel paymentForm={this.state.paymentForm} visible={this.state.paymentVisible} parent={this} reflash={() => this.reflash()} />
-          <MethodTips visible={this.state.switchVisible} parent={this} reflash={() => this.reflash()} />
+                          <div className={'flex-start-align'}>
+                            <Switch style={{ marginRight: 15 }} checked={switchChecked} onClick={this.onSwitchChange} />
+                            <Tooltip placement="top" title="Edit">
+                              <a
+                                style={{ color: 'red' }}
+                                type="link"
+                                onClick={() => {
+                                  this.setState({
+                                    paymentVisible: true,
+                                    paymentForm: item
+                                  });
+                                }}
+                                /* className="links"*/
+                                className="iconfont iconEdit"
+                              ></a>
+                            </Tooltip>
+                          </div>
+                        </div>
+                      </Card>
+                    </Col>
+                  </Row>
+                );
+              })}
+          </div>
         </div>
+
+        <div className="method">
+          {queryByStoreId.List2 && (
+            <div className="method-title flex-start-align">
+              <span></span>
+              <span>Offline payment</span>
+            </div>
+          )}
+          <div className="flex-start-align">
+            {queryByStoreId.List2 &&
+              queryByStoreId.List2.map((item, index) => {
+                return (
+                  <Row>
+                    <Col span={8} key={index}>
+                      <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
+                        <div className="methodItem">
+                          <img
+                            src={item.imgUrl}
+                            style={{
+                              width: '150px',
+                              height: '80px',
+                              marginTop: '10px'
+                            }}
+                          />
+                        </div>
+                        <div className="bar">
+                          <div className="status">{item.name}</div>
+
+                          <div className={'flex-start-align'}>
+                            <Switch style={{ marginRight: 15 }} checked={switchChecked} onClick={this.onSwitchChange} />
+                            <Tooltip placement="top" title="Edit">
+                              <a
+                                style={{ color: 'red' }}
+                                type="link"
+                                onClick={() => {
+                                  this.setState({
+                                    paymentVisible: true,
+                                    paymentForm: item
+                                  });
+                                }}
+                                /* className="links"*/
+                                className="iconfont iconEdit"
+                              ></a>
+                            </Tooltip>
+                          </div>
+                        </div>
+                      </Card>
+                    </Col>
+                  </Row>
+                );
+              })}
+          </div>
+        </div>
+
+        <div className="method">
+          {queryByStoreId.List3 && (
+            <div className="method-title flex-start-align">
+              <span></span>
+              <span>COD</span>
+            </div>
+          )}
+          <div className="flex-start-align">
+            {queryByStoreId.List3 &&
+              queryByStoreId.List3.map((item, index) => {
+                return (
+                  <Row>
+                    <Col span={8} key={index}>
+                      <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
+                        <div className="methodItem">
+                          <img
+                            src={item.imgUrl}
+                            style={{
+                              width: '150px',
+                              height: '80px',
+                              marginTop: '10px'
+                            }}
+                          />
+                        </div>
+                        <div className="bar">
+                          <div className="status">{item.name}</div>
+
+                          <div className={'flex-start-align'}>
+                            <Switch style={{ marginRight: 15 }} checked={switchChecked} onClick={this.onSwitchChange} />
+                            <Tooltip placement="top" title="Edit">
+                              <a
+                                style={{ color: 'red' }}
+                                type="link"
+                                onClick={() => {
+                                  this.setState({
+                                    paymentVisible: true,
+                                    paymentForm: item
+                                  });
+                                }}
+                                /* className="links"*/
+                                className="iconfont iconEdit"
+                              ></a>
+                            </Tooltip>
+                          </div>
+                        </div>
+                      </Card>
+                    </Col>
+                  </Row>
+                );
+              })}
+          </div>
+        </div>
+        <PaymentModel paymentForm={this.state.paymentForm} visible={this.state.paymentVisible} parent={this} reflash={() => this.reflash()} />
+        <MethodTips />
       </div>
     );
   }

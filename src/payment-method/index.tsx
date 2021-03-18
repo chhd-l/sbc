@@ -1,6 +1,6 @@
 import React from 'react';
 import { StoreProvider } from 'plume2';
-import { AuthWrapper, BreadCrumb } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Headline } from 'qmkit';
 import AppStore from './store';
 //import SearchHead from './components/search-head';
 import MethodList from './components/method-list';
@@ -26,15 +26,8 @@ export default class OrderReturnList extends React.Component<any, any> {
       <AuthWrapper functionName="rolf001">
         <div className="order-con">
           <BreadCrumb />
-          {/* <Breadcrumb separator=">">
-            <Breadcrumb.Item>订单</Breadcrumb.Item>
-            <Breadcrumb.Item>订单管理</Breadcrumb.Item>
-            <Breadcrumb.Item>退单列表</Breadcrumb.Item>
-          </Breadcrumb> */}
-          {/*<div className="container-search">
-            <SearchHead />
-          </div>*/}
-          <div className="container">
+          <div className="container" style={{ height: '100vh' }}>
+            <Headline title="Payment method" />
             <MethodList />
           </div>
         </div>

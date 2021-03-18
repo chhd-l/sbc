@@ -4,6 +4,7 @@ import { fromJS, List } from 'immutable';
 export default class ListActor extends Actor {
   defaultState() {
     return {
+      queryByStoreId: [],
       addStorePayment: {
         img_url: 0,
         isOpen: 0,
@@ -13,13 +14,30 @@ export default class ListActor extends Actor {
         pspId: 0,
         storeId: 0
       },
-      loading: true
+      loading: true,
+      switchVisible: false,
+      switchChecked: false
     };
+  }
+
+  @Action('Payment:queryByStoreId')
+  queryByStoreId(state: IMap, content) {
+    return state.set('queryByStoreId', content);
   }
 
   @Action('Payment:addStorePayment')
   addStorePayment(state: IMap, content) {
     return state.set('addStorePayment', content);
+  }
+
+  @Action('method:switchVisible')
+  switchVisible(state: IMap, content) {
+    return state.set('switchVisible', content);
+  }
+
+  @Action('method:switchChecked')
+  switchChecked(state: IMap, content) {
+    return state.set('switchChecked', content);
   }
 
   @Action('order-return-list:loading:start')

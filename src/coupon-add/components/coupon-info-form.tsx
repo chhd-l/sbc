@@ -99,7 +99,7 @@ export default class CouponInfoForm extends Component<any, any> {
       loading: boolean;
       sourceStoreCateList: any;
       storeCateList: any;
-      joinLevel: any;
+      couponJoinLevel: any;
       allGroups: any;
       segmentIds: any;
       couponPromotionType: number | string;
@@ -148,7 +148,7 @@ export default class CouponInfoForm extends Component<any, any> {
     sourceStoreCateList: 'sourceStoreCateList',
     storeCateList: 'storeCateList',
     cateIds: 'cateIds',
-    joinLevel: 'joinLevel',
+    couponJoinLevel: 'couponJoinLevel',
     allGroups: 'allGroups',
     segmentIds: 'segmentIds',
     couponPromotionType: 'couponPromotionType',
@@ -240,7 +240,7 @@ export default class CouponInfoForm extends Component<any, any> {
     debugger;
     const { fieldsValue } = this.props.relaxProps;
     fieldsValue({
-      field: 'joinLevel',
+      field: 'couponJoinLevel',
       value: value
     });
   };
@@ -289,7 +289,7 @@ export default class CouponInfoForm extends Component<any, any> {
       storeCateList,
       storeCateIds,
       allGroups,
-      joinLevel,
+      couponJoinLevel,
       segmentIds,
       couponPromotionType,
       couponDiscount
@@ -650,18 +650,18 @@ export default class CouponInfoForm extends Component<any, any> {
 
           <div className="bold-title">Target consumer</div>
           <FormItem {...formItemLayout} required={true}>
-            <RadioGroup value={joinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
+            <RadioGroup value={couponJoinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
               <Radio value={0}>All</Radio>
               <Radio value={-3}>Select group</Radio>
             </RadioGroup>
           </FormItem>
-          {joinLevel === -3 && (
+          {couponJoinLevel === -3 && (
             <FormItem>
               {getFieldDecorator('segmentIds', {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      if (!value && joinLevel === -3) {
+                      if (!value && couponJoinLevel === -3) {
                         callback('Please select group.');
                       }
                       callback();

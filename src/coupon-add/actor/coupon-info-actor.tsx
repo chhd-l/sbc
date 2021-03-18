@@ -57,7 +57,7 @@ export default class CouponInfoActor extends Actor {
       storeCateList: [],
       sourceStoreCateList: [],
       storeCateIds: [],
-      joinLevel: 0,
+      couponJoinLevel: 0,
       allGroups: [],
       segmentIds: [],
       couponPromotionType: 0, //Amount: 0 or Percentage: 1

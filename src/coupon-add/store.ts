@@ -136,6 +136,10 @@ export default class AppStore extends Store {
         field: 'goodsRows',
         value: []
       });
+      this.dispatch('coupon: info: field: value', {
+        field: 'storeCateIds',
+        value: []
+      });
     });
   };
 
@@ -182,7 +186,7 @@ export default class AppStore extends Store {
       couponName,
       couponType,
       storeCateIds,
-      joinLevel,
+      couponJoinLevel,
       segmentIds,
       couponPromotionType,
       couponDiscount,
@@ -206,7 +210,7 @@ export default class AppStore extends Store {
       couponType,
       cateIds: couponCateIds,
       storeCateIds,
-      joinLevel,
+      couponJoinLevel,
       segmentIds,
       rangeDayType,
       denomination,

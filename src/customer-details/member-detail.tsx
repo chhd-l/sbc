@@ -219,7 +219,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 extra={
                   <>
                     <Link to={`/edit-petowner/${this.state.customerId}/${this.state.customerAccount}`}>
-                      <i className="iconfont iconEdit"></i> Edit
+                      <i className="iconfont iconDetails"></i> Detail
                     </Link>
                     <Link to={`/pet-owner-activity/${this.state.customerId}`} style={{ marginLeft: '20px' }}>
                       <i className="iconfont iconfenxiang"></i> Overview
@@ -244,19 +244,23 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </Col>
                 </Row>
                 <Row className="text-highlight" style={{ marginTop: 5 }}>
-                  <Col span={4}>{basic.customerName}</Col>
-                  <Col span={4}>{basic.birthDay ? moment().diff(moment(basic.birthDay, 'YYYY-MM-DD'), 'years') : ''}</Col>
+                  <Col span={4}>
+                    <div style={{ paddingLeft: 19 }}>{basic.customerName}</div>
+                  </Col>
+                  <Col span={4}>
+                    <div style={{ paddingLeft: 19 }}>{basic.birthDay ? moment().diff(moment(basic.birthDay, 'YYYY-MM-DD'), 'years') : ''}</div>
+                  </Col>
                 </Row>
               </div>
               <div className="basic-info-detail">
                 <Row type="flex" align="middle">
-                  <Col span={4} className="text-tip">
+                  <Col span={3} className="text-tip">
                     Registration date
                   </Col>
                   <Col span={6} className="text-highlight">
-                    {moment(basic.createTime, 'YYYY-MM-DD').format('YYYY-MM-DD')}
+                    {basic.createTime ? moment(basic.createTime, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}
                   </Col>
-                  <Col span={4} className="text-tip">
+                  <Col span={3} className="text-tip">
                     Email address
                   </Col>
                   <Col span={6} className="text-highlight">
@@ -264,13 +268,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </Col>
                 </Row>
                 <Row type="flex" align="middle">
-                  <Col span={4} className="text-tip">
+                  <Col span={3} className="text-tip">
                     Phone number
                   </Col>
                   <Col span={6} className="text-highlight">
                     {basic.contactPhone}
                   </Col>
-                  <Col span={4} className="text-tip">
+                  <Col span={3} className="text-tip">
                     Prefer channel
                   </Col>
                   <Col span={6} className="text-highlight">
@@ -285,13 +289,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </Col>
                 </Row>
                 <Row type="flex" align="middle">
-                  <Col span={4} className="text-tip">
+                  <Col span={3} className="text-tip">
                     Country
                   </Col>
                   <Col span={6} className="text-highlight">
                     {basic.country}
                   </Col>
-                  <Col span={4} className="text-tip">
+                  <Col span={3} className="text-tip">
                     Address reference
                   </Col>
                   <Col span={6} className="text-highlight">
@@ -299,13 +303,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col span={4} className="text-tip">
+                  <Col span={3} className="text-tip">
                     Consent
                   </Col>
                   <Col span={6} className="text-highlight">
                     {basic.userConsentList && basic.userConsentList.length > 0 ? basic.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
                   </Col>
-                  <Col span={4} className="text-tip">
+                  <Col span={3} className="text-tip">
                     City
                   </Col>
                   <Col span={6} className="text-highlight">
@@ -317,20 +321,19 @@ export default class CustomerDetails extends React.Component<any, any> {
             <div className="detail-container">
               <Headline title="Tagging" />
               <Row>
-                <Col span={20}>
-                  <Form layout="vertical">
-                    <FormItem label="Tag name">
-                      <Select value={this.state.petOwnerTag} mode="multiple" onChange={this.setPetOwnerTagging}>
-                        {this.state.tagList
-                          .filter((item) => item.segmentType == 0)
-                          .map((v, idx) => (
-                            <Option value={v.id} key={idx}>
-                              {v.name}
-                            </Option>
-                          ))}
-                      </Select>
-                    </FormItem>
-                  </Form>
+                <Col span={12}>
+                  <div className="text-highlight">Tag name</div>
+                  <div>
+                    <Select style={{ width: '100%' }} value={this.state.petOwnerTag} mode="multiple" onChange={this.setPetOwnerTagging}>
+                      {this.state.tagList
+                        .filter((item) => item.segmentType == 0)
+                        .map((v, idx) => (
+                          <Option value={v.id} key={idx}>
+                            {v.name}
+                          </Option>
+                        ))}
+                    </Select>
+                  </div>
                 </Col>
               </Row>
             </div>
@@ -347,7 +350,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                           </Button>
                         </Popconfirm> */}
                         <Link to={`/edit-pet/${pet.petsId}`}>
-                          <span className="iconfont iconEdit"></span> Edit
+                          <span className="iconfont iconDetails"></span> Detail
                         </Link>
                       </div>
                       <Row gutter={10}>

@@ -168,20 +168,14 @@ export function delPets(filterParams = {}) {
 }
 
 export function getPaymentMethods(param) {
-  return Fetch<TResult>('/payment-method/query-by-customer-id', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...param
-    })
+  return Fetch<TResult>(`/${param.storeId}/pay-payment-info/${param.customerId}`, {
+    method: 'GET'
   });
 }
 
 export function deleteCard(param) {
-  return Fetch<TResult>('/payment-method/delete-by-id', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...param
-    })
+  return Fetch<TResult>(`/pay-payment-info/${param.id}`, {
+    method: 'DELETE'
   });
 }
 

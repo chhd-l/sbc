@@ -223,7 +223,7 @@ export default class ListView extends React.Component<any, any> {
                         </span> */}
 
                         <div style={{ width: 310, display: 'inline-block' }}>
-                          <span style={{ marginLeft: 20, color: '#000' }}>{v.subscribeId} </span>
+                          <span style={{ marginLeft: 20, color: '#000' }}>{v.externalSubscribeId} </span>
                         </div>
 
                         <span style={{ marginLeft: 60 }}>

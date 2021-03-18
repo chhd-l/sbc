@@ -70,25 +70,19 @@ export default class OrderReceive extends React.Component<any, any> {
       title: 'Collection Time',
       dataIndex: 'receiveTime',
       key: 'receiveTime',
-      render: (receiveTime) =>
-        receiveTime && moment(receiveTime).format(Const.TIME_FORMAT).toString()
+      render: (receiveTime) => receiveTime && moment(receiveTime).format(Const.TIME_FORMAT).toString()
     },
     {
       title: 'Amount Received',
       dataIndex: 'payOrderPrice',
       key: 'payOrderPrice',
-      render: (text, record) =>
-        record.payOrderStatus == 1
-          ? ''
-          : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-            (text || 0).toFixed(2)
+      render: (text, record) => (record.payOrderStatus == 1 ? '' : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (text || 0).toFixed(2))
     },
     {
       title: 'Accounts Receivable',
       dataIndex: 'receivableAccount',
       key: 'receivableAccount',
-      render: (receivableAccount) =>
-        receivableAccount ? this._desensitizeAccount(receivableAccount) : '-'
+      render: (receivableAccount) => (receivableAccount ? this._desensitizeAccount(receivableAccount) : '-')
     },
     {
       title: 'Accessories',
@@ -96,13 +90,7 @@ export default class OrderReceive extends React.Component<any, any> {
       key: 'encloses',
       render: (encloses) =>
         encloses ? (
-          <Popover
-            key={'encloses'}
-            placement="topRight"
-            title={''}
-            trigger="click"
-            content={<img style={styles.attachmentView} src={encloses} />}
-          >
+          <Popover key={'encloses'} placement="topRight" title={''} trigger="click" content={<img style={styles.attachmentView} src={encloses} />}>
             <a href="#">
               <img style={styles.attachment} src={encloses} />
             </a>
@@ -145,6 +133,7 @@ export default class OrderReceive extends React.Component<any, any> {
   render() {
     const { detail, payRecord, paymentInfo } = this.props.relaxProps;
     const id = detail.get('id');
+    const toExternalOrderId = detail.get('toExternalOrderId');
     const totalPayCash = detail.getIn(['tradePrice', 'totalPrice']) || 0;
 
     //交易状态
@@ -155,7 +144,7 @@ export default class OrderReceive extends React.Component<any, any> {
         <div style={styles.addReceive}>
           <div style={styles.orderInfo}>
             <label style={styles.orderNum}>
-              {<FormattedMessage id="orderNumber" />}:{id}
+              {<FormattedMessage id="orderNumber" />}:{toExternalOrderId}
               &nbsp;&nbsp;&nbsp;&nbsp;
               {<FormattedMessage id="amountReceivable" />}:$
               {(totalPayCash || 0).toFixed(2)}
@@ -164,24 +153,16 @@ export default class OrderReceive extends React.Component<any, any> {
         </div>
 
         <div>
-          <Table
-            columns={this.receiveColumns}
-            dataSource={payRecord.toJS()}
-            pagination={false}
-            bordered
-            rowKey={(_record, index) => index.toString()}
-          />
+          <Table columns={this.receiveColumns} dataSource={payRecord.toJS()} pagination={false} bordered rowKey={(_record, index) => index.toString()} />
         </div>
 
         <Row>
           <Col span={16}>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="paymentId" />}:{' '}
-              {paymentInfo.get('chargeId')}
+              {<FormattedMessage id="paymentId" />}: {paymentInfo.get('chargeId')}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="paymentTime" />}:{' '}
-              {tradeState.get('createTime')}
+              {<FormattedMessage id="paymentTime" />}: {tradeState.get('createTime')}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="name" />}: {paymentInfo.get('accountName')}
@@ -190,16 +171,13 @@ export default class OrderReceive extends React.Component<any, any> {
               {<FormattedMessage id="email" />}: {paymentInfo.get('email')}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="phoneNumber" />}:{' '}
-              {paymentInfo.get('phone')}
+              {<FormattedMessage id="phoneNumber" />}: {paymentInfo.get('phone')}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="cardNumber" />}:{' '}
-              {paymentInfo.get('last4Digits')}
+              {<FormattedMessage id="cardNumber" />}: {paymentInfo.get('last4Digits')}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="paymentMethod" />}:{' '}
-              {paymentInfo.get('vendor')}
+              {<FormattedMessage id="paymentMethod" />}: {paymentInfo.get('vendor')}
             </p>
           </Col>
         </Row>
@@ -229,9 +207,7 @@ export default class OrderReceive extends React.Component<any, any> {
     return (
       <Menu>
         <Menu.Item key="0">
-          <a onClick={() => onConfirm(id)}>
-            {<FormattedMessage id="confirm" />}
-          </a>
+          <a onClick={() => onConfirm(id)}>{<FormattedMessage id="confirm" />}</a>
         </Menu.Item>
         <Menu.Divider />
       </Menu>

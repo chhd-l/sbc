@@ -12,11 +12,6 @@ export default class orders extends Component<any, any> {
     super(props);
     this.state = {
       orderStatus: [],
-      orderCategories: [
-        { label: 'Single purchase', value: 'SINGLE' },
-        { label: '1st autoship order', value: 'FIRST_AUTOSHIP' },
-        { label: 'Recurrent orders of autoship', value: 'RECURRENT_AUTOSHIP' }
-      ],
       orderList: [],
       pagination: {
         current: 1,
@@ -57,7 +52,7 @@ export default class orders extends Component<any, any> {
     let params = Object.assign(formData, {
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize,
-      orderType: 'NORMAL_ORDER',
+      orderType: 'ALL_ORDER',
       buyerAccount: this.props.customerAccount
     });
     this.setState({
@@ -105,28 +100,9 @@ export default class orders extends Component<any, any> {
     };
     const columns = [
       {
-        title: 'Category',
-        dataIndex: 'orderCategory',
-        width: '20%',
-        render: (text) => {
-          let orderCategory = orderCategories.find((x) => x.value === text);
-          return (
-            <Tooltip
-              overlayStyle={{
-                overflowY: 'auto'
-              }}
-              placement="bottomLeft"
-              title={<div>{orderCategory ? orderCategory.name : ''}</div>}
-            >
-              <p className="overFlowtext">{orderCategory ? orderCategory.name : ''}</p>
-            </Tooltip>
-          );
-        }
-      },
-      {
         title: 'Number',
         dataIndex: 'id',
-        width: '20%',
+        width: '30%',
         render: (text) => {
           return (
             <Tooltip
@@ -144,7 +120,7 @@ export default class orders extends Component<any, any> {
       {
         title: 'Time',
         dataIndex: 'creationDate',
-        width: '25%',
+        width: '30%',
         render: (text) => {
           return (
             <Tooltip
@@ -162,7 +138,7 @@ export default class orders extends Component<any, any> {
       {
         title: 'Status',
         dataIndex: 'status',
-        width: '25%',
+        width: '30%',
         render: (text, record) => {
           return (
             <Tooltip
@@ -207,29 +183,6 @@ export default class orders extends Component<any, any> {
               }}
               prefix={<Icon type="search" onClick={() => this.getOrderList()} />}
             />
-          </Col>
-          <Col span={14} className="activities-right" style={{ marginBottom: '20px' }}>
-            <Select
-              className="filter"
-              placeholder="Order Category"
-              allowClear={true}
-              dropdownMatchSelectWidth={false}
-              maxTagCount={0}
-              style={{ width: '120px' }}
-              mode="multiple"
-              onChange={(value) =>
-                this.onFormChange({
-                  field: 'orderCategory',
-                  value: value ? (value as []).join(',') : ''
-                })
-              }
-            >
-              {orderCategories.map((item) => (
-                <Option value={item.value} key={item.label}>
-                  {item.label}
-                </Option>
-              ))}
-            </Select>
           </Col>
           <Col span={24}>
             <Table

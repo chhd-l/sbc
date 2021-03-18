@@ -81,7 +81,7 @@ export default class ExportModal extends React.Component<any, any> {
             byIdsTitle: byIdsTitle
           }}
         />
-        
+
       </Modal>
     );
   }
@@ -117,25 +117,28 @@ class ExportForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <Form style={{ marginLeft: 50 }}>
-        <FormItem >
-          {getFieldDecorator('exportType', {
-            rules: [
-              {
-                required: true,
-                message: 'Please select an export method'
-              }
-            ]
-          })(
-            <RadioGroup>
-              <Radio value="byParams">{this.props.byParamsTitle}</Radio>
-              <Radio value="byIds">{this.props.byIdsTitle}</Radio>
-            </RadioGroup>
-          )}<p style={{ color:'#e2001a',lineHeight:0.5 }}>Reminder: up to 100 orders</p>
-        </FormItem>
-        
-        
-      </Form>
+      <div>
+        <Form style={{ marginLeft: 50 }}>
+          <FormItem >
+            {getFieldDecorator('exportType', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please select an export method'
+                }
+              ]
+            })(
+              <RadioGroup>
+                <Radio value="byParams">{this.props.byParamsTitle}</Radio>
+                <Radio value="byIds">{this.props.byIdsTitle}</Radio>
+              </RadioGroup>
+            )}
+          </FormItem>
+
+        </Form>
+        <p style={{ color: '#e2001a', lineHeight: 0.5 }}>Reminder: up to 100 orders</p>
+      </div>
+
     );
   }
 }

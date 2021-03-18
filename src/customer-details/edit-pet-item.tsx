@@ -22,7 +22,7 @@ export default function EditPetItem(props: any) {
         <Breadcrumb.Item>
           <a href={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Edit pet information</Breadcrumb.Item>
+        <Breadcrumb.Item>Pet information</Breadcrumb.Item>
       </Breadcrumb>
       <div>
         <PetItem petId={petId} />

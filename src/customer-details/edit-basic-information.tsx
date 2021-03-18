@@ -20,7 +20,7 @@ export default function EditBasicInfo(props: any) {
         <Breadcrumb.Item>
           <a href={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Edit basic information</Breadcrumb.Item>
+        <Breadcrumb.Item>Basic information</Breadcrumb.Item>
       </Breadcrumb>
       <div>
         <BasicEdit customerId={customerId} customerAccount={customerAccount} />

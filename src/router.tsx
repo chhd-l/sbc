@@ -921,6 +921,10 @@ const routes = [
   {
     path: '/validation-setting',
     asyncComponent: () => import('./validation-setting')
+  },
+  {
+    path: '/appointment-list',
+    asyncComponent: () => import('./appointment-list')
   }
 ];
 

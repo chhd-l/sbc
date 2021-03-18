@@ -1,0 +1,26 @@
+.customer-date-field {
+  display: block;
+  margin-left: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  color: #fff;
+  line-height: 28px;
+  text-align: center;
+  background-color: #4bde6e;
+
+  &.disabled {
+    background-color: #f4f4f4 !important;
+    color: '#999' !important;
+    cursor: not-allowed;
+  }
+}
+
+.ant-fullcalendar-selected-day .customer-date-field {
+  background-color: #bd001c;
+}
+
+.ant-fullcalendar-next-month-btn-day .customer-date-field,
+.ant-fullcalendar-last-month-cell .customer-date-field {
+  background-color: #d3d3d3;
+}

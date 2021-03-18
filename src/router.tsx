@@ -925,6 +925,10 @@ const routes = [
   {
     path: '/appointment-list',
     asyncComponent: () => import('./appointment-list')
+  },
+  {
+    path: '/appointment-add',
+    asyncComponent: () => import('./appointment-list/new')
   }
 ];
 

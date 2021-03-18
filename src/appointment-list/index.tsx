@@ -1,6 +1,6 @@
 import React from 'react';
-import { Headline, BreadCrumb } from 'qmkit';
-import { Table, Form, Row, Col, Input, DatePicker } from 'antd';
+import { Headline, BreadCrumb, history } from 'qmkit';
+import { Table, Form, Row, Col, Input, DatePicker, Button } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -119,16 +119,26 @@ export default class AppointmentList extends React.Component<any, any> {
                   />
                 </FormItem>
               </Col>
+              <Col span={24} style={{ textAlign: 'center' }}>
+                <Button type="primary">Search</Button>
+              </Col>
             </Row>
           </Form>
         </div>
-        <Table
-          rowKey="id"
-          columns={columns}
-          dataSource={list}
-          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
-          pagination={pagination}
-        />
+        <div className="container">
+          <div style={{ marginBottom: 10 }}>
+            <Button type="primary" onClick={() => history.push('/appointment-add')}>
+              Add new
+            </Button>
+          </div>
+          <Table
+            rowKey="id"
+            columns={columns}
+            dataSource={list}
+            loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            pagination={pagination}
+          />
+        </div>
       </div>
     );
   }

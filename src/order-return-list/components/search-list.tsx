@@ -393,7 +393,7 @@ export default class SearchList extends React.Component<any, any> {
                       .concat(returnGifts)
                       .map((v, k) => {
                         const img = v.get('pic') ? v.get('pic') : defaultImg;
-                        return k < 3 ? <img style={styles.listImages} src={img} title={v.get('skuName')} key={k} /> : null;
+                        return k < 3 ? <img style={styles.imgItem} src={img} title={v.get('skuName')} key={k} /> : null;
                       })}
 
                     {

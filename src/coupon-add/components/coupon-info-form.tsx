@@ -102,6 +102,7 @@ export default class CouponInfoForm extends Component<any, any> {
       couponJoinLevel: any;
       allGroups: any;
       segmentIds: any;
+      storeCateIds: any;
       couponPromotionType: number | string;
       couponDiscount: number | string;
       // 键值设置方法
@@ -153,6 +154,7 @@ export default class CouponInfoForm extends Component<any, any> {
     segmentIds: 'segmentIds',
     couponPromotionType: 'couponPromotionType',
     couponDiscount: 'couponDiscount',
+    storeCateIds: 'storeCateIds',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -237,7 +239,6 @@ export default class CouponInfoForm extends Component<any, any> {
   };
 
   targetCustomerRadioChange = (value) => {
-    debugger;
     const { fieldsValue } = this.props.relaxProps;
     fieldsValue({
       field: 'couponJoinLevel',
@@ -294,8 +295,10 @@ export default class CouponInfoForm extends Component<any, any> {
       couponPromotionType,
       couponDiscount
     } = this.props.relaxProps;
-    console.log(sourceStoreCateList, 'sourceStoreCateList----');
-    console.log(storeCateList, 'storeCateList----');
+    debugger;
+    console.log(storeCateIds, 'storeCateIds----');
+    console.log(couponJoinLevel, 'couponJoinLevel----');
+    console.log(segmentIds, 'segmentIds----');
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
     if (storeCateIds) {
@@ -649,8 +652,9 @@ export default class CouponInfoForm extends Component<any, any> {
           ) : null}
 
           <div className="bold-title">Target consumer</div>
+          {console.log(couponJoinLevel, 'couponJoinLevel99999999999')}
           <FormItem {...formItemLayout} required={true}>
-            <RadioGroup value={couponJoinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
+            <RadioGroup defaultValue={couponJoinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
               <Radio value={0}>All</Radio>
               <Radio value={-3}>Select group</Radio>
             </RadioGroup>

@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import { Const, Headline, history, cache } from 'qmkit';
 import _, { divide } from 'lodash';
-import { getCountryList, getStateList, getCityList, searchCity, getManualAddressFieldList } from './webapi';
+import { getCountryList, getStateList, getCityList, searchCity, getAddressFieldList } from './webapi';
 import { spawn } from 'child_process';
 
 const { TextArea } = Input;
@@ -53,7 +53,7 @@ class BasicEdit extends React.Component<any, any> {
   }
 
   getDict = async () => {
-    const addressTypeList = await getManualAddressFieldList();
+    const addressTypeList = await getAddressFieldList();
     const countryList = await getCountryList();
     const stateList = await getStateList();
     let cityType = 2;

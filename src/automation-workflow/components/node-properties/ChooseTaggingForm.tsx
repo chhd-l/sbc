@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Form, Input, Col, Row, Select, message, InputNumber, Radio, Icon } from 'antd';
 import * as webapi from '@/automation-workflow/webapi';
 import { Const } from 'qmkit';
-import { debug } from 'console';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -88,7 +87,7 @@ export default class ChooseTaggingForm extends Component<any, any> {
 
   radioChangeStyle(link, linkType) {
     if (link === linkType) {
-      return 'green';
+      return 'rgb(89, 247, 199)';
     }
   }
 
@@ -179,7 +178,7 @@ export default class ChooseTaggingForm extends Component<any, any> {
             <Row gutter={5} key={tagging.rowId}>
               {tagging.linkOp ? (
                 <Row>
-                  <Col span={10} style={{ marginLeft: '20px' }}>
+                  <Col span={10} className="taggingRadio" style={{ marginLeft: '20px' }}>
                     <Radio.Group
                       onChange={(e) => {
                         const value = (e.target as any).value;
@@ -189,12 +188,9 @@ export default class ChooseTaggingForm extends Component<any, any> {
                       value={tagging.linkOp}
                       className="linkStyle"
                     >
-                      <Radio.Button value="1" style={{ backgroundColor: this.radioChangeStyle(tagging.linkOp, '1') }}>
-                        And
-                      </Radio.Button>
-                      <Radio.Button value="2" style={{ backgroundColor: this.radioChangeStyle(tagging.linkOp, '2') }}>
-                        Or
-                      </Radio.Button>
+                      <Radio.Button className="union" value="1" style={{ backgroundColor: this.radioChangeStyle(tagging.linkOp, '1') }}></Radio.Button>
+                      <Radio.Button className="intersection" value="2" style={{ backgroundColor: this.radioChangeStyle(tagging.linkOp, '2') }}></Radio.Button>
+                      <Radio.Button className="difference" value="3" style={{ backgroundColor: this.radioChangeStyle(tagging.linkOp, '3') }}></Radio.Button>
                     </Radio.Group>
                   </Col>
                   <Col span={5}>

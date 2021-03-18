@@ -853,9 +853,11 @@ class TaskUpdate extends Component<any, any> {
         </div>
         {tabKey !== 'activity' ? (
           <div className="bar-button" style={{ left: '134px' }}>
-            <Button type="primary" style={{ marginRight: '10px' }} onClick={(e) => this.updateTask(e)}>
-              Save
-            </Button>
+            {editable ? (
+              <Button type="primary" style={{ marginRight: '10px' }} onClick={(e) => this.updateTask(e)}>
+                Save
+              </Button>
+            ) : null}
             <Button onClick={() => history.goBack()}>{<FormattedMessage id="back" />}</Button>
           </div>
         ) : null}

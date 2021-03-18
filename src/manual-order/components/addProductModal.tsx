@@ -150,9 +150,9 @@ export default class AddProductModal extends Component {
       },
 
       {
-        title: 'Operation',
-        dataIndex: 'Operation',
-        key: 'Operation',
+        title: 'add',
+        dataIndex: 'add',
+        key: 'add',
         render: (text, row) => {
           return <span onClick={() => this.addCarts(row)} style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 25 }} className="iconfont icongouwu"></span>;
         }

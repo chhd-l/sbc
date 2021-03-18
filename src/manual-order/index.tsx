@@ -6,6 +6,8 @@ import ConsumerInformation from './components/consumerInformation';
 import SelectedProduct from './components/selectedProduct';
 import PaymentInformation from './components/paymentInformation';
 
+import { getShopToken } from './webapi';
+
 const { Step } = Steps;
 
 class ManualOrder extends Component<any, any> {
@@ -20,20 +22,33 @@ class ManualOrder extends Component<any, any> {
       title: 'Valet order',
       current: 0,
       customerId: '',
-      storeId: storeId
+      storeId: storeId,
+      list: []
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
   }
   next(e) {
     e.preventDefault();
-
+    let { customerId, current, list } = this.state;
     this.props.form.validateFields((err) => {
-      if (!err && this.state.customerId) {
-        const current = this.state.current + 1;
+      if (!err && customerId) {
+        if (current === 1) {
+          if (list.length > 0) {
+            this.getShopTokenJump(customerId);
+          } else {
+            message.info('please add product');
+          }
+        } else {
+          current++;
+        }
         this.setState({ current });
       }
     });
+  }
+
+  async getShopTokenJump(customerId) {
+    const { res } = await getShopToken(customerId, {});
   }
 
   prev() {
@@ -48,7 +63,12 @@ class ManualOrder extends Component<any, any> {
       customerId
     });
   };
-
+  //获取购物车信息
+  getCartsList = (list) => {
+    this.setState({
+      list
+    });
+  };
   render() {
     const { current, title, customerId, storeId } = this.state;
     const steps = [
@@ -58,7 +78,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Selected product',
-        controller: <SelectedProduct stepName={'Product list:'} storeId={storeId} customerId={customerId} />
+        controller: <SelectedProduct stepName={'Product list:'} carts={this.getCartsList} storeId={storeId} customerId={customerId} />
       },
       {
         title: 'Delivery & payment information',

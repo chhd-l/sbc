@@ -54,6 +54,14 @@ export function updateGoodsInfoCarts(store_id, filterParams) {
     body: JSON.stringify({ ...filterParams })
   });
 }
+//获取token
+export function getShopToken(customerId, filterParams) {
+  return Fetch<TResult>(`/customer/login-customer-id/${customerId}`, {
+    method: 'Post',
+    body: JSON.stringify({ ...filterParams })
+  });
+}
+
 /**
  * get Dict
  * @param filterParams

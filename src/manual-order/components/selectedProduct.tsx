@@ -63,6 +63,7 @@ export default class SelectedProduct extends React.Component<any, any> {
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let goodsList = result[2].res.context?.goodsList ?? [];
     let options = [...months, ...weeks];
+    this.props.carts(goodsList);
     // debugger
     this.setState({
       options,
@@ -77,7 +78,7 @@ export default class SelectedProduct extends React.Component<any, any> {
   async deleteCartsGood(row) {
     const { storeId, customerId } = this.props;
     await deleteGoodsInfoCarts(storeId, {
-      goodsInfoId: row.goodsInfoId,
+      goodsInfoIds: [row.goodsInfoId],
       customerId
     });
     this.querySysDictionary();
@@ -196,6 +197,7 @@ export default class SelectedProduct extends React.Component<any, any> {
             dataSource={dataSource}
             columns={columns}
           />
+          <div style={{ textAlign: 'right', padding: '20px 0' }}>Product amount $1234</div>
           <AddProductModal storeId={storeId} customerId={customerId} visible={this.state.visible} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>
         </div>
       </div>

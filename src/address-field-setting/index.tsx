@@ -30,8 +30,8 @@ export default class AddressFieldSetting extends React.Component<any, any> {
     const manual = await getFieldList('MANUALLY');
     const auto = await getFieldList('AUTOMATICALLY');
     this.setState({
-      manualFieldList: manual,
-      autoFieldList: auto
+      manualFieldList: manual.sort((a, b) => a.sequence - b.sequence),
+      autoFieldList: auto.sort((a, b) => a.sequence - b.sequence)
     });
   };
 
@@ -92,6 +92,15 @@ export default class AddressFieldSetting extends React.Component<any, any> {
     }
   };
 
+  onSortFieldList = (sortList) => {
+    sortList.forEach((field, idx) => {
+      field.sequence = idx + 1;
+    });
+    this.setState({
+      [this.state.activeKey === 'MANUALLY' ? 'manualFieldList' : 'autoFieldList']: sortList
+    });
+  };
+
   saveFieldSetting = () => {
     this.setState({ loading: true });
     saveFieldList({ batchAddressDisplaySettingEditItems: this.state.manualFieldList.concat(this.state.autoFieldList) })
@@ -128,21 +137,16 @@ export default class AddressFieldSetting extends React.Component<any, any> {
             </Row>
             <Alert type="info" message="Address setting is for address adding and address edit of shop and store portal" />
             {step === 1 ? (
-              <Fields manualFieldList={manualFieldList} autoFieldList={autoFieldList} activeKey={activeKey} onChangeActiveKey={this.onChangeActiveKey} onFieldChange={this.onFieldChange} onStepChange={this.onStepChange} />
+              <Fields manualFieldList={manualFieldList} autoFieldList={autoFieldList} activeKey={activeKey} onChangeActiveKey={this.onChangeActiveKey} onFieldChange={this.onFieldChange} onStepChange={this.onStepChange} onSortEnd={this.onSortFieldList} />
             ) : (
               <Manage fieldList={activeKey === 'MANUALLY' ? manualFieldList : autoFieldList} onFieldChange={this.onFieldChange} />
             )}
           </div>
-          {step === 2 && (
-            <div className="bar-button">
-              <Button type="primary" onClick={this.saveFieldSetting}>
-                Save
-              </Button>
-              <Button onClick={() => this.onStepChange(1)} style={{ marginLeft: 20 }}>
-                Back
-              </Button>
-            </div>
-          )}
+          <div className="bar-button">
+            <Button type="primary" onClick={this.saveFieldSetting}>
+              Save
+            </Button>
+          </div>
         </Spin>
         <RuleSetting visible={visible} setting={this.state.setting} onChange={this.onChangeAddressInputTypeSetting} onCloseModal={this.onCloseModal} />
       </div>

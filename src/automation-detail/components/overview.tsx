@@ -173,7 +173,7 @@ class Overview extends Component<any, any> {
   };
 
   getOverview = () => {
-    webapi.getOverview().then((data) => {
+    webapi.getOverview({ campaignId: this.props.automationId }).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         let overviewList = res.context.overviewList;
@@ -185,29 +185,31 @@ class Overview extends Component<any, any> {
         let clickedList = [];
         let bouncesList = [];
         let spamReportsList = [];
-        for (let i = 0; i < overviewList.length; i++) {
-          dateList.push(overviewList[i].eventDate);
-          requestsList.push(overviewList[i].requestsCount);
-          deliveredList.push(overviewList[i].deliveredCount);
-          opensList.push(overviewList[i].opensCount);
-          clickedList.push(overviewList[i].clicksCount);
-          bouncesList.push(overviewList[i].bounceCount);
-          spamReportsList.push(overviewList[i].spamReportCount);
-        }
-        this.setState(
-          {
-            dateList,
-            requestsList,
-            deliveredList,
-            clickedList,
-            bouncesList,
-            spamReportsList,
-            overviewTotal
-          },
-          () => {
-            this.chartInit();
+        if (overviewList) {
+          for (let i = 0; i < overviewList.length; i++) {
+            dateList.push(overviewList[i].eventDate);
+            requestsList.push(overviewList[i].requestsCount);
+            deliveredList.push(overviewList[i].deliveredCount);
+            opensList.push(overviewList[i].opensCount);
+            clickedList.push(overviewList[i].clicksCount);
+            bouncesList.push(overviewList[i].bounceCount);
+            spamReportsList.push(overviewList[i].spamReportCount);
           }
-        );
+          this.setState(
+            {
+              dateList,
+              requestsList,
+              deliveredList,
+              clickedList,
+              bouncesList,
+              spamReportsList,
+              overviewTotal
+            },
+            () => {
+              this.chartInit();
+            }
+          );
+        }
       }
     });
   };

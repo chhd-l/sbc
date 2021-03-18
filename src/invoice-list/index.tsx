@@ -108,7 +108,7 @@ class InvoiceList extends Component<any, any> {
     let params = {
       beginTime: searchForm.startDate,
       endTime: searchForm.endDate,
-      externalOrderId: searchForm.orderNumber,
+      orderNo: searchForm.orderNumber,
       invoiceState: searchForm.invoiceStatus === 0 || searchForm.invoiceStatus === 1 ? searchForm.invoiceStatus : null,
       customerName: searchForm.customerName,
       consumerLevelId: searchForm.consumerType,
@@ -288,7 +288,7 @@ class InvoiceList extends Component<any, any> {
   };
   getOrderList = (value) => {
     let params = {
-      externalOrderId: value,
+      id: value,
       pageSize: 30,
       pageNum: 0
     };
@@ -446,8 +446,8 @@ class InvoiceList extends Component<any, any> {
             <p>Subscription number</p>
           </div>
         ),
-        dataIndex: 'externalOrderId',
-        key: 'externalOrderId',
+        dataIndex: 'orderNo',
+        key: 'orderNo',
         width: '13%',
         render: (text, row) => (
           <div>

@@ -98,8 +98,6 @@ export default class SubscriptionList extends Component<any, any> {
     let param = {
       orderNumber: searchForm.subscriptionOption === 'Order id' ? searchForm.number : '',
       subscriptionNumber: searchForm.subscriptionOption === 'Subscription id' ? searchForm.number : '',
-      // externalOrderId: searchForm.subscriptionOption === 'Order id' ? searchForm.number : '',
-      // externalSubscribeId: searchForm.subscriptionOption === 'Subscription id' ? searchForm.number : '',
       consumerName: searchForm.consumerOption === 'Consumer Name' ? searchForm.consumer : '',
       consumerAccount: searchForm.consumerOption === 'Consumer Account' ? searchForm.consumer : '',
       productName: searchForm.productOption === 'Product Name' ? searchForm.product : '',
@@ -121,7 +119,7 @@ export default class SubscriptionList extends Component<any, any> {
           searchParams: {
             customerAccount: param.consumerAccount ? param.consumerAccount : '',
             customerName: param.consumerName ? param.consumerName : '',
-            externalSubscribeId: param.subscriptionNumber,
+            subscribeId: param.subscriptionNumber,
             // subscribeIds: param.subscriptionNumber
             //   ? [param.subscriptionNumber]
             //   : [],
@@ -129,7 +127,7 @@ export default class SubscriptionList extends Component<any, any> {
             subscribeStatus: param.status === 'all' ? '' : param.status,
             consigneeName: param.recipient ? param.recipient : '',
             consigneeNumber: param.recipientPhone ? param.recipientPhone : '',
-            externalOrderId: param.orderNumber ? param.orderNumber : '',
+            orderCode: param.orderNumber ? param.orderNumber : '',
             skuNo: param.skuCode ? param.skuCode : '',
             goodsName: param.productName ? param.productName : '',
             prescriberId: param.prescriberId ? param.prescriberId : '',

@@ -242,7 +242,7 @@ class AutomationDetail extends Component<any, any> {
     });
     if (isOrderEvent) {
       let params = {
-        externalOrderId: value,
+        id: value,
         pageSize: 30,
         pageNum: 0
       };
@@ -395,7 +395,7 @@ class AutomationDetail extends Component<any, any> {
                 </TabPane>
                 <TabPane tab="Executing & Tracking" key="2">
                   <Card title={'Activity Chart'} headStyle={{ padding: 0 }} bordered={false}>
-                    <Overview></Overview>
+                    <Overview automationId={automationId}></Overview>
                   </Card>
                   <AutomationExecution automationId={automationId} />
                   <PetOwnerCommunication automationId={automationId} />

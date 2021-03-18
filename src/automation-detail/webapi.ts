@@ -37,9 +37,13 @@ export function terminateAutomation(filterParams = {}) {
     })
   });
 }
-export function getOverview() {
-  return Fetch<TResult>('/message/listSendGridOverview', {
-    method: 'POST'
+
+export function getOverview(filterParams = {}) {
+  return Fetch<TResult>('/automation/campaign/campaign/campaignStatistics', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
   });
 }
 

@@ -413,7 +413,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="orderNumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
+                {<FormattedMessage id="orderNumber" />}: {detail.get('toExternalOrderId')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
                 {/*<span style={styles.platform}>代下单</span>*/}
                 {/* <span style={styles.platform}>{orderType}</span> */}
                 {detail.get('grouponFlag') && <span style={styles.platform}>拼团</span>}
@@ -424,7 +424,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </p>
               {detail.get('isAutoSub') ? (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="order.subscriptioNumber" /> : {detail.get('subscribeId')}
+                  <FormattedMessage id="order.subscriptioNumber" /> : {detail.getIn(['subscriptionResponseVO', 'externalSubscribeId'])}
                 </p>
               ) : (
                 ''

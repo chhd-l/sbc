@@ -22,7 +22,12 @@ export default class tasks extends Component<any, any> {
       associatedPetOwners: [],
       associatedPetList: [],
       associatedOrderList: [],
-      statusList: ['To Do', 'On-going', 'Completed', 'Cancelled'],
+      statusList: [
+        { name: 'To Do', value: 'To Do' },
+        { name: 'On-going', value: 'On-going' },
+        { name: 'Completed', value: 'Completed' },
+        { name: 'Cancelled', value: 'Cancelled' }
+      ],
       editble: false,
       taskForm: {},
       circleBackground: [
@@ -252,13 +257,13 @@ export default class tasks extends Component<any, any> {
                               </div>
                             </Col>
                             <Col span={16}>
-                              <span className="tasksLable">Tasks</span>
+                              <span className="tasksLable">Task</span>
                             </Col>
                           </Row>
                         </Col>
                         <Col span={12}>
                           <Row style={{ textAlign: 'right' }}>
-                            {item.status}
+                            {statusList.find((x) => x.value === item.status) ? statusList.find((x) => x.value === item.status).name : ''}
                             <span className="icontiaozhuan icon iconfont" style={{ marginLeft: '15px', cursor: 'pointer' }} onClick={() => this.redirectDetail(item.id)} />
                           </Row>
                         </Col>

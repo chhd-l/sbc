@@ -17,8 +17,7 @@ export default class orders extends Component<any, any> {
         { label: '1st autoship order', value: 'FIRST_AUTOSHIP' },
         { label: 'Recurrent orders of autoship', value: 'RECURRENT_AUTOSHIP' }
       ],
-      orderList: [
-      ],
+      orderList: [],
       pagination: {
         current: 1,
         pageSize: 4,
@@ -106,25 +105,26 @@ export default class orders extends Component<any, any> {
     };
     const columns = [
       {
-        title: 'Order Category',
+        title: 'Category',
         dataIndex: 'orderCategory',
         width: '20%',
         render: (text) => {
+          let orderCategory = orderCategories.find((x) => x.value === text);
           return (
             <Tooltip
               overlayStyle={{
                 overflowY: 'auto'
               }}
               placement="bottomLeft"
-              title={<div>{text}</div>}
+              title={<div>{orderCategory ? orderCategory.name : ''}</div>}
             >
-              <p className="overFlowtext">{text}</p>
+              <p className="overFlowtext">{orderCategory ? orderCategory.name : ''}</p>
             </Tooltip>
           );
         }
       },
       {
-        title: 'Order No',
+        title: 'Number',
         dataIndex: 'id',
         width: '20%',
         render: (text) => {
@@ -142,7 +142,7 @@ export default class orders extends Component<any, any> {
         }
       },
       {
-        title: 'Order Time',
+        title: 'Time',
         dataIndex: 'creationDate',
         width: '25%',
         render: (text) => {
@@ -160,7 +160,7 @@ export default class orders extends Component<any, any> {
         }
       },
       {
-        title: 'Order Status',
+        title: 'Status',
         dataIndex: 'status',
         width: '25%',
         render: (text, record) => {
@@ -191,7 +191,7 @@ export default class orders extends Component<any, any> {
       }
     ];
     return (
-      <Card title="Order" className="rightCard">
+      <Card title="Order" className="topCard">
         <Row>
           <Col span={10}>
             <Input
@@ -211,7 +211,7 @@ export default class orders extends Component<any, any> {
           <Col span={14} className="activities-right" style={{ marginBottom: '20px' }}>
             <Select
               className="filter"
-              placeholder="Email Type"
+              placeholder="Order Category"
               allowClear={true}
               dropdownMatchSelectWidth={false}
               maxTagCount={0}

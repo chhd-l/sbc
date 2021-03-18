@@ -16,7 +16,7 @@ export default function EditBasicInfo(props: any) {
           <a href="/customer-list">Pet owner list</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <FormattedMessage id="consumer.consumerDetails" />
+          <a href={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Edit basic information</Breadcrumb.Item>
       </Breadcrumb>

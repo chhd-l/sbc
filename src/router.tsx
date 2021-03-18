@@ -323,7 +323,7 @@ const routes = [
     asyncComponent: () => import('./customer-details/edit-basic-information')
   },
   {
-    path: '/edit-pet/:id',
+    path: '/edit-pet/:id/:account/:petid',
     asyncComponent: () => import('./customer-details/edit-pet-item')
   },
   // 客户等级

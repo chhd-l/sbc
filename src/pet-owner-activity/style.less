@@ -48,7 +48,7 @@
     margin-bottom: 10px;
   }
 
-  .order-panel /deep/ .ant-collapse-content-box {
+  .order-panel .ant-collapse-content-box {
     padding-left: 0;
     padding-right: 0;
   }
@@ -58,7 +58,7 @@
   }
 
   .table-custom {
-    /deep/ .ant-table-small {
+    .ant-table-small {
       border-radius: 0;
       border-left: none;
       border-right: none;
@@ -77,38 +77,15 @@
     }
   }
 
-  /deep/ .ant-card-body {
+  .ant-card-body {
     .ant-dropdown-link {
       padding-left: 5px;
       padding-right: 5px;
     }
   }
 
-  /deep/ .ant-card-body {
+  .ant-card-body {
     padding: 16px 10px 10px 10px;
-  }
-
-  .rightCard {
-    min-height: 392px;
-    // min-height: 795px;
-    overflow-y: auto;
-
-    /deep/ .ant-card-body {
-      padding: 16px 10px 0 10px;
-
-      .ant-table {
-        min-height: 212px;
-        border-bottom: none;
-
-        .ant-table-content {
-          border-bottom: 1px solid #e8e8e8;
-        }
-      }
-    }
-
-    .actionBtn {
-      margin-right: 2px;
-    }
   }
 
   .icon-action {
@@ -333,15 +310,6 @@
     }
   }
 
-  .orderCard {
-    min-height: 810px;
-    max-height: 810px;
-
-    /deep/ .ant-card-body .ant-pagination {
-      top: 627px;
-    }
-  }
-
   .viewMore {
     border: 0;
     color: #999999;
@@ -365,10 +333,10 @@
     white-space: nowrap;
   }
 
-  /deep/ .ant-card-body .ant-pagination {
+  .ant-card-body .ant-pagination {
     position: absolute;
     right: 0;
-    top: 211px;
+    top: 221px;
   }
 
   #middle .ant-card-body {
@@ -384,12 +352,13 @@
     }
 
     .ant-empty {
-       min-height: 672px;
-       max-height: 672px;
-       overflow-y: auto;
-       .ant-empty-image {
+      min-height: 672px;
+      max-height: 672px;
+      overflow-y: auto;
+
+      .ant-empty-image {
         margin-top: 200px;
-       }
+      }
     }
   }
 
@@ -400,6 +369,10 @@
 
   .searchInput .ant-input {
     font-size: 11px;
+  }
+
+  .ant-card-body {
+    padding: 10px;
   }
 }
 
@@ -467,13 +440,13 @@
   }
 }
 
-/deep/ .description-list.small .term,
-/deep/ .description-list.small .content {
+.description-list.small .term,
+.description-list.small .content {
   padding-bottom: 4px;
   font-size: 0.95em;
 }
 
-/deep/ .description-list.small .content {
+.description-list.small .content {
   color: rgba(0, 0, 0, 0.4);
 }
 
@@ -594,7 +567,7 @@
     padding: 15px !important;
   }
 
-  /deep/ .ant-checkbox-wrapper {
+  .ant-checkbox-wrapper {
     margin-top: 5px;
   }
 
@@ -602,7 +575,7 @@
     width: 300px;
     line-height: 2.5;
 
-    /deep/ .ant-checkbox-wrapper {
+    .ant-checkbox-wrapper {
       margin-left: 22px;
       width: 100%;
     }

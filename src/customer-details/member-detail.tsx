@@ -213,9 +213,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             <Breadcrumb.Item>
               <a href="/customer-list">Pet owner list</a>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <FormattedMessage id="consumer.consumerDetails" />
-            </Breadcrumb.Item>
+            <Breadcrumb.Item>Pet owner detail</Breadcrumb.Item>
           </Breadcrumb>
           {/*导航面包屑*/}
           <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -304,12 +302,12 @@ export default class CustomerDetails extends React.Component<any, any> {
                     {basic.address1}
                   </Col>
                 </Row>
-                <Row type="flex" align="middle">
+                <Row>
                   <Col span={4} className="text-tip">
                     Consent
                   </Col>
                   <Col span={6} className="text-highlight">
-                    Email communication
+                    {basic.userConsentList && basic.userConsentList.length > 0 ? basic.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
                   </Col>
                   <Col span={4} className="text-tip">
                     City
@@ -352,7 +350,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <span className="iconfont iconDelete"></span> Delete
                           </Button>
                         </Popconfirm> */}
-                        <Link to={`/edit-pet/${pet.petsId}`}>
+                        <Link to={`/edit-pet/${this.state.customerId}/${this.state.customerAccount}/${pet.petsId}`}>
                           <span className="iconfont iconEdit"></span> Edit
                         </Link>
                       </div>
@@ -375,9 +373,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}>
                               {pet.petsBreed && (
                                 <Tooltip title={pet.petsBreed}>
-                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }} title={pet.petsBreed}>
-                                    {pet.petsBreed}
-                                  </div>
+                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{pet.petsBreed}</div>
                                 </Tooltip>
                               )}
                             </Col>
@@ -397,7 +393,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Row>
             </div>
             <div className="container">
-              <Headline title="Other information" extra={<RangePicker defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />} />
+              <Headline title="Other information" extra={<RangePicker allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />} />
               <Tabs defaultActiveKey="order" onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
                   <OrderInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
@@ -430,7 +426,14 @@ export default class CustomerDetails extends React.Component<any, any> {
               <a href="/customer-list">Pet owner list</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <FormattedMessage id="consumer.consumerDetails" />
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.backToDetail();
+                }}
+              >
+                Pet owner detail
+              </a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
           </Breadcrumb>

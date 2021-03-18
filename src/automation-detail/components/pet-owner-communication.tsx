@@ -287,11 +287,23 @@ class PetOwnerCommunication extends Component<any, any> {
         render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
-        title: 'Opened time',
-        dataIndex: 'openedTime',
-        width: '15%',
-        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
+        title: 'Click count',
+        dataIndex: 'clicksCount',
+        width: '10%',
+        render: (text) => <p>{text ? text : '-'}</p>
+      },
+      {
+        title: 'Open count',
+        dataIndex: 'opensCount',
+        width: '10%',
+        render: (text) => <p>{text ? text : '-'}</p>
       }
+      // {
+      //   title: 'Opened time',
+      //   dataIndex: 'openedTime',
+      //   width: '15%',
+      //   render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
+      // }
     ];
 
     return (

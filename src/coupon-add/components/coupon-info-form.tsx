@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Button, Col, DatePicker, Form, Input, message, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
-
+import { FormattedMessage } from 'react-intl';
 import { Const, noop, QMMethod, ValidConst, history, cache } from 'qmkit';
 import moment from 'moment';
 import SelectedGoodsGrid from './selected-goods-grid';
@@ -179,7 +179,7 @@ export default class CouponInfoForm extends Component<any, any> {
     return (
       <RightContent>
         <Form>
-          <FormItem {...formItemSmall} label="Coupon name" required={true}>
+          <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.CouponName" />} required={true}>
             {getFieldDecorator('couponName', {
               initialValue: couponName,
               rules: [
@@ -244,7 +244,7 @@ export default class CouponInfoForm extends Component<any, any> {
               <span style={styles.greyColor}>&nbsp;&nbsp;最多可选三个分类</span>
             </Col>
           </FormItem>*/}
-          <FormItem {...formItemLayout} label="Start and end time" required={true}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />} required={true}>
             {/* <RadioGroup
               value={rangeDayType}
               onChange={(e) => {
@@ -258,7 +258,7 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     required: rangeDayType === 0,
-                    message: 'Please input the start and end time'
+                    message: <FormattedMessage id="Marketing.PleaseInputTheStart" />
                   }
                 ]
               })(
@@ -279,7 +279,10 @@ export default class CouponInfoForm extends Component<any, any> {
                   }}
                 />
               )}
-              <span style={styles.greyColor}>&nbsp;&nbsp;Coupons can be created but not used before the start time</span>
+              <span style={styles.greyColor}>
+                &nbsp;&nbsp;
+                <FormattedMessage id="Marketing.CouponsCanBe" />
+              </span>
               {/* </Radio> */}
             </FormItem>
             {/* <FormItem>
@@ -319,16 +322,16 @@ export default class CouponInfoForm extends Component<any, any> {
             {/* </RadioGroup> */}
           </FormItem>
           <ErrorDiv>
-            <FormItem {...formItemSmall} label="Coupon value" required={true}>
+            <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.CouponValue" />} required={true}>
               <Row>
                 {getFieldDecorator('denomination', {
                   initialValue: denomination,
                   rules: [
-                    { required: true, message: 'Please input the face value of coupon' },
+                    { required: true, message: <FormattedMessage id="Marketing.theFaceValueOfCoupon" /> },
                     {
                       validator: (_rule, value, callback) => {
                         if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                          callback('Integers between 1-99999 are allowed');
+                          callback(<FormattedMessage id="Marketing.IntegersBetweenAreAllowed" />);
                           return;
                         }
                         callback();
@@ -355,7 +358,7 @@ export default class CouponInfoForm extends Component<any, any> {
                 {/*<span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
               </Row>
             </FormItem>
-            <FormItem {...formItemLayout} label="Threshold" required={true}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />} required={true}>
               <RadioGroup value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)}>
                 <FormItem>
                   <Radio value={1} style={styles.radioStyle}>
@@ -365,16 +368,16 @@ export default class CouponInfoForm extends Component<any, any> {
                       rules: [
                         {
                           required: fullBuyType === 1,
-                          message: 'Please input the usage threshold'
+                          message: <FormattedMessage id="Marketing.theUsageThreshold" />
                         },
                         {
                           validator: (_rule, value, callback) => {
                             if (fullBuyType == 1 && (value || value === 0)) {
                               if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                                callback('Integers between 1-99999 are allowed');
+                                callback(<FormattedMessage id="Marketing.IntegersBetweenAreAllowed" />);
                                 return;
                               } else if (value <= parseInt(`${denomination}`)) {
-                                callback('The threshold must be greater than the face value of the coupon');
+                                callback(<FormattedMessage id="Marketing.TheThresholdMust" />);
                                 return;
                               }
                             }
@@ -403,16 +406,20 @@ export default class CouponInfoForm extends Component<any, any> {
                 </FormItem>
                 <FormItem>
                   <Radio value={0} style={{ ...styles.lastRadioStyle, width: 80 }}>
-                    <span style={styles.darkColor}>No threshold</span>
+                    <span style={styles.darkColor}>
+                      <FormattedMessage id="Marketing.NoThreshold" />
+                    </span>
                   </Radio>
                 </FormItem>
               </RadioGroup>
             </FormItem>
           </ErrorDiv>
-          <FormItem {...formItemLayout} label="Select product" required={true}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.SelectProduct" />} required={true}>
             <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
-                <span style={styles.darkColor}>All products</span>
+                <span style={styles.darkColor}>
+                  <FormattedMessage id="Marketing.AllProducts" />
+                </span>
               </Radio>
               {/*<Radio value={1}>
                     <span style={styles.darkColor}>按品牌</span>
@@ -421,17 +428,19 @@ export default class CouponInfoForm extends Component<any, any> {
               {/*  <span style={styles.darkColor}>Base on category</span>*/}
               {/*</Radio>*/}
               <Radio value={4}>
-                <span style={styles.darkColor}>Custom</span>
+                <span style={styles.darkColor}>
+                  <FormattedMessage id="Marketing.Custom" />
+                </span>
               </Radio>
             </RadioGroup>
           </FormItem>
           {scopeType === 4 ? (
-            <FormItem {...this._scopeBoxStyle(scopeType)} label="Selected products" id={'page-content'}>
+            <FormItem {...this._scopeBoxStyle(scopeType)} label={<FormattedMessage id="Marketing.SelectedProducts" />} id={'page-content'}>
               {/* {this.chooseGoods().dom} */}
               <SelectedGoodsGrid />
             </FormItem>
           ) : null}
-          <FormItem {...formItemLayout} label="Instructions for use">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.InstructionsForUse" />}>
             {getFieldDecorator('couponDesc', {
               initialValue: couponDesc,
               rules: [{ max: 500, message: '使用说明最多500个字符' }]
@@ -451,10 +460,10 @@ export default class CouponInfoForm extends Component<any, any> {
         </Form>
         <div className="bar-button">
           <Button disabled={btnDisabled} type="primary" onClick={() => this.saveCoupon()} style={{ marginRight: 10 }}>
-            Save
+            <FormattedMessage id="Marketing.Save" />
           </Button>
           <Button onClick={() => history.goBack()} style={{ marginLeft: 10 }}>
-            Cancel
+            <FormattedMessage id="Marketing.Cancel" />
           </Button>
         </div>
         {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}

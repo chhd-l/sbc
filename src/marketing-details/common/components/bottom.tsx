@@ -4,7 +4,7 @@ import { Relax, IMap } from 'plume2';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import { List } from 'immutable';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 type TList = List<IMap>;
 
 const GreyBg = styled.div`
@@ -44,11 +44,7 @@ export default class Bottom extends React.Component<any, any> {
     } else if (joinLevel != '') {
       levelName = joinLevel
         .split(',')
-        .map((info) =>
-          customerLevels
-            .filter((v) => v.get('customerLevelId') == info)
-            .getIn([0, 'customerLevelName'])
-        )
+        .map((info) => customerLevels.filter((v) => v.get('customerLevelId') == info).getIn([0, 'customerLevelName']))
         .filter((v) => v)
         .join('，');
     }
@@ -58,7 +54,9 @@ export default class Bottom extends React.Component<any, any> {
         <GreyBg>
           <Row>
             <Col span={24}>
-              <span>Target consumer:</span>
+              <span>
+                <FormattedMessage id="Marketing.TargetConsumer" />:
+              </span>
               {levelName}
             </Col>
           </Row>

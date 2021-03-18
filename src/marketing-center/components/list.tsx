@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, message, Row } from 'antd';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { AuthWrapper, Headline, history } from 'qmkit';
 // import '../index.less';
 
@@ -33,7 +33,7 @@ export default class List extends React.Component<any, any> {
     return (
       <div>
         <div className="container-search">
-          <Headline title="Marketing center" />
+          <Headline title={<FormattedMessage id="Marketing.MarketingCenter" />} />
         </div>
         <div className="container">
           <div className="appsMain">
@@ -73,7 +73,10 @@ export default class List extends React.Component<any, any> {
             {/*</Row>*/}
 
             <h3>
-              Order conversion<span>More orders and sales</span>
+              <FormattedMessage id="Marketing.OrderConversion" />
+              <span>
+                <FormattedMessage id="Marketing.MoreOrdersAndSales" />
+              </span>
             </h3>
             <Row>
               <AuthWrapper functionName={'f_create_coupon'}>
@@ -94,8 +97,12 @@ export default class List extends React.Component<any, any> {
                       <img src={images.order_001} style={iconStyle} />
                     </span>
                     <div className="info">
-                      <h5>Coupon creation</h5>
-                      <p>Create coupon meeting specific conditions</p>
+                      <h5>
+                        <FormattedMessage id="Marketing.CouponCreation" />
+                      </h5>
+                      <p>
+                        <FormattedMessage id="Marketing.CreateCouponMeetingSpecificConditions" />
+                      </p>
                     </div>
                     {/*<span className="miniTags">推荐</span>
                     <span className="mini-tags">Optimum</span>*/}
@@ -145,8 +152,12 @@ export default class List extends React.Component<any, any> {
                       <img src={images.order_003} style={iconStyle} />
                     </span>
                     <div className="info">
-                      <h5>Coupon distribution</h5>
-                      <p>Distribute coupon under certain conditiion, including valid period</p>
+                      <h5>
+                        <FormattedMessage id="Marketing.CouponDistribution" />
+                      </h5>
+                      <p>
+                        <FormattedMessage id="Marketing.DistributeCoupon" />
+                      </p>
                     </div>
                   </a>
                 </Col>
@@ -196,7 +207,10 @@ export default class List extends React.Component<any, any> {
             {/*</Row>*/}
 
             <h3>
-              Improve consumer bill<span>Higher sales and profits</span>
+              <FormattedMessage id="Marketing.ImproveConsumerBill" />
+              <span>
+                <FormattedMessage id="Marketing.HigherSalesAndProfits" />
+              </span>
             </h3>
             <Row>
               <AuthWrapper functionName="f_marketing_reduction_add">
@@ -216,8 +230,12 @@ export default class List extends React.Component<any, any> {
                       <img src={images.full_001} style={iconStyle} />
                     </span>
                     <div className="info">
-                      <h5>Reduction</h5>
-                      <p>Meet the specified conditions to enjoy the price reduction</p>
+                      <h5>
+                        <FormattedMessage id="Marketing.Reduction" />
+                      </h5>
+                      <p>
+                        <FormattedMessage id="Marketing.MeetTheSpecified" />
+                      </p>
                     </div>
                   </a>
                 </Col>
@@ -240,8 +258,12 @@ export default class List extends React.Component<any, any> {
                       <img src={images.full_002} style={iconStyle} />
                     </span>
                     <div className="info">
-                      <h5>Discount</h5>
-                      <p>Discount at specified conditions</p>
+                      <h5>
+                        <FormattedMessage id="Marketing.Discount" />
+                      </h5>
+                      <p>
+                        <FormattedMessage id="Marketing.DiscountAtSpecifiedConditions" />
+                      </p>
                     </div>
                   </a>
                 </Col>

@@ -3,7 +3,7 @@ import { Form, Input, InputNumber, Button, Select, message } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
 import { Const } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -71,7 +71,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
 
     const { res } = await webapi.addClinicsDictionary(params);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
     }
   };
   onUpdate = async () => {
@@ -90,7 +90,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
 
     const { res } = await webapi.updateClinicsDictionary(params);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
     }
   };
 
@@ -111,13 +111,13 @@ class PrescriberTypeForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form {...layout} style={{ width: '600px' }} onSubmit={this.handleSubmit}>
-        <FormItem label="Prescriber type name">
+        <FormItem label={<FormattedMessage id="Prescriber.PrescriberTypeName" />}>
           {getFieldDecorator('clinicTypeName', {
             rules: [
-              { required: true, message: 'Please input Prescriber Type Name!' },
+              { required: true, message: <FormattedMessage id="Prescriber.PleaseInputPrescriberTypeName" /> },
               {
                 max: 50,
-                message: 'Exceed maximum length!'
+                message: <FormattedMessage id="Prescriber.ExceedMaximumLength" />
               }
             ]
           })(
@@ -132,16 +132,16 @@ class PrescriberTypeForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        <FormItem label="Prescriber type description">
+        <FormItem label={<FormattedMessage id="Prescriber.PrescriberTypeDescription" />}>
           {getFieldDecorator('clinicTypeDesc', {
             rules: [
               {
                 required: true,
-                message: 'Please input Prescriber Type Description!'
+                message: <FormattedMessage id="Prescriber.PleaseInputPrescriberTypeName" />
               },
               {
                 max: 200,
-                message: 'Exceed maximum length!'
+                message: <FormattedMessage id="Prescriber.ExceedMaximumLength" />
               }
             ]
           })(
@@ -159,15 +159,17 @@ class PrescriberTypeForm extends React.Component<any, any> {
         <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           {this.props.pageType === 'edit' ? (
             <Button type="primary" htmlType="submit">
-              Update
+              <FormattedMessage id="Prescriber.Update" />
             </Button>
           ) : (
             <Button type="primary" htmlType="submit">
-              Create
+              <FormattedMessage id="Prescriber.Create" />
             </Button>
           )}
           <Button style={{ marginLeft: '20px' }}>
-            <Link to="/prescriber-type">Back to list</Link>
+            <Link to="/prescriber-type">
+              <FormattedMessage id="Prescriber.BackToList" />
+            </Link>
           </Button>
         </FormItem>
       </Form>

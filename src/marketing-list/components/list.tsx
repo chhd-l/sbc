@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import { DataGrid, noop, history, AuthWrapper, Const } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import { Table } from 'antd';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 type TList = List<IMap>;
 
 const Column = Table.Column;
@@ -74,22 +74,10 @@ export default class MarketingList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      dataList,
-      pageSize,
-      total,
-      currentPage,
-      init,
-      onDelete,
-      customerLevels,
-      onPause,
-      close,
-      onStart
-    } = this.props.relaxProps;
+    const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         rowKey={(record) => record.marketingId}
         isScroll={false}
         dataSource={dataList.toJS()}
@@ -116,13 +104,9 @@ export default class MarketingList extends React.Component<any, any> {
             );
           }}
         />*/}
+        <Column title={<FormattedMessage id="Marketing.CampaignName" />} key="marketingName" dataIndex="marketingName" />
         <Column
-          title="Campaign name"
-          key="marketingName"
-          dataIndex="marketingName"
-        />
-        <Column
-          title="Promotion type"
+          title={<FormattedMessage id="Marketing.PromotionType" />}
           key="promotionType"
           dataIndex="promotionType"
           render={(promotionType) => {
@@ -130,7 +114,7 @@ export default class MarketingList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="Campaign type"
+          title={<FormattedMessage id="Marketing.CampaignType" />}
           key="subType"
           dataIndex="subType"
           render={(subType) => {
@@ -138,18 +122,14 @@ export default class MarketingList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="Time"
+          title={<FormattedMessage id="Marketing.Time" />}
           width="15%"
           render={(rowData) => {
             return (
               <div>
-                {moment(rowData['beginTime'])
-                  .format(Const.TIME_FORMAT)
-                  .toString()}
+                {moment(rowData['beginTime']).format(Const.TIME_FORMAT).toString()}
                 <br />
-                {moment(rowData['endTime'])
-                  .format(Const.TIME_FORMAT)
-                  .toString()}
+                {moment(rowData['endTime']).format(Const.TIME_FORMAT).toString()}
               </div>
             );
           }}
@@ -196,7 +176,7 @@ export default class MarketingList extends React.Component<any, any> {
         {/*/>*/}
 
         <Column
-          title="Campaign Status"
+          title={<FormattedMessage id="Marketing.CampaignStatus" />}
           width="10%"
           key="marketingStatus"
           dataIndex="marketingStatus"
@@ -213,22 +193,14 @@ export default class MarketingList extends React.Component<any, any> {
         />*/}
 
         <Column
-          title="Operation"
+          title={<FormattedMessage id="Marketing.Operation" />}
           width="15%"
           className={'operation-th'}
           render={(rowInfo) => {
             let url = '';
-            if (
-              rowInfo['subType'] === 0 ||
-              rowInfo['subType'] === 1 ||
-              rowInfo['subType'] === 6
-            ) {
+            if (rowInfo['subType'] === 0 || rowInfo['subType'] === 1 || rowInfo['subType'] === 6) {
               url = `/marketing-full-reduction/${rowInfo['marketingId']}`;
-            } else if (
-              rowInfo['subType'] === 2 ||
-              rowInfo['subType'] === 3 ||
-              rowInfo['subType'] === 7
-            ) {
+            } else if (rowInfo['subType'] === 2 || rowInfo['subType'] === 3 || rowInfo['subType'] === 7) {
               url = `/marketing-full-discount/${rowInfo['marketingId']}`;
             } else if (rowInfo['subType'] === 4 || rowInfo['subType'] === 5) {
               url = `/marketing-full-gift/${rowInfo['marketingId']}`;
@@ -237,7 +209,7 @@ export default class MarketingList extends React.Component<any, any> {
             return (
               <div className="operation-box">
                 <AuthWrapper functionName="f_marketing_view">
-                  <Tooltip placement="top" title="View">
+                  <Tooltip placement="top" title={<FormattedMessage id="Marketing.View" />}>
                     <a
                       style={{ marginRight: 5 }}
                       href="javascript:void(0)"
@@ -252,7 +224,7 @@ export default class MarketingList extends React.Component<any, any> {
                 </AuthWrapper>
                 <AuthWrapper functionName="f_marketing_operate">
                   {rowInfo['marketingStatus'] == 3 && (
-                    <Tooltip placement="top" title="Edit">
+                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
                       <a
                         href="javascript:void(0)"
                         style={{ marginRight: 5 }}
@@ -266,47 +238,24 @@ export default class MarketingList extends React.Component<any, any> {
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 2 && (
-                    <Tooltip placement="top" title="Open">
-                      <a
-                        href="javascript:void(0);"
-                        style={{ marginRight: 5 }}
-                        onClick={() => onStart(rowInfo['marketingId'])}
-                        className="iconfont iconbtn-open"
-                      ></a>
+                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Open" />}>
+                      <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onStart(rowInfo['marketingId'])} className="iconfont iconbtn-open"></a>
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
-                    <Tooltip placement="top" title="Stop">
-                      <a
-                        href="javascript:void(0);"
-                        style={{ marginRight: 5 }}
-                        onClick={() => onPause(rowInfo['marketingId'])}
-                        className="iconfont iconbtn-stop"
-                      ></a>
+                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Stop" />}>
+                      <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onPause(rowInfo['marketingId'])} className="iconfont iconbtn-stop"></a>
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
-                    <Tooltip placement="top" title="Close">
-                      <a
-                        style={{ marginRight: 5 }}
-                        onClick={() => close(rowInfo['marketingId'])}
-                        className="iconfont iconbtn-cancelall"
-                      ></a>
+                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Close" />}>
+                      <a style={{ marginRight: 5 }} onClick={() => close(rowInfo['marketingId'])} className="iconfont iconbtn-cancelall"></a>
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 3 && (
-                    <Popconfirm
-                      title="Are you sure to delete the activity?"
-                      onConfirm={() => onDelete(rowInfo['marketingId'])}
-                      okText="Confirm"
-                      cancelText="Cancel"
-                    >
-                      <Tooltip placement="top" title="Delete">
-                        <a
-                          href="javascript:void(0);"
-                          style={{ marginRight: 5 }}
-                          className="iconfont iconDelete"
-                        ></a>
+                    <Popconfirm title={<FormattedMessage id="Marketing.deleteTheActivity" />} onConfirm={() => onDelete(rowInfo['marketingId'])} okText={<FormattedMessage id="Marketing.Confirm" />} cancelText={<FormattedMessage id="Marketing.Cancel" />}>
+                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.Delete" />}>
+                        <a href="javascript:void(0);" style={{ marginRight: 5 }} className="iconfont iconDelete"></a>
                       </Tooltip>
                     </Popconfirm>
                   )}

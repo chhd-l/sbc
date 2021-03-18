@@ -6,6 +6,7 @@ import { List } from 'immutable';
 // import locale from 'antd/es/date-picker/locale/lv_LV';
 import moment from 'moment';
 import 'moment/locale/en-au';
+import { FormattedMessage, injectIntl } from 'react-intl';
 moment.locale('en-au');
 type TList = List<IMap>;
 
@@ -38,12 +39,7 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      onFormChange,
-      onSearch,
-      customerLevels,
-      defaultLocalDateTime
-    } = this.props.relaxProps;
+    const { onFormChange, onSearch, customerLevels, defaultLocalDateTime } = this.props.relaxProps;
     const { startValue, endValue } = this.state;
     return (
       <Form className="filter-content" layout="inline">
@@ -65,10 +61,8 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8" id="select-group-width">
             <FormItem>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label="Promotion type"
+                getPopupContainer={() => document.getElementById('page-content')}
+                label={<FormattedMessage id="Marketing.PromotionType" />}
                 // style={{ width: 170 }}
                 defaultValue="All"
                 onChange={(value) => {
@@ -79,9 +73,15 @@ export default class SearchForm extends React.Component<any, any> {
                   });
                 }}
               >
-                <Option value="">All</Option>
-                <Option value="0">Normal promotion</Option>
-                <Option value="1">Subscription promotion</Option>
+                <Option value="">
+                  <FormattedMessage id="Marketing.All" />
+                </Option>
+                <Option value="0">
+                  <FormattedMessage id="Marketing.NormalPromotion" />
+                </Option>
+                <Option value="1">
+                  <FormattedMessage id="Marketing.SubscriptionPromotion" />
+                </Option>
                 {/* <Option value="4">满金额赠</Option>
             <Option value="5">满数量赠</Option> */}
               </SelectGroup>
@@ -90,9 +90,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8" id="select-group-width">
             <FormItem>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 label="Campaign Type"
                 // style={{ width: 160 }}
                 defaultValue="All"
@@ -104,11 +102,21 @@ export default class SearchForm extends React.Component<any, any> {
                   });
                 }}
               >
-                <Option value={null}>All</Option>
-                <Option value="0">Full amount reduction</Option>
-                <Option value="1">Full quantity reduction</Option>
-                <Option value="2">Full amount discount</Option>
-                <Option value="3">Full quantity discount</Option>
+                <Option value={null}>
+                  <FormattedMessage id="Marketing.All" />
+                </Option>
+                <Option value="0">
+                  <FormattedMessage id="Marketing.FullAmountReduction" />
+                </Option>
+                <Option value="1">
+                  <FormattedMessage id="Marketing.FullQuantityReduction" />
+                </Option>
+                <Option value="2">
+                  <FormattedMessage id="Marketing.FullAmountDiscount" />
+                </Option>
+                <Option value="3">
+                  <FormattedMessage id="Marketing.FullQuantityDiscount" />
+                </Option>
                 {/* <Option value="4">满金额赠</Option>
             <Option value="5">满数量赠</Option> */}
               </SelectGroup>
@@ -156,7 +164,7 @@ export default class SearchForm extends React.Component<any, any> {
                   onSearch();
                 }}
               >
-                Search
+                <FormattedMessage id="Marketing.Search" />
               </Button>
             </FormItem>
           </Col>

@@ -258,7 +258,9 @@ export default class SearchHead extends Component<any, any> {
                         history.push('/recomm-page-detail-new');
                       }}
                     >
-                      <span>New</span>
+                      <span>
+                        <FormattedMessage id="Marketing.New" />
+                      </span>
                     </Button>
                   ) : null}
 
@@ -283,7 +285,7 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Marketing.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -332,8 +334,12 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="consumerName">Recipient name</Option>
-        <Option value="consumerEmail">Recipient mail</Option>
+        <Option value="consumerName">
+          <FormattedMessage id="Marketing.RecipientName" />
+        </Option>
+        <Option value="consumerEmail">
+          <FormattedMessage id="Marketing.RecipientMail" />
+        </Option>
       </Select>
     );
   };
@@ -350,8 +356,12 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option value="goodsInfoName">Product name</Option>
-        <Option value="goodsInfoNo">Product SKU</Option>
+        <Option value="goodsInfoName">
+          <FormattedMessage id="Marketing.ProductName" />
+        </Option>
+        <Option value="goodsInfoNo">
+          <FormattedMessage id="Marketing.ProductSKU" />
+        </Option>
       </Select>
     );
   };
@@ -368,10 +378,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option value="consigneeName">
-          <FormattedMessage id="recipient" />
+          <FormattedMessage id="Marketing.recipient" />
         </Option>
         <Option value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
+          <FormattedMessage id="Marketing.recipientPhone" />
         </Option>
       </Select>
     );
@@ -389,8 +399,12 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
         disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
-        <Option value="clinicsName">Prescriber name</Option>
-        <Option value="clinicsIds">Prescriber id</Option>
+        <Option value="clinicsName">
+          <FormattedMessage id="Marketing.PrescriberName" />
+        </Option>
+        <Option value="clinicsIds">
+          <FormattedMessage id="Marketing.PrescriberId" />
+        </Option>
       </Select>
     );
   };
@@ -448,7 +462,7 @@ export default class SearchHead extends Component<any, any> {
       .toJS();
 
     if (checkedIds.length == 0) {
-      message.error('Please select the order that needs to be operated');
+      message.error(<FormattedMessage id="Marketing.needsToBeOperated" />);
       return;
     }
 

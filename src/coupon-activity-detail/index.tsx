@@ -3,7 +3,7 @@ import React from 'react';
 import { Breadcrumb } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Const, Headline, BreadCrumb } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 import AppStore from './store';
 import ActivityTab from './components/tab';
 
@@ -27,12 +27,12 @@ export default class CouponActivityDetail extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
             {/* {Const.couponActivityType[type]} */}
-            Activity detail
+            <FormattedMessage id="Marketing.ActivityDetail" />
           </Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container">
-          <Headline title={'Activity detail'} />
+          <Headline title={<FormattedMessage id="Marketing.ActivityDetail" />} />
           <ActivityTab />
         </div>
       </div>

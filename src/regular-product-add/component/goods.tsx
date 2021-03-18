@@ -631,8 +631,8 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     min: 1,
-                    max: 600,
-                    message: '1-600 characters'
+                    max: 5000,
+                    message: '1-5000 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -642,7 +642,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsNewSubtitle'),
                 initialValue: goods.get('goodsNewSubtitle')
-              })(<Input placeholder="Please input the item card intro., no more than 600 words" />)}
+              })(<Input placeholder="Please input the item card intro., no more than 5000 words" />)}
             </FormItem>
           </Col>
         </Row>
@@ -666,8 +666,8 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     min: 1,
-                    max: 600,
-                    message: '1-600 characters'
+                    max: 5000,
+                    message: '1-5000 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -677,7 +677,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(<Input placeholder="Please input the item subtitle, no more than 600 words" />)}
+              })(<Input placeholder="Please input the item subtitle, no more than 5000 words" />)}
             </FormItem>
           </Col>
         </Row>

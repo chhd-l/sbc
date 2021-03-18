@@ -341,7 +341,7 @@ export default class ChooseTaskForm extends Component<any, any> {
                 </Select>
               </Col>
               <Col span={8} className="horizontalLable">
-                before task due
+                after task start
               </Col>
             </Row>
             <Row gutter={24} type="flex" justify="start" align="middle">

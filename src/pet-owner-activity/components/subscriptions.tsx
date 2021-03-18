@@ -7,14 +7,11 @@ import { string } from 'prop-types';
 
 const { RangePicker } = DatePicker;
 
-
-
 export default class bookings extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      subscriptionList: [
-      ],
+      subscriptionList: [],
       pagination: {
         current: 1,
         pageSize: 4,
@@ -40,9 +37,12 @@ export default class bookings extends Component<any, any> {
     let data = this.state.formData;
     data['startTime'] = value[0] ? value[0] + ' 00:00:00' : null;
     data['endTime'] = value[1] ? value[1] + ' 23:59:59' : null;
-    this.setState({
-      formData: data
-    }, ()=> this.getSubscriptionList());
+    this.setState(
+      {
+        formData: data
+      },
+      () => this.getSubscriptionList()
+    );
   };
   getSubscriptionList = () => {
     const { formData, pagination } = this.state;
@@ -83,10 +83,10 @@ export default class bookings extends Component<any, any> {
     const { subscriptionList } = this.state;
     const columns = [
       {
-        title: 'Type',
-        dataIndex: 'subscriptionType',
-        width: '20%',
-        render: (text, record) => {
+        title: 'Number',
+        dataIndex: 'subscribeId',
+        width: '30%',
+        render: (text) => {
           return (
             <Tooltip
               overlayStyle={{
@@ -101,29 +101,9 @@ export default class bookings extends Component<any, any> {
         }
       },
       {
-        title: 'Number',
-        dataIndex: 'subscribeId',
-        width: '20%',
-        render: (text) => {
-          return (
-            <Tooltip
-              overlayStyle={{
-                overflowY: 'auto'
-              }}
-              placement="bottomLeft"
-              title={<div>{text}</div>}
-            >
-              <p className="overFlowtext">
-                {text}
-              </p>
-            </Tooltip>
-          );
-        }
-      },
-      {
         title: 'Product name',
         dataIndex: 'goodsInfo',
-        width: '25%',
+        width: '30%',
         render: (text, record) => {
           return (
             <Tooltip
@@ -139,10 +119,10 @@ export default class bookings extends Component<any, any> {
         }
       },
       {
-        title: 'Status',
-        dataIndex: 'subscribeStatus',
-        width: '25%',
-        render: (text) => {
+        title: 'Type',
+        dataIndex: 'subscriptionType',
+        width: '30%',
+        render: (text, record) => {
           return (
             <Tooltip
               overlayStyle={{
@@ -151,7 +131,7 @@ export default class bookings extends Component<any, any> {
               placement="bottomLeft"
               title={<div>{text}</div>}
             >
-              <p className="overFlowtext">{text === '0' ? 'Active' : 'Inactive'}</p>
+              <p className="overFlowtext">{text}</p>
             </Tooltip>
           );
         }

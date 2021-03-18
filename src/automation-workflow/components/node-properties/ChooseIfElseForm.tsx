@@ -262,7 +262,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
             <Row key={condition.id}>
               {condition.linkOp ? (
                 <Row gutter={0}>
-                  <Col span={8}>
+                  <Col span={8} className="ifelseRadio">
                     <Radio.Group
                       size="small"
                       onChange={(e) => {

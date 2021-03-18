@@ -132,7 +132,8 @@ export default class OrderReceive extends React.Component<any, any> {
 
   render() {
     const { detail, payRecord, paymentInfo } = this.props.relaxProps;
-    const id = detail.get('id');
+    const id = detail.get('toExternalOrderId');
+    const toExternalOrderId = detail.get('toExternalOrderId');
     const totalPayCash = detail.getIn(['tradePrice', 'totalPrice']) || 0;
 
     //交易状态
@@ -143,7 +144,7 @@ export default class OrderReceive extends React.Component<any, any> {
         <div style={styles.addReceive}>
           <div style={styles.orderInfo}>
             <label style={styles.orderNum}>
-              {<FormattedMessage id="orderNumber" />}:{id}
+              {<FormattedMessage id="orderNumber" />}:{toExternalOrderId}
               &nbsp;&nbsp;&nbsp;&nbsp;
               {<FormattedMessage id="amountReceivable" />}:$
               {(totalPayCash || 0).toFixed(2)}

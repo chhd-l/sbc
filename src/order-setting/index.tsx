@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import './index.less';
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
+const { Option } = Select;
 
 class OrderSetting extends Component<any, any> {
   constructor(props: any) {
@@ -26,7 +27,8 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
         orderAutomaticConfirmationStatus: false,
-        orderAutomaticConfirmationValue: 1
+        orderAutomaticConfirmationValue: 1,
+        paymentWhen: 'None'
       },
       paymentCashForm: {
         orderExpirationTimeStatus: false,
@@ -38,7 +40,8 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
         orderAutomaticConfirmationStatus: false,
-        orderAutomaticConfirmationValue: 1
+        orderAutomaticConfirmationValue: 1,
+        paymentWhen: 'None'
       },
       unlimitedForm: {
         orderExpirationTimeStatus: false,
@@ -412,6 +415,32 @@ class OrderSetting extends Component<any, any> {
                       </Radio.Button>
                     </Radio.Group>
                   </div>
+                </FormItem>
+
+                <FormItem label="Capture payment when">
+                  <Row>
+                    <Select
+                      value={paymentCategory === 'Online payment' ? paymentOnlineForm.paymentWhen : paymentCashForm.paymentWhen}
+                      style={{ width: 140 }}
+                      onChange={(value) => {
+                        if (paymentCategory === 'Online payment') {
+                          this.paymentOnlineFormChange({
+                            field: 'paymentWhen',
+                            value: value
+                          });
+                        } else {
+                          this.paymentCashFormChange({
+                            field: 'paymentWhen',
+                            value: value
+                          });
+                        }
+                      }}
+                    >
+                      <Option value="None">None</Option>
+                      <Option value="To be delivered">To be delivered</Option>
+                      <Option value="Shipped">Shipped</Option>
+                    </Select>
+                  </Row>
                 </FormItem>
                 {paymentCategory === 'Online payment' ? (
                   <>

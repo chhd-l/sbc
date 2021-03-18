@@ -31,7 +31,7 @@ class RuleSetting extends React.Component<any, any> {
 
   getAddressSettingList = () => {
     getAddressSetting().then((data) => {
-      if (data.res.code === Const.SUCCESS_CODE) {
+      if (data.res.code === Const.SUCCESS_CODE && data.res.context.addressApiSettings.length > 0) {
         this.setState({
           addressSettingForm: data.res.context.addressApiSettings[0]
         });
@@ -98,7 +98,7 @@ class RuleSetting extends React.Component<any, any> {
               <Switch checked={setItem.context === '1'} onChange={(checked) => onChange(idx, checked ? '1' : '0')} />
             </div>
           ))}
-        {setting.findIndex((st) => st.configKey === 'address_input_type_automatically') > -1 && setting.find((st) => st.configKey === 'address_input_type_automatically')['context'] === '1' && (
+        {setting.findIndex((st) => st.configKey === 'address_input_type_automatically') > -1 && setting.find((st) => st.configKey === 'address_input_type_automatically')['context'] === '1' && addressSettingForm.id ? (
           <>
             <Radio value={addressSettingForm.id} key={addressSettingForm.id} checked={true}>
               <img src={addressSettingForm.imgUrl} style={{ width: '120px' }} />
@@ -124,7 +124,7 @@ class RuleSetting extends React.Component<any, any> {
               </Row>
             </Form>
           </>
-        )}
+        ) : null}
       </Modal>
     );
   }

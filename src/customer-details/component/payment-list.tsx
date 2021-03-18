@@ -58,29 +58,19 @@ export default class PaymentList extends React.Component<Iprop, any> {
     const columns = [
       {
         title: 'Card number',
-        dataIndex: 'cardno',
+        dataIndex: 'lastFourDigits',
         key: 'cardno',
-        render: (_, record) => (
-          <>
-            {record.paymentType === 'PAYU' ? (
-              <div>{record.payuPaymentMethod && record.payuPaymentMethod.last_4_digits ? '**** **** **** ' + record.payuPaymentMethod.last_4_digits : ''}</div>
-            ) : (
-              <div>{record.adyenPaymentMethod && record.adyenPaymentMethod.lastFour ? '**** **** **** ' + record.adyenPaymentMethod.lastFour : ''}</div>
-            )}
-          </>
-        )
+        render: (text, record) => <div>{text ? '**** **** **** ' + text : ''}</div>
       },
       {
         title: 'Card type',
-        dataIndex: 'type',
-        key: 'type',
-        render: (_, record) => <>{record.paymentType === 'PAYU' ? <div>{record.payuPaymentMethod && record.payuPaymentMethod.card_type}</div> : <div>{record.adyenPaymentMethod && record.adyenPaymentMethod.card_type}</div>}</>
+        dataIndex: 'paymentVendor',
+        key: 'type'
       },
       {
         title: 'Card holder',
-        dataIndex: 'holder',
-        key: 'holder',
-        render: (_, record) => <>{record.paymentType === 'PAYU' ? <div>{record.payuPaymentMethod && record.payuPaymentMethod.holder_name}</div> : <div>{record.adyenPaymentMethod && record.adyenPaymentMethod.holder_name}</div>}</>
+        dataIndex: 'holderName',
+        key: 'holder'
       },
       {
         title: 'E-mail address',
@@ -89,7 +79,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
       },
       {
         title: 'Phone number',
-        dataIndex: 'phoneNumber',
+        dataIndex: 'phone',
         key: 'phoneNumber'
       },
       {

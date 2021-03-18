@@ -4,6 +4,8 @@ import { BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import PetItem from './component/pet-item';
 
+import './index.less';
+
 export default function EditPetItem(props: any) {
   const customerId = props.match.params.id || '';
   const customerAccount = props.match.params.account || '';
@@ -20,7 +22,7 @@ export default function EditPetItem(props: any) {
         <Breadcrumb.Item>
           <a href={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Edit pet information</Breadcrumb.Item>
+        <Breadcrumb.Item>Pet information</Breadcrumb.Item>
       </Breadcrumb>
       <div>
         <PetItem petId={petId} />

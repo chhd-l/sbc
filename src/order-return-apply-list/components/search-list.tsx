@@ -51,8 +51,8 @@ export default class SearchList extends React.Component<any, any> {
               <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                 <thead className="ant-table-thead">
                   <tr>
-                    <th style={{ width: '300' }}>{<FormattedMessage id="commodity" />}</th>
-                    <th style={{ width: '10%' }}>{<FormattedMessage id="consumerName" />}</th>
+                    <th style={{ width: '200' }}>{<FormattedMessage id="commodity" />}</th>
+                    <th style={{ width: '15%' }}>{<FormattedMessage id="consumerName" />}</th>
                     <th style={{ width: '15%' }}>{<FormattedMessage id="recipient" />}</th>
                     <th style={{ width: '10%' }}>
                       {<FormattedMessage id="amount" />}
@@ -157,7 +157,7 @@ export default class SearchList extends React.Component<any, any> {
                   <td
                     style={{
                       textAlign: 'left',
-                      width: '300',
+                      width: '200',
                       padding: '16px 0'
                     }}
                   >

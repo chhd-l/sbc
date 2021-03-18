@@ -14,7 +14,7 @@ export default class SubscriptionList extends Component<any, any> {
     super(props);
     this.state = {
       searchForm: {
-        subscriptionOption: 'Subscription Number',
+        subscriptionOption: 'Subscription id',
         number: '',
         consumerOption: 'Consumer Name',
         consumer: '',
@@ -26,7 +26,7 @@ export default class SubscriptionList extends Component<any, any> {
         prescriberOption: 'Auditor Name',
         prescriber: ''
       },
-      subscriptionOption: ['Subscription Number', 'Order Number'],
+      subscriptionOption: ['Subscription id', 'Order id'],
 
       consumerOption: ['Consumer Name', 'Consumer Account'],
       productOption: ['Product Name', 'SKU Code'],
@@ -96,8 +96,10 @@ export default class SubscriptionList extends Component<any, any> {
     const { searchForm, activeKey } = this.state;
     let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
     let param = {
-      orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
-      subscriptionNumber: searchForm.subscriptionOption === 'Subscription Number' ? searchForm.number : '',
+      // orderNumber: searchForm.subscriptionOption === 'Order id' ? searchForm.number : '',
+      // subscriptionNumber: searchForm.subscriptionOption === 'Subscription id' ? searchForm.number : '',
+      externalOrderId: searchForm.subscriptionOption === 'Order id' ? searchForm.number : '',
+      externalSubscribeId: searchForm.subscriptionOption === 'Subscription id' ? searchForm.number : '',
       consumerName: searchForm.consumerOption === 'Consumer Name' ? searchForm.consumer : '',
       consumerAccount: searchForm.consumerOption === 'Consumer Account' ? searchForm.consumer : '',
       productName: searchForm.productOption === 'Product Name' ? searchForm.product : '',

@@ -26,7 +26,8 @@ class OrderSetting extends Component<any, any> {
       visiblePrescriberConfig: false,
       configData: [],
       loading: false,
-      categoryLoading: false
+      categoryLoading: false,
+      modalTitle: ''
     };
   }
   componentDidMount() {
@@ -248,17 +249,7 @@ class OrderSetting extends Component<any, any> {
 
   render() {
     const { title, auditMethod, isPetInfo, configForm, visibleAuditConfig, visiblePrescriberConfig, configData, categoryLoading } = this.state;
-    const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 }
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
-      }
-    };
+
     const columns = [
       {
         title: 'Category',
@@ -335,7 +326,40 @@ class OrderSetting extends Component<any, any> {
           <Headline title={title} />
           <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <div style={{ margin: 20 }}>
-              <span style={{ marginRight: 20 }}>Audit method:</span>
+              <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}>Online payment:</p>
+              <Radio.Group onChange={this.onAuditMethodChange} value={auditMethod}>
+                <Radio value="Auto audit">Auto audit</Radio>
+                {auditMethod === 'Auto audit' ? (
+                  <Tooltip placement="top" title="Edit">
+                    <span
+                      onClick={() => {
+                        this.setState({
+                          visiblePrescriberConfig: true
+                        });
+                      }}
+                      style={{ marginRight: 10, color: '#e2001a' }}
+                      className="iconfont iconEdit"
+                    ></span>
+                  </Tooltip>
+                ) : null}
+                <Radio value="Manual audit">Manual audit</Radio>
+                {auditMethod === 'Manual audit' ? (
+                  <Tooltip placement="top" title="Edit">
+                    <span
+                      onClick={() => {
+                        this.setState({
+                          visibleAuditConfig: true
+                        });
+                      }}
+                      style={{ marginRight: 10, color: '#e2001a' }}
+                      className="iconfont iconEdit"
+                    ></span>
+                  </Tooltip>
+                ) : null}
+              </Radio.Group>
+            </div>
+            <div style={{ margin: 20 }}>
+              <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}>COD:</p>
               <Radio.Group onChange={this.onAuditMethodChange} value={auditMethod}>
                 <Radio value="Auto audit">Auto audit</Radio>
                 {auditMethod === 'Auto audit' ? (
@@ -450,12 +474,6 @@ class OrderSetting extends Component<any, any> {
             <Switch size="small" disabled={false} checked={isPetInfo} onClick={(checked) => this.onPetInfoChange(checked)}></Switch>
           </div>
         </Modal>
-
-        {/* <div className="bar-button">
-          <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.save()}>
-            {<FormattedMessage id="save" />}
-          </Button>
-        </div> */}
       </AuthWrapper>
     );
   }

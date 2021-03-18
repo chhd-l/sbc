@@ -264,6 +264,7 @@ export default class ListView extends React.Component<any, any> {
       dataList &&
       dataList.map((v, index) => {
         const id = v.get('id');
+        const toExternalOrderId = v.get('toExternalOrderId');
         const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
         const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
         const num =
@@ -321,7 +322,7 @@ export default class ListView extends React.Component<any, any> {
                               position: 'relative'
                             }}
                           >
-                            {id}{' '}
+                            {toExternalOrderId}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
                               <span style={styles.platform}>
                                 <FormattedMessage id="order.valetOrder" />
@@ -344,7 +345,7 @@ export default class ListView extends React.Component<any, any> {
                                   top: '20px'
                                 }}
                               >
-                                {v.get('subscribeId')}
+                                {v.get('externalSubscribeId')}
                               </span>
                             ) : (
                               ''

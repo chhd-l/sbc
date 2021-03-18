@@ -406,7 +406,7 @@ class PetItem extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Divider />
-                <Row gutter={16} type="flex" align="middle">
+                {/* <Row gutter={16} type="flex" align="middle">
                   <Col span={16}>
                     <div style={{ fontSize: 16, color: '#666' }}>Life stage information</div>
                   </Col>
@@ -438,7 +438,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                 </Row>
-                <Divider />
+                <Divider /> */}
                 <div>
                   <a
                     style={{ fontSize: 16 }}
@@ -471,10 +471,10 @@ class PetItem extends React.Component<Iprop, any> {
                         <Form.Item label="Death reason">{pet.reasonOfDeath}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Weight">{pet.weightAdded == 1 ? 'Yes' : 'No'}</Form.Item>
+                        <Form.Item label="Weight">{pet.weightAdded == 1 ? 'Yes' : pet.weightAdded == 0 ? 'No' : ''}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Reproduction status">{pet.reproductionStatusCode == 1 ? 'Yes' : 'No'}</Form.Item>
+                        <Form.Item label="Reproduction status">{pet.reproductionStatusCode == 1 ? 'Yes' : pet.reproductionStatusCode == 0 ? 'No' : ''}</Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="ICD">{pet.icd}</Form.Item>
@@ -504,7 +504,7 @@ class PetItem extends React.Component<Iprop, any> {
                         <Form.Item label="Hair color">{pet.hair}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Reproducer">{pet.isReproducer == 1 ? 'Yes' : 'No'}</Form.Item>
+                        <Form.Item label="Reproducer">{pet.isReproducer == 1 ? 'Yes' : pet.isReproducer ? 'No' : ''}</Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Reason">{pet.reason}</Form.Item>
@@ -534,7 +534,7 @@ class PetItem extends React.Component<Iprop, any> {
                         <Form.Item label="Species">{pet.speciesCode}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Sterilisation status">{pet.sterilisation == 1 ? 'Yes' : 'No'}</Form.Item>
+                        <Form.Item label="Sterilisation status">{pet.sterilisation == 1 ? 'Yes' : pet.sterilisation ? 'No' : ''}</Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Status">{pet.status}</Form.Item>

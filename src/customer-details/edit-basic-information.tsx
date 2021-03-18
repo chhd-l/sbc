@@ -3,6 +3,8 @@ import { Breadcrumb } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import BasicEdit from './component/basic-edit';
 
+import './index.less';
+
 export default function EditBasicInfo(props: any) {
   const customerId = props.match.params.id || '';
   const customerAccount = props.match.params.account || '';

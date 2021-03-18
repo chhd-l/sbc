@@ -8,6 +8,7 @@ import moment from 'moment';
 import { Const, Headline, history, cache } from 'qmkit';
 import _, { divide } from 'lodash';
 import { getCountryList, getStateList, getCityList, searchCity, getManualAddressFieldList } from './webapi';
+import { spawn } from 'child_process';
 
 const { TextArea } = Input;
 
@@ -27,6 +28,7 @@ class BasicEdit extends React.Component<any, any> {
     super(props);
     this.state = {
       storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '',
+      editable: false,
       customer: {},
       countryList: [],
       stateList: [],
@@ -272,7 +274,7 @@ class BasicEdit extends React.Component<any, any> {
   };
 
   render() {
-    const { customer, countryList, stateList, cityList, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
+    const { customer, countryList, stateList, cityList, editable, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
     const options = [
       {
         label: 'Phone',
@@ -297,109 +299,143 @@ class BasicEdit extends React.Component<any, any> {
     return (
       <div>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-          <div className="container">
-            <Headline title="Edit basic information" />
+          <div className="container petowner-noedit-form">
+            <Headline title="Basic information" />
             <Form {...formItemLayout}>
               <Row gutter={16}>
                 <Col span={12}>
                   <FormItem label="Pet owner account">
-                    {getFieldDecorator('customerAccount', {
-                      initialValue: customer.customerAccount
-                    })(<Input disabled={true} />)}
+                    {editable ? (
+                      getFieldDecorator('customerAccount', {
+                        initialValue: customer.customerAccount
+                      })(<Input disabled={true} />)
+                    ) : (
+                      <span>{customer.customerAccount}</span>
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem label="Registration date">
-                    {getFieldDecorator('createTime', {
-                      initialValue: moment(customer.createTime)
-                    })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" disabled={true} />)}
+                    {editable ? (
+                      getFieldDecorator('createTime', {
+                        initialValue: moment(customer.createTime, 'YYYY-MM-DD')
+                      })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" disabled={true} />)
+                    ) : (
+                      <span>{customer.createTime ? moment(customer.createTime, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
+                    )}
                   </FormItem>
                 </Col>
-              </Row>
-              <Row gutter={16}>
                 <Col span={12}>
                   <FormItem label="First name">
-                    {getFieldDecorator('firstName', {
-                      initialValue: customer.firstName,
-                      rules: [
-                        { required: true, message: 'Please input First Name!' },
-                        {
-                          max: 50,
-                          message: 'Exceed maximum length!'
-                        }
-                      ]
-                    })(<Input disabled />)}
+                    {editable ? (
+                      getFieldDecorator('firstName', {
+                        initialValue: customer.firstName,
+                        rules: [
+                          { required: true, message: 'Please input First Name!' },
+                          {
+                            max: 50,
+                            message: 'Exceed maximum length!'
+                          }
+                        ]
+                      })(<Input disabled />)
+                    ) : (
+                      <span>{customer.firstName}</span>
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem label="Last name">
-                    {getFieldDecorator('lastName', {
-                      initialValue: customer.lastName,
-                      rules: [
-                        { required: true, message: 'Please input Last Name!' },
-                        {
-                          max: 50,
-                          message: 'Exceed maximum length!'
-                        }
-                      ]
-                    })(<Input disabled />)}
+                    {editable ? (
+                      getFieldDecorator('lastName', {
+                        initialValue: customer.lastName,
+                        rules: [
+                          { required: true, message: 'Please input Last Name!' },
+                          {
+                            max: 50,
+                            message: 'Exceed maximum length!'
+                          }
+                        ]
+                      })(<Input disabled />)
+                    ) : (
+                      <span>{customer.lastName}</span>
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem label="Birth Date">
-                    {getFieldDecorator('birthDay', {
-                      rules: [{ required: true, message: 'Please input Birth Date!' }],
-                      initialValue: customer.birthDay ? moment(customer.birthDay) : null
-                    })(
-                      <DatePicker
-                        style={{ width: '100%' }}
-                        format="YYYY-MM-DD"
-                        disabledDate={(current) => {
-                          return current && current > moment().endOf('day');
-                        }}
-                      />
+                    {editable ? (
+                      getFieldDecorator('birthDay', {
+                        rules: [{ required: true, message: 'Please input Birth Date!' }],
+                        initialValue: customer.birthDay ? moment(customer.birthDay, 'YYYY-MM-DD') : null
+                      })(
+                        <DatePicker
+                          style={{ width: '100%' }}
+                          format="YYYY-MM-DD"
+                          disabledDate={(current) => {
+                            return current && current > moment().endOf('day');
+                          }}
+                        />
+                      )
+                    ) : (
+                      <span>{customer.birthDay ? moment(customer.birthDay, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
                     )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem label="Email">
-                    {getFieldDecorator('email', {
-                      initialValue: customer.email,
-                      rules: [{ required: true, message: 'Please input Email!' }, { validator: this.compareEmail }, { max: 50, message: 'Exceed maximum length!' }]
-                    })(<Input disabled />)}
+                    {editable ? (
+                      getFieldDecorator('email', {
+                        initialValue: customer.email,
+                        rules: [{ required: true, message: 'Please input Email!' }, { validator: this.compareEmail }, { max: 50, message: 'Exceed maximum length!' }]
+                      })(<Input disabled />)
+                    ) : (
+                      <span>{customer.email}</span>
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem label="Phone number">
-                    {getFieldDecorator('contactPhone', {
-                      initialValue: customer.contactPhone,
-                      rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }]
-                    })(<Input />)}
+                    {editable ? (
+                      getFieldDecorator('contactPhone', {
+                        initialValue: customer.contactPhone,
+                        rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }]
+                      })(<Input />)
+                    ) : (
+                      <span>{customer.contactPhone}</span>
+                    )}
                   </FormItem>
                 </Col>
 
                 <Col span={12}>
                   <FormItem label="Postal code">
-                    {getFieldDecorator('postalCode', {
-                      initialValue: customer.postalCode,
-                      rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
-                    })(<Input />)}
+                    {editable ? (
+                      getFieldDecorator('postalCode', {
+                        initialValue: customer.postalCode,
+                        rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
+                      })(<Input />)
+                    ) : (
+                      <span>{customer.postalCode}</span>
+                    )}
                   </FormItem>
                 </Col>
 
                 <Col span={12}>
                   <FormItem label="Country">
-                    {getFieldDecorator('countryId', {
-                      initialValue: customer.countryId,
-                      rules: [{ required: true, message: 'Please select country!' }]
-                    })(
-                      <Select optionFilterProp="children">
-                        {countryList.map((item) => (
-                          <Option value={item.id} key={item.id}>
-                            {item.name}
-                          </Option>
-                        ))}
-                      </Select>
+                    {editable ? (
+                      getFieldDecorator('countryId', {
+                        initialValue: customer.countryId,
+                        rules: [{ required: true, message: 'Please select country!' }]
+                      })(
+                        <Select optionFilterProp="children">
+                          {countryList.map((item) => (
+                            <Option value={item.id} key={item.id}>
+                              {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      )
+                    ) : (
+                      <span>{customer.countryId && countryList.findIndex((c) => c.id === customer.countryId) > -1 ? countryList.find((c) => c.id === customer.countryId)['name'] : ''}</span>
                     )}
                   </FormItem>
                 </Col>
@@ -407,17 +443,21 @@ class BasicEdit extends React.Component<any, any> {
                 {this.state.stateEnable && (
                   <Col span={12}>
                     <FormItem label="State">
-                      {getFieldDecorator('province', {
-                        initialValue: customer.province,
-                        rules: [{ required: true, message: 'Please select state!' }]
-                      })(
-                        <Select showSearch>
-                          {stateList.map((item) => (
-                            <Option value={item.stateName} key={item.id}>
-                              {item.stateName}
-                            </Option>
-                          ))}
-                        </Select>
+                      {editable ? (
+                        getFieldDecorator('province', {
+                          initialValue: customer.province,
+                          rules: [{ required: true, message: 'Please select state!' }]
+                        })(
+                          <Select showSearch>
+                            {stateList.map((item) => (
+                              <Option value={item.stateName} key={item.id}>
+                                {item.stateName}
+                              </Option>
+                            ))}
+                          </Select>
+                        )
+                      ) : (
+                        <div style={{ minHeight: 40 }}>{customer.province || ''}</div>
                       )}
                     </FormItem>
                   </Col>
@@ -425,70 +465,94 @@ class BasicEdit extends React.Component<any, any> {
 
                 <Col span={12}>
                   <FormItem label="City">
-                    {getFieldDecorator('city', {
-                      rules: [{ required: true, message: 'Please select City!' }],
-                      initialValue: customer.city
-                    })(
-                      this.state.cityType === 1 ? (
-                        <AutoComplete dataSource={cityList.map((city) => city.cityName)} onSearch={this.searchCity} />
-                      ) : (
-                        <Select showSearch>
-                          {this.state.dropDownCityList.map((item) => (
-                            <Option value={item.name} key={item.id}>
-                              {item.name}
-                            </Option>
-                          ))}
-                        </Select>
+                    {editable ? (
+                      getFieldDecorator('city', {
+                        rules: [{ required: true, message: 'Please select City!' }],
+                        initialValue: customer.city
+                      })(
+                        this.state.cityType === 1 ? (
+                          <AutoComplete dataSource={cityList.map((city) => city.cityName)} onSearch={this.searchCity} />
+                        ) : (
+                          <Select showSearch>
+                            {this.state.dropDownCityList.map((item) => (
+                              <Option value={item.name} key={item.id}>
+                                {item.name}
+                              </Option>
+                            ))}
+                          </Select>
+                        )
                       )
+                    ) : (
+                      <span>{customer.city}</span>
                     )}
                   </FormItem>
                 </Col>
+
                 <Col span={12}>
                   <FormItem label="Address reference">
-                    {getFieldDecorator('address1', {
-                      initialValue: customer.address1,
-                      rules: [
-                        { required: true, message: 'Please input Address 1!' },
-                        {
-                          max: 200,
-                          message: 'Exceed maximum length!'
-                        }
-                      ]
-                    })(<Input />)}
+                    {editable ? (
+                      getFieldDecorator('address1', {
+                        initialValue: customer.address1,
+                        rules: [
+                          { required: true, message: 'Please input Address 1!' },
+                          {
+                            max: 200,
+                            message: 'Exceed maximum length!'
+                          }
+                        ]
+                      })(<Input />)
+                    ) : (
+                      <span>{customer.address1}</span>
+                    )}
                   </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem label="Consent">{customer.userConsentList && customer.userConsentList.length > 0 ? customer.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}</FormItem>
                 </Col>
 
                 <Col span={12}>
                   <FormItem label="Prefer channel">
-                    {getFieldDecorator('preferredMethods', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please Select Preferred methods of communication!'
-                        }
-                      ],
-                      initialValue: ['communicationPhone', 'communicationEmail'].reduce((prev, curr) => {
-                        if (+customer[curr]) {
-                          prev.push(curr);
-                        }
-                        return prev;
-                      }, [])
-                    })(<Checkbox.Group options={options} />)}
+                    {editable ? (
+                      getFieldDecorator('preferredMethods', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please Select Preferred methods of communication!'
+                          }
+                        ],
+                        initialValue: ['communicationPhone', 'communicationEmail'].reduce((prev, curr) => {
+                          if (+customer[curr]) {
+                            prev.push(curr);
+                          }
+                          return prev;
+                        }, [])
+                      })(<Checkbox.Group options={options} />)
+                    ) : (
+                      <span>
+                        {['Email', 'Phone']
+                          .reduce((prev, curr) => {
+                            if (+customer[`communication${curr}`]) {
+                              prev.push(curr);
+                            }
+                            return prev;
+                          }, [])
+                          .join(' ')}
+                      </span>
+                    )}
                   </FormItem>
+                </Col>
+
+                <Col span={12}>
+                  <FormItem label="Consent">{customer.userConsentList && customer.userConsentList.length > 0 ? customer.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}</FormItem>
                 </Col>
               </Row>
             </Form>
           </div>
           <div className="bar-button">
-            <Button type="primary" onClick={this.handleSubmit}>
-              Save
-            </Button>
+            {editable && (
+              <Button type="primary" onClick={this.handleSubmit} style={{ marginRight: '20px' }}>
+                Save
+              </Button>
+            )}
 
             <Button
-              style={{ marginLeft: '20px' }}
               onClick={() => {
                 history.go(-1);
               }}

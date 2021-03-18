@@ -4,6 +4,8 @@ import { BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import PetItem from './component/pet-item';
 
+import './index.less';
+
 export default function EditPetItem(props: any) {
   const customerId = props.match.params.id || '';
   const customerAccount = props.match.params.account || '';

@@ -345,7 +345,7 @@ export default class ListView extends React.Component<any, any> {
                                   top: '20px'
                                 }}
                               >
-                                {v.get('subscribeId')}
+                                {v.get('externalSubscribeId')}
                               </span>
                             ) : (
                               ''

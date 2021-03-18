@@ -781,8 +781,11 @@ export default class SearchHead extends Component<any, any> {
 
     // };
     const params = {
-      id: numberSelect === 'orderNumber' ? numberSelectValue : '',
-      subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+      // id: numberSelect === 'orderNumber' ? numberSelectValue : '',
+      // subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+
+      externalOrderId: numberSelect === 'orderNumber' ? numberSelectValue : '',
+      externalSubscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
       subscriptionRefillType: refillNumber,
       [goodsOptions]: goodsOptionsValue,
       orderType,

@@ -242,7 +242,7 @@ class AutomationDetail extends Component<any, any> {
     });
     if (isOrderEvent) {
       let params = {
-        id: value,
+        externalOrderId: value,
         pageSize: 30,
         pageNum: 0
       };

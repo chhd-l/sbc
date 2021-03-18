@@ -347,7 +347,7 @@ class MessageDetails extends Component<any, any> {
     });
     if (basicForm.objectType === 'Order') {
       let params = {
-        id: value,
+        externalOrderId: value,
         pageSize: 30,
         pageNum: 0
       };
@@ -362,7 +362,7 @@ class MessageDetails extends Component<any, any> {
       });
     } else if (basicForm.objectType === 'Subscription') {
       let params = {
-        subscribeId: value,
+        externalSubscribeId: value,
         pageSize: 30,
         pageNum: 0
       };

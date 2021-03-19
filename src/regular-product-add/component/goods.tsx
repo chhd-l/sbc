@@ -403,7 +403,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
                 // initialValue: 'Y'
-                initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') == 0 ? goods.get('subscriptionStatus') : 1
+                initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') == 0 ? goods.get('subscriptionStatus') : 1 || goods.get('displayFlag') == 0 ? 0 : 1
               })(
                 <Select getPopupContainer={() => document.getElementById('page-content')} disabled={goods.get('displayFlag') == 0 ? true : false} placeholder="please select status">
                   <Option value={1}>Y</Option>

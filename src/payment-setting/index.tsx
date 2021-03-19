@@ -84,7 +84,7 @@ export default class PaymentSetting extends React.Component<any, any> {
               {paymentList &&
                 paymentList.map((item, index) => (
                   <Col span={8} key={index}>
-                    <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                    <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                       <div className="methodItem">
                         <img
                           src={item.imgUrl}

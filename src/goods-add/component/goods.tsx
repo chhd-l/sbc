@@ -399,7 +399,7 @@ class GoodsForm extends React.Component<any, any> {
                 // initialValue: 'Y'
                 initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') === 0 ? goods.get('subscriptionStatus') : 1
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
+                <Select getPopupContainer={() => document.getElementById('page-content')} disabled={goods.get('displayFlag') == 0 ? true : false} placeholder="please select status">
                   <Option value={1}>Y</Option>
                   <Option value={0}>N</Option>
                 </Select>
@@ -726,7 +726,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          {this.state.saleableType == true ? (
+          {goods.get('saleableFlag') == 0 ? (
             <Col span={12}>
               <FormItem {...formItemLayout} label="Display on shop">
                 {getFieldDecorator('displayFlag', {
@@ -822,6 +822,7 @@ class GoodsForm extends React.Component<any, any> {
   _editGoods = (key: string, e) => {
     const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
+
     if (key === 'saleableFlag') {
       if (e.target.value == 0) {
         this.setState({

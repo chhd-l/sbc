@@ -129,12 +129,12 @@ export default class AppStore extends Store {
     } else {
       this.dispatch('formActor:enterpriseFlag', false);
     }
-
+    console.log(editResource, 12344);
     let userList: any;
     if (util.isThirdStore()) {
-      userList = editResource.allCustomers;
+      userList = editResource.allCustomers || [];
     } else {
-      userList = editResource.allBossCustomers;
+      userList = editResource.allBossCustomers || [];
     }
 
     const sourceUserList = fromJS(userList);
@@ -2061,33 +2061,36 @@ export default class AppStore extends Store {
     const { res } = (await getSeo(goodsId, type)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
-      let title = '{name} | Royal Canin Shop';
-      let description = '{description}';
+      let title = null;
+      let description = null;
+      let keywords = null;
       const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
       if (loginInfo) {
         switch (loginInfo.storeId) {
           case 123457910: //"美国"
             title = '{name} | Royal Canin Shop';
-            description = '{description}';
             break;
           case 123457911: //"土耳其"
             title = '{name} {subtitle} | Royal Canin Türkiye';
             description = '{name} {subtitle} Royal Canin resmi mağazasında. "X" TL üzeri siparişlerinizde ücretsiz kargo. Sipariş verin veya mama aboneliğinizi başlatın!';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
             break;
           case 123457907: //"俄罗斯"
             title = 'Купить {technology} корм Royal Canin {name} в официальном интернет-магазине';
             description = 'Купить {technology} корм Royal Canin {name} со скидкой 10% при оформлении подписки. Сделайте заказ в интернет-магазине Royal Canin уже сегодня!';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
             break;
           default:
             title = '{name} | Royal Canin Shop';
             description = '{description}';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
         }
       }
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
           titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : title,
-          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}', //{name}, {subtitle}, {sales category}, {tagging}
+          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : keywords, //{name}, {subtitle}, {sales category}, {tagging}
           metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : description, //{description}
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
@@ -2098,16 +2101,42 @@ export default class AppStore extends Store {
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
     this.dispatch('loading:start');
+    let params = {};
     const updateNumbers = this.state().get('updateNumbers') + 1;
-    const params = {
-      type: 1,
-      goodsId,
-      metaDescriptionSource: seoObj.metaDescriptionSource,
-      metaKeywordsSource: seoObj.metaKeywordsSource,
-      titleSource: seoObj.titleSource,
-      headingTag: seoObj.headingTag,
-      updateNumbers
-    };
+    const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')); //{storeId: 123457910}
+    if (loginInfo) {
+      switch (loginInfo.storeId) {
+        case 123457910: //"美国"
+          params = {
+            type: 1,
+            goodsId,
+            metaDescriptionSource: null,
+            metaKeywordsSource: null,
+            titleSource: seoObj.titleSource,
+            headingTag: null,
+            updateNumbers
+          };
+          break;
+        // case 123457911: //"土耳其"
+        //
+        //   break;
+        // case 123457907: //"俄罗斯"
+        //
+        //   break;
+        default:
+          params = {
+            type: 1,
+            goodsId,
+            metaDescriptionSource: seoObj.metaDescriptionSource,
+            metaKeywordsSource: seoObj.metaKeywordsSource,
+            titleSource: seoObj.titleSource,
+            headingTag: seoObj.headingTag,
+            updateNumbers
+          };
+      }
+    }
+
+    console.log(params, '----params');
     const { res } = (await editSeo(params)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {

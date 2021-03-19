@@ -208,9 +208,12 @@ class AutomationList extends Component<any, any> {
         width: '8%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
-              <Link to={`/automation-edit/${record.id}`} className="iconfont iconEdit" style={{ marginRight: 10 }}></Link>
-            </Tooltip>
+            {record.status === 'Published' ? null : (
+              <Tooltip placement="top" title="Edit">
+                <Link to={`/automation-edit/${record.id}`} className="iconfont iconEdit" style={{ marginRight: 10 }}></Link>
+              </Tooltip>
+            )}
+
             <Tooltip placement="top" title="Detail">
               <Link to={`/automation-detail/${record.id}`} className="iconfont iconDetails" style={{ marginRight: 10 }}></Link>
             </Tooltip>

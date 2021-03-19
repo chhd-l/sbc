@@ -1,4 +1,4 @@
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, Card } from 'antd';
+import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, Card, Icon } from 'antd';
 import React, { Component } from 'react';
 import { Const, history } from 'qmkit';
 import * as webapi from '../webapi';
@@ -190,14 +190,32 @@ export default class CardView extends Component<any, any> {
             <span> {taskCardLength.onGoingLength} </span>
           </Col>
           <Col span={6} className="completed">
-            <span className="stick"></span>
-            <h3>COMPLETED</h3>
-            <span> {taskCardLength.completedLength} </span>
+            <Row>
+              <Col span={16}>
+                <span className="stick"></span>
+                <h3>COMPLETED</h3>
+                <span> {taskCardLength.completedLength} </span>
+              </Col>
+              <Col span={8} style={{ textAlign: 'right' }}>
+                <span className="taskMore" onClick={() => this.props.clickTaskMore('Completed')}>
+                  More <Icon type="right" />
+                </span>
+              </Col>
+            </Row>
           </Col>
           <Col span={6} className="cancelled">
-            <span className="stick"></span>
-            <h3>CANCELLED</h3>
-            <span> {taskCardLength.cancelledLength} </span>
+            <Row>
+              <Col span={16}>
+                <span className="stick"></span>
+                <h3>CANCELLED</h3>
+                <span> {taskCardLength.cancelledLength} </span>
+              </Col>
+              <Col span={8} style={{ textAlign: 'right' }}>
+                <span className="taskMore" onClick={() => this.props.clickTaskMore('Cancelled')}>
+                  More <Icon type="right" />
+                </span>
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Card loading={loading} bordered={false}>
@@ -205,8 +223,8 @@ export default class CardView extends Component<any, any> {
             <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'To Do')} onDragOver={(e) => e.preventDefault()}>
               <Row className="taskItem" id="todoView">
                 {toDoList.map((item) => (
-                  <div className="taskCardItem">
-                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} className="taskCard" hoverable onClick={() => this.redirectDetail(item.id)}>
+                  <div className="taskCardItem" key={item.id}>
+                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">
                           <div className="goldenMoment">
@@ -236,7 +254,7 @@ export default class CardView extends Component<any, any> {
             <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'On-going')} onDragOver={(e) => e.preventDefault()}>
               <Row className="taskItem" id="ongoingView">
                 {onGoingList.map((item) => (
-                  <div className="taskCardItem">
+                  <div className="taskCardItem" key={item.id}>
                     <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">
@@ -267,7 +285,7 @@ export default class CardView extends Component<any, any> {
             <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'Completed')} onDragOver={(e) => e.preventDefault()}>
               <Row className="taskItem" id="completeView">
                 {completedList.map((item) => (
-                  <div className="taskCardItem">
+                  <div className="taskCardItem" key={item.id}>
                     <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">
@@ -298,7 +316,7 @@ export default class CardView extends Component<any, any> {
             <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'Cancelled')} onDragOver={(e) => e.preventDefault()}>
               <Row className="taskItem" id="cancelView">
                 {cancelledList.map((item) => (
-                  <div className="taskCardItem">
+                  <div className="taskCardItem" key={item.id}>
                     <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">

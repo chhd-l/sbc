@@ -179,6 +179,28 @@ export function searchCity(searchTxt: string) {
 }
 
 /**
+ * 根据city id查询region list
+ * @param id
+ * @returns
+ */
+export function getRegionListByCityId(id: number) {
+  return Fetch<TResult>(`/systemRegion/queryByStoreId/${id}`, {
+    method: 'GET'
+  });
+}
+
+/**
+ * 搜索地址 Dadata
+ * @param txt
+ * @returns
+ */
+export function getAddressListByDadata(txt: string) {
+  return Fetch<TResult>(`/address-input-auto/list?keyword=${txt}`, {
+    method: 'GET'
+  });
+}
+
+/**
  * 获取候选tagging
  */
 export function getTaggingList() {

@@ -225,9 +225,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                     <Link to={`/edit-petowner/${this.state.customerId}/${this.state.customerAccount}`}>
                       <i className="iconfont iconDetails"></i> Detail
                     </Link>
-                    <Link to={`/pet-owner-activity/${this.state.customerId}`} style={{ marginLeft: '20px' }}>
+                    {/* <Link to={`/pet-owner-activity/${this.state.customerId}`} style={{ marginLeft: '20px' }}>
                       <i className="iconfont iconfenxiang"></i> Overview
-                    </Link>
+                    </Link> */}
                   </>
                 }
               />

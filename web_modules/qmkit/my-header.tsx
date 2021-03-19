@@ -259,13 +259,13 @@ export default class MyHeader extends React.Component {
 
           <div style={styles.headerRight}>
             <div style={{ marginRight: 30, marginTop: 15 }}>
-              <Badge count={this.state.taskList.length}>
-                <Popover style={{ padding: 0 }}
+              <Badge>
+                {/* <Popover style={{ padding: 0 }}
                   // visible={this.state.visible}
                   // onVisibleChange={this.handleVisibleChange}
                   placement="bottomRight" content={content} trigger="click">
                   <Icon type="bell" style={{ fontSize: 25 }} />
-                </Popover>
+                </Popover> */}
               </Badge>
             </div>
             <div style={{ height: 20, textAlign: 'right', }}>

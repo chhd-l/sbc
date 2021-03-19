@@ -112,7 +112,7 @@ export default class SearchHead extends Component<any, any> {
 
     const orderSourceList = [
       { value: 'FGS', name: 'FGS' },
-      { value: 'L_ATELIER_FELINE', name: "L'Atelier Feline" }
+      { value: 'L_ATELIER_FELINE', name: 'L\'Atelier Feline' }
     ];
 
     const menu = (
@@ -161,7 +161,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Refill number'} />
+                    <Input style={styles.leftLabel} title={'Subscription order time'} disabled defaultValue={'Subscription order time'} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -387,7 +387,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Plan type'} />
+                    <Input style={styles.leftLabel} title={'Subscription plan type'} disabled defaultValue={'Subscription plan type'} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -580,11 +580,11 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title="Order id" value="orderNumber">
-          <FormattedMessage id="order.orderId" />
+        <Option title="Order number" value="orderNumber">
+          <FormattedMessage id="order.orderNumber" />
         </Option>
-        <Option title="Subscriptio id" value="subscriptioNumber">
-          <FormattedMessage id="order.subscriptionId" />
+        <Option title="Subscription number" value="subscriptionNumber">
+          <FormattedMessage id="order.subscriptionNumber" />
         </Option>
       </Select>
     );
@@ -777,10 +777,9 @@ export default class SearchHead extends Component<any, any> {
 
     // };
     const params = {
-      // id: numberSelect === 'orderNumber' ? numberSelectValue : '',
-      externalOrderId: numberSelect === 'orderNumber' ? numberSelectValue : '',
-      externalSubscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
-      // subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+      id: numberSelect === 'orderNumber' ? numberSelectValue : '',
+
+      subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
       subscriptionRefillType: refillNumber,
       [goodsOptions]: goodsOptionsValue,
       orderType,
@@ -815,7 +814,10 @@ const styles = {
     textAlign: 'left',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',
-    cursor: 'text'
+    cursor: 'default',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   wrapper: {
     width: 200

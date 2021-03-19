@@ -822,6 +822,7 @@ class GoodsForm extends React.Component<any, any> {
   _editGoods = (key: string, e) => {
     const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
+
     if (key === 'saleableFlag') {
       if (e.target.value == 0) {
         this.setState({

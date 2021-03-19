@@ -87,7 +87,7 @@ export default class ChooseTaggingForm extends Component<any, any> {
 
   radioChangeStyle(link, linkType) {
     if (link === linkType) {
-      return 'rgb(89, 247, 199)';
+      return '#fff'; //rgb(89, 247, 199)
     }
   }
 

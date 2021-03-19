@@ -69,7 +69,7 @@ export default withPropsAPI(
     saveProperties(formData) {
       const { currentItem } = this.state;
       if (currentItem) {
-        let tmpParam = { name: formData.name, eventType: null, templateId: null, conditionDataList: null };
+        let tmpParam = { name: formData.name, eventType: null, templateId: null, templateName: null, conditionDataList: null };
         switch (formData.nodeType) {
           case 'TimeTrigger':
             tmpParam = { ...tmpParam, ...formData.startCampaignTime };
@@ -79,6 +79,7 @@ export default withPropsAPI(
             break;
           case 'SendEmail':
             tmpParam.templateId = formData.templateId;
+            tmpParam.templateName = formData.templateName;
             break;
           case 'Wait':
             tmpParam = { ...tmpParam, ...formData.waitCampaignTime };

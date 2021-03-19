@@ -129,7 +129,6 @@ export default class AppStore extends Store {
     } else {
       this.dispatch('formActor:enterpriseFlag', false);
     }
-    console.log(editResource, 12344);
     let userList: any;
     if (util.isThirdStore()) {
       userList = editResource.allCustomers || [];

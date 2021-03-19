@@ -146,9 +146,9 @@ export default class AppStore extends Store {
 
     let userList: any;
     if (util.isThirdStore()) {
-      userList = editResource.allCustomers;
+      userList = editResource.allCustomers || [];
     } else {
-      userList = editResource.allBossCustomers;
+      userList = editResource.allBossCustomers || [];
     }
 
     const sourceUserList = fromJS(userList);

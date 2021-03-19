@@ -55,19 +55,13 @@ export default class PaymentSetting extends React.Component<any, any> {
     onShow(true);
   };
 
-  onChange = () => {
-    console.log(111111111111);
-  };
+  onChange = () => {};
 
   reflash() {
     this.getPaymentSetting();
   }
   render() {
     const { queryByStoreId, switchChecked } = this.props.relaxProps;
-
-    setTimeout(() => {
-      console.log(queryByStoreId, 22222);
-    });
 
     return (
       <div>

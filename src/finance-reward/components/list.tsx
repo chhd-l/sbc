@@ -53,7 +53,6 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
   render() {
     const { loading, total, pageSize, selected, dataList, onSelect, init, current } = this.props.relaxProps;
-    //console.log(this.props.relaxProps.searchForm.toJS(),'--------===');
 
     return (
       <DataGrid
@@ -106,10 +105,6 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       }
     });
 
-    /*setTimeout(()=>{
-      console.log(this.props.relaxProps.ccccccc);
-
-    },300)*/
     //return (<Link to={{pathname :'/finance-reward-details', state : { name : rowInfo }}}>Details</Link>)
 
     /*const { invoiceState, orderInvoiceId } = rowInfo;

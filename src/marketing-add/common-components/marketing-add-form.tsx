@@ -281,7 +281,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
     const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
-    console.log(marketingBean.toJS(), 'marketingBean---------');
 
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
@@ -293,7 +292,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
         }
       });
     }
-    console.log(storeCateValues, 'storeCateValues----');
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';

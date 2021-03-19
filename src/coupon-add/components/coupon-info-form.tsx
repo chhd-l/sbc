@@ -654,7 +654,7 @@ export default class CouponInfoForm extends Component<any, any> {
           <div className="bold-title">Target consumer</div>
           {console.log(couponJoinLevel, 'couponJoinLevel99999999999')}
           <FormItem {...formItemLayout} required={true}>
-            <RadioGroup defaultValue={couponJoinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
+            <RadioGroup value={-3} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
               <Radio value={0}>All</Radio>
               <Radio value={-3}>Select group</Radio>
             </RadioGroup>

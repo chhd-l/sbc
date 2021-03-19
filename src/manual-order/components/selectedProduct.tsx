@@ -1,4 +1,4 @@
-import { Button, Icon, Select, Table } from 'antd';
+import { Button, Icon, Popconfirm, Select, Table, Tooltip } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
 import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
@@ -36,6 +36,7 @@ export default class SelectedProduct extends React.Component<any, any> {
     this.querySysDictionary();
   }
   async onSelectChange(e, index, row, name) {
+    const { customer } = this.props;
     if (name === 'subscriptionStatus' && e === 0) {
       row['periodTypeId'] = null;
     }
@@ -45,7 +46,8 @@ export default class SelectedProduct extends React.Component<any, any> {
       subscriptionStatus: row.subscriptionStatus,
       goodsInfoFlag: row.subscriptionStatus,
       goodsNum: row.buyCount,
-      goodsInfoId: row.goodsInfoId
+      goodsInfoId: row.goodsInfoId,
+      customerId: customer.customerId
     });
 
     this.state.dataSource[index] = row;
@@ -58,7 +60,7 @@ export default class SelectedProduct extends React.Component<any, any> {
    */
   async querySysDictionary() {
     this.setState({ loading: true });
-    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), getGoodsInfoCarts(this.props.storeId, this.props.customerId)]);
+    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), getGoodsInfoCarts(this.props.storeId, this.props.customer.customerId)]);
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let goodsList = result[2].res.context?.goodsList ?? [];
@@ -76,17 +78,17 @@ export default class SelectedProduct extends React.Component<any, any> {
    * @param row 删除购物车的商品
    */
   async deleteCartsGood(row) {
-    const { storeId, customerId } = this.props;
+    const { storeId, customer } = this.props;
     await deleteGoodsInfoCarts(storeId, {
       goodsInfoIds: [row.goodsInfoId],
-      customerId
+      customerId: customer.customerId
     });
     this.querySysDictionary();
   }
   render() {
     // const { getFieldDecorator } = this.props.form;
     const { options, dataSource, loading } = this.state;
-    const { storeId, customerId } = this.props;
+    const { storeId, customer } = this.props;
     const columns = [
       {
         title: 'Image',
@@ -175,7 +177,15 @@ export default class SelectedProduct extends React.Component<any, any> {
         dataIndex: 'Operation',
         key: 'Operation',
         render: (text, record) => {
-          return <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 25 }} onClick={() => this.deleteCartsGood(record)} className="icon iconfont iconDelete"></span>;
+          return (
+            <Popconfirm placement="topLeft" title="Are you sure you want to delete this product?" onConfirm={() => this.deleteCartsGood(record)} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title="Delete">
+                <a>
+                  <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 16 }} className="icon iconfont iconDelete"></span>
+                </a>
+              </Tooltip>
+            </Popconfirm>
+          );
         }
       }
     ];
@@ -198,7 +208,7 @@ export default class SelectedProduct extends React.Component<any, any> {
             columns={columns}
           />
           <div style={{ textAlign: 'right', padding: '20px 0' }}>Product amount $1234</div>
-          <AddProductModal storeId={storeId} customerId={customerId} visible={this.state.visible} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>
+          <AddProductModal storeId={storeId} customer={customer} visible={this.state.visible} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>
         </div>
       </div>
     );

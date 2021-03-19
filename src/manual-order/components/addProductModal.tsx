@@ -25,7 +25,7 @@ export default class AddProductModal extends Component {
     loading: false
   };
   props: {
-    customerId: string;
+    customer: any;
     storeId: string;
     visible: boolean;
     handleOk: any;
@@ -80,13 +80,16 @@ export default class AddProductModal extends Component {
       message.info('please selected quantity');
       return;
     }
+    this.setState({ loading: true });
     const { res } = await addGoodsIntoCarts(this.props.storeId, {
-      customerId: this.props.customerId,
+      customerId: this.props.customer.customerId,
       goodsInfoId: row.goodsInfoId,
+      goodsInfoFlag: 0,
       goodsNum: row.buyCount
     });
     if (res.code === Const.SUCCESS_CODE) {
       message.success('add success');
+      this.setState({ loading: false });
     }
   }
 

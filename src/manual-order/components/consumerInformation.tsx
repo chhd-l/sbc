@@ -5,9 +5,12 @@ import debounce from 'lodash/debounce';
 const { Option } = Select;
 class ConsumerInformation extends React.Component<any, any> {
   state = {
-    customerId: '',
+    customer: {
+      customerId: '',
+      customerName: '',
+      customerAccount: ''
+    },
     customerList: [],
-    value: '',
     fetching: false
   };
 
@@ -19,20 +22,23 @@ class ConsumerInformation extends React.Component<any, any> {
   onChange = (customerId) => {
     let obj = this.state.customerList.find((item) => item.customerId === customerId);
     if (!obj) return;
-    this.props.getCustomerId(customerId);
-    // this.setState({
-    //   value: obj.customerName
-    // });
-    this.props.form.setFieldsValue({
-      ownerName: obj.customerName
+    this.props.getCustomerId({
+      customerId,
+      customerName: obj.customerName,
+      customerAccount: obj.customerAccount
     });
+    // this.setState({
+    //   customerId,
+    //   customerName: obj.customerName,
+    //   customerAccount:obj.customerAccount
+    // });
   };
   onSearch = async (value) => {
     this.setState({ customerList: [], fetching: true });
     if (value) {
       const { res } = await getCustomerDetails({ keywords: value });
       this.setState({
-        customerList: res.context,
+        customerList: res?.context ?? [],
         fetching: false
       });
     } else {
@@ -40,9 +46,19 @@ class ConsumerInformation extends React.Component<any, any> {
     }
   };
 
+  static getDerivedStateFromProps(props, state) {
+    if (JSON.stringify(props.customer) !== JSON.stringify(state.customer)) {
+      return {
+        customer: props.customer
+      };
+    }
+    return null;
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { fetching } = this.state;
+    const { customerName, customerAccount } = this.state.customer;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -63,7 +79,8 @@ class ConsumerInformation extends React.Component<any, any> {
         <div className="selectLanguage">
           <Form {...formItemLayout}>
             <Form.Item label="Pet owner account">
-              {getFieldDecorator('ownerAccount', {
+              {getFieldDecorator('customerAccount', {
+                initialValue: customerAccount,
                 rules: [
                   {
                     required: true,
@@ -71,14 +88,14 @@ class ConsumerInformation extends React.Component<any, any> {
                   }
                 ]
               })(
-                <Select showSearch notFoundContent={fetching ? <Spin size="small" /> : null} placeholder={this.props.placeholder} style={this.props.style} defaultActiveFirstOption={false} filterOption={false} onSearch={this.onSearch} onChange={this.onChange}>
+                <Select showSearch notFoundContent={fetching ? <Spin size="small" /> : null} placeholder="Please input your Pet owner account!" style={this.props.style} defaultActiveFirstOption={false} filterOption={false} onSearch={this.onSearch} onChange={this.onChange}>
                   {options}
                 </Select>
               )}
             </Form.Item>
             <Form.Item label="Pet owner name">
-              {getFieldDecorator('ownerName', {
-                initialValue: this.state.value
+              {getFieldDecorator('customerName', {
+                initialValue: customerName
               })(<Input disabled />)}
             </Form.Item>
           </Form>

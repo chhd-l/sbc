@@ -21,7 +21,11 @@ class ManualOrder extends Component<any, any> {
       id: this.props.match.params.id,
       title: 'Valet order',
       current: 0,
-      customerId: '',
+      customer: {
+        customerId: '',
+        customerName: '',
+        customerAccount: ''
+      },
       storeId: storeId,
       list: []
     };
@@ -30,12 +34,12 @@ class ManualOrder extends Component<any, any> {
   }
   next(e) {
     e.preventDefault();
-    let { customerId, current, list } = this.state;
+    let { customer, current, list } = this.state;
     this.props.form.validateFields((err) => {
-      if (!err && customerId) {
+      if (!err && customer.customerId) {
         if (current === 1) {
           if (list.length > 0) {
-            this.getShopTokenJump(customerId);
+            this.getShopTokenJump();
           } else {
             message.info('please add product');
           }
@@ -47,9 +51,20 @@ class ManualOrder extends Component<any, any> {
     });
   }
 
-  async getShopTokenJump(customerId) {
-    const { res } = await getShopToken(customerId, {});
-  }
+  turnShowPage = (token) => {
+    window.open(`https://shopstg.royalcanin.com/de/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+  };
+  getShopTokenJump = async (other?: string) => {
+    let { customer, current } = this.state;
+    const { res } = await getShopToken(customer.customerId, {});
+    this.turnShowPage(res.context);
+    if (other !== 'other') {
+      current = current + 1;
+      this.setState({
+        current
+      });
+    }
+  };
 
   prev() {
     const current = this.state.current - 1;
@@ -58,9 +73,9 @@ class ManualOrder extends Component<any, any> {
 
   componentWillMount() {}
 
-  getCustomerId = (customerId) => {
+  getCustomer = (customer) => {
     this.setState({
-      customerId
+      customer
     });
   };
   //获取购物车信息
@@ -70,19 +85,19 @@ class ManualOrder extends Component<any, any> {
     });
   };
   render() {
-    const { current, title, customerId, storeId } = this.state;
+    const { current, title, customer, storeId } = this.state;
     const steps = [
       {
         title: 'Consumer information',
-        controller: <ConsumerInformation form={this.props.form} stepName={'Consumer information'} getCustomerId={this.getCustomerId} />
+        controller: <ConsumerInformation form={this.props.form} customer={customer} stepName={'Consumer information'} getCustomerId={this.getCustomer} />
       },
       {
         title: 'Selected product',
-        controller: <SelectedProduct stepName={'Product list:'} carts={this.getCartsList} storeId={storeId} customerId={customerId} />
+        controller: <SelectedProduct stepName={'Product list:'} carts={this.getCartsList} storeId={storeId} customer={customer} />
       },
       {
         title: 'Delivery & payment information',
-        controller: <PaymentInformation stepName={'Delivery & payment information'} />
+        controller: <PaymentInformation turnShowPage={this.getShopTokenJump} stepName={'Delivery & payment information'} />
       }
     ];
     // if (noLanguageSelect) {
@@ -93,7 +108,6 @@ class ManualOrder extends Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{title}</Breadcrumb.Item>
         </BreadCrumb>
-
         <div className="container-search" id="navigationStep">
           <Headline title={title} />
           <Steps current={current} labelPlacement="vertical">

@@ -7,6 +7,7 @@ import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/toolbox';
+import 'echarts/lib/component/dataZoom';
 import './../index.less';
 import { FormattedMessage } from 'react-intl';
 
@@ -60,6 +61,14 @@ class Overview extends Component<any, any> {
           }
         }
       },
+      dataZoom: [
+        {
+          id: 'dataZoomX',
+          type: 'slider',
+          xAxisIndex: [0],
+          maxValueSpan: 30
+        }
+      ],
       legend: {
         data: ['requests', 'delivered', 'opened', 'clicked', 'bounces', 'spam reports'],
         bottom: 20
@@ -176,8 +185,15 @@ class Overview extends Component<any, any> {
     webapi.getOverview({ campaignId: this.props.automationId }).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let overviewList = res.context.overviewList;
-        let overviewTotal = res.context.overviewTotal;
+        let overviewList = res.context.statList;
+        let overviewTotal = {
+          requestsCount: res.context.statTotal.request,
+          bounceRate: res.context.statTotal.bouncesCount,
+          clicksRate: res.context.statTotal.clicksCount,
+          deliveredRate: res.context.statTotal.delivered,
+          opensRate: res.context.statTotal.opensCount,
+          spamReportRate: res.context.statTotal.spamReportsCount
+        };
         let dateList = [];
         let requestsList = [];
         let deliveredList = [];
@@ -185,31 +201,31 @@ class Overview extends Component<any, any> {
         let clickedList = [];
         let bouncesList = [];
         let spamReportsList = [];
-        if (overviewList) {
+        if (overviewList && overviewList.length > 0) {
           for (let i = 0; i < overviewList.length; i++) {
-            dateList.push(overviewList[i].eventDate);
-            requestsList.push(overviewList[i].requestsCount);
-            deliveredList.push(overviewList[i].deliveredCount);
+            dateList.push(overviewList[i].dateDay);
+            requestsList.push(overviewList[i].request);
+            deliveredList.push(overviewList[i].delivered);
             opensList.push(overviewList[i].opensCount);
             clickedList.push(overviewList[i].clicksCount);
-            bouncesList.push(overviewList[i].bounceCount);
-            spamReportsList.push(overviewList[i].spamReportCount);
+            bouncesList.push(overviewList[i].bouncesCount);
+            spamReportsList.push(overviewList[i].spamReportsCount);
           }
-          this.setState(
-            {
-              dateList,
-              requestsList,
-              deliveredList,
-              clickedList,
-              bouncesList,
-              spamReportsList,
-              overviewTotal
-            },
-            () => {
-              this.chartInit();
-            }
-          );
         }
+        this.setState(
+          {
+            dateList,
+            requestsList,
+            deliveredList,
+            clickedList,
+            bouncesList,
+            spamReportsList,
+            overviewTotal
+          },
+          () => {
+            this.chartInit();
+          }
+        );
       }
     });
   };

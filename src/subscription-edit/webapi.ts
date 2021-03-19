@@ -121,26 +121,26 @@ export function queryCityById(filterParams = {}) {
 }
 
 export function calcShippingFee(addressId: string) {
-  return Fetch<TResult>('/shipping/Calculation', {
+  return Fetch<TResult>('/ShipSetting/Calculation', {
     method: 'POST',
     body: JSON.stringify({
-      sourceRegionFias: addressId,
+      sourceRegionFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
       sourceAreaFias: null,
-      sourceCityFias: addressId,
+      sourceCityFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
       sourceSettlementFias: null,
       sourcePostalCode: null,
-      regionFias: addressId,
+      regionFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
       areaFias: null,
-      cityFias: addressId,
+      cityFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
       settlementFias: null,
       postalCode: null,
-      weight: '1',
+      weight: '500',
       insuranceSum: 0,
       codSum: 0,
       dimensions: {
-        height: '1',
-        width: '1',
-        depth: '1'
+        height: '10',
+        width: '10',
+        depth: '10'
       }
     })
   });

@@ -322,7 +322,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
                           field.fieldName != 'Country' ? { max: field.maxLength, message: 'Exceed maximum length' } : undefined,
                           { validator: field.fieldName === 'Phone number' ? this.comparePhone : (rule, value, callback) => callback() },
                           { validator: field.fieldName === 'Post code' ? this.compareZip : (rule, value, callback) => callback() }
-                        ]
+                        ].filter((r) => !!r)
                       })(this.renderField(field))}
                     </Form.Item>
                   </Col>

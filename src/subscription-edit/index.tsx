@@ -530,7 +530,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       return item.deliveryAddressId === deliveryAddressId;
     });
     let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
-    webapi.calcShippingFee(deliveryAddressId);
+    //计算运费
+    webapi.calcShippingFee(deliveryAddressId).then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE && data.res.context.success) {
+        this.setState({
+          deliveryPrice: data.res.context.tariffs && data.res.context.tariffs[0]['deliveryPrice']
+        });
+      }
+    });
     if (this.state.sameFlag) {
       this.setState({
         deliveryAddressInfo: deliveryAddressInfo,

@@ -2,6 +2,7 @@ import React from 'react';
 import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, Select, message, DatePicker, Table, InputNumber, Collapse, Modal, Radio, Checkbox, Tag, Spin, Tooltip, Popconfirm, Popover, Calendar } from 'antd';
 import { StoreProvider } from 'plume2';
 import FeedBack from '../subscription-detail/component/feedback';
+import DeliveryItem from '../customer-details/component/delivery-item';
 import { Headline, BreadCrumb, SelectGroup, Const, cache } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -15,6 +16,22 @@ const { Option } = Select;
 
 const { TabPane } = Tabs;
 const { Search } = Input;
+
+const NEW_ADDRESS_TEMPLATE = {
+  firstName: '',
+  lastName: '',
+  consigneeNumber: '',
+  postCode: '',
+  countryId: null,
+  region: '',
+  province: '',
+  city: '',
+  address1: '',
+  address2: '',
+  entrance: '',
+  apartment: '',
+  rfc: ''
+};
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
@@ -76,9 +93,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       completedOrder: [],
       visibleDate: false,
       currentOrder: {},
-      currencySymbol: ''
+      currencySymbol: '',
 
       // operationLog: []
+      showAddressForm: false,
+      addressItem: {},
+      addressType: 'delivery',
+      customerId: ''
     };
   }
 
@@ -417,22 +438,28 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     return id;
   };
-  getCityName = (id) => {
+  getCityName = (address) => {
+    if (!address.city && !address.cityId) {
+      return '';
+    }
+    if (address.city) {
+      return address.city;
+    }
     const { deliveryCityArr, billingCityArr } = this.state;
     let list = [];
     list = list.concat(deliveryCityArr, billingCityArr);
     if (list && list.length > 0) {
       let item = list.find((item) => {
-        return item.id === id;
+        return item.id === address.cityId;
       });
       if (item) {
         return item.cityName;
       }
     }
-    return id;
+    return '';
   };
 
-  getAddressList = (customerId, type) => {
+  getAddressList = (customerId, type, showModal = false) => {
     webapi.getAddressListByType(customerId, type).then((data) => {
       const res = data.res;
       if (res.code === 'K-000000') {
@@ -443,25 +470,34 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           addressList = this.selectedOnTop(addressList, this.state.deliveryAddressId);
           let cityIds = [];
           for (let i = 0; i < addressList.length; i++) {
-            cityIds.push(addressList[i].cityId);
+            if (addressList[i].cityId) {
+              cityIds.push(addressList[i].cityId);
+            }
           }
           this.getCityNameById(cityIds, 'DELIVERY');
           this.setState({
             deliveryList: addressList,
-            customerAccount: customerAccount
+            customerAccount: customerAccount,
+            customerId: customerId,
+            visibleShipping: showModal,
+            loading: false
           });
         }
         if (type === 'BILLING') {
           addressList = this.selectedOnTop(addressList, this.state.billingAddressId);
           let cityIds = [];
           for (let i = 0; i < addressList.length; i++) {
-            cityIds.push(addressList[i].cityId);
+            if (addressList[i].cityId) {
+              cityIds.push(addressList[i].cityId);
+            }
           }
           this.getCityNameById(cityIds, 'BILLING');
 
           this.setState({
             billingList: addressList,
-            customerAccount: customerAccount
+            customerAccount: customerAccount,
+            visibleBilling: showModal,
+            loading: false
           });
         }
       }
@@ -494,7 +530,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       return item.deliveryAddressId === deliveryAddressId;
     });
     let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
-
+    webapi.calcShippingFee(deliveryAddressId);
     if (this.state.sameFlag) {
       this.setState({
         deliveryAddressInfo: deliveryAddressInfo,
@@ -767,6 +803,39 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     this.setState({
       currencySymbol
     });
+  };
+
+  onOpenAddressForm = (addressItem: any, type: string) => {
+    this.setState({
+      showAddressForm: true,
+      addressItem: addressItem,
+      addressType: type,
+      visibleBilling: false,
+      visibleShipping: false
+    });
+  };
+
+  backToSubscriptionEdit = (refreshAddressList: boolean = true) => {
+    if (refreshAddressList) {
+      this.setState(
+        {
+          loading: true,
+          showAddressForm: false
+        },
+        () => {
+          if (this.state.addressType === 'delivery') {
+            this.getAddressList(this.state.customerId, 'DELIVERY', true);
+          } else {
+            this.getAddressList(this.state.customerId, 'BILLING', true);
+          }
+        }
+      );
+    } else {
+      this.setState({
+        showAddressForm: false,
+        [this.state.addressType === 'delivery' ? 'visibleShipping' : 'visibleBilling']: true
+      });
+    }
   };
 
   render() {
@@ -1152,6 +1221,27 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
     ];
 
+    if (this.state.showAddressForm) {
+      return (
+        <div>
+          <BreadCrumb thirdLevel={true}>
+            <Breadcrumb.Item>
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.backToSubscriptionEdit(false);
+                }}
+              >
+                <FormattedMessage id="subscription.edit" />
+              </a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>{this.state.addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
+          </BreadCrumb>
+          <DeliveryItem customerId={this.state.customerId} delivery={this.state.addressItem} addressType={this.state.addressType} backToDetail={this.backToSubscriptionEdit} />
+        </div>
+      );
+    }
+
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -1253,7 +1343,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{this.getCityName(deliveryAddressInfo.cityId) + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                    <p>{this.getCityName(deliveryAddressInfo) + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
@@ -1282,7 +1372,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{billingAddressInfo ? this.getCityName(billingAddressInfo.cityId) + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
+                    <p>{billingAddressInfo ? this.getCityName(billingAddressInfo) + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
@@ -1323,17 +1413,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 });
               }}
             >
-              <Checkbox
-                checked={this.state.sameFlag}
-                onChange={(e) => {
-                  let value = e.target.checked;
-                  this.setState({
-                    sameFlag: value
-                  });
-                }}
-              >
-                Billing address is the same as
-              </Checkbox>
+              <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
+                <Col>
+                  <Checkbox
+                    checked={this.state.sameFlag}
+                    onChange={(e) => {
+                      let value = e.target.checked;
+                      this.setState({
+                        sameFlag: value
+                      });
+                    }}
+                  >
+                    Billing address is the same as
+                  </Checkbox>
+                </Col>
+                <Col>
+                  <Button size="small" type="primary" onClick={() => this.onOpenAddressForm(NEW_ADDRESS_TEMPLATE, 'delivery')}>
+                    Add new
+                  </Button>
+                </Col>
+              </Row>
               <Radio.Group
                 style={{ maxHeight: 600, overflowY: 'auto' }}
                 value={this.state.deliveryAddressId}
@@ -1350,11 +1449,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
-                            <p>{this.getCityName(item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
+                            <p>{this.getCityName(item) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
                           </div>
                         </Radio>
+                        <div>
+                          <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
+                            Edit
+                          </Button>
+                        </div>
                       </Card>
                     ))
                   : deliveryList.map((item, index) =>
@@ -1363,11 +1467,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
-                              <p>{this.getCityName(item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
+                              <p>{this.getCityName(item) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
                             </div>
                           </Radio>
+                          <div>
+                            <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
+                              Edit
+                            </Button>
+                          </div>
                         </Card>
                       ) : null
                     )}
@@ -1397,6 +1506,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 });
               }}
             >
+              <div style={{ marginBottom: 10, textAlign: 'right' }}>
+                <Button size="small" type="primary" onClick={() => this.onOpenAddressForm(NEW_ADDRESS_TEMPLATE, 'billing')}>
+                  Add new
+                </Button>
+              </div>
               <Radio.Group
                 style={{ maxHeight: 600, overflowY: 'auto' }}
                 value={this.state.billingAddressId}
@@ -1413,11 +1527,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
-                            <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item.cityId)}</p>
+                            <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
                           </div>
                         </Radio>
+                        <div>
+                          <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'billing')}>
+                            Edit
+                          </Button>
+                        </div>
                       </Card>
                     ))
                   : billingList.map((item, index) =>
@@ -1426,11 +1545,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
-                              <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item.cityId)}</p>
+                              <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
                             </div>
                           </Radio>
+                          <div>
+                            <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'billing')}>
+                              Edit
+                            </Button>
+                          </div>
                         </Card>
                       ) : null
                     )}

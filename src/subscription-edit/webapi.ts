@@ -119,3 +119,29 @@ export function queryCityById(filterParams = {}) {
     })
   });
 }
+
+export function calcShippingFee(addressId: string) {
+  return Fetch<TResult>('/shipping/Calculation', {
+    method: 'POST',
+    body: JSON.stringify({
+      sourceRegionFias: addressId,
+      sourceAreaFias: null,
+      sourceCityFias: addressId,
+      sourceSettlementFias: null,
+      sourcePostalCode: null,
+      regionFias: addressId,
+      areaFias: null,
+      cityFias: addressId,
+      settlementFias: null,
+      postalCode: null,
+      weight: '1',
+      insuranceSum: 0,
+      codSum: 0,
+      dimensions: {
+        height: '1',
+        width: '1',
+        depth: '1'
+      }
+    })
+  });
+}

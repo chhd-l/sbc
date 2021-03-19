@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete, Modal, Alert, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, cache, Const } from 'qmkit';
-import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress } from './webapi';
+import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress, getRegionListByCityId, getAddressListByDadata } from './webapi';
 import { updateAddress, addAddress } from '../webapi';
 import _ from 'lodash';
 
@@ -57,18 +57,23 @@ class DeliveryItem extends React.Component<Iprop, any> {
       stateList: [],
       cityList: [],
       searchCityList: [],
+      regionList: [],
       addressInputType: '',
       isAddressValidation: false,
       validationModalVisisble: false,
+      validationSuccess: false,
       checkedAddress: 0,
       fields: {},
-      suggestionAddress: {}
+      suggestionAddress: {},
+      searchAddressList: []
     };
     this.searchCity = _.debounce(this.searchCity, 500);
+    this.searchAddress = _.debounce(this.searchAddress, 200);
   }
 
   componentDidMount() {
     this.getDics();
+    getAddressListByDadata('москва хабар');
   }
 
   getDics = async () => {
@@ -111,7 +116,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
                   validationModalVisisble: true,
                   fields: fields,
                   checkedAddress: 1,
-                  suggestionAddress: data.res.context.suggestionAddress
+                  suggestionAddress: data.res.context.suggestionAddress,
+                  validationSuccess: data.res.context.validationResult
                 });
               } else {
                 this.setState({
@@ -141,6 +147,22 @@ class DeliveryItem extends React.Component<Iprop, any> {
     this.setState({
       checkedAddress: 0,
       validationModalVisisble: false
+    });
+  };
+
+  getRegionListByCity = (type: number, city: any) => {
+    let cityId = 0;
+    if (type === 1) {
+      cityId = (this.state.cityList.find((ci) => ci.name === city) || {})['id'] || 0;
+    } else {
+      cityId = (this.state.searchCityList.find((ci) => ci.cityName === city) || {})['id'] || 0;
+    }
+    getRegionListByCityId(cityId).then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          regionList: data.res.context.systemRegions.map((r) => ({ id: r.id, name: r.regionName }))
+        });
+      }
     });
   };
 
@@ -185,16 +207,36 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   searchCity = (txt: string) => {
     searchCity(txt).then((data) => {
-      this.setState({
-        searchCityList: data.res.context.systemCityVO
-      });
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          searchCityList: data.res.context.systemCityVO
+        });
+      }
+    });
+  };
+
+  searchAddress = (txt: string) => {
+    getAddressListByDadata(txt).then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          searchAddressList: data.res.context.addressList.map((ad) => ad.unrestrictedValue)
+        });
+      }
     });
   };
 
   renderField = (field: any) => {
     if (field.fieldName === 'Address1') {
       if (field.inputSearchBoxFlag === 1) {
-        return <AutoComplete />;
+        return (
+          <Select showSearch filterOption={false} onSearch={this.searchAddress}>
+            {this.state.searchAddressList.map((text, idx) => (
+              <Option value={text} key={idx}>
+                {text}
+              </Option>
+            ))}
+          </Select>
+        );
       } else {
         return <Input />;
       }
@@ -202,7 +244,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
     if (field.fieldName === 'City') {
       if (field.inputDropDownBoxFlag === 1) {
         return (
-          <Select showSearch>
+          <Select showSearch onChange={(val) => this.getRegionListByCity(1, val)}>
             {this.state.cityList.map((city, idx) => (
               <Option value={city.name} key={idx}>
                 {city.name}
@@ -211,10 +253,10 @@ class DeliveryItem extends React.Component<Iprop, any> {
           </Select>
         );
       } else {
-        return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={this.searchCity} />;
+        return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={this.searchCity} onChange={(val) => this.getRegionListByCity(2, val)} />;
       }
     }
-    const optionList = field.fieldName === 'Country' ? this.state.countryList : field.fieldName === 'State' ? this.state.stateList : [];
+    const optionList = field.fieldName === 'Country' ? this.state.countryList : field.fieldName === 'State' ? this.state.stateList : field.fieldName === 'Region' ? this.state.regionList : [];
     if (field.inputDropDownBoxFlag === 1) {
       return (
         <Select showSearch>
@@ -251,7 +293,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   render() {
     const { delivery, addressType } = this.props;
-    const { fields, suggestionAddress, checkedAddress } = this.state;
+    const { fields, suggestionAddress, checkedAddress, validationSuccess } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = (col: number) => ({
       labelCol: {
@@ -277,7 +319,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
                         initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
                         rules: [
                           { required: field.requiredFlag === 1, message: `${field.fieldName} is required` },
-                          { max: field.maxLength, message: 'Exceed maximum length' },
+                          field.fieldName != 'Country' ? { max: field.maxLength, message: 'Exceed maximum length' } : undefined,
                           { validator: field.fieldName === 'Phone number' ? this.comparePhone : (rule, value, callback) => callback() },
                           { validator: field.fieldName === 'Post code' ? this.compareZip : (rule, value, callback) => callback() }
                         ]
@@ -300,7 +342,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
             <Alert type="warning" message="We could not verify the address you provided, please confirm or edit your address to ensure prompt delivery." />
             <Row gutter={32} style={{ marginTop: 20 }}>
               <Col span={12}>
-                <Radio checked={checkedAddress === 0} onClick={() => this.onChangeCheckedAddress(0)}>
+                <Radio disabled={!validationSuccess} checked={checkedAddress === 0} onClick={() => this.onChangeCheckedAddress(0)}>
                   <span className="text-highlight">Original Address</span>
                   <br />
                   <span style={{ paddingLeft: 26, wordBreak: 'break-word' }}>{[[fields.address1, fields.address2].join(''), fields.city, fields.state, fields.postCode].filter((fd) => !!fd).join(',')}</span>

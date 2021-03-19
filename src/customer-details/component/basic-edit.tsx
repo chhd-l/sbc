@@ -539,8 +539,10 @@ class BasicEdit extends React.Component<any, any> {
                   </FormItem>
                 </Col>
 
-                <Col span={12}>
-                  <FormItem label="Consent">{customer.userConsentList && customer.userConsentList.length > 0 ? customer.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}</FormItem>
+                <Col span={24}>
+                  <FormItem label="Consent" labelCol={{ sm: { span: 4 } }} wrapperCol={{ sm: { span: 18 } }}>
+                    {customer.userConsentList && customer.userConsentList.length > 0 ? customer.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
+                  </FormItem>
                 </Col>
               </Row>
             </Form>

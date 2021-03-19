@@ -112,7 +112,7 @@ export default class SearchHead extends Component<any, any> {
 
     const orderSourceList = [
       { value: 'FGS', name: 'FGS' },
-      { value: 'L_ATELIER_FELINE', name: "L'Atelier Feline" }
+      { value: 'L_ATELIER_FELINE', name: 'L\'Atelier Feline' }
     ];
 
     const menu = (
@@ -161,7 +161,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Refill number'} />
+                    <Input style={styles.leftLabel} title={'Subscription order time'} disabled defaultValue={'Subscription order time'} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -387,7 +387,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Plan type'} />
+                    <Input style={styles.leftLabel} title={'Subscription plan type'} disabled defaultValue={'Subscription plan type'} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -814,7 +814,10 @@ const styles = {
     textAlign: 'left',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',
-    cursor: 'text'
+    cursor: 'default',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   wrapper: {
     width: 200

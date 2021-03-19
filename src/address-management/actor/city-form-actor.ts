@@ -11,7 +11,6 @@ export default class CityFormActor extends Actor {
         country: '',
         state: '',
         city: '',
-        region: '',
         postCodeArr: [
           {
             value: new Date().getTime(),
@@ -43,7 +42,6 @@ export default class CityFormActor extends Actor {
       country: JSON.parse(sessionStorage.getItem('currentCountry')).name,
       state: '',
       city: '',
-      region: '',
       postCodeArr: [
         {
           value: new Date().getTime(),

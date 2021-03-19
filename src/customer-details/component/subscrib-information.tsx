@@ -117,14 +117,21 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                         <td style={{ width: '25%' }}>
                           <img src={v.goodsPic ? v.goodsPic : defaultImg} className="img-item" />
                         </td>
-                        <td style={{ width: '20%' }}>{v.goodsName}</td>
-                        <td style={{ width: '10%' }}></td>
+                        <td style={{ width: '15%' }}>{v.goodsName}</td>
                         <td style={{ width: '10%' }}>{v.subscriptionType}</td>
-                        <td style={{ width: '15%' }}>{v.frequency || ''}</td>
+                        <td style={{ width: '10%' }}>{v.frequency || ''}</td>
                         {k === 0 && (
-                          <td rowSpan={item.goodsInfo.length} style={{ width: '20%' }}>
-                            {item.subscribeStatus === '0' ? 'Active' : 'Inactive'}
-                          </td>
+                          <>
+                            <td rowSpan={item.goodsInfo.length} style={{ width: '20%' }}>
+                              {item.petsInfo && item.petsInfo.petSourceId ? item.petsInfo.petSourceId : ''}
+                            </td>
+                            <td rowSpan={item.goodsInfo.length} style={{ width: '10%' }}>
+                              {item.petsInfo && item.petsInfo.petsName ? item.petsInfo.petsName : ''}
+                            </td>
+                            <td rowSpan={item.goodsInfo.length} style={{ width: '10%' }}>
+                              {item.subscribeStatus === '0' ? 'Active' : 'Inactive'}
+                            </td>
+                          </>
                         )}
                       </tr>
                     </>
@@ -132,11 +139,12 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 ) : (
                   <tr>
                     <td style={{ width: '25%' }}></td>
-                    <td style={{ width: '20%' }}></td>
-                    <td style={{ width: '10%' }}></td>
-                    <td style={{ width: '10%' }}></td>
                     <td style={{ width: '15%' }}></td>
-                    <td style={{ width: '20%' }}>{item.subscribeStatus === '0' ? 'Active' : 'Inactive'}</td>
+                    <td style={{ width: '10%' }}></td>
+                    <td style={{ width: '10%' }}></td>
+                    <td style={{ width: '20%' }}>{item.petsInfo && item.petsInfo.petSourceId ? item.petsInfo.petSourceId : ''}</td>
+                    <td style={{ width: '10%' }}>{item.petsInfo && item.petsInfo.petsName ? item.petsInfo.petsName : ''}</td>
+                    <td style={{ width: '10%' }}>{item.subscribeStatus === '0' ? 'Active' : 'Inactive'}</td>
                   </tr>
                 )}
               </tbody>
@@ -159,11 +167,12 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                   <thead className="ant-table-thead">
                     <tr>
                       <th style={{ width: '25%' }}>Product</th>
-                      <th style={{ width: '20%' }}>Product name</th>
-                      <th style={{ width: '10%' }}>Pet ID</th>
+                      <th style={{ width: '15%' }}>Product name</th>
                       <th style={{ width: '10%' }}>Subscription type</th>
-                      <th style={{ width: '15%' }}>Frequency</th>
-                      <th style={{ width: '20%', textAlign: 'left' }}>Subscription status</th>
+                      <th style={{ width: '10%' }}>Frequency</th>
+                      <th style={{ width: '20%' }}>Pet ID</th>
+                      <th style={{ width: '10%' }}>Pet name</th>
+                      <th style={{ width: '10%', textAlign: 'left' }}>Subscription status</th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList)}</tbody>

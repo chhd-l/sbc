@@ -133,6 +133,7 @@ class AutomationDetail extends Component<any, any> {
   };
   testAutomation = () => {
     const { automationId, selectedObjectNo, isOrderEvent } = this.state;
+    debugger;
     let params = {
       id: automationId,
       type: isOrderEvent ? 'Order' : 'Subscription',
@@ -230,8 +231,7 @@ class AutomationDetail extends Component<any, any> {
     this.setState({
       visibleTest: false,
       startTrigger: '',
-      selectedObjectNo: '',
-      isEvent: false
+      selectedObjectNo: ''
     });
   };
 
@@ -457,6 +457,7 @@ class AutomationDetail extends Component<any, any> {
                 placeholder={isOrderEvent ? 'Select a Order No' : 'Select a Subscription No'}
                 style={{ minWidth: '300px', marginLeft: 10, marginBottom: 10 }}
                 optionFilterProp="children"
+                value={selectedObjectNo}
                 getPopupContainer={(trigger: any) => trigger.parentNode}
                 onChange={(value) => {
                   this.setState({

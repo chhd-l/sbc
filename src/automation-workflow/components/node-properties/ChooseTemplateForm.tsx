@@ -46,13 +46,15 @@ export default class ChooseTemplataeForm extends Component<any, any> {
   }
 
   onChange(value) {
-    const { updateValue } = this.props;
+    const { updateValue, templateList } = this.props;
+    let template = templateList.find((x) => x.templateId === value);
     this.setState({
       form: {
         selectValue: value
       }
     });
     updateValue('templateId', value);
+    updateValue('templateName', template.emailTemplate);
   }
 
   handlePreview() {

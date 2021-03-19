@@ -256,11 +256,11 @@ class DeliveryItem extends React.Component<Iprop, any> {
     const formItemLayout = (col: number) => ({
       labelCol: {
         xs: { span: 24 },
-        sm: { span: col === 2 ? 8 : 4 }
+        sm: { span: col === 1 ? 8 : 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: col === 2 ? 12 : 18 }
+        sm: { span: col === 1 ? 12 : 18 }
       }
     });
     return (
@@ -269,27 +269,23 @@ class DeliveryItem extends React.Component<Iprop, any> {
           <div className="container">
             <Headline title={`${delivery.deliveryAddressId ? 'Edit' : 'Add'} ${addressType === 'delivery' ? 'delivery' : 'billing'} information`} />
             <Form>
-              {this.state.formFieldList.map((fieldRow, rowIdx) => (
-                <Row key={rowIdx}>
-                  {fieldRow &&
-                    fieldRow.length &&
-                    fieldRow.map((field, colIdx) => (
-                      <Col span={24 / fieldRow.length} key={colIdx}>
-                        <Form.Item {...formItemLayout(fieldRow.length)} label={field.fieldName}>
-                          {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`, {
-                            initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
-                            rules: [
-                              { required: field.requiredFlag === 1, message: `${field.fieldName} is required` },
-                              { max: field.maxLength, message: 'Exceed maximum length' },
-                              { validator: field.fieldName === 'Phone number' ? this.comparePhone : (rule, value, callback) => callback() },
-                              { validator: field.fieldName === 'Post code' ? this.compareZip : (rule, value, callback) => callback() }
-                            ]
-                          })(this.renderField(field))}
-                        </Form.Item>
-                      </Col>
-                    ))}
-                </Row>
-              ))}
+              <Row>
+                {this.state.formFieldList.map((field, colIdx) => (
+                  <Col span={12 * field.occupancyNum} key={colIdx}>
+                    <Form.Item {...formItemLayout(field.occupancyNum)} label={field.fieldName}>
+                      {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`, {
+                        initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
+                        rules: [
+                          { required: field.requiredFlag === 1, message: `${field.fieldName} is required` },
+                          { max: field.maxLength, message: 'Exceed maximum length' },
+                          { validator: field.fieldName === 'Phone number' ? this.comparePhone : (rule, value, callback) => callback() },
+                          { validator: field.fieldName === 'Post code' ? this.compareZip : (rule, value, callback) => callback() }
+                        ]
+                      })(this.renderField(field))}
+                    </Form.Item>
+                  </Col>
+                ))}
+              </Row>
             </Form>
           </div>
           <div className="bar-button">

@@ -41,36 +41,7 @@ export async function getAddressFieldList(type: string = 'MANUALLY') {
   })
     .then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
-        return data.res.context.addressDisplaySettings
-          .filter((field) => field.enableFlag === 1 && field.pageRow > 0 && field.pageCol > 0)
-          .sort((a, b) => a.pageRow - b.pageRow || a.pageCol - b.pageCol)
-          .reduce((prev, curr) => {
-            if (!prev[curr.pageRow]) {
-              prev[curr.pageRow] = [];
-            }
-            prev[curr.pageRow].push(curr);
-            return prev;
-          }, []);
-      } else {
-        return [];
-      }
-    })
-    .catch(() => {
-      return [];
-    });
-}
-
-/**
- * 获取address字段的输入类型
- * @returns
- */
-export async function getManualAddressFieldList() {
-  return await Fetch<TResult>('/addressDisplaySetting/queryByStoreId/MANUALLY', {
-    method: 'GET'
-  })
-    .then((data) => {
-      if (data.res.code === Const.SUCCESS_CODE) {
-        return data.res.context.addressDisplaySettings;
+        return data.res.context.addressDisplaySettings.filter((field) => field.enableFlag === 1 && field.occupancyNum > 0).sort((a, b) => a.sequence - b.sequence);
       } else {
         return [];
       }

@@ -216,17 +216,10 @@ class SkuForm extends React.Component<any, any> {
         const { addSkUProduct } = this.props.relaxProps;
 
         let a = '';
-        /*if(rowInfo.goodsInfoNo == addSkUProduct[rowInfo.index-1].pid) {
-          a =  addSkUProduct[rowInfo.index-1].pid
 
-        }else {
-          // console.log(333333)
-          a = ''
-        }*/
         if (rowInfo.goodsInfoNo == '') {
           a = addSkUProduct[rowInfo.index - 1] ? addSkUProduct[rowInfo.index - 1].pid : '';
         } else {
-          // console.log(333333)
           a = rowInfo.goodsInfoNo;
         }
 
@@ -353,14 +346,13 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
                   initialValue: rowInfo.externalSku
-                })(<Input style={{ width: '116px' }} maxLength={45}/>)}
+                })(<Input style={{ width: '116px' }} maxLength={45} />)}
               </FormItem>
             </Col>
           </Row>
         );
       }
     });
-
 
     //EAN
     columns = columns.push({

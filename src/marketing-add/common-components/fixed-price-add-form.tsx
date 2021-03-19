@@ -141,7 +141,6 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
   };
 
   selectedProductQuantityOnChange = (val, record) => {
-    console.log(val, 'val---------');
     // let { selectedRows } = this.state
     // selectedRows.forEach(item => {
     //   if(item.id === record.id) {
@@ -160,8 +159,6 @@ export default class FixedPriceAddForm extends React.Component<any, any> {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
     const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
-
-    console.log(marketingBean.toJS(), 'marketingBean---------');
 
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>

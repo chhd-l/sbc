@@ -285,7 +285,6 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
-        console.log(rowInfo, 11111);
         return (
           <Row>
             <Col span={12}>

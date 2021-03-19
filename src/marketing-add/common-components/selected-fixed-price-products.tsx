@@ -99,8 +99,6 @@ export default class SelectedFixedPriceProducts extends React.Component<any, any
             key="quantity"
             width="20%"
             render={(row, record) => {
-              console.log(row, 'row----------');
-              console.log(record, 'record----------');
               return (
                 <FormItem>
                   {getFieldDecorator(`${row.goodsInfoId}goods_detail`, {

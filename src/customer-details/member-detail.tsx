@@ -308,16 +308,18 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </Row>
                 <Row>
                   <Col span={3} className="text-tip">
-                    Consent
-                  </Col>
-                  <Col span={6} className="text-highlight">
-                    {basic.userConsentList && basic.userConsentList.length > 0 ? basic.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
-                  </Col>
-                  <Col span={3} className="text-tip">
                     City
                   </Col>
                   <Col span={6} className="text-highlight">
                     {basic.city}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={3} className="text-tip">
+                    Consent
+                  </Col>
+                  <Col span={20} className="text-highlight">
+                    {basic.userConsentList && basic.userConsentList.length > 0 ? basic.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
                   </Col>
                 </Row>
               </div>

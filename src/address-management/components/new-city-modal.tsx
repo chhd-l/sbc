@@ -110,7 +110,7 @@ export default class NewCityModal extends Component<any, any> {
       }
       if (!err) {
         const { setCityModalVisible, onResetCityForm, cityForm, stateNameList, addCity, editCity } = this.props.relaxProps;
-        const { country, state, city, region, postCodeArr, id } = cityForm.toJS();
+        const { country, state, city, postCodeArr, id } = cityForm.toJS();
         let arr = [];
 
         if (postCodeArr.length > 1) {
@@ -142,7 +142,6 @@ export default class NewCityModal extends Component<any, any> {
           stateName: selectedState ? selectedState.stateName : null,
           stateId: state,
           cityName: city,
-          region: region,
           systemCityPostCodes: arr
         };
         if (id) {
@@ -219,7 +218,7 @@ export default class NewCityModal extends Component<any, any> {
     const { codeValidateStatus } = this.state;
     const { onCityFormChange, cityForm, cityModalVisible, stateNameList, searchState, confirmLoading } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-    const { id, country, state, postCodeArr, city, region } = cityForm.toJS();
+    const { id, country, state, postCodeArr, city } = cityForm.toJS();
     return (
       <Modal maskClosable={false} title={id ? 'Edit City' : 'Add City'} visible={cityModalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>
@@ -282,22 +281,6 @@ export default class NewCityModal extends Component<any, any> {
                   onChange={(e) =>
                     onCityFormChange({
                       field: 'city',
-                      value: e.target.value
-                    })
-                  }
-                />
-              )}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label="Region">
-              {getFieldDecorator('region', {
-                initialValue: region
-              })(
-                <Input
-                  value={region}
-                  onChange={(e) =>
-                    onCityFormChange({
-                      field: 'region',
                       value: e.target.value
                     })
                   }

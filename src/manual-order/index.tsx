@@ -6,7 +6,7 @@ import ConsumerInformation from './components/consumerInformation';
 import SelectedProduct from './components/selectedProduct';
 import PaymentInformation from './components/paymentInformation';
 
-import { getShopToken } from './webapi';
+import { getShopToken, queryOrderStatus } from './webapi';
 
 const { Step } = Steps;
 
@@ -21,6 +21,7 @@ class ManualOrder extends Component<any, any> {
       id: this.props.match.params.id,
       title: 'Valet order',
       current: 0,
+      status: 1,
       customer: {
         customerId: '',
         customerName: '',
@@ -52,8 +53,20 @@ class ManualOrder extends Component<any, any> {
   }
 
   turnShowPage = (token) => {
-    window.open(`https://shopstg.royalcanin.com/de/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+    let winObj = window.open(`https://shopstg.royalcanin.com/de/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+    let { customer } = this.state;
+    let loop = setInterval(async () => {
+      if (winObj.closed) {
+        clearInterval(loop);
+        const { res } = await queryOrderStatus(customer.customerId, token);
+        let status = res.context === '' || res.context === false ? 2 : 3;
+        this.setState({
+          status
+        });
+      }
+    }, 500);
   };
+
   getShopTokenJump = async (other?: string) => {
     let { customer, current } = this.state;
     const { res } = await getShopToken(customer.customerId, {});
@@ -85,11 +98,11 @@ class ManualOrder extends Component<any, any> {
     });
   };
   render() {
-    const { current, title, customer, storeId } = this.state;
+    const { current, title, customer, storeId, status } = this.state;
     const steps = [
       {
         title: 'Consumer information',
-        controller: <ConsumerInformation form={this.props.form} customer={customer} stepName={'Consumer information'} getCustomerId={this.getCustomer} />
+        controller: <ConsumerInformation form={this.props.form} customer={customer} storeId={storeId} stepName={'Consumer information'} getCustomerId={this.getCustomer} />
       },
       {
         title: 'Selected product',
@@ -97,7 +110,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Delivery & payment information',
-        controller: <PaymentInformation turnShowPage={this.getShopTokenJump} stepName={'Delivery & payment information'} />
+        controller: <PaymentInformation turnShowPage={this.getShopTokenJump} status={status} customer={customer} stepName={'Delivery & payment information'} />
       }
     ];
     // if (noLanguageSelect) {

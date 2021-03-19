@@ -1,7 +1,7 @@
 import { Button, Icon, Popconfirm, Select, Table, Tooltip } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
-import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
+import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts, totalGoodsPrice } from '../webapi';
 const defaultImg = require('./img/none.png');
 const { Option } = Select;
 export default class SelectedProduct extends React.Component<any, any> {
@@ -12,7 +12,8 @@ export default class SelectedProduct extends React.Component<any, any> {
       confirmLoading: false,
       dataSource: [],
       options: [],
-      loading: false
+      loading: false,
+      totalPrice: 0
     };
   }
 
@@ -55,6 +56,27 @@ export default class SelectedProduct extends React.Component<any, any> {
       dataSource: this.state.dataSource
     });
   }
+
+  async totalGoodsPrices(data) {
+    const { customer } = this.props;
+    let goodsInfoIds = data.map((item) => item.goodsInfoId);
+    let params = {
+      goodsInfoIds: goodsInfoIds,
+      promotionCode: '',
+      subscriptionFlag: false,
+      country: '',
+      region: '',
+      city: '',
+      street: '',
+      postalCode: '',
+      customerAccount: ''
+    };
+    const { res } = await totalGoodsPrice(customer.customerId, params);
+    this.setState({
+      totalPrice: res.context?.totalPrice ?? 0
+    });
+  }
+
   /**
    * 获取更新频率月｜ 周
    */
@@ -67,11 +89,16 @@ export default class SelectedProduct extends React.Component<any, any> {
     let options = [...months, ...weeks];
     this.props.carts(goodsList);
     // debugger
-    this.setState({
-      options,
-      dataSource: goodsList,
-      loading: false
-    });
+    this.setState(
+      {
+        options,
+        dataSource: goodsList,
+        loading: false
+      },
+      () => {
+        this.totalGoodsPrices(goodsList);
+      }
+    );
   }
   /**
    *
@@ -87,7 +114,7 @@ export default class SelectedProduct extends React.Component<any, any> {
   }
   render() {
     // const { getFieldDecorator } = this.props.form;
-    const { options, dataSource, loading } = this.state;
+    const { options, dataSource, loading, totalPrice } = this.state;
     const { storeId, customer } = this.props;
     const columns = [
       {
@@ -207,7 +234,7 @@ export default class SelectedProduct extends React.Component<any, any> {
             dataSource={dataSource}
             columns={columns}
           />
-          <div style={{ textAlign: 'right', padding: '20px 0' }}>Product amount $1234</div>
+          <div style={{ textAlign: 'right', padding: '20px 0' }}>Product amount ${totalPrice}</div>
           <AddProductModal storeId={storeId} customer={customer} visible={this.state.visible} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>
         </div>
       </div>

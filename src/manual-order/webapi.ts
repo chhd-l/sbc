@@ -40,9 +40,25 @@ export function getGoodsInfoCarts(store_id, cunstomer_id) {
     method: 'GET'
   });
 }
+
+//查询订单状态
+
+export function queryOrderStatus(customerId, token) {
+  return Fetch<TResult>(`/customer/valet/order/${customerId}?token=${token}`, {
+    method: 'GET'
+  });
+}
+
+//计算价格
+export function totalGoodsPrice(customerId, filterParams) {
+  return Fetch<TResult>(`/store/purchases/${customerId}`, {
+    method: 'post',
+    body: JSON.stringify({ ...filterParams })
+  });
+}
 //删除商品
 export function deleteGoodsInfoCarts(store_id, filterParams) {
-  return Fetch<TResult>(`/store/${store_id}/carts`, {
+  return Fetch<TResult>('/store/purchase', {
     method: 'delete',
     body: JSON.stringify({ ...filterParams })
   });

@@ -36,7 +36,7 @@ class ConsumerInformation extends React.Component<any, any> {
   onSearch = async (value) => {
     this.setState({ customerList: [], fetching: true });
     if (value) {
-      const { res } = await getCustomerDetails({ keywords: value });
+      const { res } = await getCustomerDetails({ keywords: value, storeId: this.props.storeId });
       this.setState({
         customerList: res?.context ?? [],
         fetching: false
@@ -69,7 +69,11 @@ class ConsumerInformation extends React.Component<any, any> {
         sm: { span: 5 }
       }
     };
-    const options = this.state.customerList.map((d) => <Option key={d.customerId}>{d.customerAccount}</Option>);
+    const options = this.state.customerList.map((d, index) => (
+      <Option key={d.customerDetailId} value={d.customerId}>
+        {d.customerAccount}
+      </Option>
+    ));
     return (
       <div>
         <h3>Step1</h3>

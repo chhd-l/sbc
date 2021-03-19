@@ -53,7 +53,10 @@ export default class AppStore extends Store {
         rangeDayType,
         // scopeNames,
         scopeType,
-        startTime
+        startTime,
+        storeCateIds,
+        couponJoinLevel,
+        segmentIds
       } = couponInfo;
 
       const scopeIds = await this.fetchScope(scopeType, couponInfo.scopeIds);
@@ -72,7 +75,10 @@ export default class AppStore extends Store {
         scopeIds,
         scopeType,
         startTime,
-        goodsList
+        goodsList,
+        storeCateIds,
+        couponJoinLevel: Number(couponJoinLevel),
+        segmentIds
       });
     }
   };

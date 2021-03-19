@@ -521,9 +521,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   initialValue: isFullCount
                 })(
                   <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                    <Radio style={radioStyle} value={2}>
-                      Direct discount
-                    </Radio>
+                    {/*<Radio style={radioStyle} value={2}>*/}
+                    {/*  Direct discount*/}
+                    {/*</Radio>*/}
                     <Radio value={0} style={radioStyle}>
                       Full amount discount
                     </Radio>
@@ -554,9 +554,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   initialValue: isFullCount
                 })(
                   <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                    <Radio style={radioStyle} value={2}>
-                      Direct reduction
-                    </Radio>
+                    {/*<Radio style={radioStyle} value={2}>*/}
+                    {/*  Direct reduction*/}
+                    {/*</Radio>*/}
                     <Radio value={0} style={radioStyle}>
                       Full amount reduction
                     </Radio>
@@ -1172,18 +1172,20 @@ export default class MarketingAddForm extends React.Component<any, any> {
               value: isFullCount ? level.fullCount : level.fullAmount
             })
           );
-          if (!isFullCount && +level.fullAmount <= +level.reduction) {
-            if (this.state.PromotionTypeValue == 0) {
-              errorObject[`level_rule_value_${index}`] = {
-                errors: [new Error('The conditional amount must be greater than the deductible amount')]
-              };
-              errorObject[`level_rule_reduction_${index}`] = {
-                errors: [new Error('The deductible amount must be less than the conditional amount')]
-              };
-            } else {
-              errorObject[`level_rule_reduction_${index}`] = {
-                errors: [new Error('The deductible amount must be less than the conditional amount')]
-              };
+          if (level.fullAmount != 0) {
+            if (!isFullCount && +level.fullAmount <= +level.reduction) {
+              if (this.state.PromotionTypeValue == 0) {
+                errorObject[`level_rule_value_${index}`] = {
+                  errors: [new Error('The conditional amount must be greater than the deductible amount')]
+                };
+                errorObject[`level_rule_reduction_${index}`] = {
+                  errors: [new Error('The deductible amount must be less than the conditional amount')]
+                };
+              } else {
+                errorObject[`level_rule_reduction_${index}`] = {
+                  errors: [new Error('The deductible amount must be less than the conditional amount')]
+                };
+              }
             }
           }
         });

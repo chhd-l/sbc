@@ -608,8 +608,8 @@ export default class SearchHead extends Component<any, any> {
         <Option title="Order number" value="orderNumber">
           <FormattedMessage id="order.orderNumber" />
         </Option>
-        <Option title="Subscriptio number" value="subscriptioNumber">
-          <FormattedMessage id="order.subscriptioNumber" />
+        <Option title="Subscription number" value="subscriptionNumber">
+          <FormattedMessage id="order.subscriptionNumber" />
         </Option>
       </Select>
     );

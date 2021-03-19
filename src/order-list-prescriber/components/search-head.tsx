@@ -114,7 +114,7 @@ export default class SearchHead extends Component<any, any> {
 
     const orderSourceList = [
       { value: 'FGS', name: 'FGS' },
-      { value: 'L_Atelier_Feline', name: "L'Atelier Feline" }
+      { value: 'L_Atelier_Feline', name: 'L\'Atelier Feline' }
     ];
 
     const menu = (

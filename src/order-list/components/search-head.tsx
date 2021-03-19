@@ -161,7 +161,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Refill number'} />
+                    <Input style={styles.leftLabel} disabled defaultValue={'Subscription order time'} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -387,7 +387,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Plan type'} />
+                    <Input style={styles.leftLabel} disabled defaultValue={'Subscription plan type'} />
                     <Select
                       style={styles.wrapper}
                       allowClear

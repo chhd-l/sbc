@@ -333,7 +333,6 @@ export default class AppStore extends Store {
         country: form.country,
         state: form.state,
         city: form.city,
-        region: form.region,
         postCodeArr,
         ...form
       };
@@ -354,10 +353,6 @@ export default class AppStore extends Store {
       this.onCityFormChange({
         field: 'city',
         value: form.city
-      });
-      this.onCityFormChange({
-        field: 'region',
-        value: form.region
       });
     }
 

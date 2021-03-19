@@ -295,7 +295,6 @@ export default class CouponInfoForm extends Component<any, any> {
       couponPromotionType,
       couponDiscount
     } = this.props.relaxProps;
-    debugger;
     console.log(storeCateIds, 'storeCateIds----');
     console.log(couponJoinLevel, 'couponJoinLevel----');
     console.log(segmentIds, 'segmentIds----');
@@ -620,7 +619,7 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      if (!value && scopeType === 5) {
+                      if (storeCateIds.size === 0 && scopeType === 5) {
                         callback('Please select store cate.');
                       }
                       callback();
@@ -652,9 +651,8 @@ export default class CouponInfoForm extends Component<any, any> {
           ) : null}
 
           <div className="bold-title">Target consumer</div>
-          {console.log(couponJoinLevel, 'couponJoinLevel99999999999')}
           <FormItem {...formItemLayout} required={true}>
-            <RadioGroup value={-3} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
+            <RadioGroup defaultValue={couponJoinLevel} value={couponJoinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
               <Radio value={0}>All</Radio>
               <Radio value={-3}>Select group</Radio>
             </RadioGroup>
@@ -665,7 +663,8 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      if (!value && couponJoinLevel === -3) {
+                      // debugger
+                      if (segmentIds.size === 0 && couponJoinLevel === -3) {
                         callback('Please select group.');
                       }
                       callback();
@@ -673,14 +672,16 @@ export default class CouponInfoForm extends Component<any, any> {
                   }
                 ]
               })(
-                <Select style={{ width: 520 }} onChange={this.selectGroupOnChange} defaultValue={segmentIds && segmentIds.size > 0 ? segmentIds.toJS()[0] : null}>
-                  {allGroups.size > 0 &&
-                    allGroups.map((item) => (
-                      <Select.Option key={item.get('id')} value={item.get('id')}>
-                        {item.get('name')}
-                      </Select.Option>
-                    ))}
-                </Select>
+                <>
+                  <Select style={{ width: 520 }} onChange={this.selectGroupOnChange} defaultValue={segmentIds && segmentIds.size > 0 ? segmentIds.toJS()[0] : null} value={segmentIds && segmentIds.size > 0 ? segmentIds.toJS()[0] : null}>
+                    {allGroups.size > 0 &&
+                      allGroups.map((item) => (
+                        <Select.Option key={item.get('id')} value={item.get('id')}>
+                          {item.get('name')}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </>
               )}
             </FormItem>
           )}

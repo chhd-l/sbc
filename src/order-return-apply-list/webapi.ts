@@ -1,7 +1,14 @@
 import { Fetch } from 'qmkit';
 
+
+type TResult = {
+  code: string;
+  message: string;
+  context: any;
+};
+
 export const fetchOrderList = (filter = {}) => {
-  return Fetch('/trade/list/return', {
+  return Fetch<TResult>('/trade/list/return', {
     method: 'POST',
     body: JSON.stringify(filter)
   });

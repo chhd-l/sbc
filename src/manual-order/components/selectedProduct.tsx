@@ -223,7 +223,7 @@ export default class SelectedProduct extends React.Component<any, any> {
           {this.props.stepName}
           {/* <span className="ant-form-item-required"></span> */}
         </h4>
-        <Button type="primary" onClick={this.addProduct}>
+        <Button type="primary" onClick={this.addProduct} style={{marginTop:10}}>
           Add product
         </Button>
         <div className="basicInformation">

@@ -342,44 +342,52 @@ export default class TodoItems extends React.Component<any, any> {
                     />
                   </div> */}
                   <div className="traffic-r flex-content" style={{ width: '97%' }}>
-                    <div className="traffic-r-btm flex-content" style={{ padding: '25px 0 0 0' }}>
-                      <div className="mode" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div className="mode-text" style={{ flex: 1 }}>
+                    <div className="traffic-r-btm" style={{display: 'flex',alignItems: 'center',height:'100%' }}>
+                      <div className="mode" style={{textAlign:'center'}}>
+                        <div className="mode-text" >
                           To do
                         </div>
-                        <div className="mode-num" style={{ flex: 1 }}>
+                        <div className="mode-num" >
                           <span> {<CountUp end={taskEmployeeStatisticsView?.toDoTaskCount ?? 0} {...countUpProps} />}</span>
                         </div>
                       </div>
-                      <div className="mode" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div className="mode-text" style={{ flex: 1 }}>
+                      <div className="mode" style={{textAlign:'center',borderLeft:'1px solid #ccc',borderRight:'1px solid #ccc'}}>
+                        <div className="mode-text" >
                           On going
                         </div>
-                        <div className="mode-num num" style={{ flex: 1 }}>
+                        <div className="mode-num num" >
                           {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
                           <span> {<CountUp end={taskEmployeeStatisticsView?.onGoingTaskCount ?? 0} {...countUpProps} />}</span>
                         </div>
                       </div>
+                      <div className="mode"  style={{textAlign:'center'}}>
+                        <div className="mode-text" >
+                          Overdue
+                        </div>
+                        <div className="mode-num num" >
+                          {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
+                          <span > {<CountUp style={{color:'#e2001a'}} end={taskEmployeeStatisticsView?.overdueTaskCount ?? 0} {...countUpProps} />}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="traffic-r-btm flex-content" style={{ padding: '25px 0 0 0' }}>
+                    {/* <div className="traffic-r-btm flex-content" style={{ padding: '25px 0 0 0' }}>
                       <div className="mode" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div className="mode-text" style={{ flex: 1 }}>
+                        <div className="mode-text" >
                           Completed
                         </div>
-                        <div className="mode-num" style={{ flex: 1 }}>
+                        <div className="mode-num" >
                           <span> {<CountUp end={taskEmployeeStatisticsView?.completedTaskCount ?? 0} {...countUpProps} />}</span>
                         </div>
                       </div>
                       <div className="mode" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div className="mode-text" style={{ flex: 1 }}>
+                        <div className="mode-text" >
                           Overdue
                         </div>
-                        <div className="mode-num num" style={{ flex: 1 }}>
-                          {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
+                        <div className="mode-num num" >
                           <span> {<CountUp end={taskEmployeeStatisticsView?.overdueTaskCount ?? 0} {...countUpProps} />}</span>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

@@ -333,7 +333,7 @@ export default class TodoItems extends React.Component<any, any> {
                   </span>
                 </div>
                 <div className="traffic ">
-                  {/* <div className="traffic-l">
+                  {/* <div className="traffic-l"
                     <img
                       width="40"
                       height="40"

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb, history, Const } from 'qmkit';
+import { Headline, BreadCrumb, history, Const, cache } from 'qmkit';
 import { Breadcrumb, message, Steps, Button, Icon, Form } from 'antd';
 import './index.less';
 import ConsumerInformation from './components/consumerInformation';
@@ -9,14 +9,12 @@ import PaymentInformation from './components/paymentInformation';
 import { getShopToken, queryOrderStatus } from './webapi';
 
 const { Step } = Steps;
-
 class ManualOrder extends Component<any, any> {
   static propTypes = {};
   static defaultProps = {};
   constructor(props) {
     super(props);
-    let { storeId } = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
-
+    let { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     this.state = {
       id: this.props.match.params.id,
       title: 'Valet order',
@@ -53,7 +51,7 @@ class ManualOrder extends Component<any, any> {
   }
 
   turnShowPage = (token) => {
-    let winObj = window.open(`https://shopstg.royalcanin.com/de/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+    let winObj = window.open(`https://shopstg.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
     let { customer } = this.state;
     let loop = setInterval(async () => {
       if (winObj.closed) {
@@ -99,6 +97,7 @@ class ManualOrder extends Component<any, any> {
   };
   render() {
     const { current, title, customer, storeId, status } = this.state;
+    console.log((window as any).countryEnum[storeId]);
     const steps = [
       {
         title: 'Consumer information',
@@ -132,7 +131,11 @@ class ManualOrder extends Component<any, any> {
           <div className="steps-action">
             {current === 0 && (
               <span>
-                <Button type="primary">Register</Button>
+                <Button type="primary">
+                  <a style={{ color: '#fff' }} target="_blank" href={`https://shop.royalcanin.${(window as any).countryEnum[storeId]}/register/HUB`}>
+                    Register
+                  </a>
+                </Button>
                 <Button
                   type="primary"
                   onClick={() => {

@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { getGoodsSKUS, addGoodsIntoCarts } from '../webapi';
 const defaultImg = require('./img/none.png');
+
 interface IParams {
   cateType: string;
   likeGoodsInfoNo: string;
@@ -165,13 +166,20 @@ export default class AddProductModal extends Component {
       <Modal title="Choose product" visible={visible} onOk={handleOk} width="70%" onCancel={handleCancel}>
         <Form className="filter-content" layout="inline">
           <Row>
-            <Col span={24}>
+            <Col span={20}>
               <FormItem label="Product category">
                 <Radio.Group onChange={(e) => this.onChange(e, 'cateType')} value={cateType}>
                   <Radio value="Cat SPT">Cat SPT</Radio>
                   <Radio value="Dog SPT">Dog SPT</Radio>
                 </Radio.Group>
               </FormItem>
+            </Col>
+            <Col span={4} style={{ textAlign: 'right' }}>
+              <Button type="primary" shape="round">
+                <a target="_blank" style={{ color: '#fff' }} href={`https://shop.royalcanin.${(window as any).countryEnum[this.props.storeId]}/`}>
+                  View all
+                </a>
+              </Button>
             </Col>
             <Col span={12}>
               <FormItem>

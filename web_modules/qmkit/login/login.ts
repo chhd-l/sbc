@@ -101,113 +101,127 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       const functionsRes = menusRes.res.context.functionList
       sessionStorage.setItem(cache.LOGIN_FUNCTIONS, JSON.stringify(functionsRes));
 
-      const addressApiSettings = menusRes.res.context.addressApiSettingVOListResponse.addressApiSettings
-      const taxApiSettings = menusRes.res.context.addressApiSettingVOListResponse.taxApiSettings
-      sessionStorage.setItem(cache.TAX_API_SETTINGS, JSON.stringify(taxApiSettings))
-      sessionStorage.setItem(cache.ADDRESS_API_SETTINGS, JSON.stringify(addressApiSettings))
-      const settingConfigList = menusRes.res.context.systemTaxSettingResponse.configVOList
-
-      let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');
-      if (element) {
-        sessionStorage.setItem(cache.TAX_SWITCH, element.context.toString());
-      } else {
-        sessionStorage.setItem(cache.TAX_SWITCH, '0');
+      const addressApiSettings = menusRes.res.context &&
+        menusRes.res.context.addressApiSettingVOListResponse &&
+        menusRes.res.context.addressApiSettingVOListResponse.addressApiSettings
+      const taxApiSettings = menusRes.res.context &&
+        menusRes.res.context.addressApiSettingVOListResponse &&
+        menusRes.res.context.addressApiSettingVOListResponse.taxApiSettings
+      if (taxApiSettings) {
+        sessionStorage.setItem(cache.TAX_API_SETTINGS, JSON.stringify(taxApiSettings))
+      }
+      if (addressApiSettings) {
+        sessionStorage.setItem(cache.ADDRESS_API_SETTINGS, JSON.stringify(addressApiSettings))
       }
 
-    /*const functionsRes = (await webapi.fetchFunctions()) as any;
-    if (functionsRes.res.code === Const.SUCCESS_CODE) {
-      sessionStorage.setItem(
-        cache.LOGIN_FUNCTIONS,
-        JSON.stringify(functionsRes.res.context)
-      );
-    } else {
-      message.error(functionsRes.res.message)
-    }*/
-    //获取店铺ID
-    const storeId = res.context.storeId;
-    //获取店铺主页的小程序码
-    /*const { res: qrcode } = (await webapi.fetchMiniProgramQrcode(
-      storeId
-    )) as any;
-    if (qrcode.code == Const.SUCCESS_CODE) {
-      //获取小程序码的地址，保存到本地
-      localStorage.setItem(cache.MINI_QRCODE, qrcode.context);
-    }*/
 
-    //Perscriber used
-    /*const employee = (await webapi.employee()) as any;
-    if (employee.res) {
-      sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(employee.res));
-    } else {
-      message.error(employee.res.message)
-    }*/
-
-
-
-    /**
-     * 审核状态 0、待审核 1、已审核 2、审核未通过 -1、未开店
-     */
-    switch ((res.context as any).auditState) {
-      /**待审核*/
-      case 0:
-        //将审核中的店铺信息存入本地缓存
-        history.push('/shop-info');
-        break;
-      /**审核通过，成功登录*/
-      case 1:
-        message.success('login successful');
-        //登录成功之后，塞入baseConfig
-        // const config = (await webapi.getUserSiteInfo()) as any;
-        // if (config.res.code === Const.SUCCESS_CODE) {
-        sessionStorage.setItem(cache.SYSTEM_BASE_CONFIG, JSON.stringify(menusRes.res.context.baseConfigRopResponse));
-        sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(menusRes.res.context.employeeAccountByIdResponse));
-        let configResponse = menusRes.res.context.configResponse
-        let defaultPurchase = {
-          defaultPurchaseType: parseInt((configResponse as any).storeVO?.defaultPurchaseType ?? -1),
-          defaultSubscriptionFrequencyId: (configResponse as any).storeVO?.defaultSubscriptionFrequencyId ?? '',
-          languageId: (configResponse as any).storeVO?.languageId ?? ''
-        }
-        sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (configResponse as any).currency.valueEn); //货币符号
-        sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (configResponse as any).currency.name); //货币名称
-        sessionStorage.setItem(cache.MAP_MODE, (configResponse as any).storeVO.prescriberMap); //货币名称
-
-        sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify(defaultPurchase));//add product sales setting 
-
-        sessionStorage.setItem(cache.CURRENT_YEAR, (configResponse as any).currentDate); //年
-        sessionStorage.setItem(cache.SYSTEM_GET_WEIGHT, (configResponse as any).weight.valueEn); //weight
-        // } else {
-        //   message.error(config.res.message)
-        // }
-        let hasHomeFunction = functionsRes.includes('f_home');
-        if (hasHomeFunction) {
-          history.push('/');
+      const settingConfigList = menusRes.res.context &&
+        menusRes.res.context.systemTaxSettingResponse &&
+        menusRes.res.context.systemTaxSettingResponse.configVOList
+      if (settingConfigList) {
+        let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');
+        if (element) {
+          sessionStorage.setItem(cache.TAX_SWITCH, element.context.toString());
         } else {
-          let url = _getUrl(allGradeMenus);
-          history.push(url);
+          sessionStorage.setItem(cache.TAX_SWITCH, '0');
         }
-        callback(res.context)
-        break;
-      /**审核未通过*/
-      case 2:
-        history.push('/shop-info');
-        break;
-      default:
-        //申请开店
-        history.push('/shop-process');
-    }
-    callback(res.context)
-  } else {
-    callback(res)
-  }
+      }
 
-} else {
-  if (res.message === 'E-000052') {
-    history.push('/403')
+
+      /*const functionsRes = (await webapi.fetchFunctions()) as any;
+      if (functionsRes.res.code === Const.SUCCESS_CODE) {
+        sessionStorage.setItem(
+          cache.LOGIN_FUNCTIONS,
+          JSON.stringify(functionsRes.res.context)
+        );
+      } else {
+        message.error(functionsRes.res.message)
+      }*/
+      //获取店铺ID
+      const storeId = res.context.storeId;
+      //获取店铺主页的小程序码
+      /*const { res: qrcode } = (await webapi.fetchMiniProgramQrcode(
+        storeId
+      )) as any;
+      if (qrcode.code == Const.SUCCESS_CODE) {
+        //获取小程序码的地址，保存到本地
+        localStorage.setItem(cache.MINI_QRCODE, qrcode.context);
+      }*/
+
+      //Perscriber used
+      /*const employee = (await webapi.employee()) as any;
+      if (employee.res) {
+        sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(employee.res));
+      } else {
+        message.error(employee.res.message)
+      }*/
+
+
+
+      /**
+       * 审核状态 0、待审核 1、已审核 2、审核未通过 -1、未开店
+       */
+      switch ((res.context as any).auditState) {
+        /**待审核*/
+        case 0:
+          //将审核中的店铺信息存入本地缓存
+          history.push('/shop-info');
+          break;
+        /**审核通过，成功登录*/
+        case 1:
+          message.success('login successful');
+          //登录成功之后，塞入baseConfig
+          // const config = (await webapi.getUserSiteInfo()) as any;
+          // if (config.res.code === Const.SUCCESS_CODE) {
+          sessionStorage.setItem(cache.SYSTEM_BASE_CONFIG, JSON.stringify(menusRes.res.context.baseConfigRopResponse));
+          sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(menusRes.res.context.employeeAccountByIdResponse));
+          let configResponse = menusRes.res.context.configResponse
+          let defaultPurchase = {
+            defaultPurchaseType: parseInt((configResponse as any).storeVO?.defaultPurchaseType ?? -1),
+            defaultSubscriptionFrequencyId: (configResponse as any).storeVO?.defaultSubscriptionFrequencyId ?? '',
+            languageId: (configResponse as any).storeVO?.languageId ?? ''
+          }
+          sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (configResponse as any).currency.valueEn); //货币符号
+          sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (configResponse as any).currency.name); //货币名称
+          sessionStorage.setItem(cache.MAP_MODE, (configResponse as any).storeVO.prescriberMap); //货币名称
+
+          sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify(defaultPurchase));//add product sales setting 
+
+          sessionStorage.setItem(cache.CURRENT_YEAR, (configResponse as any).currentDate); //年
+          sessionStorage.setItem(cache.SYSTEM_GET_WEIGHT, (configResponse as any).weight.valueEn); //weight
+          // } else {
+          //   message.error(config.res.message)
+          // }
+          let hasHomeFunction = functionsRes.includes('f_home');
+          if (hasHomeFunction) {
+            history.push('/');
+          } else {
+            let url = _getUrl(allGradeMenus);
+            history.push(url);
+          }
+          callback(res.context)
+          break;
+        /**审核未通过*/
+        case 2:
+          history.push('/shop-info');
+          break;
+        default:
+          //申请开店
+          history.push('/shop-process');
+      }
+      callback(res.context)
+    } else {
+      callback(res)
+    }
+
   } else {
-    callback(res)
-    //
+    if (res.message === 'E-000052') {
+      history.push('/403')
+    } else {
+      callback(res)
+      //
+    }
   }
-}
 
 };
 

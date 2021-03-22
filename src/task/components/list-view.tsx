@@ -3,6 +3,7 @@ import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table } from '
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
 import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 export default class ListView extends Component<any, any> {
   constructor(props) {
@@ -15,6 +16,12 @@ export default class ListView extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
+      taskStatus: [
+        { name: 'To Do', value: 'To Do' },
+        { name: 'On-going', value: 'On-going' },
+        { name: 'Completed', value: 'Completed' },
+        { name: 'Cancelled', value: 'Cancelled' }
+      ],
       loading: false,
       queryType: '1'
     };
@@ -24,7 +31,7 @@ export default class ListView extends Component<any, any> {
   }
 
   componentDidMount() {
-    this.getTaskList(this.state.queryType);
+    this.getTaskList(this.props.queryType);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -101,7 +108,7 @@ export default class ListView extends Component<any, any> {
     return color;
   }
   render() {
-    const { taskList } = this.state;
+    const { taskList, taskStatus } = this.state;
     const columns = [
       {
         title: 'Task Name',
@@ -117,7 +124,10 @@ export default class ListView extends Component<any, any> {
         title: 'Task Status',
         dataIndex: 'status',
         width: '10%',
-        render: (text) => <div style={{ color: this.statuColor(text) }}> {text}</div>
+        render: (text) => {
+          let status = taskStatus.find((x) => x.value === text);
+          return <div style={{ color: this.statuColor(text) }}> {status ? status.name : ''}</div>;
+        }
       },
       {
         title: 'Priority',
@@ -136,14 +146,14 @@ export default class ListView extends Component<any, any> {
       },
       {
         title: 'Pet Owner',
-        dataIndex: 'contactName',
-        scopedSlots: { customRender: 'contactName' },
+        dataIndex: 'petOwner',
         width: '10%'
       },
       {
         title: 'Due Time',
         dataIndex: 'dueTime',
-        width: '15%'
+        width: '15%',
+        render: (text, record) => (moment(text) < moment(new Date()) && (record.status === 'To Do' || record.status === 'On-going') ? <div style={{ color: 'rgba(239,28,51)' }}>{text}</div> : text)
       },
       {
         title: 'Operation',

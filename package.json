@@ -21,23 +21,6 @@
     "api": "node ./node_modules/moon-wanmi/lib/swagger-api/index.js",
     "tslint": "./node_modules/tslint/bin/tslint"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{jsx,tsx,ts,js}": [
-      "tslint --fix",
-      "prettier --write",
-      "git add"
-    ],
-    "src/**/*.{css,less}": [
-      "stylelint --fix",
-      "prettier --write",
-      "git add"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "http://172.19.26.140/b2b/b2b-supplier.git"
@@ -64,7 +47,6 @@
     "core-js": "^3.1.2",
     "echarts": "4.2.1",
     "echarts-for-react": "^2.0.0",
-    "gg-editor": "^2.0.2",
     "i18next": "^19.8.4",
     "immutability-helper": "^2.9.1",
     "json-loader": "^0.5.4",
@@ -87,6 +69,7 @@
     "react-router-dom": "^5.0.1",
     "react-sortable-hoc": "^1.11.0",
     "recompact": "^3.2.0",
+    "gg-editor": "2.0.2",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",

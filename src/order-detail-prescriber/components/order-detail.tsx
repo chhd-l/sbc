@@ -471,7 +471,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </p>
               {detail.get('isAutoSub') ? (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="order.subscriptioNumber" /> : {detail.get('subscribeId')}
+                  <FormattedMessage id="order.subscriptionNumber" /> : {detail.get('subscribeId')}
                 </p>
               ) : (
                 ''

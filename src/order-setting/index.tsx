@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import './index.less';
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
+const { Option } = Select;
 
 class OrderSetting extends Component<any, any> {
   constructor(props: any) {
@@ -26,7 +27,8 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
         orderAutomaticConfirmationStatus: false,
-        orderAutomaticConfirmationValue: 1
+        orderAutomaticConfirmationValue: 1,
+        paymentWhen: 'None'
       },
       paymentCashForm: {
         orderExpirationTimeStatus: false,
@@ -38,7 +40,8 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
         orderAutomaticConfirmationStatus: false,
-        orderAutomaticConfirmationValue: 1
+        orderAutomaticConfirmationValue: 1,
+        paymentWhen: 'None'
       },
       unlimitedForm: {
         orderExpirationTimeStatus: false,
@@ -54,7 +57,12 @@ class OrderSetting extends Component<any, any> {
       },
       pcashList: [],
       ponlineList: [],
-      unLimitedList: []
+      unLimitedList: [],
+      fieldForm: {
+        orderField: '',
+        subscriptionField: '',
+        returnOrderField: ''
+      }
     };
   }
   componentDidMount() {
@@ -378,7 +386,7 @@ class OrderSetting extends Component<any, any> {
   };
 
   render() {
-    const { title, message, paymentOnlineForm, paymentCashForm, unlimitedForm, paymentCategory } = this.state;
+    const { title, message, paymentOnlineForm, paymentCashForm, unlimitedForm, paymentCategory, fieldForm } = this.state;
     const description = (
       <div>
         <p>1. Order settings are associated with the key process of order return processing, please operate with caution, all settings will take effect after clicking Save.</p>
@@ -398,8 +406,8 @@ class OrderSetting extends Component<any, any> {
           <Alert message={message} description={description} type="error" />
 
           <p style={styles.tipsStyle}>Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not</p>
-          <Tabs defaultActiveKey="Payment before delivery">
-            <TabPane tab="Payment before delivery" key="Payment before delivery">
+          <Tabs defaultActiveKey="Delivery after payment">
+            <TabPane tab="Delivery after payment" key="Delivery after payment">
               <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
                 <FormItem label="Payment category">
                   <div>
@@ -412,6 +420,32 @@ class OrderSetting extends Component<any, any> {
                       </Radio.Button>
                     </Radio.Group>
                   </div>
+                </FormItem>
+
+                <FormItem label="Capture payment when">
+                  <Row>
+                    <Select
+                      value={paymentCategory === 'Online payment' ? paymentOnlineForm.paymentWhen : paymentCashForm.paymentWhen}
+                      style={{ width: 140 }}
+                      onChange={(value) => {
+                        if (paymentCategory === 'Online payment') {
+                          this.paymentOnlineFormChange({
+                            field: 'paymentWhen',
+                            value: value
+                          });
+                        } else {
+                          this.paymentCashFormChange({
+                            field: 'paymentWhen',
+                            value: value
+                          });
+                        }
+                      }}
+                    >
+                      <Option value="None">None</Option>
+                      <Option value="To be delivered">To be delivered</Option>
+                      <Option value="Shipped">Shipped</Option>
+                    </Select>
+                  </Row>
                 </FormItem>
                 {paymentCategory === 'Online payment' ? (
                   <>
@@ -797,7 +831,7 @@ class OrderSetting extends Component<any, any> {
                 ) : null}
               </Form>
             </TabPane>
-            <TabPane tab="Unlimited" key="Unlimited">
+            <TabPane tab="Cash on delivery" key="Cash on delivery">
               <Form style={{ marginTop: 20 }} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
                 <FormItem label="Order expiration time">
                   <Row>
@@ -985,6 +1019,19 @@ class OrderSetting extends Component<any, any> {
                       </Col>
                     ) : null}
                   </Row>
+                </FormItem>
+              </Form>
+            </TabPane>
+            <TabPane tab="Filed rule setting" key="Filed rule setting">
+              <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 4 }} labelAlign="right">
+                <FormItem label="Order number">
+                  <Input addonBefore="RCF" value={fieldForm.orderField} />
+                </FormItem>
+                <FormItem label="Subscription number">
+                  <Input addonBefore="SRCF" value={fieldForm.subscriptionField} />
+                </FormItem>
+                <FormItem label="Return order number">
+                  <Input addonBefore="RRCF" value={fieldForm.returnOrderField} />
                 </FormItem>
               </Form>
             </TabPane>

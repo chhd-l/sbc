@@ -180,7 +180,7 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th>
+                      <th style={{ width: 200 }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
                       <th style={{ width: '14%' }}>
@@ -188,7 +188,7 @@ export default class ListView extends React.Component<any, any> {
                         {/* <br />
                         <FormattedMessage id="consumerAccount" /> */}
                       </th>
-                      <th style={{ width: '17%' }}>
+                      <th style={{ width: '14%' }}>
                         <FormattedMessage id="recipient" />
                       </th>
                       <th style={{ width: '10%' }}>
@@ -197,13 +197,16 @@ export default class ListView extends React.Component<any, any> {
                         <FormattedMessage id="quantity" />
                       </th>
                       {/* <th style={{ width: '5%' }}>rfc</th> */}
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '10%' }}>
                         <FormattedMessage id="order.shippingStatus" />
                       </th>
-                      <th style={{ width: '12%' }}>
+                      {/* <th style={{ width: '10%' }}>
                         <FormattedMessage id="order.orderStatus" />
+                      </th> */}
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="order.createBy" />
                       </th>
-                      <th className="operation-th" style={{ width: '12%' }}>
+                      <th className="operation-th" style={{ width: '10%' }}>
                         <FormattedMessage id="order.paymentStatus" />
                       </th>
                     </tr>
@@ -261,6 +264,7 @@ export default class ListView extends React.Component<any, any> {
       dataList &&
       dataList.map((v, index) => {
         const id = v.get('id');
+        // const toExternalOrderId = v.get('toExternalOrderId');
         const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
         const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
         const num =
@@ -457,14 +461,14 @@ export default class ListView extends React.Component<any, any> {
                         alignItems: 'flex-end',
                         flexWrap: 'wrap',
                         padding: '16px 0',
-                        width: '100'
+                        width: '200'
                       }}
                     >
                       {/*商品图片*/}
                       {v
                         .get('tradeItems')
                         .concat(gifts)
-                        .map((v, k) => (k < 4 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} className="img-item" style={styles.imgItem} key={k} /> : null))}
+                        .map((v, k) => (k < 4 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} title={v.get('skuName') ? v.get('skuName') : ''} className="img-item" style={styles.imgItem} key={k} /> : null))}
 
                       {
                         /*最后一张特殊处理*/
@@ -495,7 +499,7 @@ export default class ListView extends React.Component<any, any> {
                         {v.getIn(['buyer', 'account'])}
                       </p> */}
                     </td>
-                    <td style={{ width: '17%' }}>
+                    <td style={{ width: '14%' }}>
                       {/*收件人姓名*/}
                       {/* <FormattedMessage id="recipient" />： */}
                       <p title={v.getIn(['consignee', 'name'])} className="line-ellipse">
@@ -519,11 +523,11 @@ export default class ListView extends React.Component<any, any> {
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '12%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
+                    <td style={{ width: '10%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*订单状态*/}
-                    <td style={{ width: '12%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
+                    <td style={{ width: '10%' }}>{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>
                     {/*支付状态*/}
-                    <td style={{ width: '12%', paddingRight: 22 }} className="operation-td">
+                    <td style={{ width: '10%', paddingRight: 22 }} className="operation-td">
                       {payStatus(v.getIn(['tradeState', 'payState']))}
                     </td>
                   </tr>

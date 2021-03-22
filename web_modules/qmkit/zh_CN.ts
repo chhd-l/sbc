@@ -117,7 +117,7 @@ export default {
 
   'order.orderList': '订单列表',
   'order.orderNumber': '订单编号',
-  'order.subscriptioNumber': '订阅编号',
+  'order.subscriptionNumber': '订阅编号',
   'order.shippingStatus': '发货状态',
   'order.paymentStatus': '付款状态',
   'order.orderStatus': '订单状态',

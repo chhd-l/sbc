@@ -8,29 +8,7 @@ import FormItem from 'antd/lib/form/FormItem';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 
-const invoiceContent = (invoice) => {
-  let invoiceContent = '';
-
-  if (invoice.type == '0') {
-    invoiceContent += 'general invoice';
-  } else if (invoice.type == '1') {
-    invoiceContent += '增值税专用发票';
-  } else if (invoice.type == '-1') {
-    invoiceContent += '不需要发票';
-    return invoiceContent;
-  }
-
-  invoiceContent += ' ' + (invoice.projectName || '');
-
-  if (invoice.type == 0 && invoice.generalInvoice.flag) {
-    invoiceContent += ' ' + (invoice.generalInvoice.title || '');
-    invoiceContent += ' ' + invoice.generalInvoice.identification;
-  } else if (invoice.type == 1 && invoice.specialInvoice) {
-    invoiceContent += ' ' + invoice.specialInvoice.companyName;
-    invoiceContent += ' ' + invoice.specialInvoice.identification;
-  }
-  return invoiceContent;
-};
+import './style.less';
 
 const flowState = (status) => {
   if (status == 'INIT') {
@@ -157,7 +135,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
   render() {
     const { currentPetInfo, havePet } = this.state;
-    const { detail, countryDict, cityDict, orderRejectModalVisible } = this.props.relaxProps;
+    const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
     //当前的订单号
     const tid = detail.get('id');
     let orderSource = detail.get('orderSource');
@@ -193,6 +171,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
       detailAddress2: string;
       rfc: string;
       postCode: string;
+      firstName: string;
+      lastName: string;
     };
 
     //发票信息
@@ -214,28 +194,20 @@ export default class OrderDetailTab extends React.Component<any, any> {
           countryId: number;
           // city:string;
           // province:string;
+          firstName: string;
+          lastName: string;
+          postCode: string;
+          city: string;
         })
       : null;
 
     //附件信息
     const encloses = detail.get('encloses') ? detail.get('encloses').split(',') : [];
-    const enclo = fromJS(
-      encloses.map((url, index) =>
-        Map({
-          uid: index,
-          name: index,
-          size: 1,
-          status: 'done',
-          url: url
-        })
-      )
-    );
     //交易状态
     const tradeState = detail.get('tradeState');
 
     //满减、满折金额
     tradePrice.discountsPriceDetails = tradePrice.discountsPriceDetails || fromJS([]);
-    const reduction = tradePrice.discountsPriceDetails.find((item) => item.marketingType == 0);
     const discount = tradePrice.discountsPriceDetails.find((item) => item.marketingType == 1);
     tradeItems.forEach((tradeItems) => {
       if (tradeItems.isFlashSaleGoods) {
@@ -397,70 +369,80 @@ export default class OrderDetailTab extends React.Component<any, any> {
       }
     ];
     return (
-      <div>
-        <div style={styles.headBox as any}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between'
-            }}
-          >
-            <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
+      <div className="orderDetail">
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+          }}
+        >
+          <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
 
-            {this._renderBtnAction(tid)}
-          </div>
-          <Row>
-            <Col span={8}>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="orderNumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
-                {/*<span style={styles.platform}>代下单</span>*/}
-                {/* <span style={styles.platform}>{orderType}</span> */}
-                {detail.get('grouponFlag') && <span style={styles.platform}>拼团</span>}
-                {/*)}*/}
-              </p>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="orderTime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
-              </p>
-              {detail.get('isAutoSub') ? (
-                <p style={styles.darkText}>
-                  <FormattedMessage id="order.subscriptioNumber" /> : {detail.get('subscribeId')}
-                </p>
-              ) : (
-                ''
-              )}
-              <p style={styles.darkText}>
-                {<FormattedMessage id="clinicID" />}: {detail.get('clinicsId')}
-              </p>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="clinicName" />}: {detail.get('clinicsName')}
-              </p>
-            </Col>
-            <Col span={8}>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
-              </p>
-              {detail.getIn(['buyer', 'customerFlag']) && (
-                <p style={styles.darkText}>
-                  {/* {(util.isThirdStore()
-                    ? 'Consumer Level:  '
-                    : 'Platform Level:  ') +
-                    detail.getIn(['buyer', 'levelName'])} */}
-                  {'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}
-                </p>
-              )}
-              <p style={styles.darkText}>
-                {<FormattedMessage id="phoneNumber" />}: {detail.getIn(['consignee', 'phone'])}
-              </p>
-              {/* <p style={styles.darkText}>
-                {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
-              </p>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="recommenderName" />}: {detail.get('recommenderName')}
-              </p> */}
-            </Col>
-          </Row>
+          {this._renderBtnAction(tid)}
         </div>
+        <Row gutter={30}>
+          <Col span={12}>
+            <div className="headBox">
+              <h4>Order</h4>
+              <Row>
+                <Col span={12}>
+                  <p>Order ID: {detail.get('id')}</p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{detail.get('id')}</div>}
+                  >
+                    <p className="overFlowtext">
+                      {<FormattedMessage id="orderNumber" />}: {detail.get('id')}
+                    </p>
+                  </Tooltip>
+                  <p>External order id: {detail.get('toExternalOrderId')}</p>
+                  <p>Order status: {detail.get('toExternalOrderId')}</p>
+                  <p>Order time: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
+                </Col>
+                <Col span={12}>
+                  <p>Start time: {detail.get('toExternalOrderId')}</p>
+                  <p>End time: {detail.get('toExternalOrderId')}</p>
+                  <p>Order type: {detail.get('orderType')}</p>
+                  <p>Order source: {detail.get('orderSource')}</p>
+                  <p>Create by: {detail.get('orderCreateBy')}</p>
+                </Col>
+              </Row>
+            </div>
+          </Col>
+          <Col span={12}>
+            <div className="headBox">
+              <h4>Pet Owner</h4>
+              <p>Pet owner name: {detail.getIn(['buyer', 'name'])}</p>
+              <p>Pet owner type: {detail.getIn(['buyer', 'levelName'])}</p>
+              <p>Pet owner account: {detail.getIn(['buyer', 'account'])}</p>
+              <p>Email address: {detail.getIn(['buyer', 'email'])}</p>
+            </div>
+          </Col>
+        </Row>
+        <Row gutter={30}>
+          <Col span={12}>
+            <div className="headBox">
+              <h4>Subscription</h4>
+              <p>Subscription ID: {detail.getIn(['subscriptionResponseVO', 'externalSubscribeId'])}</p>
+              <p>Subscription type: {detail.get('toExternalOrderId')}</p>
+              <p>Subscription plan type: {detail.get('toExternalOrderId')}</p>
+              <p>Subscription number: {detail.get('toExternalOrderId')}</p>
+            </div>
+          </Col>
+          <Col span={12}>
+            <div className="headBox">
+              <h4>Partner</h4>
+              <p>Auditor name: {detail.get('clinicsName')}</p>
+              <p>Auditor id: {detail.get('clinicsId')}</p>
+              <p>Recommender id: {detail.get('toExternalOrderId')}</p>
+              <p>Recommender name: {detail.get('toExternalOrderId')}</p>
+            </div>
+          </Col>
+        </Row>
 
         <div
           style={{
@@ -525,18 +507,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   {(tradePrice.goodsPrice || 0).toFixed(2)}
                 </strong>
               </label>
-              {/* <label style={styles.priceItem as any}>
-                <span style={styles.name}>
-                  {<FormattedMessage id="pointsDeduction" />}:
-                </span>
-                <strong>-${(tradePrice.pointsPrice || 0).toFixed(2)}</strong>
-              </label> */}
-              {/* {reduction && (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>满减优惠: </span>
-                  <strong>-${reduction.discounts.toFixed(2)}</strong>
-                </label>
-              )} */}
 
               {discount && (
                 <label style={styles.priceItem as any}>
@@ -544,38 +514,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   <strong>-${discount.discounts.toFixed(2)}</strong>
                 </label>
               )}
-
-              {/* {tradePrice.couponPrice ? (
-                <div>
-                  <label style={styles.priceItem as any}>
-                    <span style={styles.name}>优惠券: </span>
-                    <strong>
-                      -${(tradePrice.couponPrice || 0).toFixed(2)}
-                    </strong>
-                  </label>
-                </div>
-              ) : null}
-
-              {tradePrice.special ? (
-                <div>
-                  <label style={styles.priceItem as any}>
-                    <span style={styles.name}>订单改价: </span>
-                    <strong>
-                      ${(tradePrice.privilegePrice || 0).toFixed(2)}
-                    </strong>
-                  </label>
-                </div>
-              ) : null} */}
-
-              {/* {tradePrice.discountsPrice ? (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>
-                  <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                    {(tradePrice.discountsPrice || 0).toFixed(2)}
-                  </strong>
-                </label>
-              ) : null} */}
 
               {tradePrice.promotionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
@@ -631,130 +569,72 @@ export default class OrderDetailTab extends React.Component<any, any> {
           </div>
         </div>
 
-        <Row>
-          <Col span={8}>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCountry" />}: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
-            </p>
-            {consignee.province ? (
-              <p style={styles.inforItem}>
-                {<FormattedMessage id="deliveryState" />}: {consignee.province}
-              </p>
-            ) : null}
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCity" />}: {consignee.city}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryAddress1" />}: {consignee.detailAddress1}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryAddress2" />}: {consignee.detailAddress2}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="postalCode" />}: {consignee.postCode}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="reference" />}: {consignee.rfc}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryComment" />}: {detail.get('buyerRemark')}
-            </p>
+        <Row gutter={30}>
+          <Col span={12}>
+            <div className="headBox">
+              <h4>Delivery Address</h4>
+              <Row>
+                <Col span={12}>
+                  <p>First name: {consignee.firstName}</p>
+                  <p>Last name: {consignee.lastName}</p>
+                  <p>Address 1: {consignee.detailAddress1}</p>
+                  <p>Address 2: {consignee.detailAddress2}</p>
+                  <p>Country: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}</p>
+                </Col>
+                <Col span={12}>
+                  <p>City: {consignee.city}</p>
+                  <p>Activity: {detail.get('toExternalOrderId')}</p>
+                  <p>Post code: {consignee.postCode}</p>
+                  <p>Phone number: {consignee.phone}</p>
+                </Col>
+              </Row>
+            </div>
           </Col>
-          <Col span={8}>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryInvoiceAddress1" />}: {invoice.address1}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryInvoiceAddress2" />}: {invoice.address2}
-            </p>
+          <Col span={12}>
+            <div className="headBox">
+              <h4>Billing Address</h4>
+              <Row>
+                <Col span={12}>
+                  <p>First name: {invoice.firstName}</p>
+                  <p>Last name: {invoice.lastName}</p>
+                  <p>Address 1: {invoice.address1}</p>
+                  <p>Address 2: {invoice.address2}</p>
+                  <p>Country: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
+                </Col>
+                <Col span={12}>
+                  <p>City: {invoice.city}</p>
+                  <p>Activity: {detail.get('toExternalOrderId')}</p>
+                  <p>Post code: {invoice.postCode}</p>
+                  <p>Phone number: {invoice.phone}</p>
+                </Col>
+              </Row>
+            </div>
           </Col>
         </Row>
 
-        {/* <div
-          style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              paddingTop: 10,
-              marginLeft: 20
-            }}
-          >
-            {<FormattedMessage id="sellerNotes" />}:
-            {sellerRemarkVisible == true && (
-              <a onClick={() => setSellerRemarkVisible(false)}>
-                <Icon type="edit" />
-                {detail.get('sellerRemark') || 'none'}
-              </a>
-            )}
-            {sellerRemarkVisible == false && (
-              <div
-                style={{ width: 400, display: 'flex', flexDirection: 'row' }}
-              >
-                <Input
-                  style={{ width: 300, marginRight: 20 }}
-                  onChange={(e) => {
-                    setSellerRemark((e.target as any).value);
-                  }}
-                  placeholder={detail.get('sellerRemark')}
-                  size="small"
-                  defaultValue={detail.get('sellerRemark')}
-                />
+        <Row gutter={30}>
+          <Col span={12}>
+            <div className="headBox">
+              <h4>Pet</h4>
+              <Row>
+                <Col span={12}>
+                  <p>Pet name: {detail.get('toExternalOrderId')}</p>
+                  <p>Gender: {detail.get('toExternalOrderId')}</p>
+                  <p>Birthday: {detail.get('toExternalOrderId')}</p>
+                  <p>Breed {detail.get('toExternalOrderId')}</p>
+                  <p>Sensitivities {detail.get('toExternalOrderId')}</p>
+                </Col>
+                <Col span={12}>
+                  <p>Lifestyle: {detail.get('toExternalOrderId')}</p>
+                  <p>Activity: {detail.get('toExternalOrderId')}</p>
+                  <p>Weight: {detail.get('toExternalOrderId')}</p>
+                  <p>Sterilized: {detail.get('toExternalOrderId')}</p>
+                </Col>
+              </Row>
+            </div>
+          </Col>
+        </Row>
 
-                <a style={styles.pr20} onClick={() => remedySellerRemark()}>
-                  {<FormattedMessage id="confirm" />}
-                </a>
-                <a onClick={() => setSellerRemarkVisible(true)}>
-                  {<FormattedMessage id="cancel" />}
-                </a>
-              </div>
-            )}
-          </div>
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="buyerNotes" />}:{' '}
-            {detail.get('buyerRemark') || 'none'}
-          </label>
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="orderAttachment" />}:{' '}
-            {this._renderEncloses(enclo)}
-          </label>
-
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="paymentMethod" />}:{' '}
-            {detail.getIn(['payInfo', 'desc']) || 'none'}
-          </label>
-          {
-            <label style={styles.inforItem}>
-              {<FormattedMessage id="invoiceInformation" />}:{' '}
-              {invoice ? invoiceContent(invoice) || '' : 'none'}
-            </label>
-          }
-          {invoice.address && (
-            <label style={styles.inforItem}>
-              {<FormattedMessage id="invoiceReceivingAddress" />}:{' '}
-              {invoice && invoice.type == -1
-                ? 'none'
-                : `${invoice.contacts} ${invoice.phone}
-                ${invoice.address || 'none'}`}
-            </label>
-          )}
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="deliveryMethod" />}:{' '}
-            {<FormattedMessage id="expressDelivery" />}
-          </label>
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="deliveryInformation" />}:{consignee.name}{' '}
-            {consignee.phone} {consignee.detailAddress}
-          </label>
-
-          {tradeState.get('obsoleteReason') && (
-            <label style={styles.inforItem}>
-              驳回原因：{tradeState.get('obsoleteReason')}
-            </label>
-          )}
-        </div>
-         */}
         <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm
             ref={(form) => {
@@ -784,7 +664,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   }
 
   _renderBtnAction(tid: string) {
-    const { detail, onAudit, verify, onDelivery, showRejectModal } = this.props.relaxProps;
+    const { detail, verify, onDelivery } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const paymentOrder = detail.get('paymentOrder');
@@ -808,20 +688,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </Tooltip>
             </AuthWrapper>
           )}
-          {
-            // payState === 'PAID'
-            //   ? null
-            //   : flowState === 'INIT' && (
-            //       <AuthWrapper functionName="fOrderList002">
-            //         <Tooltip placement="top" title="Turn down">
-            //           <a onClick={() => showRejectModal()} href="javascript:void(0)" style={styles.pr20} className="iconfont iconbtn-turndown">
-            //             {/*<FormattedMessage id="order.turnDown" />*/}
-            //           </a>
-            //         </Tooltip>
-            //       </AuthWrapper>
-            //     )
-          }
-          {/*已审核处理的*/}
           {flowState === 'AUDIT' && (
             <div>
               {payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
@@ -857,24 +723,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
               )}
             </div>
           )}
-          {/*未审核需要处理的*/}
-          {
-            // flowState === 'INIT' && (
-            //   <AuthWrapper functionName="fOrderList002">
-            //     <Tooltip placement="top" title="Review">
-            //       <a
-            //         onClick={() => {
-            //           onAudit(tid, 'CHECKED');
-            //         }}
-            //         style={{ fontSize: 14 }}
-            //         className="iconfont iconbtn-review"
-            //       >
-            //         {/*Review*/}
-            //       </a>
-            //     </Tooltip>
-            //   </AuthWrapper>
-            // )
-          }
         </div>
       );
     } else if (flowState === 'DELIVERED_PART') {
@@ -988,10 +836,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
 }
 
 const styles = {
-  headBox: {
-    padding: 15,
-    backgroundColor: '#FAFAFA'
-  },
   greenText: {
     color: '#339966'
   },

@@ -21,6 +21,12 @@
     margin-right: 10px;
     text-transform: uppercase;
   }
+
+  .taskMore {
+    display: inline-block;
+    margin-top: 7px;
+    cursor: pointer;
+  }
 }
 
 .stick {
@@ -104,10 +110,30 @@
     }
 
     .warningIcon {
-      color: rgba(233, 63, 81);
       float: right;
       position: relative;
       margin-right: 5px;
+    }
+
+    .high {
+      color: #e2001a;
+    }
+
+    .medium {
+      color: #e7a23b;
+    }
+
+    .low {
+      color: #f9d055;
+    }
+
+    .point {
+      border-radius: 8px;
+      width: 8px;
+      height: 8px;
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 2px;
     }
   }
 
@@ -160,3 +186,9 @@
   }
 }
 
+.advanceSearch {
+  color: #e82f3d;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 16px;
+}

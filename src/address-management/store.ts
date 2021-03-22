@@ -287,6 +287,7 @@ export default class AppStore extends Store {
         id: form.id,
         country: form.country,
         state: form.state,
+        abbreviation: form.abbreviation,
         postCodeArr,
         ...form
       };
@@ -303,6 +304,10 @@ export default class AppStore extends Store {
       this.onStateFormChange({
         field: 'state',
         value: form.state
+      });
+      this.onStateFormChange({
+        field: 'abbreviation',
+        value: form.abbreviation
       });
     }
 

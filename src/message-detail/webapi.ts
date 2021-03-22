@@ -118,3 +118,16 @@ export function getClinicList(filterParams = {}) {
     })
   });
 }
+
+/**
+ * 根据用户获取宠物列表
+ * @param filterParams
+ */
+export function petsByConsumer(filterParams = {}) {
+  return Fetch<TResult>('/pets/petsByConsumer', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

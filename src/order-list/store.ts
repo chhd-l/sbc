@@ -38,7 +38,7 @@ export default class AppStore extends Store {
       const [state, value] = key.split('-');
       form['tradeState'][state] = value;
     }
-    form['orderType'] = 'NORMAL_ORDER';
+    form['orderType'] = form['orderType'] ? form['orderType'] : 'ALL_ORDER';
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {

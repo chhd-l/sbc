@@ -1,4 +1,4 @@
-import { Fetch } from 'qmkit';
+import { Fetch, cache } from 'qmkit';
 
 type TResult = {
   code: string;
@@ -20,7 +20,7 @@ export function queryClinicsDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function getBasicDetails(id = null) {
-  return Fetch<TResult>('/customer/detail/' + id, {
+  return Fetch<TResult>('/customer/detail2/' + id, {
     method: 'Get'
   });
 }
@@ -83,6 +83,19 @@ export function getAddressListByType(id = null, type = '') {
 export function delAddress(id = null) {
   return Fetch<TResult>('/customer/address/' + id, {
     method: 'DELETE'
+  });
+}
+
+/**
+ * 新增客户地址
+ * @param filterParams
+ */
+export function addAddress(filterParams = {}) {
+  return Fetch<TResult>('/customer/address', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
   });
 }
 
@@ -155,20 +168,14 @@ export function delPets(filterParams = {}) {
 }
 
 export function getPaymentMethods(param) {
-  return Fetch<TResult>('/payment-method/query-by-customer-id', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...param
-    })
+  return Fetch<TResult>(`/${param.storeId}/pay-payment-info/${param.customerId}`, {
+    method: 'GET'
   });
 }
 
 export function deleteCard(param) {
-  return Fetch<TResult>('/payment-method/delete-by-id', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...param
-    })
+  return Fetch<TResult>(`/pay-payment-info/${param.id}`, {
+    method: 'DELETE'
   });
 }
 
@@ -204,6 +211,26 @@ export function queryCityListByName(filterParams = {}) {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
+    })
+  });
+}
+
+export function setTagging(params = {}) {
+  return Fetch<TResult>('/customer/segment/segment/segmentRelation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || 0
+    })
+  });
+}
+
+export function getPrescriberList(params = {}) {
+  return Fetch<TResult>('/prescriber/query/listByCustomer', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
     })
   });
 }
@@ -320,4 +347,3 @@ export function bindTagging(filterParams = {}) {
     })
   });
 }
-

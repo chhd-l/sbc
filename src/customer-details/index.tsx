@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { BreadCrumb, history } from 'qmkit';
+import { history } from 'qmkit';
 import BasicInfomation from './component/basic-infomation';
 import PetInfomation from './component/pet-infomation';
 import DeliveryInformation from './component/delivery-information';
@@ -100,11 +100,15 @@ export default class CustomerDetails extends React.Component<any, any> {
   render() {
     return (
       <div>
-        <BreadCrumb thirdLevel={true}>
+        <Breadcrumb>
           <Breadcrumb.Item>
-            <FormattedMessage id="consumer.consumerDetails" />
+            <a href="/customer-list">Pet owner</a>
           </Breadcrumb.Item>
-        </BreadCrumb>
+          <Breadcrumb.Item>
+            <a href="/customer-list">Pet owner list</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>Pet owner detail</Breadcrumb.Item>
+        </Breadcrumb>
         {/*导航面包屑*/}
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <div className="container">

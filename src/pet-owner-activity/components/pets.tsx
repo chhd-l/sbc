@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { history, Const } from 'qmkit';
-import { Card, Icon, Row, Col, Pagination, message } from 'antd';
+import { Card, Icon, Row, Col, Pagination, message, Empty, Tooltip } from 'antd';
 const cat = require('../components/image/cat.png');
 const catFemale = require('../components/image/cat2.png');
 const dog = require('../components/image/dog.png');
@@ -11,45 +11,15 @@ export default class pets extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      petList: [
-        {
-          birthday: '2019-02-01',
-          breedCode: 'mixed_breed',
-          clubStatus: false,
-          contactId: 256,
-          createdAt: '2020-10-28',
-          currentWeight: '4kg',
-          dateAdded: '2020-10-28',
-          dateModified: '2020-10-28',
-          gender: 'female',
-          id: 29739,
-          isPurebred: true,
-          lastPetStatus: '10',
-          lifestyle: 'outdoor',
-          maineCoon: false,
-          name: 'Tiruy',
-          needs: '[{"name":"Özel ihtiyacı yok"}]',
-          ownerId: '00uoe3flxDuU6H1EN0x6',
-          petActivityCode: 'moderate',
-          petAge: 24,
-          petAgeMonth: 0,
-          petAgeYear: 2,
-          petId: 'a3ec2942-37b8-4144-ac2b-0e54c1341cba',
-          sensitivity: 'false',
-          sterillizationStatus: false,
-          tenantId: 6,
-          updatedAt: '2020-10-28 17:21:46',
-          weightCategory: ''
-        }
-      ],
+      petList: [],
       petPagination: {
-        total: 1,
+        total: 0,
         current: 1,
         pageSize: 1
       }
     };
     this.getPetAgeString = this.getPetAgeString.bind(this);
-    this.onShowSizeChange = this.onShowSizeChange.bind(this);
+    this.pageChange = this.pageChange.bind(this);
     this.getPetList = this.getPetList.bind(this);
   }
 
@@ -76,7 +46,7 @@ export default class pets extends Component<any, any> {
     }
     return ageString;
   }
-  onShowSizeChange(current, pageSize) {
+  pageChange(current, pageSize) {
     this.setState(
       {
         petPagination: {
@@ -89,17 +59,25 @@ export default class pets extends Component<any, any> {
   }
 
   getPetList() {
+    const { petPagination } = this.state;
+    let params = {
+      pageNum: petPagination.current - 1,
+      pageSize: petPagination.pageSize,
+      customerId: this.props.petOwnerId
+    };
     this.setState({
       loading: true
     });
     webapi
-      .getPetList()
+      .getPetList(params)
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
+          petPagination.total = res.context.total;
           this.setState({
-            petList: res.context,
-            loading: false
+            petList: res.context.customerPets ? res.context.customerPets : [],
+            loading: false,
+            petPagination: petPagination
           });
         } else {
           message.error(res.message || 'Get data failed');
@@ -116,22 +94,22 @@ export default class pets extends Component<any, any> {
       });
   }
   render() {
-    const { id } = this.props;
+    const { petOwnerId, customerAccount } = this.props;
     const { petList, petPagination, loading } = this.state;
     petList.map((item) => {
-      if (item.speciesCode === 'dog' && (item.gender === 'male' || item.gender === 'other')) {
+      if (item.petsType === 'dog' && (item.genderCode === 'male' || item.genderCode === 'other')) {
         item.defaultPhoto = dog;
       }
-      if (item.speciesCode === 'dog' && item.gender === 'female') {
+      if (item.petsType === 'dog' && item.genderCode === 'female') {
         item.defaultPhoto = dogFemale;
       }
-      if (item.speciesCode === 'cat' && (item.gender === 'male' || item.gender === 'other')) {
+      if (item.petsType === 'cat' && (item.genderCode === 'male' || item.genderCode === 'other')) {
         item.defaultPhoto = cat;
       }
-      if (item.speciesCode === 'cat' && item.gender === 'female') {
+      if (item.petsType === 'cat' && item.genderCode === 'female') {
         item.defaultPhoto = catFemale;
       }
-      if (!item.speciesCode || !item.gender) {
+      if (!item.petsType || !item.genderCode) {
         item.defaultPhoto = dog;
       }
     });
@@ -143,7 +121,7 @@ export default class pets extends Component<any, any> {
           title={
             <div className="title">
               <span>Pets</span>
-              <span className="viewAll" onClick={() => history.push('/pet-all/' + id)}>
+              <span className="viewAll" onClick={() => history.push({ pathname: `/petowner-details/${petOwnerId}/${customerAccount}`, query: { hash: 'pets-list' } })}>
                 View All
                 <Icon type="right" />
               </span>
@@ -160,11 +138,21 @@ export default class pets extends Component<any, any> {
                   </Row>
                   <div className="detail-content" style={{ width: '60%' }}>
                     <div>
-                      <span className="contactName">{item.name}</span>
+                      <span className="contactName">{item.petsName}</span>
                     </div>
                     <span className="ui-lighter">
                       ID:
-                      <span className="content"> {item.petId || '&nbsp;'}</span>
+                      <span className="content">
+                        <Tooltip
+                          overlayStyle={{
+                            overflowY: 'auto'
+                          }}
+                          placement="bottomLeft"
+                          title={<div> {item.petSourceId}</div>}
+                        >
+                          <p style={styles.text}> {item.petSourceId}</p>
+                        </Tooltip>
+                      </span>
                     </span>
                   </div>
                 </Row>
@@ -190,7 +178,17 @@ export default class pets extends Component<any, any> {
                         <span className="ui-lighter">Breed</span>
                       </Col>
                       <Col span={18}>
-                        <span className="content">{item.breedCode}</span>
+                        <span className="content">
+                          <Tooltip
+                            overlayStyle={{
+                              overflowY: 'auto'
+                            }}
+                            placement="bottomLeft"
+                            title={<div> {item.petsBreed}</div>}
+                          >
+                            <p style={styles.text}> {item.petsBreed}</p>
+                          </Tooltip>
+                        </span>
                       </Col>
                     </Row>
                   </div>
@@ -211,10 +209,21 @@ export default class pets extends Component<any, any> {
                 </Row>
               </Row>
             ))}
-            {petList && petList.length > 0 ? <Pagination style={{top:'331px'}} onShowSizeChange={this.onShowSizeChange} total={petPagination.total} pageSize={petPagination.pageSize} size="small" /> : null}
+            {petList.length > 0 ? <Pagination style={{ top: '331px' }} onChange={this.pageChange} current={petPagination.current} total={petPagination.total} pageSize={petPagination.pageSize} size="small" /> : null}
+            {petList.length === 0 ? <Empty /> : null}
           </div>
         </Card>
       </div>
     );
   }
 }
+
+const styles = {
+  text: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 170,
+    display: 'inline-block'
+  }
+};

@@ -6,6 +6,55 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "20493325",
+      "name": "III",
+      "font_class": "III",
+      "unicode": "e6e4",
+      "unicode_decimal": 59108
+    },
+    {
+      "icon_id": "20493326",
+      "name": "II",
+      "font_class": "II",
+      "unicode": "e6eb",
+      "unicode_decimal": 59115
+    },
+    {
+      "icon_id": "20493327",
+      "name": "I",
+      "font_class": "I",
+      "unicode": "e6ec",
+      "unicode_decimal": 59116
+    },
+    {
+      "icon_id": "20493328",
+      "name": "task",
+      "font_class": "task1",
+      "unicode": "e6ed",
+      "unicode_decimal": 59117
+    },
+    {
+      "icon_id": "20376136",
+      "name": "货到付款",
+      "font_class": "huodaofukuan",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "20375668",
+      "name": "cash",
+      "font_class": "cash",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
+      "icon_id": "20374623",
+      "name": "pos",
+      "font_class": "pos",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
       "icon_id": "19988442",
       "name": "环节",
       "font_class": "huanjie",
@@ -552,13 +601,6 @@
       "unicode_decimal": 58962
     },
     {
-      "icon_id": "14259892",
-      "name": "编组 8",
-      "font_class": "bianzu8",
-      "unicode": "e653",
-      "unicode_decimal": 58963
-    },
-    {
       "icon_id": "14259894",
       "name": "编组 9",
       "font_class": "bianzu9",
@@ -984,6 +1026,13 @@
       "font_class": "iconfontzhizuobiaozhun13",
       "unicode": "e69a",
       "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "20157237",
+      "name": "编组 8",
+      "font_class": "bianzusort",
+      "unicode": "e88c",
+      "unicode_decimal": 59532
     },
     {
       "icon_id": "8062961",

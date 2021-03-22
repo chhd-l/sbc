@@ -133,6 +133,7 @@ export default class OrderReceive extends React.Component<any, any> {
   render() {
     const { detail, payRecord, paymentInfo } = this.props.relaxProps;
     const id = detail.get('id');
+    // const toExternalOrderId = detail.get('toExternalOrderId');
     const totalPayCash = detail.getIn(['tradePrice', 'totalPrice']) || 0;
 
     //交易状态

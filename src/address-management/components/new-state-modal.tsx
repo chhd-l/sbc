@@ -115,7 +115,7 @@ export default class NewStateModal extends Component<any, any> {
       }
       if (!err) {
         const { setStateModalVisible, onResetStateForm, stateForm } = this.props.relaxProps;
-        const { id, country, state, postCodeArr } = stateForm.toJS();
+        const { id, country, state, abbreviation, postCodeArr } = stateForm.toJS();
         let arr = [];
         if (postCodeArr.length > 1) {
           postCodeArr.forEach((item) => {
@@ -138,6 +138,7 @@ export default class NewStateModal extends Component<any, any> {
           id,
           countryName: country,
           stateName: state,
+          abbreviation: abbreviation,
           // "stateNo": "string",
           systemStatePostCodes: arr
         };
@@ -214,7 +215,7 @@ export default class NewStateModal extends Component<any, any> {
     const { codeValidateStatus } = this.state;
     const { modalVisible, onStateFormChange, stateForm, confirmLoading } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-    const { id, country, state, postCodeArr } = stateForm.toJS();
+    const { id, country, state, abbreviation, postCodeArr } = stateForm.toJS();
     return (
       <Modal maskClosable={false} title={id ? 'Edit State' : 'Add State'} visible={modalVisible} width={920} confirmLoading={confirmLoading} onCancel={this._handleModelCancel} onOk={this._handleSubmit} afterClose={this._afterClose}>
         <div>
@@ -246,6 +247,21 @@ export default class NewStateModal extends Component<any, any> {
                   onChange={(e) =>
                     onStateFormChange({
                       field: 'state',
+                      value: e.target.value
+                    })
+                  }
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="Abbreviation">
+              {getFieldDecorator('abbreviation', {
+                initialValue: abbreviation
+              })(
+                <Input
+                  value={abbreviation}
+                  onChange={(e) =>
+                    onStateFormChange({
+                      field: 'abbreviation',
                       value: e.target.value
                     })
                   }

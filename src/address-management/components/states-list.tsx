@@ -72,11 +72,13 @@ export default class StatesList extends Component<any, any> {
         const country = item.get('country');
         const state = item.get('state');
         const postCode = item.get('postCode');
+        const abbreviation = item.get('abbreviation');
 
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={index}>
             <td style={{ wordBreak: 'break-all' }}>{country}</td>
             <td style={{ wordBreak: 'break-all' }}>{state}</td>
+            <td style={{ wordBreak: 'break-all' }}>{abbreviation}</td>
             <td style={{ wordBreak: 'break-all' }}>{postCode}</td>
             <td>
               <Tooltip placement="top" title="Edit">
@@ -139,6 +141,7 @@ export default class StatesList extends Component<any, any> {
                       <tr>
                         <th style={{ width: '10%' }}>Country</th>
                         <th style={{ width: '10%' }}>State</th>
+                        <th style={{ width: '10%' }}>Abbreviation</th>
                         <th style={{ width: '10%' }}>Post code</th>
                         <th style={{ width: '10%' }}>Operation</th>
                       </tr>

@@ -134,6 +134,7 @@ export default class AppStore extends Store {
       this.dispatch('home:prescriberTrendView', res.context ? res.context.prescriberTrendView : []);
       this.dispatch('home:prescriberTopView', res.context ? res.context.prescriberTopView : []);
       this.dispatch('home:trafficDashboardView', res.context ? res.context.trafficDashboardView : []);
+      this.dispatch('home:taskEmployeeStatisticsView', res.context?.taskEmployeeStatisticsView?.taskStatistics ?? {});
       this.dispatch('home:transactionTrendView', res.context ? res.context.transactionTrendView : []);
       this.dispatch('home:trafficTrendDashboardView', res.context ? res.context.trafficTrendDashboardView : []);
       //this.dispatch('home:searchData', getListAll.context);
@@ -207,6 +208,7 @@ export default class AppStore extends Store {
       this.dispatch('home:trafficDashboardView', []);
       this.dispatch('home:transactionTrendView', []);
       this.dispatch('home:trafficTrendDashboardView', []);
+      this.dispatch('home:taskEmployeeStatisticsView', []);
     }, 3000);
   };
 }

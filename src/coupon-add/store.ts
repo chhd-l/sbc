@@ -23,7 +23,6 @@ export default class AppStore extends Store {
     } else {
       this.fetchScope(couponType);
     }
-
     this.fetchCouponCate();
     this.initCategory();
     this.getAllGroups();
@@ -36,6 +35,7 @@ export default class AppStore extends Store {
    * 查询优惠券信息
    */
   fetchCouponInfo = async (couponId) => {
+    this.dispatch('loading:start');
     const { res } = (await webApi.fetchCoupon(couponId)) as any;
     if (res.code === Const.SUCCESS_CODE) {
       const { couponInfo, goodsList } = res.context;
@@ -82,8 +82,9 @@ export default class AppStore extends Store {
         couponJoinLevel: Number(couponJoinLevel),
         segmentIds,
         couponPromotionType,
-        couponDiscount
+        couponDiscount: couponDiscount * 10.0
       });
+      this.dispatch('loading:end');
     }
   };
 
@@ -228,7 +229,7 @@ export default class AppStore extends Store {
       scopeType,
       couponDesc,
       couponPromotionType,
-      couponDiscount
+      couponDiscount: couponDiscount / 10.0
     } as any;
 
     if (rangeDayType === 0) {

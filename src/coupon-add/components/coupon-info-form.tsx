@@ -105,6 +105,7 @@ export default class CouponInfoForm extends Component<any, any> {
       storeCateIds: any;
       couponPromotionType: number | string;
       couponDiscount: number | string;
+
       // 键值设置方法
       fieldsValue: Function;
       // 修改时间区间方法
@@ -297,7 +298,7 @@ export default class CouponInfoForm extends Component<any, any> {
     } = this.props.relaxProps;
     console.log(storeCateIds, 'storeCateIds----');
     console.log(couponJoinLevel, 'couponJoinLevel----');
-    console.log(couponDiscount, 'couponDiscount----');
+    console.log(couponPromotionType, 'couponPromotionType----');
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
     if (storeCateIds) {

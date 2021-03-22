@@ -120,6 +120,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                                 onChange={(e) => {
                                   this.ruleValueChange(index, e.target.value);
                                 }}
+                                value={!isFullCount ? level.fullAmount : level.fullCount}
                                 disabled={isFullCount === 2}
                               />
                               <span>
@@ -162,6 +163,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                             onChange={(e) => {
                               this.onChange(index, 'discount', parseFloat(e.target.value));
                             }}
+                            value={level.discount}
                           />
                           <span>&nbsp;of orginal price,</span>
                         </>
@@ -196,6 +198,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                             onChange={(e) => {
                               this.onChange(index, 'limitAmount', parseInt(e.target.value));
                             }}
+                            value={level.limitAmount}
                           />
                           &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                         </>

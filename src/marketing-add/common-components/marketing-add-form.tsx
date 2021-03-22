@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, List, Map } from 'immutable';
 
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
@@ -138,7 +138,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
       allGroups: relaxProps.get('allGroups'),
       storeCateList: relaxProps.get('storeCateList'),
       sourceStoreCateList: relaxProps.get('sourceStoreCateList'),
-      attributesList: relaxProps.get('attributesList')
+      attributesList: relaxProps.get('attributesList'),
+      loading: relaxProps.get('loading')
     };
   }
 
@@ -190,7 +191,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
     });
     this.onBeanChange({
       scopeType: value,
-      storeCateIds: []
+      storeCateIds: [],
+      attributes: []
     });
   };
   targetCustomerRadioChange = (value) => {
@@ -285,7 +287,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups, attributesList } = this.state;
+    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups, attributesList, loading } = this.state;
 
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
@@ -982,6 +984,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
           </Col>
         </Row>
+        {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
         <GoodsModal visible={this.state.goodsModal._modalVisible} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
       </Form>
     );

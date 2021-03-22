@@ -477,7 +477,7 @@ class TaskUpdate extends Component<any, any> {
                           >
                             {assignedUsers.map((item) => (
                               <Option value={item.employeeId} key={item.employeeId}>
-                                {item.employeeName} {'(' + item.accountName + ')'})
+                                {item.employeeName} {'(' + item.accountName + ')'}
                               </Option>
                             ))}
                           </Select>

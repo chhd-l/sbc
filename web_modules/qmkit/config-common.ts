@@ -145,7 +145,7 @@ const Common = {
 
   spuMaxSku: 50,
 
-  // STG Presciber Okta Config
+  // STG  Okta Config
   REACT_APP_PRESCRIBER_CLIENT_ID: "0oaq5jv1f653OBJn80x6",
   REACT_APP_PRESCRIBER_ISSUER : "https://accountpreview.royalcanin.com/oauth2/default",
   REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback",
@@ -154,7 +154,7 @@ const Common = {
   REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
 
 
-  // PROD Presciber Okta Config
+  // PROD  Okta Config
   // REACT_APP_PRESCRIBER_CLIENT_ID: "0oa6ac06a7I03dDyY416",
   // REACT_APP_PRESCRIBER_ISSUER : "https://signin.royalcanin.com/oauth2/default",
   // REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback?type=prescriber",
@@ -171,12 +171,6 @@ const Common = {
   // REACT_APP_RC_CLIENT_ID: "0oa5odnbjhRhbV16X357",
   // REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
   // REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
-
-  // PROD Europ RC STAFF Okta Config
-
-
-  // STG RC STAFF Okta Config
-
 
 };
 export default Common;

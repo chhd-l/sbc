@@ -113,29 +113,29 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
    * @param e
    */
   handleSubmit = (e) => {
-    e.preventDefault();
-    let { marketingBean } = this.state;
-    let errorObject = {};
-    const { marketingType, form } = this.props;
-    form.validateFieldsAndScroll((err) => {
-      if (Object.keys(errorObject).length != 0) {
-        form.setFields(errorObject);
-        this.setState({ saveLoading: false });
-      } else {
-        if (!err) {
-          this.setState({ saveLoading: true });
-          if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
-          }
-        }
-      }
-    });
-
     // e.preventDefault();
-    // this.props.form.validateFields((err, values) => {
-    //   if (!err) {
-    //     console.log('Received values of form: ', values);
+    // let { marketingBean } = this.state;
+    // let errorObject = {};
+    // const { marketingType, form } = this.props;
+    // form.validateFieldsAndScroll((err) => {
+    //   if (Object.keys(errorObject).length != 0) {
+    //     form.setFields(errorObject);
+    //     this.setState({ saveLoading: false });
+    //   } else {
+    //     if (!err) {
+    //       this.setState({ saveLoading: true });
+    //       if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
+    //       }
+    //     }
     //   }
     // });
+
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
   };
 
   handleEndOpenChange = async (date) => {
@@ -196,7 +196,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
     const { marketingBean, saveLoading, allGroups } = this.state;
-
+    console.log(marketingBean.toJS(), 'marketingBean---------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <div className="bold-title">Basic Setting</div>
@@ -262,14 +262,92 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
         </FormItem>
         <div className="bold-title">Free shipping type</div>
         <FormItem {...smallformItemLayout} labelAlign="left">
-          {/*{getFieldDecorator('shippingType', {*/}
-          {/*  onChange: (e) => this.onBeanChange({ shippingType: e.target.value }),*/}
-          {/*  initialValue: 1//marketingBean.get('marketingName')*/}
-          {/*})(*/}
-          {/*  <ShippingTypeForm form={this.props.form}/>*/}
-          {/*)}*/}
-
-          <ShippingTypeForm form={this.props.form} shippingType={marketingBean.get('shippingType')} onChange={(e, key) => this.shippingRadioOnChange(e, key)} />
+          {getFieldDecorator(
+            'shippingType',
+            {}
+          )(
+            <>
+              <RadioGroup
+                value={1}
+                // value={marketingBean.get('shippingType') ? marketingBean.get('shippingType') : 1}
+                onChange={(e) => this.shippingRadioOnChange(e, 'shippingType')}
+              >
+                <FormItem>
+                  <Radio value={1}>All order</Radio>
+                </FormItem>
+                <FormItem>
+                  <Radio value={2}>
+                    <span>
+                      Order reach &nbsp;
+                      {getFieldDecorator('shippingValue', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Value must be entered'
+                          },
+                          {
+                            validator: (_rule, value, callback) => {
+                              // if (shippingType !== 2) {
+                              //   return;
+                              // }
+                              if (value) {
+                                if (!ValidConst.zeroPrice.test(value) || !(value < 10000 && value >= 0)) {
+                                  callback('0-9999');
+                                }
+                              }
+                              callback();
+                            }
+                          }
+                        ],
+                        initialValue: null
+                      })(
+                        <Input
+                          style={{ width: 200 }}
+                          title={'0-9999'}
+                          placeholder={'0-9999'}
+                          onChange={(e) => {
+                            this.shippingRadioOnChange(e, 'shippingValue');
+                          }}
+                          // disabled={shippingType !== 2}
+                        />
+                      )}
+                      <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                    </span>
+                  </Radio>
+                </FormItem>
+                <FormItem>
+                  <Radio value={3}>
+                    <span>
+                      Order reach &nbsp;
+                      {getFieldDecorator('shippingItems', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Value must be entered'
+                          },
+                          {
+                            validator: (_rule, value, callback) => {
+                              // if (shippingType !== 3) {
+                              //   return;
+                              // }
+                              if (value) {
+                                if (!ValidConst.zeroNumber.test(value) || !(value < 10000 && value >= 0)) {
+                                  callback('0-9999');
+                                }
+                              }
+                              callback();
+                            }
+                          }
+                        ],
+                        initialValue: null
+                      })(<Input style={{ width: 200 }} title={'0-9999'} placeholder={'0-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItems')} />)}
+                      <span>&nbsp;item</span>
+                    </span>
+                  </Radio>
+                </FormItem>
+              </RadioGroup>
+            </>
+          )}
         </FormItem>
         <div className="bold-title">Target consumer:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">

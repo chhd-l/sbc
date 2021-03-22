@@ -5,6 +5,7 @@ import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
 import FreeShippingAddForm from '../common-components/free-shipping-add-form';
+import TestForm from '../common-components/test-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
 

@@ -9,13 +9,14 @@ import MethodTips from './methodTips';
 import { Relax, StoreProvider } from 'plume2';
 import { IList, IMap } from '../../../typings/globalType';
 @Relax
-export default class PaymentSetting extends React.Component<any, any> {
+export default class PaymentMethod extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       paymentVisible: false,
       enabled: true,
-      paymentForm: {} //edit
+      paymentForm: {}, //edit
+      editType: false
     };
     this.closeModel = this.closeModel.bind(this);
   }
@@ -24,7 +25,10 @@ export default class PaymentSetting extends React.Component<any, any> {
       queryByStoreId: any;
       switchVisible: any;
       onShow: Function;
+      onChecked: Function;
       switchChecked: any;
+      getEditStorePayment: Function;
+      getStorePaymentVOs: Function;
     };
   };
 
@@ -32,7 +36,10 @@ export default class PaymentSetting extends React.Component<any, any> {
     queryByStoreId: 'queryByStoreId',
     switchVisible: 'switchVisible',
     onShow: noop,
-    switchChecked: 'checked'
+    onChecked: noop,
+    switchChecked: 'switchChecked',
+    getEditStorePayment: noop,
+    getStorePaymentVOs: noop
   };
   componentDidMount() {}
   getPaymentSetting = async () => {
@@ -50,18 +57,32 @@ export default class PaymentSetting extends React.Component<any, any> {
     });
   };
 
-  onSwitchChange = () => {
-    const { onShow } = this.props.relaxProps;
-    onShow(true);
+  onSwitchChange = (res) => {
+    console.log(res, 1111);
+    const { onChecked } = this.props.relaxProps;
+    /*this.setState({
+      editType: res
+    })*/
+    onChecked(res);
+  };
+
+  onTooltip = () => {
+    const { onShow, switchChecked } = this.props.relaxProps;
+    if (switchChecked == true) {
+      onShow(true);
+    } else {
+      return false;
+    }
   };
 
   onChange = () => {};
 
-  reflash() {
-    this.getPaymentSetting();
-  }
   render() {
-    const { queryByStoreId, switchChecked } = this.props.relaxProps;
+    const { queryByStoreId, switchChecked, getStorePaymentVOs, switchVisible } = this.props.relaxProps;
+
+    setTimeout(() => {
+      console.log(switchChecked, 2222222);
+    });
 
     return (
       <div>
@@ -77,8 +98,8 @@ export default class PaymentSetting extends React.Component<any, any> {
             {queryByStoreId.List1 &&
               queryByStoreId.List1.map((item, index) => {
                 return (
-                  <Row>
-                    <Col span={8} key={index}>
+                  <Row key={index}>
+                    <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
                           <img
@@ -92,24 +113,6 @@ export default class PaymentSetting extends React.Component<any, any> {
                         </div>
                         <div className="bar">
                           <div className="status">{item.name}</div>
-
-                          <div className={'flex-start-align'}>
-                            <Switch style={{ marginRight: 15 }} checked={switchChecked} onClick={this.onSwitchChange} />
-                            <Tooltip placement="top" title="Edit">
-                              <a
-                                style={{ color: 'red' }}
-                                type="link"
-                                onClick={() => {
-                                  this.setState({
-                                    paymentVisible: true,
-                                    paymentForm: item
-                                  });
-                                }}
-                                /* className="links"*/
-                                className="iconfont iconEdit"
-                              ></a>
-                            </Tooltip>
-                          </div>
                         </div>
                       </Card>
                     </Col>
@@ -130,8 +133,8 @@ export default class PaymentSetting extends React.Component<any, any> {
             {queryByStoreId.List2 &&
               queryByStoreId.List2.map((item, index) => {
                 return (
-                  <Row>
-                    <Col span={8} key={index}>
+                  <Row key={index}>
+                    <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
                           <img
@@ -147,8 +150,8 @@ export default class PaymentSetting extends React.Component<any, any> {
                           <div className="status">{item.name}</div>
 
                           <div className={'flex-start-align'}>
-                            <Switch style={{ marginRight: 15 }} checked={switchChecked} onClick={this.onSwitchChange} />
-                            <Tooltip placement="top" title="Edit">
+                            <Switch style={{ marginRight: 15 }} />
+                            {/*<Tooltip placement="top" title="Edit">
                               <a
                                 style={{ color: 'red' }}
                                 type="link"
@@ -158,10 +161,9 @@ export default class PaymentSetting extends React.Component<any, any> {
                                     paymentForm: item
                                   });
                                 }}
-                                /* className="links"*/
                                 className="iconfont iconEdit"
                               ></a>
-                            </Tooltip>
+                            </Tooltip>*/}
                           </div>
                         </div>
                       </Card>
@@ -182,9 +184,10 @@ export default class PaymentSetting extends React.Component<any, any> {
           <div className="flex-start-align">
             {queryByStoreId.List3 &&
               queryByStoreId.List3.map((item, index) => {
+                getStorePaymentVOs(item);
                 return (
-                  <Row>
-                    <Col span={8} key={index}>
+                  <Row key={index}>
+                    <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
                           <img
@@ -200,20 +203,9 @@ export default class PaymentSetting extends React.Component<any, any> {
                           <div className="status">{item.name}</div>
 
                           <div className={'flex-start-align'}>
-                            <Switch style={{ marginRight: 15 }} checked={switchChecked} onClick={this.onSwitchChange} />
+                            <Switch style={{ marginRight: 15 }} checked={switchChecked} onChange={this.onSwitchChange} />
                             <Tooltip placement="top" title="Edit">
-                              <a
-                                style={{ color: 'red' }}
-                                type="link"
-                                onClick={() => {
-                                  this.setState({
-                                    paymentVisible: true,
-                                    paymentForm: item
-                                  });
-                                }}
-                                /* className="links"*/
-                                className="iconfont iconEdit"
-                              ></a>
+                              <a style={{ color: switchChecked == true ? 'red' : '#cccccc' }} type="link" onClick={this.onTooltip} className="iconfont iconEdit"></a>
                             </Tooltip>
                           </div>
                         </div>
@@ -224,7 +216,6 @@ export default class PaymentSetting extends React.Component<any, any> {
               })}
           </div>
         </div>
-        <PaymentModel paymentForm={this.state.paymentForm} visible={this.state.paymentVisible} parent={this} reflash={() => this.reflash()} />
         <MethodTips />
       </div>
     );

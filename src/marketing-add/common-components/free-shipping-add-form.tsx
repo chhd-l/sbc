@@ -267,11 +267,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
             {}
           )(
             <>
-              <RadioGroup
-                value={1}
-                // value={marketingBean.get('shippingType') ? marketingBean.get('shippingType') : 1}
-                onChange={(e) => this.shippingRadioOnChange(e, 'shippingType')}
-              >
+              <RadioGroup value={marketingBean.get('shippingType') ? marketingBean.get('shippingType') : 1} onChange={(e) => this.shippingRadioOnChange(e, 'shippingType')}>
                 <FormItem>
                   <Radio value={1}>All order</Radio>
                 </FormItem>

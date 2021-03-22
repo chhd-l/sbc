@@ -61,7 +61,9 @@ export default class CouponInfoActor extends Actor {
       allGroups: [],
       segmentIds: [],
       couponPromotionType: 0, //Amount: 0 or Percentage: 1
-      couponDiscount: null
+      couponDiscount: null,
+      attributesList: [],
+      attributes: []
     };
   }
   /**
@@ -92,7 +94,29 @@ export default class CouponInfoActor extends Actor {
    */
   @Action('coupon: info: data')
   fetchCouponInfo(state, params) {
-    const { cateIds, couponDesc, couponId, couponName, couponType, denomination, effectiveDays, endTime, fullBuyPrice, fullBuyType, rangeDayType, scopeIds, scopeType, startTime, goodsList, storeCateIds, couponJoinLevel, segmentIds, couponPromotionType, couponDiscount } = params;
+    const {
+      cateIds,
+      couponDesc,
+      couponId,
+      couponName,
+      couponType,
+      denomination,
+      effectiveDays,
+      endTime,
+      fullBuyPrice,
+      fullBuyType,
+      rangeDayType,
+      scopeIds,
+      scopeType,
+      startTime,
+      goodsList,
+      storeCateIds,
+      couponJoinLevel,
+      segmentIds,
+      couponPromotionType,
+      couponDiscount,
+      attributes
+    } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
       .set('couponName', couponName)
@@ -111,7 +135,9 @@ export default class CouponInfoActor extends Actor {
       .set('couponJoinLevel', couponJoinLevel)
       .set('segmentIds', fromJS(segmentIds))
       .set('couponPromotionType', couponPromotionType)
-      .set('couponDiscount', fromJS(couponDiscount));
+      .set('couponDiscount', fromJS(couponDiscount))
+      .set('attributes', fromJS(attributes));
+
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));
     } else if (scopeType === 3) {
@@ -230,5 +256,10 @@ export default class CouponInfoActor extends Actor {
   @Action('goodsActor: allGroups')
   getAllGroups(state, allGroups) {
     return state.set('allGroups', fromJS(allGroups));
+  }
+
+  @Action('goodsActor:attributesList')
+  getAllAttributesList(state, attributesList) {
+    return state.set('attributesList', fromJS(attributesList));
   }
 }

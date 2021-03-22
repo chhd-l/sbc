@@ -105,7 +105,9 @@ export default class CouponInfoForm extends Component<any, any> {
       storeCateIds: any;
       couponPromotionType: number | string;
       couponDiscount: number | string;
+      attributesList: any;
 
+      attributes: any;
       // 键值设置方法
       fieldsValue: Function;
       // 修改时间区间方法
@@ -156,6 +158,8 @@ export default class CouponInfoForm extends Component<any, any> {
     couponPromotionType: 'couponPromotionType',
     couponDiscount: 'couponDiscount',
     storeCateIds: 'storeCateIds',
+    attributesList: 'attributesList',
+    attributes: 'attributes',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -245,6 +249,10 @@ export default class CouponInfoForm extends Component<any, any> {
       field: 'couponJoinLevel',
       value: value
     });
+    fieldsValue({
+      field: 'segmentIds',
+      value: []
+    });
   };
 
   selectGroupOnChange = (value) => {
@@ -261,6 +269,26 @@ export default class CouponInfoForm extends Component<any, any> {
     fieldsValue({
       field: 'couponPromotionType',
       value
+    });
+
+    fieldsValue({
+      field: 'denomination',
+      value: null
+    });
+
+    fieldsValue({
+      field: 'couponDiscount',
+      value: null
+    });
+  };
+
+  selectAttributeOnChange = (value) => {
+    const { fieldsValue } = this.props.relaxProps;
+    let attributes = [];
+    attributes.push(value);
+    fieldsValue({
+      field: 'attributes',
+      value: attributes
     });
   };
   render() {
@@ -294,11 +322,13 @@ export default class CouponInfoForm extends Component<any, any> {
       couponJoinLevel,
       segmentIds,
       couponPromotionType,
-      couponDiscount
+      couponDiscount,
+      attributesList,
+      attributes
     } = this.props.relaxProps;
     console.log(storeCateIds, 'storeCateIds----');
     console.log(couponJoinLevel, 'couponJoinLevel----');
-    console.log(couponPromotionType, 'couponPromotionType----');
+    console.log(attributes, 'attributes----');
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
     if (storeCateIds) {
@@ -606,6 +636,9 @@ export default class CouponInfoForm extends Component<any, any> {
               <Radio value={4}>
                 <span style={styles.darkColor}>Custom</span>
               </Radio>
+              <Radio value={3}>
+                <span style={styles.darkColor}>Attribute</span>
+              </Radio>
             </RadioGroup>
           </FormItem>
           {scopeType === 4 ? (
@@ -652,7 +685,33 @@ export default class CouponInfoForm extends Component<any, any> {
               )}
             </FormItem>
           ) : null}
-
+          {scopeType === 3 && (
+            <FormItem {...formItemLayout} required={true} labelAlign="left">
+              {getFieldDecorator('attributes', {
+                rules: [
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (attributes.size === 0 && scopeType === 3) {
+                        callback('Please select attribute.');
+                      }
+                      callback();
+                    }
+                  }
+                ]
+              })(
+                <>
+                  <Select style={{ width: 520 }} onChange={this.selectAttributeOnChange}>
+                    {attributesList.size > 0 &&
+                      attributesList.map((item) => (
+                        <Select.Option key={item.get('id')} value={item.get('id')}>
+                          {item.get('attributeName')}
+                        </Select.Option>
+                      ))}
+                  </Select>
+                </>
+              )}
+            </FormItem>
+          )}
           <div className="bold-title">Target consumer</div>
           <FormItem {...formItemLayout} required={true}>
             <RadioGroup defaultValue={couponJoinLevel} value={couponJoinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>

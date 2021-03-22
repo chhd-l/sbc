@@ -26,6 +26,7 @@ export default class AppStore extends Store {
     this.fetchCouponCate();
     this.initCategory();
     this.getAllGroups();
+    this.getAllAttribute();
     if (couponType) {
       this.fieldsValue({ field: 'couponType', value: couponType });
     }
@@ -58,7 +59,8 @@ export default class AppStore extends Store {
         couponJoinLevel,
         segmentIds,
         couponPromotionType,
-        couponDiscount
+        couponDiscount,
+        attributes
       } = couponInfo;
 
       const scopeIds = await this.fetchScope(scopeType, couponInfo.scopeIds);
@@ -82,7 +84,8 @@ export default class AppStore extends Store {
         couponJoinLevel: Number(couponJoinLevel),
         segmentIds,
         couponPromotionType,
-        couponDiscount: couponDiscount * 10.0
+        couponDiscount: couponDiscount * 10.0,
+        attributes
       });
       this.dispatch('loading:end');
     }
@@ -151,6 +154,10 @@ export default class AppStore extends Store {
         field: 'storeCateIds',
         value: []
       });
+      this.dispatch('coupon: info: field: value', {
+        field: 'attributes',
+        value: []
+      });
     });
   };
 
@@ -213,7 +220,8 @@ export default class AppStore extends Store {
       chooseBrandIds,
       chooseCateIds,
       couponDesc,
-      chooseSkuIds
+      chooseSkuIds,
+      attributes
     } = this.state().toJS();
 
     let params = {
@@ -229,7 +237,8 @@ export default class AppStore extends Store {
       scopeType,
       couponDesc,
       couponPromotionType,
-      couponDiscount: couponDiscount / 10.0
+      couponDiscount: couponDiscount / 10.0,
+      attributes
     } as any;
 
     if (rangeDayType === 0) {
@@ -399,6 +408,29 @@ export default class AppStore extends Store {
 
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('goodsActor: allGroups', res.context.segmentList);
+    } else {
+      // message.error('load group error.');
+    }
+  };
+
+  /**
+   * 获取attribute
+   *
+   *
+   */
+  getAllAttribute = async () => {
+    let params = {
+      attributeName: '',
+      displayName: '',
+      attributeValue: '',
+      displayValue: '',
+      pageSize: 10000,
+      pageNum: 0
+    };
+    const { res } = await webApi.getAllAttribute(params);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('goodsActor:attributesList', res.context.attributesList);
     } else {
       // message.error('load group error.');
     }

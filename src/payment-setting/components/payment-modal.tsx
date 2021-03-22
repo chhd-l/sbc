@@ -64,7 +64,7 @@ class PaymentModal extends React.Component<any, any> {
     }
 
     return (
-      <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()}>
+      <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Form>
           <Row>
             <Col span={24}>

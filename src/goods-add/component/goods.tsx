@@ -47,6 +47,7 @@ export default class Info extends React.Component<any, any> {
       isEditGoods: boolean;
       goods: IMap;
       editGoods: Function;
+      editGoodsItem: Function;
       onGoodsTaggingRelList: Function;
       onProductFilter: Function;
       statusHelpMap: IMap;
@@ -91,6 +92,7 @@ export default class Info extends React.Component<any, any> {
     goods: 'goods',
     // 修改商品基本信息
     editGoods: noop,
+    editGoodsItem: noop,
     // 签约平台类目信息
     cateList: 'cateList',
     sourceCateList: 'sourceCateList',
@@ -399,7 +401,7 @@ class GoodsForm extends React.Component<any, any> {
                 // initialValue: 'Y'
                 initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') === 0 ? goods.get('subscriptionStatus') : 1
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
+                <Select getPopupContainer={() => document.getElementById('page-content')} disabled={goods.get('displayFlag') == 0 ? true : false} placeholder="please select status">
                   <Option value={1}>Y</Option>
                   <Option value={0}>N</Option>
                 </Select>
@@ -726,7 +728,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          {this.state.saleableType == true ? (
+          {goods.get('saleableFlag') == 0 ? (
             <Col span={12}>
               <FormItem {...formItemLayout} label="Display on shop">
                 {getFieldDecorator('displayFlag', {
@@ -820,8 +822,9 @@ class GoodsForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
+    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
+
     if (key === 'saleableFlag') {
       if (e.target.value == 0) {
         this.setState({
@@ -841,6 +844,24 @@ class GoodsForm extends React.Component<any, any> {
         });
         editGoods(goods);
         setFieldsValue({ saleType: 0 });
+      }
+    }
+
+    if (key === 'displayFlag') {
+      if (e.target.value == 0) {
+        let goods = Map({
+          subscriptionStatus: fromJS(0)
+        });
+        editGoods(goods);
+        editGoodsItem(goods);
+        setFieldsValue({ subscriptionStatus: 0 });
+      } else {
+        let goods = Map({
+          subscriptionStatus: fromJS(1)
+        });
+        editGoods(goods);
+        editGoodsItem(goods);
+        setFieldsValue({ subscriptionStatus: 1 });
       }
     }
 

@@ -52,6 +52,12 @@ export default class NewAppointment extends React.Component<any, any> {
                 />
               </div>
             </Form.Item>
+            <Form.Item label="Consumer information">
+              <Radio.Group defaultValue="member">
+                <Radio value="member">Member</Radio>
+                <Radio value="guest">Guest</Radio>
+              </Radio.Group>
+            </Form.Item>
           </Form>
           <div className="bar-button">
             <Button type="primary">Save</Button>

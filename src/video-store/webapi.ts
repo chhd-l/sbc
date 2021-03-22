@@ -1,11 +1,16 @@
 import { Fetch } from 'qmkit';
 import { IMap } from 'typings/globalType';
 
+type TResult = {
+  code: string;
+  message: string;
+  context: any;
+};
 /**
  * 获取类目列表
  */
 export const getCateList = () => {
-  return Fetch(`/store/resourceCates`);
+  return Fetch<TResult>('/store/resourceCates');
 };
 
 /**
@@ -14,7 +19,7 @@ export const getCateList = () => {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function fetchVideos(params = {}) {
-  return Fetch(`/store/resources`, {
+  return Fetch<TResult>('/store/resources', {
     method: 'POST',
     body: JSON.stringify(params)
   });
@@ -24,7 +29,7 @@ export function fetchVideos(params = {}) {
  * 删除
  */
 export const deleteVideo = (params: { videoIds: string[] }) => {
-  return Fetch(`/store/resource`, {
+  return Fetch('/store/resource', {
     method: 'DELETE',
     body: JSON.stringify({
       resourceIds: params
@@ -36,7 +41,7 @@ export const deleteVideo = (params: { videoIds: string[] }) => {
  * 添加分类
  */
 export const addCate = (formData: IMap) => {
-  return Fetch(`/store/resourceCate`, {
+  return Fetch('/store/resourceCate', {
     method: 'POST',
     body: JSON.stringify(formData.toJS())
   });
@@ -46,7 +51,7 @@ export const addCate = (formData: IMap) => {
  * 移动视频
  */
 export const moveVideo = (formData) => {
-  return Fetch(`/store/resource/resourceCate`, {
+  return Fetch('/store/resource/resourceCate', {
     method: 'PUT',
     body: JSON.stringify(formData)
   });
@@ -56,7 +61,7 @@ export const moveVideo = (formData) => {
  * 修改
  */
 export const updateVideo = (params: {}) => {
-  return Fetch(`/store/resource`, {
+  return Fetch('/store/resource', {
     method: 'PUT',
     body: JSON.stringify(params)
   });

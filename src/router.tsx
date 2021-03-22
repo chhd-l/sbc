@@ -39,6 +39,10 @@ const routes = [
     asyncComponent: () => import('./seo-setting')
   },
   {
+    path: '/shipping-fee-setting',
+    asyncComponent: () => import('./shipping-fee-setting')
+  },
+  {
     path: '/site-map',
     exact: true,
     asyncComponent: () => import('./site-map')

@@ -7,7 +7,7 @@ import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
 import FullReductionActor from './actor/full-reduction-actor';
 import { fromJS } from 'immutable';
-
+import LoadingActor from './actor/loading-actor';
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -17,16 +17,19 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new FullReductionActor()];
+    return [new FullReductionActor(), new LoadingActor()];
   }
 
   init = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('marketing:reductionBean', res.context);
+      this.dispatch('loading:end');
     } else if (res.code == 'K-080016') {
       //
       history.go(-1);
+      this.dispatch('loading:end');
     }
   };
 
@@ -56,12 +59,14 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   submitFullReduction = async (reductionBean) => {
+    this.dispatch('loading:start');
     let response;
     if (reductionBean.marketingId) {
       response = await webapi.updateFullReduction(reductionBean);
     } else {
       response = await webapi.addFullReduction(reductionBean);
     }
+    this.dispatch('loading:end');
     return response;
   };
 
@@ -78,6 +83,24 @@ export default class AppStore extends Store {
     const { res } = await webapi.getGoodsCate();
     if (res && res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor: initStoreCateList', fromJS(res.context));
+    }
+  };
+
+  getAllAttribute = async () => {
+    let params = {
+      attributeName: '',
+      displayName: '',
+      attributeValue: '',
+      displayValue: '',
+      pageSize: 10000,
+      pageNum: 0
+    };
+    const { res } = await commonWebapi.getAllAttribute(params);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('marketing:attributesList', res.context.attributesList);
+    } else {
+      // message.error('load group error.');
     }
   };
 }

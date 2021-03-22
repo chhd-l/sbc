@@ -328,9 +328,9 @@ export default class TodoItems extends React.Component<any, any> {
               <div className="item-top-m-top">
                 <div className="top-text space-between">
                   <span>Task</span>
-                  {/* <span>
+                  <span>
                     <Link to="/tasks">more &gt;</Link>
-                  </span> */}
+                  </span>
                 </div>
                 <div className="traffic ">
                   {/* <div className="traffic-l">

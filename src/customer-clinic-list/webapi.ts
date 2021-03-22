@@ -9,9 +9,6 @@ type TResult = {
 
 // 获取customer list
 export function getCustomerList(filterParams = {}) {
-  // console.log(JSON.stringify({
-  //   ...filterParams
-  // }), 'hahahaha')
   if (sessionStorage.getItem('s2b-employee@data')) {
     filterParams['clinicsIds'] = JSON.parse(sessionStorage.getItem('s2b-employee@data'))['clinicsIds'];
   }

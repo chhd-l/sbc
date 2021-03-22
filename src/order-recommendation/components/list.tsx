@@ -238,7 +238,6 @@ export default class ListView extends React.Component<any, any> {
   }
 
   onDetail(e) {
-    //console.log(e, 11111111111);
   }
 
   _renderContent(dataList) {

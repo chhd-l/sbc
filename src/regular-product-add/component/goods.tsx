@@ -47,6 +47,7 @@ export default class Info extends React.Component<any, any> {
       isEditGoods: boolean;
       goods: IMap;
       editGoods: Function;
+      editGoodsItem: Function;
       onGoodsTaggingRelList: Function;
       onProductFilter: Function;
       statusHelpMap: IMap;
@@ -91,6 +92,7 @@ export default class Info extends React.Component<any, any> {
     goods: 'goods',
     // 修改商品基本信息
     editGoods: noop,
+    editGoodsItem: noop,
     // 签约平台类目信息
     cateList: 'cateList',
     sourceCateList: 'sourceCateList',
@@ -235,7 +237,6 @@ class GoodsForm extends React.Component<any, any> {
       filterList
     });
   }
-
   render() {
     const { getFieldDecorator } = this.props.form;
     const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter, purchaseTypeList, frequencyList } = this.props.relaxProps;
@@ -283,6 +284,7 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     }
+
     return (
       <Form>
         <Row type="flex" justify="start">
@@ -399,11 +401,11 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
                 // initialValue: 'Y'
-                initialValue: goods.get('subscriptionStatus') === 0 || goods.get('subscriptionStatus') == null ? 'N' : 'Y'
+                initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') === 0 ? goods.get('subscriptionStatus') : 1
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
-                  <Option value="1">Y</Option>
-                  <Option value="0">N</Option>
+                <Select getPopupContainer={() => document.getElementById('page-content')} disabled={goods.get('displayFlag') == 0 ? true : false} placeholder="please select status">
+                  <Option value={1}>Y</Option>
+                  <Option value={0}>N</Option>
                 </Select>
               )}
             </FormItem>
@@ -627,8 +629,8 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     min: 1,
-                    max: 225,
-                    message: '1-225 characters'
+                    max: 5000,
+                    message: '1-5000 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -638,7 +640,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsNewSubtitle'),
                 initialValue: goods.get('goodsNewSubtitle')
-              })(<Input placeholder="Please input the item card intro., no more than 225 words" />)}
+              })(<Input placeholder="Please input the item card intro., no more than 5000 words" />)}
             </FormItem>
           </Col>
         </Row>
@@ -662,8 +664,8 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     min: 1,
-                    max: 225,
-                    message: '1-225 characters'
+                    max: 5000,
+                    message: '1-5000 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -673,7 +675,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(<Input placeholder="Please input the item subtitle, no more than 225 words" />)}
+              })(<Input placeholder="Please input the item subtitle, no more than 5000 words" />)}
             </FormItem>
           </Col>
         </Row>
@@ -826,7 +828,7 @@ class GoodsForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
+    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
     console.error(key, e);
 
@@ -841,6 +843,24 @@ class GoodsForm extends React.Component<any, any> {
     //     });
     //   }
     // }
+
+    if (key === 'displayFlag') {
+      if (e.target.value == 0) {
+        let goods = Map({
+          subscriptionStatus: fromJS(0)
+        });
+        editGoods(goods);
+        editGoodsItem(goods);
+        setFieldsValue({ subscriptionStatus: 0 });
+      } else {
+        let goods = Map({
+          subscriptionStatus: fromJS(1)
+        });
+        editGoods(goods);
+        editGoodsItem(goods);
+        setFieldsValue({ subscriptionStatus: 1 });
+      }
+    }
 
     if (e && e.target) {
       e = e.target.value;
@@ -1069,6 +1089,7 @@ class GoodsForm extends React.Component<any, any> {
    * @param storeCateList
    */
   generateStoreCateTree = (storeCateList) => {
+    const { sourceStoreCateList } = this.props.relaxProps;
     return (
       storeCateList &&
       storeCateList.map((item) => {

@@ -129,12 +129,11 @@ export default class AppStore extends Store {
     } else {
       this.dispatch('formActor:enterpriseFlag', false);
     }
-
     let userList: any;
     if (util.isThirdStore()) {
-      userList = editResource.allCustomers;
+      userList = editResource.allCustomers || [];
     } else {
-      userList = editResource.allBossCustomers;
+      userList = editResource.allBossCustomers || [];
     }
 
     const sourceUserList = fromJS(userList);
@@ -967,12 +966,19 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
+        if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
+          tip = 3;
+          valid = false;
+          return;
+        }
       });
     }
     if (tip === 1) {
       message.error('Please input market price');
     } else if (tip === 2) {
       message.error('Please input subscription price');
+    } else if (tip === 3) {
+      message.error('Market price cannot be zero');
     }
     return valid;
   }
@@ -1002,7 +1008,7 @@ export default class AppStore extends Store {
   /**
    * 保存基本信息和价格
    */
-  saveAll = async () => {
+  saveAll = async (nextTab = null) => {
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1199,6 +1205,7 @@ export default class AppStore extends Store {
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
+          externalSku: item.get('externalSku'),
           stock: item.get('stock') || c,
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
@@ -1213,6 +1220,7 @@ export default class AppStore extends Store {
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           goodsInfoBundleRels: b,
+          addedFlag: item.get('addedFlag') || 0,
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',
@@ -1310,8 +1318,6 @@ export default class AppStore extends Store {
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
     param = param.set('goodsDescriptionDetailList', this.state().get('goodsDescriptionDetailList'));
 
-    //console.log(this.state().get('productFilter'), 2222);
-
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)
     // this.dispatch('goodsActor: saveLoading', true);
@@ -1340,8 +1346,6 @@ export default class AppStore extends Store {
       result = await save(param && param.toJS());
     }
 
-    //console.log(param.toJS(), 'param.toJS(),----------------');
-
     // this.dispatch('goodsActor: saveLoading', false);
     this.dispatch('loading:end');
     if (result.res.code === Const.SUCCESS_CODE) {
@@ -1357,7 +1361,11 @@ export default class AppStore extends Store {
       }
       message.success('Operate successfully');
       this.dispatch('goodsActor:saveSuccessful', true);
-      this.onMainTabChange('related');
+      if (!nextTab) {
+        this.onMainTabChange('related');
+      } else {
+        this.onMainTabChange('seo');
+      }
       //history.push('/goods-list');
     } else {
     }
@@ -1746,6 +1754,8 @@ export default class AppStore extends Store {
     } else if (nextKey === 'seo') {
       if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew() || !this.state().get('getGoodsId')) {
         return;
+      } else {
+        this.saveAll('seo');
       }
     }
     if (nextKey !== 'related') {
@@ -1840,11 +1850,12 @@ export default class AppStore extends Store {
       let content = result.res.context;
       let res = content.map((item) => {
         return {
+          key: +new Date(),
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
           contentType: item.contentType,
-          content: ' ',
+          content: '',
           sort: item.sort,
           editable: true
         };
@@ -2050,12 +2061,37 @@ export default class AppStore extends Store {
     const { res } = (await getSeo(goodsId, type)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      let title = null;
+      let description = null;
+      let keywords = null;
+      const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+      if (loginInfo) {
+        switch (loginInfo.storeId) {
+          case 123457910: //"美国"
+            title = '{name} | Royal Canin Shop';
+            break;
+          case 123457911: //"土耳其"
+            title = '{name} {subtitle} | Royal Canin Türkiye';
+            description = '{name} {subtitle} Royal Canin resmi mağazasında. "X" TL üzeri siparişlerinizde ücretsiz kargo. Sipariş verin veya mama aboneliğinizi başlatın!';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+            break;
+          case 123457907: //"俄罗斯"
+            title = 'Купить {technology} корм Royal Canin {name} в официальном интернет-магазине';
+            description = 'Купить {technology} корм Royal Canin {name} со скидкой 10% при оформлении подписки. Сделайте заказ в интернет-магазине Royal Canin уже сегодня!';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+            break;
+          default:
+            title = '{name} | Royal Canin Shop';
+            description = '{description}';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+        }
+      }
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : '{name} | Royal Canin Shop',
-          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}', //{name}, {subtitle}, {sales category}, {tagging}
-          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : '{description}', //{description}
+          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : title,
+          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : keywords, //{name}, {subtitle}, {sales category}, {tagging}
+          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : description, //{description}
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );
@@ -2065,17 +2101,42 @@ export default class AppStore extends Store {
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
     this.dispatch('loading:start');
+    let params = {};
     const updateNumbers = this.state().get('updateNumbers') + 1;
-    const params = {
-      type: 1,
-      goodsId,
-      metaDescriptionSource: seoObj.metaDescriptionSource,
-      metaKeywordsSource: seoObj.metaKeywordsSource,
-      titleSource: seoObj.titleSource,
-      headingTag: seoObj.headingTag,
-      updateNumbers
-    };
-    // console.log(params, 'params-------------');
+    const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')); //{storeId: 123457910}
+    if (loginInfo) {
+      switch (loginInfo.storeId) {
+        case 123457910: //"美国"
+          params = {
+            type: 1,
+            goodsId,
+            metaDescriptionSource: null,
+            metaKeywordsSource: null,
+            titleSource: seoObj.titleSource,
+            headingTag: null,
+            updateNumbers
+          };
+          break;
+        // case 123457911: //"土耳其"
+        //
+        //   break;
+        // case 123457907: //"俄罗斯"
+        //
+        //   break;
+        default:
+          params = {
+            type: 1,
+            goodsId,
+            metaDescriptionSource: seoObj.metaDescriptionSource,
+            metaKeywordsSource: seoObj.metaKeywordsSource,
+            titleSource: seoObj.titleSource,
+            headingTag: seoObj.headingTag,
+            updateNumbers
+          };
+      }
+    }
+
+    console.log(params, '----params');
     const { res } = (await editSeo(params)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {

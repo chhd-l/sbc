@@ -64,7 +64,6 @@ export default class SeoSettingModal extends Component<any, any> {
       titleSource: seoObj.titleSource,
       headingTag: seoObj.headingTag
     };
-    console.log(params, 'params--------------');
     editSeo(params);
   };
   uploadImage() {}
@@ -90,7 +89,6 @@ export default class SeoSettingModal extends Component<any, any> {
       { name: 'H4', id: 'H4' },
       { name: 'H5', id: 'H5' }
     ];
-    console.log(seoObj, 'seoObj-------------');
     return (
       <Modal
         maskClosable={false}

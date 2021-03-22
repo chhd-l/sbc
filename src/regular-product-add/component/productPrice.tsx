@@ -284,11 +284,61 @@ class SkuForm extends React.Component<any, any> {
         </div>
       ),
       key: 'marketPrice',
-      render: (rowInfo) => (
-        <Row>
-          <Col span={12}>
-            {goods.get('subscriptionStatus') == 1 ? (
-              <div>
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              {goods.get('subscriptionStatus') == 1 ? (
+                <div>
+                  <p>
+                    <FormItem style={styles.tableFormItem}>
+                      {getFieldDecorator('marketPrice_' + rowInfo.id, {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please input market price'
+                          }
+                        ],
+
+                        onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
+                        initialValue: rowInfo.marketPrice || 0
+                      })(
+                        <InputNumber
+                          min={0}
+                          max={9999999.99}
+                          disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                          precision={2}
+                          formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        />
+                      )}
+                    </FormItem>
+                  </p>
+                  {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
+                    <p>
+                      <FormItem style={styles.tableFormItem}>
+                        {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Please input subscription price'
+                            }
+                          ],
+                          onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
+                          initialValue: rowInfo.subscriptionPrice || 0
+                        })(
+                          <InputNumber
+                            min={0}
+                            max={9999999.99}
+                            precision={2}
+                            disabled={rowInfo.subscriptionStatus === 0}
+                            formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                          />
+                        )}
+                      </FormItem>
+                    </p>
+                  ) : null}
+                </div>
+              ) : (
                 <p>
                   <FormItem style={styles.tableFormItem}>
                     {getFieldDecorator('marketPrice_' + rowInfo.id, {
@@ -299,7 +349,7 @@ class SkuForm extends React.Component<any, any> {
                         }
                       ],
 
-                      onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
+                      onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
                       initialValue: rowInfo.marketPrice || ''
                     })(
                       <InputNumber
@@ -312,59 +362,11 @@ class SkuForm extends React.Component<any, any> {
                     )}
                   </FormItem>
                 </p>
-                {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
-                  <p>
-                    <FormItem style={styles.tableFormItem}>
-                      {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input subscription price'
-                          }
-                        ],
-                        onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                        initialValue: rowInfo.subscriptionPrice || ''
-                      })(
-                        <InputNumber
-                          min={0}
-                          max={9999999.99}
-                          precision={2}
-                          disabled={rowInfo.subscriptionStatus === 0}
-                          formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        />
-                      )}
-                    </FormItem>
-                  </p>
-                ) : null}
-              </div>
-            ) : (
-              <p>
-                <FormItem style={styles.tableFormItem}>
-                  {getFieldDecorator('marketPrice_' + rowInfo.id, {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please input market price'
-                      }
-                    ],
-
-                    onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
-                    initialValue: rowInfo.marketPrice || ''
-                  })(
-                    <InputNumber
-                      min={0}
-                      max={9999999.99}
-                      disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                      precision={2}
-                      formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    />
-                  )}
-                </FormItem>
-              </p>
-            )}
-          </Col>
-        </Row>
-      )
+              )}
+            </Col>
+          </Row>
+        );
+      }
     });
     columns = columns.push({
       title: (

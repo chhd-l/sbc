@@ -722,6 +722,10 @@ const routes = [
     path: '/payment-setting',
     asyncComponent: () => import('./payment-setting')
   },
+  {
+    path: '/payment-method',
+    asyncComponent: () => import('./payment-method')
+  },
   // prescriber
   {
     path: '/prescriber',

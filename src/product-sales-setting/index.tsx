@@ -72,7 +72,6 @@ class ProductSearchSetting extends Component<any, any> {
         return item;
       }
     });
-    // debugger
     this.setState({
       options,
       defaultPurchaseType,
@@ -121,7 +120,40 @@ class ProductSearchSetting extends Component<any, any> {
             <Form.Item
               label={
                 <span className="ant-form-item-required" style={{ color: '#666' }}>
-                  Default subscription frequency
+                  Default autoship frequency
+                </span>
+              }
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
+                {getFieldDecorator('defaultSubscriptionFrequencyId', {
+                  initialValue: defaultSubscriptionFrequencyId,
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please select subscription frequency !'
+                    }
+                  ]
+                })(
+                  <Select disabled={disabled} placeholder="Please select subscription frequency !">
+                    {options.map((item) => (
+                      <Option key={item.id} value={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              </Form.Item>
+              <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
+                <Button type="danger" size="default" onClick={this.showModal} disabled={disabled}>
+                  Add new frequency
+                </Button>
+              </Form.Item>
+            </Form.Item>
+            <Form.Item
+              label={
+                <span className="ant-form-item-required" style={{ color: '#666' }}>
+                  Default club frequency
                 </span>
               }
               style={{ marginBottom: 0 }}

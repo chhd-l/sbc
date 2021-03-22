@@ -8,7 +8,6 @@ import SettleActor from './actor/settle-actor';
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
-    //console.log(__DEV__,'---------------------')
     if (__DEV__) {
       (window as any)._store = this;
     }
@@ -72,7 +71,6 @@ export default class AppStore extends Store {
   };
 
   /*onChecked = (index: number, checked: boolean, a: any) => {
-    console.log(checked, index, a);
     this.dispatch('list:check', { index, checked });
   };*/
   /**

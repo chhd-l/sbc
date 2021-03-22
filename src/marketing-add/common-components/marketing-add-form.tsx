@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { fromJS, List } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
@@ -16,6 +16,7 @@ import * as webapi from '../webapi';
 import * as Enum from './marketing-enum';
 
 import { doc } from 'prettier';
+import { IList } from '../../../typings/globalType';
 // import debug = doc.debug;
 
 const FormItem = Form.Item;
@@ -23,6 +24,7 @@ const RadioGroup = Radio.Group;
 const RangePicker = DatePicker.RangePicker;
 const CheckboxGroup = Checkbox.Group;
 const Confirm = Modal.confirm;
+const { SHOW_PARENT } = TreeSelect;
 
 const formItemLayout = {
   labelCol: {
@@ -54,6 +56,44 @@ const radioStyle = {
   height: '40px',
   lineHeight: '40px'
 };
+
+const treeData = [
+  {
+    title: 'Node1',
+    value: '0-0',
+    key: '0-0',
+    children: [
+      {
+        title: 'Child Node1',
+        value: '0-0-0',
+        key: '0-0-0'
+      }
+    ]
+  },
+  {
+    title: 'Node2',
+    value: '0-1',
+    key: '0-1',
+    children: [
+      {
+        title: 'Child Node3',
+        value: '0-1-0',
+        key: '0-1-0'
+      },
+      {
+        title: 'Child Node4',
+        value: '0-1-1',
+        key: '0-1-1'
+      },
+      {
+        title: 'Child Node5',
+        value: '0-1-2',
+        key: '0-1-2'
+      }
+    ]
+  }
+];
+const TreeNode = Tree.TreeNode;
 export default class MarketingAddForm extends React.Component<any, any> {
   props;
 
@@ -95,7 +135,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
       PromotionTypeChecked: true,
       timeZone: moment,
       isClubChecked: false,
-      allGroups: relaxProps.get('allGroups')
+      allGroups: relaxProps.get('allGroups'),
+      storeCateList: relaxProps.get('storeCateList'),
+      sourceStoreCateList: relaxProps.get('sourceStoreCateList')
     };
   }
 
@@ -134,11 +176,28 @@ export default class MarketingAddForm extends React.Component<any, any> {
     });
   };
 
-  productTypeOnChange = (value) => {
-    this.onBeanChange({ productType: value });
+  scopeTypeOnChange = (value) => {
+    this.setState({
+      selectedRows: fromJS([]),
+      goodsModal: {
+        _modalVisible: false,
+        _selectedSkuIds: [],
+        _selectedRows: []
+      },
+      selectedSkuIds: [],
+      selectedRows: fromJS([])
+    });
+    this.onBeanChange({
+      scopeType: value,
+      storeCateIds: []
+    });
   };
   targetCustomerRadioChange = (value) => {
-    this.onBeanChange({ joinLevel: value });
+    this.onBeanChange({
+      joinLevel: value,
+      emailSuffixList: [],
+      segmentIds: []
+    });
   };
 
   selectGroupOnChange = (value) => {
@@ -146,14 +205,93 @@ export default class MarketingAddForm extends React.Component<any, any> {
     segmentIds.push(value);
     this.onBeanChange({ segmentIds });
   };
+
+  storeCateChange = (value, _label, extra) => {
+    const sourceGoodCateList = this.state.sourceStoreCateList;
+
+    // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
+    // 店铺分类列表
+
+    // 勾选的店铺分类列表
+    let originValues = fromJS(value.map((v) => v.value));
+
+    // 如果是点x清除某个节点或者是取消勾选某个节点，判断清除的是一级还是二级，如果是二级可以直接清；如果是一级，连带把二级的清了
+    if (extra.clear || !extra.checked) {
+      sourceGoodCateList.forEach((cate) => {
+        // 删的是某个一级的
+        if (extra.triggerValue == cate.get('storeCateId') && cate.get('cateParentId') == 0) {
+          // 找到此一级节点下的二级节点
+          const children = sourceGoodCateList.filter((ss) => ss.get('cateParentId') == extra.triggerValue);
+          // 把一级的子节点也都删了
+          originValues = originValues.filter((v) => children.findIndex((c) => c.get('storeCateId') == v) == -1);
+        }
+      });
+    }
+
+    // 如果子节点被选中，上级节点也要被选中
+    // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
+    originValues.forEach((v) => {
+      sourceGoodCateList.forEach((cate) => {
+        // 找到选中的分类，判断是否有上级r
+        if (v == cate.get('storeCateId') && cate.get('cateParentId') != 0) {
+          // 判断上级是否已添加过，如果没有添加过，添加
+          let secondLevel = sourceGoodCateList.find((x) => x.get('storeCateId') === cate.get('cateParentId'));
+          if (secondLevel && secondLevel.get('cateParentId') !== 0) {
+            let exsit = originValues.toJS().includes(secondLevel.get('cateParentId'));
+            if (!exsit) {
+              originValues = originValues.push(secondLevel.get('cateParentId')); // first level
+            }
+          }
+
+          let exsit = originValues.toJS().includes(cate.get('cateParentId'));
+          if (!exsit) {
+            originValues = originValues.push(cate.get('cateParentId')); // second level
+          }
+        }
+      });
+    });
+    const storeCateIds = originValues;
+    this.onBeanChange({
+      storeCateIds
+    });
+  };
+
+  /**
+   * 店铺分类树形下拉框
+   * @param storeCateList
+   */
+  generateStoreCateTree = (storeCateList) => {
+    return (
+      storeCateList &&
+      storeCateList.map((item) => {
+        if (item.get('children') && item.get('children').count()) {
+          return (
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
+              {this.generateStoreCateTree(item.get('children'))}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+      })
+    );
+  };
+
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
+    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
 
-    console.log(marketingBean.toJS(), 'marketingBean---------');
-
+    const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
+    const storeCateValues = [];
+    const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
+    if (storeCateIds) {
+      storeCateIds.toJS().map((id) => {
+        if (!parentIds.includes(id)) {
+          storeCateValues.push({ value: id });
+        }
+      });
+    }
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
@@ -174,12 +312,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     //this.onBeanChange({publicStatus: 1});
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        {/*<FormItem {...formItemLayout} label="Promotion type:">*/}
-        {/*  <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>*/}
-        {/*    <Radio value={0}>Normal promotion</Radio>*/}
-        {/*    <Radio value={1}>Subscription promotion</Radio>*/}
-        {/*  </Radio.Group>*/}
-        {/*</FormItem>*/}
         <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={this.promotionType} value={this.state.PromotionTypeValue}>
@@ -389,9 +521,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   initialValue: isFullCount
                 })(
                   <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                    <Radio style={radioStyle} value={2}>
-                      Direct discount
-                    </Radio>
+                    {/*<Radio style={radioStyle} value={2}>*/}
+                    {/*  Direct discount*/}
+                    {/*</Radio>*/}
                     <Radio value={0} style={radioStyle}>
                       Full amount discount
                     </Radio>
@@ -422,9 +554,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   initialValue: isFullCount
                 })(
                   <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>
-                    <Radio style={radioStyle} value={2}>
-                      Direct reduction
-                    </Radio>
+                    {/*<Radio style={radioStyle} value={2}>*/}
+                    {/*  Direct reduction*/}
+                    {/*</Radio>*/}
                     <Radio value={0} style={radioStyle}>
                       Full amount reduction
                     </Radio>
@@ -500,7 +632,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                     isNormal={this.state.PromotionTypeValue === 0}
                   />
                 ) : (
-                  <div>
+                  <div style={{ display: 'flex' }}>
                     <FormItem labelAlign="left">
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
                       {getFieldDecorator('firstSubscriptionOrderDiscount', {
@@ -520,7 +652,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                         initialValue: marketingBean.get('firstSubscriptionOrderDiscount')
                       })(
                         <Input
-                          style={{ width: 300 }}
+                          style={{ width: 100 }}
                           title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
@@ -528,8 +660,39 @@ export default class MarketingAddForm extends React.Component<any, any> {
                           }}
                         />
                       )}
-                      <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+                      <span>&nbsp;of orginal price,&nbsp;</span>
                     </FormItem>
+
+                    {/*<FormItem>*/}
+                    {/*  <span>&nbsp;discount limit&nbsp;&nbsp;</span>*/}
+                    {/*  {getFieldDecorator('subscriptionFirstLimit', {*/}
+                    {/*    rules: [*/}
+                    {/*      // { required: true, message: 'Must enter rules' },*/}
+                    {/*      {*/}
+                    {/*        validator: (_rule, value, callback) => {*/}
+                    {/*          if (value) {*/}
+                    {/*            if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {*/}
+                    {/*              callback('1-9999');*/}
+                    {/*            }*/}
+                    {/*          }*/}
+                    {/*          callback();*/}
+                    {/*        }*/}
+                    {/*        // callback();*/}
+                    {/*      }*/}
+                    {/*    ],*/}
+                    {/*    initialValue: marketingBean.get('subscriptionFirstLimit')*/}
+                    {/*  })(*/}
+                    {/*    <Input*/}
+                    {/*      style={{ width: 100 }}*/}
+                    {/*      title={'1-9999'}*/}
+                    {/*      placeholder={'1-9999'}*/}
+                    {/*      onChange={(e) => {*/}
+                    {/*        this.onBeanChange({ subscriptionFirstLimit: e.target.value });*/}
+                    {/*      }}*/}
+                    {/*    />*/}
+                    {/*  )}*/}
+                    {/*  &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}*/}
+                    {/*</FormItem>*/}
                   </div>
                 )
               )}
@@ -606,7 +769,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               <>
                 <Input
                   style={{ width: 200 }}
-                  placeholder="0.01-99999999.99"
+                  placeholder="0.01-99999999.9922222"
                   onChange={(e) => {
                     this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
                   }}
@@ -617,61 +780,109 @@ export default class MarketingAddForm extends React.Component<any, any> {
         )}
         {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT && PromotionTypeValue == 1 && (
           <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
-            {getFieldDecorator('restSubscriptionOrderDiscount', {
-              rules: [
-                { required: true, message: 'Amount must be entered' },
-                {
-                  validator: (_rule, value, callback) => {
-                    if (value) {
-                      if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                        callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+            <div style={{ display: 'flex' }}>
+              <FormItem>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
+                {getFieldDecorator('restSubscriptionOrderDiscount', {
+                  rules: [
+                    { required: true, message: 'Amount must be entered' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
+                            callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+                          }
+                        }
+                        callback();
                       }
                     }
-                    callback();
-                  }
-                }
-              ],
-              initialValue: marketingBean.get('restSubscriptionOrderDiscount')
-            })(
-              <Input
-                style={{ width: 300 }}
-                title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
-                placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
-                onChange={(e) => {
-                  this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
-                }}
-              />
-            )}
-            <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+                  ],
+                  initialValue: marketingBean.get('restSubscriptionOrderDiscount')
+                })(
+                  <Input
+                    style={{ width: 100 }}
+                    title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                    placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                    onChange={(e) => {
+                      this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
+                    }}
+                  />
+                )}
+                <span>&nbsp;of orginal price,&nbsp;</span>
+              </FormItem>
+              {/*<FormItem>*/}
+              {/*  <span>&nbsp;discount limit&nbsp;&nbsp;</span>*/}
+              {/*  {getFieldDecorator('subscriptionRestLimit', {*/}
+              {/*    rules: [*/}
+              {/*      // { required: true, message: 'Must enter rules' },*/}
+              {/*      {*/}
+              {/*        validator: (_rule, value, callback) => {*/}
+              {/*          if (value) {*/}
+              {/*            if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {*/}
+              {/*              callback('1-9999');*/}
+              {/*            }*/}
+              {/*          }*/}
+              {/*          callback();*/}
+              {/*        }*/}
+              {/*        // callback();*/}
+              {/*      }*/}
+              {/*    ],*/}
+              {/*    initialValue: marketingBean.get('subscriptionRestLimit')*/}
+              {/*  })(*/}
+              {/*    <Input*/}
+              {/*      style={{ width: 100 }}*/}
+              {/*      title={'1-9999'}*/}
+              {/*      placeholder={'1-9999'}*/}
+              {/*      onChange={(e) => {*/}
+              {/*        this.onBeanChange({ subscriptionRestLimit: e.target.value });*/}
+              {/*      }}*/}
+              {/*    />*/}
+              {/*  )}*/}
+              {/*  &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}*/}
+              {/*</FormItem>*/}
+            </div>
           </FormItem>
         )}
 
         <div className="bold-title">Select products:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
-          {getFieldDecorator('productType', {
-            // rules: [
-            //   { required: true, message: 'Amount must be entered' },
-            //   {
-            //     validator: (_rule, value, callback) => {
-            //       if (value) {
-            //         if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-            //           callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
-            //         }
-            //       }
-            //       callback();
-            //     }
-            //   }
-            // ],
-            initialValue: marketingBean.get('productType') ? marketingBean.get('productType') : 1
+          {getFieldDecorator('scopeType', {
+            initialValue: marketingBean.get('scopeType') ? marketingBean.get('scopeType') : 0
           })(
-            <Radio.Group onChange={(e) => this.productTypeOnChange(e.target.value)} value={this.state.productType}>
-              <Radio value={1}>All</Radio>
-              <Radio value={2}>Custom</Radio>
+            <Radio.Group onChange={(e) => this.scopeTypeOnChange(e.target.value)} value={marketingBean.get('scopeType')}>
+              <Radio value={0}>All</Radio>
+              <Radio value={2}>Category</Radio>
+              <Radio value={1}>Custom</Radio>
             </Radio.Group>
           )}
         </FormItem>
-        {marketingBean.get('productType') === 2 ? (
+        {marketingBean.get('scopeType') === 2 && (
+          <>
+            <FormItem {...formItemLayout}>
+              <TreeSelect
+                id="storeCateIds"
+                defaultValue={storeCateValues}
+                getPopupContainer={() => document.getElementById('page-content')}
+                treeCheckable={true}
+                showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                treeCheckStrictly={true}
+                //treeData ={getGoodsCate}
+                // showCheckedStrategy = {SHOW_PARENT}
+                placeholder="Please select category"
+                notFoundContent="No sales category"
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                showSearch={false}
+                onChange={this.storeCateChange}
+                style={{ width: 500 }}
+                treeDefaultExpandAll
+              >
+                {this.generateStoreCateTree(storeCateList)}
+              </TreeSelect>
+            </FormItem>
+            <FormItem {...formItemLayout}>{getFieldDecorator('storeCateIds', {})(<span></span>)}</FormItem>
+          </>
+        )}
+        {marketingBean.get('scopeType') === 1 ? (
           <FormItem {...formItemLayout} required={true}>
             {getFieldDecorator(
               'goods',
@@ -694,10 +905,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
           })(
             <div>
               <RadioGroup
-                // onChange={(e) => {
-                //   this.levelRadioChange(e.target.value);
-                // }}
-                // value={level._allCustomer ? -1 : 0}
                 onChange={(e) => {
                   this.targetCustomerRadioChange(e.target.value);
                 }}
@@ -707,6 +914,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 {/*{util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}*/}
                 <Radio value={-1}>All</Radio>
                 <Radio value={-3}>Select group</Radio>
+                <Radio value={-4}>By email</Radio>
               </RadioGroup>
               {/*{level._levelPropsShow && (*/}
               {/*  <div>*/}
@@ -721,12 +929,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         </FormItem>
         {marketingBean.get('joinLevel') == -3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
-            <Select
-              style={{ width: 520 }}
-              onChange={this.selectGroupOnChange}
-              // defaultValue={232}
-              defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
-            >
+            <Select style={{ width: 520 }} onChange={this.selectGroupOnChange} defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}>
               {allGroups.size > 0 &&
                 allGroups.map((item) => (
                   <Select.Option key={item.get('id')} value={item.get('id')}>
@@ -736,6 +939,20 @@ export default class MarketingAddForm extends React.Component<any, any> {
             </Select>
           </FormItem>
         )}
+        {marketingBean.get('joinLevel') == -4 && (
+          <FormItem {...formItemLayout} required={true} labelAlign="left">
+            <Input
+              style={{ width: 300 }}
+              defaultValue={marketingBean.get('emailSuffixList') ? marketingBean.get('emailSuffixList').toJS()[0] : null}
+              onChange={(e) => {
+                const emailSuffixList = [e.target.value];
+                this.onBeanChange({ emailSuffixList });
+              }}
+              maxLength={30}
+            />
+          </FormItem>
+        )}
+
         <Row type="flex" justify="start">
           {/*<Col span={3} />*/}
           <Col span={10}>
@@ -784,9 +1001,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
           PromotionTypeValue: subType === 6 || subType === 7 ? 1 : 0
         },
         () => {
-          this.setState({
-            PromotionTypeChecked: this.state.PromotionTypeValue === 1 ? true : false
-          });
+          if (marketingBean.get('marketingId')) {
+            this.setState({
+              PromotionTypeChecked: marketingBean.get('publicStatus') == 1
+            });
+          } else {
+            this.setState({
+              PromotionTypeChecked: this.state.PromotionTypeValue === 1 ? true : false
+            });
+          }
+
           if (subType === 6) {
             let bean = marketingBean.get('fullReductionLevelList') ? marketingBean.get('fullReductionLevelList').toJS() : null;
             if (bean && this.state.PromotionTypeValue === 1) {
@@ -911,7 +1135,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     marketingBean = marketingBean.set('promotionType', PromotionTypeValue);
     const { marketingType, form } = this.props;
     form.resetFields();
-
     //判断设置规则
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
       levelList = marketingBean.get('fullReductionLevelList');
@@ -949,18 +1172,20 @@ export default class MarketingAddForm extends React.Component<any, any> {
               value: isFullCount ? level.fullCount : level.fullAmount
             })
           );
-          if (!isFullCount && +level.fullAmount <= +level.reduction) {
-            if (this.state.PromotionTypeValue == 0) {
-              errorObject[`level_rule_value_${index}`] = {
-                errors: [new Error('The conditional amount must be greater than the deductible amount')]
-              };
-              errorObject[`level_rule_reduction_${index}`] = {
-                errors: [new Error('The deductible amount must be less than the conditional amount')]
-              };
-            } else {
-              errorObject[`level_rule_reduction_${index}`] = {
-                errors: [new Error('The deductible amount must be less than the conditional amount')]
-              };
+          if (level.fullAmount != 0) {
+            if (!isFullCount && +level.fullAmount <= +level.reduction) {
+              if (this.state.PromotionTypeValue == 0) {
+                errorObject[`level_rule_value_${index}`] = {
+                  errors: [new Error('The conditional amount must be greater than the deductible amount')]
+                };
+                errorObject[`level_rule_reduction_${index}`] = {
+                  errors: [new Error('The deductible amount must be less than the conditional amount')]
+                };
+              } else {
+                errorObject[`level_rule_reduction_${index}`] = {
+                  errors: [new Error('The deductible amount must be less than the conditional amount')]
+                };
+              }
             }
           }
         });
@@ -1006,31 +1231,41 @@ export default class MarketingAddForm extends React.Component<any, any> {
         });
     }
 
-    //判断目标等级
-    // if (level._allCustomer) {
-    //   marketingBean = marketingBean.set('joinLevel', -1);
-    // } else {
-    //   if (level._checkAll) {
-    //     marketingBean = marketingBean.set('joinLevel', 0);
-    //   } else {
-    //     if (level._checkedLevelList.length != 0) {
-    //       marketingBean = marketingBean.set('joinLevel', level._checkedLevelList.join(','));
-    //     } else {
-    //       errorObject['targetCustomer'] = {
-    //         errors: [new Error('Please select target customers')]
-    //       };
-    //     }
-    //   }
-    // }
-
     //判断选择商品
     if (selectedSkuIds.length > 0) {
       marketingBean = marketingBean.set('skuIds', fromJS(selectedSkuIds));
     } else {
-      errorObject['goods'] = {
+      if (marketingBean.get('scopeType') === 1) {
+        errorObject['goods'] = {
+          value: null,
+          errors: [new Error('Please select the product to be marketed')]
+        };
+      } else if (marketingBean.get('scopeType') === 2 && (!marketingBean.get('storeCateIds') || marketingBean.get('storeCateIds').size === 0)) {
+        errorObject['storeCateIds'] = {
+          value: null,
+          errors: [new Error('Please select category')]
+        };
+      }
+    }
+    if (marketingBean.get('joinLevel') == -3 && (!marketingBean.get('segmentIds') || marketingBean.get('segmentIds').size === 0)) {
+      errorObject['joinLevel'] = {
         value: null,
-        errors: [new Error('Please select the product to be marketed')]
+        errors: [new Error('Please select group.')]
       };
+    }
+    if (marketingBean.get('joinLevel') == -4) {
+      if (!marketingBean.get('emailSuffixList') || marketingBean.get('emailSuffixList').length === 0) {
+        errorObject['joinLevel'] = {
+          value: null,
+          errors: [new Error('Please enter email suffix.')]
+        };
+      }
+      // else if (!ValidConst.email.test(marketingBean.get('emailSuffixList').toJS()[0])) {
+      //   errorObject['joinLevel'] = {
+      //     value: null,
+      //     errors: [new Error('Please enter correct email.')]
+      //   };
+      // }
     }
     if (this.state.promotionCode) {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
@@ -1038,7 +1273,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     if (!marketingBean.get('publicStatus')) {
       marketingBean = marketingBean.set('publicStatus', '1');
     }
-
     form.validateFieldsAndScroll((err) => {
       if (Object.keys(errorObject).length != 0) {
         form.setFields(errorObject);
@@ -1047,8 +1281,14 @@ export default class MarketingAddForm extends React.Component<any, any> {
         if (!err) {
           this.setState({ saveLoading: true });
           //组装营销类型
-          marketingBean = marketingBean.set('marketingType', marketingType).set('scopeType', 1);
+          marketingBean = marketingBean.set('marketingType', marketingType); //.set('scopeType', 1);
 
+          if (!marketingBean.get('joinLevel')) {
+            marketingBean = marketingBean.set('joinLevel', -1); //.set('scopeType', 1);
+          }
+          if (!marketingBean.get('scopeType')) {
+            marketingBean = marketingBean.set('scopeType', 0); //.set('scopeType', 1);
+          }
           //商品已经选择 + 时间已经选择 => 判断  同类型的营销活动下，商品是否重复
           if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
             // webapi
@@ -1070,7 +1310,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
               );
               let obj = {
                 firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') / 10,
-                restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10
+                restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10,
+                subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
+                subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
               };
 
               marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
@@ -1078,7 +1320,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
             } else {
               let obj = {
                 firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
-                restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
+                restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction'),
+                subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
+                subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
               };
               marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
               this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
@@ -1097,9 +1341,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (marketingType, e) => {
-    debugger;
     const _thisRef = this;
     let levelType = '';
+    // Session 有状态登录，保存一个seesion, 返回相应的cookie，
+    // JWT无状态登录: 返回一个JWT加密文档(角色，权限，过期时间等)，前端保存起来
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
       levelType = 'fullReductionLevelList';
     } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {

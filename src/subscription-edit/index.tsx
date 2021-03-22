@@ -132,7 +132,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           }
 
           let goodsInfo = subscriptionDetail.goodsInfo;
-          let paymentInfo = subscriptionDetail.paymentInfo;
+          let paymentInfo = subscriptionDetail.payPaymentInfo;
 
           let subscribeNumArr = [];
           let periodTypeArr = [];
@@ -788,7 +788,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <InputNumber
-              disabled
               min={1}
               max={100}
               onChange={(value) => {
@@ -812,7 +811,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <Select
-              disabled
               style={{ width: '70%' }}
               value={record.periodTypeId}
               onChange={(value) => {
@@ -930,7 +928,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             );
           }}
           disabledDate={this.disabledStartDate}
-          defaultValue={currentOrder && currentOrder.tradeState && currentOrder.tradeState.createTime ? moment(currentOrder.tradeState.createTime) : moment()}
+          defaultValue={currentOrder && currentOrder.tradeItems && currentOrder.tradeItems[0] && currentOrder.tradeItems[0].nextDeliveryTime ? moment(currentOrder.tradeItems[0].nextDeliveryTime) : moment()}
           onSelect={this.updateNextDeliveryTime}
         />
       </div>
@@ -997,7 +995,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
         key: 'shipmentDate',
         width: '10%',
-        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+        render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
         title: 'Operation',
@@ -1081,7 +1079,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         width: '10%',
-        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
+        render: (text, record) => <div>{record.tradeItems[0] && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Order status</span>,
@@ -1290,11 +1288,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}>Payment Method: </p>
-                    <p>{paymentInfo ? paymentInfo.paymentType : ''}</p>
+                    <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Card Number: </p>
-                    <p>{paymentInfo && paymentInfo.payuPaymentMethod ? '**** **** **** ' + paymentInfo.payuPaymentMethod.last_4_digits : paymentInfo && paymentInfo.adyenPaymentMethod ? '**** **** **** ' + paymentInfo.adyenPaymentMethod.lastFour : ''}</p>
+                    <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
                   </Col>
                 </Row>
               </Col>

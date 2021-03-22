@@ -24,6 +24,7 @@ export default class MarketingFullGiftAdd extends React.Component<any, any> {
       this.store.init(marketingId);
     }
     this.store.getAllGroups();
+    this.store.initCategory();
   }
 
   render() {

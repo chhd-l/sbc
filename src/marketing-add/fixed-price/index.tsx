@@ -4,7 +4,7 @@ import { Breadcrumb, Alert, Form } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
-import MarketingAddForm from '../common-components/marketing-add-form';
+import FixedPriceAddForm from '../common-components/fixed-price-add-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
 
@@ -26,7 +26,7 @@ export default class MarketingFixedPriceAdd extends React.Component<any, any> {
   }
 
   render() {
-    const WrappedForm = Form.create()(MarketingAddForm);
+    const WrappedForm = Form.create()(FixedPriceAddForm);
     const state = this.props.location.state;
     const { marketingId } = this.props.match.params;
     const { source } = (state || {}) as any;
@@ -40,13 +40,12 @@ export default class MarketingFixedPriceAdd extends React.Component<any, any> {
 
           <div className="container-search marketing-container">
             <Headline title={marketingId ? 'Edit discount activity' : 'Create discount activity'} />
-            <Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity;" type="info" showIcon />
-            Fixed Price
+            {/*<Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity;" type="info" showIcon />*/}
             <WrappedForm
               ref={(form) => (this._form = form)}
               {...{
                 store: this.store,
-                marketingType: Enum.MARKETING_TYPE.FIRST_DISCOUNT
+                marketingType: Enum.MARKETING_TYPE.FIXED_PRICE
               }}
             />
           </div>

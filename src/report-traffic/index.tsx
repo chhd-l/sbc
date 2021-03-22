@@ -205,8 +205,8 @@ export default class TrafficReport extends Component<any, any> {
   }
 
   onChangeDate = (date, dateString) => {
-    let startDate = moment(dateString[0]).format('YYYY-MM-DD');
-    let endDate = moment(dateString[1]).format('YYYY-MM-DD');
+    let startDate = dateString[0];
+    let endDate = dateString[1];
     this.setState(
       {
         startDate,
@@ -219,8 +219,8 @@ export default class TrafficReport extends Component<any, any> {
     );
   };
   getDefaultDate = () => {
-    let startDate = moment(new Date(this.dateCalculate(7)).toLocaleDateString()).format('YYYY-MM-DD');
-    let endDate = moment(new Date(this.dateCalculate(0)).toLocaleDateString()).format('YYYY-MM-DD');
+    let startDate = moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days').format('YYYY-MM-DD');
+    let endDate = moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').format('YYYY-MM-DD');
     this.setState(
       {
         startDate,
@@ -423,7 +423,12 @@ export default class TrafficReport extends Component<any, any> {
               title={<p style={styles.blodFont}> {title}</p>}
               extra={
                 <div>
-                  <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+                  <RangePicker
+                    onChange={this.onChangeDate}
+                    disabledDate={this.disabledDate}
+                    defaultValue={[moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days'), moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD')]}
+                    format={'YYYY-MM-DD'}
+                  />
                 </div>
               }
             />

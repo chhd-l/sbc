@@ -85,7 +85,6 @@ export default class DiscountLevels extends React.Component<any, any> {
                   <HasError>
                     {this.state.isNormal ? (
                       <div>
-                        <span>Full&nbsp;</span>
                         <FormItem style={{ display: 'inline-block' }}>
                           {getFieldDecorator(`level_rule_value_${index}`, {
                             rules: [
@@ -94,11 +93,14 @@ export default class DiscountLevels extends React.Component<any, any> {
                                 validator: (_rule, value, callback) => {
                                   if (value) {
                                     if (!isFullCount) {
+                                      if (value == 0) {
+                                        callback();
+                                      }
                                       if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                        callback('0.01-99999999.99');
+                                        callback('0-99999999.99');
                                       }
                                     } else {
-                                      if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                      if (!ValidConst.noZeroNineNumber.test(value) || !(value < 10000 && value > 0)) {
                                         callback('1-9999');
                                       }
                                     }
@@ -109,22 +111,25 @@ export default class DiscountLevels extends React.Component<any, any> {
                             ],
                             initialValue: !isFullCount ? level.fullAmount : level.fullCount
                           })(
-                            <Input
-                              style={{ width: 200 }}
-                              placeholder={isFullCount === 0 ? '0.01-99999999.99' : isFullCount === 1 ? '1-9999' : 0}
-                              onChange={(e) => {
-                                this.ruleValueChange(index, e.target.value);
-                              }}
-                              disabled={isFullCount === 2}
-                            />
+                            <>
+                              <span>Full&nbsp;</span>
+                              <Input
+                                // style={{ width: 200 }}
+                                className="input-width"
+                                placeholder={isFullCount === 0 ? '0-99999999.99' : isFullCount === 1 ? '1-9999' : 0}
+                                onChange={(e) => {
+                                  this.ruleValueChange(index, e.target.value);
+                                }}
+                                disabled={isFullCount === 2}
+                              />
+                              <span>
+                                {' '}
+                                &nbsp;
+                                {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'},
+                              </span>
+                            </>
                           )}
                         </FormItem>
-                        <span>
-                          {' '}
-                          &nbsp;
-                          {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
-                          ，&nbsp;&nbsp;&nbsp;&nbsp;discount price&nbsp;&nbsp;
-                        </span>
                       </div>
                     ) : null}
                     <FormItem>
@@ -147,16 +152,54 @@ export default class DiscountLevels extends React.Component<any, any> {
                         ],
                         initialValue: level.discount
                       })(
-                        <Input
-                          style={{ width: 300 }}
-                          title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
-                          placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
-                          onChange={(e) => {
-                            this.onChange(index, 'discount', parseFloat(e.target.value));
-                          }}
-                        />
+                        <>
+                          <span>&nbsp;discount price&nbsp;&nbsp;</span>
+                          <Input
+                            // style={{ width: 200 }}
+                            className="input-width"
+                            title={'0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                            placeholder={'0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                            onChange={(e) => {
+                              this.onChange(index, 'discount', parseFloat(e.target.value));
+                            }}
+                          />
+                          <span>&nbsp;of orginal price,</span>
+                        </>
                       )}
-                      <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
+                    </FormItem>
+
+                    <FormItem>
+                      {getFieldDecorator(`level_rule_discount_limit${index}`, {
+                        rules: [
+                          // { required: true, message: 'Must enter rules' },
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (value) {
+                                if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                  callback('1-9999');
+                                }
+                              }
+                              callback();
+                            }
+                            // callback();
+                          }
+                        ],
+                        initialValue: level.limitAmount
+                      })(
+                        <>
+                          <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                          <Input
+                            // style={{ width: 200 }}
+                            className="input-width"
+                            title={'1-9999'}
+                            placeholder={'1-9999'}
+                            onChange={(e) => {
+                              this.onChange(index, 'limitAmount', parseInt(e.target.value));
+                            }}
+                          />
+                          &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                        </>
+                      )}
                     </FormItem>
                     {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
                   </HasError>
@@ -258,6 +301,7 @@ export default class DiscountLevels extends React.Component<any, any> {
     } else if (props == 'fullCount') {
       fullDiscountLevelList[index]['fullAmount'] = null;
     }
+
     this.setState({ fullDiscountLevelList: fullDiscountLevelList });
 
     //传递到父页面

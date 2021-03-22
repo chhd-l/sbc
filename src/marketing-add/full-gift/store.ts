@@ -6,6 +6,7 @@ import { Const, history } from 'qmkit';
 import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
 import FullGiftActor from './actor/full-gift-actor';
+import { fromJS } from 'immutable';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -28,6 +29,7 @@ export default class AppStore extends Store {
     } else {
     }
   };
+
   /**
    * 获取select groups
    *
@@ -44,9 +46,10 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('marketing:allGroups', res.context.segmentList);
     } else {
-      message.error('load group error.');
+      // message.error('load group error.');
     }
   };
+
   /**
    * 满赠提交，编辑和新增由marketingId是否存在区分
    * @param giftBean
@@ -60,5 +63,17 @@ export default class AppStore extends Store {
       response = await webapi.addFullGift(giftBean);
     }
     return response;
+  };
+
+  /**
+   * 店铺分类
+   * @param discountBean
+   * @returns {Promise<void>}
+   */
+  initCategory = async () => {
+    const { res } = await webapi.getGoodsCate();
+    if (res && res.code === Const.SUCCESS_CODE) {
+      this.dispatch('goodsActor: initStoreCateList', fromJS(res.context));
+    }
   };
 }

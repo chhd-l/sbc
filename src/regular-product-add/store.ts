@@ -146,9 +146,9 @@ export default class AppStore extends Store {
 
     let userList: any;
     if (util.isThirdStore()) {
-      userList = editResource.allCustomers;
+      userList = editResource.allCustomers || [];
     } else {
-      userList = editResource.allBossCustomers;
+      userList = editResource.allBossCustomers || [];
     }
 
     const sourceUserList = fromJS(userList);
@@ -415,7 +415,7 @@ export default class AppStore extends Store {
 
       this.dispatch('goodsActor: editGoods', goods);
 
-      this.dispatch('goodsActor: goodsDetailTabContentOld', goods.get('goodsDetail'));
+      //this.dispatch('goodsActor: goodsDetailTabContentOld', goods.get('goodsDetail'));
       this.dispatch('goodsSpecActor: editSpecSingleFlag', goodsDetail.getIn(['goods', 'moreSpecFlag']) == 0);
 
       // 商品图片
@@ -438,23 +438,23 @@ export default class AppStore extends Store {
       });
       this.dispatch('imageActor: editVideo', videoObj);
 
-      const tabs = [];
-      if (goodsDetail.get('storeGoodsTabs')) {
-        goodsDetail.get('storeGoodsTabs').forEach((info) => {
-          tabs.push({
-            tabId: info.get('tabId'),
-            tabName: info.get('tabName'),
-            tabDetail:
-              goodsDetail.get('goodsTabRelas').find((tabInfo) => tabInfo.get('tabId') === info.get('tabId')) &&
-              goodsDetail
-                .get('goodsTabRelas')
-                .find((tabInfo) => tabInfo.get('tabId') === info.get('tabId'))
-                .get('tabDetail')
-          });
-        });
-      }
+      // const tabs = [];
+      // if (goodsDetail.get('storeGoodsTabs')) {
+      //   goodsDetail.get('storeGoodsTabs').forEach((info) => {
+      //     tabs.push({
+      //       tabId: info.get('tabId'),
+      //       tabName: info.get('tabName'),
+      //       tabDetail:
+      //         goodsDetail.get('goodsTabRelas').find((tabInfo) => tabInfo.get('tabId') === info.get('tabId')) &&
+      //         goodsDetail
+      //           .get('goodsTabRelas')
+      //           .find((tabInfo) => tabInfo.get('tabId') === info.get('tabId'))
+      //           .get('tabDetail')
+      //     });
+      //   });
+      // }
 
-      this.dispatch('goodsActor: goodsTabs', tabs);
+      // this.dispatch('goodsActor: goodsTabs', tabs);
       // 属性信息
       this.showGoodsPropDetail(goodsDetail.getIn(['goods', 'cateId']), goodsDetail.get('goodsPropDetailRels'));
       // 是否为多规格
@@ -466,7 +466,6 @@ export default class AppStore extends Store {
         const goodsSpecDetails = goodsDetail.get('goodsSpecDetails');
         goodsSpecs = goodsSpecs.map((item) => {
           // 规格值列表，按照id升序排列
-          console.log(goodsSpecDetails, 11111111111);
           const specValues = goodsSpecDetails
             .filter((detailItem) => detailItem.get('specId') == item.get('specId'))
             .map((detailItem) => detailItem.set('isMock', false))
@@ -1073,12 +1072,19 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
+        if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
+          tip = 3;
+          valid = false;
+          return;
+        }
       });
     }
     if (tip === 1) {
       message.error('Please input market price');
     } else if (tip === 2) {
       message.error('Please input subscription price');
+    } else if (tip === 3) {
+      message.error('Market price cannot be zero');
     }
     return valid;
   }
@@ -1105,7 +1111,7 @@ export default class AppStore extends Store {
   /**
    * 保存基本信息和价格
    */
-  saveAll = async () => {
+  saveAll = async (nextTab = null) => {
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1188,8 +1194,7 @@ export default class AppStore extends Store {
     // }
 
     param = param.set('goodsTabRelas', tabs);
-
-    goods = goods.set('goodsType', 0);
+    goods = goods.set('goodsType', goods.get('goodsType') == 3 ? goods.get('goodsType') : 0);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
@@ -1293,6 +1298,7 @@ export default class AppStore extends Store {
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
+          externalSku: item.get('externalSku'),
           stock: item.get('stock'),
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
@@ -1304,6 +1310,7 @@ export default class AppStore extends Store {
           packSize: item.get('packSize') || '',
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           subscriptionPrice: item.get('subscriptionPrice') || 0,
+          addedFlag: item.get('addedFlag') || 0,
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',
@@ -1445,7 +1452,11 @@ export default class AppStore extends Store {
       }
       message.success('Operate successfully');
       this.dispatch('goodsActor:saveSuccessful', true);
-      this.onMainTabChange('related');
+      if (!nextTab) {
+        this.onMainTabChange('related');
+      } else {
+        this.onMainTabChange('seo');
+      }
       //history.push('/goods-list');
     } else {
       return false;
@@ -1834,6 +1845,8 @@ export default class AppStore extends Store {
     } else if (nextKey === 'seo') {
       if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew() || !this.state().get('getGoodsId')) {
         return;
+      } else {
+        this.saveAll('seo');
       }
     }
     if (nextKey !== 'related') {
@@ -1921,17 +1934,19 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeDescriptionTab = async (cateId) => {
+    if (!cateId) return;
     const result: any = await getDescriptionTab(cateId);
 
     if (result.res.code === Const.SUCCESS_CODE) {
       let content = result.res.context;
       let res = content.map((item) => {
         return {
+          key: +new Date(),
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
           contentType: item.contentType,
-          content: ' ',
+          content: '',
           sort: item.sort,
           editable: true
         };
@@ -2119,12 +2134,37 @@ export default class AppStore extends Store {
     const { res } = (await getSeo(goodsId, type)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      let title = null;
+      let description = null;
+      let keywords = null;
+      const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+      if (loginInfo) {
+        switch (loginInfo.storeId) {
+          case 123457910: //"美国"
+            title = '{name} | Royal Canin Shop';
+            break;
+          case 123457911: //"土耳其"
+            title = '{name} {subtitle} | Royal Canin Türkiye';
+            description = '{name} {subtitle} Royal Canin resmi mağazasında. "X" TL üzeri siparişlerinizde ücretsiz kargo. Sipariş verin veya mama aboneliğinizi başlatın!';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+            break;
+          case 123457907: //"俄罗斯"
+            title = 'Купить {technology} корм Royal Canin {name} в официальном интернет-магазине';
+            description = 'Купить {technology} корм Royal Canin {name} со скидкой 10% при оформлении подписки. Сделайте заказ в интернет-магазине Royal Canin уже сегодня!';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+            break;
+          default:
+            title = '{name} | Royal Canin Shop';
+            description = '{description}';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+        }
+      }
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : '{name} | Royal Canin Shop',
-          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}', //{name}, {subtitle}, {sales category}, {tagging}
-          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : '{description}', //{description}
+          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : title,
+          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : keywords, //{name}, {subtitle}, {sales category}, {tagging}
+          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : description, //{description}
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );
@@ -2134,16 +2174,42 @@ export default class AppStore extends Store {
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
     this.dispatch('loading:start');
+    let params = {};
     const updateNumbers = this.state().get('updateNumbers') + 1;
-    const params = {
-      type: 1,
-      goodsId,
-      metaDescriptionSource: seoObj.metaDescriptionSource,
-      metaKeywordsSource: seoObj.metaKeywordsSource,
-      titleSource: seoObj.titleSource,
-      headingTag: seoObj.headingTag,
-      updateNumbers
-    };
+    const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')); //{storeId: 123457910}
+    if (loginInfo) {
+      switch (loginInfo.storeId) {
+        case 123457910: //"美国"
+          params = {
+            type: 1,
+            goodsId,
+            metaDescriptionSource: null,
+            metaKeywordsSource: null,
+            titleSource: seoObj.titleSource,
+            headingTag: null,
+            updateNumbers
+          };
+          break;
+        // case 123457911: //"土耳其"
+        //
+        //   break;
+        // case 123457907: //"俄罗斯"
+        //
+        //   break;
+        default:
+          params = {
+            type: 1,
+            goodsId,
+            metaDescriptionSource: seoObj.metaDescriptionSource,
+            metaKeywordsSource: seoObj.metaKeywordsSource,
+            titleSource: seoObj.titleSource,
+            headingTag: seoObj.headingTag,
+            updateNumbers
+          };
+      }
+    }
+
+    console.log(params, '----params');
     const { res } = (await editSeo(params)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {

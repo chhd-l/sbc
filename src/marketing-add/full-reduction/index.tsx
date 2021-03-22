@@ -23,6 +23,7 @@ export default class MarketingFullReductionAdd extends React.Component<any, any>
       this.store.init(marketingId);
     }
     this.store.getAllGroups();
+    this.store.initCategory();
   }
 
   render() {

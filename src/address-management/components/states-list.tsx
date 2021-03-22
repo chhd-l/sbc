@@ -116,7 +116,6 @@ export default class StatesList extends Component<any, any> {
   render() {
     const { loading, statesList, statePagination } = this.props.relaxProps;
     const pagination = statePagination.toJS();
-    console.log(statesList, 'statesList--------');
     return (
       <div>
         <div>

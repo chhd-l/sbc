@@ -93,15 +93,6 @@ class SkuForm extends React.Component<any, any> {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
-    // if(this.state.count < 100) {
-    //   let count = this.state.count + 1
-    //   this.setState({count: count})
-    // }else {
-    //   return false
-    // }
-    setTimeout(()=>{
-      console.log(goodsList.toJS(),1111111111);
-    })
     return (
       <div style={{ marginBottom: 20 }}>
         {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
@@ -127,13 +118,11 @@ class SkuForm extends React.Component<any, any> {
 
       columns = goodsSpecs
         .map((item, i) => {
-          //debugger
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
-              console.log(rowInfo,11111111111);
               return rowInfo
             }
           };
@@ -210,7 +199,37 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
                   initialValue: rowInfo.goodsInfoNo
-                })(<Input style={{ width: '115px' }} />)}
+                })(<Input style={{ width: '116px' }} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    //External SKU
+    columns = columns.push({
+      title: 'External SKU',
+      key: 'externalSku',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('externalSku' + rowInfo.id, {
+                  rules: [
+                    /*{
+                      required: true,
+                      message: 'Please input EAN code'
+                    },*/
+                    /*{
+                      pattern: ValidConst.noMinus,
+                      message: 'Please enter the correct value'
+                    }*/
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
+                  initialValue: rowInfo.externalSku
+                })(<Input style={{ width: '116px' }} maxLength={45}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -240,7 +259,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
                   initialValue: rowInfo.goodsInfoBarcode
-                })(<Input style={{ width: '180px' }} />)}
+                })(<Input style={{ width: '116px' }} />)}
               </FormItem>
             </Col>
           </Row>
@@ -269,7 +288,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
+                })(<Input type="number" style={{ width: '116px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
               </FormItem>
             </Col>
           </Row>
@@ -359,7 +378,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div style={{
-          marginRight: '152px',
+          marginRight: '81px',
         }}>
           Subscription
         </div>
@@ -368,16 +387,14 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
         return (
-          <Row  style={{
-            marginRight: '124px',
-          }}>
+          <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0':'1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0?true:false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0?true:false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>
@@ -387,6 +404,46 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         )}
     });
+
+    columns = columns.push({
+      title: (
+        <div
+          style={{
+            marginRight: '81px'
+          }}
+        >
+          Sales status
+        </div>
+      ),
+      key: 'addedFlag',
+      render: (rowInfo) => {
+        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
+
+        return (
+          <Row
+            style={{
+              marginRight: '81px'
+            }}
+          >
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('addedFlag' + rowInfo.id, {
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'addedFlag', Number(e)),
+                  initialValue: rowInfo.addedFlag == 0 ? '0' : '1'
+                })(
+                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
+                    <Option value="1">Y</Option>
+                    <Option value="0">N</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+
     /* let a = columns.toJS();
     let b = a.splice(a.length - 4, 1);
     a.splice(3, 0, b[0]);*/

@@ -16,7 +16,8 @@ export default class ListActor extends Actor {
       },
       loading: true,
       switchVisible: false,
-      switchChecked: false
+      switchChecked: false,
+      storePaymentVOs: {}
     };
   }
 
@@ -36,8 +37,13 @@ export default class ListActor extends Actor {
   }
 
   @Action('method:switchChecked')
-  switchChecked(state: IMap, content) {
+  switchChecked(state, content) {
     return state.set('switchChecked', content);
+  }
+
+  @Action('method:storePaymentVOs')
+  storePaymentVOs(state, content) {
+    return state.set('storePaymentVOs', content);
   }
 
   @Action('order-return-list:loading:start')

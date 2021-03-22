@@ -826,6 +826,7 @@ class GoodsForm extends React.Component<any, any> {
     const { setFieldsValue } = this.props.form;
 
     if (key === 'saleableFlag') {
+      console.log(e.target.value, 11222);
       if (e.target.value == 0) {
         this.setState({
           saleableType: true

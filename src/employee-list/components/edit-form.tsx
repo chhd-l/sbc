@@ -89,10 +89,6 @@ export default class EditForm extends React.Component<any, any> {
 
     const _state = this._store.state();
     const roles = _state.get('roles');
-    //扁平化roles,获取roleIds集合
-    const roleIds = roles.map((role) => {
-      return role.get('roleInfoId');
-    });
     const employeeForm = _state.get('employeeForm');
     //部门树
     const departTree = _state.get('departTree');

@@ -297,7 +297,7 @@ export default class CouponInfoForm extends Component<any, any> {
     } = this.props.relaxProps;
     console.log(storeCateIds, 'storeCateIds----');
     console.log(couponJoinLevel, 'couponJoinLevel----');
-    console.log(segmentIds, 'segmentIds----');
+    console.log(couponDiscount, 'couponDiscount----');
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
     if (storeCateIds) {
@@ -307,7 +307,6 @@ export default class CouponInfoForm extends Component<any, any> {
         }
       });
     }
-    console.log(storeCateValues, 'storeCateValues----');
     return (
       <RightContent>
         <Form labelAlign={'left'}>
@@ -315,14 +314,16 @@ export default class CouponInfoForm extends Component<any, any> {
             {getFieldDecorator('couponPromotionType', {
               initialValue: couponPromotionType
             })(
-              <RadioGroup value={couponPromotionType} onChange={(e) => this.couponPromotionTypeOnChange((e as any).target.value)}>
-                <Radio value={0}>
-                  <span style={styles.darkColor}>Amount</span>
-                </Radio>
-                <Radio value={1}>
-                  <span style={styles.darkColor}>Percentage</span>
-                </Radio>
-              </RadioGroup>
+              <>
+                <RadioGroup value={couponPromotionType} onChange={(e) => this.couponPromotionTypeOnChange((e as any).target.value)}>
+                  <Radio value={0}>
+                    <span style={styles.darkColor}>Amount</span>
+                  </Radio>
+                  <Radio value={1}>
+                    <span style={styles.darkColor}>Percentage</span>
+                  </Radio>
+                </RadioGroup>
+              </>
             )}
           </FormItem>
           <div className="bold-title">Basic Setting</div>
@@ -525,6 +526,7 @@ export default class CouponInfoForm extends Component<any, any> {
                   <Input
                     placeholder="0.1-9.9"
                     maxLength={3}
+                    value={couponDiscount}
                     onChange={async (e) => {
                       await fieldsValue({
                         field: 'couponDiscount',

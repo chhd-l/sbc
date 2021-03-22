@@ -92,7 +92,7 @@ export default class CouponInfoActor extends Actor {
    */
   @Action('coupon: info: data')
   fetchCouponInfo(state, params) {
-    const { cateIds, couponDesc, couponId, couponName, couponType, denomination, effectiveDays, endTime, fullBuyPrice, fullBuyType, rangeDayType, scopeIds, scopeType, startTime, goodsList, storeCateIds, couponJoinLevel, segmentIds } = params;
+    const { cateIds, couponDesc, couponId, couponName, couponType, denomination, effectiveDays, endTime, fullBuyPrice, fullBuyType, rangeDayType, scopeIds, scopeType, startTime, goodsList, storeCateIds, couponJoinLevel, segmentIds, couponPromotionType, couponDiscount } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
       .set('couponName', couponName)
@@ -109,7 +109,9 @@ export default class CouponInfoActor extends Actor {
       .set('couponDesc', couponDesc)
       .set('storeCateIds', fromJS(storeCateIds))
       .set('couponJoinLevel', couponJoinLevel)
-      .set('segmentIds', fromJS(segmentIds));
+      .set('segmentIds', fromJS(segmentIds))
+      .set('couponPromotionType', couponPromotionType)
+      .set('couponDiscount', fromJS(couponDiscount));
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));
     } else if (scopeType === 3) {

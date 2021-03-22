@@ -80,3 +80,11 @@ export const getAllGroups = (params) => {
     body: JSON.stringify({ ...params })
   });
 };
+
+/*获取Attribute*/
+export const getAllAttribute = (params) => {
+  return Fetch('/attribute_library/attributes', {
+    method: 'POST',
+    body: JSON.stringify({ ...params })
+  });
+};

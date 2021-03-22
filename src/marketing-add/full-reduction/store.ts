@@ -80,4 +80,22 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: initStoreCateList', fromJS(res.context));
     }
   };
+
+  getAllAttribute = async () => {
+    let params = {
+      attributeName: '',
+      displayName: '',
+      attributeValue: '',
+      displayValue: '',
+      pageSize: 10000,
+      pageNum: 0
+    };
+    const { res } = await commonWebapi.getAllAttribute(params);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('marketing:attributesList', res.context.attributesList);
+    } else {
+      // message.error('load group error.');
+    }
+  };
 }

@@ -130,7 +130,7 @@ class PetOwnerCommunication extends Component<any, any> {
   handleModalTableChange = (pagination) => {
     this.setState(
       {
-        modalpPagination: pagination
+        modalPagination: pagination
       },
       () => {
         this.getpetOwnerCommunicationDetailList();

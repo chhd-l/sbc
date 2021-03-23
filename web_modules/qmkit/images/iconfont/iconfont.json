@@ -6,6 +6,13 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "8327013",
+      "name": "Pause",
+      "font_class": "btn-pause",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
       "icon_id": "20493325",
       "name": "III",
       "font_class": "III",

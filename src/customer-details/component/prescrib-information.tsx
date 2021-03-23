@@ -3,8 +3,6 @@ import { Table, Popconfirm } from 'antd';
 import { getPrescriberList } from '../webapi';
 
 interface Iprop {
-  startDate: string;
-  endDate: string;
   customerAccount: string;
 }
 
@@ -26,18 +24,10 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
     this.getPrescriberList();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.startDate !== prevProps.startDate || this.props.endDate !== prevProps.endDate) {
-      this.getPrescriberList();
-    }
-  }
-
   getPrescriberList = () => {
     const { pagination } = this.state;
     this.setState({ loading: true });
     getPrescriberList({
-      beginTime: this.props.startDate,
-      endTime: this.props.endDate,
       customerAccount: this.props.customerAccount,
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize

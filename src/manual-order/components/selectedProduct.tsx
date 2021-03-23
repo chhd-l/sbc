@@ -38,6 +38,7 @@ export default class SelectedProduct extends React.Component<any, any> {
   }
   async onSelectChange(e, index, row, name) {
     const { customer } = this.props;
+    console.log(row)
     if (name === 'subscriptionStatus' && e === 0) {
       row['periodTypeId'] = null;
     }
@@ -48,7 +49,8 @@ export default class SelectedProduct extends React.Component<any, any> {
       goodsInfoFlag: row.subscriptionStatus,
       goodsNum: row.buyCount,
       goodsInfoId: row.goodsInfoId,
-      customerId: customer.customerId
+      customerId: customer.customerId,
+     purchaseId:row.purchaseId
     });
 
     this.state.dataSource[index] = row;

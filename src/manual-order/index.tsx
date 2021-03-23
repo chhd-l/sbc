@@ -57,10 +57,18 @@ class ManualOrder extends Component<any, any> {
       if (winObj.closed) {
         clearInterval(loop);
         const { res } = await queryOrderStatus(customer.customerId, token);
-        let status = res.context === '' || res.context === false ? 2 : 3;
+        let d = {
+           'string':1,
+           'boolean':2,
+           'object':3
+        }
+        let status = d[typeof res.context];
+        console.log(status)
         this.setState({
           status
         });
+      }else{
+        clearInterval(loop);
       }
     }, 500);
   };
@@ -82,7 +90,7 @@ class ManualOrder extends Component<any, any> {
     this.setState({ current });
   }
 
-  componentWillMount() {}
+  componentWillMount() { }
 
   getCustomer = (customer) => {
     this.setState({

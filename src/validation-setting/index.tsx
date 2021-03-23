@@ -323,9 +323,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="Company code">
+                      <FormItem label="Client secret">
                         {getFieldDecorator('companyCode', {
-                          rules: [{ required: true, message: 'Company code is required' }],
+                          rules: [{ required: true, message: 'Client secret is required' }],
                           initialValue: addressSettingForm.companyCode
                         })(
                           <Input

@@ -30,9 +30,10 @@ export default class AppStore extends Store {
     let form = this.state().get('form').toJS();
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
+      let returnObj= res.context
       this.transaction(() => {
         this.dispatch('loading:end');
-        this.dispatch('list:orderList', res);
+        this.dispatch('list:orderList', returnObj);
         this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
       });
     });

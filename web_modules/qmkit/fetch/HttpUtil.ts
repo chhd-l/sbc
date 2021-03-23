@@ -58,7 +58,7 @@ class HttpUtil {
                                 history.go(-1)
                             }
                             // 账号禁用 统一返回到登录页面
-                            else if (['K-000002', 'K-000005', 'K-000015'].includes(jsonBody.code)) {
+                            else if (fetchUrl.indexOf('baseConfig')===-1&&['K-000002', 'K-000005', 'K-000015'].includes(jsonBody.code)) {
                                 HttpUtil.notificationPop(msg[jsonBody.code] || jsonBody.message)
                                 util.logout();
                                 history.push('/login')

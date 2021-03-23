@@ -89,10 +89,6 @@ export default class EditForm extends React.Component<any, any> {
 
     const _state = this._store.state();
     const roles = _state.get('roles');
-    //扁平化roles,获取roleIds集合
-    const roleIds = roles.map((role) => {
-      return role.get('roleInfoId');
-    });
     const employeeForm = _state.get('employeeForm');
     //部门树
     const departTree = _state.get('departTree');
@@ -489,13 +485,13 @@ export default class EditForm extends React.Component<any, any> {
    * @private
    */
   _renderOption(roles: List<any>) {
-    return roles.map((option) => {
+    return roles&&roles.map((option) => {
       return (
         <Option value={option.get('roleInfoId').toString()} key={option.get('roleInfoId')}>
           {option.get('roleName')}
         </Option>
       );
-    });
+    })||[];
   }
 
   filterOption = (input, option: { props }) => {
@@ -534,9 +530,10 @@ export default class EditForm extends React.Component<any, any> {
     let roleIdList = rolesIds.split(',');
     let roleNames = [];
     roleIdList.map((x) => {
-      let role = roles.find((r) => r.get('roleInfoId').toString() === x);
+      let role = roles&&roles.find((r) => r.get('roleInfoId').toString() === x)||undefined;
+      console.log(role,'rolerolerolerolerolerolerolerolerolerolerole')
       if (role) {
-        roleNames.push(role.get('roleName'));
+        roleNames.push(role.get('roleName')||'');
       }
     });
     return roleNames.join(',');

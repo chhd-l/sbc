@@ -1,17 +1,11 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
 
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
-import ShippingTypeForm from '../free-shipping/components/shipping-type-form';
 import moment from 'moment';
-import { GoodsModal } from 'biz';
 
-import * as webapi from '../webapi';
-import * as Enum from './marketing-enum';
-
-import { doc } from 'prettier';
-// import debug = doc.debug;
+import * as webapi from '../../webapi';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -52,41 +46,11 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     super(props);
     const relaxProps = props.store.state();
     this.state = {
-      //公用的商品弹出框
-      goodsModal: {
-        _modalVisible: false,
-        _selectedSkuIds: [],
-        _selectedRows: []
-      },
-      //营销活动已选的商品信息
-      selectedSkuIds: [],
-      selectedRows: fromJS([]),
-      //全部等级
-      customerLevel: [],
-      //选择的等级
-      selectedLevelIds: [],
-      //营销实体
       marketingBean: relaxProps.get('marketingBean'),
-      //等级选择组件相关
-      level: {
-        _indeterminate: false,
-        _checkAll: false,
-        _checkedLevelList: [],
-        _allCustomer: true,
-        _levelPropsShow: false
-      },
-      //满金额还是满数量
-      isFullCount: null,
-      //已经存在于其他同类型的营销活动的skuId
-      skuExists: [],
-      saveLoading: false,
-      promotionCode: '',
-      promotionCode2: '', //记录初始自动生成的promotionCode
-      PromotionTypeValue: 0,
-      PromotionTypeChecked: true,
       timeZone: moment,
-      isClubChecked: false,
-      allGroups: relaxProps.get('allGroups')
+      allGroups: relaxProps.get('allGroups'),
+      submitFreeShipping: relaxProps.get('allGroups'),
+      loading: relaxProps.get('loading')
     };
   }
 
@@ -113,27 +77,11 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
    * @param e
    */
   handleSubmit = (e) => {
-    // e.preventDefault();
-    // let { marketingBean } = this.state;
-    // let errorObject = {};
-    // const { marketingType, form } = this.props;
-    // form.validateFieldsAndScroll((err) => {
-    //   if (Object.keys(errorObject).length != 0) {
-    //     form.setFields(errorObject);
-    //     this.setState({ saveLoading: false });
-    //   } else {
-    //     if (!err) {
-    //       this.setState({ saveLoading: true });
-    //       if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
-    //       }
-    //     }
-    //   }
-    // });
-
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        const { marketingBean } = this.state;
+        this.props.store.submitFreeShipping(marketingBean.toJS());
       }
     });
   };
@@ -153,7 +101,10 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     this.onBeanChange({ productType: value });
   };
   targetCustomerRadioChange = (value) => {
-    this.onBeanChange({ joinLevel: value });
+    this.onBeanChange({
+      joinLevel: value,
+      segmentIds: []
+    });
   };
 
   selectGroupOnChange = (value) => {
@@ -195,7 +146,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { marketingBean, saveLoading, allGroups } = this.state;
+    const { marketingBean, saveLoading, allGroups, loading } = this.state;
     console.log(marketingBean.toJS(), 'marketingBean---------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
@@ -246,19 +197,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
             },
 
             initialValue: marketingBean.get('beginTime') === undefined ? [undefined, undefined] : [moment(marketingBean.get('beginTime')), moment(marketingBean.get('endTime'))]
-          })(
-            <RangePicker
-              getCalendarContainer={() => document.getElementById('page-content')}
-              allowClear={false}
-              format={Const.DATE_FORMAT}
-              //defaultValue = {moment[undefined,undefined]}
-              //format={'YYYY-MM-DD' + ' ' + moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')}
-              // format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
-              placeholder={['Start time', 'End time']}
-              showTime={{ format: 'HH:mm' }}
-              onOpenChange={this.handleEndOpenChange}
-            />
-          )}
+          })(<RangePicker getCalendarContainer={() => document.getElementById('page-content')} allowClear={false} format={Const.DATE_FORMAT} placeholder={['Start time', 'End time']} showTime={{ format: 'HH:mm' }} onOpenChange={this.handleEndOpenChange} />)}
         </FormItem>
         <div className="bold-title">Free shipping type</div>
         <FormItem {...smallformItemLayout} labelAlign="left">
@@ -278,14 +217,10 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                       {getFieldDecorator('shippingValue', {
                         rules: [
                           {
-                            required: true,
-                            message: 'Value must be entered'
-                          },
-                          {
                             validator: (_rule, value, callback) => {
-                              // if (shippingType !== 2) {
-                              //   return;
-                              // }
+                              if (!value && marketingBean.get('shippingType') === 2) {
+                                callback('Shipping value must be entered.');
+                              }
                               if (value) {
                                 if (!ValidConst.zeroPrice.test(value) || !(value < 10000 && value >= 0)) {
                                   callback('0-9999');
@@ -294,8 +229,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                               callback();
                             }
                           }
-                        ],
-                        initialValue: null
+                        ]
                       })(
                         <Input
                           style={{ width: 200 }}
@@ -304,7 +238,8 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                           onChange={(e) => {
                             this.shippingRadioOnChange(e, 'shippingValue');
                           }}
-                          // disabled={shippingType !== 2}
+                          value={marketingBean.get('shippingValue')}
+                          disabled={marketingBean.get('shippingType') !== 2}
                         />
                       )}
                       <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
@@ -318,26 +253,21 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                       {getFieldDecorator('shippingItems', {
                         rules: [
                           {
-                            required: true,
-                            message: 'Value must be entered'
-                          },
-                          {
                             validator: (_rule, value, callback) => {
-                              // if (shippingType !== 3) {
-                              //   return;
-                              // }
+                              if (!value && marketingBean.get('shippingType') === 3) {
+                                callback('Items must be entered.');
+                              }
                               if (value) {
-                                if (!ValidConst.zeroNumber.test(value) || !(value < 10000 && value >= 0)) {
-                                  callback('0-9999');
+                                if (!ValidConst.zeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                  callback('1-9999');
                                 }
                               }
                               callback();
                             }
                           }
-                        ],
-                        initialValue: null
-                      })(<Input style={{ width: 200 }} title={'0-9999'} placeholder={'0-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItems')} />)}
-                      <span>&nbsp;item</span>
+                        ]
+                      })(<Input style={{ width: 200 }} value={marketingBean.get('shippingItems')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItems')} disabled={marketingBean.get('shippingType') !== 3} />)}
+                      <span>&nbsp;items</span>
                     </span>
                   </Radio>
                 </FormItem>
@@ -379,19 +309,32 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
         </FormItem>
         {marketingBean.get('joinLevel') == -3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
-            <Select
-              style={{ width: 520 }}
-              onChange={this.selectGroupOnChange}
-              // defaultValue={232}
-              defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
-            >
-              {allGroups.size > 0 &&
-                allGroups.map((item) => (
-                  <Select.Option key={item.get('id')} value={item.get('id')}>
-                    {item.get('name')}
-                  </Select.Option>
-                ))}
-            </Select>
+            {getFieldDecorator('segmentIds', {
+              rules: [
+                {
+                  validator: (_rule, value, callback) => {
+                    if (!value && marketingBean.get('joinLevel') === -3) {
+                      callback('Please select group.');
+                    }
+                    callback();
+                  }
+                }
+              ]
+            })(
+              <Select
+                style={{ width: 520 }}
+                onChange={this.selectGroupOnChange}
+                // defaultValue={232}
+                value={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
+              >
+                {allGroups.size > 0 &&
+                  allGroups.map((item) => (
+                    <Select.Option key={item.get('id')} value={item.get('id')}>
+                      {item.get('name')}
+                    </Select.Option>
+                  ))}
+              </Select>
+            )}
           </FormItem>
         )}
         <Row type="flex" justify="start">
@@ -404,6 +347,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
             <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
           </Col>
         </Row>
+        {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
         {/*<GoodsModal visible={this.state.goodsModal._modalVisible} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />*/}
       </Form>
     );

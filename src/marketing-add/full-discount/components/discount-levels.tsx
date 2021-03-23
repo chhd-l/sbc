@@ -161,7 +161,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                             title={'0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                             placeholder={'0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                             onChange={(e) => {
-                              this.onChange(index, 'discount', parseFloat(e.target.value));
+                              this.onChange(index, 'discount', e.target.value); //parseFloat()
                             }}
                             value={level.discount}
                           />

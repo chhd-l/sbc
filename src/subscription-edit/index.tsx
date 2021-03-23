@@ -515,20 +515,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       isUnfoldedDelivery: false
     });
   };
-  deliveryOK = () => {
+  deliveryOK = async () => {
     const { deliveryList, deliveryAddressId } = this.state;
     let deliveryAddressInfo = deliveryList.find((item) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
     let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
     //计算运费
-    webapi.calcShippingFee(deliveryAddressId).then((data) => {
-      if (data.res.code === Const.SUCCESS_CODE && data.res.context.success) {
+    if (await webapi.getAddressInputTypeSetting() === 'AUTOMATICALLY') {
+      const feeRes = webapi.calcShippingFee(deliveryAddressInfo.address1);
+      if (feeRes.res.code === Const.SUCCESS_CODE && feeRes.res.context.success) {
         this.setState({
-          deliveryPrice: data.res.context.tariffs && data.res.context.tariffs[0]['deliveryPrice']
+          deliveryPrice: feeRes.res.context.tariffs && feeRes.res.context.tariffs[0]['deliveryPrice']
         });
+      } else {
+        message.error('Address is not within shipping area');
+        return;
       }
-    });
+    }
     if (this.state.sameFlag) {
       this.setState({
         deliveryAddressInfo: deliveryAddressInfo,
@@ -757,6 +761,42 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       visibleDate: !visibleDate,
       currentOrder: record
     });
+  };
+
+  getCityNameById = (ids, type) => {
+    let params = {
+      id: ids
+    };
+    webapi
+      .queryCityById(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          if (type === 'BILLING') {
+            let billingCityArr = [];
+            if (res.context.systemCityVO) {
+              billingCityArr = res.context.systemCityVO;
+            }
+            this.setState({
+              billingCityArr
+            });
+          }
+          if (type === 'DELIVERY') {
+            let deliveryCityArr = [];
+            if (res.context.systemCityVO) {
+              deliveryCityArr = res.context.systemCityVO;
+            }
+            this.setState({
+              deliveryCityArr
+            });
+          }
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
   };
 
   getCurrencySymbol = () => {

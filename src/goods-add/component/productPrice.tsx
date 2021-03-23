@@ -571,8 +571,13 @@ class SkuForm extends React.Component<any, any> {
       }
     }
     if (key == 'subscriptionPrice') {
-      let a = e * addSkUProduct[0].targetGoodsIds[0].bundleNum;
-      editGoodsItem(id, key, a);
+      let m = 0
+      if (addSkUProduct.length === 1) {
+        m = e * addSkUProduct[0].targetGoodsIds[0].bundleNum;
+      } else {
+        m = e
+      }
+      editGoodsItem(id, key, m);
 
       // 是否同步库存
       if (checked) {

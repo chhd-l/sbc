@@ -401,7 +401,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             <div className="container">
               <Headline
                 title="Other information"
-                extra={<RangePicker style={{ display: ['order', 'subscrib', 'prescrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />}
+                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
@@ -411,7 +411,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <SubscribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
                 <TabPane tab="Prescriber information" key="prescrib">
-                  <PrescribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
+                  <PrescribInformation customerAccount={this.state.customerAccount} />
                 </TabPane>
                 <TabPane tab="Delivery information" key="delivery">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}

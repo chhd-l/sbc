@@ -170,17 +170,20 @@ class NewAppointment extends React.Component<any, any> {
             </Form.Item>
             <Form.Item label="Consumer name">
               {getFieldDecorator('consumerName', {
-                initialValue: ''
+                initialValue: '',
+                rules: [{ required: true, message: 'Consumer name is required' }]
               })(<Input disabled={this.state.memberType === 'member'} />)}
             </Form.Item>
             <Form.Item label="Phone number">
               {getFieldDecorator('consumerPhone', {
-                initialValue: ''
+                initialValue: '',
+                rules: [{ required: true, message: 'Phone number is required' }]
               })(<Input disabled={this.state.memberType === 'member'} />)}
             </Form.Item>
             <Form.Item label="Consumer email">
               {getFieldDecorator('consumerEmail', {
-                initialValue: ''
+                initialValue: '',
+                rules: [{ required: true, message: 'email is required' }]
               })(<Input disabled={this.state.memberType === 'member'} />)}
             </Form.Item>
           </Form>

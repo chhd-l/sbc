@@ -220,7 +220,7 @@ export default class AppointmentList extends React.Component<any, any> {
                   <Input
                     addonBefore={<p style={styles.label}>Appointment no.</p>}
                     onChange={(e) => {
-                      const value = (e.target as any).value;
+                      const value = (e.target as any).value || undefined;
                       this.onSearchFormFieldChange('apptNo', value);
                     }}
                   />
@@ -231,7 +231,7 @@ export default class AppointmentList extends React.Component<any, any> {
                   <Input
                     addonBefore={<p style={styles.label}>Pet owner name</p>}
                     onChange={(e) => {
-                      const value = (e.target as any).value;
+                      const value = (e.target as any).value || undefined;
                       this.onSearchFormFieldChange('consumerName', value);
                     }}
                   />
@@ -239,7 +239,7 @@ export default class AppointmentList extends React.Component<any, any> {
               </Col>
               <Col span={8}>
                 <FormItem>
-                  <DatePicker format="YYYYMMDD" placeholder="Start time" onChange={(date, dateStr) => this.onSearchFormFieldChange('apptDate', dateStr)} />
+                  <DatePicker format="YYYYMMDD" placeholder="Start time" onChange={(date, dateStr) => this.onSearchFormFieldChange('apptDate', dateStr || undefined)} />
                 </FormItem>
               </Col>
               <Col span={8}>
@@ -247,7 +247,7 @@ export default class AppointmentList extends React.Component<any, any> {
                   <Input
                     addonBefore={<p style={styles.label}>Email</p>}
                     onChange={(e) => {
-                      const value = (e.target as any).value;
+                      const value = (e.target as any).value || undefined;
                       this.onSearchFormFieldChange('consumerEmail', value);
                     }}
                   />
@@ -260,8 +260,8 @@ export default class AppointmentList extends React.Component<any, any> {
                     label={<p style={styles.label}>Status</p>}
                     style={{ width: 80 }}
                     onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onSearchFormFieldChange(status, value);
+                      value = value || undefined;
+                      this.onSearchFormFieldChange('status', value);
                     }}
                   >
                     <Option value="">All</Option>

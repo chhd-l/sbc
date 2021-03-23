@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
 
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
 
@@ -48,7 +48,9 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     this.state = {
       marketingBean: relaxProps.get('marketingBean'),
       timeZone: moment,
-      allGroups: relaxProps.get('allGroups')
+      allGroups: relaxProps.get('allGroups'),
+      submitFreeShipping: relaxProps.get('allGroups'),
+      loading: relaxProps.get('loading')
     };
   }
 
@@ -75,27 +77,11 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
    * @param e
    */
   handleSubmit = (e) => {
-    // e.preventDefault();
-    // let { marketingBean } = this.state;
-    // let errorObject = {};
-    // const { marketingType, form } = this.props;
-    // form.validateFieldsAndScroll((err) => {
-    //   if (Object.keys(errorObject).length != 0) {
-    //     form.setFields(errorObject);
-    //     this.setState({ saveLoading: false });
-    //   } else {
-    //     if (!err) {
-    //       this.setState({ saveLoading: true });
-    //       if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
-    //       }
-    //     }
-    //   }
-    // });
-
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        const { marketingBean } = this.state;
+        this.props.store.submitFreeShipping(marketingBean.toJS());
       }
     });
   };
@@ -115,7 +101,10 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     this.onBeanChange({ productType: value });
   };
   targetCustomerRadioChange = (value) => {
-    this.onBeanChange({ joinLevel: value });
+    this.onBeanChange({
+      joinLevel: value,
+      segmentIds: []
+    });
   };
 
   selectGroupOnChange = (value) => {
@@ -157,7 +146,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { marketingBean, saveLoading, allGroups } = this.state;
+    const { marketingBean, saveLoading, allGroups, loading } = this.state;
     console.log(marketingBean.toJS(), 'marketingBean---------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
@@ -320,19 +309,32 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
         </FormItem>
         {marketingBean.get('joinLevel') == -3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
-            <Select
-              style={{ width: 520 }}
-              onChange={this.selectGroupOnChange}
-              // defaultValue={232}
-              defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
-            >
-              {allGroups.size > 0 &&
-                allGroups.map((item) => (
-                  <Select.Option key={item.get('id')} value={item.get('id')}>
-                    {item.get('name')}
-                  </Select.Option>
-                ))}
-            </Select>
+            {getFieldDecorator('segmentIds', {
+              rules: [
+                {
+                  validator: (_rule, value, callback) => {
+                    if (!value && marketingBean.get('joinLevel') === -3) {
+                      callback('Please select group.');
+                    }
+                    callback();
+                  }
+                }
+              ]
+            })(
+              <Select
+                style={{ width: 520 }}
+                onChange={this.selectGroupOnChange}
+                // defaultValue={232}
+                value={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
+              >
+                {allGroups.size > 0 &&
+                  allGroups.map((item) => (
+                    <Select.Option key={item.get('id')} value={item.get('id')}>
+                      {item.get('name')}
+                    </Select.Option>
+                  ))}
+              </Select>
+            )}
           </FormItem>
         )}
         <Row type="flex" justify="start">
@@ -345,6 +347,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
             <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
           </Col>
         </Row>
+        {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
         {/*<GoodsModal visible={this.state.goodsModal._modalVisible} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />*/}
       </Form>
     );

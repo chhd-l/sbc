@@ -1254,7 +1254,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     }
 
     //判断选择商品
-    debugger;
     if (selectedSkuIds.length > 0) {
       marketingBean = marketingBean.set('skuIds', fromJS(selectedSkuIds));
     } else {

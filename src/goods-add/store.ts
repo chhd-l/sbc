@@ -376,7 +376,7 @@ export default class AppStore extends Store {
 
       // 商品基本信息
       let goods = goodsDetail.get('goods');
-      if (tmpContext.goodsDescriptionDetailList.length === 0) {
+      if (!tmpContext.goodsDescriptionDetailList || tmpContext.goodsDescriptionDetailList.length === 0) {
         const cateId = goods.get('cateId');
         this.changeDescriptionTab(cateId);
       } else {

@@ -42,7 +42,6 @@ export default class AppStore extends Store {
     //没有部门的人数
     await this.countNum();
     if (res.code === Const.SUCCESS_CODE) {
-      debugger
       this.transaction(() => {
         this.dispatch('list:init', res.context);
         this.dispatch('employee:initRoles', fromJS(roleRes));

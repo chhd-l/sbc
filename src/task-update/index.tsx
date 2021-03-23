@@ -805,8 +805,9 @@ class TaskUpdate extends Component<any, any> {
                 <Row>
                   {editable ? (
                     <FormItem {...formRowItemLayout} label="Description">
-                      {taskCompleted ? <ReactEditor id="description" height={200} disabled={true} content={task.description} onContentChange={(html) => {}} /> : null}
-                      {task.description && !taskCompleted ? (
+                      {taskCompleted ? (
+                        <ReactEditor id="description" height={200} disabled={true} content={task.description} onContentChange={(html) => {}} />
+                      ) : task.description ? (
                         <ReactEditor
                           id="description"
                           height={200}
@@ -818,12 +819,11 @@ class TaskUpdate extends Component<any, any> {
                             })
                           }
                         />
-                      ) : null}
-                      {!task.description && !taskCompleted ? (
+                      ) : (
                         <ReactEditor
                           id="description"
                           height={200}
-                          content={task.description}
+                          content={''}
                           onContentChange={(html) =>
                             this.onChange({
                               field: 'description',
@@ -831,7 +831,7 @@ class TaskUpdate extends Component<any, any> {
                             })
                           }
                         />
-                      ) : null}
+                      )}
                     </FormItem>
                   ) : (
                     <FormItem {...formRowItemLayout} label="Description">

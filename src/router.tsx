@@ -945,6 +945,18 @@ const routes = [
   {
     path: '/address-field-setting',
     asyncComponent: () => import('./address-field-setting')
+  },
+  {
+    path: '/appointment-list',
+    asyncComponent: () => import('./appointment-list')
+  },
+  {
+    path: '/appointment-add',
+    asyncComponent: () => import('./appointment-list/new')
+  },
+  {
+    path: '/appointment-update/:id',
+    asyncComponent: () => import('./appointment-list/new')
   }
 ];
 

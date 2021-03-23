@@ -7,7 +7,10 @@ import { fromJS } from 'immutable';
 export default class FreeShippingActor extends Actor {
   defaultState() {
     return {
-      marketingBean: {},
+      marketingBean: {
+        shippingType: 1,
+        joinLevel: -1
+      },
       allGroups: []
     };
   }

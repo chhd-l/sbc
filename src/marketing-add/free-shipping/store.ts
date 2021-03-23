@@ -6,7 +6,7 @@ import { Const, history } from 'qmkit';
 import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
 import FreeShippingActor from './actor/free-shipping-actor';
-
+import LoadingActor from './actor/loading-actor';
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -16,16 +16,19 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new FreeShippingActor()];
+    return [new FreeShippingActor(), new LoadingActor()];
   }
 
   init = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('marketing:discountBean', res.context);
+      this.dispatch('loading:end');
     } else if (res.code == 'K-080016') {
       //
       history.go(-1);
+      this.dispatch('loading:end');
     }
   };
   /**
@@ -52,12 +55,15 @@ export default class AppStore extends Store {
    * @param discountBean
    * @returns {Promise<void>}
    */
-  submitFullDiscount = async (discountBean) => {
+  submitFreeShipping = async (shippingBean) => {
     let response;
-    if (discountBean.marketingId) {
-      response = await webapi.updateFullDiscount(discountBean);
+    this.dispatch('loading:start');
+    if (shippingBean.marketingId) {
+      response = await webapi.updateFullDiscount(shippingBean);
+      this.dispatch('loading:end');
     } else {
-      response = await webapi.addFullDiscount(discountBean);
+      response = await webapi.addFullDiscount(shippingBean);
+      this.dispatch('loading:end');
     }
     return response;
   };

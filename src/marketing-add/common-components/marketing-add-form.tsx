@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, List, Map } from 'immutable';
 
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
@@ -137,7 +137,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
       isClubChecked: false,
       allGroups: relaxProps.get('allGroups'),
       storeCateList: relaxProps.get('storeCateList'),
-      sourceStoreCateList: relaxProps.get('sourceStoreCateList')
+      sourceStoreCateList: relaxProps.get('sourceStoreCateList'),
+      attributesList: relaxProps.get('attributesList'),
+      loading: relaxProps.get('loading')
     };
   }
 
@@ -189,7 +191,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
     });
     this.onBeanChange({
       scopeType: value,
-      storeCateIds: []
+      storeCateIds: [],
+      attributeIds: []
     });
   };
   targetCustomerRadioChange = (value) => {
@@ -205,7 +208,11 @@ export default class MarketingAddForm extends React.Component<any, any> {
     segmentIds.push(value);
     this.onBeanChange({ segmentIds });
   };
-
+  selectAttributeOnChange = (value) => {
+    let attributeIds = [];
+    attributeIds.push(value);
+    this.onBeanChange({ attributeIds });
+  };
   storeCateChange = (value, _label, extra) => {
     const sourceGoodCateList = this.state.sourceStoreCateList;
 
@@ -280,7 +287,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups } = this.state;
+    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups, attributesList, loading } = this.state;
 
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
@@ -310,6 +317,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       }
     }
     //this.onBeanChange({publicStatus: 1});
+    console.log(marketingBean.toJS(), 'marketingBean--------------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
@@ -853,6 +861,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               <Radio value={0}>All</Radio>
               <Radio value={2}>Category</Radio>
               <Radio value={1}>Custom</Radio>
+              <Radio value={3}>Attribute</Radio>
             </Radio.Group>
           )}
         </FormItem>
@@ -898,6 +907,18 @@ export default class MarketingAddForm extends React.Component<any, any> {
             )}
           </FormItem>
         ) : null}
+        {marketingBean.get('scopeType') === 3 && (
+          <FormItem {...formItemLayout} required={true} labelAlign="left">
+            <Select style={{ width: 520 }} onChange={this.selectAttributeOnChange} defaultValue={null}>
+              {attributesList.size > 0 &&
+                attributesList.map((item) => (
+                  <Select.Option key={item.get('id')} value={item.get('id')}>
+                    {item.get('attributeName')}
+                  </Select.Option>
+                ))}
+            </Select>
+          </FormItem>
+        )}
         <div className="bold-title">Target consumer:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
           {getFieldDecorator('joinLevel', {
@@ -963,6 +984,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
           </Col>
         </Row>
+        {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
         <GoodsModal visible={this.state.goodsModal._modalVisible} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
       </Form>
     );
@@ -1243,7 +1265,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
       } else if (marketingBean.get('scopeType') === 2 && (!marketingBean.get('storeCateIds') || marketingBean.get('storeCateIds').size === 0)) {
         errorObject['storeCateIds'] = {
           value: null,
-          errors: [new Error('Please select category')]
+          errors: [new Error('Please select category.')]
+        };
+      } else if (marketingBean.get('scopeType') === 3 && (!marketingBean.get('attributeIds') || marketingBean.get('attributeIds').size === 0)) {
+        errorObject['storeCateIds'] = {
+          value: null,
+          errors: [new Error('Please select attribute.')]
         };
       }
     }

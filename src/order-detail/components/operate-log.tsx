@@ -75,11 +75,6 @@ export default class OperateLog extends React.Component<any, any> {
             </Panel>
           </Collapse>
         </div>
-        <div className="bar-button">
-          <Button type="primary" onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="back" />}
-          </Button>
-        </div>
       </div>
     );
   }

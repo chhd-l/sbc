@@ -172,24 +172,15 @@ export default class SearchHead extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.leftLabel} title={'Subscription order time'} disabled defaultValue={'Subscription order time'} />
-                      <Select
+                      {this._renderBuyerOptionSelect()}
+                      <Input
                         style={styles.wrapper}
-                        allowClear
-                        getPopupContainer={(trigger: any) => trigger.parentNode}
-                        onChange={(value) => {
+                        onChange={(e) => {
                           this.setState({
-                            refillNumber: value
+                            buyerOptionsValue: (e.target as any).value
                           });
                         }}
-                      >
-                        {refillNumberList &&
-                          refillNumberList.map((item, index) => (
-                            <Option value={item.value} title={item.name} key={index}>
-                              {item.name}
-                            </Option>
-                          ))}
-                      </Select>
+                      />
                     </InputGroup>
                   </FormItem>
                 </Col>
@@ -360,24 +351,23 @@ export default class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
-                  <Col span={8} id="Range-picker-width">
+
+                  <Col span={8}>
                     <FormItem>
-                      <RangePicker
-                        className="rang-picker-width"
-                        style={styles.formItemStyle}
-                        onChange={(e) => {
-                          let beginTime = '';
-                          let endTime = '';
-                          if (e.length > 0) {
-                            beginTime = e[0].format(Const.DAY_FORMAT);
-                            endTime = e[1].format(Const.DAY_FORMAT);
-                          }
-                          this.setState({ beginTime: beginTime, endTime: endTime });
-                        }}
-                      />
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderCodeSelect()}
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            this.setState({
+                              codeSelectValue: (e.target as any).value
+                            });
+                          }}
+                        />
+                      </InputGroup>
                     </FormItem>
                   </Col>
-                  <Col span={8}>
+                  {/* <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
                         {this._renderRecommenderSelect()}
@@ -391,7 +381,32 @@ export default class SearchHead extends Component<any, any> {
                         />
                       </InputGroup>
                     </FormItem>
+                  </Col> */}
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input style={styles.leftLabel} title={'Subscription order time'} disabled defaultValue={'Subscription order time'} />
+                        <Select
+                          style={styles.wrapper}
+                          allowClear
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            this.setState({
+                              refillNumber: value
+                            });
+                          }}
+                        >
+                          {refillNumberList &&
+                            refillNumberList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
                   </Col>
+
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -435,19 +450,22 @@ export default class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
-                  <Col span={8}>
+
+                  <Col span={8} id="Range-picker-width">
                     <FormItem>
-                      <InputGroup compact style={styles.formItemStyle}>
-                        {this._renderCodeSelect()}
-                        <Input
-                          style={styles.wrapper}
-                          onChange={(e) => {
-                            this.setState({
-                              codeSelectValue: (e.target as any).value
-                            });
-                          }}
-                        />
-                      </InputGroup>
+                      <RangePicker
+                        className="rang-picker-width"
+                        style={styles.formItemStyle}
+                        onChange={(e) => {
+                          let beginTime = '';
+                          let endTime = '';
+                          if (e.length > 0) {
+                            beginTime = e[0].format(Const.DAY_FORMAT);
+                            endTime = e[1].format(Const.DAY_FORMAT);
+                          }
+                          this.setState({ beginTime: beginTime, endTime: endTime });
+                        }}
+                      />
                     </FormItem>
                   </Col>
                 </Row>

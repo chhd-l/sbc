@@ -78,10 +78,9 @@ class ShippingFeeSetting extends Component<any, any> {
       shippingFeeVisible: false
     });
   };
-  enableShippingFee(item) {
-    item.closeFlag = item.closeFlag === 0 ? 1 : 0;
+  enableShippingFee(id) {
     webapi
-      .updateShipSetting(item)
+      .enableShippingFee(id)
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
@@ -152,13 +151,13 @@ class ShippingFeeSetting extends Component<any, any> {
                         <div className="bar" style={{ float: 'right' }}>
                           <div className="status">
                             <Popconfirm
-                              disabled={item.closeFlag === 1 && shippingFeeList.filter((x) => x.closeFlag === 0).length > 0}
-                              title={`Are you sure to ${item.closeFlag === 0 ? 'disable' : 'enable'} this?`}
-                              onConfirm={() => this.enableShippingFee(item)}
+                              disabled={item.closeFlag === 0}
+                              title={`Are you sure to enable this?`}
+                              onConfirm={() => this.enableShippingFee(item.id)}
                               okText="Yes"
                               cancelText="No"
                             >
-                              <Switch size="small" disabled={item.closeFlag === 1 && shippingFeeList.filter((x) => x.closeFlag === 0).length > 0} checked={item.closeFlag === 0 ? true : false} />
+                              <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
                             </Popconfirm>
                           </div>
                         </div>
@@ -173,13 +172,13 @@ class ShippingFeeSetting extends Component<any, any> {
                         <div className="bar" style={{ float: 'right' }}>
                           <div className="status">
                             <Popconfirm
-                              disabled={item.closeFlag === 1 && shippingFeeList.filter((x) => x.closeFlag === 0).length > 0}
-                              title={`Are you sure to ${item.closeFlag === 0 ? 'disable' : 'enable'} this?`}
-                              onConfirm={() => this.enableShippingFee(item)}
+                              disabled={item.closeFlag === 0}
+                              title={`Are you sure to enable this?`}
+                              onConfirm={() => this.enableShippingFee(item.id)}
                               okText="Yes"
                               cancelText="No"
                             >
-                              <Switch size="small" disabled={item.closeFlag === 1 && shippingFeeList.filter((x) => x.closeFlag === 0).length > 0} checked={item.closeFlag === 0 ? true : false} />
+                              <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
                             </Popconfirm>
                           </div>
                           <div>

@@ -26,3 +26,12 @@ export function updateShipSetting(filterParams = {}) {
     })
   });
 }
+
+export function enableShippingFee(id) {
+  return Fetch<TResult>('/ShipSetting/open', {
+    method: 'POST',
+    body: JSON.stringify({
+      id: id
+    })
+  });
+}

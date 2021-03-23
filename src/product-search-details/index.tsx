@@ -218,7 +218,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
           <Table rowKey="id" columns={columns} dataSource={searchResultDetails} pagination={pagination} loading={loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
         </div>
         <div className="bar-button">
-          <Button type="primary" onClick={() => (history as any).go(-1)}>
+          <Button onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="back" />}
           </Button>
         </div>

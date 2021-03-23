@@ -1,4 +1,5 @@
-import { Fetch, cache } from 'qmkit';
+import { Fetch, cache, Const, util } from 'qmkit';
+import { message } from 'antd';
 type TResult = {
   code: string;
   message: string;
@@ -36,5 +37,44 @@ export function addNewAppointment(params = {}) {
       ...params,
       storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
     })
+  });
+}
+
+export function findAppointmentById(id: number) {
+  return Fetch<TResult>('/appt/find', {
+    method: 'POST',
+    body: JSON.stringify({ id })
+  });
+}
+
+export function updateAppointmentById(params = {}) {
+  return Fetch<TResult>('/appt/update', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
+    })
+  });
+}
+
+export function exportAppointmentList(params = {}) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // 参数加密
+      let base64 = new util.Base64();
+      const token = (window as any).token;
+      if (token) {
+        let result = JSON.stringify({ ...params, token: token });
+        let encrypted = base64.urlEncode(result);
+
+        // 新窗口下载
+        const exportHref = Const.HOST + `/appt/export/${encrypted}`;
+        window.open(exportHref);
+      } else {
+        message.error('Please login first');
+      }
+
+      resolve('');
+    }, 500);
   });
 }

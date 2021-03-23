@@ -1,70 +1,77 @@
 import React from 'react';
-import { Headline, history } from 'qmkit';
-import { Radio, Calendar, Button, Form, Breadcrumb, Row, Col, Input, Tooltip, Icon, Spin } from 'antd';
+import { Const, Headline, history } from 'qmkit';
+import { Radio, Button, Form, Breadcrumb, Input, Spin } from 'antd';
 import moment from 'moment';
 import CustomerList from './components/customer-list';
-import { getAvailabelTimeByDate, addNewAppointment } from './webapi';
+import AppointmentDatePicker from './components/appointment-date-picker';
+import { addNewAppointment, findAppointmentById, updateAppointmentById } from './webapi';
 
 import './index.less';
 
-const genTimeArr = () => {
-  let timeArr = [];
-  for (let i = 10; i < 20; i++) {
-    timeArr.push({ hour: i, begin: '00', end: '20', available: true, selected: false });
-    timeArr.push({ hour: i, begin: '30', end: '50', available: true, selected: false });
-  }
-  return timeArr;
-};
-
-export default class NewAppointment extends React.Component<any, any> {
+class NewAppointment extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       visible: false,
       loading: false,
-      selectedDate: [moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
-      showTimePicker: false,
-      timeList: genTimeArr(),
-      memberInfo: {},
-      guestInfo: {},
+      memberInfo: {
+        customerName: '',
+        contactPhone: '',
+        email: ''
+      },
       memberType: 'member'
     };
   }
 
-  onSelectDate = (date) => {
-    getAvailabelTimeByDate(date.format('YYYYMMDD')).then((data) => {});
-    this.setState({
-      selectedDate: [date.format('YYYY-MM-DD'), ''],
-      showTimePicker: true
-    });
-  };
+  componentDidMount() {
+    if (this.props.match.params.id) {
+      this.getAppointmentById(this.props.match.params.id);
+    }
+  }
 
-  onSelectTime = (hour, begin) => {
-    const { timeList, selectedDate } = this.state;
-    timeList.forEach((time) => {
-      time.selected = false;
-      if (time.hour === hour && time.begin === begin) {
-        time.selected = true;
-      }
-    });
-    selectedDate[1] = `${hour}:${begin}`;
-    this.setState({
-      timeList,
-      selectedDate
-    });
-  };
-
-  onResetDate = () => {
-    this.setState({
-      selectedDate: [moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
-      timeList: genTimeArr(),
-      showTimePicker: false
-    });
+  getAppointmentById = (id: number) => {
+    this.setState({ loading: true });
+    const { setFieldsValue } = this.props.form;
+    findAppointmentById(id)
+      .then((data) => {
+        if (data.res.code === Const.SUCCESS_CODE) {
+          const appointment = data.res.context.settingVO;
+          this.setState({
+            loading: false,
+            memberInfo: {
+              customerId: appointment.customerId,
+              customerName: appointment.consumerName,
+              contactPhone: appointment.consumerPhone,
+              email: appointment.consumerEmail
+            },
+            memberType: appointment.customerId ? 'member' : 'guest'
+          });
+          setFieldsValue({
+            consumerName: appointment.consumerName,
+            consumerPhone: appointment.consumerPhone,
+            consumerEmail: appointment.consumerEmail,
+            type: appointment.type,
+            apptDateTime: [moment(appointment.apptDate, 'YYYYMMDD').format('YYYY-MM-DD'), appointment.apptTime]
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      })
+      .catch(() => {
+        this.setState({ loading: true });
+      });
   };
 
   onSelectMemberType = (e) => {
+    const { memberInfo } = this.props;
+    const { setFieldsValue } = this.props.form;
     this.setState({
       memberType: e.target.value
+    });
+    setFieldsValue({
+      consumerName: e.target.value === 'member' ? memberInfo.customerName : '',
+      consumerPhone: e.target.value === 'member' ? memberInfo.contactPhone : '',
+      consumerEmail: e.target.value === 'member' ? memberInfo.email : ''
     });
   };
 
@@ -81,91 +88,72 @@ export default class NewAppointment extends React.Component<any, any> {
   };
 
   onChooseMember = (memberInfo) => {
+    const { setFieldsValue } = this.props.form;
     this.setState({
       visible: false,
       memberInfo: memberInfo
     });
-  };
-
-  onChangeGuestInfo = (field, value) => {
-    this.setState({
-      guestInfo: {
-        ...this.state.guestInfo,
-        [field]: value
-      }
+    setFieldsValue({
+      consumerName: memberInfo.customerName,
+      consumerPhone: memberInfo.contactPhone,
+      consumerEmail: memberInfo.email
     });
   };
 
   onSaveAppointment = () => {
-    const {};
+    this.props.form.validateFields((err, fields) => {
+      if (!err) {
+        this.setState({ loading: true });
+        const handler = this.props.match.params.id ? updateAppointmentById : addNewAppointment;
+        handler({
+          id: this.props.match.params.id || undefined,
+          ...fields,
+          customerId: this.state.memberType === 'member' ? this.state.memberInfo.customerId : undefined,
+          status: 0,
+          apptDate: fields.apptDateTime[0].split('-').join(''),
+          apptTime: fields.apptDateTime[1]
+        })
+          .then((data) => {
+            if (data.res.code === Const.SUCCESS_CODE) {
+              history.push('/appointment-list');
+            } else {
+              this.setState({ loading: false });
+            }
+          })
+          .catch(() => {
+            this.setState({ loading: false });
+          });
+      }
+    });
   };
 
   render() {
-    const { selectedDate, showTimePicker, timeList } = this.state;
+    const { getFieldDecorator } = this.props.form;
     return (
       <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
         <Breadcrumb>
           <Breadcrumb.Item>
             <a href="/appointment-list">Appointment list</a>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>New appointment</Breadcrumb.Item>
+          <Breadcrumb.Item>Appointment</Breadcrumb.Item>
         </Breadcrumb>
         <div className="container">
-          <Headline title="Create new appointment" />
+          <Headline title={this.props.match.params.id ? 'Update appointment' : 'Add new appointment'} />
           <Form wrapperCol={{ sm: { span: 16 } }} labelCol={{ sm: { span: 4 } }}>
             <Form.Item label="Select appointment type">
-              <Radio.Group defaultValue="offline">
-                <Radio value="offline">Offline</Radio>
-                <Radio value="online">Online</Radio>
-              </Radio.Group>
+              {getFieldDecorator('type', {
+                initialValue: '1'
+              })(
+                <Radio.Group>
+                  <Radio value="1">Offline</Radio>
+                  <Radio value="0">Online</Radio>
+                </Radio.Group>
+              )}
             </Form.Item>
             <Form.Item label="Select appointment time">
-              <div className="appt-date-wrapper">
-                <Calendar
-                  fullscreen={false}
-                  mode="month"
-                  value={moment(selectedDate[0], 'YYYY-MM-DD')}
-                  disabledDate={(currentDate) => currentDate < moment().startOf('day') || currentDate.day() === 1}
-                  validRange={[moment(), moment('2021-06-13', 'YYYY-MM-DD')]}
-                  onChange={this.onSelectDate}
-                  headerRender={({ value, type, onChange, onTypeChange }) => {
-                    return (
-                      <Row type="flex" justify="space-between" gutter={20}>
-                        <Col>
-                          <Button type="link" size="small" icon="left" onClick={() => onChange(value.clone().subtract(1, 'month'))} />
-                        </Col>
-                        <Col>{value.format('YYYY-MM')}</Col>
-                        <Col>
-                          <Button type="link" size="small" icon="right" onClick={() => onChange(value.clone().add(1, 'month'))} />
-                        </Col>
-                      </Row>
-                    );
-                  }}
-                  dateFullCellRender={(date) => <a className={`customer-date-field ${date < moment().startOf('day') || date.day() === 1 ? 'disabled' : ''}`}>{date.format('DD')}</a>}
-                />
-                <div className="appt-date-footer">{selectedDate.join(' ')}</div>
-                <div className={`appt-time-wrapper ${showTimePicker ? 'show' : ''}`}>
-                  <Row>
-                    <Col span={12} offset={6} style={{ textAlign: 'center' }}>
-                      <Icon type="caret-up" />
-                    </Col>
-                    <Col span={6}>
-                      <Button type="link" onClick={this.onResetDate}>
-                        <Icon type="sync" /> Reset
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row>
-                    {timeList.map((time, idx) => (
-                      <Col style={{ textAlign: 'center' }} key={idx} span={6}>
-                        <Tooltip title={`${time.hour}:${time.begin}-${time.hour}:${time.end}`} trigger="hover">
-                          <Button size="small" disabled={!time.available} type={time.selected ? 'primary' : 'default'} onClick={() => this.onSelectTime(time.hour, time.begin)}>{`${time.hour}:${time.begin}`}</Button>
-                        </Tooltip>
-                      </Col>
-                    ))}
-                  </Row>
-                </div>
-              </div>
+              {getFieldDecorator('apptDateTime', {
+                initialValue: [moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), '']
+              })(<AppointmentDatePicker />)}
             </Form.Item>
             <Form.Item label="Consumer information">
               <Radio.Group value={this.state.memberType} onChange={this.onSelectMemberType}>
@@ -181,18 +169,26 @@ export default class NewAppointment extends React.Component<any, any> {
               </div>
             </Form.Item>
             <Form.Item label="Consumer name">
-              <Input disabled={this.state.memberType === 'member'} value={this.state.memberType === 'member' ? this.state.memberInfo.customerName : this.state.guestInfo.customerName} onChange={(e) => this.onChangeGuestInfo('customerName', e.target.value)} />
+              {getFieldDecorator('consumerName', {
+                initialValue: ''
+              })(<Input disabled={this.state.memberType === 'member'} />)}
             </Form.Item>
             <Form.Item label="Phone number">
-              <Input disabled={this.state.memberType === 'member'} value={this.state.memberType === 'member' ? this.state.memberInfo.contactPhone : this.state.guestInfo.contactPhone} onChange={(e) => this.onChangeGuestInfo('contactPhone', e.target.value)} />
+              {getFieldDecorator('consumerPhone', {
+                initialValue: ''
+              })(<Input disabled={this.state.memberType === 'member'} />)}
             </Form.Item>
             <Form.Item label="Consumer email">
-              <Input disabled={this.state.memberType === 'member'} value={this.state.memberType === 'member' ? this.state.memberInfo.email : this.state.guestInfo.email} onChange={(e) => this.onChangeGuestInfo('email', e.target.value)} />
+              {getFieldDecorator('consumerEmail', {
+                initialValue: ''
+              })(<Input disabled={this.state.memberType === 'member'} />)}
             </Form.Item>
           </Form>
           <CustomerList visible={this.state.visible} onConfirm={this.onChooseMember} onClose={this.onCloseMemberModal} />
           <div className="bar-button">
-            <Button type="primary">Save</Button>
+            <Button type="primary" onClick={this.onSaveAppointment}>
+              Save
+            </Button>
             <Button style={{ marginLeft: 20 }} onClick={() => history.go(-1)}>
               Cancel
             </Button>
@@ -202,3 +198,5 @@ export default class NewAppointment extends React.Component<any, any> {
     );
   }
 }
+
+export default Form.create<any>()(NewAppointment);

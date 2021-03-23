@@ -1,7 +1,9 @@
 import React from 'react';
-import { Headline, BreadCrumb, history, SelectGroup } from 'qmkit';
-import { Table, Form, Row, Col, Input, DatePicker, Button, Select } from 'antd';
-import { getAppointmentList } from './webapi';
+import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal } from 'qmkit';
+import { Link } from 'react-router-dom';
+import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message } from 'antd';
+import { getAppointmentList, updateAppointmentById, exportAppointmentList } from './webapi';
+import { ExportableNode } from 'ts-morph';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -17,6 +19,14 @@ export default class AppointmentList extends React.Component<any, any> {
         current: 1,
         pageSize: 10,
         total: 0
+      },
+      selectedRowKeys: [],
+      exportModalData: {
+        visible: false,
+        byParamsTitle: 'Export filtered appointments',
+        byIdsTitle: 'Export selected appointments',
+        exportByParams: this.onExportSearchParams,
+        exportByIds: this.onExportSelected
       }
     };
   }
@@ -54,6 +64,79 @@ export default class AppointmentList extends React.Component<any, any> {
     });
   };
 
+  updateAppointmentStatus = (id: number, status: number) => {
+    const { list } = this.state;
+    this.setState({ loading: true });
+    const appointment = list.find((r) => r.id === id);
+    updateAppointmentById({
+      ...appointment,
+      status: status
+    })
+      .then((data) => {
+        if (data.res.code === Const.SUCCESS_CODE) {
+          appointment.status = status;
+          this.setState({
+            loading: false,
+            list
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      })
+      .catch(() => {
+        this.setState({ loading: false });
+      });
+  };
+
+  onSelectedRowKeys = (selectedRowKeys) => {
+    this.setState({
+      selectedRowKeys
+    });
+  };
+
+  onOpenExportModal = () => {
+    const { exportModalData } = this.state;
+    this.setState({
+      exportModalData: {
+        ...exportModalData,
+        visible: true
+      }
+    });
+  };
+
+  onCloseExportModal = () => {
+    const { exportModalData } = this.state;
+    this.setState({
+      exportModalData: {
+        ...exportModalData,
+        visible: false
+      }
+    });
+  };
+
+  onExportSearchParams = () => {
+    const { searchForm, pagination } = this.state;
+    if (pagination.total > 0) {
+      return exportAppointmentList(searchForm);
+    } else {
+      message.error('no record has found');
+      return new Promise((resolve) => {
+        setTimeout(resolve, 1000);
+      });
+    }
+  };
+
+  onExportSelected = () => {
+    const { selectedRowKeys } = this.state;
+    if (selectedRowKeys.length === 0) {
+      message.error('no appointment has been selected');
+      return new Promise((resolve) => {
+        setTimeout(resolve, 1000);
+      });
+    }
+    return exportAppointmentList({ ids: selectedRowKeys });
+  };
+
   render() {
     const columns = [
       {
@@ -85,7 +168,7 @@ export default class AppointmentList extends React.Component<any, any> {
         title: 'Appointment type',
         dataIndex: 'type',
         key: 'd5',
-        render: (text) => <div>{text === 0 ? 'Online' : text === 1 ? 'Offline' : ''}</div>
+        render: (text) => <div>{text === '0' ? 'Online' : text === '1' ? 'Offline' : ''}</div>
       },
       {
         title: 'Status',
@@ -99,23 +182,31 @@ export default class AppointmentList extends React.Component<any, any> {
         key: 'd7',
         render: (text, record) => (
           <>
-            <Button type="link" size="small">
-              <i className="iconfont iconDetails"></i>
-            </Button>
+            <Tooltip title="Edit">
+              <Link to={`/appointment-update/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
+            </Tooltip>
             {text === 0 && (
-              <Button type="link" size="small">
-                <i className="iconfont iconEnabled"></i>
-              </Button>
+              <Tooltip title="Arrived">
+                <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record.id, 1)} style={{ padding: '0 5px' }}>
+                  <i className="iconfont iconEnabled"></i>
+                </Button>
+              </Tooltip>
             )}
             {text === 0 && (
-              <Button type="link" size="small">
-                <i className="iconfont iconbtn-disable"></i>
-              </Button>
+              <Tooltip title="Cancel">
+                <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record.id, 2)} style={{ padding: '0 5px' }}>
+                  <i className="iconfont iconbtn-disable"></i>
+                </Button>
+              </Tooltip>
             )}
           </>
         )
       }
     ];
+    const rowSelection = {
+      selectedRowKeys: this.state.selectedRowKeys,
+      onChange: this.onSelectedRowKeys
+    };
     const { loading, list, pagination } = this.state;
     return (
       <div>
@@ -190,18 +281,23 @@ export default class AppointmentList extends React.Component<any, any> {
         </div>
         <div className="container">
           <div style={{ marginBottom: 10 }}>
+            <Button style={{ marginRight: 10 }} onClick={this.onOpenExportModal}>
+              Batch export
+            </Button>
             <Button type="primary" onClick={() => history.push('/appointment-add')}>
               Add new
             </Button>
           </div>
           <Table
             rowKey="id"
+            rowSelection={rowSelection}
             columns={columns}
             dataSource={list}
             loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
             pagination={pagination}
           />
         </div>
+        <ExportModal data={this.state.exportModalData} onHide={this.onCloseExportModal} handleByParams={this.state.exportModalData.exportByParams} handleByIds={this.state.exportModalData.exportByIds} />
       </div>
     );
   }

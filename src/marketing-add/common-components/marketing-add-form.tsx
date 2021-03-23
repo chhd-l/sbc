@@ -192,7 +192,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     this.onBeanChange({
       scopeType: value,
       storeCateIds: [],
-      attributes: []
+      attributeIds: []
     });
   };
   targetCustomerRadioChange = (value) => {
@@ -209,9 +209,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
     this.onBeanChange({ segmentIds });
   };
   selectAttributeOnChange = (value) => {
-    let attributes = [];
-    attributes.push(value);
-    this.onBeanChange({ attributes });
+    let attributeIds = [];
+    attributeIds.push(value);
+    this.onBeanChange({ attributeIds });
   };
   storeCateChange = (value, _label, extra) => {
     const sourceGoodCateList = this.state.sourceStoreCateList;
@@ -1268,7 +1268,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
           value: null,
           errors: [new Error('Please select category.')]
         };
-      } else if (marketingBean.get('scopeType') === 3 && (!marketingBean.get('attributes') || marketingBean.get('attributes').size === 0)) {
+      } else if (marketingBean.get('scopeType') === 3 && (!marketingBean.get('attributeIds') || marketingBean.get('attributeIds').size === 0)) {
         errorObject['storeCateIds'] = {
           value: null,
           errors: [new Error('Please select attribute.')]

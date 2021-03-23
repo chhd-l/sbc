@@ -283,9 +283,9 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                           },
                           {
                             validator: (_rule, value, callback) => {
-                              // if (shippingType !== 2) {
-                              //   return;
-                              // }
+                              if (!value && marketingBean.get('shippingType') === 2) {
+                                callback('Value must be entered.');
+                              }
                               if (value) {
                                 if (!ValidConst.zeroPrice.test(value) || !(value < 10000 && value >= 0)) {
                                   callback('0-9999');
@@ -304,7 +304,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                           onChange={(e) => {
                             this.shippingRadioOnChange(e, 'shippingValue');
                           }}
-                          // disabled={shippingType !== 2}
+                          disabled={marketingBean.get('shippingType') !== 2}
                         />
                       )}
                       <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
@@ -318,17 +318,13 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                       {getFieldDecorator('shippingItems', {
                         rules: [
                           {
-                            required: true,
-                            message: 'Value must be entered'
-                          },
-                          {
                             validator: (_rule, value, callback) => {
-                              // if (shippingType !== 3) {
-                              //   return;
-                              // }
+                              if (!value && marketingBean.get('shippingType') === 3) {
+                                callback('Value must be entered.');
+                              }
                               if (value) {
-                                if (!ValidConst.zeroNumber.test(value) || !(value < 10000 && value >= 0)) {
-                                  callback('0-9999');
+                                if (!ValidConst.zeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                  callback('1-9999');
                                 }
                               }
                               callback();
@@ -336,7 +332,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                           }
                         ],
                         initialValue: null
-                      })(<Input style={{ width: 200 }} title={'0-9999'} placeholder={'0-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItems')} />)}
+                      })(<Input style={{ width: 200 }} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItems')} disabled={marketingBean.get('shippingType') !== 3} />)}
                       <span>&nbsp;item</span>
                     </span>
                   </Radio>

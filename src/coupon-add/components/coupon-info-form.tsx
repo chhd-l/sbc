@@ -107,7 +107,7 @@ export default class CouponInfoForm extends Component<any, any> {
       couponDiscount: number | string;
       attributesList: any;
 
-      attributes: any;
+      attributeIds: any;
       // 键值设置方法
       fieldsValue: Function;
       // 修改时间区间方法
@@ -159,7 +159,7 @@ export default class CouponInfoForm extends Component<any, any> {
     couponDiscount: 'couponDiscount',
     storeCateIds: 'storeCateIds',
     attributesList: 'attributesList',
-    attributes: 'attributes',
+    attributeIds: 'attributeIds',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -284,11 +284,11 @@ export default class CouponInfoForm extends Component<any, any> {
 
   selectAttributeOnChange = (value) => {
     const { fieldsValue } = this.props.relaxProps;
-    let attributes = [];
-    attributes.push(value);
+    let attributeIds = [];
+    attributeIds.push(value);
     fieldsValue({
-      field: 'attributes',
-      value: attributes
+      field: 'attributeIds',
+      value: attributeIds
     });
   };
   render() {
@@ -324,11 +324,11 @@ export default class CouponInfoForm extends Component<any, any> {
       couponPromotionType,
       couponDiscount,
       attributesList,
-      attributes
+      attributeIds
     } = this.props.relaxProps;
     console.log(storeCateIds, 'storeCateIds----');
     console.log(couponJoinLevel, 'couponJoinLevel----');
-    console.log(attributes, 'attributes----');
+    console.log(attributeIds, 'attributeIds----');
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
     if (storeCateIds) {
@@ -636,7 +636,7 @@ export default class CouponInfoForm extends Component<any, any> {
               <Radio value={4}>
                 <span style={styles.darkColor}>Custom</span>
               </Radio>
-              <Radio value={3}>
+              <Radio value={6}>
                 <span style={styles.darkColor}>Attribute</span>
               </Radio>
             </RadioGroup>
@@ -685,13 +685,13 @@ export default class CouponInfoForm extends Component<any, any> {
               )}
             </FormItem>
           ) : null}
-          {scopeType === 3 && (
+          {scopeType === 6 && (
             <FormItem {...formItemLayout} required={true} labelAlign="left">
-              {getFieldDecorator('attributes', {
+              {getFieldDecorator('attributeIds', {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      if (attributes.size === 0 && scopeType === 3) {
+                      if (attributeIds.size === 0 && scopeType === 3) {
                         callback('Please select attribute.');
                       }
                       callback();

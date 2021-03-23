@@ -63,7 +63,7 @@ export default class CouponInfoActor extends Actor {
       couponPromotionType: 0, //Amount: 0 or Percentage: 1
       couponDiscount: null,
       attributesList: [],
-      attributes: []
+      attributeIds: []
     };
   }
   /**
@@ -115,7 +115,7 @@ export default class CouponInfoActor extends Actor {
       segmentIds,
       couponPromotionType,
       couponDiscount,
-      attributes
+      attributeIds
     } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
@@ -136,7 +136,7 @@ export default class CouponInfoActor extends Actor {
       .set('segmentIds', fromJS(segmentIds))
       .set('couponPromotionType', couponPromotionType)
       .set('couponDiscount', fromJS(couponDiscount))
-      .set('attributes', fromJS(attributes));
+      .set('attributeIds', fromJS(attributeIds));
 
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));

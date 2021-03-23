@@ -16,7 +16,8 @@ export default class PaymentMethod extends React.Component<any, any> {
       paymentVisible: false,
       enabled: true,
       paymentForm: {}, //edit
-      editType: false
+      editType: false,
+      isChecked: false
     };
     this.closeModel = this.closeModel.bind(this);
   }
@@ -24,11 +25,13 @@ export default class PaymentMethod extends React.Component<any, any> {
     relaxProps?: {
       queryByStoreId: any;
       switchVisible: any;
+      checkedId: any;
       onShow: Function;
       onChecked: Function;
       switchChecked: any;
       getEditStorePayment: Function;
       getStorePaymentVOs: Function;
+      getCheckedId: Function;
     };
   };
 
@@ -38,8 +41,10 @@ export default class PaymentMethod extends React.Component<any, any> {
     onShow: noop,
     onChecked: noop,
     switchChecked: 'switchChecked',
+    checkedId: 'checkedId',
     getEditStorePayment: noop,
-    getStorePaymentVOs: noop
+    getStorePaymentVOs: noop,
+    getCheckedId: noop,
   };
   componentDidMount() {}
   getPaymentSetting = async () => {
@@ -57,12 +62,15 @@ export default class PaymentMethod extends React.Component<any, any> {
     });
   };
 
-  onSwitchChange = (res) => {
-    const { onChecked } = this.props.relaxProps;
-    /*this.setState({
-      editType: res
-    })*/
-    onChecked(res);
+  onSwitchChange = (e,checkedId) => {
+    const { onChecked, getCheckedId } = this.props.relaxProps;
+    console.log(e,1111);
+    console.log(checkedId,3333333);
+    this.setState({
+      isChecked: e
+    })
+    //getCheckedId(checkedId)
+    onChecked(e);
   };
 
   onTooltip = () => {
@@ -77,8 +85,10 @@ export default class PaymentMethod extends React.Component<any, any> {
   onChange = () => {};
 
   render() {
-    const { queryByStoreId, switchChecked, getStorePaymentVOs, switchVisible } = this.props.relaxProps;
-
+    const { queryByStoreId, switchChecked, getStorePaymentVOs, getCheckedId, switchVisible } = this.props.relaxProps;
+    setTimeout(()=>{
+      console.log(switchChecked,11111111111);
+    })
     return (
       <div>
         <div className="method">
@@ -93,7 +103,7 @@ export default class PaymentMethod extends React.Component<any, any> {
             {queryByStoreId.List1 &&
               queryByStoreId.List1.map((item, index) => {
                 return (
-                  <Row key={index}>
+                  <Row>
                     <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
@@ -128,7 +138,7 @@ export default class PaymentMethod extends React.Component<any, any> {
             {queryByStoreId.List2 &&
               queryByStoreId.List2.map((item, index) => {
                 return (
-                  <Row key={index}>
+                  <Row>
                     <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
@@ -181,7 +191,7 @@ export default class PaymentMethod extends React.Component<any, any> {
               queryByStoreId.List3.map((item, index) => {
                 getStorePaymentVOs(item);
                 return (
-                  <Row key={index}>
+                  <Row>
                     <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
@@ -198,9 +208,9 @@ export default class PaymentMethod extends React.Component<any, any> {
                           <div className="status">{item.name}</div>
 
                           <div className={'flex-start-align'}>
-                            <Switch style={{ marginRight: 15 }} checked={switchChecked} onChange={this.onSwitchChange} />
+                            <Switch style={{ marginRight: 15 }} key={item.id} onChange={e=>this.onSwitchChange(e,item.id)} />
                             <Tooltip placement="top" title="Edit">
-                              <a style={{ color: switchChecked == true ? 'red' : '#cccccc' }} type="link" onClick={this.onTooltip} className="iconfont iconEdit"></a>
+                              <a style={{ color: this.state.isChecked == true ? 'red' : '#cccccc' }} type="link" onClick={this.onTooltip} className="iconfont iconEdit"></a>
                             </Tooltip>
                           </div>
                         </div>
@@ -211,7 +221,7 @@ export default class PaymentMethod extends React.Component<any, any> {
               })}
           </div>
         </div>
-        <MethodTips />
+        <MethodTips/>
       </div>
     );
   }

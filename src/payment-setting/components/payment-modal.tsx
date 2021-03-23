@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Row, Col, Form, Button, message, Input, Modal, Switch, Select } from 'antd';
+import { Row, Col, Form, Tabs, message, Input, Modal, Switch, Select } from 'antd';
 
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import * as webapi from '../webapi';
 import { SelectGroup, Const } from 'qmkit';
+import List from "@/groupon-activity-list/component/list";
 
 const formItemLayout = {
   labelCol: {
@@ -56,8 +57,13 @@ class PaymentModal extends React.Component<any, any> {
     });
   };
 
+  _handleClick = (value) => {
+
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
+    //const key = form.get('tabType');
     let checked = this.state.paymentForm.enabled;
     if (this.state.enabled != null) {
       checked = this.state.enabled;
@@ -65,6 +71,23 @@ class PaymentModal extends React.Component<any, any> {
 
     return (
       <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
+        <Tabs  onChange={(key) => this._handleClick(key)}>
+          <Tabs.TabPane tab="进行中">
+            qqq
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="即将开始">
+            www
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="已结束">
+            eeee
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="待审核">
+            44
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="审核失败">
+            5
+          </Tabs.TabPane>
+        </Tabs>
         <Form>
           <Row>
             <Col span={24}>

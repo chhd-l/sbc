@@ -60,6 +60,10 @@ export default class AppStore extends Store {
     }
   };
 
+  getCheckedId = (checkedId) => {
+    this.dispatch('method:checkedId', checkedId);
+  };
+
   /**
    * 保存账号名称
    * @param form

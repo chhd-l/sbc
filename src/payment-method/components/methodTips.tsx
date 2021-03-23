@@ -48,9 +48,7 @@ class MethodTips extends React.Component<any, any> {
       <Modal visible={switchVisible} title="Set rules" maskClosable={false} onOk={this.onOk} onCancel={() => this.cancel()}>
         <div className="methodTips flex-start-align">
           <span>Max order amount is</span>
-          <span>
-            <InputNumber min={0} max={9999} value={storePaymentVOs.maxAmount} onChange={this.onChange} />
-          </span>
+          <InputNumber min={0} max={99999} defaultValue={storePaymentVOs.maxAmount} onChange={this.onChange} />
           <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
         </div>
       </Modal>
@@ -76,6 +74,7 @@ class MethodTips extends React.Component<any, any> {
     const { onShow, onChecked } = this.props.relaxProps;
     onShow(false);
     onChecked(false);
+
   };
 }
 export default Form.create()(MethodTips);

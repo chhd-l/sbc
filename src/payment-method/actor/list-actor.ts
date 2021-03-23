@@ -17,7 +17,8 @@ export default class ListActor extends Actor {
       loading: true,
       switchVisible: false,
       switchChecked: false,
-      storePaymentVOs: {}
+      storePaymentVOs: {},
+      checkedId: ""
     };
   }
 
@@ -40,6 +41,12 @@ export default class ListActor extends Actor {
   switchChecked(state, content) {
     return state.set('switchChecked', content);
   }
+
+  @Action('method:checkedId')
+  checkedId(state, content) {
+    return state.set('checkedId', content);
+  }
+
 
   @Action('method:storePaymentVOs')
   storePaymentVOs(state, content) {

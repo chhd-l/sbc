@@ -3,6 +3,7 @@ import { Headline, history } from 'qmkit';
 import { Radio, Calendar, Button, Form, Breadcrumb, Row, Col, Input } from 'antd';
 import moment from 'moment';
 import CustomerList from './components/customer-list';
+import { getAvailabelTimeByDate } from './webapi';
 
 import './index.less';
 
@@ -11,6 +12,7 @@ export default class NewAppointment extends React.Component<any, any> {
     super(props);
     this.state = {
       visible: false,
+      selectedDate: [moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
       memberInfo: {},
       guestInfo: {},
       memberType: 'member'
@@ -52,6 +54,7 @@ export default class NewAppointment extends React.Component<any, any> {
   };
 
   render() {
+    const { selectedDate } = this.state;
     return (
       <div>
         <Breadcrumb>
@@ -70,10 +73,11 @@ export default class NewAppointment extends React.Component<any, any> {
               </Radio.Group>
             </Form.Item>
             <Form.Item label="Select appointment time">
-              <div style={{ width: 400, border: '1px solid #d9d9d9', borderRadius: 4 }}>
+              <div className="appt-date-wrapper">
                 <Calendar
                   fullscreen={false}
                   mode="month"
+                  defaultValue={moment().day() === 1 ? moment().add(1, 'days') : moment()}
                   disabledDate={(currentDate) => currentDate < moment().startOf('day') || currentDate.day() === 1}
                   validRange={[moment(), moment('2021-06-13', 'YYYY-MM-DD')]}
                   headerRender={({ value, type, onChange, onTypeChange }) => {
@@ -91,6 +95,7 @@ export default class NewAppointment extends React.Component<any, any> {
                   }}
                   dateFullCellRender={(date) => <a className={`customer-date-field ${date < moment().startOf('day') || date.day() === 1 ? 'disabled' : ''}`}>{date.format('DD')}</a>}
                 />
+                <div className="appt-date-footer">{selectedDate.join(' ')}</div>
               </div>
             </Form.Item>
             <Form.Item label="Consumer information">

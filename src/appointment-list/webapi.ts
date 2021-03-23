@@ -14,3 +14,17 @@ export function getCustomerList(filterParams = {}) {
     })
   });
 }
+
+export function getAppointmentList(params = {}) {
+  return Fetch<TResult>('/appt/list', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+export function getAvailabelTimeByDate(dateStr: string) {
+  return Fetch<TResult>('/appt/findByStoreAndDate', {
+    method: 'POST',
+    body: JSON.stringify({ apptDate: dateStr })
+  });
+}

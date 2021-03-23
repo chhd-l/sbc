@@ -1,8 +1,10 @@
 import React from 'react';
-import { Headline, BreadCrumb, history } from 'qmkit';
-import { Table, Form, Row, Col, Input, DatePicker, Button } from 'antd';
+import { Headline, BreadCrumb, history, SelectGroup } from 'qmkit';
+import { Table, Form, Row, Col, Input, DatePicker, Button, Select } from 'antd';
+import { getAppointmentList } from './webapi';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 export default class AppointmentList extends React.Component<any, any> {
   constructor(props: any) {
@@ -19,6 +21,29 @@ export default class AppointmentList extends React.Component<any, any> {
     };
   }
 
+  componentDidMount() {
+    this.getAppointmentList();
+  }
+
+  getAppointmentList = () => {
+    const { searchForm, pagination } = this.state;
+    this.setState({ loading: true });
+    getAppointmentList({ ...searchForm, pageNum: pagination.current - 1, pageSize: pagination.pageSize })
+      .then((data) => {
+        this.setState({
+          loading: false,
+          list: data.res.context.page.content,
+          pagination: {
+            ...pagination,
+            total: data.res.context.page.total
+          }
+        });
+      })
+      .catch(() => {
+        this.setState({ loading: false });
+      });
+  };
+
   onSearchFormFieldChange = (field, value) => {
     const { searchForm } = this.state;
     this.setState({
@@ -33,38 +58,62 @@ export default class AppointmentList extends React.Component<any, any> {
     const columns = [
       {
         title: 'Appointment no',
-        dataIndex: 'd1',
+        dataIndex: 'apptNo',
         key: 'd1'
       },
       {
         title: 'Appointment time',
-        dataIndex: 'd2',
+        dataIndex: 'apptTime',
         key: 'd2'
       },
       {
         title: 'Pet owner name',
-        dataIndex: 'd3',
+        dataIndex: 'consumerName',
         key: 'd3'
       },
       {
         title: 'Pet owner email',
-        dataIndex: 'd4',
+        dataIndex: 'consumerEmail',
         key: 'd4'
       },
       {
+        title: 'Phone number',
+        dataIndex: 'consumerPhone',
+        key: 'd8'
+      },
+      {
         title: 'Appointment type',
-        dataIndex: 'd5',
-        key: 'd5'
+        dataIndex: 'type',
+        key: 'd5',
+        render: (text) => <div>{text === 0 ? 'Online' : text === 1 ? 'Offline' : ''}</div>
       },
       {
         title: 'Status',
-        dataIndex: 'd6',
-        key: 'd6'
+        dataIndex: 'status',
+        key: 'd6',
+        render: (text) => <div>{text === 0 ? 'Booked' : text === 1 ? 'Arrived' : text === 2 ? 'Canceled' : ''}</div>
       },
       {
         title: 'Operation',
-        dataIndex: 'd7',
-        key: 'd7'
+        dataIndex: 'status',
+        key: 'd7',
+        render: (text, record) => (
+          <>
+            <Button type="link" size="small">
+              <i className="iconfont iconDetails"></i>
+            </Button>
+            {text === 0 && (
+              <Button type="link" size="small">
+                <i className="iconfont iconEnabled"></i>
+              </Button>
+            )}
+            {text === 0 && (
+              <Button type="link" size="small">
+                <i className="iconfont iconbtn-disable"></i>
+              </Button>
+            )}
+          </>
+        )
       }
     ];
     const { loading, list, pagination } = this.state;
@@ -81,7 +130,7 @@ export default class AppointmentList extends React.Component<any, any> {
                     addonBefore={<p style={styles.label}>Appointment no.</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
-                      this.onSearchFormFieldChange('appointmentNo', value);
+                      this.onSearchFormFieldChange('apptNo', value);
                     }}
                   />
                 </FormItem>
@@ -99,28 +148,42 @@ export default class AppointmentList extends React.Component<any, any> {
               </Col>
               <Col span={8}>
                 <FormItem>
+                  <DatePicker format="YYYYMMDD" placeholder="Start time" onChange={(date, dateStr) => this.onSearchFormFieldChange('apptDate', dateStr)} />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
                   <Input
                     addonBefore={<p style={styles.label}>Email</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
-                      this.onSearchFormFieldChange('email', value);
+                      this.onSearchFormFieldChange('consumerEmail', value);
                     }}
                   />
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={<p style={styles.label}>Status</p>}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onSearchFormFieldChange('status', value);
+                  <SelectGroup
+                    defaultValue=""
+                    label={<p style={styles.label}>Status</p>}
+                    style={{ width: 80 }}
+                    onChange={(value) => {
+                      value = value === '' ? null : value;
+                      this.onSearchFormFieldChange(status, value);
                     }}
-                  />
+                  >
+                    <Option value="">All</Option>
+                    <Option value="0">Booked</Option>
+                    <Option value="1">Arrived</Option>
+                    <Option value="2">Canceled</Option>
+                  </SelectGroup>
                 </FormItem>
               </Col>
               <Col span={24} style={{ textAlign: 'center' }}>
-                <Button type="primary">Search</Button>
+                <Button type="primary" onClick={this.getAppointmentList}>
+                  Search
+                </Button>
               </Col>
             </Row>
           </Form>

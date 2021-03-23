@@ -391,7 +391,7 @@ export default class AppStore extends Store {
       // 商品基本信息
       let goods = goodsDetail.get('goods');
       //设置编辑器是否为空数组，是空数组，根据cateId去查找，不为空，直接展示
-      if (tmpContext.goodsDescriptionDetailList.length === 0) {
+      if (!tmpContext.goodsDescriptionDetailList || tmpContext.goodsDescriptionDetailList.length === 0) {
         const cateId = goods.get('cateId');
         this.changeDescriptionTab(cateId);
       } else {

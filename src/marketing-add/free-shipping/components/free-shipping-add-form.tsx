@@ -3,15 +3,9 @@ import { fromJS, List } from 'immutable';
 
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
-import ShippingTypeForm from '../free-shipping/components/shipping-type-form';
 import moment from 'moment';
-import { GoodsModal } from 'biz';
 
-import * as webapi from '../webapi';
-import * as Enum from './marketing-enum';
-
-import { doc } from 'prettier';
-// import debug = doc.debug;
+import * as webapi from '../../webapi';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -52,40 +46,8 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     super(props);
     const relaxProps = props.store.state();
     this.state = {
-      //公用的商品弹出框
-      goodsModal: {
-        _modalVisible: false,
-        _selectedSkuIds: [],
-        _selectedRows: []
-      },
-      //营销活动已选的商品信息
-      selectedSkuIds: [],
-      selectedRows: fromJS([]),
-      //全部等级
-      customerLevel: [],
-      //选择的等级
-      selectedLevelIds: [],
-      //营销实体
       marketingBean: relaxProps.get('marketingBean'),
-      //等级选择组件相关
-      level: {
-        _indeterminate: false,
-        _checkAll: false,
-        _checkedLevelList: [],
-        _allCustomer: true,
-        _levelPropsShow: false
-      },
-      //满金额还是满数量
-      isFullCount: null,
-      //已经存在于其他同类型的营销活动的skuId
-      skuExists: [],
-      saveLoading: false,
-      promotionCode: '',
-      promotionCode2: '', //记录初始自动生成的promotionCode
-      PromotionTypeValue: 0,
-      PromotionTypeChecked: true,
       timeZone: moment,
-      isClubChecked: false,
       allGroups: relaxProps.get('allGroups')
     };
   }
@@ -246,19 +208,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
             },
 
             initialValue: marketingBean.get('beginTime') === undefined ? [undefined, undefined] : [moment(marketingBean.get('beginTime')), moment(marketingBean.get('endTime'))]
-          })(
-            <RangePicker
-              getCalendarContainer={() => document.getElementById('page-content')}
-              allowClear={false}
-              format={Const.DATE_FORMAT}
-              //defaultValue = {moment[undefined,undefined]}
-              //format={'YYYY-MM-DD' + ' ' + moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')}
-              // format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
-              placeholder={['Start time', 'End time']}
-              showTime={{ format: 'HH:mm' }}
-              onOpenChange={this.handleEndOpenChange}
-            />
-          )}
+          })(<RangePicker getCalendarContainer={() => document.getElementById('page-content')} allowClear={false} format={Const.DATE_FORMAT} placeholder={['Start time', 'End time']} showTime={{ format: 'HH:mm' }} onOpenChange={this.handleEndOpenChange} />)}
         </FormItem>
         <div className="bold-title">Free shipping type</div>
         <FormItem {...smallformItemLayout} labelAlign="left">
@@ -278,13 +228,9 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                       {getFieldDecorator('shippingValue', {
                         rules: [
                           {
-                            required: true,
-                            message: 'Value must be entered'
-                          },
-                          {
                             validator: (_rule, value, callback) => {
                               if (!value && marketingBean.get('shippingType') === 2) {
-                                callback('Value must be entered.');
+                                callback('Shipping value must be entered.');
                               }
                               if (value) {
                                 if (!ValidConst.zeroPrice.test(value) || !(value < 10000 && value >= 0)) {
@@ -294,8 +240,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                               callback();
                             }
                           }
-                        ],
-                        initialValue: null
+                        ]
                       })(
                         <Input
                           style={{ width: 200 }}
@@ -304,6 +249,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                           onChange={(e) => {
                             this.shippingRadioOnChange(e, 'shippingValue');
                           }}
+                          value={marketingBean.get('shippingValue')}
                           disabled={marketingBean.get('shippingType') !== 2}
                         />
                       )}
@@ -320,7 +266,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                           {
                             validator: (_rule, value, callback) => {
                               if (!value && marketingBean.get('shippingType') === 3) {
-                                callback('Value must be entered.');
+                                callback('Items must be entered.');
                               }
                               if (value) {
                                 if (!ValidConst.zeroNumber.test(value) || !(value < 10000 && value > 0)) {
@@ -330,10 +276,9 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                               callback();
                             }
                           }
-                        ],
-                        initialValue: null
-                      })(<Input style={{ width: 200 }} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItems')} disabled={marketingBean.get('shippingType') !== 3} />)}
-                      <span>&nbsp;item</span>
+                        ]
+                      })(<Input style={{ width: 200 }} value={marketingBean.get('shippingItems')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItems')} disabled={marketingBean.get('shippingType') !== 3} />)}
+                      <span>&nbsp;items</span>
                     </span>
                   </Radio>
                 </FormItem>

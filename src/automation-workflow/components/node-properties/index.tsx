@@ -135,8 +135,7 @@ export default class NodeProperties extends Component<any, any> {
   render() {
     const { model } = this.props;
     const { formParam, taggingSource, goldenMomentList, templateList } = this.state;
-    console.log(model);
-    console.log(formParam);
+
     return (
       <div>
         <Form className="ui-form-custom">

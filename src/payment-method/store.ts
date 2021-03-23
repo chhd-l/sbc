@@ -23,8 +23,6 @@ export default class AppStore extends Store {
   };
 
   onChecked = (res) => {
-    console.log(res, 3333333);
-
     this.dispatch('method:switchChecked', res);
   };
 
@@ -58,7 +56,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.editStorePayment(pram);
 
     if (res.code === Const.SUCCESS_CODE) {
-      console.log(res, 11111111111);
+      //console.log(res, 11111111111);
     }
   };
 

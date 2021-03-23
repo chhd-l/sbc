@@ -317,7 +317,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
       }
     }
     //this.onBeanChange({publicStatus: 1});
-    console.log(marketingBean.toJS(), 'marketingBean--------------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">

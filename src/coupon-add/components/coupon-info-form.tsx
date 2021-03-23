@@ -326,9 +326,6 @@ export default class CouponInfoForm extends Component<any, any> {
       attributesList,
       attributes
     } = this.props.relaxProps;
-    console.log(storeCateIds, 'storeCateIds----');
-    console.log(couponJoinLevel, 'couponJoinLevel----');
-    console.log(attributes, 'attributes----');
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
     if (storeCateIds) {

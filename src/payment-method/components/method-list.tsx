@@ -58,7 +58,6 @@ export default class PaymentMethod extends React.Component<any, any> {
   };
 
   onSwitchChange = (res) => {
-    console.log(res, 1111);
     const { onChecked } = this.props.relaxProps;
     /*this.setState({
       editType: res
@@ -79,10 +78,6 @@ export default class PaymentMethod extends React.Component<any, any> {
 
   render() {
     const { queryByStoreId, switchChecked, getStorePaymentVOs, switchVisible } = this.props.relaxProps;
-
-    setTimeout(() => {
-      console.log(switchChecked, 2222222);
-    });
 
     return (
       <div>

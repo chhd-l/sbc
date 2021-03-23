@@ -321,6 +321,17 @@ class SkuForm extends React.Component<any, any> {
                             {
                               required: true,
                               message: 'Please input subscription price'
+                            },
+                            {
+                              validator: (_rule, value, callback) => {
+                                if (rowInfo.subscriptionStatus === 1) {
+                                  if (value === 0) {
+                                    console.log(value, 111111);
+                                    callback('Subscription price cannot be zero');
+                                  }
+                                }
+                                callback();
+                              }
                             }
                           ],
                           onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),

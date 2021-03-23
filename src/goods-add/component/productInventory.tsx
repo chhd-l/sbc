@@ -218,7 +218,20 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
                   initialValue: c
-                })(<InputNumber style={{ width: '121px' }} min={0} max={b} />)}
+                })(
+                  <InputNumber
+                    style={{ width: '121px' }}
+                    min={0}
+                    max={b}
+                    formatter={(value) => {
+                      if (addSkUProduct.length === 1) {
+                        return (Number(value) / addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(0);
+                      } else {
+                        return value;
+                      }
+                    }}
+                  />
+                )}
               </FormItem>
             </Col>
           </Row>

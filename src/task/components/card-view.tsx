@@ -230,7 +230,9 @@ export default class CardView extends Component<any, any> {
                           <div className="goldenMoment">
                             <span style={{ background: this.getBackground('todo') }} className="point" />
                             <span>{item.name}</span>
-                            {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                            {item.priority === 'High' ? <span className="icon iconfont iconIII warningIcon high" /> : null}
+                            {item.priority === 'Medium' ? <span className="icon iconfont iconII warningIcon medium" /> : null}
+                            {item.priority === 'Low' ? <span className="icon iconfont iconI warningIcon low" /> : null}
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontaskName" />
@@ -261,7 +263,9 @@ export default class CardView extends Component<any, any> {
                           <div className="goldenMoment">
                             <span style={{ background: this.getBackground('onGoing') }} className="point" />
                             {item.name}
-                            {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                            {item.priority === 'High' ? <span className="icon iconfont iconIII warningIcon high" /> : null}
+                            {item.priority === 'Medium' ? <span className="icon iconfont iconII warningIcon medium" /> : null}
+                            {item.priority === 'Low' ? <span className="icon iconfont iconI warningIcon low" /> : null}
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontaskName" />
@@ -292,7 +296,9 @@ export default class CardView extends Component<any, any> {
                           <div className="goldenMoment">
                             <span style={{ background: this.getBackground('completed') }} className="point" />
                             {item.name}
-                            {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                            {item.priority === 'High' ? <span className="icon iconfont iconIII warningIcon high" /> : null}
+                            {item.priority === 'Medium' ? <span className="icon iconfont iconII warningIcon medium" /> : null}
+                            {item.priority === 'Low' ? <span className="icon iconfont iconI warningIcon low" /> : null}
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontaskName" />
@@ -323,7 +329,9 @@ export default class CardView extends Component<any, any> {
                           <div className="goldenMoment">
                             <span style={{ background: this.getBackground('cancelled') }} className="point" />
                             {item.name}
-                            {item.priority === 'High' ? <span className="icon iconfont iconwarning warningIcon" /> : null}
+                            {item.priority === 'High' ? <span className="icon iconfont iconIII warningIcon high" /> : null}
+                            {item.priority === 'Medium' ? <span className="icon iconfont iconII warningIcon medium" /> : null}
+                            {item.priority === 'Low' ? <span className="icon iconfont iconI warningIcon low" /> : null}
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontaskName" />

@@ -43,6 +43,13 @@ export function getTaskRead(params = {}) {
   });
 }
 
+export function getHomeTaskTodoListTop5() {
+  return Fetch<TResult>('/task/getTodoListTop5?queryType=1');
+}
+
+
+
+
 export function updateTask(filterParams = {}) {
   return Fetch<TResult>('/task/updateTask', {
     method: 'POST',

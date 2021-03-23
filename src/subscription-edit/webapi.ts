@@ -1,4 +1,4 @@
-import { Fetch } from 'qmkit';
+import { Fetch, Const } from 'qmkit';
 
 type TResult = {
   code: string;
@@ -120,8 +120,51 @@ export function queryCityById(filterParams = {}) {
   });
 }
 
-export function calcShippingFee(addressId: string) {
-  return Fetch<TResult>('/ShipSetting/Calculation', {
+/**
+ *
+ * @returns 获取地址输入类型
+ */
+ export async function getAddressInputTypeSetting() {
+  return await Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      configType: 'address_input_type'
+    })
+  })
+    .then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE && data.res.context && data.res.context.length > 0) {
+        return data.res.context.findIndex((ad) => ad.configKey === 'address_input_type_manually' && ad.context === '1') > -1 ? 'MANUALLY' : 'AUTOMATICALLY';
+      } else {
+        return '';
+      }
+    })
+    .catch(() => {
+      return '';
+    });
+}
+
+/**
+ * 搜索地址 Dadata
+ * @param txt
+ * @returns
+ */
+ async function getAddressListByDadata(txt: string) {
+  return Fetch<TResult>(`/address-input-auto/list?keyword=${txt}`, {
+    method: 'GET'
+  }).then(data => {
+    if (data.res.code === Const.SUCCESS_CODE && data.res.context.addressList.length > 0) {
+      return data.res.context.addressList[0];
+    } else {
+      return {};
+    }
+  }).catch(() => {
+    return {};
+  });
+}
+
+export async function calcShippingFee(address: string) {
+  const addressObj = await getAddressListByDadata(address);
+  return await Fetch<TResult>('/ShipSetting/Calculation', {
     method: 'POST',
     body: JSON.stringify({
       sourceRegionFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
@@ -129,19 +172,19 @@ export function calcShippingFee(addressId: string) {
       sourceCityFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
       sourceSettlementFias: null,
       sourcePostalCode: null,
-      regionFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
-      areaFias: null,
-      cityFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
-      settlementFias: null,
-      postalCode: null,
-      weight: '500',
+      regionFias: addressObj.provinceId || null,
+      areaFias: addressObj.areaId || null,
+      cityFias: addressObj.cityId || null,
+      settlementFias: addressObj.settlementId || null,
+      postalCode: addressObj.postCode || null,
+      weight: '1',
       insuranceSum: 0,
       codSum: 0,
       dimensions: {
-        height: '10',
-        width: '10',
-        depth: '10'
+        height: '1',
+        width: '1',
+        depth: '1'
       }
     })
-  });
+  }).then(data => data).catch(() => ({ res: { code: '505' } }));
 }

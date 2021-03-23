@@ -221,13 +221,13 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
         placeholder="Please select chargeback reason"
-        notFoundContent="暂无退货原因"
+        notFoundContent="There is no reason for the return"
         onChange={this._editInfo.bind(this, 'selectedReturnReason')}
       >
         <Option key={'key'} value={''}>
           Please select chargeback reason
         </Option>
-        {returnReasonList.map((item) => {
+        {returnReasonList&&returnReasonList.map((item) => {
           const map: IMap = item.toMap();
           const key = map.keySeq().first();
           const value = map.valueSeq().first();

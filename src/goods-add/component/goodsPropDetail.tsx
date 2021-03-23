@@ -57,10 +57,7 @@ export default class GoodsPropDetail extends React.Component<any, any> {
     const relaxProps = this.props.relaxProps;
     return (
       <div>
-        <WrapperForm
-          ref={(form) => (this['_form'] = form)}
-          {...{ relaxProps: relaxProps }}
-        />
+        <WrapperForm ref={(form) => (this['_form'] = form)} {...{ relaxProps: relaxProps }} />
       </div>
     );
   }
@@ -92,11 +89,9 @@ class AttributeForm extends React.Component<any, any> {
           <Form id="attributeForm">
             {propList &&
               propList.toJS().map((detList) => {
-                
                 return (
                   <Row type="flex" justify="start" key={detList[0].propId}>
                     {detList.map((det) => (
-                      
                       <Col span={10} key={det.propId + det.cateId}>
                         <FormItem {...formItemLayout} label={det.propName}>
                           {getFieldDecorator(`${det.propName}`, {
@@ -107,13 +102,16 @@ class AttributeForm extends React.Component<any, any> {
                               }
                             ],
                             initialValue:
-                            det.goodsPropDetails && (det.goodsPropDetails.filter((item) => item.select === 'select')).length
-                             ? (det.goodsPropDetails.filter((item) => item.select === 'select')).map((item) => {
-                              return {
-                                label: item.detailName,
-                                value: item.detailId
-                              }
-                            }) : []
+                              det.goodsPropDetails && det.goodsPropDetails.filter((item) => item.select === 'select').length
+                                ? det.goodsPropDetails
+                                    .filter((item) => item.select === 'select')
+                                    .map((item) => {
+                                      return {
+                                        label: item.detailName,
+                                        value: item.detailId
+                                      };
+                                    })
+                                : []
                           })(this._getPropTree(det))}
                         </FormItem>
                       </Col>
@@ -172,11 +170,11 @@ class AttributeForm extends React.Component<any, any> {
    * 店铺分类树形下拉框
    * @param propValues
    */
-   generateStoreCateTree = (propValues, isSingle) => {
+  generateStoreCateTree = (propValues, isSingle) => {
     const { propDetail } = this.props.relaxProps;
     const propDetails = propDetail ? propDetail.toJS() : [];
     const selectList = [];
-    propDetails.map((p) => {
+    propDetails.map((p:any) => {
       p.goodsPropDetails &&
         p.goodsPropDetails.map((x) => {
           if (x.select === 'select') {

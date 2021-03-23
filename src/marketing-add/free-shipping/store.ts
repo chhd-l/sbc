@@ -7,6 +7,7 @@ import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
 import FreeShippingActor from './actor/free-shipping-actor';
 import LoadingActor from './actor/loading-actor';
+import { fromJS } from 'immutable';
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -23,7 +24,15 @@ export default class AppStore extends Store {
     this.dispatch('loading:start');
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
-      this.dispatch('marketing:discountBean', res.context);
+      let shipping = {};
+      if (res.context.marketingFreeShippingLevel) {
+        shipping = {
+          shippingValue: res.context.marketingFreeShippingLevel.fullAmount ? res.context.marketingFreeShippingLevel.fullAmount : null,
+          shippingItemValue: res.context.marketingFreeShippingLevel.fullCount ? res.context.marketingFreeShippingLevel.fullCount : null
+        };
+      }
+      console.log({ ...res.context, ...shipping }, '----初始化');
+      this.dispatch('marketing:shippingBean', fromJS({ ...res.context, ...shipping }));
       this.dispatch('loading:end');
     } else if (res.code == 'K-080016') {
       //
@@ -56,15 +65,35 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   submitFreeShipping = async (shippingBean) => {
-    let response;
+    const params = this.toParams(shippingBean);
+    console.log(params, 'params---------------');
     this.dispatch('loading:start');
-    if (shippingBean.marketingId) {
-      response = await webapi.updateFullDiscount(shippingBean);
+    if (params.marketingId) {
+      const { res } = await webapi.updateFreeShipping(params);
+      if (res && res.code === Const.SUCCESS_CODE) {
+        history.push('/marketing-list');
+      }
       this.dispatch('loading:end');
     } else {
-      response = await webapi.addFullDiscount(shippingBean);
+      const { res } = await webapi.addFreeShipping(params);
+      if (res && res.code === Const.SUCCESS_CODE) {
+        history.push('/marketing-list');
+      }
       this.dispatch('loading:end');
     }
-    return response;
+  };
+  toParams = ({ marketingId, marketingName, beginTime, endTime, subType, shippingValue, shippingItemValue, joinLevel, segmentIds }) => {
+    return {
+      marketingType: 3, //免邮
+      marketingName,
+      beginTime,
+      endTime,
+      subType,
+      marketingFreeShippingLevel: { fullAmount: shippingValue, fullCount: shippingItemValue },
+      joinLevel,
+      segmentIds,
+      scopeType: 0,
+      marketingId
+    };
   };
 }

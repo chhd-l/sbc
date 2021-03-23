@@ -115,26 +115,26 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
 
   shippingRadioOnChange = (e, key) => {
     switch (key) {
-      case 'shippingType':
+      case 'subType':
         this.props.form.setFieldsValue({
-          shippingItems: null,
+          shippingItemValue: null,
           shippingValue: null
         });
         this.onBeanChange({
           shippingValue: null,
-          shippingItems: null,
-          shippingType: e.target.value
+          shippingItemValue: null,
+          subType: e.target.value
         });
         break;
       case 'shippingValue':
         this.onBeanChange({
           shippingValue: e.target.value,
-          shippingItems: null
+          shippingItemValue: null
         });
         break;
-      case 'shippingItems':
+      case 'shippingItemValue':
         this.onBeanChange({
-          shippingItems: e.target.value,
+          shippingItemValue: e.target.value,
           shippingValue: null
         });
         break;
@@ -202,23 +202,23 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
         <div className="bold-title">Free shipping type</div>
         <FormItem {...smallformItemLayout} labelAlign="left">
           {getFieldDecorator(
-            'shippingType',
+            'subType',
             {}
           )(
             <>
-              <RadioGroup value={marketingBean.get('shippingType') ? marketingBean.get('shippingType') : 1} onChange={(e) => this.shippingRadioOnChange(e, 'shippingType')}>
+              <RadioGroup value={marketingBean.get('subType')} onChange={(e) => this.shippingRadioOnChange(e, 'subType')}>
+                {/*<FormItem>*/}
+                {/*  <Radio value={1}>All order</Radio>*/}
+                {/*</FormItem>*/}
                 <FormItem>
-                  <Radio value={1}>All order</Radio>
-                </FormItem>
-                <FormItem>
-                  <Radio value={2}>
+                  <Radio value={10}>
                     <span>
                       Order reach &nbsp;
                       {getFieldDecorator('shippingValue', {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              if (!value && marketingBean.get('shippingType') === 2) {
+                              if (!value && marketingBean.get('subType') === 10) {
                                 callback('Shipping value must be entered.');
                               }
                               if (value) {
@@ -239,7 +239,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                             this.shippingRadioOnChange(e, 'shippingValue');
                           }}
                           value={marketingBean.get('shippingValue')}
-                          disabled={marketingBean.get('shippingType') !== 2}
+                          disabled={marketingBean.get('subType') !== 10}
                         />
                       )}
                       <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
@@ -247,14 +247,14 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                   </Radio>
                 </FormItem>
                 <FormItem>
-                  <Radio value={3}>
+                  <Radio value={11}>
                     <span>
                       Order reach &nbsp;
-                      {getFieldDecorator('shippingItems', {
+                      {getFieldDecorator('shippingItemValue', {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              if (!value && marketingBean.get('shippingType') === 3) {
+                              if (!value && marketingBean.get('subType') === 11) {
                                 callback('Items must be entered.');
                               }
                               if (value) {
@@ -266,7 +266,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                             }
                           }
                         ]
-                      })(<Input style={{ width: 200 }} value={marketingBean.get('shippingItems')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItems')} disabled={marketingBean.get('shippingType') !== 3} />)}
+                      })(<Input style={{ width: 200 }} value={marketingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={marketingBean.get('subType') !== 11} />)}
                       <span>&nbsp;items</span>
                     </span>
                   </Radio>
@@ -321,19 +321,21 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                 }
               ]
             })(
-              <Select
-                style={{ width: 520 }}
-                onChange={this.selectGroupOnChange}
-                // defaultValue={232}
-                value={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
-              >
-                {allGroups.size > 0 &&
-                  allGroups.map((item) => (
-                    <Select.Option key={item.get('id')} value={item.get('id')}>
-                      {item.get('name')}
-                    </Select.Option>
-                  ))}
-              </Select>
+              <>
+                <Select
+                  style={{ width: 520 }}
+                  onChange={this.selectGroupOnChange}
+                  // defaultValue={232}
+                  value={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
+                >
+                  {allGroups.size > 0 &&
+                    allGroups.map((item) => (
+                      <Select.Option key={item.get('id')} value={item.get('id')}>
+                        {item.get('name')}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </>
             )}
           </FormItem>
         )}

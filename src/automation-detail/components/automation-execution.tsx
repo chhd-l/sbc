@@ -61,7 +61,7 @@ class AutomationExecution extends Component<any, any> {
   handleModalTableChange = (pagination) => {
     this.setState(
       {
-        modalpPagination: pagination
+        modalPagination: pagination
       },
       () => {
         if (this.state.isDetail) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete, Modal, Alert, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, cache, Const } from 'qmkit';
-import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress, getRegionListByCityId, getAddressListByDadata } from './webapi';
+import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress, getRegionListByCityId, getAddressListByDadata, validateAddressScope } from './webapi';
 import { updateAddress, addAddress } from '../webapi';
 import _ from 'lodash';
 
@@ -65,7 +65,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
       checkedAddress: 0,
       fields: {},
       suggestionAddress: {},
-      searchAddressList: []
+      searchAddressList: [],
+      dadataAddress: {} //用来验证俄罗斯地址是不是在配送范围
     };
     this.searchCity = _.debounce(this.searchCity, 500);
     this.searchAddress = _.debounce(this.searchAddress, 200);
@@ -175,15 +176,33 @@ class DeliveryItem extends React.Component<Iprop, any> {
     backToDetail();
   };
 
-  saveAddress = () => {
+  saveAddress = async () => {
     const { delivery } = this.props;
-    const { checkedAddress, suggestionAddress } = this.state;
+    const { checkedAddress, suggestionAddress, dadataAddress, addressInputType } = this.state;
     const sugAddr = checkedAddress === 1 ? { province: suggestionAddress.provinceCode, city: suggestionAddress.city, address1: suggestionAddress.address1, address2: suggestionAddress.address2, postCode: suggestionAddress.postalCode } : {};
-    this.props.form.validateFields((err, fields) => {
+    this.props.form.validateFields(async (err, fields) => {
       if (!err) {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
         const rFields = { ...fields, ...sugAddr };
+        if (addressInputType === 'AUTOMATICALLY') {
+          const validStatus = await validateAddressScope({
+            regionFias: dadataAddress.provinceId || null,
+            areaFias: dadataAddress.areaId || null,
+            cityFias: dadataAddress.cityId || null,
+            settlementFias: dadataAddress.settlementId || null,
+            postalCode: dadataAddress.postCode || null
+          });
+          if (!validStatus) {
+            this.props.form.setFields({
+              address1: {
+                value: fields['address1'],
+                errors: [new Error('Please enter an address that is within the delivery areas of the online store')]
+              }
+            });
+            return;
+          }
+        }
         handlerFunc({
           ...delivery,
           ...rFields,
@@ -219,20 +238,28 @@ class DeliveryItem extends React.Component<Iprop, any> {
     getAddressListByDadata(txt).then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          searchAddressList: data.res.context.addressList.map((ad) => ad.unrestrictedValue)
+          searchAddressList: data.res.context.addressList
         });
       }
     });
+  };
+
+  onSelectRuAddress = (value, option) => {
+    const address = this.state.searchAddressList[option.key];
+    this.setState({
+      dadataAddress: address
+    });
+    this.props.form.setFieldsValue({ postCode: address.postCode || '' });
   };
 
   renderField = (field: any) => {
     if (field.fieldName === 'Address1') {
       if (field.inputSearchBoxFlag === 1) {
         return (
-          <Select showSearch filterOption={false} onSearch={this.searchAddress}>
-            {this.state.searchAddressList.map((text, idx) => (
-              <Option value={text} key={idx}>
-                {text}
+          <Select showSearch filterOption={false} onSearch={this.searchAddress} onChange={this.onSelectRuAddress}>
+            {this.state.searchAddressList.map((item, idx) => (
+              <Option value={item.unrestrictedValue} key={idx}>
+                {item.unrestrictedValue}
               </Option>
             ))}
           </Select>

@@ -201,6 +201,43 @@ export function getAddressListByDadata(txt: string) {
 }
 
 /**
+ * 俄罗斯验证地址是不是在配送范围
+ * @param addressFias
+ * @returns
+ */
+export async function validateAddressScope(addressFias = {}) {
+  return await Fetch<TResult>('/ShipSetting/Calculation', {
+    method: 'POST',
+    body: JSON.stringify({
+      sourceRegionFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
+      sourceAreaFias: null,
+      sourceCityFias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
+      sourceSettlementFias: null,
+      sourcePostalCode: null,
+      ...addressFias,
+      weight: '1',
+      insuranceSum: 0,
+      codSum: 0,
+      dimensions: {
+        height: '1',
+        width: '1',
+        depth: '1'
+      }
+    })
+  })
+    .then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        return data.res.context.success;
+      } else {
+        return false;
+      }
+    })
+    .catch(() => {
+      return false;
+    });
+}
+
+/**
  * 获取候选tagging
  */
 export function getTaggingList() {

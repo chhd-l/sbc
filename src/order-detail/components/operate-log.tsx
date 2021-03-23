@@ -69,7 +69,7 @@ export default class OperateLog extends React.Component<any, any> {
             <Panel header={<FormattedMessage id="operationLog" />} key="1" style={customPanelStyle}>
               <Row>
                 <Col span={24}>
-                  <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={log.toJS()} pagination={false} bordered />
+                  <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={log ? log.toJS() : []} pagination={false} bordered />
                 </Col>
               </Row>
             </Panel>

@@ -18,8 +18,8 @@ class ShippingFeeSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      ShippingFeeVisible: false,
-      ShippingFeeList: [],
+      shippingFeeVisible: false,
+      shippingFeeList: [],
       selectShippingFee: {},
       loading: false
     };
@@ -34,14 +34,28 @@ class ShippingFeeSetting extends Component<any, any> {
   getShippingFeeSetting() {
     this.setState({
       loading: true
-    });
+    }); 
     webapi
       .GetShipSettingList()
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
+          let list = res.context.page ? res.context.page.content : []
+          let shippingFeeList = []
+          list.map(item=>{
+            if(item.type === 'fgs'){
+              shippingFeeList.push(item)
+            }
+            return item
+          })
+          list.map(item=>{
+            if(item.type !== 'fgs'){
+              shippingFeeList.push(item)
+            }
+            return item
+          })
           this.setState({
-            ShippingFeeList: res.context.page ? res.context.page.content : [],
+            shippingFeeList: shippingFeeList,
             loading: false
           });
         } else {
@@ -61,7 +75,7 @@ class ShippingFeeSetting extends Component<any, any> {
 
   closeModel = () => {
     this.setState({
-      ShippingFeeVisible: false
+      shippingFeeVisible: false
     });
   };
   enableShippingFee(item) {
@@ -106,7 +120,7 @@ class ShippingFeeSetting extends Component<any, any> {
     });
   }
   render() {
-    const { ShippingFeeList, ShippingFeeVisible, loading } = this.state;
+    const { shippingFeeList, shippingFeeVisible, loading } = this.state;
     const { getFieldDecorator } = this.props.form;
     let header = this.state.selectShippingFee.header ? JSON.parse(this.state.selectShippingFee.header) : {};
     let domain = header.Domain;
@@ -118,8 +132,8 @@ class ShippingFeeSetting extends Component<any, any> {
           <Headline title="Shipping fee calculation" />
           <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <Row style={{ marginBottom: 10 }}>
-              {ShippingFeeList &&
-                ShippingFeeList.map((item, index) => (
+              {shippingFeeList &&
+                shippingFeeList.map((item, index) => (
                   <Col span={8} key={index}>
                     {item.type === 'fgs' ? (
                       <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
@@ -138,29 +152,14 @@ class ShippingFeeSetting extends Component<any, any> {
                         <div className="bar" style={{ float: 'right' }}>
                           <div className="status">
                             <Popconfirm
-                              disabled={item.closeFlag === 1 && ShippingFeeList.filter((x) => x.closeFlag === 0).length > 0}
+                              disabled={item.closeFlag === 1 && shippingFeeList.filter((x) => x.closeFlag === 0).length > 0}
                               title={`Are you sure to ${item.closeFlag === 0 ? 'disable' : 'enable'} this?`}
                               onConfirm={() => this.enableShippingFee(item)}
                               okText="Yes"
                               cancelText="No"
                             >
-                              <Switch size="small" disabled={item.closeFlag === 1 && ShippingFeeList.filter((x) => x.closeFlag === 0).length > 0} checked={item.closeFlag === 0 ? true : false} />
+                              <Switch size="small" disabled={item.closeFlag === 1 && shippingFeeList.filter((x) => x.closeFlag === 0).length > 0} checked={item.closeFlag === 0 ? true : false} />
                             </Popconfirm>
-                          </div>
-                          <div>
-                            <Tooltip placement="top" title="Edit">
-                              <a
-                                style={{ color: 'red', position: 'absolute', top: 10, right: 10 }}
-                                type="link"
-                                onClick={() => {
-                                  this.setState({
-                                    ShippingFeeVisible: true,
-                                    selectShippingFee: item
-                                  });
-                                }}
-                                className="iconfont iconEdit"
-                              ></a>
-                            </Tooltip>
                           </div>
                         </div>
                       </Card>
@@ -174,13 +173,13 @@ class ShippingFeeSetting extends Component<any, any> {
                         <div className="bar" style={{ float: 'right' }}>
                           <div className="status">
                             <Popconfirm
-                              disabled={item.closeFlag === 1 && ShippingFeeList.filter((x) => x.closeFlag === 0).length > 0}
+                              disabled={item.closeFlag === 1 && shippingFeeList.filter((x) => x.closeFlag === 0).length > 0}
                               title={`Are you sure to ${item.closeFlag === 0 ? 'disable' : 'enable'} this?`}
                               onConfirm={() => this.enableShippingFee(item)}
                               okText="Yes"
                               cancelText="No"
                             >
-                              <Switch size="small" disabled={item.closeFlag === 1 && ShippingFeeList.filter((x) => x.closeFlag === 0).length > 0} checked={item.closeFlag === 0 ? true : false} />
+                              <Switch size="small" disabled={item.closeFlag === 1 && shippingFeeList.filter((x) => x.closeFlag === 0).length > 0} checked={item.closeFlag === 0 ? true : false} />
                             </Popconfirm>
                           </div>
                           <div>
@@ -190,7 +189,7 @@ class ShippingFeeSetting extends Component<any, any> {
                                 type="link"
                                 onClick={() => {
                                   this.setState({
-                                    ShippingFeeVisible: true,
+                                    shippingFeeVisible: true,
                                     selectShippingFee: item
                                   });
                                 }}
@@ -205,7 +204,7 @@ class ShippingFeeSetting extends Component<any, any> {
                 ))}
             </Row>
           </Spin>
-          <Modal visible={ShippingFeeVisible} title="Shipping API Setting" onOk={this.saveShippingFee} maskClosable={false} onCancel={() => this.closeModel()} okText="Submit">
+          <Modal visible={shippingFeeVisible} title="Shipping API Setting" onOk={this.saveShippingFee} maskClosable={false} onCancel={() => this.closeModel()} okText="Submit">
             <Form>
               <FormItem {...formItemLayout} required={true} label="URL">
                 {getFieldDecorator('url', {

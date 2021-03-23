@@ -135,12 +135,7 @@ export default class ListView extends Component<any, any> {
         width: '10%'
       },
       {
-        title: 'Email',
-        dataIndex: 'assistantEmail',
-        width: '15%'
-      },
-      {
-        title: 'Pet Assistant',
+        title: 'Customer Care',
         dataIndex: 'assistantName',
         width: '10%'
       },

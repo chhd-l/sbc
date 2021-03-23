@@ -24,6 +24,13 @@ export const addStorePayment = (rids) => {
   });
 };
 
+export const editStorePayment = (rids) => {
+  return Fetch<TResult>('/storePayment/editStorePayment', {
+    method: 'POST',
+    body: JSON.stringify(rids)
+  });
+};
+
 /**
  * 保存Payment Setting
  * @param info

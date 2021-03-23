@@ -27,19 +27,27 @@
 
 .appt-date-wrapper {
   width: 400px;
+  height: 353px;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   position: relative;
+  overflow: hidden;
 
   .appt-time-wrapper {
-    width: 400;
-    height: 100%;
+    width: 400px;
+    height: 353px;
+    box-sizing: border-box;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 352px;
+    left: -1px;
     border: 1px solid #d9d9d9;
     border-radius: 4px;
     background-color: #fff;
+    transition: top linear 0.2s;
+
+    &.show {
+      top: -1px;
+    }
   }
 
   .appt-date-footer {

@@ -13,11 +13,19 @@ export default class NewAppointment extends React.Component<any, any> {
     this.state = {
       visible: false,
       selectedDate: [moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
+      showTimePicker: false,
       memberInfo: {},
       guestInfo: {},
       memberType: 'member'
     };
   }
+
+  onSelectDate = (date) => {
+    this.setState({
+      selectedDate: [date.format('YYYY-MM-DD'), ''],
+      showTimePicker: true
+    });
+  };
 
   onSelectMemberType = (e) => {
     this.setState({
@@ -54,7 +62,7 @@ export default class NewAppointment extends React.Component<any, any> {
   };
 
   render() {
-    const { selectedDate } = this.state;
+    const { selectedDate, showTimePicker } = this.state;
     return (
       <div>
         <Breadcrumb>
@@ -77,9 +85,10 @@ export default class NewAppointment extends React.Component<any, any> {
                 <Calendar
                   fullscreen={false}
                   mode="month"
-                  defaultValue={moment().day() === 1 ? moment().add(1, 'days') : moment()}
+                  value={moment(selectedDate[0], 'YYYY-MM-DD')}
                   disabledDate={(currentDate) => currentDate < moment().startOf('day') || currentDate.day() === 1}
                   validRange={[moment(), moment('2021-06-13', 'YYYY-MM-DD')]}
+                  onChange={this.onSelectDate}
                   headerRender={({ value, type, onChange, onTypeChange }) => {
                     return (
                       <Row type="flex" justify="space-between" gutter={20}>
@@ -96,6 +105,7 @@ export default class NewAppointment extends React.Component<any, any> {
                   dateFullCellRender={(date) => <a className={`customer-date-field ${date < moment().startOf('day') || date.day() === 1 ? 'disabled' : ''}`}>{date.format('DD')}</a>}
                 />
                 <div className="appt-date-footer">{selectedDate.join(' ')}</div>
+                <div className={`appt-time-wrapper ${showTimePicker ? 'show' : ''}`}></div>
               </div>
             </Form.Item>
             <Form.Item label="Consumer information">

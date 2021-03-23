@@ -111,6 +111,29 @@ export default class ListView extends React.Component<any, any> {
       });
   };
 
+  modifySubStatus = (id: string, status: string) => {
+    this.setState({ loading: true });
+    const handler = status === '1' ? webapi.pauseSubscription : webapi.restartSubscription;
+    handler(id).then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        const { dataList } = this.state;
+        dataList.forEach((item) => {
+          if (item.subscribeId === id) {
+            item.subscribeStatus = status;
+          }
+        });
+        this.setState({
+          loading: false,
+          dataList: dataList
+        });
+      } else {
+        this.setState({ loading: false });
+      }
+    }).catch(() => {
+      this.setState({ loading: false });
+    });
+  };
+
   render() {
     const { allChecked, loading, pagination, dataList } = this.state;
     return (
@@ -268,7 +291,7 @@ export default class ListView extends React.Component<any, any> {
                         ))}
                     </td>
                     {/*subscription status*/}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscribeStatus === '0' ? 'Active' : 'Inactive'}</td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscribeStatus === '0' ? 'Active' : v.subscribeStatus === '1' ? 'Pause' : 'Inactive'}</td>
                     {/* consumerName */}
                     <td style={{ width: '10%', paddingLeft: 20 }}>{v.customerName ? v.customerName : ''}</td>
                     {/* Recipient */}
@@ -305,6 +328,20 @@ export default class ListView extends React.Component<any, any> {
                             </a>
                           </Tooltip>
                         </Popconfirm>
+                      ) : null}
+                      {v.subscribeStatus === '0' ? (
+                        <Tooltip placement="top" title="Pause">
+                          <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '1')}>
+                            <i className="iconfont iconbtn-pause"></i>
+                          </Button>
+                        </Tooltip>
+                      ) : null}
+                      {v.subscribeStatus === '1' ? (
+                        <Tooltip placement="top" title="Restart">
+                          <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '0')}>
+                            <i className="iconfont iconbtn-open"></i>
+                          </Button>
+                        </Tooltip>
                       ) : null}
                     </td>
                   </tr>

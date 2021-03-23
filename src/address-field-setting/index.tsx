@@ -39,7 +39,7 @@ export default class AddressFieldSetting extends React.Component<any, any> {
     getAddressInputTypeSetting().then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          setting: data.res.context
+          setting: data.res.context || []
         });
       }
     });

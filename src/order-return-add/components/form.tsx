@@ -94,7 +94,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       <div style={styles.container}>
         <h3 style={styles.title}>Chargeback information</h3>
         <Form>
-          <FormItem {...formItemLayout} label="Chargeback reason" hasFeedback>
+          <FormItem {...formItemLayout} label="Return reason" hasFeedback>
             {getFieldDecorator('returnReason', {
               initialValue: selectedReturnReason,
               rules: [

@@ -1,19 +1,30 @@
 import React from 'react';
 import { Headline, history } from 'qmkit';
-import { Radio, Calendar, Button, Form, Breadcrumb, Row, Col, Input } from 'antd';
+import { Radio, Calendar, Button, Form, Breadcrumb, Row, Col, Input, Tooltip, Icon, Spin } from 'antd';
 import moment from 'moment';
 import CustomerList from './components/customer-list';
-import { getAvailabelTimeByDate } from './webapi';
+import { getAvailabelTimeByDate, addNewAppointment } from './webapi';
 
 import './index.less';
+
+const genTimeArr = () => {
+  let timeArr = [];
+  for (let i = 10; i < 20; i++) {
+    timeArr.push({ hour: i, begin: '00', end: '20', available: true, selected: false });
+    timeArr.push({ hour: i, begin: '30', end: '50', available: true, selected: false });
+  }
+  return timeArr;
+};
 
 export default class NewAppointment extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       visible: false,
+      loading: false,
       selectedDate: [moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
       showTimePicker: false,
+      timeList: genTimeArr(),
       memberInfo: {},
       guestInfo: {},
       memberType: 'member'
@@ -21,9 +32,33 @@ export default class NewAppointment extends React.Component<any, any> {
   }
 
   onSelectDate = (date) => {
+    getAvailabelTimeByDate(date.format('YYYYMMDD')).then((data) => {});
     this.setState({
       selectedDate: [date.format('YYYY-MM-DD'), ''],
       showTimePicker: true
+    });
+  };
+
+  onSelectTime = (hour, begin) => {
+    const { timeList, selectedDate } = this.state;
+    timeList.forEach((time) => {
+      time.selected = false;
+      if (time.hour === hour && time.begin === begin) {
+        time.selected = true;
+      }
+    });
+    selectedDate[1] = `${hour}:${begin}`;
+    this.setState({
+      timeList,
+      selectedDate
+    });
+  };
+
+  onResetDate = () => {
+    this.setState({
+      selectedDate: [moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
+      timeList: genTimeArr(),
+      showTimePicker: false
     });
   };
 
@@ -61,10 +96,14 @@ export default class NewAppointment extends React.Component<any, any> {
     });
   };
 
+  onSaveAppointment = () => {
+    const {};
+  };
+
   render() {
-    const { selectedDate, showTimePicker } = this.state;
+    const { selectedDate, showTimePicker, timeList } = this.state;
     return (
-      <div>
+      <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
         <Breadcrumb>
           <Breadcrumb.Item>
             <a href="/appointment-list">Appointment list</a>
@@ -105,7 +144,27 @@ export default class NewAppointment extends React.Component<any, any> {
                   dateFullCellRender={(date) => <a className={`customer-date-field ${date < moment().startOf('day') || date.day() === 1 ? 'disabled' : ''}`}>{date.format('DD')}</a>}
                 />
                 <div className="appt-date-footer">{selectedDate.join(' ')}</div>
-                <div className={`appt-time-wrapper ${showTimePicker ? 'show' : ''}`}></div>
+                <div className={`appt-time-wrapper ${showTimePicker ? 'show' : ''}`}>
+                  <Row>
+                    <Col span={12} offset={6} style={{ textAlign: 'center' }}>
+                      <Icon type="caret-up" />
+                    </Col>
+                    <Col span={6}>
+                      <Button type="link" onClick={this.onResetDate}>
+                        <Icon type="sync" /> Reset
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row>
+                    {timeList.map((time, idx) => (
+                      <Col style={{ textAlign: 'center' }} key={idx} span={6}>
+                        <Tooltip title={`${time.hour}:${time.begin}-${time.hour}:${time.end}`} trigger="hover">
+                          <Button size="small" disabled={!time.available} type={time.selected ? 'primary' : 'default'} onClick={() => this.onSelectTime(time.hour, time.begin)}>{`${time.hour}:${time.begin}`}</Button>
+                        </Tooltip>
+                      </Col>
+                    ))}
+                  </Row>
+                </div>
               </div>
             </Form.Item>
             <Form.Item label="Consumer information">
@@ -139,7 +198,7 @@ export default class NewAppointment extends React.Component<any, any> {
             </Button>
           </div>
         </div>
-      </div>
+      </Spin>
     );
   }
 }

@@ -218,11 +218,11 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              if (!value && marketingBean.get('subType') === 10) {
+                              if (!marketingBean.get('shippingValue') && marketingBean.get('subType') === 10) {
                                 callback('Shipping value must be entered.');
                               }
-                              if (value) {
-                                if (!ValidConst.zeroPrice.test(value) || !(value < 10000 && value >= 0)) {
+                              if (marketingBean.get('shippingValue')) {
+                                if (!ValidConst.zeroPrice.test(marketingBean.get('shippingValue')) || !(marketingBean.get('shippingValue') < 10000 && marketingBean.get('shippingValue') >= 0)) {
                                   callback('0-9999');
                                 }
                               }
@@ -231,16 +231,18 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                           }
                         ]
                       })(
-                        <Input
-                          style={{ width: 200 }}
-                          title={'0-9999'}
-                          placeholder={'0-9999'}
-                          onChange={(e) => {
-                            this.shippingRadioOnChange(e, 'shippingValue');
-                          }}
-                          value={marketingBean.get('shippingValue')}
-                          disabled={marketingBean.get('subType') !== 10}
-                        />
+                        <>
+                          <Input
+                            style={{ width: 200 }}
+                            title={'0-9999'}
+                            placeholder={'0-9999'}
+                            onChange={(e) => {
+                              this.shippingRadioOnChange(e, 'shippingValue');
+                            }}
+                            value={marketingBean.get('shippingValue')}
+                            disabled={marketingBean.get('subType') !== 10}
+                          />
+                        </>
                       )}
                       <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                     </span>
@@ -254,11 +256,12 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              if (!value && marketingBean.get('subType') === 11) {
+                              debugger;
+                              if (!marketingBean.get('shippingItemValue') && marketingBean.get('subType') === 11) {
                                 callback('Items must be entered.');
                               }
-                              if (value) {
-                                if (!ValidConst.zeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                              if (marketingBean.get('shippingItemValue')) {
+                                if (!ValidConst.zeroNumber.test(marketingBean.get('shippingItemValue')) || !(marketingBean.get('shippingItemValue') < 10000 && marketingBean.get('shippingItemValue') > 0)) {
                                   callback('1-9999');
                                 }
                               }
@@ -266,7 +269,11 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                             }
                           }
                         ]
-                      })(<Input style={{ width: 200 }} value={marketingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={marketingBean.get('subType') !== 11} />)}
+                      })(
+                        <>
+                          <Input style={{ width: 200 }} value={marketingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={marketingBean.get('subType') !== 11} />
+                        </>
+                      )}
                       <span>&nbsp;items</span>
                     </span>
                   </Radio>

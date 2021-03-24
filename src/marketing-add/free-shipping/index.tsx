@@ -7,6 +7,7 @@ import AppStore from './store';
 import FreeShippingAddForm from './components/free-shipping-add-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
+const WrappedForm = Form.create()(FreeShippingAddForm);
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class MarketingFreeShippingAdd extends React.Component<any, any> {
@@ -26,11 +27,9 @@ export default class MarketingFreeShippingAdd extends React.Component<any, any> 
   }
 
   render() {
-    const WrappedForm = Form.create()(FreeShippingAddForm);
     const state = this.props.location.state;
     const { marketingId } = this.props.match.params;
     const { source } = (state || {}) as any;
-
     return (
       <AuthWrapper functionName="f_marketing_discount_add">
         <div>

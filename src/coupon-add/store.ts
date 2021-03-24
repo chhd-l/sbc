@@ -60,7 +60,7 @@ export default class AppStore extends Store {
         segmentIds,
         couponPromotionType,
         couponDiscount,
-        attributeIds
+        attributeValueIds
       } = couponInfo;
 
       const scopeIds = await this.fetchScope(scopeType, couponInfo.scopeIds);
@@ -85,7 +85,7 @@ export default class AppStore extends Store {
         segmentIds,
         couponPromotionType,
         couponDiscount: couponDiscount * 10.0,
-        attributeIds
+        attributeValueIds
       });
       this.dispatch('loading:end');
     }
@@ -155,7 +155,7 @@ export default class AppStore extends Store {
         value: []
       });
       this.dispatch('coupon: info: field: value', {
-        field: 'attributeIds',
+        field: 'attributeValueIds',
         value: []
       });
     });
@@ -221,7 +221,7 @@ export default class AppStore extends Store {
       chooseCateIds,
       couponDesc,
       chooseSkuIds,
-      attributeIds
+      attributeValueIds
     } = this.state().toJS();
 
     let params = {
@@ -238,7 +238,7 @@ export default class AppStore extends Store {
       couponDesc,
       couponPromotionType,
       couponDiscount: couponDiscount / 10.0,
-      attributeIds
+      attributeValueIds
     } as any;
 
     if (rangeDayType === 0) {

@@ -63,7 +63,7 @@ export default class CouponInfoActor extends Actor {
       couponPromotionType: 0, //Amount: 0 or Percentage: 1
       couponDiscount: null,
       attributesList: [],
-      attributeIds: []
+      attributeValueIds: null
     };
   }
   /**
@@ -115,7 +115,7 @@ export default class CouponInfoActor extends Actor {
       segmentIds,
       couponPromotionType,
       couponDiscount,
-      attributeIds
+      attributeValueIds
     } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
@@ -136,7 +136,7 @@ export default class CouponInfoActor extends Actor {
       .set('segmentIds', fromJS(segmentIds))
       .set('couponPromotionType', couponPromotionType)
       .set('couponDiscount', fromJS(couponDiscount))
-      .set('attributeIds', fromJS(attributeIds));
+      .set('attributeValueIds', fromJS(attributeValueIds));
 
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));
@@ -260,6 +260,13 @@ export default class CouponInfoActor extends Actor {
 
   @Action('goodsActor:attributesList')
   getAllAttributesList(state, attributesList) {
+    attributesList.forEach((item) => {
+      if (item.attributesValuesVOList) {
+        item.attributesValuesVOList.forEach((child) => {
+          child.attributeName = child.attributeDetailName;
+        });
+      }
+    });
     return state.set('attributesList', fromJS(attributesList));
   }
 }

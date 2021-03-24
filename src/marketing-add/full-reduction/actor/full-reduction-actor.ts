@@ -35,6 +35,13 @@ export default class FullReductionActor extends Actor {
 
   @Action('marketing:attributesList')
   getAllAttributesList(state, attributesList) {
+    attributesList.forEach((item) => {
+      if (item.attributesValuesVOList) {
+        item.attributesValuesVOList.forEach((child) => {
+          child.attributeName = child.attributeDetailName;
+        });
+      }
+    });
     return state.set('attributesList', fromJS(attributesList));
   }
 

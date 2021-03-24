@@ -1,8 +1,8 @@
 import React from 'react';
 import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message } from 'antd';
-import { getAppointmentList, updateAppointmentById, exportAppointmentList } from './webapi';
+import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal } from 'antd';
+import { getAppointmentList, updateAppointmentById, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
 import QRScan from './components/qr-scan';
 
 const FormItem = Form.Item;
@@ -31,13 +31,15 @@ export default class AppointmentList extends React.Component<any, any> {
         exportByParams: this.onExportSearchParams,
         exportByIds: this.onExportSelected
       },
-      showScan: false
+      showScan: false,
+      scanedInfo: {},
+      showCard: false
     };
   }
 
   componentDidMount() {
     this.getAppointmentList();
-    this.qrScan = new QRScan('scan_div');
+    this.qrScan = new QRScan();
   }
 
   getAppointmentList = () => {
@@ -59,6 +61,23 @@ export default class AppointmentList extends React.Component<any, any> {
       });
   };
 
+  onSearch = () => {
+    const { pagination } = this.state;
+    this.onTableChange({
+      ...pagination,
+      current: 1
+    });
+  };
+
+  onTableChange = (pagination) => {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.getAppointmentList()
+    );
+  };
+
   onSearchFormFieldChange = (field, value) => {
     const { searchForm } = this.state;
     this.setState({
@@ -69,12 +88,12 @@ export default class AppointmentList extends React.Component<any, any> {
     });
   };
 
-  updateAppointmentStatus = (id: number, status: number) => {
+  updateAppointmentStatus = (record: any, status: number) => {
     const { list } = this.state;
     this.setState({ loading: true });
-    const appointment = list.find((r) => r.id === id);
+    const appointment = list.find((r) => r.id === record.id) || {};
     updateAppointmentById({
-      ...appointment,
+      ...record,
       status: status
     })
       .then((data) => {
@@ -82,7 +101,8 @@ export default class AppointmentList extends React.Component<any, any> {
           appointment.status = status;
           this.setState({
             loading: false,
-            list
+            list,
+            showCard: false
           });
         } else {
           this.setState({ loading: false });
@@ -142,25 +162,43 @@ export default class AppointmentList extends React.Component<any, any> {
     return exportAppointmentList({ ids: selectedRowKeys });
   };
 
+  findByApptNo = (apptNo: string) => {
+    findAppointmentByAppointmentNo(apptNo).then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE && data.res.context.settingVO.id) {
+        this.setState({
+          scanedInfo: data.res.context.settingVO,
+          showCard: true
+        });
+      } else {
+        message.error('Can not find consumer, please try again');
+      }
+    });
+  };
+
   beginScan = () => {
     this.setState(
       {
         showScan: true
       },
       () => {
-        this.qrScan.openScan();
+        this.qrScan.startScan('scan_div', (code) => {
+          this.findByApptNo(code);
+          this.closeScan();
+        });
       }
     );
   };
 
-  captureImg = () => {
-    this.qrScan.getImgDecode((img) => {});
-  };
-
   closeScan = () => {
-    this.qrScan.closeScan();
+    this.qrScan.stopScan();
     this.setState({
       showScan: false
+    });
+  };
+
+  onCloseCard = () => {
+    this.setState({
+      showCard: false
     });
   };
 
@@ -214,14 +252,14 @@ export default class AppointmentList extends React.Component<any, any> {
             </Tooltip>
             {text === 0 && (
               <Tooltip title="Arrived">
-                <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record.id, 1)} style={{ padding: '0 5px' }}>
+                <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
                   <i className="iconfont iconEnabled"></i>
                 </Button>
               </Tooltip>
             )}
             {text === 0 && (
               <Tooltip title="Cancel">
-                <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record.id, 2)} style={{ padding: '0 5px' }}>
+                <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 2)} style={{ padding: '0 5px' }}>
                   <i className="iconfont iconbtn-disable"></i>
                 </Button>
               </Tooltip>
@@ -299,7 +337,7 @@ export default class AppointmentList extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={24} style={{ textAlign: 'center' }}>
-                <Button type="primary" onClick={this.getAppointmentList}>
+                <Button type="primary" onClick={this.onSearch}>
                   Search
                 </Button>
               </Col>
@@ -329,18 +367,21 @@ export default class AppointmentList extends React.Component<any, any> {
             dataSource={list}
             loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
             pagination={pagination}
+            onChange={this.onTableChange}
           />
         </div>
         <ExportModal data={this.state.exportModalData} onHide={this.onCloseExportModal} handleByParams={this.state.exportModalData.exportByParams} handleByIds={this.state.exportModalData.exportByIds} />
         <div id="scan_container" style={{ ...styles.scaner, display: this.state.showScan ? 'block' : 'none' }}>
-          <div id="scan_div"></div>
+          <div id="scan_div" style={styles.camera}></div>
           <div style={{ marginTop: 20 }}>
-            <Button type="primary" onClick={this.captureImg}>
-              Capture
-            </Button>
             <Button onClick={this.closeScan}>Close</Button>
           </div>
         </div>
+        <Modal title="Consumer information" visible={this.state.showCard} onCancel={this.onCloseCard} onOk={() => this.updateAppointmentStatus(this.state.scanedInfo, 1)}>
+          <p>Consumer name: {this.state.scanedInfo.consumerName}</p>
+          <p>Consumer phone: {this.state.scanedInfo.consumerPhone}</p>
+          <p>Consumer email: {this.state.scanedInfo.consumerEmail}</p>
+        </Modal>
       </div>
     );
   }
@@ -361,7 +402,11 @@ const styles = {
     top: '0px',
     left: '0px',
     zIndex: 99999,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(0,0,0,.7)',
     textAlign: 'center'
+  },
+  camera: {
+    display: 'inline-block',
+    width: 600
   }
 } as any;

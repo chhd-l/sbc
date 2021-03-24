@@ -88,7 +88,6 @@ export default class SelectedProduct extends React.Component<any, any> {
     let goodsList = result[2].res.context?.goodsList ?? [];
     let options = [...months, ...weeks];
     this.props.carts(goodsList);
-    // debugger
     this.setState(
       {
         options,

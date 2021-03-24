@@ -271,7 +271,6 @@ class MessageDetails extends Component<any, any> {
             ccList: detailForm.ccList
           }
         };
-        debugger;
         if (params.id) {
           this.updateEmailTask(params, 'submit');
         } else {

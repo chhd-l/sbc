@@ -88,7 +88,20 @@ class ManualOrder extends Component<any, any> {
     this.setState({ current });
   }
 
-  componentWillMount() { }
+  componentWillMount() { 
+    let {customerId,customerName, customerAccount}=this.props?.location?.query??{};
+    if(customerId&&customerName&&customerAccount){
+      this.setState({
+        customer:{
+          customerId,
+          customerName, 
+          customerAccount
+        }
+      })
+    }
+
+
+  }
 
   getCustomer = (customer) => {
     this.setState({

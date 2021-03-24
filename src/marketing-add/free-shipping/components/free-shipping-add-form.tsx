@@ -44,7 +44,7 @@ const largeformItemLayout = {
 export default class FreeShippingAddForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
-    const relaxProps = props.store.state();
+    // const relaxProps = props.store.state();
     this.state = {
       // marketingBean: relaxProps.get('marketingBean'),
       timeZone: moment
@@ -84,11 +84,6 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
    */
   onBeanChange = (params) => {
     const { marketingBean, shippingBeanOnChange } = this.props.relaxProps;
-    // this.setState({
-    //   marketingBean: this.state.marketingBean.merge(params)
-    //   // PromotionTypeChecked: true
-    // });
-    debugger;
     shippingBeanOnChange(marketingBean.merge(params));
   };
 
@@ -100,20 +95,12 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     e.preventDefault();
     let errorObject = {};
     const { marketingBean, submitFreeShipping } = this.props.relaxProps;
-    debugger;
-    // if (marketingBean.get('joinLevel') == -3 && (!marketingBean.get('segmentIds') || marketingBean.get('segmentIds').size === 0)) {
-    //   errorObject['segmentIds'] = {
-    //     value: null,
-    //     errors: [new Error('Please select group.')]
-    //   };
-    // }
+    this.setState({
+      count: 1
+    });
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // if (Object.keys(errorObject).length != 0) {
-        //   this.props.form.setFields(errorObject);
-        //   return
-        // }
         submitFreeShipping(marketingBean.toJS());
       }
     });
@@ -178,7 +165,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
 
   render() {
     const { form } = this.props; //marketingType, marketingId,
-    const { getFieldDecorator } = form;
+    const { getFieldDecorator } = this.props.form;
     const { allGroups, marketingBean, loading } = this.props.relaxProps;
     console.log(marketingBean.toJS(), 'marketingBean---------');
     console.log(allGroups.toJS(), 'allGroups---------');
@@ -347,28 +334,35 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
             </div>
           )}
         </FormItem>
+
         {marketingBean.get('joinLevel') == -3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
             {getFieldDecorator('segmentIds', {
+              initialValue: marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null,
               rules: [
-                // { type: 'array', required: true, message: 'Please select group.' },
+                {
+                  validator: (_rule, value, callback) => {
+                    if (!value && marketingBean.get('joinLevel') === -3) {
+                      callback('Please select group.');
+                    }
+                    callback();
+                  }
+                }
               ]
             })(
-              <>
-                <Select
-                  style={{ width: 520 }}
-                  onChange={this.selectGroupOnChange}
-                  // defaultValue={232}
-                  value={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
-                >
-                  {allGroups.size > 0 &&
-                    allGroups.map((item) => (
-                      <Select.Option key={item.get('id')} value={item.get('id')}>
-                        {item.get('name')}
-                      </Select.Option>
-                    ))}
-                </Select>
-              </>
+              <Select
+                style={{ width: 520 }}
+                onChange={this.selectGroupOnChange}
+                // defaultValue={232}
+                // value={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
+              >
+                {allGroups.size > 0 &&
+                  allGroups.map((item) => (
+                    <Select.Option key={item.get('id')} value={item.get('id')}>
+                      {item.get('name')}
+                    </Select.Option>
+                  ))}
+              </Select>
             )}
           </FormItem>
         )}

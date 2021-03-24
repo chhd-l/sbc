@@ -58,6 +58,7 @@ export function updateAppointmentById(params = {}) {
 }
 
 export function exportAppointmentList(params = {}) {
+  params['storeId'] = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || '';
   return new Promise((resolve) => {
     setTimeout(() => {
       // 参数加密

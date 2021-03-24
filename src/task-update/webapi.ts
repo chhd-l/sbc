@@ -90,7 +90,7 @@ export function getPetOwnerOrders(consumerAccount) {
     method: 'POST',
     body: JSON.stringify({
       buyerAccount: consumerAccount,
-      orderType: 'NORMAL_ORDER',
+      orderType: 'ALL_ORDER',
       pageNum: 0,
       pageSize: 99999999
     })

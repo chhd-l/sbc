@@ -192,6 +192,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           phone: string; //联系方式
           provinceId: number;
           cityId: number;
+          province: string;
           countryId: number;
           // city:string;
           // province:string;
@@ -419,7 +420,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <p>Pet owner name: {detail.getIn(['buyer', 'name'])}</p>
               <p>Pet owner type: {detail.getIn(['buyer', 'levelName'])}</p>
               <p>Pet owner account: {detail.getIn(['buyer', 'account'])}</p>
-              <p>Email address: {detail.getIn(['buyer', 'account'])}</p>
             </div>
           </Col>
         </Row>
@@ -588,8 +588,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <p>City: {consignee.city}</p>
-                  <p>Post code: {consignee.postCode}</p>
+                  <p>Postal code: {consignee.postCode}</p>
                   <p>Phone number: {consignee.phone}</p>
+                  <p>State: {consignee.province}</p>
                 </Col>
               </Row>
             </div>
@@ -607,8 +608,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <p>City: {invoice.city}</p>
-                  <p>Post code: {invoice.postCode}</p>
+                  <p>Postal code: {invoice.postCode}</p>
                   <p>Phone number: {invoice.phone}</p>
+                  <p>State: {invoice.province}</p>
                 </Col>
               </Row>
             </div>

@@ -279,7 +279,7 @@ class TaskUpdate extends Component<any, any> {
 
       const { associatedPetOwners } = this.state;
       const petOwner = associatedPetOwners.find((x) => x.customerAccount === value);
-      value = petOwner.customerId; // save by customerId
+      value = petOwner ? petOwner.customerId : ''; // save by customerId
     }
     let data = this.state.task;
     data[field] = value;

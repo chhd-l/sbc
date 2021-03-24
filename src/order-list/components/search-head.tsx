@@ -259,6 +259,23 @@ export default class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
+{/*                   
+                  <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      {this._renderReceiverSelect()}
+                      <Input
+                        style={styles.wrapper}
+                        onChange={(e) => {
+                          this.setState({
+                            buyerOptionsValue: (e.target as any).value
+                          });
+                        }}
+                      />
+                    </InputGroup>
+                  </FormItem>
+                </Col> */}
+
                   <Col span={8} id="input-group-width">
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -807,6 +824,7 @@ export default class SearchHead extends Component<any, any> {
       id: numberSelect === 'orderNumber' ? numberSelectValue : '',
 
       subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+      [buyerOptions]: buyerOptionsValue,
       subscriptionRefillType: refillNumber,
       [goodsOptions]: goodsOptionsValue,
       orderType,

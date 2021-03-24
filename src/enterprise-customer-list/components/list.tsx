@@ -114,7 +114,7 @@ export default class CustomerList extends React.Component<any, any> {
         dataSource={dataList.toJS()}
       >
         <Column
-          title="Consumer name"
+          title="Pet owner name "
           key="customerName"
           dataIndex="customerName"
           render={(customerName) => (customerName ? customerName : '-')}

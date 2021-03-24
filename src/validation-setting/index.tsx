@@ -111,7 +111,8 @@ class ValidationSetting extends Component<any, any> {
   changeSettingStatus = (id) => {
     let params = {
       id,
-      isOpen: 1
+      isOpen: 1,
+      addressApiType: 0
     };
     webapi
       .changeAddressApiSettingStatus(params)

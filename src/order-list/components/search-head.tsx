@@ -520,10 +520,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title="Consumer name" value="buyerName">
+        <Option title="Pet owner name " value="buyerName">
           <FormattedMessage id="consumerName" />
         </Option>
-        <Option title="Consumer account" value="buyerAccount">
+        <Option title="Pet owner account" value="buyerAccount">
           <FormattedMessage id="consumerAccount" />
         </Option>
       </Select>

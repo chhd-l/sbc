@@ -615,7 +615,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Consumer name" />
+                    <Input style={styles.label} disabled defaultValue="Pet owner name " />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -788,7 +788,7 @@ class InvoiceList extends Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Consumer name">
+                <FormItem label="Pet owner name ">
                   <Input disabled value={selectedOrder.customerName} />
                 </FormItem>
               </Col>

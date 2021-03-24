@@ -168,10 +168,10 @@ class NewAppointment extends React.Component<any, any> {
                 )}
               </div>
             </Form.Item>
-            <Form.Item label="Consumer name">
+            <Form.Item label="Pet owner name ">
               {getFieldDecorator('consumerName', {
                 initialValue: '',
-                rules: [{ required: true, message: 'Consumer name is required' }]
+                rules: [{ required: true, message: 'Pet owner name  is required' }]
               })(<Input disabled={this.state.memberType === 'member'} />)}
             </Form.Item>
             <Form.Item label="Phone number">

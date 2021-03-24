@@ -34,26 +34,26 @@ class ShippingFeeSetting extends Component<any, any> {
   getShippingFeeSetting() {
     this.setState({
       loading: true
-    }); 
+    });
     webapi
       .GetShipSettingList()
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          let list = res.context.page ? res.context.page.content : []
-          let shippingFeeList = []
-          list.map(item=>{
-            if(item.type === 'fgs'){
-              shippingFeeList.push(item)
+          let list = res.context.page ? res.context.page.content : [];
+          let shippingFeeList = [];
+          list.map((item) => {
+            if (item.type === 'fgs') {
+              shippingFeeList.push(item);
             }
-            return item
-          })
-          list.map(item=>{
-            if(item.type !== 'fgs'){
-              shippingFeeList.push(item)
+            return item;
+          });
+          list.map((item) => {
+            if (item.type !== 'fgs') {
+              shippingFeeList.push(item);
             }
-            return item
-          })
+            return item;
+          });
           this.setState({
             shippingFeeList: shippingFeeList,
             loading: false
@@ -150,13 +150,7 @@ class ShippingFeeSetting extends Component<any, any> {
                         </div>
                         <div className="bar" style={{ float: 'right' }}>
                           <div className="status">
-                            <Popconfirm
-                              disabled={item.closeFlag === 0}
-                              title={`Are you sure to enable this?`}
-                              onConfirm={() => this.enableShippingFee(item.id)}
-                              okText="Yes"
-                              cancelText="No"
-                            >
+                            <Popconfirm disabled={item.closeFlag === 0} title={`Are you sure to enable this?`} onConfirm={() => this.enableShippingFee(item.id)} okText="Yes" cancelText="No">
                               <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
                             </Popconfirm>
                           </div>
@@ -171,30 +165,26 @@ class ShippingFeeSetting extends Component<any, any> {
                         </div>
                         <div className="bar" style={{ float: 'right' }}>
                           <div className="status">
-                            <Popconfirm
-                              disabled={item.closeFlag === 0}
-                              title={`Are you sure to enable this?`}
-                              onConfirm={() => this.enableShippingFee(item.id)}
-                              okText="Yes"
-                              cancelText="No"
-                            >
+                            <Popconfirm disabled={item.closeFlag === 0} title={`Are you sure to enable this?`} onConfirm={() => this.enableShippingFee(item.id)} okText="Yes" cancelText="No">
                               <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
                             </Popconfirm>
                           </div>
                           <div>
-                            <Tooltip placement="top" title="Edit">
-                              <a
-                                style={{ color: 'red', position: 'absolute', top: 10, right: 10 }}
-                                type="link"
-                                onClick={() => {
-                                  this.setState({
-                                    shippingFeeVisible: true,
-                                    selectShippingFee: item
-                                  });
-                                }}
-                                className="iconfont iconEdit"
-                              ></a>
-                            </Tooltip>
+                            {item.closeFlag === 0 ? (
+                              <Tooltip placement="top" title="Edit">
+                                <a
+                                  style={{ color: 'red', position: 'absolute', top: 10, right: 10 }}
+                                  type="link"
+                                  onClick={() => {
+                                    this.setState({
+                                      shippingFeeVisible: true,
+                                      selectShippingFee: item
+                                    });
+                                  }}
+                                  className="iconfont iconEdit"
+                                ></a>
+                              </Tooltip>
+                            ) : null}
                           </div>
                         </div>
                       </Card>

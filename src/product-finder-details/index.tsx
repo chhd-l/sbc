@@ -98,7 +98,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      <p>Consumer account</p>
+                      <p>Pet owner account</p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.consumerAccount}</strong>
@@ -121,7 +121,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      <p>Consumer name</p>
+                      <p>Pet owner name </p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.consumerName}</strong>

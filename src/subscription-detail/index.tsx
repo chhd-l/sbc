@@ -791,7 +791,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                  Consumer name: <span>{subscriptionInfo.consumer}</span>
+                  Pet owner name : <span>{subscriptionInfo.consumer}</span>
                 </p>
                 <p>
                   Consumer Account : <span>{subscriptionInfo.consumerAccount}</span>

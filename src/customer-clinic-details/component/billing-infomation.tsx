@@ -309,7 +309,7 @@ class BillingInfomation extends React.Component<any, any> {
                       display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
-                    <FormItem label="Consumer account">
+                    <FormItem label="Pet owner account">
                       {getFieldDecorator('customerAccount', {
                         rules: [
                           {

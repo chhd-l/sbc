@@ -169,7 +169,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Consumer account</p>}
+                    addonBefore={<p style={styles.label}>Pet owner account</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({

@@ -1067,13 +1067,18 @@ export default class AppStore extends Store {
           tip = 1;
           return;
         }
-        if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+        if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
           tip = 2;
           valid = false;
           return;
         }
         if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
           tip = 3;
+          valid = false;
+          return;
+        }
+        if (item.get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
+          tip = 4;
           valid = false;
           return;
         }
@@ -1310,7 +1315,7 @@ export default class AppStore extends Store {
           packSize: item.get('packSize') || '',
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          addedFlag: item.get('addedFlag') || 0,
+          addedFlag: item.get('addedFlag'),
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',

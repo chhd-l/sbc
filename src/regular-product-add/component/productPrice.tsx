@@ -307,10 +307,8 @@ class SkuForm extends React.Component<any, any> {
                           min={0}
                           max={9999999.99}
                           disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                          step={0.0001}
                           precision={4}
-                          //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                          formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
+                          formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         />
                       )}
                     </FormItem>
@@ -323,6 +321,17 @@ class SkuForm extends React.Component<any, any> {
                             {
                               required: true,
                               message: 'Please input subscription price'
+                            },
+                            {
+                              validator: (_rule, value, callback) => {
+                                if (rowInfo.subscriptionStatus === 1) {
+                                  if (value === 0) {
+                                    console.log(value, 111111);
+                                    callback('Subscription price cannot be zero');
+                                  }
+                                }
+                                callback();
+                              }
                             }
                           ],
                           onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
@@ -331,12 +340,9 @@ class SkuForm extends React.Component<any, any> {
                           <InputNumber
                             min={0}
                             max={9999999.99}
-                            step={0.0001}
                             precision={4}
                             disabled={rowInfo.subscriptionStatus === 0}
-                            //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
-
+                            formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                           />
                         )}
                       </FormItem>
@@ -361,11 +367,8 @@ class SkuForm extends React.Component<any, any> {
                         min={0}
                         max={9999999.99}
                         disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                        step={0.0001}
-                        precision={4}
-                        //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
-
+                        precision={2}
+                        formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                       />
                     )}
                   </FormItem>

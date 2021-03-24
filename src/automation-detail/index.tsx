@@ -133,7 +133,6 @@ class AutomationDetail extends Component<any, any> {
   };
   testAutomation = () => {
     const { automationId, selectedObjectNo, isOrderEvent } = this.state;
-    debugger;
     let params = {
       id: automationId,
       type: isOrderEvent ? 'Order' : 'Subscription',

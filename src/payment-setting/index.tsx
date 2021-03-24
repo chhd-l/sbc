@@ -44,7 +44,7 @@ export default class PaymentSetting extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      paymentVisible: false,
+      paymentVisible: true,
       enabled: true,
       paymentForm: {}, //edit
       paymentList: []

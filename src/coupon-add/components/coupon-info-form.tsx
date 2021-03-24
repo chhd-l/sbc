@@ -326,9 +326,6 @@ export default class CouponInfoForm extends Component<any, any> {
       attributesList,
       attributeIds
     } = this.props.relaxProps;
-    console.log(storeCateIds, 'storeCateIds----');
-    console.log(couponJoinLevel, 'couponJoinLevel----');
-    console.log(attributeIds, 'attributeIds----');
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
     if (storeCateIds) {
@@ -725,7 +722,6 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      // debugger
                       if (segmentIds.size === 0 && couponJoinLevel === -3) {
                         callback('Please select group.');
                       }

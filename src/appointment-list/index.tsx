@@ -3,12 +3,15 @@ import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal } from '
 import { Link } from 'react-router-dom';
 import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message } from 'antd';
 import { getAppointmentList, updateAppointmentById, exportAppointmentList } from './webapi';
-import { ExportableNode } from 'ts-morph';
+import QRScan from './components/qr-scan';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 export default class AppointmentList extends React.Component<any, any> {
+  state: any;
+  qrScan: any;
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -27,12 +30,14 @@ export default class AppointmentList extends React.Component<any, any> {
         byIdsTitle: 'Export selected appointments',
         exportByParams: this.onExportSearchParams,
         exportByIds: this.onExportSelected
-      }
+      },
+      showScan: false
     };
   }
 
   componentDidMount() {
     this.getAppointmentList();
+    this.qrScan = new QRScan('scan_div');
   }
 
   getAppointmentList = () => {
@@ -135,6 +140,28 @@ export default class AppointmentList extends React.Component<any, any> {
       });
     }
     return exportAppointmentList({ ids: selectedRowKeys });
+  };
+
+  beginScan = () => {
+    this.setState(
+      {
+        showScan: true
+      },
+      () => {
+        this.qrScan.openScan();
+      }
+    );
+  };
+
+  captureImg = () => {
+    this.qrScan.getImgDecode((img) => {});
+  };
+
+  closeScan = () => {
+    this.qrScan.closeScan();
+    this.setState({
+      showScan: false
+    });
   };
 
   render() {
@@ -280,14 +307,21 @@ export default class AppointmentList extends React.Component<any, any> {
           </Form>
         </div>
         <div className="container">
-          <div style={{ marginBottom: 10 }}>
-            <Button style={{ marginRight: 10 }} onClick={this.onOpenExportModal}>
-              Batch export
-            </Button>
-            <Button type="primary" onClick={() => history.push('/appointment-add')}>
-              Add new
-            </Button>
-          </div>
+          <Row style={{ marginBottom: 10 }} type="flex" justify="space-between">
+            <Col>
+              <Button style={{ marginRight: 10 }} onClick={this.onOpenExportModal}>
+                Batch export
+              </Button>
+              <Button type="primary" onClick={() => history.push('/appointment-add')}>
+                Add new
+              </Button>
+            </Col>
+            <Col>
+              <Button type="primary" onClick={this.beginScan}>
+                Scan the code
+              </Button>
+            </Col>
+          </Row>
           <Table
             rowKey="id"
             rowSelection={rowSelection}
@@ -298,6 +332,15 @@ export default class AppointmentList extends React.Component<any, any> {
           />
         </div>
         <ExportModal data={this.state.exportModalData} onHide={this.onCloseExportModal} handleByParams={this.state.exportModalData.exportByParams} handleByIds={this.state.exportModalData.exportByIds} />
+        <div id="scan_container" style={{ ...styles.scaner, display: this.state.showScan ? 'block' : 'none' }}>
+          <div id="scan_div"></div>
+          <div style={{ marginTop: 20 }}>
+            <Button type="primary" onClick={this.captureImg}>
+              Capture
+            </Button>
+            <Button onClick={this.closeScan}>Close</Button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -310,5 +353,15 @@ const styles = {
   },
   wrapper: {
     width: 157
+  },
+  scaner: {
+    position: 'fixed',
+    width: '100%',
+    height: '100%',
+    top: '0px',
+    left: '0px',
+    zIndex: 99999,
+    backgroundColor: '#fff',
+    textAlign: 'center'
   }
 } as any;

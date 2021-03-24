@@ -91,7 +91,7 @@ export default class SearchHead extends Component<any, any> {
   render() {
     const { tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState, orderType,orderSource, subscriptionType, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
+    const { tradeState, orderType,orderSource, subscriptionType, refillNumber, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
@@ -219,7 +219,8 @@ export default class SearchHead extends Component<any, any> {
                                 this.setState({
                                   orderType: value,
                                   subscriptionType: '',
-                                  subscriptionPlanType: ''
+                                  subscriptionPlanType: '',
+                                  refillNumber: ''
                                 });
                               } else {
                                 this.setState({
@@ -344,7 +345,7 @@ export default class SearchHead extends Component<any, any> {
                           style={styles.wrapper}
                           allowClear
                           value={subscriptionType}
-                          disabled={orderType === 'SINGLE_PURCHASE'}
+                          disabled={orderType !== 'SUBSCRIPTION'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState(
@@ -405,6 +406,8 @@ export default class SearchHead extends Component<any, any> {
                         <Select
                           style={styles.wrapper}
                           allowClear
+                          value={refillNumber}
+                          disabled={orderType !== 'SUBSCRIPTION'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({
@@ -431,7 +434,7 @@ export default class SearchHead extends Component<any, any> {
                           style={styles.wrapper}
                           allowClear
                           value={subscriptionPlanType}
-                          disabled={orderType === 'SINGLE_PURCHASE'}
+                          disabled={orderType !== 'SUBSCRIPTION'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({

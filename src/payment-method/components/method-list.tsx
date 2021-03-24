@@ -64,8 +64,7 @@ export default class PaymentMethod extends React.Component<any, any> {
 
   onSwitchChange = (e,checkedId) => {
     const { onChecked, getCheckedId } = this.props.relaxProps;
-    console.log(e,1111);
-    console.log(checkedId,3333333);
+
     this.setState({
       isChecked: e
     })

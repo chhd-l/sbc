@@ -957,8 +957,16 @@ export default class AppStore extends Store {
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
+        console.log(item.get('subscriptionPrice'),111111111111);
+        console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
+        console.log(item,3333333);
         if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           tip = 1;
+          valid = false;
+          return;
+        }
+        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
+          tip = 4;
           valid = false;
           return;
         }
@@ -972,11 +980,7 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
-        if (item.get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
-          tip = 4;
-          valid = false;
-          return;
-        }
+
         /* if (this.state().get('addSkUProduct').length === 1) {
           this.state().get('addSkUProduct')[0].targetGoodsIds
         }*/

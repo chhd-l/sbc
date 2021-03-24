@@ -67,8 +67,6 @@ class ManualOrder extends Component<any, any> {
         this.setState({
           status
         });
-      }else{
-        clearInterval(loop);
       }
     }, 500);
   };

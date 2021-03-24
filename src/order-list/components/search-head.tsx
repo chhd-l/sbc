@@ -215,7 +215,7 @@ export default class SearchHead extends Component<any, any> {
                             value={orderType}
                             getPopupContainer={(trigger: any) => trigger.parentNode}
                             onChange={(value) => {
-                              if (value === 'SINGLE_PURCHASE') {
+                              if (value !== 'SUBSCRIPTION') {
                                 this.setState({
                                   orderType: value,
                                   subscriptionType: '',

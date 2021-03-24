@@ -350,6 +350,7 @@ export default class AppStore extends Store {
       let addSkUProduct = tmpContext.goodsInfos.map((item) => {
         return {
           pid: item.goodsInfoNo,
+          marketPrice: item.marketPrice,
           targetGoodsIds: item.goodsInfoBundleRels,
           minStock: item.stock
         };
@@ -956,8 +957,16 @@ export default class AppStore extends Store {
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
+        console.log(item.get('subscriptionPrice'),111111111111);
+        console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
+        console.log(item,3333333);
         if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           tip = 1;
+          valid = false;
+          return;
+        }
+        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
+          tip = 4;
           valid = false;
           return;
         }
@@ -971,11 +980,7 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
-        if (item.get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
-          tip = 4;
-          valid = false;
-          return;
-        }
+
         /* if (this.state().get('addSkUProduct').length === 1) {
           this.state().get('addSkUProduct')[0].targetGoodsIds
         }*/
@@ -1228,7 +1233,7 @@ export default class AppStore extends Store {
           packSize: item.get('packSize') || '',
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           // purchasePrice: item.get('purchasePrice') || 0,
-          subscriptionPrice: item.get('subscriptionPrice') || 0,
+          subscriptionPrice: item.get('subscriptionPrice'),
           goodsInfoBundleRels: b,
           addedFlag: item.get('addedFlag') || 0,
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,

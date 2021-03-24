@@ -294,6 +294,30 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
+        let marketPrice = Number(parseFloat(rowInfo.marketPrice))
+        let subscriptionPrice = Number(parseFloat(rowInfo.subscriptionPrice))
+        if(addSkUProduct.length === 1) {
+          if(String(marketPrice).indexOf(".") == -1){
+            marketPrice = (marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
+          }else{
+            if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
+              marketPrice = marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
+            }else {
+              marketPrice = marketPrice.toFixed(4)
+            }
+          }
+
+          if(String(subscriptionPrice).indexOf(".") == -1){
+            subscriptionPrice = (subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
+          }else{
+            if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
+              subscriptionPrice = subscriptionPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
+            }else {
+              subscriptionPrice = subscriptionPrice.toFixed(4)
+            }
+          }
+        }
+
         return (
           <Row>
             <Col span={12}>
@@ -321,14 +345,17 @@ class SkuForm extends React.Component<any, any> {
                       ],
 
                       onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
-                      initialValue: rowInfo.marketPrice || 0
+                      //initialValue: addSkUProduct.length === 1? marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : marketPrice ? marketPrice : 0
+                      initialValue:  marketPrice ? marketPrice : 0
+
                     })(
                       <InputNumber
                         min={0}
                         max={9999999.99}
-                        precision={4}
+                        //precision={2}
                         disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                        formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
+                        formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? 
+                          sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                       />
                       // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                     )}
@@ -365,21 +392,15 @@ class SkuForm extends React.Component<any, any> {
                           }
                         ],
                         onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                        initialValue: rowInfo.subscriptionPrice
+                        initialValue:  subscriptionPrice ? subscriptionPrice : 0
                       })(
                         <InputNumber
                           min={0}
                           max={9999999.99}
-                          precision={4}
+                          //precision={4}
                           disabled={rowInfo.subscriptionStatus === 0}
                           formatter={(value) => {
-                            if (addSkUProduct.length === 1) {
-                              return `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${Number(value) * addSkUProduct[0].targetGoodsIds[0].bundleNum}`;
-                            } else {
-                              return `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`;
-                            }
-
-                            //`${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
+                            return `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`
                           }}
                         />
                         // <Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />
@@ -410,14 +431,14 @@ class SkuForm extends React.Component<any, any> {
                     ],
 
                     onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
-                    initialValue: rowInfo.marketPrice || 0
+                    initialValue:  marketPrice ? marketPrice : 0
                   })(
                     <InputNumber
                       min={0}
                       max={9999999.99}
                       precision={2}
                       disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                      formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                      formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                     />
                     // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                   )}
@@ -552,7 +573,7 @@ class SkuForm extends React.Component<any, any> {
       editGoodsItem(id, 'flag', flag);
     }
 
-    if (key == 'stock' || key == 'marketPrice') {
+    if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存
       if (checked) {
         // 修改store中的库存或市场价
@@ -570,32 +591,7 @@ class SkuForm extends React.Component<any, any> {
         this.props.form.setFieldsValue(values);
       }
     }
-    if (key == 'subscriptionPrice') {
-      let m = 0
-      if (addSkUProduct.length === 1) {
-        m = e * addSkUProduct[0].targetGoodsIds[0].bundleNum;
-      } else {
-        m = e
-      }
-      editGoodsItem(id, key, m);
 
-      // 是否同步库存
-      if (checked) {
-        // 修改store中的库存或市场价
-        synchValue(key);
-        // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
-        const fieldsValue = this.props.form.getFieldsValue();
-        // 同步库存/市场价
-        let values = {};
-        Object.getOwnPropertyNames(fieldsValue).forEach((field) => {
-          if (field.indexOf(`${key}_`) === 0) {
-            values[field] = e;
-          }
-        });
-        // update
-        this.props.form.setFieldsValue(values);
-      }
-    }
     updateBasePrice(id, key, e);
   };
 

@@ -217,19 +217,12 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
-                  initialValue: c
+                  initialValue: addSkUProduct.length === 1? Number(String(c / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, '')) : c
                 })(
                   <InputNumber
                     style={{ width: '121px' }}
                     min={0}
                     max={b}
-                    formatter={(value) => {
-                      if (addSkUProduct.length === 1) {
-                        return (Number(value) / addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(0);
-                      } else {
-                        return value;
-                      }
-                    }}
                   />
                 )}
               </FormItem>
@@ -335,17 +328,7 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    if (key == 'inventory') {
-      let m = 0
-      if (addSkUProduct.length === 1) {
-        m = e * addSkUProduct[0].targetGoodsIds[0].bundleNum;
-      } else {
-        m = e
-      }
-      editGoodsItem(id, key, m);
-    }else {
-      editGoodsItem(id, key, e);
-    }
+    editGoodsItem(id, key, e);
   };
 }
 

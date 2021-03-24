@@ -73,7 +73,7 @@ class MethodTips extends React.Component<any, any> {
   cancel = () => {
     const { onShow, onChecked } = this.props.relaxProps;
     onShow(false);
-    onChecked(false);
+    //onChecked(false);
 
   };
 }

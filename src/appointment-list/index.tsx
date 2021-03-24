@@ -373,11 +373,13 @@ export default class AppointmentList extends React.Component<any, any> {
         <ExportModal data={this.state.exportModalData} onHide={this.onCloseExportModal} handleByParams={this.state.exportModalData.exportByParams} handleByIds={this.state.exportModalData.exportByIds} />
         <div id="scan_container" style={{ ...styles.scaner, display: this.state.showScan ? 'block' : 'none' }}>
           <div id="scan_div" style={styles.camera}></div>
-          <div style={{ marginTop: 20 }}>
-            <Button onClick={this.closeScan}>Close</Button>
+          <div style={styles.scanbtn}>
+            <Button size="large" onClick={this.closeScan}>
+              Close
+            </Button>
           </div>
         </div>
-        <Modal title="Consumer information" visible={this.state.showCard} onCancel={this.onCloseCard} onOk={() => this.updateAppointmentStatus(this.state.scanedInfo, 1)}>
+        <Modal title="Consumer information" visible={this.state.showCard} okText="Arrived" onCancel={this.onCloseCard} onOk={() => this.updateAppointmentStatus(this.state.scanedInfo, 1)}>
           <p>Consumer name: {this.state.scanedInfo.consumerName}</p>
           <p>Consumer phone: {this.state.scanedInfo.consumerPhone}</p>
           <p>Consumer email: {this.state.scanedInfo.consumerEmail}</p>
@@ -405,8 +407,15 @@ const styles = {
     backgroundColor: 'rgba(0,0,0,.7)',
     textAlign: 'center'
   },
+  scanbtn: {
+    position: 'absolute',
+    width: '100%',
+    left: 0,
+    bottom: 20,
+    zIndex: 101010
+  },
   camera: {
     display: 'inline-block',
-    width: 600
+    width: '100%'
   }
 } as any;

@@ -9,6 +9,7 @@ import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 
 import './style.less';
+import TodoItems from '@/home/component/todo-items';
 
 const flowState = (status) => {
   if (status == 'INIT') {
@@ -151,7 +152,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     } else {
       orderType = '代客下单';
     }
-    const tradeItems = detail.get('tradeItems').toJS();
+    const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
     gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
@@ -214,6 +215,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         tradeItems.levelPrice = tradeItems.price;
       }
     });
+    let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
     const columns = [
       {
         title: 'SKU Code',
@@ -374,6 +376,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           style={{
             display: 'flex',
             flexDirection: 'row',
+            marginBottom: 20,
             justifyContent: 'space-between'
           }}
         >
@@ -387,7 +390,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <h4>Order</h4>
               <Row>
                 <Col span={12}>
-                  <p>Order ID: {detail.get('id')}</p>
                   <Tooltip
                     overlayStyle={{
                       overflowY: 'auto'
@@ -399,14 +401,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       {<FormattedMessage id="orderNumber" />}: {detail.get('id')}
                     </p>
                   </Tooltip>
-                  <p>External order id: {detail.get('toExternalOrderId')}</p>
-                  <p>Order status: {detail.get('toExternalOrderId')}</p>
-                  <p>Order time: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
+                  <p>External order id: {detail.getIn(['tradeOms', 'orderNo'])}</p>
+                  <p>Order status: {flowState(detail.getIn(['tradeState', 'flowState']))}</p>
+                  <p>Order type: {detail.get('orderType')}</p>
                 </Col>
                 <Col span={12}>
-                  <p>Start time: {detail.get('toExternalOrderId')}</p>
-                  <p>End time: {detail.get('toExternalOrderId')}</p>
-                  <p>Order type: {detail.get('orderType')}</p>
+                  <p>Order time: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
                   <p>Order source: {detail.get('orderSource')}</p>
                   <p>Create by: {detail.get('orderCreateBy')}</p>
                 </Col>
@@ -419,35 +419,40 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <p>Pet owner name: {detail.getIn(['buyer', 'name'])}</p>
               <p>Pet owner type: {detail.getIn(['buyer', 'levelName'])}</p>
               <p>Pet owner account: {detail.getIn(['buyer', 'account'])}</p>
-              <p>Email address: {detail.getIn(['buyer', 'email'])}</p>
+              <p>Email address: {detail.getIn(['buyer', 'account'])}</p>
             </div>
           </Col>
         </Row>
         <Row gutter={30}>
-          <Col span={12}>
-            <div className="headBox">
-              <h4>Subscription</h4>
-              <p>Subscription ID: {detail.getIn(['subscriptionResponseVO', 'externalSubscribeId'])}</p>
-              <p>Subscription type: {detail.get('toExternalOrderId')}</p>
-              <p>Subscription plan type: {detail.get('toExternalOrderId')}</p>
-              <p>Subscription number: {detail.get('toExternalOrderId')}</p>
-            </div>
-          </Col>
-          <Col span={12}>
-            <div className="headBox">
-              <h4>Partner</h4>
-              <p>Auditor name: {detail.get('clinicsName')}</p>
-              <p>Auditor id: {detail.get('clinicsId')}</p>
-              <p>Recommender id: {detail.get('toExternalOrderId')}</p>
-              <p>Recommender name: {detail.get('toExternalOrderId')}</p>
-            </div>
-          </Col>
+          {detail.get('subscribeId') ? (
+            <Col span={12}>
+              <div className="headBox">
+                <h4>Subscription</h4>
+                <p>Subscription number: {detail.get('subscribeId')}</p>
+                <p>Subscription type: {detail.get('subscriptionType')}</p>
+                <p>Subscription plan type: {detail.get('subscriptionPlanType')}</p>
+              </div>
+            </Col>
+          ) : null}
+
+          {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
+            <Col span={12}>
+              <div className="headBox">
+                <h4>Partner</h4>
+                <p>Auditor name: {detail.get('clinicsName')}</p>
+                <p>Auditor id: {detail.get('clinicsId')}</p>
+                <p>Recommender id: {firstTradeItems.recommendationId}</p>
+                <p>Recommender name: {firstTradeItems.recommendationName}</p>
+              </div>
+            </Col>
+          ) : null}
         </Row>
 
         <div
           style={{
             display: 'flex',
             marginTop: 20,
+            marginBottom: 20,
             flexDirection: 'column',
             wordBreak: 'break-word'
           }}
@@ -583,7 +588,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <p>City: {consignee.city}</p>
-                  <p>Activity: {detail.get('toExternalOrderId')}</p>
                   <p>Post code: {consignee.postCode}</p>
                   <p>Phone number: {consignee.phone}</p>
                 </Col>
@@ -603,7 +607,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <p>City: {invoice.city}</p>
-                  <p>Activity: {detail.get('toExternalOrderId')}</p>
                   <p>Post code: {invoice.postCode}</p>
                   <p>Phone number: {invoice.phone}</p>
                 </Col>
@@ -612,28 +615,30 @@ export default class OrderDetailTab extends React.Component<any, any> {
           </Col>
         </Row>
 
-        <Row gutter={30}>
-          <Col span={12}>
-            <div className="headBox">
-              <h4>Pet</h4>
-              <Row>
-                <Col span={12}>
-                  <p>Pet name: {detail.get('toExternalOrderId')}</p>
-                  <p>Gender: {detail.get('toExternalOrderId')}</p>
-                  <p>Birthday: {detail.get('toExternalOrderId')}</p>
-                  <p>Breed {detail.get('toExternalOrderId')}</p>
-                  <p>Sensitivities {detail.get('toExternalOrderId')}</p>
-                </Col>
-                <Col span={12}>
-                  <p>Lifestyle: {detail.get('toExternalOrderId')}</p>
-                  <p>Activity: {detail.get('toExternalOrderId')}</p>
-                  <p>Weight: {detail.get('toExternalOrderId')}</p>
-                  <p>Sterilized: {detail.get('toExternalOrderId')}</p>
-                </Col>
-              </Row>
-            </div>
-          </Col>
-        </Row>
+        {firstTradeItems.petsName ? (
+          <Row gutter={30}>
+            <Col span={12}>
+              <div className="headBox">
+                <h4>Pet</h4>
+                <Row>
+                  <Col span={12}>
+                    <p>Pet name: {firstTradeItems.petsName} </p>
+                    <p>Gender: </p>
+                    <p>Birthday: </p>
+                    <p>Breed </p>
+                    <p>Sensitivities </p>
+                  </Col>
+                  <Col span={12}>
+                    <p>Lifestyle: </p>
+                    <p>Activity: </p>
+                    <p>Weight: </p>
+                    <p>Sterilized: </p>
+                  </Col>
+                </Row>
+              </div>
+            </Col>
+          </Row>
+        ) : null}
 
         <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm

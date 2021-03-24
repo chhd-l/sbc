@@ -12,7 +12,10 @@ export default class FullReductionActor extends Actor {
       allGroups: [],
       // 店铺分类信息
       storeCateList: [],
-      sourceStoreCateList: []
+      sourceStoreCateList: [],
+
+      //Attribute
+      attributesList: []
     };
   }
 
@@ -28,6 +31,11 @@ export default class FullReductionActor extends Actor {
   @Action('marketing:allGroups')
   getAllGroups(state, allGroups) {
     return state.set('allGroups', fromJS(allGroups));
+  }
+
+  @Action('marketing:attributesList')
+  getAllAttributesList(state, attributesList) {
+    return state.set('attributesList', fromJS(attributesList));
   }
 
   /**

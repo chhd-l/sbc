@@ -45,6 +45,7 @@ class RuleSetting extends React.Component<any, any> {
 
   onSave = () => {
     const { setting } = this.props;
+    const isAuto = (setting.find((st) => st.configKey === 'address_input_type_automatically') || {})['context'] === '1';
     this.props.form.validateFields((err, fields) => {
       if (!err) {
         this.setState({ loading: true });
@@ -52,10 +53,12 @@ class RuleSetting extends React.Component<any, any> {
           saveAddressInputTypeSetting({
             configRequestList: setting
           }),
-          editAddressApiSetting({
-            ...this.state.addressSettingForm,
-            ...fields
-          })
+          isAuto
+            ? editAddressApiSetting({
+                ...this.state.addressSettingForm,
+                ...fields
+              })
+            : Promise.resolve({ res: { code: Const.SUCCESS_CODE } })
         ])
           .then(([data1, data2]) => {
             if (data1.res.code === Const.SUCCESS_CODE && data2.res.code === Const.SUCCESS_CODE) {

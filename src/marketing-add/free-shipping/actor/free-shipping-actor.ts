@@ -7,7 +7,10 @@ import { fromJS } from 'immutable';
 export default class FreeShippingActor extends Actor {
   defaultState() {
     return {
-      marketingBean: {},
+      marketingBean: {
+        subType: 10, // 10 11
+        joinLevel: -1
+      },
       allGroups: []
     };
   }
@@ -16,14 +19,8 @@ export default class FreeShippingActor extends Actor {
     super();
   }
 
-  @Action('marketing:discountBean')
-  getDiscountBean(state: IMap, res) {
-    const bean = fromJS(res).set(
-      'fullDiscountLevelList',
-      fromJS(res)
-        .get('fullDiscountLevelList')
-        .map((item) => item.set('discount', (item.get('discount') * 10).toFixed(1)))
-    );
+  @Action('marketing:shippingBean')
+  getShippingBean(state: IMap, bean) {
     return state.set('marketingBean', bean);
   }
 

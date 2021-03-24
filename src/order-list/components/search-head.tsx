@@ -82,14 +82,15 @@ export default class SearchHead extends Component<any, any> {
         payState: '',
         orderSource: ''
       },
-      orderCategory: ''
+      orderCategory: '',
+      showAdvanceSearch: false
     };
   }
 
   render() {
     const { tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState, orderType, subscriptionType, subscriptionPlanType, planTypeList } = this.state;
+    const { tradeState, orderType, subscriptionType, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
@@ -112,7 +113,7 @@ export default class SearchHead extends Component<any, any> {
 
     const orderSourceList = [
       { value: 'FGS', name: 'FGS' },
-      { value: 'L_ATELIER_FELINE', name: 'L\'Atelier Feline' }
+      { value: 'L_ATELIER_FELINE', name: "L'Atelier Feline" }
     ];
 
     const menu = (
@@ -138,311 +139,337 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="order.orderList" />} />
+        <Row>
+          <Col span={12}>
+            <Headline title={<FormattedMessage id="order.orderList" />} />
+          </Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            <span style={{ color: '#e82f3d', cursor: 'pointer' }} onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
+              Advance Search <Icon type={showAdvanceSearch ? 'up' : 'down'} />
+            </span>
+          </Col>
+        </Row>
         <div>
           <Form className="filter-content" layout="inline">
             <Row>
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderNumberSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          numberSelectValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} title={'Subscription order time'} disabled defaultValue={'Subscription order time'} />
-                    <Select
-                      style={styles.wrapper}
-                      allowClear
-                      getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value) => {
-                        this.setState({
-                          refillNumber: value
-                        });
-                      }}
-                    >
-                      {refillNumberList &&
-                        refillNumberList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </Select>
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderGoodsOptionSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          goodsOptionsValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Order type'} />
-                    <Select
-                      style={styles.wrapper}
-                      allowClear
-                      getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value) => {
-                        if (value === 'SINGLE_PURCHASE') {
-                          this.setState({
-                            orderType: value,
-                            subscriptionType: '',
-                            subscriptionPlanType: ''
-                          });
-                        } else {
-                          this.setState({
-                            orderType: value
-                          });
-                        }
-                      }}
-                    >
-                      {orderTypeList &&
-                        orderTypeList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </Select>
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Order source'} />
-                    <Select
-                      style={styles.wrapper}
-                      allowClear
-                      getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value) => {
-                        this.setState({
-                          orderSource: value
-                        });
-                      }}
-                    >
-                      {orderSourceList &&
-                        orderSourceList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </Select>
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8} id="input-group-width">
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderStatusSelect()}
-                    {this.state.statusSelect === 'paymentStatus' ? (
-                      <Select
+              <Row>
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      {this._renderNumberSelect()}
+                      <Input
                         style={styles.wrapper}
-                        allowClear
-                        getPopupContainer={(trigger: any) => trigger.parentNode}
-                        onChange={(value) =>
+                        onChange={(e) => {
                           this.setState({
-                            tradeState: {
-                              deliverStatus: '',
-                              payState: value,
-                              orderSource: ''
-                            }
-                          })
-                        }
-                        value={tradeState.payState}
-                      >
-                        <Option value="NOT_PAID">
-                          <FormattedMessage id="order.unpaid" />
-                        </Option>
-                        {/*<Option value="UNCONFIRMED">
-                          <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>*/}
-                        <Option value="PAID">
-                          <FormattedMessage id="order.paid" />
-                        </Option>
-                        <Option value="PAYING">Paying</Option>
-                      </Select>
-                    ) : (
-                      <Select
-                        value={tradeState.deliverStatus}
-                        style={styles.wrapper}
-                        allowClear
-                        getPopupContainer={(trigger: any) => trigger.parentNode}
-                        onChange={(value) => {
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: value,
-                              payState: '',
-                              orderSource: ''
-                            }
+                            numberSelectValue: (e.target as any).value
                           });
                         }}
-                      >
-                        <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="order.notShipped" />
-                        </Option>
-                        <Option value="PART_SHIPPED">
-                          <FormattedMessage id="order.partialShipment" />
-                        </Option>
-                        <Option value="SHIPPED">
-                          <FormattedMessage id="order.allShipments" />
-                        </Option>
-                      </Select>
-                    )}
-                  </InputGroup>
-                </FormItem>
-              </Col>
+                      />
+                    </InputGroup>
+                  </FormItem>
+                </Col>
 
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Subscription type'} />
-                    <Select
-                      style={styles.wrapper}
-                      allowClear
-                      value={subscriptionType}
-                      disabled={orderType === 'SINGLE_PURCHASE'}
-                      getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value) => {
-                        this.setState(
-                          {
-                            subscriptionType: value
-                          },
-                          () => {
-                            this.getPlanType(value);
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      {this._renderBuyerOptionSelect()}
+                      <Input
+                        style={styles.wrapper}
+                        onChange={(e) => {
+                          this.setState({
+                            buyerOptionsValue: (e.target as any).value
+                          });
+                        }}
+                      />
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      {this._renderGoodsOptionSelect()}
+                      <Input
+                        style={styles.wrapper}
+                        onChange={(e) => {
+                          this.setState({
+                            goodsOptionsValue: (e.target as any).value
+                          });
+                        }}
+                      />
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+              </Row>
+              {showAdvanceSearch ? (
+                <Row>
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input style={styles.leftLabel} disabled defaultValue={'Order type'} />
+                        <Select
+                          style={styles.wrapper}
+                          allowClear
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            if (value === 'SINGLE_PURCHASE') {
+                              this.setState({
+                                orderType: value,
+                                subscriptionType: '',
+                                subscriptionPlanType: ''
+                              });
+                            } else {
+                              this.setState({
+                                orderType: value
+                              });
+                            }
+                          }}
+                        >
+                          {orderTypeList &&
+                            orderTypeList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input style={styles.leftLabel} disabled defaultValue={'Order source'} />
+                        <Select
+                          style={styles.wrapper}
+                          allowClear
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            this.setState({
+                              orderSource: value
+                            });
+                          }}
+                        >
+                          {orderSourceList &&
+                            orderSourceList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+                  <Col span={8} id="input-group-width">
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderStatusSelect()}
+                        {this.state.statusSelect === 'paymentStatus' ? (
+                          <Select
+                            style={styles.wrapper}
+                            allowClear
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) =>
+                              this.setState({
+                                tradeState: {
+                                  deliverStatus: '',
+                                  payState: value,
+                                  orderSource: ''
+                                }
+                              })
+                            }
+                            value={tradeState.payState}
+                          >
+                            <Option value="NOT_PAID">
+                              <FormattedMessage id="order.unpaid" />
+                            </Option>
+                            {/*<Option value="UNCONFIRMED">
+                          <FormattedMessage id="order.toBeConfirmed" />
+                        </Option>*/}
+                            <Option value="PAID">
+                              <FormattedMessage id="order.paid" />
+                            </Option>
+                            <Option value="PAYING">Paying</Option>
+                          </Select>
+                        ) : (
+                          <Select
+                            value={tradeState.deliverStatus}
+                            style={styles.wrapper}
+                            allowClear
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
+                              this.setState({
+                                tradeState: {
+                                  deliverStatus: value,
+                                  payState: '',
+                                  orderSource: ''
+                                }
+                              });
+                            }}
+                          >
+                            <Option value="NOT_YET_SHIPPED">
+                              <FormattedMessage id="order.notShipped" />
+                            </Option>
+                            <Option value="PART_SHIPPED">
+                              <FormattedMessage id="order.partialShipment" />
+                            </Option>
+                            <Option value="SHIPPED">
+                              <FormattedMessage id="order.allShipments" />
+                            </Option>
+                          </Select>
+                        )}
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input style={styles.leftLabel} disabled defaultValue={'Subscription type'} />
+                        <Select
+                          style={styles.wrapper}
+                          allowClear
+                          value={subscriptionType}
+                          disabled={orderType === 'SINGLE_PURCHASE'}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            this.setState(
+                              {
+                                subscriptionType: value
+                              },
+                              () => {
+                                this.getPlanType(value);
+                              }
+                            );
+                          }}
+                        >
+                          {subscriptionTypeList &&
+                            subscriptionTypeList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderCodeSelect()}
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            this.setState({
+                              codeSelectValue: (e.target as any).value
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+                  {/* <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderRecommenderSelect()}
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            this.setState({
+                              recommenderSelectValue: (e.target as any).value
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col> */}
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input style={styles.leftLabel} title={'Subscription order time'} disabled defaultValue={'Subscription order time'} />
+                        <Select
+                          style={styles.wrapper}
+                          allowClear
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            this.setState({
+                              refillNumber: value
+                            });
+                          }}
+                        >
+                          {refillNumberList &&
+                            refillNumberList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input style={styles.leftLabel} title={'Subscription plan type'} disabled defaultValue={'Subscription plan type'} />
+                        <Select
+                          style={styles.wrapper}
+                          allowClear
+                          value={subscriptionPlanType}
+                          disabled={orderType === 'SINGLE_PURCHASE'}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            this.setState({
+                              subscriptionPlanType: value
+                            });
+                          }}
+                        >
+                          {planTypeList &&
+                            planTypeList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderClinicSelect()}
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            let a = e.target.value ? e.target.value.split(',') : null;
+
+                            this.setState({
+                              clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8} id="Range-picker-width">
+                    <FormItem>
+                      <RangePicker
+                        className="rang-picker-width"
+                        style={styles.formItemStyle}
+                        onChange={(e) => {
+                          let beginTime = '';
+                          let endTime = '';
+                          if (e.length > 0) {
+                            beginTime = e[0].format(Const.DAY_FORMAT);
+                            endTime = e[1].format(Const.DAY_FORMAT);
                           }
-                        );
-                      }}
-                    >
-                      {subscriptionTypeList &&
-                        subscriptionTypeList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </Select>
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8} id="Range-picker-width">
-                <FormItem>
-                  <RangePicker
-                    className="rang-picker-width"
-                    style={styles.formItemStyle}
-                    onChange={(e) => {
-                      let beginTime = '';
-                      let endTime = '';
-                      if (e.length > 0) {
-                        beginTime = e[0].format(Const.DAY_FORMAT);
-                        endTime = e[1].format(Const.DAY_FORMAT);
-                      }
-                      this.setState({ beginTime: beginTime, endTime: endTime });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderRecommenderSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          recommenderSelectValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} title={'Subscription plan type'} disabled defaultValue={'Subscription plan type'} />
-                    <Select
-                      style={styles.wrapper}
-                      allowClear
-                      value={subscriptionPlanType}
-                      disabled={orderType === 'SINGLE_PURCHASE'}
-                      getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value) => {
-                        this.setState({
-                          subscriptionPlanType: value
-                        });
-                      }}
-                    >
-                      {planTypeList &&
-                        planTypeList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </Select>
-                  </InputGroup>
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderClinicSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        let a = e.target.value ? e.target.value.split(',') : null;
-
-                        this.setState({
-                          clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderCodeSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          codeSelectValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
+                          this.setState({ beginTime: beginTime, endTime: endTime });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                </Row>
+              ) : null}
 
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
@@ -817,7 +844,7 @@ const styles = {
     cursor: 'default',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   wrapper: {
     width: 200

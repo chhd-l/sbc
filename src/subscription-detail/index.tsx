@@ -977,7 +977,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <FeedBack subscriptionId={this.state.subscriptionId} />
         </Spin>
         <div className="bar-button">
-          <Button type="primary" onClick={() => (history as any).go(-1)}>
+          <Button onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="back" />}
           </Button>
         </div>

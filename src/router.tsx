@@ -39,6 +39,10 @@ const routes = [
     asyncComponent: () => import('./seo-setting')
   },
   {
+    path: '/shipping-fee-setting',
+    asyncComponent: () => import('./shipping-fee-setting')
+  },
+  {
     path: '/site-map',
     exact: true,
     asyncComponent: () => import('./site-map')
@@ -100,7 +104,7 @@ const routes = [
   {
     path: '/order-add',
     exact: true,
-    asyncComponent: () => import('./order-add')
+    asyncComponent: () => import('./manual-order')
   },
   //订单-详情
   {
@@ -941,6 +945,18 @@ const routes = [
   {
     path: '/address-field-setting',
     asyncComponent: () => import('./address-field-setting')
+  },
+  {
+    path: '/appointment-list',
+    asyncComponent: () => import('./appointment-list')
+  },
+  {
+    path: '/appointment-add',
+    asyncComponent: () => import('./appointment-list/new')
+  },
+  {
+    path: '/appointment-update/:id',
+    asyncComponent: () => import('./appointment-list/new')
   }
 ];
 

@@ -10,10 +10,10 @@ type TResult = {
  * 新增满折
  * @returns {Promise<IAsyncResult<T>>}
  */
-export const addFullDiscount = (discountBean) => {
-  return Fetch<TResult>('/marketing/fullDiscount', {
+export const addFreeShipping = (shippingBean) => {
+  return Fetch<TResult>('/marketing/freeShipping', {
     method: 'POST',
-    body: JSON.stringify(discountBean)
+    body: JSON.stringify(shippingBean)
   });
 };
 
@@ -21,9 +21,9 @@ export const addFullDiscount = (discountBean) => {
  * 编辑满折
  * @returns {Promise<IAsyncResult<T>>}
  */
-export const updateFullDiscount = (discountBean) => {
-  return Fetch<TResult>('/marketing/fullDiscount', {
+export const updateFreeShipping = (shippingBean) => {
+  return Fetch<TResult>('/marketing/freeShipping', {
     method: 'PUT',
-    body: JSON.stringify(discountBean)
+    body: JSON.stringify(shippingBean)
   });
 };

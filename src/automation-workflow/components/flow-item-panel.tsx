@@ -17,7 +17,7 @@ export default class FlowItemPanel extends Component {
       <div id="itemPanel">
         <ItemPanel>
           <Collapse bordered={false} activeKey={['1', '2', '3', '4']}>
-            <Panel header="START/END" key="1" className="panel-custom">
+            <Panel header="Start / End" key="1" className="panel-custom">
               <Item
                 type="node"
                 model={{
@@ -93,7 +93,7 @@ export default class FlowItemPanel extends Component {
                 <span className="item-text">End</span>
               </Item>
             </Panel>
-            <Panel header="WORK FLOW" key="2" className="panel-custom">
+            <Panel header="Work Flow" key="2" className="panel-custom">
               <Item
                 type="node"
                 model={{

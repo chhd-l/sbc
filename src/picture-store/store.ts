@@ -26,7 +26,7 @@ export default class AppStore extends Store {
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     //1.查询店铺分类列表
     const cateList: any = await getCateList();
-    const cateListIm = fromJS(cateList.res);
+    const cateListIm = fromJS(cateList.res.context.storeResourceCateVOList);
     const cateId = cateListIm.find((item) => item.get('isDefault') == 1).get('cateId'); //找默认分类
 
     //2.查询图片分页信息
@@ -39,7 +39,7 @@ export default class AppStore extends Store {
     if (imageList.res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.selectImageCate(cateId);
-        this.dispatch('cateActor: init', fromJS(cateList.res)); //初始化分类列表
+        this.dispatch('cateActor: init', fromJS(cateList.res.context.storeResourceCateVOList)); //初始化分类列表
         this.dispatch('imageActor: init', fromJS(imageList.res.context)); //初始化图片分页列表
         this.dispatch('imageActor: page', fromJS({ currentPage: pageNum + 1 }));
         this.dispatch('cateActor: closeCateModal');

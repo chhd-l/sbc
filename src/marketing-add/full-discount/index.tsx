@@ -26,6 +26,7 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
     }
     this.store.getAllGroups();
     this.store.initCategory();
+    this.store.getAllAttribute();
   }
 
   render() {

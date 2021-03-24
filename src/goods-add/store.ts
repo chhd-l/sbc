@@ -376,7 +376,7 @@ export default class AppStore extends Store {
 
       // 商品基本信息
       let goods = goodsDetail.get('goods');
-      if (tmpContext.goodsDescriptionDetailList.length === 0) {
+      if (!tmpContext.goodsDescriptionDetailList || tmpContext.goodsDescriptionDetailList.length === 0) {
         const cateId = goods.get('cateId');
         this.changeDescriptionTab(cateId);
       } else {
@@ -1220,6 +1220,7 @@ export default class AppStore extends Store {
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           goodsInfoBundleRels: b,
+          addedFlag: item.get('addedFlag') || 0,
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',

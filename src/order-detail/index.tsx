@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb, Tabs, Spin } from 'antd';
+import { Breadcrumb, Tabs, Spin, Button } from 'antd';
 import { StoreProvider } from 'plume2';
 import AppStore from './store';
 
@@ -60,8 +60,13 @@ export default class OrderDetail extends React.Component<any, any> {
               <Comment orderNumber={tid} petOwnerName={this.store.state().get('detail').getIn(['buyer', 'name'])} />
             </Tabs.TabPane>
           </Tabs>
-
+          
           <OperateLog />
+        </div>
+        <div className="bar-button">
+          <Button onClick={() => (history as any).go(-1)}>
+            {<FormattedMessage id="back" />}
+          </Button>
         </div>
       </div>
     );

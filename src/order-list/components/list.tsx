@@ -185,29 +185,21 @@ export default class ListView extends React.Component<any, any> {
                       </th>
                       <th style={{ width: '14%' }}>
                         <FormattedMessage id="consumerName" />
-                        {/* <br />
-                        <FormattedMessage id="consumerAccount" /> */}
-                      </th>
-                      <th style={{ width: '14%' }}>
-                        <FormattedMessage id="recipient" />
                       </th>
                       <th style={{ width: '10%' }}>
                         <FormattedMessage id="amount" />
-                        <br />
+                      </th>
+                      <th style={{ width: '10%' }}>
                         <FormattedMessage id="quantity" />
                       </th>
-                      {/* <th style={{ width: '5%' }}>rfc</th> */}
-                      <th style={{ width: '10%' }}>
+                      <th style={{ width: '14%' }}>
                         <FormattedMessage id="order.shippingStatus" />
                       </th>
-                      {/* <th style={{ width: '10%' }}>
-                        <FormattedMessage id="order.orderStatus" />
-                      </th> */}
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="order.createBy" />
+                      <th style={{ width: '14%' }}>
+                        <FormattedMessage id="order.paymentStatus" />
                       </th>
                       <th className="operation-th" style={{ width: '10%' }}>
-                        <FormattedMessage id="order.paymentStatus" />
+                        <FormattedMessage id="order.createBy" />
                       </th>
                     </tr>
                   </thead>
@@ -313,7 +305,7 @@ export default class ListView extends React.Component<any, any> {
                           />
                         </span>
 
-                        <div style={{ width: 310, display: 'inline-block' }}>
+                        <div style={{ width: 700, display: 'inline-block' }}>
                           <span
                             style={{
                               marginLeft: 20,
@@ -328,9 +320,6 @@ export default class ListView extends React.Component<any, any> {
                                 <FormattedMessage id="order.valetOrder" />
                               </span>
                             )}
-                            {/* {orderType != '' && (
-                              <span style={styles.platform}>{orderType}</span>
-                            )} */}
                             {v.get('grouponFlag') && (
                               <span style={styles.platform}>
                                 <FormattedMessage id="order.fightTogether" />
@@ -494,42 +483,21 @@ export default class ListView extends React.Component<any, any> {
                       <p title={v.getIn(['buyer', 'name'])} className="line-ellipse">
                         {v.getIn(['buyer', 'name'])}
                       </p>
-                      {/* <br />
-                      <p title={v.getIn(['buyer', 'name'])} className="line-ellipse">
-                        {v.getIn(['buyer', 'account'])}
-                      </p> */}
-                    </td>
-                    <td style={{ width: '14%' }}>
-                      {/*收件人姓名*/}
-                      {/* <FormattedMessage id="recipient" />： */}
-                      <p title={v.getIn(['consignee', 'name'])} className="line-ellipse">
-                        {v.getIn(['consignee', 'name'])}
-                      </p>
-
-                      {/* <br /> */}
-                      {/*收件人手机号码*/}
-                      {/* {v.getIn(['consignee', 'phone'])} */}
                     </td>
                     <td style={{ width: '10%' }}>
+                      {/* Amount */}
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
-                      <br />（{num} <FormattedMessage id="piece" />)
                     </td>
-                    {/* <td style={{ width: '10%' }}>
-                      <p title={v.getIn(['clinicsName', 'name'])} className="line-ellipse">
-                        {v.get('clinicsName')}
-                      </p>
-                    </td> */}
-                    {/* <td style={{ width: '5%' }}> */}
-                    {/* 1{v.getIn(['invoice', 'rfc'])} */}
-                    {/* </td> */}
+                    {/* Quantity */}
+                    <td style={{ width: '10%' }}>{num}</td>
                     {/*发货状态*/}
-                    <td style={{ width: '10%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
-                    {/*订单状态*/}
-                    <td style={{ width: '10%' }}>{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>
+                    <td style={{ width: '14%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*支付状态*/}
-                    <td style={{ width: '10%', paddingRight: 22 }} className="operation-td">
+                    <td style={{ width: '14%' }}>
                       {payStatus(v.getIn(['tradeState', 'payState']))}
                     </td>
+                    {/*orderCreateBy*/}
+                    <td style={{ width: '10%', paddingRight: 22 }}  className="operation-td">{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>
                   </tr>
                 </tbody>
               </table>

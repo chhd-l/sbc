@@ -61,7 +61,9 @@ export default class CouponInfoActor extends Actor {
       allGroups: [],
       segmentIds: [],
       couponPromotionType: 0, //Amount: 0 or Percentage: 1
-      couponDiscount: null
+      couponDiscount: null,
+      attributesList: [],
+      attributeIds: []
     };
   }
   /**
@@ -92,7 +94,29 @@ export default class CouponInfoActor extends Actor {
    */
   @Action('coupon: info: data')
   fetchCouponInfo(state, params) {
-    const { cateIds, couponDesc, couponId, couponName, couponType, denomination, effectiveDays, endTime, fullBuyPrice, fullBuyType, rangeDayType, scopeIds, scopeType, startTime, goodsList, storeCateIds, couponJoinLevel, segmentIds } = params;
+    const {
+      cateIds,
+      couponDesc,
+      couponId,
+      couponName,
+      couponType,
+      denomination,
+      effectiveDays,
+      endTime,
+      fullBuyPrice,
+      fullBuyType,
+      rangeDayType,
+      scopeIds,
+      scopeType,
+      startTime,
+      goodsList,
+      storeCateIds,
+      couponJoinLevel,
+      segmentIds,
+      couponPromotionType,
+      couponDiscount,
+      attributeIds
+    } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
       .set('couponName', couponName)
@@ -109,7 +133,11 @@ export default class CouponInfoActor extends Actor {
       .set('couponDesc', couponDesc)
       .set('storeCateIds', fromJS(storeCateIds))
       .set('couponJoinLevel', couponJoinLevel)
-      .set('segmentIds', fromJS(segmentIds));
+      .set('segmentIds', fromJS(segmentIds))
+      .set('couponPromotionType', couponPromotionType)
+      .set('couponDiscount', fromJS(couponDiscount))
+      .set('attributeIds', fromJS(attributeIds));
+
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));
     } else if (scopeType === 3) {
@@ -228,5 +256,10 @@ export default class CouponInfoActor extends Actor {
   @Action('goodsActor: allGroups')
   getAllGroups(state, allGroups) {
     return state.set('allGroups', fromJS(allGroups));
+  }
+
+  @Action('goodsActor:attributesList')
+  getAllAttributesList(state, attributesList) {
+    return state.set('attributesList', fromJS(attributesList));
   }
 }

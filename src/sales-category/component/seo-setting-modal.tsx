@@ -77,6 +77,7 @@ export default class SeoSettingModal extends Component<any, any> {
     const { getFieldDecorator, setFieldsValue } = this.props.form;
     const { seoForm, updateSeoForm, loading, seoModalVisible } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
+    const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
     setFieldsValue({
       titleSource: seoObj.titleSource,
       metaKeywordsSource: seoObj.metaKeywordsSource,
@@ -142,46 +143,51 @@ export default class SeoSettingModal extends Component<any, any> {
             {/*    </Select>*/}
             {/*  )}*/}
             {/*</Form.Item>*/}
-            {/*<Form.Item label="Meta Keywords">*/}
-            {/*  {getFieldDecorator('metaKeywordsSource', {*/}
-            {/*    initialValue: seoObj.metaKeywordsSource*/}
-            {/*  })(*/}
-            {/*    <TextArea*/}
-            {/*      rows={4}*/}
-            {/*      onChange={(e) =>*/}
-            {/*        updateSeoForm({*/}
-            {/*          field: 'metaKeywordsSource',*/}
-            {/*          value: e.target.value*/}
-            {/*        })*/}
-            {/*      }*/}
-            {/*    />*/}
-            {/*  )}*/}
-            {/*</Form.Item>*/}
-            {/*<Form.Item label="Meta Description">*/}
-            {/*  {getFieldDecorator('metaDescriptionSource', {*/}
-            {/*    initialValue: seoObj.metaDescriptionSource*/}
-            {/*  })(*/}
-            {/*    <TextArea*/}
-            {/*      rows={4}*/}
-            {/*      onChange={(e) =>*/}
-            {/*        updateSeoForm({*/}
-            {/*          field: 'metaDescriptionSource',*/}
-            {/*          value: e.target.value*/}
-            {/*        })*/}
-            {/*      }*/}
-            {/*    />*/}
-            {/*  )}*/}
-            {/*</Form.Item>*/}
-            {/*<Form.Item label="H1">*/}
-            {/*  {getFieldDecorator('h1', {*/}
-            {/*    initialValue: '{ description title }'*/}
-            {/*  })(<Input disabled />)}*/}
-            {/*</Form.Item>*/}
-            {/*<Form.Item label="H2">*/}
-            {/*  {getFieldDecorator('h2', {*/}
-            {/*    initialValue: '{ product name }'*/}
-            {/*  })(<Input disabled />)}*/}
-            {/*</Form.Item>*/}
+
+            {loginInfo && loginInfo.storeId !== 123457910 && (
+              <>
+                <Form.Item label="Meta Keywords">
+                  {getFieldDecorator('metaKeywordsSource', {
+                    initialValue: seoObj.metaKeywordsSource
+                  })(
+                    <TextArea
+                      rows={4}
+                      onChange={(e) =>
+                        updateSeoForm({
+                          field: 'metaKeywordsSource',
+                          value: e.target.value
+                        })
+                      }
+                    />
+                  )}
+                </Form.Item>
+                <Form.Item label="Meta Description">
+                  {getFieldDecorator('metaDescriptionSource', {
+                    initialValue: seoObj.metaDescriptionSource
+                  })(
+                    <TextArea
+                      rows={4}
+                      onChange={(e) =>
+                        updateSeoForm({
+                          field: 'metaDescriptionSource',
+                          value: e.target.value
+                        })
+                      }
+                    />
+                  )}
+                </Form.Item>
+                <Form.Item label="H1">
+                  {getFieldDecorator('h1', {
+                    initialValue: '{ description title }'
+                  })(<Input disabled />)}
+                </Form.Item>
+                <Form.Item label="H2">
+                  {getFieldDecorator('h2', {
+                    initialValue: '{ product name }'
+                  })(<Input disabled />)}
+                </Form.Item>
+              </>
+            )}
           </Form>
         </div>
       </Modal>

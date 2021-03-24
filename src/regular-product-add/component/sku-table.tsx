@@ -387,9 +387,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
         return (
-          <Row  style={{
-            marginRight: '81px',
-          }}>
+          <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
@@ -406,6 +404,46 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         )}
     });
+
+    columns = columns.push({
+      title: (
+        <div
+          style={{
+            marginRight: '81px'
+          }}
+        >
+          Sales status
+        </div>
+      ),
+      key: 'addedFlag',
+      render: (rowInfo) => {
+        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
+
+        return (
+          <Row
+            style={{
+              marginRight: '81px'
+            }}
+          >
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('addedFlag' + rowInfo.id, {
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'addedFlag', Number(e)),
+                  initialValue: rowInfo.addedFlag == 0 ? '0' : '1'
+                })(
+                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
+                    <Option value="1">Y</Option>
+                    <Option value="0">N</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+
     /* let a = columns.toJS();
     let b = a.splice(a.length - 4, 1);
     a.splice(3, 0, b[0]);*/

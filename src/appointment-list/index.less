@@ -1,0 +1,59 @@
+.customer-date-field {
+  display: block;
+  margin-left: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  color: #fff;
+  line-height: 28px;
+  text-align: center;
+  background-color: #4bde6e;
+
+  &.disabled {
+    background-color: #f4f4f4 !important;
+    color: '#999' !important;
+    cursor: not-allowed;
+  }
+}
+
+.ant-fullcalendar-selected-day .customer-date-field {
+  background-color: #bd001c;
+}
+
+.ant-fullcalendar-next-month-btn-day .customer-date-field,
+.ant-fullcalendar-last-month-cell .customer-date-field {
+  background-color: #d3d3d3;
+}
+
+.appt-date-wrapper {
+  width: 400px;
+  height: 353px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+
+  .appt-time-wrapper {
+    width: 400px;
+    height: 315px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 352px;
+    left: -1px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: top linear 0.2s;
+
+    &.show {
+      top: -1px;
+    }
+  }
+
+  .appt-date-footer {
+    width: 400px;
+    border-top: 1px solid #d9d9d9;
+    text-align: center;
+    height: 38px;
+  }
+}

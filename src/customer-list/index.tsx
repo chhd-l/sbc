@@ -69,7 +69,7 @@ export default class Customer extends React.Component<any, any> {
               <Tooltip placement="top" title="Details">
                 <Link to={record.customerLevelName === 'Member' ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
               </Tooltip>
-              {record.customerLevelName === 'Member111' ? (
+              {record.customerLevelName === 'Member' ? (
                 <span>
                   <Divider type="vertical" />
                   <Tooltip placement="top" title="Activity">

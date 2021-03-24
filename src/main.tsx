@@ -16,6 +16,14 @@ export default class Main extends React.Component<any, any> {
       hasError: false,
       uuid: ''
     };
+    (window as any).countryEnum = {
+      123456858: 'mx',
+      123457907: 'ru',
+      123457908: 'de',
+      123457909: 'fr',
+      123457910: 'us',
+      123457911: 'tr'
+    };
   }
 
   UNSAFE_componentWillMount() {

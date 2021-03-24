@@ -9,7 +9,7 @@ import MethodTips from './methodTips';
 import { Relax, StoreProvider } from 'plume2';
 import { IList, IMap } from '../../../typings/globalType';
 @Relax
-export default class PaymentSetting extends React.Component<any, any> {
+export default class PaymentMethod extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -25,6 +25,7 @@ export default class PaymentSetting extends React.Component<any, any> {
       switchVisible: any;
       onShow: Function;
       switchChecked: any;
+      getEditStorePayment: Function;
     };
   };
 
@@ -32,7 +33,8 @@ export default class PaymentSetting extends React.Component<any, any> {
     queryByStoreId: 'queryByStoreId',
     switchVisible: 'switchVisible',
     onShow: noop,
-    switchChecked: 'checked'
+    switchChecked: 'checked',
+    getEditStorePayment: noop
   };
   componentDidMount() {}
   getPaymentSetting = async () => {
@@ -58,7 +60,8 @@ export default class PaymentSetting extends React.Component<any, any> {
   onChange = () => {};
 
   reflash() {
-    this.getPaymentSetting();
+    const { getEditStorePayment } = this.props.relaxProps;
+    this.getEditStorePayment();
   }
   render() {
     const { queryByStoreId, switchChecked } = this.props.relaxProps;
@@ -77,8 +80,8 @@ export default class PaymentSetting extends React.Component<any, any> {
             {queryByStoreId.List1 &&
               queryByStoreId.List1.map((item, index) => {
                 return (
-                  <Row>
-                    <Col span={8} key={index}>
+                  <Row key={index}>
+                    <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
                           <img
@@ -94,7 +97,7 @@ export default class PaymentSetting extends React.Component<any, any> {
                           <div className="status">{item.name}</div>
 
                           <div className={'flex-start-align'}>
-                            <Switch style={{ marginRight: 15 }} checked={switchChecked} onClick={this.onSwitchChange} />
+                            {/*<Switch style={{ marginRight: 15 }} checked={switchChecked} onClick={this.onSwitchChange} />*/}
                             <Tooltip placement="top" title="Edit">
                               <a
                                 style={{ color: 'red' }}
@@ -130,8 +133,8 @@ export default class PaymentSetting extends React.Component<any, any> {
             {queryByStoreId.List2 &&
               queryByStoreId.List2.map((item, index) => {
                 return (
-                  <Row>
-                    <Col span={8} key={index}>
+                  <Row key={index}>
+                    <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
                           <img
@@ -183,8 +186,8 @@ export default class PaymentSetting extends React.Component<any, any> {
             {queryByStoreId.List3 &&
               queryByStoreId.List3.map((item, index) => {
                 return (
-                  <Row>
-                    <Col span={8} key={index}>
+                  <Row key={index}>
+                    <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
                           <img
@@ -224,6 +227,7 @@ export default class PaymentSetting extends React.Component<any, any> {
               })}
           </div>
         </div>
+
         <PaymentModel paymentForm={this.state.paymentForm} visible={this.state.paymentVisible} parent={this} reflash={() => this.reflash()} />
         <MethodTips />
       </div>

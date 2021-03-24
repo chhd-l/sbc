@@ -8,6 +8,8 @@ import { addressList } from '@/order-add-old/webapi';
 import { Const } from 'qmkit';
 import _ from 'lodash';
 
+import '../index.less';
+
 const { TextArea } = Input;
 
 const { SubMenu } = Menu;
@@ -183,6 +185,7 @@ class BillingInfomation extends React.Component<any, any> {
 
             this.setState(
               {
+                customerAccount: res.context.customerAccount,
                 currentId: billingForm.deliveryAddressId,
                 clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
                 addressList: addressList,
@@ -383,7 +386,7 @@ class BillingInfomation extends React.Component<any, any> {
   };
 
   render() {
-    const { countryArr, cityArr, clinicList, storeId, stateList } = this.state;
+    const { countryArr, cityArr, clinicList, storeId, stateList, billingForm } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -425,7 +428,7 @@ class BillingInfomation extends React.Component<any, any> {
                 display: this.state.addressList.length === 0 ? 'none' : 'block'
               }}
             >
-              <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+              <Form {...formItemLayout} onSubmit={this.handleSubmit} className="petowner-noedit-form">
                 <Row gutter={16}>
                   <Col
                     span={12}
@@ -434,14 +437,7 @@ class BillingInfomation extends React.Component<any, any> {
                     }}
                   >
                     <FormItem label="Consumer account">
-                      {getFieldDecorator('customerAccount', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input First Name!'
-                          }
-                        ]
-                      })(<Input disabled={true} />)}
+                      {this.state.customerAccount}
                     </FormItem>
                   </Col>
                   {/* <Col
@@ -491,267 +487,63 @@ class BillingInfomation extends React.Component<any, any> {
                   </Col> */}
                   <Col span={12}>
                     <FormItem label="First Name">
-                      {getFieldDecorator('firstName', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input First Name!'
-                          },
-                          {
-                            max: 50,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'firstName',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                      {billingForm.firstName}
                     </FormItem>
                   </Col>
                   <Col span={12}>
                     <FormItem label="Last Name">
-                      {getFieldDecorator('lastName', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input Last Name!'
-                          },
-                          {
-                            max: 50,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'lastName',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                      {billingForm.lastName}
                     </FormItem>
                   </Col>
                   <Col span={12}>
                     <FormItem label="Phone Number">
-                      {getFieldDecorator('consigneeNumber', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input Phone Number!'
-                          },
-                          { validator: this.comparePhone }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'consigneeNumber',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                      {billingForm.consigneeNumber}
                     </FormItem>
                   </Col>
                   <Col span={12}>
                     <FormItem label="Post Code">
-                      {getFieldDecorator('postCode', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input Post Code!'
-                          },
-                          { validator: this.compareZip }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'postCode',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                      {billingForm.postCode}
                     </FormItem>
                   </Col>
                   <Col span={12}>
                     <FormItem label="Country">
-                      {getFieldDecorator('countryId', {
-                        rules: [{ required: true, message: 'Please input Country!' }]
-                      })(
-                        <Select
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(value) => {
-                            value = value === '' ? null : value;
-                            this.onFormChange({
-                              field: 'countryId',
-                              value
-                            });
-                          }}
-                        >
-                          {countryArr
-                            ? countryArr.map((item) => (
-                                <Option value={item.id} key={item.id}>
-                                  {item.name}
-                                </Option>
-                              ))
-                            : null}
-                        </Select>
-                      )}
+                    {(countryArr.find(t => t.id === billingForm.countryId) || {})['name'] || ''}
                     </FormItem>
                   </Col>
                   {storeId.toString() === '123457910' ? (
                     <Col span={12}>
                       <FormItem label="State">
-                        {getFieldDecorator('state', {
-                          rules: [{ required: true, message: 'Please select State!' }]
-                        })(
-                          <Select
-                            showSearch
-                            optionFilterProp="children"
-                            onChange={(value) => {
-                              this.onFormChange({
-                                field: 'state',
-                                value: value ? value : ''
-                              });
-                            }}
-                          >
-                            {stateList
-                              ? stateList.map((item) => (
-                                  <Option value={item.stateName} key={item.id}>
-                                    {item.stateName}
-                                  </Option>
-                                ))
-                              : null}
-                          </Select>
-                        )}
+                        {billingForm.province}
                       </FormItem>
                     </Col>
                   ) : null}
 
                   <Col span={12}>
                     <FormItem label="City">
-                      {getFieldDecorator('city', {
-                        rules: [{ required: true, message: 'Please input or select City!' }]
-                      })(
-                        <AutoComplete
-                          placeholder="Please input or select City"
-                          onSearch={_.debounce(this.getCityList, 500)}
-                          onChange={(value) => {
-                            this.onFormChange({
-                              field: 'city',
-                              value: value ? value : ''
-                            });
-                          }}
-                        >
-                          {cityArr &&
-                            cityArr.map((item) => (
-                              <Option value={item.cityName} key={item.id}>
-                                {item.cityName}
-                              </Option>
-                            ))}
-                        </AutoComplete>
-                      )}
+                      {billingForm.city}
                     </FormItem>
                   </Col>
                 </Row>
                 <Row>
                   <Col span={12}>
                     <FormItem label="Address 1">
-                      {getFieldDecorator('address1', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input Address 1!'
-                          },
-                          {
-                            max: 200,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <TextArea
-                          disabled={this.props.customerType === 'Guest'}
-                          autoSize={{ minRows: 3, maxRows: 3 }}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'address1',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                      {billingForm.address1}
                     </FormItem>
                   </Col>
                   <Col span={12}>
                     <FormItem label="Address 2">
-                      {getFieldDecorator('address2', {
-                        rules: [
-                          {
-                            max: 200,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <TextArea
-                          disabled={this.props.customerType === 'Guest'}
-                          autoSize={{ minRows: 3, maxRows: 3 }}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'address2',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                      {billingForm.address2}
                     </FormItem>
                   </Col>
                   <Col span={12}>
                     <FormItem label="Reference">
-                      {getFieldDecorator('rfc', {
-                        rules: [
-                          {
-                            max: 200,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'rfc',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                      {billingForm.rfc}
                     </FormItem>
                   </Col>
 
                   <Col span={24}>
                     <FormItem>
-                      <Button
+                      {/* <Button
                         type="primary"
                         htmlType="submit"
                         style={{
@@ -760,7 +552,7 @@ class BillingInfomation extends React.Component<any, any> {
                         }}
                       >
                         Save
-                      </Button>
+                      </Button> */}
 
                       {/* <Button
                         style={{
@@ -773,7 +565,7 @@ class BillingInfomation extends React.Component<any, any> {
                         Delete
                       </Button> */}
 
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delAddress()} okText="Confirm" cancelText="Cancel">
+                      {/* <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delAddress()} okText="Confirm" cancelText="Cancel">
                         <Button
                           style={{
                             marginRight: '20px',
@@ -782,7 +574,7 @@ class BillingInfomation extends React.Component<any, any> {
                         >
                           <FormattedMessage id="delete" />
                         </Button>
-                      </Popconfirm>
+                      </Popconfirm> */}
 
                       <Button>
                         <Link to="/customer-list">Cancel</Link>

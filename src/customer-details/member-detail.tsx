@@ -34,6 +34,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       displayPage: 'detail',
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
       customerAccount: this.props.match.params.account ? this.props.match.params.account : '',
+      activeKey: 'order',
       loading: false,
       tagList: [],
       basic: {},
@@ -108,7 +109,11 @@ export default class CustomerDetails extends React.Component<any, any> {
     });
   };
 
-  clickTabs = (key) => {};
+  clickTabs = (key) => {
+    this.setState({
+      activeKey: key
+    });
+  };
   showConfirm(id) {
     const that = this;
     confirm({
@@ -398,8 +403,11 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Row>
             </div>
             <div className="container">
-              <Headline title="Other information" extra={<RangePicker allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />} />
-              <Tabs defaultActiveKey="order" onChange={this.clickTabs}>
+              <Headline
+                title="Other information"
+                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />}
+              />
+              <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
                   <OrderInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
@@ -407,7 +415,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <SubscribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
                 <TabPane tab="Prescriber information" key="prescrib">
-                  <PrescribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
+                  <PrescribInformation customerAccount={this.state.customerAccount} />
                 </TabPane>
                 <TabPane tab="Delivery information" key="delivery">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}

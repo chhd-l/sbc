@@ -62,6 +62,28 @@ export default class AppointmentDatePicker extends React.Component<any, any> {
     this.getAvailableDate(date.format('YYYYMMDD'), true);
   };
 
+  onPrevMonth = (date) => {
+    const { value, onChange } = this.props;
+    if (date.day() === 1) {
+      date = date.clone().add(1, 'days');
+    }
+    value[0] = date.format('YYYY-MM-DD');
+    if (onChange) {
+      onChange(value);
+    }
+  };
+
+  onNextMonth = (date) => {
+    const { value, onChange } = this.props;
+    if (date.day() === 1) {
+      date = date.clone().subtract(1, 'days');
+    }
+    value[0] = date.format('YYYY-MM-DD');
+    if (onChange) {
+      onChange(value);
+    }
+  };
+
   onSelectTime = (hour, begin, end) => {
     const { timeList } = this.state;
     const { value, onChange } = this.props;
@@ -105,11 +127,11 @@ export default class AppointmentDatePicker extends React.Component<any, any> {
               return (
                 <Row type="flex" justify="space-between" gutter={20}>
                   <Col>
-                    <Button type="link" size="small" icon="left" onClick={() => onChange(value.clone().subtract(1, 'month'))} />
+                    <Button type="link" size="small" icon="left" onClick={() => this.onPrevMonth(value.clone().subtract(1, 'month'))} />
                   </Col>
                   <Col>{value.format('YYYY-MM')}</Col>
                   <Col>
-                    <Button type="link" size="small" icon="right" onClick={() => onChange(value.clone().add(1, 'month'))} />
+                    <Button type="link" size="small" icon="right" onClick={() => this.onNextMonth(value.clone().add(1, 'month'))} />
                   </Col>
                 </Row>
               );

@@ -47,6 +47,13 @@ export function findAppointmentById(id: number) {
   });
 }
 
+export function findAppointmentByAppointmentNo(apptNo: string) {
+  return Fetch<TResult>('/appt/findByNo', {
+    method: 'POST',
+    body: JSON.stringify({ apptNo })
+  });
+}
+
 export function updateAppointmentById(params = {}) {
   return Fetch<TResult>('/appt/update', {
     method: 'POST',

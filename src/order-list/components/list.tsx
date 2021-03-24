@@ -353,19 +353,20 @@ export default class ListView extends React.Component<any, any> {
                         <span style={{ marginRight: 0, float: 'right' }}>
                           {/*只有未审核状态才显示修改*/}
                           {(v.getIn(['tradeState', 'flowState']) === 'INIT' || v.getIn(['tradeState', 'flowState']) === 'AUDIT') && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && v.get('tradeItems') && !v.get('tradeItems').get(0).get('isFlashSaleGoods') && (
-                            <AuthWrapper functionName="edit_order_f_001">
-                              <Tooltip placement="top" title="Edit">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    verify(id, buyerId);
-                                  }}
-                                  className="iconfont iconEdit"
-                                >
-                                  {/*<FormattedMessage id="edit" />*/}
-                                </a>
-                              </Tooltip>
-                            </AuthWrapper>
+                            // <AuthWrapper functionName="edit_order_f_001">
+                            //   <Tooltip placement="top" title="Edit">
+                            //     <a
+                            //       style={{ marginLeft: 20 }}
+                            //       onClick={() => {
+                            //         verify(id, buyerId);
+                            //       }}
+                            //       className="iconfont iconEdit"
+                            //     >
+                            //       {/*<FormattedMessage id="edit" />*/}
+                            //     </a>
+                            //   </Tooltip>
+                            // </AuthWrapper>
+                            null
                           )}
                           {/*审核按钮显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (

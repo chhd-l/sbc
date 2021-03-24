@@ -83,14 +83,15 @@ export default class SearchHead extends Component<any, any> {
         orderSource: ''
       },
       orderCategory: '',
-      showAdvanceSearch: false
+      showAdvanceSearch: false,
+      orderTypeSelect: 'Order type'
     };
   }
 
   render() {
     const { tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState, orderType, subscriptionType, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
+    const { tradeState, orderType,orderSource, subscriptionType, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
@@ -206,75 +207,73 @@ export default class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} disabled defaultValue={'Order type'} />
-                        <Select
-                          style={styles.wrapper}
-                          allowClear
-                          getPopupContainer={(trigger: any) => trigger.parentNode}
-                          onChange={(value) => {
-                            if (value === 'SINGLE_PURCHASE') {
+                        {this._renderOrderTypeSelect()}
+                        {this.state.orderTypeSelect === 'Order type' ? (
+                          <Select
+                            style={styles.wrapper}
+                            allowClear
+                            value={orderType}
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
+                              if (value === 'SINGLE_PURCHASE') {
+                                this.setState({
+                                  orderType: value,
+                                  subscriptionType: '',
+                                  subscriptionPlanType: ''
+                                });
+                              } else {
+                                this.setState({
+                                  orderType: value
+                                });
+                              }
+                            }}
+                          >
+                            {orderTypeList &&
+                              orderTypeList.map((item, index) => (
+                                <Option value={item.value} title={item.name} key={index}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                          </Select>
+                        ) : (
+                          <Select
+                            style={styles.wrapper}
+                            allowClear
+                            value={orderSource}
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
                               this.setState({
-                                orderType: value,
-                                subscriptionType: '',
-                                subscriptionPlanType: ''
+                                orderSource: value
                               });
-                            } else {
-                              this.setState({
-                                orderType: value
-                              });
-                            }
-                          }}
-                        >
-                          {orderTypeList &&
-                            orderTypeList.map((item, index) => (
-                              <Option value={item.value} title={item.name} key={index}>
-                                {item.name}
-                              </Option>
-                            ))}
-                        </Select>
+                            }}
+                          >
+                            {orderSourceList &&
+                              orderSourceList.map((item, index) => (
+                                <Option value={item.value} title={item.name} key={index}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                          </Select>
+                        )}
                       </InputGroup>
                     </FormItem>
                   </Col>
+
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} disabled defaultValue={'Order source'} />
-                        <Select
+                        {this._renderReceiverSelect()}
+                        <Input
                           style={styles.wrapper}
-                          allowClear
-                          getPopupContainer={(trigger: any) => trigger.parentNode}
-                          onChange={(value) => {
+                          onChange={(e) => {
                             this.setState({
-                              orderSource: value
+                              buyerOptionsValue: (e.target as any).value
                             });
                           }}
-                        >
-                          {orderSourceList &&
-                            orderSourceList.map((item, index) => (
-                              <Option value={item.value} title={item.name} key={index}>
-                                {item.name}
-                              </Option>
-                            ))}
-                        </Select>
+                        />
                       </InputGroup>
                     </FormItem>
                   </Col>
-{/*                   
-                  <Col span={8}>
-                  <FormItem>
-                    <InputGroup compact style={styles.formItemStyle}>
-                      {this._renderReceiverSelect()}
-                      <Input
-                        style={styles.wrapper}
-                        onChange={(e) => {
-                          this.setState({
-                            buyerOptionsValue: (e.target as any).value
-                          });
-                        }}
-                      />
-                    </InputGroup>
-                  </FormItem>
-                </Col> */}
 
                   <Col span={8} id="input-group-width">
                     <FormItem>
@@ -586,6 +585,28 @@ export default class SearchHead extends Component<any, any> {
         </Option>
         <Option title="Recipient phone" value="consigneePhone">
           <FormattedMessage id="recipientPhone" />
+        </Option>
+      </Select>
+    );
+  };
+
+  _renderOrderTypeSelect = () => {
+    return (
+      <Select
+        onChange={(val) =>
+          this.setState({
+            orderTypeSelect: val
+          })
+        }
+        getPopupContainer={(trigger: any) => trigger.parentNode}
+        value={this.state.orderTypeSelect}
+        style={styles.label}
+      >
+        <Option title="Order type" value="Order type">
+          Order type
+        </Option>
+        <Option title="Order source" value="Order source">
+          Order source
         </Option>
       </Select>
     );

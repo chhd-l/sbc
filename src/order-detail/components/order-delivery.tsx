@@ -197,7 +197,11 @@ export default class OrderDelivery extends React.Component<any, any> {
             this['_receiveAdd'].validateFields(null, (errs, values) => {
               //如果校验通过
               if (!errs) {
-                values.deliverTime = values.deliverTime.format(Const.DAY_FORMAT);
+                if(values.deliverNo){
+                  values.deliverTime =  values.deliverTime.format(Const.DAY_FORMAT)
+                } else {
+                  values.deliverNo = null
+                }
                 saveDelivery(values);
               }
             });

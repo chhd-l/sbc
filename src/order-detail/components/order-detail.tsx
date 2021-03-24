@@ -29,6 +29,11 @@ const flowState = (status) => {
   }
 };
 
+const orderTypeList = [
+  { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
+  { value: 'SUBSCRIPTION', name: 'Subscription' }
+];
+
 /**
  * 拒绝表单，只为校验体验
  */
@@ -371,6 +376,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
         )
       }
     ];
+
+    let orderDetailType = orderTypeList.find(x=>x.value === detail.get('orderType'))
     return (
       <div className="orderDetail">
         <div
@@ -404,7 +411,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   </Tooltip>
                   <p>External order id: {detail.getIn(['tradeOms', 'orderNo'])}</p>
                   <p>Order status: {flowState(detail.getIn(['tradeState', 'flowState']))}</p>
-                  <p>Order type: {detail.get('orderType')}</p>
+                  <p>Order type: { orderDetailType ? orderDetailType.name : '' }</p>
                 </Col>
                 <Col span={12}>
                   <p>Order time: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
@@ -682,35 +689,37 @@ export default class OrderDetailTab extends React.Component<any, any> {
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {payState === 'NOT_PAID' && (
-            <AuthWrapper functionName="edit_order_f_001">
-              <Tooltip placement="top" title="Modify">
-                <a
-                  style={styles.pr20}
-                  onClick={() => {
-                    verify(tid);
-                  }}
-                >
-                  Modify
-                </a>
-              </Tooltip>
-            </AuthWrapper>
+            // <AuthWrapper functionName="edit_order_f_001">
+            //   <Tooltip placement="top" title="Modify">
+            //     <a
+            //       style={styles.pr20}
+            //       onClick={() => {
+            //         verify(tid);
+            //       }}
+            //     >
+            //       Modify
+            //     </a>
+            //   </Tooltip>
+            // </AuthWrapper>
+            null
           )}
           {flowState === 'AUDIT' && (
             <div>
               {payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
-                <AuthWrapper functionName="fOrderList002">
-                  <Tooltip placement="top" title="Re-review">
-                    <a
-                      onClick={() => {
-                        this._showRetrialConfirm(tid);
-                      }}
-                      href="javascript:void(0)"
-                      style={styles.pr20}
-                    >
-                      Re-review
-                    </a>
-                  </Tooltip>
-                </AuthWrapper>
+                // <AuthWrapper functionName="fOrderList002">
+                //   <Tooltip placement="top" title="Re-review">
+                //     <a
+                //       onClick={() => {
+                //         this._showRetrialConfirm(tid);
+                //       }}
+                //       href="javascript:void(0)"
+                //       style={styles.pr20}
+                //     >
+                //       Re-review
+                //     </a>
+                //   </Tooltip>
+                // </AuthWrapper>
+                null
               )}
               {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
                 <AuthWrapper functionName="fOrderDetail002">

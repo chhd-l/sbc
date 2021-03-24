@@ -35,12 +35,37 @@ class UserList extends Component<any, any> {
       userVisible: false,
       disabledModalVisible: false,
       disabledReason: '',
-      auditModalVisible: false
+      auditModalVisible: false,
+      hasPrescriberRole: false
     }),
       (this.getUsers = this.getUsers.bind(this));
     this.deleteUser = this.deleteUser.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.getAllRoles();
     this.getUsers();
+  }
+
+  getAllRoles() {
+    webapi
+      .fetchAllRoles()
+      .then((data) => {
+        const res = data.res;
+        debugger;
+        if (res.code === Const.SUCCESS_CODE) {
+          let allRoles = res.context ? res.context.map((x) => x.roleName) : [];
+          this.setState({
+            hasPrescriberRole: allRoles.includes('Prescriber')
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
   }
 
   getUsers = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 5 }) => {
@@ -326,129 +351,135 @@ class UserList extends Component<any, any> {
     ];
     return (
       <div>
-        <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*New added user still needs to register before logging in store portal</p>
-        <div className="container-search">
-          <Form layout="inline">
-            <FormItem>
-              <Input
-                addonBefore="User name"
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onFormChange({
-                    field: 'userName',
-                    value
-                  });
-                }}
-                placeholder="Please input name"
-                style={{ width: 300 }}
-              />
-            </FormItem>
-            <FormItem>
-              <Input
-                addonBefore="User email"
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onFormChange({
-                    field: 'email',
-                    value
-                  });
-                }}
-                placeholder="Please input email"
-                style={{ width: 300 }}
-              />
-            </FormItem>
-            <FormItem>
-              <SelectGroup
-                defaultValue="All"
-                label="User status"
-                onChange={(value) => {
-                  value = value === '' ? null : value;
-                  this.onFormChange({
-                    field: 'accountState',
-                    value
-                  });
-                }}
-                style={{ width: 80 }}
-              >
-                <Option value="">All</Option>
-                <Option value={'3'}>Inactivated</Option>
-                <Option value={'4'}>To be audit</Option>
-                <Option value={'0'}>Enabled</Option>
-                <Option value={'1'}>Disabled</Option>
-              </SelectGroup>
-            </FormItem>
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                icon="search"
-                shape="round"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.getUsers();
-                }}
-              >
-                <span>
-                  <FormattedMessage id="search" />
-                </span>
+        {this.state.hasPrescriberRole ? (
+          <React.Fragment>
+            <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*New added user still needs to register before logging in store portal</p>
+            <div className="container-search">
+              <Form layout="inline">
+                <FormItem>
+                  <Input
+                    addonBefore="User name"
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'userName',
+                        value
+                      });
+                    }}
+                    placeholder="Please input name"
+                    style={{ width: 300 }}
+                  />
+                </FormItem>
+                <FormItem>
+                  <Input
+                    addonBefore="User email"
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'email',
+                        value
+                      });
+                    }}
+                    placeholder="Please input email"
+                    style={{ width: 300 }}
+                  />
+                </FormItem>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue="All"
+                    label="User status"
+                    onChange={(value) => {
+                      value = value === '' ? null : value;
+                      this.onFormChange({
+                        field: 'accountState',
+                        value
+                      });
+                    }}
+                    style={{ width: 80 }}
+                  >
+                    <Option value="">All</Option>
+                    <Option value={'3'}>Inactivated</Option>
+                    <Option value={'4'}>To be audit</Option>
+                    <Option value={'0'}>Enabled</Option>
+                    <Option value={'1'}>Disabled</Option>
+                  </SelectGroup>
+                </FormItem>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    icon="search"
+                    shape="round"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.getUsers();
+                    }}
+                  >
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
+                  </Button>
+                </Form.Item>
+              </Form>
+              <Button type="primary" htmlType="submit" onClick={this.addUser} style={{ marginBottom: '10px', marginTop: '10px' }}>
+                <FormattedMessage id="add" />
               </Button>
-            </Form.Item>
-          </Form>
-          <Button type="primary" htmlType="submit" onClick={this.addUser} style={{ marginBottom: '10px', marginTop: '10px' }}>
-            <FormattedMessage id="add" />
-          </Button>
-        </div>
-        <div className="container">
-          <Table rowKey={(record, index) => index} dataSource={this.state.userData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
-        </div>
-        <UserModal userForm={this.state.userForm} visible={this.state.userVisible} parent={this} prescriberKeyId={this.props.prescriberKeyId} reflash={() => this.getUsers()} />
-        <Modal maskClosable={false} title="Please input the reason for disabling" visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
-          <Form>
-            <FormItem>
-              {getFieldDecorator('reason', {
-                rules: [
-                  {
-                    validator: (rule, value, callback) => {
-                      QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Reason for disabling', 1, 100);
-                    }
-                  }
-                ]
-              })(
-                <Input.TextArea
-                  placeholder="Please input a reason for disabling"
-                  onChange={(e: any) =>
-                    this.setState({
-                      disabledReason: e.target.value
-                    })
-                  }
-                />
-              )}
-            </FormItem>
-          </Form>
-        </Modal>
-        <Modal
-          maskClosable={false}
-          visible={this.state.auditModalVisible}
-          footer={null}
-          title="Agree or Reject?"
-          onCancel={() =>
-            this.setState({
-              auditModalVisible: false
-            })
-          }
-        >
-          <Row>
-            <Col span={12}></Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              <Button onClick={() => this.handleAudit(false)} style={{ marginRight: '10px' }}>
-                Reject
-              </Button>
-              <Button type="primary" onClick={() => this.handleAudit(true)}>
-                Agree
-              </Button>
-            </Col>
-          </Row>
-        </Modal>
+            </div>
+            <div className="container">
+              <Table rowKey={(record, index) => index} dataSource={this.state.userData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
+            </div>
+            <UserModal userForm={this.state.userForm} visible={this.state.userVisible} parent={this} prescriberKeyId={this.props.prescriberKeyId} reflash={() => this.getUsers()} />
+            <Modal maskClosable={false} title="Please input the reason for disabling" visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
+              <Form>
+                <FormItem>
+                  {getFieldDecorator('reason', {
+                    rules: [
+                      {
+                        validator: (rule, value, callback) => {
+                          QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Reason for disabling', 1, 100);
+                        }
+                      }
+                    ]
+                  })(
+                    <Input.TextArea
+                      placeholder="Please input a reason for disabling"
+                      onChange={(e: any) =>
+                        this.setState({
+                          disabledReason: e.target.value
+                        })
+                      }
+                    />
+                  )}
+                </FormItem>
+              </Form>
+            </Modal>
+            <Modal
+              maskClosable={false}
+              visible={this.state.auditModalVisible}
+              footer={null}
+              title="Agree or Reject?"
+              onCancel={() =>
+                this.setState({
+                  auditModalVisible: false
+                })
+              }
+            >
+              <Row>
+                <Col span={12}></Col>
+                <Col span={12} style={{ textAlign: 'right' }}>
+                  <Button onClick={() => this.handleAudit(false)} style={{ marginRight: '10px' }}>
+                    Reject
+                  </Button>
+                  <Button type="primary" onClick={() => this.handleAudit(true)}>
+                    Agree
+                  </Button>
+                </Col>
+              </Row>
+            </Modal>
+          </React.Fragment>
+        ) : (
+          <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*No Prescriber Role</p>
+        )}
       </div>
     );
   }

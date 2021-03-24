@@ -96,4 +96,8 @@ export default class AppStore extends Store {
       marketingId
     };
   };
+
+  shippingBeanOnChange = (shippingBean) => {
+    this.dispatch('marketing:shippingBean', shippingBean);
+  };
 }

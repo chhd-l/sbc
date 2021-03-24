@@ -2,10 +2,11 @@ import * as React from 'react';
 import { fromJS, List } from 'immutable';
 
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin } from 'antd';
-import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
+import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
 import moment from 'moment';
 
 import * as webapi from '../../webapi';
+import { Relax } from 'plume2';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -39,21 +40,37 @@ const largeformItemLayout = {
   }
 };
 
+@Relax
 export default class FreeShippingAddForm extends React.Component<any, any> {
-  props;
-
   constructor(props) {
     super(props);
-    const relaxProps = props.store.state();
+    // const relaxProps = props.store.state();
     this.state = {
-      marketingBean: relaxProps.get('marketingBean'),
-      timeZone: moment,
-      allGroups: relaxProps.get('allGroups'),
-      submitFreeShipping: relaxProps.get('allGroups'),
-      loading: relaxProps.get('loading')
+      // marketingBean: relaxProps.get('marketingBean'),
+      timeZone: moment
+      // allGroups: relaxProps.get('allGroups'),
+      // submitFreeShipping: relaxProps.get('allGroups'),
+      // loading: relaxProps.get('loading')
     };
   }
+  props: {
+    form: any;
+    relaxProps?: {
+      allGroups: any;
+      marketingBean: any;
+      loading: boolean;
+      submitFreeShipping: Function;
+      shippingBeanOnChange: Function;
+    };
+  };
 
+  static relaxProps = {
+    allGroups: 'allGroups',
+    marketingBean: 'marketingBean',
+    loading: 'loading',
+    submitFreeShipping: noop,
+    shippingBeanOnChange: noop
+  };
   componentDidMount() {}
   /**
    * 页面初始化
@@ -66,10 +83,8 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
    * @param params
    */
   onBeanChange = (params) => {
-    this.setState({
-      marketingBean: this.state.marketingBean.merge(params)
-      // PromotionTypeChecked: true
-    });
+    const { marketingBean, shippingBeanOnChange } = this.props.relaxProps;
+    shippingBeanOnChange(marketingBean.merge(params));
   };
 
   /**
@@ -78,10 +93,15 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
    */
   handleSubmit = (e) => {
     e.preventDefault();
+    let errorObject = {};
+    const { marketingBean, submitFreeShipping } = this.props.relaxProps;
+    this.setState({
+      count: 1
+    });
+
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const { marketingBean } = this.state;
-        this.props.store.submitFreeShipping(marketingBean.toJS());
+        submitFreeShipping(marketingBean.toJS());
       }
     });
   };
@@ -144,10 +164,11 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
   };
 
   render() {
-    const { marketingType, marketingId, form } = this.props;
-    const { getFieldDecorator } = form;
-    const { marketingBean, saveLoading, allGroups, loading } = this.state;
+    const { form } = this.props; //marketingType, marketingId,
+    const { getFieldDecorator } = this.props.form;
+    const { allGroups, marketingBean, loading } = this.props.relaxProps;
     console.log(marketingBean.toJS(), 'marketingBean---------');
+    console.log(allGroups.toJS(), 'allGroups---------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <div className="bold-title">Basic Setting</div>
@@ -256,7 +277,6 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              debugger;
                               if (!marketingBean.get('shippingItemValue') && marketingBean.get('subType') === 11) {
                                 callback('Items must be entered.');
                               }
@@ -314,9 +334,11 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
             </div>
           )}
         </FormItem>
+
         {marketingBean.get('joinLevel') == -3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
             {getFieldDecorator('segmentIds', {
+              initialValue: marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null,
               rules: [
                 {
                   validator: (_rule, value, callback) => {
@@ -328,28 +350,26 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                 }
               ]
             })(
-              <>
-                <Select
-                  style={{ width: 520 }}
-                  onChange={this.selectGroupOnChange}
-                  // defaultValue={232}
-                  value={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
-                >
-                  {allGroups.size > 0 &&
-                    allGroups.map((item) => (
-                      <Select.Option key={item.get('id')} value={item.get('id')}>
-                        {item.get('name')}
-                      </Select.Option>
-                    ))}
-                </Select>
-              </>
+              <Select
+                style={{ width: 520 }}
+                onChange={this.selectGroupOnChange}
+                // defaultValue={232}
+                // value={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}
+              >
+                {allGroups.size > 0 &&
+                  allGroups.map((item) => (
+                    <Select.Option key={item.get('id')} value={item.get('id')}>
+                      {item.get('name')}
+                    </Select.Option>
+                  ))}
+              </Select>
             )}
           </FormItem>
         )}
         <Row type="flex" justify="start">
           {/*<Col span={3} />*/}
           <Col span={10}>
-            <Button type="primary" htmlType="submit" loading={saveLoading}>
+            <Button type="primary" htmlType="submit">
               Save
             </Button>
             &nbsp;&nbsp;
@@ -464,6 +484,6 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
       message.success('Operate successfully');
       history.push('/marketing-list');
     }
-    this.setState({ saveLoading: false });
+    // this.setState({ saveLoading: false });
   };
 }

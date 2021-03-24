@@ -4,6 +4,7 @@
 import { Action, Actor, IMap } from 'plume2';
 import { fromJS } from 'immutable';
 import { IList } from '../../../../typings/globalType';
+import { forEach } from 'wangeditor/dist/utils/util';
 
 export default class FullDiscountActor extends Actor {
   defaultState() {
@@ -41,6 +42,13 @@ export default class FullDiscountActor extends Actor {
 
   @Action('marketing:attributesList')
   getAllAttributesList(state, attributesList) {
+    attributesList.forEach((item) => {
+      if (item.attributesValuesVOList) {
+        item.attributesValuesVOList.forEach((child) => {
+          child.attributeName = child.attributeDetailName;
+        });
+      }
+    });
     return state.set('attributesList', fromJS(attributesList));
   }
 

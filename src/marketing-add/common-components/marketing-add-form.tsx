@@ -192,7 +192,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     this.onBeanChange({
       scopeType: value,
       storeCateIds: [],
-      attributeIds: []
+      attributeValueIds: []
     });
   };
   targetCustomerRadioChange = (value) => {
@@ -208,10 +208,20 @@ export default class MarketingAddForm extends React.Component<any, any> {
     segmentIds.push(value);
     this.onBeanChange({ segmentIds });
   };
-  selectAttributeOnChange = (value) => {
-    let attributeIds = [];
-    attributeIds.push(value);
-    this.onBeanChange({ attributeIds });
+  // selectAttributeOnChange = (value) => {
+  //   let attributeIds = [];
+  //   attributeIds.push(value);
+  //   this.onBeanChange({ attributeIds });
+  // };
+
+  attributeChange = (value) => {
+    let attributeValueIds = [];
+    value.forEach((item) => {
+      attributeValueIds.push(item.value);
+    });
+    this.onBeanChange({
+      attributeValueIds
+    });
   };
   storeCateChange = (value, _label, extra) => {
     const sourceGoodCateList = this.state.sourceStoreCateList;
@@ -282,12 +292,32 @@ export default class MarketingAddForm extends React.Component<any, any> {
       })
     );
   };
+  /**
+   * Attribute分类树形下拉框
+   * @param storeCateList
+   */
+  generateAttributeTree = (attributesList) => {
+    console.log(attributesList.toJS(), 'attributesList-------------');
+    return (
+      attributesList &&
+      attributesList.map((item) => {
+        if (item.get('attributesValuesVOList') && item.get('attributesValuesVOList').count()) {
+          return (
+            <TreeNode key={item.get('id')} value={item.get('id')} title={item.get('attributeName')} disabled checkable={false}>
+              {this.generateAttributeTree(item.get('attributesValuesVOList'))}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.get('id')} value={item.get('id')} title={item.get('attributeName')} />;
+      })
+    );
+  };
 
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups, attributesList, loading } = this.state;
+    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, sourceStoreCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups, attributesList, loading } = this.state;
 
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
@@ -299,6 +329,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
         }
       });
     }
+    const attributeDefaultValue = [];
+    if (marketingBean.get('attributeValueIds')) {
+      marketingBean.get('attributeValueIds').map((item) => {
+        attributeDefaultValue.push({ value: item });
+      });
+    }
+    console.log(storeCateList.toJS(), 'storeCateList-----------');
+    console.log(sourceStoreCateList.toJS(), 'sourceStoreCateList-----------');
+    console.log(storeCateValues, 'storeCateValues-----------');
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
@@ -908,14 +947,30 @@ export default class MarketingAddForm extends React.Component<any, any> {
         ) : null}
         {marketingBean.get('scopeType') === 3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
-            <Select style={{ width: 520 }} onChange={this.selectAttributeOnChange} defaultValue={null}>
-              {attributesList.size > 0 &&
-                attributesList.map((item) => (
-                  <Select.Option key={item.get('id')} value={item.get('id')}>
-                    {item.get('attributeName')}
-                  </Select.Option>
-                ))}
-            </Select>
+            <>
+              <FormItem {...formItemLayout}>
+                <TreeSelect
+                  id="attributeValueIds"
+                  defaultValue={attributeDefaultValue}
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  //treeData ={getGoodsCate}
+                  // showCheckedStrategy = {SHOW_PARENT}
+                  placeholder="Please select attribute"
+                  notFoundContent="No sales attribute"
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  showSearch={false}
+                  onChange={this.attributeChange}
+                  style={{ width: 500 }}
+                  treeDefaultExpandAll
+                >
+                  {this.generateAttributeTree(attributesList)}
+                </TreeSelect>
+              </FormItem>
+              <FormItem {...formItemLayout}>{getFieldDecorator('attributeValueIds', {})(<span></span>)}</FormItem>
+            </>
           </FormItem>
         )}
         <div className="bold-title">Target consumer:</div>
@@ -1266,8 +1321,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
           value: null,
           errors: [new Error('Please select category.')]
         };
-      } else if (marketingBean.get('scopeType') === 3 && (!marketingBean.get('attributeIds') || marketingBean.get('attributeIds').size === 0)) {
-        errorObject['storeCateIds'] = {
+      } else if (marketingBean.get('scopeType') === 3 && (!marketingBean.get('attributeValueIds') || marketingBean.get('attributeValueIds').size === 0)) {
+        errorObject['attributeValueIds'] = {
           value: null,
           errors: [new Error('Please select attribute.')]
         };

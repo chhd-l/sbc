@@ -96,7 +96,7 @@ export default class ProductPrice extends React.Component<any, any> {
     );
   }
 }
-
+let precisions = 2
 class SkuForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -120,6 +120,7 @@ class SkuForm extends React.Component<any, any> {
   render() {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
+
 
     const columns = this._getColumns();
     return (
@@ -285,6 +286,16 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
+        /*if (rowInfo.marketPrice&&rowInfo.marketPrice.toString().split(".")[1]) {
+          console.log(rowInfo.marketPrice.toString().split(".")[1].length,22222222);
+          if (rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
+            precisions = rowInfo.marketPrice.toString().split(".")[1].length
+          }else {
+            precisions = 4
+          }
+          console.log(precisions,11111111111);
+
+        }*/
         return (
           <Row>
             <Col span={12}>
@@ -307,7 +318,7 @@ class SkuForm extends React.Component<any, any> {
                           min={0}
                           max={9999999.99}
                           disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                          precision={4}
+                          precision={precisions}
                           formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                         />
                       )}
@@ -326,7 +337,6 @@ class SkuForm extends React.Component<any, any> {
                               validator: (_rule, value, callback) => {
                                 if (rowInfo.subscriptionStatus === 1) {
                                   if (value === 0) {
-                                    console.log(value, 111111);
                                     callback('Subscription price cannot be zero');
                                   }
                                 }
@@ -340,7 +350,7 @@ class SkuForm extends React.Component<any, any> {
                           <InputNumber
                             min={0}
                             max={9999999.99}
-                            precision={4}
+                            precision={precisions}
                             disabled={rowInfo.subscriptionStatus === 0}
                             formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                           />
@@ -367,7 +377,7 @@ class SkuForm extends React.Component<any, any> {
                         min={0}
                         max={9999999.99}
                         disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                        precision={2}
+                        precision={precisions}
                         formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                       />
                     )}

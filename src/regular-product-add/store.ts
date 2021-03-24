@@ -1082,6 +1082,11 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
+       /* if (!(item.get('subscriptionStatus') || item.get('subscriptionStatus') == 0)) {
+          tip = 4;
+          valid = false;
+          return;
+        }*/
       });
     }
     if (tip === 1) {

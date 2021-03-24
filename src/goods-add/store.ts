@@ -350,6 +350,7 @@ export default class AppStore extends Store {
       let addSkUProduct = tmpContext.goodsInfos.map((item) => {
         return {
           pid: item.goodsInfoNo,
+          marketPrice: item.marketPrice,
           targetGoodsIds: item.goodsInfoBundleRels,
           minStock: item.stock
         };
@@ -1228,7 +1229,7 @@ export default class AppStore extends Store {
           packSize: item.get('packSize') || '',
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           // purchasePrice: item.get('purchasePrice') || 0,
-          subscriptionPrice: item.get('subscriptionPrice') || 0,
+          subscriptionPrice: item.get('subscriptionPrice'),
           goodsInfoBundleRels: b,
           addedFlag: item.get('addedFlag') || 0,
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,

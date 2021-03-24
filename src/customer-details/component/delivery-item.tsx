@@ -74,7 +74,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   componentDidMount() {
     this.getDics();
-    getAddressListByDadata('москва хабар');
   }
 
   getDics = async () => {

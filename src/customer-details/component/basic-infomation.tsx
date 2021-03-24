@@ -281,7 +281,7 @@ class BasicInfomation extends React.Component<any, any> {
     const { form } = this.props;
     let reg = /^[0-9]{3,10}$/;
     if (!reg.test(form.getFieldValue('postalCode'))) {
-      callback('Please enter the correct Post Code');
+      callback('Please enter the correct Postal Code');
     } else {
       callback();
     }
@@ -482,7 +482,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Postal code">
                   {getFieldDecorator('postalCode', {
-                    rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
+                    rules: [{ required: true, message: 'Please input Postal Code!' }, { validator: this.compareZip }]
                   })(
                     <Input
                       onChange={(e) => {

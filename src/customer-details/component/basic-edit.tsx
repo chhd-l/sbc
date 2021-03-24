@@ -226,7 +226,7 @@ class BasicEdit extends React.Component<any, any> {
     const { form } = this.props;
     let reg = /^[0-9]{3,10}$/;
     if (!reg.test(form.getFieldValue('postalCode'))) {
-      callback('Please enter the correct Post Code');
+      callback('Please enter the correct Postal Code');
     } else {
       callback();
     }
@@ -411,7 +411,7 @@ class BasicEdit extends React.Component<any, any> {
                     {editable ? (
                       getFieldDecorator('postalCode', {
                         initialValue: customer.postalCode,
-                        rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
+                        rules: [{ required: true, message: 'Please input Postal Code!' }, { validator: this.compareZip }]
                       })(<Input />)
                     ) : (
                       <span>{customer.postalCode}</span>

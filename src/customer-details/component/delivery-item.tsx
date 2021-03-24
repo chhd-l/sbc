@@ -40,7 +40,7 @@ const FORM_FIELD_MAP = {
   Address1: 'address1',
   Address2: 'address2',
   'Phone number': 'consigneeNumber',
-  'Post code': 'postCode',
+  'Postal code': 'postCode',
   Entrance: 'entrance',
   Apartment: 'apartment',
   Comment: 'rfc'
@@ -312,7 +312,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   compareZip = (rule, value, callback) => {
     if (!/^[0-9]{3,10}$/.test(value)) {
-      callback('Please enter the correct Post Code');
+      callback('Please enter the correct Postal Code');
     } else {
       callback();
     }
@@ -348,7 +348,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
                           { required: field.requiredFlag === 1, message: `${field.fieldName} is required` },
                           field.fieldName != 'Country' ? { max: field.maxLength, message: 'Exceed maximum length' } : undefined,
                           { validator: field.fieldName === 'Phone number' ? this.comparePhone : (rule, value, callback) => callback() },
-                          { validator: field.fieldName === 'Post code' ? this.compareZip : (rule, value, callback) => callback() }
+                          { validator: field.fieldName === 'Postal code' ? this.compareZip : (rule, value, callback) => callback() }
                         ].filter((r) => !!r)
                       })(this.renderField(field))}
                     </Form.Item>

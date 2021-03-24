@@ -88,7 +88,7 @@ export default class Detail extends React.Component<any, any> {
               item.content = item?.content ?? '';
               if (item.contentType && item.contentType.toUpperCase() === 'JSON') {
                 item.content = this.functionTurnJson(item.content);
-                item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content || '{tip:"请输入json格式"}'}</xmp></code></pre>`;
+                item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content || '{tip:"Please enter the JSON format"}'}</xmp></code></pre>`;
               }
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>

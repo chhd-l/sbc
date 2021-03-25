@@ -28,7 +28,7 @@ export default class AppointmentDatePicker extends React.Component<any, any> {
     getAvailabelTimeByDate(dateStr)
       .then((data) => {
         if (data.res.code === Const.SUCCESS_CODE) {
-          const appointedTime = data.res.context.appointmentVOList.filter((ap) => ap.status === 0).map((ap) => ({ hour: ap.apptTime.split('-')[0].split(':')[0], begin: ap.apptTime.split('-')[0].split(':')[1], end: ap.apptTime.split('-')[1].split(':')[1] }));
+          const appointedTime = data.res.context.appointmentVOList.map((ap) => ({ hour: ap.apptTime.split('-')[0].split(':')[0], begin: ap.apptTime.split('-')[0].split(':')[1], end: ap.apptTime.split('-')[1].split(':')[1] }));
           const { timeList } = this.state;
           timeList.forEach((time) => {
             if (appointedTime.findIndex((ap) => ap.hour == time.hour && ap.begin == time.begin && ap.end == time.end) > -1) {

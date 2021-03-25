@@ -957,6 +957,10 @@ const routes = [
   {
     path: '/appointment-update/:id',
     asyncComponent: () => import('./appointment-list/new')
+  },
+  {
+    path: '/offline-checkout',
+    asyncComponent: () => import('./offline-checkout')
   }
 ];
 

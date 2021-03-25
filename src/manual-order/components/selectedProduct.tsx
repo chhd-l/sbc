@@ -63,6 +63,8 @@ export default class SelectedProduct extends React.Component<any, any> {
     this.state.dataSource[index] = row;
     this.setState({
       dataSource: this.state.dataSource
+    },()=>{
+      this.querySysDictionary();
     });
   }
 /**

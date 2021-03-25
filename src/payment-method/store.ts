@@ -22,7 +22,7 @@ export default class AppStore extends Store {
     this.dispatch('method:switchVisible', res);
   };
 
-  checked = (res) => {
+  onChecked = (res) => {
     this.dispatch('method:switchChecked', res);
   };
 
@@ -48,12 +48,20 @@ export default class AppStore extends Store {
     }
   };
 
-  getEditStorePayment = async () => {
-    const { res } = await webapi.editStorePayment();
+  getStorePaymentVOs = async (res) => {
+    this.dispatch('method:storePaymentVOs', res);
+  };
+
+  getEditStorePayment = async (pram) => {
+    const { res } = await webapi.editStorePayment(pram);
 
     if (res.code === Const.SUCCESS_CODE) {
-      console.log(res, 11111111111);
+      //console.log(res, 11111111111);
     }
+  };
+
+  getCheckedId = (checkedId) => {
+    this.dispatch('method:checkedId', checkedId);
   };
 
   /**

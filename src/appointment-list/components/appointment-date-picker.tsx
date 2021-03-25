@@ -62,6 +62,28 @@ export default class AppointmentDatePicker extends React.Component<any, any> {
     this.getAvailableDate(date.format('YYYYMMDD'), true);
   };
 
+  onPrevMonth = (date) => {
+    const { value, onChange } = this.props;
+    if (date.day() === 1) {
+      date = date.clone().add(1, 'days');
+    }
+    value[0] = date.format('YYYY-MM-DD');
+    if (onChange) {
+      onChange(value);
+    }
+  };
+
+  onNextMonth = (date) => {
+    const { value, onChange } = this.props;
+    if (date.day() === 1) {
+      date = date.clone().subtract(1, 'days');
+    }
+    value[0] = date.format('YYYY-MM-DD');
+    if (onChange) {
+      onChange(value);
+    }
+  };
+
   onSelectTime = (hour, begin, end) => {
     const { timeList } = this.state;
     const { value, onChange } = this.props;
@@ -81,11 +103,12 @@ export default class AppointmentDatePicker extends React.Component<any, any> {
   };
 
   onResetDate = () => {
+    const defaultDate = moment() < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') ? '2021-04-20' : moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     const { onChange } = this.props;
     if (onChange) {
-      onChange([moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), '']);
+      onChange([defaultDate, '']);
     }
-    this.getAvailableDate(moment().day() === 1 ? moment().add(1, 'days').format('YYYYMMDD') : moment().format('YYYYMMDD'), false);
+    this.getAvailableDate(defaultDate.split('-').join(''), false);
   };
 
   render() {
@@ -98,18 +121,18 @@ export default class AppointmentDatePicker extends React.Component<any, any> {
             fullscreen={false}
             mode="month"
             value={moment(value[0], 'YYYY-MM-DD')}
-            disabledDate={(currentDate) => currentDate < moment().startOf('day') || currentDate.day() === 1}
+            disabledDate={(currentDate) => currentDate < moment().startOf('day') || currentDate < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') || currentDate > moment('2021-06-13', 'YYYY-MM-DD').endOf('day') || currentDate.day() === 1}
             validRange={[moment(), moment('2021-06-13', 'YYYY-MM-DD')]}
             onSelect={this.onSelectDate}
             headerRender={({ value, type, onChange, onTypeChange }) => {
               return (
                 <Row type="flex" justify="space-between" gutter={20}>
                   <Col>
-                    <Button type="link" size="small" icon="left" onClick={() => onChange(value.clone().subtract(1, 'month'))} />
+                    <Button type="link" size="small" icon="left" onClick={() => this.onPrevMonth(value.clone().subtract(1, 'month'))} />
                   </Col>
                   <Col>{value.format('YYYY-MM')}</Col>
                   <Col>
-                    <Button type="link" size="small" icon="right" onClick={() => onChange(value.clone().add(1, 'month'))} />
+                    <Button type="link" size="small" icon="right" onClick={() => this.onNextMonth(value.clone().add(1, 'month'))} />
                   </Col>
                 </Row>
               );

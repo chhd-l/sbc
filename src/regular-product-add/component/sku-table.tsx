@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
+import {Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select, Popconfirm} from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { cache, noop, ValidConst } from 'qmkit';
+import {AuthWrapper, cache, noop, ValidConst} from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltip from './productTooltip';
@@ -110,7 +110,7 @@ class SkuForm extends React.Component<any, any> {
   };
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId, goodsList } = this.props.relaxProps;
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -182,7 +182,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         return (
           <Row>
-            <Col span={12}>
+            <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoNo_' + rowInfo.id, {
                   rules: [
@@ -214,7 +214,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         return (
           <Row>
-            <Col span={12}>
+            <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('externalSku' + rowInfo.id, {
                   rules: [
@@ -244,7 +244,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         return (
           <Row>
-            <Col span={12}>
+            <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoBarcode' + rowInfo.id, {
                   rules: [
@@ -273,7 +273,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         return (
           <Row>
-            <Col span={12}>
+            <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoWeight' + rowInfo.id, {
                   rules: [
@@ -388,7 +388,7 @@ class SkuForm extends React.Component<any, any> {
         goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
         return (
           <Row>
-            <Col span={12}>
+            <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
@@ -407,35 +407,24 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div
-          style={{
-            marginRight: '81px'
-          }}
-        >
-          Sales status
-        </div>
+        <div style={{marginRight: '81px'}}>On/Off shelves</div>
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
-        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
-
         return (
-          <Row
-            style={{
-              marginRight: '81px'
-            }}
-          >
-            <Col span={12}>
+          <Row style={{marginRight: '81px'}}>
+            <Col span={8}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('addedFlag' + rowInfo.id, {
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'addedFlag', Number(e)),
-                  initialValue: rowInfo.addedFlag == 0 ? '0' : '1'
-                })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
-                    <Option value="1">Y</Option>
-                    <Option value="0">N</Option>
-                  </Select>
-                )}
+                {rowInfo.addedFlag === 1 ? (
+                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
+                    <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                  </div>
+                ) : null}
+                {rowInfo.addedFlag === 0? (
+                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
+                    <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                  </div>
+                ) : null}
               </FormItem>
             </Col>
           </Row>
@@ -457,6 +446,11 @@ class SkuForm extends React.Component<any, any> {
     const { deleteGoodsInfo } = this.props.relaxProps;
     deleteGoodsInfo(id);
   };
+
+  onAddedFlag = (id: string) => {
+    console.log(1122)
+  };
+
 
   /**
    * 检查文件格式

@@ -63,6 +63,8 @@ export default class SelectedProduct extends React.Component<any, any> {
     this.state.dataSource[index] = row;
     this.setState({
       dataSource: this.state.dataSource
+    },()=>{
+      this.querySysDictionary();
     });
   }
 /**
@@ -100,7 +102,6 @@ export default class SelectedProduct extends React.Component<any, any> {
     let goodsList = result[2].res.context?.goodsList ?? [];
     let options = [...months, ...weeks];
     this.props.carts(goodsList);
-    // debugger
     this.setState(
       {
         options,

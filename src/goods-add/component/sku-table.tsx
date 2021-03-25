@@ -503,35 +503,24 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div
-          style={{
-            marginRight: '21px'
-          }}
-        >
-          Sales status
-        </div>
+        <div style={{marginRight: '81px'}}>On/Off shelves</div>
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
-        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
-
         return (
-          <Row
-            style={{
-              marginRight: '21px'
-            }}
-          >
-            <Col span={12}>
+          <Row style={{marginRight: '81px'}}>
+            <Col span={8}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('addedFlag' + rowInfo.id, {
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'addedFlag', Number(e)),
-                  initialValue: rowInfo.addedFlag == 0 ? '0' : '1'
-                })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
-                    <Option value="1">Y</Option>
-                    <Option value="0">N</Option>
-                  </Select>
-                )}
+                {rowInfo.addedFlag === 1 ? (
+                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
+                    <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                  </div>
+                ) : null}
+                {rowInfo.addedFlag === 0? (
+                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
+                    <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                  </div>
+                ) : null}
               </FormItem>
             </Col>
           </Row>

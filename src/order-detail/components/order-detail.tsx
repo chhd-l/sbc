@@ -527,6 +527,13 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </label>
               )}
 
+             {tradePrice.firstOrderOnThePlatformDiscountPrice ?  (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>First Order Discount:</span>
+                  <strong>-${tradePrice.firstOrderOnThePlatformDiscountPrice.toFixed(2)}</strong>
+                </label>
+              ) : null}
+
               {tradePrice.promotionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>

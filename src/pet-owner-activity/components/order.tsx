@@ -169,7 +169,7 @@ export default class orders extends Component<any, any> {
     return (
       <Card title="Order" className="topCard">
         <Row>
-          <Col span={10}>
+          <Col span={10} style={{ marginBottom: '20px' }}>
             <Input
               className="searchInput"
               placeholder="Order Number"

@@ -217,8 +217,14 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
-                  initialValue: c
-                })(<InputNumber style={{ width: '121px' }} min={0} max={b} />)}
+                  initialValue: addSkUProduct.length === 1? Number(String(c / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, '')) : c
+                })(
+                  <InputNumber
+                    style={{ width: '121px' }}
+                    min={0}
+                    max={b}
+                  />
+                )}
               </FormItem>
             </Col>
           </Row>
@@ -317,12 +323,11 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any, flag?: any) => {
-    const { editGoodsItem, synchValue, updateBasePrice } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, updateBasePrice, addSkUProduct } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
-
     editGoodsItem(id, key, e);
   };
 }

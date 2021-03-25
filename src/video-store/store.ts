@@ -37,7 +37,6 @@ export default class AppStore extends Store {
       resourceType: 1
     });
     if (videoList.res.code === Const.SUCCESS_CODE) {
-      debugger;
       this.transaction(() => {
         this.selectVideoCate(cateId);
         this.dispatch('cateActor: init', fromJS(cateList.res.context.storeResourceCateVOList)); //初始化分类列表

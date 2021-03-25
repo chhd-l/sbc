@@ -9,6 +9,7 @@ export default class CustomerList extends React.Component<any, any> {
     this.state = {
       loading: false,
       list: [],
+      searchTxt: '',
       selectedRowKeys: [],
       pagination: {
         current: 1,
@@ -19,14 +20,14 @@ export default class CustomerList extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.getCustomerList('');
+    this.getCustomerList();
   }
 
-  getCustomerList = (searchTxt: any = '') => {
-    const { pagination } = this.state;
+  getCustomerList = () => {
+    const { pagination, searchTxt } = this.state;
     this.setState({ loading: true });
     getCustomerList({
-      customerAccount: searchTxt,
+      email: searchTxt,
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize
     })
@@ -47,6 +48,30 @@ export default class CustomerList extends React.Component<any, any> {
       .catch(() => {
         this.setState({ loading: false });
       });
+  };
+
+  onChangeSearchTxt = (e) => {
+    this.setState({
+      searchTxt: e.target.value
+    });
+  };
+
+  onSearchMember = () => {
+    const { pagination } = this.state;
+    this.onTableChange({
+      ...pagination,
+      current: 1
+    });
+  };
+
+  onTableChange = (pagination) => {
+    this.setState(
+      {
+        selectedRowKeys: [],
+        pagination: pagination
+      },
+      () => this.getCustomerList()
+    );
   };
 
   onSelectRow = (selectedRowKeys) => {
@@ -96,7 +121,7 @@ export default class CustomerList extends React.Component<any, any> {
     return (
       <Modal width={900} title="Member information" visible={visible} okText="Confirm" cancelText="Cancel" okButtonProps={{ disabled: selectedRowKeys.length === 0 }} onOk={this.onConfirmChoose} onCancel={this.onCloseModal}>
         <div style={{ marginBottom: 10 }}>
-          <Input.Search placeholder="customer account" onSearch={this.getCustomerList} />
+          <Input.Search placeholder="consumer email" onChange={this.onChangeSearchTxt} onSearch={this.onSearchMember} />
         </div>
         <Table
           rowKey="customerDetailId"
@@ -105,6 +130,7 @@ export default class CustomerList extends React.Component<any, any> {
           dataSource={list}
           pagination={pagination}
           rowSelection={rowSelection}
+          onChange={this.onTableChange}
         />
       </Modal>
     );

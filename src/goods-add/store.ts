@@ -348,6 +348,8 @@ export default class AppStore extends Store {
 
     if (tmpContext && tmpContext.goodsInfos && tmpContext.goodsInfos.length > 0) {
       let addSkUProduct = tmpContext.goodsInfos.map((item) => {
+        console.log(item,333333333);
+        debugger
         return {
           pid: item.goodsInfoNo,
           marketPrice: item.marketPrice,

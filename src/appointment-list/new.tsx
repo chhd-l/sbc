@@ -14,6 +14,7 @@ class NewAppointment extends React.Component<any, any> {
     this.state = {
       visible: false,
       loading: false,
+      appointment: {},
       memberInfo: {
         customerName: '',
         contactPhone: '',
@@ -38,6 +39,7 @@ class NewAppointment extends React.Component<any, any> {
           const appointment = data.res.context.settingVO;
           this.setState({
             loading: false,
+            appointment,
             memberInfo: {
               customerId: appointment.customerId,
               customerName: appointment.consumerName,
@@ -114,7 +116,7 @@ class NewAppointment extends React.Component<any, any> {
         this.setState({ loading: true });
         const handler = this.props.match.params.id ? updateAppointmentById : addNewAppointment;
         handler({
-          id: this.props.match.params.id || undefined,
+          ...this.state.appointment,
           ...fields,
           customerId: this.state.memberType === 'member' ? this.state.memberInfo.customerId : undefined,
           status: 0,

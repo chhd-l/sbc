@@ -27,7 +27,7 @@ export default class CustomerList extends React.Component<any, any> {
     const { pagination, searchTxt } = this.state;
     this.setState({ loading: true });
     getCustomerList({
-      customerAccount: searchTxt,
+      email: searchTxt,
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize
     })
@@ -121,7 +121,7 @@ export default class CustomerList extends React.Component<any, any> {
     return (
       <Modal width={900} title="Member information" visible={visible} okText="Confirm" cancelText="Cancel" okButtonProps={{ disabled: selectedRowKeys.length === 0 }} onOk={this.onConfirmChoose} onCancel={this.onCloseModal}>
         <div style={{ marginBottom: 10 }}>
-          <Input.Search placeholder="customer account" onChange={this.onChangeSearchTxt} onSearch={this.onSearchMember} />
+          <Input.Search placeholder="consumer email" onChange={this.onChangeSearchTxt} onSearch={this.onSearchMember} />
         </div>
         <Table
           rowKey="customerDetailId"

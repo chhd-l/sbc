@@ -6,6 +6,7 @@ import moment from 'moment';
 import { IList } from 'typings/globalType';
 import { Const, noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 const defaultImg = require('../img/none.png');
 
 @Relax
@@ -136,15 +137,7 @@ export default class SearchList extends React.Component<any, any> {
                       </span>
                       <span style={{ marginRight: 20, float: 'right' }}>
                         <Tooltip placement="top" title="Application">
-                          <a
-                            href="javascript:void(0)"
-                            onClick={() => {
-                              apply(id);
-                            }}
-                            className="iconfont iconApplication"
-                          >
-                            {/*{<FormattedMessage id="application" />}*/}
-                          </a>
+                          <Link to={`/order-return-add/${id}`} className="iconfont iconApplication" style={{ padding: '0 5px' }}></Link>
                         </Tooltip>
                       </span>
                     </div>

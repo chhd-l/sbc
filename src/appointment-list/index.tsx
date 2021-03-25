@@ -383,6 +383,9 @@ export default class AppointmentList extends React.Component<any, any> {
           <p>Consumer name: {this.state.scanedInfo.consumerName}</p>
           <p>Consumer phone: {this.state.scanedInfo.consumerPhone}</p>
           <p>Consumer email: {this.state.scanedInfo.consumerEmail}</p>
+          <p>
+            Appointment time: {this.state.scanedInfo.apptDate} {this.state.scanedInfo.apptTime}
+          </p>
         </Modal>
       </div>
     );

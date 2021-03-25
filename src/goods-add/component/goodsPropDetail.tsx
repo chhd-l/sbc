@@ -87,7 +87,7 @@ class AttributeForm extends React.Component<any, any> {
         </div>
         <div>
           <Form id="attributeForm">
-            {propList &&
+            {propList.size>0 &&
               propList.toJS().map((detList) => {
                 return (
                   <Row type="flex" justify="start" key={detList[0].propId}>

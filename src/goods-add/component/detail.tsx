@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Tabs } from 'antd';
+import { Select, Tabs } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { ErrorBoundary, noop, ReactEditor, history } from 'qmkit';
 import { List } from 'immutable';
@@ -70,7 +70,14 @@ export default class Detail extends React.Component<any, any> {
     }
     editEditorContent(arr);
   };
-
+  changeTabsBar = (key,item) => {
+    let id=item.descriptionName + '_' + item.descriptionId;
+    item['contentType']=key;
+    item.content = ''
+    item.key=+new Date();
+    goodsDetailTabObj[id]=item;
+    this.sortDetailTab();
+  }
   render() {
     const { goods, goodsDescriptionDetailList } = this.props.relaxProps;
     goodsDetailTabObj = {};
@@ -92,6 +99,12 @@ export default class Detail extends React.Component<any, any> {
               }
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
+                  <div style={{paddingBottom:10,position:'absolute',right:0,zIndex:99999,top:10}}>
+                  <Select key={item.descriptionId} disabled={item?.created??true} value={item.contentType} style={{ width: 200 }} onChange={(e)=>{this.changeTabsBar(e,item)}}>
+                    <Select.Option value="text">text</Select.Option>
+                    <Select.Option value="json">json</Select.Option>
+                  </Select>
+                  </div>
                   <ReactEditor
                     key={item.key}
                     id={'main-' + item.descriptionId}

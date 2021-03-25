@@ -103,11 +103,12 @@ export default class AppointmentDatePicker extends React.Component<any, any> {
   };
 
   onResetDate = () => {
+    const defaultDate = moment() < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') ? '2021-04-20' : moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     const { onChange } = this.props;
     if (onChange) {
-      onChange([moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), '']);
+      onChange([defaultDate, '']);
     }
-    this.getAvailableDate(moment().day() === 1 ? moment().add(1, 'days').format('YYYYMMDD') : moment().format('YYYYMMDD'), false);
+    this.getAvailableDate(defaultDate.split('-').join(''), false);
   };
 
   render() {
@@ -120,7 +121,7 @@ export default class AppointmentDatePicker extends React.Component<any, any> {
             fullscreen={false}
             mode="month"
             value={moment(value[0], 'YYYY-MM-DD')}
-            disabledDate={(currentDate) => currentDate < moment().startOf('day') || currentDate.day() === 1}
+            disabledDate={(currentDate) => currentDate < moment().startOf('day') || currentDate < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') || currentDate > moment('2021-06-13', 'YYYY-MM-DD').endOf('day') || currentDate.day() === 1}
             validRange={[moment(), moment('2021-06-13', 'YYYY-MM-DD')]}
             onSelect={this.onSelectDate}
             headerRender={({ value, type, onChange, onTypeChange }) => {

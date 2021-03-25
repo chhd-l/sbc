@@ -100,6 +100,14 @@ class NewAppointment extends React.Component<any, any> {
     });
   };
 
+  validateDateTime = (rule, value, callback) => {
+    if (value.length !== 2 || !value[0] || !value[1] || moment(value[0], 'YYYY-MM-DD') < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') || moment(value[0], 'YYYY-MM-DD') > moment('2021-06-13', 'YYYY-MM-DD').endOf('day')) {
+      callback('Please select available date and time');
+    } else {
+      callback();
+    }
+  };
+
   onSaveAppointment = () => {
     this.props.form.validateFields((err, fields) => {
       if (!err) {
@@ -152,7 +160,8 @@ class NewAppointment extends React.Component<any, any> {
             </Form.Item>
             <Form.Item label="Select appointment time">
               {getFieldDecorator('apptDateTime', {
-                initialValue: [moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), '']
+                initialValue: [moment() < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') ? '2021-04-20' : moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
+                rules: [{ validator: this.validateDateTime }]
               })(<AppointmentDatePicker />)}
             </Form.Item>
             <Form.Item label="Consumer information">

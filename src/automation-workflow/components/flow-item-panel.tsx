@@ -170,7 +170,7 @@ export default class FlowItemPanel extends Component {
                 <span className="item-text">Send Email</span>
               </Item>
             </Panel>
-            <Panel header="Others" key="4" className="panel-custom">
+            <Panel header="Others" key="4" className="panel-custom" id="otherItem">
               <Item
                 type="node"
                 model={{
@@ -189,7 +189,7 @@ export default class FlowItemPanel extends Component {
                 <br />
                 <span className="item-text">Tagging</span>
               </Item>
-              <Item
+              {/* <Item
                 type="node"
                 model={{
                   size: [40, 40],
@@ -206,7 +206,7 @@ export default class FlowItemPanel extends Component {
                 <span className="icon iconfont iconfangjian1 item-icon" style={{ color: color.green }} />
                 <br />
                 <span className="item-text">Order</span>
-              </Item>
+              </Item> */}
             </Panel>
           </Collapse>
         </ItemPanel>

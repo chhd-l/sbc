@@ -91,7 +91,7 @@ export default class SearchHead extends Component<any, any> {
   render() {
     const { tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState, orderType,orderSource, subscriptionType, refillNumber, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
+    const { tradeState, orderType, orderSource, subscriptionType, refillNumber, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
@@ -189,12 +189,12 @@ export default class SearchHead extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      {this._renderGoodsOptionSelect()}
+                      {this._renderReceiverSelect()}
                       <Input
                         style={styles.wrapper}
                         onChange={(e) => {
                           this.setState({
-                            goodsOptionsValue: (e.target as any).value
+                            buyerOptionsValue: (e.target as any).value
                           });
                         }}
                       />
@@ -263,19 +263,19 @@ export default class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        {this._renderReceiverSelect()}
+                        {this._renderGoodsOptionSelect()}
                         <Input
                           style={styles.wrapper}
                           onChange={(e) => {
                             this.setState({
-                              buyerOptionsValue: (e.target as any).value
+                              goodsOptionsValue: (e.target as any).value
                             });
                           }}
                         />
                       </InputGroup>
                     </FormItem>
                   </Col>
-
+                  
                   <Col span={8} id="input-group-width">
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -337,6 +337,7 @@ export default class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
+
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>

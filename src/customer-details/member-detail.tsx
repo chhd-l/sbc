@@ -27,6 +27,20 @@ const { confirm } = Modal;
 const dogImg = require('./img/dog.png');
 const catImg = require('./img/cat.png');
 
+const calcPetAge = (dateStr: string) => {
+  const birthday = moment(dateStr, 'YYYY-MM-DD');
+  const diffMonth = moment().diff(birthday, 'months');
+  if (diffMonth <= 1) {
+    return `${diffMonth} month`;
+  } else if (diffMonth < 12) {
+    return `${diffMonth} months`;
+  } else {
+    const diffYear = Math.floor(diffMonth / 12);
+    const diffMonthAfterYear = diffMonth % 12;
+    return `${diffYear} ${diffYear > 1 ? 'years' : 'year'} ${diffMonthAfterYear === 0 ? '' : `${diffMonthAfterYear} ${diffMonthAfterYear > 1 ? 'months' : 'month'}`}`;
+  }
+};
+
 export default class CustomerDetails extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -315,14 +329,14 @@ export default class CustomerDetails extends React.Component<any, any> {
                     {basic.city}
                   </Col>
                 </Row>
-                <Row>
+                {/* <Row>
                   <Col span={3} className="text-tip">
                     Consent
                   </Col>
                   <Col span={20} className="text-highlight">
                     {basic.userConsentList && basic.userConsentList.length > 0 ? basic.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
                   </Col>
-                </Row>
+                </Row> */}
               </div>
             </div>
             <div className="detail-container">
@@ -375,7 +389,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}>Breed</Col>
                           </Row>
                           <Row style={{ fontSize: 16 }}>
-                            <Col span={12}>{pet.birthOfPets && `${moment().diff(moment(pet.birthOfPets, 'YYYY-MM-DD'), 'months')} months`}</Col>
+                            <Col span={12}>{pet.birthOfPets ? calcPetAge(pet.birthOfPets) : ''}</Col>
                             <Col span={12}>
                               {pet.petsBreed && (
                                 <Tooltip title={pet.petsBreed}>

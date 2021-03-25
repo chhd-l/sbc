@@ -72,7 +72,8 @@ class AutomationDetail extends Component<any, any> {
       isEvent: false,
       isOrderEvent: false,
       objectFetching: false,
-      objectNoList: []
+      objectNoList: [],
+      showTestTip:false
     };
   }
   componentDidMount() {
@@ -132,7 +133,18 @@ class AutomationDetail extends Component<any, any> {
       });
   };
   testAutomation = () => {
-    const { automationId, selectedObjectNo, isOrderEvent } = this.state;
+    const { automationId, selectedObjectNo, isOrderEvent,isEvent } = this.state;
+    if(isEvent && !selectedObjectNo){
+      this.setState({
+        showTestTip:true
+      })
+      return false
+    }
+    else{
+      this.setState({
+        showTestTip:false
+      })
+    }
     let params = {
       id: automationId,
       type: isOrderEvent ? 'Order' : 'Subscription',
@@ -229,6 +241,7 @@ class AutomationDetail extends Component<any, any> {
   handleClose = () => {
     this.setState({
       visibleTest: false,
+      showTestTip:false,
       startTrigger: '',
       selectedObjectNo: ''
     });
@@ -273,7 +286,7 @@ class AutomationDetail extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, automationId, automationDetail, visibleTest, startTrigger, isOrderEvent, objectFetching, selectedObjectNo, isEvent, objectNoList } = this.state;
+    const { loading, title, automationId, automationDetail, visibleTest, startTrigger, isOrderEvent, objectFetching, selectedObjectNo, isEvent, objectNoList,showTestTip } = this.state;
     const testStatusList = [
       { name: 'Not Tested', value: 'NotTested' },
       { name: 'Testing', value: 'Testing' },
@@ -474,6 +487,11 @@ class AutomationDetail extends Component<any, any> {
                     </Option>
                   ))}
               </Select>
+              {
+                showTestTip?<p style={{marginLeft: '125px',marginTop:'-10px',color:'#e2001a'}}>
+                  {isOrderEvent ? 'Please select order':'Please select subscription'}</p>:null
+              }
+              
             </div>
           ) : null}
           <p style={{ display: 'inline-block', color: '#a6a6a6' }}>This automation (start with time trigger) will be tested immediately.</p>

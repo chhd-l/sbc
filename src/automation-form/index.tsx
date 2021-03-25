@@ -39,7 +39,7 @@ class AutomationForm extends Component<any, any> {
       this.getAutomationDetail(this.props.match.params.id);
     }
   }
-  init = () => {};
+  init = () => { };
   getAutomationDetail = (id) => {
     webapi
       .getAutomationById(id)
@@ -180,16 +180,17 @@ class AutomationForm extends Component<any, any> {
 
   disabledTrackingStartDate = (startValue) => {
     const { automationForm } = this.state;
-    let endValue = automationForm.trackingEndTime;
+    let endValue = automationForm.eventStartTime;
+    // let eventStartValue = automationForm.eventStartTime
     if (!startValue || !endValue) {
       return false;
     }
-    return startValue.valueOf() > endValue.valueOf();
+    return startValue.valueOf() > endValue.valueOf()
   };
 
   disabledTrackingEndDate = (endValue) => {
     const { automationForm } = this.state;
-    let startValue = automationForm.trackingStartTime;
+    let startValue = automationForm.eventEndTime;
     if (!endValue || !startValue) {
       return false;
     }
@@ -285,10 +286,10 @@ class AutomationForm extends Component<any, any> {
                         >
                           {automationCategoryList
                             ? automationCategoryList.map((item, index) => (
-                                <Option value={item.value} key={index}>
-                                  {item.name}
-                                </Option>
-                              ))
+                              <Option value={item.value} key={index}>
+                                {item.name}
+                              </Option>
+                            ))
                             : null}
                         </Select>
                       )}
@@ -334,10 +335,10 @@ class AutomationForm extends Component<any, any> {
                         >
                           {automationTypeList
                             ? automationTypeList.map((item, index) => (
-                                <Option value={item.value} key={index}>
-                                  {item.name}
-                                </Option>
-                              ))
+                              <Option value={item.value} key={index}>
+                                {item.name}
+                              </Option>
+                            ))
                             : null}
                         </Select>
                       )}
@@ -358,10 +359,10 @@ class AutomationForm extends Component<any, any> {
                         >
                           {automationGoalList
                             ? automationGoalList.map((item, index) => (
-                                <Option value={item.value} key={index}>
-                                  {item.name}
-                                </Option>
-                              ))
+                              <Option value={item.value} key={index}>
+                                {item.name}
+                              </Option>
+                            ))
                             : null}
                         </Select>
                       )}
@@ -410,10 +411,13 @@ class AutomationForm extends Component<any, any> {
                               field: 'eventEndTime',
                               value
                             });
-                            this.onFormChange({
-                              field: 'trackingEndTime',
-                              value: moment(value).add(3, 'days')
-                            });
+                            if (value) {
+                              this.onFormChange({
+                                field: 'trackingEndTime',
+                                value: moment(value).add(3, 'days')
+                              });
+                            }
+
                           }}
                         />
                       )}
@@ -481,10 +485,10 @@ class AutomationForm extends Component<any, any> {
                         >
                           {communicationChannelList
                             ? communicationChannelList.map((item, index) => (
-                                <Option value={item.value} key={index}>
-                                  {item.name}
-                                </Option>
-                              ))
+                              <Option value={item.value} key={index}>
+                                {item.name}
+                              </Option>
+                            ))
                             : null}
                         </Select>
                       )}

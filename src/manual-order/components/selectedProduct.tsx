@@ -212,7 +212,15 @@ export default class SelectedProduct extends React.Component<any, any> {
         title: ' Total amount',
         dataIndex: 'itemTotalAmount',
         key: 'itemTotalAmount',
-        // return: (text, record) => <span>{record.buyCount * record.costPrice}</span>
+        return: (text, record) => {
+          let price={
+          1:(record.subscriptionPrice*record.buyCount).toFixed(2),
+          0:(record.marketPrice*record.buyCount).toFixed(2)
+          }
+          console.log(price)
+          return (<span>{price[record.subscriptionStatus]}</span>)
+        }
+        
       },
       {
         title: 'Operation',

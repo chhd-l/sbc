@@ -1856,8 +1856,9 @@ export default class AppStore extends Store {
           descriptionName: item.descriptionName,
           contentType: item.contentType,
           content: '',
-          sort: item.sort,
-          editable: true
+          sort: item?.sort??1,
+          editable: true,
+          created:false
         };
       });
       this.editEditorContent(res);

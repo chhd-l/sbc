@@ -5,6 +5,7 @@ import { IList, IMap } from 'typings/globalType';
 import { noop, ErrorBoundary, ReactEditor, history } from 'qmkit';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+import { ElementAccessExpression } from 'ts-morph';
 let goodsDetailTabObj = {};
 
 @Relax
@@ -86,9 +87,7 @@ export default class Detail extends React.Component<any, any> {
   changeTabsBar = (key,item) => {
     let id=item.descriptionName + '_' + item.descriptionId;
     item['contentType']=key;
-    if (key.toUpperCase() === 'TEXT') {
-      item.content = this.functionTurnJson(item.content);
-    }
+    item.content = ''
     item.key=+new Date();
     goodsDetailTabObj[id]=item;
     this.sortDetailTab();
@@ -115,12 +114,12 @@ export default class Detail extends React.Component<any, any> {
               // debugger
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
-
+                  <div style={{paddingBottom:10,position:'absolute',right:0,zIndex:99999,top:10}}>
                   <Select key={item.descriptionId} disabled={item?.created??true} value={item.contentType} style={{ width: 200 }} onChange={(e)=>{this.changeTabsBar(e,item)}}>
                     <Select.Option value="text">text</Select.Option>
                     <Select.Option value="json">json</Select.Option>
                   </Select>
-
+                  </div>
                   <ReactEditor
                     key={item.key}
                     id={'main-' + item.descriptionId}

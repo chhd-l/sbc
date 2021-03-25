@@ -103,4 +103,8 @@ export default class AppStore extends Store {
       // message.error('load group error.');
     }
   };
+
+  reductionBeanOnChange = (bean) => {
+    this.dispatch('marketing:reductionBean', bean);
+  };
 }

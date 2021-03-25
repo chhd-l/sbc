@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromJS, List, Map } from 'immutable';
 
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
-import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
+import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
 import DiscountLevels from '../full-discount/components/discount-levels';
@@ -14,6 +14,7 @@ import SelectedGoodsGrid from './selected-goods-grid';
 
 import * as webapi from '../webapi';
 import * as Enum from './marketing-enum';
+import { Relax } from 'plume2';
 
 import { doc } from 'prettier';
 import { IList } from '../../../typings/globalType';
@@ -94,12 +95,12 @@ const treeData = [
   }
 ];
 const TreeNode = Tree.TreeNode;
-export default class MarketingAddForm extends React.Component<any, any> {
-  props;
 
+@Relax
+export default class MarketingAddForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
-    const relaxProps = props.store.state();
+    // const relaxProps = props.store.state();
     this.state = {
       //公用的商品弹出框
       goodsModal: {
@@ -114,8 +115,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
       customerLevel: [],
       //选择的等级
       selectedLevelIds: [],
-      //营销实体
-      marketingBean: relaxProps.get('marketingBean'),
+      // //营销实体
+      // marketingBean: relaxProps.get('marketingBean'),
       //等级选择组件相关
       level: {
         _indeterminate: false,
@@ -134,14 +135,46 @@ export default class MarketingAddForm extends React.Component<any, any> {
       PromotionTypeValue: 0,
       PromotionTypeChecked: true,
       timeZone: moment,
-      isClubChecked: false,
-      allGroups: relaxProps.get('allGroups'),
-      storeCateList: relaxProps.get('storeCateList'),
-      sourceStoreCateList: relaxProps.get('sourceStoreCateList'),
-      attributesList: relaxProps.get('attributesList'),
-      loading: relaxProps.get('loading')
+      isClubChecked: false
+      // allGroups: relaxProps.get('allGroups'),
+      // storeCateList: relaxProps.get('storeCateList'),
+      // sourceStoreCateList: relaxProps.get('sourceStoreCateList'),
+      // attributesList: relaxProps.get('attributesList'),
+      // loading: relaxProps.get('loading')
     };
   }
+
+  props: {
+    form: any;
+    relaxProps?: {
+      allGroups: any;
+      marketingBean: any;
+      loading: boolean;
+      storeCateList: any;
+      sourceStoreCateList: any;
+      attributesList: any;
+      submitFullGift: Function;
+      submitFullDiscount: Function;
+      submitFullReduction: Function;
+      discountBeanOnChange: Function;
+      reductionBeanChange: Function;
+      giftBeanOnChange: Function;
+    };
+  };
+  static relaxProps = {
+    allGroups: 'allGroups',
+    marketingBean: 'marketingBean',
+    loading: 'loading',
+    storeCateList: 'storeCateList',
+    sourceStoreCateList: 'sourceStoreCateList',
+    attributesList: 'attributesList',
+    submitFullGift: noop,
+    submitFullDiscount: noop,
+    submitFullReduction: noop,
+    discountBeanOnChange: noop,
+    reductionBeanChange: noop,
+    giftBeanOnChange: noop
+  };
 
   componentDidMount() {
     this.init();
@@ -316,9 +349,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
-    const { getFieldDecorator } = form;
-    const { customerLevel, sourceGoodCateList, selectedRows, marketingBean, storeCateList, sourceStoreCateList, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked, allGroups, attributesList, loading } = this.state;
-
+    const { getFieldDecorator } = this.props.form;
+    const { customerLevel, sourceGoodCateList, selectedRows, level, isFullCount, skuExists, saveLoading, PromotionTypeValue, isClubChecked } = this.state;
+    const { marketingBean, allGroups, attributesList, loading, storeCateList, sourceStoreCateList } = this.props.relaxProps;
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
     const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
@@ -335,9 +368,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
         attributeDefaultValue.push({ value: item });
       });
     }
-    console.log(storeCateList.toJS(), 'storeCateList-----------');
-    console.log(sourceStoreCateList.toJS(), 'sourceStoreCateList-----------');
-    console.log(storeCateValues, 'storeCateValues-----------');
+    console.log(marketingBean.toJS(), 'marketingBean-----------');
+    // console.log(sourceStoreCateList.toJS(), 'sourceStoreCateList-----------');
+    // console.log(storeCateValues, 'storeCateValues-----------');
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
@@ -1065,7 +1098,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     }
     this.setState({ customerLevel: levelList });
 
-    let { marketingBean } = this.state;
+    let { marketingBean } = this.props.relaxProps;
 
     this.setState({
       promotionCode2: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode()
@@ -1133,7 +1166,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   promotionType = (e) => {
     sessionStorage.setItem('PromotionTypeValue', e.target.value);
-    let { marketingBean } = this.state;
+    let { marketingBean } = this.props.relaxProps;
     this.setState(
       {
         PromotionTypeValue: e.target.value,
@@ -1162,10 +1195,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param params
    */
   onBeanChange = (params) => {
-    this.setState({
-      marketingBean: this.state.marketingBean.merge(params)
-      // PromotionTypeChecked: true
-    });
+    const { marketingBean, discountBeanOnChange, reductionBeanChange, giftBeanOnChange } = this.props.relaxProps;
+    const { marketingType } = this.props;
+    if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+      discountBeanOnChange(marketingBean.merge(params));
+    } else if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
+      reductionBeanChange(marketingBean.merge(params));
+    } else if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
+      giftBeanOnChange(marketingBean.merge(params));
+    }
   };
   /**
    * 等级初始化
@@ -1206,12 +1244,17 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   handleSubmit = (e) => {
     e.preventDefault();
-    let { marketingBean, level, isFullCount, selectedSkuIds, PromotionTypeValue } = this.state;
+    const { submitFullGift, submitFullDiscount, submitFullReduction } = this.props.relaxProps;
+    let { marketingBean } = this.props.relaxProps;
+    let { level, isFullCount, selectedSkuIds, PromotionTypeValue } = this.state;
     let levelList = fromJS([]);
     let errorObject = {};
     marketingBean = marketingBean.set('promotionType', PromotionTypeValue);
     const { marketingType, form } = this.props;
-    form.resetFields();
+    // form.resetFields();
+    this.setState({
+      count: 1
+    });
     //判断设置规则
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
       levelList = marketingBean.get('fullReductionLevelList');
@@ -1384,7 +1427,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             //   .then(({ res }) => {
             // if (res.code == Const.SUCCESS_CODE) {
             if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
-              this.props.store.submitFullGift(marketingBean.toJS()).then((res) => this._responseThen(res));
+              submitFullGift(marketingBean.toJS()).then((res) => this._responseThen(res));
             } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
               marketingBean = marketingBean.set(
                 'fullDiscountLevelList',
@@ -1398,7 +1441,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               };
 
               marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
-              this.props.store.submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
+              submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
             } else {
               let obj = {
                 firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
@@ -1407,7 +1450,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
               };
               marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
-              this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
+              submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
             }
             //  }
             // });
@@ -1434,7 +1477,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
     } else if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
       levelType = 'fullGiftLevelList';
     }
-    const { marketingBean, isFullCount } = this.state;
+    const { marketingBean } = this.props.relaxProps;
+    const { isFullCount } = this.state;
     if (levelType == '' || !marketingBean.get(levelType)) return;
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
@@ -1534,8 +1578,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
   };
 
   onSubscriptionChange = (props, value) => {
+    const { marketingBean } = this.props.relaxProps;
     const { marketingType } = this.props;
-    const { marketingBean } = this.state;
     // this.props.form.resetFields('rules');
     if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
       let obj = marketingBean.get('marketingSubscriptionDiscount');
@@ -1608,7 +1652,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @returns {any}
    */
   makeSelectedRows = (scopeIds) => {
-    const { marketingBean } = this.state;
+    const { marketingBean } = this.props.relaxProps;
     const goodsList = marketingBean.get('goodsList');
     if (goodsList) {
       const goodsList = marketingBean.get('goodsList');

@@ -24,14 +24,19 @@ export default class FullDiscountActor extends Actor {
     super();
   }
 
-  @Action('marketing:discountBean')
-  getDiscountBean(state: IMap, res) {
+  @Action('marketing:initDiscountBean')
+  initDiscountBean(state: IMap, res) {
     const bean = fromJS(res).set(
       'fullDiscountLevelList',
       fromJS(res)
         .get('fullDiscountLevelList')
         .map((item) => item.set('discount', (item.get('discount') * 10).toFixed(1)))
     );
+    return state.set('marketingBean', bean);
+  }
+
+  @Action('marketing:discountBean')
+  getDiscountBean(state: IMap, bean) {
     return state.set('marketingBean', bean);
   }
 

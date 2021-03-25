@@ -26,7 +26,7 @@ export default class AppStore extends Store {
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      this.dispatch('marketing:discountBean', res.context);
+      this.dispatch('marketing:initDiscountBean', res.context);
     } else if (res.code == 'K-080016') {
       //
       this.dispatch('loading:end');
@@ -98,5 +98,9 @@ export default class AppStore extends Store {
     } else {
       // message.error('load group error.');
     }
+  };
+
+  discountBeanOnChange = (bean) => {
+    this.dispatch('marketing:discountBean', bean);
   };
 }

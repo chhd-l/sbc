@@ -854,9 +854,6 @@ class TaskUpdate extends Component<any, any> {
                 </Form>
               </Spin>
             </TabPane>
-            {/* <TabPane tab="Service List" key="services">
-              <ServiceList goldenMomentList={goldenMomentList} goldenMoment={this.state.task.goldenMoment} />
-            </TabPane> */}
             {id ? (
               <TabPane tab="Activity" key="activity">
                 <Activity taskId={id} taskCompleted={taskCompleted} />

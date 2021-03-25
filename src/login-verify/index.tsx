@@ -1,14 +1,9 @@
 import React, { useEffect } from 'react';
 import { Form } from 'antd';
-import { StoreProvider } from 'plume2';
 import verifyForm from './components/verify-form';
 const bg_login = require('../login/img/bg_login.png');
-import AppStore from '../../web_modules/qmkit/fetch/HttpUtil';
 
-@StoreProvider(AppStore, { debug: __DEV__ })
 export default class LoginVerify extends React.Component<any, any> {
-  store: AppStore;
-
   constructor(props: any) {
     super(props);
     this.state = {};

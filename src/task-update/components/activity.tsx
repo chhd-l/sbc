@@ -1,4 +1,4 @@
-import { Row, Col, Input, Button, Form, message } from 'antd';
+import { Row, Col, Input, Button, Form, message, Tooltip } from 'antd';
 import React, { Component } from 'react';
 import * as webapi from '../webapi';
 import { Const } from 'qmkit';
@@ -69,7 +69,15 @@ export default class Activity extends Component<any, any> {
             <div className="log" key={index}>
               <Row>
                 <Col span={14}>
-                  <span>{item.content} </span>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{item.content}</div>}
+                  >
+                    <p className="overFlowtext">{item.content}</p>
+                  </Tooltip>
                 </Col>
                 <Col span={10}>
                   <span>by</span>

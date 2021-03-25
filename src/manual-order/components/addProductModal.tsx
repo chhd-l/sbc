@@ -21,7 +21,7 @@ export default class AddProductModal extends Component {
     likeGoodsInfoNo: '',
     keyword: '',
     goodsLists: [],
-    currentPage: 1,
+    currentPage: 0,
     total: 0,
     pageSize: 5,
     loading: false
@@ -53,7 +53,7 @@ export default class AddProductModal extends Component {
     this.setState(
       {
         total: goodsInfoPage.total,
-        currentPage: goodsInfoPage?.number ?? 1,
+        currentPage: goodsInfoPage?.number+1 ?? 0,
         pageSzie: goodsInfoPage.numberOfElements,
         goodsLists: goodsInfoPage?.content ?? []
       },
@@ -70,7 +70,7 @@ export default class AddProductModal extends Component {
       cateType,
       likeGoodsInfoNo,
       keyword,
-      pageNum: 1,
+      pageNum: 0,
       pageSize: 5,
       saleableFlag:1
     });
@@ -227,7 +227,7 @@ export default class AddProductModal extends Component {
               total={total}
               pageSize={pageSize}
               onChange={(pageNum, pageSize) => {
-                this.getGoodsSKUSList({ cateType, likeGoodsInfoNo, keyword, pageNum: pageNum, pageSize,saleableFlag:1 });
+                this.getGoodsSKUSList({ cateType, likeGoodsInfoNo, keyword, pageNum: pageNum-1, pageSize,saleableFlag:1 });
               }}
             />
           ) : null}

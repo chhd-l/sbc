@@ -36,6 +36,13 @@ export default class SelectedProduct extends React.Component<any, any> {
   componentDidMount() {
     this.querySysDictionary();
   }
+  /**
+   * 
+   * @param e 下拉选项
+   * @param index 
+   * @param row 
+   * @param name 
+   */
   async onSelectChange(e, index, row, name) {
     const { customer } = this.props;
     console.log(row)
@@ -58,7 +65,10 @@ export default class SelectedProduct extends React.Component<any, any> {
       dataSource: this.state.dataSource
     });
   }
-
+/**
+ * 
+ * @param data 获取总的价格
+ */
   async totalGoodsPrices(data) {
     const { customer } = this.props;
     let goodsInfoIds = data.map((item) => item.goodsInfoId);
@@ -175,8 +185,11 @@ export default class SelectedProduct extends React.Component<any, any> {
         key: 'periodTypeId',
 
         render: (text, record, index) => {
+          
+          let value=record.subscriptionStatus===1?(text?text:options[0].id):null
+    
           return record.subscriptionStatus === 1 ? (
-            <Select style={{ width: 100 }} value={text} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
+            <Select style={{ width: 100 }} value={value} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
               {options.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}
@@ -197,9 +210,9 @@ export default class SelectedProduct extends React.Component<any, any> {
 
       {
         title: ' Total amount',
-        dataIndex: 'amount',
-        key: 'amount',
-        return: (text, record) => <span>{record.buyCount * record.costPrice}</span>
+        dataIndex: 'itemTotalAmount',
+        key: 'itemTotalAmount',
+        // return: (text, record) => <span>{record.buyCount * record.costPrice}</span>
       },
       {
         title: 'Operation',

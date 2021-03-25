@@ -208,20 +208,22 @@ class AutomationList extends Component<any, any> {
         width: '8%',
         render: (text, record) => (
           <div>
-            {record.status === 'Published' ? null : (
+            {record.status === 'Published' || record.status ==='Executing' ? null : (
               <Tooltip placement="top" title="Edit">
-                <Link to={`/automation-edit/${record.id}`} className="iconfont iconEdit" style={{ marginRight: 10 }}></Link>
+                <Link to={`/automation-edit/${record.id}`} className="iconfont iconEdit" style={{ margin: "0 5px" }}></Link>
               </Tooltip>
             )}
 
             <Tooltip placement="top" title="Detail">
-              <Link to={`/automation-detail/${record.id}`} className="iconfont iconDetails" style={{ marginRight: 10 }}></Link>
+              <Link to={`/automation-detail/${record.id}`} className="iconfont iconDetails" style={{ margin: "0 5px" }}></Link>
             </Tooltip>
+            {record.status === 'Published' || record.status ==='Executing' ? null :(
             <Popconfirm placement="topLeft" title="Are you sure to do this?" onConfirm={() => this.deleteAutomation(record.id)} okText="Confirm" cancelText="Cancel">
               <Tooltip placement="top" title="Delete">
-                <a className="iconfont iconDelete"></a>
+                <a className="iconfont iconDelete" style={{ margin: "0 5px" }}></a>
               </Tooltip>
             </Popconfirm>
+            )}
           </div>
         )
       }

@@ -121,7 +121,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                                     this.ruleValueChange(index, e.target.value);
                                   }}
                                   value={!isFullCount ? level.fullAmount : level.fullCount}
-                                  disabled={isFullCount === 2}
+                                  // disabled={isFullCount === 2}
                                 />
                                 <span>
                                   {' '}

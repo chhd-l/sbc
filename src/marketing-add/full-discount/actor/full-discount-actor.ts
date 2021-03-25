@@ -9,7 +9,11 @@ import { forEach } from 'wangeditor/dist/utils/util';
 export default class FullDiscountActor extends Actor {
   defaultState() {
     return {
-      marketingBean: {},
+      marketingBean: {
+        promotionType: 0,
+        publicStatus: 1,
+        subType: 2
+      },
       allGroups: [],
       // 店铺分类信息
       storeCateList: [],

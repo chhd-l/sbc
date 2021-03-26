@@ -82,7 +82,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               ...res.context,
               customerAccount: this.state.customerAccount
             },
-            petOwnerTag: res.context.segmentList ? res.context.segmentList.map((t) => t.id) : []
+            petOwnerTag: res.context.segmentList ? res.context.segmentList.map((t) => t.name) : []
           });
         } else {
           this.setState({ loading: false });
@@ -111,10 +111,11 @@ export default class CustomerDetails extends React.Component<any, any> {
   };
 
   setPetOwnerTagging = (values) => {
+    const { tagList } = this.state;
     webapi
       .setTagging({
         relationId: this.state.customerId,
-        segmentIdList: values,
+        segmentIdList: tagList.filter((tag) => values.indexOf(tag.name) > -1 && tag.segmentType == 0).map((tag) => tag.id),
         segmentType: 0
       })
       .then(() => {});
@@ -353,7 +354,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                       {this.state.tagList
                         .filter((item) => item.segmentType == 0)
                         .map((v, idx) => (
-                          <Option value={v.id} key={idx}>
+                          <Option value={v.name} key={v.id}>
                             {v.name}
                           </Option>
                         ))}

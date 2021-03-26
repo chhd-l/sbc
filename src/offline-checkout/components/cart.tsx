@@ -18,6 +18,7 @@ export default class Cart extends React.Component<any, any> {
           <Col span={4}>Total price</Col>
           <Col span={4}>Operation</Col>
         </Row>
+        <div className="c-cart-container"></div>
         <div className="c-box-footer" style={{textAlign: 'right', lineHeight: '40px', fontSize: 16, fontWeight: 'bold'}}>
           <span style={{marginRight: 20}}>No. of products: 4</span>
           <span>total weight: 10kg</span>

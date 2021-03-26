@@ -13,8 +13,7 @@ export default class MemberBar extends React.Component<any, any> {
     this.state = {
       memberType: 'Guest',
       guestFormVisible: false,
-      memberFormVisible: false,
-      memberInfo: {}
+      memberFormVisible: false
     };
   }
 
@@ -25,12 +24,9 @@ export default class MemberBar extends React.Component<any, any> {
   onConfirmGuestInfo = (guestInfo: any = {}) => {
     this.setState({
       memberType: 'Guest',
-      guestFormVisible: false,
-      memberInfo: {
-        ...this.state.memberInfo,
-        ...guestInfo
-      }
+      guestFormVisible: false
     });
+    this.props.onChange({ ...this.props.memberInfo, ...guestInfo });
   };
 
   onOpenMemberForm = () => {
@@ -40,25 +36,21 @@ export default class MemberBar extends React.Component<any, any> {
   onConfirmMemberInfo = (memberInfo: any = {}) => {
     this.setState({
       memberType: 'Member',
-      memberFormVisible: false,
-      memberInfo: {
-        ...this.state.memberInfo,
-        ...memberInfo
-      }
+      memberFormVisible: false
     });
+    this.props.onChange({ ...this.props.memberInfo, ...memberInfo });
   };
 
   onReset = () => {
-    this.setState({
-      memberInfo: {}
-    });
+    this.props.onChange({});
   };
 
   render() {
+    const { memberInfo } = this.props;
     return (
       <>
-        {this.state.memberInfo.customerName && <a onClick={(e) => {e.preventDefault();this.onReset();}} className="member-reset-link">Reset</a>}
-        {!this.state.memberInfo.customerName ? <Row type="flex" justify="space-between" align="middle" style={{marginTop: 34}}>
+        {memberInfo.customerName && <a onClick={(e) => {e.preventDefault();this.onReset();}} className="member-reset-link">Reset</a>}
+        {!memberInfo.customerName ? <Row type="flex" justify="space-between" align="middle" style={{marginTop: 34}}>
           <Col span={4} style={{fontWeight: 'bold'}}>Consumer information</Col>
           <Col span={4}>
             <Card className="text-align-center" bodyStyle={{padding: '10px'}} onClick={() => this.onOpenGuestForm()}>
@@ -78,11 +70,11 @@ export default class MemberBar extends React.Component<any, any> {
               <span className="action-tag small">Recommendation</span>
             </Card>
           </Col>
-        </Row> : <Row gutter={24} style={{marginTop: 20}}>
+        </Row> : <Row gutter={24} style={{marginTop: 20, fontWeight: 'bold'}}>
           <Col span={12}>Consumer type: {this.state.memberType}</Col>
-          <Col span={12}>Email: {this.state.memberInfo.email}</Col>
-          <Col span={12}>Consumer name: {this.state.memberInfo.customerName}</Col>
-          <Col span={12}>Phone: {this.state.memberInfo.contactPhone}</Col>
+          <Col span={12}>Email: {memberInfo.email}</Col>
+          <Col span={12}>Consumer name: {memberInfo.customerName}</Col>
+          <Col span={12}>Phone: {memberInfo.contactPhone}</Col>
         </Row>}
         <GuestForm visible={this.state.guestFormVisible} onClose={this.onConfirmGuestInfo} />
         <CustomerList visible={this.state.memberFormVisible} onConfirm={this.onConfirmMemberInfo} onClose={this.onConfirmMemberInfo} />

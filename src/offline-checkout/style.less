@@ -125,3 +125,36 @@
   color: #e2001a;
   text-decoration: underline;
 }
+
+.c-product-overview {
+  height: calc(100% - 100px);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .c-product-item {
+    padding: 20px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    text-align: center;
+    &.selected {
+      border: 1px solid #e2001a;
+    }
+    img {
+      height: 60px;
+    }
+    .name, .ean {
+      font-size: 16px;
+      color: #666;
+      line-height: 24px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
+
+.c-cart-container {
+  height: calc(100% - 160px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}

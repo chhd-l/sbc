@@ -9,7 +9,16 @@ import CheckoutAction from './checkout-action';
 export default class Order extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
+    this.state = {
+      memberInfo: {}
+    };
   }
+
+  onSetMemberInfo = (memberInfo: any = {}) => {
+    this.setState({
+      memberInfo
+    });
+  };
 
   render() {
     return (
@@ -21,7 +30,7 @@ export default class Order extends React.Component<any, any> {
               <Cart />
             </div>
             <div className="c-full-box c-foot">
-              <MemberBar />
+              <MemberBar memberInfo={this.state.memberInfo} onChange={this.onSetMemberInfo} />
             </div>
           </Col>
           <Col span={8} style={{height: '100%'}}>

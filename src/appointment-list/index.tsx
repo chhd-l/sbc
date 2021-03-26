@@ -363,6 +363,7 @@ export default class AppointmentList extends React.Component<any, any> {
           </Row>
           <Table
             rowKey="id"
+            className="table-overflow"
             scroll={{ x: true }}
             rowSelection={rowSelection}
             columns={columns}

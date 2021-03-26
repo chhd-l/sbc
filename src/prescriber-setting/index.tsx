@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, Const } from 'qmkit';
 import { Row, Spin, Table, Radio, Col, Switch, Button, message } from 'antd';
 import * as webapi from './webapi';
-import './style.less'
+import './style.less';
 
 export default class PrescriberSetting extends Component<any, any> {
   constructor(props: any) {
@@ -13,7 +13,8 @@ export default class PrescriberSetting extends Component<any, any> {
       productCategoryData: [],
       listSystemConfig: [],
       selectType: 'selection_type',
-      ifPrescriberMandatory: 'if_prescriber_is_not_mandatory'
+      ifPrescriberMandatory: 'if_prescriber_is_not_mandatory',
+      showConfig: true
     };
     this.savePrescriberSetting = this.savePrescriberSetting.bind(this);
     this.getListSystemConfig = this.getListSystemConfig.bind(this);
@@ -56,9 +57,11 @@ export default class PrescriberSetting extends Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
+          let needPrescriberCategory = res.context ? res.context.filter((x) => x.prescriberFlag === 1) : [];
           this.setState({
-            productCategoryData: res.context,
-            loading: false
+            productCategoryData: res.context ? res.context : [],
+            loading: false,
+            showConfig: needPrescriberCategory.length > 0
           });
         } else {
           message.error(res.message || 'Get data failed');
@@ -77,7 +80,7 @@ export default class PrescriberSetting extends Component<any, any> {
   savePrescriberSetting() {
     this.setState({
       buttonLoadding: true
-    })
+    });
     const { listSystemConfig, productCategoryData } = this.state;
     let prescriberConfigs = [];
     let orderConfigs = [];
@@ -95,21 +98,21 @@ export default class PrescriberSetting extends Component<any, any> {
           message.success('Save successfully');
           this.setState({
             buttonLoadding: false
-          })
+          });
           this.getListSystemConfig();
           this.getProductCategory();
         } else {
           message.error(res.message || 'Save Failed');
           this.setState({
             buttonLoadding: false
-          })
+          });
         }
       })
       .catch((err) => {
         message.error(err || 'Save Failed');
         this.setState({
           buttonLoadding: false
-        })
+        });
       });
   }
   onChange = ({ field, value }) => {
@@ -125,19 +128,35 @@ export default class PrescriberSetting extends Component<any, any> {
     });
   };
   onChangeNeedPrescriber(cateId, checked) {
-    const { productCategoryData } = this.state;
+    const { productCategoryData, listSystemConfig } = this.state;
     productCategoryData.map((item) => {
       if (item.cateId === cateId) {
         item.prescriberFlag = checked ? 1 : 0;
       }
       return item;
     });
-    this.setState({
-      productCategoryData
-    });
+    this.setState(
+      {
+        productCategoryData
+      },
+      () => {
+        let needPrescriberCategory = productCategoryData ? productCategoryData.filter((x) => x.prescriberFlag === 1) : [];
+        if (needPrescriberCategory.length === 0) {
+          listSystemConfig.map((item) => {
+            item.status = 0;
+          });
+          this.setState({
+            listSystemConfig,
+            showConfig: false
+          });
+        } else {
+          this.setState({ showConfig: true });
+        }
+      }
+    );
   }
   render() {
-    const { listSystemConfig, selectType, ifPrescriberMandatory, buttonLoadding } = this.state;
+    const { listSystemConfig, selectType, ifPrescriberMandatory, buttonLoadding, showConfig } = this.state;
     let columns = [
       {
         title: 'Category',
@@ -174,38 +193,43 @@ export default class PrescriberSetting extends Component<any, any> {
               <Table rowKey="cateId" pagination={false} dataSource={this.state.productCategoryData} columns={columns} />
             </Spin>
           </Row>
-          <Row>
-            <Col span={6}>Selection Type</Col>
-            <Col span={18}>
-              <Radio.Group
-                value={selectionType ? selectionType.status : null}
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onChange({
-                    field: selectType,
-                    value
-                  });
-                }}
-              >
-                <Radio value={0}>Prescriber Map</Radio>
-                <Radio value={1}>Recommendation Code</Radio>
-              </Radio.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={6}>If prescriber is not mandatory</Col>
-            <Col span={18}>
-              <Switch
-                onChange={(checked) => {
-                  this.onChange({
-                    field: ifPrescriberMandatory,
-                    value: checked ? 1 : 0
-                  });
-                }}
-                checked={prescriberMandatory ? (prescriberMandatory.status === 1 ? true : false) : null}
-              ></Switch>
-            </Col>
-          </Row>
+          {showConfig ? (
+            <div>
+              <Row>
+                <Col span={6}>Selection Type</Col>
+                <Col span={18}>
+                  <Radio.Group
+                    value={selectionType ? selectionType.status : null}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onChange({
+                        field: selectType,
+                        value
+                      });
+                    }}
+                  >
+                    <Radio value={0}>Prescriber Map</Radio>
+                    <Radio value={1}>Recommendation Code</Radio>
+                  </Radio.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={6}>If prescriber is not mandatory</Col>
+                <Col span={18}>
+                  <Switch
+                    onChange={(checked) => {
+                      this.onChange({
+                        field: ifPrescriberMandatory,
+                        value: checked ? 1 : 0
+                      });
+                    }}
+                    checked={prescriberMandatory ? (prescriberMandatory.status === 1 ? true : false) : null}
+                  ></Switch>
+                </Col>
+              </Row>
+            </div>
+          ) : null}
+
           <Row>
             <Col span={12}>
               <Button loading={buttonLoadding} type="primary" onClick={() => this.savePrescriberSetting()}>

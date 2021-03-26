@@ -23,9 +23,9 @@ export default class ReductionLevels extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      isFullCount: props.isFullCount,
+      isFullCount: null,
       isNormal: true,
-      fullReductionLevelList: props.fullReductionLevelList ? props.fullReductionLevelList : [],
+      fullReductionLevelList:  [],
       PromotionTypeValue: 0
     };
   }
@@ -37,7 +37,9 @@ export default class ReductionLevels extends React.Component<any, any> {
   }
   componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
     this.setState({
-      isNormal: nextProps.isNormal
+      isNormal: nextProps.isNormal,
+      isFullCount: nextProps.isFullCount,
+      fullReductionLevelList:  nextProps.fullReductionLevelList,
     });
   }
   shouldComponentUpdate(nextProps) {
@@ -70,13 +72,8 @@ export default class ReductionLevels extends React.Component<any, any> {
   render() {
     const { isFullCount, fullReductionLevelList } = this.state;
     const { form } = this.props;
-
-    if (fullReductionLevelList) {
-      console.log(fullReductionLevelList, 'fullReductionLevelList-----------');
-    }
-
     const { getFieldDecorator } = form;
-
+    // console.log(fullReductionLevelList, 'fullReductionLevelList------------inernnnnnnnnnn');
     return (
       <div>
         {fullReductionLevelList.map((level, index) => {

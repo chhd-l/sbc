@@ -8,14 +8,23 @@ import { IList } from '../../../../typings/globalType';
 export default class FullReductionActor extends Actor {
   defaultState() {
     return {
-      marketingBean: {},
+      marketingBean: {
+        promotionType: 0,
+        publicStatus: 1,
+        subType: 0,// 0 1 6
+        isClub: false,
+      },
       allGroups: [],
       // 店铺分类信息
       storeCateList: [],
       sourceStoreCateList: [],
 
       //Attribute
-      attributesList: []
+      attributesList: [],
+
+      //营销活动已选的商品信息
+      selectedSkuIds: [],
+      selectedRows: []
     };
   }
 
@@ -26,6 +35,15 @@ export default class FullReductionActor extends Actor {
   @Action('marketing:reductionBean')
   getReductionBean(state: IMap, res) {
     return state.set('marketingBean', fromJS(res));
+  }
+
+  @Action('marketing:selectedRows')
+  selectedRows(state, selectedRows) {
+    return state.set('selectedRows', fromJS(selectedRows));
+  }
+  @Action('marketing:selectedSkuIds')
+  selectedSkuIds(state, selectedSkuIds) {
+    return state.set('selectedSkuIds', selectedSkuIds);
   }
 
   @Action('marketing:allGroups')

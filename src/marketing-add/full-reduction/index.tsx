@@ -8,6 +8,8 @@ import AppStore from './store';
 import MarketingAddForm from '../common-components/marketing-add-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
+const WrappedForm = Form.create()(MarketingAddForm);
+
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class MarketingFullReductionAdd extends React.Component<any, any> {
   store: AppStore;
@@ -28,7 +30,6 @@ export default class MarketingFullReductionAdd extends React.Component<any, any>
   }
 
   render() {
-    const WrappedForm = Form.create()(MarketingAddForm);
     const { marketingId } = this.props.match.params;
     const state = this.props.location.state;
     const { source } = (state || {}) as any;

@@ -131,7 +131,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
       promotionCode: '',
       promotionCode2: '', //记录初始自动生成的promotionCode
       timeZone: moment,
-      isClubChecked: false
       // allGroups: relaxProps.get('allGroups'),
       // storeCateList: relaxProps.get('storeCateList'),
       // sourceStoreCateList: relaxProps.get('sourceStoreCateList'),
@@ -155,7 +154,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       submitFullDiscount: Function;
       submitFullReduction: Function;
       discountBeanOnChange: Function;
-      reductionBeanChange: Function;
+      reductionBeanOnChange: Function;
       giftBeanOnChange: Function;
       deleteSelectedSku: Function;
       setSelectedProductRows: Function;
@@ -174,7 +173,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     submitFullDiscount: noop,
     submitFullReduction: noop,
     discountBeanOnChange: noop,
-    reductionBeanChange: noop,
+    reductionBeanOnChange: noop,
     giftBeanOnChange: noop,
     deleteSelectedSku: noop,
     setSelectedProductRows: noop
@@ -209,11 +208,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     }
   };
 
-  clubChecked = (isClubChecked) => {
-    this.setState({
-      isClubChecked
-    });
-  };
+
 
   scopeTypeOnChange = (value) => {
     this.setState({
@@ -354,7 +349,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { customerLevel, sourceGoodCateList, skuExists, saveLoading, isClubChecked } = this.state;
+    const { customerLevel, sourceGoodCateList, skuExists, saveLoading } = this.state;
     const { marketingBean, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds } = this.props.relaxProps;
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
@@ -396,15 +391,17 @@ export default class MarketingAddForm extends React.Component<any, any> {
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
           <div className="ant-form-inline">
-            <Radio.Group onChange={this.promotionType} value={marketingBean.get('promotionType')}>
+            <Radio.Group onChange={e => this.promotionType(marketingType, e)} value={marketingBean.get('promotionType')}>
               <Radio value={0}>Normal promotion</Radio>
               <Radio value={1}>Subscription promotion</Radio>
             </Radio.Group>
-            {marketingBean.get('promotionType') === 1 ? (
-              <Checkbox onChange={(e) => this.clubChecked(e.target.checked)} checked={isClubChecked}>
-                Club
-              </Checkbox>
-            ) : null}
+            {/*{marketingBean.get('promotionType') === 1 ? (*/}
+            {/*  <Checkbox onChange={(e) => this.onBeanChange({*/}
+            {/*    isClub: e.target.checked*/}
+            {/*  })} checked={marketingBean.get('isClub')}>*/}
+            {/*    Club*/}
+            {/*  </Checkbox>*/}
+            {/*) : null}*/}
           </div>
         </FormItem>
         <div className="bold-title">Basic Setting</div>
@@ -634,24 +631,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
             )}
           </>
         )}
-        {/*{isFullCount != null && this.state.PromotionTypeValue === 0 && (*/}
-        {/*  <FormItem {...formItemLayout} label={`full ${Enum.GET_MARKETING_STRING(marketingType)} type`}>*/}
-        {/*    {getFieldDecorator('subType', {*/}
-        {/*      rules: [*/}
-        {/*        {*/}
-        {/*          required: true,*/}
-        {/*          message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`*/}
-        {/*        }*/}
-        {/*      ],*/}
-        {/*      initialValue: isFullCount*/}
-        {/*    })(*/}
-        {/*      <RadioGroup onChange={(e) => this.subTypeChange(marketingType, e)}>*/}
-        {/*        {this.state.PromotionTypeValue == 0 ? <Radio value={0}>Full amount {Enum.GET_MARKETING_STRING(marketingType)}</Radio> : <div></div>}*/}
-        {/*        <Radio value={1}>Full quantity {Enum.GET_MARKETING_STRING(marketingType)}</Radio>*/}
-        {/*      </RadioGroup>*/}
-        {/*    )}*/}
-        {/*  </FormItem>*/}
-        {/*)}*/}
 
         <FormItem {...settingRuleFrom} label={settingLabel} required={true} labelAlign="left">
           {marketingType == Enum.MARKETING_TYPE.FIRST_DISCOUNT &&
@@ -663,7 +642,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 form={this.props.form}
                 fullDiscountLevelList={marketingBean.get('fullDiscountLevelList') && marketingBean.get('fullDiscountLevelList').toJS()}
                 onChangeBack={this.onRulesChange}
-                isFullCount={marketingBean.get('subType') === 0 || marketingBean.get('subType') === 2}
+                isFullCount={marketingBean.get('subType') % 2 }
                 isNormal={marketingBean.get('promotionType') === 0}
               />
             )}
@@ -678,7 +657,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 isNormal={marketingBean.get('promotionType') === 0}
                 fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()}
                 onChangeBack={this.onRulesChange}
-                isFullCount={marketingBean.get('subType') === 0 || marketingBean.get('subType') === 2}
+                isFullCount={marketingBean.get('subType') % 2 }
               />
             )}
           {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT &&
@@ -769,7 +748,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   form={this.props.form}
                   fullReductionLevelList={marketingBean.get('fullReductionLevelList') && marketingBean.get('fullReductionLevelList').toJS()}
                   onChangeBack={this.onRulesChange}
-                  isFullCount={marketingBean.get('subType') === 0 || marketingBean.get('subType') === 2}
+                  isFullCount={marketingBean.get('subType') % 2 }
                   isNormal={marketingBean.get('promotionType') === 0}
                   PromotionTypeValue={marketingBean.get('promotionType')}
                 />
@@ -793,15 +772,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
                       ],
                       initialValue: marketingBean.get('firstSubscriptionOrderReduction')
                     })(
-                      <>
-                        <Input
-                          style={{ width: 200 }}
-                          placeholder={'0.01-99999999.99'}
-                          onChange={(e) => {
-                            this.onBeanChange({ firstSubscriptionOrderReduction: e.target.value });
-                          }}
-                        />
-                      </>
+                      <Input
+                        style={{ width: 200 }}
+                        placeholder={'0.01-99999999.99'}
+                        onChange={(e) => {
+                          this.onBeanChange({ firstSubscriptionOrderReduction: e.target.value });
+                        }}
+                      />
                     )}
                   </FormItem>
                 </div>
@@ -828,15 +805,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
               ],
               initialValue: marketingBean.get('restSubscriptionOrderReduction')
             })(
-              <>
-                <Input
-                  style={{ width: 200 }}
-                  placeholder="0.01-99999999.9922222"
-                  onChange={(e) => {
-                    this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
-                  }}
-                />
-              </>
+              <Input
+                style={{ width: 200 }}
+                placeholder="0.01-99999999.9922222"
+                onChange={(e) => {
+                  this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
+                }}
+              />
             )}
           </FormItem>
         )}
@@ -1195,16 +1170,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * Promotion type
    * @param joinLevel
    */
-  promotionType = (e) => {
+  promotionType = (marketingType, e) => {
     if (e.target.value === 0) {
       this.onBeanChange({
         promotionType: e.target.value,
-        subType: 2
+        subType:  marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION ? 0 : marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT ?  2 : 0
       });
     } else {
       this.onBeanChange({
         promotionType: e.target.value,
-        subType: 7
+        subType:  marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION ? 6 : marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT ?  7 : 0
       });
     }
   };
@@ -1214,12 +1189,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param params
    */
   onBeanChange = (params) => {
-    const { marketingBean, discountBeanOnChange, reductionBeanChange, giftBeanOnChange } = this.props.relaxProps;
+    const { marketingBean, discountBeanOnChange, reductionBeanOnChange, giftBeanOnChange } = this.props.relaxProps;
     const { marketingType } = this.props;
     if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
       discountBeanOnChange(marketingBean.merge(params));
     } else if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
-      reductionBeanChange(marketingBean.merge(params));
+      reductionBeanOnChange(marketingBean.merge(params));
     } else if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
       giftBeanOnChange(marketingBean.merge(params));
     }
@@ -1477,7 +1452,25 @@ export default class MarketingAddForm extends React.Component<any, any> {
       }
     });
   };
-
+  initLevel = (levelType) => {
+    const { ma }
+    const initLevel = [
+      {
+        key: this.makeRandom(),
+        fullAmount: null,
+        fullCount: null,
+        discount: null
+      }
+    ];
+    ma
+  }
+  /**
+   * 生成随机数，作为key值
+   * @returns {string}
+   */
+  makeRandom = () => {
+    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  };
   /**
    * 满系类型改变
    * @param marketingType

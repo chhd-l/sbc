@@ -12,7 +12,8 @@ export default class FullDiscountActor extends Actor {
       marketingBean: {
         promotionType: 0,
         publicStatus: 1,
-        subType: 2
+        subType: 2,
+        isClub: false
       },
       allGroups: [],
       // 店铺分类信息

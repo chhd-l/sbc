@@ -76,4 +76,8 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: initStoreCateList', fromJS(res.context));
     }
   };
+
+  giftBeanOnChange = (bean) => {
+    this.dispatch('marketing:giftBean', bean);
+  };
 }

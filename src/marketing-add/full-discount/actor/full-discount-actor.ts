@@ -9,14 +9,25 @@ import { forEach } from 'wangeditor/dist/utils/util';
 export default class FullDiscountActor extends Actor {
   defaultState() {
     return {
-      marketingBean: {},
+      marketingBean: {
+        promotionType: 0,
+        publicStatus: 1,
+        subType: 2,
+        isClub: false,
+        fullDiscountLevelList: []
+      },
       allGroups: [],
       // 店铺分类信息
       storeCateList: [],
       sourceStoreCateList: [],
 
       //Attribute
-      attributesList: []
+      attributesList: [],
+
+      //营销活动已选的商品信息
+      selectedSkuIds: [],
+      selectedRows: [],
+
     };
   }
 
@@ -24,8 +35,8 @@ export default class FullDiscountActor extends Actor {
     super();
   }
 
-  @Action('marketing:discountBean')
-  getDiscountBean(state: IMap, res) {
+  @Action('marketing:initDiscountBean')
+  initDiscountBean(state: IMap, res) {
     const bean = fromJS(res).set(
       'fullDiscountLevelList',
       fromJS(res)
@@ -35,9 +46,39 @@ export default class FullDiscountActor extends Actor {
     return state.set('marketingBean', bean);
   }
 
+  @Action('marketing:initBeanLevelList')
+  initBeanLevelList(state: IMap) {
+    const fullDiscountLevelList = [
+      {
+        key: this.makeRandom(),
+        fullAmount: null,
+        fullCount: null,
+        discount: null
+      }
+    ]
+
+    return state.update('marketingBean', (bean) => {
+      return bean.set('fullDiscountLevelList', fromJS(fullDiscountLevelList))
+    });
+  }
+
+  @Action('marketing:discountBean')
+  getDiscountBean(state: IMap, bean) {
+    return state.set('marketingBean', bean);
+  }
+
   @Action('marketing:allGroups')
   getAllGroups(state, allGroups) {
     return state.set('allGroups', fromJS(allGroups));
+  }
+
+  @Action('marketing:selectedRows')
+  selectedRows(state, selectedRows) {
+    return state.set('selectedRows', fromJS(selectedRows));
+  }
+  @Action('marketing:selectedSkuIds')
+  selectedSkuIds(state, selectedSkuIds) {
+    return state.set('selectedSkuIds', selectedSkuIds);
   }
 
   @Action('marketing:attributesList')
@@ -80,4 +121,12 @@ export default class FullDiscountActor extends Actor {
       });
     return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
   }
+
+  /**
+   * 生成随机数，作为key值
+   * @returns {string}
+   */
+  makeRandom = () => {
+    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  };
 }

@@ -54,17 +54,18 @@ export default class RefundAmount extends React.Component<any, any> {
       <div style={{ marginBottom: 20 }}>
         <div style={styles.priceContainer}>
           <div style={styles.priceBox}>
-            <label style={styles.priceItem as any}>
-              <span style={styles.name}>Refundable amount: </span>
+            <label style={styles.priceItem }>
+              Refundable amount:
+            </label>
+
               <strong>
                 ${applyStatus ? applyPrice.toFixed(2) : totalPrice.toFixed(2)}
               </strong>
+            
+            <label style={styles.priceItem}>
+              Retractable integral: 
             </label>
-            <label style={styles.priceItem as any}>
-              <span style={styles.name}>Retractable integral: </span>
               <strong>{applyStatus ? applyIntegral : shouldIntegral}</strong>
-            </label>
-            <div style={{ marginTop: 20, width: 245 }} />
           </div>
         </div>
       </div>

@@ -143,7 +143,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, goodsList, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -488,7 +488,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0' : '1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false || goodsList.toJS().length == 1? true : false } getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>
@@ -507,20 +507,25 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
+
         return (
           <Row style={{marginRight: '81px'}}>
             <Col span={8}>
               <FormItem style={styles.tableFormItem}>
-                {rowInfo.addedFlag === 1 ? (
-                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
-                    <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
-                  </div>
-                ) : null}
-                {rowInfo.addedFlag === 0? (
-                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
-                    <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
-                  </div>
-                ) : null}
+                {goodsList.toJS().length == 1 ? ( <div>
+                  <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>
+                </div> ) : (<>
+                  {goods.get('addedFlag') === 1 ? (
+                    <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
+                      <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                    </div>
+                  ) : null}
+                  {goods.get('addedFlag') === 0? (
+                    <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
+                      <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                    </div>
+                  ) : null}</>)}
+
               </FormItem>
             </Col>
           </Row>

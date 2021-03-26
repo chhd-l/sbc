@@ -288,29 +288,6 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
-        let marketPrice = Number(parseFloat(rowInfo.marketPrice))
-        let subscriptionPrice = Number(parseFloat(rowInfo.subscriptionPrice))
-        if(addSkUProduct.length === 1) {
-          if(String(marketPrice).indexOf(".") == -1){
-            marketPrice = (marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
-          }else{
-            if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
-              marketPrice = marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
-            }else {
-              marketPrice = marketPrice.toFixed(4)
-            }
-          }
-
-          if(String(subscriptionPrice).indexOf(".") == -1){
-            subscriptionPrice = (subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
-          }else{
-            if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
-              subscriptionPrice = subscriptionPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
-            }else {
-              subscriptionPrice = subscriptionPrice.toFixed(4)
-            }
-          }
-        }
         return (
           <Row>
             <Col span={12}>
@@ -327,13 +304,13 @@ class SkuForm extends React.Component<any, any> {
                         ],
 
                         onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
-                        initialValue: marketPrice ? marketPrice : 0
+                        initialValue: rowInfo.marketPrice || 0
                       })(
                         <InputNumber
                           min={0}
                           max={9999999.99}
                           disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                          precision={precisions}
+                          precision={2}
                           formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                         />
                       )}
@@ -360,12 +337,12 @@ class SkuForm extends React.Component<any, any> {
                             }
                           ],
                           onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                          initialValue: subscriptionPrice ? subscriptionPrice : 0
+                          initialValue: rowInfo.subscriptionPrice || 0
                         })(
                           <InputNumber
                             min={0}
                             max={9999999.99}
-                            precision={precisions}
+                            precision={2}
                             disabled={rowInfo.subscriptionStatus === 0}
                             formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                           />
@@ -386,13 +363,13 @@ class SkuForm extends React.Component<any, any> {
                       ],
 
                       onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
-                      initialValue: marketPrice ? marketPrice : 0
+                      initialValue: rowInfo.marketPrice || 0
                     })(
                       <InputNumber
                         min={0}
                         max={9999999.99}
                         disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                        precision={precisions}
+                        precision={2}
                         formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                       />
                     )}
@@ -424,8 +401,7 @@ class SkuForm extends React.Component<any, any> {
       key: 'basePrice',
       render: (rowInfo, a, b) => {
         const { goodsList, goods } = this.props.relaxProps;
-
-        if (goodsList.toJS()[b].goodsInfoWeight != 0) {
+        if (goodsList.toJS()[b].goodsInfoWeight) {
           this._handleBasePriceChange(goodsList.toJS()[b].goodsInfoWeight);
         } else {
           this._handleBasePriceChange('None');

@@ -6,6 +6,7 @@ import moment from 'moment';
 import { IList } from 'typings/globalType';
 import { Const, noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 const defaultImg = require('../img/none.png');
 
 @Relax
@@ -136,15 +137,7 @@ export default class SearchList extends React.Component<any, any> {
                       </span>
                       <span style={{ marginRight: 20, float: 'right' }}>
                         <Tooltip placement="top" title="Application">
-                          <a
-                            href="javascript:void(0)"
-                            onClick={() => {
-                              apply(id);
-                            }}
-                            className="iconfont iconApplication"
-                          >
-                            {/*{<FormattedMessage id="application" />}*/}
-                          </a>
+                          <Link to={`/order-return-add/${id}`} className="iconfont iconApplication" style={{ padding: '0 5px' }}></Link>
                         </Tooltip>
                       </span>
                     </div>
@@ -168,7 +161,7 @@ export default class SearchList extends React.Component<any, any> {
                       .map((v, k) => {
                         if (k < 3) {
                           const imageSrc = v.get('pic') ? v.get('pic') : defaultImg;
-                          return <img src={imageSrc} key={k} style={styles.imgItem} />;
+                          return <img src={imageSrc} key={k} style={styles.imgItem} title={v.get('skuName')||''} />;
                         } else if (k == 4) {
                           return <label>...</label>;
                         }
@@ -190,9 +183,9 @@ export default class SearchList extends React.Component<any, any> {
                       ) : null
                     }
                   </td>
-                  <td style={{ width: '10%' }}>
+                  <td style={{ width: '14%' }}>
                     {/*客户名称*/}
-                    {v.getIn(['buyer', 'name'])}
+                    <p title={v.getIn(['buyer', 'account'])}>{v.getIn(['buyer', 'name'])}</p>
                   </td>
                   <td style={{ width: '15%' }}>
                     {/*收件人姓名*/}
@@ -206,9 +199,11 @@ export default class SearchList extends React.Component<any, any> {
                     <br />( total {num})
                   </td>
                   {/*发货状态*/}
-                  <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td>
+                  {/* <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td> */}
+                  <td style={{ width: '10%' }}>{v.getIn(['tradeState', 'deliverStatus'])}</td>
                   {/*订单状态*/}
-                  <td style={{ width: '10%' }}>{Const.flowState[v.getIn(['tradeState', 'flowState'])]}</td>
+                  {/* <td style={{ width: '10%' }}>{Const.flowState[v.getIn(['tradeState', 'flowState'])]}</td> */}
+                  <td style={{ width: '10%' }}>{v.getIn(['tradeState', 'flowState'])}</td>
                   {/*支付状态*/}
                   <td
                     style={{
@@ -217,7 +212,8 @@ export default class SearchList extends React.Component<any, any> {
                       paddingRight: 20
                     }}
                   >
-                    {Const.payState[v.getIn(['tradeState', 'payState'])]}
+                    {/* {Const.payState[v.getIn(['tradeState', 'payState'])]} */}
+                    {v.getIn(['tradeState', 'payState'])}
                   </td>
                 </tr>
               </tbody>

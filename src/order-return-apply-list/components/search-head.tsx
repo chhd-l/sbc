@@ -67,7 +67,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Order id'} />
+                    <Input style={styles.leftLabel} disabled defaultValue={'Order Number'} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -166,7 +166,7 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title="Order id" value="orderNumber">
+        <Option title="Order number" value="orderNumber">
           <FormattedMessage id="order.orderNumber" />
         </Option>
         <Option title="Subscriptio id" value="subscriptionNumber">

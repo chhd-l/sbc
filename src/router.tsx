@@ -138,7 +138,7 @@ const routes = [
   },
   //订单-订单管理-订单列表-新增退单
   {
-    path: '/order-return-add',
+    path: '/order-return-add/:id',
     exact: true,
     asyncComponent: () => import('./order-return-add')
   },
@@ -961,6 +961,10 @@ const routes = [
   {
     path: '/appointment-update/:id',
     asyncComponent: () => import('./appointment-list/new')
+  },
+  {
+    path: '/split-order-setting',
+    asyncComponent: () => import('./order-split-setting')
   }
 ];
 

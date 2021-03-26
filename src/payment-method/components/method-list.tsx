@@ -190,7 +190,7 @@ export default class PaymentMethod extends React.Component<any, any> {
               queryByStoreId.List3.map((item, index) => {
                 getStorePaymentVOs(item);
                 return (
-                  <Row>
+                  <Row key={item.id} >
                     <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
@@ -207,7 +207,7 @@ export default class PaymentMethod extends React.Component<any, any> {
                           <div className="status">{item.name}</div>
 
                           <div className={'flex-start-align'}>
-                            <Switch style={{ marginRight: 15 }} key={item.id} onChange={e=>this.onSwitchChange(e,item.id)} />
+                            <Switch style={{ marginRight: 15 }} onChange={e=>this.onSwitchChange(e,item.id)} />
                             <Tooltip placement="top" title="Edit">
                               <a style={{ color: this.state.isChecked == true ? 'red' : '#cccccc' }} type="link" onClick={this.onTooltip} className="iconfont iconEdit"></a>
                             </Tooltip>

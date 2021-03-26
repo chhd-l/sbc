@@ -101,18 +101,20 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //   });
     // });
     selectedRows && selectedRows.map((item) => {
-      if(item.stock){
-        minStock.push(item.stock)
-      }else if(sessionStorage.getItem('minStock')){
-        minStock.push(sessionStorage.getItem('minStock'))
+        console.log(item,23333333);
+        if(item.stock){
+          minStock.push(item.stock)
+        }else if(sessionStorage.getItem('minStock')){
+          minStock.push(sessionStorage.getItem('minStock'))
+        }
+        targetGoodsIds.push({
+          subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
+          bundleNum: 1,
+          marketPrice: item.marketPrice,
+          goodsInfoNo: item.goodsInfoNo,
+          subGoodsInfoNo: item.goodsInfoNo,
+        })
       }
-      targetGoodsIds.push({
-        subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
-        bundleNum: 1,
-        goodsInfoNo: item.goodsInfoNo,
-        subGoodsInfoNo: item.goodsInfoNo,
-      })
-    }
     );
     let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
 

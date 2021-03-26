@@ -50,14 +50,12 @@ class PaymentModal extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { payPspCardTypeVOList } = this.props.paymentForm;
     //const key = form.get('tabType');
     let checked = this.state.paymentForm.enabled;
     if (this.state.enabled != null) {
       checked = this.state.enabled;
     }
-    /*setTimeout(()=>{
-      console.log(this.state.paymentForm,2211);
-    })*/
     return (
       <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Tabs defaultActiveKey="0" onChange={this._handleClick} >
@@ -103,7 +101,9 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
                         {getFieldDecorator('paymentMethod', {
-                          initialValue: item.pspConfigVO.paymentMethod,
+                          initialValue: item.payPspItemCardTypeVOList.map((a)=>{
+                            return a.cardType
+                          }),
                           rules: [
                             {
                               required: false,
@@ -112,94 +112,21 @@ class PaymentModal extends React.Component<any, any> {
                           ]
                         })(
                           <Select mode="multiple">
-                            <Option value="VISA">
-                              <img
-                                src={require('../img/visa.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              VISA
-                            </Option>
-                            <Option value="MasterCard">
-                              <img
-                                src={require('../img/masterCard.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              MasterCard
-                            </Option>
-                            <Option value="AmericanExpress">
-                              <img
-                                src={require('../img/american.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              American Express
-                            </Option>
-                            <Option value="OXXO">
-                              <img
-                                src={require('../img/oxxo.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              OXXO
-                            </Option>
-                            <Option value="JCB">
-                              <img
-                                src={require('../img/jcb.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              JCB
-                            </Option>
-                            <Option value="Discover">
-                              <img
-                                src={require('../img/discover.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              Discover
-                            </Option>
-                            <Option value="ChinaUnionPay">
-                              <img
-                                src={require('../img/chinaUnionPay.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              China Union Pay
-                            </Option>
-                            <Option value="Maestro">
-                              <img
-                                src={require('../img/maestro.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              Maestro
-                            </Option>
+                            {payPspCardTypeVOList&&payPspCardTypeVOList.map((b,i)=>{
+                              return (
+                                <Option value={b.cardType} key={i}>
+                                  <img
+                                    src={b.imgUrl}
+                                    style={{
+                                      width: '30px',
+                                      height: '20px',
+                                      marginRight: '10px'
+                                    }}
+                                  />
+                                  {b.cardType}
+                                </Option>
+                              )
+                            })}
                           </Select>
                         )}
                       </FormItem>

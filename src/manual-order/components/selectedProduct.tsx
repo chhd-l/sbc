@@ -87,7 +87,7 @@ export default class SelectedProduct extends React.Component<any, any> {
     };
     const { res } = await totalGoodsPrice(customer.customerId, params);
     this.setState({
-      totalPrice: res.context?.totalPrice ?? 0
+      totalPrice: res.context?.tradePrice ?? 0
     });
   }
 

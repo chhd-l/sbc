@@ -16,13 +16,13 @@ export default class MemberBar extends React.Component<any, any> {
         <Col span={4} style={{fontWeight: 'bold'}}>Consumer information</Col>
         <Col span={4}>
           <Card className="text-align-center" bodyStyle={{padding: '10px'}}>
-            <div><img src={guestImg} width="40" height="40" alt=""/></div>
+            <div><img src={guestImg} width="35" height="40" alt=""/></div>
             <span className="action-tag small">Guest</span>
           </Card>
         </Col>
         <Col span={4}>
           <Card className="text-align-center" bodyStyle={{padding: '10px'}}>
-            <div><img src={memberImg} width="40" height="40" alt=""/></div>
+            <div><img src={memberImg} width="35" height="40" alt=""/></div>
             <span className="action-tag small">Member</span>
           </Card>
         </Col>

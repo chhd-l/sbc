@@ -33,7 +33,7 @@ class PetOwnerTagging extends Component<any, any> {
       loading: false,
       isDisable: false,
       isSubmit: false,
-      updateDisableTip: 'The tagging has been associated with pet owner or pet. Please unblind the relationship firstly'
+      updateDisableTip: 'The tagging has been associated with pet owner or pet. Please unbind the relationship firstly'
     };
   }
   componentDidMount() {
@@ -217,7 +217,8 @@ class PetOwnerTagging extends Component<any, any> {
   };
   handleSubmit = () => {
     const { taggingForm, isEdit, isDisable, currentEditTagging, updateDisableTip } = this.state;
-    if (isDisable) {
+    if (isDisable && (currentEditTagging.segmentType !== taggingForm.taggingType || 
+      currentEditTagging.isPublished !==taggingForm.taggingStatus )) {
       message.error(updateDisableTip);
       return;
     }

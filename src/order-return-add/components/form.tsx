@@ -187,7 +187,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             <Tips title="Please add your return credentials to the attachment. Supported picture formats: JPG, JPEG, PNG, GIF, file size no more than 5M, and upload a maximum of 10" />
           </FormItem>
 
-          {true? (
+          {isReturn? (
             <GoodsList
               form={this.props.form}
               flushState={this.state.flushState}

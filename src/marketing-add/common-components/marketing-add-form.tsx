@@ -1175,6 +1175,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param joinLevel
    */
   promotionType = (marketingType, e) => {
+    const { initDefualtLevelList, initReductionDefualtLevelList } = this.props.relaxProps
     if (e.target.value === 0) {
       this.onBeanChange({
         promotionType: e.target.value,
@@ -1185,6 +1186,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
         promotionType: e.target.value,
         subType:  marketingType === Enum.MARKETING_TYPE.FULL_REDUCTION ? 6 : marketingType === Enum.MARKETING_TYPE.FULL_DISCOUNT ?  7 : 0
       });
+    }
+    switch (marketingType) {
+      case Enum.MARKETING_TYPE.FULL_REDUCTION :
+        initReductionDefualtLevelList()
+        break;
+      case  Enum.MARKETING_TYPE.FULL_REDUCTION:
+        initDefualtLevelList()
+        break;
+      default:
     }
   };
 

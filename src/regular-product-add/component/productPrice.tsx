@@ -310,7 +310,7 @@ class SkuForm extends React.Component<any, any> {
                           min={0}
                           max={9999999.99}
                           disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                          precision={precisions}
+                          precision={2}
                           formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                         />
                       )}
@@ -342,7 +342,7 @@ class SkuForm extends React.Component<any, any> {
                           <InputNumber
                             min={0}
                             max={9999999.99}
-                            precision={precisions}
+                            precision={2}
                             disabled={rowInfo.subscriptionStatus === 0}
                             formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                           />
@@ -369,7 +369,7 @@ class SkuForm extends React.Component<any, any> {
                         min={0}
                         max={9999999.99}
                         disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                        precision={precisions}
+                        precision={2}
                         formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                       />
                     )}
@@ -401,8 +401,7 @@ class SkuForm extends React.Component<any, any> {
       key: 'basePrice',
       render: (rowInfo, a, b) => {
         const { goodsList, goods } = this.props.relaxProps;
-
-        if (goodsList.toJS()[b].goodsInfoWeight != 0) {
+        if (goodsList.toJS()[b].goodsInfoWeight) {
           this._handleBasePriceChange(goodsList.toJS()[b].goodsInfoWeight);
         } else {
           this._handleBasePriceChange('None');

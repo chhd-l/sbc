@@ -296,13 +296,15 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         let marketPrice = Number(parseFloat(rowInfo.marketPrice))
         let subscriptionPrice = Number(parseFloat(rowInfo.subscriptionPrice))
-        console.log(addSkUProduct[0],11111111);
-        console.log(marketPrice,2222222);
+       /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
+        //console.log(marketPrice,2222222);
         console.log(rowInfo.marketPrice,33333);
-        if(addSkUProduct.length === 1) {
+        if(addSkUProduct.length === 1 && addSkUProduct[0].targetGoodsIds.length === 1) {
           if(String(marketPrice).indexOf(".") == -1){
-            marketPrice = (marketPrice * addSkUProduct[0].marketPrice).toFixed(2)
+            console.log(4444444)
+            marketPrice = (addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
           }else{
+            console.log(5555555)
             if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
               marketPrice = marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
             }else {
@@ -311,7 +313,7 @@ class SkuForm extends React.Component<any, any> {
           }
 
           if(String(subscriptionPrice).indexOf(".") == -1){
-            subscriptionPrice = (subscriptionPrice * addSkUProduct[0].marketPrice).toFixed(2)
+            subscriptionPrice = (addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
           }else{
             if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
               subscriptionPrice = subscriptionPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
@@ -319,7 +321,9 @@ class SkuForm extends React.Component<any, any> {
               subscriptionPrice = subscriptionPrice.toFixed(4)
             }
           }
-        }
+        }else {
+          marketPrice = rowInfo.marketPrice ? marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length) : 0.00
+        }*/
 
         return (
           <Row>
@@ -355,7 +359,8 @@ class SkuForm extends React.Component<any, any> {
                       <InputNumber
                         min={0}
                         max={9999999.99}
-                        //precision={2}
+                        //precision={marketPriceNum}
+                        style={{ width: '111px' }}
                         disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                         formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? 
                           sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
@@ -401,6 +406,7 @@ class SkuForm extends React.Component<any, any> {
                           min={0}
                           max={9999999.99}
                           //precision={4}
+                          style={{ width: '111px' }}
                           disabled={rowInfo.subscriptionStatus === 0}
                           formatter={(value) => {
                             return `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`
@@ -440,6 +446,7 @@ class SkuForm extends React.Component<any, any> {
                       min={0}
                       max={9999999.99}
                       precision={2}
+                      style={{ width: '111px' }}
                       disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                       formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                     />

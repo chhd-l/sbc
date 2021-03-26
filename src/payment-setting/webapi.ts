@@ -11,15 +11,15 @@ type TResult = {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function getPaymentSetting() {
-  return Fetch<TResult>('/store/storePaymentSetting');
+  return Fetch<TResult>('/pay/psp/listPayPspAndItemAndConfig');
 }
 /**
  * 保存Payment Setting
  * @param info
  */
 export const savePaymentSetting = (info) => {
-  return Fetch<TResult>('/store/storePaymentSetting', {
-    method: 'PUT',
+  return Fetch<TResult>('/pay/psp/savePayPspAndStorePspConfig', {
+    method: 'POST',
     body: JSON.stringify(info)
   });
 };

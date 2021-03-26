@@ -29,6 +29,11 @@ const flowState = (status) => {
   }
 };
 
+const orderTypeList = [
+  { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
+  { value: 'SUBSCRIPTION', name: 'Subscription' }
+];
+
 /**
  * 拒绝表单，只为校验体验
  */
@@ -192,6 +197,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           phone: string; //联系方式
           provinceId: number;
           cityId: number;
+          province: string;
           countryId: number;
           // city:string;
           // province:string;
@@ -370,6 +376,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
         )
       }
     ];
+
+    let orderDetailType = orderTypeList.find(x=>x.value === detail.get('orderType'))
     return (
       <div className="orderDetail">
         <div
@@ -403,7 +411,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   </Tooltip>
                   <p>External order id: {detail.getIn(['tradeOms', 'orderNo'])}</p>
                   <p>Order status: {flowState(detail.getIn(['tradeState', 'flowState']))}</p>
-                  <p>Order type: {detail.get('orderType')}</p>
+                  <p>Order type: { orderDetailType ? orderDetailType.name : '' }</p>
                 </Col>
                 <Col span={12}>
                   <p>Order time: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
@@ -419,7 +427,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <p>Pet owner name: {detail.getIn(['buyer', 'name'])}</p>
               <p>Pet owner type: {detail.getIn(['buyer', 'levelName'])}</p>
               <p>Pet owner account: {detail.getIn(['buyer', 'account'])}</p>
-              <p>Email address: {detail.getIn(['buyer', 'account'])}</p>
             </div>
           </Col>
         </Row>
@@ -520,6 +527,13 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </label>
               )}
 
+             {tradePrice.firstOrderOnThePlatformDiscountPrice ?  (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>First Order Discount:</span>
+                  <strong>-${tradePrice.firstOrderOnThePlatformDiscountPrice.toFixed(2)}</strong>
+                </label>
+              ) : null}
+
               {tradePrice.promotionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
@@ -588,8 +602,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <p>City: {consignee.city}</p>
-                  <p>Post code: {consignee.postCode}</p>
+                  <p>Postal code: {consignee.postCode}</p>
                   <p>Phone number: {consignee.phone}</p>
+                  <p>State: {consignee.province}</p>
                 </Col>
               </Row>
             </div>
@@ -607,8 +622,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <p>City: {invoice.city}</p>
-                  <p>Post code: {invoice.postCode}</p>
+                  <p>Postal code: {invoice.postCode}</p>
                   <p>Phone number: {invoice.phone}</p>
+                  <p>State: {invoice.province}</p>
                 </Col>
               </Row>
             </div>
@@ -680,35 +696,37 @@ export default class OrderDetailTab extends React.Component<any, any> {
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {payState === 'NOT_PAID' && (
-            <AuthWrapper functionName="edit_order_f_001">
-              <Tooltip placement="top" title="Modify">
-                <a
-                  style={styles.pr20}
-                  onClick={() => {
-                    verify(tid);
-                  }}
-                >
-                  Modify
-                </a>
-              </Tooltip>
-            </AuthWrapper>
+            // <AuthWrapper functionName="edit_order_f_001">
+            //   <Tooltip placement="top" title="Modify">
+            //     <a
+            //       style={styles.pr20}
+            //       onClick={() => {
+            //         verify(tid);
+            //       }}
+            //     >
+            //       Modify
+            //     </a>
+            //   </Tooltip>
+            // </AuthWrapper>
+            null
           )}
           {flowState === 'AUDIT' && (
             <div>
               {payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
-                <AuthWrapper functionName="fOrderList002">
-                  <Tooltip placement="top" title="Re-review">
-                    <a
-                      onClick={() => {
-                        this._showRetrialConfirm(tid);
-                      }}
-                      href="javascript:void(0)"
-                      style={styles.pr20}
-                    >
-                      Re-review
-                    </a>
-                  </Tooltip>
-                </AuthWrapper>
+                // <AuthWrapper functionName="fOrderList002">
+                //   <Tooltip placement="top" title="Re-review">
+                //     <a
+                //       onClick={() => {
+                //         this._showRetrialConfirm(tid);
+                //       }}
+                //       href="javascript:void(0)"
+                //       style={styles.pr20}
+                //     >
+                //       Re-review
+                //     </a>
+                //   </Tooltip>
+                // </AuthWrapper>
+                null
               )}
               {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
                 <AuthWrapper functionName="fOrderDetail002">

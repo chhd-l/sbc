@@ -32,6 +32,7 @@ export default class ProductPrice extends React.Component<any, any> {
       updateSkuForm: Function;
       updateChecked: Function;
       synchValue: Function;
+      addSkUProduct: any;
       clickImg: Function;
       removeImg: Function;
       modalVisible: Function;
@@ -58,6 +59,7 @@ export default class ProductPrice extends React.Component<any, any> {
     subscriptionStatus: 'subscriptionStatus',
     getGoodsId: 'getGoodsId',
     selectedBasePrice: 'selectedBasePrice',
+    addSkUProduct: 'addSkUProduct',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -96,7 +98,7 @@ export default class ProductPrice extends React.Component<any, any> {
     );
   }
 }
-
+let precisions = 2
 class SkuForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -118,8 +120,9 @@ class SkuForm extends React.Component<any, any> {
   }
 
   render() {
-    const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    const { goodsList, goods, goodsSpecs, baseSpecId, addSkUProduct } = this.props.relaxProps;
     // const {  } = this.state
+
 
     const columns = this._getColumns();
     return (
@@ -133,7 +136,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, selectedBasePrice, getGoodsId, stockChecked, marketPriceChecked, subscriptionStatus, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, addSkUProduct, marketPriceChecked, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -249,7 +252,7 @@ class SkuForm extends React.Component<any, any> {
                   // ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                   initialValue: rowInfo.linePrice || 0
-                })(<InputNumber min={0} max={9999999.99} precision={2} formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />)}
+                })(<InputNumber min={0} max={9999999.99} precision={2} formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`} />)}
               </FormItem>
             </p>
           </Col>
@@ -285,6 +288,29 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
+        let marketPrice = Number(parseFloat(rowInfo.marketPrice))
+        let subscriptionPrice = Number(parseFloat(rowInfo.subscriptionPrice))
+        if(addSkUProduct.length === 1) {
+          if(String(marketPrice).indexOf(".") == -1){
+            marketPrice = (marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
+          }else{
+            if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
+              marketPrice = marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
+            }else {
+              marketPrice = marketPrice.toFixed(4)
+            }
+          }
+
+          if(String(subscriptionPrice).indexOf(".") == -1){
+            subscriptionPrice = (subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
+          }else{
+            if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
+              subscriptionPrice = subscriptionPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
+            }else {
+              subscriptionPrice = subscriptionPrice.toFixed(4)
+            }
+          }
+        }
         return (
           <Row>
             <Col span={12}>
@@ -301,15 +327,13 @@ class SkuForm extends React.Component<any, any> {
                         ],
 
                         onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
-                        initialValue: rowInfo.marketPrice || 0
+                        initialValue: marketPrice ? marketPrice : 0
                       })(
                         <InputNumber
                           min={0}
                           max={9999999.99}
                           disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                          step={0.0001}
-                          precision={4}
-                          //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                          precision={precisions}
                           formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                         />
                       )}
@@ -323,20 +347,27 @@ class SkuForm extends React.Component<any, any> {
                             {
                               required: true,
                               message: 'Please input subscription price'
+                            },
+                            {
+                              validator: (_rule, value, callback) => {
+                                if (rowInfo.subscriptionStatus === 1) {
+                                  if (value === 0) {
+                                    callback('Subscription price cannot be zero');
+                                  }
+                                }
+                                callback();
+                              }
                             }
                           ],
                           onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                          initialValue: rowInfo.subscriptionPrice || 0
+                          initialValue: subscriptionPrice ? subscriptionPrice : 0
                         })(
                           <InputNumber
                             min={0}
                             max={9999999.99}
-                            step={0.0001}
-                            precision={4}
+                            precision={precisions}
                             disabled={rowInfo.subscriptionStatus === 0}
-                            //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
-
                           />
                         )}
                       </FormItem>
@@ -355,17 +386,14 @@ class SkuForm extends React.Component<any, any> {
                       ],
 
                       onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
-                      initialValue: rowInfo.marketPrice || ''
+                      initialValue: marketPrice ? marketPrice : 0
                     })(
                       <InputNumber
                         min={0}
                         max={9999999.99}
                         disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                        step={0.0001}
-                        precision={4}
-                        //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        precision={precisions}
                         formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
-
                       />
                     )}
                   </FormItem>

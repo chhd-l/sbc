@@ -122,7 +122,7 @@ class ProductFinderList extends Component<any, any> {
         width: '10%'
       },
       {
-        title: 'Consumer account',
+        title: 'Pet owner account',
         dataIndex: 'consumerAccount',
         key: 'consumerAccount',
         width: '10%'
@@ -219,7 +219,7 @@ class ProductFinderList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Consumer account</p>}
+                    addonBefore={<p style={styles.label}>Pet owner account</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({

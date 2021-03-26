@@ -246,3 +246,7 @@ export function queryCityListByName(filterParams = {}) {
     })
   });
 }
+
+export function fetchAllRoles() {
+  return Fetch<TResult>('/customer/employee/roles');
+}

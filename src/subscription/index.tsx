@@ -506,23 +506,24 @@ export default class SubscriptionList extends Component<any, any> {
               </div> */}
 
             {/* <SearchList /> */}
-
-            <Tabs
-              onChange={(key) => {
-                this.onTabChange(key);
-              }}
-              activeKey={activeKey}
-            >
-              <Tabs.TabPane tab={<FormattedMessage id="all" />} key="all">
-                <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Active" key="0">
-                <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Inactive" key="2">
-                <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
-              </Tabs.TabPane>
-            </Tabs>
+            <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Tabs
+                onChange={(key) => {
+                  this.onTabChange(key);
+                }}
+                activeKey={activeKey}
+              >
+                <Tabs.TabPane tab={<FormattedMessage id="all" />} key="all">
+                  <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Active" key="0">
+                  <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Inactive" key="2">
+                  <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
+                </Tabs.TabPane>
+              </Tabs>
+            </Spin>
           </div>
         </div>
       </AuthWrapper>

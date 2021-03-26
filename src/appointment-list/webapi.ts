@@ -47,6 +47,13 @@ export function findAppointmentById(id: number) {
   });
 }
 
+export function findAppointmentByAppointmentNo(apptNo: string) {
+  return Fetch<TResult>('/appt/findByNo', {
+    method: 'POST',
+    body: JSON.stringify({ apptNo })
+  });
+}
+
 export function updateAppointmentById(params = {}) {
   return Fetch<TResult>('/appt/update', {
     method: 'POST',
@@ -58,6 +65,7 @@ export function updateAppointmentById(params = {}) {
 }
 
 export function exportAppointmentList(params = {}) {
+  params['storeId'] = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || '';
   return new Promise((resolve) => {
     setTimeout(() => {
       // 参数加密

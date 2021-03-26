@@ -42,11 +42,7 @@ export default class Activities extends Component<any, any> {
         {
           title: 'Comments',
           value: 'Comments',
-          key: 'Comments',
-          children: [
-            { value: 'Comments.Notes', key: 'Comments.Notes', title: 'Notes' },
-            { value: 'Comments.Feedback', key: 'Comments.Feedback', title: 'Feedback' }
-          ]
+          key: 'Comments'
         },
         {
           title: 'Task',
@@ -60,7 +56,7 @@ export default class Activities extends Component<any, any> {
         }
       ],
       isRecent: true,
-      orderType: 'asc',
+      orderType: 'desc',
       filters: [],
       keyword: '',
       visible: false

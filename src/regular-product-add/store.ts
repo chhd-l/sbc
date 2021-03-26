@@ -1067,7 +1067,12 @@ export default class AppStore extends Store {
           tip = 1;
           return;
         }
-        if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
+          tip = 4;
+          valid = false;
+          return;
+        }
+        if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
           tip = 2;
           valid = false;
           return;
@@ -1077,6 +1082,12 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
+
+       /* if (!(item.get('subscriptionStatus') || item.get('subscriptionStatus') == 0)) {
+          tip = 4;
+          valid = false;
+          return;
+        }*/
       });
     }
     if (tip === 1) {
@@ -1085,6 +1096,8 @@ export default class AppStore extends Store {
       message.error('Please input subscription price');
     } else if (tip === 3) {
       message.error('Market price cannot be zero');
+    } else if (tip === 4) {
+      message.error('Subscription price cannot be zero');
     }
     return valid;
   }
@@ -1310,7 +1323,7 @@ export default class AppStore extends Store {
           packSize: item.get('packSize') || '',
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          addedFlag: item.get('addedFlag') || 0,
+          addedFlag: item.get('addedFlag'),
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',
@@ -1947,8 +1960,9 @@ export default class AppStore extends Store {
           descriptionName: item.descriptionName,
           contentType: item.contentType,
           content: '',
-          sort: item.sort,
-          editable: true
+          sort: item?.sort??1,
+          editable: true,
+          created:false
         };
       });
       this.editEditorContent(res);

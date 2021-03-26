@@ -109,8 +109,6 @@ export default withPropsAPI(
         flowdata: flowdata,
         saveLoading: true
       });
-      console.log(flowdata);
-      console.log(JSON.stringify(flowdata));
       webapi
         .updateAutomationNodes({ workflow: JSON.stringify(flowdata), id: this.props.id, updateWorkflow: true })
         .then((data) => {

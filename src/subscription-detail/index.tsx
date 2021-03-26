@@ -93,6 +93,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   // };
 
   getSubscriptionDetail = (id: String) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .getSubscriptionDetail(id)
       .then((data) => {
@@ -764,9 +767,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     return (
       <div>
-        <BreadCrumb thirdLevel={true}>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <a href="/subscription-list">Subscription</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="/subscription-list">Subscription List</a>
+          </Breadcrumb.Item>
           <Breadcrumb.Item>{<FormattedMessage id="subscription.detail" />}</Breadcrumb.Item>
-        </BreadCrumb>
+        </Breadcrumb>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           {' '}
           <div className="container-search">
@@ -791,7 +800,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                  Consumer name: <span>{subscriptionInfo.consumer}</span>
+                  Pet owner name : <span>{subscriptionInfo.consumer}</span>
                 </p>
                 <p>
                   Consumer Account : <span>{subscriptionInfo.consumerAccount}</span>

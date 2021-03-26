@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, Icon, Input, Button, Col, message, Checkbox, Row } from 'antd';
 const FormItem = Form.Item;
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import PropTypes from 'prop-types';
 import { history, Const, login, cache, OktaLogout, getRoutType } from 'qmkit';
 import * as webApi from '../webapi';
 const { Search } = Input;
@@ -10,13 +9,6 @@ import { withOktaAuth } from '@okta/okta-react';
 
 export default withOktaAuth(
   class VerifyForm extends React.Component<any, any> {
-    form;
-
-    //声明上下文依赖
-    static contextTypes = {
-      _plume$Store: PropTypes.object
-    };
-
     constructor(props, ctx) {
       super(props);
       this.state = {

@@ -7,7 +7,7 @@ import AppStore from './store';
 import FreeShippingAddForm from './components/free-shipping-add-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
-
+const WrappedForm = Form.create()(FreeShippingAddForm);
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class MarketingFreeShippingAdd extends React.Component<any, any> {
   store: AppStore;
@@ -26,11 +26,9 @@ export default class MarketingFreeShippingAdd extends React.Component<any, any> 
   }
 
   render() {
-    const WrappedForm = Form.create()(FreeShippingAddForm);
     const state = this.props.location.state;
     const { marketingId } = this.props.match.params;
     const { source } = (state || {}) as any;
-
     return (
       <AuthWrapper functionName="f_marketing_discount_add">
         <div>
@@ -40,7 +38,7 @@ export default class MarketingFreeShippingAdd extends React.Component<any, any> 
 
           <div className="container-search marketing-container">
             <Headline title={marketingId ? 'Edit Free Shipping' : 'Create Free Shipping'} />
-            {/*<Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity;" type="info" showIcon />*/}
+            <Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity;" type="info" showIcon />
             <WrappedForm
               ref={(form) => (this._form = form)}
               {...{

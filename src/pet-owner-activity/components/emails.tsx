@@ -19,7 +19,7 @@ export default class emails extends Component<any, any> {
         { value: 'Automation Email', label: 'Automation Email' }
       ],
       isRecent: true,
-      orderType: 'asc',
+      orderType: 'desc',
       filters: [],
       visible: false
     };

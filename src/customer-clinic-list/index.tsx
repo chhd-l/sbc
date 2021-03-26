@@ -14,12 +14,12 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Consumer account',
+          title: 'Pet owner account',
           dataIndex: 'customerAccount',
           key: 'consumerAccount'
         },
         {
-          title: 'Consumer name',
+          title: 'Pet owner name ',
           dataIndex: 'customerName',
           key: 'consumerName'
         },

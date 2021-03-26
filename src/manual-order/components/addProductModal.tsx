@@ -9,18 +9,19 @@ const defaultImg = require('./img/none.png');
 interface IParams {
   cateType: string;
   likeGoodsInfoNo: string;
-  keywords: string;
+  keyword: string;
   pageNum: number;
   pageSize: number;
+  saleableFlag:number
 }
 
 export default class AddProductModal extends Component {
   state = {
     cateType: '',
     likeGoodsInfoNo: '',
-    keywords: '',
+    keyword: '',
     goodsLists: [],
-    currentPage: 1,
+    currentPage: 0,
     total: 0,
     pageSize: 5,
     loading: false
@@ -52,7 +53,7 @@ export default class AddProductModal extends Component {
     this.setState(
       {
         total: goodsInfoPage.total,
-        currentPage: goodsInfoPage?.number ?? 1,
+        currentPage: goodsInfoPage?.number+1 ?? 0,
         pageSzie: goodsInfoPage.numberOfElements,
         goodsLists: goodsInfoPage?.content ?? []
       },
@@ -64,13 +65,14 @@ export default class AddProductModal extends Component {
     );
   }
   search = () => {
-    const { cateType, likeGoodsInfoNo, keywords } = this.state;
+    const { cateType, likeGoodsInfoNo, keyword} = this.state;
     this.getGoodsSKUSList({
       cateType,
       likeGoodsInfoNo,
-      keywords,
-      pageNum: 1,
-      pageSize: 5
+      keyword,
+      pageNum: 0,
+      pageSize: 5,
+      saleableFlag:1
     });
   };
   inputNumberChange(e, key) {
@@ -96,7 +98,7 @@ export default class AddProductModal extends Component {
 
   render() {
     const { visible, handleOk, handleCancel } = this.props;
-    const { cateType, likeGoodsInfoNo, keywords, goodsLists, total, pageSize, currentPage, loading } = this.state;
+    const { cateType, likeGoodsInfoNo, keyword, goodsLists, total, pageSize, currentPage, loading } = this.state;
     const columns = [
       {
         title: 'Image',
@@ -171,6 +173,8 @@ export default class AddProductModal extends Component {
                 <Radio.Group onChange={(e) => this.onChange(e, 'cateType')} value={cateType}>
                   <Radio value="Cat SPT">Cat SPT</Radio>
                   <Radio value="Dog SPT">Dog SPT</Radio>
+                  <Radio value="Cat VET">Cat VET</Radio>
+                  <Radio value="Dog VET">Dog VET</Radio>
                 </Radio.Group>
               </FormItem>
             </Col>
@@ -196,7 +200,7 @@ export default class AddProductModal extends Component {
             </Col>
             <Col span={12}>
               <FormItem>
-                <Input addonBefore={<p style={styles.label}>Product name</p>} value={keywords} onChange={(e) => this.onChange(e, 'keywords')} />
+                <Input addonBefore={<p style={styles.label}>Product name</p>} value={keyword} onChange={(e) => this.onChange(e, 'keyword')} />
               </FormItem>
             </Col>
             <Col span={24} style={{ textAlign: 'center' }}>
@@ -223,7 +227,7 @@ export default class AddProductModal extends Component {
               total={total}
               pageSize={pageSize}
               onChange={(pageNum, pageSize) => {
-                this.getGoodsSKUSList({ cateType, likeGoodsInfoNo, keywords, pageNum: pageNum, pageSize });
+                this.getGoodsSKUSList({ cateType, likeGoodsInfoNo, keyword, pageNum: pageNum-1, pageSize,saleableFlag:1 });
               }}
             />
           ) : null}

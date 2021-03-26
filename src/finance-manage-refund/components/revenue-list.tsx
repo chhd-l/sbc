@@ -86,7 +86,7 @@ export default class RevenueList extends React.Component<any, any> {
             width="15%"
             key="tradeNo"
           />*/}
-          <Column title="Consumer name" dataIndex="customerName" key="customerName" />
+          <Column title="Pet owner name " dataIndex="customerName" key="customerName" />
           <Column
             title="Order Revenue"
             dataIndex="amount"

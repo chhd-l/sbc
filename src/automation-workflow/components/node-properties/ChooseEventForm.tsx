@@ -70,7 +70,21 @@ export default class ChooseEventForm extends Component<any, any> {
           { title: 'Food transition (new life-stage)', value: 'foodTransition', key: '0-1-5' },
           { title: '3 days before next refill order', value: '3DaysBeforeNextRefillOrder', key: '0-1-6' }
         ]
-      }
+      },
+      {
+        title: 'Goods',
+        value: '0-2',
+        key: '0-2',
+        selectable: false,
+        children: [
+          {
+            title: 'Inventory warning',
+            value: 'inventoryWarning',
+            key: '0-2-1'
+          }
+        ]
+      },
+
     ];
     return (
       <FormItem label="Choose an event" colon={false}>

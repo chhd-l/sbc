@@ -350,6 +350,7 @@ export default class AppStore extends Store {
       let addSkUProduct = tmpContext.goodsInfos.map((item) => {
         return {
           pid: item.goodsInfoNo,
+          marketPrice: item.marketPrice,
           targetGoodsIds: item.goodsInfoBundleRels,
           minStock: item.stock
         };
@@ -956,12 +957,20 @@ export default class AppStore extends Store {
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
+        console.log(item.get('subscriptionPrice'),111111111111);
+        console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
+        console.log(item,3333333);
         if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           tip = 1;
           valid = false;
           return;
         }
-        if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
+          tip = 4;
+          valid = false;
+          return;
+        }
+        if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
           tip = 2;
           valid = false;
           return;
@@ -971,6 +980,10 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
+
+        /* if (this.state().get('addSkUProduct').length === 1) {
+          this.state().get('addSkUProduct')[0].targetGoodsIds
+        }*/
       });
     }
     if (tip === 1) {
@@ -979,6 +992,8 @@ export default class AppStore extends Store {
       message.error('Please input subscription price');
     } else if (tip === 3) {
       message.error('Market price cannot be zero');
+    } else if (tip === 4) {
+      message.error('Subscription price cannot be zero');
     }
     return valid;
   }
@@ -1218,7 +1233,7 @@ export default class AppStore extends Store {
           packSize: item.get('packSize') || '',
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           // purchasePrice: item.get('purchasePrice') || 0,
-          subscriptionPrice: item.get('subscriptionPrice') || 0,
+          subscriptionPrice: item.get('subscriptionPrice'),
           goodsInfoBundleRels: b,
           addedFlag: item.get('addedFlag') || 0,
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,
@@ -1856,8 +1871,9 @@ export default class AppStore extends Store {
           descriptionName: item.descriptionName,
           contentType: item.contentType,
           content: '',
-          sort: item.sort,
-          editable: true
+          sort: item?.sort??1,
+          editable: true,
+          created:false
         };
       });
       this.editEditorContent(res);
@@ -2136,7 +2152,6 @@ export default class AppStore extends Store {
       }
     }
 
-    console.log(params, '----params');
     const { res } = (await editSeo(params)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {

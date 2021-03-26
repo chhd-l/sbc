@@ -75,7 +75,6 @@ export default class Fields extends React.Component<any, any> {
   };
 
   onSortManualEnd = (sortList) => {
-    console.log(sortList);
     this.setState({
       manu
     });

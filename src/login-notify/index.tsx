@@ -1,17 +1,12 @@
 import React, { useEffect } from 'react';
 import { Form, Button, Icon} from 'antd';
-import { StoreProvider } from 'plume2';
 const bg_login = require('./img/bg-notify.png');
 const img_review = require('./img/review.png');
-import AppStore from '../login/store';
 import { withOktaAuth } from '@okta/okta-react';
 import { cache, Const } from 'qmkit';
 
 const FormItem = Form.Item;
-
-StoreProvider(AppStore, { debug: __DEV__ })
 export default withOktaAuth(class LoginNotify extends React.Component<any, any> {
-  store: AppStore;
   
   constructor(props: any) {
     super(props);

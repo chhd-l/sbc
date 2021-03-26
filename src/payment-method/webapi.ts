@@ -26,7 +26,7 @@ export const addStorePayment = (rids) => {
 
 export const editStorePayment = (rids) => {
   return Fetch<TResult>('/storePayment/editStorePayment', {
-    method: 'POST',
+    method: 'PUT',
     body: JSON.stringify(rids)
   });
 };

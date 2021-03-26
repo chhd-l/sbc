@@ -85,7 +85,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         key: 'phone'
       },
       {
-        title: 'Post code',
+        title: 'Postal code',
         dataIndex: 'postCode',
         key: 'postcode'
       },

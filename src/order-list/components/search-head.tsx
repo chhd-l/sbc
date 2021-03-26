@@ -83,14 +83,15 @@ export default class SearchHead extends Component<any, any> {
         orderSource: ''
       },
       orderCategory: '',
-      showAdvanceSearch: false
+      showAdvanceSearch: false,
+      orderTypeSelect: 'Order type'
     };
   }
 
   render() {
     const { tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState, orderType, subscriptionType, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
+    const { tradeState, orderType, orderSource, subscriptionType, refillNumber, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
@@ -188,12 +189,12 @@ export default class SearchHead extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      {this._renderGoodsOptionSelect()}
+                      {this._renderReceiverSelect()}
                       <Input
                         style={styles.wrapper}
                         onChange={(e) => {
                           this.setState({
-                            goodsOptionsValue: (e.target as any).value
+                            buyerOptionsValue: (e.target as any).value
                           });
                         }}
                       />
@@ -206,59 +207,75 @@ export default class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} disabled defaultValue={'Order type'} />
-                        <Select
-                          style={styles.wrapper}
-                          allowClear
-                          getPopupContainer={(trigger: any) => trigger.parentNode}
-                          onChange={(value) => {
-                            if (value === 'SINGLE_PURCHASE') {
+                        {this._renderOrderTypeSelect()}
+                        {this.state.orderTypeSelect === 'Order type' ? (
+                          <Select
+                            style={styles.wrapper}
+                            allowClear
+                            value={orderType}
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
+                              if (value !== 'SUBSCRIPTION') {
+                                this.setState({
+                                  orderType: value,
+                                  subscriptionType: '',
+                                  subscriptionPlanType: '',
+                                  refillNumber: ''
+                                });
+                              } else {
+                                this.setState({
+                                  orderType: value
+                                });
+                              }
+                            }}
+                          >
+                            {orderTypeList &&
+                              orderTypeList.map((item, index) => (
+                                <Option value={item.value} title={item.name} key={index}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                          </Select>
+                        ) : (
+                          <Select
+                            style={styles.wrapper}
+                            allowClear
+                            value={orderSource}
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
                               this.setState({
-                                orderType: value,
-                                subscriptionType: '',
-                                subscriptionPlanType: ''
+                                orderSource: value
                               });
-                            } else {
-                              this.setState({
-                                orderType: value
-                              });
-                            }
-                          }}
-                        >
-                          {orderTypeList &&
-                            orderTypeList.map((item, index) => (
-                              <Option value={item.value} title={item.name} key={index}>
-                                {item.name}
-                              </Option>
-                            ))}
-                        </Select>
+                            }}
+                          >
+                            {orderSourceList &&
+                              orderSourceList.map((item, index) => (
+                                <Option value={item.value} title={item.name} key={index}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                          </Select>
+                        )}
                       </InputGroup>
                     </FormItem>
                   </Col>
+
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} disabled defaultValue={'Order source'} />
-                        <Select
+                        {this._renderGoodsOptionSelect()}
+                        <Input
                           style={styles.wrapper}
-                          allowClear
-                          getPopupContainer={(trigger: any) => trigger.parentNode}
-                          onChange={(value) => {
+                          onChange={(e) => {
                             this.setState({
-                              orderSource: value
+                              goodsOptionsValue: (e.target as any).value
                             });
                           }}
-                        >
-                          {orderSourceList &&
-                            orderSourceList.map((item, index) => (
-                              <Option value={item.value} title={item.name} key={index}>
-                                {item.name}
-                              </Option>
-                            ))}
-                        </Select>
+                        />
                       </InputGroup>
                     </FormItem>
                   </Col>
+                  
                   <Col span={8} id="input-group-width">
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -320,6 +337,7 @@ export default class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
+
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -328,7 +346,7 @@ export default class SearchHead extends Component<any, any> {
                           style={styles.wrapper}
                           allowClear
                           value={subscriptionType}
-                          disabled={orderType === 'SINGLE_PURCHASE'}
+                          disabled={orderType !== 'SUBSCRIPTION'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState(
@@ -389,6 +407,8 @@ export default class SearchHead extends Component<any, any> {
                         <Select
                           style={styles.wrapper}
                           allowClear
+                          value={refillNumber}
+                          disabled={orderType !== 'SUBSCRIPTION'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({
@@ -415,7 +435,7 @@ export default class SearchHead extends Component<any, any> {
                           style={styles.wrapper}
                           allowClear
                           value={subscriptionPlanType}
-                          disabled={orderType === 'SINGLE_PURCHASE'}
+                          disabled={orderType !== 'SUBSCRIPTION'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({
@@ -520,10 +540,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title="Consumer name" value="buyerName">
+        <Option title="Pet owner name " value="buyerName">
           <FormattedMessage id="consumerName" />
         </Option>
-        <Option title="Consumer account" value="buyerAccount">
+        <Option title="Pet owner account" value="buyerAccount">
           <FormattedMessage id="consumerAccount" />
         </Option>
       </Select>
@@ -569,6 +589,28 @@ export default class SearchHead extends Component<any, any> {
         </Option>
         <Option title="Recipient phone" value="consigneePhone">
           <FormattedMessage id="recipientPhone" />
+        </Option>
+      </Select>
+    );
+  };
+
+  _renderOrderTypeSelect = () => {
+    return (
+      <Select
+        onChange={(val) =>
+          this.setState({
+            orderTypeSelect: val
+          })
+        }
+        getPopupContainer={(trigger: any) => trigger.parentNode}
+        value={this.state.orderTypeSelect}
+        style={styles.label}
+      >
+        <Option title="Order type" value="Order type">
+          Order type
+        </Option>
+        <Option title="Order source" value="Order source">
+          Order source
         </Option>
       </Select>
     );
@@ -807,6 +849,7 @@ export default class SearchHead extends Component<any, any> {
       id: numberSelect === 'orderNumber' ? numberSelectValue : '',
 
       subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+      [buyerOptions]: buyerOptionsValue,
       subscriptionRefillType: refillNumber,
       [goodsOptions]: goodsOptionsValue,
       orderType,

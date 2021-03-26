@@ -95,6 +95,7 @@ class PetOwnerCommunication extends Component<any, any> {
       contactId: currentRow.contactId,
       campaignId: this.props.automationId,
       nodeName: currentRow.nodeName,
+      nodeType: currentRow.nodeType,
       pageSize: modalPagination.pageSize,
       pageNum: modalPagination.current - 1,
       keyword: keyword
@@ -212,9 +213,14 @@ class PetOwnerCommunication extends Component<any, any> {
         width: '15%'
       },
       {
+        title: 'Communication type',
+        dataIndex: 'nodeType',
+        width: '10%'
+      },
+      {
         title: 'Communication item',
         dataIndex: 'nodeName',
-        width: '15%'
+        width: '10%'
       },
       {
         title: 'counts',

@@ -362,6 +362,7 @@ export default class AppointmentList extends React.Component<any, any> {
           </Row>
           <Table
             rowKey="id"
+            scroll={{ x: true }}
             rowSelection={rowSelection}
             columns={columns}
             dataSource={list}

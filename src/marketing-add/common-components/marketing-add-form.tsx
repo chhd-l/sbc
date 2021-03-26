@@ -108,9 +108,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         _selectedSkuIds: [],
         _selectedRows: []
       },
-      //营销活动已选的商品信息
-      selectedSkuIds: [],
-      selectedRows: fromJS([]),
+
       //全部等级
       customerLevel: [],
       //选择的等级
@@ -151,12 +149,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
       storeCateList: any;
       sourceStoreCateList: any;
       attributesList: any;
+      selectedRows: IList;
+      selectedSkuIds: any;
       submitFullGift: Function;
       submitFullDiscount: Function;
       submitFullReduction: Function;
       discountBeanOnChange: Function;
       reductionBeanChange: Function;
       giftBeanOnChange: Function;
+      deleteSelectedSku: Function;
+      setSelectedProductRows: Function;
     };
   };
   static relaxProps = {
@@ -166,12 +168,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
     storeCateList: 'storeCateList',
     sourceStoreCateList: 'sourceStoreCateList',
     attributesList: 'attributesList',
+    selectedRows: 'selectedRows',
+    selectedSkuIds: 'selectedSkuIds',
     submitFullGift: noop,
     submitFullDiscount: noop,
     submitFullReduction: noop,
     discountBeanOnChange: noop,
     reductionBeanChange: noop,
-    giftBeanOnChange: noop
+    giftBeanOnChange: noop,
+    deleteSelectedSku: noop,
+    setSelectedProductRows: noop
   };
 
   componentDidMount() {
@@ -348,8 +354,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { customerLevel, sourceGoodCateList, selectedRows, skuExists, saveLoading, isClubChecked } = this.state;
-    const { marketingBean, allGroups, attributesList, loading, storeCateList, sourceStoreCateList } = this.props.relaxProps;
+    const { customerLevel, sourceGoodCateList, skuExists, saveLoading, isClubChecked } = this.state;
+    const { marketingBean, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds } = this.props.relaxProps;
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
     const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
@@ -367,8 +373,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
       });
     }
     console.log(marketingBean.toJS(), 'marketingBean-----------');
-    // console.log(sourceStoreCateList.toJS(), 'sourceStoreCateList-----------');
-    // console.log(storeCateValues, 'storeCateValues-----------');
+    console.log(selectedRows, 'selectedRows-----------');
+    console.log(selectedSkuIds, 'selectedSkuIds-----------');
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
@@ -386,8 +392,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
         settingType = 'reduction';
       }
     }
-    //this.onBeanChange({publicStatus: 1});
-    console.log(marketingBean.toJS(), 'marketingBean--------------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
@@ -670,7 +674,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             )(
               <GiftLevels
                 form={this.props.form}
-                selectedRows={this.makeSelectedRows(null)}
+                selectedRows={selectedRows}
                 isNormal={marketingBean.get('promotionType') === 0}
                 fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()}
                 onChangeBack={this.onRulesChange}
@@ -964,7 +968,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   Add products
                 </Button>
                 &nbsp;&nbsp;
-                <SelectedGoodsGrid selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={this.deleteSelectedSku} />
+                <SelectedGoodsGrid selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={deleteSelectedSku} />
               </div>
             )}
           </FormItem>
@@ -1259,9 +1263,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   handleSubmit = (e) => {
     e.preventDefault();
-    const { submitFullGift, submitFullDiscount, submitFullReduction } = this.props.relaxProps;
+    const { submitFullGift, submitFullDiscount, submitFullReduction, selectedSkuIds } = this.props.relaxProps;
     let { marketingBean } = this.props.relaxProps;
-    let { level, selectedSkuIds } = this.state;
     let levelList = fromJS([]);
     let errorObject = {};
     const { marketingType, form } = this.props;
@@ -1368,7 +1371,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
     //判断选择商品
     if (selectedSkuIds.length > 0) {
-      marketingBean = marketingBean.set('skuIds', fromJS(selectedSkuIds));
+      marketingBean = marketingBean.set('skuIds', selectedSkuIds);
     } else {
       if (marketingBean.get('scopeType') === 1) {
         errorObject['goods'] = {
@@ -1617,18 +1620,20 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   skuSelectedBackFun = async (selectedSkuIds, selectedRows) => {
     this.props.form.resetFields('goods');
+    const { setSelectedProductRows } = this.props.relaxProps;
     this.setState({
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows,
       goodsModal: { _modalVisible: false }
     });
+    setSelectedProductRows({ selectedRows, selectedSkuIds: selectedSkuIds });
   };
 
   /**
    * 打开货品选择modal
    */
   openGoodsModal = () => {
-    const { selectedRows, selectedSkuIds } = this.state;
+    const { selectedRows, selectedSkuIds } = this.props.relaxProps;
     this.setState({
       goodsModal: {
         _modalVisible: true,
@@ -1657,62 +1662,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
         value: level.customerLevelId + '',
         key: level.customerLevelId
       };
-    });
-  };
-
-  /**
-   * 将skuIds转换成gridSource
-   * @param scopeIds
-   * @returns {any}
-   */
-  makeSelectedRows = (scopeIds) => {
-    const { marketingBean } = this.props.relaxProps;
-    const goodsList = marketingBean.get('goodsList');
-    if (goodsList) {
-      const goodsList = marketingBean.get('goodsList');
-      let selectedRows;
-      if (scopeIds) {
-        selectedRows = goodsList
-          .get('goodsInfoPage')
-          .get('content')
-          .filter((goodInfo) => scopeIds.includes(goodInfo.get('goodsInfoId')));
-      } else {
-        selectedRows = goodsList.get('goodsInfoPage').get('content');
-      }
-      return fromJS(
-        selectedRows.toJS().map((goodInfo) => {
-          const cId = fromJS(goodsList.get('goodses'))
-            .find((s) => s.get('goodsId') === goodInfo.goodsId)
-            .get('cateId');
-          const cate = fromJS(goodsList.get('cates') || []).find((s) => s.get('cateId') === cId);
-          goodInfo.cateName = cate ? cate.get('cateName') : '';
-
-          const bId = fromJS(goodsList.get('goodses'))
-            .find((s) => s.get('goodsId') === goodInfo.goodsId)
-            .get('brandId');
-          const brand = fromJS(goodsList.get('brands') || []).find((s) => s.get('brandId') === bId);
-          goodInfo.brandName = brand ? brand.get('brandName') : '';
-          return goodInfo;
-        })
-      );
-    } else {
-      return fromJS([]);
-    }
-  };
-
-  /**
-   * 已选商品的删除方法
-   * @param skuId
-   */
-  deleteSelectedSku = (skuId) => {
-    const { selectedRows, selectedSkuIds } = this.state;
-    selectedSkuIds.splice(
-      selectedSkuIds.findIndex((item) => item == skuId),
-      1
-    );
-    this.setState({
-      selectedSkuIds: selectedSkuIds,
-      selectedRows: selectedRows.delete(selectedRows.findIndex((row) => row.get('goodsInfoId') == skuId))
     });
   };
 

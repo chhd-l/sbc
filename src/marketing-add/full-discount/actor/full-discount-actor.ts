@@ -20,7 +20,11 @@ export default class FullDiscountActor extends Actor {
       sourceStoreCateList: [],
 
       //Attribute
-      attributesList: []
+      attributesList: [],
+
+      //营销活动已选的商品信息
+      selectedSkuIds: [],
+      selectedRows: []
     };
   }
 
@@ -47,6 +51,15 @@ export default class FullDiscountActor extends Actor {
   @Action('marketing:allGroups')
   getAllGroups(state, allGroups) {
     return state.set('allGroups', fromJS(allGroups));
+  }
+
+  @Action('marketing:selectedRows')
+  selectedRows(state, selectedRows) {
+    return state.set('selectedRows', fromJS(selectedRows));
+  }
+  @Action('marketing:selectedSkuIds')
+  selectedSkuIds(state, selectedSkuIds) {
+    return state.set('selectedSkuIds', selectedSkuIds);
   }
 
   @Action('marketing:attributesList')

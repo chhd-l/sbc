@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, cache, util } from 'qmkit';
+import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -10,24 +10,6 @@ import { FormattedMessage } from 'react-intl';
 
 import './style.less';
 import TodoItems from '@/home/component/todo-items';
-
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return 'Pending review';
-  } else if (status == 'GROUPON') {
-    return 'To be formed';
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return 'to be delivered';
-  } else if (status == 'DELIVERED') {
-    return 'To be received';
-  } else if (status == 'CONFIRMED') {
-    return 'Received';
-  } else if (status == 'COMPLETED') {
-    return 'Completed';
-  } else if (status == 'VOID') {
-    return 'Out of date';
-  }
-};
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
@@ -377,7 +359,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       }
     ];
 
-    let orderDetailType = orderTypeList.find(x=>x.value === detail.get('orderType'))
+    let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
     return (
       <div className="orderDetail">
         <div
@@ -388,7 +370,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             justifyContent: 'space-between'
           }}
         >
-          <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
+          <label style={styles.greenText}>{detail.getIn(['tradeState', 'flowState'])}</label>
 
           {this._renderBtnAction(tid)}
         </div>
@@ -410,8 +392,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p>External order id: {detail.getIn(['tradeOms', 'orderNo'])}</p>
-                  <p>Order status: {flowState(detail.getIn(['tradeState', 'flowState']))}</p>
-                  <p>Order type: { orderDetailType ? orderDetailType.name : '' }</p>
+                  <p>Order status: {detail.getIn(['tradeState', 'flowState'])}</p>
+                  <p>Order type: {orderDetailType ? orderDetailType.name : ''}</p>
                 </Col>
                 <Col span={12}>
                   <p>Order time: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
@@ -523,38 +505,42 @@ export default class OrderDetailTab extends React.Component<any, any> {
               {discount && (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
-                  <strong>-${discount.discounts.toFixed(2)}</strong>
+                  <strong>
+                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {discount.discounts.toFixed(2)}
+                  </strong>
                 </label>
               )}
 
-             {tradePrice.firstOrderOnThePlatformDiscountPrice ?  (
+              {tradePrice.firstOrderOnThePlatformDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>First Order Discount:</span>
-                  <strong>-${tradePrice.firstOrderOnThePlatformDiscountPrice.toFixed(2)}</strong>
-                </label>
-              ) : null}
-
-              {tradePrice.promotionDiscountPrice ? (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>
-                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:
-                  </span>
                   <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                    {(tradePrice.promotionDiscountPrice || 0).toFixed(2)}
+                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {tradePrice.firstOrderOnThePlatformDiscountPrice.toFixed(2)}
                   </strong>
                 </label>
               ) : null}
 
+              {tradePrice.promotionVOList && tradePrice.promotionVOList.length > 0
+                ? tradePrice.promotionVOList.map((promotion) => (
+                    <label style={styles.priceItem as any}>
+                      <span style={styles.name}>{promotion.marketingName}</span>
+                      <strong>
+                        -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                        {(promotion.discountPrice || 0).toFixed(2)}
+                      </strong>
+                    </label>
+                  ))
+                : null}
+
               {tradePrice.subscriptionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
-                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:
+                    Autoship Discount:
                   </span>
                   <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     {(tradePrice.subscriptionDiscountPrice || 0).toFixed(2)}
                   </strong>
                 </label>
@@ -695,7 +681,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     if (flowState === 'INIT' || flowState === 'AUDIT') {
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {payState === 'NOT_PAID' && (
+          {payState === 'NOT_PAID' &&
             // <AuthWrapper functionName="edit_order_f_001">
             //   <Tooltip placement="top" title="Modify">
             //     <a
@@ -708,26 +694,25 @@ export default class OrderDetailTab extends React.Component<any, any> {
             //     </a>
             //   </Tooltip>
             // </AuthWrapper>
-            null
-          )}
+            null}
           {flowState === 'AUDIT' && (
             <div>
-              {payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
-                // <AuthWrapper functionName="fOrderList002">
-                //   <Tooltip placement="top" title="Re-review">
-                //     <a
-                //       onClick={() => {
-                //         this._showRetrialConfirm(tid);
-                //       }}
-                //       href="javascript:void(0)"
-                //       style={styles.pr20}
-                //     >
-                //       Re-review
-                //     </a>
-                //   </Tooltip>
-                // </AuthWrapper>
-                null
-              )}
+              {payState === 'PAID' || payState === 'UNCONFIRMED'
+                ? null
+                : // <AuthWrapper functionName="fOrderList002">
+                  //   <Tooltip placement="top" title="Re-review">
+                  //     <a
+                  //       onClick={() => {
+                  //         this._showRetrialConfirm(tid);
+                  //       }}
+                  //       href="javascript:void(0)"
+                  //       style={styles.pr20}
+                  //     >
+                  //       Re-review
+                  //     </a>
+                  //   </Tooltip>
+                  // </AuthWrapper>
+                  null}
               {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
                 <AuthWrapper functionName="fOrderDetail002">
                   <Tooltip placement="top" title="Ship">

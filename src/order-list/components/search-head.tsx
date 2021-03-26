@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Input, Select, Button, Menu, Dropdown, Icon, DatePicker, Row, Col, Modal, message } from 'antd';
-import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup } from 'qmkit';
+import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup, ShippStatus, PaymentStatus } from 'qmkit';
 // import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 
@@ -296,16 +296,11 @@ export default class SearchHead extends Component<any, any> {
                             }
                             value={tradeState.payState}
                           >
-                            <Option value="NOT_PAID">
-                              <FormattedMessage id="order.unpaid" />
-                            </Option>
-                            {/*<Option value="UNCONFIRMED">
-                          <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>*/}
-                            <Option value="PAID">
-                              <FormattedMessage id="order.paid" />
-                            </Option>
-                            <Option value="PAYING">Paying</Option>
+                             { PaymentStatus.map(item=> (
+                                <Option value={item.value}>
+                                {item.name}
+                              </Option>
+                             )) }
                           </Select>
                         ) : (
                           <Select
@@ -323,15 +318,11 @@ export default class SearchHead extends Component<any, any> {
                               });
                             }}
                           >
-                            <Option value="NOT_YET_SHIPPED">
-                              <FormattedMessage id="order.notShipped" />
-                            </Option>
-                            <Option value="PART_SHIPPED">
-                              <FormattedMessage id="order.partialShipment" />
-                            </Option>
-                            <Option value="SHIPPED">
-                              <FormattedMessage id="order.allShipments" />
-                            </Option>
+                              { ShippStatus.map(item=> (
+                                <Option value={item.value}>
+                                {item.name}
+                              </Option>
+                             )) }
                           </Select>
                         )}
                       </InputGroup>

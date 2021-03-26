@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Icon, Row, Col, message, Tooltip, Table, Input, Menu, Checkbox, Select } from 'antd';
 import * as webapi from '../webapi';
-import { Const } from 'qmkit';
+import { Const, OrderStatus, getOrderStatusValue } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
@@ -11,7 +11,6 @@ export default class orders extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      orderStatus: [],
       orderList: [],
       pagination: {
         current: 1,
@@ -47,7 +46,7 @@ export default class orders extends Component<any, any> {
       () => this.getOrderList()
     );
   };
-  getOrderList = () => {
+  getOrderList = (status?) => {
     const { formData, pagination } = this.state;
     let params = Object.assign(formData, {
       pageNum: pagination.current - 1,
@@ -55,6 +54,9 @@ export default class orders extends Component<any, any> {
       orderType: 'ALL_ORDER',
       buyerAccount: this.props.customerAccount
     });
+    if (status) {
+      params.tradeState = { flowState: status };
+    }
     this.setState({
       loading: true
     });
@@ -84,20 +86,7 @@ export default class orders extends Component<any, any> {
       });
   };
   render() {
-    const { orderList, orderCategories } = this.state;
-    const deliverStatus = (status) => {
-      if (status == 'NOT_YET_SHIPPED') {
-        return <FormattedMessage id="order.notShipped" />;
-      } else if (status == 'SHIPPED') {
-        return <FormattedMessage id="order.allShipments" />;
-      } else if (status == 'PART_SHIPPED') {
-        return <FormattedMessage id="order.partialShipment" />;
-      } else if (status == 'VOID') {
-        return <FormattedMessage id="order.invalid" />;
-      } else {
-        return <FormattedMessage id="order.unknown" />;
-      }
-    };
+    const { orderList } = this.state;
     const columns = [
       {
         title: 'Number',
@@ -146,9 +135,9 @@ export default class orders extends Component<any, any> {
                 overflowY: 'auto'
               }}
               placement="bottomLeft"
-              title={<div>{deliverStatus(record.tradeState ? record.tradeState.deliverStatus : '')}</div>}
+              title={<div>{record.flowState ? record.tradeState.flowState : ''}</div>}
             >
-              <p className="overFlowtext">{deliverStatus(record.tradeState ? record.tradeState.deliverStatus : '')}</p>
+              <p className="overFlowtext">{record.flowState ? record.tradeState.flowState : ''}</p>
             </Tooltip>
           );
         }
@@ -169,7 +158,7 @@ export default class orders extends Component<any, any> {
     return (
       <Card title="Order" className="topCard">
         <Row>
-          <Col span={10} style={{ marginBottom: '20px' }}>
+          <Col span={9} style={{ marginBottom: '20px' }}>
             <Input
               className="searchInput"
               placeholder="Order Number"
@@ -183,6 +172,23 @@ export default class orders extends Component<any, any> {
               }}
               prefix={<Icon type="search" onClick={() => this.getOrderList()} />}
             />
+          </Col>
+          <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
+            <div style={{ marginRight: '10px' }}>
+              <Select
+                allowClear
+                className="filter"
+                placeholder="Order Status"
+                style={{ width: '180px' }}
+                onChange={(value) => {
+                  this.getOrderList(value);
+                }}
+              >
+                {OrderStatus.map((item) => (
+                  <Option value={item.value}>{item.name}</Option>
+                ))}
+              </Select>
+            </div>
           </Col>
           <Col span={24}>
             <Table

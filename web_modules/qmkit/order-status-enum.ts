@@ -22,7 +22,7 @@ export const OrderStatus = [
   ];
   
   export const PaymentStatus = [
-    { name: 'Not Paid', value: 'NOT_PAID' },
+    { name: 'Unpaid', value: 'NOT_PAID' },
     { name: 'Authorized', value: 'AUTHORIZED' },
     { name: 'Paid', value: 'PAID' },
     { name: 'Refund', value: 'REFUND' },

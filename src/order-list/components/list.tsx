@@ -447,7 +447,7 @@ export default class ListView extends React.Component<any, any> {
                     <td style={{ width: '14%' }}>{getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*支付状态*/}
                     <td style={{ width: '14%' }}>
-                      {getOrderStatusValue('paymentStatus',v.getIn(['tradeState', 'payState']))}
+                      {getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))}
                     </td>
                     {/*orderCreateBy*/}
                     <td style={{ width: '10%', paddingRight: 22 }}  className="operation-td">{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>

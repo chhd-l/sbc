@@ -5,40 +5,26 @@ type TResult = {
   message: string;
   context: any;
 };
-/**
- * 获取Dictionary列表
- * @param filterParams
- */
-export function fetchDictionaryList(filterParams = {}) {
-  return Fetch<TResult>('/sysdict/pageView', {
+
+export function savePrescrberSettting(prescriberConfigs, orderConfigs) {
+  return Fetch<TResult>('/order/config/saveOrderPrescriberConfig', {
     method: 'POST',
     body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
-/**
- * Get Dictionary Type
- * @param filterParams
- */
-export function getDictionaryTypes(filterParams = {}) {
-  return Fetch<TResult>('/sysdict/queryTypeList', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
+      prescriberConfigs: prescriberConfigs, 
+      orderConfigs: orderConfigs
     })
   });
 }
 
-/**
- * delete Dictionary
- * @param filterParams
- */
-export function deleteDictionary(filterParams = {}) {
-  return Fetch<TResult>('/sysdict/delSysDictionary', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
+
+export function getListSystemConfig() {
+  return Fetch<TResult>('/order/config/listSystemConfig', {
+    method: 'GET',
+  });
+}
+
+export function getGoodsCatesByStoreId() {
+  return Fetch<TResult>('/goods/cate/listGoodsCateByStoreId', {
+    method: 'GET'
   });
 }

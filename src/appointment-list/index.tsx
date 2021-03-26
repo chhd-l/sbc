@@ -212,7 +212,8 @@ export default class AppointmentList extends React.Component<any, any> {
       {
         title: 'Appointment time',
         dataIndex: 'apptTime',
-        key: 'd2'
+        key: 'd2',
+        render: (text, record) => <div>{`${record.apptDate} ${record.apptTime}`}</div>
       },
       {
         title: 'Pet owner name',
@@ -362,6 +363,7 @@ export default class AppointmentList extends React.Component<any, any> {
           </Row>
           <Table
             rowKey="id"
+            className="table-overflow"
             scroll={{ x: true }}
             rowSelection={rowSelection}
             columns={columns}

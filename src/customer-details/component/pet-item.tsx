@@ -5,6 +5,7 @@ import { Headline, history, AssetManagement } from 'qmkit';
 import moment from 'moment';
 import { querySysDictionary, petsById, editPets, delPets } from '../webapi';
 import { getTaggingList } from './webapi';
+import { setTagging } from '../webapi';
 
 const { Option } = Select;
 const dogImg = require('../img/dog.png');
@@ -177,6 +178,20 @@ class PetItem extends React.Component<Iprop, any> {
     this.setState({
       show: show
     });
+  };
+
+  onSelectPetTagging = (tagsId) => {
+    this.setState({
+      pet: {
+        ...this.state.pet,
+        segmentList: tagsId.map((tagId) => ({ id: tagId }))
+      }
+    });
+    setTagging({
+      relationId: this.state.pet.petsId,
+      segmentType: 1,
+      segmentIdList: tagsId
+    }).then(() => {});
   };
 
   render() {
@@ -364,11 +379,11 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Needs">
+                    <Form.Item label="Special needs">
                       {editable ? (
                         getFieldDecorator('customerPetsPropRelations', {
                           initialValue: pet.customerPetsPropRelations ? pet.customerPetsPropRelations.map((v) => v.propName) : null,
-                          rules: [{ required: true, message: 'Needs is required' }]
+                          rules: [{ required: true, message: 'Special needs is required' }]
                         })(
                           <Select mode="tags">
                             {this.state.customerPetsPropRelationList.map((p, i) => (
@@ -400,7 +415,16 @@ class PetItem extends React.Component<Iprop, any> {
                           </Select>
                         )
                       ) : (
-                        <span>{pet.segmentList ? pet.segmentList.map((v) => v.name).join(', ') : ''}</span>
+                        // <span>{pet.segmentList ? pet.segmentList.map((v) => v.name).join(', ') : ''}</span>
+                        <Select mode="multiple" value={pet.segmentList ? pet.segmentList.map((v) => v.id) : []} onChange={this.onSelectPetTagging}>
+                          {this.state.tagList
+                            .filter((t) => t.segmentType == 1)
+                            .map((v, idx) => (
+                              <Option value={v.id} key={idx}>
+                                {v.name}
+                              </Option>
+                            ))}
+                        </Select>
                       )}
                     </Form.Item>
                   </Col>
@@ -456,13 +480,13 @@ class PetItem extends React.Component<Iprop, any> {
                         <Form.Item label="Pet ID">{pet.petSourceId}</Form.Item>
                       </Col>
                       <Col span={12}>
+                        <Form.Item label="Pet owner ID">{pet.ownerId}</Form.Item>
+                      </Col>
+                      <Col span={12}>
                         <Form.Item label="Pet activity level">{pet.petActivityCode}</Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Breeder ID">{pet.breederId}</Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item label="Pet owner ID">{pet.ownerId}</Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Vet ID">{pet.vetId}</Form.Item>

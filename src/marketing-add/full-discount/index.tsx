@@ -25,6 +25,8 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
     const { marketingId } = this.props.match.params;
     if (marketingId) {
       this.store.init(marketingId);
+    } else {
+      this.store.initDefualtLevelList();
     }
     this.store.getAllGroups();
     this.store.initCategory();

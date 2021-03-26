@@ -13,6 +13,7 @@ export default class FullReductionActor extends Actor {
         publicStatus: 1,
         subType: 0,// 0 1 6
         isClub: false,
+        fullReductionLevelList: []
       },
       allGroups: [],
       // 店铺分类信息
@@ -63,6 +64,21 @@ export default class FullReductionActor extends Actor {
     return state.set('attributesList', fromJS(attributesList));
   }
 
+  @Action('marketing:initReductionBeanLevelList')
+  initReductionBeanLevelList(state: IMap) {
+    const fullReductionLevelList = [
+      {
+        key: this.makeRandom(),
+        fullAmount: null,
+        fullCount: null,
+        reduction: null
+      }
+    ]
+debugger
+    return state.update('marketingBean', (bean) => {
+      return bean.set('fullReductionLevelList', fromJS(fullReductionLevelList))
+    });
+  }
   /**
    * 初始化店铺分类
    * @param state
@@ -91,4 +107,12 @@ export default class FullReductionActor extends Actor {
       });
     return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
   }
+
+  /**
+   * 生成随机数，作为key值
+   * @returns {string}
+   */
+  makeRandom = () => {
+    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  };
 }

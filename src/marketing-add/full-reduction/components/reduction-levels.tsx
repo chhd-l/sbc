@@ -30,57 +30,57 @@ export default class ReductionLevels extends React.Component<any, any> {
     };
   }
 
-  componentDidMount() {
-    if (!this.props.fullReductionLevelList || this.props.fullReductionLevelList.length == 0) {
-      this.initLevel();
-    }
-  }
-  componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
-    this.setState({
-      isNormal: nextProps.isNormal,
-      isFullCount: nextProps.isFullCount,
-      fullReductionLevelList:  nextProps.fullReductionLevelList,
-    });
-  }
-  shouldComponentUpdate(nextProps) {
-    let resetFields = {};
-    const { fullReductionLevelList, isFullCount } = this.props;
-
-    if (isFullCount != nextProps.isFullCount) {
-      fullReductionLevelList.forEach((_level, index) => {
-        resetFields[`level_rule_value_${index}`] = null;
-        resetFields[`level_rule_reduction_${index}`] = null;
-      });
-      this.initLevel();
-      this.setState({ isFullCount: nextProps.isFullCount });
-    } else {
-      if (fullReductionLevelList && fullReductionLevelList.length != nextProps.fullReductionLevelList.length) {
-        nextProps.fullReductionLevelList.forEach((level, index) => {
-          if ((!isFullCount ? level.fullAmount : level.fullCount) != null) {
-            resetFields[`level_rule_value_${index}`] = !isFullCount ? level.fullAmount : level.fullCount;
-            resetFields[`level_rule_reduction_${index}`] = level.reduction;
-          }
-        });
-      }
-    }
-    if (JSON.stringify(resetFields) !== '{}') {
-      this.props.form.setFieldsValue(resetFields);
-    }
-    return true;
-  }
+  // componentDidMount() {
+  //   if (!this.props.fullReductionLevelList || this.props.fullReductionLevelList.length == 0) {
+  //     this.initLevel();
+  //   }
+  // }
+  // componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
+  //   this.setState({
+  //     isNormal: nextProps.isNormal,
+  //     isFullCount: nextProps.isFullCount,
+  //     fullReductionLevelList:  nextProps.fullReductionLevelList,
+  //   });
+  // }
+  // shouldComponentUpdate(nextProps) {
+  //   let resetFields = {};
+  //   const { fullReductionLevelList, isFullCount } = this.props;
+  //
+  //   if (isFullCount != nextProps.isFullCount) {
+  //     fullReductionLevelList.forEach((_level, index) => {
+  //       resetFields[`level_rule_value_${index}`] = null;
+  //       resetFields[`level_rule_reduction_${index}`] = null;
+  //     });
+  //     this.initLevel();
+  //     this.setState({ isFullCount: nextProps.isFullCount });
+  //   } else {
+  //     if (fullReductionLevelList && fullReductionLevelList.length != nextProps.fullReductionLevelList.length) {
+  //       nextProps.fullReductionLevelList.forEach((level, index) => {
+  //         if ((!isFullCount ? level.fullAmount : level.fullCount) != null) {
+  //           resetFields[`level_rule_value_${index}`] = !isFullCount ? level.fullAmount : level.fullCount;
+  //           resetFields[`level_rule_reduction_${index}`] = level.reduction;
+  //         }
+  //       });
+  //     }
+  //   }
+  //   if (JSON.stringify(resetFields) !== '{}') {
+  //     this.props.form.setFieldsValue(resetFields);
+  //   }
+  //   return true;
+  // }
 
   render() {
-    const { isFullCount, fullReductionLevelList } = this.state;
+    const { isFullCount, fullReductionLevelList, isNormal } = this.props;
     const { form } = this.props;
     const { getFieldDecorator } = form;
     // console.log(fullReductionLevelList, 'fullReductionLevelList------------inernnnnnnnnnn');
     return (
       <div>
-        {fullReductionLevelList.map((level, index) => {
+        {fullReductionLevelList && fullReductionLevelList.map((level, index) => {
           return (
             <div key={level.key ? level.key : level.reductionLevelId}>
               <HasError>
-                {this.state.isNormal ? (
+                {isNormal ? (
                   <div>
                     <FormItem style={{ display: 'inline-block' }}>
                       {getFieldDecorator(`level_rule_value_${index}`, {
@@ -170,7 +170,7 @@ export default class ReductionLevels extends React.Component<any, any> {
             </div>
           );
         })}
-        {this.state.isNormal && isFullCount !== 2 ? (
+        {isNormal && isFullCount !== 2 ? (
           <div>
             <Button onClick={this.addLevels} disabled={fullReductionLevelList.length >= 5}>
               Add multi-level promotions
@@ -187,7 +187,7 @@ export default class ReductionLevels extends React.Component<any, any> {
    * @param index
    */
   deleteLevels = (index) => {
-    let { fullReductionLevelList } = this.state;
+    let { fullReductionLevelList, onChangeBack } = this.props;
     //重置表单的值
     this.props.form.setFieldsValue({
       [`level_rule_value_${fullReductionLevelList.length - 1}`]: null
@@ -196,9 +196,7 @@ export default class ReductionLevels extends React.Component<any, any> {
       [`level_rule_reduction_${fullReductionLevelList.length - 1}`]: null
     });
     fullReductionLevelList.splice(index, 1);
-    this.setState({ fullReductionLevelList: fullReductionLevelList });
     //传递到父页面
-    const { onChangeBack } = this.props;
     onChangeBack(fullReductionLevelList);
   };
 
@@ -206,7 +204,7 @@ export default class ReductionLevels extends React.Component<any, any> {
    * 添加多级促销
    */
   addLevels = () => {
-    const { fullReductionLevelList } = this.state;
+    const { fullReductionLevelList, onChangeBack } = this.props;
     if (fullReductionLevelList.length >= 5) return;
     fullReductionLevelList.push({
       key: this.makeRandom(),
@@ -217,7 +215,6 @@ export default class ReductionLevels extends React.Component<any, any> {
     this.setState({ fullReductionLevelList: fullReductionLevelList });
 
     //传递到父页面
-    const { onChangeBack } = this.props;
     onChangeBack(fullReductionLevelList);
   };
 
@@ -233,7 +230,6 @@ export default class ReductionLevels extends React.Component<any, any> {
         reduction: null
       }
     ];
-    this.setState({ fullReductionLevelList: initLevel });
 
     const { onChangeBack } = this.props;
     onChangeBack(initLevel);
@@ -245,7 +241,7 @@ export default class ReductionLevels extends React.Component<any, any> {
    * @param value
    */
   ruleValueChange = (index, value) => {
-    const { isFullCount } = this.state;
+    const { isFullCount } = this.props;
     this.onChange(index, !isFullCount ? 'fullAmount' : 'fullCount', value);
   };
 
@@ -256,7 +252,7 @@ export default class ReductionLevels extends React.Component<any, any> {
    * @param value
    */
   onChange = (index, props, value) => {
-    const { fullReductionLevelList } = this.state;
+    const { fullReductionLevelList, onChangeBack } = this.props;
     fullReductionLevelList[index][props] = value;
     if (props == 'fullAmount') {
       fullReductionLevelList[index]['fullCount'] = null;
@@ -266,7 +262,6 @@ export default class ReductionLevels extends React.Component<any, any> {
     this.setState({ fullReductionLevelList: fullReductionLevelList });
 
     //传递到父页面
-    const { onChangeBack } = this.props;
     onChangeBack(fullReductionLevelList);
   };
 

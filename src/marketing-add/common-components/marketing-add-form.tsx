@@ -158,6 +158,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
       giftBeanOnChange: Function;
       deleteSelectedSku: Function;
       setSelectedProductRows: Function;
+      initDefualtLevelList: Function;
+      initReductionDefualtLevelList: Function;
     };
   };
   static relaxProps = {
@@ -176,7 +178,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
     reductionBeanOnChange: noop,
     giftBeanOnChange: noop,
     deleteSelectedSku: noop,
-    setSelectedProductRows: noop
+    setSelectedProductRows: noop,
+    initDefualtLevelList: noop,
+    initReductionDefualtLevelList: noop
   };
 
   componentDidMount() {
@@ -1477,6 +1481,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (marketingType, e) => {
+    const { initDefualtLevelList, initReductionDefualtLevelList, marketingBean } = this.props.relaxProps
     const _thisRef = this;
     let levelType = '';
     // Session 有状态登录，保存一个seesion, 返回相应的cookie，
@@ -1488,8 +1493,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     } else if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
       levelType = 'fullGiftLevelList';
     }
-    const { marketingBean } = this.props.relaxProps;
-    const isFullCount = marketingBean.get('subType') % 2;
     if (levelType == '' || !marketingBean.get(levelType)) return;
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
@@ -1500,10 +1503,17 @@ export default class MarketingAddForm extends React.Component<any, any> {
             _thisRef.props.form.resetFields(`level_${i}`);
           }
           let beanObject = {
-            [levelType]: fromJS([]),
+            // [levelType]: fromJS([]),
             subType: e.target.value
           };
           _thisRef.onBeanChange(beanObject);
+          if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
+            initReductionDefualtLevelList()
+          } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+            initDefualtLevelList()
+          } else if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
+
+          }
         }
         // onCancel() {
         //   _thisRef.props.form.setFieldsValue({ subType: isFullCount });

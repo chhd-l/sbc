@@ -20,7 +20,9 @@ export default class AppStore extends Store {
   bindActor() {
     return [new FullDiscountActor(), new LoadingActor()];
   }
-
+  initDefualtLevelList= () => {
+    this.dispatch('marketing:initBeanLevelList')
+  }
   init = async (marketingId) => {
     this.dispatch('loading:start');
     const { res } = await commonWebapi.getMarketingInfo(marketingId);

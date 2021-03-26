@@ -13,7 +13,8 @@ export default class FullDiscountActor extends Actor {
         promotionType: 0,
         publicStatus: 1,
         subType: 2,
-        isClub: false
+        isClub: false,
+        fullDiscountLevelList: []
       },
       allGroups: [],
       // 店铺分类信息
@@ -25,7 +26,8 @@ export default class FullDiscountActor extends Actor {
 
       //营销活动已选的商品信息
       selectedSkuIds: [],
-      selectedRows: []
+      selectedRows: [],
+
     };
   }
 
@@ -42,6 +44,22 @@ export default class FullDiscountActor extends Actor {
         .map((item) => item.set('discount', (item.get('discount') * 10).toFixed(1)))
     );
     return state.set('marketingBean', bean);
+  }
+
+  @Action('marketing:initBeanLevelList')
+  initBeanLevelList(state: IMap) {
+    const fullDiscountLevelList = [
+      {
+        key: this.makeRandom(),
+        fullAmount: null,
+        fullCount: null,
+        discount: null
+      }
+    ]
+
+    return state.update('marketingBean', (bean) => {
+      return bean.set('fullDiscountLevelList', fromJS(fullDiscountLevelList))
+    });
   }
 
   @Action('marketing:discountBean')
@@ -103,4 +121,12 @@ export default class FullDiscountActor extends Actor {
       });
     return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
   }
+
+  /**
+   * 生成随机数，作为key值
+   * @returns {string}
+   */
+  makeRandom = () => {
+    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  };
 }

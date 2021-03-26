@@ -19,7 +19,9 @@ export default class AppStore extends Store {
   bindActor() {
     return [new FullReductionActor(), new LoadingActor()];
   }
-
+  initReductionDefualtLevelList= () => {
+    this.dispatch('marketing:initReductionBeanLevelList')
+  }
   init = async (marketingId) => {
     this.dispatch('loading:start');
     const { res } = await commonWebapi.getMarketingInfo(marketingId);

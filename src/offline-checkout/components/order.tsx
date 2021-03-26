@@ -1,6 +1,10 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import Header from './header';
+import Cart from './cart';
+import ProductOverview from './products';
+import MemberBar from './member-bar';
+import CheckoutAction from './checkout-action';
 
 export default class Order extends React.Component<any, any> {
   constructor(props: any) {
@@ -13,12 +17,20 @@ export default class Order extends React.Component<any, any> {
         <Header />
         <Row gutter={24} className="c-content">
           <Col span={16} style={{height: '100%'}}>
-            <div className="c-full-box c-order"></div>
-            <div className="c-full-box c-foot"></div>
+            <div className="c-full-box c-order">
+              <Cart />
+            </div>
+            <div className="c-full-box c-foot">
+              <MemberBar />
+            </div>
           </Col>
           <Col span={8} style={{height: '100%'}}>
-            <div className="c-full-box c-order"></div>
-            <div className="c-full-box c-foot"></div>
+            <div className="c-full-box c-order">
+              <ProductOverview />
+            </div>
+            <div className="c-full-box c-foot">
+              <CheckoutAction />
+            </div>
           </Col>
         </Row>
       </>

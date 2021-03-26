@@ -19,28 +19,28 @@ class GuestForm extends React.Component<any, any> {
     const { visible, onClose } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
-      <Modal visible={visible} title="Consumer information" onCancel={() => onClose()} footer={null}>
+      <Modal width={700} visible={visible} title="Consumer information" onCancel={() => onClose()} footer={null}>
         <Form labelCol={{sm: {span: 6}}} wrapperCol={{sm: {span: 16}}}>
           <Form.Item label="Consumer name">
-            {getFieldDecorator('consumerName', {
+            {getFieldDecorator('customerName', {
               initialValue: '',
               rules: [{ required: true, message: 'Consumer name is required' }]
             })(<Input />)}
           </Form.Item>
           <Form.Item label="Consumer email">
-            {getFieldDecorator('consumerEmail', {
+            {getFieldDecorator('email', {
               initialValue: '',
               rules: [{ required: true, message: 'Consumer name is required' }]
             })(<Input />)}
           </Form.Item>
-          <Form.Item label="Consumer name">
-            {getFieldDecorator('consumerPhone', {
+          <Form.Item label="Consumer phone">
+            {getFieldDecorator('contactPhone', {
               initialValue: ''
             })(<Input />)}
           </Form.Item>
         </Form>
         <div style={{textAlign: 'center', marginTop: 20}}>
-          <Button type="primary" size="large">Next</Button>
+          <Button type="primary" onClick={this.onConfirm}>Next</Button>
         </div>
       </Modal>
     );

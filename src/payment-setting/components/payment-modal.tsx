@@ -50,16 +50,19 @@ class PaymentModal extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { payPspCardTypeVOList } = this.props.paymentForm;
     //const key = form.get('tabType');
     let checked = this.state.paymentForm.enabled;
     if (this.state.enabled != null) {
       checked = this.state.enabled;
     }
+    setTimeout(()=>{
+
+    })
     return (
       <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Tabs defaultActiveKey="0" onChange={this._handleClick} >
           {this.props.paymentForm&&this.props.paymentForm.payPspItemVOList&&this.props.paymentForm.payPspItemVOList.map((item, index)=>{
+            console.log(item,111111111);
             return(
               <TabPane tab={item.name} key={index}>
                 <Form>
@@ -101,9 +104,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
                         {getFieldDecorator('paymentMethod', {
-                          initialValue: item.payPspItemCardTypeVOList.map((a)=>{
-                            return a.cardType
-                          }),
+                          initialValue: item.pspConfigVO.paymentMethod,
                           rules: [
                             {
                               required: false,
@@ -112,18 +113,18 @@ class PaymentModal extends React.Component<any, any> {
                           ]
                         })(
                           <Select mode="multiple">
-                            {payPspCardTypeVOList&&payPspCardTypeVOList.map((b,i)=>{
+                            {this.props.paymentForm.payPspItemCardTypeVOList&&this.props.paymentForm.payPspItemCardTypeVOList.map((a)=>{
                               return (
-                                <Option value={b.cardType} key={i}>
+                                <Option value={a.cardType}>
                                   <img
-                                    src={b.imgUrl}
+                                    src={a.imgUrl}
                                     style={{
                                       width: '30px',
                                       height: '20px',
                                       marginRight: '10px'
                                     }}
                                   />
-                                  {b.cardType}
+                                  {a.cardType}
                                 </Option>
                               )
                             })}

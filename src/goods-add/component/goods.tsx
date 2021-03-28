@@ -944,6 +944,8 @@ class GoodsForm extends React.Component<any, any> {
       this.props.form.setFieldsValue({
         defaultFrequencyId: null
       });
+    }else {
+
     }
   };
 

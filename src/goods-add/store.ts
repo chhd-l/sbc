@@ -624,6 +624,7 @@ export default class AppStore extends Store {
    * 修改商品基本信息
    */
   editGoods = async (goods: IMap) => {
+    console.log(goods.toJS(),3333333333);
     if (goods.get('saleType') !== undefined && goods.get('saleType') === 1 && this.state().getIn(['goods', 'priceType']) === 1) {
       this.editPriceSetting('priceOpt', 2);
     }
@@ -1237,7 +1238,7 @@ export default class AppStore extends Store {
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice'),
           goodsInfoBundleRels: b,
-          addedFlag: item.get('addedFlag') || 0,
+          addedFlag: item.get('addedFlag'),
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',

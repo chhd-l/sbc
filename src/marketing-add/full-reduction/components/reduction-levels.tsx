@@ -82,6 +82,8 @@ export default class ReductionLevels extends React.Component<any, any> {
               <HasError>
                 {isNormal ? (
                   <div>
+                    <span>Full&nbsp;</span>
+
                     <FormItem style={{ display: 'inline-block' }}>
                       {getFieldDecorator(`level_rule_value_${index}`, {
                         rules: [
@@ -109,8 +111,6 @@ export default class ReductionLevels extends React.Component<any, any> {
                         ],
                         initialValue: !isFullCount ? level.fullAmount : level.fullCount
                       })(
-                        <>
-                          <span>Full&nbsp;</span>
                           <Input
                             style={{ width: 180 }}
                             value={!isFullCount ? level.fullAmount : level.fullCount}
@@ -120,16 +120,17 @@ export default class ReductionLevels extends React.Component<any, any> {
                             }}
                             disabled={isFullCount === 2}
                           />
-                          <span>
-                            &nbsp;
-                            {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}，
-                          </span>
-                        </>
                       )}
                     </FormItem>
+                    <span>
+                            &nbsp;
+                      {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}，
+                          </span>
                   </div>
                 ) : null}
                 <div>
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
+
                   <FormItem style={{ display: 'inline-block' }}>
                     {getFieldDecorator(`level_rule_reduction_${index}`, {
                       rules: [
@@ -147,8 +148,6 @@ export default class ReductionLevels extends React.Component<any, any> {
                       ],
                       initialValue: level.reduction
                     })(
-                      <>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
                         <Input
                           style={{ width: 200 }}
                           placeholder={'0.01-99999999.99'}
@@ -157,13 +156,12 @@ export default class ReductionLevels extends React.Component<any, any> {
                             this.onChange(index, 'reduction', e.target.value);
                           }}
                         />
-                        <span>
-                          &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                          &nbsp;&nbsp;
-                        </span>
-                      </>
                     )}
                   </FormItem>
+                  <span>
+                          &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    &nbsp;&nbsp;
+                        </span>
                 </div>
                 {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
               </HasError>

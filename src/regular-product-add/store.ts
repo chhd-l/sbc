@@ -119,7 +119,9 @@ export default class AppStore extends Store {
           this.dispatch('goodsActor:frequencyList', {
             dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
             weekList: (results[0].res as any).context.frequency_week ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content : [],
-            monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : []
+            monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : [],
+            weekClubList: (results[0].res as any).context.frequency_week_club ? (results[0].res as any).context.frequency_week_club.sysDictionaryPage.content : [],
+            monthClubList: (results[0].res as any).context.frequency_month_club ? (results[0].res as any).context.frequency_month_club.sysDictionaryPage.content : []
           });
 
           this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods ? (results[0].res as any).context.goodsRelation.relationGoods : []));
@@ -130,6 +132,7 @@ export default class AppStore extends Store {
           this.dispatch('related:goodsId', goodsId);
           this.dispatch('goodsActor:getGoodsId', goodsId);
         });
+        console.log((results[0].res as any).context);
       } else {
         this.dispatch('loading:end');
       }
@@ -1007,6 +1010,13 @@ export default class AppStore extends Store {
         });
     }
 
+    let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
+    if ( this.state().get('goodsList').toJS().length === a.toJS().length ) {
+      message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
+      valid = false;
+      return;
+    }
+
     return valid;
   }
 
@@ -1060,17 +1070,26 @@ export default class AppStore extends Store {
     let valid = true;
     let tip = 0;
     let goodsList = this.state().get('goodsList');
+
     if (goodsList) {
       goodsList.forEach((item) => {
+
+
         if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           valid = false;
           tip = 1;
           return;
         }
-        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
-          tip = 4;
-          valid = false;
-          return;
+        if (this.state().get('goods').get('subscriptionStatus') == 1 ) {
+          if(item.get('subscriptionStatus') == 1) {
+            if( item.get('subscriptionPrice') == 0) {
+              tip = 4;
+              valid = false;
+              return;
+            }
+          }else {
+            valid = true;
+          }
         }
         if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
           tip = 2;

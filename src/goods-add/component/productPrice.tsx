@@ -436,16 +436,6 @@ class SkuForm extends React.Component<any, any> {
                             message: 'Please input the legal amount with two decimal places'
                           },
                           {
-                            validator: (_rule, value, callback) => {
-                              if (rowInfo.subscriptionStatus === 1) {
-                                if (value === 0) {
-                                  callback('Subscription price cannot be zero');
-                                }
-                              }
-                              callback();
-                            }
-                          },
-                          {
                             type: 'number',
                             max: 9999999.99,
                             message: 'The maximum value is 9999999.99',

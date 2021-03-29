@@ -320,6 +320,7 @@ class SkuForm extends React.Component<any, any> {
 
         //marketPrice = Number(marketPrice.toString().match(/^\d+(?:\.\d{0,2})?/))
        // console.log(marketPrice,11111);
+        console.log(rowInfo.subscriptionStatus,3333);
 
         return (
           <Row>
@@ -361,16 +362,16 @@ class SkuForm extends React.Component<any, any> {
                               required: true,
                               message: 'Please input subscription price'
                             },
-                            {
+                            /*{
                               validator: (_rule, value, callback) => {
                                 if (rowInfo.subscriptionStatus === 1) {
                                   if (value === 0) {
                                     callback('Subscription price cannot be zero');
                                   }
                                 }
-                                callback();
+
                               }
-                            }
+                            }*/
                           ],
                           onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
                           initialValue: subscriptionPrice

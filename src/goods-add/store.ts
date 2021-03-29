@@ -905,6 +905,13 @@ export default class AppStore extends Store {
         });
     }
 
+    let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
+    if ( this.state().get('goodsList').toJS().length === a.toJS().length ) {
+      message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
+      valid = false;
+      return;
+    }
+
     return valid;
   }
 
@@ -962,16 +969,22 @@ export default class AppStore extends Store {
       goodsList.forEach((item) => {
         console.log(item.get('subscriptionPrice'),111111111111);
         console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
-        console.log(item,3333333);
+        console.log(item.toJS(),3333333);
         if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           tip = 1;
           valid = false;
           return;
         }
-        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
-          tip = 4;
-          valid = false;
-          return;
+        if (this.state().get('goods').get('subscriptionStatus') == 1 ) {
+          if(item.get('subscriptionStatus') == 1) {
+            if( item.get('subscriptionPrice') == 0) {
+              tip = 4;
+              valid = false;
+              return;
+            }
+          }else {
+            console.log(555555)
+          }
         }
         if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
           tip = 2;

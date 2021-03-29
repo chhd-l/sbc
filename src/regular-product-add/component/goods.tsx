@@ -285,6 +285,10 @@ class GoodsForm extends React.Component<any, any> {
       });
     }
 
+    setTimeout(()=>{
+      console.log(frequencyList.toJS(),11111111);
+    })
+
     return (
       <Form>
         <Row type="flex" justify="start">
@@ -411,29 +415,17 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Product tagging">
-              {getFieldDecorator('tagging', {
-                rules: [
-                  {
-                    required: false,
-                    message: 'Please select product tagging'
-                  }
-                ],
-                initialValue: taggingRelListValues
+            <FormItem {...formItemLayout} label="Subscription type">
+              {getFieldDecorator('promotions', {
+                rules: [],
+                onChange: this._editGoods.bind(this, 'promotions'),
+                // initialValue: 'Y'
+                initialValue: goods.get('promotions')
               })(
-                <TreeSelect
-                  getPopupContainer={() => document.getElementById('page-content')}
-                  treeCheckable={true}
-                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                  treeCheckStrictly={true}
-                  placeholder="Please select product tagging"
-                  notFoundContent="No classification"
-                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  showSearch={false}
-                  onChange={this.taggingChange}
-                >
-                  {this.loopTagging(taggingTotal)}
-                </TreeSelect>
+                <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type">
+                  <Option value='autoship'>Auto ship</Option>
+                  <Option value='club'>Club</Option>
+                </Select>
               )}
             </FormItem>
           </Col>
@@ -590,6 +582,33 @@ class GoodsForm extends React.Component<any, any> {
                       onChange: this._editGoods.bind(this, 'brandId')
                     }
               )(this._getBrandSelect())}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem {...formItemLayout} label="Product tagging">
+              {getFieldDecorator('tagging', {
+                rules: [
+                  {
+                    required: false,
+                    message: 'Please select product tagging'
+                  }
+                ],
+                initialValue: taggingRelListValues
+              })(
+                <TreeSelect
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  placeholder="Please select product tagging"
+                  notFoundContent="No classification"
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  showSearch={false}
+                  onChange={this.taggingChange}
+                >
+                  {this.loopTagging(taggingTotal)}
+                </TreeSelect>
+              )}
             </FormItem>
           </Col>
           {/*<Col span={8}>

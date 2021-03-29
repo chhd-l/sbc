@@ -388,6 +388,16 @@ class SkuForm extends React.Component<any, any> {
       key: 'subscriptionStatus',
       render: (rowInfo) => {
         goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
+        let disable = false
+        if (goods.get('subscriptionStatus') == 0) {
+          disable = true
+        }else {
+          if(goodsList.toJS().length == 1 ) {
+            disable = true
+          }else {
+            disable = false
+          }
+        }
         return (
           <Row>
             <Col span={8}>
@@ -396,7 +406,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0':'1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0?true:false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
+                  <Select disabled={disable} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>

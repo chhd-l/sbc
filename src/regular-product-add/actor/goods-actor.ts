@@ -312,8 +312,8 @@ export default class GoodsActor extends Actor {
   }
   @Action('goodsActor:frequencyList')
   frequencyList(state, params) {
-    const { dayList, weekList, monthList } = params;
-    const frequencyList = [...dayList, ...weekList, ...monthList];
+    const { dayList, weekList, monthList, weekClubList, monthClubList  } = params;
+    const frequencyList = [...dayList, ...weekList, ...monthList, ...weekClubList, ...monthClubList];
     return state.set('frequencyList', frequencyList);
   }
   @Action('goodsActor:descriptionTab')

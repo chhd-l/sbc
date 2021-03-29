@@ -21,6 +21,8 @@ export default class MarketingFreeShippingAdd extends React.Component<any, any> 
     const { marketingId } = this.props.match.params;
     if (marketingId) {
       this.store.init(marketingId);
+    } else {
+      this.store.randomPromotionCode()
     }
     this.store.getAllGroups();
   }

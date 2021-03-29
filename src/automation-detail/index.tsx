@@ -378,7 +378,7 @@ class AutomationDetail extends Component<any, any> {
                       {automationDetail.trackingEndTime ? moment(automationDetail.trackingEndTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
                   </Descriptions>
-                  <Card title={'Workflow'} headStyle={{ padding: 0 }} bordered={false}>
+                  <Card title={'Workflow'} headStyle={{ padding: 0, fontWeight: 'bold' }} bordered={false}>
                     {this.state.automationDetail.workflow ? (
                       <GGEditor>
                         <Flow

@@ -174,12 +174,15 @@ class SkuForm extends React.Component<any, any> {
               {getFieldDecorator('stock_' + rowInfo.id, {
                 rules: [
                   {
-                    required: true,
-                    message: 'Please input inventory'
-                  },
-                  {
-                    pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
+                    validator: (_rule, value, callback) => {
+                      if (!value && value !== 0) {
+                        callback('Please input inventory.');
+                      }
+                      if (!ValidConst.zeroNumber.test(value)) {
+                        callback('Please enter the correct value.');
+                      }
+                      callback();
+                    }
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),

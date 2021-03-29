@@ -2,8 +2,7 @@ import { IOptions, Store } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List, Map, OrderedMap } from 'immutable';
 import { message } from 'antd';
-import { Const, history, util, cache } from 'qmkit';
-
+import { Const, history, util, cache, ValidConst } from 'qmkit';
 import GoodsActor from './actor/goods-actor';
 import ImageActor from './actor/image-actor';
 import SpecActor from './actor/spec-actor';
@@ -1002,19 +1001,27 @@ export default class AppStore extends Store {
   }
   _validInventoryFormsNew() {
     let valid = true;
+    let flag = 0
     let goodsList = this.state().get('goodsList');
     let addSkUProduct = this.state().get('addSkUProduct');
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
         if (!(item.get('stock') || item.get('stock') == 0) && a == undefined) {
+          flag = 1
+          valid = false;
+          return;
+        } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
+          flag = 2
           valid = false;
           return;
         }
       });
     }
-    if (!valid) {
+    if (flag === 1) {
       message.error('Please input Inventory');
+    } else if(flag === 2){
+      console.log('Please enter the correct value');
     }
     return valid;
   }
@@ -1224,7 +1231,7 @@ export default class AppStore extends Store {
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
           externalSku: item.get('externalSku'),
-          stock: item.get('stock') || c,
+          stock: item.get('stock') || item.get('stock') === 0 ? item.get('stock')  : c,
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
           mockSpecDetailIds,

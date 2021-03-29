@@ -23,6 +23,7 @@ export default class GoodsActor extends Actor {
         goodsName: '',
         // SPU编码
         goodsNo: '',
+        promotions: 'autoship',
         internalGoodsNo: '',
         // 计量单位
         goodsUnit: '',
@@ -325,8 +326,7 @@ export default class GoodsActor extends Actor {
   }
   @Action('goodsActor:frequencyList')
   frequencyList(state, params) {
-    const { dayList, weekList, monthList } = params;
-    const frequencyList = [...dayList, ...weekList, ...monthList];
+    const frequencyList = params;
     return state.set('frequencyList', frequencyList);
   }
   @Action('goodsActor:descriptionTab')

@@ -104,9 +104,16 @@ export default class AppStore extends Store {
 
           this.dispatch('goodsActor:purchaseTypeList', (results[0].res as any).context.purchase_type.sysDictionaryPage.content);
           this.dispatch('goodsActor:frequencyList', {
-            dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
-            weekList: (results[0].res as any).context.frequency_week ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content : [],
-            monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : []
+            autoShip: {
+              dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
+              weekList: (results[0].res as any).context.frequency_week ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content : [],
+              monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : [],
+            },
+            club: {
+              dayClubList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
+              weekClubList: (results[0].res as any).context.frequency_week_club ? (results[0].res as any).context.frequency_week_club.sysDictionaryPage.content : [],
+              monthClubList: (results[0].res as any).context.frequency_month_club ? (results[0].res as any).context.frequency_month_club.sysDictionaryPage.content : []
+            }
           });
 
           this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods ? (results[0].res as any).context.goodsRelation.relationGoods : []));

@@ -8,6 +8,8 @@ import AppStore from './store';
 import MarketingAddForm from '../common-components/marketing-add-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
+const WrappedForm = Form.create()(MarketingAddForm);
+
 import * as webapi from '@/marketing-add/webapi';
 import { fromJS } from 'immutable';
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -23,6 +25,8 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
     const { marketingId } = this.props.match.params;
     if (marketingId) {
       this.store.init(marketingId);
+    } else {
+      this.store.initDefualtLevelList();
     }
     this.store.getAllGroups();
     this.store.initCategory();
@@ -30,7 +34,6 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
   }
 
   render() {
-    const WrappedForm = Form.create()(MarketingAddForm);
     const state = this.props.location.state;
     const { marketingId } = this.props.match.params;
     const { source } = (state || {}) as any;

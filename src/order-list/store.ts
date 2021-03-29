@@ -35,8 +35,7 @@ export default class AppStore extends Store {
     const key = this.state().getIn(['tab', 'key']);
 
     if (key != '0') {
-      const [state, value] = key.split('-');
-      form['tradeState'][state] = value;
+      form['tradeState']['flowState'] = key;
     }
     form['orderType'] = form['orderType'] ? form['orderType'] : 'ALL_ORDER';
 

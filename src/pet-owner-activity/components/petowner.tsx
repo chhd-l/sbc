@@ -30,7 +30,7 @@ export default class petowner extends Component<any, any> {
           <Row type="flex" align="middle" className="ui-row-detail userBase">
             <div className="detail-content" style={{ width: '100%' }}>
               <div>
-                <span className="contactName">{petOwner.contactName}</span>
+                <span className="contactName">{petOwner.customerName}</span>
               </div>
               <span className="ui-lighter">
                 <span>Account: {petOwner.customerAccount}</span>

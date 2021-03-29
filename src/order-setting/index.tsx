@@ -405,8 +405,8 @@ class OrderSetting extends Component<any, any> {
           <Headline title={title} />
           <Alert message={message} description={description} type="error" />
 
-          <p style={styles.tipsStyle}>Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not</p>
-          <Tabs defaultActiveKey="Delivery after payment">
+          {/* <p style={styles.tipsStyle}>Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not</p> */}
+          <Tabs defaultActiveKey="Delivery after payment" style={{ marginTop: 20 }}>
             <TabPane tab="Delivery after payment" key="Delivery after payment">
               <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
                 <FormItem label="Payment category">

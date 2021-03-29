@@ -42,14 +42,14 @@ export default class SearchTabList extends React.Component<any, any> {
           </Tabs.TabPane>
           {/*{<FormattedMessage id="pendingReview" />}*/}
           <Tabs.TabPane
-            tab={<FormattedMessage id="toBeFilledOutLogisticsInformation" />}
+            tab={<FormattedMessage id="toBeDelivered" />}
             key="flowState-AUDIT"
           >
             {tab.get('key') === 'flowState-AUDIT' ? <List /> : null}
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <FormattedMessage id="waitingForTheMerchantToReceiveTheGoods" />
+              <FormattedMessage id="toBeReceived" />
             }
             key="flowState-DELIVERED"
           >
@@ -77,7 +77,7 @@ export default class SearchTabList extends React.Component<any, any> {
             {tab.get('key') === 'flowState-REJECT_RECEIVE' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane
+          {/* <Tabs.TabPane
             tab={<FormattedMessage id="refusedToRefund" />}
             key="flowState-REJECT_REFUND"
           >
@@ -95,7 +95,7 @@ export default class SearchTabList extends React.Component<any, any> {
             key="flowState-REFUND_FAILED"
           >
             {tab.get('key') === 'flowState-REFUND_FAILED' ? <List /> : null}
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
         </Tabs>
       </div>
     );

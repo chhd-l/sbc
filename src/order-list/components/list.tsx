@@ -3,60 +3,12 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, cache } from 'qmkit';
+import { noop, Const, AuthWrapper, cache, getOrderStatusValue } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
 const defaultImg = require('../../goods-list/img/none.png');
-
-const deliverStatus = (status) => {
-  if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="order.notShipped" />;
-  } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="order.allShipments" />;
-  } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="order.partialShipment" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.invalid" />;
-  } else {
-    return <FormattedMessage id="order.unknown" />;
-  }
-};
-
-const payStatus = (status) => {
-  if (status == 'NOT_PAID') {
-    return <FormattedMessage id="order.unpaid" />;
-  } else if (status == 'UNCONFIRMED') {
-    return <FormattedMessage id="order.toBeConfirmed" />;
-  } else if (status == 'PAID') {
-    return <FormattedMessage id="order.paid" />;
-  } else if (status == 'REFUND') {
-    return <FormattedMessage id="Refund" />;
-  } else if (status == 'PAYING') {
-    return 'Paying';
-  } else {
-    return <FormattedMessage id="order.unknown" />;
-  }
-};
-
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return <FormattedMessage id="order.pendingReview" />;
-  } else if (status == 'GROUPON') {
-    return <FormattedMessage id="order.toBeFormed" />;
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="order.toBeDelivered" />;
-  } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="order.toBeReceived" />;
-  } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="order.received" />;
-  } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="order.completed" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.outOfDate" />;
-  }
-};
 
 type TList = List<any>;
 
@@ -492,10 +444,10 @@ export default class ListView extends React.Component<any, any> {
                     {/* Quantity */}
                     <td style={{ width: '10%' }}>{num}</td>
                     {/*发货状态*/}
-                    <td style={{ width: '14%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
+                    <td style={{ width: '14%' }}>{getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*支付状态*/}
                     <td style={{ width: '14%' }}>
-                      {payStatus(v.getIn(['tradeState', 'payState']))}
+                      {getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))}
                     </td>
                     {/*orderCreateBy*/}
                     <td style={{ width: '10%', paddingRight: 22 }}  className="operation-td">{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>

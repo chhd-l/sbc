@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Input, Icon } from 'antd';
+import { Row, Col, InputNumber, Icon } from 'antd';
 
 export default class Cart extends React.Component<any, any> {
   constructor(props: any) {
@@ -24,7 +24,12 @@ export default class Cart extends React.Component<any, any> {
             <Col span={4}>Puppy LATA</Col>
             <Col span={4}>€32</Col>
             <Col span={4}>
-              <Input suffix="kg" type="number" addonAfter={<Icon type="plus-circle" />} addonBefore={<Icon type="minus-circle" />} />
+              <div className="input-num-group">
+                <Icon type="minus-circle" />
+                <InputNumber className="input-num" min={0.01} step={1} precision={2} />
+                <span>kg</span>
+                <Icon type="plus-circle" />
+              </div>
             </Col>
             <Col span={4}>€54</Col>
             <Col span={4}><i className="iconfont iconDelete"></i></Col>

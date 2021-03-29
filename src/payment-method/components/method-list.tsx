@@ -27,10 +27,12 @@ export default class PaymentMethod extends React.Component<any, any> {
     super(props);
     this.state = {
       paymentVisible: false,
-      enabled: true,
-      paymentForm: {}, //edit
       editType: false,
-      isChecked: false
+      isChecked: false,
+      paymentForm: {
+        enabled: false
+      },
+      enabled: null
     };
     this.closeModel = this.closeModel.bind(this);
   }
@@ -77,32 +79,40 @@ export default class PaymentMethod extends React.Component<any, any> {
 
   onSwitchChange = (e,checkedId) => {
     const { onChecked, getCheckedId } = this.props.relaxProps;
-
+    console.log(checkedId,44444);
     this.setState({
-      isChecked: e
+      isChecked: e,
+     // checkedId: checkedId
     })
+    getCheckedId(checkedId)
     //getCheckedId(checkedId)
     onChecked(e);
   };
 
-  onTooltip = () => {
-    const { onShow, switchChecked } = this.props.relaxProps;
-    if (switchChecked == true) {
+  onTooltip = (e,id) => {
+    const { onShow, switchChecked, checkedId } = this.props.relaxProps;
+    console.log(e,22222)
+    console.log(id,33333333);
+    if (switchChecked == true && checkedId == id) {
       onShow(true);
     } else {
       return false;
     }
   };
 
-  onChange = () => {};
+  onFormChange = (value) => {
+    this.setState({
+      enabled: value
+    });
+  };
 
   render() {
     const { queryByStoreId, switchChecked, getStorePaymentVOs, getCheckedId, switchVisible } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-    const { payPspCardTypeVOList } = this.props.paymentForm;
-    setTimeout(()=>{
-      console.log(switchChecked,11111111111);
-    })
+    let checked = this.state.paymentForm.enabled;
+    if (this.state.enabled != null) {
+      checked = this.state.enabled;
+    }
     return (
       <div>
         <div className="method">
@@ -203,87 +213,22 @@ export default class PaymentMethod extends React.Component<any, any> {
           <div className="flex-start-align">
             {queryByStoreId.List3 &&
               queryByStoreId.List3.map((item, index) => {
-                getStorePaymentVOs(item);
+                console.log(item,11111);
                 return (
-                  <Form>
+                  /*<Form key={index}>
                     <Row>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="apiKey" />}>
-                          {getFieldDecorator('apiKey', {
-                            initialValue: item.pspConfigVO.apiKey,
-                            rules: [{ required: true, message: 'Please input Api Key!' }]
-                          })(<Input />)}
-                        </FormItem>
-                      </Col>
-                      <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="appID" />}>
-                          {getFieldDecorator('appId', {
-                            initialValue: item.pspConfigVO.appId,
-                            rules: [{ required: false, message: 'Please input App ID!' }]
-                          })(<Input />)}
-                        </FormItem>
-                      </Col>
-                      <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="privateKey" />}>
-                          {getFieldDecorator('privateKey', {
-                            initialValue: item.pspConfigVO.privateKey,
-                            rules: [{ required: false, message: 'Please input Private Key!' }]
-                          })(<Input.TextArea />)}
-                        </FormItem>
-                      </Col>
-                      <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="publicKey" />}>
-                          {getFieldDecorator('publicKey', {
-                            initialValue: item.pspConfigVO.publicKey,
-                            rules: [{ required: false, message: 'Please input Public Key!' }]
-                          })(<Input.TextArea />)}
-                        </FormItem>
-                      </Col>
-
-                      {/*新增*/}
-                      <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
-                          {getFieldDecorator('paymentMethod', {
-                            initialValue: item.payPspItemCardTypeVOList.map((a)=>{
-                              return a.cardType
-                            }),
-                            rules: [
-                              {
-                                required: false,
-                                message: 'Please select Payment Method.'
-                              }
-                            ]
-                          })(
-                            <Select mode="multiple">
-                              {payPspCardTypeVOList&&payPspCardTypeVOList.map((b,i)=>{
-                                return (
-                                  <Option value={b.cardType} key={i}>
-                                    <img
-                                      src={b.imgUrl}
-                                      style={{
-                                        width: '30px',
-                                        height: '20px',
-                                        marginRight: '10px'
-                                      }}
-                                    />
-                                    {b.cardType}
-                                  </Option>
-                                )
-                              })}
-                            </Select>
-                          )}
-                        </FormItem>
-                      </Col>
-                      <Col span={24}>
-                        <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
+                        <FormItem {...formItemLayout} label="111"  valuePropName="checked">
                           {getFieldDecorator('enabled', {
-                            initialValue: item.pspConfigVO.enabled
-                          })(<Switch checked={checked} onChange={(value) => this.onFormChange(value)} />)}
+                            initialValue: item.isOpen == 0 ? false : true
+                          })(<Switch onChange={(value) => this.onFormChange(value)} />)}
                         </FormItem>
                       </Col>
                     </Row>
-                  </Form>
-                  /*<Row key={item.id} >
+                  </Form>*/
+
+
+                  <Row key={item.id} >
                     <Col span={8}>
                       <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                         <div className="methodItem">
@@ -302,13 +247,15 @@ export default class PaymentMethod extends React.Component<any, any> {
                           <div className={'flex-start-align'}>
                             <Switch style={{ marginRight: 15 }} onChange={e=>this.onSwitchChange(e,item.id)} />
                             <Tooltip placement="top" title="Edit">
-                              <a style={{ color: this.state.isChecked == true ? 'red' : '#cccccc' }} type="link" onClick={this.onTooltip} className="iconfont iconEdit"></a>
+                              {/*<a style={{ color: this.state.isChecked == true ? 'red' : '#cccccc' }} type="link" onClick={this.onTooltip} className="iconfont iconEdit"></a>\*/}
+                              <a  type="link" onClick={()=>this.onTooltip(this,item.id)} className="iconfont iconEdit"></a>
+
                             </Tooltip>
                           </div>
                         </div>
                       </Card>
                     </Col>
-                  </Row>*/
+                  </Row>
                 );
               })}
           </div>

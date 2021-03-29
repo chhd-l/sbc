@@ -55,7 +55,7 @@ class PaymentModal extends React.Component<any, any> {
     if (this.state.enabled != null) {
       checked = this.state.enabled;
     }
-  
+
     return (
       <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Tabs defaultActiveKey="0" onChange={this._handleClick} >

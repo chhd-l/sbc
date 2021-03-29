@@ -42,7 +42,6 @@ class PaymentModal extends React.Component<any, any> {
   };
 
   _handleClick = (value) => {
-    console.log(value);
     this.setState({
       key: Number(value)
     })
@@ -170,7 +169,6 @@ class PaymentModal extends React.Component<any, any> {
     this.props.form.validateFields(null, async (errs, values) => {
       //如果校验通过
       let payPspItemVOList = this.props.paymentForm.payPspItemVOList[this.state.key]
-      console.log(payPspItemVOList,222222);
       if (!errs) {
         const { res } = await webapi.savePaymentSetting({
           pspConfigSaveRequest: Object.assign({

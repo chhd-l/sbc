@@ -101,7 +101,6 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //   });
     // });
     selectedRows && selectedRows.map((item) => {
-        console.log(item,23333333);
         if(item.stock){
           minStock.push(item.stock)
         }else if(sessionStorage.getItem('minStock')){

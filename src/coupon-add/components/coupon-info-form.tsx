@@ -299,7 +299,6 @@ export default class CouponInfoForm extends Component<any, any> {
    * @param storeCateList
    */
   generateAttributeTree = (attributesList) => {
-    console.log(attributesList.toJS(), 'attributesList-------------');
     return (
       attributesList &&
       attributesList.map((item) => {

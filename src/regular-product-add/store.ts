@@ -137,7 +137,6 @@ export default class AppStore extends Store {
           this.dispatch('related:goodsId', goodsId);
           this.dispatch('goodsActor:getGoodsId', goodsId);
         });
-        console.log((results[0].res as any).context);
       } else {
         this.dispatch('loading:end');
       }
@@ -2253,7 +2252,6 @@ export default class AppStore extends Store {
       }
     }
 
-    console.log(params, '----params');
     const { res } = (await editSeo(params)) as any;
     this.dispatch('loading:end');
     if (res.code === Const.SUCCESS_CODE) {

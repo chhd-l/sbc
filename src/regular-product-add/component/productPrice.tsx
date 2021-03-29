@@ -320,7 +320,6 @@ class SkuForm extends React.Component<any, any> {
 
         //marketPrice = Number(marketPrice.toString().match(/^\d+(?:\.\d{0,2})?/))
        // console.log(marketPrice,11111);
-        console.log(rowInfo.subscriptionStatus,3333);
 
         return (
           <Row>

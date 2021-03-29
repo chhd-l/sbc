@@ -464,7 +464,6 @@ class SkuForm extends React.Component<any, any> {
   };
 
   onAddedFlag = (id: string) => {
-    console.log(1122)
   };
 
 

@@ -354,7 +354,6 @@ export default class AppStore extends Store {
 
     if (tmpContext && tmpContext.goodsInfos && tmpContext.goodsInfos.length > 0) {
       let addSkUProduct = tmpContext.goodsInfos.map((item) => {
-        console.log(item,333333333);
 
         return {
           pid: item.goodsInfoNo,
@@ -630,7 +629,6 @@ export default class AppStore extends Store {
    * 修改商品基本信息
    */
   editGoods = async (goods: IMap) => {
-    console.log(goods.toJS(),3333333333);
     if (goods.get('saleType') !== undefined && goods.get('saleType') === 1 && this.state().getIn(['goods', 'priceType']) === 1) {
       this.editPriceSetting('priceOpt', 2);
     }
@@ -973,9 +971,9 @@ export default class AppStore extends Store {
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
-        console.log(item.get('subscriptionPrice'),111111111111);
-        console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
-        console.log(item.toJS(),3333333);
+        //console.log(item.get('subscriptionPrice'),111111111111);
+        //console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
+        //console.log(item.toJS(),3333333);
         if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           tip = 1;
           valid = false;
@@ -988,8 +986,6 @@ export default class AppStore extends Store {
               valid = false;
               return;
             }
-          }else {
-            console.log(555555)
           }
         }
         if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {

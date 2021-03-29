@@ -332,7 +332,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param storeCateList
    */
   generateAttributeTree = (attributesList) => {
-    console.log(attributesList.toJS(), 'attributesList-------------');
     return (
       attributesList &&
       attributesList.map((item) => {
@@ -370,9 +369,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         attributeDefaultValue.push({ value: item });
       });
     }
-    console.log(marketingBean.toJS(), 'marketingBean-----------');
-    console.log(selectedRows, 'selectedRows-----------');
-    console.log(selectedSkuIds, 'selectedSkuIds-----------');
+
     let settingLabel = '';
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';

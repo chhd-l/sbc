@@ -44,7 +44,6 @@ class ProductSearchSetting extends Component<any, any> {
     });
   };
   handleCancel = () => {
-    console.log(1111111)
     this.setState({
       visible: false
     });

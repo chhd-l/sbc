@@ -79,7 +79,6 @@ export default class PaymentMethod extends React.Component<any, any> {
 
   onSwitchChange = (e,checkedId) => {
     const { onChecked, getCheckedId } = this.props.relaxProps;
-    console.log(checkedId,44444);
     this.setState({
       isChecked: e,
      // checkedId: checkedId
@@ -91,8 +90,7 @@ export default class PaymentMethod extends React.Component<any, any> {
 
   onTooltip = (e,id) => {
     const { onShow, switchChecked, checkedId } = this.props.relaxProps;
-    console.log(e,22222)
-    console.log(id,33333333);
+
     if (switchChecked == true && checkedId == id) {
       onShow(true);
     } else {
@@ -213,7 +211,6 @@ export default class PaymentMethod extends React.Component<any, any> {
           <div className="flex-start-align">
             {queryByStoreId.List3 &&
               queryByStoreId.List3.map((item, index) => {
-                console.log(item,11111);
                 return (
                   /*<Form key={index}>
                     <Row>

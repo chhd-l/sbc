@@ -66,7 +66,7 @@ export default class RewardRate extends Component<any, any> {
     } else {
       const { res } = await webapi.addClinicsReward(row);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('add success');
+        message.success('Add successfully');
       }
     }
   };

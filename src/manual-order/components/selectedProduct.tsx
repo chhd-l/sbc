@@ -48,6 +48,8 @@ export default class SelectedProduct extends React.Component<any, any> {
     console.log(row)
     if (name === 'subscriptionStatus' && e === 0) {
       row['periodTypeId'] = null;
+    }else if(name === 'subscriptionStatus' && e === 1){
+      row.periodTypeId=row.periodTypeId?row.periodTypeId:options[0].id
     }
     row[name] = e;
     await updateGoodsInfoCarts(this.props.storeId, {
@@ -173,7 +175,7 @@ export default class SelectedProduct extends React.Component<any, any> {
 
         render: (text, record, index) => {
           return (
-            <Select style={{ width: 100 }} value={record.goodsInfoFlag} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
+            <Select style={{ width: 100 }} value={record.goodsInfoFlag} getPopupContainer={(trigger: any) => trigger.parentNode} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
              { record.subscriptionStatus===1&&(<Option value={1}>Y</Option>)}
               <Option value={0}>N</Option>
             </Select>
@@ -187,10 +189,10 @@ export default class SelectedProduct extends React.Component<any, any> {
 
         render: (text, record, index) => {
           
-          let value=record.goodsInfoFlag===1?(text?text:options[0].id):null
+          // let value=record.goodsInfoFlag===1?(text?text:options[0].id):null
     
           return record.goodsInfoFlag === 1 ? (
-            <Select style={{ width: 100 }} value={value} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
+            <Select style={{ width: 100 }} value={text} getPopupContainer={(trigger: any) => trigger.parentNode} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
               {options.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, LegacyRef } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
 import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse, Breadcrumb, Icon } from 'antd';
 import * as webapi from './webapi';
@@ -13,9 +13,11 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const { Panel } = Collapse;
 
-export default class Task extends Component<any, any> {
+export default class Task extends React.Component<any, any> {
+  cardViewRef: React.RefObject<any>;
+  listViewRef: React.RefObject<any>;
   constructor(props) {
-    super(props);
+    super(props);    
     this.state = {
       title: 'Task Board',
       isCardView: true,
@@ -39,6 +41,9 @@ export default class Task extends Component<any, any> {
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.clickTaskMore = this.clickTaskMore.bind(this);
+
+    this.cardViewRef = React.createRef();
+    this.listViewRef = React.createRef();
   }
 
   componentDidMount() {
@@ -252,9 +257,9 @@ export default class Task extends Component<any, any> {
                       onClick={(e) => {
                         e.preventDefault();
                         if (isCardView) {
-                          this.refs.cardView.getTaskList(queryType);
+                          this.cardViewRef.current.getTaskList(queryType)
                         } else {
-                          this.refs.listView.getTaskList(queryType);
+                          this.listViewRef.current.getTaskList(queryType)
                         }
                       }}
                     >
@@ -283,9 +288,9 @@ export default class Task extends Component<any, any> {
                     queryType: value
                   });
                   if (isCardView) {
-                    this.refs.cardView.getTaskList(value);
+                    this.cardViewRef.current.getTaskList(value)
                   } else {
-                    this.refs.listView.getTaskList(value);
+                    this.listViewRef.current.getTaskList(value)
                   }
                 }}
               >
@@ -306,7 +311,7 @@ export default class Task extends Component<any, any> {
               </Select>
             </Col>
           </Row>
-          {isCardView ? <CardView ref="cardView" formData={taskForm} queryType={queryType} clickTaskMore={this.clickTaskMore} /> : <ListView ref="listView" formData={taskForm} queryType={queryType} />}
+          {isCardView ? <CardView ref={this.cardViewRef} formData={taskForm} queryType={queryType} clickTaskMore={this.clickTaskMore} /> : <ListView ref={this.listViewRef} formData={taskForm} queryType={queryType} />}
         </div>
       </div>
     );

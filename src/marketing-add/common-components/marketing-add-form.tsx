@@ -148,7 +148,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       storeCateList: any;
       sourceStoreCateList: any;
       attributesList: any;
-      selectedRows: IList;
+      selectedRows: any;
       selectedSkuIds: any;
       submitFullGift: Function;
       submitFullDiscount: Function;
@@ -216,14 +216,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
   scopeTypeOnChange = (value) => {
     this.setState({
-      selectedRows: fromJS([]),
       goodsModal: {
         _modalVisible: false,
         _selectedSkuIds: [],
         _selectedRows: []
       },
-      selectedSkuIds: [],
-      selectedRows: fromJS([])
+      // selectedSkuIds: [],
+      // selectedRows: fromJS([])
     });
     this.onBeanChange({
       scopeType: value,
@@ -418,7 +417,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 whitespace: true,
                 message: 'Please input promotion code'
               },
-              { min: 4, max: 20, message: '4-20 words' },
+              { min: 1, max: 20, message: '1-20 words' },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, 'Promotion code');
@@ -905,14 +904,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
               rules: [
                 {
                   validator: (_rule, value, callback) => {
-                    if ((!marketingBean.get('storeCateIds') || marketingBean.get('storeCateIds').size === 0) && marketingBean.get('scopeType') === 2) {
+                    if ((!value)) {//!marketingBean.get('storeCateIds') || marketingBean.get('storeCateIds').size === 0)
                       //
                       callback('Please select category.');
                     }
                     callback();
                   }
                 }
-              ]
+              ],
+              initialValue: storeCateValues
             })(
               <TreeSelect
                 id="storeCateIds"
@@ -925,7 +925,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 // showCheckedStrategy = {SHOW_PARENT}
                 placeholder="Please select category"
                 notFoundContent="No sales category"
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto', top: '390' }}
                 showSearch={false}
                 onChange={this.storeCateChange}
                 style={{ width: 500 }}
@@ -959,7 +959,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               rules: [
                 {
                   validator: (_rule, value, callback) => {
-                    if ((!marketingBean.get('attributeValueIds') || marketingBean.get('attributeValueIds').size === 0) && marketingBean.get('scopeType') === 3) {
+                    if ((!value && marketingBean.get('scopeType') === 3)) { //marketingBean.get('attributeValueIds') || marketingBean.get('attributeValueIds').size === 0)
                       //
                       callback('Please select attribute.');
                     }

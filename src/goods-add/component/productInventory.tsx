@@ -212,8 +212,12 @@ class SkuForm extends React.Component<any, any> {
                       message: 'Please input inventory'
                     },
                     {
-                      pattern: ValidConst.number,
-                      message: 'Please enter the correct value'
+                      validator: (_rule, value, callback) => {
+                        if (!ValidConst.zeroNumber.test(value)) {
+                          callback('Please enter the correct value.');
+                        }
+                        callback();
+                      }
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),

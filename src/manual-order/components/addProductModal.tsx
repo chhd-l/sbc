@@ -91,7 +91,7 @@ export default class AddProductModal extends Component {
       goodsNum: row.buyCount
     });
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('add success');
+      message.success('Add successfully');
       this.setState({ loading: false });
     }
   }

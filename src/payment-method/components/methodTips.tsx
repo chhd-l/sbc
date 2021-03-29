@@ -66,6 +66,7 @@ class MethodTips extends React.Component<any, any> {
 
   onOk = () => {
     const { onShow, getEditStorePayment, storePaymentVOs } = this.props.relaxProps;
+    console.log(storePaymentVOs);
     getEditStorePayment(storePaymentVOs);
     onShow(false);
   };

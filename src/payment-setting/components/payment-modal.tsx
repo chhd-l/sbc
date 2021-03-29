@@ -55,9 +55,7 @@ class PaymentModal extends React.Component<any, any> {
     if (this.state.enabled != null) {
       checked = this.state.enabled;
     }
-    /*setTimeout(()=>{
-      console.log(this.state.paymentForm,2211);
-    })*/
+
     return (
       <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Tabs defaultActiveKey="0" onChange={this._handleClick} >
@@ -112,94 +110,21 @@ class PaymentModal extends React.Component<any, any> {
                           ]
                         })(
                           <Select mode="multiple">
-                            <Option value="VISA">
-                              <img
-                                src={require('../img/visa.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              VISA
-                            </Option>
-                            <Option value="MasterCard">
-                              <img
-                                src={require('../img/masterCard.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              MasterCard
-                            </Option>
-                            <Option value="AmericanExpress">
-                              <img
-                                src={require('../img/american.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              American Express
-                            </Option>
-                            <Option value="OXXO">
-                              <img
-                                src={require('../img/oxxo.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              OXXO
-                            </Option>
-                            <Option value="JCB">
-                              <img
-                                src={require('../img/jcb.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              JCB
-                            </Option>
-                            <Option value="Discover">
-                              <img
-                                src={require('../img/discover.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              Discover
-                            </Option>
-                            <Option value="ChinaUnionPay">
-                              <img
-                                src={require('../img/chinaUnionPay.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              China Union Pay
-                            </Option>
-                            <Option value="Maestro">
-                              <img
-                                src={require('../img/maestro.png')}
-                                style={{
-                                  width: '30px',
-                                  height: '20px',
-                                  marginRight: '10px'
-                                }}
-                              />
-                              Maestro
-                            </Option>
+                            {this.props.paymentForm.payPspItemCardTypeVOList&&this.props.paymentForm.payPspItemCardTypeVOList.map((a)=>{
+                              return (
+                                <Option value={a.cardType}>
+                                  <img
+                                    src={a.imgUrl}
+                                    style={{
+                                      width: '30px',
+                                      height: '20px',
+                                      marginRight: '10px'
+                                    }}
+                                  />
+                                  {a.cardType}
+                                </Option>
+                              )
+                            })}
                           </Select>
                         )}
                       </FormItem>

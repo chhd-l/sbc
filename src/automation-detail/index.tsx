@@ -305,6 +305,7 @@ class AutomationDetail extends Component<any, any> {
         {automationDetail.testStatus === 'Testing' ? <Tag color="#00B0F0">{testStatusList.find((item) => item.value === automationDetail.testStatus).name}</Tag> : null}
       </div>
     );
+    const testStautsObject = testStatusList.find(x=>x.value === automationDetail.testStatus)
 
     return (
       <AuthWrapper functionName="f_automation_detail">
@@ -336,7 +337,7 @@ class AutomationDetail extends Component<any, any> {
             >
               <Tabs defaultActiveKey="1">
                 <TabPane tab="Basic information" key="1">
-                  <Descriptions title={'Automation info'}>
+                  <Descriptions title={'Automation information'}>
                     <Descriptions.Item label="Automation name" span={1}>
                       {automationDetail.automationName}
                     </Descriptions.Item>
@@ -344,7 +345,7 @@ class AutomationDetail extends Component<any, any> {
                       {automationDetail.automationStatus}
                     </Descriptions.Item>
                     <Descriptions.Item label="Test status" span={1}>
-                      {automationDetail.testStatus}
+                      {testStautsObject ? testStautsObject.name : ''}
                     </Descriptions.Item>
                     <Descriptions.Item label="Automation category" span={1}>
                       {automationDetail.automationCategory}

@@ -25,6 +25,7 @@ export default class MarketingFullReductionAdd extends React.Component<any, any>
       this.store.init(marketingId);
     } else {
       this.store.initReductionDefualtLevelList();
+      this.store.setSelectedProductRows({ selectedRows: [], selectedSkuIds: [] })
     }
     this.store.getAllGroups();
     this.store.initCategory();

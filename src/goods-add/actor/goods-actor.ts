@@ -77,7 +77,10 @@ export default class GoodsActor extends Actor {
       oldGoodsDetailTabContent: '',
       resourceCates: [],
       purchaseTypeList: [],
-      frequencyList: [],
+      frequencyList: {
+        autoShip: {},
+        club: {}
+      },
       goodsDescriptionDetailList: []
     };
   }

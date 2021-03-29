@@ -502,7 +502,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </strong>
               </label>
 
-              {discount && (
+              {/* {discount && (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
                   <strong>
@@ -510,9 +510,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     {discount.discounts.toFixed(2)}
                   </strong>
                 </label>
-              )}
+              )} */}
 
-              {tradePrice.firstOrderOnThePlatformDiscountPrice ? (
+              {/* {tradePrice.firstOrderOnThePlatformDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>First Order Discount:</span>
                   <strong>
@@ -520,7 +520,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     {tradePrice.firstOrderOnThePlatformDiscountPrice.toFixed(2)}
                   </strong>
                 </label>
-              ) : null}
+              ) : null} */}
 
               {tradePrice.promotionVOList && tradePrice.promotionVOList.length > 0
                 ? tradePrice.promotionVOList.map((promotion) => (

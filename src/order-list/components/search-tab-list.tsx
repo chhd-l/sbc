@@ -73,7 +73,7 @@ export default class SearchList extends React.Component<any, any> {
           { activeOrderStatus.map(item=>(
              <Tabs.TabPane tab={item.name}
              key={item.value}>
-               
+               <List />
              </Tabs.TabPane>
           )) }
         </Tabs>

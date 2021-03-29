@@ -148,7 +148,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       storeCateList: any;
       sourceStoreCateList: any;
       attributesList: any;
-      selectedRows: IList;
+      selectedRows: any;
       selectedSkuIds: any;
       submitFullGift: Function;
       submitFullDiscount: Function;
@@ -216,14 +216,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
   scopeTypeOnChange = (value) => {
     this.setState({
-      selectedRows: fromJS([]),
       goodsModal: {
         _modalVisible: false,
         _selectedSkuIds: [],
         _selectedRows: []
       },
-      selectedSkuIds: [],
-      selectedRows: fromJS([])
+      // selectedSkuIds: [],
+      // selectedRows: fromJS([])
     });
     this.onBeanChange({
       scopeType: value,

@@ -148,6 +148,12 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-return-edit')
   },
+  //新增推荐
+  {
+    path: '/recommendation',
+    exact: true,
+    asyncComponent: () => import('./recommendation')
+  },
   //订单-订单管理-推荐列表
   {
     path: '/recomm-page',

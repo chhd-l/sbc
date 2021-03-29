@@ -27,7 +27,7 @@ class PaymentModal extends React.Component<any, any> {
     super(props);
     this.state = {
       paymentForm: {
-        enabled: false
+        isOpen: false
       },
       enabled: null,
       key: "0"
@@ -37,7 +37,7 @@ class PaymentModal extends React.Component<any, any> {
 
   onFormChange = (value) => {
     this.setState({
-      enabled: value
+      isOpen: value
     });
   };
 
@@ -50,15 +50,20 @@ class PaymentModal extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     //const key = form.get('tabType');
-    let checked = this.state.paymentForm.enabled;
-    if (this.state.enabled != null) {
-      checked = this.state.enabled;
+    let checked = this.state.paymentForm.isOpen;
+    if (this.state.isOpen != null) {
+      checked = this.state.isOpen;
     }
+
+
 
     return (
       <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Tabs defaultActiveKey="0" onChange={this._handleClick} >
           {this.props.paymentForm&&this.props.paymentForm.payPspItemVOList&&this.props.paymentForm.payPspItemVOList.map((item, index)=>{
+            setTimeout(()=>{
+              console.log(item.payPspItemCardTypeVOList,23);
+            })
             return(
               <TabPane tab={item.name} key={index}>
                 <Form>
@@ -100,7 +105,9 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
                         {getFieldDecorator('paymentMethod', {
-                          initialValue: item.pspConfigVO.paymentMethod,
+                          initialValue: item.payPspItemCardTypeVOList.map((a)=>{
+                            return a.cardType
+                          }),
                           rules: [
                             {
                               required: false,
@@ -109,18 +116,18 @@ class PaymentModal extends React.Component<any, any> {
                           ]
                         })(
                           <Select mode="multiple">
-                            {this.props.paymentForm.payPspItemCardTypeVOList&&this.props.paymentForm.payPspItemCardTypeVOList.map((a)=>{
+                            {this.props.paymentForm.payPspCardTypeVOList&&this.props.paymentForm.payPspCardTypeVOList.map((b,i)=>{
                               return (
-                                <Option value={a.cardType}>
+                                <Option value={b.cardType} key={i}>
                                   <img
-                                    src={a.imgUrl}
+                                    src={b.imgUrl}
                                     style={{
                                       width: '30px',
                                       height: '20px',
                                       marginRight: '10px'
                                     }}
                                   />
-                                  {a.cardType}
+                                  {b.cardType}
                                 </Option>
                               )
                             })}
@@ -131,7 +138,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
                         {getFieldDecorator('enabled', {
-                          initialValue: item.pspConfigVO.enabled
+                          initialValue: item.pspConfigVO.isOpen
                         })(<Switch checked={checked} onChange={(value) => this.onFormChange(value)} />)}
                       </FormItem>
                     </Col>
@@ -161,12 +168,13 @@ class PaymentModal extends React.Component<any, any> {
     this.props.parent.closeModel();
     this.props.form.resetFields();
     this.setState({
-      enabled: null
+      isOpen: null
     });
   };
 
   onSave = async () => {
     this.props.form.validateFields(null, async (errs, values) => {
+      console.log(values,1111111);
       //如果校验通过
       let payPspItemVOList = this.props.paymentForm.payPspItemVOList[this.state.key]
       if (!errs) {
@@ -183,7 +191,7 @@ class PaymentModal extends React.Component<any, any> {
           }),
           payPspSaveRequest: Object.assign({
             id: payPspItemVOList.pspConfigVO.pspItemId,
-            isOpen: values.enabled ? 1 : 0,
+            isOpen: values.isOpen ? 1 : 0,
             storePaymentMethod: values.paymentMethod.join(','),
           })
         });

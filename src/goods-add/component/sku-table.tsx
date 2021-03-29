@@ -606,7 +606,6 @@ class SkuForm extends React.Component<any, any> {
         let goods = Map({
           ['addedFlag']: fromJS(2)
         });
-        console.log(goods.toJS(),22222);
         editGoods(goods);
       }
     }

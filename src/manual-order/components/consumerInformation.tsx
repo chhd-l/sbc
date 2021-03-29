@@ -92,7 +92,7 @@ class ConsumerInformation extends React.Component<any, any> {
                   }
                 ]
               })(
-                <Select showSearch notFoundContent={fetching ? <Spin size="small" /> : null} placeholder="Please input your Pet owner account!" style={this.props.style} defaultActiveFirstOption={false} filterOption={false} onSearch={this.onSearch} onChange={this.onChange}>
+                <Select showSearch getPopupContainer={(trigger: any) => trigger.parentNode} notFoundContent={fetching ? <Spin size="small" /> : null} placeholder="Please input your Pet owner account!" style={this.props.style} defaultActiveFirstOption={false} filterOption={false} onSearch={this.onSearch} onChange={this.onChange}>
                   {options}
                 </Select>
               )}

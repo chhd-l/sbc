@@ -6,6 +6,20 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "20666609",
+      "name": "Appointment",
+      "font_class": "Appointment",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "20556307",
+      "name": "pause",
+      "font_class": "pause",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
       "icon_id": "8327013",
       "name": "Pause",
       "font_class": "btn-pause",

@@ -2,7 +2,7 @@ import { IOptions, Store } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List, Map, OrderedMap } from 'immutable';
 import { message } from 'antd';
-import { Const, history, util, cache } from 'qmkit';
+import { Const, history, util, cache, ValidConst } from 'qmkit';
 
 import GoodsActor from './actor/goods-actor';
 import ImageActor from './actor/image-actor';
@@ -1103,16 +1103,22 @@ export default class AppStore extends Store {
   }
   _validInventoryFormsNew() {
     let valid = true;
+    let flag = 0
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
         if (!(item.get('stock') || item.get('stock') == 0)) {
+          flag = 1
+          valid = false;
+          return;
+        } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
+          flag = 2
           valid = false;
           return;
         }
       });
     }
-    if (!valid) {
+    if (flag = 1) {
       message.error('Please input Inventory');
     }
     return valid;

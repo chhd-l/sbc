@@ -96,7 +96,7 @@ export default class AppStore extends Store {
       marketingId,
       publicStatus: 1,
       promotionType: 0,
-      promotionCode: promotionCode
+      promotionCode: promotionCode ? promotionCode : this.randomPromotionCode()
     };
   };
 
@@ -105,12 +105,9 @@ export default class AppStore extends Store {
   };
 
   randomPromotionCode = () => {
-    debugger
     const randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
     const timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
     const promotionCode = randomNumber + timeStamp;
-    const bean = this.state().get('marketingBean').merge({promotionCode})
-    console.log(bean.toJS(), '    console.log(bean.merge({promotionCode}), \'\')\n')
-    this.shippingBeanOnChange(bean)
-  }
+    return promotionCode;
+  };
 }

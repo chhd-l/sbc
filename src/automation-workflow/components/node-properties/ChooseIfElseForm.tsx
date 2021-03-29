@@ -11,7 +11,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
       conditionList: [{ id: 1, tableName: undefined, colName: undefined, selOp: undefined, colValue: '', linkOp: '', valueSelect: [], valueType: 'text' }],
       types: [
         { name: 'Order', value: 'order' },
-        { name: 'Contact', value: 'contact' },
+        { name: 'Pet owner', value: 'petowner' },
         { name: 'Pet', value: 'pet' }
       ],
       fileds: [],
@@ -44,7 +44,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
       contactFeildDict: [
         { name: 'City', value: 'city' },
         { name: 'Postal Code', value: 'postalCode' },
-        { name: 'Consumer Type', value: 'consumerType' }
+        { name: 'Pet Owner Type', value: 'consumerType' }
       ],
       petFeildDict: [
         { name: 'Gender', value: 'gender' },
@@ -191,7 +191,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
           fileds: orderFeildDict
         });
         break;
-      case 'contact':
+      case 'petowner':
         this.setState({
           fileds: contactFeildDict
         });
@@ -199,6 +199,11 @@ export default class ChooseIfElseForm extends Component<any, any> {
       case 'pet':
         this.setState({
           fileds: petFeildDict
+        });
+        break;
+      default:
+        this.setState({
+          fileds: []
         });
         break;
     }

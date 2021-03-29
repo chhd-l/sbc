@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card } from 'antd';
+import { Row, Col, Card, Button } from 'antd';
 import GuestForm from './guest-form';
 import CustomerList from '../../appointment-list/components/customer-list';
 
@@ -11,7 +11,6 @@ export default class MemberBar extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      memberType: 'Guest',
       guestFormVisible: false,
       memberFormVisible: false
     };
@@ -23,10 +22,9 @@ export default class MemberBar extends React.Component<any, any> {
 
   onConfirmGuestInfo = (guestInfo: any = {}) => {
     this.setState({
-      memberType: 'Guest',
       guestFormVisible: false
     });
-    this.props.onChange({ ...this.props.memberInfo, ...guestInfo });
+    this.props.onChange({ ...this.props.memberInfo, ...guestInfo }, 'Guest');
   };
 
   onOpenMemberForm = () => {
@@ -35,10 +33,9 @@ export default class MemberBar extends React.Component<any, any> {
 
   onConfirmMemberInfo = (memberInfo: any = {}) => {
     this.setState({
-      memberType: 'Member',
       memberFormVisible: false
     });
-    this.props.onChange({ ...this.props.memberInfo, ...memberInfo });
+    this.props.onChange({ ...this.props.memberInfo, ...memberInfo }, 'Member');
   };
 
   onReset = () => {
@@ -46,10 +43,10 @@ export default class MemberBar extends React.Component<any, any> {
   };
 
   render() {
-    const { memberInfo } = this.props;
+    const { memberType, memberInfo } = this.props;
     return (
       <>
-        {memberInfo.customerName && <a onClick={(e) => {e.preventDefault();this.onReset();}} className="member-reset-link">Reset</a>}
+        {memberInfo.customerName && <Button type="link" onClick={() => this.onReset()} className="member-reset-link">Reset</Button>}
         {!memberInfo.customerName ? <Row type="flex" justify="space-between" align="middle" style={{marginTop: 34}}>
           <Col span={4} style={{fontWeight: 'bold'}}>Consumer information</Col>
           <Col span={4}>
@@ -70,8 +67,8 @@ export default class MemberBar extends React.Component<any, any> {
               <span className="action-tag small">Recommendation</span>
             </Card>
           </Col>
-        </Row> : <Row gutter={24} style={{marginTop: 20, fontWeight: 'bold'}}>
-          <Col span={12}>Consumer type: {this.state.memberType}</Col>
+        </Row> : <Row gutter={24} style={{marginTop: 34, fontWeight: 'bold'}}>
+          <Col span={12}>Consumer type: {memberType}</Col>
           <Col span={12}>Email: {memberInfo.email}</Col>
           <Col span={12}>Consumer name: {memberInfo.customerName}</Col>
           <Col span={12}>Phone: {memberInfo.contactPhone}</Col>

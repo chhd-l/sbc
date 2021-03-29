@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import Order from './components/order';
 import Board from './components/board';
+import ScanedInfo from './components/scaned-info';
 import './style.less';
 
 export default class Checkout extends React.Component<any, any> {
@@ -9,16 +10,17 @@ export default class Checkout extends React.Component<any, any> {
     super(props);
     this.state = {
       selected: false,
-      selectedType: 'guest',
-      memberInfo: {}
+      memberType: 'Guest',
+      memberInfo: {},
+      scanedInfoVisible: false
     };
   }
 
-  onSelect = (memberInfo?: any) => {
+  onSelect = (memberInfo: any = {}, memberType: 'Member' | 'Guest' = 'Guest') => {
     this.setState({
       selected: true,
-      selectedType: memberInfo ? 'member' : 'guest',
-      memberInfo: memberInfo || {}
+      memberType: memberType,
+      memberInfo: memberInfo
     });
   }
 
@@ -27,7 +29,8 @@ export default class Checkout extends React.Component<any, any> {
     return (
       <div className="c-main-page">
         <a className="close" onClick={(e) => {e.preventDefault();onClose(false);}}><i className="iconfont iconbtn-cancelall" style={{fontSize: 30,color:'#333'}}></i></a>
-        {this.state.selected ? <Order /> : <Board onSelect={this.onSelect} />}
+        {this.state.selected ? <Order memberType={this.state.memberType} memberInfo={this.state.memberInfo} onSelectMember={this.onSelect} /> : <Board onSelect={this.onSelect} />}
+        <ScanedInfo visible={this.state.scanedInfoVisible} />
       </div>
     );
   }

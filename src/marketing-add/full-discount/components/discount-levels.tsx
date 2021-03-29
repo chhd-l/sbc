@@ -85,6 +85,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                     <HasError>
                       {isNormal ? (
                         <div>
+                          <span>Full&nbsp;</span>
                           <FormItem style={{ display: 'inline-block' }}>
                             {getFieldDecorator(`level_rule_value_${index}`, {
                               rules: [
@@ -111,8 +112,6 @@ export default class DiscountLevels extends React.Component<any, any> {
                               ],
                               initialValue: !isFullCount ? level.fullAmount : level.fullCount
                             })(
-                              <>
-                                <span>Full&nbsp;</span>
                                 <Input
                                   // style={{ width: 200 }}
                                   className="input-width"
@@ -123,17 +122,18 @@ export default class DiscountLevels extends React.Component<any, any> {
                                   value={!isFullCount ? level.fullAmount : level.fullCount}
                                   disabled={isFullCount === 2}
                                 />
-                                <span>
-                                  {' '}
-                                  &nbsp;
-                                  {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'},
-                                </span>
-                              </>
+
                             )}
                           </FormItem>
+                          <span>
+                            {' '}
+                            &nbsp;
+                            {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'},
+                          </span>
                         </div>
                       ) : null}
                       <FormItem>
+                        <span>&nbsp;discount price&nbsp;&nbsp;</span>
                         {getFieldDecorator(`level_rule_discount_${index}`, {
                           rules: [
                             {
@@ -153,8 +153,6 @@ export default class DiscountLevels extends React.Component<any, any> {
                           ],
                           initialValue: level.discount
                         })(
-                          <>
-                            <span>&nbsp;discount price&nbsp;&nbsp;</span>
                             <Input
                               // style={{ width: 200 }}
                               className="input-width"
@@ -165,9 +163,8 @@ export default class DiscountLevels extends React.Component<any, any> {
                               }}
                               value={level.discount}
                             />
-                            <span>&nbsp;of orginal price,</span>
-                          </>
                         )}
+                        <span>&nbsp;of orginal price,</span>
                       </FormItem>
 
                       <FormItem>

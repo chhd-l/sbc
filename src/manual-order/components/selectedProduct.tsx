@@ -45,6 +45,7 @@ export default class SelectedProduct extends React.Component<any, any> {
    */
   async onSelectChange(e, index, row, name) {
     const { customer } = this.props;
+    const {options}=this.state
     if (name === 'subscriptionStatus' && e === 0) {
       row['periodTypeId'] = null;
     }else if(name === 'subscriptionStatus' && e === 1){

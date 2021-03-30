@@ -862,9 +862,9 @@ class StepTaxes extends Component<any, any> {
                     )}
                   </FormItem>
 
-                  <FormItem label="Client secret">
+                  <FormItem label="Company code">
                     {getFieldDecorator('companyCode', {
-                      rules: [{ required: true, message: 'Client secret is required' }],
+                      rules: [{ required: true, message: 'Company code is required' }],
                       initialValue: taxSettingForm.companyCode
                     })(
                       <Input

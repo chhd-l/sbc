@@ -102,7 +102,6 @@ export default class CateList extends React.Component<any, any> {
           dataIndex="goodsName"
           key="goodsName"
           className="nameBox"
-          width={160}
           render={(rowInfo) => {
             return (
               <Tooltip
@@ -156,8 +155,7 @@ export default class CateList extends React.Component<any, any> {
           // title="店铺分类"
           title={<FormattedMessage id="product.salesCategory" />}
           dataIndex="goodsStoreCateNames"
-          key="goodsStoreCateNames"
-          width={100}
+          key="goodsStoreCateNames" 
           //render={this._renderStoreCateList}
         />
         <Column
@@ -165,7 +163,6 @@ export default class CateList extends React.Component<any, any> {
           title={<FormattedMessage id="product.productCategory" />}
           dataIndex="productCategoryNames"
           key="productCategoryNames"
-          width={100}
           //render={this._renderProductCateList}
         />
         <Column

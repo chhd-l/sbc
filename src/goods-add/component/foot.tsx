@@ -59,7 +59,7 @@ export default class Foot extends React.Component<any, any> {
   render() {
     const { saveLoading } = this.props.relaxProps;
     return (
-      <div className="bar-button">
+      <div className="bar-button" style={{marginLeft:'-20px'}}>
         {this.props.tabType == 'main' ? (
           <AuthWrapper key="001" functionName={this.props.goodsFuncName}>
             <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }}>

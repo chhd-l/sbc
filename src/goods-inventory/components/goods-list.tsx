@@ -103,6 +103,7 @@ export default class CateList extends React.Component<any, any> {
           title="Product category"
           dataIndex="goods.cateName"
           key="goods.cateName"
+          width={150}
         />
         <Column
           // title="店铺分类"

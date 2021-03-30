@@ -294,7 +294,6 @@ class GoodsForm extends React.Component<any, any> {
       }
     }
 
-
     return (
       <Form>
         <Row type="flex" justify="start">
@@ -385,7 +384,7 @@ class GoodsForm extends React.Component<any, any> {
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'addedFlag'),
-                initialValue: goods.get('addedFlag')
+                initialValue: goods.get('addedFlag') != 0? 1:0
               })(
                 <RadioGroup>
                   <Radio value={1}>

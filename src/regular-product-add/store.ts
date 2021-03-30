@@ -1015,7 +1015,7 @@ export default class AppStore extends Store {
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
-    if ( this.state().get('goodsList').toJS().length === a.toJS().length ) {
+    if ( (this.state().get('goodsList').toJS().length === a.toJS().length) && this.state().get('goods').get('subscriptionStatus') == 1 ) {
       message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
       valid = false;
       return;

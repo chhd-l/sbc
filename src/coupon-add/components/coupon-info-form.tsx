@@ -683,7 +683,6 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      debugger;
                       if ((!value || value.length === 0) && scopeType === 5) {
                         //storeCateIds.size === 0
                         callback('Please select store cate.');
@@ -766,7 +765,6 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      debugger;
                       if (segmentIds.size === 0 && couponJoinLevel === -3) {
                         callback('Please select group.');
                       }

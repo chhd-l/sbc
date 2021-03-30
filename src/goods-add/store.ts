@@ -2123,6 +2123,11 @@ export default class AppStore extends Store {
             description = 'Купить {technology} корм Royal Canin {name} со скидкой 10% при оформлении подписки. Сделайте заказ в интернет-магазине Royal Canin уже сегодня!';
             keywords = '{name}, {subtitle}, {sales category}, {tagging}';
             break;
+          case 123456858: //墨西哥
+            title = 'TIENDA OFICIAL DE PRODUCTOS VETERINARIOS ROYAL CANIN MEXICO';
+            description = null
+            keywords = null
+            break;
           default:
             title = '{name} | Royal Canin Shop';
             description = '{description}';

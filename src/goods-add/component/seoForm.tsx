@@ -118,7 +118,7 @@ export default class SeoForm extends Component<any, any> {
         {/*  )}*/}
         {/*</Form.Item>*/}
 
-        {loginInfo && loginInfo.storeId !== 123457910 && (
+        {loginInfo && loginInfo.storeId !== 123457910 && loginInfo.storeId !== 123456858  && (
           <>
             <Form.Item label="Meta Keywords">
               {getFieldDecorator('metaKeywordsSource', {

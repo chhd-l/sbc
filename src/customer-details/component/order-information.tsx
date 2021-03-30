@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { fetchOrderList } from '../../order-list/webapi';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { Const, cache } from 'qmkit';
+import { Const, cache, getOrderStatusValue } from 'qmkit';
 const defaultImg = require('../../goods-list/img/none.png');
 
 interface Iprop {
@@ -17,37 +17,6 @@ interface Istyle {
   [key: string]: React.CSSProperties;
 }
 
-const deliverStatus = (status) => {
-  if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="order.notShipped" />;
-  } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="order.allShipments" />;
-  } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="order.partialShipment" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.invalid" />;
-  } else {
-    return <FormattedMessage id="order.unknown" />;
-  }
-};
-
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return <FormattedMessage id="order.pendingReview" />;
-  } else if (status == 'GROUPON') {
-    return <FormattedMessage id="order.toBeFormed" />;
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="order.toBeDelivered" />;
-  } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="order.toBeReceived" />;
-  } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="order.received" />;
-  } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="order.completed" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.outOfDate" />;
-  }
-};
 
 export default class OrderInformation extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
@@ -202,10 +171,10 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                     {item.buyer.name}
                   </td>
                   <td key="6" style={{ width: '10%' }}>
-                    {deliverStatus(item.tradeState.deliverStatus)}
+                    {getOrderStatusValue('ShippStatus',(item.tradeState.deliverStatus))}
                   </td>
                   <td key="7" style={{ width: '10%' }}>
-                    {flowState(item.tradeState.flowState)}
+                    {getOrderStatusValue('OrderStatus',(item.tradeState.flowState))}
                   </td>
                 </tr>
               </tbody>

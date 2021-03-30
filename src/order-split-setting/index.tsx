@@ -10,7 +10,7 @@ class OrderSplitSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Split order setting',
+      title: <FormattedMessage id="Menu.Split order setting" />,
       configForm: {
         isSplit:false
       },
@@ -56,10 +56,10 @@ class OrderSplitSetting extends Component<any, any> {
         <div className="container-search">
           <Headline title={title} />
             <div style={{ margin: 20 }}>
-              <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}>Whether to split order:</p>
+              <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}><FormattedMessage id="Order.whetherToSplitOrder" />:</p>
               <Radio.Group disabled value={configForm.isSplit}>
-                <Radio value={true}>Yes</Radio>
-                <Radio value={false}>No</Radio>
+                <Radio value={true}><FormattedMessage id="yes" /></Radio>
+                <Radio value={false}><FormattedMessage id="no" /></Radio>
               </Radio.Group>
             </div>
         </div>

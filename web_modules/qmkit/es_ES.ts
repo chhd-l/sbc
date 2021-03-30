@@ -33,6 +33,7 @@ export default {
   'Public.more':'more',
   'Public.all':'all',
   'Public.Search':'Search',
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -143,7 +144,14 @@ export default {
   'Menu.Asset type':'Asset type',
   'Menu.Operation log':'Operation log',
   'Menu.Set Banner':'Set Banner',
+  /* -------- 已翻译 V1.0---------------*/
   'Menu.Appointment':'Appointment',
+  'Menu.Split order setting':'Split order setting',
+  'Menu.Order data setting':'Order data setting',
+  'Menu.Order eligible for return':'Order eligible for return',
+  'Menu.Valet order':'Valet order',
+  'Menu.Point to sales':'Point to sales',
+
 
 
   /*-----------------------------  Home -----------------------------------------------*/
@@ -179,6 +187,10 @@ export default {
   'Home.Prescriberreward':'Prescriber reward',
   'Home.Activerate':'Active rate',
   'Home.Transaction':'Transaction',
+  /* -------- 已翻译 V1.0---------------*/
+
+
+
 
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
@@ -706,7 +718,7 @@ export default {
   "Product.DescriptionType": "Description type",
   "Product.AddNewDescription": "Add new description",
   "Product.NoResultsSearches": "No results searches",
-
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -1080,6 +1092,14 @@ export default {
   'Order.totalPayable': 'Total payable',
   'Order.Nomorethan50': 'No more than 50 types of purchased goods',
   'Order.Selectproduct': 'Select product',
+  /* -------- 已翻译 V1.0---------------*/
+  'Order.whetherToSplitOrder':'Whether to split order',
+  'Order.COD':'COD',
+  'Order.deliveryAfterPayment':'Delivery after payment',
+  'Order.capturePaymentWhen':'Capture payment when',
+  'Order.none':'None',
+  'Order.cashOnDelivery':'Cash on delivery',
+  'Order.fieldRuleSetting':'Field rule setting',
 
 
 
@@ -1385,7 +1405,7 @@ export default {
   'Subscription.Active.UnfoldedAll':'Unfolded all delivery addresses',
   'Subscription.Active.ChooseBillingAddress':'Choose From Saved Billing Address',
   'Subscription.Active.UnfoldedAllDeliveryAddresses':'Unfolded all delivery addresses',
-
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -1545,6 +1565,10 @@ export default {
   'PetOwner.levelName':'Type name',
   'PetOwner.levelBadge':'Type badge',
   'PetOwner.consumerLevel':'Consumer type',
+  /* -------- 已翻译 V1.0---------------*/
+
+
+
 
   /*-----------------------------  Finance  ------------------------------------------*/
   'Finance.NO':'NO.',
@@ -1681,17 +1705,17 @@ export default {
   'Finance.vatSpecialInvoice':'VAT special invoice',
   'Finance.saveSettings':'Save Settings',
   'Finance.add':'add',
-
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
   /*-----------------------------  Marketing  ----------------------------------------*/
-  'Marketing.PromotionType':'Promotion type:',
+  'Marketing.PromotionType':'Promotion type',
   'Marketing.NormalPromotion':'Normal promotion',
   'Marketing.SubscriptionPromotion':'Subscription promotion',
   'Marketing.PromotionCode':'Promotion Code',
   'Marketing.PleaseInputPromotionCode':'Please input promotion code',
-  'Marketing.words':'4-20 words',
+  'Marketing.words':'1-20 words',
   'Marketing.PromotionName':'Promotion Name',
   'Marketing.PleaseInputPromotionName':'Please input Promotion Name',
   'Marketing.40Words':'1-40 words',
@@ -1924,6 +1948,26 @@ export default {
   'Marketing.needsToBeOperated':'Please select the order that needs to be operated',
   'Marketing.Invalid':'Invalid',
   'Marketing.Valid':'Valid',
+  /* -------- 已翻译 V1.0---------------*/
+
+  'Marketing.DiscountType': 'Discount type',
+  'Marketing.Forthefirstsubscription': 'For the first subscription order,discount',
+  'Marketing.Fortherestsubscription': 'For the rest subscription order,discount',
+  'Marketing.discount':'discount',
+  'Marketing.fulldiscounttype': 'full discount type',
+  'Marketing.Attribute': 'Attribute',
+  'Marketing.Pleaseselectcategory': 'Please select category',
+  'Marketing.Nosalescategory': 'No sales category',
+  'Marketing.Pleaseselectattribute': 'Please select attribute',
+  'Marketing.Noattribute': 'No attribute',
+  'Marketing.Selectgroup': 'Select group',
+  'Marketing.Byemail': 'By email',
+  'Marketing.Pleaseselectgroup': 'Please select group.',
+  'Marketing.Pleaseenteremailsuffix.': 'Please enter email suffix.',
+  'Marketing.Addmulti-levelpromotions': 'Add multi-level promotions',
+  'Marketing.upto5levels': 'up to 5 levels can be set',
+  'Marketing.0-99999999.99': '0-99999999.99',
+  'Marketing.1-9999': '1-9999',
 
   /*-----------------------------  Prescriber  ----------------------------------------*/
   'Prescriber.Add':'Add',
@@ -2054,6 +2098,9 @@ export default {
   'Prescriber.Create':'Create',
   'Prescriber.EditPrescriberType':'Edit Prescriber Type',
   'Prescriber.NewPrescriberType':'New Prescriber type',
+  /* -------- 已翻译 V1.0---------------*/
+
+
 
   /*-----------------------------  Analysis  ----------------------------------------*/
   'Analysis.ProductReport':'Product Report',
@@ -2089,6 +2136,9 @@ export default {
   'Analysis.Consumers':'Consumers',
   'Analysis.TransactionTrend':'Transaction trend',
   'Analysis.TransactionReport':'Transaction report',
+  /* -------- 已翻译 V1.0---------------*/
+
+
 
   /*-----------------------------  Content  ----------------------------------------*/
   'Content.NavigationList':'Navigation list',
@@ -2148,6 +2198,9 @@ export default {
   'Content.NextStep':'Next step',
   'Content.Interaction':'Interaction',
   'Content.Submit':'Submit',
+  /* -------- 已翻译 V1.0---------------*/
+
+
 
   /*-----------------------------  Setting  ----------------------------------------*/
 
@@ -2585,6 +2638,7 @@ export default {
   'Setting.seoSetting': 'SEO Setting',
   'Setting.SiteSEO': 'Site SEO',
   'Setting.PageSEO': 'Page SEO',
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -2597,7 +2651,7 @@ export default {
   'Fetch.K-000015':'Failed to obtain authorization',
   'Fetch.MethodNotAllowed':'You do not have permission to access this feature',
   'Fetch.500-502-503':'System is deploying, if it does not recovery after 10 mins, please contact the administrator.',
-
+  /* -------- 已翻译 V1.0---------------*/
 
 
   /*---------------------------------------------------------------------*/

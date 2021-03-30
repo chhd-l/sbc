@@ -146,6 +146,11 @@ export default {
   'Menu.Set Banner':'Set Banner',
   /* -------- 已翻译 V1.0---------------*/
   'Menu.Appointment':'Appointment',
+  'Menu.Split order setting':'Split order setting',
+  'Menu.Order data setting':'Order data setting',
+  'Menu.Order eligible for return':'Order eligible for return',
+  'Menu.Valet order':'Valet order',
+  'Menu.Point to sales':'Point to sales',
 
 
 
@@ -1088,6 +1093,13 @@ export default {
   'Order.Nomorethan50': 'No more than 50 types of purchased goods',
   'Order.Selectproduct': 'Select product',
   /* -------- 已翻译 V1.0---------------*/
+  'Order.whetherToSplitOrder':'Whether to split order',
+  'Order.COD':'COD',
+  'Order.deliveryAfterPayment':'Delivery after payment',
+  'Order.capturePaymentWhen':'Capture payment when',
+  'Order.none':'None',
+  'Order.cashOnDelivery':'Cash on delivery',
+  'Order.fieldRuleSetting':'Field rule setting',
 
 
 

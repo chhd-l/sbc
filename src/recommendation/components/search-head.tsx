@@ -49,7 +49,7 @@ export default class SearchHead extends Component<any, any> {
       goodsOptions: 'Product name',
       receiverSelect: 'consigneeName',
       clinicSelect: 'clinicsName',
-      buyerOptions: 'Recipient name',
+      buyerOptions: 'PO name',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
       linkStatus: 0,
@@ -191,7 +191,7 @@ export default class SearchHead extends Component<any, any> {
             
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
-                  {sessionStorage.getItem('PrescriberType') != null ? (
+                  {/* {sessionStorage.getItem('PrescriberType') != null ? ( */}
                     <Button
                       type="primary"
                       icon="plus"
@@ -199,12 +199,13 @@ export default class SearchHead extends Component<any, any> {
                       shape="round"
                       style={{ textAlign: 'center', marginRight: '20px' }}
                       onClick={(e) => {
-                        history.push('/recomm-page-detail-new');
+                        history.push('/recommendation-add');
                       }}
                     >
                       <span>New</span>
                     </Button>
-                  ) : null}
+                  {/* ) : null} */}
+
 
                   <Button
                     type="primary"
@@ -217,7 +218,7 @@ export default class SearchHead extends Component<any, any> {
                       const { recommendationId, buyerOptions, goodsOptions, receiverSelect, clinicSelect, linkStatus, buyerOptionsValue, goodsOptionsValue, receiverSelectValue, clinicSelectValue } = this.state;
                       const params = {
                         recommendationId,
-                        [buyerOptions == 'Recipient name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue,
+                        [buyerOptions == 'PO name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue,
                         [goodsOptions == 'Product name' ? 'goodsInfoName' : 'goodsInfoNo']: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
                         [clinicSelect == 'clinicsName' ? 'prescriberName' : 'prescriberId']: clinicSelectValue,
@@ -230,6 +231,7 @@ export default class SearchHead extends Component<any, any> {
                       <FormattedMessage id="search" />
                     </span>
                   </Button>
+                 
                 </FormItem>
               </Col>
             </Row>
@@ -267,7 +269,7 @@ export default class SearchHead extends Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        defaultValue="Recipient name"
+        defaultValue="PO name"
         onChange={(value, a) => {
           this.setState({
             buyerOptions: value
@@ -276,8 +278,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="consumerName">Recipient name</Option>
-        <Option value="consumerEmail">Recipient mail</Option>
+        <Option value="consumerName">PO Name</Option>
+        <Option value="consumerEmail">PO E-mail</Option>
       </Select>
     );
   };

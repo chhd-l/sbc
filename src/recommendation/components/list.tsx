@@ -186,7 +186,7 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '12%' }}>PO Name</th>
                       <th style={{ width: '13.5%' }}>PO E-mail</th>
                       <th style={{ width: '11%' }}>Amount</th>
-                      {/* <th style={{ width: '10.5%' }}>Link status</th> */}
+                      <th style={{ width: '10.5%' }}>Link status</th>
                       <th style={{ width: '12.5%' }}>Expert</th>
                       <th style={{ width: '7.1%' }}>Operation</th>
                     </tr>
@@ -324,7 +324,7 @@ export default class ListView extends React.Component<any, any> {
                         return a.toFixed(2);
                       }, 0)}
                   </td>
-                  {/* <td style={{ width: '13%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td> */}
+                  <td style={{ width: '13%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td>
                   <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td>
                   <td
                     style={{
@@ -334,27 +334,16 @@ export default class ListView extends React.Component<any, any> {
                       textAlign: 'right',
                       paddingRight: 20
                     }}
-                    // onClick={() =>
-                    //   history.push({
-                    //     pathname: '/recomm-page-detail',
-                    //     state: { id: v.id }
-                    //   })
-                    // }
+                    onClick={() =>
+                      history.push({
+                        pathname: '/recomm-page-detail',
+                        state: { id: v.id }
+                      })
+                    }
                   >
-                    {/* <Tooltip placement="top" title="See details">
+                    <Tooltip placement="top" title="See details">
                       <span className="iconfont iconDetails"></span>
-                    </Tooltip> */}
-                    <div style={{display:'flex',justifyContent:'space-around'}}>
-                    <Tooltip placement="top" title="edit">
-                    <Icon type="form" />
                     </Tooltip>
-                    <Tooltip placement="top" title="download">
-                    <Icon type="cloud-download" />
-                    </Tooltip>
-                    <Tooltip placement="top" title="copy link">
-                    <Icon type="deployment-unit" />
-                    </Tooltip>
-                    </div>
                   </td>
                 </tr>
               </tbody>

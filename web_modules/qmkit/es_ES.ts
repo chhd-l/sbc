@@ -1752,12 +1752,12 @@ export default {
   
 
   /*-----------------------------  Marketing  ----------------------------------------*/
-  'Marketing.PromotionType':'Promotion type:',
+  'Marketing.PromotionType':'Promotion type',
   'Marketing.NormalPromotion':'Normal promotion',
   'Marketing.SubscriptionPromotion':'Subscription promotion',
   'Marketing.PromotionCode':'Promotion Code',
   'Marketing.PleaseInputPromotionCode':'Please input promotion code',
-  'Marketing.words':'4-20 words',
+  'Marketing.words':'1-20 words',
   'Marketing.PromotionName':'Promotion Name',
   'Marketing.PleaseInputPromotionName':'Please input Promotion Name',
   'Marketing.40Words':'1-40 words',
@@ -1990,6 +1990,11 @@ export default {
   'Marketing.needsToBeOperated':'Please select the order that needs to be operated',
   'Marketing.Invalid':'Invalid',
   'Marketing.Valid':'Valid',
+
+
+  'Marketing.DiscountType': 'Discount type',
+  'Marketing.fullType': 'full {type} Url',
+
 
   /*-----------------------------  Prescriber  ----------------------------------------*/
   'Prescriber.Add':'Add',

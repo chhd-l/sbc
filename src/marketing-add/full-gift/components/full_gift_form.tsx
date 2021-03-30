@@ -1,14 +1,10 @@
 import * as React from 'react';
 import { fromJS, List, Map } from 'immutable';
-
+import FormattedMessage from 'react-intl';
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../../full-gift/components/gift-levels';
-import DiscountLevels from '../../full-discount/components/discount-levels';
-import FirstDiscountLevels from '../../first-order-discount/components/discount-levels';
-import ReductionLevels from '../../full-reduction/components/reduction-levels';
-// import ReductionSubscritionLevels from '../full-reduction/components/reduction-subscrition-levels';
 import { GoodsModal } from 'biz';
 import SelectedGoodsGrid from '../../common-components/selected-goods-grid';
 

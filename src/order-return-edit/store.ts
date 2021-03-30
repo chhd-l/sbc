@@ -7,7 +7,7 @@ import FormActor from './actor/form-actor';
 import TradeActor from './actor/trade-actor';
 import PriceActor from './actor/price-actor';
 import ImageActor from './actor/image-actor';
-import { fetchOrderReturnList, getCanRefundPrice, getReturnDetail, getReturnReasons, getReturnWays, getTradeDetail, remedy } from './webapi';
+import { fetchOrder, getCanRefundPrice, getReturnDetail, getReturnReasons, getReturnWays, getTradeDetail, remedy } from './webapi';
 
 const confirm = Modal.confirm;
 
@@ -45,10 +45,10 @@ export default class AppStore extends Store {
 
     // 在线支付订单，计算剩余退款金额
     if (isOnLine) {
-      let orderReturnListRes = await fetchOrderReturnList(returnDetail.res.tid);
+      let OrderRes = await fetchOrder(returnDetail.res.tid);
 
-      if (orderReturnListRes.res && orderReturnListRes.res['context']) {
-        orderReturnListRes.res['context']
+      if (OrderRes.res && OrderRes.res['context']) {
+        OrderRes.res['context']
           .filter((v) => {
             return v.returnFlowState == 'COMPLETED';
           })

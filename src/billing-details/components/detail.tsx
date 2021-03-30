@@ -27,31 +27,20 @@ export default class BillingDetails extends React.Component<any, any> {
         <div style={styles.static}>
           <p style={{ marginLeft: 5, marginBottom: 10 }}>
             <span style={styles.space}>
-              {<FormattedMessage id="SettlementPeriod" />}：
-              {settlement.get('startTime')}～{settlement.get('endTime')}
+              {<FormattedMessage id="Finance.SettlementPeriod" />}：{settlement.get('startTime')}～{settlement.get('endTime')}
             </span>
             <span style={styles.space}>
-              {<FormattedMessage id="statementNumber" />}：
-              {settlement.get('settlementCode')}
+              {<FormattedMessage id="Finance.statementNumber" />}：{settlement.get('settlementCode')}
             </span>
             <span style={styles.space}>
-              {<FormattedMessage id="statementGenerationTime" />}：
-              {moment(settlement.get('createTime'))
-                .format(Const.DAY_FORMAT)
-                .toString()}
+              {<FormattedMessage id="Finance.statementGenerationTime" />}：{moment(settlement.get('createTime')).format(Const.DAY_FORMAT).toString()}
             </span>
           </p>
 
           <Row>
             <Col span={3}>
-              <p style={styles.nav}>
-                {<FormattedMessage id="Paymentamount" />}
-              </p>
-              <p style={styles.num}>
-                {settlement.get('splitPayPrice')
-                  ? util.FORMAT_YUAN(settlement.get('splitPayPrice'))
-                  : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '0.00'}
-              </p>
+              <p style={styles.nav}>{<FormattedMessage id="Finance.Paymentamount" />}</p>
+              <p style={styles.num}>{settlement.get('splitPayPrice') ? util.FORMAT_YUAN(settlement.get('splitPayPrice')) : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '0.00'}</p>
             </Col>
             {/* <Col span={3}>
               <p style={styles.nav}>{<FormattedMessage id="totalFreight" />}</p>

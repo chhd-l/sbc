@@ -187,15 +187,15 @@ class CateModalForm extends React.Component<any, any> {
 
     return (
       <Form className="login-form" style={{ width: 550 }}>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="categoryName" />} hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.categoryName" />} hasFeedback>
           {getFieldDecorator('cateName', {
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please enter a category name'
+                message: <FormattedMessage id="Product.enterCategoryName" />
               },
-              { max: 100, message: 'Up to 100 characters' },
+              { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, 'Category Name');
@@ -215,15 +215,19 @@ class CateModalForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: 'Please select display in shop'
+                  message: <FormattedMessage id="Product.PleaseSelectDisplay" />
                 }
               ],
               initialValue: displayStatus,
               onChange: this._editGoods.bind(this, 'displayStatus')
             })(
               <Radio.Group>
-                <Radio value={true}>Yes</Radio>
-                <Radio value={false}>No</Radio>
+                <Radio value={true}>
+                  <FormattedMessage id="Product.Yes" />
+                </Radio>
+                <Radio value={false}>
+                  <FormattedMessage id="Product.No" />
+                </Radio>
               </Radio.Group>
             )}
           </FormItem>
@@ -238,14 +242,14 @@ class CateModalForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please enter router'
+                      message: <FormattedMessage id="Product.PleaseEnterRouter" />
                     },
-                    { max: 100, message: 'Up to 100 characters' }
+                    { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }
                   ],
                   initialValue: cateRouter,
                   onChange: this._editGoods.bind(this, 'cateRouter')
                 })(<Input />)}
-                <Tips title={<FormattedMessage id="product.recommendedRouter" />} />
+                <Tips title={<FormattedMessage id="Product.recommendedRouter" />} />
               </FormItem>
             )}
             {formData.get('cateParentName') ? null : (
@@ -255,9 +259,9 @@ class CateModalForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please enter ALT name'
+                      message: <FormattedMessage id="Product.PleaseEnterALT" />
                     },
-                    { max: 100, message: 'Up to 100 characters' }
+                    { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }
                   ],
                   initialValue: altName,
                   onChange: this._editGoods.bind(this, 'altName')
@@ -276,7 +280,9 @@ class CateModalForm extends React.Component<any, any> {
                 initialValue: cateType ? this._getCateTypeName(cateType) : ''
               })(
                 <Select>
-                  <Option value="">All</Option>
+                  <Option value="">
+                    <FormattedMessage id="Product.All" />
+                  </Option>
                   {petType &&
                     petType.toJS().map((item, index) => (
                       <Option value={item.valueEn} key={index}>
@@ -285,27 +291,27 @@ class CateModalForm extends React.Component<any, any> {
                     ))}
                 </Select>
               )}
-              <Tips title={<FormattedMessage id="product.recommendedAliasName" />} />
+              <Tips title={<FormattedMessage id="Product.recommendedAliasName" />} />
             </FormItem>
           </>
         ) : null}
 
-        <FormItem {...formItemLayout} label={<FormattedMessage id="cateImage" />}>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.cateImage" />}>
           <div style={{ width: '400px' }}>
             <ImageLibraryUpload images={images} modalVisible={modalVisibleFun} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
           </div>
-          <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
+          <Tips title={<FormattedMessage id="Product.recommendedSizeImg" />} />
         </FormItem>
 
         <FormItem {...formItemLayout} label="Description title">
           {getFieldDecorator('cateTitle', {
-            rules: [{ max: 100, message: 'Up to 100 characters' }],
+            rules: [{ max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }],
             onChange: this._editGoods.bind(this, 'cateTitle'),
             initialValue: descriptionTitle
           })(<Input />)}
         </FormItem>
 
-        <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="cateDsc" />}>
+        <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="Product.cateDsc" />}>
           {getFieldDecorator('cateDescription', {
             rules: [
               {

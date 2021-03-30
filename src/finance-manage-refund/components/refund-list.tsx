@@ -4,6 +4,7 @@ import { Relax } from 'plume2';
 import { DataGrid, noop } from 'qmkit';
 import moment from 'moment';
 import { Table } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const Column = Table.Column;
 
@@ -30,13 +31,7 @@ export default class RefundList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      refundDetail,
-      total,
-      pageNum,
-      pageSize,
-      payWaysObj
-    } = this.props.relaxProps;
+    const { refundDetail, total, pageNum, pageSize, payWaysObj } = this.props.relaxProps;
 
     return (
       <div>
@@ -48,12 +43,10 @@ export default class RefundList extends React.Component<any, any> {
             total,
             current: pageNum + 1
           }}
-          onChange={(pagination, filters, sorter) =>
-            this._getData(pagination, filters, sorter)
-          }
+          onChange={(pagination, filters, sorter) => this._getData(pagination, filters, sorter)}
         >
           <Column
-            title="No"
+            title={<FormattedMessage id="Finance.No" />}
             dataIndex="index"
             key="index"
             width="5%"
@@ -62,7 +55,7 @@ export default class RefundList extends React.Component<any, any> {
             }}
           />
           <Column
-            title="Return Order time"
+            title={<FormattedMessage id="Finance.ReturnOrderTime" />}
             dataIndex="orderTime"
             key="orderTime"
             width="11%"
@@ -70,18 +63,9 @@ export default class RefundList extends React.Component<any, any> {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-          <Column
-            title="Return Order number"
-            dataIndex="returnOrderCode"
-            key="returnOrderCode"
-            width="12%"
-          />
-          <Column title="Order number" dataIndex="orderCode" key="orderCode" />
-          <Column
-            title="Order refund"
-            dataIndex="orderRefund"
-            key="orderRefund"
-          />
+          <Column title={<FormattedMessage id="Finance.ReturnOrderNumber" />} dataIndex="returnOrderCode" key="returnOrderCode" width="12%" />
+          <Column title={<FormattedMessage id="Finance.OrderRefund" />} dataIndex="orderCode" key="orderCode" />
+          <Column title={<FormattedMessage id="Finance.OrderNumber" />} dataIndex="orderRefund" key="orderRefund" />
           {/*<Column
             title="Trasaction serial number"
             width="15%"
@@ -89,22 +73,18 @@ export default class RefundList extends React.Component<any, any> {
             key="tradeNo"
           />*/}
 
+          <Column title={<FormattedMessage id="Finance.CustomerName" />} dataIndex="customerName" key="customerName" />
           <Column
-            title="Customer name"
-            dataIndex="customerName"
-            key="customerName"
-          />
-          <Column
-            title="Refund time"
+            title={<FormattedMessage id="Finance.RefundTime" />}
             dataIndex="tradeTime"
             key="tradeTime"
             render={(text, _rowData: any) => {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-          <Column title="Payment type" dataIndex="payWay" key="payWay" />
+          <Column title={<FormattedMessage id="Finance.PaymentType" />} dataIndex="payWay" key="payWay" />
           <Column
-            title="Payment method"
+            title={<FormattedMessage id="Finance.PaymentMethod" />}
             dataIndex="vendor"
             key="vendor"
             render={(_text, rowData: any) => {
@@ -113,7 +93,7 @@ export default class RefundList extends React.Component<any, any> {
           />
 
           <Column
-            title="Real Refund"
+            title={<FormattedMessage id="Finance.RealRefund" />}
             dataIndex="paymentOSActualReturnPrice"
             key="paymentOSActualReturnPrice"
             render={(text, rowData: any) => {

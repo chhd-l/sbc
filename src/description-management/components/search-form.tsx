@@ -35,7 +35,7 @@ export default function SearchForm(props: Iprop) {
             }}
           >
             <span>
-              <FormattedMessage id="search" />
+              <FormattedMessage id="Product.search" />
             </span>
           </Button>
         </Col>

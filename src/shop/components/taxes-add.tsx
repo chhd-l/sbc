@@ -3,7 +3,8 @@ import { Button, Modal, Form, Radio, Input, Select, Spin, InputNumber, message }
 import _ from 'lodash';
 import * as webApi from './../webapi';
 import { Const } from 'qmkit';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { IList } from '../../../typings/globalType';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class TaxesAdd extends React.Component<any, any> {
@@ -37,6 +38,9 @@ class TaxesAdd extends React.Component<any, any> {
       countryZoneIncludes: []
     };
   }
+  props: {
+    intl: any;
+  };
   componentDidMount() {
     this.getZoneList('');
   }
@@ -115,14 +119,14 @@ class TaxesAdd extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationsuccessful' }));
           this.props.closeFunction(true);
         } else {
-          message.error(res.message || 'Operation failure');
+          message.error(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
+        message.error(err.toString() || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
       });
   };
   updateTaxZone = (params) => {
@@ -131,14 +135,14 @@ class TaxesAdd extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationsuccessful' }));
           this.props.closeFunction(true);
         } else {
-          message.error(res.message || 'Operation failure');
+          message.error(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
+        message.error(err.toString() || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
       });
   };
 
@@ -165,14 +169,14 @@ class TaxesAdd extends React.Component<any, any> {
           this.setState({
             fetching: false
           });
-          message.error(res.message || 'Operation failure');
+          message.error(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
         }
       })
       .catch((err) => {
         this.setState({
           fetching: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(err.toString() || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
       });
   };
 
@@ -194,7 +198,7 @@ class TaxesAdd extends React.Component<any, any> {
       <Modal
         width={600}
         maskClosable={false}
-        title={isEdit ? 'Edit tax zone' : 'New tax zone'}
+        title={isEdit ? this.props.intl.formatMessage({ id: 'Setting.Edittaxzone' }) : this.props.intl.formatMessage({ id: 'Setting.Newtaxzone' })}
         visible={visible}
         confirmLoading={loading}
         onCancel={() => this.handleCancel()}
@@ -209,21 +213,21 @@ class TaxesAdd extends React.Component<any, any> {
               this.handleCancel();
             }}
           >
-            Cancel
+            {this.props.intl.formatMessage({ id: 'Setting.Cancel' })}
           </Button>,
           <Button key="submit" type="primary" onClick={this.handleSubmit}>
-            Submit
+            {this.props.intl.formatMessage({ id: 'Setting.Submit' })}
           </Button>
         ]}
       >
         <Form {...formItemLayout}>
-          <FormItem label="Tax zone name">
+          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Taxzonename' })}>
             {getFieldDecorator('taxZoneName', {
               rules: [
-                { required: true, message: 'Tax zone name is required' },
+                { required: true, message: this.props.intl.formatMessage({ id: 'Setting.Taxzonenameisrequired' }) },
                 {
                   max: 50,
-                  message: 'Exceed maximum length!'
+                  message: this.props.intl.formatMessage({ id: 'Setting.Exceedmaximumlength' })
                 }
               ],
               initialValue: taxForm.taxZoneName
@@ -240,12 +244,12 @@ class TaxesAdd extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem label="Tax zone description">
+          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Taxzonedescription' })}>
             {getFieldDecorator('taxZoneDescription', {
               rules: [
                 {
                   max: 500,
-                  message: 'Exceed maximum length!'
+                  message: this.props.intl.formatMessage({ id: 'Setting.Exceedmaximumlength' })
                 }
               ],
               initialValue: taxForm.taxZoneDescription
@@ -262,9 +266,9 @@ class TaxesAdd extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem label="Tax zone type">
+          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Taxzonetype' })}>
             {getFieldDecorator('taxZoneType', {
-              rules: [{ required: true, message: 'Tax zone type is required' }],
+              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Taxzonetypeisrequired' }) }],
               initialValue: taxForm.taxZoneType
             })(
               <Select
@@ -286,12 +290,12 @@ class TaxesAdd extends React.Component<any, any> {
               </Select>
             )}
           </FormItem>
-          <FormItem label="Zone includes">
+          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Zoneincludes' })}>
             {getFieldDecorator('zoneIncludes', {
               rules: [
                 {
                   required: true,
-                  message: 'Please Select zone!'
+                  message: this.props.intl.formatMessage({ id: 'Setting.PleaseSelectzone' })
                 }
               ],
               initialValue: taxForm.zoneIncludes
@@ -299,7 +303,7 @@ class TaxesAdd extends React.Component<any, any> {
               <Select
                 style={{ width: '80%' }}
                 showSearch
-                placeholder="Select zone"
+                placeholder={this.props.intl.formatMessage({ id: 'Setting.Selectzone' })}
                 optionFilterProp="children"
                 mode="multiple"
                 disabled={taxForm.taxZoneType === 1}
@@ -322,9 +326,9 @@ class TaxesAdd extends React.Component<any, any> {
               </Select>
             )}
           </FormItem>
-          <FormItem label="Tax rates">
+          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Taxrates' })}>
             {getFieldDecorator('taxRates', {
-              rules: [{ required: true, message: 'Tax rates is required' }],
+              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Taxratesisrequired' }) }],
               initialValue: taxForm.taxRates ? taxForm.taxRates : 0
             })(
               <InputNumber
@@ -347,4 +351,4 @@ class TaxesAdd extends React.Component<any, any> {
     );
   }
 }
-export default Form.create()(TaxesAdd);
+export default Form.create()(injectIntl(TaxesAdd));

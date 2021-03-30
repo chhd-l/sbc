@@ -75,7 +75,7 @@ class RejectForm extends React.Component<any, any> {
               },
               {
                 max: 100,
-                message: 'Please input less than 100 characters'
+                message: <FormattedMessage id="Marketing.lessThan100Characters" />
               }
               // { validator: this.checkComment }
             ]
@@ -183,12 +183,24 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '11%' }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
-                      <th style={{ width: '12%' }}>Recipient name</th>
-                      <th style={{ width: '13.5%' }}>Recipient mail</th>
-                      <th style={{ width: '11%' }}>Amount</th>
-                      <th style={{ width: '10.5%' }}>Link status</th>
-                      <th style={{ width: '12.5%' }}>Perscriber</th>
-                      <th style={{ width: '7.1%' }}>Operation</th>
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="Marketing.RecipientName" />
+                      </th>
+                      <th style={{ width: '13.5%' }}>
+                        <FormattedMessage id="Marketing.RecipientMail" />
+                      </th>
+                      <th style={{ width: '11%' }}>
+                        <FormattedMessage id="Marketing.Amount" />
+                      </th>
+                      <th style={{ width: '10.5%' }}>
+                        <FormattedMessage id="Marketing.LinkStatus" />
+                      </th>
+                      <th style={{ width: '12.5%' }}>
+                        <FormattedMessage id="Marketing.Perscriber" />
+                      </th>
+                      <th style={{ width: '7.1%' }}>
+                        <FormattedMessage id="Marketing.Operation" />
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
@@ -198,7 +210,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="Marketing.noData" />
                   </span>
                 </div>
               ) : null}
@@ -275,7 +287,10 @@ export default class ListView extends React.Component<any, any> {
                         <span> {id}</span>
                       </div>
                       <div style={{ width: 310, display: 'inline-block' }}>
-                        <span> Created Time: {moment(v.createTime).format('YYYY-MM-DD')}</span>
+                        <span>
+                          {' '}
+                          <FormattedMessage id="Marketing.CreatedTime" />: {moment(v.createTime).format('YYYY-MM-DD')}
+                        </span>
                       </div>
                     </div>
                   </td>
@@ -341,7 +356,7 @@ export default class ListView extends React.Component<any, any> {
                       })
                     }
                   >
-                    <Tooltip placement="top" title="See details">
+                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.SeeDetails" />}>
                       <span className="iconfont iconDetails"></span>
                     </Tooltip>
                   </td>

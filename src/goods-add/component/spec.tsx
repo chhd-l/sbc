@@ -76,7 +76,7 @@ class SpecForm extends React.Component<any, any> {
       <div id="specSelect" style={{ marginBottom: 10 }}>
         <Form>
           <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 10 }}>
-            <FormattedMessage id="product.specificationSetting" />
+            <FormattedMessage id="Product.specificationSetting" />
           </div>
           <div style={styles.box}>
             <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
@@ -92,7 +92,7 @@ class SpecForm extends React.Component<any, any> {
                 >
                   *
                 </span> */}
-                <FormattedMessage id="product.setMultipleSpecificationOfProducts" />
+                <FormattedMessage id="Product.setMultipleSpecificationOfProducts" />
               </span>
             </Checkbox>
           </div>
@@ -100,7 +100,9 @@ class SpecForm extends React.Component<any, any> {
             {specSingleFlag ? null : (
               <Row>
                 <Col offset={0}>
-                  <p style={{ color: '#999', marginBottom: 5 }}>You can quickly add multiple specifications using the keyboard enter key</p>
+                  <p style={{ color: '#999', marginBottom: 5 }}>
+                    <FormattedMessage id="Product.usingTheKeyboardEnterKey" />
+                  </p>
                 </Col>
               </Row>
             )}
@@ -138,7 +140,7 @@ class SpecForm extends React.Component<any, any> {
                                 {
                                   min: 1,
                                   max: 100,
-                                  message: 'No more than 100 characters'
+                                  message: <FormattedMessage id="Product.NoMoreThan100characters" />
                                 },
                                 {
                                   // 重复校验,
@@ -238,14 +240,14 @@ class SpecForm extends React.Component<any, any> {
                               initialValue: specValues
                             })(
                               <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
-                                {this._getChildren(item.get('specValues'),item.get('specName'))}
+                                {this._getChildren(item.get('specValues'), item.get('specName'))}
                               </Select>
                             )}
                           </FormItem>
                         </Col>
                         <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
                           <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }}>
-                            <FormattedMessage id="delete" />
+                            <FormattedMessage id="Product.delete" />
                           </Button>
                         </Col>
                       </Row>
@@ -256,7 +258,7 @@ class SpecForm extends React.Component<any, any> {
             {specSingleFlag ? null : (
               <Button onClick={this._addSpec}>
                 <Icon type="plus" />
-                <FormattedMessage id="addSpecifications" />
+                <FormattedMessage id="Product.addSpecifications" />
               </Button>
             )}
           </div>
@@ -268,7 +270,7 @@ class SpecForm extends React.Component<any, any> {
   /**
    * 获取规格值转为option
    */
-  _getChildren = (specValues: IList,specName: any) => {
+  _getChildren = (specValues: IList, specName: any) => {
     const children = [];
     specValues.forEach((item) => {
       //let a = item.get('detailName').replace(/[^\d.]/g, '');
@@ -325,7 +327,7 @@ class SpecForm extends React.Component<any, any> {
   _addSpec = () => {
     const { addSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() >= 5) {
-      message.error('Add up to 5 specifications');
+      message.error(<FormattedMessage id="Product.AddUpo5Specifications" />);
       return;
     }
     updateSpecForm(this.props.form);
@@ -335,7 +337,7 @@ class SpecForm extends React.Component<any, any> {
   _deleteSpec = (specId: number) => {
     const { deleteSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() <= 1) {
-      message.error('Keep at least 1 specification item');
+      message.error(<FormattedMessage id="Product.Keep1SpecificationItem" />);
       return;
     }
     updateSpecForm(this.props.form);

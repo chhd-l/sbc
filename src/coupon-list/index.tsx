@@ -3,7 +3,7 @@ import { Breadcrumb } from 'antd';
 import { StoreProvider } from 'plume2';
 
 import { AuthWrapper, Headline, BreadCrumb } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 import AppStore from './store';
 import SearchHead from './components/search-head';
 import SearchList from './components/search-list';
@@ -28,7 +28,7 @@ export default class CouponActivityList extends React.Component<any, any> {
             <Breadcrumb.Item>优惠券列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container coupon">
-            <Headline title="Coupon list" />
+            <Headline title={<FormattedMessage id="Marketing.CouponList" />} />
             <SearchHead />
             {/*操作按钮组*/}
             {/* <ButtonGroup /> */}

@@ -31,15 +31,15 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="Marketing.all" />} key="0">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Invalid" key="Invalid">
+          <Tabs.TabPane tab={<FormattedMessage id="Marketing.Invalid" />} key="Invalid">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Valid" key="Valid">
+          <Tabs.TabPane tab={<FormattedMessage id="Marketing.Valid" />} key="Valid">
             <List />
           </Tabs.TabPane>
         </Tabs>

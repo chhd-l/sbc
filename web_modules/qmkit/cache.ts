@@ -34,5 +34,6 @@ export default {
   PRODUCT_SALES_SETTING:'product_sales_setting',
   TAX_API_SETTINGS: 's2b-supplier@taxApiSettings',
   ADDRESS_API_SETTINGS: 's2b-supplier@addressApiSettings',
-  TAX_SWITCH:'s2b-supplier@taxSwitch'
+  TAX_SWITCH:'s2b-supplier@taxSwitch',
+  LANGUAGE:'language'
 };

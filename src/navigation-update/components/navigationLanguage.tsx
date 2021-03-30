@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import { cache } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const img_left = require('./img/left.png');
 const img_right = require('./img/right.png');
 
@@ -69,9 +70,12 @@ export default class NavigationLanguage extends React.Component<any, any> {
 
     return (
       <div>
-        <h3>Step1</h3>
+        <h3>
+          <FormattedMessage id="Content.Step1" />
+        </h3>
         <h4>
-          Navigation Language <span className="ant-form-item-required"></span>
+          <FormattedMessage id="Content.NavigationLanguage" />
+          <span className="ant-form-item-required"></span>
         </h4>
         <div className="selectLanguage">
           <Row>

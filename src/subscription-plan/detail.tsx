@@ -1,7 +1,7 @@
 import React from 'react';
-import SubscriptionPlanUpdate from '../subscription-plan-update';
+import Subscription from '../subscription-plan-update';
 
-export default function SubscriptionPlanDetail(props: any) {
+export default function SubscriptionDetail(props: any) {
   //@ts-ignore
-  return <SubscriptionPlanUpdate id={props.match.params.id} editable={false} />;
+  return <Subscription id={props.match.params.id} editable={false} />;
 }

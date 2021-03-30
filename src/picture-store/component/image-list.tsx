@@ -45,40 +45,23 @@ export default class ImageList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      imageList,
-      currentPage,
-      total,
-      pageSize,
-      allChecked
-    } = this.props.relaxProps;
+    const { imageList, currentPage, total, pageSize, allChecked } = this.props.relaxProps;
     return (
       <div>
         <div style={styles.greyHeader}>
-          <Checkbox
-            checked={allChecked}
-            onChange={this._onchangeCheckedAll.bind(this)}
-          >
-            <FormattedMessage id="selectAll" />
+          <Checkbox checked={allChecked} onChange={this._onchangeCheckedAll.bind(this)}>
+            <FormattedMessage id="Setting.selectAll" />
           </Checkbox>
           <AuthWrapper functionName="f_image_del">
-            <Tooltip placement="top" title="Delete">
-              <a
-                onClick={this._delete}
-                style={styles.link}
-                className="iconfont iconDelete"
-              >
+            <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
+              <a onClick={this._delete} style={styles.link} className="iconfont iconDelete">
                 {/*<FormattedMessage id="delete" />*/}
               </a>
             </Tooltip>
           </AuthWrapper>
           <AuthWrapper functionName="f_picturePort_1">
-            <Tooltip placement="top" title="Move">
-              <a
-                style={styles.link}
-                onClick={this._showModal}
-                className="iconfont iconbtn-move"
-              >
+            <Tooltip placement="top" title={<FormattedMessage id="Setting.Move" />}>
+              <a style={styles.link} onClick={this._showModal} className="iconfont iconbtn-move">
                 {/*<FormattedMessage id="move" />*/}
               </a>
             </Tooltip>
@@ -88,24 +71,12 @@ export default class ImageList extends React.Component<any, any> {
           {(imageList || fromJS([])).map((item, index) => {
             return (
               <div style={styles.boxItem} key={item.get('resourceId')}>
-                <Checkbox
-                  checked={item.get('checked')}
-                  onChange={this._onchangeChecked.bind(this, index)}
-                />
-                <img
-                  src={item.get('artworkUrl')}
-                  alt=""
-                  width="120"
-                  height="120"
-                />
+                <Checkbox checked={item.get('checked')} onChange={this._onchangeChecked.bind(this, index)} />
+                <img src={item.get('artworkUrl')} alt="" width="120" height="120" />
                 <Input
                   defaultValue={item.get('resourceName')}
                   onBlur={(e) => {
-                    this._updateImage(
-                      e,
-                      item.get('resourceName'),
-                      item.get('resourceId')
-                    );
+                    this._updateImage(e, item.get('resourceName'), item.get('resourceId'));
                   }}
                 />
               </div>
@@ -116,19 +87,12 @@ export default class ImageList extends React.Component<any, any> {
           <div className="ant-table-placeholder">
             <span>
               <i className="anticon anticon-frown-o" />
-              No data
+              <FormattedMessage id="Setting.NoData" />
             </span>
           </div>
         ) : (
           <div style={styles.page}>
-            <Pagination
-              onChange={(pageNum, pageSize) =>
-                this._toCurrentPage(pageNum, pageSize)
-              }
-              current={currentPage}
-              total={total}
-              pageSize={pageSize}
-            />
+            <Pagination onChange={(pageNum, pageSize) => this._toCurrentPage(pageNum, pageSize)} current={currentPage} total={total} pageSize={pageSize} />
           </div>
         )}
       </div>
@@ -141,12 +105,12 @@ export default class ImageList extends React.Component<any, any> {
   _delete = () => {
     const { imageList, doDelete } = this.props.relaxProps;
     if (imageList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error('Please select the picture to delete first');
+      message.error(<FormattedMessage id="Setting.deleteFirst" />);
       return;
     }
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete the selected picture?',
+      title: <FormattedMessage id="Setting.Prompt" />,
+      content: <FormattedMessage id="Setting.deleteTheSelectedPicture" />,
       onOk() {
         doDelete();
       }
@@ -160,7 +124,7 @@ export default class ImageList extends React.Component<any, any> {
   _showModal = () => {
     const { imageList, showMoveImageModal } = this.props.relaxProps;
     if (imageList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error('Please select an image to move first');
+      message.error(<FormattedMessage id="Setting.moveFirst" />);
       return;
     }
     showMoveImageModal(true);
@@ -175,21 +139,17 @@ export default class ImageList extends React.Component<any, any> {
     //修改了图片名称才真正的请求接口进行修改
     if (e.target.value != oldVal) {
       if (!e.target.value.trim()) {
-        message.error('Please input a file name');
+        message.error(<FormattedMessage id="Setting.PleaseInputAFileName" />);
         return false;
       }
 
-      if (
-        /(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(
-          e.target.value
-        )
-      ) {
-        message.error('Please enter the file name in the correct format');
+      if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(e.target.value)) {
+        message.error(<FormattedMessage id="Setting.theCorrectFormat" />);
         return false;
       }
 
       if (e.target.value.length > 40) {
-        message.error('File name is too long');
+        message.error(<FormattedMessage id="Setting.FileNameIsTooLong" />);
         return false;
       }
 

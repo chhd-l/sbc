@@ -5,7 +5,7 @@ import { Const } from 'qmkit';
 import SearchForm from './../../description-management/components/search-form';
 import { getDescriptionList } from './../../description-management/webapi';
 import { bindDescription } from '../webapi';
-
+import { FormattedMessage } from 'react-intl';
 import SortList from './sort-list';
 
 interface Iprop {
@@ -137,16 +137,16 @@ export default class BindDescription extends Component<Iprop, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.onCancel();
-          message.success(res.message || 'Operate successfully');
+          message.success(res.message || <FormattedMessage id="Product.OperateSuccessfully" />);
         } else {
-          message.error(res.message || 'Operate failed');
+          message.error(res.message || <FormattedMessage id="Product.OperateFailed" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Operate failed');
+        message.error(err || <FormattedMessage id="Product.OperateFailed" />);
         this.setState({
           loading: false
         });
@@ -158,12 +158,12 @@ export default class BindDescription extends Component<Iprop, any> {
     const { descName, loading, selectedRowKeys, descList, step, pagination, bindList } = this.state;
     const listColumns = [
       {
-        title: 'Description name',
+        title: <FormattedMessage id="Product.DescriptionName" />,
         dataIndex: 'descriptionName',
         key: 'descName'
       },
       {
-        title: 'Display name',
+        title: <FormattedMessage id="Product.DisplayName" />,
         key: 'dipName',
         render: (text, record) => (
           <div>
@@ -184,7 +184,7 @@ export default class BindDescription extends Component<Iprop, any> {
 
     return (
       <Modal
-        title="Bind description"
+        title={<FormattedMessage id="Product.BindDescription" />}
         visible={visible}
         width="800px"
         maskClosable={false}
@@ -194,7 +194,7 @@ export default class BindDescription extends Component<Iprop, any> {
         footer={[
           step === 2 ? (
             <Button key="prev" onClick={this.onPrevButtonClick}>
-              Previous
+              <FormattedMessage id="Product.Previous" />
             </Button>
           ) : null,
           <Button
@@ -203,7 +203,7 @@ export default class BindDescription extends Component<Iprop, any> {
               this.onCancel();
             }}
           >
-            Cancel
+            <FormattedMessage id="Product.Cancel" />
           </Button>,
           step === 2 ? (
             <Button
@@ -214,11 +214,11 @@ export default class BindDescription extends Component<Iprop, any> {
                 this.onSubmit();
               }}
             >
-              Confirm
+              <FormattedMessage id="Product.Confirm" />
             </Button>
           ) : (
             <Button key="next" type="primary" disabled={!selectedRowKeys.length} onClick={this.onNextButtonClick}>
-              Next
+              <FormattedMessage id="Product.Next" />
             </Button>
           )
         ]}
@@ -236,7 +236,7 @@ export default class BindDescription extends Component<Iprop, any> {
                 }}
                 disabled={selectedRowKeys.length === 0}
               >
-                Reload
+                <FormattedMessage id="Product.Reload" />
               </Button>
               <span style={{ marginLeft: 8 }}>{selectedRowKeys.length ? `Selected ${selectedRowKeys.length} items` : ''}</span>
             </div>

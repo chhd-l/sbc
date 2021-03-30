@@ -1,27 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Select,
-  Radio,
-  Checkbox,
-  message,
-  Icon
-} from 'antd';
+import { Row, Col, Form, Input, Select, Radio, Checkbox, message, Icon } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-import {
-  Const,
-  Tips,
-  FindArea,
-  QMUpload,
-  ValidConst,
-  AreaSelect,
-  QMMethod
-} from 'qmkit';
+import { Const, Tips, FindArea, QMUpload, ValidConst, AreaSelect, QMMethod } from 'qmkit';
 import Store from '../store';
 import { fromJS } from 'immutable';
 import styled from 'styled-components';
@@ -150,10 +132,7 @@ export default class ExtraForm extends React.Component<any, any> {
     }
 
     //选择发票单独收货地址
-    if (
-      this.props.sperator &&
-      this.state.selectedInvoiceAddrId != selectedInvoiceAddrId
-    ) {
+    if (this.props.sperator && this.state.selectedInvoiceAddrId != selectedInvoiceAddrId) {
       if (invoiceType == 0 || invoiceType == 1) {
         if (this.props.sperator && selectedInvoiceAddrId) {
           this.props.form.setFieldsValue({
@@ -185,22 +164,16 @@ export default class ExtraForm extends React.Component<any, any> {
     //发票Options
     const invoiceOptions = this._store.state().get('invoiceOptions');
     //发票信息
-    const invoiceProjectType = this._store
-      .state()
-      .getIn(['extra', 'invoiceProjectType']);
+    const invoiceProjectType = this._store.state().getIn(['extra', 'invoiceProjectType']);
 
     const selectedInvoiceAddrId = this.props.selectedInvoiceAddrId;
     //买家备注
     const buyerRemark = this._store.state().getIn(['extra', 'buyerRemark']);
     //订单附件
-    const images = (
-      this._store.state().getIn(['extra', 'images']) || fromJS([])
-    ).toJS();
+    const images = (this._store.state().getIn(['extra', 'images']) || fromJS([])).toJS();
     const { onExtraInfoChange, invoiceShowMore } = this._store;
     //开票项目
-    const projectOptions = this._store
-      .state()
-      .getIn(['extra', 'projectOptions']);
+    const projectOptions = this._store.state().getIn(['extra', 'projectOptions']);
     //发票抬头
     const invoiceTitle = this._store.state().getIn(['extra', 'invoiceTitle']);
     //纳税人识别号
@@ -216,22 +189,10 @@ export default class ExtraForm extends React.Component<any, any> {
     //地址数组
     let addsArray = [];
 
-    if (
-      invoiceConsignee.get('provinceId') &&
-      invoiceConsignee.get('addressId') == 'tempId'
-    ) {
-      addsArray.push(
-        invoiceConsignee.get('provinceId') &&
-          invoiceConsignee.get('provinceId').toString()
-      );
-      addsArray.push(
-        invoiceConsignee.get('cityId') &&
-          invoiceConsignee.get('cityId').toString()
-      );
-      addsArray.push(
-        invoiceConsignee.get('areaId') &&
-          invoiceConsignee.get('areaId').toString()
-      );
+    if (invoiceConsignee.get('provinceId') && invoiceConsignee.get('addressId') == 'tempId') {
+      addsArray.push(invoiceConsignee.get('provinceId') && invoiceConsignee.get('provinceId').toString());
+      addsArray.push(invoiceConsignee.get('cityId') && invoiceConsignee.get('cityId').toString());
+      addsArray.push(invoiceConsignee.get('areaId') && invoiceConsignee.get('areaId').toString());
     }
 
     const addressInit = {
@@ -239,52 +200,36 @@ export default class ExtraForm extends React.Component<any, any> {
     };
 
     const phone = {
-      initialValue:
-        invoiceConsignee.get('addressId') == 'tempId'
-          ? invoiceConsignee.get('phone')
-          : null
+      initialValue: invoiceConsignee.get('addressId') == 'tempId' ? invoiceConsignee.get('phone') : null
     };
 
     const name = {
-      initialValue:
-        invoiceConsignee.get('addressId') == 'tempId'
-          ? invoiceConsignee.get('name')
-          : null
+      initialValue: invoiceConsignee.get('addressId') == 'tempId' ? invoiceConsignee.get('name') : null
     };
 
     const detailAddress = {
-      initialValue:
-        invoiceConsignee.get('addressId') == 'tempId'
-          ? invoiceConsignee.get('address')
-          : null
+      initialValue: invoiceConsignee.get('addressId') == 'tempId' ? invoiceConsignee.get('address') : null
     };
 
-    const customerInvoiceTempAddressVisiable = this._store
-      .state()
-      .get('customerInvoiceTempAddressVisiable');
+    const customerInvoiceTempAddressVisiable = this._store.state().get('customerInvoiceTempAddressVisiable');
     if (customerInvoiceTempAddressVisiable && !selectedInvoiceAddrId) {
       this._store.onSelectInvoiceAddress('tempId');
     }
     return (
       <div>
         <strong style={styles.title}>
-          <FormattedMessage id="deliveryMethod" />:{' '}
+          <FormattedMessage id="Order.deliveryMethod" />:{' '}
         </strong>
 
         {/*p配送方式 0:其他 1:快递*/}
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="extraInformation" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.extraInformation" />}>
           <Col span={8}>
             {getFieldDecorator('deliverWay', {
               initialValue: '1'
             })(
               <Select
                 disabled={selectedCustomerId ? false : true}
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 onChange={(val) => {
                   this.setState({
                     deliverWay: val
@@ -296,7 +241,7 @@ export default class ExtraForm extends React.Component<any, any> {
                 }}
               >
                 <Option value="1">
-                  <FormattedMessage id="expressDelivery" />
+                  <FormattedMessage id="Order.expressDelivery" />
                 </Option>
               </Select>
             )}
@@ -304,19 +249,14 @@ export default class ExtraForm extends React.Component<any, any> {
         </FormItem>
 
         {/*支付方式 0 在线支付 1线下支付 */}
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="paymentMethod" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.paymentMethod" />}>
           <Col span={8}>
             {getFieldDecorator('payType', {
               initialValue: '0'
             })(
               <Select
                 disabled={selectedCustomerId ? false : true}
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 onChange={(val) => {
                   this.setState({
                     payType: val
@@ -328,10 +268,10 @@ export default class ExtraForm extends React.Component<any, any> {
                 }}
               >
                 <Option value="0">
-                  <FormattedMessage id="onlinePayment" />
+                  <FormattedMessage id="Order.onlinePayment" />
                 </Option>
                 <Option value="1">
-                  <FormattedMessage id="offlinePayment" />
+                  <FormattedMessage id="Order.offlinePayment" />
                 </Option>
               </Select>
             )}
@@ -339,18 +279,13 @@ export default class ExtraForm extends React.Component<any, any> {
         </FormItem>
 
         {/*发票 0：普通发票 1：增值税专用发票 -1：不需要发票*/}
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="invoice.invoiceInformation" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.invoiceInformation" />}>
           <Col span={8}>
             {getFieldDecorator('invoiceType', {
               initialValue: '-1'
             })(
               <Select
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 disabled={isSupportInvoice && selectedCustomerId ? false : true}
                 onChange={(val) => {
                   this.setState({
@@ -363,7 +298,7 @@ export default class ExtraForm extends React.Component<any, any> {
                 }}
               >
                 <Option key={Math.random()} value="-1">
-                  <FormattedMessage id="invoice.noInvoiceRequired" />
+                  <FormattedMessage id="Order.noInvoiceRequired" />
                 </Option>
                 {invoiceOptions.map((option) => (
                   <Option key={option.get('val')} value={option.get('val')}>
@@ -379,15 +314,10 @@ export default class ExtraForm extends React.Component<any, any> {
         {(this.state.invoiceType == '0' || this.state.invoiceType == '1') && (
           <div>
             {this.state.invoiceType == '0' && (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="invoice.invoiceInformation" />}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Order.invoiceInformation" />}>
                 <Col span={8}>
                   {getFieldDecorator('invoiceProject', {
-                    initialValue: invoiceProjectType
-                      ? invoiceProjectType.toString()
-                      : '0'
+                    initialValue: invoiceProjectType ? invoiceProjectType.toString() : '0'
                   })(
                     <RadioGroup
                       size="default"
@@ -400,36 +330,29 @@ export default class ExtraForm extends React.Component<any, any> {
                       }}
                     >
                       <RadioButton value="0">
-                        <FormattedMessage id="invoice.personal" />
+                        <FormattedMessage id="Order.personal" />
                       </RadioButton>
                       <RadioButton value="1">
-                        <FormattedMessage id="invoice.company" />
+                        <FormattedMessage id="Order.company" />
                       </RadioButton>
                     </RadioGroup>
                   )}
                 </Col>
               </FormItem>
             )}
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="invoice.pleaseSelectInvoiceItem" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Order.pleaseSelectInvoiceItem" />}>
               <Col span={24}>
                 {getFieldDecorator('invoiceResult', {
                   initialValue: invoiceResult,
                   rules: [
                     {
                       len: 32,
-                      message: (
-                        <FormattedMessage id="invoice.mustSelectInvoiceItem" />
-                      )
+                      message: <FormattedMessage id="Order.mustSelectInvoiceItem" />
                     }
                   ]
                 })(
                   <Select
-                    getPopupContainer={() =>
-                      document.getElementById('page-content')
-                    }
+                    getPopupContainer={() => document.getElementById('page-content')}
                     style={{ width: 200 }}
                     onChange={(val) => {
                       this.setState({
@@ -443,14 +366,10 @@ export default class ExtraForm extends React.Component<any, any> {
                     }}
                   >
                     <Option value="-1">
-                      <FormattedMessage id="invoice.pleaseSelectInvoiceItem" />
+                      <FormattedMessage id="Order.pleaseSelectInvoiceItem" />
                     </Option>
                     {projectOptions
-                      .filter((f) =>
-                        this.state.invoiceType == '1'
-                          ? f.projectId == '00000000000000000000000000000000'
-                          : true
-                      )
+                      .filter((f) => (this.state.invoiceType == '1' ? f.projectId == '00000000000000000000000000000000' : true))
                       .map((v: { projectId: string; projectName: string }) => (
                         <Option key={v.projectId} value={v.projectId}>
                           {v.projectName}
@@ -461,30 +380,21 @@ export default class ExtraForm extends React.Component<any, any> {
               </Col>
             </FormItem>
             {this.state.invoiceType == '0' && invoiceProjectType == 1 && (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="invoice.invoiceHeader" />}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Order.invoiceHeader" />}>
                 {getFieldDecorator('invoiceTitle', {
                   initialValue: invoiceTitle,
                   rules: [
                     {
                       required: true,
-                      message: (
-                        <FormattedMessage id="invoice.mustFillInTheInvoiceHeader" />
-                      )
+                      message: <FormattedMessage id="Order.mustFillInTheInvoiceHeader" />
                     },
                     {
                       min: 1,
-                      message: (
-                        <FormattedMessage id="invoice.invoiceHeaderValidateTip1" />
-                      )
+                      message: <FormattedMessage id="Order.invoiceHeaderValidateTip1" />
                     },
                     {
                       max: 50,
-                      message: (
-                        <FormattedMessage id="invoice.invoiceHeaderValidateTip2" />
-                      )
+                      message: <FormattedMessage id="Order.invoiceHeaderValidateTip2" />
                     }
                   ]
                 })(
@@ -503,24 +413,17 @@ export default class ExtraForm extends React.Component<any, any> {
               </FormItem>
             )}
             {this.state.invoiceType == '0' && invoiceProjectType == 1 && (
-              <FormItem
-                {...formItemLayout}
-                label={
-                  <FormattedMessage id="invoice.taxpayerIdentificationNumber" />
-                }
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Order.taxpayerIdentificationNumber" />}>
                 {getFieldDecorator('taxNo', {
                   initialValue: taxNo,
                   rules: [
                     {
                       pattern: ValidConst.tax,
-                      message: (
-                        <FormattedMessage id="invoice.taxpayerIdentificationNumberValidateTip1" />
-                      )
+                      message: <FormattedMessage id="Order.taxpayerIdentificationNumberValidateTip" />
                     }
                   ]
                 })(
-                  <FormattedMessage id="invoice.taxpayerIdentificationNumberValidateTip2">
+                  <FormattedMessage id="Order.taxpayerIdentificationNumberValidateTip2">
                     {(txt) => (
                       <Input
                         style={{ width: 450 }}
@@ -540,36 +443,26 @@ export default class ExtraForm extends React.Component<any, any> {
               </FormItem>
             )}
             {this.state.invoiceType == '1' && (
-              <FormItem
-                {...formItemLayout}
-                label={<span>&nbsp;</span>}
-                colon={false}
-              >
+              <FormItem {...formItemLayout} label={<span>&nbsp;</span>} colon={false}>
                 <Row>
                   <Col span={16}>
                     <p>
-                      <FormattedMessage id="invoice.companyFullName" />:
-                      {invoiceResponse.get('companyName')}
+                      <FormattedMessage id="Order.companyFullName" />:{invoiceResponse.get('companyName')}
                     </p>
                     <p>
-                      <FormattedMessage id="invoice.companyTaxpayerIdentificationNumber" />
-                      :{invoiceResponse.get('taxpayerNumber')}
+                      <FormattedMessage id="invoice.companyTaxpayerIdentificationNumber" />:{invoiceResponse.get('taxpayerNumber')}
                     </p>
                     <p>
-                      <FormattedMessage id="invoice.companyPhone" />:
-                      {invoiceResponse.get('companyPhone')}
+                      <FormattedMessage id="Order.companyPhone" />:{invoiceResponse.get('companyPhone')}
                     </p>
                     <p>
-                      <FormattedMessage id="address" />:
-                      {invoiceResponse.get('companyAddress')}
+                      <FormattedMessage id="Order.address" />:{invoiceResponse.get('companyAddress')}
                     </p>
                     <p>
-                      <FormattedMessage id="invoice.basicBankAccountNumber" />:
-                      {invoiceResponse.get('bankNo')}
+                      <FormattedMessage id="Order.basicBankAccountNumber" />:{invoiceResponse.get('bankNo')}
                     </p>
                     <p>
-                      <FormattedMessage id="invoice.bank" />:
-                      {invoiceResponse.get('bankName')}
+                      <FormattedMessage id="Order.bank" />:{invoiceResponse.get('bankName')}
                     </p>
                   </Col>
                 </Row>
@@ -591,16 +484,12 @@ export default class ExtraForm extends React.Component<any, any> {
                   });
                 }}
               >
-                <FormattedMessage id="invoice.useSeparateInvoiceReceiptInformation" />
+                <FormattedMessage id="Order.useSeparateInvoiceReceiptInformation" />
               </Checkbox>
             </FormItem>
             {/*如果是独立发票地址*/}
             {this.props.sperator && selectedCustomerId && (
-              <FormItem
-                label={<FormattedMessage id="invoice.deliveryInformation" />}
-                hasFeedback
-                {...smallformItemLayout}
-              >
+              <FormItem label={<FormattedMessage id="Order.deliveryInformation" />} hasFeedback {...smallformItemLayout}>
                 <Radio.Group
                   value={selectedInvoiceAddrId}
                   onChange={(e: any) => {
@@ -612,24 +501,10 @@ export default class ExtraForm extends React.Component<any, any> {
                     invoiceShowType === 2 || k < 10 ? (
                       <div key={k} className="addressDisplay">
                         <Radio value={v.get('deliveryAddressId')}>
-                          <FormattedMessage id="receiver" />：
-                          {v.get('consigneeName')}&nbsp;{' '}
-                          <FormattedMessage id="phoneNumber" />：
-                          {v.get('consigneeNumber')}&nbsp;{' '}
-                          <FormattedMessage id="deliveryInformation" />：
-                          {FindArea.addressInfo(
-                            v.get('provinceId')
-                              ? v.get('provinceId').toString()
-                              : '',
-                            v.get('cityId') ? v.get('cityId').toString() : '',
-                            v.get('areaId') ? v.get('areaId').toString() : ''
-                          )}
+                          <FormattedMessage id="Order.receiver" />：{v.get('consigneeName')}&nbsp; <FormattedMessage id="Order.phoneNumber" />：{v.get('consigneeNumber')}&nbsp; <FormattedMessage id="Order.deliveryInformation" />：
+                          {FindArea.addressInfo(v.get('provinceId') ? v.get('provinceId').toString() : '', v.get('cityId') ? v.get('cityId').toString() : '', v.get('areaId') ? v.get('areaId').toString() : '')}
                           {v.get('deliveryAddress')}&nbsp;
-                          {v.get('isDefaltAddress') === 1 ? (
-                            <FormattedMessage id="defaultAddress" />
-                          ) : (
-                            ''
-                          )}
+                          {v.get('isDefaltAddress') === 1 ? <FormattedMessage id="Order.defaultAddress" /> : ''}
                         </Radio>
                       </div>
                     ) : null
@@ -641,7 +516,7 @@ export default class ExtraForm extends React.Component<any, any> {
                         invoiceShowMore(2);
                       }}
                     >
-                      <FormattedMessage id="more" />
+                      <FormattedMessage id="Public.more" />
                     </a>
                   ) : (
                     ''
@@ -649,7 +524,7 @@ export default class ExtraForm extends React.Component<any, any> {
                   <div>
                     <Radio value="tempId">
                       <span style={{ color: '#F56C1D' }}>
-                        <FormattedMessage id="order.noAddressAvailable" />
+                        <FormattedMessage id="Order.noAddressAvailable" />
                       </span>
                     </Radio>
                   </div>
@@ -663,13 +538,8 @@ export default class ExtraForm extends React.Component<any, any> {
                         initialValue: selectedInvoiceAddrId,
                         rules: [
                           {
-                            required:
-                              selectedCustomerId && this.props.sperator
-                                ? true
-                                : false,
-                            message: (
-                              <FormattedMessage id="order.mustChooseAShippingAddress" />
-                            )
+                            required: selectedCustomerId && this.props.sperator ? true : false,
+                            message: <FormattedMessage id="Order.mustChooseAShippingAddress" />
                           }
                         ]
                       })(<input type="hidden" />)}
@@ -683,138 +553,73 @@ export default class ExtraForm extends React.Component<any, any> {
               <Row>
                 <Col offset={3}>
                   <AreaSelectBox>
-                    <FormItem
-                      label={<FormattedMessage id="area" />}
-                      hasFeedback
-                      {...addressformItemLayout}
-                    >
+                    <FormItem label={<FormattedMessage id="area" />} hasFeedback {...addressformItemLayout}>
                       {getFieldDecorator('invoiceConsigneeAddressIds', {
                         ...addressInit,
                         rules: [
                           {
                             required: true,
-                            message: (
-                              <FormattedMessage id="order.pleaseSelectProvinceOrCityOrDistrict" />
-                            )
+                            message: <FormattedMessage id="Order.pleaseSelectProvinceOrCityOrDistrict" />
                           }
                         ]
                       })(
                         <AreaSelect
                           onChange={(val) => {
-                            this._store.settingInvoiceTempAddress(
-                              'tempAddress',
-                              val
-                            );
+                            this._store.settingInvoiceTempAddress('tempAddress', val);
                           }}
                         />
                       )}
                     </FormItem>
                   </AreaSelectBox>
-                  <FormItem
-                    label={<FormattedMessage id="detailAddress" />}
-                    hasFeedback
-                    {...addressformItemLayout}
-                  >
+                  <FormItem label={<FormattedMessage id="Order.detailAddress" />} hasFeedback {...addressformItemLayout}>
                     {getFieldDecorator('invoiceConsigneeAddress', {
                       ...detailAddress,
                       rules: [
                         {
                           required: true,
-                          message: (
-                            <FormattedMessage id="order.inputDetailAddressTip1" />
-                          )
+                          message: <FormattedMessage id="Order.inputDetailAddressTip1" />
                         },
                         {
                           min: 5,
-                          message: (
-                            <FormattedMessage id="order.inputDetailAddressTip2" />
-                          )
+                          message: <FormattedMessage id="Order.inputDetailAddressTip2" />
                         },
                         {
                           max: 60,
-                          message: (
-                            <FormattedMessage id="order.inputDetailAddressTip2" />
-                          )
+                          message: <FormattedMessage id="Order.inputDetailAddressTip2" />
                         }
                       ]
-                    })(
-                      <Input
-                        onChange={(val) =>
-                          this._store.settingInvoiceTempAddress(
-                            'address',
-                            (val.target as any).value
-                          )
-                        }
-                      />
-                    )}
+                    })(<Input onChange={(val) => this._store.settingInvoiceTempAddress('address', (val.target as any).value)} />)}
                   </FormItem>
-                  <FormItem
-                    label={<FormattedMessage id="receiver" />}
-                    hasFeedback
-                    {...addressformItemLayout}
-                  >
+                  <FormItem label={<FormattedMessage id="Order.receiver" />} hasFeedback {...addressformItemLayout}>
                     {getFieldDecorator('invoiceConsigneeName', {
                       ...name,
                       rules: [
                         {
                           required: true,
-                          message: (
-                            <FormattedMessage id="order.inputReceiverTip" />
-                          )
+                          message: <FormattedMessage id="Order.inputReceiverTip" />
                         },
                         {
                           validator: (rule, value, callback) => {
-                            QMMethod.validatorMinAndMax(
-                              rule,
-                              value,
-                              callback,
-                              <FormattedMessage id="receiver" />,
-                              2,
-                              15
-                            );
+                            QMMethod.validatorMinAndMax(rule, value, callback, <FormattedMessage id="Order.receiver" />, 2, 15);
                           }
                         }
                       ]
-                    })(
-                      <Input
-                        onChange={(val) =>
-                          this._store.settingInvoiceTempAddress(
-                            'name',
-                            (val.target as any).value
-                          )
-                        }
-                      />
-                    )}
+                    })(<Input onChange={(val) => this._store.settingInvoiceTempAddress('name', (val.target as any).value)} />)}
                   </FormItem>
-                  <FormItem
-                    label={<FormattedMessage id="phoneNumber2" />}
-                    hasFeedback
-                    {...addressformItemLayout}
-                  >
+                  <FormItem label={<FormattedMessage id="Order.phoneNumber2" />} hasFeedback {...addressformItemLayout}>
                     {getFieldDecorator('invocieConsigneeDetailAddress', {
                       ...phone,
                       rules: [
                         {
                           required: true,
-                          message: <FormattedMessage id="inputPhoneNumberTip" />
+                          message: <FormattedMessage id="Order.inputPhoneNumberTip" />
                         },
                         {
                           pattern: ValidConst.phone,
-                          message: (
-                            <FormattedMessage id="inputPhoneNumberTip2" />
-                          )
+                          message: <FormattedMessage id="Order.inputPhoneNumberTip2" />
                         }
                       ]
-                    })(
-                      <Input
-                        onChange={(val) =>
-                          this._store.settingInvoiceTempAddress(
-                            'phone',
-                            (val.target as any).value
-                          )
-                        }
-                      />
-                    )}
+                    })(<Input onChange={(val) => this._store.settingInvoiceTempAddress('phone', (val.target as any).value)} />)}
                   </FormItem>
                 </Col>
               </Row>
@@ -824,10 +629,7 @@ export default class ExtraForm extends React.Component<any, any> {
 
         {/*订单附件*/}
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="orderAttachment" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="orderAttachment" />}>
           {getFieldDecorator('enclose', {
             initialValue: ''
           })(
@@ -843,14 +645,10 @@ export default class ExtraForm extends React.Component<any, any> {
                 action={`${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`}
                 accept={'.jpg,.jpeg,.png,.gif'}
               >
-                {images.length < 10 ? (
-                  <Icon type="plus" style={styles.plus} />
-                ) : null}
+                {images.length < 10 ? <Icon type="plus" style={styles.plus} /> : null}
               </QMUpload>
               <div>
-                <FormattedMessage id="order.uploadValidateTip">
-                  {(txt) => <Tips title={txt.toString()} />}
-                </FormattedMessage>
+                <FormattedMessage id="Order.uploadValidateTip">{(txt) => <Tips title={txt.toString()} />}</FormattedMessage>
               </div>
             </div>
           )}
@@ -861,7 +659,7 @@ export default class ExtraForm extends React.Component<any, any> {
           {...formItemLayout}
           label={
             <span>
-              <FormattedMessage id="fillInTheRemarks" />
+              <FormattedMessage id="Order.fillInTheRemarks" />
             </span>
           }
           hasFeedback
@@ -870,7 +668,7 @@ export default class ExtraForm extends React.Component<any, any> {
             rules: [
               {
                 max: 100,
-                message: <FormattedMessage id="enterUpTo100Characters" />
+                message: <FormattedMessage id="Order.enterUpTo100Characters" />
               }
             ],
             initialValue: ''
@@ -899,10 +697,7 @@ export default class ExtraForm extends React.Component<any, any> {
   }
 
   beforeUpload(file) {
-    const isSupportImage =
-      file.type === 'image/jpeg' ||
-      file.type === 'image/gif' ||
-      file.type == 'image/png';
+    const isSupportImage = file.type === 'image/jpeg' || file.type === 'image/gif' || file.type == 'image/png';
     if (!isSupportImage) {
       message.error('Only jpg, png, gif type pictures can be uploaded');
     }

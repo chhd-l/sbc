@@ -58,11 +58,11 @@ export default class SeoSettingForm extends Component<any, any> {
       <div>
         {loading ? (
           <div className="spin-container">
-            <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+            <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
           </div>
         ) : null}
         <Form {...formItemLayout} className="login-form">
-          <Form.Item label="Site Map">
+          <Form.Item label={<FormattedMessage id="Setting.SiteMap" />}>
             {getFieldDecorator('content', {
               initialValue: seoObj.content
             })(

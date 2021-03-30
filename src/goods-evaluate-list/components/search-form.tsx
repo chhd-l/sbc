@@ -54,7 +54,7 @@ export default class SearchForm extends React.Component<any, any> {
               <Input
                 addonBefore={
                   <p style={styles.label}>
-                    <FormattedMessage id="orderNumber" />
+                    <FormattedMessage id="Product.orderNumber" />
                   </p>
                 }
                 style={{ width: 300 }}
@@ -88,7 +88,7 @@ export default class SearchForm extends React.Component<any, any> {
               <SelectGroup
                 label={
                   <p style={styles.label}>
-                    <FormattedMessage id="anonymousStatus" />
+                    <FormattedMessage id="Product.anonymousStatus" />
                   </p>
                 }
                 style={styles.wrapper}
@@ -102,13 +102,13 @@ export default class SearchForm extends React.Component<any, any> {
                 value={form.get('isAnonymous')}
               >
                 <Option value={null}>
-                  <FormattedMessage id="all" />
+                  <FormattedMessage id="Product.all" />
                 </Option>
                 <Option value="1">
-                  <FormattedMessage id="yes" />
+                  <FormattedMessage id="Product.yes" />
                 </Option>
                 <Option value="0">
-                  <FormattedMessage id="no" />
+                  <FormattedMessage id="Product.no" />
                 </Option>
               </SelectGroup>
             </FormItem>
@@ -118,7 +118,7 @@ export default class SearchForm extends React.Component<any, any> {
               <SelectGroup
                 label={
                   <p style={styles.label}>
-                    <FormattedMessage id="productRatings" />
+                    <FormattedMessage id="Product.productRatings" />
                   </p>
                 }
                 style={styles.wrapper}
@@ -132,22 +132,22 @@ export default class SearchForm extends React.Component<any, any> {
                 value={form.get('evaluateScore')}
               >
                 <Option value="-1">
-                  <FormattedMessage id="all" />
+                  <FormattedMessage id="Product.all" />
                 </Option>
                 <Option value="5">
-                  5 <FormattedMessage id="star" />
+                  5 <FormattedMessage id="Product.star" />
                 </Option>
                 <Option value="4">
-                  4 <FormattedMessage id="star" />
+                  4 <FormattedMessage id="Product.star" />
                 </Option>
                 <Option value="3">
-                  3 <FormattedMessage id="star" />
+                  3 <FormattedMessage id="Product.star" />
                 </Option>
                 <Option value="2">
-                  2 <FormattedMessage id="star" />
+                  2 <FormattedMessage id="Product.star" />
                 </Option>
                 <Option value="1">
-                  1 <FormattedMessage id="star" />
+                  1 <FormattedMessage id="Product.star" />
                 </Option>
               </SelectGroup>
             </FormItem>
@@ -155,9 +155,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem style={{ marginTop: 2 }}>
               <RangePicker
-                getCalendarContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getCalendarContainer={() => document.getElementById('page-content')}
                 onChange={(e) => {
                   let beginTime = null;
                   let endTime = null;
@@ -190,7 +188,7 @@ export default class SearchForm extends React.Component<any, any> {
                 }}
               >
                 <span>
-                  <FormattedMessage id="search" />
+                  <FormattedMessage id="Product.search" />
                 </span>
               </Button>
             </FormItem>
@@ -246,10 +244,7 @@ export default class SearchForm extends React.Component<any, any> {
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
         onChange={(val) => {
-          this.props.relaxProps.onSelectOptionChange(
-            this.state.customerOptions,
-            val
-          );
+          this.props.relaxProps.onSelectOptionChange(this.state.customerOptions, val);
           this.setState({
             customerOptions: val
           });
@@ -258,10 +253,10 @@ export default class SearchForm extends React.Component<any, any> {
         style={{ width: 160 }}
       >
         <Option value="customerName">
-          <FormattedMessage id="consumerName" />
+          <FormattedMessage id="Product.consumerName" />
         </Option>
         <Option value="customerAccount">
-          <FormattedMessage id="consumerAccount" />
+          <FormattedMessage id="Product.consumerAccount" />
         </Option>
       </Select>
     );

@@ -22,7 +22,9 @@ export default class GoodsLibraryImport extends React.Component<any, any> {
       <div>
         <AuthWrapper functionName="f_goods_import_2">
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>Commodity library import</Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <FormattedMessage id="Product.CommodityLibraryImport" />
+            </Breadcrumb.Item>
           </BreadCrumb>
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>商品</Breadcrumb.Item>
@@ -31,15 +33,13 @@ export default class GoodsLibraryImport extends React.Component<any, any> {
             <Breadcrumb.Item>商品库导入</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline
-              title={<FormattedMessage id="commodityLibraryImport" />}
-            />
+            <Headline title={<FormattedMessage id="Product.CommodityLibraryImport" />} />
             <Alert
-              message={<FormattedMessage id="Instructions" />}
+              message={<FormattedMessage id="Product.Instructions" />}
               description={
                 <ul>
                   <li>
-                    <FormattedMessage id="commodityLibraryImportInfo" />
+                    <FormattedMessage id="Product.commodityLibraryImportInfo" />
                   </li>
                 </ul>
               }

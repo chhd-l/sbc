@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { addressList } from '@/order-add-old/webapi';
 import axios from 'axios';
 import moment from 'moment';
 import { cache, Const } from 'qmkit';
@@ -74,7 +73,7 @@ class PaymentInformation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="PetOwner.OperateSuccessfully" />);
           this.getList();
         } else {
           message.error(res.message || 'Delete failed');
@@ -114,8 +113,8 @@ class PaymentInformation extends React.Component<any, any> {
                             </Col>
                             <Col span={5}>
                               {!item.isDefault ? (
-                                <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
-                                  <Tooltip placement="top" title="Delete">
+                                <Popconfirm placement="topLeft" title={<FormattedMessage id="PetOwner.deleteThisCard" />} onConfirm={() => this.delCard(item.id)} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
+                                  <Tooltip placement="top" title={<FormattedMessage id="PetOwner.Delete" />}>
                                     <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
                                   </Tooltip>
                                 </Popconfirm>
@@ -137,8 +136,8 @@ class PaymentInformation extends React.Component<any, any> {
                             </Col>
                             <Col span={5}>
                               {!item.isDefault ? (
-                                <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
-                                  <Tooltip placement="top" title="Delete">
+                                <Popconfirm placement="topLeft" title={<FormattedMessage id="PetOwner.deleteThisCard" />} onConfirm={() => this.delCard(item.id)} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
+                                  <Tooltip placement="top" title={<FormattedMessage id="PetOwner.Delete" />}>
                                     <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
                                   </Tooltip>
                                 </Popconfirm>
@@ -156,7 +155,9 @@ class PaymentInformation extends React.Component<any, any> {
 
           <div className="bar-button">
             <Button>
-              <Link to="/customer-list">Cancel</Link>
+              <Link to="/customer-list">
+                <FormattedMessage id="PetOwner.Cancel" />
+              </Link>
             </Button>
           </div>
         </Row>

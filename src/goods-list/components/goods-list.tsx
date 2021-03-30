@@ -95,10 +95,10 @@ export default class CateList extends React.Component<any, any> {
         }}
         pagination={{ total, current: pageNum + 1, onChange: this._getData }}
       >
-        <Column title={<FormattedMessage id="product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
         <Column
           // title="商品名称"
-          title={<FormattedMessage id="product.productName" />}
+          title={<FormattedMessage id="Product.productName" />}
           dataIndex="goodsName"
           key="goodsName"
           className="nameBox"
@@ -118,7 +118,7 @@ export default class CateList extends React.Component<any, any> {
             );
           }}
         />
-        <Column title={<FormattedMessage id="product.SPU" />} dataIndex="goodsNo" key="goodsNo" />
+        <Column title={<FormattedMessage id="Product.SPU" />} dataIndex="goodsNo" key="goodsNo" />
         {/* <Column
           title="销售类型"
           key="saleType"
@@ -136,7 +136,7 @@ export default class CateList extends React.Component<any, any> {
         <Column
           title={
             <span>
-              <FormattedMessage id="product.marketPrice" />
+              <FormattedMessage id="Product.marketPrice" />
             </span>
           }
           key="marketPrice"
@@ -154,7 +154,7 @@ export default class CateList extends React.Component<any, any> {
         />
         <Column
           // title="店铺分类"
-          title={<FormattedMessage id="product.salesCategory" />}
+          title={<FormattedMessage id="Product.SalesCategory" />}
           dataIndex="goodsStoreCateNames"
           key="goodsStoreCateNames"
           width={100}
@@ -162,7 +162,7 @@ export default class CateList extends React.Component<any, any> {
         />
         <Column
           // title="店铺分类"
-          title={<FormattedMessage id="product.productCategory" />}
+          title={<FormattedMessage id="Product.ProductCategory" />}
           dataIndex="productCategoryNames"
           key="productCategoryNames"
           width={100}
@@ -170,7 +170,7 @@ export default class CateList extends React.Component<any, any> {
         />
         <Column
           // title="品牌"
-          title={<FormattedMessage id="product.brand" />}
+          title={<FormattedMessage id="Product.brand" />}
           dataIndex="brandName"
           key="brandName"
           render={(rowInfo) => {
@@ -185,22 +185,22 @@ export default class CateList extends React.Component<any, any> {
           }}
         />
         <Column
-          title={<FormattedMessage id="product.onOrOffShelves" />}
+          title={<FormattedMessage id="Product.onOrOffShelves" />}
           dataIndex="addedFlag"
           key="addedFlag"
           render={(rowInfo) => {
             if (rowInfo == 0) {
-              return <FormattedMessage id="product.offShelves" />;
+              return <FormattedMessage id="Product.offShelves" />;
             }
             if (rowInfo == 2) {
-              return <FormattedMessage id="product.partialOnShelves" />;
+              return <FormattedMessage id="Product.partialOnShelves" />;
             }
-            return <FormattedMessage id="product.onShelves" />;
+            return <FormattedMessage id="Product.onShelves" />;
           }}
         />
         <Column
           align="center"
-          title={<FormattedMessage id="operation" />}
+          title={<FormattedMessage id="Product.operation" />}
           key="goodsId"
           className="operation-th"
           render={(rowInfo) => {
@@ -375,7 +375,7 @@ export default class CateList extends React.Component<any, any> {
                     })
                   }
                 >
-                  <FormattedMessage id="edit" />
+                  <FormattedMessage id="Product.edit" />
                 </a>
               </AuthWrapper>
               <AuthWrapper functionName="f_goods_sku_edit_3">
@@ -390,38 +390,50 @@ export default class CateList extends React.Component<any, any> {
                       })
                     }
                   >
-                    <FormattedMessage id="product.setPrice" />
+                    <FormattedMessage id="Product.setPrice" />
                   </a>
                 )}
               </AuthWrapper>
             </div>
             <div style={{ marginLeft: 0 }}>
               <div style={styles.cell}>
-                <label style={styles.label}>Specification：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.Specification" />：
+                </label>
                 <span className="specification" style={styles.textCon}>
                   {currentGoodsSpecDetails ? currentGoodsSpecDetails : '-'}
                 </span>
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>SKU code：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.skuCode" />：
+                </label>
                 {goods.get('goodsInfoNo')}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>Market price：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.MarketPrice" />：
+                </label>
                 {goods.get('marketPrice') || goods.get('marketPrice') === 0 ? goods.get('marketPrice').toFixed(2) : 0}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>On/Off shelve：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.On/OffShelve" />：
+                </label>
                 {goods.get('addedFlag') == 0 ? 'Off shelf' : 'On shelf'}
               </div>
             </div>
             <div>
               <div style={styles.cell}>
-                <label style={styles.label}>Bar code：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.BarCode" />：
+                </label>
                 {goods.get('goodsInfoBarcode') ? goods.get('goodsInfoBarcode') : '-'}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>In stock：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.InStock" />：
+                </label>
                 {goods.get('stock')}
               </div>
             </div>
@@ -456,8 +468,8 @@ export default class CateList extends React.Component<any, any> {
   _delete = (goodsId: string) => {
     const { spuDelete } = this.props.relaxProps;
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete this product?',
+      title: <FormattedMessage id="Product.Prompt" />,
+      content: <FormattedMessage id="Product.deleteThisProduct" />,
       onOk() {
         spuDelete([goodsId]);
       }

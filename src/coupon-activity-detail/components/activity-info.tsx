@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { FormattedMessage } from 'react-intl';
 import { Relax } from 'plume2';
 import { Row, Col, Spin } from 'antd';
 import moment from 'moment';
@@ -44,13 +44,21 @@ export default class ActivityInfo extends React.Component<any, any> {
         <GreyBg>
           <Row>
             <Col span={24}>
-              <span>Activiy name：</span>
+              <span>
+                <FormattedMessage id="Marketing.ActiviyName" />：
+              </span>
               {couponActivity.get('activityName')}
             </Col>
           </Row>
           <Row>
             <Col span={24}>
-              {couponActivity.get('couponActivityType') == 1 ? <span>Issuance time：</span> : <span>Activity time：</span>}
+              {couponActivity.get('couponActivityType') == 1 ? (
+                <span>
+                  <FormattedMessage id="Marketing.IssuanceTime" />：
+                </span>
+              ) : (
+                <span>Activity time：</span>
+              )}
               {couponActivity.get('couponActivityType') == 1
                 ? moment(couponActivity.get('startTime')).format(Const.TIME_FORMAT).toString()
                 : moment(couponActivity.get('startTime')).format(Const.TIME_FORMAT).toString() + ' ~ ' + moment(couponActivity.get('endTime')).format(Const.TIME_FORMAT).toString()}
@@ -59,7 +67,9 @@ export default class ActivityInfo extends React.Component<any, any> {
 
           <Row>
             <Col span={24}>
-              <span>Coupon：</span>
+              <span>
+                <FormattedMessage id="Marketing.Coupon" />：
+              </span>
             </Col>
           </Row>
         </GreyBg>

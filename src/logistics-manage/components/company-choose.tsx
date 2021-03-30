@@ -3,7 +3,7 @@ import React from 'react';
 import { Row, Col, Checkbox } from 'antd';
 import { Relax } from 'plume2';
 import { List } from 'immutable';
-
+import { FormattedMessage } from 'react-intl';
 import { noop } from 'qmkit';
 
 @Relax
@@ -22,22 +22,14 @@ export default class CompanyChoose extends React.Component<any, any> {
   render() {
     return (
       <div>
-        <div style={styles.title}>Choose a logistics company</div>
+        <div style={styles.title}>
+          <FormattedMessage id="Setting.ChooseALogisticsCompany" />
+        </div>
         <Row type="flex" justify="start" style={styles.box}>
           {this.props.relaxProps.allExpressList.toJS().map((v, i) => {
             return (
               <Col span={4} key={v.expressCompanyId}>
-                <Checkbox
-                  style={styles.item}
-                  checked={v.isChecked}
-                  onChange={(e) =>
-                    this._handleOnChange(
-                      i,
-                      (e.target as any).checked,
-                      v.expressCompanyId
-                    )
-                  }
-                >
+                <Checkbox style={styles.item} checked={v.isChecked} onChange={(e) => this._handleOnChange(i, (e.target as any).checked, v.expressCompanyId)}>
                   {v.expressName}
                 </Checkbox>
               </Col>

@@ -6,7 +6,7 @@ import NavigationLanguage from './components/navigationLanguage';
 import BasicInformation from './components/basicInformation';
 import Interaction from './components/interaction';
 import * as webapi from './webapi';
-
+import { FormattedMessage } from 'react-intl';
 const { Step } = Steps;
 
 class NavigationUpdate extends Component<any, any> {
@@ -48,7 +48,7 @@ class NavigationUpdate extends Component<any, any> {
 
   componentWillMount() {
     this.setState({
-      title: this.state.type === 'edit' ? 'Edit Navigation Item' : 'Create Navigation Item'
+      title: this.state.type === 'edit' ? <FormattedMessage id="Content.EditNavigationItem" /> : <FormattedMessage id="Content.CreateNavigationItem" />
     });
     if (this.state.type === 'edit') {
       webapi
@@ -84,7 +84,7 @@ class NavigationUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === Const.SUCCESS_CODE) {
-                message.success('Operate successfully');
+                message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
                 history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
               }
             })
@@ -96,7 +96,7 @@ class NavigationUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === Const.SUCCESS_CODE) {
-                message.success('Operate successfully');
+                message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
                 history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
               }
             })
@@ -109,15 +109,15 @@ class NavigationUpdate extends Component<any, any> {
     const { id, current, title, navigation, store, noLanguageSelect, topNames } = this.state;
     const steps = [
       {
-        title: 'Navigation Language',
+        title: <FormattedMessage id="Content.NavigationLanguage" />,
         controller: <NavigationLanguage navigation={navigation} addField={this.addField} />
       },
       {
-        title: 'Basic Information',
+        title: <FormattedMessage id="Content.BasicInformation" />,
         controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} noLanguageSelect={noLanguageSelect} store={store} topNames={topNames} />
       },
       {
-        title: 'Interaction',
+        title: <FormattedMessage id="Content.Interaction" />,
         controller: <Interaction navigation={navigation} addField={this.addField} form={this.props.form} noLanguageSelect={noLanguageSelect} />
       }
     ];
@@ -141,17 +141,17 @@ class NavigationUpdate extends Component<any, any> {
           <div className="steps-action">
             {current > 0 && (
               <Button style={{ marginRight: 15 }} onClick={() => this.prev()}>
-                <Icon type="left" /> Return
+                <Icon type="left" /> <FormattedMessage id="Content.Return" />
               </Button>
             )}
             {current < steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.next(e)}>
-                Next step <Icon type="right" />
+                <FormattedMessage id="Content.NextStep" /> <Icon type="right" />
               </Button>
             )}
             {current === steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.updateNavigation(e)}>
-                Submit <Icon type="right" />
+                <FormattedMessage id="Content.Submit" /> <Icon type="right" />
               </Button>
             )}
           </div>

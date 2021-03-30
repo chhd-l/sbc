@@ -56,69 +56,50 @@ export default class uploadVideoModal extends React.Component<any, any> {
     }
     const setFileList = this._setFileList;
     const setCateDisabled = this._setCateDisabled;
-    const { storeId, companyInfoId } = JSON.parse(
-      sessionStorage.getItem(cache.LOGIN_DATA)
-    );
+    const { storeId, companyInfoId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     const cateIdCurr = this.state.cateId;
     //处理分类的树形图结构数据
     const loop = (cateList) =>
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              value={item.get('cateId').toString()}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} value={item.get('cateId').toString()} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId').toString()}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId').toString()} title={item.get('cateName')} />;
       });
 
     const props = {
       name: 'uploadFile',
       headers: {
         Accept: 'application/json',
-        Authorization:
-          'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
+        Authorization: 'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
       },
       multiple: true,
       showUploadList: { showPreviewIcon: false, showRemoveIcon: false },
-      action:
-        Const.HOST +
-        `/store/uploadStoreResource?cateId=${cateIdCurr}&storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=VIDEO`,
+      action: Const.HOST + `/store/uploadStoreResource?cateId=${cateIdCurr}&storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=VIDEO`,
       accept: '.mp4',
       beforeUpload(file) {
         if (!cateIdCurr) {
-          message.error('Please select category first!');
+          message.error(<FormattedMessage id="Setting.PleaseSelectCategoryFirst" />);
           return false;
         }
         let fileName = file.name.toLowerCase();
 
         if (!fileName.trim()) {
-          message.error('Please input a file name');
+          message.error(<FormattedMessage id="Setting.PleaseInputAFileName" />);
           return false;
         }
 
-        if (
-          /(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(
-            fileName
-          )
-        ) {
-          message.error('Please enter the file name in the correct format');
+        if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
+          message.error(<FormattedMessage id="Setting.theCorrectFormat" />);
           return false;
         }
 
         if (fileName.length > 40) {
-          message.error('File name is too long');
+          message.error(<FormattedMessage id="Setting.FileNameIsTooLong" />);
           return false;
         }
 
@@ -127,11 +108,11 @@ export default class uploadVideoModal extends React.Component<any, any> {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error('File size cannot exceed 50M');
+            message.error(<FormattedMessage id="Setting.FileSizeCannotExceed50M" />);
             return false;
           }
         } else {
-          message.error('File format error');
+          message.error(<FormattedMessage id="Setting.FileFormatError" />);
           return false;
         }
       },
@@ -140,11 +121,7 @@ export default class uploadVideoModal extends React.Component<any, any> {
         let fileList = info.fileList;
 
         if (status === 'done') {
-          if (
-            info.file.response &&
-            info.file.response.code &&
-            info.file.response.code !== Const.SUCCESS_CODE
-          ) {
+          if (info.file.response && info.file.response.code && info.file.response.code !== Const.SUCCESS_CODE) {
             message.error(`${info.file.name} upload failed!`);
           } else {
             message.success(`${info.file.name} Uploaded successfully!`);
@@ -155,41 +132,20 @@ export default class uploadVideoModal extends React.Component<any, any> {
         }
 
         //仅展示上传中和上传成功的文件列表
-        fileList = fileList.filter(
-          (f) =>
-            f.status == 'uploading' ||
-            (f.status == 'done' && !f.response) ||
-            (f.status == 'done' && f.response && !f.response.code)
-        );
+        fileList = fileList.filter((f) => f.status == 'uploading' || (f.status == 'done' && !f.response) || (f.status == 'done' && f.response && !f.response.code));
 
         setFileList(fileList);
       }
     };
 
     return (
-      <Modal
-        maskClosable={false}
-        title={<FormattedMessage id="uploadVideo"></FormattedMessage>}
-        visible={uploadVisible}
-        cancelText="Close"
-        onCancel={this._handleCancel}
-        onOk={this._handleOk}
-      >
+      <Modal maskClosable={false} title={<FormattedMessage id="Setting.uploadVideo"></FormattedMessage>} visible={uploadVisible} cancelText="Close" onCancel={this._handleCancel} onOk={this._handleOk}>
         <Form>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="ChooseCategory"></FormattedMessage>}
-            required={true}
-            hasFeedback
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.ChooseCategory"></FormattedMessage>} required={true} hasFeedback>
             <TreeSelect
               showSearch
               disabled={this.state.cateDisabled}
-              filterTreeNode={(input, treeNode) =>
-                treeNode.props.title
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) >= 0
-              }
+              filterTreeNode={(input, treeNode) => treeNode.props.title.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               style={{ width: 300 }}
               value={this.state.cateId}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -202,18 +158,16 @@ export default class uploadVideoModal extends React.Component<any, any> {
               {loop(cateList)}
             </TreeSelect>
           </FormItem>
-          <FormItem {...formItemLayout} label="Select video" required={true}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.SelectVideo" />} required={true}>
             <div>
               <Upload {...props} fileList={this.state.fileList}>
                 <Button>
-                  <Icon type="upload" /> Click to upload video
+                  <Icon type="upload" /> <FormattedMessage id="Setting.ClickToUploadVideo" />
                 </Button>
               </Upload>
             </div>
             <p style={{ lineHeight: '2em', marginTop: '15px', color: '#999' }}>
-              Commodity video size recommended 30M, maximum limit 50M, support
-              file type: mp4, recommended duration is less than or equal to 90s,
-              greater than or equal to 6s, recommended video ratio of 7:9
+              <FormattedMessage id="Setting.p" />
             </p>
           </FormItem>
         </Form>
@@ -252,10 +206,7 @@ export default class uploadVideoModal extends React.Component<any, any> {
    * @private
    */
   _handleCancel = () => {
-    if (
-      this.state.cateId == '' ||
-      this.state.fileList.filter((file) => file.status === 'done').length <= 0
-    ) {
+    if (this.state.cateId == '' || this.state.fileList.filter((file) => file.status === 'done').length <= 0) {
       const { showUploadVideoModal } = this.props.relaxProps;
       showUploadVideoModal(false);
       this.setState({ cateId: '', fileList: [], cateDisabled: false });
@@ -271,13 +222,11 @@ export default class uploadVideoModal extends React.Component<any, any> {
    */
   _handleOk = () => {
     if (this.state.cateId == '') {
-      message.error('Please select a category!');
+      message.error(<FormattedMessage id="Setting.PleaseSelectACategory" />);
       return;
     }
-    if (
-      this.state.fileList.filter((file) => file.status === 'done').length <= 0
-    ) {
-      message.error('Please choose to upload a video!');
+    if (this.state.fileList.filter((file) => file.status === 'done').length <= 0) {
+      message.error(<FormattedMessage id="Setting.UploadAVideo" />);
       return;
     }
 
@@ -290,11 +239,7 @@ export default class uploadVideoModal extends React.Component<any, any> {
    */
   _okFunc = () => {
     //提交
-    const {
-      autoExpandVideoCate,
-      showUploadVideoModal,
-      queryVideoPage
-    } = this.props.relaxProps;
+    const { autoExpandVideoCate, showUploadVideoModal, queryVideoPage } = this.props.relaxProps;
     //展开上传的分类
     autoExpandVideoCate(this.state.cateId);
     showUploadVideoModal(false);

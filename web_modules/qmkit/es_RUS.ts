@@ -7,7 +7,7 @@ import {Button, Checkbox, Radio} from "antd";
  */
 export default {
   /*-------------------------------- Public ---------------------------------------------*/
-  'Public.Overview':'Overview112',
+  'Public.Overview':'Overview',
   'Public.WelcometoROYALCANIN':'Welcome to ROYALCANIN',
   'Public.storeportal':'store portal',
   'Public.Pleaseselectyourrole':'Please select your role',
@@ -56,7 +56,6 @@ export default {
   'Menu.Description management':'Description management',
   'Menu.Product sales setting':'Product sales setting',
   'Menu.Review management':'Review management',
-
   'Menu.Order':'Order',
   'Menu.Sales order':'Sales order',
   'Menu.Order list(Prescriber)':'Order list(Prescriber)',
@@ -72,17 +71,14 @@ export default {
   'Menu.Manual return order':'Manual return order',
   'Menu.积分订单':'积分订单 ',
   'Menu.External order':'External order',
-
   'Menu.Task':'Task',
   'Menu.Task Management':'Task Management',
   'Menu.Task board':'Task board',
-
   'Menu.Subscription':'Subscription',
   'Menu.Subscription Manage':'Subscription Manage',
   'Menu.Subscription List':'Subscription List',
   'Menu.Subscription setting':'Subscription setting',
   'Menu.Subscription Plan':'Subscription Plan',
-
   'Menu.Pet owner':'Pet owner',
   'Menu.Pet owner management':'Pet owner management',
   'Menu.Pet owner list':'Pet owner list',
@@ -90,7 +86,6 @@ export default {
   'Menu.Pet owner type':'Pet owner type',
   'Menu.Pet owner list(Prescriber)':'Pet owner list(Prescriber)',
   'Menu.企业会员':'企业会员',
-
   'Menu.Finance':'Finance',
   'Menu.Finance management':'Finance management',
   'Menu.Finance reconciliation':'Finance reconciliation',
@@ -99,7 +94,6 @@ export default {
   'Menu.Reward List':'Reward List',
   'Menu.Invoice':'Invoice',
   'Menu.Invoice list':'Invoice list',
-
   'Menu.Marketing':'Marketing',
   'Menu.Marketing Settings':'Marketing Settings',
   'Menu.Marketing Center':'Marketing Center',
@@ -114,21 +108,17 @@ export default {
   'Menu.Recommendation':'Recommendation',
   'Menu.Product Finder List':'Product Finder List',
   'Menu.Prescriber recommendation':'Prescriber recommendation',
-
   'Menu.Prescriber':'Prescriber',
   'Menu.Prescriber List':'Prescriber List',
   'Menu.Prescriber Type':'Prescriber Type',
-
   'Menu.Analysis':'Analysis',
   'Menu.Statistics Report':'Statistics Report',
   'Menu.Product report':'Product report',
   'Menu.Traffic report':'Traffic report',
   'Menu.Transaction report':'Transaction report',
-
   'Menu.Content':'Content',
   'Menu.Front Navigation':'Front Navigation',
   'Menu.Navigation list':'Navigation list',
-
   'Menu.Setting':'Setting',
   'Menu.Store setting':'Store setting',
   'Menu.Shop information':'Shop information',
@@ -153,6 +143,7 @@ export default {
   'Menu.Asset type':'Asset type',
   'Menu.Operation log':'Operation log',
   'Menu.Set Banner':'Set Banner',
+  'Menu.Appointment':'Appointment',
 
 
   /*-----------------------------  Home -----------------------------------------------*/
@@ -210,8 +201,6 @@ export default {
   "Product.Batchdelete": "Batch delete",
   "Product.DeleteConfirmTip": "Are you sure you want to delete this product?",
   "Product.OffshelvesConfirmTip": "Are you sure you want off to shelves this product?",
-
-
   "Product.Pending": "Pending",
   "Product.Pendingreview": "Pending review",
   "Product.Reviewfailed": "Review failed",
@@ -220,7 +209,6 @@ export default {
   "Product.Storecategory": "Store category",
   "Product.Approvalstatus": "Approval status",
   "Product.Batchdeletion": "Batch deletion",
-
   "Product.Publishproduct": "Publish product",
   "Product.Chooseapublishingmethod": "Choose a publishing method",
   "Product.Publishdirectly": "Publish directly",
@@ -267,7 +255,6 @@ export default {
   "Product.Virtualinventory": "Virtual inventory",
   "Product.UOM": "UOM",
   "Product.Inventory Alert": "Inventory Alert",
-
   "Product.SEOsettingalert": `You can delete these fields, including { name }-Royal Canin, { name }, { subtitle }, { sales category }, { tagging }, { description }, but can not edit the field
     1、{ name } means the name of the product which enters in the product information tab page
     2、{subtitle } means the subtitle of the product which enters in the product information tab page
@@ -289,11 +276,9 @@ export default {
   "Product.Taggingname": "Tagging name",
   "Product.Taggingtype": "Tagging type",
   "Product.Productcount": "Product count",
-
   "Product.Inventorywarning": "Inventory warning",
   "Product.Inventorywarningdesc": "Set a quantity that when products are below this certain quantity, they are considered as ‘Low inventory’ and will be shown in the list below.",
   "Product.Bulkexport": "Bulk export",
-
   "Product.Addnewcategory": "Add new category",
   "Product.Numberofproduct": "Number of product",
   "Product.Salescategorydesc": "Sales category is the classification of products within the scope of your store. Up to 3 levels can be added. When there is No categories, all products will be classified into the default classification",
@@ -307,7 +292,6 @@ export default {
   "Product.Descriptiontitle": "Description title",
   "Product.Categorydescription": "Category description",
   "Product.Categorydescriptionplaceholder": "Please input the product description",
-
   "Product.Commoditylibraryimport":"Commodity library import",
   "Product.Instructions":"Instructions",
   "Product.Instructionstip":"The products imported from the commodity library are initially reviewed / off the shelf. Please add the information before selling them;",
@@ -328,7 +312,6 @@ export default {
   "Product.regular-product-shop":"regular-product-shop",
   "Product.Replycomments":"Reply comments",
   "Product.Enteruptocharacters":"Enter up to 500 characters",
-
   'Product.Productimport':'Product import',
   'Product.OperationDescription':'Operation Description',
   'Product.OperationDescription-1':'1、Please download the product import template first, and input the product data according to the requirements in the annotation. Failure to input the requirements will cause the product import to fail.',
@@ -337,11 +320,9 @@ export default {
   'Product.Uploaddata':'Upload data',
   'Product.Finish':'Finish',
   'Product.Thenextstep':'The next step',
-
   "Product.Productcategorydesc": "Product category is set by RC staff, you can associate attribute to product category.",
   "Product.Categoryimages": "Category images",
   "Product.Categoryname": "Category name",
-
   "Product.Attributelibrary": "Attribute library",
   "Product.Attributename": "Attribute name",
   "Product.Displayname": "Display name",
@@ -352,7 +333,6 @@ export default {
   "Product.Choosetype": "Choose type",
   "Product.Singlechoice": "Single choice",
   "Product.Multiplechoice": "Multiple choice",
-
   "Product.FilterSortsetting": "Filter & Sort setting",
   "Product.FilterSortsettingdesc": `
   1. Filter attributes can be chosen from attributes, which are associated with product category
@@ -381,13 +361,11 @@ export default {
   "Product.ConsumerType": "Consumer Type",
   "Product.ConsumerName": "Consumer Name",
   "Product.Back": "Back",
-
   "Product.Descriptionmanagement": "Description management",
   "Product.Addnewdescription": "Add new description",
   "Product.Descriptionname": "Description name",
   "Product.Descriptiontype": "Description type",
   "Product.Addnewdescriptiontip": "The number display name is set in shop information",
-
   "Product.Productsalessetting": "Product sales setting",
   "Product.Defaultsubscriptionfrequency": "Default subscription frequency",
   "Product.Addnewfrequency": "Add new frequency",
@@ -397,7 +375,6 @@ export default {
   "Product.Reviewmanagement": "Review management",
   "Product.Categorymanagement": "Category management",
   "Product.Productmanagement": "Product management",
-
   "Product.operationInstruction": "Operation instruction",
   "Product.operationInstructionFirst": "Until filled all required fields, the product could be published. ",
   "Product.operationInstructionSecond": " The product information tab, product price tab, product inventory tab must be filled before published.",
@@ -606,7 +583,6 @@ export default {
   "Product.putProductsOnShelves": "Are you sure you want to put these products on shelves?",
   "Product.Are you sure you want to delete these products?": "Are you sure you want to delete these products?",
   "Product.productList": "Product list",
-
   "Product.OperateSuccessfully": "Operate successfully",
   "Product.OperateFailed": "Operate failed",
   "Product.DescriptionName": "Description name",
@@ -707,7 +683,6 @@ export default {
   "Product.OperationFailed": "Operation failed",
   "Product.AddCustomizedFilter": "Add customized filter",
   "Product.EditCustomizedFilter": "Edit customized filter",
-
   "Product.FilterName": "Filter name",
   "Product.SortFieldName": "Sort field name",
   "Product.SortFieldStatus": "Sort field status",
@@ -753,9 +728,8 @@ export default {
   'Order.PetInformationAs':'Pet information as a reference',
   'Order.selectBeReviewed':'Please select the product category to be reviewed.',
   'Order.SignedCategory':'Signed category ',
-  'Order.categoriesHave':' categories have been signed then maximum is 200 categories',
+  'Order.categoriesHave':'categories have been signed then maximum is 200 categories',
   'Order.PetInformation':'Pet information as a reference',
-
   'Order.Order':'Order Setting',
   'Order.OperationTips':'Operation tips',
   'Order.PaymentBeforeDelivery':'Payment before delivery',
@@ -797,8 +771,6 @@ export default {
   'Order.ConfirmationOfReceipt':'Automatic confirmation of receipt of return order',
   'Order.TheMerchantAutomatically':'After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.',
   'Order.save':'Save',
-
-
   'Order.all':'All',
   'Order.pendingReview':'Pending review',
   'Order.toBeFilledOutLogisticsInformation':'To be filled out logistics information',
@@ -807,7 +779,6 @@ export default {
   'Order.rejected':'Rejected',
   'Order.refusedToRefund':'Refused to refund',
   'Order.refundFailed':'Refund failed',
-
   'Order.initiateApplication':'Initiate after-sales application',
   'Order.search':'Search',
   'Order.consumerName':'Consumer name',
@@ -823,8 +794,6 @@ export default {
   'Order.Application':'Application',
   'Order.ignore':'//@ts-ignore',
   'Order.total':'total',
-
-  /* --External-Order-Page--*/
   'Order.ClinicsCRM':'Clinics CRM id',
   'Order.ClinicsName':'Clinics name',
   'Order.ClinicsRegion':'Clinics region',
@@ -842,9 +811,6 @@ export default {
   'Order.Cancel':'Do you confirm to cancel bill record？',
   'Order.btnConfirm':'Confirm',
   'Order.btnCancel':'Cancel',
-
-
-  /*---order-list-prescriber yxy---*/
   'Order.order': 'order',
   'Order.Orderlist': 'Order list',
   'Order.Ordernumber': 'Order number',
@@ -1146,7 +1112,6 @@ export default {
   'Subscription.PetOwnerList':'Pet owner list (',
   'Subscription.Subscription':'Subscription plan',
   'Subscription.PleaseInputKeyword':'Please input keyword',
-
   'Subscription.batchExport': 'Batch export',
   'Subscription.Frequency': 'Frequency',
   'Subscription.all': 'All',
@@ -1161,14 +1126,12 @@ export default {
   'Subscription.List.consumerName':'Consumer name',
   'Subscription.List.operation':'Operation',
   'Subscription.List.noData':'noData',
-
   'Subscription.order.notShipped': 'not shipped',
   'Subscription.order.allShipments': 'All shipments',
   'Subscription.order.partialShipment': 'Partial shipment',
   'Subscription.order.invalid': 'Invalid',
   'Subscription.order.unknown': 'Unknown',
   'Subscription.AreYouSureDelivery': 'Are you sure skip next delivery?',
-
   'Subscription.Subscriptions':'Subscription details',
   'Subscription.SkipNextDelivery':'Skip Next Delivery',
   'Subscription.OperateSuccessfully':'Operate successfully',
@@ -1182,12 +1145,10 @@ export default {
   'Subscription.List.Quantity':'Quantity',
   'Subscription.List.DeliveryFrequency':'Delivery frequency',
   'Subscription.List.Total':'Total',
-
   'Subscription.noStar.DeliveryDate':'Delivery date',
   'Subscription.noStar.Product':'Product',
   'Subscription.completed.DeliveryDate':'Delivery date',
   'Subscription.completed.Product':'Product',
-
   'Subscription.columnsCompleted.Product':'Product',
   'Subscription.columnsCompleted.Quantity':'Quantity',
   'Subscription.columnsCompleted.EnjoyDiscount':'Enjoy discount',
@@ -1195,23 +1156,19 @@ export default {
   'Subscription.columnsCompleted.ShipmentDate':'Shipment date',
   'Subscription.columnsCompleted.OrderStatus':'Order status',
   'Subscription.columnsCompleted.Operation':'Operation',
-
   'Subscription.operatorColumns.OperatorType':'Operator Type',
   'Subscription.operatorColumns.Operator':'Operator',
   'Subscription.operatorColumns.Time':'Time',
   'Subscription.operatorColumns.OperationCategory':'Operation Category',
   'Subscription.operatorColumns.OperationLog':'Operation Log',
-
   'Subscription.noStart.Product':'Product',
   'Subscription.noStart.Quantity':'Quantity',
   'Subscription.noStart.EnjoyDiscount':'Enjoy discount',
   'Subscription.noStart.Amount':'Amount',
   'Subscription.noStart.ShipmentDate':'Shipment date',
-
   'Subscription.AutoshipOrder':'Autoship order',
   'Subscription.NoStart':'No start',
   'Subscription.Completed':'Completed',
-
   'Subscription.ColSpan.ubscriptionNumberS':'ubscription Number',
   'Subscription.ColSpan.SubscriptionDate':'Subscription Date',
   'Subscription.ColSpan.AuditorID':'Auditor ID',
@@ -1243,17 +1200,14 @@ export default {
   'Subscription.back':'back',
   'Subscription.Active':'Active',
   'Subscription.Inactive':'Inactive',
-
   'Subscription.RemindOfNewOrders':'Remind of new orders',
   'Subscription.Days1':'Days ahead new orders being created, an email will be sent to pet owners to remind them of new orders.',
   'Subscription.RemindOfCardExpiration':'Remind of card expiration',
   'Subscription.Days2':'Days ahead pet owners’ card expired, an email will be sent to pet owners to remind them of card expiration.',
   'Subscription.save': 'Save',
-
   'Subscription.SubscriptionName':'Subscription Plan Name',
   'Subscription.SubscriptionID':'Subscription Plan ID',
   'Subscription.SubscriptionType':'Subscription Plan Type',
-
   'Subscription.AddNewPlan':'Add New Plan',
   'Subscription.Table.SubscriptionID':'Subscription Plan ID',
   'Subscription.Table.SubscriptionName':'Subscription Plan Name',
@@ -1267,9 +1221,7 @@ export default {
   'Subscription.GetDataFailed':'Get Data Failed',
   'Subscription.UpdateDataFailed':'Update Data Failed',
   'Subscription.Detail':'Detail',
-
   'Subscription.GetPlanFailed':'Get plan type list failed!',
-
   'Subscription.Step1':'Step1',
   'Subscription.BasicInformation':'Basic Information',
   'Subscription.PlanType':'Subscription Plan type',
@@ -1337,7 +1289,6 @@ export default {
   'Subscription.Confirm':'Confirm',
   'Subscription.Cancel':'Cancel',
   'Subscription.ConsentTitle':'Consent title',
-
   'Subscription.addConsent.ConsentId':'Consent Id',
   'Subscription.addConsent.ConsentCode':'Consent code',
   'Subscription.addConsent.ConsentType':'Consent type',
@@ -1354,7 +1305,6 @@ export default {
   'Subscription.addConsent.EmailOut':'Email out',
   'Subscription.addConsent.ConsentTitle':'Consent title',
   'Subscription.addConsent.search': 'Search',
-
   'Subscription.addProduct.Image': 'Image',
   'Subscription.addProduct.SKU': 'SKU',
   'Subscription.addProduct.ProductName': 'Product name',
@@ -1366,7 +1316,6 @@ export default {
   'Subscription.addProduct.Confirm': 'Confirm',
   'Subscription.addProduct.Cancel': 'Cancel',
   'Subscription.addProduct.search': 'Search',
-
   'Subscription.index.EditPlan': 'Edit Plan (Food Dispenser)',
   'Subscription.index.AddNewPlan': 'Add New Plan (Food Dispenser)',
   'Subscription.index.GetDataFailed': 'Get data failed',
@@ -1382,34 +1331,27 @@ export default {
   'Subscription.index.NextStep': 'Next step',
   'Subscription.index.Save': 'Save',
   'Subscription.index.Publish': 'Publish',
-
   'Subscription.quantityAndFrequency':'Please enter the correct quantity and frequency!',
-
   'Subscription.AutNoStartoshipOrder.EnjoyDiscount':'Enjoy discount',
-
   'Subscription.Product':'Product',
-
   'Subscription.DeliveryFrequency':'Delivery frequency',
   'Subscription.Subtotal':'Subtotal',
   'Subscription.CustomHeader':'Custom header',
   'Subscription.SelectDate':'Select Date',
   'Subscription.AreYouSure':'Are you sure to skip this item?',
   'Subscription.SkipDelivery':'Skip delivery',
-
   'Subscription.NoStart.Product':'Product',
   'Subscription.NoStart.Quantity':'Quantity',
   'Subscription.NoStart.EnjoyDiscount':'Enjoy discount',
   'Subscription.NoStart.Amount':'Amount',
   'Subscription.NoStart.ShipmentDate':'Shipment date',
   'Subscription.NoStart.Operation':'Operation',
-
   'Subscription.completed.Quantity':'Quantity',
   'Subscription.completed.EnjoyDiscount':'Enjoy discount',
   'Subscription.completed.Amount':'Amount',
   'Subscription.completed.ShipmentDate':'Shipment date',
   'Subscription.completed.OrderStatus':'Order status',
   'Subscription.completed.Operation':'Operation',
-
   'Subscription.Active.SubscriptionNumber':'Subscription Number',
   'Subscription.Active.SubscriptionDate':'Subscription Date',
   'Subscription.Active.AuditorID':'Auditor ID',
@@ -1418,14 +1360,12 @@ export default {
   'Subscription.Active.ConsumerAccount':'Consumer Account',
   'Subscription.Active.ConsumerType':'Consumer type',
   'Subscription.Active.PhoneNumber':'Phone Number',
-
   'Subscription.Active.Subtotal':'Subtotal',
   'Subscription.Active.Promotion':'Promotion',
   'Subscription.Active.Shipping':'Shipping',
   'Subscription.Active.Tax':'Tax',
   'Subscription.Active.Total':'Total',
   'Subscription.Active.IVAInclude':'IVA Include',
-
   'Subscription.Active.Change':'Change',
   'Subscription.Active.DeliveryAddress':'Delivery Address',
   'Subscription.Active.Name':'Name',
@@ -1440,7 +1380,6 @@ export default {
   'Subscription.Active.PaymentMethod':'Payment Method',
   'Subscription.Active.PaymentMethod1':'Payment Method',
   'Subscription.Active.CardNumber':'Card Number',
-
   'Subscription.Active.ChooseDeliveryAddress':'Choose From Saved Delivery Address',
   'Subscription.Active.TheSameAs':'Billing address is the same as',
   'Subscription.Active.UnfoldedAll':'Unfolded all delivery addresses',
@@ -1617,7 +1556,6 @@ export default {
   'Finance.FinanceReconciliation': 'Finance reconciliation',
   'Finance.revenueReconciliation': 'Revenue reconciliation',
   'Finance.refundReconciliation': 'Refund reconciliation',
-
   'Finance.BatchOperation':'Batch operation',
   'Finance.SetAsSettled':'Set as settled',
   'Finance.BulkExport':'Bulk Export',
@@ -1634,12 +1572,9 @@ export default {
   'Finance.financialSettlement':'Finance settlement',
   'Finance.Reward':'Reward',
   'Finance.bulkExport':'Bulk export',
-
   'Finance.TheStartTime':'The start time and end time should be within three months',
   'Finance.YourSettlementDate':'Your settlement date is',
   'Finance.EachMonth':'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
-
-
   'Finance.invoiceStatus':'Invoice Status',
   'Finance.orderNumber':'   Order number  ',
   'Finance.consumerName':'Consumer name',
@@ -1710,7 +1645,6 @@ export default {
   'Finance.PleaseSelectOrderNumber':'Please Select orderNumber!',
   'Finance.SelectOrderNumber':'Select a Order number',
   'Finance.BillingAddress':'Billing address',
-
   'Finance.No':'No',
   'Finance.ReturnOrderTime':'Return Order time',
   'Finance.ReturnOrderNumber':'Return Order number',
@@ -2486,8 +2420,6 @@ export default {
   'Setting.Code': 'Code',
   'Setting.Ifyoufillin': 'If you fill in one of them, you have to complete the other.',
   'Setting.Addstate': 'Add state',
-
-  //setting-set-banner
   'Setting.deleteThisItem': 'Are you sure to delete this item?',
   'Setting.Upload': 'Upload',
   'Setting.bannerNo': 'Banner No',
@@ -2519,7 +2451,6 @@ export default {
   'Setting.dragImagesOrVideos': 'Click or drag images or videos to upload',
   'Setting.supportUpload': 'Support one or more pictures or videos upload',
   'Setting.setBanner': 'Set banner',
-  //setting-Operation-log
   'Setting.operatorAccount': 'Operator account',
   'Setting.operatorName': 'Operator name',
   'Setting.operatorIP': 'Operator IP',
@@ -2534,7 +2465,6 @@ export default {
   'Setting.Setting': 'Setting',
   'Setting.CustomerDelivery': 'Customer Delivery',
   'Setting.CustomerBilling': 'Customer Billing',
-  //setting-resource-cate
   'Setting.categoryName': 'Category name',
   'Setting.operation': 'Operation',
   'Setting.AddSubcategory': 'Add subcategory',
@@ -2549,7 +2479,6 @@ export default {
   'Setting.addFirstLeverCate': 'Add the first group',
   'Setting.assetCategory': 'Asset category',
   'Setting.assetCategoryInfo': 'Asset category can add up to 3 levels, when there is nocategory, all asset will be classified into the default category',
-  //setting-video-store
   'Setting.videoContent': 'Video content',
   'Setting.AddCategory': 'Add Category',
   'Setting.SelectParentCategory': 'Select parent category',
@@ -2615,7 +2544,6 @@ export default {
   'Setting.ChooseALogisticsCompany': 'Choose a logistics company',
   'Setting.LogisticsCompanySettings': 'Logistics company settings',
   'Setting.Manage': 'Manage your commonly used logistics companies, easy to choose when ordering and shipping, up to 20 logistics companies can be set up.',
-  //role-list
   'Setting.roleName': 'Role name',
   'Setting.permission': 'Permission',
   'Setting.setPermission': 'Set permission',

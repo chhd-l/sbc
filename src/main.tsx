@@ -25,6 +25,14 @@ export default class Main extends React.Component<any, any> {
       123457910: 'us',
       123457911: 'tr'
     };
+    (window as any).goodsCount = {
+      123456858: 20,
+      123457907: 20,
+      123457908: 20,
+      123457909: 20,
+      123457910: 20,
+      123457911: 10
+    };
   }
 
   UNSAFE_componentWillMount() {

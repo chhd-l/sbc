@@ -85,7 +85,7 @@ const Common = {
     REMEDY: '修改订单',
     REFUND: '退款',
     AUDIT: '待发货',
-    DELIVERED_PART: '待发货',
+    PARTIALLY_SHIPPED: '待发货',
     DELIVERED: '待收货',
     CONFIRMED: '已收货',
     COMPLETED: '已完成',

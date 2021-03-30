@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Col, Row, Select, message, InputNumber, Radio, Icon } from 'antd';
+import { OrderStatus } from 'qmkit';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -14,16 +15,6 @@ export default class ChooseOrderForm extends Component<any, any> {
         isOrderStatus: true,
         orderStatus: []
       },
-      orderStatusDict: [
-        { name: 'Init', value: 'INIT' },
-        { name: 'Groupon', value: 'GROUPON' },
-        { name: 'Audit', value: 'AUDIT' },
-        { name: 'Delivered_part', value: 'DELIVERED_PART' },
-        { name: 'Delivered', value: 'DELIVERED' },
-        { name: 'Confirmed', value: 'CONFIRMED' },
-        { name: 'Completed', value: 'COMPLETED' },
-        { name: 'Void', value: 'VOID' }
-      ],
       nodeId: ''
     };
     this.onChange = this.onChange.bind(this);
@@ -86,7 +77,7 @@ export default class ChooseOrderForm extends Component<any, any> {
     }
   }
   render() {
-    const { form, orderStatusDict } = this.state;
+    const { form } = this.state;
     return (
       <React.Fragment>
         <FormItem label="Order creation date is" style={{ lineHeight: 2.8 }}>
@@ -137,7 +128,7 @@ export default class ChooseOrderForm extends Component<any, any> {
                 value={form.orderStatus}
                 style={{ width: '100%' }}
               >
-                {orderStatusDict.map((item) => (
+                {OrderStatus.map((item) => (
                   <Option value={item.value} key={item.value}>
                     {item.name}
                   </Option>

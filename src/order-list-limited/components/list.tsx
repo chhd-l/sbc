@@ -3,8 +3,8 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper } from 'qmkit';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { noop, Const, AuthWrapper, getOrderStatusValue } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
@@ -12,59 +12,37 @@ const defaultImg = require('../../goods-list/img/none.png');
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="Order.notshipped" />;
+    return <FormattedMessage id="order.notShipped" />;
   } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="Order.Allshipments" />;
+    return <FormattedMessage id="order.allShipments" />;
   } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="Order.Partialshipment" />;
+    return <FormattedMessage id="order.partialShipment" />;
   } else if (status == 'VOID') {
-    return <FormattedMessage id="Order.Invalid" />;
+    return <FormattedMessage id="order.invalid" />;
   } else {
-    return <FormattedMessage id="Order.Unknown" />;
+    return <FormattedMessage id="order.unknown" />;
   }
 };
 
 const payStatus = (status) => {
   if (status == 'NOT_PAID') {
-    return <FormattedMessage id="Order.Unpaid" />;
+    return <FormattedMessage id="order.unpaid" />;
   } else if (status == 'UNCONFIRMED') {
-    return <FormattedMessage id="Order.Tobeconfirmed" />;
+    return <FormattedMessage id="order.toBeConfirmed" />;
   } else if (status == 'PAID') {
-    return <FormattedMessage id="Order.Paid" />;
+    return <FormattedMessage id="order.paid" />;
   } else if (status == 'REFUND') {
-    return <FormattedMessage id="Order.Refund" />;
+    return <FormattedMessage id="Refund" />;
   } else if (status == 'PAYING') {
-    return <FormattedMessage id="Order.Paying" />;
+    return 'Paying';
   } else {
-    return <FormattedMessage id="Order.Unknown" />;
-  }
-};
-
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return <FormattedMessage id="Order.Pendingreview" />;
-  } else if (status == 'GROUPON') {
-    return <FormattedMessage id="Order.Tobeformed" />;
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="Order.Tobedelivered" />;
-  } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="Order.Tobereceived" />;
-  } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="Order.Received" />;
-  } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="Order.Completed" />;
-  } else if (status == 'VOID') {
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="Order.Outofdate" />;
+    return <FormattedMessage id="order.unknown" />;
   }
 };
 
 type TList = List<any>;
 
 class RejectForm extends React.Component<any, any> {
-  props: {
-    intl: any;
-  };
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -75,7 +53,7 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="Order.RejectionReasonTip" />
+                message: <FormattedMessage id="order.rejectionReasonTip" />
               },
               {
                 max: 100,
@@ -83,7 +61,7 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={this.props.intl.formatMessage({ id: 'Order.RejectionReasonTip' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -106,7 +84,7 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create({})(RejectForm);
 
 @Relax
-class ListView extends React.Component<any, any> {
+export default class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
@@ -135,7 +113,6 @@ class ListView extends React.Component<any, any> {
       hideRejectModal: Function;
       showRejectModal: Function;
     };
-    intl: any;
   };
 
   static relaxProps = {
@@ -186,29 +163,29 @@ class ListView extends React.Component<any, any> {
                         />
                       </th>
                       <th>
-                        <FormattedMessage id="Order.Product" />
+                        <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
                       <th style={{ width: '14%' }}>
-                        <FormattedMessage id="Order.Consumername" />
+                        <FormattedMessage id="consumerName" />
                       </th>
                       <th style={{ width: '17%' }}>
-                        <FormattedMessage id="Order.Recipient" />
+                        <FormattedMessage id="recipient" />
                       </th>
                       <th style={{ width: '10%' }}>
                         {/* <FormattedMessage id="amount" /> */}
                         {/* <br /> */}
-                        <FormattedMessage id="Order.Quantity" />
+                        <FormattedMessage id="quantity" />
                       </th>
                       {/* <th style={{ width: '5%' }}>postCode</th> */}
                       {/* <th style={{ width: '5%' }}>rfc</th> */}
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="Order.Shippingstatus" />
+                        <FormattedMessage id="order.shippingStatus" />
                       </th>
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="Order.Orderstatus" />
+                        <FormattedMessage id="order.orderStatus" />
                       </th>
                       <th className="operation-th" style={{ width: '12%' }}>
-                        <FormattedMessage id="Order.Paymentstatus" />
+                        <FormattedMessage id="order.paymentStatus" />
                       </th>
                     </tr>
                   </thead>
@@ -236,7 +213,7 @@ class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal maskClosable={false} title={<FormattedMessage id="Order.RejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
+          <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;
@@ -324,7 +301,7 @@ class ListView extends React.Component<any, any> {
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
                               <span style={styles.platform}>
-                                <FormattedMessage id="Order.Valetorder" />
+                                <FormattedMessage id="order.valetOrder" />
                               </span>
                             )}
                             {/* {orderType != '' && (
@@ -332,7 +309,7 @@ class ListView extends React.Component<any, any> {
                             )} */}
                             {v.get('grouponFlag') && (
                               <span style={styles.platform}>
-                                <FormattedMessage id="Order.Fighttogether" />
+                                <FormattedMessage id="order.fightTogether" />
                               </span>
                             )}
                             {v.get('isAutoSub') && <span style={styles.platform}>S</span>}
@@ -433,7 +410,7 @@ class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           {/*部分发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED_PART' && v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' && !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID') && (
+                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') && (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') && v.getIn(['tradeState', 'payState']) === 'PAID' && (
                             <AuthWrapper functionName="fOrderDetail002_3pl">
                               <Tooltip placement="top" title="Ship">
                                 <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
@@ -452,7 +429,7 @@ class ListView extends React.Component<any, any> {
                                   }}
                                   href="javascript:void(0)"
                                 >
-                                  <FormattedMessage id="Order.ConfirmReceipt" />
+                                  <FormattedMessage id="order.confirmReceipt" />
                                 </a>
                               </Tooltip>
                             </AuthWrapper>
@@ -536,9 +513,11 @@ class ListView extends React.Component<any, any> {
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '12%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
-                    {/*订单状态*/}
-                    <td style={{ width: '12%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
+                    <td style={{ width: '14%' }}>{getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))}</td>
+                    {/*支付状态*/}
+                    <td style={{ width: '14%' }}>
+                      {getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))}
+                    </td>
                     {/*支付状态*/}
                     <td style={{ width: '12%', paddingRight: 22 }} className="operation-td">
                       {payStatus(v.getIn(['tradeState', 'payState']))}
@@ -572,12 +551,8 @@ class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: this.props.intl.formatMessage({
-        id: 'Order.Review'
-      }),
-      content: this.props.intl.formatMessage({
-        id: 'Order.ConfirmReview'
-      }),
+      title: <FormattedMessage id="order.review" />,
+      content: <FormattedMessage id="order.confirmReview" />,
       onOk() {
         onRetrial(tdId);
       },
@@ -605,12 +580,8 @@ class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: this.props.intl.formatMessage({
-        id: 'Order.ConfirmReceipt'
-      }),
-      content: this.props.intl.formatMessage({
-        id: 'Order.Confirmthatallproducts'
-      }),
+      title: 'Confirm receipt',
+      content: 'Confirm that all products have been received?',
       onOk() {
         onConfirm(tdId);
       },
@@ -641,7 +612,7 @@ class ListView extends React.Component<any, any> {
     this._rejectForm.setFieldsValue({ comment: '' });
   };
 }
-export default injectIntl(ListView);
+
 const styles = {
   loading: {
     textAlign: 'center',

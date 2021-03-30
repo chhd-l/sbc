@@ -172,21 +172,34 @@ class PaymentModal extends React.Component<any, any> {
     });
   };
 
+  union = (arr1,arr2) =>{
+    return arr1.filter(item=>{
+      if (arr2.indexOf(item.cardType)>-1) {
+        arr2.splice(arr2.indexOf(item.cardType),1)
+        return item
+      }
+    })
+  }
+
   onSave = async () => {
     this.props.form.validateFields(null, async (errs, values) => {
       //如果校验通过
       let payPspItemVOList = this.props.paymentForm.payPspItemVOList[this.state.key]
       let pspItemCardTypeSaveRequestList = []
-      this.props.paymentForm.payPspCardTypeVOList&&this.props.paymentForm.payPspCardTypeVOList.map((item,i)=>{
-        if (item.cardType == values.paymentMethod[i]) {
-          pspItemCardTypeSaveRequestList.push({
-            storeId: item.storeId,
-            pspId: item.pspId,
-            pspItemId: payPspItemVOList.pspConfigVO.pspItemId,
-            cardType: item.cardType,
-            imgUrl: item.imgUrl,
-          })
+      let paymentMethodList = this.props.paymentForm.payPspCardTypeVOList.filter(item=>{
+        if (values.paymentMethod.indexOf(item.cardType)>-1) {
+          values.paymentMethod.splice(values.paymentMethod.indexOf(item.cardType),1)
+          return item
         }
+      })
+      paymentMethodList.map((item,i)=>{
+        pspItemCardTypeSaveRequestList.push({
+          storeId: item.storeId,
+          pspId: item.pspId,
+          pspItemId: payPspItemVOList.pspConfigVO.pspItemId,
+          cardType: item.cardType,
+          imgUrl: item.imgUrl,
+        })
       })
       if (!errs) {
         const { res } = await webapi.savePaymentSetting({
@@ -200,7 +213,7 @@ class PaymentModal extends React.Component<any, any> {
             privateKey: values.privateKey,
             publicKey: values.publicKey
           }),
-          payPspItemSaveReques: Object.assign({
+          payPspItemSaveRequest: Object.assign({
             id: payPspItemVOList.pspConfigVO.pspItemId,
             isOpen: values.isOpen == true ? 1 : 0,
             pspItemCardTypeSaveRequestList: pspItemCardTypeSaveRequestList,

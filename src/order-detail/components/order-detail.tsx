@@ -580,10 +580,50 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <h4>Delivery Address</h4>
               <Row>
                 <Col span={12}>
-                  <p>First name: {consignee.firstName}</p>
-                  <p>Last name: {consignee.lastName}</p>
-                  <p>Address 1: {consignee.detailAddress1}</p>
-                  <p>Address 2: {consignee.detailAddress2}</p>
+                   <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.firstName}</div>}
+                  >
+                    <p className="overFlowtext">
+                    First name: {consignee.firstName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.lastName}</div>}
+                  >
+                    <p className="overFlowtext">
+                    First name: {consignee.lastName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.detailAddress1}</div>}
+                  >
+                    <p className="overFlowtext">
+                    Address 1: {consignee.detailAddress1}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.detailAddress2}</div>}
+                  >
+                    <p className="overFlowtext">
+                    Address 2: {consignee.detailAddress2}
+                    </p>
+                  </Tooltip>
                   <p>Country: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}</p>
                 </Col>
                 <Col span={12}>
@@ -600,10 +640,50 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <h4>Billing Address</h4>
               <Row>
                 <Col span={12}>
-                  <p>First name: {invoice.firstName}</p>
-                  <p>Last name: {invoice.lastName}</p>
-                  <p>Address 1: {invoice.address1}</p>
-                  <p>Address 2: {invoice.address2}</p>
+                <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{invoice.firstName}</div>}
+                  >
+                    <p className="overFlowtext">
+                    First name: {invoice.firstName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{invoice.lastName}</div>}
+                  >
+                    <p className="overFlowtext">
+                    First name: {invoice.lastName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{invoice.address1}</div>}
+                  >
+                    <p className="overFlowtext">
+                    Address 1: {invoice.address1}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{invoice.address2}</div>}
+                  >
+                    <p className="overFlowtext">
+                    Address 2: {invoice.address2}
+                    </p>
+                  </Tooltip>
                   <p>Country: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
                 </Col>
                 <Col span={12}>

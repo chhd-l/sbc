@@ -345,8 +345,6 @@ class SkuForm extends React.Component<any, any> {
         if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
           marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
           subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
-        }else {
-          return marketPrice
         }
         console.log(addSkUProduct[0],11111111);
         console.log(marketPrice,2222222);
@@ -457,7 +455,7 @@ class SkuForm extends React.Component<any, any> {
                           max={9999999.99}
                           //precision={4}
                           style={{ width: '111px' }}
-                          disabled={rowInfo.subscriptionStatus === 0}
+                          //disabled={rowInfo.subscriptionStatus === 0}
                           formatter={limitDecimals}
                           parser={limitDecimals}
                           step={0.01}

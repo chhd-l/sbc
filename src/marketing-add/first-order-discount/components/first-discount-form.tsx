@@ -97,7 +97,7 @@ const treeData = [
 const TreeNode = Tree.TreeNode;
 
 @Relax
-export default class FullGiftForm extends React.Component<any, any> {
+export default class FirstDiscountForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     // const relaxProps = props.store.state();
@@ -349,7 +349,7 @@ export default class FullGiftForm extends React.Component<any, any> {
 
   // @ts-ignore
   render() {
-    const { marketingId, form } = this.props;
+    const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { customerLevel, sourceGoodCateList, skuExists, saveLoading } = this.state;
     const { marketingBean, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds } = this.props.relaxProps;
@@ -374,7 +374,6 @@ export default class FullGiftForm extends React.Component<any, any> {
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
-
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
@@ -383,13 +382,6 @@ export default class FullGiftForm extends React.Component<any, any> {
               <Radio value={0}>Normal promotion</Radio>
               <Radio value={1}>Subscription promotion</Radio>
             </Radio.Group>
-            {/*{marketingBean.get('promotionType') === 1 ? (*/}
-            {/*  <Checkbox onChange={(e) => this.onBeanChange({*/}
-            {/*    isClub: e.target.checked*/}
-            {/*  })} checked={marketingBean.get('isClub')}>*/}
-            {/*    Club*/}
-            {/*  </Checkbox>*/}
-            {/*) : null}*/}
           </div>
         </FormItem>
         <div className="bold-title">Basic Setting</div>
@@ -495,57 +487,40 @@ export default class FullGiftForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        <div className="bold-title">Gift type:</div>
+        <div className="bold-title">Discount type:</div>
         <FormItem {...formItemLayout} labelAlign="left">
           {getFieldDecorator('subType', {
             rules: [
               {
                 required: true,
-                message: 'full gift type'
+                message: `full ${Enum.GET_MARKETING_STRING(marketingType)} type`
               }
             ],
             initialValue: marketingBean.get('subType')
           })(
             <RadioGroup onChange={(e) => this.subTypeChange(e)}>
-              <Radio style={radioStyle} value={2}>
-                Direct gift
+              <Radio style={radioStyle} value={12}>
+                Direct discount
               </Radio>
-              {marketingBean.get('promotionType') === 1 && (
-                <Radio value={3} style={radioStyle}>
-                  For <Input /> refill
-                </Radio>
-              )}
-              {marketingBean.get('promotionType') === 0 && (
-                <Radio value={0} style={radioStyle}>
-                  Full amount gift
-                </Radio>
-              )}
-              {marketingBean.get('promotionType') === 0 && (
-                <Radio value={1} style={radioStyle}>
-                  Full quantity gift{' '}
-                </Radio>
-              )}
             </RadioGroup>
           )}
         </FormItem>
-
-
         <FormItem {...settingRuleFrom} label={settingLabel} required={true} labelAlign="left">
-          {
-          getFieldDecorator(
+          {getFieldDecorator(
             'rules',
             {}
           )(
-            <GiftLevels
+            <FirstDiscountLevels
               form={this.props.form}
-              selectedRows={selectedRows}
-              isNormal={marketingBean.get('promotionType') === 0}
-              fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()}
+              fullDiscountLevelList={marketingBean.get('fullDiscountLevelList') && marketingBean.get('fullDiscountLevelList').toJS()}
               onChangeBack={this.onRulesChange}
               isFullCount={marketingBean.get('subType') % 2 }
+              isNormal={marketingBean.get('promotionType') === 0}
             />
           )}
         </FormItem>
+
+
         <div className="bold-title">Select products:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
           {getFieldDecorator('scopeType', {
@@ -840,9 +815,17 @@ export default class FullGiftForm extends React.Component<any, any> {
     const { initDefualtLevelList, initReductionDefualtLevelList } = this.props.relaxProps
     this.onBeanChange({
       promotionType: e.target.value,
-      subType: 9
+      subType:  10
     });
-    // initReductionDefualtLevelList()
+    // switch (marketingType) {
+    //   case Enum.MARKETING_TYPE.FULL_REDUCTION :
+    //     initReductionDefualtLevelList()
+    //     break;
+    //   case  Enum.MARKETING_TYPE.FULL_REDUCTION:
+    //     initDefualtLevelList()
+    //     break;
+    //   default:
+    // }
   };
 
   /**
@@ -850,8 +833,8 @@ export default class FullGiftForm extends React.Component<any, any> {
    * @param params
    */
   onBeanChange = (params) => {
-    const { marketingBean, giftBeanOnChange } = this.props.relaxProps;
-    giftBeanOnChange(marketingBean.merge(params));
+    const { marketingBean, discountBeanOnChange } = this.props.relaxProps;
+    discountBeanOnChange(marketingBean.merge(params));
   };
   /**
    * 等级初始化
@@ -902,45 +885,6 @@ export default class FullGiftForm extends React.Component<any, any> {
       count: 1
     });
     const isFullCount = marketingBean.get('subType') % 2;
-    //判断设置规则
-    levelList = marketingBean.get('fullGiftLevelList');
-
-    if (!levelList || (levelList.isEmpty() && marketingBean.get('promotionType') == 0)) {
-      errorObject['rules'] = {
-        value: null,
-        errors: [new Error('Please setting rules')]
-      };
-    } else {
-      let ruleArray = List();
-      //满赠规则具体内容校验
-      levelList.toJS().forEach((level, index) => {
-        //为下面的多级条件校验加入因子
-        ruleArray = ruleArray.push(
-          fromJS({
-            index: index,
-            value: isFullCount ? level.fullCount : level.fullAmount
-          })
-        );
-        //校验赠品是否为空
-        if (!level.fullGiftDetailList || level.fullGiftDetailList.length == 0) {
-          errorObject[`level_${index}`] = {
-            value: null,
-            errors: [new Error('A full gift cannot be empty')]
-          };
-        }
-      });
-      //校验多级促销条件是否相同
-      ruleArray
-        .groupBy((item) => +(item as any).get('value'))
-        .filter((value) => value.size > 1)
-        .forEach((item) => {
-          item.forEach((level) => {
-            errorObject[`level_rule_value_${(level as any).get('index')}`] = {
-              errors: [new Error('Multi-level promotion conditions are not the same')]
-            };
-          });
-        });
-    }
 
     //判断选择商品
     if (selectedSkuIds && selectedSkuIds.length > 0) {
@@ -963,32 +907,11 @@ export default class FullGiftForm extends React.Component<any, any> {
         };
       }
     }
-    // if (marketingBean.get('joinLevel') == -3 && (!marketingBean.get('segmentIds') || marketingBean.get('segmentIds').size === 0)) {
-    //   errorObject['joinLevel'] = {
-    //     value: null,
-    //     errors: [new Error('Please select group.')]
-    //   };
-    // }
-    // if (marketingBean.get('joinLevel') == -4) {
-    //   if (!marketingBean.get('emailSuffixList') || marketingBean.get('emailSuffixList').length === 0) {
-    //     errorObject['joinLevel'] = {
-    //       value: null,
-    //       errors: [new Error('Please enter email suffix.')]
-    //     };
-    //   }
-    //   else if (!ValidConst.email.test(marketingBean.get('emailSuffixList').toJS()[0])) {
-    //     errorObject['joinLevel'] = {
-    //       value: null,
-    //       errors: [new Error('Please enter correct email.')]
-    //     };
-    //   }
-    // }
+
     if (this.state.promotionCode) {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
     }
-    if (!marketingBean.get('publicStatus')) {
-      marketingBean = marketingBean.set('publicStatus', '1');
-    }
+
     form.validateFieldsAndScroll((err) => {
       if (Object.keys(errorObject).length != 0) {
         form.setFields(errorObject);
@@ -998,27 +921,9 @@ export default class FullGiftForm extends React.Component<any, any> {
           this.setState({ saveLoading: true });
           //组装营销类型
           marketingBean = marketingBean.set('marketingType', marketingType); //.set('scopeType', 1);
-
-          if (!marketingBean.get('joinLevel')) {
-            marketingBean = marketingBean.set('joinLevel', -1); //.set('scopeType', 1);
-          }
-          if (!marketingBean.get('scopeType')) {
-            marketingBean = marketingBean.set('scopeType', 0); //.set('scopeType', 1);
-          }
           //商品已经选择 + 时间已经选择 => 判断  同类型的营销活动下，商品是否重复
           if (marketingBean.get('beginTime') && marketingBean.get('endTime')) {
-            // webapi
-            //   .skuExists({
-            //     skuIds: selectedSkuIds,
-            //     marketingType,
-            //     startTime: marketingBean.get('beginTime'),
-            //     endTime: marketingBean.get('endTime'),
-            //     excludeId: marketingBean.get('marketingId')
-            //   })
-            //   .then(({ res }) => {
-            // if (res.code == Const.SUCCESS_CODE) {
-
-            submitFullGift(marketingBean.toJS()).then((res) => this._responseThen(res));
+            // submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
           }
         }
       }
@@ -1049,35 +954,9 @@ export default class FullGiftForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (e) => {
-    const { initDefualtLevelList, initReductionDefualtLevelList, marketingBean } = this.props.relaxProps
-    const _thisRef = this;
-    let levelType = '';
-    // Session 有状态登录，保存一个seesion, 返回相应的cookie，
-    // JWT无状态登录: 返回一个JWT加密文档(角色，权限，过期时间等)，前端保存起来
-    levelType = 'fullGiftLevelList';
-
-    if (levelType == '' || !marketingBean.get(levelType)) return;
-    if (marketingBean.get(levelType).size > 0) {
-      Confirm({
-        title: 'Switch type',
-        content: 'Switching types will clear the set rules. Do you want to continue?',
-        onOk() {
-          for (let i = 0; i < marketingBean.get(levelType).size; i++) {
-            _thisRef.props.form.resetFields(`level_${i}`);
-          }
-          let beanObject = {
-            // [levelType]: fromJS([]),
-            subType: e.target.value
-          };
-          _thisRef.onBeanChange(beanObject);
-          //gift需要替换
-          initReductionDefualtLevelList()
-        }
-        // onCancel() {
-        //   _thisRef.props.form.setFieldsValue({ subType: isFullCount });
-        // }
-      });
-    }
+    this.onBeanChange({
+      subType: e.target.value
+    })
   };
 
   /**
@@ -1144,16 +1023,34 @@ export default class FullGiftForm extends React.Component<any, any> {
    * @param rules
    */
   onRulesChange = (rules) => {
+    const { marketingType } = this.props;
     this.props.form.resetFields('rules');
-    this.onBeanChange({ fullGiftLevelList: rules });
+    if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
+      this.onBeanChange({ fullGiftLevelList: rules });
+    } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+      this.onBeanChange({ fullDiscountLevelList: rules });
+    } else {
+      this.onBeanChange({ fullReductionLevelList: rules });
+    }
   };
 
   onSubscriptionChange = (props, value) => {
     const { marketingBean } = this.props.relaxProps;
+    const { marketingType } = this.props;
     // this.props.form.resetFields('rules');
-    let obj = marketingBean.get('marketingSubscriptionDiscount');
-    obj[props] = value;
-    this.onBeanChange({ marketingSubscriptionDiscount: obj });
+    if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
+      let obj = marketingBean.get('marketingSubscriptionDiscount');
+      obj[props] = value;
+      this.onBeanChange({ marketingSubscriptionDiscount: obj });
+    } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+      let obj = marketingBean.get('marketingSubscriptionDiscount');
+      obj[props] = value;
+      this.onBeanChange({ marketingSubscriptionDiscount: obj });
+    } else {
+      let obj = marketingBean.get('marketingSubscriptionReduction') ? marketingBean.get('marketingSubscriptionReduction').toJS() : {};
+      obj[props] = value;
+      this.onBeanChange({ marketingSubscriptionReduction: obj });
+    }
   };
 
   /**

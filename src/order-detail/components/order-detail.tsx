@@ -370,7 +370,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             justifyContent: 'space-between'
           }}
         >
-          <label style={styles.greenText}>{detail.getIn(['tradeState', 'flowState'])}</label>
+          <label style={styles.greenText}>{getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))  }</label>
 
           {this._renderBtnAction(tid)}
         </div>
@@ -392,7 +392,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p>External order id: {detail.getIn(['tradeOms', 'orderNo'])}</p>
-                  <p>Order status: {detail.getIn(['tradeState', 'flowState'])}</p>
+                  <p>Order status: {getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}</p>
                   <p>Order type: {orderDetailType ? orderDetailType.name : ''}</p>
                 </Col>
                 <Col span={12}>
@@ -674,6 +674,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { detail, verify, onDelivery } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
+    const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const paymentOrder = detail.get('paymentOrder');
 
     //修改状态的修改
@@ -733,7 +734,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
       );
-    } else if (flowState === 'DELIVERED_PART') {
+    } else if ((flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && payState === 'PAID' && deliverStatus === 'PART_SHIPPED') {
       return (
         <div>
           <AuthWrapper functionName="fOrderDetail002">

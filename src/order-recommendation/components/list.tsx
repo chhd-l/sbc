@@ -40,23 +40,6 @@ const payStatus = (status) => {
   }
 };
 
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return <FormattedMessage id="order.pendingReview" />;
-  } else if (status == 'GROUPON') {
-    return <FormattedMessage id="order.toBeFormed" />;
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="order.toBeDelivered" />;
-  } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="order.toBeReceived" />;
-  } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="order.received" />;
-  } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="order.completed" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.outOfDate" />;
-  }
-};
 
 type TList = List<any>;
 

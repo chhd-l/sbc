@@ -78,20 +78,6 @@ const Common = {
     PARTIAL_PAID: 'Partial paid',
     PAID: 'Paid'
   },
-
-  // 订单状态
-  flowState: {
-    INIT: 'Init',
-    REMEDY: 'Remedy',
-    REFUND: 'Refund',
-    AUDIT: 'To be delivered',
-    DELIVERED_PART: 'To be delivered',
-    DELIVERED: 'Ready for receiving',
-    CONFIRMED: 'Received',
-    COMPLETED: 'Finished',
-    VOID: 'Invalid',
-    REFUND_FAILED: 'Refund failed'
-  },
   // 优惠券使用范围
   couponScopeType: {
 

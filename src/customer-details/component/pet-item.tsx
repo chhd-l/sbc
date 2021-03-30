@@ -306,7 +306,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Weight">
+                    <Form.Item label="Adult size">
                       {editable ? (
                         getFieldDecorator('petsSizeValueName', {
                           initialValue: pet.petsSizeValueName,
@@ -380,7 +380,22 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Special needs">
+                    <Form.Item label="Weight">
+                      <span>{pet.weight}</span>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Activity">
+                      <span>{pet.petActivityCode}</span>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Lifestyle">
+                      <span>{pet.lifestyle}</span>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Sensitivities">
                       {editable ? (
                         getFieldDecorator('customerPetsPropRelations', {
                           initialValue: pet.customerPetsPropRelations ? pet.customerPetsPropRelations.map((v) => v.propName) : null,
@@ -484,9 +499,6 @@ class PetItem extends React.Component<Iprop, any> {
                         <Form.Item label="Pet owner ID">{pet.ownerId}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Pet activity level">{pet.petActivityCode}</Form.Item>
-                      </Col>
-                      <Col span={12}>
                         <Form.Item label="Breeder ID">{pet.breederId}</Form.Item>
                       </Col>
                       <Col span={12}>
@@ -533,9 +545,6 @@ class PetItem extends React.Component<Iprop, any> {
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Reason">{pet.reason}</Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item label="Lifestyle">{pet.lifestyle}</Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Microship ID">{pet.microchipId}</Form.Item>
@@ -590,9 +599,6 @@ class PetItem extends React.Component<Iprop, any> {
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Target weight">{pet.adultTargetWeight}</Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item label="Weight">{pet.weight}</Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Last pet status">{pet.lastPetStatus}</Form.Item>

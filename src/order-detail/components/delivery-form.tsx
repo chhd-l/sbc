@@ -74,7 +74,7 @@ export default class DeliveryForm extends React.Component<any, any> {
     return (
       <div>
         <Form className="login-form">
-          <FormItem {...formRadioItemLayout} label="Logistci info is mandotory">
+          <FormItem {...formRadioItemLayout} label="Logistic info is mandotory">
             <Radio.Group
               value={this.state.logistciIsMandotory}
               onChange={(e) => {

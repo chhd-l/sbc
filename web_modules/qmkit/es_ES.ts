@@ -33,6 +33,7 @@ export default {
   'Public.more':'more',
   'Public.all':'all',
   'Public.Search':'Search',
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -143,7 +144,9 @@ export default {
   'Menu.Asset type':'Asset type',
   'Menu.Operation log':'Operation log',
   'Menu.Set Banner':'Set Banner',
+  /* -------- 已翻译 V1.0---------------*/
   'Menu.Appointment':'Appointment',
+
 
 
   /*-----------------------------  Home -----------------------------------------------*/
@@ -179,6 +182,10 @@ export default {
   'Home.Prescriberreward':'Prescriber reward',
   'Home.Activerate':'Active rate',
   'Home.Transaction':'Transaction',
+  /* -------- 已翻译 V1.0---------------*/
+
+
+
 
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
@@ -706,7 +713,7 @@ export default {
   "Product.DescriptionType": "Description type",
   "Product.AddNewDescription": "Add new description",
   "Product.NoResultsSearches": "No results searches",
-
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -1080,6 +1087,7 @@ export default {
   'Order.totalPayable': 'Total payable',
   'Order.Nomorethan50': 'No more than 50 types of purchased goods',
   'Order.Selectproduct': 'Select product',
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -1385,7 +1393,7 @@ export default {
   'Subscription.Active.UnfoldedAll':'Unfolded all delivery addresses',
   'Subscription.Active.ChooseBillingAddress':'Choose From Saved Billing Address',
   'Subscription.Active.UnfoldedAllDeliveryAddresses':'Unfolded all delivery addresses',
-
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -1545,6 +1553,10 @@ export default {
   'PetOwner.levelName':'Type name',
   'PetOwner.levelBadge':'Type badge',
   'PetOwner.consumerLevel':'Consumer type',
+  /* -------- 已翻译 V1.0---------------*/
+
+
+
 
   /*-----------------------------  Finance  ------------------------------------------*/
   'Finance.NO':'NO.',
@@ -1681,7 +1693,7 @@ export default {
   'Finance.vatSpecialInvoice':'VAT special invoice',
   'Finance.saveSettings':'Save Settings',
   'Finance.add':'add',
-
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -1924,6 +1936,10 @@ export default {
   'Marketing.needsToBeOperated':'Please select the order that needs to be operated',
   'Marketing.Invalid':'Invalid',
   'Marketing.Valid':'Valid',
+  /* -------- 已翻译 V1.0---------------*/
+
+
+
 
   /*-----------------------------  Prescriber  ----------------------------------------*/
   'Prescriber.Add':'Add',
@@ -2054,6 +2070,9 @@ export default {
   'Prescriber.Create':'Create',
   'Prescriber.EditPrescriberType':'Edit Prescriber Type',
   'Prescriber.NewPrescriberType':'New Prescriber type',
+  /* -------- 已翻译 V1.0---------------*/
+
+
 
   /*-----------------------------  Analysis  ----------------------------------------*/
   'Analysis.ProductReport':'Product Report',
@@ -2089,6 +2108,9 @@ export default {
   'Analysis.Consumers':'Consumers',
   'Analysis.TransactionTrend':'Transaction trend',
   'Analysis.TransactionReport':'Transaction report',
+  /* -------- 已翻译 V1.0---------------*/
+
+
 
   /*-----------------------------  Content  ----------------------------------------*/
   'Content.NavigationList':'Navigation list',
@@ -2148,6 +2170,9 @@ export default {
   'Content.NextStep':'Next step',
   'Content.Interaction':'Interaction',
   'Content.Submit':'Submit',
+  /* -------- 已翻译 V1.0---------------*/
+
+
 
   /*-----------------------------  Setting  ----------------------------------------*/
 
@@ -2585,6 +2610,7 @@ export default {
   'Setting.seoSetting': 'SEO Setting',
   'Setting.SiteSEO': 'Site SEO',
   'Setting.PageSEO': 'Page SEO',
+  /* -------- 已翻译 V1.0---------------*/
 
 
 
@@ -2597,7 +2623,7 @@ export default {
   'Fetch.K-000015':'Failed to obtain authorization',
   'Fetch.MethodNotAllowed':'You do not have permission to access this feature',
   'Fetch.500-502-503':'System is deploying, if it does not recovery after 10 mins, please contact the administrator.',
-
+  /* -------- 已翻译 V1.0---------------*/
 
 
   /*---------------------------------------------------------------------*/

@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import { Headline, BreadCrumb, history, Const, cache } from 'qmkit';
 import { Breadcrumb, message, Steps, Button, Icon, Form } from 'antd';
 import './index.less';
-import ConsumerInformation from './components/consumerInformation';
-import SelectedProduct from './components/selectedProduct';
-import PaymentInformation from './components/paymentInformation';
-
+import ChooseYourRole from './components/chooseYourRole';
+import FillinPetInfo from './components/fillinPetInfo';
+import ChooseProducts from './components/chooseProducts';
+import WriteTips from './components/writeTips';
+import AppStore from './store';
 import { getShopToken, queryOrderStatus } from './webapi';
+import { StoreProvider } from 'plume2';
 
 const { Step } = Steps;
+@StoreProvider(AppStore, { debug: __DEV__ })
 class ManualOrder extends Component<any, any> {
+  store: AppStore;
   static propTypes = {};
   static defaultProps = {};
   constructor(props) {
@@ -17,14 +21,10 @@ class ManualOrder extends Component<any, any> {
     let { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     this.state = {
       id: this.props.match.params.id,
-      title: 'Valet order',
-      current: 0,
+      title: 'New Prescription',
+      current: 1,
       status: 1,
-      customer: {
-        customerId: '',
-        customerName: '',
-        customerAccount: ''
-      },
+      params: {},
       storeId: storeId,
       list: []
     };
@@ -34,54 +34,19 @@ class ManualOrder extends Component<any, any> {
   next(e) {
     e.preventDefault();
     let { customer, current, list } = this.state;
-    this.props.form.validateFields((err) => {
-      if (!err && customer.customerId) {
-        if (current === 1) {
-          if (list.length > 0) {
-            this.getShopTokenJump();
-          } else {
-            message.info('please add product');
-          }
-        } else {
-          current++;
-        }
+    this.props.form.validateFields((err,values) => {
+      if (!err) {
+        let _params={...this.state.params,...values}
+        current++;
+        this.setState({
+          current,
+          params:_params
+        })
         this.setState({ current });
       }
     });
   }
 
-  turnShowPage = (token) => {
-    let winObj = window.open(`https://shopstg.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
-    let { customer } = this.state;
-    let loop = setInterval(async () => {
-      if (winObj.closed) {
-        clearInterval(loop);
-        const { res } = await queryOrderStatus(customer.customerId, token);
-        let d = {
-           'string':1,
-           'boolean':2,
-           'object':3
-        }
-        let status = d[typeof res.context];
-        console.log(status)
-        this.setState({
-          status
-        });
-      }
-    }, 500);
-  };
-
-  getShopTokenJump = async (other?: string) => {
-    let { customer, current } = this.state;
-    const { res } = await getShopToken(customer.customerId, {});
-    this.turnShowPage(res.context);
-    if (other !== 'other') {
-      current = current + 1;
-      this.setState({
-        current
-      });
-    }
-  };
 
   prev() {
     const current = this.state.current - 1;
@@ -89,50 +54,34 @@ class ManualOrder extends Component<any, any> {
   }
 
   componentWillMount() { 
-    let {customerId,customerName, customerAccount}=this.props?.location?.query??{};
-    if(customerId&&customerName&&customerAccount){
-      this.setState({
-        customer:{
-          customerId,
-          customerName, 
-          customerAccount
-        }
-      })
-    }
-
-
+    
   }
 
-  getCustomer = (customer) => {
+  getFormParams = (params) => {
+    console.log(params)
     this.setState({
-      customer
+      params:{...this.state.params,...params}
     });
   };
-  //获取购物车信息
-  getCartsList = (list) => {
-    this.setState({
-      list
-    });
-  };
+ 
   render() {
-    const { current, title, customer, storeId, status } = this.state;
-    console.log((window as any).countryEnum[storeId]);
+    const { current, title, params } = this.state;
     const steps = [
       {
         title: 'Choose your role',
-        controller: <ConsumerInformation form={this.props.form} customer={customer} storeId={storeId} stepName={'Choose your role'} getCustomerId={this.getCustomer} />
+        controller: <ChooseYourRole form={this.props.form} allParams={params}  getFormParams={this.getFormParams}/>
       },
       {
         title: 'Fill in Pet Info',
-        controller: <SelectedProduct stepName={'Product list:'} carts={this.getCartsList} storeId={storeId} customer={customer} />
+        controller: <FillinPetInfo   form={this.props.form}/>
       },
       {
         title: 'Choose Products',
-        controller: <PaymentInformation turnShowPage={this.getShopTokenJump} status={status} customer={customer} stepName={'Delivery & payment information'} />
+        controller: <ChooseProducts />
       },
       {
         title: 'Write Tips',
-        controller: <PaymentInformation turnShowPage={this.getShopTokenJump} status={status} customer={customer} stepName={'Delivery & payment information'} />
+        controller: <WriteTips />
       }
     ];
     // if (noLanguageSelect) {
@@ -153,14 +102,14 @@ class ManualOrder extends Component<any, any> {
           <div className="steps-content">{steps[current].controller}</div>
           <div className="steps-action">
           
-            {current === 1 && (
+            {current >= 1 && (
               <Button style={{ marginRight: 15 }} onClick={() => this.prev()}>
-                <Icon type="left" /> Return
+                 Previous
               </Button>
             )}
             {current < steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.next(e)}>
-                Next step <Icon type="right" />
+                Next 
               </Button>
             )}
             {/* {current !== steps.length - 1 && (

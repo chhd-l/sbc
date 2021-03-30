@@ -33,7 +33,7 @@ export default class SearchForm extends React.Component<any, any> {
       onEditSkuNo: Function;
       onFormFieldChange: Function;
       brandList: IList;
-      productCateList:IList;
+      productCateList: IList;
       sourceGoodCateList: IList;
       allCateList: IList;
       cateList: IList;
@@ -59,7 +59,7 @@ export default class SearchForm extends React.Component<any, any> {
     //品牌列表
     brandList: 'brandList',
     //分类列表
-    productCateList:'productCateList',
+    productCateList: 'productCateList',
     sourceGoodCateList: 'sourceGoodCateList',
     cateList: 'cateList',
     allCateList: 'allCateList'
@@ -92,16 +92,16 @@ export default class SearchForm extends React.Component<any, any> {
       });
 
     const loopProductCateory = (productCateList) =>
-    productCateList.map((item) => {
-          if (item.get('children') && item.get('children').count()) {
-            return (
-              <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} disabled={true}>
-                {loopProductCateory(item.get('children'))}
-              </TreeNode>
-            );
-          }
-          return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
-        });
+      productCateList.map((item) => {
+        if (item.get('children') && item.get('children').count()) {
+          return (
+            <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} disabled={true}>
+              {loopProductCateory(item.get('children'))}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
+      });
 
     return (
       <Form className="filter-content" layout="inline">
@@ -111,7 +111,7 @@ export default class SearchForm extends React.Component<any, any> {
               <Input
                 addonBefore={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.productName" />
+                    <FormattedMessage id="Product.productName" />
                   </p>
                 }
                 value={likeGoodsName}
@@ -130,7 +130,7 @@ export default class SearchForm extends React.Component<any, any> {
               <Input
                 addonBefore={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.SPU" />
+                    <FormattedMessage id="Product.SPU" />
                   </p>
                 }
                 value={likeGoodsNo}
@@ -149,7 +149,7 @@ export default class SearchForm extends React.Component<any, any> {
               <Input
                 addonBefore={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.SKU" />
+                    <FormattedMessage id="Product.SKU" />
                   </p>
                 }
                 style={{ width: 300 }}
@@ -169,10 +169,14 @@ export default class SearchForm extends React.Component<any, any> {
               <TreeSelectGroup
                 allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
-                label={<p style={styles.label}>Sales category</p>}
+                label={
+                  <p style={styles.label}>
+                    <FormattedMessage id="Product.Salescategory" />
+                  </p>
+                }
                 /* defaultValue="全部"*/
                 // style={styles.wrapper}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth:200 }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth: 200 }}
                 treeDefaultExpandAll
                 onChange={(value) => {
                   let sourceCategories = allCateList ? allCateList.toJS() : [];
@@ -206,10 +210,14 @@ export default class SearchForm extends React.Component<any, any> {
               <TreeSelectGroup
                 allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
-                label={<p style={styles.label}>Product category</p>}
+                label={
+                  <p style={styles.label}>
+                    <FormattedMessage id="Product.Productcategory" />
+                  </p>
+                }
                 /* defaultValue="全部"*/
                 // style={styles.wrapper}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth:200 }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth: 200 }}
                 treeDefaultExpandAll
                 onChange={(value) => {
                   onFormFieldChange({ key: 'cateId', value });
@@ -222,29 +230,29 @@ export default class SearchForm extends React.Component<any, any> {
 
           <Col span={8}>
             <FormItem>
-                <SelectGroup
-                  allowClear
-                  getPopupContainer={() => document.getElementById('page-content')}
-                  style={styles.wrapper}
-                  label={
-                    <p style={styles.label}>
-                      <FormattedMessage id="product.brand" />
-                    </p>
-                  }
-                  showSearch
-                  optionFilterProp="children"
-                  onChange={(value) => {
-                    onFormFieldChange({ key: 'brandId', value });
-                  }}
-                >
-                  {brandList.map((v, i) => {
-                    return (
-                      <Option key={i} value={v.get('brandId') + ''}>
-                        {v.get('nickName')}
-                      </Option>
-                    );
-                  })}
-                </SelectGroup>
+              <SelectGroup
+                allowClear
+                getPopupContainer={() => document.getElementById('page-content')}
+                style={styles.wrapper}
+                label={
+                  <p style={styles.label}>
+                    <FormattedMessage id="Product.brand" />
+                  </p>
+                }
+                showSearch
+                optionFilterProp="children"
+                onChange={(value) => {
+                  onFormFieldChange({ key: 'brandId', value });
+                }}
+              >
+                {brandList.map((v, i) => {
+                  return (
+                    <Option key={i} value={v.get('brandId') + ''}>
+                      {v.get('nickName')}
+                    </Option>
+                  );
+                })}
+              </SelectGroup>
             </FormItem>
           </Col>
           <Col span={24} style={{ textAlign: 'center' }}>
@@ -260,7 +268,7 @@ export default class SearchForm extends React.Component<any, any> {
                 }}
               >
                 <span>
-                  <FormattedMessage id="product.search" />
+                  <FormattedMessage id="Product.search" />
                 </span>
               </Button>
             </FormItem>

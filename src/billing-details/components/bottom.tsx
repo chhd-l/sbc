@@ -40,17 +40,12 @@ export default class Bottom extends React.Component<any, any> {
 
         {settlement.get('settleStatus') == 0 && (
           <div style={{ marginTop: 20 }}>
-            <Button
-              type="primary"
-              onClick={() =>
-                this._handleSettleStatus(settlement.get('settleId'), 1)
-              }
-            >
-              Set as settled
+            <Button type="primary" onClick={() => this._handleSettleStatus(settlement.get('settleId'), 1)}>
+              <FormattedMessage id="Finance.SetAsSettled" />
             </Button>
             {/* <Button style={{marginLeft: 10}} type="primary" onClick={() => this._handleSettleStatus(settlement.get('settleId'), 2)}>暂不处理</Button>*/}
             <Button style={{ marginLeft: 10 }} onClick={() => history.goBack()}>
-              back
+              <FormattedMessage id="Finance.back" />
             </Button>
           </div>
         )}
@@ -75,10 +70,7 @@ export default class Bottom extends React.Component<any, any> {
     const { changeSettleStatus } = this.props.relaxProps;
     confirm({
       title: 'Tips',
-      content:
-        status == 1
-          ? 'Are you sure you want to set this settlement record as settled? '
-          : ' are you sure you want to set the settlement record to not be processed temporarily?',
+      content: status == 1 ? <FormattedMessage id="Finance.recordAsSettled" /> : <FormattedMessage id="Finance.beProcessedTemporarily" />,
       onOk() {
         changeSettleStatus([settleId], status);
         history.goBack();

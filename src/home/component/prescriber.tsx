@@ -11,6 +11,7 @@ import Funnel from 'web_modules/biz/funnel/funnel.tsx';
 import BarLine from '/web_modules/biz/BarLine/index.tsx';
 import CountUp from 'react-countup';
 import nodataImg from '@/home/images/no-data.jpg';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
@@ -25,7 +26,7 @@ const countUpProps = {
   separator: ','
 };
 @Relax
-export default class Prescriber extends React.Component<any, any> {
+class Prescriber extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,6 +53,7 @@ export default class Prescriber extends React.Component<any, any> {
       p_conversionFunnelDashboardView: any;
       p_trafficDashboardView: any;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -125,10 +127,14 @@ export default class Prescriber extends React.Component<any, any> {
           <div className="item-top space-between">
             <div className="item-top-l flex-content">
               <div className="item-top-l-top">
-                <div className="top-text">Overview</div>
+                <div className="top-text">
+                  <FormattedMessage id="Home.Overview" />
+                </div>
                 <div className="content space-between">
                   <div className="mode">
-                    <div className="mode-text">Revenue</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Revenue" />
+                    </div>
                     <div className="mode-num">
                       <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} decimals={2} {...countUpProps} /> : '--'}</span>
@@ -142,7 +148,9 @@ export default class Prescriber extends React.Component<any, any> {
                   </div>
                   <div className="line"></div>
                   <div className="mode">
-                    <div className="mode-text">Average basket</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Averagebasket" />
+                    </div>
                     <div className="mode-num">
                       <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.averageBasket != null ? <CountUp end={tradeCustomerView.averageBasket} {...countUpProps} /> : '--'}</span>
@@ -156,7 +164,9 @@ export default class Prescriber extends React.Component<any, any> {
                   </div>
                   <div className="line"></div>
                   <div className="mode">
-                    <div className="mode-text">Conversion</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Conversion" />
+                    </div>
                     <div className="mode-num">
                       <span>{tradeCustomerView && tradeCustomerView.conversion != null ? <CountUp end={tradeCustomerView.conversion} {...countUpProps} /> : '--'}</span>
                     </div>
@@ -169,7 +179,9 @@ export default class Prescriber extends React.Component<any, any> {
                   </div>
                   <div className="line"></div>
                   <div className="mode">
-                    <div className="mode-text">Traffic</div>
+                    <div className="mode-text">
+                      <FormattedMessage id="Home.Traffic" />
+                    </div>
                     <div className="mode-num">{tradeCustomerView && tradeCustomerView.traffic != null ? <CountUp end={tradeCustomerView.traffic} {...countUpProps} /> : '--'}</div>
                     <div className="mode-per">
                       {tradeCustomerView && tradeCustomerView.trafficRate != null ? <img src={tradeCustomerView.trafficRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -182,7 +194,9 @@ export default class Prescriber extends React.Component<any, any> {
               </div>
               <div className="conversion space-between">
                 <div className="item-top-l-btm-l">
-                  <div className="top-text">Conversion Funnel</div>
+                  <div className="top-text">
+                    <FormattedMessage id="Home.ConversionFunnel" />
+                  </div>
                   <div className="Funnel">
                     <Funnel data={conversionFunnelDashboardView && conversionFunnelDashboardView.dataList} />
                     <div className="Funnel-l">
@@ -210,7 +224,9 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="Funnel-r">
                       <div className="Funnel-r-top"></div>
                       <div className="Funnel-r-mid">
-                        <div className="text1">Conversion rate</div>
+                        <div className="text1">
+                          <FormattedMessage id="Home.Conversionrate" />
+                        </div>
                         <div className="text2">
                           {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} decimals={2} {...countUpProps} /> : '--'}
                           <i>%</i>
@@ -239,7 +255,9 @@ export default class Prescriber extends React.Component<any, any> {
                   </div>
                 </div>
                 <div className="item-top-l-btm-r">
-                  <div className="top-text">Subscription</div>
+                  <div className="top-text">
+                    <FormattedMessage id="Home.Subscription" />
+                  </div>
                   <div className="subscription flex-content">
                     <div className="subscription-top">
                       <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />
@@ -247,7 +265,9 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="subscription-btm">
                       <div className="consumer-top flex-start">
                         <div className="mode">
-                          <div className="mode-text">Order Number</div>
+                          <div className="mode-text">
+                            <FormattedMessage id="Home.OrderNumber" />
+                          </div>
                           <div className="mode-num">
                             <span>{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</span>
                           </div>
@@ -259,7 +279,9 @@ export default class Prescriber extends React.Component<any, any> {
                           </div>
                         </div>
                         <div className="mode">
-                          <div className="mode-text">Sales volume</div>
+                          <div className="mode-text">
+                            <FormattedMessage id="Home.Salesvolume" />
+                          </div>
                           <div className="mode-num">
                             <span>{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</span>
                           </div>
@@ -280,14 +302,18 @@ export default class Prescriber extends React.Component<any, any> {
             <div className="item-top-r flex-content">
               <div className="item-top-r-btm">
                 <div className="top-text space-between">
-                  <span>Traffic</span>
+                  <span>
+                    <FormattedMessage id="Home.Traffic" />
+                  </span>
                   {/*<span>more ></span>*/}
                 </div>
                 <div className="traffic space-between">
                   <div className="traffic-r flex-content">
                     <div className="traffic-r-top flex-start">
                       <div className="mode">
-                        <div className="mode-text">Page view</div>
+                        <div className="mode-text">
+                          <FormattedMessage id="Home.Pageview" />
+                        </div>
                         <div className="mode-num">
                           <span>{trafficDashboardView && trafficDashboardView.pageView != null ? <CountUp end={trafficDashboardView.pageView} {...countUpProps} /> : '--'}</span>
                         </div>
@@ -313,13 +339,17 @@ export default class Prescriber extends React.Component<any, any> {
                     </div>
                     <div className="traffic-r-btm flex-content">
                       <div className="mode">
-                        <div className="mode-text">VET traffic</div>
+                        <div className="mode-text">
+                          <FormattedMessage id="Home.VETtraffic" />
+                        </div>
                         <div className="mode-num">
                           <span> {trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
                         </div>
                       </div>
                       <div className="mode">
-                        <div className="mode-text">VET traffic rate</div>
+                        <div className="mode-text">
+                          <FormattedMessage id="Home.VETtrafficrate" />
+                        </div>
                         <div className="mode-num num">
                           <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                         </div>
@@ -329,11 +359,15 @@ export default class Prescriber extends React.Component<any, any> {
                 </div>
               </div>
               <div className="item-top-r-top">
-                <div className="top-text">Consumer</div>
+                <div className="top-text">
+                  <FormattedMessage id="Home.Consumer" />
+                </div>
                 <div className="consumer flex-content">
                   <div className="consumer-top flex-start">
                     <div className="mode">
-                      <div className="mode-text">Active consumers</div>
+                      <div className="mode-text">
+                        <FormattedMessage id="Home.Activeconsumers" />
+                      </div>
                       <div className="mode-num">
                         <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
                       </div>
@@ -345,7 +379,9 @@ export default class Prescriber extends React.Component<any, any> {
                       </div>
                     </div>
                     <div className="mode">
-                      <div className="mode-text">Active consumer rate</div>
+                      <div className="mode-text">
+                        <FormattedMessage id="Home.Activeconsumerrate" />
+                      </div>
                       <div className="mode-num">
                         <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                       </div>
@@ -359,7 +395,9 @@ export default class Prescriber extends React.Component<any, any> {
                   </div>
                   <div className="consumer-btm flex-content">
                     <div className="mode">
-                      <div className="mode-text">Total consumers</div>
+                      <div className="mode-text">
+                        <FormattedMessage id="Home.Totalconsumers" />
+                      </div>
                       <div className="mode-num">
                         <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
                       </div>
@@ -373,7 +411,9 @@ export default class Prescriber extends React.Component<any, any> {
             <div className="item-btm-l">
               <div className="top-text">
                 <div className="top-text space-between">
-                  <span>Traffic Trend</span>
+                  <span>
+                    <FormattedMessage id="Home.TrafficTrend" />
+                  </span>
                   {/*<span>more ></span>*/}
                 </div>
               </div>
@@ -385,7 +425,7 @@ export default class Prescriber extends React.Component<any, any> {
                 <div className="line">
                   {trafficTrendDashboardView && (
                     <BarLine
-                      yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Traffic' }), y2: this.props.intl.formatMessage({ id: 'Home.Conversionrate' }) }}
                       nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
                       unit={{ unit1: '', unit2: '%' }}
                       data={{
@@ -400,7 +440,9 @@ export default class Prescriber extends React.Component<any, any> {
             </div>
             <div className="item-btm-r">
               <div className="top-text space-between">
-                <span>Transaction Trend</span>
+                <span>
+                  <FormattedMessage id="Home.TransactionTrend" />
+                </span>
                 {/*<span>more ></span>*/}
               </div>
               {!transactionTrendView || (transactionTrendView.weekNumList.length === 0 && transactionTrendView.revenueList.length === 0 && transactionTrendView.transactionList.length === 0) ? (
@@ -411,7 +453,7 @@ export default class Prescriber extends React.Component<any, any> {
                 <div className="line">
                   {transactionTrendView && (
                     <BarLine
-                      yName={{ y1: 'Revenue', y2: 'Transaction' }}
+                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Revenue' }), y2: this.props.intl.formatMessage({ id: 'Home.Transaction' }) }}
                       unit={{ unit1: '', unit2: '' }}
                       nameTextStyle={{ y1: [0, 0, 0, 0], y2: [0, 22, 0, 0] }}
                       data={{
@@ -430,3 +472,4 @@ export default class Prescriber extends React.Component<any, any> {
     );
   }
 }
+export default injectIntl(Prescriber);

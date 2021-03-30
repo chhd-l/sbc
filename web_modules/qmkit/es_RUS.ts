@@ -3,11 +3,11 @@ import React from "react";
 import {Button, Checkbox, Radio} from "antd";
 
 /**
- * 多语言英文
+ * 多语言俄语
  */
 export default {
   /*-------------------------------- Public ---------------------------------------------*/
-  'Public.Overview':'Overview',
+  'Public.Overview':'Overview112',
   'Public.WelcometoROYALCANIN':'Welcome to ROYALCANIN',
   'Public.storeportal':'store portal',
   'Public.Pleaseselectyourrole':'Please select your role',
@@ -606,7 +606,7 @@ export default {
   "Product.putProductsOnShelves": "Are you sure you want to put these products on shelves?",
   "Product.Are you sure you want to delete these products?": "Are you sure you want to delete these products?",
   "Product.productList": "Product list",
-  
+
   "Product.OperateSuccessfully": "Operate successfully",
   "Product.OperateFailed": "Operate failed",
   "Product.DescriptionName": "Description name",
@@ -707,7 +707,7 @@ export default {
   "Product.OperationFailed": "Operation failed",
   "Product.AddCustomizedFilter": "Add customized filter",
   "Product.EditCustomizedFilter": "Edit customized filter",
-  
+
   "Product.FilterName": "Filter name",
   "Product.SortFieldName": "Sort field name",
   "Product.SortFieldStatus": "Sort field status",
@@ -1749,7 +1749,7 @@ export default {
   'Finance.add':'add',
 
 
-  
+
 
   /*-----------------------------  Marketing  ----------------------------------------*/
   'Marketing.PromotionType':'Promotion type:',

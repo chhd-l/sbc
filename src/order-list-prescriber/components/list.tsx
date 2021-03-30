@@ -40,23 +40,6 @@ const payStatus = (status) => {
   }
 };
 
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return <FormattedMessage id="order.pendingReview" />;
-  } else if (status == 'GROUPON') {
-    return <FormattedMessage id="order.toBeFormed" />;
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="order.toBeDelivered" />;
-  } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="order.toBeReceived" />;
-  } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="order.received" />;
-  } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="order.completed" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.outOfDate" />;
-  }
-};
 
 type TList = List<any>;
 
@@ -433,7 +416,7 @@ export default class ListView extends React.Component<any, any> {
                               </AuthWrapper>
                             )}
                           {/*部分发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED_PART' && v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' && v.getIn(['tradeState', 'payState']) === 'PAID' && (
+                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') && (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') && v.getIn(['tradeState', 'payState']) === 'PAID' && (
                             <AuthWrapper functionName="fOrderDetail002">
                               <Tooltip placement="top" title="Ship">
                                 <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">

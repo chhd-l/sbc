@@ -31,7 +31,7 @@ export default class Tool extends React.Component<any, any> {
     return (
       <div className="handle-bar">
         <Button type="primary" onClick={this._showCateModal}>
-          <FormattedMessage id="product.addFirstLeverCate" />
+          <FormattedMessage id="Setting.addFirstLeverCate" />
         </Button>
         {/* {departments.count() === 0 ? (
           <Link to="/department-import">

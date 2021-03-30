@@ -37,23 +37,19 @@ export default class Tool extends React.Component<any, any> {
         <AuthWrapper functionName="f_picturePort_1">
           <Button type="primary" onClick={this._upload}>
             {/* 上传图片 */}
-            <FormattedMessage id="uploadImage" />
+            <FormattedMessage id="Setting.uploadImage" />
           </Button>
         </AuthWrapper>
         <AuthWrapper functionName="f_resourceCate_2">
           <Button type="primary" onClick={this._showModal}>
             {/* 新增分类 */}
-            <FormattedMessage id="addCategory" />
+            <FormattedMessage id="Setting.addCategory" />
           </Button>
         </AuthWrapper>
         <div style={{ float: 'right' }}>
           <Form layout="inline">
             <FormItem>
-              <Input
-                placeholder="Enter image name"
-                value={this.props.relaxProps.imageName}
-                onChange={this._editSearchData}
-              />
+              <Input placeholder="Enter image name" value={this.props.relaxProps.imageName} onChange={this._editSearchData} />
             </FormItem>
             <FormItem>
               <Button
@@ -67,7 +63,7 @@ export default class Tool extends React.Component<any, any> {
                 }}
               >
                 <span>
-                  <FormattedMessage id="search" />
+                  <FormattedMessage id="Setting.search" />
                 </span>
               </Button>
             </FormItem>

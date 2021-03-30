@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, util } from 'qmkit';
+import { AuthWrapper, Const, noop, util, getOrderStatusValue } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -67,23 +67,6 @@ const invoiceContent = (invoice) => {
   return invoiceContent;
 };
 
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return 'Pending review';
-  } else if (status == 'GROUPON') {
-    return 'To be formed';
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return 'to be delivered';
-  } else if (status == 'DELIVERED') {
-    return 'To be received';
-  } else if (status == 'CONFIRMED') {
-    return 'Received';
-  } else if (status == 'COMPLETED') {
-    return 'Completed';
-  } else if (status == 'VOID') {
-    return 'Out of date';
-  }
-};
 
 /**
  * 拒绝表单，只为校验体验
@@ -269,7 +252,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               justifyContent: 'space-between'
             }}
           >
-            <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
+            <label style={styles.greenText}>{getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}</label>
 
             {this._renderBtnAction(tid)}
           </div>
@@ -480,7 +463,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           }
         </div>
       );
-    } else if (flowState === 'DELIVERED_PART') {
+    } else if (flowState === 'PARTIALLY_SHIPPED') {
       return (
         <div>
           <AuthWrapper functionName="fOrderDetail002_3pl">

@@ -21,7 +21,7 @@ export default class Tool extends React.Component<any, any> {
       <div className="handle-bar">
         <AuthWrapper functionName="f_goods_cate_1">
           <Button type="primary" onClick={this._showCateModal}>
-            Add new category
+            <FormattedMessage id="Product.AddNewCategory" />
           </Button>
         </AuthWrapper>
       </div>

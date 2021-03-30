@@ -75,10 +75,10 @@ export default class GoodsList extends React.Component<any, any> {
         }}
         pagination={{ total, current: pageNum, onChange: this._getData }}
       >
-        <Column title={<FormattedMessage id="image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
-        <Column title={<FormattedMessage id="product.productName" />} dataIndex="goodsName" key="goodsName" className="nameBox" width={200} />
+        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        <Column title={<FormattedMessage id="Product.productName" />} dataIndex="goodsName" key="goodsName" className="nameBox" width={200} />
         <Column
-          title={<FormattedMessage id="product.marketPrice" />}
+          title={<FormattedMessage id="Product.marketPrice" />}
           dataIndex="marketPrice"
           key="marketPrice"
           render={(rowInfo) => {
@@ -86,7 +86,7 @@ export default class GoodsList extends React.Component<any, any> {
           }}
         />
         <Column
-          title={<FormattedMessage id="product.platformCategory" />}
+          title={<FormattedMessage id="Product.platformCategory" />}
           dataIndex="cateId"
           key="cateId"
           render={(rowInfo) => {
@@ -100,7 +100,7 @@ export default class GoodsList extends React.Component<any, any> {
           }}
         />
         <Column
-          title={<FormattedMessage id="product.brand" />}
+          title={<FormattedMessage id="Product.brand" />}
           dataIndex="brandId"
           key="brandId"
           render={(rowInfo) => {
@@ -114,7 +114,7 @@ export default class GoodsList extends React.Component<any, any> {
           }}
         />
         <Column
-          title={<FormattedMessage id="status" />}
+          title={<FormattedMessage id="Product.status" />}
           dataIndex="addStatus"
           key="addStatus"
           render={(addStatus) => {
@@ -125,7 +125,7 @@ export default class GoodsList extends React.Component<any, any> {
           }}
         />
         <Column
-          title={<FormattedMessage id="operation" />}
+          title={<FormattedMessage id="Product.operation" />}
           dataIndex="addStatus"
           key="addGoodsLibraryFlag"
           render={(addStatus, record) => {
@@ -143,7 +143,7 @@ export default class GoodsList extends React.Component<any, any> {
                 }}
                 onClick={() => onImport([record['goodsId']])}
               >
-                {<FormattedMessage id="import" />}{' '}
+                {<FormattedMessage id="Product.image" />}{' '}
               </a>
             );
           }}

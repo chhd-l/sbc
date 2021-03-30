@@ -7,6 +7,7 @@ const role_RC = require('../img/role-RC.png');
 const role_Perscriber = require('../img/role-Perscriber.png');
 let switchedRouter = false;
 import { switchRouter } from '@/index';
+import { FormattedMessage } from 'react-intl';
 
 let LoginHome = (props) => {
   let { authState, authService } = useOktaAuth();
@@ -55,19 +56,29 @@ let LoginHome = (props) => {
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>
           <Row style={styles.welcomeFont}>
-            Welcome to ROYALCANIN<span style={styles.logoR}>R</span> store portal
+            <FormattedMessage id="Public.WelcometoROYALCANIN" />
+            <span style={styles.logoR}>
+              <FormattedMessage id="Public.R" />
+            </span>{' '}
+            <FormattedMessage id="Public.storeportal" />
           </Row>
-          <Row style={styles.selectFont}>Please select your role:</Row>
+          <Row style={styles.selectFont}>
+            <FormattedMessage id="Public.Pleaseselectyourrole" />:
+          </Row>
           <Row style={{ marginTop: '40px' }}>
             <Col span={2}></Col>
             <Col span={9} style={styles.buttonContainer} onClick={loginpRcOkta}>
               <img style={styles.roleImg} src={role_RC} />
-              <div style={styles.roleWord}>RC Staff</div>
+              <div style={styles.roleWord}>
+                <FormattedMessage id="Public.RCStaff" />
+              </div>
             </Col>
             <Col span={2}></Col>
             <Col span={9} style={styles.buttonContainer} onClick={loginpPercriberOkta}>
               <img style={styles.roleImg} src={role_Perscriber} />
-              <div style={styles.roleWord}>Prescriber</div>
+              <div style={styles.roleWord}>
+                <FormattedMessage id="Public.Prescriber" />
+              </div>
             </Col>
             <Col span={2}></Col>
           </Row>

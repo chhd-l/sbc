@@ -16,7 +16,7 @@ class PeoductCategory extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Product category',
+      title: <FormattedMessage id="Product.ProductCategory" />,
       currentId: '',
       visible: false,
       productCategoryList: [],
@@ -178,7 +178,7 @@ class PeoductCategory extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
           this.setState({
             visible: false,
             confirmLoading: false,
@@ -248,14 +248,14 @@ class PeoductCategory extends Component<any, any> {
             bindDescriptionIds: res.context.map((item) => item.id)
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
+          message.error(res.message || <FormattedMessage id="Product.GetDataFailed" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
+        message.error(err || <FormattedMessage id="Product.GetDataFailed" />);
         this.setState({
           loading: false
         });
@@ -272,28 +272,28 @@ class PeoductCategory extends Component<any, any> {
     const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination, bindId, bindVisible, bindDescriptionIds } = this.state;
     const columns = [
       {
-        title: 'Category name',
+        title: <FormattedMessage id="Product.CategoryName" />,
         dataIndex: 'cateName',
         key: 'cateName'
       },
       {
-        title: 'Category images',
+        title: <FormattedMessage id="Product.CategoryImages" />,
         dataIndex: 'cateImg',
         key: 'cateImg',
         render: (text) => <div>{text ? <img src={text} alt="" style={{ width: 30 }} /> : '-'}</div>
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         dataIndex: '',
         key: 'x',
         render: (text, record) => (
           <div>
             {record.cateGrade === 3 ? (
               <div>
-                <Tooltip placement="topLeft" title="Bind attribute">
+                <Tooltip placement="topLeft" title={<FormattedMessage id="Product.BindAttribute" />}>
                   <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
                 </Tooltip>
-                <Tooltip placement="topLeft" title="Bind description">
+                <Tooltip placement="topLeft" title={<FormattedMessage id="Product.BindDescription" />}>
                   <a className="iconfont iconbangding" onClick={() => this.openBindModal(record.cateId)}></a>
                 </Tooltip>
               </div>
@@ -306,17 +306,17 @@ class PeoductCategory extends Component<any, any> {
     ];
     const columns_attribute = [
       {
-        title: 'Attribute name',
+        title: <FormattedMessage id="Product.AttributeName" />,
         dataIndex: 'attributeName',
         key: 'attributeName'
       },
       {
-        title: 'Display name',
+        title: <FormattedMessage id="Product.DisplayName" />,
         dataIndex: 'attributeNameEn',
         key: 'attributeNameEn'
       },
       {
-        title: 'Attribute value',
+        title: <FormattedMessage id="Product.AttributeValue" />,
         dataIndex: 'attributeValue',
         key: 'attributeValue',
         width: '30%',
@@ -325,7 +325,9 @@ class PeoductCategory extends Component<any, any> {
     ];
     const description = (
       <div>
-        <p>Product category is set by RC staff, you can associate attribute to product category.</p>
+        <p>
+          <FormattedMessage id="Product.associateAttribute" />
+        </p>
       </div>
     );
 
@@ -348,7 +350,7 @@ class PeoductCategory extends Component<any, any> {
             <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} style={{ marginRight: 10 }} />
           </Spin>
         </div>
-        <Modal title="Bind attribute" width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal title={<FormattedMessage id="Product.BindAttribute" />} width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>
             <div style={{ marginBottom: 16 }}>
               <Form className="filter-content" layout="inline">
@@ -356,7 +358,11 @@ class PeoductCategory extends Component<any, any> {
                   <Col span={10}>
                     <FormItem>
                       <Input
-                        addonBefore={<p style={styles.label}>Attribute name</p>}
+                        addonBefore={
+                          <p style={styles.label}>
+                            <FormattedMessage id="Product.AttributeName" />
+                          </p>
+                        }
                         value={searchForm.attributeName}
                         onChange={(e) => {
                           const value = (e.target as any).value;
@@ -371,7 +377,11 @@ class PeoductCategory extends Component<any, any> {
                   <Col span={10}>
                     <FormItem>
                       <Input
-                        addonBefore={<p style={styles.label}>Attribute value</p>}
+                        addonBefore={
+                          <p style={styles.label}>
+                            <FormattedMessage id="Product.AttributeValue" />
+                          </p>
+                        }
                         value={searchForm.attributeValue}
                         onChange={(e) => {
                           const value = (e.target as any).value;
@@ -396,7 +406,7 @@ class PeoductCategory extends Component<any, any> {
                         }}
                       >
                         <span>
-                          <FormattedMessage id="search" />
+                          <FormattedMessage id="Product.search" />
                         </span>
                       </Button>
                     </FormItem>
@@ -405,7 +415,7 @@ class PeoductCategory extends Component<any, any> {
               </Form>
 
               <Button type="primary" onClick={this.start} disabled={!hasSelected}>
-                Reload
+                <FormattedMessage id="Product.Reload" />
               </Button>
               <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
             </div>

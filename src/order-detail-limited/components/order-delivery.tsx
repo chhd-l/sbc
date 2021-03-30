@@ -86,7 +86,7 @@ export default class OrderDelivery extends React.Component<any, any> {
             pagination={false}
             bordered
           />
-          {(flowState === 'AUDIT' || flowState === 'DELIVERED_PART') &&
+          {(flowState === 'AUDIT' || flowState === 'PARTIALLY_SHIPPED') &&
           !(paymentOrder == 'PAY_FIRST' && payState != 'PAID') ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002_3pl">

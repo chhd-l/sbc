@@ -4,6 +4,8 @@ import { Button, Dropdown, Menu, Icon, message } from 'antd';
 import { noop } from 'qmkit';
 import { Relax } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
+import { FORMERR } from 'dns';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class ButtonGroup extends React.Component<any, any> {
@@ -34,7 +36,7 @@ export default class ButtonGroup extends React.Component<any, any> {
           getPopupContainer={() => document.getElementById('page-content')}
         >
           <Button>
-            Batch operation
+            <FormattedMessage id="Finance.BatchOperation" />
             <Icon type="down" />
           </Button>
         </Dropdown>
@@ -49,12 +51,16 @@ export default class ButtonGroup extends React.Component<any, any> {
       <Menu>
         {(settleStatus == '0' || settleStatus == 2) && (
           <Menu.Item>
-            <a onClick={() => this._handleBatchOption(1)}>Set as settled</a>
+            <a onClick={() => this._handleBatchOption(1)}>
+              <FormattedMessage id="Finance.SetAsSettled" />
+            </a>
           </Menu.Item>
         )}
         {(settleStatus == '0' || settleStatus == 1) && (
           <Menu.Item>
-            <a onClick={() => bulkExport()}>Bulk Export</a>
+            <a onClick={() => bulkExport()}>
+              <FormattedMessage id="Finance.BulkExport" />
+            </a>
           </Menu.Item>
         )}
       </Menu>
@@ -71,7 +77,7 @@ export default class ButtonGroup extends React.Component<any, any> {
     if (checkedSettleIds && checkedSettleIds.size != 0) {
       changeSettleStatus(checkedSettleIds.toJS(), status);
     } else {
-      message.error('You have not checked any records ！');
+      message.error(<FormattedMessage id="Finance.NotCheckedAnyRecords" />);
     }
   };
 }

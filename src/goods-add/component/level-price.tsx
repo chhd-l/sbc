@@ -6,7 +6,7 @@ import { noop, ValidConst } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 
 import UserPrice from './user-price';
-
+import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 
 const CustomerSPU = styled.div`
@@ -102,11 +102,11 @@ class LevelPriceForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input market price'
+                      message: <FormattedMessage id="Product.inputMarketPrice" />
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: 'Please input the legal amount with two decimal places'
+                      message: <FormattedMessage id="Product.twoDecimalPlaces" />
                     },
                     {
                       type: 'number',

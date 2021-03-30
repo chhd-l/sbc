@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper } from 'qmkit';
+import { noop, Const, AuthWrapper, getOrderStatusValue } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
@@ -37,24 +37,6 @@ const payStatus = (status) => {
     return 'Paying';
   } else {
     return <FormattedMessage id="order.unknown" />;
-  }
-};
-
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return <FormattedMessage id="order.pendingReview" />;
-  } else if (status == 'GROUPON') {
-    return <FormattedMessage id="order.toBeFormed" />;
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="order.toBeDelivered" />;
-  } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="order.toBeReceived" />;
-  } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="order.received" />;
-  } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="order.completed" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.outOfDate" />;
   }
 };
 
@@ -428,7 +410,7 @@ export default class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           {/*部分发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED_PART' && v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' && !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID') && (
+                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') && (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') && v.getIn(['tradeState', 'payState']) === 'PAID' && (
                             <AuthWrapper functionName="fOrderDetail002_3pl">
                               <Tooltip placement="top" title="Ship">
                                 <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
@@ -531,9 +513,11 @@ export default class ListView extends React.Component<any, any> {
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '12%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
-                    {/*订单状态*/}
-                    <td style={{ width: '12%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
+                    <td style={{ width: '14%' }}>{getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))}</td>
+                    {/*支付状态*/}
+                    <td style={{ width: '14%' }}>
+                      {getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))}
+                    </td>
                     {/*支付状态*/}
                     <td style={{ width: '12%', paddingRight: 22 }} className="operation-td">
                       {payStatus(v.getIn(['tradeState', 'payState']))}

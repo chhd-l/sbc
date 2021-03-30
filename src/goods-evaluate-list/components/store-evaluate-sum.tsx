@@ -18,27 +18,19 @@ export default class SearchForm extends React.Component<any, any> {
 
     return (
       <div>
-        <FormattedMessage id="overview" />：
-        <FormattedMessage id="overallRating" />
+        <FormattedMessage id="Product.overview" />：
+        <FormattedMessage id="Product.overallRating" />
         &nbsp;&nbsp;&nbsp;
-        {storeEvaluateSum.sumCompositeScore
-          ? parseFloat(storeEvaluateSum.sumCompositeScore).toFixed(2)
-          : '-'}
-        &nbsp;&nbsp;&nbsp; <FormattedMessage id="productRating" />
+        {storeEvaluateSum.sumCompositeScore ? parseFloat(storeEvaluateSum.sumCompositeScore).toFixed(2) : '-'}
+        &nbsp;&nbsp;&nbsp; <FormattedMessage id="Product.productRating" />
         &nbsp;&nbsp;&nbsp;
-        {storeEvaluateSum.sumGoodsScore
-          ? parseFloat(storeEvaluateSum.sumGoodsScore).toFixed(2)
-          : '-'}
-        &nbsp;&nbsp;&nbsp; <FormattedMessage id="experienceRating" />
+        {storeEvaluateSum.sumGoodsScore ? parseFloat(storeEvaluateSum.sumGoodsScore).toFixed(2) : '-'}
+        &nbsp;&nbsp;&nbsp; <FormattedMessage id="Product.experienceRating" />
         &nbsp;&nbsp;&nbsp;
-        {storeEvaluateSum.sumServerScore
-          ? parseFloat(storeEvaluateSum.sumServerScore).toFixed(2)
-          : '-'}
-        &nbsp;&nbsp;&nbsp; <FormattedMessage id="logisticRating" />
+        {storeEvaluateSum.sumServerScore ? parseFloat(storeEvaluateSum.sumServerScore).toFixed(2) : '-'}
+        &nbsp;&nbsp;&nbsp; <FormattedMessage id="Product.logisticRating" />
         &nbsp;&nbsp;&nbsp;
-        {storeEvaluateSum.sumLogisticsScoreScore
-          ? parseFloat(storeEvaluateSum.sumLogisticsScoreScore).toFixed(2)
-          : '-'}
+        {storeEvaluateSum.sumLogisticsScoreScore ? parseFloat(storeEvaluateSum.sumLogisticsScoreScore).toFixed(2) : '-'}
       </div>
     );
   }

@@ -405,7 +405,7 @@ export default class SearchHead extends Component<any, any> {
                 }
               >
                 <Button>
-                  <FormattedMessage id="order.bulkOperations" />{' '}
+                  <FormattedMessage id="Order.bulkOperations" />{' '}
                   <Icon type="down" />
                 </Button>
               </Dropdown>

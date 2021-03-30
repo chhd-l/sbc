@@ -62,7 +62,7 @@ class PaymentModal extends React.Component<any, any> {
         <Tabs defaultActiveKey="0" onChange={this._handleClick} >
           {this.props.paymentForm&&this.props.paymentForm.payPspItemVOList&&this.props.paymentForm.payPspItemVOList.map((item, index)=>{
             setTimeout(()=>{
-              console.log(item.payPspItemCardTypeVOList,23);
+              console.log(item.isOpen,23);
             })
             return(
               <TabPane tab={item.name} key={index}>
@@ -71,7 +71,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="apiKey" />}>
                         {getFieldDecorator('apiKey', {
-                          initialValue: item.pspConfigVO.apiKey,
+                          initialValue: item.pspConfigVO&&item.pspConfigVO.apiKey,
                           rules: [{ required: true, message: 'Please input Api Key!' }]
                         })(<Input />)}
                       </FormItem>
@@ -79,7 +79,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="appID" />}>
                         {getFieldDecorator('appId', {
-                          initialValue: item.pspConfigVO.appId,
+                          initialValue: item.pspConfigVO&&item.pspConfigVO.appId,
                           rules: [{ required: false, message: 'Please input App ID!' }]
                         })(<Input />)}
                       </FormItem>
@@ -87,7 +87,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="privateKey" />}>
                         {getFieldDecorator('privateKey', {
-                          initialValue: item.pspConfigVO.privateKey,
+                          initialValue: item.pspConfigVO&&item.pspConfigVO.privateKey,
                           rules: [{ required: false, message: 'Please input Private Key!' }]
                         })(<Input.TextArea />)}
                       </FormItem>
@@ -95,7 +95,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="publicKey" />}>
                         {getFieldDecorator('publicKey', {
-                          initialValue: item.pspConfigVO.publicKey,
+                          initialValue: item.pspConfigVO&&item.pspConfigVO.publicKey,
                           rules: [{ required: false, message: 'Please input Public Key!' }]
                         })(<Input.TextArea />)}
                       </FormItem>
@@ -105,7 +105,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
                         {getFieldDecorator('paymentMethod', {
-                          initialValue: item.payPspItemCardTypeVOList.map((a)=>{
+                          initialValue: item.payPspItemCardTypeVOList&&item.payPspItemCardTypeVOList.map((a)=>{
                             return a.cardType
                           }),
                           rules: [
@@ -137,9 +137,9 @@ class PaymentModal extends React.Component<any, any> {
                     </Col>
                     <Col span={24}>
                       <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
-                        {getFieldDecorator('enabled', {
-                          initialValue: item.pspConfigVO.isOpen
-                        })(<Switch checked={checked} onChange={(value) => this.onFormChange(value)} />)}
+                        {getFieldDecorator('isOpen', {
+                          initialValue: item.isOpen == 1? true : false
+                        })(<Switch defaultChecked={item.isOpen == 1? true : false} onChange={(value) => this.onFormChange(value)} />)}
                       </FormItem>
                     </Col>
                   </Row>
@@ -172,11 +172,35 @@ class PaymentModal extends React.Component<any, any> {
     });
   };
 
+  union = (arr1,arr2) =>{
+    return arr1.filter(item=>{
+      if (arr2.indexOf(item.cardType)>-1) {
+        arr2.splice(arr2.indexOf(item.cardType),1)
+        return item
+      }
+    })
+  }
+
   onSave = async () => {
     this.props.form.validateFields(null, async (errs, values) => {
-      console.log(values,1111111);
       //如果校验通过
       let payPspItemVOList = this.props.paymentForm.payPspItemVOList[this.state.key]
+      let pspItemCardTypeSaveRequestList = []
+      let paymentMethodList = this.props.paymentForm.payPspCardTypeVOList.filter(item=>{
+        if (values.paymentMethod.indexOf(item.cardType)>-1) {
+          values.paymentMethod.splice(values.paymentMethod.indexOf(item.cardType),1)
+          return item
+        }
+      })
+      paymentMethodList.map((item,i)=>{
+        pspItemCardTypeSaveRequestList.push({
+          storeId: item.storeId,
+          pspId: item.pspId,
+          pspItemId: payPspItemVOList.pspConfigVO.pspItemId,
+          cardType: item.cardType,
+          imgUrl: item.imgUrl,
+        })
+      })
       if (!errs) {
         const { res } = await webapi.savePaymentSetting({
           pspConfigSaveRequest: Object.assign({
@@ -189,10 +213,10 @@ class PaymentModal extends React.Component<any, any> {
             privateKey: values.privateKey,
             publicKey: values.publicKey
           }),
-          payPspSaveRequest: Object.assign({
+          payPspItemSaveRequest: Object.assign({
             id: payPspItemVOList.pspConfigVO.pspItemId,
-            isOpen: values.isOpen ? 1 : 0,
-            storePaymentMethod: values.paymentMethod.join(','),
+            isOpen: values.isOpen == true ? 1 : 0,
+            pspItemCardTypeSaveRequestList: pspItemCardTypeSaveRequestList,
           })
         });
         if (res.code === Const.SUCCESS_CODE) {

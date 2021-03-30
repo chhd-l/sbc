@@ -1023,6 +1023,7 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
+        debugger
         if (!(item.get('stock') || item.get('stock') == 0) && a == undefined) {
           flag = 1
           valid = false;
@@ -2121,6 +2122,11 @@ export default class AppStore extends Store {
             title = 'Купить {technology} корм Royal Canin {name} в официальном интернет-магазине';
             description = 'Купить {technology} корм Royal Canin {name} со скидкой 10% при оформлении подписки. Сделайте заказ в интернет-магазине Royal Canin уже сегодня!';
             keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+            break;
+          case 123456858: //墨西哥
+            title = 'TIENDA OFICIAL DE PRODUCTOS VETERINARIOS ROYAL CANIN MEXICO';
+            description = null
+            keywords = null
             break;
           default:
             title = '{name} | Royal Canin Shop';

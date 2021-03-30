@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Const } from 'qmkit';
 import React from 'react';
 import * as webapi from './../webapi';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 class AddCustomizedfilter extends React.Component<any, any> {
@@ -88,7 +89,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'Operation failed');
+        message.error(err.toString() || <FormattedMessage id="Product.OperationFailed" />);
       });
   };
 
@@ -152,7 +153,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
           this.props.refreshList();
           this.setState({ visibleAttribute: false });
         }
@@ -165,7 +166,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
           this.props.refreshList();
           this.setState({ visibleAttribute: false });
         }
@@ -253,7 +254,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
                     {' '}
                     *
                   </span>
-                  Attribute value
+                  <FormattedMessage id="Product.AttributeValue" />
                 </span>
               ) : (
                 ''
@@ -269,7 +270,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
                 {
                   required: true,
                   whitespace: true,
-                  message: 'Please input Attribute value.'
+                  message: <FormattedMessage id="Product.PleaseInputAttributeValue" />
                 }
               ]
             })(
@@ -286,11 +287,11 @@ class AddCustomizedfilter extends React.Component<any, any> {
               {obj.length > 1 ? (
                 <>
                   {k.id ? (
-                    <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
+                    <Popconfirm placement="topRight" title={<FormattedMessage id="Product.deleteThisItem" />} onConfirm={() => this.removeRemote(k.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
                       <Icon className="dynamic-delete-button" type="minus-circle-o" />
                     </Popconfirm>
                   ) : (
-                    <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeTemp(k.tempId)} okText="Confirm" cancelText="Cancel">
+                    <Popconfirm placement="topRight" title={<FormattedMessage id="Product.deleteThisItem" />} onConfirm={() => this.removeTemp(k.tempId)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
                       <Icon className="dynamic-delete-button" type="minus-circle-o" />
                     </Popconfirm>
                   )}
@@ -321,18 +322,20 @@ class AddCustomizedfilter extends React.Component<any, any> {
     return (
       <div style={{ display: 'inline-block' }}>
         {isEdit ? (
-          <Tooltip placement="top" title="Edit">
+          <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
             <a style={styles.edit} onClick={() => this.openEditPage()} className="iconfont iconEdit"></a>
           </Tooltip>
         ) : (
           <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-            <span>Add customized filter</span>
+            <span>
+              <FormattedMessage id="Product.AddCustomizedFilter" />
+            </span>
           </Button>
         )}
 
         <Modal
           width="600px"
-          title={isEdit ? 'Edit customized filter' : 'Add customized filter'}
+          title={isEdit ? <FormattedMessage id="Product.EditCustomizedFilter" /> : <FormattedMessage id="Product.AddCustomizedFilter" />}
           visible={visibleAttribute}
           onCancel={() =>
             this.setState({
@@ -348,10 +351,10 @@ class AddCustomizedfilter extends React.Component<any, any> {
                 });
               }}
             >
-              Close
+              <FormattedMessage id="Product.Close" />
             </Button>,
             <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-              Submit
+              <FormattedMessage id="Product.Submit" />
             </Button>
           ]}
         >
@@ -362,7 +365,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
                   { required: true },
                   {
                     max: 50,
-                    message: 'Exceed maximum length!'
+                    message: <FormattedMessage id="Product.ExceedMaximumLength" />
                   }
                 ]
               })(
@@ -392,8 +395,12 @@ class AddCustomizedfilter extends React.Component<any, any> {
                   }}
                   style={{ width: '80%' }}
                 >
-                  <Radio value="Single choice">Single choice</Radio>
-                  <Radio value="Multiple choice">Multiple choice</Radio>
+                  <Radio value="Single choice">
+                    <FormattedMessage id="Product.SingleChoice" />
+                  </Radio>
+                  <Radio value="Multiple choice">
+                    <FormattedMessage id="Product.MultipleChoice" />
+                  </Radio>
                 </Radio.Group>
               )}
             </FormItem>

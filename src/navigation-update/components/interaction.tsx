@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, message, Radio, Select, Tree, TreeSelect, Row, Col } from 'antd';
 import * as webapi from '../webapi';
 import { util, AssetManagement, Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const { SHOW_PARENT } = TreeSelect;
 
 const FormItem = Form.Item;
@@ -320,9 +321,10 @@ export default class Interaction extends React.Component<any, any> {
     let defaultFilter = this.getFilterValues(navigation.filter);
     return (
       <div>
-        <h3>{noLanguageSelect ? 'Step2' : 'Step3'}</h3>
+        <h3>{noLanguageSelect ? <FormattedMessage id="Content.Step2" /> : <FormattedMessage id="Content.Step3" />}</h3>
         <h4>
-          Interaction Type<span className="ant-form-item-required"></span>
+          <FormattedMessage id="Content.InteractionType" />
+          <span className="ant-form-item-required"></span>
         </h4>
         <div className="interaction">
           <Form>
@@ -331,18 +333,24 @@ export default class Interaction extends React.Component<any, any> {
                 initialValue: interaction
               })(
                 <Radio.Group onChange={this.radioChange} size="large">
-                  <Radio value={0}>Page</Radio>
-                  <Radio value={1}>External URL</Radio>
-                  <Radio value={2}>Text</Radio>
+                  <Radio value={0}>
+                    <FormattedMessage id="Content.Page" />
+                  </Radio>
+                  <Radio value={1}>
+                    <FormattedMessage id="Content.ExternalURL" />
+                  </Radio>
+                  <Radio value={2}>
+                    <FormattedMessage id="Content.Text" />
+                  </Radio>
                 </Radio.Group>
               )}
             </FormItem>
             {interaction === 0 ? (
               <div>
-                <FormItem {...layout} label="Page">
+                <FormItem {...layout} label={<FormattedMessage id="Content.Page" />}>
                   {getFieldDecorator('pageId', {
                     initialValue: pageList && pageList.length > 0 ? navigation.pageId : null,
-                    rules: [{ required: true, message: 'Please select page' }]
+                    rules: [{ required: true, message: <FormattedMessage id="Content.PleaseSelectPage" /> }]
                   })(
                     <Select onChange={this.pageChange}>
                       {pageList &&
@@ -356,13 +364,13 @@ export default class Interaction extends React.Component<any, any> {
                 </FormItem>
                 {pageTypeCode === 'PLP' ? (
                   <div>
-                    <FormItem {...layout} label="Sales Category">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.SalesCategory" />}>
                       {getFieldDecorator('navigationCateIds', {
                         initialValue: defaultCategoryIds,
-                        rules: [{ required: true, message: 'Please select sales category' }]
+                        rules: [{ required: true, message: <FormattedMessage id="Content.PleaseSelectSalesCategory" /> }]
                       })(<TreeSelect {...tProps} />)}
                     </FormItem>
-                    <FormItem {...layout} label="Page Title">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.PageTitle" />}>
                       {getFieldDecorator('pageTitle', {
                         initialValue: navigation.pageTitle
                       })(
@@ -374,7 +382,7 @@ export default class Interaction extends React.Component<any, any> {
                         />
                       )}
                     </FormItem>
-                    <FormItem {...layout} label="Page Description">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.PageDescription" />}>
                       {getFieldDecorator('pageDesc', {
                         initialValue: navigation.pageDesc
                       })(
@@ -389,19 +397,21 @@ export default class Interaction extends React.Component<any, any> {
                     </FormItem>
                     <Row>
                       <Col span={4}>
-                        <div className="uploadTip">Recommened size：800*800px the size of a single sheet does not exceed 2M，and the maximum sheets is 10</div>
+                        <div className="uploadTip">
+                          <FormattedMessage id="Content.RecommenedSize" />
+                        </div>
                       </Col>
                     </Row>
-                    <FormItem {...layout} label="Page Picture">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.PagePicture" />}>
                       <AssetManagement choosedImgCount={1} images={navigation.pageImg ? [navigation.pageImg] : []} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />
                     </FormItem>
                   </div>
                 ) : null}
                 {pageTypeCode === 'SRP' ? (
-                  <FormItem {...layout} label="Keywords">
+                  <FormItem {...layout} label={<FormattedMessage id="Content.Keywords" />}>
                     {getFieldDecorator('keywords', {
                       initialValue: navigation.keywords,
-                      rules: [{ required: true, message: 'Please input keywords' }]
+                      rules: [{ required: true, message: <FormattedMessage id="Content.PleaseInputKeywords" /> }]
                     })(
                       <Input
                         onChange={(e) => {
@@ -415,7 +425,7 @@ export default class Interaction extends React.Component<any, any> {
 
                 {pageTypeCode === 'SRP' || pageTypeCode === 'PLP' ? (
                   <div>
-                    <FormItem {...layout} label="Filter">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.Filter" />}>
                       {getFieldDecorator('filter', {
                         initialValue: defaultFilter
                       })(
@@ -433,7 +443,7 @@ export default class Interaction extends React.Component<any, any> {
                         </TreeSelect>
                       )}
                     </FormItem>
-                    <FormItem {...layout} label="Sort">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.Sort" />}>
                       {getFieldDecorator('searchSort', {
                         initialValue: navigation.searchSort
                       })(
@@ -452,7 +462,7 @@ export default class Interaction extends React.Component<any, any> {
                     </FormItem>
                   </div>
                 ) : pageTypeCode !== '' ? (
-                  <FormItem {...layout} label="Parameter">
+                  <FormItem {...layout} label={<FormattedMessage id="Content.Parameter" />}>
                     <span className="tip ant-form-item-required">{example}</span>
                     {getFieldDecorator('paramsField', {
                       initialValue: navigation.paramsField
@@ -470,7 +480,7 @@ export default class Interaction extends React.Component<any, any> {
               </div>
             ) : null}
             {interaction === 1 ? (
-              <FormItem {...layout} label="Target">
+              <FormItem {...layout} label={<FormattedMessage id="Content.Target" />}>
                 {getFieldDecorator('target', {
                   initialValue: navigation.target ? navigation.target : ''
                 })(

@@ -7,6 +7,7 @@ import ProductGrid from './product-grid';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 @Relax
 class ProductTooltip extends React.Component<any, any> {
   props: {
@@ -72,9 +73,10 @@ class ProductTooltip extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div>
-            Choose goods&nbsp;
+            <FormattedMessage id="Product.ChooseGoods" />
+            &nbsp;
             <small>
-              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> items have been selected
+              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> <FormattedMessage id="Product.itemsHaveBeenSelected" />
             </small>
           </div>
         }
@@ -96,8 +98,8 @@ class ProductTooltip extends React.Component<any, any> {
           this.props.form.resetFields();
           //onCancelBackFun();
         }}
-        okText="Confirm"
-        cancelText="Cancel"
+        okText={<FormattedMessage id="Product.Confirm" />}
+        cancelText={<FormattedMessage id="Product.Cancel" />}
       >
         {<ProductGrid form={this.props.form} visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
@@ -115,4 +117,4 @@ class ProductTooltip extends React.Component<any, any> {
   };
 }
 
-export default Form.create()(ProductTooltip)
+export default Form.create()(ProductTooltip);

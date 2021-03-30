@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Spin, Popconfirm, Tooltip } from 'antd';
 import AddProduct from '../modals/addProduct';
+import { FormattedMessage } from 'react-intl';
 export default class targetProduct extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -14,10 +15,10 @@ export default class targetProduct extends Component<any, any> {
   }
 
   deleteProduct(key) {
-    const { subscriptionPlan, addField, allSkuProduct } = this.props;
+    const { Subscription, addField, allSkuProduct } = this.props;
 
     let newTargetProductIds = [];
-    subscriptionPlan.targetGoodsIds.map((item) => {
+    Subscription.targetGoodsIds.map((item) => {
       if (item !== key) {
         newTargetProductIds.push(item);
       }
@@ -46,11 +47,15 @@ export default class targetProduct extends Component<any, any> {
 
   render() {
     const { loading, visible } = this.state;
-    const { editable, subscriptionPlan } = this.props;
+    const { editable, Subscription } = this.props;
     return (
       <div>
-        <h3>Step2</h3>
-        <h4>Target Product</h4>
+        <h3>
+          <FormattedMessage id="Subscription.Step2" />
+        </h3>
+        <h4>
+          <FormattedMessage id="Subscription.TargetProduct" />
+        </h4>
         <div className="targetProduct">
           <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <div className="ant-table-wrapper">
@@ -60,18 +65,32 @@ export default class targetProduct extends Component<any, any> {
                     <table>
                       <thead className="ant-table-thead">
                         <tr>
-                          <th style={{ width: '10%' }}>Image</th>
-                          <th style={{ width: '10%' }}>SKU</th>
-                          <th style={{ width: '20%' }}>Product Name</th>
-                          <th style={{ width: '15%' }}>Specification</th>
-                          <th style={{ width: '25%' }}>Product Category</th>
-                          <th style={{ width: '10%' }}>Brand</th>
-                          <th style={{ width: '10%' }}>Price</th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Subscription.Image" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Subscription.SKU" />
+                          </th>
+                          <th style={{ width: '20%' }}>
+                            <FormattedMessage id="Subscription.ProductName" />
+                          </th>
+                          <th style={{ width: '15%' }}>
+                            <FormattedMessage id="Subscription.Specification" />
+                          </th>
+                          <th style={{ width: '25%' }}>
+                            <FormattedMessage id="Subscription.ProductCategory" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Subscription.Brand" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Subscription.Price" />
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="ant-table-tbody">
-                        {subscriptionPlan.targetGoods &&
-                          subscriptionPlan.targetGoods.map((item) => (
+                        {Subscription.targetGoods &&
+                          Subscription.targetGoods.map((item) => (
                             <tr key={item.goodsInfoId}>
                               <td>
                                 <img src={item.goodsInfoImg} />
@@ -100,7 +119,9 @@ export default class targetProduct extends Component<any, any> {
                     {editable ? (
                       <div className="noProduct">
                         <div className="addProduct" onClick={this.showAddTargetProduct}>
-                          <span> + Add product</span>
+                          <span>
+                            <FormattedMessage id="Subscription.AddProduct" />
+                          </span>
                         </div>
                       </div>
                     ) : null}

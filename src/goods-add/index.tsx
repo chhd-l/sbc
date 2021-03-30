@@ -17,11 +17,13 @@ export default class ReleaseProducts extends React.Component<any, any> {
           <Breadcrumb.Item>发布商品</Breadcrumb.Item>
         </Breadcrumb> */}
         <div className="container-search">
-          <Headline title={<FormattedMessage id="product.postGoods" />} />
+          <Headline title={<FormattedMessage id="Product.postGoods" />} />
         </div>
         <div className="container">
           <div className="release-box">
-            <h1>Choose a product characteristic</h1>
+            <h1>
+              <FormattedMessage id="Product.ChooseProductCharacteristic" />
+            </h1>
 
             <div className="release-content space-around">
               <Link to="/regular-product-add">

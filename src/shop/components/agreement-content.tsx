@@ -5,6 +5,7 @@ import { Button, Checkbox } from 'antd';
 import { noop } from 'qmkit';
 import styled from 'styled-components';
 import Header from './head';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const Box = styled.div`
   border: 1px solid #e9e9e9;
@@ -38,7 +39,7 @@ const BottomCon = styled.div`
   }
 `;
 @Relax
-export default class AgreementContent extends React.Component<any, any> {
+class AgreementContent extends React.Component<any, any> {
   props: {
     relaxProps?: {
       agree: boolean;
@@ -46,6 +47,7 @@ export default class AgreementContent extends React.Component<any, any> {
       agreeOrNot: Function;
       passAgree: Function;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -60,34 +62,28 @@ export default class AgreementContent extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      agree,
-      agreeOrNot,
-      passAgree,
-      businessEnter
-    } = this.props.relaxProps;
+    const { agree, agreeOrNot, passAgree, businessEnter } = this.props.relaxProps;
     return (
       <div>
-        <Header postTxt="您没有开店噢，请提交您的开店申请" />
+        <Header postTxt={this.props.intl.formatMessage({ id: 'Setting.Youdonthave' })} />
         <div className="shopContent">
-          <h1>申请开店</h1>
+          <h1>
+            <FormattedMessage id="Setting.Toapplyforopen" />
+          </h1>
           <Box>
-            <div
-              className="businessEnter"
-              dangerouslySetInnerHTML={{ __html: businessEnter }}
-            />
+            <div className="businessEnter" dangerouslySetInnerHTML={{ __html: businessEnter }} />
           </Box>
           <BottomCon>
             <Checkbox checked={agree} onChange={() => agreeOrNot()}>
-              我已阅读并同意商家入驻协议
+              <FormattedMessage id="Setting.Ihavereadandagree" />
             </Checkbox>
             {agree ? (
               <Button type="primary" size="large" onClick={() => passAgree()}>
-                下一步
+                <FormattedMessage id="Setting.Next" />
               </Button>
             ) : (
               <Button type="primary" size="large" disabled>
-                下一步
+                <FormattedMessage id="Setting.Next" />
               </Button>
             )}
           </BottomCon>
@@ -96,3 +92,4 @@ export default class AgreementContent extends React.Component<any, any> {
     );
   }
 }
+export default injectIntl(AgreementContent);

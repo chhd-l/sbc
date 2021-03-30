@@ -62,7 +62,7 @@ class PaymentModal extends React.Component<any, any> {
         <Tabs defaultActiveKey="0" onChange={this._handleClick} >
           {this.props.paymentForm&&this.props.paymentForm.payPspItemVOList&&this.props.paymentForm.payPspItemVOList.map((item, index)=>{
             setTimeout(()=>{
-              console.log(item.payPspItemCardTypeVOList,23);
+              console.log(item.pspConfigVO.isOpen,23);
             })
             return(
               <TabPane tab={item.name} key={index}>
@@ -138,7 +138,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
                         {getFieldDecorator('enabled', {
-                          initialValue: item.pspConfigVO.isOpen
+                          initialValue: item.pspConfigVO.isOpen == 1? true : false
                         })(<Switch checked={checked} onChange={(value) => this.onFormChange(value)} />)}
                       </FormItem>
                     </Col>
@@ -179,7 +179,7 @@ class PaymentModal extends React.Component<any, any> {
       let payPspItemVOList = this.props.paymentForm.payPspItemVOList[this.state.key]
       if (!errs) {
         const { res } = await webapi.savePaymentSetting({
-          pspConfigSaveRequest: Object.assign({
+          pspItemCardTypeSaveRequestList: Object.assign({
             id: payPspItemVOList.pspConfigVO.id,
             pspId: payPspItemVOList.pspConfigVO.pspId,
             pspItemId: payPspItemVOList.pspConfigVO.pspItemId,
@@ -189,7 +189,7 @@ class PaymentModal extends React.Component<any, any> {
             privateKey: values.privateKey,
             publicKey: values.publicKey
           }),
-          payPspSaveRequest: Object.assign({
+          payPspItemSaveReques: Object.assign({
             id: payPspItemVOList.pspConfigVO.pspItemId,
             isOpen: values.isOpen ? 1 : 0,
             storePaymentMethod: values.paymentMethod.join(','),

@@ -39,8 +39,8 @@ export function addressById(id: String) {
  * get Details
  * @param filterParams
  */
-export function getSubscription(id: String) {
-  return Fetch<TResult>('/sub/getSubscription/' + id, {
+export function getSubscriptionDetail(id: String) {
+  return Fetch<TResult>('/sub/getSubscriptionDetail/' + id, {
     method: 'POST'
   });
 }

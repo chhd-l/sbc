@@ -94,7 +94,7 @@ export default class SearchHead extends Component<any, any> {
       checkAuth('rolf006');
     const batchMenu = (
       <Menu>
-        {tabKey == 'flowState-INIT' ? (
+        {/* {tabKey == 'flowState-INIT' ? (
           <Menu.Item>
             <AuthWrapper functionName="rolf002">
               <a href="#" onClick={() => this._handleBatchAudit()}>
@@ -111,7 +111,7 @@ export default class SearchHead extends Component<any, any> {
               </a>
             </AuthWrapper>
           </Menu.Item>
-        ) : null}
+        ) : null} */}
         <Menu.Item>
           <AuthWrapper functionName="rolf006">
             <a href="#" onClick={() => this._handleBatchExport()}>
@@ -133,7 +133,7 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     // addonBefore="退单编号"
-                    addonBefore={<FormattedMessage id="chargebackNumber" />}
+                    addonBefore={<FormattedMessage id="returnOrderNumber" />}
                     onChange={(e) => {
                       this.setState(
                         { rid: (e.target as any).value },
@@ -288,7 +288,7 @@ export default class SearchHead extends Component<any, any> {
               </Col>
             </Row>
           </Form>
-          {hasMenu ? (
+          {/* {hasMenu ? (
             <div className="handle-bar ant-form-inline filter-content">
               <Dropdown
                 getPopupContainer={() =>
@@ -303,7 +303,7 @@ export default class SearchHead extends Component<any, any> {
                 </Button>
               </Dropdown>
             </div>
-          ) : null}
+          ) : null} */}
         </div>
         <ExportModal
           data={exportModalData}

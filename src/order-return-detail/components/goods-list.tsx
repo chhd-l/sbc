@@ -4,7 +4,7 @@ import { IMap } from 'typings/globalType';
 import { Popover } from 'antd';
 import moment from 'moment';
 import { fromJS } from 'immutable';
-import { Const, Logistics } from 'qmkit';
+import { cache, Const, Logistics } from 'qmkit';
 
 import { Table } from 'antd';
 import { FormattedMessage } from 'react-intl';
@@ -27,12 +27,12 @@ const columns = [
     key: 'specDetails',
     render: (s) => <div>{s}</div>
   },
-  {
-    title: <FormattedMessage id="returnUnitPrice" />,
-    dataIndex: 'price',
-    key: 'price',
-    render: (price) => <div>${price.toFixed(2)}</div>
-  },
+  // {
+  //   title: <FormattedMessage id="returnUnitPrice" />,
+  //   dataIndex: 'price',
+  //   key: 'price',
+  //   render: (price) => <div>${price.toFixed(2)}</div>
+  // },
   {
     title: <FormattedMessage id="quantityReturned" />,
     dataIndex: 'num',
@@ -83,10 +83,12 @@ export default class GoodsList extends React.Component<any, any> {
     const totalPrice = detail.getIn(['returnPrice', 'totalPrice']);
     // 改价金额
     const applyPrice = detail.getIn(['returnPrice', 'applyPrice']);
-    // 应退积分
-    const applyPoints = detail.getIn(['returnPoints', 'applyPoints']);
-    // 实退积分
-    const actualPoints = detail.getIn(['returnPoints', 'actualPoints']);
+    //
+    const actualReturnPrice = detail.getIn(['returnPrice', 'actualReturnPrice']);
+    // // 应退积分
+    // const applyPoints = detail.getIn(['returnPoints', 'applyPoints']);
+    // // 实退积分
+    // const actualPoints = detail.getIn(['returnPoints', 'actualPoints']);
 
     // 附件图片
     let images = detailObj.images || [];
@@ -129,13 +131,13 @@ export default class GoodsList extends React.Component<any, any> {
     let rejectLabel = '';
     switch (returnFlowStatus) {
       case 'REJECT_RECEIVE':
-        rejectLabel = '拒绝收货原因';
+        rejectLabel = 'Reasons for rejection';
         break;
       case 'REJECT_REFUND':
-        rejectLabel = '拒绝退款原因';
+        rejectLabel = 'Reason for Refusal of Refund';
         break;
       case 'VOID':
-        rejectLabel = '审核驳回原因';
+        rejectLabel = 'Reasons for rejection';
         break;
     }
 
@@ -149,46 +151,57 @@ export default class GoodsList extends React.Component<any, any> {
           bordered
         />
         <div style={styles.detailBox as any}>
-          <div />
           <div style={styles.priceBox}>
-            <label style={styles.priceItem as any}>
+          <label style={styles.priceItem as any}>
               <span style={styles.name}>
-                <FormattedMessage id="refundableAmount" />:{' '}
+                Total amount:{' '}
               </span>
               <strong>
-                $
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'} 
                 {totalPrice
                   ? parseFloat(totalPrice).toFixed(2)
                   : Number(0).toFixed(2)}
               </strong>
             </label>
+
             <label style={styles.priceItem as any}>
+              <span style={styles.name}>
+                <FormattedMessage id="refundableAmount" />:{' '}
+              </span>
+              <strong>
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'} 
+                {applyPrice
+                  ? parseFloat(applyPrice).toFixed(2)
+                  : Number(0).toFixed(2)}
+              </strong>
+            </label>
+            {/* <label style={styles.priceItem as any}>
               <span style={styles.name}>
                 <FormattedMessage id="pointsRefundable" />:{' '}
               </span>
               <strong>{applyPoints ? applyPoints : Number(0)}</strong>
-            </label>
+            </label> */}
             {refundStatus === 2 && (
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>
                   <FormattedMessage id="actualRefundAmount" />:{' '}
                 </span>
                 <strong>
-                  $
-                  {applyPrice
-                    ? parseFloat(applyPrice).toFixed(2)
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'} 
+                  {actualReturnPrice
+                    ? parseFloat(actualReturnPrice).toFixed(2)
                     : Number(0).toFixed(2)}
                 </strong>
               </label>
             )}
-            {refundStatus === 2 && (
+            {/* {refundStatus === 2 && (
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>
                   <FormattedMessage id="actualRefundPoints" />:{' '}
                 </span>
                 <strong>{actualPoints ? actualPoints : Number(0)}</strong>
               </label>
-            )}
+            )} */}
           </div>
         </div>
         <div style={styles.returnReason}>
@@ -197,9 +210,11 @@ export default class GoodsList extends React.Component<any, any> {
             {Object.getOwnPropertyNames(returnReason).map(
               (key) => returnReason[key]
             )}
+           
           </label>
           <label style={styles.inforItem}>
-            <FormattedMessage id="chargebackAttachment" />:{' '}
+            
+            <FormattedMessage id="returnDescription" />:{' '}
             {detail.get('description')}
           </label>
           {
@@ -215,7 +230,7 @@ export default class GoodsList extends React.Component<any, any> {
           }
           <div style={styles.inforItem}>
             <label>
-              <FormattedMessage id="returnInstructions" />:{' '}
+            <FormattedMessage id="returnOrderAttachment" />:{' '}
             </label>
             {images.map((imageObj, index) => (
               <Popover
@@ -243,7 +258,7 @@ export default class GoodsList extends React.Component<any, any> {
           </div>
           {returnType == 'RETURN' && returnWay['1'] ? (
             <label style={styles.inforItem}>
-              物流信息: {logisticInfo}
+              logistics information: {logisticInfo}
               {returnLogisticInfo && (
                 <Logistics
                   companyInfo={fromJS(returnLogisticInfo)}
@@ -280,24 +295,24 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     padding: 20,
     border: '1px solid #e9e9e9',
     borderTop: 0,
     marginTop: -4,
-    borderRadius: 4
+    borderRadius: 4,
   },
   priceBox: {
     display: 'flex',
     flexDirection: 'column'
   },
   name: {
-    width: 120,
+    width: 150,
     textAlign: 'right',
     display: 'inline-block'
   },
   priceItem: {
-    width: 200,
+    width: 230,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -14,7 +14,7 @@ type DeliverParam = {
 };
 
 export const fetchReturnDetail = rid => {
-  return Fetch(`/return/${rid}`, {
+  return Fetch<TResult>(`http://192.168.0.139/return/detail/${rid}`, {
     method: 'POST'
   });
 };
@@ -25,7 +25,7 @@ export const fetchReturnDetail = rid => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export const audit = (rid: string) => {
-  return Fetch<TResult>(`/return/audit/${rid}`, { method: 'POST' });
+  return Fetch<TResult>(`http://192.168.0.139/return/audit/${rid}`, { method: 'POST' });
 };
 
 /**
@@ -35,7 +35,7 @@ export const audit = (rid: string) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export const reject = (rid: string, reason: string) => {
-  return Fetch<TResult>(`/return/cancel/${rid}?reason=${reason}`, {
+  return Fetch<TResult>(`http://192.168.0.139/return/cancel/${rid}?reason=${reason}`, {
     method: 'POST'
   });
 };
@@ -46,14 +46,18 @@ export const reject = (rid: string, reason: string) => {
  * @param values
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const deliver = (rid: string, values: DeliverParam) => {
-  return Fetch<TResult>(`/return/deliver/${rid}`, {
+ export const deliver = (rid: string, values: DeliverParam) => {
+  return Fetch<TResult>(`http://192.168.0.139/return/deliver/${rid}`, {
     method: 'POST',
-    body: JSON.stringify({
-      company: values.logisticCompany,
+    
+    body: values? JSON.stringify({
       code: values.logisticCompanyCode,
+      company: values.logisticCompany,
       no: values.logisticNo,
-      createTime: values.date
+      createTime: values.date,
+      skip:false
+    }):JSON.stringify({
+      skip:true
     })
   });
 };
@@ -64,7 +68,7 @@ export const deliver = (rid: string, values: DeliverParam) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export const receive = (rid: string) => {
-  return Fetch<TResult>(`/return/receive/${rid}`, { method: 'POST' });
+  return Fetch<TResult>(`http://192.168.0.139/return/receive/${rid}`, { method: 'POST' });
 };
 
 /**
@@ -74,7 +78,7 @@ export const receive = (rid: string) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export const rejectReceive = (rid: string, reason: string) => {
-  return Fetch<TResult>(`/return/receive/${rid}/reject`, {
+  return Fetch<TResult>(`http://192.168.0.139/return/receive/${rid}/reject`, {
     method: 'POST',
     body: JSON.stringify({ reason: reason })
   });
@@ -86,7 +90,7 @@ export const rejectReceive = (rid: string, reason: string) => {
  * @returns {Promise<IAsyncResult<any>>}
  */
 export const checkRefundStatus = (rid: string) => {
-  return Fetch(`/return/verifyRefundStatus/${rid}`);
+  return Fetch(`http://192.168.0.139/return/verifyRefundStatus/${rid}`);
 };
 
 /**
@@ -94,7 +98,7 @@ export const checkRefundStatus = (rid: string) => {
  * @param rid
  */
 export const refundOnline = (rid: string, params = {}) => {
-  return Fetch<TResult>(`/return/edit/price/${rid}`, {
+  return Fetch<TResult>(`http://192.168.0.139/return/edit/price/${rid}`, {
     method: 'POST',
     body: JSON.stringify(params)
   });
@@ -107,7 +111,7 @@ export const refundOnline = (rid: string, params = {}) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export const refundOffline = (rid: string, params = {}) => {
-  return Fetch<TResult>(`/return/refund/${rid}/offline`, {
+  return Fetch<TResult>(`http://192.168.0.139/return/refund/${rid}/offline`, {
     method: 'POST',
     body: JSON.stringify(params)
   });
@@ -120,7 +124,7 @@ export const refundOffline = (rid: string, params = {}) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export const rejectRefund = (rid: string, reason: string) => {
-  return Fetch<TResult>(`/return/refund/${rid}/reject`, {
+  return Fetch<TResult>(`http://192.168.0.139/return/refund/${rid}/reject`, {
     method: 'POST',
     body: JSON.stringify({ reason: reason })
   });
@@ -132,7 +136,7 @@ export const rejectRefund = (rid: string, reason: string) => {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function fetchRefundOrdeById(rid: string) {
-  return Fetch(`/account/refundOrders/${rid}`);
+  return Fetch(`http://192.168.0.139/account/refundOrders/${rid}`);
 }
 
 /**
@@ -141,7 +145,15 @@ export function fetchRefundOrdeById(rid: string) {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function destroyRefundOrder(refundId: string) {
-  return Fetch(`/account/refundOrders/destory/${refundId}`, {
+  return Fetch(`http://192.168.0.139/account/refundOrders/destory/${refundId}`, {
     method: 'GET'
   });
 }
+
+
+export const realRefund = (rid: string, refundPrice:any) => {
+  return Fetch<TResult>(`http://192.168.0.139/return/refund/${rid}/online`, {
+    method: 'POST',
+    body: JSON.stringify({refundPrice})
+  });
+};

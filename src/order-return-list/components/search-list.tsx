@@ -3,7 +3,7 @@ import { IMap, Relax } from 'plume2';
 import { fromJS, List } from 'immutable';
 import momnet from 'moment';
 import { Link } from 'react-router-dom';
-import { Checkbox, message, Modal, Pagination, Spin, Tooltip } from 'antd';
+import { Checkbox, Input, InputNumber, message, Modal, Pagination, Popconfirm, Spin, Tooltip } from 'antd';
 import { AuthWrapper, Const, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
@@ -54,6 +54,7 @@ export default class SearchList extends React.Component<any, any> {
       onRefundOnlineModalChange: Function;
       onlineRefundModalData: IMap;
       onlineRefundModalHide: Function;
+      changeRefundPrice:Function;
     };
   };
 
@@ -90,12 +91,12 @@ export default class SearchList extends React.Component<any, any> {
     allChecked: allCheckedQL,
     onRefundOnlineModalChange: noop,
     onlineRefundModalData: 'onlineRefundModalData',
-    onlineRefundModalHide: noop
+    onlineRefundModalHide: noop,
+    changeRefundPrice:noop
   };
 
   render() {
     const { loading, total, pageSize, currentPage, init, allChecked, dataList, onCheckedAll, rejectModalData, onRejectModalHide, deliverModalData, onDeliverModalHide, refundModalData, onRefundModalHide, onlineRefundModalData, onlineRefundModalHide } = this.props.relaxProps;
-
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -105,7 +106,7 @@ export default class SearchList extends React.Component<any, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '0.5%' }}>
+                      {/* <th style={{ width: '0.5%' }}>
                         <Checkbox
                           checked={allChecked}
                           onChange={(e) => {
@@ -113,33 +114,33 @@ export default class SearchList extends React.Component<any, any> {
                             onCheckedAll(checked);
                           }}
                         />
-                      </th>
+                      </th> */}
                       <th>
                         <FormattedMessage id="product" />
                       </th>
-                      <th style={{ width: '10%' }}>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="orderNumber" />
                       </th>
-                      <th style={{ width: '98px' }}>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="refundTime" />
                       </th>
-                      <th style={{ width: '10%' }}>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="consumerName" />
                       </th>
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="refundableAmount" />
                       </th>
-                      <th style={{ width: '10%' }}>
+                      {/* <th style={{ width: '10%' }}>
                         <FormattedMessage id="pointsRefundable" />
-                      </th>
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="chargebackStatus" />
+                      </th> */}
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="returnOrderStatus" />
                       </th>
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="actualRefundAmount" />
                       </th>
                       <th style={{ width: '10%', textAlign: 'right' }}>
-                        <FormattedMessage id="actualRefundPoints" />
+                        <FormattedMessage id="remark" />
                       </th>
                     </tr>
                   </thead>
@@ -174,6 +175,7 @@ export default class SearchList extends React.Component<any, any> {
         <RejectModal data={rejectModalData} onHide={onRejectModalHide} handleOk={rejectModalData.get('onOk')} />
         <DeliverModal data={deliverModalData} onHide={onDeliverModalHide} handleOk={deliverModalData.get('onOk')} />
         <RefundModal data={refundModalData} onHide={onRefundModalHide} handleOk={refundModalData.get('onOk')} />
+
         <OnlineRefundModal data={onlineRefundModalData} onHide={onlineRefundModalHide} />
       </div>
     );
@@ -205,10 +207,10 @@ export default class SearchList extends React.Component<any, any> {
       //退单赠品
       const returnGifts = v.get('returnGifts') ? v.get('returnGifts') : fromJS([]);
 
-      // 应退积分
-      const applyPoints = v.getIn(['returnPoints', 'applyPoints']);
-      // 实退积分
-      const actualReturnPoints = v.getIn(['returnPoints', 'actualPoints']);
+      // // 应退积分
+      // const applyPoints = v.getIn(['returnPoints', 'applyPoints']);
+      // // 实退积分
+      // const actualReturnPoints = v.getIn(['returnPoints', 'actualPoints']);
 
       // 总额
       const totalPrice = v.getIn(['returnPrice', 'totalPrice']);
@@ -244,7 +246,7 @@ export default class SearchList extends React.Component<any, any> {
                         height: 36
                       }}
                     >
-                      <span style={{ marginLeft: '1%' }}>
+                      {/* <span style={{ marginLeft: '1%' }}>
                         <Checkbox
                           checked={v.get('checked')}
                           onChange={(e) => {
@@ -252,111 +254,73 @@ export default class SearchList extends React.Component<any, any> {
                             onChecked(index, checked);
                           }}
                         />
-                      </span>
+                      </span> */}
                       <span style={{ marginLeft: 20, color: '#000' }}>
-                        {rid} {v.get('platform') != 'CUSTOMER' && <span style={styles.platform}>Chargeback</span>}
+                        {rid} {v.get('platform') != 'CUSTOMER' && <span style={styles.platform}>Return</span>}
                       </span>
                       <span style={{ marginRight: 0, float: 'right' }}>
-                        {returnFlowState === 'INIT' && (
-                          <AuthWrapper functionName="f_order_return_edit">
-                            <Tooltip placement="top" title="Modify">
-                              <Link style={{ marginLeft: 20 }} to={`/order-return-edit/${rid}`}>
-                                Modify
-                              </Link>
+                        {returnFlowState === 'PENDING_REVIEW' && (
+                          <AuthWrapper functionName="f_return_review">
+
+                            <Tooltip placement="top" title="Approve">
+                              <a style={{ marginLeft: 20 }} onClick={
+                                () => {
+                                  this._showAudit(onAudit, rid);
+                                }
+                              }>
+                                Approve
+                                </a>
+
                             </Tooltip>
-                          </AuthWrapper>
-                        )}
-                        {returnFlowState === 'INIT' && (
-                          <AuthWrapper functionName="rolf002">
-                            <Tooltip placement="top" title="审核">
-                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showAudit(onAudit, rid)}>
-                                审核
-                              </a>
+
+                            <Tooltip placement="top" title="Reject">
+                              <a style={{ marginLeft: 20 }} onClick={
+                                () => {
+                                  this._showReject(onReject, rid);
+                                }
+                              }>
+                                Reject
+                                </a>
                             </Tooltip>
                           </AuthWrapper>
                         )}
 
-                        {returnFlowState === 'INIT' && (
-                          <AuthWrapper functionName="rolf002">
-                            <Tooltip placement="top" title="驳回">
-                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReject(onReject, rid)}>
-                                驳回
-                              </a>
-                            </Tooltip>
-                          </AuthWrapper>
-                        )}
-
-                        {/*退货单的已审核状态*/}
-                        {returnFlowState === 'AUDIT' && returnType == 'RETURN' && (
-                          <AuthWrapper functionName="rolf003">
+                        {returnFlowState === 'TO_BE_DELIVERED' && (
+                          <AuthWrapper functionName="f_return_delivered">
+                            <Popconfirm placement="topLeft" title="Are you sure skip logistics?" onConfirm={() => {
+                              this._showDeliver(onDeliver, rid, false)
+                            }} okText="Confirm" cancelText="Cancel">
+                              <Tooltip placement="top" title="Skip logistics">
+                                <a style={{ marginLeft: 20 }}>
+                                  Skip logistics
+                                </a>
+                              </Tooltip>
+                            </Popconfirm>
                             <Tooltip placement="top" title="Fill in logistics">
-                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid)}>
+                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
                                 Fill in logistics
                               </a>
                             </Tooltip>
                           </AuthWrapper>
                         )}
 
-                        {returnFlowState === 'DELIVERED' && (
-                          <AuthWrapper functionName="rolf004">
-                            <Tooltip placement="top" title="收货">
+                        {returnFlowState === 'TO_BE_RECEIVED' && (
+                          <AuthWrapper functionName="f_return_received">
+                            <Tooltip placement="top" title="Recipient accepted">
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
-                                收货
+                                Recipient accepted
                               </a>
                             </Tooltip>
-                          </AuthWrapper>
-                        )}
-
-                        {returnFlowState === 'DELIVERED' && (
-                          <AuthWrapper functionName="rolf004">
-                            <Tooltip placement="top" title="拒绝收货">
+                            <Tooltip placement="top" title="Recipient rejected">
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
-                                拒绝收货
+                                Recipient rejected
                               </a>
                             </Tooltip>
+
                           </AuthWrapper>
                         )}
-
-                        {((returnType == 'REFUND' && returnFlowState == 'AUDIT') || (returnType == 'RETURN' && returnFlowState == 'RECEIVED')) && (
-                          <AuthWrapper functionName="rolf005">
-                            <Tooltip placement="top" title="Real refund">
-                              <a
-                                href="javascript:void(0)"
-                                style={{ marginLeft: 20 }}
-                                onClick={() => {
-                                  this._showRealRefund(onRealRefund, rid);
-                                }}
-                              >
-                                <FormattedMessage id="realRefund" />
-                              </a>
-                            </Tooltip>
-                          </AuthWrapper>
-                        )}
-
-                        {enableReturn && (
-                          <AuthWrapper functionName="rolf005">
-                            <Tooltip placement="top" title="Refund">
-                              <a
-                                href="javascript:void(0)"
-                                style={{ marginLeft: 20 }}
-                                onClick={() => {
-                                  if (payType == 0) {
-                                    this._showOnlineRefund(onOnlineRefund, rid, customerId, payPrice, applyPoints);
-                                  } else {
-                                    this._showOfflineRefund(onOfflineRefund, rid, customerId, payPrice, applyPoints);
-                                  }
-                                }}
-                                className="iconfont iconbtn-refund"
-                              >
-                                {/*<FormattedMessage id="refund" />*/}
-                              </a>
-                            </Tooltip>
-                          </AuthWrapper>
-                        )}
-
-                        {/*已收货状态 或者 退款单的已审核状态*/}
-                        {enableReturn && (
-                          <AuthWrapper functionName="rolf005">
+                        {returnFlowState === 'PENDING_REFUND' && (
+                          <AuthWrapper functionName="f_return_refund">
                             <Tooltip placement="top" title="Refused to refund">
                               <a
                                 href="javascript:void(0)"
@@ -369,10 +333,22 @@ export default class SearchList extends React.Component<any, any> {
                                 <FormattedMessage id="refusedToRefund" />
                               </a>
                             </Tooltip>
+                            <Tooltip placement="top" title="Real refund">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => {
+                                  this._showRealRefund(onRealRefund, rid, returnType == 'REFUND'?applyPrice:totalPrice);
+                                }}
+                              >
+                                <FormattedMessage id="realRefund" />
+                              </a>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
-                        <AuthWrapper functionName="rodf001">
-                          <Tooltip placement="top" title="See details">
+                       
+                        <AuthWrapper functionName="f_retrun_detail">
+                          <Tooltip placement="top" title="Detail">
                             <Link style={{ marginRight: 18, marginLeft: 20 }} to={`/order-return-detail/${rid}`} className="iconfont iconDetails">
                               {/*<FormattedMessage id="order.seeDetails" />*/}
                             </Link>
@@ -385,7 +361,7 @@ export default class SearchList extends React.Component<any, any> {
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ width: '3%' }} />
+                  {/* <td style={{ width: '3%' }} /> */}
                   <td style={{ paddingTop: 14, paddingBottom: 16 }}>
                     {/*商品图片*/}
                     {v
@@ -407,39 +383,42 @@ export default class SearchList extends React.Component<any, any> {
                             style={styles.imgFourth}
                           />
                           //@ts-ignore
-                          <div style={styles.imgNum}>共{v.get('returnItems').concat(returnGifts).size}件</div>
+                          <div style={styles.imgNum}>Total {v.get('returnItems').concat(returnGifts).size}</div>
                         </div>
                       ) : null
                     }
                   </td>
-                  <td style={{ width: '10%' }}>
+                  <td style={{ width: '12%' }}>
                     {/*订单编号*/}
                     {v.get('tid')}
                   </td>
-                  <td style={{ width: '98px' }}>
+                  <td style={{ width: '12%' }}>
                     {/*退单时间*/}
                     {v.get('createTime') ? momnet(v.get('createTime')).format(Const.TIME_FORMAT).toString() : ''}
                   </td>
-                  <td style={{ width: '10%' }}>
+                  <td style={{ width: '12%' }}>
                     {/*收件人姓名*/}
                     {v.get('buyer') ? v.getIn(['buyer', 'name']) : ''}
                   </td>
-                  <td style={{ width: '12%' }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(payPrice).toFixed(2)}</td>
+                  <td style={{ width: '12%' }}>{
+                    returnType === 'REFUND'?
+                  (applyPrice|| applyPrice===0?sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(applyPrice).toFixed(2):'-'):
+                  (totalPrice|| totalPrice===0?sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(totalPrice).toFixed(2):'-')}</td>
                   {/*应退积分*/}
-                  <td style={{ width: '10%' }}>{applyPoints}</td>
+                  {/* <td style={{ width: '10%' }}>{applyPoints}</td> */}
                   {/*状态*/}
-                  <td style={{ width: '10%' }}>
-                    {returnType == 'RETURN' ? Const.returnGoodsState[returnFlowState] : Const.returnMoneyState[returnFlowState] || ''}
-                    {returnFlowState == 'REFUND_FAILED' && (
+                  <td style={{ width: '12%' }}>
+                    {returnFlowState}
+                    {/* {returnFlowState == 'REFUND_FAILED' && (
                       <Tooltip title={v.get('refundFailedReason')}>
                         <a style={{ display: 'block' }}>原因</a>
                       </Tooltip>
-                    )}
+                    )} */}
                   </td>
                   {/*实退金额*/}
                   <td style={{ width: '12%' }}>{returnFlowState == 'COMPLETED' ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(actualReturnPrice).toFixed(2) : '-'}</td>
                   {/*实退积分*/}
-                  <td
+                  {/* <td
                     style={{
                       width: '10%',
                       textAlign: 'right',
@@ -447,6 +426,10 @@ export default class SearchList extends React.Component<any, any> {
                     }}
                   >
                     {returnFlowState == 'COMPLETED' ? actualReturnPoints : '-'}
+                  </td> */}
+                  <td style={{ width: '10%' }}>
+                    {/*订单编号*/}
+                    {v.get('rejectReason')?v.get('rejectReason'):'-'}
                   </td>
                 </tr>
               </tbody>
@@ -457,26 +440,41 @@ export default class SearchList extends React.Component<any, any> {
     });
   }
 
-  async _showRealRefund(onRealRefund: Function, rid: string) {
+  async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
     confirm({
       title: 'Confirm Refund',
-      content: 'Do you confirm the refund?',
+      content: <div>
+        <p>Do you confirm the refund?</p>
+        <p>What is the amount of the refund?</p>
+
+
+        <InputNumber
+          min={0}
+          max={applyPrice}
+          defaultValue={applyPrice}
+          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || '$'} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          parser={value => value.replace(/\$\s?|(,*)/g, '')}
+          onChange={this.changeRealRefund}
+        />
+      </div>,
       onOk() {
-        return onRealRefund(rid);
+        return onRealRefund(rid,applyPrice);
       },
-      onCancel() {}
+      onCancel() {
+
+      }
     });
   }
 
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
     confirm({
-      title: '审核通过',
-      content: '是否确认审核通过？',
+      title: 'Approve',
+      content: 'Is the audit approved?',
       onOk() {
         return onAudit(rid);
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 
@@ -484,30 +482,37 @@ export default class SearchList extends React.Component<any, any> {
   _showReject(onReject: Function, rid: string) {
     this.props.relaxProps.onRejectModalChange({
       visible: true,
-      type: '驳回',
+      type: 'Reject',
       onOk: onReject,
       rid: rid
     });
   }
 
   // 填写物流
-  _showDeliver(onDeliver: Function, rid: string) {
-    this.props.relaxProps.onDeliverModalChange({
-      visible: true,
-      onOk: onDeliver,
-      rid: rid
-    });
+  _showDeliver(onDeliver: Function, rid: string, isSkip: boolean) {
+    if (isSkip) {
+      this.props.relaxProps.onDeliverModalChange({
+        visible: true,
+        onOk: onDeliver,
+        rid: rid
+      });
+    } else {
+      onDeliver(rid, false)
+    }
+
+
+
   }
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
     confirm({
-      title: '确认收货',
-      content: '是否确认收货？',
+      title: 'Confirm receipt',
+      content: 'Do you confirm receipt of the goods?',
       onOk() {
         return onReceive(rid);
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 
@@ -515,7 +520,7 @@ export default class SearchList extends React.Component<any, any> {
   _showRejectReceive(onRejectReceive: Function, rid: string) {
     this.props.relaxProps.onRejectModalChange({
       visible: true,
-      type: '拒绝收货',
+      type: 'Reject receive',
       onOk: onRejectReceive,
       rid: rid
     });
@@ -547,36 +552,44 @@ export default class SearchList extends React.Component<any, any> {
 
   // 拒绝退款
   async _showRejectRefund(onRejectRefund: Function, rid: string, online: boolean) {
-    const { onCheckFunAuth } = this.props.relaxProps;
-    const { res } = await onCheckFunAuth('/return/refund/*/reject', 'POST');
-    if (res.context) {
-      // 在线退款需要校验是否已在退款处理中
-      if (online) {
-        const { checkRefundStatus, init, currentPage, pageSize } = this.props.relaxProps;
-        const { res } = await checkRefundStatus(rid);
-        if (res.code !== Const.SUCCESS_CODE) {
-          setTimeout(
-            () =>
-              init({
-                pageNum: currentPage - 1 < 0 ? 0 : currentPage - 1,
-                pageSize: pageSize
-              }),
-            2000
-          );
-          return;
-        }
-      }
-
+    // const { onCheckFunAuth } = this.props.relaxProps;
+    // const { res } = await onCheckFunAuth('/return/refund/*/reject', 'POST');
+    // if (res.context) {
+    // 在线退款需要校验是否已在退款处理中
+    // if (online) {
+    const { checkRefundStatus, init, currentPage, pageSize } = this.props.relaxProps;
+    const { res } = await checkRefundStatus(rid);
+    // if (res.code !== Const.SUCCESS_CODE) {
+    //   setTimeout(
+    //     () =>
+    //       init({
+    //         pageNum: currentPage - 1 < 0 ? 0 : currentPage - 1,
+    //         pageSize: pageSize
+    //       }),
+    //     2000
+    //   );
+    //   return;
+    // }
+    // }
+    if (res.code === Const.SUCCESS_CODE) {
       this.props.relaxProps.onRejectModalChange({
         visible: true,
         type: 'refusing refund',
         onOk: onRejectRefund,
         rid: rid
       });
-    } else {
-      message.error('此功能您没有权限访问');
-      return;
     }
+
+
+    // } else {
+    //   message.error('此功能您没有权限访问');
+    //   return;
+    // }
+  }
+  changeRealRefund = (value) => {
+    this.props.relaxProps.changeRefundPrice({
+      refundPrice:value
+    })
   }
 }
 

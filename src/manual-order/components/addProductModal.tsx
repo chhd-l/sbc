@@ -1,4 +1,4 @@
-import { Button, Col, Form, Icon, Input, InputNumber, message, Modal, Pagination, Radio, Row, Table } from 'antd';
+import { Badge, Button, Col, Form, Icon, Input, InputNumber, message, Modal, Pagination, Radio, Row, Table } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import { Const } from 'qmkit';
 import React, { Component } from 'react';
@@ -12,7 +12,8 @@ interface IParams {
   keyword: string;
   pageNum: number;
   pageSize: number;
-  saleableFlag:number
+  saleableFlag: number,
+
 }
 
 export default class AddProductModal extends Component {
@@ -32,6 +33,8 @@ export default class AddProductModal extends Component {
     visible: boolean;
     handleOk: any;
     handleCancel: any;
+    goodsCount?: any
+    searchCount?:Function
   };
   onChange = (e, type) => {
     if (e && e.target) {
@@ -44,7 +47,7 @@ export default class AddProductModal extends Component {
   componentDidMount() {
     this.search();
   }
-  async getGoodsSKUSList(param: IParams) {
+   getGoodsSKUSList=async(param: IParams) =>{
     this.setState({
       loading: true
     });
@@ -53,7 +56,7 @@ export default class AddProductModal extends Component {
     this.setState(
       {
         total: goodsInfoPage.total,
-        currentPage: goodsInfoPage?.number+1 ?? 0,
+        currentPage: goodsInfoPage?.number + 1 ?? 0,
         pageSzie: goodsInfoPage.numberOfElements,
         goodsLists: goodsInfoPage?.content ?? []
       },
@@ -65,21 +68,29 @@ export default class AddProductModal extends Component {
     );
   }
   search = () => {
-    const { cateType, likeGoodsInfoNo, keyword} = this.state;
+    const { cateType, likeGoodsInfoNo, keyword } = this.state;
     this.getGoodsSKUSList({
       cateType,
       likeGoodsInfoNo,
       keyword,
       pageNum: 0,
       pageSize: 5,
-      saleableFlag:1
+      saleableFlag: 1
     });
   };
-  inputNumberChange(e, key) {
-    this.state.goodsLists[key].buyCount = e;
+  inputNumberChange(e, key,max) {
+    if(e<=max){
+      this.state.goodsLists[key].buyCount = e;
+    }else{
+      message.info('please selected quantity');
+    }
   }
-  async addCarts(row) {
-    if (row.buyCount === 0) {
+  async addCarts(row,index) {
+    let total = (window as any).goodsCount[this.props.storeId];
+     if(row.overCount===total||row.buyCount==row.stcok){
+      message.info('The stock ceiling has been reached');
+      return;
+    }else if (row.buyCount === 0) {
       message.info('please selected quantity');
       return;
     }
@@ -92,12 +103,19 @@ export default class AddProductModal extends Component {
     });
     if (res.code === Const.SUCCESS_CODE) {
       message.success('add success');
-      this.setState({ loading: false });
+      row.overCount+=row.buyCount
+        // this.state.goodsLists[index]=row
+       this.props.searchCount()
+        
+      this.setState({ 
+        loading: false ,
+        //goodsLists:this.state.goodsLists
+      });
     }
   }
 
   render() {
-    const { visible, handleOk, handleCancel } = this.props;
+    const { visible, handleOk, handleCancel, goodsCount, storeId } = this.props;
     const { cateType, likeGoodsInfoNo, keyword, goodsLists, total, pageSize, currentPage, loading } = this.state;
     const columns = [
       {
@@ -142,13 +160,23 @@ export default class AddProductModal extends Component {
         dataIndex: 'buyCount',
         key: 'buyCount',
         render: (text, record, index) => {
+          let total = (window as any).goodsCount[storeId];// 每个国家配置的最大限购数量
+          let overCount = goodsCount[record.goodsInfoId] || 0; //已添加到购物车的数量
+          let max = 0
+          if(record.stock <= total){
+            max=record.stock-overCount
+          }else{
+            max=total-overCount
+          }
+          record.overCount=overCount
+          // debugger
           return (
             <InputNumber
               min={0}
-              max={record.stock}
+              max={max}
               defaultValue={text}
               onChange={(e) => {
-                this.inputNumberChange(e, index);
+                this.inputNumberChange(e, index,max);
               }}
             />
           );
@@ -159,8 +187,8 @@ export default class AddProductModal extends Component {
         title: 'add',
         dataIndex: 'add',
         key: 'add',
-        render: (text, row) => {
-          return <span onClick={() => this.addCarts(row)} style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 25 }} className="iconfont icongouwu"></span>;
+        render: (text, row,index) => {
+          return (<Badge count={row.overCount}><span onClick={() => this.addCarts(row,index)} style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 25 }} className="iconfont icongouwu"></span></Badge>);
         }
       }
     ];
@@ -227,7 +255,7 @@ export default class AddProductModal extends Component {
               total={total}
               pageSize={pageSize}
               onChange={(pageNum, pageSize) => {
-                this.getGoodsSKUSList({ cateType, likeGoodsInfoNo, keyword, pageNum: pageNum-1, pageSize,saleableFlag:1 });
+                this.getGoodsSKUSList({ cateType, likeGoodsInfoNo, keyword, pageNum: pageNum - 1, pageSize, saleableFlag: 1 });
               }}
             />
           ) : null}

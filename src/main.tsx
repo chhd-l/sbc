@@ -4,6 +4,7 @@ import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, hi
 import { routes, auditDidNotPass } from './router';
 import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 import UUID from 'uuid-js';
+import { FormattedMessage } from 'react-intl';
 const { Content } = Layout;
 export default class Main extends React.Component<any, any> {
   _menu: any;
@@ -109,7 +110,7 @@ export default class Main extends React.Component<any, any> {
                   {routeWithSubRoutes(routes, this.handlePathMatched)}
                   {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
                   <div style={styles.copyright}>
-                    © Royal Canin SAS 2020
+                    © <FormattedMessage id="Public.RoyalCaninSAS2020" />
                     {/* © 2017-2019 南京万米信息技术有限公司 版本号：{
                     Const.COPY_VERSION
                   } */}

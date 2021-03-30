@@ -3,7 +3,7 @@ import { StoreProvider } from 'plume2';
 
 import { Breadcrumb, Tabs } from 'antd';
 import { Headline, BreadCrumb } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 import Appstore from './store';
 import CouponBasicInfo from './components/coupon-basic-info';
 
@@ -24,13 +24,15 @@ export default class CouponInfo extends Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Coupon detail</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="Marketing.CouponDetail" />
+          </Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container">
-          <Headline title="Coupon" />
+          <Headline title={<FormattedMessage id="Marketing.Coupon" />} />
           <Tabs>
-            <Tabs.TabPane tab="Coupon info" key="1">
+            <Tabs.TabPane tab={<FormattedMessage id="Marketing.CouponInfo" />} key="1">
               <CouponBasicInfo />
             </Tabs.TabPane>
           </Tabs>

@@ -118,6 +118,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       const settingConfigList = menusRes.res.context &&
         menusRes.res.context.systemTaxSettingResponse &&
         menusRes.res.context.systemTaxSettingResponse.configVOList
+      sessionStorage.setItem(cache.LANGUAGE, 'English');
       if (settingConfigList) {
         let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');
         if (element) {

@@ -101,12 +101,12 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           { id: '2', firstName: 'Bob', lastName: 'Mclaren'}
         ]}*/
       >
-        <Column title={<FormattedMessage id="OrderTime" />} key="tradeState" width="12%" dataIndex="tradeState.createTime" render={(v, i) => <span>{this._newDate(v)}</span>} />
-        <Column title={<FormattedMessage id="OrderNumber" />} key="id" dataIndex="id" width="18%" />
-        <Column title={<FormattedMessage id="OrderAmount" />} key="tradePrice" dataIndex="tradePrice.totalPrice" width="11%" render={(OrderAmount) => <span>{OrderAmount != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + OrderAmount : '-'}</span>} />
-        <Column title={<FormattedMessage id="RewardRate" />} key="orderRewardRate" dataIndex="orderRewardRate" width="11%" render={(orderRewardRate) => <span>{orderRewardRate != null ? `${orderRewardRate.toFixed(2)}%` : '-'}</span>} />
+        <Column title={<FormattedMessage id="Finance.orderTime" />} key="tradeState" width="12%" dataIndex="tradeState.createTime" render={(v, i) => <span>{this._newDate(v)}</span>} />
+        <Column title={<FormattedMessage id="Finance.orderNumber" />} key="id" dataIndex="id" width="18%" />
+        <Column title={<FormattedMessage id="Finance.OrderAmount" />} key="tradePrice" dataIndex="tradePrice.totalPrice" width="11%" render={(OrderAmount) => <span>{OrderAmount != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + OrderAmount : '-'}</span>} />
+        <Column title={<FormattedMessage id="Finance.RewardRate" />} key="orderRewardRate" dataIndex="orderRewardRate" width="11%" render={(orderRewardRate) => <span>{orderRewardRate != null ? `${orderRewardRate.toFixed(2)}%` : '-'}</span>} />
         <Column
-          title={<FormattedMessage id="RewardRemark" />}
+          title={<FormattedMessage id="Finance.RewardRemark" />}
           dataIndex="firstOrderFlag"
           width="11%"
           key="firstOrderFlag"
@@ -121,11 +121,9 @@ export default class OrderInvoiceList extends React.Component<any, any> {
                   placement="bottomLeft"
                   title={
                     <div>
-                      First order：
-                      {record.prescriberReward ? record.prescriberReward.rewardRateFirst + '%' : '--'}
+                      <FormattedMessage id="Finance.FirstOrder" />：{record.prescriberReward ? record.prescriberReward.rewardRateFirst + '%' : '--'}
                       <br />
-                      Repeat order：
-                      {record.prescriberReward ? record.prescriberReward.rewardRateMore + '%' : '--'}
+                      <FormattedMessage id="Finance.RepeatOrder" />：{record.prescriberReward ? record.prescriberReward.rewardRateMore + '%' : '--'}
                     </div>
                   }
                 >
@@ -137,7 +135,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         />
 
         <Column
-          title={<FormattedMessage id="RewardAmount" />}
+          title={<FormattedMessage id="Finance.RewardAmount" />}
           dataIndex="orderRewardAmount"
           key="orderRewardAmount"
           width="11%"
@@ -202,18 +200,18 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       <div className="operation-box">
         <AuthWrapper functionName="fetchOrderInovices">
           <a href="javascript:void(0);" onClick={() => onSearchByInvoiceId(id)}>
-            {<FormattedMessage id="view" />}
+            {<FormattedMessage id="Finance.view" />}
           </a>
         </AuthWrapper>
 
         <AuthWrapper functionName="destoryOpenOrderInvoice">
           <Popconfirm
-            title={invoiceState == 0 ? 'Do you confirm to bill?？' : 'Do you confirm to cancel bill record？'}
+            title={invoiceState == 0 ? <FormattedMessage id="Finance.ConfirmToBill" /> : <FormattedMessage id="Finance.CancelBillRecord" />}
             onConfirm={() => {
               invoiceState == 0 ? onConfirm(id) : onDestory(id);
             }}
-            okText="Confirm"
-            cancelText="Cancel"
+            okText={<FormattedMessage id="Finance.Confirm" />}
+            cancelText={<FormattedMessage id="Finance.Cancel" />}
           >
             <a href="javascript:void(0);">{invoiceState == 0 ? 'Billing' : 'Cancellation'}</a>
           </Popconfirm>

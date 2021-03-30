@@ -36,7 +36,7 @@ export default class SearchForm extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore={<FormattedMessage id="consumerName" />}
+            addonBefore={<FormattedMessage id="Finance.consumerName" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -49,7 +49,7 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <Input
-            addonBefore={<FormattedMessage id="orderNumber" />}
+            addonBefore={<FormattedMessage id="Finance.orderNumber" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -82,7 +82,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label={<FormattedMessage id="invoiceStatus" />}
+            label={<FormattedMessage id="Finance.invoiceStatus" />}
             style={{ width: 80 }}
             onChange={(e) => {
               onFormChange({
@@ -130,7 +130,7 @@ export default class SearchForm extends React.Component<any, any> {
             }}
           >
             <span>
-              <FormattedMessage id="search" />
+              <FormattedMessage id="Finance.search" />
             </span>
             s
           </Button>

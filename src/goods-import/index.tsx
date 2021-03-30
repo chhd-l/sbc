@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Alert,
-  Breadcrumb,
-  Button,
-  Icon,
-  message, Row,
-  Spin,
-  Steps,
-  Upload
-} from 'antd';
+import { Alert, Breadcrumb, Button, Icon, message, Row, Spin, Steps, Upload } from 'antd';
 import { Const, Fetch, Headline, util, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
@@ -23,17 +14,17 @@ const header = {
 const steps = [
   {
     id: 1,
-    title: <FormattedMessage id="product.downloadProductImportTemplate" />,
+    title: <FormattedMessage id="Product.downloadProductImportTemplate" />,
     content: 'First-content'
   },
   {
     id: 2,
-    title: <FormattedMessage id="uploadData" />,
+    title: <FormattedMessage id="Product.uploadData" />,
     content: 'Second-content'
   },
   {
     id: 3,
-    title: <FormattedMessage id="finish" />,
+    title: <FormattedMessage id="Product.finish" />,
     content: 'Third-content'
   }
 ];
@@ -76,17 +67,17 @@ export default class GoodsImport extends React.Component<any, any> {
       <div>
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
-            <FormattedMessage id="productImport" />
+            <FormattedMessage id="Product.productImport" />
           </Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title={<FormattedMessage id="productImport" />} />
+          <Headline title={<FormattedMessage id="Product.productImport" />} />
           <Alert
             message="Operation Description："
             description={
               <ul>
-                <li>1、{<FormattedMessage id="product.importInfo1" />}</li>
-                <li>2、{<FormattedMessage id="product.importInfo2" />}</li>
+                <li>1、{<FormattedMessage id="Product.importInfo1" />}</li>
+                <li>2、{<FormattedMessage id="Product.importInfo2" />}</li>
               </ul>
             }
           />
@@ -100,43 +91,25 @@ export default class GoodsImport extends React.Component<any, any> {
           </div>
           {current == 0 ? (
             <div style={styles.center}>
-              <Button
-                type="primary"
-                icon="download"
-                style={{ marginTop: 10 }}
-                onClick={this.toDownTempl}
-              >
-                {
-                  <FormattedMessage id="product.downloadProductImportTemplate" />
-                }
+              <Button type="primary" icon="download" style={{ marginTop: 10 }} onClick={this.toDownTempl}>
+                {<FormattedMessage id="Product.downloadProductImportTemplate" />}
               </Button>
               <div style={{ marginTop: 40 }}>
                 <Button type="primary" onClick={this._next}>
-                  {<FormattedMessage id="product.next" />}
+                  {<FormattedMessage id="Product.next" />}
                 </Button>
               </div>
             </div>
           ) : null}
           {current == 1 ? (
-            <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+            <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
               <div className="steps-content" style={styles.center}>
-                <Dragger
-                  name="uploadFile"
-                  multiple={false}
-                  showUploadList={false}
-                  accept=".xls,.xlsx"
-                  headers={header}
-                  action={Const.HOST + '/goods/excel/upload'}
-                  onChange={this.changeImage}
-                >
+                <Dragger name="uploadFile" multiple={false} showUploadList={false} accept=".xls,.xlsx" headers={header} action={Const.HOST + '/goods/excel/upload'} onChange={this.changeImage}>
                   <div style={styles.content}>
-                    <p
-                      className="ant-upload-hint"
-                      style={{ fontSize: 14, color: 'black' }}
-                    >
+                    <p className="ant-upload-hint" style={{ fontSize: 14, color: 'black' }}>
                       {' '}
                       <Icon type="upload" />
-                      <FormattedMessage id="chooseFileToUpload" />
+                      <FormattedMessage id="Product.chooseFileToUpload" />
                     </p>
                   </div>
                 </Dragger>
@@ -150,24 +123,16 @@ export default class GoodsImport extends React.Component<any, any> {
                 ) : null}
 
                 <p style={styles.grey}>
-                  <FormattedMessage id="product.importInfo2" />
+                  <FormattedMessage id="Product.importInfo2" />
                 </p>
 
                 {errBtn ? (
-                  <Button
-                    type="primary"
-                    onClick={this._importGoods}
-                    disabled={isImport}
-                  >
+                  <Button type="primary" onClick={this._importGoods} disabled={isImport}>
                     重新导入
                   </Button>
                 ) : (
-                  <Button
-                    type="primary"
-                    onClick={this._importGoods}
-                    disabled={isImport}
-                  >
-                    <FormattedMessage id="confirmToImport" />
+                  <Button type="primary" onClick={this._importGoods} disabled={isImport}>
+                    <FormattedMessage id="Product.confirmToImport" />
                   </Button>
                 )}
               </div>
@@ -177,9 +142,7 @@ export default class GoodsImport extends React.Component<any, any> {
             <div className="steps-content" style={styles.center}>
               <div style={styles.center}>
                 <p style={styles.greyBig}>导入成功！</p>
-                <p style={styles.grey1}>
-                  您可以前往商品列表查看已导入的商品，或是继续导入。
-                </p>
+                <p style={styles.grey1}>您可以前往商品列表查看已导入的商品，或是继续导入。</p>
               </div>
 
               <Button type="primary" onClick={this._init}>

@@ -8,6 +8,7 @@ import { fromJS } from 'immutable';
 import ChooseCoupons from '../../common-components/choose-coupons';
 import ChooseCustomer from './specify-customer';
 import moment from 'moment';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import '../../index.less';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -113,15 +114,15 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     return (
       <NumBox>
         <Form style={{ marginTop: 20 }}>
-          <FormItem {...formItemLayout} label="Activity name">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.ActivityName" />}>
             {getFieldDecorator('activityName', {
               rules: [
                 {
                   required: true,
                   whitespace: true,
-                  message: 'The name of the activity should not exceed 100 words'
+                  message: <FormattedMessage id="Marketing.theActivityShould" />
                 },
-                { min: 1, max: 100, message: '1-100 wrods' },
+                { min: 1, max: 100, message: <FormattedMessage id="Marketing.100Wrods" /> },
                 {
                   validator: (rule, value, callback) => {
                     QMMethod.validatorEmoji(rule, value, callback, 'Activity name');
@@ -138,13 +139,13 @@ export default class SpecifyAddForm extends React.Component<any, any> {
           <FormItem {...formItemLayout} label="Activity time">
             {getFieldDecorator('startTime', {
               rules: [
-                { required: true, message: 'Please select the delivery time' },
+                { required: true, message: <FormattedMessage id="Marketing.PleaseSelectTheDeliveryTime" /> },
                 {
                   validator: (_rule, value, callback) => {
                     if (value && moment().add(-5, 'minutes').second(0).unix() > moment(value).unix()) {
-                      callback('The delivery time cannot be earlier than now');
+                      callback(<FormattedMessage id="Marketing.TheDeliveryTime" />);
                     } else if (value && moment().add('months', 3).unix() < moment(value).minute(0).second(0).unix()) {
-                      callback('The delivery time cannot be later than three months');
+                      callback(<FormattedMessage id="Marketing.TheDeliveryTimeLater" />);
                     } else {
                       callback();
                     }
@@ -176,7 +177,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="Select coupons" required={true}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.SelectCoupons" />} required={true}>
             {getFieldDecorator(
               'coupons',
               {}
@@ -199,7 +200,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="Target customers" required={true}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.TargetCustomers" />} required={true}>
             {getFieldDecorator('joinLevel', {
               // rules: [{required: true, message: '请选择目标客户'}],
             })(
@@ -210,7 +211,9 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                     this._levelRadioChange(e.target.value, levelList);
                   }}
                 >
-                  <Radio value={-1}>All customers</Radio>
+                  <Radio value={-1}>
+                    <FormattedMessage id="Marketing.AllCustomers" />
+                  </Radio>
                   {/*{util.isThirdStore() && <Radio value={0}>店铺内客户</Radio>}*/}
                   {/*<Radio value={-2}>Custom</Radio>*/}
                 </RadioGroup>
@@ -249,10 +252,12 @@ export default class SpecifyAddForm extends React.Component<any, any> {
             <Col span={3} />
             <Col span={10}>
               <Button onClick={() => this._onSave()} type="primary" htmlType="submit">
-                Save
+                <FormattedMessage id="Marketing.Save" />
               </Button>
               &nbsp;&nbsp;
-              <Button onClick={() => history.goBack()}>Cancel</Button>
+              <Button onClick={() => history.goBack()}>
+                <FormattedMessage id="Marketing.Cancel" />
+              </Button>
             </Col>
           </Row>
         </Form>
@@ -281,7 +286,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
           errors: [new Error('The selected time must be later than the current time')]
         }
       });
-      message.error('The selected time must be later than the current time');
+      message.error(<FormattedMessage id="Marketing.TheSelected" />);
       errors = true;
     }
     // if (moment().add('months', 3).unix() < moment(activity.get('startTime')).minute(0).second(0).unix()) {

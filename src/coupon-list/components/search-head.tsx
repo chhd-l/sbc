@@ -4,7 +4,7 @@ import { Relax } from 'plume2';
 import { DatePicker, Form, Input, Select, Button } from 'antd';
 import { Const, noop, SelectGroup } from 'qmkit';
 import { IMap } from 'typings/globalType';
-
+import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 @Relax
 export default class SearchHead extends React.Component<any, any> {
@@ -91,7 +91,7 @@ export default class SearchHead extends React.Component<any, any> {
               search();
             }}
           >
-            Search
+            <FormattedMessage id="Marketing.Search" />
           </Button>
         </FormItem>
       </Form>

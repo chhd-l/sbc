@@ -34,7 +34,7 @@ export default class RoleTool extends React.Component<any, any> {
         <div className="handle-bar">
           <Button type="primary" onClick={this._showCateModal}>
             {/* 新增角色 */}
-            <FormattedMessage id="addRole" />
+            <FormattedMessage id="Setting.addRole" />
           </Button>
         </div>
       </div>

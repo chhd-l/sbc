@@ -25,7 +25,7 @@ export const getTradeDetail = (tid: string) => {
 /**
  * 查询退单列表
  */
-export const fetchOrderReturnList = tid => {
+export const fetchOrder = (tid) => {
   return Fetch(`/return/findByTid/${tid}`);
 };
 

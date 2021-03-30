@@ -5,10 +5,10 @@ import { Breadcrumb, Alert, Form } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb, Const } from 'qmkit';
 
 import AppStore from './store';
-import MarketingAddForm from '../common-components/marketing-add-form';
+import FullDiscountForm from './components/full_discount_form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
-const WrappedForm = Form.create()(MarketingAddForm);
+const WrappedForm = Form.create()(FullDiscountForm);
 
 import * as webapi from '@/marketing-add/webapi';
 import { fromJS } from 'immutable';

@@ -43,44 +43,44 @@ export default class GiftLevels extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    if (!this.props.fullGiftLevelList || this.props.fullGiftLevelList.length == 0) {
-      this.initLevel();
-    }
+    // if (!this.props.fullGiftLevelList || this.props.fullGiftLevelList.length == 0) {
+    //   this.initLevel();
+    // }
   }
 
-  shouldComponentUpdate(nextProps) {
-    let resetFields = {};
-    const { fullGiftLevelList, isFullCount } = this.props;
-
-    if (isFullCount != nextProps.isFullCount) {
-      fullGiftLevelList.forEach((level, index) => {
-        resetFields[`level_rule_value_${index}`] = null;
-        level.fullGiftDetailList.forEach((detail, detailIndex) => {
-          resetFields[`${detail.productId}level_detail${index}${detailIndex}`] = 1;
-        });
-      });
-      this.initLevel();
-      this.setState({
-        selectedRows: fromJS([]),
-        isFullCount: nextProps.isFullCount
-      });
-    } else {
-      if (fullGiftLevelList && fullGiftLevelList.length != nextProps.fullGiftLevelList.length) {
-        nextProps.fullGiftLevelList.forEach((level, index) => {
-          if ((!isFullCount ? level.fullAmount : level.fullCount) != null) {
-            resetFields[`level_rule_value_${index}`] = !isFullCount ? level.fullAmount : level.fullCount;
-          }
-        });
-      }
-    }
-    if (JSON.stringify(resetFields) !== '{}') {
-      this.props.form.setFieldsValue(resetFields);
-    }
-    return true;
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   let resetFields = {};
+  //   const { fullGiftLevelList, isFullCount } = this.props;
+  //
+  //   if (isFullCount != nextProps.isFullCount) {
+  //     fullGiftLevelList.forEach((level, index) => {
+  //       resetFields[`level_rule_value_${index}`] = null;
+  //       level.fullGiftDetailList.forEach((detail, detailIndex) => {
+  //         resetFields[`${detail.productId}level_detail${index}${detailIndex}`] = 1;
+  //       });
+  //     });
+  //     this.initLevel();
+  //     this.setState({
+  //       selectedRows: fromJS([]),
+  //       isFullCount: nextProps.isFullCount
+  //     });
+  //   } else {
+  //     if (fullGiftLevelList && fullGiftLevelList.length != nextProps.fullGiftLevelList.length) {
+  //       nextProps.fullGiftLevelList.forEach((level, index) => {
+  //         if ((!isFullCount ? level.fullAmount : level.fullCount) != null) {
+  //           resetFields[`level_rule_value_${index}`] = !isFullCount ? level.fullAmount : level.fullCount;
+  //         }
+  //       });
+  //     }
+  //   }
+  //   if (JSON.stringify(resetFields) !== '{}') {
+  //     this.props.form.setFieldsValue(resetFields);
+  //   }
+  //   return true;
+  // }
 
   render() {
-    const { goodsModal, isFullCount, fullGiftLevelList } = this.state;
+    const { goodsModal, isFullCount, fullGiftLevelList } = this.props;
 
     const { form } = this.props;
 
@@ -277,11 +277,11 @@ export default class GiftLevels extends React.Component<any, any> {
               </div>
             );
           })}
-        <Button onClick={this.addLevels} disabled={fullGiftLevelList.length >= 5}>
+        <Button onClick={this.addLevels} disabled={fullGiftLevelList && fullGiftLevelList.length >= 5}>
           Add multi-level promotions
         </Button>
         &nbsp;&nbsp;up to 5 levels can be set
-        {fullGiftLevelList.length > 0 && goodsModal._modalVisible && (
+        {fullGiftLevelList && fullGiftLevelList.length > 0 && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}
             visible={goodsModal._modalVisible}
@@ -301,8 +301,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param goodsInfoId
    */
   deleteRows = (_index, goodsInfoId) => {
-    let { selectedRows, fullGiftLevelList } = this.state;
-    const { onChangeBack } = this.props;
+    let { selectedRows, fullGiftLevelList, onChangeBack } = this.props;
     fullGiftLevelList.forEach((level) => {
       let levelIndex = level.fullGiftDetailList.findIndex((detail) => detail.productId == goodsInfoId);
       if (levelIndex > -1) {
@@ -330,7 +329,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param index
    */
   deleteLevels = (index) => {
-    let { fullGiftLevelList } = this.state;
+    let { fullGiftLevelList, onChangeBack } = this.props;
     //重置表单的值
     this.props.form.setFieldsValue({
       [`level_rule_value_${fullGiftLevelList.length - 1}`]: null
@@ -338,7 +337,6 @@ export default class GiftLevels extends React.Component<any, any> {
     fullGiftLevelList.splice(index, 1);
     this.setState({ fullGiftLevelList: fullGiftLevelList });
     //传递到父页面
-    const { onChangeBack } = this.props;
     onChangeBack(fullGiftLevelList);
   };
 
@@ -346,7 +344,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * 添加多级促销
    */
   addLevels = () => {
-    const { fullGiftLevelList } = this.state;
+    const { fullGiftLevelList, onChangeBack } = this.props;
     if (fullGiftLevelList.length >= 5) return;
     fullGiftLevelList.push({
       key: this.makeRandom(),
@@ -358,7 +356,6 @@ export default class GiftLevels extends React.Component<any, any> {
     this.setState({ fullGiftLevelList: fullGiftLevelList });
 
     //传递到父页面
-    const { onChangeBack } = this.props;
     onChangeBack(fullGiftLevelList);
   };
 
@@ -387,7 +384,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param value
    */
   ruleValueChange = (index, value) => {
-    const { isFullCount } = this.state;
+    const { isFullCount } = this.props;
     this.onChange(index, !isFullCount ? 'fullAmount' : 'fullCount', value);
   };
 
@@ -398,7 +395,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param value
    */
   onChange = (index, props, value) => {
-    const { fullGiftLevelList } = this.state;
+    const { fullGiftLevelList } = this.props;
     fullGiftLevelList[index][props] = value;
     if (props == 'fullAmount') {
       fullGiftLevelList[index]['fullCount'] = null;
@@ -426,7 +423,7 @@ export default class GiftLevels extends React.Component<any, any> {
         return { productId: skuId, productNum: 1 };
       })
     );
-    let rows = (selectedRows.isEmpty() ? Set([]) : selectedRows.toSet()).concat(fromJS(this.state.selectedRows).toSet());
+    let rows = (selectedRows.isEmpty() ? Set([]) : selectedRows.toSet()).concat(fromJS(this.props.selectedRows).toSet());
     this.setState({ goodsModal: { _modalVisible: false }, selectedRows: rows });
   };
 
@@ -437,7 +434,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param count
    */
   giftCountOnChange = (index, detailIndex, count) => {
-    let { fullGiftLevelList } = this.state;
+    let { fullGiftLevelList } = this.props;
     let fullGiftDetailList = fullGiftLevelList[index].fullGiftDetailList;
     fullGiftDetailList[detailIndex]['productNum'] = count;
     this.onChange(index, 'fullGiftDetailList', fullGiftDetailList);
@@ -464,7 +461,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @returns {Array}
    */
   getSelectedRowByIds = (ids) => {
-    const { selectedRows } = this.state;
+    const { selectedRows } = this.props;
     const rows = selectedRows.filter((row) => ids.includes(row.get('goodsInfoId')));
     return rows && !rows.isEmpty() ? rows.toJS() : [];
   };

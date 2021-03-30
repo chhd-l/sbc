@@ -15,7 +15,7 @@ class TagManagementDetail extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Tag management detail',
+      title: <FormattedMessage id="Subscription.TagManagementDetail" />,
       id: this.props.match.params.id,
       pagination: {
         current: 1,
@@ -66,14 +66,14 @@ class TagManagementDetail extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
+          message.error(res.message || <FormattedMessage id="Subscription.OperationFailure" />);
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(err.toString() || <FormattedMessage id="Subscription.OperationFailure" />);
       });
   };
   onSearch = (value) => {
@@ -97,20 +97,20 @@ class TagManagementDetail extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || <FormattedMessage id="Subscription.OperationSuccessful" />);
           this.getIncludePetOwnerList();
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
+          message.error(res.message || <FormattedMessage id="Subscription.OperationFailure" />);
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(err.toString() || <FormattedMessage id="Subscription.OperationFailure" />);
       });
   };
   getIncludePetOwnerList = () => {
@@ -139,19 +139,19 @@ class TagManagementDetail extends Component<any, any> {
             loading: false,
             pagination
           });
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || <FormattedMessage id="Subscription.OperationSuccessful" />);
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
+          message.error(res.message || <FormattedMessage id="Subscription.OperationFailure" />);
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(err.toString() || <FormattedMessage id="Subscription.OperationFailure" />);
       });
   };
 
@@ -170,8 +170,7 @@ class TagManagementDetail extends Component<any, any> {
               <Row style={{ marginBottom: 20 }}>
                 <Col span={20}>
                   <p style={styles.detailDesc}>
-                    Tag description:
-                    <span style={styles.detailValue}>{tagDetail.tagDescription}</span>
+                    <FormattedMessage id="Subscription.TagDescription" />:<span style={styles.detailValue}>{tagDetail.tagDescription}</span>
                   </p>
                 </Col>
                 {/* <Col span={10}>
@@ -182,8 +181,7 @@ class TagManagementDetail extends Component<any, any> {
                 </Col> */}
                 <Col span={10}>
                   <p style={styles.detailDesc}>
-                    Created on:
-                    <span style={styles.detailValue}>{tagDetail.createdTime}</span>
+                    <FormattedMessage id="Subscription.CreatedOn" />:<span style={styles.detailValue}>{tagDetail.createdTime}</span>
                   </p>
                 </Col>
                 {/* <Col span={10}>
@@ -194,15 +192,14 @@ class TagManagementDetail extends Component<any, any> {
                 </Col> */}
                 <Col span={10}>
                   <p style={styles.detailDesc}>
-                    Last Modified:
-                    <span style={styles.detailValue}>{tagDetail.lastModified}</span>
+                    <FormattedMessage id="Subscription.LastModified" />:<span style={styles.detailValue}>{tagDetail.lastModified}</span>
                   </p>
                 </Col>
               </Row>
             </div>
             <div className="container-search">
               <Headline
-                title={'Pet owner list (' + pagination.total + ')'}
+                title={<FormattedMessage id="Subscription.PetOwnerList" /> + pagination.total + ')'}
                 extra={
                   <div>
                     <Search

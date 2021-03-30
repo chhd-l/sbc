@@ -32,7 +32,7 @@ export default class OrderList extends Component<any, any> {
 
   render() {
     return (
-      <AuthWrapper functionName="externalOrderPage">
+      <AuthWrapper functionName="Order">
         <div className="order-con">
           <BreadCrumb />
           {/* <Breadcrumb separator=">">

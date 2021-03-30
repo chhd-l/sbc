@@ -5,10 +5,10 @@ import { Breadcrumb, Alert, Form } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
-import MarketingAddForm from '../common-components/marketing-add-form';
+import FullReductionForm from './components/full_reduction_form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
-const WrappedForm = Form.create()(MarketingAddForm);
+const WrappedForm = Form.create()(FullReductionForm);
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class MarketingFullReductionAdd extends React.Component<any, any> {

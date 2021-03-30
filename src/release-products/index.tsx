@@ -18,12 +18,12 @@ export default class ReleaseProducts extends React.Component<any, any> {
           <Breadcrumb.Item>发布商品</Breadcrumb.Item>
         </Breadcrumb> */}
         <div className="container-search">
-          <Headline title={<FormattedMessage id="product.postGoods" />} />
+          <Headline title={<FormattedMessage id="Product.postGoods" />} />
         </div>
         <div className="container">
           <div className="release-box">
             <h1>
-              <FormattedMessage id="product.chooseAPublishingMethod" />
+              <FormattedMessage id="Product.chooseAPublishingMethod" />
             </h1>
 
             <div className="release-content">
@@ -34,10 +34,10 @@ export default class ReleaseProducts extends React.Component<any, any> {
                       <img src={icon1} alt="" />
                       <div>
                         <h2>
-                          <FormattedMessage id="product.publishDirectly" />
+                          <FormattedMessage id="Product.publishDirectly" />
                         </h2>
                         <p>
-                          <FormattedMessage id="product.publishItemInfo1" />
+                          <FormattedMessage id="Product.publishItemInfo1" />
                         </p>
                       </div>
                     </div>
@@ -51,10 +51,10 @@ export default class ReleaseProducts extends React.Component<any, any> {
                       <img src={icon2} alt="" />
                       <div>
                         <h2>
-                          <FormattedMessage id="product.productTemplateImport" />
+                          <FormattedMessage id="Product.productTemplateImport" />
                         </h2>
                         <p>
-                          <FormattedMessage id="product.publishItemInfo2" />
+                          <FormattedMessage id="Product.publishItemInfo2" />
                         </p>
                       </div>
                     </div>
@@ -68,10 +68,10 @@ export default class ReleaseProducts extends React.Component<any, any> {
                       <img src={icon3} alt="" />
                       <div>
                         <h2>
-                          <FormattedMessage id="product.productPoolImport" />
+                          <FormattedMessage id="Product.productPoolImport" />
                         </h2>
                         <p>
-                          <FormattedMessage id="product.publishItemInfo3" />
+                          <FormattedMessage id="Product.publishItemInfo3" />
                         </p>
                       </div>
                     </div>

@@ -4,7 +4,7 @@ import { Breadcrumb, Alert, Form } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
-import MarketingAddForm from '../common-components/marketing-add-form';
+import FirstDiscountForm from './components/first-discount-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
 
@@ -26,7 +26,7 @@ export default class MarketingFirstOrderAdd extends React.Component<any, any> {
   }
 
   render() {
-    const WrappedForm = Form.create()(MarketingAddForm);
+    const WrappedForm = Form.create()(FirstDiscountForm);
     const state = this.props.location.state;
     const { marketingId } = this.props.match.params;
     const { source } = (state || {}) as any;
@@ -35,11 +35,11 @@ export default class MarketingFirstOrderAdd extends React.Component<any, any> {
       <AuthWrapper functionName="f_marketing_discount_add">
         <div>
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>{marketingId ? 'Edit' : 'Create'} Discount activity</Breadcrumb.Item>
+            <Breadcrumb.Item>{marketingId ? 'Edit' : 'Create'} first order discount</Breadcrumb.Item>
           </BreadCrumb>
 
           <div className="container-search marketing-container">
-            <Headline title={marketingId ? 'Edit discount activity' : 'Create discount activity'} />
+            <Headline title={marketingId ? 'Edit first order discount' : 'Create first order discount'} />
             <Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity;" type="info" showIcon />
 
             <WrappedForm

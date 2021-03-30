@@ -93,7 +93,7 @@ export default class SeoSettingModal extends Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={<FormattedMessage id="seoSetting" />}
+        title={<FormattedMessage id="Product.seoSetting" />}
         visible={seoModalVisible}
         width={920}
         // confirmLoading={true}

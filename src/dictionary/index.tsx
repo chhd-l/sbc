@@ -3,43 +3,43 @@ import { Headline, SelectGroup, BreadCrumb, Const } from 'qmkit';
 import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Spin } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-export default class DitionaryList extends Component<any, any> {
+class DitionaryList extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       columns: [
         {
-          title: 'Name',
+          title: <FormattedMessage id="Setting.Name" />,
           dataIndex: 'name',
           key: 'name'
         },
         {
-          title: 'Type',
+          title: <FormattedMessage id="Setting.Type" />,
           dataIndex: 'type',
           key: 'type'
         },
         {
-          title: 'Value',
+          title: <FormattedMessage id="Setting.Value" />,
           dataIndex: 'valueEn',
           key: 'value'
         },
         {
-          title: 'Description',
+          title: <FormattedMessage id="Setting.Description" />,
           dataIndex: 'description',
           key: 'description'
         },
         {
-          title: 'Priority',
+          title: <FormattedMessage id="Setting.Priority" />,
           dataIndex: 'priority',
           key: 'priority'
         },
         {
-          title: 'Operation',
+          title: <FormattedMessage id="Setting.Priority" />,
           dataIndex: 'operation',
           key: 'operation',
           render: (text, record) => (
@@ -50,7 +50,7 @@ export default class DitionaryList extends Component<any, any> {
 
               <Divider type="vertical" />
 
-              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteDictionary(record.id)} okText="Confirm" cancelText="Cancel">
+              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteDictionary(record.id)} okText={this.props.intl.formatMessage({ id: 'Setting.Confirm' })} cancelText={this.props.intl.formatMessage({ id: 'Setting.Cancel' })}>
                 <Tooltip placement="top" title="Delete">
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
@@ -77,6 +77,9 @@ export default class DitionaryList extends Component<any, any> {
     this.queryClinicsDictionary();
     this.getDictionary();
   }
+  props: {
+    intl: any;
+  };
   getDictionary = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     const query = this.state.searchForm;
     this.setState({
@@ -154,14 +157,14 @@ export default class DitionaryList extends Component<any, any> {
                     value
                   });
                 }}
-                placeholder="Please input name or discription"
+                placeholder={this.props.intl.formatMessage({ id: 'Setting.Pleaseinputnameordiscription' })}
                 style={{ width: 300 }}
               />
             </FormItem>
             <FormItem>
               <SelectGroup
                 defaultValue="All"
-                label="Type"
+                label={this.props.intl.formatMessage({ id: 'Setting.Type' })}
                 showSearch
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -172,7 +175,7 @@ export default class DitionaryList extends Component<any, any> {
                 }}
                 style={{ width: 300 }}
               >
-                <Option value="">All</Option>
+                <Option value="">{this.props.intl.formatMessage({ id: 'Setting.All' })}</Option>
                 {dictionaryTypes.map((item) => (
                   <Option value={item} key={item}>
                     {item}
@@ -192,13 +195,16 @@ export default class DitionaryList extends Component<any, any> {
                 }}
               >
                 <span>
-                  <FormattedMessage id="search" />
+                  <FormattedMessage id="Setting.search" />
                 </span>
               </Button>
             </Form.Item>
           </Form>
           <Button type="primary" htmlType="submit" style={{ marginBottom: '10px' }}>
-            <Link to="/dictionary-add">Add</Link>
+            <Link to="/dictionary-add">
+              {' '}
+              <FormattedMessage id="Setting.Add" />
+            </Link>
           </Button>
         </div>
         <div className="container">
@@ -210,3 +216,4 @@ export default class DitionaryList extends Component<any, any> {
     );
   }
 }
+export default injectIntl(DitionaryList);

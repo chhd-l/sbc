@@ -26,15 +26,11 @@ export default class Tab extends React.Component<any, any> {
   render() {
     const { addedFlag, onStateTabChange } = this.props.relaxProps;
     return (
-      <Tabs
-        defaultActiveKey={addedFlag}
-        tabBarExtraContent={<Tool></Tool>}
-        onChange={(key) => onStateTabChange(key)}
-      >
-        <TabPane tab={<FormattedMessage id="all" />} key="-1">
+      <Tabs defaultActiveKey={addedFlag} tabBarExtraContent={<Tool></Tool>} onChange={(key) => onStateTabChange(key)}>
+        <TabPane tab={<FormattedMessage id="Product.all" />} key="-1">
           <GoodsList />
         </TabPane>
-        <TabPane tab={<FormattedMessage id="product.onShelves" />} key="1">
+        <TabPane tab={<FormattedMessage id="Product.onShelves" />} key="1">
           <GoodsList />
         </TabPane>
         {/* <TabPane
@@ -43,7 +39,7 @@ export default class Tab extends React.Component<any, any> {
         >
           <GoodsList />
         </TabPane> */}
-        <TabPane tab={<FormattedMessage id="product.offShelves" />} key="0">
+        <TabPane tab={<FormattedMessage id="Product.offShelves" />} key="0">
           <GoodsList />
         </TabPane>
       </Tabs>

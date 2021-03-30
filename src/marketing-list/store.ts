@@ -83,6 +83,7 @@ export default class AppStore extends Store {
   };
 
   onDelete = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await webapi.deleteMarketing(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
@@ -95,18 +96,22 @@ export default class AppStore extends Store {
   };
 
   onPause = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await webapi.pause(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
     }
+    this.dispatch('loading:end');
     this.init();
   };
 
   close = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await webapi.close(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       message.success('close successful');
     }
+    this.dispatch('loading:end');
     this.init();
   };
 
@@ -119,9 +124,11 @@ export default class AppStore extends Store {
   };
   onStart = async (marketingId) => {
     const { res } = await webapi.start(marketingId);
+    this.dispatch('loading:start');
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
     }
+    this.dispatch('loading:end');
     this.init();
   };
 }

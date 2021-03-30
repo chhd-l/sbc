@@ -19,13 +19,13 @@ export function querySysDictionary(filterParams = {}) {
   });
 }
 
-export function getOrderConfig(filterParams = {}) {
+export function getOrderSettingConfig(filterParams = {}) {
   return Fetch<TResult>('/orderConfig/query', {
     method: 'GET'
   });
 }
 
-export function updateOrderConfig(filterParams = {}) {
+export function updateOrderSettingConfig(filterParams = {}) {
   return Fetch<TResult>('/orderConfig', {
     method: 'PUT',
     body: JSON.stringify({

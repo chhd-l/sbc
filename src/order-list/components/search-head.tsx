@@ -733,8 +733,8 @@ class SearchHead extends Component<any, any> {
 
   _renderCodeSelect = () => {
     const codeTypeList = [
-      { value: 'promotionCode', name: <FormattedMessage id="Order.promotionCode" /> },
-      { value: 'couponCode', name: <FormattedMessage id="Order.couponCode" /> }
+      { value: 'promotionCode', name: this.props.intl.formatMessage({id:'Order.promotionCode'}) },
+      { value: 'couponCode', name: this.props.intl.formatMessage({id:'Order.couponCode'}) }
     ];
     return (
       <Select

@@ -344,8 +344,11 @@ class SkuForm extends React.Component<any, any> {
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
         if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
           marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
-          subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
+          subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
         }
+        console.log(addSkUProduct[0],11111111);
+        console.log(marketPrice,2222222);
+        console.log(rowInfo.marketPrice,33333);
        /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
         //console.log(marketPrice,2222222);
         console.log(rowInfo.marketPrice,33333);
@@ -413,7 +416,7 @@ class SkuForm extends React.Component<any, any> {
                         max={9999999.99}
                         //precision={marketPriceNum}
                         style={{ width: '111px' }}
-                        disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                        //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                         formatter={limitDecimals}
                         parser={limitDecimals}
                         step={0.01}
@@ -452,7 +455,7 @@ class SkuForm extends React.Component<any, any> {
                           max={9999999.99}
                           //precision={4}
                           style={{ width: '111px' }}
-                          disabled={rowInfo.subscriptionStatus === 0}
+                          //disabled={rowInfo.subscriptionStatus === 0}
                           formatter={limitDecimals}
                           parser={limitDecimals}
                           step={0.01}
@@ -498,7 +501,7 @@ class SkuForm extends React.Component<any, any> {
                       formatter={limitDecimals}
                       parser={limitDecimals}
                       step={0.01}
-                      disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                      //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                     />
                     // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                   )}

@@ -53,7 +53,6 @@ class UserList extends Component<any, any> {
       .fetchAllRoles()
       .then((data) => {
         const res = data.res;
-        debugger;
         if (res.code === Const.SUCCESS_CODE) {
           let allRoles = res.context ? res.context.map((x) => x.roleName) : [];
           this.setState({

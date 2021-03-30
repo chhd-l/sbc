@@ -383,7 +383,7 @@ class GoodsForm extends React.Component<any, any> {
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'addedFlag'),
-                initialValue: goods.get('addedFlag')
+                initialValue: goods.get('addedFlag') != 0? 1:0
               })(
                 <RadioGroup>
                   <Radio value={1}>
@@ -426,7 +426,7 @@ class GoodsForm extends React.Component<any, any> {
                 // initialValue: 'Y'
                 initialValue: goods.get('promotions')
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type">
+                <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={Number(goods.get('subscriptionStatus')) === 0} >
                   <Option value='autoship'>Auto ship</Option>
                   <Option value='club'>Club</Option>
                 </Select>

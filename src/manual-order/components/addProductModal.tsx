@@ -169,7 +169,6 @@ export default class AddProductModal extends Component {
             max=total-overCount
           }
           record.overCount=overCount
-          // debugger
           return (
             <InputNumber
               min={0}

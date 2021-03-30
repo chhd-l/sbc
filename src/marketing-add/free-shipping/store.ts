@@ -31,7 +31,6 @@ export default class AppStore extends Store {
           shippingItemValue: res.context.marketingFreeShippingLevel.fullCount ? res.context.marketingFreeShippingLevel.fullCount : null
         };
       }
-      console.log({ ...res.context, ...shipping }, '----初始化');
       this.dispatch('marketing:shippingBean', fromJS({ ...res.context, ...shipping }));
       this.dispatch('loading:end');
     } else if (res.code == 'K-080016') {
@@ -66,7 +65,6 @@ export default class AppStore extends Store {
    */
   submitFreeShipping = async (shippingBean) => {
     const params = this.toParams(shippingBean);
-    console.log(params, 'params---------------');
     this.dispatch('loading:start');
     if (params.marketingId) {
       const { res } = await webapi.updateFreeShipping(params);

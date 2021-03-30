@@ -1023,6 +1023,7 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
+        debugger
         if (!(item.get('stock') || item.get('stock') == 0) && a == undefined) {
           flag = 1
           valid = false;

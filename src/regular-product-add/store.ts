@@ -1141,7 +1141,7 @@ export default class AppStore extends Store {
         }
       });
     }
-    if (flag = 1) {
+    if (flag === 1) {
       message.error('Please input Inventory');
     }
     return valid;

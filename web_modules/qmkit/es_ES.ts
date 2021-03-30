@@ -1938,13 +1938,24 @@ export default {
   'Marketing.Valid':'Valid',
   /* -------- 已翻译 V1.0---------------*/
 
-
-
-
-
   'Marketing.DiscountType': 'Discount type',
-  'Marketing.fullType': 'full {type} Url',
-
+  'Marketing.Forthefirstsubscription': 'For the first subscription order,discount',
+  'Marketing.Fortherestsubscription': 'For the rest subscription order,discount',
+  'Marketing.discount':'discount',
+  'Marketing.fulldiscounttype': 'full discount type',
+  'Marketing.Attribute': 'Attribute',
+  'Marketing.Pleaseselectcategory': 'Please select category',
+  'Marketing.Nosalescategory': 'No sales category',
+  'Marketing.Pleaseselectattribute': 'Please select attribute',
+  'Marketing.Noattribute': 'No attribute',
+  'Marketing.Selectgroup': 'Select group',
+  'Marketing.Byemail': 'By email',
+  'Marketing.Pleaseselectgroup': 'Please select group.',
+  'Marketing.Pleaseenteremailsuffix.': 'Please enter email suffix.',
+  'Marketing.Addmulti-levelpromotions': 'Add multi-level promotions',
+  'Marketing.upto5levels': 'up to 5 levels can be set',
+  'Marketing.0-99999999.99': '0-99999999.99',
+  'Marketing.1-9999': '1-9999',
 
   /*-----------------------------  Prescriber  ----------------------------------------*/
   'Prescriber.Add':'Add',

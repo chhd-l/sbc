@@ -93,11 +93,13 @@ export default class CateList extends React.Component<any, any> {
           }}
         /> */}
         <Column
+          width={150}
           title={
             <span>
-              <FormattedMessage id="Product.marketPrice" />
-              <br />
-              <FormattedMessage id="Product.priceSettingMethod" />
+              <FormattedMessage id="product.marketPrice" />
+              
+              <FormattedMessage id="priceSettingMethod" />
+
             </span>
           }
           key="marketPrice"

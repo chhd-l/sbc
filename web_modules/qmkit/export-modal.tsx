@@ -136,7 +136,7 @@ class ExportForm extends React.Component<any, any> {
           </FormItem>
 
         </Form>
-        <p style={{ color: '#e2001a', lineHeight: 0.5 }}>Reminder: up to 100 orders</p>
+        <p style={{ color: '#e2001a', lineHeight: 0.5 }}>Reminder: up to 100 records</p>
       </div>
 
     );

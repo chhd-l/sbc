@@ -2,8 +2,7 @@ import { IOptions, Store } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List, Map, OrderedMap } from 'immutable';
 import { message } from 'antd';
-import { Const, history, util, cache } from 'qmkit';
-
+import { Const, history, util, cache, ValidConst } from 'qmkit';
 import GoodsActor from './actor/goods-actor';
 import ImageActor from './actor/image-actor';
 import SpecActor from './actor/spec-actor';
@@ -104,9 +103,16 @@ export default class AppStore extends Store {
 
           this.dispatch('goodsActor:purchaseTypeList', (results[0].res as any).context.purchase_type.sysDictionaryPage.content);
           this.dispatch('goodsActor:frequencyList', {
-            dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
-            weekList: (results[0].res as any).context.frequency_week ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content : [],
-            monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : []
+            autoShip: {
+              dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
+              weekList: (results[0].res as any).context.frequency_week ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content : [],
+              monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : [],
+            },
+            club: {
+              dayClubList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
+              weekClubList: (results[0].res as any).context.frequency_week_club ? (results[0].res as any).context.frequency_week_club.sysDictionaryPage.content : [],
+              monthClubList: (results[0].res as any).context.frequency_month_club ? (results[0].res as any).context.frequency_month_club.sysDictionaryPage.content : []
+            }
           });
 
           this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods ? (results[0].res as any).context.goodsRelation.relationGoods : []));
@@ -348,7 +354,6 @@ export default class AppStore extends Store {
 
     if (tmpContext && tmpContext.goodsInfos && tmpContext.goodsInfos.length > 0) {
       let addSkUProduct = tmpContext.goodsInfos.map((item) => {
-        console.log(item,333333333);
 
         return {
           pid: item.goodsInfoNo,
@@ -624,7 +629,6 @@ export default class AppStore extends Store {
    * 修改商品基本信息
    */
   editGoods = async (goods: IMap) => {
-    console.log(goods.toJS(),3333333333);
     if (goods.get('saleType') !== undefined && goods.get('saleType') === 1 && this.state().getIn(['goods', 'priceType']) === 1) {
       this.editPriceSetting('priceOpt', 2);
     }
@@ -905,6 +909,13 @@ export default class AppStore extends Store {
         });
     }
 
+    let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
+    if ( this.state().get('goodsList').toJS().length === a.toJS().length ) {
+      message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
+      valid = false;
+      return;
+    }
+
     return valid;
   }
 
@@ -960,18 +971,22 @@ export default class AppStore extends Store {
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
-        console.log(item.get('subscriptionPrice'),111111111111);
-        console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
-        console.log(item,3333333);
+        //console.log(item.get('subscriptionPrice'),111111111111);
+        //console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
+        //console.log(item.toJS(),3333333);
         if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           tip = 1;
           valid = false;
           return;
         }
-        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionPrice') == 0) {
-          tip = 4;
-          valid = false;
-          return;
+        if (this.state().get('goods').get('subscriptionStatus') == 1 ) {
+          if(item.get('subscriptionStatus') == 1) {
+            if( item.get('subscriptionPrice') == 0) {
+              tip = 4;
+              valid = false;
+              return;
+            }
+          }
         }
         if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
           tip = 2;
@@ -1002,19 +1017,27 @@ export default class AppStore extends Store {
   }
   _validInventoryFormsNew() {
     let valid = true;
+    let flag = 0
     let goodsList = this.state().get('goodsList');
     let addSkUProduct = this.state().get('addSkUProduct');
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
         if (!(item.get('stock') || item.get('stock') == 0) && a == undefined) {
+          flag = 1
+          valid = false;
+          return;
+        } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
+          flag = 2
           valid = false;
           return;
         }
       });
     }
-    if (!valid) {
+    if (flag === 1) {
       message.error('Please input Inventory');
+    } else if(flag === 2){
+      console.log('Please enter the correct value');
     }
     return valid;
   }
@@ -1224,7 +1247,7 @@ export default class AppStore extends Store {
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
           externalSku: item.get('externalSku'),
-          stock: item.get('stock') || c,
+          stock: item.get('stock') || item.get('stock') === 0 ? item.get('stock')  : c,
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
           mockSpecDetailIds,

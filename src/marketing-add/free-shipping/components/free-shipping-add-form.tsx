@@ -167,8 +167,6 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     const { form } = this.props; //marketingType, marketingId,
     const { getFieldDecorator } = this.props.form;
     const { allGroups, marketingBean, loading } = this.props.relaxProps;
-    console.log(marketingBean.toJS(), 'marketingBean---------');
-    console.log(allGroups.toJS(), 'allGroups---------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <div className="bold-title">Basic Setting</div>

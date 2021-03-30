@@ -15,7 +15,6 @@ const limitDecimals = (value: string | number): string => {
 
   const reg = /^(\-)*(\d+)\.(\d\d\d\d).*$/;
   if(typeof value === 'string') {
-    console.log(value,111111111);
     if (!isNaN(Number(value))) {
       //value = Number(value).toFixed(2)
       return value.replace(reg, '$1$2.$3')
@@ -34,7 +33,6 @@ const limitDecimals = (value: string | number): string => {
       return a
     }*/
   } else if (typeof value === 'number') {
-    console.log(value,222222222);
     let a = !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
     return !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
    /* if (parseInt(a) === parseFloat(a))
@@ -434,16 +432,6 @@ class SkuForm extends React.Component<any, any> {
                           {
                             pattern: ValidConst.zeroPrice,
                             message: 'Please input the legal amount with two decimal places'
-                          },
-                          {
-                            validator: (_rule, value, callback) => {
-                              if (rowInfo.subscriptionStatus === 1) {
-                                if (value === 0) {
-                                  callback('Subscription price cannot be zero');
-                                }
-                              }
-                              callback();
-                            }
                           },
                           {
                             type: 'number',

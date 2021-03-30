@@ -81,7 +81,7 @@ export default class Info extends React.Component<any, any> {
       productFilter: IList;
       sourceGoodCateList: IList;
       purchaseTypeList: IList;
-      frequencyList: IList;
+      frequencyList: any;
       changeDescriptionTab: Function;
     };
   };
@@ -285,6 +285,16 @@ class GoodsForm extends React.Component<any, any> {
       });
     }
 
+    let getFrequencyList = []
+    if (frequencyList && frequencyList.autoShip) {
+      if (goods.get('promotions') == "autoship") {
+        getFrequencyList = [...frequencyList.autoShip.dayList, ...frequencyList.autoShip.weekList, ...frequencyList.autoShip.monthList]
+      }else if (goods.get('promotions') == "club"){
+        getFrequencyList = [...frequencyList.club.dayClubList, ...frequencyList.club.weekClubList, ...frequencyList.club.monthClubList]
+      }
+    }
+
+
     return (
       <Form>
         <Row type="flex" justify="start">
@@ -411,29 +421,17 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Product tagging">
-              {getFieldDecorator('tagging', {
-                rules: [
-                  {
-                    required: false,
-                    message: 'Please select product tagging'
-                  }
-                ],
-                initialValue: taggingRelListValues
+            <FormItem {...formItemLayout} label="Subscription type">
+              {getFieldDecorator('promotions', {
+                rules: [],
+                onChange: this._editGoods.bind(this, 'promotions'),
+                // initialValue: 'Y'
+                initialValue: goods.get('promotions')
               })(
-                <TreeSelect
-                  getPopupContainer={() => document.getElementById('page-content')}
-                  treeCheckable={true}
-                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                  treeCheckStrictly={true}
-                  placeholder="Please select product tagging"
-                  notFoundContent="No classification"
-                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  showSearch={false}
-                  onChange={this.taggingChange}
-                >
-                  {this.loopTagging(taggingTotal)}
-                </TreeSelect>
+                <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type">
+                  <Option value='autoship'>Auto ship</Option>
+                  <Option value='club'>Club</Option>
+                </Select>
               )}
             </FormItem>
           </Col>
@@ -441,50 +439,46 @@ class GoodsForm extends React.Component<any, any> {
 
         {/*修改*/}
         <Row type="flex" justify="start">
-          {purchaseTypeList && purchaseTypeList.length > 0 ? (
-            <Col span={8}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
-                {getFieldDecorator('defaultPurchaseType', {
-                  rules: [],
-                  onChange: this._editGoods.bind(this, 'defaultPurchaseType'),
-                  // initialValue: 'Y'
-                  initialValue: goods.get('defaultPurchaseType')
-                })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultPurchaseType')} placeholder="please select Default purchase type" disabled={Number(goods.get('subscriptionStatus')) === 0}>
-                    {purchaseTypeList.map((option) => (
-                      <Option value={option.id} key={option.id}>
-                        {option.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-          ) : null}
-          {frequencyList && frequencyList.length > 0 ? (
-            <Col span={8}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
-                {getFieldDecorator('defaultFrequencyId', {
-                  // rules: [
-                  //   {
-                  //     required: false,
-                  //     message: 'Please select product tagging'
-                  //   }
-                  // ],
-                  initialValue: goods.get('defaultFrequencyId'),
-                  onChange: this._editGoods.bind(this, 'defaultFrequencyId')
-                })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder="please select Default frequency" disabled={Number(goods.get('subscriptionStatus')) === 0}>
-                    {frequencyList.map((option) => (
-                      <Option value={option.id} key={option.id}>
-                        {option.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-          ) : null}
+          <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
+              {getFieldDecorator('defaultPurchaseType', {
+                rules: [],
+                onChange: this._editGoods.bind(this, 'defaultPurchaseType'),
+                // initialValue: 'Y'
+                initialValue: goods.get('defaultPurchaseType')
+              })(
+                <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultPurchaseType')} placeholder="please select Default purchase type" disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                  {purchaseTypeList&&purchaseTypeList.map((option) => (
+                    <Option value={option.id} key={option.id}>
+                      {option.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
+              {getFieldDecorator('defaultFrequencyId', {
+                // rules: [
+                //   {
+                //     required: false,
+                //     message: 'Please select product tagging'
+                //   }
+                // ],
+                initialValue: goods.get('defaultFrequencyId'),
+                onChange: this._editGoods.bind(this, 'defaultFrequencyId')
+              })(
+                <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder="please select Default frequency" disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                  {getFrequencyList&&getFrequencyList.map((option) => (
+                    <Option value={option.id} key={option.id}>
+                      {option.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
@@ -590,6 +584,33 @@ class GoodsForm extends React.Component<any, any> {
                       onChange: this._editGoods.bind(this, 'brandId')
                     }
               )(this._getBrandSelect())}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem {...formItemLayout} label="Product tagging">
+              {getFieldDecorator('tagging', {
+                rules: [
+                  {
+                    required: false,
+                    message: 'Please select product tagging'
+                  }
+                ],
+                initialValue: taggingRelListValues
+              })(
+                <TreeSelect
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  placeholder="Please select product tagging"
+                  notFoundContent="No classification"
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  showSearch={false}
+                  onChange={this.taggingChange}
+                >
+                  {this.loopTagging(taggingTotal)}
+                </TreeSelect>
+              )}
             </FormItem>
           </Col>
           {/*<Col span={8}>

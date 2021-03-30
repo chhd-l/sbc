@@ -45,7 +45,6 @@ export default class SelectedProduct extends React.Component<any, any> {
    */
   async onSelectChange(e, index, row, name) {
     const { customer } = this.props;
-    console.log(row)
     const {options}=this.state
     if (name === 'subscriptionStatus' && e === 0) {
       row['periodTypeId'] = null;
@@ -221,7 +220,6 @@ export default class SelectedProduct extends React.Component<any, any> {
           1:(record.subscriptionPrice*record.buyCount).toFixed(2),
           0:(record.marketPrice*record.buyCount).toFixed(2)
           }
-          console.log(price)
           return (<span>{price[record.subscriptionStatus]}</span>)
         }
         

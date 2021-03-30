@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { fromJS, List, Map } from 'immutable';
-
+import { FormattedMessage } from 'react-intl';
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
 import moment from 'moment';
@@ -378,35 +378,28 @@ export default class FullDiscountForm extends React.Component<any, any> {
     console.log(marketingBean.toJS(), 'marketingBean-----------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionType"/>} labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
               <Radio value={0}>Normal promotion</Radio>
               <Radio value={1}>Subscription promotion</Radio>
             </Radio.Group>
-            {/*{marketingBean.get('promotionType') === 1 ? (*/}
-            {/*  <Checkbox onChange={(e) => this.onBeanChange({*/}
-            {/*    isClub: e.target.checked*/}
-            {/*  })} checked={marketingBean.get('isClub')}>*/}
-            {/*    Club*/}
-            {/*  </Checkbox>*/}
-            {/*) : null}*/}
           </div>
         </FormItem>
-        <div className="bold-title">Basic Setting</div>
-        <FormItem {...smallformItemLayout} label="Promotion Code" labelAlign="left">
+        <div className="bold-title"><FormattedMessage id="basicSetting" /></div>
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionCode" />} labelAlign="left">
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode(),
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please input promotion code'
+                message: <FormattedMessage id="Marketing.PleaseInputPromotionCode"/>
               },
-              { min: 1, max: 20, message: '1-20 words' },
+              { min: 1, max: 20, message: <FormattedMessage id="Marketing.words" /> },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, 'Promotion code');
+                  QMMethod.validatorEmoji(rule, value, callback, <FormattedMessage id="Marketing.PromotionCode" />);
                 }
               }
             ]
@@ -455,19 +448,19 @@ export default class FullDiscountForm extends React.Component<any, any> {
             initialValue: marketingBean.get('marketingName')
           })(<Input placeholder="Please input promotion name ,no  more than 40 words." style={{ width: 360 }} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Start and end time" labelAlign="left">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />} label="Start and end time" labelAlign="left">
           {getFieldDecorator('time', {
             rules: [
               {
                 required: true,
-                message: 'Please select Starting and end time'
+                message: <FormattedMessage id="Marketing.PleaseSelectStartingAndEndTime" />
               },
               {
                 validator: (_rule, value, callback) => {
                   if (value[0]) {
                     callback();
                   } else {
-                    callback('Please select Starting and end time');
+                    callback(<FormattedMessage id="Marketing.PleaseSelectStartingAndEndTime" /> );
                   }
                 }
               }
@@ -496,7 +489,7 @@ export default class FullDiscountForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        <div className="bold-title">Discount type:</div>
+        <div className="bold-title"><FormattedMessage id="Marketing.DiscountType" />:</div>
         {marketingBean.get('promotionType') === 0 && (
           <FormItem {...formItemLayout} labelAlign="left">
             {getFieldDecorator('subType', {
@@ -513,10 +506,10 @@ export default class FullDiscountForm extends React.Component<any, any> {
                 {/*  Direct discount*/}
                 {/*</Radio>*/}
                 <Radio value={2} style={radioStyle}>
-                  Full amount discount
+                  <FormattedMessage id="Marketing.FullAmountDiscount" />
                 </Radio>
                 <Radio value={3} style={radioStyle}>
-                  Full quantity discount{' '}
+                  <FormattedMessage id="Marketing.FullQuantityDiscount" />{' '}
                 </Radio>
               </RadioGroup>
             )}
@@ -573,7 +566,7 @@ export default class FullDiscountForm extends React.Component<any, any> {
         </FormItem>
 
         {marketingBean.get('promotionType') == 1 && (
-          <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
+          <FormItem {...settingRuleFrom} label={<FormattedMessage id="Marketing.PromotionCode" />} label={settingLabel1} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
             <div style={{ display: 'flex' }}>
               <FormItem>
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
@@ -608,7 +601,7 @@ export default class FullDiscountForm extends React.Component<any, any> {
           </FormItem>
         )}
 
-        <div className="bold-title">Select products:</div>
+        <div className="bold-title">label={<FormattedMessage id="Marketing.PromotionCode" />} Select products:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
           {getFieldDecorator('scopeType', {
             initialValue: marketingBean.get('scopeType') ? marketingBean.get('scopeType') : 0

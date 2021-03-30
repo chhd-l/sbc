@@ -1698,12 +1698,12 @@ export default {
 
 
   /*-----------------------------  Marketing  ----------------------------------------*/
-  'Marketing.PromotionType':'Promotion type:',
+  'Marketing.PromotionType':'Promotion type',
   'Marketing.NormalPromotion':'Normal promotion',
   'Marketing.SubscriptionPromotion':'Subscription promotion',
   'Marketing.PromotionCode':'Promotion Code',
   'Marketing.PleaseInputPromotionCode':'Please input promotion code',
-  'Marketing.words':'4-20 words',
+  'Marketing.words':'1-20 words',
   'Marketing.PromotionName':'Promotion Name',
   'Marketing.PleaseInputPromotionName':'Please input Promotion Name',
   'Marketing.40Words':'1-40 words',
@@ -1939,6 +1939,11 @@ export default {
   /* -------- 已翻译 V1.0---------------*/
 
 
+
+
+
+  'Marketing.DiscountType': 'Discount type',
+  'Marketing.fullType': 'full {type} Url',
 
 
   /*-----------------------------  Prescriber  ----------------------------------------*/

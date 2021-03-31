@@ -217,20 +217,25 @@ class CateList extends React.Component<any, any> {
 
   _confirm = (storeCateId: string) => {
     const { doDelete, childFlag, goodsFlag } = this.props.relaxProps;
-
+    let okText = this.props.intl.formatMessage({id:'Product.OK'});
+    let title = this.props.intl.formatMessage({id:'Product.Prompt'});
+    
+debugger
     if (goodsFlag) {
+      let content = this.props.intl.formatMessage({id:'Product.TheCurrentCategory'});
       //该分类下有商品
       Modal.info({
-        title: <FormattedMessage id="Product.Prompt" />,
-        content: <FormattedMessage id="Product.TheCurrentCategory" />,
-        okText: this.props.intl.formatMessage({id:'Product.OK'})
+        title:title ,
+        content: content,
+        okText: okText
       });
     } else if (childFlag) {
+      let content = this.props.intl.formatMessage({id:'Product.PleaseDelete'});
       //有子分类
       Modal.info({
-        title: <FormattedMessage id="Product.Prompt" />,
-        content: <FormattedMessage id="Product.PleaseDelete" />,
-        okText: this.props.intl.formatMessage({id:'Product.OK'})
+        title: title ,
+        content:content ,
+        okText: okText
       });
       // confirm({
       //   title: 'Prompt',
@@ -240,10 +245,11 @@ class CateList extends React.Component<any, any> {
       //   }
       // });
     } else {
+      let content = this.props.intl.formatMessage({id:'Product.deleteThisCategory'});
       //没有子分类
       confirm({
-        title: <FormattedMessage id="Product.Prompt" />,
-        content: <FormattedMessage id="Product.deleteThisCategory" />,
+        title: title,
+        content: content,
         onOk() {
           doDelete(storeCateId);
         }

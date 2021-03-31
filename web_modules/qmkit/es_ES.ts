@@ -165,13 +165,7 @@ export default {
   'Menu.Member companies':'Member companies',
   'Menu.NPS list':'NPS list',
   'Menu.Shipping Fee':'Shipping Fee',
-
   'Menu.NPS':'NPS',
-  'Menu.NPS list':'NPS list',
-  'Menu.Shipping Fee':'Shipping Fee',
-  'Menu.Points order':'Points order',
-  'Menu.prescriber recommendation':'prescriber recommendation',
-  'Menu.Member companies':'Member companies',
 
 
 

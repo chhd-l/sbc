@@ -1,8 +1,10 @@
 import React from 'react';
 import { Row, Col } from 'antd';
+import { Const } from 'qmkit';
 import Order from './components/order';
 import Board from './components/board';
 import ScanedInfo from './components/scaned-info';
+import * as webapi from './webapi';
 import './style.less';
 
 export default class Checkout extends React.Component<any, any> {
@@ -12,8 +14,23 @@ export default class Checkout extends React.Component<any, any> {
       selected: false,
       memberType: 'Guest',
       memberInfo: {},
-      scanedInfoVisible: false
+      scanedInfoVisible: false,
+      products: []
     };
+  }
+
+  componentDidMount() {
+    this.getAllProducts();
+  }
+
+  getAllProducts = () => {
+    webapi.getProductList().then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          products: data.res.context.goodsInfoList || []
+        });
+      }
+    });
   }
 
   onSelect = (memberInfo: any = {}, memberType: 'Member' | 'Guest' = 'Guest') => {

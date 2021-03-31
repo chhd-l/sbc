@@ -2670,6 +2670,7 @@ export default {
   'Setting.SiteSEO': 'Site SEO',
   'Setting.PageSEO': 'Page SEO',
   /* -------- 已翻译 V1.0---------------*/
+  'Setting.export':'Export',
 
 
 

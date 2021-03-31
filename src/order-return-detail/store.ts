@@ -3,22 +3,23 @@ import { fromJS } from 'immutable';
 import { message } from 'antd';
 import DetailActor from './actor/detail-actor';
 import RefundRecordActor from './actor/refund-record-actor';
+import LoadingActor from './actor/loading-actor';
 import * as webapi from './webapi';
 import { Const } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [new DetailActor(), new RefundRecordActor()];
+    return [new DetailActor(), new RefundRecordActor(),new LoadingActor()];
   }
 
   constructor(props) {
     super(props);
-    //debug
     (window as any)._store = this;
   }
 
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
   init = async (rid: string) => {
+    this.dispatch('loading:start');
     const res = await webapi.fetchReturnDetail(rid);
     if (fromJS(res.res).get('code') == Const.SUCCESS_CODE) {
       this.dispatch('order-return-detail:init', fromJS(res.res).get('context'));
@@ -36,7 +37,8 @@ export default class AppStore extends Store {
           this.dispatch('order-return-detail:rejectReason', result.getIn(['context', 'refuseReason']) || '');
         });
       }
-      this.fetchRefundOrder();
+      this.dispatch('loading:end');
+      // this.fetchRefundOrder();
     }
   };
 
@@ -81,50 +83,71 @@ export default class AppStore extends Store {
   };
 
   onAudit = (rid: string) => {
+    this.dispatch('loading:start');
     return webapi
       .audit(rid)
-      .then(() => {
-        this.init(rid);
+      .then((data) => {
+        const {res} = data
+        if(res.code === Const.SUCCESS_CODE){
+          this.init(rid);
+        }
+        this.dispatch('loading:end');
+        
       })
       .catch(() => {});
   };
 
   onReject = (rid: string, reason: string) => {
+    this.dispatch('loading:start');
     return webapi
       .reject(rid, reason)
       .then(() => {
         this.init(rid);
       })
-      .catch(() => {});
+      .catch(() => {
+        this.dispatch('loading:end');
+      });
   };
 
   onDeliver = (rid: string, values) => {
+    this.dispatch('loading:start');
     return webapi
       .deliver(rid, values)
       .then(() => {
         this.init(rid);
       })
-      .catch(() => {});
+      .catch(() => {
+        this.dispatch('loading:end');
+      });
   };
 
   onReceive = (rid: string) => {
+    this.dispatch('loading:start');
     return webapi
       .receive(rid)
       .then(() => {
         this.init(rid);
       })
-      .catch(() => {});
+      .catch(() => {
+        this.dispatch('loading:end');
+      });
   };
 
   onRejectReceive = (rid: string, reason: string) => {
+    this.dispatch('loading:start');
     return webapi.rejectReceive(rid, reason).then(() => {
       this.init(rid);
+    }).catch(()=>{
+      this.dispatch('loading:end');
     });
   };
 
   onRejectRefund = (rid: string, reason: string) => {
+    this.dispatch('loading:start');
     return webapi.rejectRefund(rid, reason).then(() => {
       this.init(rid);
+    }).catch(()=>{
+      this.dispatch('loading:end');
     });
   };
 
@@ -183,4 +206,32 @@ export default class AppStore extends Store {
   checkRefundStatus = async (rid: string) => {
     return await webapi.checkRefundStatus(rid);
   };
+
+  onRealRefund = (rid: string,applyPrice) => {
+    this.dispatch('loading:start');
+    let refundPrice = this.state().get('refundPrice') || this.state().get('refundPrice').refundPrice ===0?this.state().get('refundPrice').refundPrice:applyPrice
+    return webapi
+      .realRefund(rid,refundPrice)
+      .then(({ res }) => {
+        if (res.code == Const.SUCCESS_CODE) {
+          message.success('Operate successfully');
+          this.dispatch('change-refund-price', {
+            refundPrice:null
+          });
+          this.init(rid);
+        }
+      })
+      .catch(() => {
+        this.dispatch('loading:end');
+        this.dispatch('change-refund-price', {
+          refundPrice:null
+        });
+      });
+  };
+
+  changeRefundPrice=(refundPrice:number)=>{
+    this.dispatch('change-refund-price', {
+      refundPrice
+    });
+  }
 }

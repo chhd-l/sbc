@@ -24,7 +24,8 @@ export default class ListActor extends Actor {
       //在线退款状态
       onlineRefundModalData: {
         refund: 0
-      }
+      },
+      refundPrice:null
     };
   }
 
@@ -224,4 +225,11 @@ export default class ListActor extends Actor {
   onlineRefundModalshow(state: IMap) {
     return state.setIn(['onlineRefundModalData', 'visible'], true);
   }
+
+  // 修改退款实际金额
+  @Action('change-refund-price')
+  changeRefundPrice(state: IMap,{refundPrice}) {
+    return state.set('refundPrice', refundPrice);
+  }
+
 }

@@ -74,7 +74,6 @@ export default class FullReductionActor extends Actor {
         reduction: null
       }
     ]
-debugger
     return state.update('marketingBean', (bean) => {
       return bean.set('fullReductionLevelList', fromJS(fullReductionLevelList))
     });

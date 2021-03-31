@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
 import { StoreProvider } from 'plume2';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { AuthWrapper, Headline, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
@@ -27,7 +27,7 @@ export default class CouponActivityList extends React.Component<any, any> {
             <Breadcrumb.Item>优惠券活动</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container activity">
-            <Headline title="Coupon activity" />
+            <Headline title={<FormattedMessage id="Marketing.CouponActivity" />} />
             <SearchHead />
             <SearchList />
           </div>

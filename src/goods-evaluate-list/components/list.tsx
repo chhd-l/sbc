@@ -62,8 +62,8 @@ export default class CustomerList extends React.Component<any, any> {
     };
     const { evaluateDelete } = this.props.relaxProps;
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete this evaluation?',
+      title: <FormattedMessage id="Product.Prompt" />,
+      content: <FormattedMessage id="Product.deleteThisEvaluation" />,
       onOk() {
         evaluateDelete(params);
       }
@@ -89,7 +89,7 @@ export default class CustomerList extends React.Component<any, any> {
         dataSource={dataList.toJS()}
       >
         <Column
-          title={<FormattedMessage id="productName" />}
+          title={<FormattedMessage id="Product.productName" />}
           key="goodsInfoName"
           dataIndex="goodsInfoName"
           width={150}
@@ -103,9 +103,9 @@ export default class CustomerList extends React.Component<any, any> {
             );
           }}
         />
-        <Column title={<FormattedMessage id="orderNumber" />} key="orderNo" width={170} dataIndex="orderNo" render={(orderNo) => (orderNo ? orderNo : '-')} />
+        <Column title={<FormattedMessage id="Product.orderNumber" />} key="orderNo" width={170} dataIndex="orderNo" render={(orderNo) => (orderNo ? orderNo : '-')} />
         <Column
-          title={<FormattedMessage id="consumerName" />}
+          title={<FormattedMessage id="Product.consumerName" />}
           key="customerName,"
           dataIndex="customerName"
           width={220}
@@ -119,7 +119,7 @@ export default class CustomerList extends React.Component<any, any> {
             );
           }}
         />
-        <Column title={<FormattedMessage id="productRatings" />} key="evaluateScore" dataIndex="evaluateScore" width={150} render={(evaluateScore) => (evaluateScore ? evaluateScore + '  Star' : '-')} />
+        <Column title={<FormattedMessage id="Product.productRatings" />} key="evaluateScore" dataIndex="evaluateScore" width={150} render={(evaluateScore) => (evaluateScore ? evaluateScore + '  Star' : '-')} />
         {/*<Column*/}
         {/*  title="评价内容"*/}
         {/*  key="evaluateContent"*/}
@@ -173,11 +173,11 @@ export default class CustomerList extends React.Component<any, any> {
         {/*    );*/}
         {/*  }}*/}
         {/*/>*/}
-        <Column title={<FormattedMessage id="anonymousStatus" />} key="isAnonymous" dataIndex="isAnonymous" render={(isAnonymous) => (isAnonymous ? isShowFunction(isAnonymous) : 'No')} />
-        <Column title={<FormattedMessage id="reviewTime" />} key="evaluateTime" dataIndex="evaluateTime" width={102} render={(evaluateTime) => (evaluateTime ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString() : '')} />
+        <Column title={<FormattedMessage id="Product.anonymousStatus" />} key="isAnonymous" dataIndex="isAnonymous" render={(isAnonymous) => (isAnonymous ? isShowFunction(isAnonymous) : 'No')} />
+        <Column title={<FormattedMessage id="Product.reviewTime" />} key="evaluateTime" dataIndex="evaluateTime" width={102} render={(evaluateTime) => (evaluateTime ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString() : '')} />
 
         <Column
-          title={<FormattedMessage id="operation" />}
+          title={<FormattedMessage id="Product.operation" />}
           key="evaluateId"
           dataIndex="evaluateId"
           className="operation-th"

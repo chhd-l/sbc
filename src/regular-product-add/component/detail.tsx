@@ -107,11 +107,11 @@ export default class Detail extends React.Component<any, any> {
                 disabled = item?.editable ?? false;
               }
               item.content = item?.content ?? '';
+              item.contentType=item?.contentType??'text'
               if (item.contentType && item.contentType.toUpperCase() === 'JSON') {
                 item.content = this.functionTurnJson(item.content);
                 item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content || '{tip:"Please enter the JSON format"}'}</xmp></code></pre>`;
               }
-              // debugger
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
                   <div style={{paddingBottom:10,position:'absolute',right:0,zIndex:99999,top:10}}>

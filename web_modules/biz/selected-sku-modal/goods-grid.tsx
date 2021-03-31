@@ -85,7 +85,6 @@ export default class GoodsGrid extends React.Component<any, any> {
           rowSelection={{
             selectedRowKeys: selectedRowKeys,
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
-              debugger
               const sRows = fromJS(selectedRows).filter((f) => f);
               let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet())
                 .concat(fromJS(selectedTableRows).toSet())

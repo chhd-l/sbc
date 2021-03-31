@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Relax, IMap } from 'plume2';
 import { cache } from 'qmkit';
 import moment from 'moment';
-
+import { FormattedMessage } from 'react-intl';
 import { Form, Table } from 'antd';
 import { IList } from 'typings/globalType';
 import { Const, QMFloat } from 'qmkit';
@@ -45,25 +45,25 @@ const formItemLayout = {
 
 const columns = [
   {
-    title: 'SKU code',
+    title: <FormattedMessage id="Marketing.SKUCode" />,
     dataIndex: 'goodsInfoNo',
     key: 'goodsInfoNo',
     width: '20%'
   },
   {
-    title: 'Product name',
+    title: <FormattedMessage id="Marketing.ProductName" />,
     dataIndex: 'goodsInfoName',
     key: 'goodsInfoName',
     width: '40%'
   },
   {
-    title: 'Specifications',
+    title: <FormattedMessage id="Marketing.Specifications" />,
     dataIndex: 'specText',
     key: 'specText',
     width: '20%'
   },
   {
-    title: 'Price',
+    title: <FormattedMessage id="Marketing.Price" />,
     key: 'marketPrice',
     dataIndex: 'marketPrice',
     render: (text) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + QMFloat.addZero(text)}</span>,
@@ -102,7 +102,7 @@ export default class CouponBasicInfo extends Component<any, any> {
     return (
       <FormDiv>
         <Form>
-          <FormItem {...formItemLayout} label="Coupon name">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.CouponName" />}>
             {couponName}
           </FormItem>
           {/* <FormItem {...formItemLayout} label="Coupon classify">
@@ -112,19 +112,19 @@ export default class CouponBasicInfo extends Component<any, any> {
               ))}
             </div>
           </FormItem> */}
-          <FormItem {...formItemLayout} label="Start and end time">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />}>
             {this._buildRangeDayType(rangeDayType, startTime, endTime, effectiveDays)}
           </FormItem>
-          <FormItem {...formItemLayout} label="Coupon value">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Coupon" />}>
             {`${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${denomination}`}
           </FormItem>
-          <FormItem {...formItemLayout} label="Threshold">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />}>
             {this._buildFullBuyType(fullBuyType, fullBuyPrice)}
           </FormItem>
-          <FormItem {...formItemLayout} label="Products">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
             {this._buildSkus(scopeType, skuBrands, skuCates, skus)}
           </FormItem>
-          <FormItem {...formItemLayout} label="Instructions for use">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.InstructionsForUse" />}>
             <div
               style={{ wordBreak: 'break-all' }}
               dangerouslySetInnerHTML={{

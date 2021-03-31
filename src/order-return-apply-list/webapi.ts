@@ -8,7 +8,7 @@ type TResult = {
 };
 
 export const fetchOrderList = (filter = {}) => {
-  // return Fetch<TResult>('http://172.16.200.48/trade/list/return', {
+  // return Fetch<TResult>('/trade/list/return', {
   return Fetch<TResult>('/trade/list/return', {
     method: 'POST',
     body: JSON.stringify(filter)
@@ -25,7 +25,7 @@ export const getTradeDetail = (tid: string) => {
 /**
  * 查询退单列表
  */
-export const fetchOrderReturnList = tid => {
+export const fetchOrder = (tid) => {
   return Fetch(`/return/findByTid/${tid}`);
 };
 

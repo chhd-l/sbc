@@ -4,6 +4,7 @@ import { Relax } from 'plume2';
 import { Button } from 'antd';
 import { noop } from 'qmkit';
 import ProductTooltip from './productTooltip';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Related extends React.Component<any, any> {
@@ -42,9 +43,11 @@ export default class Related extends React.Component<any, any> {
       <div>
         <div className="related-btn">
           <Button type="primary" shape="round" onClick={() => this.showProduct(true)}>
-            Choose product
+            <FormattedMessage id="Product.ChooseProduct" />
           </Button>
-          <span className="related-text">Maximum 30 products</span>
+          <span className="related-text">
+            <FormattedMessage id="Product.Maximum30" />
+          </span>
         </div>
 
         <RelatedProduct />

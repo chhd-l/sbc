@@ -6,11 +6,11 @@ import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
-export default class SubscriptionSetting extends Component<any, any> {
+export default class Subscription extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Subscription setting',
+      title: <FormattedMessage id="Subscription.Subscription" />,
       settingForm: {
         newOrdersId: null,
         newOrdersStatus: 0,
@@ -82,7 +82,7 @@ export default class SubscriptionSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operation successful');
+          message.success(<FormattedMessage id="Subscription.OperationSuccessful" />);
         }
       })
       .catch((err) => {});
@@ -96,7 +96,7 @@ export default class SubscriptionSetting extends Component<any, any> {
         <div className="container-search">
           <Headline title={title} />
           <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-            <FormItem label="Remind of new orders">
+            <FormItem label={<FormattedMessage id="Subscription.RemindOfNewOrders" />}>
               <Row>
                 <Col span={1}>
                   <Switch
@@ -126,14 +126,16 @@ export default class SubscriptionSetting extends Component<any, any> {
                           })
                         }
                       />
-                      <span style={{ marginLeft: 10 }}>Days ahead new orders being created, an email will be sent to pet owners to remind them of new orders.</span>
+                      <span style={{ marginLeft: 10 }}>
+                        <FormattedMessage id="Subscription.Days1" />
+                      </span>
                     </div>
                   </Col>
                 ) : null}
               </Row>
             </FormItem>
 
-            <FormItem label="Remind of card expiration">
+            <FormItem label={<FormattedMessage id="Subscription.RemindOfCardExpiration" />}>
               <Row>
                 <Col span={1}>
                   <Switch
@@ -163,7 +165,9 @@ export default class SubscriptionSetting extends Component<any, any> {
                           })
                         }
                       />
-                      <span style={{ marginLeft: 10 }}>Days ahead pet owners’ card expired, an email will be sent to pet owners to remind them of card expiration.</span>
+                      <span style={{ marginLeft: 10 }}>
+                        <FormattedMessage id="Subscription.Days2" />
+                      </span>
                     </div>
                   </Col>
                 ) : null}
@@ -173,7 +177,7 @@ export default class SubscriptionSetting extends Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateSetting()}>
-            {<FormattedMessage id="save" />}
+            {<FormattedMessage id="Subscription.save" />}
           </Button>
         </div>
       </div>

@@ -49,22 +49,22 @@ export default class ListView extends React.Component<any, any> {
                   <thead className="ant-table-thead">
                     <tr>
                       <th style={{ width: '17%', paddingLeft: 10 }}>
-                        <FormattedMessage id="operatorAccount" />
+                        <FormattedMessage id="Setting.operatorAccount" />
                       </th>
                       <th style={{ width: '17%', paddingLeft: 10 }}>
-                        <FormattedMessage id="operatorName" />
+                        <FormattedMessage id="Setting.operatorName" />
                       </th>
                       <th style={{ width: '10%', paddingLeft: 10 }}>
-                        <FormattedMessage id="operatorIP" />
+                        <FormattedMessage id="Setting.operatorIP" />
                       </th>
                       <th style={{ width: '17%', paddingLeft: 10 }}>
-                        <FormattedMessage id="operatorTime" />
+                        <FormattedMessage id="Setting.operatorTime" />
                       </th>
                       <th style={{ width: '10%', paddingLeft: 10 }}>
-                        <FormattedMessage id="module" />
+                        <FormattedMessage id="Setting.module" />
                       </th>
                       <th style={{ width: '10%', paddingLeft: 5 }}>
-                        <FormattedMessage id="operatorType" />
+                        <FormattedMessage id="Setting.operatorType" />
                       </th>
                       <th
                         style={{
@@ -74,7 +74,7 @@ export default class ListView extends React.Component<any, any> {
                           paddingLeft: 10
                         }}
                       >
-                        <FormattedMessage id="operatorContent" />
+                        <FormattedMessage id="Setting.operatorContent" />
                       </th>
                     </tr>
                   </thead>
@@ -85,7 +85,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    No data
+                    <FormattedMessage id="Setting.NoData" />
                   </span>
                 </div>
               ) : null}

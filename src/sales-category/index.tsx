@@ -48,8 +48,8 @@ export default class GoodsCate extends React.Component<any, any> {
         </Breadcrumb> */}
 
           <div className="container-search">
-            <Headline title={<FormattedMessage id="product.salesCategory" />} />
-            <Alert message={<FormattedMessage id="product.salesCategoryInfo" />} type="info" />
+            <Headline title={<FormattedMessage id="Product.salesCategory" />} />
+            <Alert message={<FormattedMessage id="Product.salesCategoryInfo" />} type="info" />
 
             {/*工具条*/}
             <Tool />

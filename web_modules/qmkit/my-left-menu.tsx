@@ -6,6 +6,7 @@ const { Sider } = Layout;
 import { history, cache } from 'qmkit';
 import { fromJS } from 'immutable';
 import Fetch from './fetch';
+import {FormattedMessage} from "react-intl";
 
 export default class MyLeftMenu extends React.PureComponent<any, any> {
   constructor(props) {
@@ -165,7 +166,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
                               style={styles.menuIcon}
                               src={util.requireLocalSrc(`icon/${item.icon}`)}
                             />*/}
-                            <span>{item.title}</span>
+                            <span><FormattedMessage id={"Menu."+ item.title} /></span>
                           </div>
                         }
                       >
@@ -219,7 +220,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
           path={v.url}
           children={() => (
             <a href="#" onClick={(e) => {e.preventDefault();this._goThirdMenu(v.url, index, i);return false;}}>
-              {v.title}
+              <FormattedMessage id={"Menu."+ v.title} />
             </a>
           )}
         />

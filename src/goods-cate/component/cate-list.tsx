@@ -70,14 +70,14 @@ class CateList extends React.Component<any, any> {
 
   _columns = [
     {
-      title: <FormattedMessage id="categoryName" />,
+      title: <FormattedMessage id="Product.categoryName" />,
       dataIndex: 'cateName',
       key: 'cateName',
       className: 'namerow',
       ellipsis: 'true'
     },
     {
-      title: <FormattedMessage id="operation" />,
+      title: <FormattedMessage id="Product.operation" />,
       key: 'option',
       width: '30%',
       render: (rowInfo) => this._getOption(rowInfo)
@@ -101,41 +101,20 @@ class CateList extends React.Component<any, any> {
           : hasAuth
           ? // 一级分类(非默认分类)可添加子分类
             [
-              rowInfo.get('cateGrade') < 2 &&
-                rowInfo.get('isDefault') != 1 &&
-                checkAuth('f_goods_cate_1') && (
-                  <Tooltip placement="top" title="Add subcategory">
-                    <a
-                      key="item1"
-                      style={styles.edit}
-                      onClick={this._addChildrenCate.bind(
-                        this,
-                        rowInfo.get('storeCateId'),
-                        rowInfo.get('cateName'),
-                        rowInfo.get('goodsCateId')
-                      )}
-                      className="iconfont iconbtn-addsubvisionsaddcategory"
-                    >
-                      {/*<FormattedMessage id="addSubcategory" />*/}
-                    </a>
-                  </Tooltip>
-                ),
+              rowInfo.get('cateGrade') < 2 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
+                <Tooltip placement="top" title={<FormattedMessage id="Product.AddSubcategory" />}>
+                  <a key="item1" style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconbtn-addsubvisionsaddcategory">
+                    {/*<FormattedMessage id="addSubcategory" />*/}
+                  </a>
+                </Tooltip>
+              ),
               // 非默认分类可编辑
               rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
-                <Tooltip placement="top" title="Edit">
+                <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
                   <a
                     key="item2"
                     style={styles.edit}
-                    onClick={this._showEditModal.bind(
-                      this,
-                      rowInfo.get('storeCateId'),
-                      rowInfo.get('cateName'),
-                      rowInfo.get('cateParentId'),
-                      rowInfo.get('goodsCateId'),
-                      rowInfo.get('children'),
-                      rowInfo.get('cateDescription'),
-                      rowInfo.get('cateImg')
-                    )}
+                    onClick={this._showEditModal.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('cateParentId'), rowInfo.get('goodsCateId'), rowInfo.get('children'), rowInfo.get('cateDescription'), rowInfo.get('cateImg'))}
                     className="iconfont iconEdit"
                   >
                     {/*<FormattedMessage id="edit" />*/}
@@ -144,15 +123,8 @@ class CateList extends React.Component<any, any> {
               ),
               // 非默认分类可删除
               rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_2') && (
-                <Tooltip placement="top" title="Delete">
-                  <a
-                    key="item3"
-                    onClick={this._delete.bind(
-                      this,
-                      rowInfo.get('storeCateId')
-                    )}
-                    className="iconfont iconDelete"
-                  >
+                <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
+                  <a key="item3" onClick={this._delete.bind(this, rowInfo.get('storeCateId'))} className="iconfont iconDelete">
                     {/*<FormattedMessage id="delete" />*/}
                   </a>
                 </Tooltip>
@@ -166,11 +138,7 @@ class CateList extends React.Component<any, any> {
   /**
    * 添加子类目
    */
-  _addChildrenCate = (
-    cateParentId: string,
-    cateParentName: string,
-    goodsCateId: number
-  ) => {
+  _addChildrenCate = (cateParentId: string, cateParentName: string, goodsCateId: number) => {
     const { showEditModal } = this.props.relaxProps;
     showEditModal(Map({ cateParentId, cateParentName, goodsCateId }));
   };
@@ -178,15 +146,7 @@ class CateList extends React.Component<any, any> {
   /**
    * 显示修改弹窗
    */
-  _showEditModal = (
-    storeCateId: string,
-    cateName: string,
-    cateParentId: number,
-    goodsCateId: number,
-    children: IList,
-    cateDescription: string,
-    cateImg: IList
-  ) => {
+  _showEditModal = (storeCateId: string, cateName: string, cateParentId: number, goodsCateId: number, children: IList, cateDescription: string, cateImg: IList) => {
     const { showEditModal, allDataList } = this.props.relaxProps;
     let cateParentName = '';
     if (cateParentId > 0) {
@@ -226,16 +186,14 @@ class CateList extends React.Component<any, any> {
     if (goodsFlag) {
       //该分类下有商品
       confirm({
-        title: 'Prompt',
-        content:
-          'The current classification has been associated with the product, it is recommended to delete it after modification.',
+        title: <FormattedMessage id="Product.Prompt" />,
+        content: <FormattedMessage id="Product.hasBeenAssociated" />,
         onOk() {
           if (childFlag) {
             //有子分类
             confirm({
-              title: 'Prompt',
-              content:
-                'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
+              title: <FormattedMessage id="Product.Prompt" />,
+              content: <FormattedMessage id="Product.DeleteTheCurrentCategory" />,
               onOk() {
                 doDelete(storeCateId);
               }
@@ -244,15 +202,14 @@ class CateList extends React.Component<any, any> {
             doDelete(storeCateId);
           }
         },
-        okText: 'Continue to delete',
-        cancelText: 'Cancel'
+        okText: <FormattedMessage id="Product.ContinueToDelete" />,
+        cancelText: <FormattedMessage id="Product.Cancel" />
       });
     } else if (childFlag) {
       //有子分类
       confirm({
-        title: 'Prompt',
-        content:
-          'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
+        title: <FormattedMessage id="Product.Prompt" />,
+        content: <FormattedMessage id="Product.DeleteTheCurrentCategory" />,
         onOk() {
           doDelete(storeCateId);
         }
@@ -260,8 +217,8 @@ class CateList extends React.Component<any, any> {
     } else {
       //没有子分类
       confirm({
-        title: 'Prompt',
-        content: 'Are you sure you want to delete this category?',
+        title: <FormattedMessage id="Product.Prompt" />,
+        content: <FormattedMessage id="Product.wantToDeleteThisCategory" />,
         onOk() {
           doDelete(storeCateId);
         }
@@ -281,13 +238,7 @@ class CateList extends React.Component<any, any> {
   };
 }
 
-let _dragDirection = (
-  dragIndex,
-  hoverIndex,
-  initialClientOffset,
-  clientOffset,
-  sourceClientOffset
-) => {
+let _dragDirection = (dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) => {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
   const hoverClientY = clientOffset.y - sourceClientOffset.y;
   if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY) {
@@ -299,27 +250,11 @@ let _dragDirection = (
 };
 
 let _BodyRow = (props) => {
-  const {
-    isOver,
-    connectDragSource,
-    connectDropTarget,
-    moveRow,
-    dragRow,
-    clientOffset,
-    sourceClientOffset,
-    initialClientOffset,
-    ...restProps
-  } = props;
+  const { isOver, connectDragSource, connectDropTarget, moveRow, dragRow, clientOffset, sourceClientOffset, initialClientOffset, ...restProps } = props;
   const style = { ...restProps.style, cursor: 'move' };
   let className = restProps.className;
   if (isOver && initialClientOffset) {
-    const direction = _dragDirection(
-      dragRow.index,
-      restProps.index,
-      initialClientOffset,
-      clientOffset,
-      sourceClientOffset
-    );
+    const direction = _dragDirection(dragRow.index, restProps.index, initialClientOffset, clientOffset, sourceClientOffset);
     if (direction === 'downward') {
       className += ' drop-over-downward';
     }
@@ -327,9 +262,7 @@ let _BodyRow = (props) => {
       className += ' drop-over-upward';
     }
   }
-  return connectDragSource(
-    connectDropTarget(<tr {...restProps} className={className} style={style} />)
-  );
+  return connectDragSource(connectDropTarget(<tr {...restProps} className={className} style={style} />));
 };
 
 const _rowSource = {

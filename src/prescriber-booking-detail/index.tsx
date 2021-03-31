@@ -17,7 +17,7 @@ class BookingDetail extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Booking Detail',
+      title: <FormattedMessage id="Prescriber.BookingDetail" />,
       loading: false,
       searchForm: {
         startDate: '',
@@ -134,9 +134,15 @@ class BookingDetail extends Component<any, any> {
                             });
                           }}
                         >
-                          <Option value={null}>All</Option>
-                          <Option value={1}>valid</Option>
-                          <Option value={0}>invalid</Option>
+                          <Option value={null}>
+                            <FormattedMessage id="Prescriber.All" />
+                          </Option>
+                          <Option value={1}>
+                            <FormattedMessage id="Prescriber.valid" />
+                          </Option>
+                          <Option value={0}>
+                            <FormattedMessage id="Prescriber.invalid" />
+                          </Option>
                         </Select>
                       </InputGroup>
                     </FormItem>
@@ -144,7 +150,7 @@ class BookingDetail extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Book date" />
+                        <Input style={styles.label} disabled defaultValue={<FormattedMessage id="Prescriber.BookDate" />} />
                         <RangePicker style={styles.wrapper} onChange={this.onChangeDate} format={'YYYY-MM-DD'} />
                       </InputGroup>
                     </FormItem>
@@ -161,7 +167,9 @@ class BookingDetail extends Component<any, any> {
                           this.onSearch();
                         }}
                       >
-                        <span>Search</span>
+                        <span>
+                          <FormattedMessage id="Prescriber.Search" />
+                        </span>
                       </Button>
                     </FormItem>
                   </Col>
@@ -178,14 +186,18 @@ class BookingDetail extends Component<any, any> {
                           avatar={
                             <div style={{ marginTop: 20 }}>
                               <Avatar size={64} icon="user" />
-                              <p style={{ textAlign: 'center', marginTop: 5 }}>test</p>
+                              <p style={{ textAlign: 'center', marginTop: 5 }}>
+                                <FormattedMessage id="Prescriber.test" />
+                              </p>
                             </div>
                           }
                           title={
                             <div>
                               <p style={styles.cardLabelText}>
                                 <span className="iconfont iconnaozhong"></span>
-                                <span style={{ marginLeft: 5 }}>Check-up Date</span>
+                                <span style={{ marginLeft: 5 }}>
+                                  <FormattedMessage id="Prescriber.CheckDate" />
+                                </span>
                                 <span style={{ fontWeight: 'bold', color: '#000000', marginLeft: 10 }}>{'2021-11-11'}</span>
                               </p>
                               <p style={{ textAlign: 'center' }}>
@@ -200,19 +212,25 @@ class BookingDetail extends Component<any, any> {
                               <ul>
                                 <li>
                                   <p>
-                                    <span style={{ marginLeft: 5 }}>Pet owner</span>
+                                    <span style={{ marginLeft: 5 }}>
+                                      <FormattedMessage id="Prescriber.PetOwner" />
+                                    </span>
                                     <span style={{ color: '#000000', marginLeft: 10 }}>{'2021-11-11'}</span>
                                   </p>
                                 </li>
                                 <li>
                                   <p>
-                                    <span style={{ marginLeft: 5 }}>Pet Name</span>
+                                    <span style={{ marginLeft: 5 }}>
+                                      <FormattedMessage id="Prescriber.PetName" />
+                                    </span>
                                     <span style={{ color: '#000000', marginLeft: 10 }}>{'2021-11-11'}</span>
                                   </p>
                                 </li>
                                 <li>
                                   <p>
-                                    <span style={{ marginLeft: 5 }}>Booking status</span>
+                                    <span style={{ marginLeft: 5 }}>
+                                      <FormattedMessage id="Prescriber.BookingStatus" />
+                                    </span>
                                     <span style={{ color: '#000000', marginLeft: 10 }}>{'2021-11-11'}</span>
                                   </p>
                                 </li>
@@ -231,7 +249,7 @@ class BookingDetail extends Component<any, any> {
                             <span style={styles.deleteStyle} className="iconfont iconEdit"></span>
                           </Link>
 
-                          <Popconfirm placement="topRight" title={'Are you sure to delete this item?'} onConfirm={() => this.deleteBook(item.id)} okText="Confirm" cancelText="Cancel">
+                          <Popconfirm placement="topRight" title={<FormattedMessage id="Prescriber.deleteThisItem" />} onConfirm={() => this.deleteBook(item.id)} okText={<FormattedMessage id="Prescriber.Confirm" />} cancelText={<FormattedMessage id="Prescriber.Cancel" />}>
                             <span style={styles.deleteStyle} className="iconfont iconDelete"></span>
                           </Popconfirm>
                         </div>
@@ -246,7 +264,7 @@ class BookingDetail extends Component<any, any> {
         <Modal
           width={600}
           maskClosable={false}
-          title={isEdit ? 'Edit tax zone' : 'New tax zone'}
+          title={isEdit ? <FormattedMessage id="Prescriber.EditTaxZone" /> : <FormattedMessage id="Prescriber.NewTaxZone" />}
           visible={visible}
           confirmLoading={loading}
           onCancel={() => this.handleCancel()}
@@ -257,10 +275,10 @@ class BookingDetail extends Component<any, any> {
                 this.handleCancel();
               }}
             >
-              Cancel
+              <FormattedMessage id="Prescriber.Cancel" />
             </Button>,
             <Button key="submit" type="primary" onClick={this.handleSubmit}>
-              Submit
+              <FormattedMessage id="Prescriber.Submit" />
             </Button>
           ]}
         >
@@ -286,12 +304,12 @@ class BookingDetail extends Component<any, any> {
                   />
                 )}
               </FormItem> */}
-            <FormItem label="Tax zone description">
+            <FormItem label={<FormattedMessage id="Prescriber.TaxZoneDescription" />}>
               {getFieldDecorator('taxZoneDescription', {
                 rules: [
                   {
                     max: 500,
-                    message: 'Exceed maximum length!'
+                    message: <FormattedMessage id="Prescriber.ExceedMaximumLength" />
                   }
                 ],
                 initialValue: bookForm.taxZoneDescription
@@ -318,10 +336,10 @@ class BookingDetail extends Component<any, any> {
               // console.log('save');
             }}
           >
-            New book
+            <FormattedMessage id="Prescriber.NewBook" />
           </Button>
           <Button style={{ marginLeft: 20 }} onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="back" />}
+            {<FormattedMessage id="Prescriber.back" />}
           </Button>
         </div>
       </AuthWrapper>

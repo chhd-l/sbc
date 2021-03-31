@@ -26,8 +26,7 @@ export default class SetBanner extends Component<any, any> {
   onFormChange = ({ field, value }) => {
     this.store.onFormChange({ field, value });
   };
-  onSearch = () => {
-  };
+  onSearch = () => {};
 
   uploadImage() {}
   render() {
@@ -37,7 +36,7 @@ export default class SetBanner extends Component<any, any> {
         <div className="order-con">
           <BreadCrumb />
           <div className="container-search">
-            <Headline title={<FormattedMessage id="setBanner" />} />
+            <Headline title={<FormattedMessage id="Setting.setBanner" />} />
           </div>
           <div className="container">
             {/*<Form className="filter-content" layout="inline">*/}

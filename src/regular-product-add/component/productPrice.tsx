@@ -264,7 +264,7 @@ class SkuForm extends React.Component<any, any> {
                   // ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                   initialValue: rowInfo.linePrice || 0
-                })(<InputNumber min={0} max={9999999.99} precision={2}
+                })(<InputNumber min={0} max={9999999.99} precision={2} step={0.01}
                                 //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                 />)}
               </FormItem>
@@ -343,10 +343,10 @@ class SkuForm extends React.Component<any, any> {
                         <InputNumber
                           min={0}
                           max={9999999.99}
-                          disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                          //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                           formatter={limitDecimals}
                           parser={limitDecimals}
-
+                          step={0.01}
                         />
                       )}
                     </FormItem>
@@ -361,16 +361,16 @@ class SkuForm extends React.Component<any, any> {
                               required: true,
                               message: 'Please input subscription price'
                             },
-                            {
+                            /*{
                               validator: (_rule, value, callback) => {
                                 if (rowInfo.subscriptionStatus === 1) {
                                   if (value === 0) {
                                     callback('Subscription price cannot be zero');
                                   }
                                 }
-                                callback();
+
                               }
-                            }
+                            }*/
                           ],
                           onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
                           initialValue: subscriptionPrice
@@ -379,9 +379,10 @@ class SkuForm extends React.Component<any, any> {
                             min={0}
                             max={9999999.99}
                             //precision={2}
-                            disabled={rowInfo.subscriptionStatus === 0}
+                            //disabled={rowInfo.subscriptionStatus === 0}
                             formatter={limitDecimals}
                             parser={limitDecimals}
+                            step={0.01}
                             //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                           />
                         )}
@@ -407,9 +408,10 @@ class SkuForm extends React.Component<any, any> {
                       <InputNumber
                         min={0}
                         max={9999999.99}
-                        disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                        //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                         formatter={limitDecimals}
                         parser={limitDecimals}
+                        step={0.01}
                       />
                     )}
                   </FormItem>

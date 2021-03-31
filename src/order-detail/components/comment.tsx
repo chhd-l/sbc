@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List, Tooltip, Popconfirm, Input, Row, Button, Modal, Form, message, Spin } from 'antd';
 import * as webapi from '../webapi';
 import { Const } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const { Search } = Input;
@@ -36,6 +37,9 @@ class comment extends Component<any, any> {
     this.closeModal = this.closeModal.bind(this);
   }
 
+  props: {
+    intl: any;
+  };
   componentDidMount() {
     this.searchComment('');
   }
@@ -199,7 +203,7 @@ class comment extends Component<any, any> {
                 this.setState({ commentVisible: true, comment: '', commentId: null });
               }}
             >
-              Add Comment
+              <FormattedMessage id="Order.AddComment" />
             </Button>
           </span>
         </Row>
@@ -266,19 +270,30 @@ class comment extends Component<any, any> {
           />
         </Spin>
         {commentVisible ? (
-          <Modal width={700} visible={commentVisible} title="Add Comment" onOk={this.handleSubmit} confirmLoading={confirmLoading} maskClosable={false} onCancel={this.closeModal} okText="Confirm">
+          <Modal
+            width={700}
+            visible={commentVisible}
+            title={this.props.intl.formatMessage({
+              id: 'Order.AddComment'
+            })}
+            onOk={this.handleSubmit}
+            confirmLoading={confirmLoading}
+            maskClosable={false}
+            onCancel={this.closeModal}
+            okText={this.props.intl.formatMessage({ id: 'Order.btnConfirm' })}
+          >
             <Form>
-              <FormItem {...layout} label="Pet Owner">
+              <FormItem {...layout} label={<FormattedMessage id="Order.PetOwner" />}>
                 {getFieldDecorator('petOwner', {
                   initialValue: petOwnerName
                 })(<Input disabled={true} />)}
               </FormItem>
-              <FormItem {...layout} label="Order Number">
+              <FormItem {...layout} label={<FormattedMessage id="Order.OrderNumber" />}>
                 {getFieldDecorator('orderNumber', {
                   initialValue: orderNumber
                 })(<Input disabled={true} />)}
               </FormItem>
-              <FormItem {...layout} label="Comment">
+              <FormItem {...layout} label={<FormattedMessage id="Order.Comment" />}>
                 {getFieldDecorator('name', {
                   initialValue: comment,
                   rules: [{ required: true, message: 'Please input comment' }]
@@ -303,7 +318,7 @@ class comment extends Component<any, any> {
     );
   }
 }
-export default Form.create()(comment);
+export default Form.create()(injectIntl(comment));
 
 const styles = {
   text: {

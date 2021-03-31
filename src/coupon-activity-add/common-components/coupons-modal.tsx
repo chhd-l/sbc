@@ -4,7 +4,7 @@ import { AuthWrapper, Const, DataGrid, SelectGroup, cache } from 'qmkit';
 import moment from 'moment';
 import * as webapi from './webapi';
 import '../index.less';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
@@ -55,7 +55,8 @@ export default class CouponsModal extends React.Component<any, any> {
         visible={true}
         title={
           <div>
-            Select coupons&nbsp;
+            <FormattedMessage id="Marketing.SelectCoupons" />
+            &nbsp;
             {/*<small>*/}
             {/*  已选*/}
             {/*  <span style={{ color: 'red' }}>*/}
@@ -68,8 +69,8 @@ export default class CouponsModal extends React.Component<any, any> {
         width={1200}
         onOk={() => this._onOk()}
         onCancel={() => this._onCancel()}
-        okText="Save"
-        cancelText="Cancel"
+        okText={<FormattedMessage id="Marketing.Save" />}
+        cancelText={<FormattedMessage id="Marketing.Cancel" />}
       >
         {/*search*/}
         {this._renderSearchForm()}
@@ -133,7 +134,7 @@ export default class CouponsModal extends React.Component<any, any> {
                 this._pageSearch(0);
               }}
             >
-              Search
+              <FormattedMessage id="Marketing.Search" />
             </Button>
           </FormItem>
         </Form>
@@ -170,11 +171,11 @@ export default class CouponsModal extends React.Component<any, any> {
           }
         }}
       >
-        <Column title="Coupon name" dataIndex="couponName" key="couponName" width="15%" />
+        <Column title={<FormattedMessage id="Marketing.CouponName" />} dataIndex="couponName" key="couponName" width="15%" />
 
         <Column title={`Face  value( ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} )`} dataIndex="denominationStr" key="denominationStr" width="15%" />
 
-        <Column title="Valid period" dataIndex="validity" key="validity" width="25%" />
+        <Column title={<FormattedMessage id="Marketing.ValidPeriod" />} dataIndex="validity" key="validity" width="25%" />
 
         {/*<Column*/}
         {/*  title="优惠券分类"*/}
@@ -188,10 +189,10 @@ export default class CouponsModal extends React.Component<any, any> {
 
         {/* <Column title="Use range" key="scopeNamesStr" dataIndex="scopeNamesStr" width="15%" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} /> */}
 
-        <Column title="Status" key="couponStatusStr" dataIndex="couponStatusStr" width="15%" />
+        <Column title={<FormattedMessage id="Marketing.Status" />} key="couponStatusStr" dataIndex="couponStatusStr" width="15%" />
 
         <Column
-          title="Operation"
+          title={<FormattedMessage id="Marketing.Operation" />}
           key="operate"
           width="15%"
           render={(row) => {
@@ -199,7 +200,7 @@ export default class CouponsModal extends React.Component<any, any> {
               <div>
                 <AuthWrapper functionName={'f_coupon_detail'}>
                   <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">
-                    Details
+                    {<FormattedMessage id="Marketing.Details" />}
                   </a>
                 </AuthWrapper>
               </div>

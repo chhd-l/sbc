@@ -20,7 +20,7 @@ export default class CustomerEquities extends React.Component<any, any> {
       <div>
         <BreadCrumb />
         <div className="container-search">
-          <Headline title={<FormattedMessage id="rolePermissions" />} />
+          <Headline title={<FormattedMessage id="Setting.rolePermissions" />} />
           <AuthWrapper functionName={'f_role_add'}>
             {/*工具条*/}
             <RoleTool />

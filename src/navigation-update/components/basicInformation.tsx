@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Checkbox, Row, Col } from 'antd';
 import { AssetManagement } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const layout = {
   labelCol: { span: 4 },
@@ -18,7 +19,7 @@ export default class BasicInformation extends React.Component<any, any> {
   }
 
   updateImg = (images) => {
-    let imageString =images && images.length > 0 ? images[0] : ''
+    let imageString = images && images.length > 0 ? images[0] : '';
     this.props.addField('imageLink', imageString);
   };
 
@@ -31,21 +32,22 @@ export default class BasicInformation extends React.Component<any, any> {
     const { navigation, noLanguageSelect } = this.props;
     return (
       <div>
-        <h3>{noLanguageSelect ? 'Step1' : 'Step2'}</h3>
+        <h3>{noLanguageSelect ? <FormattedMessage id="Content.Step1" /> : <FormattedMessage id="Content.Step2" />}</h3>
         <h4>
-          Basic Information<span className="ant-form-item-required"></span>
+          <FormattedMessage id="Content.BasicInformation" />
+          <span className="ant-form-item-required"></span>
         </h4>
         <div className="basicInformation">
           <Form>
-            <FormItem {...layout} label="Navigation Name">
+            <FormItem {...layout} label={<FormattedMessage id="Content.NavigationName" />}>
               {getFieldDecorator('navigationName', {
                 initialValue: navigation.navigationName,
                 rules: [
-                  { required: true, message: 'Please input Navigation Name' },
+                  { required: true, message: <FormattedMessage id="Content.PleaseInputNavigationName" /> },
                   {
                     validator: (_rule, value, callback) => {
                       if (this.props.topNames && this.props.topNames.includes(value)) {
-                        callback('Top-level navigation cannot be repeated');
+                        callback(<FormattedMessage id="Content.ToplevelNavigationCannotBeRepeated" />);
                       } else {
                         callback();
                       }
@@ -61,9 +63,9 @@ export default class BasicInformation extends React.Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...layout} label="Navigation Link">
-              <span className="tip ant-form-item-required" style={{top: '20px'}}>
-              Internal URL like: /cat, external URL like: http://www.google.com/
+            <FormItem {...layout} label={<FormattedMessage id="Content.NavigationLink" />}>
+              <span className="tip ant-form-item-required" style={{ top: '20px' }}>
+                <FormattedMessage id="Content.URLLike" />
               </span>
               {getFieldDecorator('navigationLink', {
                 initialValue: navigation.navigationLink
@@ -76,7 +78,7 @@ export default class BasicInformation extends React.Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...layout} label="Navigation Description">
+            <FormItem {...layout} label={<FormattedMessage id="Content.NavigationDescription" />}>
               {getFieldDecorator('navigationDesc', {
                 initialValue: navigation.navigationDesc
               })(
@@ -90,10 +92,12 @@ export default class BasicInformation extends React.Component<any, any> {
             </FormItem>
             <Row>
               <Col span={4}>
-                <div className="uploadTip">Recommened size：800*800px the size of a single sheet does not exceed 2M，and the maximum sheets is 10</div>
+                <div className="uploadTip">
+                  <FormattedMessage id="Content.RecommenedSize" />
+                </div>
               </Col>
             </Row>
-            <FormItem {...layout} label="Picture Image">
+            <FormItem {...layout} label={<FormattedMessage id="Content.PictureImage" />}>
               <AssetManagement choosedImgCount={1} images={navigation.imageLink ? [navigation.imageLink] : []} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />
             </FormItem>
             <FormItem>
@@ -104,9 +108,11 @@ export default class BasicInformation extends React.Component<any, any> {
                   this.props.addField('enable', navigation.enable);
                 }}
               >
-                Enable
+                <FormattedMessage id="Content.Enable" />
               </Checkbox>
-              <span className="checkBoxTip">Menu items that are not enabled will not be listed in any menu</span>
+              <span className="checkBoxTip">
+                <FormattedMessage id="Content.MenuItems" />
+              </span>
             </FormItem>
             {this.props.noLanguageSelect ? null : (
               <FormItem>
@@ -117,9 +123,11 @@ export default class BasicInformation extends React.Component<any, any> {
                     this.props.addField('expanded', navigation.expanded);
                   }}
                 >
-                  Expanded
+                  <FormattedMessage id="Content.Expanded" />
                 </Checkbox>
-                <span className="checkBoxTip">If mouser over and the menu has children, the menu will expand</span>
+                <span className="checkBoxTip">
+                  <FormattedMessage id="Content.theMenuWill" />
+                </span>
               </FormItem>
             )}
           </Form>

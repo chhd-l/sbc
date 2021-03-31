@@ -47,26 +47,26 @@ export default class RewardRate extends Component<any, any> {
   }
   saveRewardRate = async (row) => {
     if (!row.timeZone) {
-      message.error('Time Zone can not be empty');
+      message.error(<FormattedMessage id="Prescriber.TimeZone" />);
       return;
     }
     if (!row.orderAmount) {
-      message.error('Order Amount can not be empty');
+      message.error(<FormattedMessage id="Prescriber.OrderAmount" />);
       return;
     }
     if (!row.rewardRate) {
-      message.error('Reward Rate can not be empty');
+      message.error(<FormattedMessage id="Prescriber.RewardRateCan" />);
       return;
     }
     if (row.id) {
       const { res } = await webapi.updateClinicsReward(row);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('update success');
+        message.success(<FormattedMessage id="Prescriber.updateSuccess" />);
       }
     } else {
       const { res } = await webapi.addClinicsReward(row);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('Add successfully');
+        message.success(<FormattedMessage id="Prescriber.addSuccess" />);
       }
     }
   };
@@ -74,7 +74,7 @@ export default class RewardRate extends Component<any, any> {
     if (row.id) {
       const { res } = await webapi.delClinicsReward({ id: row.id });
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('delete success');
+        message.success(<FormattedMessage id="Prescriber.deleteSuccess" />);
         let data = this.state.sectionList;
         data = data.filter((item) => {
           if (item.id !== row.id) {
@@ -128,7 +128,7 @@ export default class RewardRate extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
-          <Headline title="Reward Rate" />
+          <Headline title={<FormattedMessage id="Prescriber.RewardRate" />} />
           {/*区间价价table*/}
           <span
             style={{
@@ -140,20 +140,32 @@ export default class RewardRate extends Component<any, any> {
           >
             *
           </span>
-          <label style={{ minWidth: '200px', marginRight: '10px' }}>Time Zome:</label>
-          Every
+          <label style={{ minWidth: '200px', marginRight: '10px' }}>
+            <FormattedMessage id="Prescriber.TimeZome" />:
+          </label>
+          <FormattedMessage id="Prescriber.Every" />
           <Select value={this.state.timeZone} onChange={(value) => this.selectTimeZone(value)} style={{ minWidth: '200px', marginLeft: '10px' }}>
             <Option value="Year" key="year">
-              Year
+              <FormattedMessage id="Prescriber.Year" />
             </Option>
             <Option value="Month" key="month">
-              Month
+              <FormattedMessage id="Prescriber.Month" />
             </Option>
             <Option value="Week" key="week">
-              Week
+              <FormattedMessage id="Prescriber.Week" />
             </Option>
           </Select>
-          <Table style={{ paddingTop: '10px' }} pagination={false} rowKey="intervalPriceId" dataSource={this.state.sectionList} footer={() => <Button onClick={() => this.addSection()}>+ Add section</Button>}>
+          <Table
+            style={{ paddingTop: '10px' }}
+            pagination={false}
+            rowKey="intervalPriceId"
+            dataSource={this.state.sectionList}
+            footer={() => (
+              <Button onClick={() => this.addSection()}>
+                + <FormattedMessage id="Prescriber.AddSection" />
+              </Button>
+            )}
+          >
             <Column
               title={
                 <div>
@@ -167,7 +179,7 @@ export default class RewardRate extends Component<any, any> {
                   >
                     *
                   </span>
-                  Order Amount
+                  <FormattedMessage id="Prescriber.OrderAmount" />
                 </div>
               }
               key="orderAmount"
@@ -209,7 +221,7 @@ export default class RewardRate extends Component<any, any> {
                   >
                     *
                   </span>
-                  Reward Rate
+                  <FormattedMessage id="Prescriber.RewardRate" />
                 </div>
               }
               key="rewardRate"
@@ -239,16 +251,18 @@ export default class RewardRate extends Component<any, any> {
               }}
             />
             <Column
-              title={<FormattedMessage id="operation" />}
+              title={<FormattedMessage id="Prescriber.operation" />}
               key="opt"
               width={80}
               render={(rowInfo, _x, i) => {
                 return (
                   <div>
                     <Button style={{ marginRight: '10px' }} onClick={() => this.saveRewardRate(rowInfo)}>
-                      Save
+                      <FormattedMessage id="Prescriber.Save" />
                     </Button>
-                    <Button onClick={() => this.deleteRewardRate(rowInfo)}>Delete</Button>
+                    <Button onClick={() => this.deleteRewardRate(rowInfo)}>
+                      <FormattedMessage id="Prescriber.Delete" />
+                    </Button>
                   </div>
                 );
               }}

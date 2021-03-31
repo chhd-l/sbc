@@ -8,7 +8,13 @@ import { IList } from '../../../../typings/globalType';
 export default class FullGiftActor extends Actor {
   defaultState() {
     return {
-      marketingBean: {},
+      marketingBean: {
+        promotionType: 0,
+        publicStatus: 1,
+        subType: 2,
+        isClub: false,
+        fullGiftLevelList: []
+      },
       allGroups: [],
       // 店铺分类信息
       storeCateList: [],

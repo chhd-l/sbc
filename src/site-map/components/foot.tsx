@@ -23,7 +23,7 @@ export default class Foot extends React.Component<any, any> {
       <div className="bar-button">
         {/*<AuthWrapper key="001" functionName={this.props.goodsFuncName}>*/}
         <Button type="primary" onClick={this._save}>
-          Save
+          <FormattedMessage id="Setting.Save" />
         </Button>
         {/*</AuthWrapper>*/}
       </div>

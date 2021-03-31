@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
-
+import { FormattedMessage } from 'react-intl';
 import { Table, Modal, message, Tooltip } from 'antd';
 import { history, noop, QMFloat, AuthWrapper, cache, checkAuth } from 'qmkit';
 import styled from 'styled-components';
@@ -90,7 +90,7 @@ export default class FreightItem extends React.Component<any, any> {
     let { data, title, isDefault, typeFlag, valuationType, freightId, isStore } = this.props;
     let columns = [
       {
-        title: 'Courier',
+        title: <FormattedMessage id="Setting.Courier" />,
         width: typeFlag ? '20%' : '30%',
         dataIndex: 'deliverWay',
         render: (text) => {
@@ -98,7 +98,7 @@ export default class FreightItem extends React.Component<any, any> {
         }
       } as any,
       {
-        title: 'Ship to',
+        title: <FormattedMessage id="Setting.ShipTo" />,
         width: typeFlag ? '20%' : '35%',
         dataIndex: 'destinationAreaName',
         render: (text) => {
@@ -134,20 +134,21 @@ export default class FreightItem extends React.Component<any, any> {
       // 店铺
       columns = columns.concat([
         {
-          title: 'Billing rules',
+          title: <FormattedMessage id="Setting.BillingRules" />,
           width: '35%',
           dataIndex: 'freightType',
           render: (text, record) => {
             if (text == 0) {
               return (
                 <div>
-                  Order less than {QMFloat.addZero(record.satisfyPrice)} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}, Shipping fee is {QMFloat.addZero(record.satisfyFreight)} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  <FormattedMessage id="Setting.OrderLessThan" /> {QMFloat.addZero(record.satisfyPrice)} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}, <FormattedMessage id="Setting.ShippingFeeIs" /> {QMFloat.addZero(record.satisfyFreight)}{' '}
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 </div>
               );
             } else {
               return (
                 <div>
-                  Fixed freight {QMFloat.addZero(record.fixedFreight)} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  <FormattedMessage id="Setting.FixedFreight" /> {QMFloat.addZero(record.fixedFreight)} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 </div>
               );
             }
@@ -165,34 +166,34 @@ export default class FreightItem extends React.Component<any, any> {
         return (
           <div className="table-title-box">
             {title}
-            {!isStore && isDefault && '(The default template is used for products without freight template)'}
+            {!isStore && isDefault && <FormattedMessage id="Setting.productsWithoutFreightTemplate" />}
             <div className="operat-box">
               {typeFlag && (
                 <AuthWrapper functionName="f_goods_temp_copy">
-                  <Tooltip placement="top" title="Copy">
+                  <Tooltip placement="top" title={<FormattedMessage id="Setting.Copy" />}>
                     <a href="javascript:void(0);" onClick={() => this._copy(freightId)}>
-                      Copy
+                      <FormattedMessage id="Setting.Copy" />
                     </a>
                   </Tooltip>
                 </AuthWrapper>
               )}
               {((checkAuth('f_store_temp_edit') && isStore) || (checkAuth('f_goods_temp_edit') && !isStore)) && (
-                <Tooltip placement="top" title="Edit">
+                <Tooltip placement="top" title={<FormattedMessage id="Setting.Edit" />}>
                   <a href="#!" onClick={() => this._edit(freightId, isStore)} className="iconfont iconEdit"></a>
                 </Tooltip>
               )}
               {typeFlag && (
                 <AuthWrapper functionName="f_goods_rela_list">
-                  <Tooltip placement="top" title="Related">
+                  <Tooltip placement="top" title={<FormattedMessage id="Setting.Related" />}>
                     <a href="#!" onClick={() => history.push(`/freight-with-goods/${freightId}`)}>
-                      Related
+                      <FormattedMessage id="Setting.Related" />
                     </a>
                   </Tooltip>
                 </AuthWrapper>
               )}
               {!isDefault && ((checkAuth('f_store_temp_del') && isStore) || (checkAuth('f_goods_temp_del') && !isStore)) && (
-                <Tooltip placement="top" title="Delete">
-                  <a  onClick={() => this._del(freightId, isStore)}  className="iconfont iconDelete"></a>
+                <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
+                  <a onClick={() => this._del(freightId, isStore)} className="iconfont iconDelete"></a>
                 </Tooltip>
               )}
             </div>
@@ -202,12 +203,11 @@ export default class FreightItem extends React.Component<any, any> {
     } as any;
     return (
       <div>
-        {
-          data && data.length >0 ?
-            <TableDiv>
-              <Table rowKey={(record: any) => record.id || record.freightTempId} {...params} />
-            </TableDiv> : null
-        }
+        {data && data.length > 0 ? (
+          <TableDiv>
+            <Table rowKey={(record: any) => record.id || record.freightTempId} {...params} />
+          </TableDiv>
+        ) : null}
       </div>
     );
   }
@@ -220,7 +220,7 @@ export default class FreightItem extends React.Component<any, any> {
     if (goodsFreights.count() < 20) {
       copy(freightId);
     } else {
-      message.error('You can only add up to 20 shipping templates');
+      message.error(<FormattedMessage id="Setting.20ShippingTemplates" />);
     }
   };
 
@@ -241,7 +241,7 @@ export default class FreightItem extends React.Component<any, any> {
   _del = (freightId, isStore) => {
     const { del } = this.props.relaxProps;
     confirm({
-      content: 'Are you sure you want to delete this template?',
+      content: <FormattedMessage id="Setting.deletethisTemplate" />,
       iconType: 'exclamation-circle',
       onOk() {
         del(freightId, isStore);

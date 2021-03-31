@@ -105,7 +105,7 @@ module.exports = function (webpackEnv, envCode) {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
-    devtool: isEnvProduction ? 'nosources-source-map' : 'eval-source-map', //prod: cheap-module-source-map
+    devtool: isEnvProduction ? 'nosources-source-map' : 'eval-source-map', //prod: cheap-module-source-map eval-source-map
     entry: [
       isEnvDevelopment ? require.resolve('react-dev-utils/webpackHotDevClient') : undefined,
       paths.appIndexJs,
@@ -226,7 +226,7 @@ module.exports = function (webpackEnv, envCode) {
       strictExportPresence: true,
       rules: [
         {
-          test:  /\.ts$/,
+          test:  /\.js$/,
           //把对.js 的文件处理交给id为happyBabel 的HappyPack 的实例执行
           loader: 'happypack/loader?id=happyBabel',
           //排除node_modules 目录下的文件
@@ -269,26 +269,26 @@ module.exports = function (webpackEnv, envCode) {
                 compact: isEnvProduction,
               },
             },
-            // {
-            //   test: /\.(js|mjs)$/,
-            //   exclude: /@babel(?:\/|\\{1,2})runtime/,
-            //   loader: require.resolve('babel-loader'),
-            //   options: {
-            //     babelrc: false,
-            //     configFile: false,
-            //     compact: false,
-            //     presets: [
-            //       [
-            //         require.resolve('babel-preset-react-app/dependencies'),
-            //         { helpers: true },
-            //       ],
-            //     ],
-            //     cacheDirectory: true,
-            //     cacheCompression: isEnvProduction,
-            //
-            //     sourceMaps: false,
-            //   },
-            // },
+            {
+              test: /\.(js|mjs)$/,
+              exclude: /@babel(?:\/|\\{1,2})runtime/,
+              loader: require.resolve('babel-loader'),
+              options: {
+                babelrc: false,
+                configFile: false,
+                compact: false,
+                presets: [
+                  [
+                    require.resolve('babel-preset-react-app/dependencies'),
+                    { helpers: true },
+                  ],
+                ],
+                cacheDirectory: true,
+                cacheCompression: isEnvProduction,
+
+                sourceMaps: false,
+              },
+            },
 
             {
               test: cssRegex,

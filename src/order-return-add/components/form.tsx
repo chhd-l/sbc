@@ -120,6 +120,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       tradeDetail,
       canApplyPrice
     } = this.props.relaxProps;
+    
 
     const { getFieldDecorator } = this.props.form;
     let images = this.props.relaxProps.images.toJS();
@@ -196,12 +197,20 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             <>
               <FormItem {...formItemLayout} label="Refundable amount" >
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + canApplyPrice.toFixed(2)}
-                <InputNumber
+              {getFieldDecorator('refundableAmount', {
+                initialValue: canApplyPrice,
+                 rules: [
+                  {
+                    required: true,
+                    message: 'Refundable amount cannot be blank !'
+                  },
+                ]
+              })
+                (<InputNumber
                   min={0}
                   max={+canApplyPrice}
-                  defaultValue={+canApplyPrice}
                   style={{marginLeft:10}}
-                  onChange={this._editInfo.bind(this, 'applyPrice')} />
+                  onChange={this._editInfo.bind(this, 'applyPrice')} /> )}
               </FormItem>
             </>
           )}

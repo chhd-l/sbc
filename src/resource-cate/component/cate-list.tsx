@@ -45,18 +45,8 @@ export default class CateList extends React.Component<any, any> {
     const { dataList } = this.props.relaxProps;
     return (
       <DataGrid rowKey="cateId" dataSource={dataList.toJS()}>
-        <Column
-          title={<FormattedMessage id="categoryName" />}
-          dataIndex="cateName"
-          key="cateName"
-          className="namerow"
-          width="50%"
-        />
-        <Column
-          title={<FormattedMessage id="operation" />}
-          key="option"
-          render={this._getOption}
-        />
+        <Column title={<FormattedMessage id="Setting.categoryName" />} dataIndex="cateName" key="cateName" className="namerow" width="50%" />
+        <Column title={<FormattedMessage id="Setting.operation" />} key="option" render={this._getOption} />
       </DataGrid>
     );
   }
@@ -70,16 +60,8 @@ export default class CateList extends React.Component<any, any> {
       <div>
         {rowInfo.get('cateGrade') != 3 && rowInfo.get('isDefault') != 1 ? (
           <AuthWrapper functionName="f_resourceCate_2">
-            <Tooltip placement="top" title="Add subcategory">
-              <a
-                style={styles.edit}
-                onClick={this._addChildrenCate.bind(
-                  this,
-                  rowInfo.get('cateId'),
-                  rowInfo.get('cateName')
-                )}
-                className="iconfont iconbtn-addsubvisionsaddcategory"
-              >
+            <Tooltip placement="top" title={<FormattedMessage id="Setting.AddSubcategory" />}>
+              <a style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('cateId'), rowInfo.get('cateName'))} className="iconfont iconbtn-addsubvisionsaddcategory">
                 {/*<FormattedMessage id="addSubcategory" />*/}
               </a>
             </Tooltip>
@@ -87,17 +69,8 @@ export default class CateList extends React.Component<any, any> {
         ) : null}
         {rowInfo.get('isDefault') != 1 ? (
           <AuthWrapper functionName="f_resourceCate_2">
-            <Tooltip placement="top" title="Edit">
-              <a
-                style={styles.edit}
-                onClick={this._showEditModal.bind(
-                  this,
-                  rowInfo.get('cateId'),
-                  rowInfo.get('cateName'),
-                  rowInfo.get('cateParentId')
-                )}
-                className="iconfont iconEdit"
-              >
+            <Tooltip placement="top" title={<FormattedMessage id="Setting.Edit" />}>
+              <a style={styles.edit} onClick={this._showEditModal.bind(this, rowInfo.get('cateId'), rowInfo.get('cateName'), rowInfo.get('cateParentId'))} className="iconfont iconEdit">
                 {/*<FormattedMessage id="edit" />*/}
               </a>
             </Tooltip>
@@ -105,11 +78,8 @@ export default class CateList extends React.Component<any, any> {
         ) : null}
         {rowInfo.get('isDefault') != 1 ? (
           <AuthWrapper functionName="f_resourceCate_1">
-            <Tooltip placement="top" title="Delete">
-              <a
-                onClick={this._delete.bind(this, rowInfo.get('cateId'))}
-                className="iconfont iconDelete"
-              >
+            <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
+              <a onClick={this._delete.bind(this, rowInfo.get('cateId'))} className="iconfont iconDelete">
                 {/*<FormattedMessage id="delete" />*/}
               </a>
             </Tooltip>
@@ -169,21 +139,19 @@ export default class CateList extends React.Component<any, any> {
     if (childFlag) {
       //有子分类
       confirm({
-        title: 'Prompt',
-        content:
-          'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
+        title: <FormattedMessage id="Setting.Prompt" />,
+        content: <FormattedMessage id="Setting.DeleteTheCurrentCategory" />,
         onOk() {
           if (resourceFlag) {
             //该分类下有素材
             confirm({
-              title: 'Prompt',
-              content:
-                'The current classification has associated materials, it is recommended to delete after modification, click to continue to delete, related materials will be classified into the default classification!',
+              title: <FormattedMessage id="Setting.Prompt" />,
+              content: <FormattedMessage id="Setting.TheCurrentClassification" />,
               onOk() {
                 doDelete(cateId);
               },
-              okText: 'Continue to delete',
-              cancelText: 'Cancel'
+              okText: <FormattedMessage id="Setting.ContinueToDelete" />,
+              cancelText: <FormattedMessage id="Setting.Cancel" />
             });
           } else {
             doDelete(cateId);
@@ -193,20 +161,19 @@ export default class CateList extends React.Component<any, any> {
     } else if (resourceFlag) {
       //该分类下有素材
       confirm({
-        title: 'Prompt',
-        content:
-          'The current classification has associated materials, it is recommended to delete after modification, click to continue to delete, related materials will be classified into the default classification!',
+        title: <FormattedMessage id="Setting.Prompt" />,
+        content: <FormattedMessage id="Setting.TheCurrentClassification" />,
         onOk() {
           doDelete(cateId);
         },
-        okText: 'Continue to delete',
-        cancelText: 'Cancel'
+        okText: <FormattedMessage id="Setting.ContinueToDelete" />,
+        cancelText: <FormattedMessage id="Setting.Cancel" />
       });
     } else {
       //没有子分类
       confirm({
-        title: 'Prompt',
-        content: 'Are you sure you want to delete this category?',
+        title: <FormattedMessage id="Setting.Prompt" />,
+        content: <FormattedMessage id="Setting.deleteThisCategory" />,
         onOk() {
           doDelete(cateId);
         }

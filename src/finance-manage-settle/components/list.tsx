@@ -41,24 +41,12 @@ export default class List extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      settlePage,
-      selected,
-      checkedSettleIds,
-      fetchSettleList,
-      queryParams,
-      onSelect,
-      setCheckedSettleIds,
-      changeSettleStatus
-    } = this.props.relaxProps;
+    const { loading, settlePage, selected, checkedSettleIds, fetchSettleList, queryParams, onSelect, setCheckedSettleIds, changeSettleStatus } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         rowKey="settleId"
-        dataSource={
-          settlePage.get('content') ? settlePage.get('content').toJS() : []
-        }
+        dataSource={settlePage.get('content') ? settlePage.get('content').toJS() : []}
         rowSelection={
           queryParams.get('settleStatus').toString() == 0
             ? {
@@ -75,14 +63,13 @@ export default class List extends React.Component<any, any> {
           pageSize: settlePage.get('size'),
           current: settlePage.get('number') + 1,
           onChange: (pageNum, pageSize) => {
-            fetchSettleList(pageNum - 1, pageSize );
+            fetchSettleList(pageNum - 1, pageSize);
           }
         }}
-
       >
         {queryParams.get('settleStatus') == 1 && (
           <Column
-            title={<FormattedMessage id="statementTime" />}
+            title={<FormattedMessage id="Finance.statementTime" />}
             key="settleTime"
             dataIndex="settleTime"
             render={(value) => {
@@ -92,7 +79,7 @@ export default class List extends React.Component<any, any> {
         )}
 
         <Column
-          title={<FormattedMessage id="SettlementStatementTime" />}
+          title={<FormattedMessage id="Finance.SettlementStatementTime" />}
           key="createTime"
           dataIndex="createTime"
           render={(value) => {
@@ -100,28 +87,20 @@ export default class List extends React.Component<any, any> {
           }}
         />
 
-        <Column
-          title={<FormattedMessage id="statementNumber" />}
-          key="statementNo"
-          dataIndex="settlementCode"
-        />
+        <Column title={<FormattedMessage id="Finance.statementNumber" />} key="statementNo" dataIndex="settlementCode" />
 
         <Column
-          title={<FormattedMessage id="statementPeriod" />}
+          title={<FormattedMessage id="Finance.statementPeriod" />}
           key="statementTime"
           render={(row) => {
             return `${row.startTime}～${row.endTime}`;
           }}
         />
 
-        <Column
-          title={<FormattedMessage id="storeName" />}
-          key="storeName"
-          dataIndex="storeName"
-        />
+        <Column title={<FormattedMessage id="Finance.storeName" />} key="storeName" dataIndex="storeName" />
 
         <Column
-          title={<FormattedMessage id="Paymentamount" />}
+          title={<FormattedMessage id="Finance.Paymentamount" />}
           key="splitPayPrice"
           dataIndex="splitPayPrice"
           render={(value) => {
@@ -184,21 +163,18 @@ export default class List extends React.Component<any, any> {
         /> */}
 
         <Column
-          title={<FormattedMessage id="operation" />}
+          title={<FormattedMessage id="Finance.operation" />}
           key="operation"
           render={(row) => {
             return (
               <AuthWrapper functionName="f_billing_details">
-                <Tooltip placement="top" title="Details">
+                <Tooltip placement="top" title={<FormattedMessage id="Finance.Details" />}>
                   <a
                     onClick={() =>
                       history.push({
                         pathname: `/billing-details/${row.settleId}`,
                         state: {
-                          settlementType:
-                            queryParams.get('settleStatus').toString() == 0
-                              ? 'UnSettlement details'
-                              : 'Settlement details'
+                          settlementType: queryParams.get('settleStatus').toString() == 0 ? 'UnSettlement details' : 'Settlement details'
                         }
                       })
                     }

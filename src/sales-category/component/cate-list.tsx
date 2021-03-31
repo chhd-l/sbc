@@ -5,7 +5,7 @@ import { Form, Modal, Popconfirm, Switch, Table, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, checkAuth } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 const confirm = Modal.confirm;
@@ -82,17 +82,17 @@ class CateList extends React.Component<any, any> {
 
   _columns = [
     {
-      title: 'Category name',
+      title: <FormattedMessage id="Product.CategoryName" />,
       dataIndex: 'cateName',
       key: 'cateName'
     },
     {
-      title: 'Number of product',
+      title: <FormattedMessage id="Product.NumberOfProduct" />,
       dataIndex: 'productNum',
       key: 'productNum'
     },
     {
-      title: 'Display in shop',
+      title: <FormattedMessage id="Product.DisplayInShop" />,
       dataIndex: 'displayStatus',
       key: 'displayStatus',
 
@@ -108,7 +108,7 @@ class CateList extends React.Component<any, any> {
       )
     },
     {
-      title: <FormattedMessage id="operation" />,
+      title: <FormattedMessage id="Product.operation" />,
       key: 'option',
       render: (rowInfo) => this._getOption(rowInfo)
     }
@@ -139,14 +139,14 @@ class CateList extends React.Component<any, any> {
           ? // 一级分类(非默认分类)可添加子分类
             [
               rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
-                <Tooltip placement="top" title="Edit SEO Setting" key="item1">
+                <Tooltip placement="top" title={<FormattedMessage id="Product.EditSEOSetting" />} key="item1">
                   <a style={styles.edit} onClick={this._editSEOSetting.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconicon">
                     {/*<FormattedMessage id="addSubcategory" />*/}
                   </a>
                 </Tooltip>
               ),
               rowInfo.get('cateGrade') < 3 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
-                <Tooltip placement="top" title="Add subcategory" key="item2">
+                <Tooltip placement="top" title={<FormattedMessage id="Product.AddSubcategory" />} key="item2">
                   <a style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconbtn-addsubvisionsaddcategory">
                     {/*<FormattedMessage id="addSubcategory" />*/}
                   </a>
@@ -154,7 +154,7 @@ class CateList extends React.Component<any, any> {
               ),
               // 非默认分类可编辑
               rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
-                <Tooltip placement="top" title="Edit" key="item3">
+                <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />} key="item3">
                   <a style={styles.edit} onClick={this._showEditModal.bind(this, rowInfo)} className="iconfont iconEdit">
                     {/*<FormattedMessage id="edit" />*/}
                   </a>
@@ -162,7 +162,7 @@ class CateList extends React.Component<any, any> {
               ),
               // 非默认分类可删除
               rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_2') && (
-                <Tooltip placement="top" title="Delete" key="item4">
+                <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />} key="item4">
                   <a onClick={this._delete.bind(this, rowInfo.get('storeCateId'))} className="iconfont iconDelete">
                     {/*<FormattedMessage id="delete" />*/}
                   </a>
@@ -217,20 +217,25 @@ class CateList extends React.Component<any, any> {
 
   _confirm = (storeCateId: string) => {
     const { doDelete, childFlag, goodsFlag } = this.props.relaxProps;
-
+    let okText = this.props.intl.formatMessage({id:'Product.OK'});
+    let title = this.props.intl.formatMessage({id:'Product.Prompt'});
+    
+debugger
     if (goodsFlag) {
+      let content = this.props.intl.formatMessage({id:'Product.TheCurrentCategory'});
       //该分类下有商品
       Modal.info({
-        title: 'Prompt',
-        content: 'The current category is associated with the product, please modify and then delete.',
-        okText: 'OK'
+        title:title ,
+        content: content,
+        okText: okText
       });
     } else if (childFlag) {
+      let content = this.props.intl.formatMessage({id:'Product.PleaseDelete'});
       //有子分类
       Modal.info({
-        title: 'Prompt',
-        content: 'Please delete all categories under this category first.',
-        okText: 'OK'
+        title: title ,
+        content:content ,
+        okText: okText
       });
       // confirm({
       //   title: 'Prompt',
@@ -240,10 +245,11 @@ class CateList extends React.Component<any, any> {
       //   }
       // });
     } else {
+      let content = this.props.intl.formatMessage({id:'Product.deleteThisCategory'});
       //没有子分类
       confirm({
-        title: 'Prompt',
-        content: 'Are you sure you want to delete this category?',
+        title: title,
+        content: content,
         onOk() {
           doDelete(storeCateId);
         }
@@ -354,4 +360,4 @@ _BodyRow = DropTarget('row', _rowTarget, (connect, monitor) => ({
   }))(_BodyRow)
 );
 
-export default DragDropContext(HTML5Backend)(CateList);
+export default DragDropContext(HTML5Backend)(injectIntl(CateList));

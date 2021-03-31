@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Relax } from 'plume2';
-import { Col, message, Modal, Row } from 'antd';
+import { Col, InputNumber, message, Modal, Popconfirm, Row, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import { IMap } from 'typings/globalType';
-import { AuthWrapper, Const, noop } from 'qmkit';
+import { AuthWrapper, cache, Const, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { fromJS } from 'immutable';
 import moment from 'moment';
@@ -46,6 +46,8 @@ export default class OrderStatusHead extends React.Component<any, any> {
       onRefundOnlineModalChange: Function;
       refundRecord: IMap;
       fetchRefundOrder: Function;
+      changeRefundPrice:Function;
+      onRealRefund: Function;
     };
   };
 
@@ -75,7 +77,9 @@ export default class OrderStatusHead extends React.Component<any, any> {
     onlineRefundModalHide: noop,
     onRefundOnlineModalChange: noop,
     refundRecord: 'refundRecord',
-    fetchRefundOrder: noop
+    fetchRefundOrder: noop,
+    changeRefundPrice:noop,
+    onRealRefund: noop
   };
 
   constructor(props) {
@@ -100,7 +104,8 @@ export default class OrderStatusHead extends React.Component<any, any> {
       refundModalData,
       onRefundModalHide,
       onlineRefundModalData,
-      onlineRefundModalHide
+      onlineRefundModalHide,
+      onRealRefund
     } = this.props.relaxProps;
     let { refundRecord } = this.props.relaxProps;
 
@@ -133,98 +138,102 @@ export default class OrderStatusHead extends React.Component<any, any> {
               <label style={styles.greenText}>{returnType == 'RETURN' ? Const.returnGoodsState[returnFlowState] : Const.returnMoneyState[returnFlowState] || ''}</label>
             </div>
             <div style={styles.orderEnd}>
-              {returnFlowState === 'INIT' && (
-                <AuthWrapper functionName="f_order_return_edit">
-                  <Link
-                    style={styles.pr20}
-                    to={{
-                      pathname: `/order-return-edit/${rid}`,
-                      state: { rid: `${rid}` }
-                    }}
-                  >
-                    Update
-                  </Link>
-                </AuthWrapper>
-              )}
-              {returnFlowState === 'INIT' && (
-                <AuthWrapper functionName="rolf002">
-                  <a style={styles.pr20} href="#" onClick={() => this._showAudit(onAudit, rid)}>
-                    Audit
-                  </a>
-                </AuthWrapper>
-              )}
+              {returnFlowState === 'PENDING_REVIEW' && (
+                          <AuthWrapper functionName="f_return_review">
 
-              {returnFlowState === 'INIT' && (
-                <AuthWrapper functionName="rolf002">
-                  <a style={styles.pr20} href="#" onClick={() => this._showReject(onReject, rid)}>
-                    Reject
-                  </a>
-                </AuthWrapper>
-              )}
+                            <Tooltip placement="top" title="Approve">
+                              <a style={{ marginLeft: 20 }} onClick={
+                                () => {
+                                  this._showAudit(onAudit, rid);
+                                }
+                              }>
+                                Approve
+                                </a>
 
-              {/*退货单的已审核状态*/}
-              {returnFlowState === 'AUDIT' && returnType == 'RETURN' && (
-                <AuthWrapper functionName="rolf003">
-                  <a style={styles.pr20} href="#" onClick={() => this._showDeliver(onDeliver, rid)}>
-                    Fill in logistics
-                  </a>
-                </AuthWrapper>
-              )}
+                            </Tooltip>
 
-              {returnFlowState === 'DELIVERED' && (
-                <AuthWrapper functionName="rolf004">
-                  <a style={styles.pr20} href="#" onClick={() => this._showReceive(onReceive, rid)}>
-                    收货
-                  </a>
-                </AuthWrapper>
-              )}
+                            <Tooltip placement="top" title="Reject">
+                              <a style={{ marginLeft: 20 }} onClick={
+                                () => {
+                                  this._showReject(onReject, rid);
+                                }
+                              }>
+                                Reject
+                                </a>
+                            </Tooltip>
+                          </AuthWrapper>
+                        )}
 
-              {returnFlowState === 'DELIVERED' && (
-                <AuthWrapper functionName="rolf004">
-                  <a style={styles.pr20} href="#" onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
-                    拒绝收货
-                  </a>
-                </AuthWrapper>
-              )}
+                        {returnFlowState === 'TO_BE_DELIVERED' && (
+                          <AuthWrapper functionName="f_return_delivered">
+                            <Popconfirm placement="topLeft" title="Are you sure skip logistics?" onConfirm={() => {
+                              this._showDeliver(onDeliver, rid, false)
+                            }} okText="Confirm" cancelText="Cancel">
+                              <Tooltip placement="top" title="Skip logistics">
+                                <a style={{ marginLeft: 20 }}>
+                                  Skip logistics
+                                </a>
+                              </Tooltip>
+                            </Popconfirm>
+                            <Tooltip placement="top" title="Fill in logistics">
+                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
+                                Fill in logistics
+                              </a>
+                            </Tooltip>
+                          </AuthWrapper>
+                        )}
 
-              {/*已收货状态 或者 退款单的已审核状态*/}
-              {enableReturn && (
-                <AuthWrapper functionName="rolf005">
-                  <div>
-                    {' '}
-                    <a
-                      style={styles.pr20}
-                      href="#"
-                      onClick={() => {
-                        if (payType == 0) {
-                          this._showOnlineRefund(onOnlineRefund, rid, customerId, payPrice, applyPoints);
-                        } else {
-                          this._showOfflineRefund(onOfflineRefund, rid, customerId, payPrice, applyPoints);
-                        }
-                      }}
-                    >
-                      <FormattedMessage id="refund" />
-                    </a>
-                  </div>
-                </AuthWrapper>
-              )}
-              {/*已收货状态 或者 退款单的已审核状态*/}
-              {enableReturn && (
-                <AuthWrapper functionName="rolf005">
-                  <a style={styles.pr20} href="#" onClick={() => this._showRejectRefund(onRejectRefund, rid, 0 == payType)}>
-                    <FormattedMessage id="refusedToRefund" />
-                  </a>
-                </AuthWrapper>
-              )}
+                        {returnFlowState === 'TO_BE_RECEIVED' && (
+                          <AuthWrapper functionName="f_return_received">
+                            <Tooltip placement="top" title="Recipient accepted">
+                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
+                                Recipient accepted
+                              </a>
+                            </Tooltip>
+                            <Tooltip placement="top" title="Recipient rejected">
+                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
+                                Recipient rejected
+                              </a>
+                            </Tooltip>
+
+                          </AuthWrapper>
+                        )}
+                        {returnFlowState === 'PENDING_REFUND' && (
+                          <AuthWrapper functionName="f_return_refund">
+                            <Tooltip placement="top" title="Refused to refund">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => {
+                                  // console.log(onRejectRefund, 'onRejectRefund');
+                                  this._showRejectRefund(onRejectRefund, rid, 0 == payType);
+                                }}
+                              >
+                                <FormattedMessage id="refusedToRefund" />
+                              </a>
+                            </Tooltip>
+                            <Tooltip placement="top" title="Real refund">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => {
+                                  this._showRealRefund(onRealRefund, rid, applyPrice);
+                                }}
+                              >
+                                <FormattedMessage id="realRefund" />
+                              </a>
+                            </Tooltip>
+                          </AuthWrapper>
+                        )}
             </div>
           </div>
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                <FormattedMessage id="chargebackNumber" />：{detail.get('id')}{' '}
+                <FormattedMessage id="returnOrderNumber" />：{detail.get('id')}{' '}
                 {detail.get('platform') != 'CUSTOMER' && (
                   <span style={styles.platform}>
-                    <FormattedMessage id="Chargeback" />
+                    <FormattedMessage id="Return" />
                   </span>
                 )}
               </p>
@@ -243,13 +252,13 @@ export default class OrderStatusHead extends React.Component<any, any> {
                 <FormattedMessage id="consumer" />：{detail.getIn(['buyer', 'name'])}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="consumerAccount" />：{this._parsePhone(detail.getIn(['buyer', 'account']))}
+                <FormattedMessage id="consumerAccount" />:{this._parsePhone(detail.getIn(['buyer', 'account']))}
               </p>
 
               {detail.getIn(['buyer', 'customerFlag']) && (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="consumerLevel" />： Tourist
-                  {/* {detail.getIn(['buyer', 'levelName'])} */}
+                  <FormattedMessage id="consumerLevel" />:
+                  {detail.getIn(['buyer', 'levelName'])}
                 </p>
               )}
             </Col>
@@ -266,8 +275,8 @@ export default class OrderStatusHead extends React.Component<any, any> {
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
     confirm({
-      title: '审核通过',
-      content: '是否确认审核通过？',
+      title: 'approve',
+      content: 'Is the audit approved?',
       onOk() {
         return onAudit(rid);
       },
@@ -279,26 +288,30 @@ export default class OrderStatusHead extends React.Component<any, any> {
   _showReject(onReject: Function, rid: string) {
     this.props.relaxProps.onRejectModalChange({
       visible: true,
-      type: '驳回',
+      type: 'reject',
       onOk: onReject,
       rid: rid
     });
   }
 
   // 填写物流
-  _showDeliver(onDeliver: Function, rid: string) {
-    this.props.relaxProps.onDeliverModalChange({
-      visible: true,
-      onOk: onDeliver,
-      rid: rid
-    });
+  _showDeliver(onDeliver: Function, rid: string, isSkip: boolean) {
+    if (isSkip) {
+      this.props.relaxProps.onDeliverModalChange({
+        visible: true,
+        onOk: onDeliver,
+        rid: rid
+      });
+    } else {
+      onDeliver(rid, false)
+    }
   }
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
     confirm({
-      title: '确认收货',
-      content: '是否确认收货？',
+      title: 'Confirm receipt',
+      content: 'Do you confirm receipt of the goods?',
       onOk() {
         return onReceive(rid);
       },
@@ -310,7 +323,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
   _showRejectReceive(onRejectReceive: Function, rid: string) {
     this.props.relaxProps.onRejectModalChange({
       visible: true,
-      type: '拒绝收货',
+      type: 'recipient rejected',
       onOk: onRejectReceive,
       rid: rid
     });
@@ -354,7 +367,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
     this.props.relaxProps.onRejectModalChange({
       visible: true,
-      type: '拒绝退款',
+      type: 'refused to refund',
       onOk: onRejectRefund,
       rid: rid
     });
@@ -370,6 +383,38 @@ export default class OrderStatusHead extends React.Component<any, any> {
     } else {
       return phone;
     }
+  }
+  async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
+    confirm({
+      title: 'Confirm Refund',
+      content: <div>
+        <p>Do you confirm the refund?</p>
+        <p>What is the amount of the refund?</p>
+
+
+        <InputNumber
+          min={0}
+          max={applyPrice}
+          defaultValue={applyPrice}
+          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || '$'} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          parser={value => value.replace(/\$\s?|(,*)/g, '')}
+          onChange={this.changeRealRefund}
+        />
+      </div>,
+      onOk() {
+        return onRealRefund(rid,applyPrice);
+      },
+      onCancel() {
+        this.setState({
+          refundPrice: null
+        })
+      }
+    });
+  }
+  changeRealRefund = (value) => {
+    this.props.relaxProps.changeRefundPrice({
+      refundPrice:value
+    })
   }
 }
 
@@ -416,10 +461,11 @@ const styles = {
   },
   platform: {
     fontSize: 12,
-    color: '#fff',
-    padding: '1px 3px',
-    background: '#F56C1D',
+    padding: '0px 5px',
     display: 'inline-block',
-    marginLeft: 5
+    marginLeft: 5,
+    border: ' 1px solid #F56C1D',
+    color: '#F56C15',
+    borderRadius: 5
   }
 } as any;

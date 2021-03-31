@@ -36,45 +36,45 @@ export default class SearchTabList extends React.Component<any, any> {
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={<FormattedMessage id="pendingReview" />}
-            key="flowState-INIT"
+            key="PENDING_REVIEW"
           >
-            {tab.get('key') === 'flowState-INIT' ? <List /> : null}
+            {tab.get('key') === 'PENDING_REVIEW' ? <List /> : null}
           </Tabs.TabPane>
           {/*{<FormattedMessage id="pendingReview" />}*/}
           <Tabs.TabPane
             tab={<FormattedMessage id="toBeDelivered" />}
-            key="flowState-AUDIT"
+            key="TO_BE_DELIVERED"
           >
-            {tab.get('key') === 'flowState-AUDIT' ? <List /> : null}
+            {tab.get('key') === 'TO_BE_DELIVERED' ? <List /> : null}
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <FormattedMessage id="toBeReceived" />
+              <FormattedMessage id="order.toBeReceived" />
             }
-            key="flowState-DELIVERED"
+            key="TO_BE_RECEIVED"
           >
-            {tab.get('key') === 'flowState-DELIVERED' ? <List /> : null}
+            {tab.get('key') === 'TO_BE_RECEIVED' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
             tab={<FormattedMessage id="pendingRefund" />}
-            key="flowState-RECEIVED"
+            key="PENDING_REFUND"
           >
-            {tab.get('key') === 'flowState-RECEIVED' ? <List /> : null}
+            {tab.get('key') === 'PENDING_REFUND' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
             tab={<FormattedMessage id="order.completed" />}
-            key="flowState-COMPLETED"
+            key="COMPLETED"
           >
-            {tab.get('key') === 'flowState-COMPLETED' ? <List /> : null}
+            {tab.get('key') === 'COMPLETED' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
             tab={<FormattedMessage id="rejected" />}
-            key="flowState-REJECT_RECEIVE"
+            key="REJECTED"
           >
-            {tab.get('key') === 'flowState-REJECT_RECEIVE' ? <List /> : null}
+            {tab.get('key') === 'REJECTED' ? <List /> : null}
           </Tabs.TabPane>
 
           {/* <Tabs.TabPane

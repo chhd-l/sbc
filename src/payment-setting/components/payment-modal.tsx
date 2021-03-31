@@ -27,7 +27,7 @@ class PaymentModal extends React.Component<any, any> {
     super(props);
     this.state = {
       paymentForm: {
-        enabled: false
+        isOpen: false
       },
       enabled: null,
       key: "0"
@@ -37,12 +37,11 @@ class PaymentModal extends React.Component<any, any> {
 
   onFormChange = (value) => {
     this.setState({
-      enabled: value
+      isOpen: value
     });
   };
 
   _handleClick = (value) => {
-    console.log(value);
     this.setState({
       key: Number(value)
     })
@@ -51,15 +50,20 @@ class PaymentModal extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     //const key = form.get('tabType');
-    let checked = this.state.paymentForm.enabled;
-    if (this.state.enabled != null) {
-      checked = this.state.enabled;
+    let checked = this.state.paymentForm.isOpen;
+    if (this.state.isOpen != null) {
+      checked = this.state.isOpen;
     }
+
+
 
     return (
       <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Tabs defaultActiveKey="0" onChange={this._handleClick} >
           {this.props.paymentForm&&this.props.paymentForm.payPspItemVOList&&this.props.paymentForm.payPspItemVOList.map((item, index)=>{
+            setTimeout(()=>{
+              console.log(item.isOpen,23);
+            })
             return(
               <TabPane tab={item.name} key={index}>
                 <Form>
@@ -67,7 +71,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="apiKey" />}>
                         {getFieldDecorator('apiKey', {
-                          initialValue: item.pspConfigVO.apiKey,
+                          initialValue: item.pspConfigVO&&item.pspConfigVO.apiKey,
                           rules: [{ required: true, message: 'Please input Api Key!' }]
                         })(<Input />)}
                       </FormItem>
@@ -75,7 +79,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="appID" />}>
                         {getFieldDecorator('appId', {
-                          initialValue: item.pspConfigVO.appId,
+                          initialValue: item.pspConfigVO&&item.pspConfigVO.appId,
                           rules: [{ required: false, message: 'Please input App ID!' }]
                         })(<Input />)}
                       </FormItem>
@@ -83,7 +87,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="privateKey" />}>
                         {getFieldDecorator('privateKey', {
-                          initialValue: item.pspConfigVO.privateKey,
+                          initialValue: item.pspConfigVO&&item.pspConfigVO.privateKey,
                           rules: [{ required: false, message: 'Please input Private Key!' }]
                         })(<Input.TextArea />)}
                       </FormItem>
@@ -91,7 +95,7 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="publicKey" />}>
                         {getFieldDecorator('publicKey', {
-                          initialValue: item.pspConfigVO.publicKey,
+                          initialValue: item.pspConfigVO&&item.pspConfigVO.publicKey,
                           rules: [{ required: false, message: 'Please input Public Key!' }]
                         })(<Input.TextArea />)}
                       </FormItem>
@@ -101,7 +105,9 @@ class PaymentModal extends React.Component<any, any> {
                     <Col span={24}>
                       <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
                         {getFieldDecorator('paymentMethod', {
-                          initialValue: item.pspConfigVO.paymentMethod,
+                          initialValue: item.payPspItemCardTypeVOList&&item.payPspItemCardTypeVOList.map((a)=>{
+                            return a.cardType
+                          }),
                           rules: [
                             {
                               required: false,
@@ -110,18 +116,18 @@ class PaymentModal extends React.Component<any, any> {
                           ]
                         })(
                           <Select mode="multiple">
-                            {this.props.paymentForm.payPspItemCardTypeVOList&&this.props.paymentForm.payPspItemCardTypeVOList.map((a)=>{
+                            {this.props.paymentForm.payPspCardTypeVOList&&this.props.paymentForm.payPspCardTypeVOList.map((b,i)=>{
                               return (
-                                <Option value={a.cardType}>
+                                <Option value={b.cardType} key={i}>
                                   <img
-                                    src={a.imgUrl}
+                                    src={b.imgUrl}
                                     style={{
                                       width: '30px',
                                       height: '20px',
                                       marginRight: '10px'
                                     }}
                                   />
-                                  {a.cardType}
+                                  {b.cardType}
                                 </Option>
                               )
                             })}
@@ -131,9 +137,9 @@ class PaymentModal extends React.Component<any, any> {
                     </Col>
                     <Col span={24}>
                       <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
-                        {getFieldDecorator('enabled', {
-                          initialValue: item.pspConfigVO.enabled
-                        })(<Switch checked={checked} onChange={(value) => this.onFormChange(value)} />)}
+                        {getFieldDecorator('isOpen', {
+                          initialValue: item.isOpen == 1? true : false
+                        })(<Switch defaultChecked={item.isOpen == 1? true : false} onChange={(value) => this.onFormChange(value)} />)}
                       </FormItem>
                     </Col>
                   </Row>
@@ -162,15 +168,39 @@ class PaymentModal extends React.Component<any, any> {
     this.props.parent.closeModel();
     this.props.form.resetFields();
     this.setState({
-      enabled: null
+      isOpen: null
     });
   };
+
+  union = (arr1,arr2) =>{
+    return arr1.filter(item=>{
+      if (arr2.indexOf(item.cardType)>-1) {
+        arr2.splice(arr2.indexOf(item.cardType),1)
+        return item
+      }
+    })
+  }
 
   onSave = async () => {
     this.props.form.validateFields(null, async (errs, values) => {
       //如果校验通过
       let payPspItemVOList = this.props.paymentForm.payPspItemVOList[this.state.key]
-      console.log(payPspItemVOList,222222);
+      let pspItemCardTypeSaveRequestList = []
+      let paymentMethodList = this.props.paymentForm.payPspCardTypeVOList.filter(item=>{
+        if (values.paymentMethod.indexOf(item.cardType)>-1) {
+          values.paymentMethod.splice(values.paymentMethod.indexOf(item.cardType),1)
+          return item
+        }
+      })
+      paymentMethodList.map((item,i)=>{
+        pspItemCardTypeSaveRequestList.push({
+          storeId: item.storeId,
+          pspId: item.pspId,
+          pspItemId: payPspItemVOList.pspConfigVO.pspItemId,
+          cardType: item.cardType,
+          imgUrl: item.imgUrl,
+        })
+      })
       if (!errs) {
         const { res } = await webapi.savePaymentSetting({
           pspConfigSaveRequest: Object.assign({
@@ -183,10 +213,10 @@ class PaymentModal extends React.Component<any, any> {
             privateKey: values.privateKey,
             publicKey: values.publicKey
           }),
-          payPspSaveRequest: Object.assign({
+          payPspItemSaveRequest: Object.assign({
             id: payPspItemVOList.pspConfigVO.pspItemId,
-            isOpen: values.enabled ? 1 : 0,
-            storePaymentMethod: values.paymentMethod.join(','),
+            isOpen: values.isOpen == true ? 1 : 0,
+            pspItemCardTypeSaveRequestList: pspItemCardTypeSaveRequestList,
           })
         });
         if (res.code === Const.SUCCESS_CODE) {

@@ -38,7 +38,7 @@ export default class AppStore extends Store {
       const [state, value] = key.split('-');
       form['tradeState'][state] = value;
     }
-    form['orderType'] = 'NORMAL_ORDER';
+    form['orderType'] = form['orderType'] ? form['orderType'] : 'ALL_ORDER';
     if (sessionStorage.getItem('PrescriberSelect')) {
       form['clinicsIds'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId.split(',') : null;
       form['clinicsName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;

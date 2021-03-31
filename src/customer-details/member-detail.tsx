@@ -356,7 +356,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <Col span={12}>
                   <div className="text-highlight">Tag name</div>
                   <div>
-                    <Select style={{ width: '100%' }} value={this.state.petOwnerTag} mode="multiple" onChange={this.setPetOwnerTagging}>
+                    <Select style={{ width: '100%' }} value={this.state.petOwnerTag} mode="multiple" onChange={this.setPetOwnerTagging} getPopupContainer={(trigger: any) => trigger.parentNode}>
                       {this.state.tagList
                         .filter((item) => item.segmentType == 0)
                         .map((v, idx) => (
@@ -426,7 +426,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             <div className="container">
               <Headline
                 title="Other information"
-                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />}
+                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">

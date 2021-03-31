@@ -41,11 +41,11 @@ if (sessionStorage.getItem(cache.LANGUAGE) == 'English') {
   antLanguage = deDE;
 }
 
-let a = '';
+/*let a = '';
 for (let i in es_ES) {
   a += "'" + i + "'"+ ':'+ "'" +'\n';
 }
-console.log(a);
+console.log(a);*/
 
 const PrescriberRouter = () => (
   <IntlProvider locale="es" messages={language}>

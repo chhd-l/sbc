@@ -32,7 +32,8 @@ export default class PaymentMethod extends React.Component<any, any> {
       paymentForm: {
         enabled: false
       },
-      enabled: null
+      enabled: null,
+      maxAmount: 0
     };
     this.closeModel = this.closeModel.bind(this);
   }
@@ -81,17 +82,20 @@ export default class PaymentMethod extends React.Component<any, any> {
     const { onChecked, getCheckedId } = this.props.relaxProps;
     this.setState({
       isChecked: e,
-     // checkedId: checkedId
+      checkedId: checkedId
     })
     getCheckedId(checkedId)
     //getCheckedId(checkedId)
     onChecked(e);
   };
 
-  onTooltip = (e,id) => {
+  onTooltip = (e,id,maxAmount) => {
     const { onShow, switchChecked, checkedId } = this.props.relaxProps;
 
     if (switchChecked == true && checkedId == id) {
+      this.setState({
+        maxAmount: maxAmount
+      })
       onShow(true);
     } else {
       return false;
@@ -211,6 +215,7 @@ export default class PaymentMethod extends React.Component<any, any> {
           <div className="flex-start-align">
             {queryByStoreId.List3 &&
               queryByStoreId.List3.map((item, index) => {
+                console.log(item,111111);
                 return (
                   /*<Form key={index}>
                     <Row>
@@ -245,7 +250,7 @@ export default class PaymentMethod extends React.Component<any, any> {
                             <Switch style={{ marginRight: 15 }} onChange={e=>this.onSwitchChange(e,item.id)} />
                             <Tooltip placement="top" title="Edit">
                               {/*<a style={{ color: this.state.isChecked == true ? 'red' : '#cccccc' }} type="link" onClick={this.onTooltip} className="iconfont iconEdit"></a>\*/}
-                              <a  type="link" onClick={()=>this.onTooltip(this,item.id)} className="iconfont iconEdit"></a>
+                              <a  type="link" onClick={()=>this.onTooltip(this,item.id,item.maxAmount)} className="iconfont iconEdit"></a>
 
                             </Tooltip>
                           </div>
@@ -257,7 +262,7 @@ export default class PaymentMethod extends React.Component<any, any> {
               })}
           </div>
         </div>
-        <MethodTips/>
+        <MethodTips checkedId={this.state.checkedId} maxAmount={this.state.maxAmount}/>
       </div>
     );
   }

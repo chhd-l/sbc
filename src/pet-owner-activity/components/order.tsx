@@ -52,7 +52,7 @@ export default class orders extends Component<any, any> {
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize,
       orderType: 'ALL_ORDER',
-      buyerAccount: this.props.customerAccount
+      buyerId: this.props.petOwnerId
     });
     if (status) {
       params.tradeState = { flowState: status };
@@ -108,7 +108,7 @@ export default class orders extends Component<any, any> {
       },
       {
         title: 'Time',
-        dataIndex: 'creationDate',
+        dataIndex: 'tradeState.createTime',
         width: '30%',
         render: (text) => {
           return (
@@ -135,9 +135,9 @@ export default class orders extends Component<any, any> {
                 overflowY: 'auto'
               }}
               placement="bottomLeft"
-              title={<div>{record.flowState ? record.tradeState.flowState : ''}</div>}
+              title={<div><FormattedMessage id={record.tradeState ? getOrderStatusValue('OrderStatus', record.tradeState.flowState): ''}/></div>}
             >
-              <p className="overFlowtext">{record.flowState ? record.tradeState.flowState : ''}</p>
+              <p className="overFlowtext"><FormattedMessage id={record.tradeState ? getOrderStatusValue('OrderStatus', record.tradeState.flowState): ''}/></p>
             </Tooltip>
           );
         }

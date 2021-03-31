@@ -69,13 +69,13 @@ class TabList extends React.Component<any, any> {
   };
   _columns = [
     {
-      title: this.props.intl.formatMessage({ id: 'Setting.No' }),
+      title: <FormattedMessage id="Setting.No" />,
       dataIndex: 'id',
       key: 'id',
       render: (text, record, index) => `${index + 1}`
     },
     {
-      title: this.props.intl.formatMessage({ id: 'Setting.Consenttitle' }),
+      title: <FormattedMessage id="Setting.Consenttitle" />,
       dataIndex: 'consentTitle',
       key: 'consentTitle',
       render: (text) => {
@@ -84,33 +84,33 @@ class TabList extends React.Component<any, any> {
       }
     },
     {
-      title: this.props.intl.formatMessage({ id: 'Setting.ConsentId' }),
+      title: <FormattedMessage id="Setting.ConsentId" />,
       dataIndex: 'consentId',
       key: 'consentId'
     },
     {
-      title: this.props.intl.formatMessage({ id: 'Setting.Consentcode' }),
+      title: <FormattedMessage id="Setting.Consentcode" />,
       dataIndex: 'consentCode',
       key: 'consentCode'
     },
     {
-      title: this.props.intl.formatMessage({ id: 'Setting.Consenttype' }),
+      title: <FormattedMessage id="Setting.Consenttype" />,
       dataIndex: 'consentType',
       key: 'consentType'
     },
     {
-      title: this.props.intl.formatMessage({ id: 'Setting.Category' }),
+      title: <FormattedMessage id="Setting.Category" />,
       dataIndex: 'consentCategory',
       key: 'consentCategory'
     },
     {
-      title: this.props.intl.formatMessage({ id: 'Setting.Fieldtype' }),
+      title: <FormattedMessage id="Setting.Fieldtype" />,
       dataIndex: 'filedType',
       key: 'filedType'
     },
     ,
     {
-      title: this.props.intl.formatMessage({ id: 'Setting.Operation' }),
+      title: <FormattedMessage id="Setting.Operation" />,
       dataIndex: 'operation',
       key: 'operation',
       render: (_text, _record) => this._getOption(_record)

@@ -2061,6 +2061,9 @@ export default {
   'Marketing.Itemsmustbeentered': 'Items must be entered',
   'Marketing.EditfreeShipping': 'Edit  free Shipping',
   'Marketing.CreatefreeShipping': 'Create  free Shipping',
+  'Marketing.Promotiontype':'Promotion type',
+  'Marketing.CampaignStatus2': 'Campaign Status',
+  'Marketing.Download': 'Download',
 
 
 

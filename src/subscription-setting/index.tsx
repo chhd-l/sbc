@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs } from 'antd';
+import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs, Spin } from 'antd';
 
 import * as webapi from './webapi';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
-export default class Subscription extends Component<any, any> {
+ class Subscription extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -18,7 +18,8 @@ export default class Subscription extends Component<any, any> {
         cardExpirationId: null,
         cardExpirationStatus: 0,
         cardExpirationValue: 0
-      }
+      },
+      loading:false,
     };
   }
   componentDidMount() {
@@ -32,6 +33,9 @@ export default class Subscription extends Component<any, any> {
     });
   };
   getSettingConfig = () => {
+    this.setState({
+      loading:true
+    })
     webapi
       .getSettingConfig()
       .then((data) => {
@@ -55,11 +59,16 @@ export default class Subscription extends Component<any, any> {
             settingForm.cardExpirationValue = cardExpirationConfig.context;
           }
           this.setState({
-            settingForm
+            settingForm,
+            loading:false
           });
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        this.setState({
+          loading:false
+        })
+      });
   };
   updateSetting = () => {
     const { settingForm } = this.state;
@@ -77,20 +86,30 @@ export default class Subscription extends Component<any, any> {
         }
       ]
     };
+    this.setState({
+      loading:true
+    })
     webapi
       .updateSetting(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(<FormattedMessage id="Subscription.OperationSuccessful" />);
+          message.success(this.props.intl.formatMessage({id:'Subscription.OperationSuccessful'}));
+          this.setState({
+            loading:false
+          })
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        this.setState({
+          loading:false
+        })
+      });
   };
   render() {
     const { title, settingForm } = this.state;
     return (
-      <div>
+      <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
@@ -180,7 +199,7 @@ export default class Subscription extends Component<any, any> {
             {<FormattedMessage id="Subscription.save" />}
           </Button>
         </div>
-      </div>
+      </Spin>
     );
   }
 }
@@ -196,3 +215,4 @@ const styles = {
     margin: '20px 0 10px 0'
   }
 } as any;
+export default injectIntl(Subscription)

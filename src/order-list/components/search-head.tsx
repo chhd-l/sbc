@@ -123,7 +123,7 @@ export default class SearchHead extends Component<any, any> {
           <Menu.Item>
             <AuthWrapper functionName="fOrderList002">
               <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
-                <FormattedMessage id="order.batchReview" />
+                <FormattedMessage id="Order.batchReview" />
               </a>
             </AuthWrapper>
           </Menu.Item>
@@ -131,7 +131,7 @@ export default class SearchHead extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExport" />
+              <FormattedMessage id="Order.batchExport" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -142,11 +142,11 @@ export default class SearchHead extends Component<any, any> {
       <div>
         <Row>
           <Col span={12}>
-            <Headline title={<FormattedMessage id="order.orderList" />} />
+            <Headline title={<FormattedMessage id="Order.orderList" />} />
           </Col>
           <Col span={12} style={{ textAlign: 'right' }}>
             <span style={{ color: '#e82f3d', cursor: 'pointer' }} onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
-              Advance Search <Icon type={showAdvanceSearch ? 'up' : 'down'} />
+              <FormattedMessage id="Order.AdvanceSearch"/> <Icon type={showAdvanceSearch ? 'up' : 'down'} />
             </span>
           </Col>
         </Row>
@@ -495,7 +495,7 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Order.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -507,7 +507,7 @@ export default class SearchHead extends Component<any, any> {
             <div className="handle-bar">
               <Dropdown overlay={menu} placement="bottomLeft" getPopupContainer={() => document.getElementById('page-content')}>
                 <Button>
-                  <FormattedMessage id="order.bulkOperations" /> <Icon type="down" />
+                  <FormattedMessage id="Order.bulkOperations" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
@@ -532,10 +532,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Pet owner name " value="buyerName">
-          <FormattedMessage id="consumerName" />
+          <FormattedMessage id="Order.consumerName" />
         </Option>
         <Option title="Pet owner account" value="buyerAccount">
-          <FormattedMessage id="consumerAccount" />
+          <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
     );
@@ -554,10 +554,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Product name" value="skuName">
-          <FormattedMessage id="productName" />
+          <FormattedMessage id="Order.productName" />
         </Option>
         <Option title="Sku code" value="skuNo">
-          <FormattedMessage id="skuCode" />
+          <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
     );
@@ -576,10 +576,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Recipient" value="consigneeName">
-          <FormattedMessage id="recipient" />
+          <FormattedMessage id="Order.recipient" />
         </Option>
         <Option title="Recipient phone" value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
+          <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
     );
@@ -598,10 +598,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Order type" value="Order type">
-          Order type
+          <FormattedMessage id="Order.OrderType"/>
         </Option>
         <Option title="Order source" value="Order source">
-          Order source
+         <FormattedMessage id="Order.OrderSource"/>
         </Option>
       </Select>
     );
@@ -620,10 +620,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Auditor name" value="clinicsName">
-          <FormattedMessage id="clinicName" />
+          <FormattedMessage id="Order.clinicName" />
         </Option>
         <Option title="Auditor ID" value="clinicsIds">
-          <FormattedMessage id="clinicID" />
+          <FormattedMessage id="Order.clinicID" />
         </Option>
       </Select>
     );
@@ -641,10 +641,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Order number" value="orderNumber">
-          <FormattedMessage id="order.orderNumber" />
+          <FormattedMessage id="Order.orderNumber" />
         </Option>
         <Option title="Subscription number" value="subscriptionNumber">
-          <FormattedMessage id="order.subscriptionNumber" />
+          <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
     );
@@ -662,10 +662,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Recommender id" value="recommenderId">
-          <FormattedMessage id="recommenderId" />
+          <FormattedMessage id="Order.recommenderId" />
         </Option>
         <Option title="Recommender name" value="recommenderName">
-          <FormattedMessage id="recommenderName" />
+          <FormattedMessage id="Order.recommenderName" />
         </Option>
       </Select>
     );
@@ -684,10 +684,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Payment status" value="paymentStatus">
-          <FormattedMessage id="order.paymentStatus" />
+          <FormattedMessage id="Order.paymentStatus" />
         </Option>
         <Option title="Shipping status" value="shippingStatus">
-          <FormattedMessage id="order.shippingStatus" />
+          <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
     );
@@ -711,8 +711,8 @@ export default class SearchHead extends Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: <FormattedMessage id="Order.audit" />,
+      content: <FormattedMessage id="Order.confirmAudit" />,
       onOk() {
         onBatchAudit();
       },

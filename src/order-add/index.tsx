@@ -49,7 +49,7 @@ class CreateOrder extends React.Component<any, any> {
             />
 
             <strong style={styles.title}>
-              <FormattedMessage id="product.productList" />:{' '}
+              <FormattedMessage id="Order.productList" />:{' '}
             </strong>
 
             {/*商品列表*/}

@@ -115,31 +115,31 @@ export default class SearchList extends React.Component<any, any> {
                         />
                       </th>
                       <th>
-                        <FormattedMessage id="product" />
+                        <FormattedMessage id="Order.product" />
                       </th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="orderNumber" />
+                        <FormattedMessage id="Order.orderNumber" />
                       </th>
                       <th style={{ width: '98px' }}>
-                        <FormattedMessage id="refundTime" />
+                        <FormattedMessage id="Order.refundTime" />
                       </th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="consumerName" />
+                        <FormattedMessage id="Order.consumerName" />
                       </th>
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="refundableAmount" />
+                        <FormattedMessage id="Order.refundableAmount" />
                       </th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="pointsRefundable" />
+                        <FormattedMessage id="Order.pointsRefundable" />
                       </th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="chargebackStatus" />
+                        <FormattedMessage id="Order.chargebackStatus" />
                       </th>
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="actualRefundAmount" />
+                        <FormattedMessage id="Order.actualRefundAmount" />
                       </th>
                       <th style={{ width: '10%', textAlign: 'right' }}>
-                        <FormattedMessage id="actualRefundPoints" />
+                        <FormattedMessage id="Order.actualRefundPoints" />
                       </th>
                     </tr>
                   </thead>
@@ -150,7 +150,7 @@ export default class SearchList extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    No data
+                    <FormattedMessage id="Order.noData"/>
                   </span>
                 </div>
               ) : null}

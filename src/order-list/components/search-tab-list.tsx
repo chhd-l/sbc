@@ -32,7 +32,7 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="Order.all" />} key="0">
             <List />
           </Tabs.TabPane>
 

@@ -58,8 +58,8 @@ class OrderSplitSetting extends Component<any, any> {
             <div style={{ margin: 20 }}>
               <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}><FormattedMessage id="Order.whetherToSplitOrder" />:</p>
               <Radio.Group disabled value={configForm.isSplit}>
-                <Radio value={true}><FormattedMessage id="yes" /></Radio>
-                <Radio value={false}><FormattedMessage id="no" /></Radio>
+                <Radio value={true}><FormattedMessage id="Order.yes" /></Radio>
+                <Radio value={false}><FormattedMessage id="Order.no" /></Radio>
               </Radio.Group>
             </div>
         </div>

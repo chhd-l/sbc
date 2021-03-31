@@ -31,25 +31,25 @@ export default class SearchTabList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="Order.all" />} key="0">
             {tab.get('key') === '0' ? <List /> : null}
           </Tabs.TabPane>
           <Tabs.TabPane
-            tab={<FormattedMessage id="pendingReview" />}
+            tab={<FormattedMessage id="Order.pendingReview" />}
             key="flowState-INIT"
           >
             {tab.get('key') === 'flowState-INIT' ? <List /> : null}
           </Tabs.TabPane>
           {/*{<FormattedMessage id="pendingReview" />}*/}
           <Tabs.TabPane
-            tab={<FormattedMessage id="toBeDelivered" />}
+            tab={<FormattedMessage id="Order.toBeDelivered" />}
             key="flowState-AUDIT"
           >
             {tab.get('key') === 'flowState-AUDIT' ? <List /> : null}
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <FormattedMessage id="toBeReceived" />
+              <FormattedMessage id="Order.toBeReceived" />
             }
             key="flowState-DELIVERED"
           >
@@ -57,21 +57,21 @@ export default class SearchTabList extends React.Component<any, any> {
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<FormattedMessage id="pendingRefund" />}
+            tab={<FormattedMessage id="Order.pendingRefund" />}
             key="flowState-RECEIVED"
           >
             {tab.get('key') === 'flowState-RECEIVED' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<FormattedMessage id="order.completed" />}
+            tab={<FormattedMessage id="Order.completed" />}
             key="flowState-COMPLETED"
           >
             {tab.get('key') === 'flowState-COMPLETED' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<FormattedMessage id="rejected" />}
+            tab={<FormattedMessage id="Order.rejected" />}
             key="flowState-REJECT_RECEIVE"
           >
             {tab.get('key') === 'flowState-REJECT_RECEIVE' ? <List /> : null}

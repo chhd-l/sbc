@@ -133,25 +133,25 @@ export default class ListView extends React.Component<any, any> {
                         />
                       </th>
                       <th style={{ width: 200 }}>
-                        <FormattedMessage id="productFirstLetterUpperCase" />
+                        <FormattedMessage id="Order.productFirstLetterUpperCase" />
                       </th>
                       <th style={{ width: '14%' }}>
-                        <FormattedMessage id="consumerName" />
+                        <FormattedMessage id="Order.consumerName" />
                       </th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="amount" />
+                        <FormattedMessage id="Order.amount" />
                       </th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="quantity" />
+                        <FormattedMessage id="Order.quantity" />
                       </th>
                       <th style={{ width: '14%' }}>
-                        <FormattedMessage id="order.shippingStatus" />
+                        <FormattedMessage id="Order.shippingStatus" />
                       </th>
                       <th style={{ width: '14%' }}>
-                        <FormattedMessage id="order.paymentStatus" />
+                        <FormattedMessage id="Order.paymentStatus" />
                       </th>
                       <th className="operation-th" style={{ width: '10%' }}>
-                        <FormattedMessage id="order.createBy" />
+                        <FormattedMessage id="Order.createBy" />
                       </th>
                     </tr>
                   </thead>
@@ -162,7 +162,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="Order.noData" />
                   </span>
                 </div>
               ) : null}
@@ -179,7 +179,7 @@ export default class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
+          <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;
@@ -269,12 +269,12 @@ export default class ListView extends React.Component<any, any> {
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
                               <span style={styles.platform}>
-                                <FormattedMessage id="order.valetOrder" />
+                                <FormattedMessage id="Order.valetOrder" />
                               </span>
                             )}
                             {v.get('grouponFlag') && (
                               <span style={styles.platform}>
-                                <FormattedMessage id="order.fightTogether" />
+                                <FormattedMessage id="Order.fightTogether" />
                               </span>
                             )}
                             {v.get('isAutoSub') && <span style={styles.platform}>Subscription</span>}
@@ -295,7 +295,7 @@ export default class ListView extends React.Component<any, any> {
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="orderTime" />：
+                          <FormattedMessage id="Order.orderTime" />：
                           {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
                                 .format(Const.TIME_FORMAT)
@@ -330,7 +330,7 @@ export default class ListView extends React.Component<any, any> {
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
                               >
-                                <FormattedMessage id="order.audit" />
+                                <FormattedMessage id="Order.audit" />
                               </a>
                             </AuthWrapper>
                           )}
@@ -338,7 +338,7 @@ export default class ListView extends React.Component<any, any> {
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
                             <AuthWrapper functionName="fOrderList002">
                               <a onClick={() => this._showRejectedConfirm(id)} href="javascript:void(0)" style={{ marginLeft: 20 }}>
-                                <FormattedMessage id="order.turnDown" />
+                                <FormattedMessage id="Order.turnDown" />
                               </a>
                             </AuthWrapper>
                           )}
@@ -376,7 +376,7 @@ export default class ListView extends React.Component<any, any> {
                                   }}
                                   href="javascript:void(0)"
                                 >
-                                  <FormattedMessage id="order.confirmReceipt" />
+                                  <FormattedMessage id="Order.confirmReceipt" />
                                 </a>
                               </Tooltip>
                             </AuthWrapper>
@@ -424,8 +424,8 @@ export default class ListView extends React.Component<any, any> {
                             />
                             //@ts-ignore
                             <div style={styles.imgNum}>
-                              <FormattedMessage id="total" /> {v.get('tradeItems').concat(gifts).size}
-                              <FormattedMessage id="items" />
+                              <FormattedMessage id="Order.total" /> {v.get('tradeItems').concat(gifts).size}
+                              <FormattedMessage id="Order.items" />
                             </div>
                           </div>
                         ) : null
@@ -480,8 +480,8 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="order.review" />,
-      content: <FormattedMessage id="order.confirmReview" />,
+      title: <FormattedMessage id="Order.review" />,
+      content: <FormattedMessage id="Order.confirmReview" />,
       onOk() {
         onRetrial(tdId);
       },
@@ -509,8 +509,8 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: 'Confirm receipt',
-      content: 'Confirm that all products have been received?',
+      title: <FormattedMessage id="Order.ConfirmReceipt"/>,
+      content: <FormattedMessage id="Order.ConfirmThatAllProducts"/>,
       onOk() {
         onConfirm(tdId);
       },

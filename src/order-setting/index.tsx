@@ -1024,13 +1024,13 @@ class OrderSetting extends Component<any, any> {
             </TabPane>
             <TabPane tab={<FormattedMessage id="Order.fieldRuleSetting" />} key="Filed rule setting">
               <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 4 }} labelAlign="right">
-                <FormItem label="Order number">
+                <FormItem label={<FormattedMessage id="Order.OrderNumber"/>}>
                   <Input addonBefore="RCF" value={fieldForm.orderField} />
                 </FormItem>
-                <FormItem label="Subscription number">
+                <FormItem label={<FormattedMessage id="Order.SubscriptionNumber"/>}>
                   <Input addonBefore="SRCF" value={fieldForm.subscriptionField} />
                 </FormItem>
-                <FormItem label="Return order number">
+                <FormItem label={<FormattedMessage id="Order.ReturnOrderNumber"/>}>
                   <Input addonBefore="RRCF" value={fieldForm.returnOrderField} />
                 </FormItem>
               </Form>
@@ -1039,7 +1039,7 @@ class OrderSetting extends Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateOrderSettingConfig()}>
-            {<FormattedMessage id="save" />}
+            {<FormattedMessage id="Order.save" />}
           </Button>
         </div>
       </div>

@@ -450,7 +450,7 @@ export default class ExtraForm extends React.Component<any, any> {
                       <FormattedMessage id="Order.companyFullName" />:{invoiceResponse.get('companyName')}
                     </p>
                     <p>
-                      <FormattedMessage id="invoice.companyTaxpayerIdentificationNumber" />:{invoiceResponse.get('taxpayerNumber')}
+                      <FormattedMessage id="Order.companyTaxpayerIdentificationNumber" />:{invoiceResponse.get('taxpayerNumber')}
                     </p>
                     <p>
                       <FormattedMessage id="Order.companyPhone" />:{invoiceResponse.get('companyPhone')}
@@ -475,7 +475,7 @@ export default class ExtraForm extends React.Component<any, any> {
                 onChange={(_e: any) => {
                   const checked = this.props.sperator;
                   if (checked && !selectedCustomerId) {
-                    message.error('Please select member');
+                    message.error(<FormattedMessage id="Order.PleaseSelectMember"/>);
                     return;
                   }
                   onExtraInfoChange({
@@ -516,7 +516,7 @@ export default class ExtraForm extends React.Component<any, any> {
                         invoiceShowMore(2);
                       }}
                     >
-                      <FormattedMessage id="Public.more" />
+                      <FormattedMessage id="Order.more" />
                     </a>
                   ) : (
                     ''
@@ -553,7 +553,7 @@ export default class ExtraForm extends React.Component<any, any> {
               <Row>
                 <Col offset={3}>
                   <AreaSelectBox>
-                    <FormItem label={<FormattedMessage id="area" />} hasFeedback {...addressformItemLayout}>
+                    <FormItem label={<FormattedMessage id="Order.area" />} hasFeedback {...addressformItemLayout}>
                       {getFieldDecorator('invoiceConsigneeAddressIds', {
                         ...addressInit,
                         rules: [
@@ -629,7 +629,7 @@ export default class ExtraForm extends React.Component<any, any> {
 
         {/*订单附件*/}
 
-        <FormItem {...formItemLayout} label={<FormattedMessage id="orderAttachment" />}>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.orderAttachment" />}>
           {getFieldDecorator('enclose', {
             initialValue: ''
           })(
@@ -679,7 +679,7 @@ export default class ExtraForm extends React.Component<any, any> {
                 value={buyerRemark}
                 onChange={(e) => {
                   if (!selectedCustomerId) {
-                    message.error('Please select member');
+                    message.error(<FormattedMessage id="Order.PleaseSelectMember"/>);
                     return;
                   }
                   const val = (e.target as any).value;
@@ -699,11 +699,11 @@ export default class ExtraForm extends React.Component<any, any> {
   beforeUpload(file) {
     const isSupportImage = file.type === 'image/jpeg' || file.type === 'image/gif' || file.type == 'image/png';
     if (!isSupportImage) {
-      message.error('Only jpg, png, gif type pictures can be uploaded');
+      message.error(<FormattedMessage id="Order.typePictures"/>);
     }
     const isLt5M = file.size / 1024 / 1024 < 5;
     if (!isLt5M) {
-      message.error('Image size cannot exceed 5MB!');
+      message.error(<FormattedMessage id="Order.ImageSize"/>);
     }
     return isSupportImage && isLt5M;
   }
@@ -713,7 +713,7 @@ export default class ExtraForm extends React.Component<any, any> {
    */
   _editImages = ({ file, fileList }) => {
     if (file.status == 'error') {
-      message.error('upload failed');
+      message.error(<FormattedMessage id="Order.uploadFailed"/>);
     }
 
     // 规避有时没有生成缩略图导致页面图片展示不了的问题

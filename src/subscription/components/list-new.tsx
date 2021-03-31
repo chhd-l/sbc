@@ -96,7 +96,7 @@ export default class ListView extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
           this.init();
         } else {
           this.setState({
@@ -160,11 +160,11 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th> */}
-                      <th style={{ width: '15%' }}>Product</th>
-                      <th style={{ width: '15%' }}>Product name</th>
-                      <th style={{ width: '10%' }}>Subscription status</th>
+                      <th style={{ width: '15%' }}><FormattedMessage id="Subscription.Product"/></th>
+                      <th style={{ width: '15%' }}><FormattedMessage id="Subscription.ProductName"/></th>
+                      <th style={{ width: '10%' }}><FormattedMessage id="Subscription.SubscriptionStatus"/></th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="subscription.consumerName" />
+                        <FormattedMessage id="Subscription.consumerName" />
                       </th>
                       {/* <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.receiver" />
@@ -176,7 +176,7 @@ export default class ListView extends React.Component<any, any> {
                         <FormattedMessage id="subscription.quantity" />
                       </th> */}
                       <th style={{ width: '15%' }}>
-                        <FormattedMessage id="subscription.operation" />
+                        <FormattedMessage id="Subscription.operation" />
                       </th>
                     </tr>
                   </thead>
@@ -187,7 +187,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="Subscription.noData" />
                   </span>
                 </div>
               ) : null}
@@ -250,7 +250,7 @@ export default class ListView extends React.Component<any, any> {
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="subscription.subscriptionDate" />:{v.createTime ? moment(new Date(v.createTime.replace(/ /g, 'T'))).format('YYYY-MM-DD HH:mm:ss') : ''}
+                          <FormattedMessage id="Subscription.subscriptionDate" />:{v.createTime ? moment(new Date(v.createTime.replace(/ /g, 'T'))).format('YYYY-MM-DD HH:mm:ss') : ''}
                         </span>
                       </div>
                     </td>
@@ -275,8 +275,8 @@ export default class ListView extends React.Component<any, any> {
                               style={styles.imgFourth}
                             />
                             <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />
-                              {v.goodsInfo.size} <FormattedMessage id="piece" />
+                              <FormattedMessage id="Subscription.total" />
+                              {v.goodsInfo.size} <FormattedMessage id="Subscription.piece" />
                             </div>
                           </div>
                         ) : null

@@ -59,7 +59,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="initiateApplication" />} number={total && total.toString()} />
+        <Headline title={<FormattedMessage id="Order.initiateApplication" />} number={total && total.toString()} />
 
         <div>
           <Form className="filter-content" layout="inline">
@@ -139,7 +139,7 @@ export default class SearchHead extends Component<any, any> {
                   >
                     {
                       <span>
-                        <FormattedMessage id="search" />
+                        <FormattedMessage id="Order.search" />
                       </span>
                     }
                   </Button>
@@ -167,10 +167,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Order number" value="orderNumber">
-          <FormattedMessage id="order.orderNumber" />
+          <FormattedMessage id="Order.orderNumber" />
         </Option>
         <Option title="Subscriptio id" value="subscriptionNumber">
-          <FormattedMessage id="order.subscriptionNumber" />
+          <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
     );
@@ -191,10 +191,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Product name" value="skuName">
-          <FormattedMessage id="productName" />
+          <FormattedMessage id="Order.productName" />
         </Option>
         <Option title="Sku code" value="skuNo">
-          <FormattedMessage id="skuCode" />
+          <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
     );
@@ -214,10 +214,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Pet owner name " value="buyerName">
-          <FormattedMessage id="consumerName" />
+          <FormattedMessage id="Order.consumerName" />
         </Option>
         <Option title="Pet owner account" value="buyerAccount">
-          <FormattedMessage id="consumerAccount" />
+          <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
     );
@@ -237,10 +237,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option title="Recipient" value="consigneeName">
-          <FormattedMessage id="recipient" />
+          <FormattedMessage id="Order.recipient" />
         </Option>
         <Option title="Recipient phone" value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
+          <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
     );

@@ -4,6 +4,7 @@ import { Headline } from 'qmkit';
 import { getFeedbackBySubscriptionId, saveFeedback } from '../webapi';
 import { FormComponentProps } from 'antd/lib/form';
 import './feedback.less';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -58,7 +59,7 @@ class FeedBack extends React.Component<Iprop, any> {
           subscriptionId: this.props.subscriptionId
         })
           .then((data) => {
-            message.success('Save feedback successfully');
+            message.success(<FormattedMessage id="Subscription.SaveFeedbackSuccessfully"/>);
             this.setState({
               loading: false,
               editable: false
@@ -86,7 +87,7 @@ class FeedBack extends React.Component<Iprop, any> {
               <div>
                 {showMore ? (
                   <Button type="primary" onClick={() => this.changeEditable(true)}>
-                    Edit
+                    <FormattedMessage id="Subscription.Edit"/>
                   </Button>
                 ) : null}
               </div>
@@ -106,13 +107,13 @@ class FeedBack extends React.Component<Iprop, any> {
           <Form labelAlign="left" className="petowner-feedback-form">
             <Row gutter={8}>
               <Col span={6}>
-                <span className="text-highlight">After welcome pack received</span>
+                <span className="text-highlight"><FormattedMessage id="Subscription.AfterWelcomePackReceived"/></span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div>Rate delivery:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.RateDelivery"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -130,8 +131,8 @@ class FeedBack extends React.Component<Iprop, any> {
                     </FormItem>
                   </Col>
                   <Col span={6} offset={4}>
-                    <div>Rate the pack:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.RateThePack"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -151,7 +152,7 @@ class FeedBack extends React.Component<Iprop, any> {
                 </Row>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div>Comments:</div>
+                    <div><FormattedMessage id="Subscription.Comments"/>:</div>
                   </Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('rateComments', { initialValue: feedback.rateComments })(<TextArea disabled={!editable} cols={6} />)}</FormItem>
@@ -161,13 +162,13 @@ class FeedBack extends React.Component<Iprop, any> {
             </Row>
             <Row gutter={8}>
               <Col span={6}>
-                <span className="text-highlight">During 2nd delivery confirmation</span>
+                <span className="text-highlight"><FormattedMessage id="Subscription.deliveryConfirmation"/></span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div>NPS:</div>
-                    <div>(scale from 1 to 10)</div>
+                    <div><FormattedMessage id="Subscription.NPS"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom10"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -186,15 +187,15 @@ class FeedBack extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Row gutter={8} type="flex" align="middle">
-                  <Col span={6}>Delivery schedule fit:</Col>
+                  <Col span={6}><FormattedMessage id="Subscription.DeliveryScheduleFit"/>:</Col>
                   <Col span={4}>
                     <FormItem>
                       {getFieldDecorator('deliveryScheduleFit_2rd', {
                         initialValue: feedback.deliveryScheduleFit_2rd
                       })(
                         <Radio.Group disabled={!editable}>
-                          <Radio value={1}>Yes</Radio>
-                          <Radio value={0}>No</Radio>
+                          <Radio value={1}><FormattedMessage id="Subscription.Yes"/></Radio>
+                          <Radio value={0}><FormattedMessage id="Subscription.No"/></Radio>
                         </Radio.Group>
                       )}
                     </FormItem>
@@ -204,13 +205,13 @@ class FeedBack extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Row gutter={8} type="flex" align="middle">
-                  <Col span={6}>Reason of interest of the Club:</Col>
+                  <Col span={6}><FormattedMessage id="Subscription.ReasonOfInterest"/>:</Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('interestReason2rd', { initialValue: feedback.interestReason2rd })(<Input disabled={!editable} />)}</FormItem>
                   </Col>
                 </Row>
                 <Row gutter={8}>
-                  <Col span={6}>Comments:</Col>
+                  <Col span={6}><FormattedMessage id="Subscription.Comments"/>:</Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('comments2rd', { initialValue: feedback.comments2rd })(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
@@ -219,13 +220,13 @@ class FeedBack extends React.Component<Iprop, any> {
             </Row>
             <Row gutter={8}>
               <Col span={6}>
-                <span className="text-highlight">After 3rd delivery, during 4th delivery confirmation</span>
+                <span className="text-highlight"><FormattedMessage id="Subscription.After3rdDelivery"/></span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div>NPS:</div>
-                    <div>(scale from 1 to 10)</div>
+                    <div><FormattedMessage id="Subscription.NPS"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom10"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -243,8 +244,8 @@ class FeedBack extends React.Component<Iprop, any> {
                     </FormItem>
                   </Col>
                   <Col span={6} offset={4}>
-                    <div>Rate PA consultation quality:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.ConsultationQuality"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -263,19 +264,19 @@ class FeedBack extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Row gutter={8} type="flex" align="middle">
-                  <Col span={6}>Unnecessary services:</Col>
+                  <Col span={6}><FormattedMessage id="Subscription.UnnecessaryServices"/>:</Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('unnecessaryServices', { initialValue: feedback.unnecessaryServices })(<Input disabled={!editable} />)}</FormItem>
                   </Col>
                 </Row>
                 <Row gutter={8} type="flex" align="middle">
-                  <Col span={6}>Necessary services:</Col>
+                  <Col span={6}><FormattedMessage id="Subscription.NecessaryServices"/>:</Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('necessaryServices', { initialValue: feedback.necessaryServices })(<Input disabled={!editable} />)}</FormItem>
                   </Col>
                 </Row>
                 <Row gutter={8}>
-                  <Col span={6}>Comments:</Col>
+                  <Col span={6}><FormattedMessage id="Subscription.Comments"/>:</Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('comments3rd', { initialValue: feedback.comments3rd })(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
@@ -284,13 +285,13 @@ class FeedBack extends React.Component<Iprop, any> {
             </Row>
             <Row gutter={8}>
               <Col span={6}>
-                <span className="text-highlight">Feedback 4(completion of Club)</span>
+                <span className="text-highlight"><FormattedMessage id="Subscription.Feedback"/></span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div>NPS:</div>
-                    <div>(scale from 1 to 10)</div>
+                    <div><FormattedMessage id="Subscription.NPS"/>:</div>
+                    <div><FormattedMessage id="Subscription.scaleFrom10"/></div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -309,19 +310,19 @@ class FeedBack extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Row gutter={8} type="flex" align="middle">
-                  <Col span={6}>Reason for cancellation of membership:</Col>
+                  <Col span={6}><FormattedMessage id="Subscription.ReasonForCancellation"/>:</Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('reasonForCancellationOfMembership', { initialValue: feedback.reasonForCancellationOfMembership })(<Input disabled={!editable} />)}</FormItem>
                   </Col>
                 </Row>
                 <Row gutter={8} type="flex" align="middle">
-                  <Col span={6}>Suggestions for improvement:</Col>
+                  <Col span={6}><FormattedMessage id="Subscription.SuggestionsForImprovement"/>:</Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('suggestionsForImprovement', { initialValue: feedback.suggestionsForImprovement })(<Input disabled={!editable} />)}</FormItem>
                   </Col>
                 </Row>
                 <Row gutter={8}>
-                  <Col span={6}>Comments:</Col>
+                  <Col span={6}><FormattedMessage id="Subscription.Comments"/>:</Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('comments4rd', { initialValue: feedback.comments4rd })(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
@@ -330,21 +331,21 @@ class FeedBack extends React.Component<Iprop, any> {
             </Row>
             <Row gutter={8}>
               <Col span={6}>
-                <span className="text-highlight">Feedback for clinics</span>
+                <span className="text-highlight"><FormattedMessage id="Subscription.FeedbackForClinics"/></span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
                   <Col span={12}>
-                    <div className="text-align-center text-highlight">Visit 1</div>
+                    <div className="text-align-center text-highlight"><FormattedMessage id="Subscription.Visit"/> 1</div>
                   </Col>
                   <Col span={12}>
-                    <div className="text-align-center text-highlight">Visit 2</div>
+                    <div className="text-align-center text-highlight"><FormattedMessage id="Subscription.Visit"/> 2</div>
                   </Col>
                 </Row>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div>Quality of service 1:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.QualityOfService"/> 1:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -362,8 +363,8 @@ class FeedBack extends React.Component<Iprop, any> {
                     </FormItem>
                   </Col>
                   <Col span={6} offset={4}>
-                    <div>Quality of service 2:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.QualityOfService"/> 2:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -383,8 +384,8 @@ class FeedBack extends React.Component<Iprop, any> {
                 </Row>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div>Veterinarian qualification 1:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.VeterinarianQualification"/> 1:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -402,8 +403,8 @@ class FeedBack extends React.Component<Iprop, any> {
                     </FormItem>
                   </Col>
                   <Col span={6} offset={4}>
-                    <div>Veterinarian qualification 2:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.VeterinarianQualification"/> 2:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -423,8 +424,8 @@ class FeedBack extends React.Component<Iprop, any> {
                 </Row>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div>Clinics rating 1 of the last visiting clinic:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.Clinics1"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -442,8 +443,8 @@ class FeedBack extends React.Component<Iprop, any> {
                     </FormItem>
                   </Col>
                   <Col span={6} offset={4}>
-                    <div>Clinics rating 2 of the last visiting clinic:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.Clinics2"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -463,8 +464,8 @@ class FeedBack extends React.Component<Iprop, any> {
                 </Row>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div>Vet clinic check-up 1:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.Vet"/> 1:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -482,8 +483,8 @@ class FeedBack extends React.Component<Iprop, any> {
                     </FormItem>
                   </Col>
                   <Col span={6} offset={4}>
-                    <div>Vet clinic check-up 2:</div>
-                    <div>(scale from 1 to 5)</div>
+                    <div><FormattedMessage id="Subscription.Vet"/> 2:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -507,9 +508,9 @@ class FeedBack extends React.Component<Iprop, any> {
           {editable && (
             <div>
               <Button loading={loading} type="primary" onClick={this.handleSave} style={{ marginRight: 10 }}>
-                Save
+                <FormattedMessage id="Subscription.Save"/>
               </Button>
-              <Button onClick={() => this.changeEditable(false)}>Cancel</Button>
+              <Button onClick={() => this.changeEditable(false)}><FormattedMessage id="Subscription.Cancel"/></Button>
             </div>
           )}
         </div>

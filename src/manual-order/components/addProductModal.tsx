@@ -101,7 +101,7 @@ export default class AddProductModal extends Component {
       goodsNum: row.buyCount
     });
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('add success');
+      message.success('Add successfully');
       row.overCount+=row.buyCount
         // this.state.goodsLists[index]=row
        this.props.searchCount()

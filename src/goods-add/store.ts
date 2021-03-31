@@ -989,9 +989,9 @@ export default class AppStore extends Store {
       goodsList.forEach((item) => {
         console.log(item.get('marketPrice'));
 
-        //console.log(item.get('subscriptionPrice'),111111111111);
-        //console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
-        //console.log(item.toJS(),3333333);
+        console.log(item.get('subscriptionPrice'),111111111111);
+        console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
+        console.log(item.toJS(),3333333);
         if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
           if (addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) {
             tip = 1;
@@ -1013,7 +1013,7 @@ export default class AppStore extends Store {
         }*/
         if (this.state().get('goods').get('subscriptionStatus') == 1 ) {
           if(item.get('subscriptionStatus') == 1) {
-            if( item.get('subscriptionPrice') == 0) {
+            if( item.get('subScriptionPrice') == 0 && item.get('subscriptionPrice') == 0) {
               tip = 4;
               valid = false;
               return;
@@ -1036,11 +1036,11 @@ export default class AppStore extends Store {
           }
         }
 
-        if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
+        /*if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
           tip = 3;
           valid = false;
           return;
-        }
+        }*/
 
         /* if (this.state().get('addSkUProduct').length === 1) {
           this.state().get('addSkUProduct')[0].targetGoodsIds

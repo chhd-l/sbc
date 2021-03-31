@@ -9,7 +9,7 @@ type TResult = {
 
 export const fetchOrderList = (filter = {}) => {
   // return Fetch<TResult>('/trade/list/return', {
-  return Fetch<TResult>('http://192.168.0.139/trade/list/return', {
+  return Fetch<TResult>('/trade/list/return', {
     method: 'POST',
     body: JSON.stringify(filter)
   });

@@ -5,7 +5,7 @@ import { Fetch } from 'qmkit';
  */
 export const getReturnWays = () => {
   // return Fetch('/return/ways');
-  return Fetch('http://192.168.0.139/return/ways');
+  return Fetch('/return/ways');
 };
 
 /**
@@ -13,7 +13,7 @@ export const getReturnWays = () => {
  */
 export const getReturnReasons = () => {
   // return Fetch('/return/reasons');
-  return Fetch('http://192.168.0.139/return/reasons');
+  return Fetch('/return/reasons');
 };
 
 /**
@@ -21,7 +21,7 @@ export const getReturnReasons = () => {
  */
 export const getTradeDetail = (tid: string) => {
   // return Fetch(`/return/trade/${tid}`);
-  return Fetch(`http://192.168.0.139/return/trade/${tid}`);
+  return Fetch(`/return/trade/${tid}`);
 };
 
 /**
@@ -29,7 +29,7 @@ export const getTradeDetail = (tid: string) => {
  */
 export const addApply = (param: any) => {
   // return Fetch('/return/add', {
-  return Fetch('http://192.168.0.139/return/add', {
+  return Fetch('/return/add', {
     method: 'POST',
     body: JSON.stringify(param)
   });
@@ -40,5 +40,5 @@ export const addApply = (param: any) => {
  */
 export const fetchOrderReturnList = (tid) => {
   // return Fetch(`/return/findCompletedByTid/${tid}`);
-  return Fetch(`http://192.168.0.139/return/findCompletedByTid/${tid}`);
+  return Fetch(`/return/findCompletedByTid/${tid}`);
 };

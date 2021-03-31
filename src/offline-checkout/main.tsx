@@ -15,7 +15,8 @@ export default class Checkout extends React.Component<any, any> {
       memberType: 'Guest',
       memberInfo: {},
       scanedInfoVisible: false,
-      products: []
+      products: [],
+      list: []
     };
   }
 
@@ -27,7 +28,7 @@ export default class Checkout extends React.Component<any, any> {
     webapi.getProductList().then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          products: data.res.context.goodsInfoList || []
+          products: data.res.context.goodsInfoList.map(goods => ({goodsId: goods.goodsId, goodsInfoName: goods.goodsInfoName, goodsInfoBarcode: goods.goodsInfoBarcode, goodsImg: goods.goods.goodsImg, marketPrice: goods.marketPrice}))
         });
       }
     });
@@ -41,12 +42,29 @@ export default class Checkout extends React.Component<any, any> {
     });
   }
 
+  onAddProduct = (product: any) => {
+    const { list } = this.state;
+    if (list.findIndex(p => p.goodsId === product.goodsId) === -1) {
+      list.push(product);
+      this.setState({ list });
+    }
+  }
+
   render() {
     const { onClose } = this.props;
     return (
       <div className="c-main-page">
         <a className="close" onClick={(e) => {e.preventDefault();onClose(false);}}><i className="iconfont iconbtn-cancelall" style={{fontSize: 30,color:'#333'}}></i></a>
-        {this.state.selected ? <Order memberType={this.state.memberType} memberInfo={this.state.memberInfo} onSelectMember={this.onSelect} /> : <Board onSelect={this.onSelect} />}
+        {this.state.selected
+          ? <Order
+              memberType={this.state.memberType}
+              memberInfo={this.state.memberInfo}
+              onSelectMember={this.onSelect}
+              products={this.state.products}
+              list={this.state.list}
+              onAddProduct={this.onAddProduct}
+            />
+          : <Board onSelect={this.onSelect} />}
         <ScanedInfo visible={this.state.scanedInfoVisible} />
       </div>
     );

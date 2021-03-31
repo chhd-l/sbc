@@ -429,7 +429,7 @@ class PetItem extends React.Component<Iprop, any> {
                         getFieldDecorator('segmentIdList', {
                           initialValue: pet.segmentList ? pet.segmentList.map((v) => v.id) : []
                         })(
-                          <Select mode="multiple">
+                          <Select mode="multiple" getPopupContainer={(trigger: any) => trigger.parentNode}>
                             {this.state.tagList
                               .filter((t) => t.segmentType == 1)
                               .map((v, idx) => (
@@ -441,7 +441,7 @@ class PetItem extends React.Component<Iprop, any> {
                         )
                       ) : (
                         // <span>{pet.segmentList ? pet.segmentList.map((v) => v.name).join(', ') : ''}</span>
-                        <Select mode="multiple" value={pet.segmentList ? pet.segmentList.map((v) => v.name) : []} onChange={this.onSelectPetTagging}>
+                        <Select mode="multiple" value={pet.segmentList ? pet.segmentList.map((v) => v.name) : []} onChange={this.onSelectPetTagging} getPopupContainer={(trigger: any) => trigger.parentNode}>
                           {this.state.tagList
                             .filter((t) => t.segmentType == 1)
                             .map((v, idx) => (

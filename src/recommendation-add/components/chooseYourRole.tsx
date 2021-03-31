@@ -55,7 +55,7 @@ class ConsumerInformation extends React.Component<any, any> {
 
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator('expertName', {
+            {getFieldDecorator('export', {
               initialValue:expertName||"Marion Ruffié"
             })(<SelectGroup
               label="Role"

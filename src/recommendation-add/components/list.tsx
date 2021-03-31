@@ -72,10 +72,10 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
          
 
           <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
-          <Column title="SPU" dataIndex="goodsNo" key="goodsNo" />
+          <Column title="SPU" dataIndex="goods.goodsNo" key="goods.goodsNo" />
           <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
-          <Column title="Sales category" dataIndex="storeCateName" key="storeCateName" />
+          <Column title="Product category" dataIndex="cateId" key="cateId" />
+          <Column title="Sales category" dataIndex="storeCateIds" key="storeCateIds" />
           <Column
             title="Price"
             dataIndex="marketPrice"
@@ -88,13 +88,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }}
             key="marketPrice"
           />
-           <Column title="Weight" dataIndex="Weight" key="Weight" />
-          <Column title="Quantity" key="recommendationNumber" dataIndex="recommendationNumber" 
+           <Column title="Weight" dataIndex="goodsInfoWeight" key="goodsInfoWeight" />
+          <Column title="Quantity" key="quantity" dataIndex="quantity" 
           render={(value,row,index)=>{
             return ( <InputNumber
               min={0}
-              max={10}
-              defaultValue={value}
+              max={9999}
+              defaultValue={value||0}
               onChange={(e) => {
                 this.inputNumberChange(e, row,index);
               }}

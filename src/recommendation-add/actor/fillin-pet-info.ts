@@ -3,12 +3,19 @@ import { Action, Actor, IMap } from 'plume2';
 export default class FillinPetInfo extends Actor {
   defaultState() {
     return {
-      "felinRecoId": "Rsfjaljflfafsdfsdfsdf",
-      "storeId": 123457909,
-      "apptId": 190,
-      "export": "export",
+      "felinRecoId": null,
+      "storeId": null,
+      "apptId": null,
+      "export": null,
       "paris": true,
       "pickup": false,
+      "goodsQuantity": [
+        {
+          "goodsInfoNo": "8387427466",
+          "quantity": 1
+        },
+      ],
+      "appointmentVO": {},
       "customerPet": {
         "petsId": "",
         "petsType": "",
@@ -21,6 +28,7 @@ export default class FillinPetInfo extends Actor {
         "weight": null,
         "sensitivity": null,
       },
+      "prescriber": null
     }
   }
 

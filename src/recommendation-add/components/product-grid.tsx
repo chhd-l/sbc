@@ -21,7 +21,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       selectedRows: props.selectedRows ? props.selectedRows : fromJS([]),
       selectedRowKeys: props.selectedSkuIds ? props.selectedSkuIds : [],
       total: 0,
-      goodsInfoPage: {},
+      goodsInfoPage: [],
       searchParams: props.searchParams ? props.searchParams : {},
       showValidGood: props.showValidGood
     };
@@ -60,7 +60,7 @@ export default class GoodsGrid extends React.Component<any, any> {
         <DataGrid
           loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
           rowKey={(record) => record.goodsInfoId}
-          dataSource={goodsInfoPage.content}
+          dataSource={goodsInfoPage}
           isScroll={false}
           pagination={false}
           // pagination={{
@@ -112,7 +112,13 @@ export default class GoodsGrid extends React.Component<any, any> {
             key="goodsInfoName"
             width="15%"
           />
-
+          <Column
+            title="SPU"
+            dataIndex="goods.goodsNo"
+            key="goods.goodsNo"
+            width="20%"
+            //ellipsis
+          />
           <Column
             title="SKU"
             dataIndex="goodsInfoNo"
@@ -122,53 +128,18 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="Signed classification"
+            title="Product category"
             dataIndex="Signed"
             key="Signed"
             width="20%"
             ellipsis
-            render={(value) => {
-              if (value) {
-                return <span>{value.goods.goodsCateName}</span>;
-              } else {
-                return '-';
-              }
-            }}
+            render={(value) => <span>{value?.goods?.goodsCateName??'-'}</span>}
           />
+          <Column title="Sales category" key="salesCategory" dataIndex="salesCategory" />
 
           <Column title="Price" key="marketPrice" dataIndex="marketPrice" />
 
-          <Column
-            title="Quantity"
-            key="recommendationNumber"
-            dataIndex="recommendationNumber"
-            render={(value, i) => {
-              if (value) {
-                return (
-                  <Select
-                    defaultValue="1"
-                    style={{ width: 120 }}
-                    onChange={(e) =>
-                      (i = i['recommendationNumber'] = Number(e))
-                    }
-                  >
-                    <Option value="1">1</Option>
-                    <Option value="2">2</Option>
-                    <Option value="3">3</Option>
-                    <Option value="4">4</Option>
-                    <Option value="5">5</Option>
-                    <Option value="6">6</Option>
-                    <Option value="7">7</Option>
-                    <Option value="8">8</Option>
-                    <Option value="9">9</Option>
-                    <Option value="10">10</Option>
-                  </Select>
-                );
-              } else {
-                return '-';
-              }
-            }}
-          />
+          
         </DataGrid>
       </div>
     );
@@ -196,7 +167,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     let { res } = await webapi.fetchproductTooltip({ ...params });
 
     if ((res as any).code == Const.SUCCESS_CODE) {
-      res = (res as any).context.goodsInfoPage;
+      let goodsInfoList = (res as any).context.goodsInfoList;
       /*res['goodsInfoPage'].content.map((goodInfo) => {
         const cId = fromJS(res['goodses'])
           .find((s) => s.get('goodsId') === goodInfo.goodsId)
@@ -217,7 +188,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       });*/
 
       this.setState({
-        goodsInfoPage: res,
+        goodsInfoPage: goodsInfoList,
         loading: false
       });
     }

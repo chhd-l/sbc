@@ -21,7 +21,7 @@ class ManualOrder extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: 'New Prescription',
-      current: 2,
+      current: 3,
       status: 1,
       params: {},
       storeId: storeId,
@@ -60,7 +60,9 @@ class ManualOrder extends Component<any, any> {
       params:{...this.state.params,...params}
     });
   };
- 
+  done(e){
+    console.log()
+  }
   render() {
     const { current, title, params } = this.state;
     const steps = [
@@ -78,7 +80,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Write Tips',
-        controller: <WriteTips />
+        controller: <WriteTips  form={this.props.form}/>
       }
     ];
     // if (noLanguageSelect) {
@@ -109,11 +111,11 @@ class ManualOrder extends Component<any, any> {
                 Next 
               </Button>
             )}
-            {/* {current !== steps.length - 1 && (
-              <Button type="primary" onClick={(e) => this.updateNavigation(e)}>
-                Submit <Icon type="right" />
+            {current === steps.length - 1 && (
+              <Button type="primary" onClick={(e) => this.done(e)}>
+                Done 
               </Button>
-            )} */}
+            )}
           </div>
         </div>
       </div>

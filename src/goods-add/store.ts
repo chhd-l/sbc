@@ -540,6 +540,10 @@ export default class AppStore extends Store {
     });
   };
 
+  goodsDescriptionSort(data){
+    return data.sort((a,b)=>a.sort-b.sort)
+  }
+
   /**
    * 解析设价信息
    * @param {any} goodsDetail
@@ -911,14 +915,15 @@ export default class AppStore extends Store {
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
-    if ( (this.state().get('goodsList').toJS().length === a.toJS().length) && this.state().get('goods').get('subscriptionStatus') == 1 ) {
+    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
+      this.state().get('goods').get('subscriptionStatus') == 1 ) {
       message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
       valid = false;
       return;
     }
 
     let b = this.state().get('goodsList').filter((item)=>item.get('addedFlag') == 0)
-    if ( (this.state().get('goodsList').toJS().length === b.toJS().length) &&
+    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === b.toJS().length) &&
       (this.state().get('goods').get('addedFlag') == 1 || this.state().get('goods').get('addedFlag') == 2) ) {
       message.error('If the shelves status in SPU is Y, at lease one shelves status of Sku is Y');
       valid = false;
@@ -1770,7 +1775,7 @@ export default class AppStore extends Store {
    * @param
    */
   editEditorContent = (value) => {
-    this.dispatch('goodsActor:descriptionTab', value);
+    this.dispatch('goodsActor:descriptionTab', this.goodsDescriptionSort(value));
   };
   editEditor = (editor) => {
     this.dispatch('goodsActor: editor', editor);

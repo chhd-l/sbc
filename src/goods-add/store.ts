@@ -1245,6 +1245,7 @@ export default class AppStore extends Store {
     let skuNoMap = Map();
     let existedSkuNo = '';
     let goodsList = List();
+    console.log('goodsListgoodsListgoodsList:', data.get('goodsList').toJS());
     data.get('goodsList').forEach((item) => {
       if (skuNoMap.has(item.get('goodsInfoNo') + '')) {
         existedSkuNo = item.get('goodsInfoNo') + '';
@@ -1257,6 +1258,7 @@ export default class AppStore extends Store {
       // 规格值id集合
       let mockSpecDetailIds = List();
       item.forEach((value, key: string) => {
+        console.log('itemitemitem:', key, value);
         if (key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));
         }

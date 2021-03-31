@@ -392,7 +392,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p><FormattedMessage id="Order.externalOrderId" />: {detail.getIn(['tradeOms', 'orderNo'])}</p>
-                  <p><FormattedMessage id="Order.OrderStatus" />: {getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}</p>
+                  <p><FormattedMessage id="Order.OrderStatus" />: <FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} /></p>
                   <p><FormattedMessage id="Order.orderTyp" />: {orderDetailType ? orderDetailType.name : ''}</p>
                 </Col>
                 <Col span={12}>

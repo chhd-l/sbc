@@ -252,7 +252,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               justifyContent: 'space-between'
             }}
           >
-            <label style={styles.greenText}>{getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}</label>
+            <label style={styles.greenText}><FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} /></label>
 
             {this._renderBtnAction(tid)}
           </div>

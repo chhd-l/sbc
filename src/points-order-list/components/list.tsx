@@ -6,6 +6,7 @@ import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper, getOrderStatusValue } from 'qmkit';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
+import { FormattedMessage } from 'react-intl';
 const defaultImg = require('../../goods-list/img/none.png');
 
 const deliverStatus = (status) => {
@@ -292,7 +293,7 @@ export default class ListView extends React.Component<any, any> {
                     {/*发货状态*/}
                     <td style={{ width: '10%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*订单状态*/}
-                    <td style={{ width: '10%' }}>{getOrderStatusValue('OrderStatus', v.getIn(['tradeState', 'flowState']))}</td>
+                    <td style={{ width: '10%' }}><FormattedMessage id={getOrderStatusValue('OrderStatus', v.getIn(['tradeState', 'flowState']))} /></td>
                     {/*支付状态*/}
                     <td
                       style={{

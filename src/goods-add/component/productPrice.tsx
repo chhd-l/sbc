@@ -343,6 +343,7 @@ class SkuForm extends React.Component<any, any> {
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
         let subscriptionPrice =  rowInfo.subMarketPrice ? rowInfo.subMarketPrice : 0
         if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+          console.log(44444444)
           marketPrice = addSkUProduct[0].targetGoodsIds[0].subMarketPrice?
             addSkUProduct[0].targetGoodsIds[0].subMarketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : addSkUProduct[0].targetGoodsIds[0].marketPrice?
               addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum: 0
@@ -350,9 +351,12 @@ class SkuForm extends React.Component<any, any> {
             addSkUProduct[0].targetGoodsIds[0].subScriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : addSkUProduct[0].targetGoodsIds[0].subscriptionPrice?
               addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum :0
         }
-        console.log(addSkUProduct[0],11111111);
-        console.log(marketPrice,2222222);
-        console.log(rowInfo,33333);
+        setTimeout(()=>{
+          console.log(addSkUProduct[0],11111111);
+          console.log(marketPrice,2222222);
+          console.log(rowInfo,33333);
+        })
+
        /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
         //console.log(marketPrice,2222222);
         console.log(rowInfo.marketPrice,33333);

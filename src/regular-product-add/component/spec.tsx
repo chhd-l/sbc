@@ -23,6 +23,7 @@ export default class Spec extends React.Component<any, any> {
       deleteSpec: Function;
       updateSpecForm: Function;
       setDefaultBaseSpecId: Function;
+      editGoodsItem: Function;
       baseSpecId: any;
     };
   };
@@ -43,7 +44,8 @@ export default class Spec extends React.Component<any, any> {
     addSpec: noop,
     deleteSpec: noop,
     updateSpecForm: noop,
-    setDefaultBaseSpecId: noop
+    setDefaultBaseSpecId: noop,
+    editGoodsItem: noop
   };
 
   constructor(props) {
@@ -302,7 +304,9 @@ class SpecForm extends React.Component<any, any> {
    * 修改规格值
    */
   _editSpecValue = (specId: number, value: string) => {
-    const { editSpecValues, goodsSpecs, updateSpecForm } = this.props.relaxProps;
+    const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem } = this.props.relaxProps;
+    const { setFieldsValue } = this.props.form;
+
     // 找到原规格值列表
     const spec = goodsSpecs.find((spec) => spec.get('specId') == specId);
     const oldSpecValues = spec.get('specValues');
@@ -319,6 +323,20 @@ class SpecForm extends React.Component<any, any> {
     });
     updateSpecForm(this.props.form);
     editSpecValues({ specId, specValues });
+
+    if (value.length == 1) {
+      let goods = Map({
+        subscriptionStatus: fromJS(1)
+      });
+      editGoodsItem(goods);
+      setFieldsValue({ subscriptionStatus: 1 })
+      //setFieldsValue({ subscriptionStatus: 0 });
+    } /*else {
+      let goods = Map({
+        subscriptionStatus: fromJS(0)
+      });
+      editGoodsItem(goods);
+    }*/
   };
 
   /**

@@ -110,6 +110,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
           subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
           bundleNum: 1,
           marketPrice: item.marketPrice,
+          subscriptionPrice: item.subscriptionPrice,
           goodsInfoNo: item.goodsInfoNo,
           subGoodsInfoNo: item.goodsInfoNo,
         })

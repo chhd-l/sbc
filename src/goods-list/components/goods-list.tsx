@@ -288,7 +288,7 @@ export default class CateList extends React.Component<any, any> {
             <FormattedMessage id="product.setPrice" />
           </a>
         </AuthWrapper> */}
-        {rowInfo.addedFlag == 0 || rowInfo.addedFlag == 2 ? (
+        {rowInfo.addedFlag == 0 ? (
           <AuthWrapper functionName="f_goods_up_down">
             <Tooltip placement="top" title="On Shelves">
               <a
@@ -417,7 +417,7 @@ export default class CateList extends React.Component<any, any> {
                 <label style={styles.label}>
                   <FormattedMessage id="Product.On/OffShelve" />：
                 </label>
-                {goods.get('addedFlag') == 0 ? 'Off shelf' : 'On shelf'}
+                {goods.get('addedFlag') != 0 ? 'Off shelf' : 'On shelf'}
               </div>
             </div>
             <div>

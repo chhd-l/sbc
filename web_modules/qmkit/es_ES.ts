@@ -146,6 +146,11 @@ export default {
   'Menu.Set Banner':'Set Banner',
   /* -------- 已翻译 V1.0---------------*/
   'Menu.Appointment':'Appointment',
+  'Menu.Split order setting':'Split order setting',
+  'Menu.Order data setting':'Order data setting',
+  'Menu.Order eligible for return':'Order eligible for return',
+  'Menu.Valet order':'Valet order',
+  'Menu.Point to sales':'Point to sales',
 
 
 
@@ -1088,6 +1093,13 @@ export default {
   'Order.Nomorethan50': 'No more than 50 types of purchased goods',
   'Order.Selectproduct': 'Select product',
   /* -------- 已翻译 V1.0---------------*/
+  'Order.whetherToSplitOrder':'Whether to split order',
+  'Order.COD':'COD',
+  'Order.deliveryAfterPayment':'Delivery after payment',
+  'Order.capturePaymentWhen':'Capture payment when',
+  'Order.none':'None',
+  'Order.cashOnDelivery':'Cash on delivery',
+  'Order.fieldRuleSetting':'Field rule setting',
 
 
 
@@ -1698,12 +1710,12 @@ export default {
 
 
   /*-----------------------------  Marketing  ----------------------------------------*/
-  'Marketing.PromotionType':'Promotion type:',
+  'Marketing.PromotionType':'Promotion type',
   'Marketing.NormalPromotion':'Normal promotion',
   'Marketing.SubscriptionPromotion':'Subscription promotion',
   'Marketing.PromotionCode':'Promotion Code',
   'Marketing.PleaseInputPromotionCode':'Please input promotion code',
-  'Marketing.words':'4-20 words',
+  'Marketing.words':'1-20 words',
   'Marketing.PromotionName':'Promotion Name',
   'Marketing.PleaseInputPromotionName':'Please input Promotion Name',
   'Marketing.40Words':'1-40 words',
@@ -1938,8 +1950,24 @@ export default {
   'Marketing.Valid':'Valid',
   /* -------- 已翻译 V1.0---------------*/
 
-
-
+  'Marketing.DiscountType': 'Discount type',
+  'Marketing.Forthefirstsubscription': 'For the first subscription order,discount',
+  'Marketing.Fortherestsubscription': 'For the rest subscription order,discount',
+  'Marketing.discount':'discount',
+  'Marketing.fulldiscounttype': 'full discount type',
+  'Marketing.Attribute': 'Attribute',
+  'Marketing.Pleaseselectcategory': 'Please select category',
+  'Marketing.Nosalescategory': 'No sales category',
+  'Marketing.Pleaseselectattribute': 'Please select attribute',
+  'Marketing.Noattribute': 'No attribute',
+  'Marketing.Selectgroup': 'Select group',
+  'Marketing.Byemail': 'By email',
+  'Marketing.Pleaseselectgroup': 'Please select group.',
+  'Marketing.Pleaseenteremailsuffix.': 'Please enter email suffix.',
+  'Marketing.Addmulti-levelpromotions': 'Add multi-level promotions',
+  'Marketing.upto5levels': 'up to 5 levels can be set',
+  'Marketing.0-99999999.99': '0-99999999.99',
+  'Marketing.1-9999': '1-9999',
 
   /*-----------------------------  Prescriber  ----------------------------------------*/
   'Prescriber.Add':'Add',
@@ -2640,7 +2668,7 @@ export default {
   inputPhoneNumberTip: 'Please enter the phone number',
   inputPhoneNumberTip2: 'Please enter the correct phone number',
   more: 'More',
-
+  receiver: 'Receiver',
   defaultAddress: 'Default address',
   phoneNumber2: 'Phone number',
   piece: 'Piece',
@@ -2757,6 +2785,7 @@ export default {
     'The products imported from the commodity library are initially reviewed / off the shelf. Please add the information before selling them;',
   instructions: 'Instructions:',
   status: 'Status',
+  import: 'Import',
   batchImport: 'Batch Import',
   addSpecifications: 'Specification setting',
   newProduct: 'New product (Bundle product)',
@@ -2964,8 +2993,8 @@ export default {
   orderNumber: '   Order number  ',
   payWay: 'Pay Way',
   consumer: 'Consumer',
-
-
+  consumerAccount: 'Consumer account',
+  consumerInfo: 'Consumer information',
   orderTime: 'Order time',
   skuCode: 'SKU code',
   spuCode: 'SPU code',
@@ -2983,7 +3012,6 @@ export default {
   coupon: 'Coupon',
   pointsDeduction: 'Points deduction',
   shippingFees: 'Shipping fees',
-  tax: 'Tax',
   totalPayable: 'Total payable',
   sellerNotes: 'Seller notes',
   buyerNotes: 'Buyer notes',
@@ -2996,6 +3024,7 @@ export default {
   invoiceReceivingAddress: 'Invoice receiving address',
   deliveryMethod: 'Delivery method',
   expressDelivery: 'Express delivery',
+  deliveryInformation: 'delivery information',
   confirm: 'Confirm',
   productFirstLetterUpperCase: 'Product',
   recipient: 'Recipient',
@@ -3004,7 +3033,71 @@ export default {
   cateImage: 'Category image',
   cateDsc: 'Category description',
 
-
+  'order.orderList': 'Order list',
+  'order.orderNumber': 'Order number',
+  'order.subscriptioNumber': 'Subscription number',
+  'order.shippingStatus': 'Shipping status',
+  'order.paymentStatus': 'Payment status',
+  'order.orderStatus': 'Order status',
+  'order.orderSource': 'Order source',
+  'order.startDate': 'Start date',
+  'order.endDate': 'End date',
+  'order.bulkOperations': 'Bulk operations',
+  'order.pendingReview': 'Pending review',
+  'order.toBeFormed': 'To be formed',
+  'order.notShipped': 'not shipped',
+  'order.toBeDelivered': 'To be delivered',
+  'order.toBeReceived': 'To be received',
+  'order.paid': 'Paid',
+  'order.unpaid': 'Unpaid',
+  'order.toBeConfirmed': 'To be confirmed',
+  'order.received': 'Received',
+  'order.confirmReceipt': 'Confirm receipt',
+  'order.completed': 'Completed',
+  'order.outOfDate': 'Out of date',
+  'order.ship': 'Ship',
+  'order.allShipments': 'All shipments',
+  'order.partialShipment': 'Partial shipment',
+  'order.invalid': 'Invalid',
+  'order.unknown': 'Unknown',
+  'order.seeDetails': 'See details',
+  'order.PCOrder': 'PC order',
+  'order.H5Order': 'H5 order',
+  'order.AppOrder': 'APP order',
+  'order.miniProgramOrder': 'Mini Program order',
+  'order.rejectionReasonTip': 'Please enter the reason for rejection',
+  'order.100charactersLimitTip': 'Please input less than 100 characters',
+  'order.valetOrder': 'Valet order',
+  'order.fightTogether': 'Fight together',
+  'order.audit': 'Audit',
+  'order.turnDown': 'Turn down',
+  'order.review': 'Review',
+  'order.confirmReceivedAllProducts':
+    'Confirm that all products have been received?',
+  'order.confirmReview':
+    'Are you sure you want to return the selected order for reconsideration?',
+  'order.confirmAudit': 'Confirm to review the selected order?',
+  'order.exportFilterOrder': 'Export filtered orders',
+  'order.exportSelectedOrder': 'Export selected order',
+  'order.pleaseSelectOrderToOperate':
+    'Please select the order that needs to be operated',
+  'order.batchReview': 'Batch review',
+  'order.batchExport': 'Batch export',
+  'order.editOrder': 'Edit order',
+  'order.mustSelectAMember': 'Must select a member',
+  'order.noAddressAvailable':
+    'No address available, please input temporary address',
+  'order.mustChooseAShippingAddress': 'Must choose a shipping address',
+  'order.pleaseSelectProvinceOrCityOrDistrict':
+    'Please select province/city/district',
+  'order.inputDetailAddressTip1': 'Please input the detailed address',
+  'order.inputDetailAddressTip2':
+    'Detailed address length must be between 5-60 characters',
+  'order.inputReceiverTip': 'Please input the receiver',
+  'order.uploadValidateTip':
+    'Supported picture formats: jpg, jpeg, png, gif, file size no more than 5M, maximum upload 10',
+  'order.uploadValidateTip2': 'Image size cannot exceed 5MB',
+  'order.orderPriceChange': 'Order price change',
 
   'invoice.invoiceInformation': 'Invoice information',
   'invoice.noInvoiceRequired': 'No invoice required',
@@ -3266,8 +3359,6 @@ export default {
   items: 'Items',
   'product.subscriptionStatus': 'Subscription status',
   'product.subscriptionPrice': 'Subscription Price',
-  'product.defaultPurchaseType': 'Default purchase type',
-  'product.defaultFrequency': 'Default frequency',
 
   'subscription.subList': 'Subscription list',
   'subscription.orderNumber': 'Order number',
@@ -3299,6 +3390,7 @@ export default {
   'subscription.sub': 'Sub-',
   'subscription.operation': 'Operation',
   'subscription.subscriptionDate': 'Subscription date',
+  items: 'Items',
   petCategory: 'Pet Category',
   petName: 'Pet Name',
   gender: 'Gender',
@@ -3317,6 +3409,7 @@ export default {
   star: 'star',
   yes: 'Yes',
   no: 'No',
+  description: '',
   reviewTip:
     'Review overview shows the summary of review data in the past 180 days',
   ratingRule: 'Rating rule',
@@ -3369,5 +3462,5 @@ export default {
   lastName: 'Last name',
   footerConfig:'Footer Config',
   seoSetting: 'SEO Setting',
-  siteMap: 'Site map',
+  siteMap: 'Site map'
 };

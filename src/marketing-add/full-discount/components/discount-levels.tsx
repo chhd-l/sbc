@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Input, Button, Form } from 'antd';
 import { noop, ValidConst, cache } from 'qmkit';
-
+import { FormattedMessage, injectIntl } from 'react-intl'
 const FormItem = Form.Item;
 
 import styled from 'styled-components';
@@ -18,7 +18,10 @@ const HasError = styled.div`
     color: #d9d9d9;
   }
 `;
-export default class DiscountLevels extends React.Component<any, any> {
+class DiscountLevels extends React.Component<any, any> {
+  props: {
+    intl: any;
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -98,11 +101,19 @@ export default class DiscountLevels extends React.Component<any, any> {
                                           callback();
                                         }
                                         if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                          callback('0-99999999.99');
+                                          callback(
+                                            this.props.intl.formatMessage({
+                                              id: 'Marketing.0-99999999.99'
+                                            })
+                                          );
                                         }
                                       } else {
                                         if (!ValidConst.noZeroNineNumber.test(value) || !(value < 10000 && value > 0)) {
-                                          callback('1-9999');
+                                          callback(
+                                            this.props.intl.formatMessage({
+                                              id: 'Marketing.1-9999'
+                                            })
+                                          );
                                         }
                                       }
                                     }
@@ -115,7 +126,15 @@ export default class DiscountLevels extends React.Component<any, any> {
                                 <Input
                                   // style={{ width: 200 }}
                                   className="input-width"
-                                  placeholder={isFullCount === 0 ? '0-99999999.99' : isFullCount === 1 ? '1-9999' : 0}
+                                  placeholder={isFullCount === 0 ?
+                                    this.props.intl.formatMessage({
+                                      id: 'Marketing.0-99999999.99'
+                                    })
+                                    : isFullCount === 1 ?
+                                      this.props.intl.formatMessage({
+                                        id: 'Marketing.1-9999'
+                                      })
+                                      : 0}
                                   onChange={(e) => {
                                     this.ruleValueChange(index, e.target.value);
                                   }}
@@ -144,7 +163,11 @@ export default class DiscountLevels extends React.Component<any, any> {
                               validator: (_rule, value, callback) => {
                                 if (value) {
                                   if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                                    callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+                                    callback(
+                                      this.props.intl.formatMessage({
+                                        id: 'Marketing.InputValueBetween'
+                                      })
+                                    );
                                   }
                                 }
                                 callback();
@@ -156,8 +179,16 @@ export default class DiscountLevels extends React.Component<any, any> {
                             <Input
                               // style={{ width: 200 }}
                               className="input-width"
-                              title={'0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
-                              placeholder={'0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
+                              title={
+                                this.props.intl.formatMessage({
+                                id: 'Marketing.InputValueBetween'
+                              })
+                              }
+                              placeholder={
+                                this.props.intl.formatMessage({
+                                  id: 'Marketing.InputValueBetween'
+                                })
+                              }
                               onChange={(e) => {
                                 this.onChange(index, 'discount', e.target.value); //parseFloat()
                               }}
@@ -175,7 +206,11 @@ export default class DiscountLevels extends React.Component<any, any> {
                               validator: (_rule, value, callback) => {
                                 if (value) {
                                   if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                                    callback('1-9999');
+                                    callback(
+                                      this.props.intl.formatMessage({
+                                        id: 'Marketing.1-9999'
+                                      })
+                                    );
                                   }
                                 }
                                 callback();
@@ -190,8 +225,16 @@ export default class DiscountLevels extends React.Component<any, any> {
                             <Input
                               // style={{ width: 200 }}
                               className="input-width"
-                              title={'1-9999'}
-                              placeholder={'1-9999'}
+                              title={
+                                this.props.intl.formatMessage({
+                                id: 'Marketing.1-9999'
+                              })
+                              }
+                              placeholder={
+                                this.props.intl.formatMessage({
+                                  id: 'Marketing.1-9999'
+                                })
+                              }
                               onChange={(e) => {
                                 this.onChange(index, 'limitAmount', parseInt(e.target.value));
                               }}
@@ -211,9 +254,9 @@ export default class DiscountLevels extends React.Component<any, any> {
         {isNormal && isFullCount !== 2 ? (
           <div>
             <Button onClick={this.addLevels} disabled={fullDiscountLevelList && fullDiscountLevelList.length >= 5}>
-              Add multi-level promotions
+              <FormattedMessage id="Marketing.Addmulti-levelpromotions" />
             </Button>
-            &nbsp;&nbsp;up to 5 levels can be set
+            &nbsp;&nbsp;<FormattedMessage id="Marketing.upto5levels" />
           </div>
         ) : null}
       </div>
@@ -311,3 +354,5 @@ export default class DiscountLevels extends React.Component<any, any> {
     return 'key' + (Math.random() as any).toFixed(6) * 1000000;
   };
 }
+
+export default injectIntl(DiscountLevels)

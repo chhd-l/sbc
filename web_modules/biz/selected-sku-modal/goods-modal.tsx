@@ -99,7 +99,6 @@ export default class GoodsModal extends React.Component<any, any> {
   }
 
   rowChangeBackFun = (selectedSkuIds, selectedRows) => {
-    debugger
     this.setState({
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows

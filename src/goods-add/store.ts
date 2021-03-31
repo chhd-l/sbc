@@ -354,10 +354,11 @@ export default class AppStore extends Store {
 
     if (tmpContext && tmpContext.goodsInfos && tmpContext.goodsInfos.length > 0) {
       let addSkUProduct = tmpContext.goodsInfos.map((item) => {
-
+        console.log(item,44444);
         return {
           pid: item.goodsInfoNo,
           marketPrice: item.marketPrice,
+          subscriptionPrice: item.subscriptionPrice,
           targetGoodsIds: item.goodsInfoBundleRels,
           minStock: item.stock
         };
@@ -910,7 +911,7 @@ export default class AppStore extends Store {
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
-    if ( this.state().get('goodsList').toJS().length === a.toJS().length ) {
+    if ( (this.state().get('goodsList').toJS().length === a.toJS().length) && this.state().get('goods').get('subscriptionStatus') == 1 ) {
       message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
       valid = false;
       return;
@@ -1023,7 +1024,6 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
-        debugger
         if (!(item.get('stock') || item.get('stock') == 0) && a == undefined) {
           flag = 1
           valid = false;

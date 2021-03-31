@@ -358,7 +358,6 @@ export default class AppStore extends Store {
         return {
           pid: item.goodsInfoNo,
           marketPrice: item.marketPrice,
-          subscriptionPrice: item.subscriptionPrice,
           targetGoodsIds: item.goodsInfoBundleRels,
           minStock: item.stock
         };
@@ -917,6 +916,14 @@ export default class AppStore extends Store {
       return;
     }
 
+    let b = this.state().get('goodsList').filter((item)=>item.get('addedFlag') == 0)
+    if ( (this.state().get('goodsList').toJS().length === b.toJS().length) &&
+      (this.state().get('goods').get('addedFlag') == 1 || this.state().get('goods').get('addedFlag') == 2) ) {
+      message.error('If the shelves status in SPU is Y, at lease one shelves status of Sku is Y');
+      valid = false;
+      return;
+    }
+
     return valid;
   }
 
@@ -970,16 +977,34 @@ export default class AppStore extends Store {
     let valid = true;
     let tip = 0;
     let goodsList = this.state().get('goodsList');
+    let addSkUProduct = this.state().get('addSkUProduct')
+    console.log(addSkUProduct);
     if (goodsList) {
       goodsList.forEach((item) => {
+        console.log(item.get('marketPrice'));
+
         //console.log(item.get('subscriptionPrice'),111111111111);
         //console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
         //console.log(item.toJS(),3333333);
-        if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
+        if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+          if (addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) {
+            tip = 1;
+            valid = false;
+            return;
+          }
+        }else {
+
+          if (!(item.get('marketPrice') || item.get('marketPrice') == 0) ) {
+            tip = 1;
+            valid = false;
+            return;
+          }
+        }
+       /* if (!(item.get('marketPrice') || item.get('marketPrice') == 0) ) {
           tip = 1;
           valid = false;
           return;
-        }
+        }*/
         if (this.state().get('goods').get('subscriptionStatus') == 1 ) {
           if(item.get('subscriptionStatus') == 1) {
             if( item.get('subscriptionPrice') == 0) {
@@ -989,11 +1014,22 @@ export default class AppStore extends Store {
             }
           }
         }
-        if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
-          tip = 2;
-          valid = false;
-          return;
+
+
+        if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+          if (addSkUProduct[0].targetGoodsIds[0].subscriptionPrice == 0) {
+            tip = 4;
+            valid = false;
+            return;
+          }
+        }else {
+          if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
+            tip = 4;
+            valid = false;
+            return;
+          }
         }
+
         if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
           tip = 3;
           valid = false;

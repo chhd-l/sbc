@@ -341,16 +341,18 @@ class SkuForm extends React.Component<any, any> {
       key: 'marketPrice',
       render: (rowInfo) => {
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
-        let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
+        let subscriptionPrice =  rowInfo.subMarketPrice ? rowInfo.subMarketPrice : 0
         if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
-          marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
-          subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
-        }else {
-          return marketPrice
+          marketPrice = addSkUProduct[0].targetGoodsIds[0].subMarketPrice?
+            addSkUProduct[0].targetGoodsIds[0].subMarketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : addSkUProduct[0].targetGoodsIds[0].marketPrice?
+              addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum: 0
+          subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subScriptionPrice?
+            addSkUProduct[0].targetGoodsIds[0].subScriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : addSkUProduct[0].targetGoodsIds[0].subScriptionPrice?
+              addSkUProduct[0].targetGoodsIds[0].subScriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum :0
         }
         console.log(addSkUProduct[0],11111111);
         console.log(marketPrice,2222222);
-        console.log(rowInfo.marketPrice,33333);
+        console.log(rowInfo,33333);
        /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
         //console.log(marketPrice,2222222);
         console.log(rowInfo.marketPrice,33333);
@@ -410,7 +412,7 @@ class SkuForm extends React.Component<any, any> {
 
                       onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
                       //initialValue: addSkUProduct.length === 1? marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : marketPrice ? marketPrice : 0
-                      initialValue:  marketPrice ? marketPrice : 0
+                      initialValue:  marketPrice
 
                     })(
                       <InputNumber

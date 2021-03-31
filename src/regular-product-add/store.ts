@@ -1021,6 +1021,14 @@ export default class AppStore extends Store {
       return;
     }
 
+    let b = this.state().get('goodsList').filter((item)=>item.get('addedFlag') == 0)
+    if ( (this.state().get('goodsList').toJS().length === b.toJS().length) &&
+      (this.state().get('goods').get('addedFlag') == 1 || this.state().get('goods').get('addedFlag') == 2) ) {
+      message.error('If the shelves status in SPU is Y, at lease one shelves status of Sku is Y');
+      valid = false;
+      return;
+    }
+
     return valid;
   }
 
@@ -1084,22 +1092,21 @@ export default class AppStore extends Store {
           tip = 1;
           return;
         }
-        if (this.state().get('goods').get('subscriptionStatus') == 1 ) {
-          if(item.get('subscriptionStatus') == 1) {
-            if( item.get('subscriptionPrice') == 0) {
-              tip = 4;
-              valid = false;
-              return;
-            }
-          }else {
-            valid = true;
+
+        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionStatus') !=0) {
+          if( item.get('subscriptionPrice') == 0 || item.get('subscriptionPrice') == null) {
+            tip = 4;
+            valid = false;
+            return;
           }
         }
-        if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
+
+        if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0))) {
           tip = 2;
           valid = false;
           return;
         }
+
         if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
           tip = 3;
           valid = false;

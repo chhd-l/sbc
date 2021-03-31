@@ -69,6 +69,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
 
   init = () => {
     const { addSkUProduct } = this.props.relaxProps;
+    console.log(addSkUProduct,666666);
+
     let obj = addSkUProduct;
     if (Array.isArray(obj) &&obj.length>0) {
       let currentObj = obj.find(item=>item.pid === this.props.pid)
@@ -91,7 +93,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
   };
 
   handleOK=()=>{
-    const {selectedRowKeys,selectedRows} = this.state
+    const {selectedRowKeys,selectedRows, addSkUProduct} = this.state
     const { onProductselectSku } = this.props.relaxProps;
     // let a = [];
     let minStock = []
@@ -100,7 +102,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //     goodsInfoNo: item
     //   });
     // });
+
     selectedRows && selectedRows.map((item) => {
+        console.log(item,555555);
         if(item.stock){
           minStock.push(item.stock)
         }else if(sessionStorage.getItem('minStock')){
@@ -110,7 +114,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
           subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
           bundleNum: 1,
           marketPrice: item.marketPrice,
-          subscriptionPrice: item.subscriptionPrice,
+          subMarketPrice: item.subMarketPrice,
+          subScriptionPrice: item.subScriptionPrice,
           goodsInfoNo: item.goodsInfoNo,
           subGoodsInfoNo: item.goodsInfoNo,
         })

@@ -343,7 +343,7 @@ class SkuForm extends React.Component<any, any> {
                         <InputNumber
                           min={0}
                           max={9999999.99}
-                          disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                          //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                           formatter={limitDecimals}
                           parser={limitDecimals}
                           step={0.01}
@@ -379,7 +379,7 @@ class SkuForm extends React.Component<any, any> {
                             min={0}
                             max={9999999.99}
                             //precision={2}
-                            disabled={rowInfo.subscriptionStatus === 0}
+                            //disabled={rowInfo.subscriptionStatus === 0}
                             formatter={limitDecimals}
                             parser={limitDecimals}
                             step={0.01}
@@ -408,7 +408,7 @@ class SkuForm extends React.Component<any, any> {
                       <InputNumber
                         min={0}
                         max={9999999.99}
-                        disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                        //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                         formatter={limitDecimals}
                         parser={limitDecimals}
                         step={0.01}

@@ -21,7 +21,7 @@ export function queryClinicsDictionary(filterParams = {}) {
  */
 export function getBasicDetails(id = null) {
   return Fetch<TResult>('/customer/detail2/' + id, {
-    method: 'Get'
+    method: 'GET'
   });
 }
 
@@ -62,7 +62,7 @@ export function fetchClinicList(filterParams = {}) {
  */
 export function getAddressList(id = null) {
   return Fetch<TResult>('/customer/addressList/' + id, {
-    method: 'Get'
+    method: 'GET'
   });
 }
 
@@ -72,7 +72,7 @@ export function getAddressList(id = null) {
  */
 export function getAddressListByType(id = null, type = '') {
   return Fetch<TResult>('/customer/addressList/listByCustomerIdAndType?customerId=' + id + '&type=' + type, {
-    method: 'Get'
+    method: 'GET'
   });
 }
 
@@ -320,7 +320,7 @@ export function getPrescriberList(params = {}) {
 //查询州地址
 
 export function queryStateList() {
-  return Fetch<TResult>('systemState/queryByStoreId', {
+  return Fetch<TResult>('/systemState/queryByStoreId', {
     method: 'POST',
     body: JSON.stringify({
       ...{ storeId: 123457910 }

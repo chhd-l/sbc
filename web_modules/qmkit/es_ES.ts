@@ -165,6 +165,7 @@ export default {
   'Menu.Member companies':'Member companies',
   'Menu.NPS list':'NPS list',
   'Menu.Shipping Fee':'Shipping Fee',
+  'Menu.NPS':'NPS',
 
 
 
@@ -2040,6 +2041,20 @@ export default {
   'Marketing.upto5levels': 'up to 5 levels can be set',
   'Marketing.0-99999999.99': '0-99999999.99',
   'Marketing.1-9999': '1-9999',
+  'Marketing.ustenterrules': 'Must enter rules',
+  'Marketing.Discountmustbeentered': 'Discount must be entered',
+  'Marketing.Editdiscountactivity': 'Edit  discount activity',
+  'Marketing.Creatediscountactivity': 'Create  discount activity',
+  'Marketing.discountTip': 'The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity',
+  'Marketing.Editreductionactivity': 'Edit reduction activity',
+  'Marketing.Createreductionactivity': 'Create reduction activity',
+  'Marketing.reductionTip': 'The same product can participate in different types of promotional activities at the same time, but can only participate in one full reduction activity',
+  'Marketing.0.01-99999999.99': '0.01-99999999.99',
+  'Marketing.items': 'items',
+
+
+
+
 
   /*-----------------------------  Prescriber  ----------------------------------------*/
   'Prescriber.Add':'Add',

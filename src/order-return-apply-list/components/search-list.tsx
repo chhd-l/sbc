@@ -52,17 +52,17 @@ export default class SearchList extends React.Component<any, any> {
               <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                 <thead className="ant-table-thead">
                   <tr>
-                    <th style={{ width: '200' }}>{<FormattedMessage id="commodity" />}</th>
-                    <th style={{ width: '15%' }}>{<FormattedMessage id="consumerName" />}</th>
-                    <th style={{ width: '15%' }}>{<FormattedMessage id="recipient" />}</th>
-                    <th style={{ width: '10%' }}>
+                    <th style={{ width: '20%' }}>{<FormattedMessage id="commodity" />}</th>
+                    <th style={{ width: '12%' }}>{<FormattedMessage id="consumerName" />}</th>
+                    <th style={{ width: '12%' }}>{<FormattedMessage id="recipient" />}</th>
+                    <th style={{ width: '12%' }}>
                       {<FormattedMessage id="amount" />}
                       <br />
                       {<FormattedMessage id="quantity" />}
                     </th>
-                    <th style={{ width: '10%' }}>{<FormattedMessage id="shippingStatus" />}</th>
-                    <th style={{ width: '10%' }}>{<FormattedMessage id="orderStatus" />}</th>
-                    <th style={{ width: '10%', textAlign: 'right' }}>{<FormattedMessage id="paymentStatus" />}</th>
+                    <th style={{ width: '15%' }}>{<FormattedMessage id="shippingStatus" />}</th>
+                    <th style={{ width: '15%' }}>{<FormattedMessage id="orderStatus" />}</th>
+                    <th style={{ width: '12%', textAlign: 'right' }}>{<FormattedMessage id="paymentStatus" />}</th>
                   </tr>
                 </thead>
                 <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList, apply)}</tbody>
@@ -150,7 +150,7 @@ export default class SearchList extends React.Component<any, any> {
                   <td
                     style={{
                       textAlign: 'left',
-                      width: '200',
+                      width: '20%',
                       padding: '16px 0'
                     }}
                   >
@@ -183,31 +183,31 @@ export default class SearchList extends React.Component<any, any> {
                       ) : null
                     }
                   </td>
-                  <td style={{ width: '14%' }}>
+                  <td style={{ width: '12%' }}>
                     {/*客户名称*/}
                     <p title={v.getIn(['buyer', 'account'])}>{v.getIn(['buyer', 'name'])}</p>
                   </td>
-                  <td style={{ width: '15%' }}>
+                  <td style={{ width: '12%' }}>
                     {/*收件人姓名*/}
                     {<FormattedMessage id="recipient" />}：{v.getIn(['consignee', 'name'])}
                     <br />
                     {/*收件人手机号码*/}
                     {v.getIn(['consignee', 'phone'])}
                   </td>
-                  <td style={{ width: '10%' }}>
+                  <td style={{ width: '12%' }}>
                     {tradePrice.toFixed(2)}
                     <br />( total {num})
                   </td>
                   {/*发货状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td> */}
-                  <td style={{ width: '10%' }}>{v.getIn(['tradeState', 'deliverStatus'])}</td>
+                  <td style={{ width: '15%' }}>{v.getIn(['tradeState', 'deliverStatus'])}</td>
                   {/*订单状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.flowState[v.getIn(['tradeState', 'flowState'])]}</td> */}
-                  <td style={{ width: '10%' }}>{v.getIn(['tradeState', 'flowState'])}</td>
+                  <td style={{ width: '15%' }}>{v.getIn(['tradeState', 'flowState'])}</td>
                   {/*支付状态*/}
                   <td
                     style={{
-                      width: '10%',
+                      width: '12%',
                       textAlign: 'right',
                       paddingRight: 20
                     }}

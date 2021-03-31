@@ -119,6 +119,7 @@ class ProductSearchSetting extends Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { disabled, defaultPurchaseType, visible, visibleClub, defaultSubscriptionFrequencyId, options, optionsClub, language, purchaseType } = this.state;
+
     return (
       <div style={styles.container}>
         <BreadCrumb />
@@ -162,7 +163,7 @@ class ProductSearchSetting extends Component<any, any> {
             >
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
                 {getFieldDecorator('defaultSubscriptionFrequencyId', {
-                  initialValue: defaultSubscriptionFrequencyId,
+                  initialValue: options[0]? options[0].name: '',
                   rules: [
                     {
                       required: true,
@@ -194,8 +195,8 @@ class ProductSearchSetting extends Component<any, any> {
               style={{ marginBottom: 0 }}
             >
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
-                {getFieldDecorator('defaultSubscriptionFrequencyId', {
-                  initialValue: defaultSubscriptionFrequencyId,
+                {getFieldDecorator('defaultSubscriptionClubFrequencyId', {
+                  initialValue: optionsClub[0]? optionsClub[0].name: '',
                   rules: [
                     {
                       required: true,

@@ -307,15 +307,15 @@ class AutomationExecution extends Component<any, any> {
     ];
 
     const executionDetailsColumns = [
+      // {
+      //   title: 'Pet owner account',
+      //   dataIndex: 'contactId',
+      //   width: '15%'
+      // },
       {
         title: 'Pet owner account',
-        dataIndex: 'contactId',
-        width: '15%'
-      },
-      {
-        title: 'Pet owner name',
         dataIndex: 'contactName',
-        width: '10%'
+        width: '15%'
       },
       {
         title: 'Communication item',

@@ -166,7 +166,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
           />
           <Column title={<FormattedMessage id="Product.SKU" />} dataIndex="goodsInfoNo" key="goodsInfoNo" />
           <Column title={<FormattedMessage id="Product.ProductName" />} dataIndex="goodsInfoName" key="goodsInfoName" width="200px" />
-          <Column title={<FormattedMessage id="Product.SalesCategory" />} key="storeCateName" dataIndex="storeCateName" />
+          <Column title={<FormattedMessage id="Product.SalesCategory" />} key="storeCateName" dataIndex="storeCateName"  width="200px" />
           <Column title={<FormattedMessage id="Product.Specification" />} dataIndex="specName" key="specName" />
           <Column title={<FormattedMessage id="Product.ProductCategory" />} dataIndex="goodsCateName" key="goodsCateName" />
           <Column title={<FormattedMessage id="Product.Brand" />} key="brandName" dataIndex="brandName" />

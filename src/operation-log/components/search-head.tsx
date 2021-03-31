@@ -188,7 +188,7 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
-              <Col span="8">
+              <Col span="24">
                 <FormItem>
                   <Button
                     htmlType="submit"
@@ -230,8 +230,6 @@ export default class SearchHead extends Component<any, any> {
                     </span>
                   </Button>
                 </FormItem>
-              </Col>
-              <Col span="8">
                 <AuthWrapper functionName="f_operation_log_export">
                   <FormItem>
                     <Button
@@ -252,7 +250,7 @@ export default class SearchHead extends Component<any, any> {
                         onExportByParams(params);
                       }}
                     >
-                      <FormattedMessage id="Setting.Setting" />
+                      <FormattedMessage id="Setting.export" />
                     </Button>
                   </FormItem>
                 </AuthWrapper>

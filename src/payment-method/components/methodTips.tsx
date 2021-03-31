@@ -24,6 +24,8 @@ class MethodTips extends React.Component<any, any> {
       getEditStorePayment: Function;
       getStorePaymentVOs: Function;
     };
+    checkedId: any,
+    maxAmount: any
   };
 
   static relaxProps = {
@@ -43,12 +45,18 @@ class MethodTips extends React.Component<any, any> {
 
   render() {
     const { switchVisible, storePaymentVOs } = this.props.relaxProps;
+    const { checkedId, maxAmount } = this.props
+    console.log(maxAmount,11111111);
 
+    /*let maxAmount = 0
+    if(checkedId == storePaymentVOs.id) {
+      maxAmount = storePaymentVOs.maxAmount
+    }*/
     return (
       <Modal visible={switchVisible} title="Set rules" maskClosable={false} onOk={this.onOk} onCancel={() => this.cancel()}>
         <div className="methodTips flex-start-align">
           <span>Max order amount is</span>
-          <InputNumber min={0} max={99999} defaultValue={storePaymentVOs.maxAmount} onChange={this.onChange} />
+          <InputNumber min={0} max={99999} value={maxAmount} onChange={this.onChange} />
           <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
         </div>
       </Modal>

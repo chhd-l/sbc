@@ -379,7 +379,7 @@ class SkuForm extends React.Component<any, any> {
                             min={0}
                             max={9999999.99}
                             //precision={2}
-                            //disabled={rowInfo.subscriptionStatus === 0}
+                            disabled={rowInfo.subscriptionStatus === 0}
                             formatter={limitDecimals}
                             parser={limitDecimals}
                             step={0.01}

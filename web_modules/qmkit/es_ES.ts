@@ -2148,7 +2148,7 @@ export default {
   'Prescriber.OrderAmount':'Order Amount can not be empty',
   'Prescriber.RewardRateCan':'Reward Rate can not be empty',
   'Prescriber.updateSuccess':'update success',
-  'Prescriber.addSuccess':'add success',
+  'Prescriber.addSuccess':'Add successfully',
   'Prescriber.deleteSuccess':'Alldelete success',
   'Prescriber.TimeZome':'Time Zome',
   'Prescriber.AddSection':'Add section',

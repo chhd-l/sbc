@@ -5,7 +5,7 @@ import { Form, Modal, Popconfirm, Switch, Table, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, checkAuth } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 const confirm = Modal.confirm;
@@ -223,14 +223,14 @@ class CateList extends React.Component<any, any> {
       Modal.info({
         title: <FormattedMessage id="Product.Prompt" />,
         content: <FormattedMessage id="Product.TheCurrentCategory" />,
-        okText: <FormattedMessage id="Product.OK" />
+        okText: this.props.intl.formatMessage({id:'Product.OK'})
       });
     } else if (childFlag) {
       //有子分类
       Modal.info({
         title: <FormattedMessage id="Product.Prompt" />,
         content: <FormattedMessage id="Product.PleaseDelete" />,
-        okText: <FormattedMessage id="Product.OK" />
+        okText: this.props.intl.formatMessage({id:'Product.OK'})
       });
       // confirm({
       //   title: 'Prompt',
@@ -354,4 +354,4 @@ _BodyRow = DropTarget('row', _rowTarget, (connect, monitor) => ({
   }))(_BodyRow)
 );
 
-export default DragDropContext(HTML5Backend)(CateList);
+export default DragDropContext(HTML5Backend)(injectIntl(CateList));

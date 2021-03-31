@@ -171,10 +171,10 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                     {item.buyer.name}
                   </td>
                   <td key="6" style={{ width: '10%' }}>
-                    {getOrderStatusValue('ShippStatus',(item.tradeState.deliverStatus))}
+                    <FormattedMessage id={getOrderStatusValue('ShippStatus',(item.tradeState.deliverStatus))} />
                   </td>
                   <td key="7" style={{ width: '10%' }}>
-                    {getOrderStatusValue('OrderStatus',(item.tradeState.flowState))}
+                    <FormattedMessage id={getOrderStatusValue('OrderStatus',(item.tradeState.flowState))} />
                   </td>
                 </tr>
               </tbody>

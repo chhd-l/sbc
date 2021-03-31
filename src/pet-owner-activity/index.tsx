@@ -123,7 +123,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               </Col>
               {petOwner.email ? (
                 <Col span={8}>
-                  <Orders customerAccount={petOwner.customerAccount} />
+                  <Orders petOwnerId={id} />
                   <div style={{ marginTop: '20px' }}></div>
                   <Bookings customerAccount={petOwner.customerAccount} />
                 </Col>

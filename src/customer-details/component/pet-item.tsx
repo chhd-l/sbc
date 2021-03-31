@@ -15,6 +15,15 @@ interface Iprop extends FormComponentProps {
   petId: string;
 }
 
+const calcPetWeight = (jsonStr: string) => {
+  try {
+    const weightObj = JSON.parse(jsonStr);
+    return `${weightObj['measure']} ${weightObj['measureUnit']}`;
+  } catch(e) {
+    return '';
+  }
+};
+
 class PetItem extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
     super(props);
@@ -381,12 +390,12 @@ class PetItem extends React.Component<Iprop, any> {
                   </Col>
                   <Col span={12}>
                     <Form.Item label="Weight">
-                      <span>{pet.weight}</span>
+                      <span>{pet.weight ? calcPetWeight(pet.weight) : ''}</span>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item label="Activity">
-                      <span>{pet.petActivityCode}</span>
+                      <span>{pet.activity}</span>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
@@ -410,7 +419,7 @@ class PetItem extends React.Component<Iprop, any> {
                           </Select>
                         )
                       ) : (
-                        <span>{pet.customerPetsPropRelations ? pet.customerPetsPropRelations.map((v) => v.propName).join(', ') : ''}</span>
+                        <span>{pet.sensitivity}</span>
                       )}
                     </Form.Item>
                   </Col>

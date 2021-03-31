@@ -430,7 +430,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
-                  <OrderInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
+                  <OrderInformation startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
                 </TabPane>
                 <TabPane tab="Subscription information" key="subscrib">
                   <SubscribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />

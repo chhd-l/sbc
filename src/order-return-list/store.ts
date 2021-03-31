@@ -36,7 +36,7 @@ export default class AppStore extends Store {
     //   form['returnFlowState'] = values[1];
     // }
 
-    webapi.fetchOrder({ ...form, pageNum, pageSize }).then(({ res }) => {
+    webapi.fetchOrderReturnList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code === Const.SUCCESS_CODE) {
         this.transaction(() => {
           this.dispatch('order-return-list:loading:end');

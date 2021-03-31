@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import {Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select, Popconfirm} from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { fromJS, List } from 'immutable';
+import {fromJS, List, Map} from 'immutable';
 import {AuthWrapper, cache, noop, ValidConst} from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
@@ -35,6 +35,7 @@ export default class SkuTable extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
+      editGoods: Function;
     };
   };
 
@@ -49,6 +50,7 @@ export default class SkuTable extends React.Component<any, any> {
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
+    editGoods: noop,
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -386,6 +388,16 @@ class SkuForm extends React.Component<any, any> {
       key: 'subscriptionStatus',
       render: (rowInfo) => {
         goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
+        let disable = false
+        if (goods.get('subscriptionStatus') == 0) {
+          disable = true
+        }else {
+          if(goodsList.toJS().length == 1 ) {
+            disable = true
+          }else {
+            disable = false
+          }
+        }
         return (
           <Row>
             <Col span={8}>
@@ -394,7 +406,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0':'1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0?true:false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
+                  <Select disabled={disable} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>
@@ -415,16 +427,20 @@ class SkuForm extends React.Component<any, any> {
           <Row style={{marginRight: '81px'}}>
             <Col span={8}>
               <FormItem style={styles.tableFormItem}>
-                {rowInfo.addedFlag === 1 ? (
-                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
-                    <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
-                  </div>
-                ) : null}
-                {rowInfo.addedFlag === 0? (
-                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
-                    <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
-                  </div>
-                ) : null}
+                {goodsList.toJS().length == 1 ? ( <div>
+                  <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>
+                </div> ) : (<>
+                  {rowInfo.addedFlag == 1 ? (
+                    <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
+                      <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                    </div>
+                  ) : null}
+                  {rowInfo.addedFlag == 0? (
+                    <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
+                      <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                    </div>
+                  ) : null}</>)}
+
               </FormItem>
             </Col>
           </Row>
@@ -448,7 +464,6 @@ class SkuForm extends React.Component<any, any> {
   };
 
   onAddedFlag = (id: string) => {
-    console.log(1122)
   };
 
 
@@ -475,13 +490,22 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any) => {
-    const { editGoodsItem, synchValue } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, editGoods, goodsList } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
 
     editGoodsItem(id, key, e);
+
+    if(key == "addedFlag") {
+      if(goodsList.toJS().length >1) {
+        let goods = Map({
+          ['addedFlag']: fromJS(2)
+        });
+        editGoods(goods);
+      }
+    }
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存

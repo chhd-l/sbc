@@ -101,7 +101,6 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //   });
     // });
     selectedRows && selectedRows.map((item) => {
-        console.log(item,23333333);
         if(item.stock){
           minStock.push(item.stock)
         }else if(sessionStorage.getItem('minStock')){
@@ -111,6 +110,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
           subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
           bundleNum: 1,
           marketPrice: item.marketPrice,
+          subscriptionPrice: item.subscriptionPrice,
           goodsInfoNo: item.goodsInfoNo,
           subGoodsInfoNo: item.goodsInfoNo,
         })

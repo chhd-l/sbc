@@ -7,7 +7,7 @@ import SearchForm from './components/search-form';
 //import Tab from './components/tab';
 //import { FormattedMessage } from 'react-intl';
 import GoodsList from '@/goods-inventory/components/goods-list';
-
+import { FormattedMessage } from 'react-intl';
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsView extends React.Component<any, any> {
   store: AppStore;
@@ -22,7 +22,7 @@ export default class GoodsView extends React.Component<any, any> {
         <div>
           <BreadCrumb />
           <div className="container-search">
-            <Headline title="Inventory warning" />
+            <Headline title={<FormattedMessage id="Product.Inventorywarning" />} />
             <SearchForm />
           </div>
           <div className="container">

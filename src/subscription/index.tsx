@@ -14,9 +14,9 @@ export default class SubscriptionList extends Component<any, any> {
     super(props);
     this.state = {
       searchForm: {
-        subscriptionOption: 'Subscription id',
+        subscriptionOption: 'Subscription Number',
         number: '',
-        consumerOption: 'Consumer Name',
+        consumerOption: 'Pet Owner Name',
         consumer: '',
         productOption: 'Product Name',
         product: '',
@@ -26,9 +26,9 @@ export default class SubscriptionList extends Component<any, any> {
         prescriberOption: 'Auditor Name',
         prescriber: ''
       },
-      subscriptionOption: ['Subscription id', 'Order id'],
+      subscriptionOption: ['Subscription Number', 'Order Number'],
 
-      consumerOption: ['Consumer Name', 'Consumer Account'],
+      consumerOption: ['Pet Owner Name', 'Consumer Account'],
       productOption: ['Product Name', 'SKU Code'],
       recipientOption: ['Receiver', 'Receiver Phone'],
       prescriberOption: ['Auditor Name', 'Auditor ID'],
@@ -96,9 +96,9 @@ export default class SubscriptionList extends Component<any, any> {
     const { searchForm, activeKey } = this.state;
     let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
     let param = {
-      orderNumber: searchForm.subscriptionOption === 'Order id' ? searchForm.number : '',
-      subscriptionNumber: searchForm.subscriptionOption === 'Subscription id' ? searchForm.number : '',
-      consumerName: searchForm.consumerOption === 'Consumer Name' ? searchForm.consumer : '',
+      orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
+      subscriptionNumber: searchForm.subscriptionOption === 'Subscription Number' ? searchForm.number : '',
+      consumerName: searchForm.consumerOption === 'Pet Owner Name' ? searchForm.consumer : '',
       consumerAccount: searchForm.consumerOption === 'Consumer Account' ? searchForm.consumer : '',
       productName: searchForm.productOption === 'Product Name' ? searchForm.product : '',
       skuCode: searchForm.productOption === 'SKU Code' ? searchForm.product : '',

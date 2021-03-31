@@ -527,11 +527,44 @@ export default class AppStore extends Store {
     this.dispatch('loading:start');
     const { res } = (await getSeo(storeCateId, type)) as any;
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      let title = null;
+      let description = null;
+      let keywords = null;
       this.dispatch('loading:end');
+
+      const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+      if (loginInfo) {
+        switch (loginInfo.storeId) {
+          case 123457910: //"美国"
+            title = 'Royal Canin | {name}s'
+            description = null
+            keywords = null
+            break;
+          // case 123457911: //"土耳其"
+          //   title = '{name} {subtitle} | Royal Canin Türkiye';
+          //   description = '{name} {subtitle} Royal Canin resmi mağazasında. "X" TL üzeri siparişlerinizde ücretsiz kargo. Sipariş verin veya mama aboneliğinizi başlatın!';
+          //   keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+          //   break;
+          // case 123457907: //"俄罗斯"
+          //   title = 'Купить {technology} корм Royal Canin {name} в официальном интернет-магазине';
+          //   description = 'Купить {technology} корм Royal Canin {name} со скидкой 10% при оформлении подписки. Сделайте заказ в интернет-магазине Royal Canin уже сегодня!';
+          //   keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+          //   break;
+          case 123456858: //墨西哥
+            title = 'TIENDA OFICIAL DE PRODUCTOS VETERINARIOS ROYAL CANIN MEXICO';
+            description = null
+            keywords = null
+            break;
+          default:
+            title = 'Royal Canin | {name}s';
+            description = '{description}';
+            keywords = '{name}, {subtitle}, {sales category}, {tagging}';
+        }
+      }
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : 'Royal Canin | {name}s',
+          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : title,
           metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : '',
           metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : '',
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''

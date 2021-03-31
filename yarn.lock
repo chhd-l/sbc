@@ -6720,23 +6720,23 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gg-editor-core@1.3.4:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/gg-editor-core/-/gg-editor-core-1.3.4.tgz#f392af868ff05a8f3e56afbfe550f1264f3f96c1"
-  integrity sha512-h2ALYh/os7XphrhR967HQoc48tX8+OoG+bCoDEphwLDwqOieoIAEngqjy7DBv1874fxhw7ry1F0bKHdzCvrVIQ==
+gg-editor-core@1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/gg-editor-core/-/gg-editor-core-1.3.3.tgz#6f07de017dac8d760ccf0582958bc11c622303ac"
+  integrity sha512-AcRms0GgiABZ6u9tz2LIAPU9+w8r6xvab2k6a3JOOC8TbKIcH6stjRa8QTh+FLGUPGarlRS28QSFcrPKkSCbYA==
   dependencies:
     "@antv/g6" "^2.2.6"
     ant-design-palettes "^1.1.3"
     wolfy87-eventemitter "^5.2.5"
 
-gg-editor@^2.0.2:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/gg-editor/-/gg-editor-2.0.4.tgz#bd58073822047b4f3426654fb0d93b92d442c6ce"
-  integrity sha512-ovEfr0dmitUpUQ0KCmu6lEZjLxty4weKrIyMpUk+Z1VCn5Cl9y0V27nKDXNp3q+EqFzlDdsXz9bgVjGHIElDIw==
+gg-editor@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/gg-editor/-/gg-editor-2.0.2.tgz#27fcda9932418d880d4e4dd3dbc5c2eb4c878dd2"
+  integrity sha512-p/qZLtyhcIpR9p7sfQOmocmoI2s8vFrQvM4IIFgugLLD+/c9u9//zySiuzxQl0xV+YwVzwBafXX9mvsYiyoMww==
   dependencies:
     "@antv/g6" "^2.2.6"
     core-js "^3.0.0"
-    gg-editor-core "1.3.4"
+    gg-editor-core "1.3.3"
     lodash "^4.17.10"
 
 glob-parent@^3.1.0:

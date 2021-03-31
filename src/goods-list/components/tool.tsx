@@ -44,7 +44,7 @@ export default class Tool extends React.Component<any, any> {
         {hasMenu && (
           <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
             <Button>
-              {<FormattedMessage id="product.batchOperation" />}
+              {<FormattedMessage id="Product.batchOperation" />}
               <Icon type="down" />
             </Button>
           </Dropdown>
@@ -63,7 +63,7 @@ export default class Tool extends React.Component<any, any> {
                 this._spuOnSale();
               }}
             >
-              Batch on shelves
+              <FormattedMessage id="Product.Batchonshelves" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -74,7 +74,7 @@ export default class Tool extends React.Component<any, any> {
                 this._spuOffSale();
               }}
             >
-              Batch off shelves
+              <FormattedMessage id="Product.Batchoffshelves" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -85,7 +85,7 @@ export default class Tool extends React.Component<any, any> {
                 this._delGoods();
               }}
             >
-              Batch delete
+              <FormattedMessage id="Product.Batchdelete" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -108,7 +108,7 @@ export default class Tool extends React.Component<any, any> {
   _setFeight = () => {
     const { selectedSpuKeys, setFeightVisible } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+      message.error(<FormattedMessage id="Product.atLeastOneItem" />);
       return;
     } else {
       setFeightVisible(true);
@@ -118,12 +118,12 @@ export default class Tool extends React.Component<any, any> {
   _spuOnSale = () => {
     const { spuOnSale, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+      message.error(<FormattedMessage id="Product.atLeastOneItem" />);
       return;
     }
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to put these products on shelves?',
+      title: <FormattedMessage id="Product.Prompt" />,
+      content: <FormattedMessage id="Product.putProductsOnShelves" />,
       onOk() {
         spuOnSale();
       }
@@ -133,12 +133,12 @@ export default class Tool extends React.Component<any, any> {
   _spuOffSale = () => {
     const { spuOffSale, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+      message.error(<FormattedMessage id="Product.atLeastOneItem" />);
       return;
     }
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to put these products off shelves?',
+      title: <FormattedMessage id="Product.Prompt" />,
+      content: <FormattedMessage id="Product.putProductsOnShelves" />,
       onOk() {
         spuOffSale();
       }
@@ -148,12 +148,12 @@ export default class Tool extends React.Component<any, any> {
   _delGoods = () => {
     const { spuDelete, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+      message.error(<FormattedMessage id="Product.atLeastOneItem" />);
       return;
     }
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete these products?',
+      title: <FormattedMessage id="Product.Prompt" />,
+      content: <FormattedMessage id="Product.deleteThisProduct" />,
       onOk() {
         spuDelete();
       }

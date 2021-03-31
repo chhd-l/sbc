@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal } from 'antd';
 import { getAppointmentList, updateAppointmentById, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
 import QRScan from './components/qr-scan';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -212,7 +213,8 @@ export default class AppointmentList extends React.Component<any, any> {
       {
         title: 'Appointment time',
         dataIndex: 'apptTime',
-        key: 'd2'
+        key: 'd2',
+        render: (text, record) => <div>{`${moment(record.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')} ${record.apptTime}`}</div>
       },
       {
         title: 'Pet owner name',
@@ -362,6 +364,8 @@ export default class AppointmentList extends React.Component<any, any> {
           </Row>
           <Table
             rowKey="id"
+            className="table-overflow"
+            scroll={{ x: true }}
             rowSelection={rowSelection}
             columns={columns}
             dataSource={list}
@@ -384,7 +388,7 @@ export default class AppointmentList extends React.Component<any, any> {
           <p>Consumer phone: {this.state.scanedInfo.consumerPhone}</p>
           <p>Consumer email: {this.state.scanedInfo.consumerEmail}</p>
           <p>
-            Appointment time: {this.state.scanedInfo.apptDate} {this.state.scanedInfo.apptTime}
+            Appointment time(YYYY-MM-DD): {this.state.scanedInfo.apptDate ? `${moment(this.state.scanedInfo.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')}` : ''} {this.state.scanedInfo.apptTime}
           </p>
         </Modal>
       </div>

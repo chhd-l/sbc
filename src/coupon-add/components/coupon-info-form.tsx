@@ -299,7 +299,6 @@ export default class CouponInfoForm extends Component<any, any> {
    * @param storeCateList
    */
   generateAttributeTree = (attributesList) => {
-    console.log(attributesList.toJS(), 'attributesList-------------');
     return (
       attributesList &&
       attributesList.map((item) => {
@@ -684,7 +683,8 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      if (storeCateIds.size === 0 && scopeType === 5) {
+                      if ((!value || value.length === 0) && scopeType === 5) {
+                        //storeCateIds.size === 0
                         callback('Please select store cate.');
                       }
                       callback();
@@ -720,7 +720,8 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      if (attributeValueIds.size === 0 && scopeType === 6) {
+                      if ((!value || value.length === 0) && scopeType === 6) {
+                        //attributeValueIds.size === 0
                         callback('Please select attribute.');
                       }
                       callback();
@@ -728,28 +729,26 @@ export default class CouponInfoForm extends Component<any, any> {
                   }
                 ]
               })(
-                <>
-                  <TreeSelect
-                    id="attributeValueIds"
-                    // defaultValue={[{value: 'A20210225023548243'}]}
-                    defaultValue={attributeDefaultValue}
-                    getPopupContainer={() => document.getElementById('page-content')}
-                    treeCheckable={true}
-                    showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                    treeCheckStrictly={true}
-                    //treeData ={getGoodsCate}
-                    // showCheckedStrategy = {SHOW_PARENT}
-                    placeholder="Please select attribute"
-                    notFoundContent="No sales attribute"
-                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    showSearch={false}
-                    onChange={this.attributeChange}
-                    style={{ width: 500 }}
-                    treeDefaultExpandAll
-                  >
-                    {this.generateAttributeTree(attributesList)}
-                  </TreeSelect>
-                </>
+                <TreeSelect
+                  id="attributeValueIds"
+                  // defaultValue={[{value: 'A20210225023548243'}]}
+                  defaultValue={attributeDefaultValue}
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  //treeData ={getGoodsCate}
+                  // showCheckedStrategy = {SHOW_PARENT}
+                  placeholder="Please select attribute"
+                  notFoundContent="No sales attribute"
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  showSearch={false}
+                  onChange={this.attributeChange}
+                  style={{ width: 500 }}
+                  treeDefaultExpandAll
+                >
+                  {this.generateAttributeTree(attributesList)}
+                </TreeSelect>
               )}
             </FormItem>
           )}
@@ -766,7 +765,6 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      debugger;
                       if (segmentIds.size === 0 && couponJoinLevel === -3) {
                         callback('Please select group.');
                       }
@@ -933,8 +931,9 @@ export default class CouponInfoForm extends Component<any, any> {
    * 保存优惠券
    */
   saveCoupon = () => {
-    const { addCoupon, editCoupon, couponId, changeBtnDisabled, startTime, rangeDayType, dealErrorCode } = this.props.relaxProps;
+    const { addCoupon, editCoupon, couponId, changeBtnDisabled, startTime, rangeDayType, dealErrorCode, attributeValueIds, storeCateIds } = this.props.relaxProps;
     changeBtnDisabled();
+    let errorObject = {};
     if (!couponId) {
       //强制校验创建时间
       if (
@@ -954,7 +953,23 @@ export default class CouponInfoForm extends Component<any, any> {
         return;
       }
     }
+    // if(!attributeValueIds || attributeValueIds.size === 0) {
+    //   errorObject['attributeValueIds'] = {
+    //     value: null,
+    //     errors: [new Error('Please select attribute.')]
+    //   };
+    //
+    // } else if (!storeCateIds || storeCateIds.size === 0) {
+    //   errorObject['storeCateIds'] = {
+    //     value: null,
+    //     errors: [new Error('Please select store cate.')]
+    //   };
+    // }
     this.props.form.validateFields(null, async (errs) => {
+      // if (Object.keys(errorObject).length != 0) {
+      //   this.props.form.setFields(errorObject);
+      //   return
+      // }
       //如果校验通过
       if (!errs) {
         const res = await (couponId ? editCoupon() : addCoupon());

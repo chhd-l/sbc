@@ -93,7 +93,7 @@ export default class SeoSettingModal extends Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={<FormattedMessage id="seoSetting" />}
+        title={<FormattedMessage id="Product.seoSetting" />}
         visible={seoModalVisible}
         width={920}
         // confirmLoading={true}
@@ -144,7 +144,7 @@ export default class SeoSettingModal extends Component<any, any> {
             {/*  )}*/}
             {/*</Form.Item>*/}
 
-            {loginInfo && loginInfo.storeId !== 123457910 && (
+            {loginInfo && loginInfo.storeId !== 123457910 && loginInfo.storeId !== 123456858 &&  (
               <>
                 <Form.Item label="Meta Keywords">
                   {getFieldDecorator('metaKeywordsSource', {

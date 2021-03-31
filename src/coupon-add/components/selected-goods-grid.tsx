@@ -9,6 +9,7 @@ import { Relax } from 'plume2';
 import { IList } from '../../../typings/globalType';
 import noop from '../../../web_modules/qmkit/noop';
 import { Button } from 'antd';
+import { FormattedMessage } from 'react-intl';
 const TableRow = styled.div`
   margin-top: 20px;
   .red {
@@ -41,17 +42,17 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     return (
       <div>
         <Button type="primary" icon="plus" onClick={() => this.onAdd()}>
-          Add product
+          <FormattedMessage id="Marketing.AddProduct" />
         </Button>
         &nbsp;&nbsp;
         <TableRow>
           <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={goodsRows ? goodsRows.toJS() : []} pagination={false}>
-            <Column title="SKU code" dataIndex="goodsInfoNo" key="goodsInfoNo" width="15%" />
+            <Column title={<FormattedMessage id="Marketing.SKUCode" />} dataIndex="goodsInfoNo" key="goodsInfoNo" width="15%" />
 
-            <Column title="Product name" dataIndex="goodsInfoName" key="goodsInfoName" width="20%" />
+            <Column title={<FormattedMessage id="Marketing.ProductName" />} dataIndex="goodsInfoName" key="goodsInfoName" width="20%" />
 
             <Column
-              title="Specifications"
+              title={<FormattedMessage id="Marketing.Specifications" />}
               dataIndex="specText"
               key="specText"
               width="20%"
@@ -64,10 +65,10 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               }}
             />
 
-            <Column title="Classification" key="cateName" dataIndex="cateName" width="10%" />
+            <Column title={<FormattedMessage id="Marketing.Classification" />} key="cateName" dataIndex="cateName" width="10%" />
 
             <Column
-              title="Brand"
+              title={<FormattedMessage id="Marketing.Brand" />}
               key="brandName"
               dataIndex="brandName"
               width="10%"
@@ -81,7 +82,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             />
 
             <Column
-              title="Price"
+              title={<FormattedMessage id="Marketing.Price" />}
               key="marketPrice"
               dataIndex="marketPrice"
               width="10%"
@@ -91,7 +92,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             />
 
             <Column
-              title="Operation"
+              title={<FormattedMessage id="Marketing.Operation" />}
               key="operate"
               width="10%"
               render={(row) => {

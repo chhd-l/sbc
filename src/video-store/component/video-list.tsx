@@ -45,67 +45,42 @@ export default class VideoList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      videoList,
-      currentPage,
-      total,
-      pageSize,
-      allChecked
-    } = this.props.relaxProps;
+    const { videoList, currentPage, total, pageSize, allChecked } = this.props.relaxProps;
     return (
       <div>
         <div style={styles.greyHeader}>
-          <Checkbox
-            checked={allChecked}
-            onChange={this._onchangeCheckedAll.bind(this)}
-            style={{ width: '10%', display: 'inline-block' }}
-          >
+          <Checkbox checked={allChecked} onChange={this._onchangeCheckedAll.bind(this)} style={{ width: '10%', display: 'inline-block' }}>
             {/* <FormattedMessage id="selectAll" /> */}
           </Checkbox>
           <span style={styles.videoItem}>
-            <FormattedMessage id="videoName" />
+            <FormattedMessage id="Setting.videoName" />
           </span>
           <span style={styles.videoItem}>
-            <FormattedMessage id="videoUrl" />
+            <FormattedMessage id="Setting.videoUrl" />
           </span>
           <span style={styles.videoItem}>
-            <FormattedMessage id="operation" />
+            <FormattedMessage id="Setting.operation" />
           </span>
         </div>
         <div>
           {(videoList || fromJS([])).map((item, index) => {
             return (
               <div style={styles.boxItem} key={item.get('resourceId')}>
-                <Checkbox
-                  checked={item.get('checked')}
-                  onChange={this._onchangeChecked.bind(this, index)}
-                  style={{ width: '10%', display: 'inline-block' }}
-                />
+                <Checkbox checked={item.get('checked')} onChange={this._onchangeChecked.bind(this, index)} style={{ width: '10%', display: 'inline-block' }} />
                 <span style={styles.videoItem}>
                   <Input
                     defaultValue={item.get('resourceName')}
                     onBlur={(e) => {
-                      this._updateVideo(
-                        e,
-                        item.get('resourceName'),
-                        item.get('resourceId')
-                      );
+                      this._updateVideo(e, item.get('resourceName'), item.get('resourceId'));
                     }}
                   />
                 </span>
-                <a
-                  onClick={this._videoDetail.bind(this, item.get('artworkUrl'))}
-                  style={styles.videoItem}
-                >
+                <a onClick={this._videoDetail.bind(this, item.get('artworkUrl'))} style={styles.videoItem}>
                   {item.get('artworkUrl')}
                 </a>
                 <AuthWrapper functionName="f_videoStore_2">
-                  <Tooltip placement="top" title="Delete">
-                    <a
-                      onClick={this._delete.bind(this, item.get('resourceId'))}
-                      style={styles.videoItem}
-                      className="iconfont iconDelete"
-                    >
+                  <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
+                    <a onClick={this._delete.bind(this, item.get('resourceId'))} style={styles.videoItem} className="iconfont iconDelete">
                       {/*<FormattedMessage id="delete" />*/}
                     </a>
                   </Tooltip>
@@ -118,19 +93,12 @@ export default class VideoList extends React.Component<any, any> {
           <div className="ant-table-placeholder">
             <span>
               <i className="anticon anticon-frown-o" />
-              No data
+              <FormattedMessage id="Setting.NoData" />
             </span>
           </div>
         ) : (
           <div style={styles.page}>
-            <Pagination
-              onChange={(pageNum, pageSize) =>
-                this._toCurrentPage(pageNum, pageSize)
-              }
-              current={currentPage}
-              total={total}
-              pageSize={pageSize}
-            />
+            <Pagination onChange={(pageNum, pageSize) => this._toCurrentPage(pageNum, pageSize)} current={currentPage} total={total} pageSize={pageSize} />
           </div>
         )}
       </div>
@@ -149,8 +117,8 @@ export default class VideoList extends React.Component<any, any> {
   _delete = (videoId: string) => {
     const { doDelete } = this.props.relaxProps;
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete the selected video?',
+      title: <FormattedMessage id="Setting.Prompt" />,
+      content: <FormattedMessage id="Setting.theSelectedVideo" />,
       onOk() {
         doDelete(videoId);
       }
@@ -164,7 +132,7 @@ export default class VideoList extends React.Component<any, any> {
   _showModal = () => {
     const { videoList, showMoveVideoModal } = this.props.relaxProps;
     if (videoList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error('Please select the video to move first');
+      message.error(<FormattedMessage id="Setting.theVideoToMoveFirst" />);
       return;
     }
     showMoveVideoModal(true);
@@ -179,21 +147,17 @@ export default class VideoList extends React.Component<any, any> {
     //修改了视频名称才真正的请求接口进行修改
     if (e.target.value != oldVal) {
       if (!e.target.value.trim()) {
-        message.error('Please input a file name');
+        message.error(<FormattedMessage id="Setting.PleaseInputAFileName" />);
         return false;
       }
 
-      if (
-        /(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(
-          e.target.value
-        )
-      ) {
-        message.error('Please input the file name in the correct format');
+      if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(e.target.value)) {
+        message.error(<FormattedMessage id="Setting.theCorrectFormat" />);
         return false;
       }
 
       if (e.target.value.length > 40) {
-        message.error('File name is too long');
+        message.error(<FormattedMessage id="Setting.FileNameIsTooLong" />);
         return false;
       }
 

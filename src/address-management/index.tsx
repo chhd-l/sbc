@@ -28,15 +28,15 @@ export default class AddressManagement extends Component<any, any> {
         <div className="order-con">
           <BreadCrumb />
           <div className="container-search">
-            <Headline title={<FormattedMessage id="addressManagement" />} />
-            <Alert message="Address Management is used for shipping and tax setting in store portal or shop. " type="info" />
+            <Headline title={<FormattedMessage id="Setting.addressManagement" />} />
+            <Alert message={<FormattedMessage id="Setting.AddressManagementisusedfor" />} type="info" />
             <div className="tab-container">
               <Tabs defaultActiveKey="1" onChange={this.tabsOnChange}>
-                <TabPane tab="States" key="1">
+                <TabPane tab={<FormattedMessage id="Setting.States" />} key="1">
                   <StatesList />
                   <NewStateModalForm />
                 </TabPane>
-                <TabPane tab="City" key="2">
+                <TabPane tab={<FormattedMessage id="Setting.City" />} key="2">
                   <CityList />
                   <NewCityModalForm />
                 </TabPane>

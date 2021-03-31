@@ -39,9 +39,15 @@ export default class OrderDetail extends React.Component<any, any> {
 
     return (
       <div>
-        <BreadCrumb thirdLevel={true}>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <a href="/order-list">Order</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="/order-list">Order list</a>
+          </Breadcrumb.Item>
           <Breadcrumb.Item>{<FormattedMessage id="orderDetails" />}</Breadcrumb.Item>
-        </BreadCrumb>
+        </Breadcrumb>
         <div className="container-search">
           <Headline title={<FormattedMessage id="orderDetails" />} />
         </div>

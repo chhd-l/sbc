@@ -1,6 +1,7 @@
 import { edit } from '@/regular-product-add/webapi';
 import { Row, Col, Radio, Form, Input, InputNumber } from 'antd';
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -10,23 +11,31 @@ export default class exitRules extends Component<any, any> {
     this.state = {};
   }
   render() {
-    const { editable, subscriptionPlan, addField } = this.props;
+    const { editable, Subscription, addField } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <h3>Step4</h3>
-        <h4>Exit Rules</h4>
+        <h3>
+          <FormattedMessage id="Subscription.Step4" />
+        </h3>
+        <h4>
+          <FormattedMessage id="Subscription.ExitRules" />
+        </h4>
         <div className="exitRules">
           <Form>
-            <h5>Cancellation policy</h5>
+            <h5>
+              <FormattedMessage id="Subscription.CancellationPolicy" />
+            </h5>
             <Row className="rules">
               <FormItem>
                 <Col span={8}>
-                  <strong>Consumer can choose to cancel the plan</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.ConsumerCanChoose" />
+                  </strong>
                 </Col>
                 <Col span={4}>
                   {getFieldDecorator('canCancelPlan', {
-                    initialValue: subscriptionPlan.canCancelPlan
+                    initialValue: Subscription.canCancelPlan
                   })(
                     <Radio.Group
                       disabled={true}
@@ -35,43 +44,57 @@ export default class exitRules extends Component<any, any> {
                         addField('canCancelPlan', value);
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Subscription.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Subscription.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </Col>
               </FormItem>
               <FormItem>
                 <Col span={8}>
-                  <strong>Consumer is charged a fee upon cancellation</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.ConsumerIsCharged" />
+                  </strong>
                 </Col>
                 <Col span={4}>
-                  {getFieldDecorator('subscriptionPlanFlag', {
-                    initialValue: subscriptionPlan.subscriptionPlanFlag
+                  {getFieldDecorator('SubscriptionFlag', {
+                    initialValue: Subscription.SubscriptionFlag
                   })(
                     <Radio.Group
                       disabled={true}
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        addField('subscriptionPlanFlag', value);
+                        addField('SubscriptionFlag', value);
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Subscription.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Subscription.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </Col>
               </FormItem>
             </Row>
-            {subscriptionPlan.canCancelPlan && subscriptionPlan.subscriptionPlanFlag ? (
+            {Subscription.canCancelPlan && Subscription.SubscriptionFlag ? (
               <div>
-                <h5>Terms of cancellation</h5>
+                <h5>
+                  <FormattedMessage id="Subscription.TermsOfCancellation" />
+                </h5>
                 <Row className="rules">
                   <FormItem>
-                    <strong>Consumer is charged a fee before</strong>
+                    <strong>
+                      <FormattedMessage id="Subscription.ConsumerIsChargedBefore" />
+                    </strong>
                     {getFieldDecorator('cancellationRefillTimes', {
-                      initialValue: subscriptionPlan.cancellationRefillTimes,
-                      rules: [{ required: true, message: 'This is Required' }]
+                      initialValue: Subscription.cancellationRefillTimes,
+                      rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                     })(
                       <InputNumber
                         disabled={!editable}
@@ -81,14 +104,20 @@ export default class exitRules extends Component<any, any> {
                         }}
                       />
                     )}
-                    <strong>refills</strong>
+                    <strong>
+                      <FormattedMessage id="Subscription.refills" />
+                    </strong>
                   </FormItem>
                   <FormItem>
-                    <strong style={{ marginRight: '10px' }}>Total cancellation fee:</strong>
-                    <strong>remaining number of refills *</strong>
+                    <strong style={{ marginRight: '10px' }}>
+                      <FormattedMessage id="Subscription.TotalCancellationFee" />:
+                    </strong>
+                    <strong>
+                      <FormattedMessage id="Subscription.remainingNumberOfRefills" /> *
+                    </strong>
                     {getFieldDecorator('cancellationRefillFee', {
-                      initialValue: subscriptionPlan.cancellationRefillFee,
-                      rules: [{ required: true, message: 'This is Required' }]
+                      initialValue: Subscription.cancellationRefillFee,
+                      rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                     })(
                       <InputNumber
                         disabled={!editable}
@@ -98,20 +127,26 @@ export default class exitRules extends Component<any, any> {
                         }}
                       />
                     )}
-                    <strong>cancellation fee per refill </strong>
+                    <strong>
+                      <FormattedMessage id="Subscription.cancellationFeePerRefill" />
+                    </strong>
                   </FormItem>
                 </Row>
               </div>
             ) : null}
-            <h5>Adjustment rules</h5>
+            <h5>
+              <FormattedMessage id="Subscription.AdjustmentRules" />
+            </h5>
             <Row className="rules">
               <FormItem>
                 <Col span={6}>
-                  <strong>Change delivery date</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.ChangeDeliveryDate" />
+                  </strong>
                 </Col>
                 <Col span={4}>
                   {getFieldDecorator('changeDeliveryDateFlag', {
-                    initialValue: subscriptionPlan.changeDeliveryDateFlag
+                    initialValue: Subscription.changeDeliveryDateFlag
                   })(
                     <Radio.Group
                       disabled={!editable}
@@ -120,18 +155,24 @@ export default class exitRules extends Component<any, any> {
                         addField('changeDeliveryDateFlag', value);
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Subscription.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Subscription.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </Col>
               </FormItem>
-              {subscriptionPlan.changeDeliveryDateFlag ? (
+              {Subscription.changeDeliveryDateFlag ? (
                 <FormItem>
-                  <strong>After</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.After" />
+                  </strong>
                   {getFieldDecorator('changeDeliveryDateAfterTimes', {
-                    initialValue: subscriptionPlan.changeDeliveryDateAfterTimes,
-                    rules: [{ required: true, message: 'This is Required' }]
+                    initialValue: Subscription.changeDeliveryDateAfterTimes,
+                    rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                   })(
                     <InputNumber
                       disabled={!editable}
@@ -141,18 +182,22 @@ export default class exitRules extends Component<any, any> {
                       }}
                     />
                   )}
-                  <strong>delivery times, consumer can change the next delivery date</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.deliveryTimesDate" />
+                  </strong>
                 </FormItem>
               ) : null}
             </Row>
             <Row className="rules" style={{ marginTop: '15px' }}>
               <FormItem>
                 <Col span={6}>
-                  <strong>Skip the next delivery</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.SkipTheNextDelivery" />
+                  </strong>
                 </Col>
                 <Col span={4}>
                   {getFieldDecorator('skipNextDeliveryFlag', {
-                    initialValue: subscriptionPlan.skipNextDeliveryFlag
+                    initialValue: Subscription.skipNextDeliveryFlag
                   })(
                     <Radio.Group
                       disabled
@@ -161,18 +206,24 @@ export default class exitRules extends Component<any, any> {
                         addField('skipNextDeliveryFlag', value);
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Subscription.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Subscription.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </Col>
               </FormItem>
-              {subscriptionPlan.skipNextDeliveryFlag ? (
+              {Subscription.skipNextDeliveryFlag ? (
                 <FormItem>
-                  <strong>After</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.After" />
+                  </strong>
                   {getFieldDecorator('skipNextDeliveryTimes', {
-                    initialValue: subscriptionPlan.skipNextDeliveryTimes,
-                    rules: [{ required: true, message: 'This is Required' }]
+                    initialValue: Subscription.skipNextDeliveryTimes,
+                    rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                   })(
                     <InputNumber
                       disabled={!editable}
@@ -182,7 +233,9 @@ export default class exitRules extends Component<any, any> {
                       }}
                     />
                   )}
-                  <strong>delivery times, consumer can skip the next delivery</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.deliveryTimes" />
+                  </strong>
                 </FormItem>
               ) : null}
             </Row>

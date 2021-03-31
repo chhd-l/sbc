@@ -23,7 +23,10 @@ export default class GoodsSpecActor extends Actor {
         {
           id: this._getRandom(),
           index: 1,
-          goodsInfoNo: this._randomGoodsInfoNo()
+          addedFlag: 1,
+          goodsInfoNo: this._randomGoodsInfoNo(),
+          subscriptionStatus: 1,
+          subscriptionPrice: 0
         }
       ],
       stockChecked: false,
@@ -344,6 +347,9 @@ export default class GoodsSpecActor extends Actor {
         id: this._getRandom(),
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
+        addedFlag: 1,
+        subscriptionPrice: 0,
+        subscriptionStatus: 1,
         skuSvIds: [item.get('specDetailId')]
       });
     });

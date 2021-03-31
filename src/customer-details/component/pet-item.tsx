@@ -180,17 +180,18 @@ class PetItem extends React.Component<Iprop, any> {
     });
   };
 
-  onSelectPetTagging = (tagsId) => {
+  onSelectPetTagging = (tagNames) => {
+    const { tagList } = this.state;
     this.setState({
       pet: {
         ...this.state.pet,
-        segmentList: tagsId.map((tagId) => ({ id: tagId }))
+        segmentList: tagNames.map((tagName) => ({ name: tagName }))
       }
     });
     setTagging({
       relationId: this.state.pet.petsId,
       segmentType: 1,
-      segmentIdList: tagsId
+      segmentIdList: tagList.filter((tag) => tagNames.indexOf(tag.name) > -1 && tag.segmentType == 1).map((tag) => tag.id)
     }).then(() => {});
   };
 
@@ -305,7 +306,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Weight">
+                    <Form.Item label="Adult size">
                       {editable ? (
                         getFieldDecorator('petsSizeValueName', {
                           initialValue: pet.petsSizeValueName,
@@ -379,7 +380,22 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Special needs">
+                    <Form.Item label="Weight">
+                      <span>{pet.weight}</span>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Activity">
+                      <span>{pet.petActivityCode}</span>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Lifestyle">
+                      <span>{pet.lifestyle}</span>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Sensitivities">
                       {editable ? (
                         getFieldDecorator('customerPetsPropRelations', {
                           initialValue: pet.customerPetsPropRelations ? pet.customerPetsPropRelations.map((v) => v.propName) : null,
@@ -416,11 +432,11 @@ class PetItem extends React.Component<Iprop, any> {
                         )
                       ) : (
                         // <span>{pet.segmentList ? pet.segmentList.map((v) => v.name).join(', ') : ''}</span>
-                        <Select mode="multiple" value={pet.segmentList ? pet.segmentList.map((v) => v.id) : []} onChange={this.onSelectPetTagging}>
+                        <Select mode="multiple" value={pet.segmentList ? pet.segmentList.map((v) => v.name) : []} onChange={this.onSelectPetTagging}>
                           {this.state.tagList
                             .filter((t) => t.segmentType == 1)
                             .map((v, idx) => (
-                              <Option value={v.id} key={idx}>
+                              <Option value={v.name} key={idx}>
                                 {v.name}
                               </Option>
                             ))}
@@ -483,9 +499,6 @@ class PetItem extends React.Component<Iprop, any> {
                         <Form.Item label="Pet owner ID">{pet.ownerId}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Pet activity level">{pet.petActivityCode}</Form.Item>
-                      </Col>
-                      <Col span={12}>
                         <Form.Item label="Breeder ID">{pet.breederId}</Form.Item>
                       </Col>
                       <Col span={12}>
@@ -532,9 +545,6 @@ class PetItem extends React.Component<Iprop, any> {
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Reason">{pet.reason}</Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item label="Lifestyle">{pet.lifestyle}</Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Microship ID">{pet.microchipId}</Form.Item>
@@ -589,9 +599,6 @@ class PetItem extends React.Component<Iprop, any> {
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Target weight">{pet.adultTargetWeight}</Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item label="Weight">{pet.weight}</Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Last pet status">{pet.lastPetStatus}</Form.Item>

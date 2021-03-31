@@ -63,12 +63,12 @@ export default class ReportList extends Component<any, any> {
           }}
           dataSource={productReportPage && productReportPage.toJS()}
         >
-          <Column title="No" key="serialNum" dataIndex="serialNum" width="5%" />
-          <Column title="Product" key="skuName" dataIndex="skuName" width="200px" />
-          <Column title="SKU" key="SKU" dataIndex="skuCode" />
-          <Column title="Sales volume" key="salesVolume" dataIndex="salesVolume" />
+          <Column title={<FormattedMessage id="Analysis.No" />} key="serialNum" dataIndex="serialNum" width="5%" />
+          <Column title={<FormattedMessage id="Analysis.Product" />} key="skuName" dataIndex="skuName" width="200px" />
+          <Column title={<FormattedMessage id="Analysis.SKU" />} key="SKU" dataIndex="skuCode" />
+          <Column title={<FormattedMessage id="Analysis.SalesVolume" />} key="salesVolume" dataIndex="salesVolume" />
           <Column
-            title="Revenue"
+            title={<FormattedMessage id="Analysis.Revenue" />}
             dataIndex="revenue"
             key="revenue"
             render={(text) => {
@@ -77,7 +77,7 @@ export default class ReportList extends Component<any, any> {
           />
 
           <Column
-            title="Rating"
+            title={<FormattedMessage id="Analysis.Rating" />}
             dataIndex="rating"
             key="Rating"
             render={(text) => {

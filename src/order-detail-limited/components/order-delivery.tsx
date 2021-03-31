@@ -58,6 +58,7 @@ export default class OrderDelivery extends React.Component<any, any> {
     const tradeDelivers = detail.get('tradeDelivers') as IList;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
+    const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const paymentOrder = detail.get('paymentOrder');
 
     //处理赠品
@@ -86,8 +87,7 @@ export default class OrderDelivery extends React.Component<any, any> {
             pagination={false}
             bordered
           />
-          {(flowState === 'AUDIT' || flowState === 'DELIVERED_PART') &&
-          !(paymentOrder == 'PAY_FIRST' && payState != 'PAID') ? (
+          {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID')  ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002_3pl">
                 <Button type="primary" onClick={() => deliver()}>

@@ -20,12 +20,8 @@ export default class GoodsImage extends React.Component<any, any> {
         <div className="smallitem">
           <img src={url || defaultImg} alt="" />
           {url && (
-            <p
-              onClick={() =>
-                this.setState({ previewVisible: true, previewImage: url })
-              }
-            >
-              <FormattedMessage id="preview" />
+            <p onClick={() => this.setState({ previewVisible: true, previewImage: url })}>
+              <FormattedMessage id="Product.preview" />
             </p>
           )}
         </div>

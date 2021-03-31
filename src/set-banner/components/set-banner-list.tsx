@@ -72,7 +72,7 @@ export default class SetBannerList extends Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={10}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
         </td>
       </tr>
     );
@@ -134,7 +134,7 @@ export default class SetBannerList extends Component<any, any> {
             <td style={{ wordBreak: 'break-all' }}>{webSkipUrl}</td>
             <td style={{ wordBreak: 'break-all' }}>{mobiSkipUrl}</td>
             <td>
-              <Tooltip placement="top" title="Edit">
+              <Tooltip placement="top" title={<FormattedMessage id="Setting.Edit" />}>
                 <span
                   /*className="red mgl20"*/
                   style={{ color: 'red', paddingRight: 10, cursor: 'pointer' }}
@@ -144,8 +144,8 @@ export default class SetBannerList extends Component<any, any> {
                   {/*<FormattedMessage id="edit" />*/}
                 </span>
               </Tooltip>
-              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteRow(item.toJS())} okText="Confirm" cancelText="Cancel">
-                <Tooltip placement="top" title="Delete">
+              <Popconfirm placement="topLeft" title={<FormattedMessage id="Setting.deleteThisItem" />} onConfirm={() => this.deleteRow(item.toJS())} okText={<FormattedMessage id="Setting.Confirm" />} cancelText={<FormattedMessage id="Setting.Cancel" />}>
+                <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
               </Popconfirm>
@@ -171,7 +171,7 @@ export default class SetBannerList extends Component<any, any> {
               setModalVisible(true);
             }}
           >
-            <FormattedMessage id="upload" />
+            <FormattedMessage id="Setting.Upload" />
           </Button>
         </div>
         {tableDatas.size > 0 ? (
@@ -191,21 +191,23 @@ export default class SetBannerList extends Component<any, any> {
                           <th style={{ width: '10%' }}>
                             <FormattedMessage id="bannerNo" />
                           </th>
-                          <th style={{ width: '10%' }}>Resource name</th>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage id="resource" values={{ type: 'Pc' }} />
+                            <FormattedMessage id="Setting.ResourceName" />
                           </th>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage id="resourceName" values={{ type: 'Mobile' }} />
+                            <FormattedMessage id="Setting.resource" values={{ type: 'Pc' }} />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Setting.resourceName" values={{ type: 'Mobile' }} />
                           </th>
                           <th style={{ width: '25%' }}>
-                            <FormattedMessage id="bannerUrl" values={{ type: 'Pc' }} />
+                            <FormattedMessage id="Setting.bannerUrl" values={{ type: 'Pc' }} />
                           </th>
                           <th style={{ width: '25%' }}>
-                            <FormattedMessage id="bannerUrl" values={{ type: 'Mobile' }} />
+                            <FormattedMessage id="Setting.bannerUrl" values={{ type: 'Mobile' }} />
                           </th>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage id="operator" />
+                            <FormattedMessage id="Setting.Operator" />
                           </th>
                         </tr>
                       </thead>
@@ -220,7 +222,7 @@ export default class SetBannerList extends Component<any, any> {
           <div className="ant-table-placeholder">
             <span>
               <i className="anticon anticon-frown-o" />
-              No data
+              <FormattedMessage id="Setting.NoData" />
             </span>
           </div>
         )}

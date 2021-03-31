@@ -31,7 +31,6 @@ export default class AppStore extends Store {
           shippingItemValue: res.context.marketingFreeShippingLevel.fullCount ? res.context.marketingFreeShippingLevel.fullCount : null
         };
       }
-      console.log({ ...res.context, ...shipping }, '----初始化');
       this.dispatch('marketing:shippingBean', fromJS({ ...res.context, ...shipping }));
       this.dispatch('loading:end');
     } else if (res.code == 'K-080016') {
@@ -66,7 +65,6 @@ export default class AppStore extends Store {
    */
   submitFreeShipping = async (shippingBean) => {
     const params = this.toParams(shippingBean);
-    console.log(params, 'params---------------');
     this.dispatch('loading:start');
     if (params.marketingId) {
       const { res } = await webapi.updateFreeShipping(params);
@@ -82,7 +80,7 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
     }
   };
-  toParams = ({ marketingId, marketingName, beginTime, endTime, subType, shippingValue, shippingItemValue, joinLevel, segmentIds }) => {
+  toParams = ({ marketingId, marketingName, beginTime, endTime, subType, shippingValue, shippingItemValue, joinLevel, segmentIds, promotionCode }) => {
     return {
       marketingType: 3, //免邮
       marketingName,
@@ -93,11 +91,21 @@ export default class AppStore extends Store {
       joinLevel,
       segmentIds,
       scopeType: 0,
-      marketingId
+      marketingId,
+      publicStatus: 1,
+      promotionType: 0,
+      promotionCode: promotionCode ? promotionCode : this.randomPromotionCode()
     };
   };
 
   shippingBeanOnChange = (shippingBean) => {
     this.dispatch('marketing:shippingBean', shippingBean);
+  };
+
+  randomPromotionCode = () => {
+    const randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
+    const timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
+    const promotionCode = randomNumber + timeStamp;
+    return promotionCode;
   };
 }

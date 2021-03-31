@@ -757,6 +757,10 @@ const routes = [
     asyncComponent: () => import('./prescriber-reward-rate')
   },
   {
+    path: '/prescriber-setting',
+    asyncComponent: () => import('./prescriber-setting')
+  },
+  {
     path: '/prescriber-type-add',
     asyncComponent: () => import('./prescriber-type-add')
   },

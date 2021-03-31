@@ -63,7 +63,6 @@ class ManualOrder extends Component<any, any> {
            'object':3
         }
         let status = d[typeof res.context];
-        console.log(status)
         this.setState({
           status
         });
@@ -116,7 +115,6 @@ class ManualOrder extends Component<any, any> {
   };
   render() {
     const { current, title, customer, storeId, status } = this.state;
-    console.log((window as any).countryEnum[storeId]);
     const steps = [
       {
         title: 'Consumer information',

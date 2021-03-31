@@ -13,10 +13,10 @@ class OrderSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Order Setting',
-      message: 'Operation tips',
-      paymentSequence: 'Payment before delivery',
-      paymentCategory: 'Online payment',
+      title: <FormattedMessage id="Order.Order" />,
+      message: <FormattedMessage id="Order.OperationTips" />,
+      paymentSequence: <FormattedMessage id="Order.PaymentBeforeDelivery" />,
+      paymentCategory: <FormattedMessage id="Order.OnlinePayment" />,
       paymentOnlineForm: {
         orderExpirationTimeStatus: false,
         orderExpirationTimeValue: 1,
@@ -379,7 +379,7 @@ class OrderSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Save Successful');
+          message.success(res.message || <FormattedMessage id="Order.SaveSuccessful" />);
         }
       })
       .catch((err) => {});
@@ -389,11 +389,11 @@ class OrderSetting extends Component<any, any> {
     const { title, message, paymentOnlineForm, paymentCashForm, unlimitedForm, paymentCategory, fieldForm } = this.state;
     const description = (
       <div>
-        <p>1. Order settings are associated with the key process of order return processing, please operate with caution, all settings will take effect after clicking Save.</p>
-        <p>2. If the customer has overdue and unprocessed orders to be received, the receipt will be automatically confirmed.</p>
-        <p>3. If the completed order exceeds the set time, the customer will not be able to initiate a return or refund application.</p>
-        <p>4. The pending refund orders that have not been processed by the merchant will be automatically approved.</p>
-        <p>5. The merchant will automatically confirm the receipt of the pending return orders that have not been processed by the merchant.</p>
+        <p><FormattedMessage id="Order.Ordersution" /></p>
+        <p><FormattedMessage id="Order.IfTheCustomer" /></p>
+        <p><FormattedMessage id="Order.IfTheCmpleted" /></p>
+        <p><FormattedMessage id="Order.ThePending" /></p>
+        <p><FormattedMessage id="Order.TheMerchant" /></p>
       </div>
     );
 
@@ -405,24 +405,24 @@ class OrderSetting extends Component<any, any> {
           <Headline title={title} />
           <Alert message={message} description={description} type="error" />
 
-          <p style={styles.tipsStyle}>Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not</p>
-          <Tabs defaultActiveKey="Delivery after payment">
-            <TabPane tab="Delivery after payment" key="Delivery after payment">
+          {/* <p style={styles.tipsStyle}>Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not</p> */}
+          <Tabs defaultActiveKey="Delivery after payment" style={{ marginTop: 20 }}>
+            <TabPane tab={<FormattedMessage id="Order.deliveryAfterPayment" />} key="Delivery after payment">
               <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-                <FormItem label="Payment category">
+                <FormItem label={<FormattedMessage id="Order.PaymentCategory" />}>
                   <div>
                     <Radio.Group onChange={this.handleCategoryChange} value={paymentCategory}>
                       <Radio.Button style={{ width: 140, textAlign: 'center' }} value="Online payment">
-                        Online payment
+                        <FormattedMessage id="Order.OnlinePayment" />
                       </Radio.Button>
                       <Radio.Button style={{ width: 140, textAlign: 'center' }} value="Cash">
-                        Cash
+                        <FormattedMessage id="Order.Cash" />
                       </Radio.Button>
                     </Radio.Group>
                   </div>
                 </FormItem>
 
-                <FormItem label="Capture payment when">
+                <FormItem label={<FormattedMessage id="Order.capturePaymentWhen" />}>
                   <Row>
                     <Select
                       value={paymentCategory === 'Online payment' ? paymentOnlineForm.paymentWhen : paymentCashForm.paymentWhen}
@@ -441,15 +441,15 @@ class OrderSetting extends Component<any, any> {
                         }
                       }}
                     >
-                      <Option value="None">None</Option>
-                      <Option value="To be delivered">To be delivered</Option>
-                      <Option value="Shipped">Shipped</Option>
+                      <Option value="None"><FormattedMessage id="Order.none" /></Option>
+                      <Option value="To be delivered"><FormattedMessage id="Order.toBeDelivered" /></Option>
+                      <Option value="Shipped"><FormattedMessage id="Order.Shipped" /></Option>
                     </Select>
                   </Row>
                 </FormItem>
                 {paymentCategory === 'Online payment' ? (
                   <>
-                    <FormItem label="Order expiration time">
+                    <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -479,14 +479,14 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After hours, if the customer fails to pay overdue, the order will be automatically voided.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterHours" /></span>
                             </div>
                           </Col>
                         ) : null}
                       </Row>
                     </FormItem>
 
-                    <FormItem label="Automatically confirm receipt of order">
+                    <FormItem label={<FormattedMessage id="Order.Automatically" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -516,14 +516,14 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDays" /></span>
                             </div>
                           </Col>
                         ) : null}
                       </Row>
                     </FormItem>
 
-                    <FormItem label="Completed orders are allowed to apply for refunds">
+                    <FormItem label={<FormattedMessage id="Order.CompletedOrders" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -553,14 +553,14 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>Within days, customers are allowed to initiate a return and refund application, and orders that have not been shipped can be returned at any time.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.WithinDays" /></span>
                             </div>
                           </Col>
                         ) : null}
                       </Row>
                     </FormItem>
 
-                    <FormItem label="Automatic review of pending return orders">
+                    <FormItem label={<FormattedMessage id="Order.Automatic" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -590,14 +590,14 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After days, the merchant’s overdue and pending refund orders will be automatically approved.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysMerchant" /></span>
                             </div>
                           </Col>
                         ) : null}
                       </Row>
                     </FormItem>
 
-                    <FormItem label="Automatic confirmation of receipt of return order">
+                    <FormItem label={<FormattedMessage id="Order.AutomaticConfirmation" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -629,7 +629,7 @@ class OrderSetting extends Component<any, any> {
                               />
                               <span style={{ marginLeft: 10 }}>
                                 {' '}
-                                After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.
+                                <FormattedMessage id="Order.AfterDaysAutomatically" />
                               </span>
                             </div>
                           </Col>
@@ -640,7 +640,7 @@ class OrderSetting extends Component<any, any> {
                 ) : null}
                 {paymentCategory === 'Cash' ? (
                   <>
-                    <FormItem label="Order expiration time">
+                    <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -670,14 +670,14 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After hours, if the customer fails to pay overdue, the order will be automatically voided.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterHours" /></span>
                             </div>
                           </Col>
                         ) : null}
                       </Row>
                     </FormItem>
 
-                    <FormItem label="Automatically confirm receipt of order">
+                    <FormItem label={<FormattedMessage id="Order.AutomaticallyConfirm" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -707,14 +707,14 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysCustomer" /></span>
                             </div>
                           </Col>
                         ) : null}
                       </Row>
                     </FormItem>
 
-                    <FormItem label="Completed orders are allowed to apply for refunds">
+                    <FormItem label={<FormattedMessage id="Order.CompletedOrdersAllowed" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -744,14 +744,14 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>Within days, customers are allowed to initiate a return and refund application, and orders that have not been shipped can be returned at any time.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.WithinDaysCustomers" /></span>
                             </div>
                           </Col>
                         ) : null}
                       </Row>
                     </FormItem>
 
-                    <FormItem label="Automatic review of pending return orders">
+                    <FormItem label={<FormattedMessage id="Order.AutomaticReview" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -781,14 +781,14 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After days, the merchant’s overdue and pending refund orders will be automatically approved.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysTheMerchant" /></span>
                             </div>
                           </Col>
                         ) : null}
                       </Row>
                     </FormItem>
 
-                    <FormItem label="Automatic confirmation of receipt of return order">
+                    <FormItem label={<FormattedMessage id="Order.AutomaticReceipt" />}>
                       <Row>
                         <Col span={1}>
                           <Switch
@@ -820,7 +820,7 @@ class OrderSetting extends Component<any, any> {
                               />
                               <span style={{ marginLeft: 10 }}>
                                 {' '}
-                                After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.
+                                <FormattedMessage id="Order.AfterTheMerchant" />
                               </span>
                             </div>
                           </Col>
@@ -831,9 +831,9 @@ class OrderSetting extends Component<any, any> {
                 ) : null}
               </Form>
             </TabPane>
-            <TabPane tab="Cash on delivery" key="Cash on delivery">
+            <TabPane tab={<FormattedMessage id="Order.cashOnDelivery" />} key="Cash on delivery">
               <Form style={{ marginTop: 20 }} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-                <FormItem label="Order expiration time">
+                <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -863,14 +863,14 @@ class OrderSetting extends Component<any, any> {
                               })
                             }
                           />
-                          <span style={{ marginLeft: 10 }}>After hours, if the customer fails to pay overdue, the order will be automatically voided.</span>
+                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterHours" /></span>
                         </div>
                       </Col>
                     ) : null}
                   </Row>
                 </FormItem>
 
-                <FormItem label="Automatically confirm receipt of order">
+                <FormItem label={<FormattedMessage id="Order.Automatically" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -900,14 +900,14 @@ class OrderSetting extends Component<any, any> {
                               })
                             }
                           />
-                          <span style={{ marginLeft: 10 }}>After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.</span>
+                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDays" /></span>
                         </div>
                       </Col>
                     ) : null}
                   </Row>
                 </FormItem>
 
-                <FormItem label="Completed orders are allowed to apply for refunds">
+                <FormItem label={<FormattedMessage id="Order.CompletedOrders" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -937,14 +937,14 @@ class OrderSetting extends Component<any, any> {
                               })
                             }
                           />
-                          <span style={{ marginLeft: 10 }}>Within days, customers are allowed to initiate a return and refund application, and orders that have not been shipped can be returned at any time.</span>
+                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.WithinDays" /></span>
                         </div>
                       </Col>
                     ) : null}
                   </Row>
                 </FormItem>
 
-                <FormItem label="Automatic review of pending return orders">
+                <FormItem label={<FormattedMessage id="Order.Automatic" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -974,14 +974,14 @@ class OrderSetting extends Component<any, any> {
                               })
                             }
                           />
-                          <span style={{ marginLeft: 10 }}>After days, the merchant’s overdue and pending refund orders will be automatically approved.</span>
+                          <span style={{ marginLeft: 10 }}>{<FormattedMessage id="Order.AfterDaysMerchant" />}</span>
                         </div>
                       </Col>
                     ) : null}
                   </Row>
                 </FormItem>
 
-                <FormItem label="Automatic confirmation of receipt of return order">
+                <FormItem label={<FormattedMessage id="Order.AutomaticConfirmation" />}>
                   <Row>
                     <Col span={1}>
                       <Switch
@@ -1013,7 +1013,7 @@ class OrderSetting extends Component<any, any> {
                           />
                           <span style={{ marginLeft: 10 }}>
                             {' '}
-                            After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.
+                            <FormattedMessage id="Order.AfterDaysAutomatically" />
                           </span>
                         </div>
                       </Col>
@@ -1022,7 +1022,7 @@ class OrderSetting extends Component<any, any> {
                 </FormItem>
               </Form>
             </TabPane>
-            <TabPane tab="Filed rule setting" key="Filed rule setting">
+            <TabPane tab={<FormattedMessage id="Order.fieldRuleSetting" />} key="Filed rule setting">
               <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 4 }} labelAlign="right">
                 <FormItem label="Order number">
                   <Input addonBefore="RCF" value={fieldForm.orderField} />

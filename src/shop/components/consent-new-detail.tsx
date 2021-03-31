@@ -4,6 +4,7 @@ import '../editcomponents/style.less';
 import { Relax } from 'plume2';
 import 'braft-editor/dist/index.css';
 import BraftEditor from 'braft-editor';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { SelectGroup, UEditor, noop } from 'qmkit';
 //import { render } from 'react-dom';
@@ -18,11 +19,11 @@ let content2 = '';
 let Prescriber = '';
 let con = '';
 @Relax
-export default class StepNewConsent extends Component<any, any> {
+class StepNewConsent extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      pageType: 'Detail',
+      pageType: this.props.intl.formatMessage({ id: 'Setting.Detail' }),
       content: [],
       consentTitle: true,
       detailType: false,
@@ -48,6 +49,7 @@ export default class StepNewConsent extends Component<any, any> {
       editId: any;
       onDetailList: any;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -150,7 +152,7 @@ export default class StepNewConsent extends Component<any, any> {
           <div className="detail-form">
             <FormItem>
               <SelectGroup
-                label="Category"
+                label={this.props.intl.formatMessage({ id: 'Setting.Category' })}
                 //defaultValue={this.state.editList.consentCategory}
                 style={{ width: 280 }}
                 onChange={(value) => {
@@ -160,13 +162,17 @@ export default class StepNewConsent extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="Prescriber">Prescriber</Option>
-                <Option value="Consumer">Consumer</Option>
+                <Option value="Prescriber">
+                  <FormattedMessage id="Setting.Prescriber" />
+                </Option>
+                <Option value="Consumer">
+                  <FormattedMessage id="Setting.Consumer" />
+                </Option>
               </SelectGroup>
             </FormItem>
             <FormItem>
               <Input
-                addonBefore="Consent id"
+                addonBefore={this.props.intl.formatMessage({ id: 'Setting.Consentid' })}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -182,7 +188,7 @@ export default class StepNewConsent extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue="Optional"
-                label="Field type"
+                label={this.props.intl.formatMessage({ id: 'Setting.Fieldtype' })}
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -192,8 +198,12 @@ export default class StepNewConsent extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="Optional">Optional</Option>
-                <Option value="Required">Required</Option>
+                <Option value="Optional">
+                  <FormattedMessage id="Setting.Optional" />
+                </Option>
+                <Option value="Required">
+                  <FormattedMessage id="Setting.Required" />
+                </Option>
                 {/*{customerTypeArr.map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
@@ -203,7 +213,7 @@ export default class StepNewConsent extends Component<any, any> {
             </FormItem>
             <FormItem>
               <Input
-                addonBefore="Consent code"
+                addonBefore={this.props.intl.formatMessage({ id: 'Setting.Consentcode' })}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -219,7 +229,7 @@ export default class StepNewConsent extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue="Landing page"
-                label="Page"
+                label={this.props.intl.formatMessage({ id: 'Setting.Page' })}
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -229,15 +239,18 @@ export default class StepNewConsent extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="Landing page">Landing page</Option>
-                {/*<Option value="">landing page</Option>*/}
-                <Option value="Check out">check out</Option>
+                <Option value="Landing page">
+                  <FormattedMessage id="Setting.Landingpage" />
+                </Option>
+                <Option value="Check out">
+                  <FormattedMessage id="Setting.checkout" />
+                </Option>
               </SelectGroup>
             </FormItem>
             <FormItem>
               <SelectGroup
                 defaultValue="E-mail in"
-                label="Consent type"
+                label={this.props.intl.formatMessage({ id: 'Setting.Consenttype' })}
                 style={{ width: 280 }}
                 onChange={(value, index) => {
                   value = value === '' ? null : value;
@@ -248,8 +261,12 @@ export default class StepNewConsent extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="E-mail in">Email in</Option>
-                <Option value="E-mail out">Email out</Option>
+                <Option value="E-mail in">
+                  <FormattedMessage id="Setting.Emailin" />
+                </Option>
+                <Option value="E-mail out">
+                  <FormattedMessage id="Setting.Emailout" />
+                </Option>
               </SelectGroup>
             </FormItem>
           </div>
@@ -259,7 +276,7 @@ export default class StepNewConsent extends Component<any, any> {
               <FormItem>
                 <SelectGroup
                   defaultValue="Content"
-                  label="Consent title"
+                  label={this.props.intl.formatMessage({ id: 'Setting.Consenttitle' })}
                   onChange={(value, index) => {
                     value = value === '' ? null : value;
                     this.handleConsentTitle(index);
@@ -270,16 +287,16 @@ export default class StepNewConsent extends Component<any, any> {
                   }}
                 >
                   <Option key="Content" value="Content">
-                    Content
+                    <FormattedMessage id="Setting.Content" />
                   </Option>
                   <Option key="URL" value="URL">
-                    URL
+                    <FormattedMessage id="Setting.URL" />
                   </Option>
                 </SelectGroup>
               </FormItem>
             </div>
 
-            <BraftEditor className="my-editor" controls={controls} placeholder="请输入正文内容" />
+            <BraftEditor className="my-editor" controls={controls} placeholder={this.props.intl.formatMessage({ id: 'Setting.Pleaseenterthetext' })} />
 
             {/*
             <div className="edit-content">
@@ -317,11 +334,13 @@ export default class StepNewConsent extends Component<any, any> {
           <div className="edit-add">
             {this.state.detailType == true ? (
               <div className="edit-add-content space-between-align">
-                <div className="edit-content">Consent detail</div>
+                <div className="edit-content">
+                  <FormattedMessage id="Setting.Consentdetail" />
+                </div>
               </div>
             ) : null}
             <Button className="btn" type="primary" shape="round" icon="plus" onClick={this.addDetail}>
-              New detail
+              <FormattedMessage id="Setting.Newdetail" />
             </Button>
           </div>
           <div className="detail-add">
@@ -330,10 +349,12 @@ export default class StepNewConsent extends Component<any, any> {
                 return (
                   <div className="add">
                     <div className="add-content space-between">
-                      <div className="add-title">Detail {i + 1}</div>
+                      <div className="add-title">
+                        <FormattedMessage id="Setting.Detail" /> {i + 1}
+                      </div>
                       <div className="add-i">
                         <Input
-                          placeholder="Please enter  keywords"
+                          placeholder={this.props.intl.formatMessage({ id: 'Setting.Pleaseenterkeywords' })}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             content1 = value;
@@ -381,3 +402,5 @@ export default class StepNewConsent extends Component<any, any> {
     );
   }
 }
+
+export default injectIntl(StepNewConsent);

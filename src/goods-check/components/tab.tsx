@@ -27,21 +27,17 @@ export default class Tab extends React.Component<any, any> {
   render() {
     const { tabIndex, onStateTabChange } = this.props.relaxProps;
     return (
-      <Tabs
-        activeKey={tabIndex}
-        onChange={(key) => onStateTabChange(key)}
-        tabBarExtraContent={<Tool></Tool>}
-      >
-        <TabPane tab={<FormattedMessage id="all" />} key="1">
+      <Tabs activeKey={tabIndex} onChange={(key) => onStateTabChange(key)} tabBarExtraContent={<Tool></Tool>}>
+        <TabPane tab={<FormattedMessage id="Product.all" />} key="1">
           <GoodsList />
         </TabPane>
-        <TabPane tab={<FormattedMessage id="pendingReview" />} key="2">
+        <TabPane tab={<FormattedMessage id="Product.pendingReview" />} key="2">
           <GoodsList />
         </TabPane>
-        <TabPane tab={<FormattedMessage id="reviewFailed" />} key="3">
+        <TabPane tab={<FormattedMessage id="Product.reviewFailed" />} key="3">
           <GoodsList />
         </TabPane>
-        <TabPane tab={<FormattedMessage id="banned" />} key="4">
+        <TabPane tab={<FormattedMessage id="Product.banned" />} key="4">
           <GoodsList />
         </TabPane>
       </Tabs>

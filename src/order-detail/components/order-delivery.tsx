@@ -71,6 +71,7 @@ export default class OrderDelivery extends React.Component<any, any> {
     const tradeDelivers = detail.get('tradeDelivers') as IList;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
+    const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const paymentOrder = detail.get('paymentOrder');
 
     //处理赠品
@@ -91,7 +92,7 @@ export default class OrderDelivery extends React.Component<any, any> {
           }}
         >
           <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />
-          {(flowState === 'AUDIT' || flowState === 'DELIVERED_PART') && !(paymentOrder == 'PAY_FIRST' && payState != 'PAID') ? (
+          {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID') ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
                 <Button type="primary" onClick={() => deliver()}>
@@ -110,7 +111,7 @@ export default class OrderDelivery extends React.Component<any, any> {
               const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `【赠品】${gift.get('itemName')}`));
               return (
                 <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-                  <label style={styles.title}>{<FormattedMessage id="deliveryRecord" />}</label>
+                  <label style={styles.title}>{<FormattedMessage id="Order.DeliveryRecord" />}</label>
                   <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryRecordColumns()} dataSource={v.get('shippingItems').concat(deliversGifts).toJS()} pagination={false} bordered />
 
                   <div style={styles.expressBox as any}>
@@ -127,11 +128,11 @@ export default class OrderDelivery extends React.Component<any, any> {
                           </Button> */}
                           {v.get('trackingUrl') ? (
                             <Button type="primary" shape="round" style={{ marginLeft: 15 }} href={v.get('trackingUrl')} target="_blank" rel="noopener">
-                              Track delivery
+                              <FormattedMessage id="Order.Trackdelivery" />
                             </Button>
                           ) : (
                             <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
-                              Refresh
+                              <FormattedMessage id="Order.Refresh" />
                             </Button>
                           )}
                         </label>
@@ -218,39 +219,39 @@ export default class OrderDelivery extends React.Component<any, any> {
 
     return [
       {
-        title: 'No.',
+        title: <FormattedMessage id="Order.No." />,
         key: 'index',
         render: (_text, _row, index) => index + 1
       },
       {
-        title: 'SKU Code',
+        title: <FormattedMessage id="Order.SKUCode" />,
         dataIndex: 'skuNo',
         key: 'skuNo'
       },
       {
-        title: 'Product name',
+        title: <FormattedMessage id="Order.Productname" />,
         dataIndex: 'skuName',
         key: 'skuName',
         width: '50%'
       },
       {
-        title: 'Weight',
+        title: <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
       {
-        title: 'Quantity',
+        title: <FormattedMessage id="Order.Quantity" />,
         dataIndex: 'num',
         key: 'num'
       },
       {
-        title: 'Shipped',
+        title: <FormattedMessage id="Order.Shipped" />,
         dataIndex: 'deliveredNum',
         key: 'deliveredNum',
         render: (deliveredNum) => (deliveredNum ? deliveredNum : 0)
       },
       {
-        title: 'This Shipment',
+        title: <FormattedMessage id="Order.ThisShipment" />,
         key: 'deliveringNum',
         render: (_, row) => {
           return (
@@ -271,27 +272,27 @@ export default class OrderDelivery extends React.Component<any, any> {
   _deliveryRecordColumns = () => {
     return [
       {
-        title: 'No.',
+        title: <FormattedMessage id="Order.No." />,
         key: 'index',
         render: (_text, _row, index) => index + 1
       },
       {
-        title: 'SKU Code',
+        title: <FormattedMessage id="Order.SKUCode" />,
         dataIndex: 'skuNo',
         key: 'skuNo'
       },
       {
-        title: 'Product name',
+        title: <FormattedMessage id="Order.Productname" />,
         dataIndex: 'itemName',
         key: 'itemName'
       },
       {
-        title: 'Weight',
+        title: <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
       {
-        title: 'This Shipment',
+        title: <FormattedMessage id="Order.ThisShipment" />,
         dataIndex: 'itemNum',
         key: 'itemNum'
       }

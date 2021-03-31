@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { addressList } from '@/order-add-old/webapi';
 import { Const } from 'qmkit';
 
 const { TextArea } = Input;

@@ -3,7 +3,7 @@ import { IMap, Relax } from 'plume2';
 import { Tabs } from 'antd';
 import MarketingList from './list';
 import { noop } from 'qmkit';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 @Relax
 export default class TabDataGrid extends React.Component<any, any> {
   props: {
@@ -24,23 +24,23 @@ export default class TabDataGrid extends React.Component<any, any> {
 
     return (
       <Tabs onChange={(key) => onTabChange(key)} activeKey={key}>
-        <Tabs.TabPane tab="All" key="0">
+        <Tabs.TabPane tab={<FormattedMessage id="Marketing.All" />} key="0">
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="In process" key="1">
+        <Tabs.TabPane tab={<FormattedMessage id="Marketing.InProcess" />} key="1">
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Pause" key="2">
+        <Tabs.TabPane tab={<FormattedMessage id="Marketing.Pause" />} key="2">
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Not start" key="3">
+        <Tabs.TabPane tab={<FormattedMessage id="Marketing.NotStart" />} key="3">
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Completed" key="4">
+        <Tabs.TabPane tab={<FormattedMessage id="Marketing.Completed" />} key="4">
           <MarketingList />
         </Tabs.TabPane>
       </Tabs>

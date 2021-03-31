@@ -23,6 +23,7 @@ export default class GoodsSpecActor extends Actor {
         {
           id: this._getRandom(),
           index: 1,
+          addedFlag: 1,
           goodsInfoNo: this._randomGoodsInfoNo()
         }
       ],
@@ -86,6 +87,7 @@ export default class GoodsSpecActor extends Actor {
           {
             id: Math.random().toString().substring(2),
             index: 1,
+            addedFlag: 1,
             goodsInfoNo: this._randomGoodsInfoNo()
           }
         ])
@@ -345,6 +347,7 @@ export default class GoodsSpecActor extends Actor {
         id: this._getRandom(),
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
+        addedFlag: 1,
         skuSvIds: [item.get('specDetailId')]
       });
     });

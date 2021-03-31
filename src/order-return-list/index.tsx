@@ -11,7 +11,7 @@ import './index.less';
  * 退单列表
  */
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class OrderReturnList extends React.Component<any, any> {
+export default class Order extends React.Component<any, any> {
   store: AppStore;
 
   constructor(props) {

@@ -21,6 +21,9 @@ export default class MarketingFreeShippingAdd extends React.Component<any, any> 
     const { marketingId } = this.props.match.params;
     if (marketingId) {
       this.store.init(marketingId);
+    } else {
+      const bean = this.store.get('marketingBean').merge({ promotionCode: this.store.randomPromotionCode() });
+      this.store.shippingBeanOnChange(bean);
     }
     this.store.getAllGroups();
   }

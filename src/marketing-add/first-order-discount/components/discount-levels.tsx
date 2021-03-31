@@ -29,52 +29,52 @@ export default class FirstDiscountLevels extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    if (!this.props.fullDiscountLevelList || this.props.fullDiscountLevelList.length == 0) {
-      this.initLevel();
-    }
+    // if (!this.props.fullDiscountLevelList || this.props.fullDiscountLevelList.length == 0) {
+    //   this.initLevel();
+    // }
   }
-  componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
-    this.setState({
-      isNormal: nextProps.isNormal
-    });
-  }
+  // componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
+  //   this.setState({
+  //     isNormal: nextProps.isNormal
+  //   });
+  // }
 
-  shouldComponentUpdate(nextProps) {
-    let resetFields = {};
-    const { fullDiscountLevelList, isFullCount } = this.props;
-
-    if (isFullCount != nextProps.isFullCount) {
-      fullDiscountLevelList.forEach((_level, index) => {
-        resetFields[`level_rule_value_${index}`] = null;
-        resetFields[`level_rule_discount_${index}`] = null;
-      });
-      this.initLevel();
-      this.setState({ isFullCount: nextProps.isFullCount });
-    } else {
-      if (fullDiscountLevelList && fullDiscountLevelList.length != nextProps.fullDiscountLevelList.length) {
-        nextProps.fullDiscountLevelList.forEach((level, index) => {
-          if ((!isFullCount ? level.fullAmount : level.fullCount) != null) {
-            resetFields[`level_rule_value_${index}`] = !isFullCount ? level.fullAmount : level.fullCount;
-            resetFields[`level_rule_discount_${index}`] = level.discount;
-          }
-        });
-      }
-    }
-    if (JSON.stringify(resetFields) !== '{}') {
-      this.props.form.setFieldsValue(resetFields);
-    }
-    return true;
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   let resetFields = {};
+  //   const { fullDiscountLevelList, isFullCount } = this.props;
+  //
+  //   if (isFullCount != nextProps.isFullCount) {
+  //     fullDiscountLevelList.forEach((_level, index) => {
+  //       resetFields[`level_rule_value_${index}`] = null;
+  //       resetFields[`level_rule_discount_${index}`] = null;
+  //     });
+  //     this.initLevel();
+  //     this.setState({ isFullCount: nextProps.isFullCount });
+  //   } else {
+  //     if (fullDiscountLevelList && fullDiscountLevelList.length != nextProps.fullDiscountLevelList.length) {
+  //       nextProps.fullDiscountLevelList.forEach((level, index) => {
+  //         if ((!isFullCount ? level.fullAmount : level.fullCount) != null) {
+  //           resetFields[`level_rule_value_${index}`] = !isFullCount ? level.fullAmount : level.fullCount;
+  //           resetFields[`level_rule_discount_${index}`] = level.discount;
+  //         }
+  //       });
+  //     }
+  //   }
+  //   if (JSON.stringify(resetFields) !== '{}') {
+  //     this.props.form.setFieldsValue(resetFields);
+  //   }
+  //   return true;
+  // }
 
   render() {
-    const { isFullCount, fullDiscountLevelList } = this.state;
+    const { isFullCount, fullDiscountLevelList } = this.props;
 
     const { form } = this.props;
 
     const { getFieldDecorator } = form;
     return (
       <div>
-        {fullDiscountLevelList.map((level, index) => {
+        {fullDiscountLevelList && fullDiscountLevelList.map((level, index) => {
           return (
             <div key={level.key ? level.key : level.discountLevelId}>
               <FormItem key={index}>
@@ -131,7 +131,7 @@ export default class FirstDiscountLevels extends React.Component<any, any> {
    * @param index
    */
   deleteLevels = (index) => {
-    let { fullDiscountLevelList } = this.state;
+    let { fullDiscountLevelList, onChangeBack } = this.props;
     //重置表单的值
     this.props.form.setFieldsValue({
       [`level_rule_value_${fullDiscountLevelList.length - 1}`]: null
@@ -142,7 +142,6 @@ export default class FirstDiscountLevels extends React.Component<any, any> {
     fullDiscountLevelList.splice(index, 1);
     this.setState({ fullDiscountLevelList: fullDiscountLevelList });
     //传递到父页面
-    const { onChangeBack } = this.props;
     onChangeBack(fullDiscountLevelList);
   };
 
@@ -150,7 +149,7 @@ export default class FirstDiscountLevels extends React.Component<any, any> {
    * 添加多级促销
    */
   addLevels = () => {
-    const { fullDiscountLevelList } = this.state;
+    const { fullDiscountLevelList, onChangeBack } = this.props;
     if (fullDiscountLevelList.length >= 5) return;
     fullDiscountLevelList.push({
       key: this.makeRandom(),
@@ -161,7 +160,6 @@ export default class FirstDiscountLevels extends React.Component<any, any> {
     this.setState({ fullDiscountLevelList: fullDiscountLevelList });
 
     //传递到父页面
-    const { onChangeBack } = this.props;
     onChangeBack(fullDiscountLevelList);
   };
 
@@ -189,7 +187,7 @@ export default class FirstDiscountLevels extends React.Component<any, any> {
    * @param value
    */
   ruleValueChange = (index, value) => {
-    const { isFullCount } = this.state;
+    const { isFullCount } = this.props;
     this.onChange(index, !isFullCount ? 'fullAmount' : 'fullCount', value);
   };
 
@@ -200,7 +198,7 @@ export default class FirstDiscountLevels extends React.Component<any, any> {
    * @param value
    */
   onChange = (index, props, value) => {
-    const { fullDiscountLevelList } = this.state;
+    const { fullDiscountLevelList } = this.props;
     fullDiscountLevelList[index][props] = value;
     if (props == 'fullAmount') {
       fullDiscountLevelList[index]['fullCount'] = null;

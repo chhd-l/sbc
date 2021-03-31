@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Row, Col, Input, Radio, TimePicker, DatePicker, InputNumber, Select } from 'antd';
+import { OrderStatus, PaymentStatus, ShippStatus } from 'qmkit';
+
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -11,7 +13,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
       conditionList: [{ id: 1, tableName: undefined, colName: undefined, selOp: undefined, colValue: '', linkOp: '', valueSelect: [], valueType: 'text' }],
       types: [
         { name: 'Order', value: 'order' },
-        { name: 'Contact', value: 'contact' },
+        { name: 'Pet owner', value: 'petowner' },
         { name: 'Pet', value: 'pet' }
       ],
       fileds: [],
@@ -44,7 +46,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
       contactFeildDict: [
         { name: 'City', value: 'city' },
         { name: 'Postal Code', value: 'postalCode' },
-        { name: 'Consumer Type', value: 'consumerType' }
+        { name: 'Pet Owner Type', value: 'consumerType' }
       ],
       petFeildDict: [
         { name: 'Gender', value: 'gender' },
@@ -55,31 +57,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
         { name: 'Sterilization Status', value: 'sterilizationStatus' },
         { name: 'Special Needs', value: 'specialNeeds' }
       ],
-      orderStatusDict: [
-        { name: 'Init', value: 'INIT' },
-        { name: 'Groupon', value: 'GROUPON' },
-        { name: 'Audit', value: 'AUDIT' },
-        { name: 'Delivered Part', value: 'DELIVERED_PART' },
-        { name: 'Delivered', value: 'DELIVERED' },
-        { name: 'Confirmed', value: 'CONFIRMED' },
-        { name: 'Completed', value: 'COMPLETED' },
-        { name: 'Void', value: 'VOID' }
-      ],
-      shippingStatusDict: [
-        { name: 'Not Yet Shipped', value: 'NOT_YET_SHIPPED' },
-        { name: 'Shipped', value: 'SHIPPED' },
-        { name: 'Part Shipped', value: 'PART_SHIPPED' },
-        { name: 'Void', value: 'VOID' },
-        { name: 'Unknow', value: '' }
-      ],
-      paymenStatusDict: [
-        { name: 'Not Paid', value: 'NOT_PAID' },
-        { name: 'Unconfirmed', value: 'UNCONFIRMED' },
-        { name: 'Paid', value: 'PAID' },
-        { name: 'Refund', value: 'REFUND' },
-        { name: 'Paying', value: 'PAYING' },
-        { name: 'Unknow', value: '' }
-      ],
+
       orderTypeList: [
         { name: 'Single purchase', value: 'SINGLE_PURCHASE' },
         { name: 'Subscription', value: 'SUBSCRIPTION' }
@@ -191,7 +169,7 @@ export default class ChooseIfElseForm extends Component<any, any> {
           fileds: orderFeildDict
         });
         break;
-      case 'contact':
+      case 'petowner':
         this.setState({
           fileds: contactFeildDict
         });
@@ -201,24 +179,29 @@ export default class ChooseIfElseForm extends Component<any, any> {
           fileds: petFeildDict
         });
         break;
+      default:
+        this.setState({
+          fileds: []
+        });
+        break;
     }
   }
   colNameChange(condition) {
     const { conditionList } = this.state;
-    const { judgeSelect, shippingStatusDict, paymenStatusDict } = this.state;
-    const { orderStatusDict, genderDict, orderTypeList, consumerTypeList } = this.state;
+    const { judgeSelect } = this.state;
+    const {genderDict, orderTypeList, consumerTypeList } = this.state;
     const colName = condition.colName;
     let tmpType;
     let tmpArr = [];
     switch (colName) {
       case 'orderStatus':
-        tmpArr = orderStatusDict;
+        tmpArr = OrderStatus;
         break;
       case 'shippingStatus':
-        tmpArr = shippingStatusDict;
+        tmpArr = ShippStatus;
         break;
       case 'paymentStatus':
-        tmpArr = paymenStatusDict;
+        tmpArr = PaymentStatus;
         break;
       case 'orderType':
         tmpArr = orderTypeList;

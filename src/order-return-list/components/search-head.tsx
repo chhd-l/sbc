@@ -1,27 +1,7 @@
 import React, { Component } from 'react';
 import { Relax } from 'plume2';
-import {
-  Button,
-  Dropdown,
-  Form,
-  Icon,
-  Input,
-  Menu,
-  Modal,
-  Select,
-  DatePicker,
-  message,
-  Row,
-  Col
-} from 'antd';
-import {
-  ExportModal,
-  Headline,
-  noop,
-  Const,
-  AuthWrapper,
-  checkAuth
-} from 'qmkit';
+import { Button, Dropdown, Form, Icon, Input, Menu, Modal, Select, DatePicker, message, Row, Col } from 'antd';
+import { ExportModal, Headline, noop, Const, AuthWrapper, checkAuth } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
 
@@ -88,10 +68,7 @@ export default class SearchHead extends Component<any, any> {
   render() {
     const { exportModalData, onExportModalHide, tab } = this.props.relaxProps;
     const tabKey = tab.get('key');
-    let hasMenu =
-      (tabKey == 'flowState-INIT' && checkAuth('rolf002')) ||
-      (tabKey == 'flowState-DELIVERED' && checkAuth('rolf004')) ||
-      checkAuth('rolf006');
+    let hasMenu = (tabKey == 'flowState-INIT' && checkAuth('rolf002')) || (tabKey == 'flowState-DELIVERED' && checkAuth('rolf004')) || checkAuth('rolf006');
     const batchMenu = (
       <Menu>
         {/* {tabKey == 'flowState-INIT' ? (
@@ -135,10 +112,7 @@ export default class SearchHead extends Component<any, any> {
                     // addonBefore="退单编号"
                     addonBefore={<FormattedMessage id="returnOrderNumber" />}
                     onChange={(e) => {
-                      this.setState(
-                        { rid: (e.target as any).value },
-                        this._paramChanged
-                      );
+                      this.setState({ rid: (e.target as any).value }, this._paramChanged);
                     }}
                   />
                 </FormItem>
@@ -150,10 +124,7 @@ export default class SearchHead extends Component<any, any> {
                     addonBefore={<FormattedMessage id="orderNumber" />}
                     maxLength={300}
                     onChange={(e) => {
-                      this.setState(
-                        { tid: (e.target as any).value },
-                        this._paramChanged
-                      );
+                      this.setState({ tid: (e.target as any).value }, this._paramChanged);
                     }}
                   />
                 </FormItem>
@@ -226,9 +197,7 @@ export default class SearchHead extends Component<any, any> {
                           },
                           this._paramChanged
                         );
-                      } else if (
-                        this.state.consigneeOptions === 'consigneePhone'
-                      ) {
+                      } else if (this.state.consigneeOptions === 'consigneePhone') {
                         this.setState(
                           {
                             consigneeName: '',
@@ -244,9 +213,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8} id="Range-picker-width">
                 <FormItem>
                   <RangePicker
-                    getCalendarContainer={() =>
-                      document.getElementById('page-content')
-                    }
+                    getCalendarContainer={() => document.getElementById('page-content')}
                     onChange={(e) => {
                       let beginTime = '';
                       let endTime = '';
@@ -254,10 +221,7 @@ export default class SearchHead extends Component<any, any> {
                         beginTime = e[0].format(Const.DAY_FORMAT);
                         endTime = e[1].format(Const.DAY_FORMAT);
                       }
-                      this.setState(
-                        { beginTime: beginTime, endTime: endTime },
-                        this._paramChanged
-                      );
+                      this.setState({ beginTime: beginTime, endTime: endTime }, this._paramChanged);
                     }}
                   />
                 </FormItem>
@@ -290,27 +254,15 @@ export default class SearchHead extends Component<any, any> {
           </Form>
           {/* {hasMenu ? (
             <div className="handle-bar ant-form-inline filter-content">
-              <Dropdown
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                overlay={batchMenu}
-                placement="bottomLeft"
-              >
+              <Dropdown getPopupContainer={() => document.getElementById('page-content')} overlay={batchMenu} placement="bottomLeft">
                 <Button>
-                  <FormattedMessage id="order.bulkOperations" />{' '}
-                  <Icon type="down" />
+                  <FormattedMessage id="Order.bulkOperations" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
           ) : null} */}
         </div>
-        <ExportModal
-          data={exportModalData}
-          onHide={onExportModalHide}
-          handleByParams={exportModalData.get('exportByParams')}
-          handleByIds={exportModalData.get('exportByIds')}
-        />
+        <ExportModal data={exportModalData} onHide={onExportModalHide} handleByParams={exportModalData.get('exportByParams')} handleByIds={exportModalData.get('exportByIds')} />
       </div>
     );
   }

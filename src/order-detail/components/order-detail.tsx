@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, cache, util } from 'qmkit';
+import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -10,24 +10,6 @@ import { FormattedMessage } from 'react-intl';
 
 import './style.less';
 import TodoItems from '@/home/component/todo-items';
-
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return 'Pending review';
-  } else if (status == 'GROUPON') {
-    return 'To be formed';
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return 'to be delivered';
-  } else if (status == 'DELIVERED') {
-    return 'To be received';
-  } else if (status == 'CONFIRMED') {
-    return 'Received';
-  } else if (status == 'COMPLETED') {
-    return 'Completed';
-  } else if (status == 'VOID') {
-    return 'Out of date';
-  }
-};
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
@@ -377,7 +359,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       }
     ];
 
-    let orderDetailType = orderTypeList.find(x=>x.value === detail.get('orderType'))
+    let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
     return (
       <div className="orderDetail">
         <div
@@ -388,7 +370,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             justifyContent: 'space-between'
           }}
         >
-          <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
+          <label style={styles.greenText}>{getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))  }</label>
 
           {this._renderBtnAction(tid)}
         </div>
@@ -410,8 +392,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p>External order id: {detail.getIn(['tradeOms', 'orderNo'])}</p>
-                  <p>Order status: {flowState(detail.getIn(['tradeState', 'flowState']))}</p>
-                  <p>Order type: { orderDetailType ? orderDetailType.name : '' }</p>
+                  <p>Order status: {getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}</p>
+                  <p>Order type: {orderDetailType ? orderDetailType.name : ''}</p>
                 </Col>
                 <Col span={12}>
                   <p>Order time: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
@@ -520,41 +502,45 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </strong>
               </label>
 
-              {discount && (
+              {/* {discount && (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
-                  <strong>-${discount.discounts.toFixed(2)}</strong>
-                </label>
-              )}
-
-             {tradePrice.firstOrderOnThePlatformDiscountPrice ?  (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>First Order Discount:</span>
-                  <strong>-${tradePrice.firstOrderOnThePlatformDiscountPrice.toFixed(2)}</strong>
-                </label>
-              ) : null}
-
-              {tradePrice.promotionDiscountPrice ? (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>
-                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:
-                  </span>
                   <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                    {(tradePrice.promotionDiscountPrice || 0).toFixed(2)}
+                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {discount.discounts.toFixed(2)}
                   </strong>
                 </label>
-              ) : null}
+              )} */}
+
+              {/* {tradePrice.firstOrderOnThePlatformDiscountPrice ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>First Order Discount:</span>
+                  <strong>
+                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {tradePrice.firstOrderOnThePlatformDiscountPrice.toFixed(2)}
+                  </strong>
+                </label>
+              ) : null} */}
+
+              {tradePrice.promotionVOList && tradePrice.promotionVOList.length > 0
+                ? tradePrice.promotionVOList.map((promotion) => (
+                    <label style={styles.priceItem as any}>
+                      <span style={styles.name}>{promotion.marketingName}</span>
+                      <strong>
+                        -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                        {(promotion.discountPrice || 0).toFixed(2)}
+                      </strong>
+                    </label>
+                  ))
+                : null}
 
               {tradePrice.subscriptionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
-                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:
+                    Autoship Discount:
                   </span>
                   <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     {(tradePrice.subscriptionDiscountPrice || 0).toFixed(2)}
                   </strong>
                 </label>
@@ -594,10 +580,50 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <h4>Delivery Address</h4>
               <Row>
                 <Col span={12}>
-                  <p>First name: {consignee.firstName}</p>
-                  <p>Last name: {consignee.lastName}</p>
-                  <p>Address 1: {consignee.detailAddress1}</p>
-                  <p>Address 2: {consignee.detailAddress2}</p>
+                   <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.firstName}</div>}
+                  >
+                    <p className="overFlowtext">
+                    First name: {consignee.firstName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.lastName}</div>}
+                  >
+                    <p className="overFlowtext">
+                    First name: {consignee.lastName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.detailAddress1}</div>}
+                  >
+                    <p className="overFlowtext">
+                    Address 1: {consignee.detailAddress1}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.detailAddress2}</div>}
+                  >
+                    <p className="overFlowtext">
+                    Address 2: {consignee.detailAddress2}
+                    </p>
+                  </Tooltip>
                   <p>Country: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}</p>
                 </Col>
                 <Col span={12}>
@@ -614,10 +640,50 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <h4>Billing Address</h4>
               <Row>
                 <Col span={12}>
-                  <p>First name: {invoice.firstName}</p>
-                  <p>Last name: {invoice.lastName}</p>
-                  <p>Address 1: {invoice.address1}</p>
-                  <p>Address 2: {invoice.address2}</p>
+                <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{invoice.firstName}</div>}
+                  >
+                    <p className="overFlowtext">
+                    First name: {invoice.firstName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{invoice.lastName}</div>}
+                  >
+                    <p className="overFlowtext">
+                    First name: {invoice.lastName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{invoice.address1}</div>}
+                  >
+                    <p className="overFlowtext">
+                    Address 1: {invoice.address1}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{invoice.address2}</div>}
+                  >
+                    <p className="overFlowtext">
+                    Address 2: {invoice.address2}
+                    </p>
+                  </Tooltip>
                   <p>Country: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
                 </Col>
                 <Col span={12}>
@@ -688,6 +754,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { detail, verify, onDelivery } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
+    const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const paymentOrder = detail.get('paymentOrder');
 
     //修改状态的修改
@@ -695,7 +762,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     if (flowState === 'INIT' || flowState === 'AUDIT') {
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {payState === 'NOT_PAID' && (
+          {payState === 'NOT_PAID' &&
             // <AuthWrapper functionName="edit_order_f_001">
             //   <Tooltip placement="top" title="Modify">
             //     <a
@@ -708,26 +775,25 @@ export default class OrderDetailTab extends React.Component<any, any> {
             //     </a>
             //   </Tooltip>
             // </AuthWrapper>
-            null
-          )}
+            null}
           {flowState === 'AUDIT' && (
             <div>
-              {payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
-                // <AuthWrapper functionName="fOrderList002">
-                //   <Tooltip placement="top" title="Re-review">
-                //     <a
-                //       onClick={() => {
-                //         this._showRetrialConfirm(tid);
-                //       }}
-                //       href="javascript:void(0)"
-                //       style={styles.pr20}
-                //     >
-                //       Re-review
-                //     </a>
-                //   </Tooltip>
-                // </AuthWrapper>
-                null
-              )}
+              {payState === 'PAID' || payState === 'UNCONFIRMED'
+                ? null
+                : // <AuthWrapper functionName="fOrderList002">
+                  //   <Tooltip placement="top" title="Re-review">
+                  //     <a
+                  //       onClick={() => {
+                  //         this._showRetrialConfirm(tid);
+                  //       }}
+                  //       href="javascript:void(0)"
+                  //       style={styles.pr20}
+                  //     >
+                  //       Re-review
+                  //     </a>
+                  //   </Tooltip>
+                  // </AuthWrapper>
+                  null}
               {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
                 <AuthWrapper functionName="fOrderDetail002">
                   <Tooltip placement="top" title="Ship">
@@ -748,7 +814,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
       );
-    } else if (flowState === 'DELIVERED_PART') {
+    } else if ((flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID')) {
       return (
         <div>
           <AuthWrapper functionName="fOrderDetail002">

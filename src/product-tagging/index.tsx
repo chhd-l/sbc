@@ -12,7 +12,7 @@ class AttributeLibrary extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Product tagging',
+      title: <FormattedMessage id="Product.ProductTagging" />,
       searchForm: {
         taggingName: ''
       },
@@ -219,7 +219,7 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
           this.setState(
             {
               visible: false,
@@ -254,7 +254,7 @@ class AttributeLibrary extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getTagging();
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
         } else {
           this.setState({
             loading: false
@@ -282,7 +282,7 @@ class AttributeLibrary extends Component<any, any> {
             loading: false
           });
           this.getTagging();
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
         } else {
           this.setState({
             loading: false
@@ -340,32 +340,32 @@ class AttributeLibrary extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Tagging name',
+        title: <FormattedMessage id="Product.TaggingName" />,
         dataIndex: 'taggingName',
         key: 'taggingName'
       },
       {
-        title: 'Tagging type',
+        title: <FormattedMessage id="Product.TaggingType" />,
         dataIndex: 'taggingType',
         key: 'taggingType',
         render: (text) => <div>{text === 'Text' ? 'Text tag (Top left)' : 'Image tag (Top right)'}</div>
       },
       {
-        title: 'Product count',
+        title: <FormattedMessage id="Product.ProductCount" />,
         dataIndex: 'productNum',
         key: 'productNum'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         dataIndex: '',
         key: 'x',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
               <a style={styles.edit} onClick={() => this.openEditPage(record)} className="iconfont iconEdit"></a>
             </Tooltip>
-            <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTagging(record.id)} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Delete">
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.sureDeleteThisItem" />} onConfirm={() => this.deleteTagging(record.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+              <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
                 <a className="iconfont iconDelete"></a>
               </Tooltip>
             </Popconfirm>
@@ -419,7 +419,7 @@ class AttributeLibrary extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Product.search" />
                     </span>
                   </Button>
                 </Col>
@@ -429,7 +429,9 @@ class AttributeLibrary extends Component<any, any> {
 
           <div className="container-search">
             <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-              <span>Add new tagging</span>
+              <span>
+                <FormattedMessage id="Product.AddNewTagging" />
+              </span>
             </Button>
             <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={taggingList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
           </div>
@@ -456,10 +458,10 @@ class AttributeLibrary extends Component<any, any> {
                     });
                   }}
                 >
-                  Close
+                  <FormattedMessage id="Product.Close" />
                 </Button>,
                 <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-                  Submit
+                  <FormattedMessage id="Product.Submit" />
                 </Button>
               ]}
             >
@@ -467,10 +469,10 @@ class AttributeLibrary extends Component<any, any> {
                 <FormItem label="Tagging name">
                   {getFieldDecorator('taggingName', {
                     rules: [
-                      { required: true, message: 'Tagging name is required' },
+                      { required: true, message: <FormattedMessage id="Product.TaggingNameIsRequired" /> },
                       {
                         max: 50,
-                        message: 'Exceed maximum length!'
+                        message: <FormattedMessage id="Product.ExceedMaximumLength" />
                       }
                     ],
                     initialValue: taggingForm.taggingName
@@ -490,7 +492,7 @@ class AttributeLibrary extends Component<any, any> {
                 <FormItem label="Tagging type">
                   {getFieldDecorator('taggingType', {
                     initialValue: taggingForm.taggingType,
-                    rules: [{ required: true, message: 'Please selected tagging type' }]
+                    rules: [{ required: true, message: <FormattedMessage id="Product.PleaseSelectedTaggingType" /> }]
                   })(
                     <Radio.Group
                       name="radiogroup"
@@ -502,8 +504,12 @@ class AttributeLibrary extends Component<any, any> {
                         });
                       }}
                     >
-                      <Radio value="Text">Text tag (Top left)</Radio>
-                      <Radio value="Image">Image tag (Top right)</Radio>
+                      <Radio value="Text">
+                        <FormattedMessage id="Product.TextTopLeft" />
+                      </Radio>
+                      <Radio value="Image">
+                        <FormattedMessage id="Product.ImageTopRight" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </FormItem>
@@ -512,7 +518,7 @@ class AttributeLibrary extends Component<any, any> {
                   <div>
                     <FormItem label="Tagging font color">
                       {getFieldDecorator('taggingFontColor', {
-                        rules: [{ required: true, message: 'Tagging font color is required' }],
+                        rules: [{ required: true, message: <FormattedMessage id="Product.TaggingFontColor" /> }],
                         initialValue: this.getColour(taggingForm.taggingFontColor) ? this.getColour(taggingForm.taggingFontColor).name : ''
                       })(
                         <Select
@@ -535,7 +541,7 @@ class AttributeLibrary extends Component<any, any> {
                     </FormItem>
                     <FormItem label="Tagging fill color">
                       {getFieldDecorator('taggingFillColor', {
-                        rules: [{ required: true, message: 'Tagging fill color is required' }],
+                        rules: [{ required: true, message: <FormattedMessage id="Product.TaggingFillColor" /> }],
                         initialValue: this.getColour(taggingForm.taggingFillColor) ? this.getColour(taggingForm.taggingFillColor).name : ''
                       })(
                         <Select
@@ -560,7 +566,7 @@ class AttributeLibrary extends Component<any, any> {
                 ) : (
                   <FormItem label="Tagging Image">
                     {getFieldDecorator('taggingImgUrl', {
-                      rules: [{ required: true, message: 'Tagging image is required' }]
+                      rules: [{ required: true, message: <FormattedMessage id="Product.TaggingImage" /> }]
                     })(<AssetManagement choosedImgCount={1} images={images} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />)}
                   </FormItem>
                 )}
@@ -577,15 +583,19 @@ class AttributeLibrary extends Component<any, any> {
                         });
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Product.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Product.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </FormItem>
                 {taggingForm.displayStatus ? (
                   <FormItem label="Shop page">
                     {getFieldDecorator('showPage', {
-                      rules: [{ required: true, message: 'Please selec shop page' }],
+                      rules: [{ required: true, message: <FormattedMessage id="Product.PleaseSelecShopPage" /> }],
                       initialValue: taggingForm.showPage
                     })(
                       <Select

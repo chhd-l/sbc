@@ -53,12 +53,12 @@ export default class PageSeo extends React.Component<any, any> {
     const dataSource = allPages.toJS();
     const columns = [
       {
-        title: 'Page',
+        title: <FormattedMessage id="Setting.Page" />,
         dataIndex: 'name',
         key: 'name'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Setting.Operation" />,
         dataIndex: 'Operation',
         key: 'Operation',
         render: (text, record) => <a style={{ marginRight: 5 }} onClick={() => this.editSeo(text, record)} className="iconfont iconicon"></a>

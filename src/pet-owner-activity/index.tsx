@@ -83,8 +83,8 @@ export default class PetOwnerActivity extends Component<any, any> {
               >
                 <p style={{ color: '#e2001a' }}>Quick Send</p>
               </Button> */}
-              {petOwner.contactName ? (
-                <Button type="primary" onClick={() => history.push({ pathname: '/order-add', query: { customerId: id, customerName: petOwner.contactName, customerAccount: petOwner.customerAccount } })}>
+              {petOwner.customerName ? (
+                <Button type="primary" onClick={() => history.push({ pathname: '/order-add', query: { customerId: id, customerName: petOwner.customerName, customerAccount: petOwner.customerAccount } })}>
                   Create order
                 </Button>
               ) : null}

@@ -51,7 +51,7 @@ export default class ShopInfoEdit extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb>
-          <Breadcrumb.Item>{<FormattedMessage id="storeInformationEdit" />}</Breadcrumb.Item>
+          <Breadcrumb.Item>{<FormattedMessage id="Setting.storeInformationEdit" />}</Breadcrumb.Item>
         </BreadCrumb>
         {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>设置</Breadcrumb.Item>
@@ -64,12 +64,12 @@ export default class ShopInfoEdit extends React.Component<any, any> {
         </div>
         <div className="container">
           <Tabs onChange={(key) => this.store.setCurrentTab(key)} activeKey={currentTab}>
-            <Tabs.TabPane tab={<FormattedMessage id="basicInformation" />} key="0" />
-            <Tabs.TabPane tab={<FormattedMessage id="ssoSetting" />} key="1" />
-            <Tabs.TabPane tab={<FormattedMessage id="signedInformation" />} key="2" />
-            <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
-            <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
-            <Tabs.TabPane tab="Taxes" key="5" />
+            <Tabs.TabPane tab={<FormattedMessage id="Setting.basicInformation" />} key="0" />
+            <Tabs.TabPane tab={<FormattedMessage id="Setting.ssoSetting" />} key="1" />
+            <Tabs.TabPane tab={<FormattedMessage id="Setting.signedInformation" />} key="2" />
+            <Tabs.TabPane tab={<FormattedMessage id="Setting.footer" />} key="3" />
+            <Tabs.TabPane tab={<FormattedMessage id="Setting.consent" />} key="4" />
+            <Tabs.TabPane tab={<FormattedMessage id="Setting.Taxes" />} key="5" />
             {/* <Tabs.TabPane
               tab={<FormattedMessage id="footerConfig" />}
               key="5"

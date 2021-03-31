@@ -5,14 +5,15 @@ import AppStore from './store';
 //import SearchHead from './components/search-head';
 import MethodList from './components/method-list';
 import './index.less';
-
+import {Form} from "antd";
+const WrappedForm = Form.create()(MethodList);
 /**
  * 退单列表
  */
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class OrderReturnList extends React.Component<any, any> {
   store: AppStore;
-
+  _form;
   constructor(props) {
     super(props);
   }
@@ -28,7 +29,7 @@ export default class OrderReturnList extends React.Component<any, any> {
           <BreadCrumb />
           <div className="container" style={{ height: '100vh' }}>
             <Headline title="Payment method" />
-            <MethodList />
+            <WrappedForm ref={(form) => (this._form = form)} />
           </div>
         </div>
       </AuthWrapper>

@@ -167,8 +167,6 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     const { form } = this.props; //marketingType, marketingId,
     const { getFieldDecorator } = this.props.form;
     const { allGroups, marketingBean, loading } = this.props.relaxProps;
-    console.log(marketingBean.toJS(), 'marketingBean---------');
-    console.log(allGroups.toJS(), 'allGroups---------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <div className="bold-title">Basic Setting</div>
@@ -250,20 +248,19 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                               callback();
                             }
                           }
-                        ]
+                        ],
+                        initialValue: marketingBean.get('shippingValue')
                       })(
-                        <>
-                          <Input
-                            style={{ width: 200 }}
-                            title={'0-9999'}
-                            placeholder={'0-9999'}
-                            onChange={(e) => {
-                              this.shippingRadioOnChange(e, 'shippingValue');
-                            }}
-                            value={marketingBean.get('shippingValue')}
-                            disabled={marketingBean.get('subType') !== 10}
-                          />
-                        </>
+                        <Input
+                          style={{ width: 200 }}
+                          title={'0-9999'}
+                          placeholder={'0-9999'}
+                          onChange={(e) => {
+                            this.shippingRadioOnChange(e, 'shippingValue');
+                          }}
+                          value={marketingBean.get('shippingValue')}
+                          disabled={marketingBean.get('subType') !== 10}
+                        />
                       )}
                       <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                     </span>
@@ -288,12 +285,9 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                               callback();
                             }
                           }
-                        ]
-                      })(
-                        <>
-                          <Input style={{ width: 200 }} value={marketingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={marketingBean.get('subType') !== 11} />
-                        </>
-                      )}
+                        ],
+                        initialValue: marketingBean.get('shippingItemValue')
+                      })(<Input style={{ width: 200 }} value={marketingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={marketingBean.get('subType') !== 11} />)}
                       <span>&nbsp;items</span>
                     </span>
                   </Radio>

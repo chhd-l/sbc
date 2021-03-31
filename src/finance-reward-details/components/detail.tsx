@@ -32,12 +32,10 @@ export default class BillingDetails extends React.Component<any, any> {
         <div style={styles.static}>
           <p style={{ marginLeft: 5, marginBottom: 2 }}>
             <span style={styles.space}>
-              {<FormattedMessage id="PrescriberID" />}：
-              {prescriber.prescriberId}
+              {<FormattedMessage id="Finance.PrescriberID" />}：{prescriber.prescriberId}
             </span>
             <span style={styles.space}>
-              {<FormattedMessage id="PrescriberName" />}：
-              {prescriber.prescriberName}
+              {<FormattedMessage id="Finance.PrescriberName" />}：{prescriber.prescriberName}
             </span>
           </p>
         </div>

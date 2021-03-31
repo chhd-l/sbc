@@ -42,48 +42,26 @@ export default class CateList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      cateList,
-      expandedKeys,
-      defaultCheckedKeys
-    } = this.props.relaxProps;
+    const { cateList, expandedKeys, defaultCheckedKeys } = this.props.relaxProps;
     //分类列表生成树形结构
     const loop = (cateList) =>
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              value={item.get('cateId').toString()}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} value={item.get('cateId').toString()} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId').toString()}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId').toString()} title={item.get('cateName')} />;
       });
 
     return (
       <div>
         <div style={styles.title}>
-          <FormattedMessage id="imageContent" />
+          <FormattedMessage id="Setting.imageContent" />
         </div>
-        <Tree
-          className="draggable-tree"
-          autoExpandParent={false}
-          expandedKeys={expandedKeys.toJS()}
-          defaultSelectedKeys={defaultCheckedKeys.toJS()}
-          selectedKeys={defaultCheckedKeys.toJS()}
-          onSelect={this._select}
-          onExpand={this._expand}
-        >
+        <Tree className="draggable-tree" autoExpandParent={false} expandedKeys={expandedKeys.toJS()} defaultSelectedKeys={defaultCheckedKeys.toJS()} selectedKeys={defaultCheckedKeys.toJS()} onSelect={this._select} onExpand={this._expand}>
           {loop(cateList)}
         </Tree>
       </div>

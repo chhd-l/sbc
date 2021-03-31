@@ -350,9 +350,9 @@ class SkuForm extends React.Component<any, any> {
             addSkUProduct[0].targetGoodsIds[0].subScriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : addSkUProduct[0].targetGoodsIds[0].subScriptionPrice?
               addSkUProduct[0].targetGoodsIds[0].subScriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum :0
         }
-        console.log(addSkUProduct[0],11111111);
-        console.log(marketPrice,2222222);
-        console.log(rowInfo,33333);
+        //console.log(addSkUProduct[0],11111111);
+        //console.log(marketPrice,2222222);
+        //console.log(rowInfo,33333);
        /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
         //console.log(marketPrice,2222222);
         console.log(rowInfo.marketPrice,33333);
@@ -459,7 +459,7 @@ class SkuForm extends React.Component<any, any> {
                           max={9999999.99}
                           //precision={4}
                           style={{ width: '111px' }}
-                          disabled={rowInfo.subscriptionStatus === 0}
+                          //disabled={rowInfo.subscriptionStatus === 0}
                           formatter={limitDecimals}
                           parser={limitDecimals}
                           step={0.01}
@@ -505,7 +505,7 @@ class SkuForm extends React.Component<any, any> {
                       formatter={limitDecimals}
                       parser={limitDecimals}
                       step={0.01}
-                      disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                      //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                     />
                     // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                   )}

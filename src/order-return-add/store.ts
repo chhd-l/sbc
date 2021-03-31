@@ -7,7 +7,8 @@ import FormActor from './actor/form-actor';
 import TradeActor from './actor/trade-actor';
 import PriceActor from './actor/price-actor';
 import ImageActor from './actor/image-actor';
-import { addApply, fetchOrder, getReturnReasons, getReturnWays, getTradeDetail } from './webapi';
+import LoadingActor from './actor/loading-actor'
+import { addApply, fetchOrderReturnList, getReturnReasons, getReturnWays, getTradeDetail } from './webapi';
 
 const confirm = Modal.confirm;
 
@@ -20,10 +21,11 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new FormActor(), new TradeActor(), new PriceActor(), new ImageActor()];
+    return [new FormActor(), new TradeActor(), new PriceActor(), new ImageActor(),new LoadingActor()];
   }
 
   init = async (tid: string) => {
+    this.dispatch('loading:start');
     const returnReasonList = (await getReturnReasons()) as any;
     const returnWayList = (await getReturnWays()) as any;
     this.dispatch('formActor: init', {
@@ -31,32 +33,37 @@ export default class AppStore extends Store {
       returnWayList: fromJS(returnWayList.res.context)
     });
 
+    //获取订单详情
     let tradeDetail = (await getTradeDetail(tid)) as any;
-    let originTradeItems = fromJS([]); //订单里原来的所有商品信息
+    // 判断是否发货， 未发货的订单直接退款
+    let isReturn = tradeDetail.res.context.tradeState.flowState !== 'TO_BE_DELIVERED' ? true : false;
+    // 判断是否是线上订单
+    // let isOnLine = tradeDetail.res.context.payInfo.payTypeId == '0';
+    //订单里原来的所有商品信息
+    let originTradeItems = fromJS([]);
+    // 可退最大金额
     let canApplyPrice = tradeDetail.res.context.tradePrice.totalPrice;
-
-    let isOnLine = tradeDetail.res.context.payInfo.payTypeId == '0';
-
-    let OrderRes = await fetchOrder(tid);
+    // 已申请退货订单
     let returnOrderList = [];
-    if (OrderRes.res && OrderRes.res['context']) {
-      returnOrderList = OrderRes.res['context'];
-    }
 
-    // 在线支付订单，计算剩余退款金额
-    if (isOnLine) {
-      returnOrderList
-        .filter((v) => {
-          return v.returnFlowState == 'COMPLETED';
-        })
-        .forEach((v) => (canApplyPrice = QMFloat.accSubtr(canApplyPrice, v.returnPrice.applyStatus ? v.returnPrice.applyPrice : v.returnPrice.totalPrice)));
-    }
 
-    // 已完结订单，则为退货申请，否则认为是退款申请
-    let isReturn = tradeDetail.res.context.tradeState.flowState == 'COMPLETED' ? true : false;
-
-    // 退货申请，设置商品可退数量
     if (isReturn) {
+      let orderReturnListRes = await fetchOrderReturnList(tid);
+     
+      if (orderReturnListRes.res && orderReturnListRes.res['context']) {
+        returnOrderList = orderReturnListRes.res['context'];
+      }
+      // 计算剩余退款金额
+      // if (isOnLine) {
+        returnOrderList&&returnOrderList
+          .filter((v) => {
+            return v.returnFlowState == 'COMPLETED';
+          })
+          .forEach((v) => (canApplyPrice = QMFloat.accSubtr(canApplyPrice, v.returnPrice.applyStatus ? v.returnPrice.applyPrice : v.returnPrice.totalPrice)));
+      // }
+
+      // 退货申请，设置商品可退数量
+
       originTradeItems = fromJS(tradeDetail.res.context.tradeItems);
       // 只展示有可退商品的信息
       tradeDetail.res.context.tradeItems = tradeDetail.res.context.tradeItems.filter((v) => v.canReturnNum > 0);
@@ -79,12 +86,22 @@ export default class AppStore extends Store {
       });
     }
 
+
+
+
+
+
+    // 已完结订单，则为退货申请，否则认为是退款申请
+    this.dispatch('loading:end');
+
+
+
     this.dispatch('tradeActor: init', {
       tradeDetail: fromJS(tradeDetail.res.context),
       originTradeItems: originTradeItems,
       returnOrderList: fromJS(returnOrderList),
       isReturn: isReturn,
-      isOnLine: isOnLine,
+      // isOnLine: isOnLine,
       canApplyPrice: canApplyPrice
     });
   };
@@ -312,52 +329,52 @@ export default class AppStore extends Store {
     // 退款金额，退货是商品总额，退款是应付金额
     let totalPrice = data.get('isReturn')
       ? tradeItems
-          .map((sku) => {
-            if (sku.get('num') < sku.get('canReturnNum')) {
-              //小于可退数量,直接单价乘以数量
-              return QMFloat.accMul(sku.get('price'), sku.get('num'));
-            } else {
-              //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
-              return QMFloat.accSubtr(sku.get('splitPrice'), QMFloat.accMul(sku.get('price'), QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))));
-            }
-          })
-          .reduce((one, two) => QMFloat.accAdd(one, two))
+        .map((sku) => {
+          if (sku.get('num') < sku.get('canReturnNum')) {
+            //小于可退数量,直接单价乘以数量
+            return QMFloat.accMul(sku.get('price'), sku.get('num'));
+          } else {
+            //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
+            return QMFloat.accSubtr(sku.get('splitPrice'), QMFloat.accMul(sku.get('price'), QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))));
+          }
+        })
+        .reduce((one, two) => QMFloat.accAdd(one, two))
       : data.getIn(['tradeDetail', 'tradePrice', 'totalPrice']);
 
-    const tradeDetail = data.get('tradeDetail');
+    // const tradeDetail = data.get('tradeDetail');
 
-    // 可退积分
-    let shouldIntegral;
-    // true为退款申请，否则为退货申请
-    if (!data.get('isReturn')) {
-      shouldIntegral = tradeDetail.getIn(['tradePrice', 'points']) == null ? 0 : tradeDetail.getIn(['tradePrice', 'points']);
-    } else {
-      shouldIntegral =
-        tradeDetail.getIn(['tradePrice', 'points']) == null
-          ? 0
-          : tradeDetail
-              .get('tradeItems')
-              .filter((sku) => sku.get('num') > 0)
-              .map((sku) => {
-                if (sku.get('num') < sku.get('canReturnNum')) {
-                  // 小于可退数量,直接均摊积分乘以数量
-                  return Math.floor(QMFloat.accMul(sku.get('skuPoint'), sku.get('num')));
-                } else {
-                  // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
-                  return Math.floor(QMFloat.accSubtr(sku.get('points') || 0, Math.floor(QMFloat.accMul(sku.get('skuPoint'), QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))))));
-                }
-              })
-              .reduce((one, two) => one + two) || 0;
-    }
+    // // 可退积分
+    // let shouldIntegral;
+    // // true为退款申请，否则为退货申请
+    // if (!data.get('isReturn')) {
+    //   shouldIntegral = tradeDetail.getIn(['tradePrice', 'points']) == null ? 0 : tradeDetail.getIn(['tradePrice', 'points']);
+    // } else {
+    //   shouldIntegral =
+    //     tradeDetail.getIn(['tradePrice', 'points']) == null
+    //       ? 0
+    //       : tradeDetail
+    //         .get('tradeItems')
+    //         .filter((sku) => sku.get('num') > 0)
+    //         .map((sku) => {
+    //           if (sku.get('num') < sku.get('canReturnNum')) {
+    //             // 小于可退数量,直接均摊积分乘以数量
+    //             return Math.floor(QMFloat.accMul(sku.get('skuPoint'), sku.get('num')));
+    //           } else {
+    //             // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
+    //             return Math.floor(QMFloat.accSubtr(sku.get('points') || 0, Math.floor(QMFloat.accMul(sku.get('skuPoint'), QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))))));
+    //           }
+    //         })
+    //         .reduce((one, two) => one + two) || 0;
+    // }
 
     param = param.set('returnPrice', {
       applyStatus: data.get('applyStatus'),
       applyPrice: data.get('applyPrice'),
       totalPrice: totalPrice
     });
-    param = param.set('returnPoints', {
-      applyPoints: shouldIntegral
-    });
+    // param = param.set('returnPoints', {
+    //   applyPoints: shouldIntegral
+    // });
 
     // 退款金额大于可退金额时
     if (data.get('applyStatus') ? data.get('applyPrice') > data.get('canApplyPrice') : totalPrice > data.get('canApplyPrice')) {
@@ -378,7 +395,7 @@ export default class AppStore extends Store {
           onOk() {
             return onAdd(param);
           },
-          onCancel() {},
+          onCancel() { },
           okText: '继续',
           cancelText: '关闭'
         });
@@ -390,6 +407,7 @@ export default class AppStore extends Store {
   };
 
   onAdd = async (param) => {
+    this.dispatch('loading:start');
     let result;
     result = await addApply(param.toJS());
 
@@ -397,5 +415,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       history.push('/order-return-list');
     }
+    this.dispatch('loading:end');
   };
 }

@@ -3188,7 +3188,9 @@ export default {
   refundList: 'Refund list',
   chargebackNumber: 'Chargeback number',
   refundTime: 'Refund time',
+  returnOrderNumber:'Return order number',
   chargebackStatus: 'Chargeback status',
+  returnOrderStatus:'Return order status',
   actualRefundAmount: 'Actual refund amount',
   actualRefundPoints: 'Actual refund points',
   toBeFilledOutLogisticsInformation: 'To be filled out logistics information',
@@ -3209,6 +3211,8 @@ export default {
   Refund: 'Refund',
   returnReason: 'Return reason',
   chargebackAttachment: 'Chargeback attachment',
+  returnOrderAttachment:'Return order attachment',
+  returnDescription:'Return description',
 
   financeTips1:
     '1. The platform will make a small amount of money for the bank account you created for the first time. After the platform makes a payment, you can see the button to receive the money, and your account will only take effect after confirmation;',

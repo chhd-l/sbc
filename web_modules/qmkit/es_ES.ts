@@ -158,6 +158,13 @@ export default {
   'Menu.Payment method':'Payment method',
   'Menu.Felin Recommendation':'Felin Recommendation',
   'Menu.Prescriber setting':'Prescriber setting',
+  'Menu.NPS':'NPS',
+  'Menu.NPS list':'NPS list',
+  'Menu.Shipping Fee':'Shipping Fee',
+  'Menu.Points order':'Points order',
+  'Menu.prescriber recommendation':'prescriber recommendation',
+  'Menu.Member companies':'Member companies',
+
 
 
 

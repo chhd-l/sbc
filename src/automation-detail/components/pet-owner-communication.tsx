@@ -202,13 +202,13 @@ class PetOwnerCommunication extends Component<any, any> {
     const { petOwnerCommunicationList, loading, pagination, petOwnerCommunicationDetailList, openModalTitle, modalPagination, visible, keyword } = this.state;
 
     const petOwnerCommunicationColumns = [
+      // {
+      //   title: 'Pet owner account',
+      //   dataIndex: 'contactId',
+      //   width: '15%'
+      // },
       {
         title: 'Pet owner account',
-        dataIndex: 'contactId',
-        width: '15%'
-      },
-      {
-        title: 'Pet owner name',
         dataIndex: 'contactName',
         width: '15%'
       },

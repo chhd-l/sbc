@@ -492,11 +492,13 @@ export default class AppStore extends Store {
           item.get('mockSpecIds').forEach((specId) => {
             // 规格值保存的顺序可能不是按照规格id的顺序，多个sku的规格值列表顺序是乱序，因此此处不能按照顺序获取规格值。只能从规格规格值对应关系里面去捞一遍。
             const detail = goodsSpecDetails.find((detail) => detail.get('specId') == specId && item.get('mockSpecDetailIds').contains(detail.get('specDetailId')));
-            const detailId = detail.get('specDetailId');
 
-            const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
-            item = item.set('specId-' + specId, goodsSpecDetail.get('detailName'));
-            item = item.set('specDetailId-' + specId, detailId);
+            if(detail) {
+              const detailId = detail.get('specDetailId');
+              const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
+              item = item.set('specId-' + specId, goodsSpecDetail.get('detailName'));
+            }
+
             if (item.get('goodsInfoImg')) {
               item = item.set(
                 'images',

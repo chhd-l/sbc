@@ -28,7 +28,7 @@ export default class Order extends React.Component<any, any> {
 
   render() {
     return (
-      <AuthWrapper functionName="rolf001">
+      <AuthWrapper functionName="f_retrun_detail">
         <div className="order-con">
           <BreadCrumb />
           {/* <Breadcrumb separator=">">

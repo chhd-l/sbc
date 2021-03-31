@@ -1330,10 +1330,10 @@ export default class AppStore extends Store {
       // 规格值id集合
       let mockSpecDetailIds = List();
       item.forEach((value, key: string) => {
-        if (key.indexOf('specId-') != -1) {
+        if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));
         }
-        if (key.indexOf('specDetailId') != -1) {
+        if (key && key.indexOf('specDetailId') != -1) {
           mockSpecDetailIds = mockSpecDetailIds.push(value);
         }
       });

@@ -1259,10 +1259,10 @@ export default class AppStore extends Store {
       let mockSpecDetailIds = List();
       item.forEach((value, key: string) => {
         console.log('itemitemitem:', key, value);
-        if (key.indexOf('specId-') != -1) {
+        if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));
         }
-        if (key.indexOf('specDetailId') != -1) {
+        if (key && key.indexOf('specDetailId') != -1) {
           mockSpecDetailIds = mockSpecDetailIds.push(value);
         }
       });

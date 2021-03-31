@@ -177,6 +177,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           sessionStorage.setItem(cache.SYSTEM_BASE_CONFIG, JSON.stringify(menusRes.res.context.baseConfigRopResponse));
           sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(menusRes.res.context.employeeAccountByIdResponse));
           let configResponse = menusRes.res.context.configResponse
+          console.log(configResponse);
           let defaultPurchase = {
             defaultPurchaseType: parseInt((configResponse as any).storeVO?.defaultPurchaseType ?? -1),
             defaultSubscriptionFrequencyId: (configResponse as any).storeVO?.defaultSubscriptionFrequencyId ?? '',

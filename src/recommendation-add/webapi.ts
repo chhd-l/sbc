@@ -115,8 +115,8 @@ export function fetchFindById(param = {}) {
   });
 }
 
-export function fetchproductTooltip(param) {
-  return Fetch<TResult>('/recommendation/listGoodsInfo', {
+export function fetchproductTooltip(param?={}) {
+  return Fetch<TResult>(`/felinReco/products`/*'/recommendation/listGoodsInfo'*/, {
     method: 'POST',
     body: JSON.stringify(param)
   });
@@ -138,6 +138,25 @@ export function fetchModify(param = {}) {
 
 export function fetchLinkStatus(param = {}) {
   return Fetch<TResult>('/recommendation/modify/linkStatus', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+
+//宠物信息详情
+export function fetchFelinRecoDetails(param = {}) {
+  return Fetch<TResult>('/felinReco/findById', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+//商品列表
+
+
+export function fetchFelinRecoProducts(param = {}) {
+  return Fetch<TResult>('/felinReco/products', {
     method: 'POST',
     body: JSON.stringify(param)
   });

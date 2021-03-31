@@ -62,18 +62,19 @@ export default class GoodsGrid extends React.Component<any, any> {
           rowKey={(record) => record.goodsInfoId}
           dataSource={goodsInfoPage.content}
           isScroll={false}
-          pagination={{
-            total: goodsInfoPage.totalElements,
-            current: goodsInfoPage.number + 1,
-            pageSize: goodsInfoPage.size,
-            onChange: (pageNum, pageSize) => {
-              const param = {
-                pageNum: --pageNum,
-                pageSize: pageSize
-              };
-              this._pageSearch(param);
-            }
-          }}
+          pagination={false}
+          // pagination={{
+          //   total: goodsInfoPage.totalElements,
+          //   current: goodsInfoPage.number + 1,
+          //   pageSize: goodsInfoPage.size,
+          //   onChange: (pageNum, pageSize) => {
+          //     const param = {
+          //       pageNum: --pageNum,
+          //       pageSize: pageSize
+          //     };
+          //     this._pageSearch(param);
+          //   }
+          // }}
           rowSelection={{
             selectedRowKeys: selectedRowKeys,
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {

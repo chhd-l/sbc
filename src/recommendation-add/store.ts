@@ -40,7 +40,7 @@ export default class AppStore extends Store {
   onProductForm = async (param?: any) => {
     param = Object.assign(this.state().get('onProductForm').toJS(), param);
     this.dispatch('loading:start');
-    const res1 = await webapi.fetchproductTooltip(param);
+    const res1 = await webapi.fetchproductTooltip();
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.goodsInfoPage.total;
       /*let data = res1.res.context.goodsInfoPage.content.map((item, i) => {
@@ -50,7 +50,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
-        this.dispatch('productList:productInit', res1.res.context.goodsInfoPage.content);
+        this.dispatch('productList:productInit', res1.res.context.goodsInfoList);
       });
     } else {
       this.dispatch('loading:end');

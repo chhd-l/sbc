@@ -7,7 +7,6 @@ import FillinPetInfo from './components/fillinPetInfo';
 import ChooseProducts from './components/chooseProducts';
 import WriteTips from './components/writeTips';
 import AppStore from './store';
-import { getShopToken, queryOrderStatus } from './webapi';
 import { StoreProvider } from 'plume2';
 
 const { Step } = Steps;
@@ -22,7 +21,7 @@ class ManualOrder extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: 'New Prescription',
-      current: 1,
+      current: 2,
       status: 1,
       params: {},
       storeId: storeId,
@@ -33,7 +32,7 @@ class ManualOrder extends Component<any, any> {
   }
   next(e) {
     e.preventDefault();
-    let { customer, current, list } = this.state;
+    let {  current } = this.state;
     this.props.form.validateFields((err,values) => {
       if (!err) {
         let _params={...this.state.params,...values}
@@ -54,11 +53,9 @@ class ManualOrder extends Component<any, any> {
   }
 
   componentWillMount() { 
-    
   }
 
   getFormParams = (params) => {
-    console.log(params)
     this.setState({
       params:{...this.state.params,...params}
     });

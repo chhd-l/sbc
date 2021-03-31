@@ -1,7 +1,5 @@
 import React from 'react';
 import { Row, Col, Form, Input, Select, Spin } from 'antd';
-import { getCustomerDetails } from '../webapi';
-import debounce from 'lodash/debounce';
 import { SelectGroup } from 'qmkit';
 const { Option } = Select;
 class ConsumerInformation extends React.Component<any, any> {
@@ -27,18 +25,10 @@ class ConsumerInformation extends React.Component<any, any> {
   constructor(props) {
     super(props);
   }
-  componentDidMount() { }
-  onChange = (value, name) => {
-    
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.props.getFormParams(values);
-      }
-    });
+ async componentDidMount() {
 
-  
-  };
  
+   }
   render() {
     const { getFieldDecorator } = this.props.form;
     const { storeName, expertName } = this.props.allParams;
@@ -57,10 +47,6 @@ class ConsumerInformation extends React.Component<any, any> {
               label="Role"
               getPopupContainer={(trigger: any) => trigger.parentNode}
               style={{ width: 180 }}
-              onChange={(value) => {
-                this.onChange(value,'storeName')
-              }}
-
             >
               <Option value="L’Atelier Felin">
                 L’Atelier Felin
@@ -74,9 +60,6 @@ class ConsumerInformation extends React.Component<any, any> {
             })(<SelectGroup
               label="Role"
               getPopupContainer={(trigger: any) => trigger.parentNode}
-              onChange={(value) => {
-                this.onChange(value,'expertName')
-              }}
               style={{ width: 180 }}
             >
               {options}

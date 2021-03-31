@@ -10,7 +10,7 @@ const defaultImg = require('../../goods-list/img/none.png');
 interface Iprop {
   startDate: string;
   endDate: string;
-  customerAccount: string;
+  customerId: string;
 }
 
 interface Istyle {
@@ -56,12 +56,12 @@ export default class OrderInformation extends React.Component<Iprop, any> {
   };
 
   getOrderList = () => {
-    const { startDate, endDate, customerAccount } = this.props;
+    const { startDate, endDate, customerId } = this.props;
     const { pagination } = this.state;
     this.setState({ loading: true });
     fetchOrderList({
       orderType: 'ALL_ORDER',
-      buyerAccount: customerAccount,
+      buyerId: customerId,
       beginTime: startDate,
       endTime: endDate,
       pageNum: pagination.current - 1,

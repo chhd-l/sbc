@@ -5,7 +5,7 @@ import { Breadcrumb, Alert, Form } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
-import FullGiftForm from './components/full_gift_form';
+import FullGiftForm from './components/full-gift-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
 

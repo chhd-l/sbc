@@ -2041,6 +2041,30 @@ export default {
   'Marketing.upto5levels': 'up to 5 levels can be set',
   'Marketing.0-99999999.99': '0-99999999.99',
   'Marketing.1-9999': '1-9999',
+  'Marketing.0-9999': '0-9999',
+  'Marketing.ustenterrules': 'Must enter rules',
+  'Marketing.Discountmustbeentered': 'Discount must be entered',
+  'Marketing.Editdiscountactivity': 'Edit  discount activity',
+  'Marketing.Creatediscountactivity': 'Create  discount activity',
+  'Marketing.discountTip': 'The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity',
+  'Marketing.Editreductionactivity': 'Edit reduction activity',
+  'Marketing.Createreductionactivity': 'Create reduction activity',
+  'Marketing.reductionTip': 'The same product can participate in different types of promotional activities at the same time, but can only participate in one full reduction activity',
+  'Marketing.0.01-99999999.99': '0.01-99999999.99',
+  'Marketing.items': 'items',
+  'Marketing.Pleaseenterfreeshippingname': 'Please enter free shipping name',
+  'Marketing.Freeshippingname': 'Free shipping name',
+  'Marketing.nomorethan40words.': 'no  more than 40 words.',
+  'Marketing.Freeshippingtype': 'Free shipping type',
+  'Marketing.Orderreach': 'Order reach',
+  'Marketing.Shippingvalueentered': 'Shipping value must be entered.',
+  'Marketing.Itemsmustbeentered': 'Items must be entered',
+  'Marketing.EditfreeShipping': 'Edit  free Shipping',
+  'Marketing.CreatefreeShipping': 'Create  free Shipping',
+
+
+
+
 
   /*-----------------------------  Prescriber  ----------------------------------------*/
   'Prescriber.Add':'Add',

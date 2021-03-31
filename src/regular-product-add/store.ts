@@ -1829,13 +1829,15 @@ export default class AppStore extends Store {
       }
     }
   };
-
+  goodsDescriptionSort(data){
+    return data.sort((a,b)=>a.sort-b.sort)
+  }
   /**
    * 设置富文本框的值
    * @param
    */
   editEditorContent = (value) => {
-    this.dispatch('goodsActor:descriptionTab', value);
+    this.dispatch('goodsActor:descriptionTab', this.goodsDescriptionSort(value));
   };
   editEditor = (editor) => {
     this.dispatch('goodsActor: editor', editor);

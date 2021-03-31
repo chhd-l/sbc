@@ -45,6 +45,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 let evnMap = {
   dev: require('./env-config/dev.js'),
   stg: require('./env-config/stg.js'),
+  sit: require('./env-config/sit.js'),
   prod_fa: require('./env-config/prod_fa.js'),
   prod_de: require('./env-config/prod_de.js'),
 }

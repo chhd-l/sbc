@@ -3,7 +3,7 @@ import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, 
 import { StoreProvider } from 'plume2';
 import FeedBack from '../subscription-detail/component/feedback';
 import DeliveryItem from '../customer-details/component/delivery-item';
-import { Headline, BreadCrumb, SelectGroup, Const, cache } from 'qmkit';
+import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
@@ -1649,7 +1649,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </TabPane>
             </Tabs>
           </div>
-          <FeedBack subscriptionId={this.state.subscriptionId} />
+          <AuthWrapper functionName="f_subscription_feedback">
+            <FeedBack subscriptionId={this.state.subscriptionId} />
+          </AuthWrapper>
           <div className="bar-button">
             <Button type="primary" onClick={() => this.updateSubscription()} loading={this.state.saveLoading}>
               {<FormattedMessage id="save" />}

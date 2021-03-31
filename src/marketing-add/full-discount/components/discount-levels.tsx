@@ -92,7 +92,11 @@ class DiscountLevels extends React.Component<any, any> {
                           <FormItem style={{ display: 'inline-block' }}>
                             {getFieldDecorator(`level_rule_value_${index}`, {
                               rules: [
-                                { required: true, message: 'Must enter rules' },
+                                { required: true, message:
+                                    this.props.intl.formatMessage({
+                                      id: 'Marketing.Mustenterrules'
+                                    })
+                                },
                                 {
                                   validator: (_rule, value, callback) => {
                                     if (value) {
@@ -157,7 +161,9 @@ class DiscountLevels extends React.Component<any, any> {
                           rules: [
                             {
                               required: true,
-                              message: 'Discount must be entered'
+                              message: this.props.intl.formatMessage({
+                                id: 'Marketing.Discountmustbeentered'
+                              })
                             },
                             {
                               validator: (_rule, value, callback) => {

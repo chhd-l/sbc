@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Input, Button, Form } from 'antd';
 import { ValidConst, cache } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -19,7 +20,10 @@ const HasError = styled.div`
   }
 `;
 
-export default class ReductionLevels extends React.Component<any, any> {
+class ReductionLevels extends React.Component<any, any> {
+  props: {
+    intl: any;
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -87,7 +91,11 @@ export default class ReductionLevels extends React.Component<any, any> {
                     <FormItem style={{ display: 'inline-block' }}>
                       {getFieldDecorator(`level_rule_value_${index}`, {
                         rules: [
-                          { required: true, message: 'Must enter rules' },
+                          { required: true, message:
+                            this.props.intl.formatMessage({
+                              id: 'Marketing.ustenterrules',
+                            })
+                          },
                           {
                             validator: (_rule, value, callback) => {
                               if (value) {
@@ -96,11 +104,19 @@ export default class ReductionLevels extends React.Component<any, any> {
                                     callback();
                                   }
                                   if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                    callback('0-99999999.99');
+                                    callback(
+                                      this.props.intl.formatMessage({
+                                        id: 'Marketing.0-99999999.99',
+                                      })
+                                    );
                                   }
                                 } else {
                                   if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                                    callback('1-9999');
+                                    callback(
+                                      this.props.intl.formatMessage({
+                                        id: 'Marketing.1-9999',
+                                      })
+                                    );
                                   }
                                 }
                               }
@@ -114,7 +130,15 @@ export default class ReductionLevels extends React.Component<any, any> {
                           <Input
                             style={{ width: 180 }}
                             value={!isFullCount ? level.fullAmount : level.fullCount}
-                            placeholder={!isFullCount ? '0-99999999.99' : '1-9999'}
+                            placeholder={!isFullCount ?
+                              this.props.intl.formatMessage({
+                                id: 'Marketing.0-99999999.99',
+                              })
+                              :
+                              this.props.intl.formatMessage({
+                                id: 'Marketing.1-9999',
+                              })
+                              }
                             onChange={(e) => {
                               this.ruleValueChange(index, e.target.value);
                             }}
@@ -124,7 +148,7 @@ export default class ReductionLevels extends React.Component<any, any> {
                     </FormItem>
                     <span>
                             &nbsp;
-                      {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}，
+                      {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : <FormattedMessage id="Marketing.items" />}，
                           </span>
                   </div>
                 ) : null}
@@ -134,12 +158,20 @@ export default class ReductionLevels extends React.Component<any, any> {
                   <FormItem style={{ display: 'inline-block' }}>
                     {getFieldDecorator(`level_rule_reduction_${index}`, {
                       rules: [
-                        { required: true, message: 'Amount must be entered' },
+                        { required: true, message:
+                            this.props.intl.formatMessage({
+                              id: 'Marketing.AmountMustBeEntered',
+                            })
+                        },
                         {
                           validator: (_rule, value, callback) => {
                             if (value) {
                               if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                callback('0.01-99999999.99');
+                                callback(
+                                  this.props.intl.formatMessage({
+                                    id: 'Marketing.0.01-99999999.99',
+                                  })
+                                );
                               }
                             }
                             callback();
@@ -150,7 +182,11 @@ export default class ReductionLevels extends React.Component<any, any> {
                     })(
                         <Input
                           style={{ width: 200 }}
-                          placeholder={'0.01-99999999.99'}
+                          placeholder={
+                            this.props.intl.formatMessage({
+                              id: 'Marketing.0.01-99999999.99',
+                            })
+                          }
                           value={level.reduction}
                           onChange={(e) => {
                             this.onChange(index, 'reduction', e.target.value);
@@ -163,7 +199,10 @@ export default class ReductionLevels extends React.Component<any, any> {
                     &nbsp;&nbsp;
                         </span>
                 </div>
-                {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
+                {index > 0 && <a onClick={() => this.deleteLevels(index)}>
+                  <FormattedMessage id="Marketing.Delete" />
+                  </a>
+                }
               </HasError>
             </div>
           );
@@ -171,9 +210,9 @@ export default class ReductionLevels extends React.Component<any, any> {
         {isNormal && isFullCount !== 2 ? (
           <div>
             <Button onClick={this.addLevels} disabled={fullReductionLevelList.length >= 5}>
-              Add multi-level promotions
+              <FormattedMessage id="Marketing.Marketing.Addmulti-levelpromotions" />
             </Button>
-            &nbsp;&nbsp;up to 5 levels can be set
+            &nbsp;&nbsp;<FormattedMessage id="Marketing.Marketing.upto5levels" />
           </div>
         ) : null}
       </div>
@@ -271,3 +310,5 @@ export default class ReductionLevels extends React.Component<any, any> {
     return 'key' + (Math.random() as any).toFixed(6) * 1000000;
   };
 }
+
+export default injectIntl(ReductionLevels)

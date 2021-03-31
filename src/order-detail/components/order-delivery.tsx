@@ -137,7 +137,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                           )}
                         </label>
                       ) : (
-                        'none'
+                        ''
                       )}
                     </div>
                     {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
@@ -363,7 +363,8 @@ const styles = {
   title: {
     fontSize: 14,
     color: '#333333',
-    marginBottom: 5
+    marginBottom: 5,
+    padding: '10px 0'
   },
   expressBox: {
     paddingTop: 10,

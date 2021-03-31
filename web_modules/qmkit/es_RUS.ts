@@ -146,6 +146,25 @@ export default {
   'Menu.Set Banner':'Set Banner',
   /* -------- 已翻译 V1.0---------------*/
   'Menu.Appointment':'Appointment',
+  'Menu.Appointment list':'Appointment list',
+  'Menu.Split order setting':'Split order setting',
+  'Menu.Order data setting':'Order data setting',
+  'Menu.Order eligible for return':'Order eligible for return',
+  'Menu.Valet order':'Valet order',
+  'Menu.Point to sales':'Point to sales',
+  'Menu.Address list setting':'Address list setting',
+  'Menu.Address field setting':'Address field setting',
+  'Menu.Payment setting':'Payment setting',
+  'Menu.Payment method':'Payment method',
+  'Menu.Felin Recommendation':'Felin Recommendation',
+  'Menu.Prescriber setting':'Prescriber setting',
+  'Menu.Inventory alert':'Inventory alert',
+  'Menu.Consumer review':'Consumer review',
+  'Menu.Points order':'Points order',
+  'Menu.prescriber recommendation':'Prescriber recommendation',
+  'Menu.Member companies':'Member companies',
+  'Menu.NPS list':'NPS list',
+  'Menu.Shipping Fee':'Shipping Fee',
 
 
 

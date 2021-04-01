@@ -46,17 +46,16 @@ export default class orders extends Component<any, any> {
       () => this.getOrderList()
     );
   };
-  getOrderList = (status?) => {
+  getOrderList = () => {
     const { formData, pagination } = this.state;
     let params = Object.assign(formData, {
+      id: formData.id,
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize,
       orderType: 'ALL_ORDER',
-      buyerId: this.props.petOwnerId
+      buyerId: this.props.petOwnerId,
+      tradeState: { flowState: formData.status }
     });
-    if (status) {
-      params.tradeState = { flowState: status };
-    }
     this.setState({
       loading: true
     });
@@ -181,7 +180,10 @@ export default class orders extends Component<any, any> {
                 placeholder="Order Status"
                 style={{ width: '180px' }}
                 onChange={(value) => {
-                  this.getOrderList(value);
+                  this.onFormChange({
+                    field: 'status',
+                    value
+                  });
                 }}
               >
                 {OrderStatus.map((item) => (

@@ -992,11 +992,13 @@ export default class AppStore extends Store {
         console.log(item.get('subscriptionPrice'),111111111111);
         console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
         console.log(item.toJS(),3333333);*/
-        if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
-          if (addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) {
-            tip = 1;
-            valid = false;
-            return;
+        if (goodsList.toJS().length == 1) {
+          if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+            if (item.get('marketPrice') == 0) {
+              tip = 1;
+              valid = false;
+              return;
+            }
           }
         }else {
           //console.log(item.toJS(),555)
@@ -1007,6 +1009,7 @@ export default class AppStore extends Store {
             return;
           }
         }
+
        /* if (!(item.get('marketPrice') || item.get('marketPrice') == 0) ) {
           tip = 1;
           valid = false;

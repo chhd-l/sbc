@@ -3215,7 +3215,7 @@ export default {
   refundFailed: 'Refund failed',
   refund: 'Refund',
   realRefund: 'Real refund',
-  refundDetails: 'Refund details',
+  refundDetails: 'Return details',
   applicationTime: 'Application time',
   chargeback: 'Chargeback',
   returnUnitPrice: 'Return unit price',

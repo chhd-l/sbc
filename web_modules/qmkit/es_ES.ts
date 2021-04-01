@@ -3274,7 +3274,7 @@ export default {
   refundFailed: 'Refund failed',
   refund: 'Refund',
   realRefund: 'Real refund',
-  refundDetails: 'Refund details',
+  refundDetails: 'Return details',
   applicationTime: 'Application time',
   chargeback: 'Chargeback',
   returnUnitPrice: 'Return unit price',
@@ -3498,7 +3498,6 @@ export default {
   'subscription.sub': 'Sub-',
   'subscription.operation': 'Operation',
   'subscription.subscriptionDate': 'Subscription date',
-  items: 'Items',
   petCategory: 'Pet Category',
   petName: 'Pet Name',
   gender: 'Gender',
@@ -3517,7 +3516,7 @@ export default {
   star: 'star',
   yes: 'Yes',
   no: 'No',
-  description: '',
+
   reviewTip:
     'Review overview shows the summary of review data in the past 180 days',
   ratingRule: 'Rating rule',

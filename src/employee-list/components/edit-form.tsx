@@ -436,7 +436,7 @@ export default class EditForm extends React.Component<any, any> {
             </FormItem>
           ) : null}
 
-          {this.state.changePassword ? (
+          {/* {this.state.changePassword ? (
             <div>
               <FormItem {...formItemLayout} label="Password" hasFeedback required={true}>
                 {getFieldDecorator('accountPassword', {
@@ -462,7 +462,7 @@ export default class EditForm extends React.Component<any, any> {
                 })(<Input type="password" />)}
               </FormItem>
             </div>
-          ) : null}
+          ) : null} */}
 
           {/* {_state.get('edit') ? null : (
             <FormItem {...formItemLayout} colon={false} label=" ">

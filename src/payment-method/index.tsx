@@ -24,15 +24,17 @@ export default class OrderReturnList extends React.Component<any, any> {
 
   render() {
     return (
-      <AuthWrapper functionName="rolf001">
-        <div className="order-con">
-          <BreadCrumb />
-          <div className="container" style={{ height: '100vh' }}>
-            <Headline title="Payment method" />
-            <WrappedForm ref={(form) => (this._form = form)} />
-          </div>
-        </div>
-      </AuthWrapper>
+      // <AuthWrapper functionName="rolf001">
+      //
+      // </AuthWrapper>
+
+    <div className="order-con">
+      <BreadCrumb />
+      <div className="container" style={{ height: '100vh' }}>
+        <Headline title="Payment method" />
+        <WrappedForm ref={(form) => (this._form = form)} />
+      </div>
+    </div>
     );
   }
 }

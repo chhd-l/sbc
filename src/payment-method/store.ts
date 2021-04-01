@@ -28,7 +28,6 @@ export default class AppStore extends Store {
 
   init = async () => {
     const { res } = await webapi.queryByStoreId();
-
     if (res.code === Const.SUCCESS_CODE) {
       let storePaymentVOs = res.context.storePaymentVOs || [];
       let List1 = [];
@@ -57,6 +56,8 @@ export default class AppStore extends Store {
 
     if (res.code === Const.SUCCESS_CODE) {
       //console.log(res, 11111111111);
+      this.init()
+      this.onShow(false)
     }
   };
 

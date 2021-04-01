@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import { noop, history, AuthWrapper } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 @Relax
-export default class Foot extends React.Component<any, any> {
+class Foot extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -126,6 +126,11 @@ export default class Foot extends React.Component<any, any> {
             </Button>
           </AuthWrapper>
         )}*/}
+        {this.props.isLeave && (
+          <Button type="primary" onClick={this._leavePage} style={{ marginRight: 10 }}>
+            <FormattedMessage id="Product.BackToList" />
+          </Button>
+        )}
       </div>
     );
   }
@@ -155,4 +160,22 @@ export default class Foot extends React.Component<any, any> {
       this.props.relaxProps.onMainTabChange('price');
     }*/
   };
+  _leavePage = () => {
+    // this.props.onLeave();
+    const title = this.props.intl.formatMessage({id:'Product.Prompt'});
+    const content = this.props.intl.formatMessage({id:'Product.returnToTheListPage'});
+    const okText = this.props.intl.formatMessage({id:'Product.OK'});
+    const cancelText = this.props.intl.formatMessage({id:'Product.Cancel'});
+    Modal.confirm({
+      title: title,
+      content: content,
+      okText: okText,
+      cancelText: cancelText,
+      onOk() {
+        history.push('/goods-list');
+      }
+    });
+  }
 }
+
+export default injectIntl(Foot);

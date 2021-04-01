@@ -1138,11 +1138,11 @@ export default class AppStore extends Store {
     let valid = true;
     let flag = 0
     let goodsList = this.state().get('goodsList');
+    let reg=/^[1-9]\d*$|^0$/;
+
     if (goodsList) {
       goodsList.forEach((item) => {
-        console.log(item.toJS());
-        console.log(!item.get('stock'));
-        if (!item.get('stock')) {
+        if (reg.test(item.get('stock')) === false) {
           flag = 1
           valid = false;
           return;
@@ -1154,7 +1154,7 @@ export default class AppStore extends Store {
       });
     }
     if (flag === 1) {
-      message.error('Please input Inventory');
+      console.log('Please enter the correct value');
     }
     return valid;
   }

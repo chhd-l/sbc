@@ -1166,6 +1166,9 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async (nextTab = null) => {
+    console.log(!this._validMainForms());
+    console.log(!this._validPriceFormsNew());
+    console.log(!this._validInventoryFormsNew());
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }

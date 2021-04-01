@@ -467,27 +467,29 @@ export default class AppStore extends Store {
       // 是否为多规格
       if (goodsDetail.getIn(['goods', 'moreSpecFlag']) == 1) {
         // 规格，按照id升序排列
-        let goodsSpecs = goodsDetail.get('goodsSpecs').sort((o1, o2) => {
-          return o1.get('specId') - o2.get('specId');
-        });
+        debugger
+        // let goodsSpecs = goodsDetail.get('goodsSpecs').sort((o1, o2) => {
+        //   return o1.get('specId') - o2.get('specId');
+        // });
+        let goodsSpecs = goodsDetail.get('goodsSpecs')
         const goodsSpecDetails = goodsDetail.get('goodsSpecDetails');
         goodsSpecs = goodsSpecs.map((item) => {
           // 规格值列表，按照id升序排列
           const specValues = goodsSpecDetails
             .filter((detailItem) => detailItem.get('specId') == item.get('specId'))
             .map((detailItem) => detailItem.set('isMock', false))
-            .sort((o1, o2) => {
-              return o1.get('specDetailId') - o2.get('specDetailId');
-            });
+            // .sort((o1, o2) => {
+            //   return o1.get('specDetailId') - o2.get('specDetailId');
+            // });
           return item.set('specValues', specValues);
         });
 
         // 商品列表
         let basePriceType;
-
+debugger
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
-          const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
+          const mockSpecDetailIds = item.get('mockSpecDetailIds')//.sort();
           basePriceType = item.get('basePriceType') ? Number(item.get('basePriceType')) : 0;
           item.get('mockSpecIds').forEach((specId) => {
             // 规格值保存的顺序可能不是按照规格id的顺序，多个sku的规格值列表顺序是乱序，因此此处不能按照顺序获取规格值。只能从规格规格值对应关系里面去捞一遍。
@@ -497,6 +499,7 @@ export default class AppStore extends Store {
               const detailId = detail.get('specDetailId');
               const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
               item = item.set('specId-' + specId, goodsSpecDetail.get('detailName'));
+              item = item.set('specDetailId-' + specId, goodsSpecDetail.get('mockSpecDetailId'));
             }
 
             if (item.get('goodsInfoImg')) {
@@ -1317,6 +1320,7 @@ export default class AppStore extends Store {
     let skuNoMap = Map();
     let existedSkuNo = '';
     let goodsList = List();
+    debugger
     data.get('goodsList').forEach((item) => {
       if (skuNoMap.has(item.get('goodsInfoNo') + '')) {
         existedSkuNo = item.get('goodsInfoNo') + '';
@@ -1329,11 +1333,12 @@ export default class AppStore extends Store {
       let mockSpecIds = List();
       // 规格值id集合
       let mockSpecDetailIds = List();
+      debugger
       item.forEach((value, key: string) => {
         if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));
         }
-        if (key && key.indexOf('specDetailId') != -1) {
+        if (key && key.indexOf('specDetailId-') != -1) {//specDetailId
           mockSpecDetailIds = mockSpecDetailIds.push(value);
         }
       });
@@ -1484,8 +1489,10 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
+      console.log(param.toJS(), 'edit param-----')
       result = await edit(param.toJS());
     } else {
+      console.log(param.toJS(), 'new param-----')
       result = await save(param.toJS());
     }
 

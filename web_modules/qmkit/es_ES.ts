@@ -3092,7 +3092,7 @@ export default {
   toBeDelivered: 'To be delivered',
   ship: 'Ship',
   orderNumber: 'Order number',
-  payWay: 'Pay Way',
+  payWay: 'Payment method',
   consumer: 'Consumer',
   consumerAccount: 'Pet owner account',
   consumerInfo: 'Consumer information',

@@ -236,6 +236,8 @@ class AutomationDetail extends Component<any, any> {
       startTrigger: startTrigger,
       selectedObjectNo: '',
       isOrderEvent: isOrderEvent
+    },()=>{
+      this.getObjectNoList('')
     });
   };
   handleClose = () => {
@@ -433,7 +435,7 @@ class AutomationDetail extends Component<any, any> {
                 this.handleClose();
               }}
             >
-              Cancle
+              Cancel
             </Button>,
             <Button key="submit" type="primary" onClick={this.testAutomation}>
               Comfirm

@@ -439,7 +439,7 @@ class SkuForm extends React.Component<any, any> {
                     <>
                       {rowInfo.addedFlag == 1 ? (
                         <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
-                          <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                          <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
                         </div>
                       ) : null}
                       {rowInfo.addedFlag == 0? (

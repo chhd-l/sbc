@@ -1035,8 +1035,8 @@ export default class AppStore extends Store {
           console.log(item.get('subScriptionPrice'));
           console.log(item.get('addedFlag'));*/
           if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionStatus') !=0) {
-            //console.log(item.toJS(),555)
-
+            console.log(item.toJS(),555)
+            //console.log(addSkUProduct[0].targetGoodsIds[0],666);
             if( item.get('subscriptionPrice') == 0 || item.get('subscriptionPrice') == null) {
               tip = 4;
               valid = false;
@@ -1085,9 +1085,9 @@ export default class AppStore extends Store {
           valid = false;
           return;
         } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
-          flag = 2
+         /* flag = 2
           valid = false;
-          return;
+          return;*/
         }
       });
     }

@@ -347,7 +347,7 @@ export default class GoodsSpecActor extends Actor {
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
         addedFlag: 1,
-        subscriptionPrice: 0,
+        //subscriptionPrice: 0,
         subscriptionStatus: 1,
         skuSvIds: [item.get('specDetailId')]
       });

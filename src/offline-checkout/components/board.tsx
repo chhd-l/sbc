@@ -16,8 +16,8 @@ export default class Board extends React.Component<any, any> {
       <div>
         <div style={{fontSize: 28, color: '#e2001a', margin: '50px 0', textAlign: 'center'}}>L'Atelier Felin</div>
         <Row gutter={32}>
-          <Col span={6} offset={6} onClick={() => onSelect()}>
-            <Card bordered={false} className="text-align-center c-box">
+          <Col span={6} offset={6}>
+            <Card bordered={false} className="text-align-center c-box" onClick={() => onSelect()}>
               <div><img src={pcImg} width="120" height="120" alt=""/></div>
               <span className="action-tag">Direct check-out</span>
             </Card>

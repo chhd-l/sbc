@@ -435,17 +435,20 @@ class SkuForm extends React.Component<any, any> {
                 {goodsList.toJS().length == 1 ? ( <div>
                   <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>
                 </div> ) : (<>
-                  {rowInfo.addedFlag == 1 ? (
-                    <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
-                      <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
-                    </div>
-                  ) : null}
-                  {rowInfo.addedFlag == 0? (
-                    <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
-                      <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
-                    </div>
-                  ) : null}</>)}
-
+                  {goods.get('addedFlag') == 0 ? ( <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>) : (
+                    <>
+                      {rowInfo.addedFlag == 1 ? (
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
+                          <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                        </div>
+                      ) : null}
+                      {rowInfo.addedFlag == 0? (
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
+                          <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                        </div>
+                      ) : null}</>)}
+                    </>
+                  )}
               </FormItem>
             </Col>
           </Row>

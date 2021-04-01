@@ -48,14 +48,14 @@ export default class orders extends Component<any, any> {
   };
   getOrderList = () => {
     const { formData, pagination } = this.state;
-    let params = Object.assign(formData, {
+    let params = {
       id: formData.id,
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize,
       orderType: 'ALL_ORDER',
       buyerId: this.props.petOwnerId,
       tradeState: { flowState: formData.status }
-    });
+    };
     this.setState({
       loading: true
     });

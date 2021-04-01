@@ -51,7 +51,13 @@ class ManualOrder extends Component<any, any> {
   }
 
   turnShowPage = (token) => {
-    let winObj = window.open(`https://shopstg.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+    let url ='';
+    if(['fr','ru','tr'].includes((window as any).countryEnum[this.state.storeId])){
+      url=`https://uatwedding.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
+    }else{
+      url=`https://shopstg.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
+    }
+    let winObj = window.open(`${url}/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
     let { customer } = this.state;
     let loop = setInterval(async () => {
       if (winObj.closed) {

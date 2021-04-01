@@ -848,6 +848,29 @@ class GoodsForm extends React.Component<any, any> {
   _editGoods = (key: string, e) => {
     const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
+    console.log(key,888888);
+
+    if (key === 'addedFlag') {
+      if (e.target.value == 0) {
+        this.setState({
+          saleableType: true
+        });
+        let goods = Map({
+          [key]: fromJS(0)
+        });
+        editGoodsItem(goods);
+        setFieldsValue({ addedFlag: 0 });
+      } else {
+        this.setState({
+          saleableType: false
+        });
+        let goods = Map({
+          [key]: fromJS(1)
+        });
+        editGoodsItem(goods);
+        setFieldsValue({ addedFlag: 1 });
+      }
+    }
 
     if (key === 'saleableFlag') {
       if (e.target.value == 0) {

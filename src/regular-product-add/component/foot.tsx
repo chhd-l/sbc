@@ -19,6 +19,7 @@ class Foot extends React.Component<any, any> {
     tabType: string;
     onNext: Function;
     onPrev: Function;
+    isLeave: boolean;
     relaxProps?: {
       saveMain: Function;
       saveAll: Function;

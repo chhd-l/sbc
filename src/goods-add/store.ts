@@ -1083,14 +1083,14 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
-        if (!(item.get('stock') || item.get('stock') == 0) && a == undefined) {
+        if (!item.get('stock') && a == undefined) {
           flag = 1
           valid = false;
           return;
         } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
-         /* flag = 2
+          flag = 2
           valid = false;
-          return;*/
+          return;
         }
       });
     }

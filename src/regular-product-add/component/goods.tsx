@@ -438,50 +438,46 @@ class GoodsForm extends React.Component<any, any> {
 
         {/*修改*/}
         <Row type="flex" justify="start">
-          {purchaseTypeList && purchaseTypeList.length > 0 ? (
-            <Col span={8}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
-                {getFieldDecorator('defaultPurchaseType', {
-                  rules: [],
-                  onChange: this._editGoods.bind(this, 'defaultPurchaseType'),
-                  // initialValue: 'Y'
-                  initialValue: goods.get('defaultPurchaseType')
-                })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultPurchaseType')} placeholder="please select Default purchase type" disabled={Number(goods.get('subscriptionStatus')) === 0}>
-                    {purchaseTypeList.map((option) => (
-                      <Option value={option.id} key={option.id}>
-                        {option.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-          ) : null}
-          {frequencyList && frequencyList.length > 0 ? (
-            <Col span={8}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
-                {getFieldDecorator('defaultFrequencyId', {
-                  // rules: [
-                  //   {
-                  //     required: false,
-                  //     message: 'Please select product tagging'
-                  //   }
-                  // ],
-                  initialValue: goods.get('defaultFrequencyId'),
-                  onChange: this._editGoods.bind(this, 'defaultFrequencyId')
-                })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder="please select Default frequency" disabled={Number(goods.get('subscriptionStatus')) === 0}>
-                    {frequencyList.map((option) => (
-                      <Option value={option.id} key={option.id}>
-                        {option.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-          ) : null}
+          <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
+              {getFieldDecorator('defaultPurchaseType', {
+                rules: [],
+                onChange: this._editGoods.bind(this, 'defaultPurchaseType'),
+                // initialValue: 'Y'
+                initialValue: goods.get('defaultPurchaseType')
+              })(
+                <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultPurchaseType')} placeholder="please select Default purchase type" disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                  {purchaseTypeList&&purchaseTypeList.map((option) => (
+                    <Option value={option.id} key={option.id}>
+                      {option.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
+              {getFieldDecorator('defaultFrequencyId', {
+                // rules: [
+                //   {
+                //     required: false,
+                //     message: 'Please select product tagging'
+                //   }
+                // ],
+                initialValue: goods.get('defaultFrequencyId'),
+                onChange: this._editGoods.bind(this, 'defaultFrequencyId')
+              })(
+                <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder="please select Default frequency" disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                  {getFrequencyList&&getFrequencyList.map((option) => (
+                    <Option value={option.id} key={option.id}>
+                      {option.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>

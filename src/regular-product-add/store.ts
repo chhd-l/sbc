@@ -1017,8 +1017,6 @@ export default class AppStore extends Store {
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
-    console.log(this.state().get('goodsList').toJS());
-    console.log(a.toJS());
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
       this.state().get('goods').get('subscriptionStatus') == 1 ) {
       message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
@@ -1142,7 +1140,9 @@ export default class AppStore extends Store {
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
-        if (!(item.get('stock') || item.get('stock') == 0)) {
+        console.log(item.toJS());
+        console.log(!item.get('stock'));
+        if (!item.get('stock')) {
           flag = 1
           valid = false;
           return;
@@ -1320,7 +1320,6 @@ export default class AppStore extends Store {
     let skuNoMap = Map();
     let existedSkuNo = '';
     let goodsList = List();
-    debugger
     data.get('goodsList').forEach((item) => {
       if (skuNoMap.has(item.get('goodsInfoNo') + '')) {
         existedSkuNo = item.get('goodsInfoNo') + '';
@@ -1333,7 +1332,6 @@ export default class AppStore extends Store {
       let mockSpecIds = List();
       // 规格值id集合
       let mockSpecDetailIds = List();
-      debugger
       item.forEach((value, key: string) => {
         if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));

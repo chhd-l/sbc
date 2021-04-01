@@ -5,7 +5,7 @@ import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,7 +16,7 @@ const InputGroup = Input.Group;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
     relaxProps?: {
       onSearch: Function;
@@ -77,9 +77,9 @@ export default class SearchHead extends Component<any, any> {
       codeSelect: 'promotionCode',
       codeSelectValue: '',
       planTypeList: [
-        { value: 'Cat ', name: 'Cat', rel: 'Club' },
-        { value: 'Dog', name: 'Dog', rel: 'Club' },
-        { value: 'SmartFeeder', name: 'Smart feeder', rel: 'ContractProduct' }
+        { value: 'Cat ', name: props.intl.formatMessage({id:'Order.cat'}), rel: 'club' },
+        { value: 'Dog', name: props.intl.formatMessage({id:'Order.dog'}), rel: 'club' },
+        { value: 'SmartFeeder', name: props.intl.formatMessage({id:'Order.smartFeeder'}), rel: 'contractProduct' }
       ]
     };
   }
@@ -97,24 +97,24 @@ export default class SearchHead extends Component<any, any> {
       hasMenu = true;
     }
     const refillNumberList = [
-      { value: 'First', name: 'First' },
-      { value: 'Recurrent', name: 'Recurrent' }
+      { value: 'First', name: this.props.intl.formatMessage({id:'Order.first'}) },
+      { value: 'Recurrent', name: this.props.intl.formatMessage({id:'Order.recurrent'}) }
     ];
 
     const orderTypeList = [
-      { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
-      { value: 'SUBSCRIPTION', name: 'Subscription' }
+      { value: 'SINGLE_PURCHASE', name: this.props.intl.formatMessage({id:'Order.Singlepurchase'}) },
+      { value: 'SUBSCRIPTION', name: this.props.intl.formatMessage({id:'Order.subscription'}) }
     ];
 
     const subscriptionTypeList = [
-      { value: 'ContractProduct', name: 'Contract product' },
-      { value: 'Club', name: 'Club' },
-      { value: 'Autoship', name: 'Autoship' }
+      { value: 'ContractProduct', name: this.props.intl.formatMessage({id:'Order.contractProduct'}) },
+      { value: 'Club', name: this.props.intl.formatMessage({id:'Order.club'}) },
+      { value: 'Autoship', name: this.props.intl.formatMessage({id:'Order.autoship'}) }
     ];
 
     const orderSourceList = [
-      { value: 'FGS', name: 'FGS' },
-      { value: 'L_Atelier_Feline', name: 'L\'Atelier Feline' }
+      { value: 'FGS', name: this.props.intl.formatMessage({id:'Order.fgs'}) },
+      { value: 'L_ATELIER_FELINE', name: this.props.intl.formatMessage({id:'Order.felin'}) }
     ];
 
     const menu = (
@@ -163,7 +163,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                  <Input style={styles.leftLabel} title={'Subscription order time'} disabled defaultValue={'Subscription order time'} />
+                  <Input style={styles.leftLabel} title={this.props.intl.formatMessage({id:'Order.subscriptionOrderTime'})} disabled defaultValue={this.props.intl.formatMessage({id:'Order.subscriptionOrderTime'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -204,7 +204,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Order type'} />
+                    <Input style={styles.leftLabel} disabled defaultValue={this.props.intl.formatMessage({id:'Order.orderType'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -237,7 +237,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Order source'} />
+                    <Input style={styles.leftLabel} disabled defaultValue={this.props.intl.formatMessage({id:'Order.orderSource'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -324,7 +324,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={'Subscription type'} />
+                    <Input style={styles.leftLabel} disabled defaultValue={this.props.intl.formatMessage({id:'Order.subscriptionType'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -389,7 +389,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} title={'Subscription plan type'} disabled defaultValue={'Subscription plan type'} />
+                    <Input style={styles.leftLabel} title={this.props.intl.formatMessage({id:'Order.subscriptionPlanType'})} disabled defaultValue={this.props.intl.formatMessage({id:'Order.subscriptionPlanType'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -495,10 +495,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title="Pet owner name " value="buyerName">
+        <Option title={this.props.intl.formatMessage({id:'Order.consumerName'})} value="buyerName">
           <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option title="Pet owner account" value="buyerAccount">
+        <Option title={this.props.intl.formatMessage({id:'Order.consumerAccount'})} value="buyerAccount">
           <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
@@ -517,10 +517,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option title="Product name" value="skuName">
+        <Option title={this.props.intl.formatMessage({id:'Order.productName'})} value="skuName">
           <FormattedMessage id="Order.productName" />
         </Option>
-        <Option title="Sku code" value="skuNo">
+        <Option title={this.props.intl.formatMessage({id:'Order.skuCode'})} value="skuNo">
           <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
@@ -539,10 +539,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option title="Recipient" value="consigneeName">
+        <Option title={this.props.intl.formatMessage({id:'Order.recipient'})} value="consigneeName">
           <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option title="Recipient phone" value="consigneePhone">
+        <Option title={this.props.intl.formatMessage({id:'Order.recipientPhone'})} value="consigneePhone">
           <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
@@ -561,10 +561,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.recommenderSelect}
         style={styles.label}
       >
-        <Option title="Recommender id" value="recommenderId">
+        <Option title={this.props.intl.formatMessage({id:'Order.recommenderId'})} value="recommenderId">
           <FormattedMessage id="Order.recommenderId" />
         </Option>
-        <Option title="Recommender name" value="recommenderName">
+        <Option title={this.props.intl.formatMessage({id:'Order.recommenderName'})} value="recommenderName">
           <FormattedMessage id="Order.recommenderName" />
         </Option>
       </Select>
@@ -584,10 +584,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
         disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
-        <Option title="Auditor name" value="clinicsName">
+        <Option title={this.props.intl.formatMessage({id:'Order.clinicName'})} value="clinicsName">
           <FormattedMessage id="Order.clinicName" />
         </Option>
-        <Option title="Auditor ID" value="clinicsIds">
+        <Option title={this.props.intl.formatMessage({id:'Order.clinicID'})} value="clinicsIds">
           <FormattedMessage id="Order.clinicID" />
         </Option>
       </Select>
@@ -605,10 +605,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title="Order number" value="orderNumber">
-          <FormattedMessage id="Order.orderNumber" />
+        <Option title={this.props.intl.formatMessage({id:'Order.OrderNumber'})} value="orderNumber">
+          <FormattedMessage id="Order.OrderNumber" />
         </Option>
-        <Option title="Subscription number" value="subscriptionNumber">
+        <Option title={this.props.intl.formatMessage({id:'Order.subscriptionNumber'})} value="subscriptionNumber">
           <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
@@ -627,10 +627,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.statusSelect}
         style={styles.label}
       >
-        <Option title="Payment status" value="paymentStatus">
+        <Option title={this.props.intl.formatMessage({id:'Order.paymentStatus'})} value="paymentStatus">
           <FormattedMessage id="Order.paymentStatus" />
         </Option>
-        <Option title="Shipping status" value="shippingStatus">
+        <Option title={this.props.intl.formatMessage({id:'Order.shippingStatus'})} value="shippingStatus">
           <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
@@ -649,7 +649,7 @@ export default class SearchHead extends Component<any, any> {
       .toJS();
 
     if (checkedIds.length == 0) {
-      message.error(<FormattedMessage id="Order.needsToBeOperated"/>);
+      message.error(<FormattedMessage id="Order.pleaseSelectOrderToOperate" />);
       return;
     }
 
@@ -668,8 +668,8 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export filtered orders',
-      byIdsTitle: 'Export selected orders',
+      byParamsTitle: <FormattedMessage id="Order.Exportfilteredorders" />,
+      byIdsTitle: <FormattedMessage id="Order.Exportselectedorders" />,
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });
@@ -677,8 +677,8 @@ export default class SearchHead extends Component<any, any> {
 
   _renderCodeSelect = () => {
     const codeTypeList = [
-      { value: 'promotionCode', name: 'Promotion code' },
-      { value: 'couponCode', name: 'Coupon code' }
+      { value: 'promotionCode', name: this.props.intl.formatMessage({id:'Order.promotionCode'}) },
+      { value: 'couponCode', name: this.props.intl.formatMessage({id:'Order.couponCode'}) }
     ];
     return (
       <Select
@@ -702,9 +702,9 @@ export default class SearchHead extends Component<any, any> {
   };
   getPlanType = (rel) => {
     const subscriptionPlanTypeList = [
-      { value: 'Cat ', name: 'Cat', rel: 'club' },
-      { value: 'Dog', name: 'Dog', rel: 'club' },
-      { value: 'SmartFeeder', name: 'Smart feeder', rel: 'contractProduct' }
+      { value: 'Cat ', name: this.props.intl.formatMessage({id:'Order.cat'}), rel: 'Club' },
+      { value: 'Dog', name: this.props.intl.formatMessage({id:'Order.dog'}), rel: 'Club' },
+      { value: 'SmartFeeder', name: this.props.intl.formatMessage({id:'Order.smartFeeder'}), rel: 'ContractProduct' }
     ];
     if (rel) {
       let planTypeList = subscriptionPlanTypeList.filter((item) => item.rel === rel);
@@ -803,6 +803,8 @@ export default class SearchHead extends Component<any, any> {
     onSearch(params);
   };
 }
+
+export default injectIntl(SearchHead);
 
 const styles = {
   formItemStyle: {

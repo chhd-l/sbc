@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { fromJS, List, Map } from 'immutable';
-import { FormattedMessage, injectIntl } from 'react-intl';
+
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
 import moment from 'moment';
-import DiscountLevels from '../../full-discount/components/discount-levels';
+import ReductionLevels from '../../full-reduction/components/reduction-levels';
 import { GoodsModal } from 'biz';
 import SelectedGoodsGrid from '../../common-components/selected-goods-grid';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import * as webapi from '../../webapi';
+import * as Enum from '../../common-components/marketing-enum';
 import { Relax } from 'plume2';
 
 import { doc } from 'prettier';
@@ -92,7 +93,7 @@ const treeData = [
 const TreeNode = Tree.TreeNode;
 
 @Relax
-class FullDiscountForm extends React.Component<any, any> {
+class FullReductionForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     // const relaxProps = props.store.state();
@@ -366,35 +367,58 @@ class FullDiscountForm extends React.Component<any, any> {
       });
     }
 
+    let settingLabel = '';
+    let settingLabel1 = 'setting rules';
+    let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
     if (marketingBean.get('promotionType') === 1) {
       settingRuleFrom = { ...largeformItemLayout };
+      settingLabel = 'For the first subscription order,reduction';
+      settingLabel1 = 'For the rest subscription order,reduction';
+      settingType = 'reduction';
     }
-    console.log(marketingBean.toJS(), 'marketingBean-----------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionType"/>} labelAlign="left">
+        <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
-              <Radio value={0}>Normal promotion</Radio>
-              <Radio value={1}>Subscription promotion</Radio>
+              <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
+              <Radio value={1}><FormattedMessage id="Marketing.SubscriptionPromotion" /></Radio>
             </Radio.Group>
+            {/*{marketingBean.get('promotionType') === 1 ? (*/}
+            {/*  <Checkbox onChange={(e) => this.onBeanChange({*/}
+            {/*    isClub: e.target.checked*/}
+            {/*  })} checked={marketingBean.get('isClub')}>*/}
+            {/*    Club*/}
+            {/*  </Checkbox>*/}
+            {/*) : null}*/}
           </div>
         </FormItem>
-        <div className="bold-title"><FormattedMessage id="basicSetting" />:</div>
-        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionCode" />} labelAlign="left">
+        <div className="bold-title">Basic Setting</div>
+        <FormItem {...smallformItemLayout} label="Promotion Code" labelAlign="left">
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode(),
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: <FormattedMessage id="Marketing.PleaseInputPromotionCode"/>
+                message:
+                  this.props.intl.formatMessage({
+                    id: 'Marketing.PleaseInputPromotionCode'
+                  })
               },
-              { min: 1, max: 20, message: <FormattedMessage id="Marketing.words" /> },
+              { min: 1, max: 20, message:
+                  this.props.intl.formatMessage({
+                    id: 'Marketing.words'
+                  })
+              },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, <FormattedMessage id="Marketing.PromotionCode" />);
+                  QMMethod.validatorEmoji(rule, value, callback,
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.PromotionCode'
+                    })
+                  );
                 }
               }
             ]
@@ -424,18 +448,29 @@ class FullDiscountForm extends React.Component<any, any> {
           </Checkbox>
         </FormItem>
 
-        <FormItem {...smallformItemLayout}  label={<FormattedMessage id="Marketing.PromotionName" />} labelAlign="left">
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionName" />} labelAlign="left">
           {getFieldDecorator('marketingName', {
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: <FormattedMessage id="Marketing.PleaseInputPromotionName" />
+                message:
+                  this.props.intl.formatMessage({
+                    id: 'Marketing.PleaseInputPromotionName'
+                  })
               },
-              { min: 1, max: 40, message: '1-40 words' },
+              { min: 1, max: 40, message:
+                  this.props.intl.formatMessage({
+                    id: 'Marketing.40Words'
+                  })
+              },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, 'Promotion Name');
+                  QMMethod.validatorEmoji(rule, value, callback,
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.PromotionName'
+                    })
+                  );
                 }
               }
             ],
@@ -459,9 +494,11 @@ class FullDiscountForm extends React.Component<any, any> {
                   if (value[0]) {
                     callback();
                   } else {
-                    callback(this.props.intl.formatMessage({
-                      id: 'Marketing.PleaseSelectStartingAndEndTime'
-                    }));
+                    callback(
+                      this.props.intl.formatMessage({
+                        id: 'Marketing.PleaseSelectStartingAndEndTime'
+                      })
+                    );
                   }
                 }
               }
@@ -486,17 +523,18 @@ class FullDiscountForm extends React.Component<any, any> {
               // format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
               placeholder={[
                 this.props.intl.formatMessage({
-                id: 'Marketing.StartTime'
-              }), this.props.intl.formatMessage({
-                id: 'Marketing.EndTime'
-              })
+                  id: 'Marketing.StartTime'
+                }), this.props.intl.formatMessage({
+                  id: 'Marketing.EndTime'
+                })
               ]}
               showTime={{ format: 'HH:mm' }}
               onOpenChange={this.handleEndOpenChange}
             />
           )}
         </FormItem>
-        <div className="bold-title"><FormattedMessage id="Marketing.DiscountType" />:</div>
+
+        <div className="bold-title">Reduction type:</div>
         {marketingBean.get('promotionType') === 0 && (
           <FormItem {...formItemLayout} labelAlign="left">
             {getFieldDecorator('subType', {
@@ -512,70 +550,73 @@ class FullDiscountForm extends React.Component<any, any> {
             })(
               <RadioGroup onChange={(e) => this.subTypeChange(e)}>
                 {/*<Radio style={radioStyle} value={2}>*/}
-                {/*  Direct discount*/}
+                {/*  Direct reduction*/}
                 {/*</Radio>*/}
-                <Radio value={2} style={radioStyle}>
-                  <FormattedMessage id="Marketing.FullAmountDiscount" />
+                <Radio value={0} style={radioStyle}>
+                  <FormattedMessage id="Marketing.FullAmountReduction" />
                 </Radio>
-                <Radio value={3} style={radioStyle}>
-                  <FormattedMessage id="Marketing.FullQuantityDiscount" />{' '}
+                <Radio value={1} style={radioStyle}>
+                  <FormattedMessage id="Marketing.FullQuantityReduction" />{' '}
                 </Radio>
               </RadioGroup>
             )}
           </FormItem>
         )}
 
-        <FormItem {...settingRuleFrom} label={marketingBean.get('promotionType') === 0 ? '': <FormattedMessage id="Marketing.Forthefirstsubscription" />} required={true} labelAlign="left">
+        <FormItem {...settingRuleFrom} label={settingLabel} required={true} labelAlign="left">
           {getFieldDecorator(
             'rules',
             {}
           )(
             marketingBean.get('promotionType') === 0 ? (
-              <DiscountLevels
+              <ReductionLevels
                 form={this.props.form}
-                fullDiscountLevelList={marketingBean.get('fullDiscountLevelList') && marketingBean.get('fullDiscountLevelList').toJS()}
+                fullReductionLevelList={marketingBean.get('fullReductionLevelList') && marketingBean.get('fullReductionLevelList').toJS()}
                 onChangeBack={this.onRulesChange}
-                isFullCount={marketingBean.get('subType') % 2}
+                isFullCount={marketingBean.get('subType') % 2 }
                 isNormal={marketingBean.get('promotionType') === 0}
+                PromotionTypeValue={marketingBean.get('promotionType')}
               />
             ) : (
-              <div style={{ display: 'flex' }}>
+              <div>
                 <FormItem labelAlign="left">
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount"/>&nbsp;&nbsp;</span>
-                  {getFieldDecorator('firstSubscriptionOrderDiscount', {
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.reduction"/>&nbsp;&nbsp;</span>
+                  {getFieldDecorator('firstSubscriptionOrderReduction', {
                     rules: [
-                      { required: true, message: 'Amount must be entered' },
+                      { required: true, message:
+                          this.props.intl.formatMessage({
+                            id: 'Marketing.AmountMustBeEntered',
+                          })
+                      },
                       {
                         validator: (_rule, value, callback) => {
                           if (value) {
-                            if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                              callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+                            if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                              callback(
+                                this.props.intl.formatMessage({
+                                  id: 'Marketing.0.01-99999999.99',
+                                })
+                              );
                             }
                           }
                           callback();
                         }
                       }
                     ],
-                    initialValue: marketingBean.get('firstSubscriptionOrderDiscount')
+                    initialValue: marketingBean.get('firstSubscriptionOrderReduction')
                   })(
                     <Input
-                      style={{ width: 100 }}
-                      title={
-                        this.props.intl.formatMessage({
-                          id: 'Marketing.InputValueBetween'
-                        })
-                      }
+                      style={{ width: 200 }}
                       placeholder={
                         this.props.intl.formatMessage({
-                          id: 'Marketing.InputValueBetween'
+                          id: 'Marketing.0.01-99999999.99',
                         })
                       }
                       onChange={(e) => {
-                        this.onBeanChange({ firstSubscriptionOrderDiscount: e.target.value });
+                        this.onBeanChange({ firstSubscriptionOrderReduction: e.target.value });
                       }}
                     />
                   )}
-                  <span>&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
                 </FormItem>
               </div>
             )
@@ -583,53 +624,46 @@ class FullDiscountForm extends React.Component<any, any> {
         </FormItem>
 
         {marketingBean.get('promotionType') == 1 && (
-          <FormItem {...settingRuleFrom} label={<FormattedMessage id="Marketing.Fortherestsubscription" />} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
-            <div style={{ display: 'flex' }}>
-              <FormItem>
-                <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount"/>&nbsp;&nbsp;</span>
-                {getFieldDecorator('restSubscriptionOrderDiscount', {
-                  rules: [
-                    { required: true, message: 'Amount must be entered' },
-                    {
-                      validator: (_rule, value, callback) => {
-                        if (value) {
-                          if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                            callback(
-                              this.props.intl.formatMessage({
-                                id: 'Marketing.InputValueBetween'
-                              })
-                            );
-                          }
-                        }
-                        callback();
+          <FormItem {...settingRuleFrom} label={settingLabel1} required={true} labelAlign="left" style={{ marginTop: '-50px' }}>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
+            {getFieldDecorator('restSubscriptionOrderReduction', {
+              rules: [
+                { required: true, message:
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.AmountMustBeEntered',
+                    })
+                },
+                {
+                  validator: (_rule, value, callback) => {
+                    if (value) {
+                      if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                        callback(
+                          this.props.intl.formatMessage({
+                            id: 'Marketing.0.01-99999999.99',
+                          })
+                        );
                       }
                     }
-                  ],
-                  initialValue: marketingBean.get('restSubscriptionOrderDiscount')
-                })(
-                  <Input
-                    style={{ width: 100 }}
-                    title={
-                      this.props.intl.formatMessage({
-                        id: 'Marketing.InputValueBetween'
-                      })
-                    }
-                    placeholder={
-                      this.props.intl.formatMessage({
-                        id: 'Marketing.InputValueBetween'
-                      })
-                    }
-                    onChange={(e) => {
-                      this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
-                    }}
-                  />
-                )}
-                <span>&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
-              </FormItem>
-            </div>
+                    callback();
+                  }
+                }
+              ],
+              initialValue: marketingBean.get('restSubscriptionOrderReduction')
+            })(
+              <Input
+                style={{ width: 200 }}
+                placeholder={
+                  this.props.intl.formatMessage({
+                    id: 'Marketing.0.01-99999999.99',
+                  })
+                }
+                onChange={(e) => {
+                  this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
+                }}
+              />
+            )}
           </FormItem>
         )}
-
         <div className="bold-title"><FormattedMessage id="Marketing.SelectProducts" /> :</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
           {getFieldDecorator('scopeType', {
@@ -652,7 +686,11 @@ class FullDiscountForm extends React.Component<any, any> {
                   validator: (_rule, value, callback) => {
                     if ((!value)) {//!marketingBean.get('storeCateIds') || marketingBean.get('storeCateIds').size === 0)
                       //
-                      callback('Please select category.');
+                      callback(
+                        this.props.intl.formatMessage({
+                          id: 'Marketing.Pleaseselectcategory'
+                        })
+                      );
                     }
                     callback();
                   }
@@ -715,7 +753,11 @@ class FullDiscountForm extends React.Component<any, any> {
                   validator: (_rule, value, callback) => {
                     if ((!value && marketingBean.get('scopeType') === 3)) { //marketingBean.get('attributeValueIds') || marketingBean.get('attributeValueIds').size === 0)
                       //
-                      callback('Please select attribute.');
+                      callback(
+                        this.props.intl.formatMessage({
+                          id: 'Marketing.Pleaseselectattribute'
+                        })
+                      );
                     }
                     callback();
                   }
@@ -793,7 +835,6 @@ class FullDiscountForm extends React.Component<any, any> {
                         this.props.intl.formatMessage({
                           id: 'Marketing.Pleaseselectgroup'
                         })
-
                       );
                     }
                     callback();
@@ -824,7 +865,6 @@ class FullDiscountForm extends React.Component<any, any> {
                         this.props.intl.formatMessage({
                           id: 'Marketing.Pleaseenteremailsuffix'
                         })
-
                       );
                     }
                     callback();
@@ -947,12 +987,12 @@ class FullDiscountForm extends React.Component<any, any> {
    * @param joinLevel
    */
   promotionType = (e) => {
-    const { initDefualtLevelList, initReductionDefualtLevelList } = this.props.relaxProps
+    const { initReductionDefualtLevelList } = this.props.relaxProps
     this.onBeanChange({
       promotionType: e.target.value,
-      subType: e.target.value === 0 ? 2 : 7
+      subType:  e.target.value === 0 ? 0 : 6
     });
-    initDefualtLevelList()
+    initReductionDefualtLevelList()
   };
 
   /**
@@ -960,8 +1000,8 @@ class FullDiscountForm extends React.Component<any, any> {
    * @param params
    */
   onBeanChange = (params) => {
-    const { marketingBean, discountBeanOnChange, } = this.props.relaxProps;
-    discountBeanOnChange(marketingBean.merge(params));
+    const { marketingBean,reductionBeanOnChange } = this.props.relaxProps;
+    reductionBeanOnChange(marketingBean.merge(params));
   };
   /**
    * 等级初始化
@@ -1013,8 +1053,8 @@ class FullDiscountForm extends React.Component<any, any> {
     });
     const isFullCount = marketingBean.get('subType') % 2;
     //判断设置规则
+    levelList = marketingBean.get('fullReductionLevelList');
 
-    levelList = marketingBean.get('fullDiscountLevelList');
     if (!levelList || (levelList.isEmpty() && marketingBean.get('promotionType') == 0)) {
       errorObject['rules'] = {
         value: null,
@@ -1032,6 +1072,34 @@ class FullDiscountForm extends React.Component<any, any> {
               value: isFullCount ? level.fullCount : level.fullAmount
             })
           );
+          if (level.fullAmount != 0) {
+            if (!isFullCount && +level.fullAmount <= +level.reduction) {
+              if (marketingBean.get('promotionType') == 0) {
+                errorObject[`level_rule_value_${index}`] = {
+                  errors: [new Error(
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.TheConditional',
+                    })
+                  )]
+                };
+                errorObject[`level_rule_reduction_${index}`] = {
+                  errors: [new Error(
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.TheDeductible',
+                    })
+                  )]
+                };
+              } else {
+                errorObject[`level_rule_reduction_${index}`] = {
+                  errors: [new Error(
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.TheDeductible',
+                    })
+                  )]
+                };
+              }
+            }
+          }
         });
       }
       //校验多级促销条件是否相同
@@ -1054,29 +1122,17 @@ class FullDiscountForm extends React.Component<any, any> {
       if (marketingBean.get('scopeType') === 1) {
         errorObject['goods'] = {
           value: null,
-          errors: [new Error(
-            this.props.intl.formatMessage({
-              id: 'Marketing.theProductToBeMarketed'
-            })
-          )]
+          errors: [new Error('Please select the product to be marketed')]
         };
       } else if (marketingBean.get('scopeType') === 2 && (!marketingBean.get('storeCateIds') || marketingBean.get('storeCateIds').size === 0)) {
         errorObject['storeCateIds'] = {
           value: null,
-          errors: [new Error(
-            this.props.intl.formatMessage({
-              id: 'Marketing.Pleaseselectcategory'
-            })
-          )]
+          errors: [new Error('Please select category.')]
         };
       } else if (marketingBean.get('scopeType') === 3 && (!marketingBean.get('attributeValueIds') || marketingBean.get('attributeValueIds').size === 0)) {
         errorObject['attributeValueIds'] = {
           value: null,
-          errors: [new Error(
-            this.props.intl.formatMessage({
-              id: 'Marketing.Pleaseselectattribute'
-            })
-          )]
+          errors: [new Error('Please select attribute.')]
         };
       }
     }
@@ -1135,19 +1191,14 @@ class FullDiscountForm extends React.Component<any, any> {
             //   .then(({ res }) => {
             // if (res.code == Const.SUCCESS_CODE) {
 
-            marketingBean = marketingBean.set(
-              'fullDiscountLevelList',
-              marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 10))
-            );
             let obj = {
-              firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') / 10,
-              restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10,
+              firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
+              restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction'),
               subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
               subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
             };
-
-            marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
-            submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
+            marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
+            submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
           }
         }
       }
@@ -1183,7 +1234,7 @@ class FullDiscountForm extends React.Component<any, any> {
     let levelType = '';
     // Session 有状态登录，保存一个seesion, 返回相应的cookie，
     // JWT无状态登录: 返回一个JWT加密文档(角色，权限，过期时间等)，前端保存起来
-    levelType = 'fullDiscountLevelList';
+    levelType = 'fullReductionLevelList';
     if (levelType == '' || !marketingBean.get(levelType)) return;
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
@@ -1198,7 +1249,7 @@ class FullDiscountForm extends React.Component<any, any> {
             subType: e.target.value
           };
           _thisRef.onBeanChange(beanObject);
-          initDefualtLevelList()
+          initReductionDefualtLevelList()
         }
         // onCancel() {
         //   _thisRef.props.form.setFieldsValue({ subType: isFullCount });
@@ -1272,15 +1323,15 @@ class FullDiscountForm extends React.Component<any, any> {
    */
   onRulesChange = (rules) => {
     this.props.form.resetFields('rules');
-    this.onBeanChange({ fullDiscountLevelList: rules });
+    this.onBeanChange({ fullReductionLevelList: rules });
   };
 
   onSubscriptionChange = (props, value) => {
     const { marketingBean } = this.props.relaxProps;
     // this.props.form.resetFields('rules');
-    let obj = marketingBean.get('marketingSubscriptionDiscount');
+    let obj = marketingBean.get('marketingSubscriptionReduction') ? marketingBean.get('marketingSubscriptionReduction').toJS() : {};
     obj[props] = value;
-    this.onBeanChange({ marketingSubscriptionDiscount: obj });
+    this.onBeanChange({ marketingSubscriptionReduction: obj });
   };
 
   /**
@@ -1349,4 +1400,4 @@ class FullDiscountForm extends React.Component<any, any> {
   };
 }
 
-export default injectIntl(FullDiscountForm)
+export default injectIntl(FullReductionForm)

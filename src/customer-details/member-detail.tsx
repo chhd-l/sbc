@@ -41,6 +41,12 @@ const calcPetAge = (dateStr: string) => {
   }
 };
 
+const calcPetOwnerAge = (dateStr: string) => {
+  const birthday = moment(dateStr, 'YYYY-MM-DD');
+  const diffYear = moment().diff(birthday, 'years');
+  return diffYear > 1 ? `${diffYear} years old` : `${diffYear} year old`;
+};
+
 export default class CustomerDetails extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -272,7 +278,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     <div style={{ paddingLeft: 19 }}>{basic.customerName}</div>
                   </Col>
                   <Col span={4}>
-                    <div style={{ paddingLeft: 19 }}>{basic.birthDay ? moment().diff(moment(basic.birthDay, 'YYYY-MM-DD'), 'years') : ''}</div>
+                    <div style={{ paddingLeft: 19 }}>{basic.birthDay ? calcPetOwnerAge(basic.birthDay) : ''}</div>
                   </Col>
                 </Row>
               </div>
@@ -350,7 +356,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <Col span={12}>
                   <div className="text-highlight">Tag name</div>
                   <div>
-                    <Select style={{ width: '100%' }} value={this.state.petOwnerTag} mode="multiple" onChange={this.setPetOwnerTagging}>
+                    <Select style={{ width: '100%' }} value={this.state.petOwnerTag} mode="multiple" onChange={this.setPetOwnerTagging} getPopupContainer={(trigger: any) => trigger.parentNode}>
                       {this.state.tagList
                         .filter((item) => item.segmentType == 0)
                         .map((v, idx) => (
@@ -420,11 +426,11 @@ export default class CustomerDetails extends React.Component<any, any> {
             <div className="container">
               <Headline
                 title="Other information"
-                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} />}
+                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
-                  <OrderInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
+                  <OrderInformation startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
                 </TabPane>
                 <TabPane tab="Subscription information" key="subscrib">
                   <SubscribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />

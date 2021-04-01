@@ -103,7 +103,7 @@ export default class SearchHead extends Component<any, any> {
                       style={styles.wrapper}
                       onChange={(e) => {
                         this.setState({
-                          buyerOptionsValue: (e.target as any).value
+                          buyerSelectValue: (e.target as any).value
                         });
                       }}
                     />

@@ -4,6 +4,7 @@ import { Fetch } from 'qmkit';
  * 获取退货方式
  */
 export const getReturnWays = () => {
+  // return Fetch('/return/ways');
   return Fetch('/return/ways');
 };
 
@@ -11,6 +12,7 @@ export const getReturnWays = () => {
  * 获取退货原因
  */
 export const getReturnReasons = () => {
+  // return Fetch('/return/reasons');
   return Fetch('/return/reasons');
 };
 
@@ -18,6 +20,7 @@ export const getReturnReasons = () => {
  * 获取订单详情
  */
 export const getTradeDetail = (tid: string) => {
+  // return Fetch(`/return/trade/${tid}`);
   return Fetch(`/return/trade/${tid}`);
 };
 
@@ -25,6 +28,7 @@ export const getTradeDetail = (tid: string) => {
  * 提交申请
  */
 export const addApply = (param: any) => {
+  // return Fetch('/return/add', {
   return Fetch('/return/add', {
     method: 'POST',
     body: JSON.stringify(param)
@@ -34,6 +38,7 @@ export const addApply = (param: any) => {
 /**
  * 查询退单列表
  */
-export const fetchOrder = (tid) => {
+export const fetchOrderReturnList = (tid) => {
+  // return Fetch(`/return/findCompletedByTid/${tid}`);
   return Fetch(`/return/findCompletedByTid/${tid}`);
 };

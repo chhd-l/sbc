@@ -201,6 +201,13 @@ class SkuForm extends React.Component<any, any> {
         } else {
           b = 999999;
         }
+
+        if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+          console.log(c);
+          console.log(addSkUProduct[0].targetGoodsIds[0].bundleNum);
+          c = Number(String(c / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+        }
+
         return (
           <Row>
             <Col span={12}>
@@ -221,7 +228,7 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
-                  initialValue: addSkUProduct.length === 1? Number(String(c / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, '')) : c
+                  initialValue: c
                 })(
                   <InputNumber
                     style={{ width: '121px' }}

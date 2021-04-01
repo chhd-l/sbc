@@ -23,18 +23,7 @@ export default class SearchList extends React.Component<any, any> {
     const { onTabChange, tab } = this.props.relaxProps;
     const key = tab.get('key');
     let activeOrderStatus = OrderStatus.filter(x=>x.listShow === true)
-    const obj = [
-      <FormattedMessage id="Order.Created"/>,
-      <FormattedMessage id="Order.PendingReview"/>,
-      <FormattedMessage id="Order.ToBeDelivered"/>,
-      <FormattedMessage id="Order.PartiallyShipped"/>,
-      <FormattedMessage id="Order.Shipped"/>,
-      <FormattedMessage id="Order.PartiallyDelivered"/>,
-      <FormattedMessage id="Order.Delivered"/>,
-      <FormattedMessage id="Order.Completed"/>,
-      <FormattedMessage id="Order.Cancelled"/>,
-      <FormattedMessage id="Order.Rejected"/>,
-    ]
+
     return (
       <div>
         <Tabs
@@ -81,8 +70,8 @@ export default class SearchList extends React.Component<any, any> {
           >
             <List />
           </Tabs.TabPane> */}
-          { activeOrderStatus.map((item,index)=>(
-             <Tabs.TabPane tab={obj.map((i,j)=>(j===index?i:''))}
+          { activeOrderStatus.map(item=>(
+             <Tabs.TabPane tab={<FormattedMessage id={item.langKey} />}
              key={item.value}>
                <List />
              </Tabs.TabPane>

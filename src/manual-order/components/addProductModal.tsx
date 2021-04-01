@@ -79,11 +79,10 @@ export default class AddProductModal extends Component {
     });
   };
   inputNumberChange(e, key,max) {
-    if(e<=max){
-      this.state.goodsLists[key].buyCount = e;
-    }else{
-      message.info('please selected quantity');
-    }
+    this.state.goodsLists[key].buyCount = e;
+    this.setState({
+      goodsLists: this.state.goodsLists
+    });
   }
   async addCarts(row,index) {
     let total = (window as any).goodsCount[this.props.storeId];
@@ -102,7 +101,7 @@ export default class AddProductModal extends Component {
       goodsNum: row.buyCount
     });
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('add success');
+      message.success('Add successfully');
       row.overCount+=row.buyCount
         // this.state.goodsLists[index]=row
        this.props.searchCount()
@@ -173,7 +172,7 @@ export default class AddProductModal extends Component {
             <InputNumber
               min={0}
               max={max}
-              defaultValue={text}
+              value={text}
               onChange={(e) => {
                 this.inputNumberChange(e, index,max);
               }}

@@ -287,7 +287,7 @@ class GoodsForm extends React.Component<any, any> {
 
     let getFrequencyList = []
     if (frequencyList && frequencyList.autoShip) {
-      if (goods.get('promotions') == "autoship") {
+      if (goods.get('promotions') == "autoship" || !goods.get('promotions')) {
         getFrequencyList = [...frequencyList.autoShip.dayList, ...frequencyList.autoShip.weekList, ...frequencyList.autoShip.monthList]
       }else if (goods.get('promotions') == "club"){
         getFrequencyList = [...frequencyList.club.dayClubList, ...frequencyList.club.weekClubList, ...frequencyList.club.monthClubList]
@@ -427,7 +427,7 @@ class GoodsForm extends React.Component<any, any> {
                 // initialValue: 'Y'
                 initialValue: goods.get('promotions')
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type">
+                <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={Number(goods.get('subscriptionStatus')) === 0} >
                   <Option value='autoship'>Auto ship</Option>
                   <Option value='club'>Club</Option>
                 </Select>
@@ -863,6 +863,29 @@ class GoodsForm extends React.Component<any, any> {
     //     });
     //   }
     // }
+    console.log(key,888888);
+    console.log(e.target.value);
+    if (key === 'addedFlag') {
+      if (e.target.value == 0) {
+        this.setState({
+          saleableType: true
+        });
+        let goods = Map({
+          [key]: fromJS(0)
+        });
+        editGoodsItem(goods);
+        setFieldsValue({ addedFlag: 0 });
+      } else {
+        this.setState({
+          saleableType: false
+        });
+        let goods = Map({
+          [key]: fromJS(1)
+        });
+        editGoodsItem(goods);
+        setFieldsValue({ addedFlag: 1 });
+      }
+    }
 
     if (key === 'displayFlag') {
       if (e.target.value == 0) {

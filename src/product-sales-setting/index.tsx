@@ -17,6 +17,7 @@ class ProductSearchSetting extends Component<any, any> {
     optionsClub: [],
     defaultPurchaseType: '',
     defaultSubscriptionFrequencyId: '',
+    defaultSubscriptionClubFrequencyId: '',
     language: [],
     purchaseType: []
   };
@@ -90,7 +91,7 @@ class ProductSearchSetting extends Component<any, any> {
       querySysDictionary({ type: 'Frequency_month_club' }),
       querySysDictionary({ type: 'language' }),
       querySysDictionary({ type: 'purchase_type' })]);
-    let { defaultPurchaseType, defaultSubscriptionFrequencyId, languageId } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+    let { defaultPurchaseType, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, languageId } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let weeksClub = result[2].res?.context?.sysDictionaryVOS ?? [];
@@ -111,6 +112,7 @@ class ProductSearchSetting extends Component<any, any> {
       optionsClub,
       defaultPurchaseType,
       defaultSubscriptionFrequencyId,
+      defaultSubscriptionClubFrequencyId,
       language,
       purchaseType
     });
@@ -118,7 +120,8 @@ class ProductSearchSetting extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { disabled, defaultPurchaseType, visible, visibleClub, defaultSubscriptionFrequencyId, options, optionsClub, language, purchaseType } = this.state;
+    const { disabled, defaultPurchaseType, visible, visibleClub, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, options, optionsClub, language, purchaseType } = this.state;
+
     return (
       <div style={styles.container}>
         <BreadCrumb />
@@ -135,9 +138,9 @@ class ProductSearchSetting extends Component<any, any> {
                 ]
               })(
                 <Radio.Group disabled={disabled}>
-                  {purchaseType.map((item) => {
+                  {purchaseType.map((item,index) => {
                     return (
-                      <Radio.Button value={item.id} style={{ width: 150, textAlign: 'center' }}>
+                      <Radio.Button value={item.id} key={index} style={{ width: 150, textAlign: 'center' }}>
                         {item.valueEn}
                       </Radio.Button>
                     );
@@ -194,8 +197,8 @@ class ProductSearchSetting extends Component<any, any> {
               style={{ marginBottom: 0 }}
             >
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
-                {getFieldDecorator('defaultSubscriptionFrequencyId', {
-                  initialValue: defaultSubscriptionFrequencyId,
+                {getFieldDecorator('defaultSubscriptionClubFrequencyId', {
+                  initialValue: defaultSubscriptionClubFrequencyId,
                   rules: [
                     {
                       required: true,

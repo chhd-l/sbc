@@ -118,9 +118,9 @@ export default class OrderDelivery extends React.Component<any, any> {
                     <div style={styles.stateBox}>
                       {logistic ? (
                         <label style={styles.information} className="flex-start-align">
-                          <FormattedMessage id="Order.deliveryDate"/>：{deliverTime}
-                          &nbsp;&nbsp; <FormattedMessage id="Order.LogisticsCompany"/>：
-                          {logistic.get('logisticCompanyName')} &nbsp;&nbsp;<FormattedMessage id="Order.LogisticsSingleNumber"/>：
+                          【<FormattedMessage id="Product.logisticsInformation" />】<FormattedMessage id="Order.deliveryDate" />：{deliverTime}
+                          &nbsp;&nbsp; <FormattedMessage id="Order.logisticsCompany" />：
+                          {logistic.get('logisticCompanyName')} &nbsp;&nbsp;<FormattedMessage id="Order.logisticsSingleNumber" />：
                           {logistic.get('logisticNo')}&nbsp;&nbsp;
                           <Logistics companyInfo={logistic} deliveryTime={deliverTime} />
                           {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
@@ -137,7 +137,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                           )}
                         </label>
                       ) : (
-                        'none'
+                        ''
                       )}
                     </div>
                     {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
@@ -182,7 +182,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                     this._showConfirm();
                   }}
                 >
-                  <FormattedMessage id="Order.ConfirmReceipt"/>
+                  <FormattedMessage id='Order.confirmReceipt' />
                 </Button>
               </AuthWrapper>
             ) : null}
@@ -325,8 +325,8 @@ export default class OrderDelivery extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="Order.Prompt"/>,
-      content: <FormattedMessage id="Order.WhetherToInvalidate"/>,
+      title: <FormattedMessage id="Order.prompt" />,
+      content: <FormattedMessage id="Order.Whethertoinvalidate" />,
       onOk() {
         obsoleteDeliver(tdId);
       },
@@ -344,8 +344,8 @@ export default class OrderDelivery extends React.Component<any, any> {
     const tid = detail.get('id');
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: <FormattedMessage id="Order.ConfirmReceipt"/>,
-      content: <FormattedMessage id="Order.ConfirmReceiptAll"/>,
+      title: <FormattedMessage id="Order.confirmReceipt" />,
+      content: <FormattedMessage id="Order.Confirmreceiptofallitems" />,
       onOk() {
         confirm(tid);
       },
@@ -363,7 +363,8 @@ const styles = {
   title: {
     fontSize: 14,
     color: '#333333',
-    marginBottom: 5
+    marginBottom: 5,
+    padding: '10px 0'
   },
   expressBox: {
     paddingTop: 10,

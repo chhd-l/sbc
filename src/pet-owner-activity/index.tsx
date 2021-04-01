@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline, history } from 'qmkit';
+import { BreadCrumb, SelectGroup, Const, Headline, history, AuthWrapper } from 'qmkit';
 import { Row, Col, Tabs, Card, Breadcrumb, Button, message, Spin } from 'antd';
 import PetOwner from './components/petowner';
 import Pets from './components/pets';
@@ -83,11 +83,13 @@ export default class PetOwnerActivity extends Component<any, any> {
               >
                 <p style={{ color: '#e2001a' }}>Quick Send</p>
               </Button> */}
-              {petOwner.customerName ? (
-                <Button type="primary" onClick={() => history.push({ pathname: '/order-add', query: { customerId: id, customerName: petOwner.customerName, customerAccount: petOwner.customerAccount } })}>
-                  Create order
-                </Button>
-              ) : null}
+              <AuthWrapper functionName="f_petowner_create_order_button">
+                {petOwner.customerName ? (
+                  <Button type="primary" onClick={() => history.push({ pathname: '/order-add', query: { customerId: id, customerName: petOwner.customerName, customerAccount: petOwner.customerAccount } })}>
+                    Create order
+                  </Button>
+                ) : null}
+              </AuthWrapper>
             </Col>
           </Row>
         </div>
@@ -123,7 +125,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               </Col>
               {petOwner.email ? (
                 <Col span={8}>
-                  <Orders customerAccount={petOwner.customerAccount} />
+                  <Orders petOwnerId={id} />
                   <div style={{ marginTop: '20px' }}></div>
                   <Bookings customerAccount={petOwner.customerAccount} />
                 </Col>

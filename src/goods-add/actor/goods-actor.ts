@@ -43,7 +43,7 @@ export default class GoodsActor extends Actor {
         saleType: 0,
         saleableFlag: 1,
         displayFlag: 1,
-        subscriptionPrice: '',
+        //subscriptionPrice: '',
         subscriptionStatus: 1,
         goodsId: null,
         defaultPurchaseType: null,

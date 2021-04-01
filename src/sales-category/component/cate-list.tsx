@@ -5,7 +5,7 @@ import { Form, Modal, Popconfirm, Switch, Table, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, checkAuth } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 const confirm = Modal.confirm;
@@ -217,20 +217,24 @@ class CateList extends React.Component<any, any> {
 
   _confirm = (storeCateId: string) => {
     const { doDelete, childFlag, goodsFlag } = this.props.relaxProps;
-
+    let okText = this.props.intl.formatMessage({id:'Product.OK'});
+    let title = this.props.intl.formatMessage({id:'Product.Prompt'});
+    
     if (goodsFlag) {
+      let content = this.props.intl.formatMessage({id:'Product.TheCurrentCategory'});
       //该分类下有商品
       Modal.info({
-        title: <FormattedMessage id="Product.Prompt" />,
-        content: <FormattedMessage id="Product.TheCurrentCategory" />,
-        okText: <FormattedMessage id="Product.OK" />
+        title:title ,
+        content: content,
+        okText: okText
       });
     } else if (childFlag) {
+      let content = this.props.intl.formatMessage({id:'Product.PleaseDelete'});
       //有子分类
       Modal.info({
-        title: <FormattedMessage id="Product.Prompt" />,
-        content: <FormattedMessage id="Product.PleaseDelete" />,
-        okText: <FormattedMessage id="Product.OK" />
+        title: title ,
+        content:content ,
+        okText: okText
       });
       // confirm({
       //   title: 'Prompt',
@@ -240,10 +244,11 @@ class CateList extends React.Component<any, any> {
       //   }
       // });
     } else {
+      let content = this.props.intl.formatMessage({id:'Product.deleteThisCategory'});
       //没有子分类
       confirm({
-        title: <FormattedMessage id="Product.Prompt" />,
-        content: <FormattedMessage id="Product.deleteThisCategory" />,
+        title: title,
+        content: content,
         onOk() {
           doDelete(storeCateId);
         }
@@ -354,4 +359,4 @@ _BodyRow = DropTarget('row', _rowTarget, (connect, monitor) => ({
   }))(_BodyRow)
 );
 
-export default DragDropContext(HTML5Backend)(CateList);
+export default DragDropContext(HTML5Backend)(injectIntl(CateList));

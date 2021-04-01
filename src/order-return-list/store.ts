@@ -30,13 +30,13 @@ export default class AppStore extends Store {
     //获取form数据
     let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
+    form['returnFlowState'] = +key === 0 ? '' : key
+    // if (key != '0') {
+    //   const values = key.split('-');
+    //   form['returnFlowState'] = values[1];
+    // }
 
-    if (key != '0') {
-      const values = key.split('-');
-      form['returnFlowState'] = values[1];
-    }
-
-    webapi.fetchOrder({ ...form, pageNum, pageSize }).then(({ res }) => {
+    webapi.fetchOrderReturnList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code === Const.SUCCESS_CODE) {
         this.transaction(() => {
           this.dispatch('order-return-list:loading:end');
@@ -126,19 +126,29 @@ export default class AppStore extends Store {
           this.init();
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
-  onRealRefund = (rid: string) => {
+  onRealRefund = (rid: string, applyPrice) => {
+    let refundPrice = this.state().get('refundPrice') ||
+      (this.state().get('refundPrice') && this.state().get('refundPrice').refundPrice === 0) ?
+      this.state().get('refundPrice').refundPrice : applyPrice
     return webapi
-      .realRefund(rid)
+      .realRefund(rid, refundPrice)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
           message.success('Operate successfully');
+          this.dispatch('change-refund-price', {
+            refundPrice: null
+          });
           this.init();
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        this.dispatch('change-refund-price', {
+          refundPrice: null
+        });
+      });
   };
 
   onBatchAudit = (ids: string[]) => {
@@ -150,7 +160,7 @@ export default class AppStore extends Store {
           this.init();
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onReject = (rid: string, reason: string) => {
@@ -162,7 +172,7 @@ export default class AppStore extends Store {
           this.init();
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onDeliver = (rid: string, values) => {
@@ -174,7 +184,7 @@ export default class AppStore extends Store {
           this.init();
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onReceive = (rid: string) => {
@@ -186,7 +196,7 @@ export default class AppStore extends Store {
           this.init();
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onBatchReceive = (ids: string[]) => {
@@ -198,7 +208,7 @@ export default class AppStore extends Store {
           this.init();
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onRejectReceive = (rid: string, reason: string) => {
@@ -227,7 +237,7 @@ export default class AppStore extends Store {
     return webapi.refundOnline(rid, fromData).then((result) => {
       const { res } = result;
       const code = res.code;
-      const errorInfo = res.message;
+      // const errorInfo = res.message;
 
       // 提示异常信息
       if (code != Const.SUCCESS_CODE) {
@@ -327,7 +337,7 @@ export default class AppStore extends Store {
           message.error('请登录');
         }
 
-        resolve();
+        resolve;
       }, 500);
     });
   };
@@ -340,4 +350,11 @@ export default class AppStore extends Store {
   checkRefundStatus = async (rid: string) => {
     return await webapi.checkRefundStatus(rid);
   };
+
+
+  changeRefundPrice = (refundPrice: number) => {
+    this.dispatch('change-refund-price', {
+      refundPrice
+    });
+  }
 }

@@ -1,6 +1,6 @@
 
 export const OrderStatus = [
-    { name: 'Created', value: 'INIT', listShow: true  },
+    { name: 'Created1', value: 'INIT', listShow: true  },
     { name: 'Pending review', value: 'PENDING_REVIEW', listShow: true },
     { name: 'To be delivered', value: 'TO_BE_DELIVERED', listShow: true },
     { name: 'Partially Shipped', value: 'PARTIALLY_SHIPPED', listShow: true  },

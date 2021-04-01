@@ -151,7 +151,7 @@ export default class ListView extends React.Component<any, any> {
                         <FormattedMessage id="Order.paymentStatus" />
                       </th>
                       <th className="operation-th" style={{ width: '10%' }}>
-                        <FormattedMessage id="Order.createBy" />
+                        <FormattedMessage id="Order.orderStatus" />
                       </th>
                     </tr>
                   </thead>

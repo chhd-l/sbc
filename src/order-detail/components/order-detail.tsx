@@ -6,7 +6,7 @@ import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 import './style.less';
 import TodoItems from '@/home/component/todo-items';
@@ -20,6 +20,9 @@ const orderTypeList = [
  * 拒绝表单，只为校验体验
  */
 class RejectForm extends React.Component<any, any> {
+  props: {
+    intl: any;
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -30,15 +33,15 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.rejectionReasonTip" />
               },
               {
                 max: 100,
-                message: 'Please input less than 100 characters'
+                message: <FormattedMessage id="Order.100Characters"/>
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={this.props.intl.formatMessage({ id: 'Order.enterTheReason' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -51,14 +54,14 @@ class RejectForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error('Enter up to 100 characters'));
+      callback(new Error(this.props.intl.formatMessage({ id: 'Order.Enter100Characters' })));
       return;
     }
     callback();
   };
 }
 
-const WrappedRejectForm = Form.create()(RejectForm);
+const WrappedRejectForm = Form.create()(injectIntl(RejectForm));
 
 /**
  * 订单详情
@@ -206,38 +209,38 @@ export default class OrderDetailTab extends React.Component<any, any> {
     let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
     const columns = [
       {
-        title: 'SKU Code',
+        title: <FormattedMessage id="Order.SKUCode"/>,
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text
       },
       {
-        title: 'Product Name',
+        title: <FormattedMessage id="Order.ProductName"/>,
         dataIndex: 'skuName',
         key: 'skuName',
         width: '50%'
       },
       {
-        title: 'Weight',
+        title: <FormattedMessage id="Order.Weight"/>,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
       {
-        title: 'Pet category',
+        title: <FormattedMessage id="Order.PetCategory"/>,
         dataIndex: 'petCategory',
         key: 'petCategory',
         width: '10%',
         render: (text, record) => <>{record.petsInfo && record.petsInfo.petsType ? <p>{record.petsInfo.petsType}</p> : null}</>
       },
       {
-        title: 'Pet name',
+        title: <FormattedMessage id="Order.PetName"/>,
         dataIndex: 'petName',
         key: 'petName',
         width: '10%',
         render: (text, record) => <>{record.petsInfo && record.petsInfo.petsName ? <p>{record.petsInfo.petsName}</p> : null}</>
       },
       {
-        title: 'Pet details',
+        title: <FormattedMessage id="Order.PetDetails"/>,
         dataIndex: 'petDetails',
         key: 'petDetails',
         width: '10%',
@@ -245,19 +248,19 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <>
             {record.petsInfo ? (
               <Button type="link" onClick={() => this._openPetDetails(record.petsInfo)}>
-                view
+                <FormattedMessage id="Order.view"/>
               </Button>
             ) : null}
           </>
         )
       },
       {
-        title: 'Quantity',
+        title: <FormattedMessage id="Order.Quantity"/>,
         dataIndex: 'num',
         key: 'num'
       },
       {
-        title: 'Price',
+        title: <FormattedMessage id="Order.Price"/>,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
         render: (originalPrice, record) =>
@@ -280,7 +283,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )
       },
       {
-        title: 'Subtotal',
+        title: <FormattedMessage id="Order.Subtotal"/>,
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -292,19 +295,19 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const columnsNoPet = [
       {
-        title: 'SKU Code',
+        title: <FormattedMessage id="Order.SKUCode"/>,
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text
       },
       {
-        title: 'Product Name',
+        title: <FormattedMessage id="Order.ProductName"/>,
         dataIndex: 'skuName',
         key: 'skuName',
         width: '20%'
       },
       {
-        title: 'Weight',
+        title: <FormattedMessage id="Order.Weight"/>,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
@@ -320,12 +323,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
       //   )
       // },
       {
-        title: 'Quantity',
+        title: <FormattedMessage id="Order.Quantity"/>,
         dataIndex: 'num',
         key: 'num'
       },
       {
-        title: 'Price',
+        title: <FormattedMessage id="Order.Price"/>,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
         render: (originalPrice, record) =>
@@ -348,7 +351,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )
       },
       {
-        title: 'Subtotal',
+        title: <FormattedMessage id="Order.Subtotal"/>,
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -377,7 +380,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         <Row gutter={30}>
           <Col span={12}>
             <div className="headBox">
-              <h4>Order</h4>
+              <h4><FormattedMessage id="Order.Order"/></h4>
               <Row>
                 <Col span={12}>
                   <Tooltip
@@ -388,27 +391,27 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{detail.get('id')}</div>}
                   >
                     <p className="overFlowtext">
-                      {<FormattedMessage id="orderNumber" />}: {detail.get('id')}
+                      {<FormattedMessage id="Order.orderNumber" />}: {detail.get('id')}
                     </p>
                   </Tooltip>
-                  <p>External order id: {detail.getIn(['tradeOms', 'orderNo'])}</p>
-                  <p>Order status: {getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}</p>
-                  <p>Order type: {orderDetailType ? orderDetailType.name : ''}</p>
+                  <p><FormattedMessage id="Order.ExternalOrderId"/>: {detail.getIn(['tradeOms', 'orderNo'])}</p>
+                  <p><FormattedMessage id="Order.OrderStatus"/>: {getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}</p>
+                  <p><FormattedMessage id="Order.OrderType"/>: {orderDetailType ? orderDetailType.name : ''}</p>
                 </Col>
                 <Col span={12}>
-                  <p>Order time: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
-                  <p>Order source: {detail.get('orderSource')}</p>
-                  <p>Create by: {detail.get('orderCreateBy')}</p>
+                  <p><FormattedMessage id="Order.OrderTime"/>: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
+                  <p><FormattedMessage id="Order.OrderSource"/>: {detail.get('orderSource')}</p>
+                  <p><FormattedMessage id="Order.CreateBy"/>: {detail.get('orderCreateBy')}</p>
                 </Col>
               </Row>
             </div>
           </Col>
           <Col span={12}>
             <div className="headBox">
-              <h4>Pet Owner</h4>
-              <p>Pet owner name: {detail.getIn(['buyer', 'name'])}</p>
-              <p>Pet owner type: {detail.getIn(['buyer', 'levelName'])}</p>
-              <p>Pet owner account: {detail.getIn(['buyer', 'account'])}</p>
+              <h4><FormattedMessage id="Order.PetOwner"/></h4>
+              <p><FormattedMessage id="Order.PetOwnerName"/>: {detail.getIn(['buyer', 'name'])}</p>
+              <p><FormattedMessage id="Order.PetOwnerType"/>: {detail.getIn(['buyer', 'levelName'])}</p>
+              <p><FormattedMessage id="Order.PetOwnerAccount"/>: {detail.getIn(['buyer', 'account'])}</p>
             </div>
           </Col>
         </Row>
@@ -416,10 +419,10 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {detail.get('subscribeId') ? (
             <Col span={12}>
               <div className="headBox">
-                <h4>Subscription</h4>
-                <p>Subscription number: {detail.get('subscribeId')}</p>
-                <p>Subscription type: {detail.get('subscriptionType')}</p>
-                <p>Subscription plan type: {detail.get('subscriptionPlanType')}</p>
+                <h4><FormattedMessage id="Order.Subscription"/></h4>
+                <p><FormattedMessage id="Order.SubscriptionNumber"/>: {detail.get('subscribeId')}</p>
+                <p><FormattedMessage id="Order.SubscriptionType"/>: {detail.get('subscriptionType')}</p>
+                <p><FormattedMessage id="Order.SubscriptionPlanType"/>: {detail.get('subscriptionPlanType')}</p>
               </div>
             </Col>
           ) : null}
@@ -427,11 +430,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
             <Col span={12}>
               <div className="headBox">
-                <h4>Partner</h4>
-                <p>Auditor name: {detail.get('clinicsName')}</p>
-                <p>Auditor id: {detail.get('clinicsId')}</p>
-                <p>Recommender id: {firstTradeItems.recommendationId}</p>
-                <p>Recommender name: {firstTradeItems.recommendationName}</p>
+                <h4><FormattedMessage id="Order.Partner"/></h4>
+                <p><FormattedMessage id="Order.AuditorName"/>: {detail.get('clinicsName')}</p>
+                <p><FormattedMessage id="Order.AuditorId"/>: {detail.get('clinicsId')}</p>
+                <p><FormattedMessage id="Order.RecommenderId"/>: {firstTradeItems.recommendationId}</p>
+                <p><FormattedMessage id="Order.RecommenderName"/>: {firstTradeItems.recommendationName}</p>
               </div>
             </Col>
           ) : null}
@@ -484,7 +487,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 ) : null}
               </Col>
               <Col span={12}>
-                <h3>special Needs</h3>
+                <h3><FormattedMessage id="Order.specialNeeds"/></h3>
                 {currentPetInfo.customerPetsPropRelations && currentPetInfo.customerPetsPropRelations.map((item) => <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>)}
               </Col>
             </Row>
@@ -495,7 +498,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
             <div style={styles.priceBox}>
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="productAmount" />}:</span>
+                <span style={styles.name}>{<FormattedMessage id="Order.productAmount" />}:</span>
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.goodsPrice || 0).toFixed(2)}
@@ -537,7 +540,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               {tradePrice.subscriptionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
-                    Autoship Discount:
+                    <FormattedMessage id="Order.AutoshipDiscount"/>:
                   </span>
                   <strong>
                     -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -547,7 +550,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="shippingFees" />}: </span>
+                <span style={styles.name}>{<FormattedMessage id="Order.shippingFees" />}: </span>
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.deliveryPrice || 0).toFixed(2)}
@@ -555,7 +558,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </label>
               {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{<FormattedMessage id="tax" />}: </span>
+                  <span style={styles.name}>{<FormattedMessage id="Order.tax" />}: </span>
                   <strong>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     {(tradePrice.taxFeePrice || 0).toFixed(2)}
@@ -564,7 +567,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="total" />}: </span>
+                <span style={styles.name}>{<FormattedMessage id="Order.total" />}: </span>
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.totalPrice || 0).toFixed(2)}
@@ -577,7 +580,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         <Row gutter={30}>
           <Col span={12}>
             <div className="headBox">
-              <h4>Delivery Address</h4>
+              <h4><FormattedMessage id="Order.DeliveryAddress"/></h4>
               <Row>
                 <Col span={12}>
                    <Tooltip
@@ -588,7 +591,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.firstName}</div>}
                   >
                     <p className="overFlowtext">
-                    First name: {consignee.firstName}
+                    <FormattedMessage id="Order.FirstName"/>: {consignee.firstName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -599,7 +602,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.lastName}</div>}
                   >
                     <p className="overFlowtext">
-                    First name: {consignee.lastName}
+                    <FormattedMessage id="Order.FirstName"/>: {consignee.lastName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -610,7 +613,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.detailAddress1}</div>}
                   >
                     <p className="overFlowtext">
-                    Address 1: {consignee.detailAddress1}
+                    <FormattedMessage id="Order.Address"/> 1: {consignee.detailAddress1}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -621,23 +624,23 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.detailAddress2}</div>}
                   >
                     <p className="overFlowtext">
-                    Address 2: {consignee.detailAddress2}
+                    <FormattedMessage id="Order.Address"/> 2: {consignee.detailAddress2}
                     </p>
                   </Tooltip>
-                  <p>Country: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}</p>
+                  <p><FormattedMessage id="Order.Country"/>: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}</p>
                 </Col>
                 <Col span={12}>
-                  <p>City: {consignee.city}</p>
-                  <p>Postal code: {consignee.postCode}</p>
-                  <p>Phone number: {consignee.phone}</p>
-                  <p>State: {consignee.province}</p>
+                  <p><FormattedMessage id="Order.City"/>: {consignee.city}</p>
+                  <p><FormattedMessage id="Order.PostalCode"/>: {consignee.postCode}</p>
+                  <p><FormattedMessage id="Order.PhoneNumber"/>: {consignee.phone}</p>
+                  <p><FormattedMessage id="Order.State"/>: {consignee.province}</p>
                 </Col>
               </Row>
             </div>
           </Col>
           <Col span={12}>
             <div className="headBox">
-              <h4>Billing Address</h4>
+              <h4><FormattedMessage id="Order.BillingAddress"/></h4>
               <Row>
                 <Col span={12}>
                 <Tooltip
@@ -648,7 +651,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.firstName}</div>}
                   >
                     <p className="overFlowtext">
-                    First name: {invoice.firstName}
+                    <FormattedMessage id="Order.FirstName"/>: {invoice.firstName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -659,7 +662,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.lastName}</div>}
                   >
                     <p className="overFlowtext">
-                    First name: {invoice.lastName}
+                    <FormattedMessage id="Order.FirstName"/>: {invoice.lastName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -670,7 +673,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.address1}</div>}
                   >
                     <p className="overFlowtext">
-                    Address 1: {invoice.address1}
+                    <FormattedMessage id="Order.Address"/> 1: {invoice.address1}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -681,16 +684,16 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.address2}</div>}
                   >
                     <p className="overFlowtext">
-                    Address 2: {invoice.address2}
+                    <FormattedMessage id="Order.Address"/> 2: {invoice.address2}
                     </p>
                   </Tooltip>
-                  <p>Country: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
+                  <p><FormattedMessage id="Order.Country"/>: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
                 </Col>
                 <Col span={12}>
-                  <p>City: {invoice.city}</p>
-                  <p>Postal code: {invoice.postCode}</p>
-                  <p>Phone number: {invoice.phone}</p>
-                  <p>State: {invoice.province}</p>
+                  <p><FormattedMessage id="Order.City"/>: {invoice.city}</p>
+                  <p><FormattedMessage id="Order.PostalCode"/>: {invoice.postCode}</p>
+                  <p><FormattedMessage id="Order.PhoneNumber"/>: {invoice.phone}</p>
+                  <p><FormattedMessage id="Order.State"/>: {invoice.province}</p>
                 </Col>
               </Row>
             </div>
@@ -701,20 +704,20 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Row gutter={30}>
             <Col span={12}>
               <div className="headBox">
-                <h4>Pet</h4>
+                <h4><FormattedMessage id="Order.Pet"/></h4>
                 <Row>
                   <Col span={12}>
-                    <p>Pet name: {firstTradeItems.petsName} </p>
-                    <p>Gender: </p>
-                    <p>Birthday: </p>
-                    <p>Breed </p>
-                    <p>Sensitivities </p>
+                    <p><FormattedMessage id="Order.PetName"/>: {firstTradeItems.petsName} </p>
+                    <p><FormattedMessage id="Order.Gender"/>: </p>
+                    <p><FormattedMessage id="Order.Birthday"/>: </p>
+                    <p><FormattedMessage id="Order.Breed"/> </p>
+                    <p><FormattedMessage id="Order.Sensitivities"/> </p>
                   </Col>
-                  <Col span={12}>
-                    <p>Lifestyle: </p>
-                    <p>Activity: </p>
-                    <p>Weight: </p>
-                    <p>Sterilized: </p>
+                  <Col span={12}> 
+                    <p><FormattedMessage id="Order.Lifestyle"/>: </p>
+                    <p><FormattedMessage id="Order.Activity"/>: </p>
+                    <p><FormattedMessage id="Order.Weight"/>: </p>
+                    <p><FormattedMessage id="Order.Sterilized"/>: </p>
                   </Col>
                 </Row>
               </div>
@@ -722,7 +725,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           </Row>
         ) : null}
 
-        <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
+        <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm
             ref={(form) => {
               this._rejectForm = form;
@@ -736,7 +739,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   //附件
   _renderEncloses(encloses) {
     if (encloses.size == 0 || encloses[0] === '') {
-      return <span>{<FormattedMessage id="none" />}</span>;
+      return <span>{<FormattedMessage id="Order.none" />}</span>;
     }
 
     return encloses.map((v, k) => {
@@ -796,7 +799,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   null}
               {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
                 <AuthWrapper functionName="fOrderDetail002">
-                  <Tooltip placement="top" title="Ship">
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.Ship"/>}>
                     <a
                       href="javascript:void(0);"
                       style={styles.pr20}
@@ -818,7 +821,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       return (
         <div>
           <AuthWrapper functionName="fOrderDetail002">
-            <Tooltip placement="top" title="Ship">
+            <Tooltip placement="top" title={<FormattedMessage id="Order.Ship"/>}>
               <a
                 href="javascript:void(0);"
                 style={styles.pr20}
@@ -837,7 +840,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       return (
         <div>
           <AuthWrapper functionName="fOrderList003">
-            <Tooltip placement="top" title="Confirm receipt">
+            <Tooltip placement="top" title={<FormattedMessage id="Order.ConfirmReceipt"/>}>
               <a
                 onClick={() => {
                   this._showConfirm(tid);
@@ -845,7 +848,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 href="javascript:void(0)"
                 style={styles.pr20}
               >
-                Confirm receipt
+                <FormattedMessage id="Order.Confirmreceipt"/>
               </a>
             </Tooltip>
           </AuthWrapper>
@@ -889,8 +892,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: 'Re-review',
-      content: 'Confirm to return the selected order for re approval ?',
+      title: <FormattedMessage id="Order.ReReview"/>,
+      content: <FormattedMessage id="Order.ConfirmTo"/>,
       onOk() {
         retrial(tdId);
       },
@@ -908,8 +911,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: 'Confirm receipt',
-      content: 'Confirm receipt of all items?',
+      title: <FormattedMessage id="Order.ConfirmReceipt"/>,
+      content: <FormattedMessage id="Order.ConfirmReceiptOf"/>,
       onOk() {
         confirm(tdId);
       },

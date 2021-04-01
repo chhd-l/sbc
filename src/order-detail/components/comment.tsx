@@ -53,17 +53,17 @@ class comment extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          message.success('Delete successfully');
+          message.success(<FormattedMessage id="Order.DeleteSuccessfully"/>);
           this.searchComment(this.state.searchValue);
         } else {
-          message.error(res.message || 'Delete Failed');
+          message.error(res.message || this.props.intl.formatMessage({ id: 'Order.DeleteFailed' }));
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Delete Failed');
+        message.error(err || this.props.intl.formatMessage({ id: 'Order.DeleteFailed' }));
         this.setState({
           loading: false
         });
@@ -95,14 +95,14 @@ class comment extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
+          message.error(res.message || this.props.intl.formatMessage({ id: 'Order.GetDataFailed' }));
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
+        message.error(err || this.props.intl.formatMessage({ id: 'Order.GetDataFailed' }));
         this.setState({
           loading: false
         });
@@ -131,21 +131,21 @@ class comment extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success('Operate successfully');
+                message.success(<FormattedMessage id="Order.OperateSuccessfully"/>);
                 this.setState({
                   commentVisible: false,
                   confirmLoading: false
                 });
                 this.searchComment(searchValue);
               } else {
-                message.error(res.message || 'Add Failed');
+                message.error(res.message || this.props.intl.formatMessage({ id: 'Order.AddFailed' }));
                 this.setState({
                   confirmLoading: false
                 });
               }
             })
             .catch((err) => {
-              message.error(err || 'Add Failed');
+              message.error(err || this.props.intl.formatMessage({ id: 'Order.AddFailed' }));
               this.setState({
                 confirmLoading: false
               });
@@ -156,21 +156,21 @@ class comment extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success('Operate successfully');
+                message.success(<FormattedMessage id="Order.OperateSuccessfully"/>);
                 this.setState({
                   commentVisible: false,
                   confirmLoading: false
                 });
                 this.searchComment(searchValue);
               } else {
-                message.error(res.message || 'Update Failed');
+                message.error(res.message || this.props.intl.formatMessage({ id: 'Order.UpdateFailed' }));
                 this.setState({
                   confirmLoading: false
                 });
               }
             })
             .catch((err) => {
-              message.error(err || 'Update Failed');
+              message.error(err || this.props.intl.formatMessage({ id: 'Order.UpdateFailed' }));
               this.setState({
                 confirmLoading: false
               });
@@ -194,7 +194,7 @@ class comment extends Component<any, any> {
     return (
       <div>
         <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
-          <Search placeholder="Please input comment" id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
+          <Search placeholder={this.props.intl.formatMessage({ id: 'Order.PleaseInputComment' })} id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
           <span style={{ marginLeft: '10px' }}>
             <Button
               type="primary"
@@ -231,14 +231,14 @@ class comment extends Component<any, any> {
                 actions={
                   item.operableFlag
                     ? [
-                        <Tooltip placement="top" title="Edit">
+                        <Tooltip placement="top" title={<FormattedMessage id="Order.Edit"/>}>
                           <a onClick={() => this.editComment(item.id, item.content)}>
                             {' '}
                             <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
                           </a>
                         </Tooltip>,
-                        <Popconfirm placement="topLeft" title="Are you sure you want to delete this comment?" onConfirm={() => this.deleteComment(item.id)} okText="Confirm" cancelText="Cancel">
-                          <Tooltip placement="top" title="Delete">
+                        <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.deleteThisComment"/>} onConfirm={() => this.deleteComment(item.id)} okText={<FormattedMessage id="Order.Confirm"/>} cancelText={<FormattedMessage id="Order.Cancel"/>}>
+                          <Tooltip placement="top" title={<FormattedMessage id="Order.Delete"/>}>
                             <a>
                               <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
                             </a>
@@ -296,11 +296,11 @@ class comment extends Component<any, any> {
               <FormItem {...layout} label={<FormattedMessage id="Order.Comment" />}>
                 {getFieldDecorator('name', {
                   initialValue: comment,
-                  rules: [{ required: true, message: 'Please input comment' }]
+                  rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Order.PleaseInputComment' }) }]
                 })(
                   <Input.TextArea
                     maxLength={2000}
-                    placeholder="Please input comment"
+                    placeholder={this.props.intl.formatMessage({ id: 'Order.PleaseInputComment' })}
                     autoSize={{ minRows: 5, maxRows: 10 }}
                     onChange={(e) => {
                       const value = (e.target as any).value;

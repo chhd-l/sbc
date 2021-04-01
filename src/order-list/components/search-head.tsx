@@ -5,7 +5,7 @@ import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup
 // import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,7 +16,7 @@ const InputGroup = Input.Group;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
     relaxProps?: {
       onSearch: Function;
@@ -29,6 +29,7 @@ export default class SearchHead extends Component<any, any> {
       onExportModalHide: Function;
       exportModalData: IMap;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -332,7 +333,7 @@ export default class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} disabled defaultValue={'Subscription type'} />
+                        <Input style={styles.leftLabel} disabled defaultValue={this.props.intl.formatMessage({ id: 'Order.SubscriptionType' })} />
                         <Select
                           style={styles.wrapper}
                           allowClear
@@ -394,7 +395,7 @@ export default class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} title={'Subscription order time'} disabled defaultValue={'Subscription order time'} />
+                        <Input style={styles.leftLabel} title={'Subscription order time'} disabled defaultValue={this.props.intl.formatMessage({ id: 'Order.SubscriptionOrderTime' })} />
                         <Select
                           style={styles.wrapper}
                           allowClear
@@ -421,7 +422,7 @@ export default class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} title={'Subscription plan type'} disabled defaultValue={'Subscription plan type'} />
+                        <Input style={styles.leftLabel} title={'Subscription plan type'} disabled defaultValue={this.props.intl.formatMessage({ id: 'Order.SubscriptionPlanType' })} />
                         <Select
                           style={styles.wrapper}
                           allowClear
@@ -705,7 +706,7 @@ export default class SearchHead extends Component<any, any> {
       .toJS();
 
     if (checkedIds.length == 0) {
-      message.error('Please select the order that needs to be operated');
+      message.error(<FormattedMessage id="Order.needsToBeOperated"/>);
       return;
     }
 
@@ -733,8 +734,8 @@ export default class SearchHead extends Component<any, any> {
 
   _renderCodeSelect = () => {
     const codeTypeList = [
-      { value: 'promotionCode', name: 'Promotion code' },
-      { value: 'couponCode', name: 'Coupon code' }
+      { value: 'promotionCode', name: <FormattedMessage id="Order.PromotionCode"/> },
+      { value: 'couponCode', name: <FormattedMessage id="Order.CouponCode"/> }
     ];
     return (
       <Select
@@ -884,3 +885,4 @@ const styles = {
     width: 200
   }
 } as any;
+export default injectIntl(SearchHead);

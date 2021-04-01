@@ -124,7 +124,7 @@ export default class entryCriteria extends Component<any, any> {
                   <Col span={1}></Col>
                   <Col span={4}>
                     <Button type="primary" onClick={this.showAddConsent} disabled={!editable}>
-                      Add
+                      <FormattedMessage id="Subscription.Add"/>
                     </Button>
                   </Col>
                 </Row>

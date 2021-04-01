@@ -47,11 +47,11 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.rejectionReasonTip" />
               },
               {
                 max: 100,
-                message: 'Please input less than 100 characters'
+                message: <FormattedMessage id="Order.100Characters"/>
               }
             ]
           })(
@@ -68,7 +68,7 @@ class RejectForm extends React.Component<any, any> {
                 >
                   *
                 </span>
-                Once rejected, we will return the payment for this order to the consumer
+                <FormattedMessage id="Order.OnceRejected"/>
               </p>
             </div>
           )}

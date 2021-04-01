@@ -286,7 +286,7 @@ class GoodsForm extends React.Component<any, any> {
 
     let getFrequencyList = []
 
-    debugger
+
     if (frequencyList && frequencyList.autoShip) {
       
       if (goods.get('promotions') == "autoship") {

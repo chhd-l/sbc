@@ -220,7 +220,6 @@ class CateList extends React.Component<any, any> {
     let okText = this.props.intl.formatMessage({id:'Product.OK'});
     let title = this.props.intl.formatMessage({id:'Product.Prompt'});
     
-debugger
     if (goodsFlag) {
       let content = this.props.intl.formatMessage({id:'Product.TheCurrentCategory'});
       //该分类下有商品

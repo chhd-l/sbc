@@ -341,21 +341,17 @@ class SkuForm extends React.Component<any, any> {
       key: 'marketPrice',
       render: (rowInfo) => {
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
-        let subscriptionPrice =  rowInfo.subMarketPrice ? rowInfo.subMarketPrice : 0
-        if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+        let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
+        let targetGoodsIds = addSkUProduct[0].targetGoodsIds
+        if(addSkUProduct.length == 1 && targetGoodsIds.length == 1) {
           console.log(44444444)
-          marketPrice = addSkUProduct[0].targetGoodsIds[0].subMarketPrice?
-            addSkUProduct[0].targetGoodsIds[0].subMarketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : addSkUProduct[0].targetGoodsIds[0].marketPrice?
-              addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum: 0
-          subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subScriptionPrice?
-            addSkUProduct[0].targetGoodsIds[0].subScriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : addSkUProduct[0].targetGoodsIds[0].subscriptionPrice?
-              addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum :0
+          marketPrice = targetGoodsIds.subMarketPrice?
+            Number(targetGoodsIds.subMarketPrice) * Number(targetGoodsIds[0].bundleNum) : targetGoodsIds[0].marketPrice?
+              Number(targetGoodsIds[0].marketPrice) * (targetGoodsIds[0].bundleNum): 0
+          subscriptionPrice = targetGoodsIds[0].subScriptionPrice?
+            Number(targetGoodsIds[0].subScriptionPrice) * Number(targetGoodsIds[0].bundleNum) : targetGoodsIds[0].subscriptionPrice?
+              Number(targetGoodsIds[0].subscriptionPrice) * Number(targetGoodsIds[0].bundleNum) :0
         }
-        setTimeout(()=>{
-          console.log(addSkUProduct[0],11111111);
-          console.log(marketPrice,2222222);
-          console.log(rowInfo,33333);
-        })
 
        /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
         //console.log(marketPrice,2222222);

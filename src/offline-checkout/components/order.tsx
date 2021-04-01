@@ -17,14 +17,14 @@ export default class Order extends React.Component<any, any> {
   };
 
   render() {
-    const { memberType, memberInfo, products, list, onAddProduct } = this.props;
+    const { memberType, memberInfo, products, list, onAddProduct, onRemoveProduct, onSetQuantity, onClear, onCheckout } = this.props;
     return (
       <>
         <Header />
         <Row gutter={24} className="c-content">
           <Col span={16} style={{height: '100%'}}>
             <div className="c-full-box c-order">
-              <Cart list={list} />
+              <Cart list={list} onRemoveProduct={onRemoveProduct} onSetQuantity={onSetQuantity} />
             </div>
             <div className="c-full-box c-foot">
               <MemberBar memberType={memberType} memberInfo={memberInfo} onChange={this.onSetMemberInfo} />
@@ -35,7 +35,7 @@ export default class Order extends React.Component<any, any> {
               <ProductOverview products={products} list={list} onAddProduct={onAddProduct} />
             </div>
             <div className="c-full-box c-foot">
-              <CheckoutAction />
+              <CheckoutAction list={list} onClear={onClear} onCheckout={onCheckout} />
             </div>
           </Col>
         </Row>

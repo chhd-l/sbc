@@ -735,6 +735,7 @@ export default {
   "Product.AddNewDescription": "Add new description",
   "Product.NoResultsSearches": "No results searches",
   /* -------- 已翻译 V1.0---------------*/
+  "Product.html":"html",
 
 
 

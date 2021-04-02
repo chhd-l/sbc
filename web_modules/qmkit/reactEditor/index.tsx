@@ -6,6 +6,7 @@ import i18next from 'i18next'
 import { message, Spin } from 'antd';
 import { cache } from 'qmkit'
 import _ from 'lodash';
+import './index.less'
 interface StringArray {
     [index: number]: string;
 }

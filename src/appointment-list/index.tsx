@@ -354,7 +354,7 @@ export default class AppointmentList extends React.Component<any, any> {
         </div>
         <ExportModal data={this.state.exportModalData} onHide={this.onCloseExportModal} handleByParams={this.state.exportModalData.exportByParams} handleByIds={this.state.exportModalData.exportByIds} />
         <Modal title="Consumer information" visible={this.state.showCard} okText="Arrived" onCancel={this.onCloseCard} onOk={() => this.updateAppointmentStatus(this.state.scanedInfo, 1)}>
-          <p>Consumer name: {this.state.scanedInfo.consumerName}</p>
+          <p>Pet owner name: {this.state.scanedInfo.consumerName}</p>
           <p>Consumer phone: {this.state.scanedInfo.consumerPhone}</p>
           <p>Consumer email: {this.state.scanedInfo.consumerEmail}</p>
           <p>

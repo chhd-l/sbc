@@ -342,7 +342,7 @@ class ClinicForm extends React.Component<any, any> {
       if (!err) {
         this.switchTab('reward');
       } else {
-        message.error('Prescriber basic infomation is not verified. Please modify!');
+        message.error('Prescriber Basic Information is not verified. Please modify!');
       }
     });
   };
@@ -355,7 +355,7 @@ class ClinicForm extends React.Component<any, any> {
           this.onCreate();
         }
       } else {
-        message.error('Prescriber basic infomation is not verified. Please modify!');
+        message.error('Prescriber Basic Information is not verified. Please modify!');
       }
     });
   };
@@ -539,7 +539,7 @@ class ClinicForm extends React.Component<any, any> {
 
     return (
       <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>
-        <TabPane tab="Basic Infomation" key="basic">
+        <TabPane tab="Basic Information" key="basic">
           <Row>
             <Col span={12}>
               <Form {...layout} onSubmit={this.handleSubmit}>

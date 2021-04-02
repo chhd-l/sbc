@@ -679,7 +679,7 @@ export default {
   "Product.No": "No",
   "Product.PleaseSelecShopPage": "Please selec shop page",
   "Product.publishDirectly": "Publish directly",
-  "Product.chooseAPublishingMethod": "StaChoose a publishing methodtus",
+  "Product.chooseAPublishingMethod": "Choose a publishing method",
   "Product.publishItemInfo1": "Publish directly delicacy managment",
   "Product.productTemplateImport": "Product template import",
   "Product.publishItemInfo2": "Excel file quick import",

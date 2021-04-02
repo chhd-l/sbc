@@ -93,7 +93,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         dataSource: goodsList,
         loading: false,
         goodsCount: goodsCount,
-        totalPrice
+        totalPrice:totalPrice.toFixed(2)
       }
     );
   }

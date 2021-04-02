@@ -86,7 +86,7 @@ class ReactEditor extends Component<any, any> {
         const elemMenu = ".editorElem-menu-" + id;
         const elemBody = ".editorElem-body-" + id;
 
-        this.editor = new E(elemMenu, elemBody)
+        this.editor = new E(elemBody)
         // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
         this.editor.config.onchange = (html: any) => {
             let text = this.editor.txt.text();
@@ -100,6 +100,7 @@ class ReactEditor extends Component<any, any> {
         this.editor.config.focus = false
         this.editor.config.menus = toolbars
         this.editor.config.fontNames = fontNames
+        this. editor.config.showFullScreen = true
         this.editor.config.zIndex = 90
         this.editor.config.onchangeTimeout = 500
         this.uploadImage();
@@ -180,12 +181,7 @@ class ReactEditor extends Component<any, any> {
                     </div>
                     <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
                         <div
-                            style={{
-                                padding: "0 10px",
-                                height: this.props.height,
-                                border: "1px solid #ccc",
-                                borderTop: "none"
-                            }}
+                            
                             ref="editorElemBody" className={'editorElem-body-' + this.props.id}>
 
                         </div>

@@ -344,19 +344,19 @@ class SkuForm extends React.Component<any, any> {
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
 
         //console.log(targetGoodsIds,22222);
-        console.log(goods.toJS(),22222);
+        /*console.log(goods.toJS(),22222);
         console.log(rowInfo,33333);
-        console.log(goodsList.toJS(),44444);
+        console.log(goodsList.toJS(),44444);*/
         if (goods.get('goodsId') == null && goodsList.toJS().length == 1) {
           console.log(addSkUProduct,111);
 
           let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
-          console.log(targetGoodsIds,66666);
+          /*console.log(targetGoodsIds,66666);
           console.log(addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length,7777);
           console.log(!rowInfo.marketPrice);
-          console.log(!rowInfo.subscriptionPrice);
+          console.log(!rowInfo.subscriptionPrice);*/
           if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
-            console.log(55555)
+            //console.log(55555)
             marketPrice = targetGoodsIds.subMarketPrice?
               targetGoodsIds.subMarketPrice * targetGoodsIds.bundleNum : targetGoodsIds.marketPrice?
                 targetGoodsIds.marketPrice * targetGoodsIds.bundleNum: 0

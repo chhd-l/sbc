@@ -25,6 +25,8 @@ export default class GoodsActor extends Actor {
         goodsNo: '',
         internalGoodsNo: '',
         promotions: 'autoship',
+        defaultPurchaseType: '',
+        defaultFrequencyId: '',
         // 计量单位
         goodsUnit: '',
         // 上下架状态

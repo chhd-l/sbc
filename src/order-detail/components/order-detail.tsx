@@ -392,8 +392,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p><FormattedMessage id="Order.externalOrderId" />: {detail.getIn(['tradeOms', 'orderNo'])}</p>
-                  <p><FormattedMessage id="Order.OrderStatus" />: {getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}</p>
-                  <p><FormattedMessage id="Order.orderTyp" />: {orderDetailType ? orderDetailType.name : ''}</p>
+                  <p><FormattedMessage id="Order.OrderStatus" />: <FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} /></p>
+                  <p><FormattedMessage id="Order.orderType" />: {orderDetailType ? orderDetailType.name : ''}</p>
                 </Col>
                 <Col span={12}>
                   <p><FormattedMessage id="Order.OrderTime" />: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
@@ -418,7 +418,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <div className="headBox">
                 <h4><FormattedMessage id="Order.subscription" /></h4>
                 <p><FormattedMessage id="Order.Subscriptionumber" />: {detail.get('subscribeId')}</p>
-                <p><FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionType')}</p>
+                <p><FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery')}</p>
                 <p><FormattedMessage id="Order.subscriptionPlanType" />: {detail.get('subscriptionPlanType')}</p>
               </div>
             </Col>

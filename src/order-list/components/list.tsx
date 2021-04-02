@@ -54,7 +54,7 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
 
 @Relax
-export default class ListView extends React.Component<any, any> {
+ class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
@@ -257,7 +257,7 @@ export default class ListView extends React.Component<any, any> {
                           />
                         </span>
 
-                        <div style={{ width: 700, display: 'inline-block' }}>
+                        <div style={{ width: 600, display: 'inline-block' }}>
                           <span
                             style={{
                               marginLeft: 20,
@@ -367,7 +367,7 @@ export default class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           {/*待收货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED' && (
+                          {(v.getIn(['tradeState', 'flowState']) === 'DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'SHIPPED') && (
                             <AuthWrapper functionName="fOrderList003">
                               <Tooltip placement="top" title={<FormattedMessage id="Order.confirmReceipt" />}>
                                 <a
@@ -477,11 +477,13 @@ export default class ListView extends React.Component<any, any> {
    */
   _showRetrialConfirm = (tdId: string) => {
     const { onRetrial } = this.props.relaxProps;
+    let title = this.props.intl.formatMessage({id:'Order.review'})
+    let content = this.props.intl.formatMessage({id:'Order.confirmReview'})
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="Order.review" />,
-      content: <FormattedMessage id="Order.confirmReview" />,
+      title: title,
+      content: content,
       onOk() {
         onRetrial(tdId);
       },
@@ -507,10 +509,12 @@ export default class ListView extends React.Component<any, any> {
   _showConfirm = (tdId: string) => {
     const { onConfirm } = this.props.relaxProps;
 
+    let title = this.props.intl.formatMessage({id:'Order.confirmReceipt'})
+    let content = this.props.intl.formatMessage({id:'Order.confirmReceivedAllProducts'})
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="Order.confirmReceipt" />,
-      content: <FormattedMessage id="Order.confirmReceivedAllProducts" />,
+      title: title,
+      content: content,
       onOk() {
         onConfirm(tdId);
       },
@@ -608,3 +612,6 @@ const styles = {
     borderRadius: 5
   }
 } as any;
+
+
+export default injectIntl(ListView)

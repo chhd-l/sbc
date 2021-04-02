@@ -5,6 +5,7 @@ import { AuthWrapper, Const, noop, util, getOrderStatusValue } from 'qmkit';
 import { fromJS, Map } from 'immutable';
 
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 
 const columns = [
@@ -118,7 +119,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               justifyContent: 'space-between'
             }}
           >
-            <label style={styles.greenText}>{ getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}</label>
+            <label style={styles.greenText}><FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} /></label>
 
             {this._renderBtnAction(tid)}
           </div>

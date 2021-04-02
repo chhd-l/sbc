@@ -213,7 +213,7 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerSelect}
         style={styles.label}
       >
-        <Option title="Pet owner name " value="buyerName">
+        <Option title="Pet owner name" value="buyerName">
           <FormattedMessage id="consumerName" />
         </Option>
         <Option title="Pet owner account" value="buyerAccount">

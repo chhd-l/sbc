@@ -18,6 +18,7 @@ export default class Checkout extends React.Component<any, any> {
       memberType: 'Guest',
       memberInfo: {},
       scanedInfoVisible: false,
+      scanedInfo: {},
       products: [],
       list: []
     };
@@ -55,6 +56,59 @@ export default class Checkout extends React.Component<any, any> {
       step: 2,
       memberType: memberType,
       memberInfo: memberInfo
+    });
+  }
+
+  onScanMember = (code: string) => {
+    this.setState({ loading: true });
+    webapi.findAppointmentByAppointmentNo(code).then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        const { products } = this.state;
+        const { felinReco, settingVO } = data.res.context;
+        let recoProducts = [];
+        if (felinReco && felinReco.goodsIds) {
+          const goodsInfoNos = JSON.parse(felinReco.goodsIds);
+          goodsInfoNos.forEach(item => {
+            const targetProduct = products.find(p => p.goodsInfoNo === item.goodsInfoNo);
+            if (targetProduct) {
+              recoProducts.push({ ...targetProduct, quantity: item.quantity });
+            }
+          });
+        }
+        this.setState({
+          loading: false,
+          scanedInfoVisible: true,
+          scanedInfo: {
+            memberType: settingVO.customerId ? 'Member' : 'Guest',
+            customerId: settingVO.customerId,
+            customerName: settingVO.consumerName,
+            contactPhone: settingVO.consumerPhone,
+            email: settingVO.consumerEmail,
+            felinRecoId: felinReco ? felinReco.felinRecoId : '',
+            status: settingVO.status,
+            apptDate: settingVO.apptDate,
+            apptTime: settingVO.apptTime,
+            products: recoProducts
+          }
+        });
+      } else {
+        this.setState({ loading: false });
+      }
+    }).catch(() => {
+      this.setState({ loading: false });
+    });
+  }
+
+  onConfirmScanedInfo = () => {
+    const { memberType, products, ...rest } = this.state.scanedInfo;
+    this.setState({
+      step: 2,
+      scanedInfoVisible: false,
+      memberType: memberType,
+      memberInfo: {
+        ...rest
+      },
+      list: products
     });
   }
 
@@ -105,7 +159,7 @@ export default class Checkout extends React.Component<any, any> {
       <div className={`c-main-page ${this.state.loading ? 'loading' : ''}`}>
         <a className="close" onClick={(e) => {e.preventDefault();onClose(false);}}><Icon type="close" style={{fontSize: 20,color:'#666'}} /></a>
         {this.state.step === 1
-          ? <Board onSelect={this.onSelect} />
+          ? <Board onSelect={this.onSelect} onScanEnd={this.onScanMember} />
           : this.state.step === 2 
             ? <Order
                 memberType={this.state.memberType}
@@ -122,7 +176,7 @@ export default class Checkout extends React.Component<any, any> {
             : this.state.step === 3 
               ? <Payment onCancel={() => this.switchStep(2)} /> 
               : <Result />}
-        <ScanedInfo visible={this.state.scanedInfoVisible} />
+        <ScanedInfo visible={this.state.scanedInfoVisible} scanedInfo={this.state.scanedInfo} onChoose={this.onConfirmScanedInfo} />
       </div>
     );
   }

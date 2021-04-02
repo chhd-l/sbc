@@ -12,3 +12,10 @@ export function getProductList() {
     body: JSON.stringify({})
   });
 }
+
+export function findAppointmentByAppointmentNo(apptNo: string) {
+  return Fetch<TResult>('/appt/findByNo', {
+    method: 'POST',
+    body: JSON.stringify({ apptNo })
+  });
+}

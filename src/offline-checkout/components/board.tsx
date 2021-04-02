@@ -1,4 +1,5 @@
 import React from 'react';
+import { QRScaner } from 'qmkit';
 import { Card, Row, Col } from 'antd';
 
 const pcImg = require('./../img/pc.png');
@@ -10,7 +11,7 @@ export default class Board extends React.Component<any, any> {
   }
 
   render() {
-    const { onSelect } = this.props;
+    const { onSelect, onScanEnd } = this.props;
 
     return (
       <div>
@@ -23,10 +24,12 @@ export default class Board extends React.Component<any, any> {
             </Card>
           </Col>
           <Col span={6}>
-            <Card bordered={false} className="text-align-center c-box">
-              <div><img src={qrImg} width="120" height="120" alt=""/></div>
-              <span className="action-tag">Recommendation</span>
-            </Card>
+            <QRScaner id="rscan" onScanEnd={onScanEnd}>
+              <Card bordered={false} className="text-align-center c-box">
+                <div><img src={qrImg} width="120" height="120" alt=""/></div>
+                <span className="action-tag">Recommendation</span>
+              </Card>
+            </QRScaner>
           </Col>
         </Row>
       </div>

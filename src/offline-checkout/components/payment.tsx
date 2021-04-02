@@ -21,11 +21,11 @@ export default class Payment extends React.Component<any, any> {
   };
 
   render() {
-    const { onCancel } = this.props;
+    const { onCancel, onPay } = this.props;
 
     return (
       <div>
-        <div style={{fontSize: 28, color: '#e2001a', margin: '50px 0', textAlign: 'center'}}>L'Atelier Felin</div>
+        <div style={{fontSize: 28, color: '#e2001a', margin: '50px 0', textAlign: 'center'}}>Payment type</div>
         <Row gutter={32}>
           <Col span={6} offset={6} onClick={() => this.onSelectPayment()}>
             <Card bordered={false} className="text-align-center c-box">
@@ -47,7 +47,7 @@ export default class Payment extends React.Component<any, any> {
         </Row>
         <Modal width={300} visible={this.state.showConfirm} centered={true} footer={null} onCancel={this.onCancelPayment}>
           <div style={{margin: '30px 0'}}>
-            <Button type="primary" size="large" block>Confirm</Button>
+            <Button type="primary" size="large" block onClick={onPay}>Confirm</Button>
           </div>
           <div style={{margin: '30px 0'}}>
             <Button type="default" size="large" block onClick={this.onCancelPayment}>Cancel</Button>

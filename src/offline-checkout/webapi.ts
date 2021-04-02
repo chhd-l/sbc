@@ -19,3 +19,10 @@ export function findAppointmentByAppointmentNo(apptNo: string) {
     body: JSON.stringify({ apptNo })
   });
 }
+
+export function checkout(params = {}) {
+  return Fetch<TResult>('http://172.16.200.39:8089/123456858/all/pos/checkout', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

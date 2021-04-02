@@ -36,6 +36,7 @@ export default class Checkout extends React.Component<any, any> {
           loading: false,
           products: data.res.context.goodsInfoList.map(goods => ({
             goodsId: goods.goodsId,
+            goodsInfoId: goods.goodsInfoId,
             goodsInfoNo: goods.goodsInfoNo,
             goodsInfoName: goods.goodsInfoName,
             goodsInfoBarcode: goods.goodsInfoBarcode,
@@ -157,6 +158,19 @@ export default class Checkout extends React.Component<any, any> {
     this.setState({ step });
   }
 
+  onConfirmCheckout = () => {
+    const { memberInfo, list } = this.state;
+    const params = {
+      customerId: memberInfo.customerId,
+      orderPrice: list.reduce((a, b) => a + Number((b.marketPrice * b.quantity * 100).toFixed(2)), 0),
+      payPspItemEnum: 'ADYEN_POS',
+      tradeItems: list.map(p => ({ skuId: p.goodsInfoId, num: p.quantity }))
+    };
+    webapi.checkout(params).then(data => {
+      console.log(data);
+    });
+  }
+
   render() {
     const { onClose } = this.props;
     return (
@@ -179,7 +193,7 @@ export default class Checkout extends React.Component<any, any> {
                 onScanEnd={this.onScanMember}
               />
             : this.state.step === 3 
-              ? <Payment onCancel={() => this.switchStep(2)} /> 
+              ? <Payment onCancel={() => this.switchStep(2)} onPay={this.onConfirmCheckout} /> 
               : <Result />}
         <ScanedInfo visible={this.state.scanedInfoVisible} scanedInfo={this.state.scanedInfo} onChoose={this.onConfirmScanedInfo} />
       </div>

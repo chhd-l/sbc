@@ -278,8 +278,10 @@ class DeliveryItem extends React.Component<Iprop, any> {
             ))}
           </Select>
         );
-      } else {
+      } else if (field.inputSearchBoxFlag === 1) {
         return <AutoComplete dataSource={this.state.searchCityList.map((city) => city.cityName)} onSearch={this.searchCity} onChange={(val) => this.getRegionListByCity(2, val)} />;
+      } else {
+        return <Input />;
       }
     }
     const optionList = field.fieldName === 'Country' ? this.state.countryList : field.fieldName === 'State' ? this.state.stateList : field.fieldName === 'Region' ? this.state.regionList : [];

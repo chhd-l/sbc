@@ -992,11 +992,13 @@ export default class AppStore extends Store {
         console.log(item.get('subscriptionPrice'),111111111111);
         console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
         console.log(item.toJS(),3333333);*/
-        if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
-          if (addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) {
-            tip = 1;
-            valid = false;
-            return;
+        if (goodsList.toJS().length == 1) {
+          if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+            if (item.get('marketPrice') == 0) {
+              tip = 1;
+              valid = false;
+              return;
+            }
           }
         }else {
           //console.log(item.toJS(),555)
@@ -1007,6 +1009,7 @@ export default class AppStore extends Store {
             return;
           }
         }
+
        /* if (!(item.get('marketPrice') || item.get('marketPrice') == 0) ) {
           tip = 1;
           valid = false;
@@ -1035,8 +1038,8 @@ export default class AppStore extends Store {
           console.log(item.get('subScriptionPrice'));
           console.log(item.get('addedFlag'));*/
           if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionStatus') !=0) {
-            //console.log(item.toJS(),555)
-
+            console.log(item.toJS(),555)
+            //console.log(addSkUProduct[0].targetGoodsIds[0],666);
             if( item.get('subscriptionPrice') == 0 || item.get('subscriptionPrice') == null) {
               tip = 4;
               valid = false;
@@ -1077,10 +1080,19 @@ export default class AppStore extends Store {
     let flag = 0
     let goodsList = this.state().get('goodsList');
     let addSkUProduct = this.state().get('addSkUProduct');
+    let reg=/^[1-9]\d*$|^0$/;
+
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
-        if (!(item.get('stock') || item.get('stock') == 0) && a == undefined) {
+
+
+        if (reg.test(item.get('stock')) === false && a == undefined) {
+          flag = 1
+          valid = false;
+          return;
+        }
+        if (!item.get('stock') && a == undefined) {
           flag = 1
           valid = false;
           return;

@@ -864,6 +864,28 @@ class GoodsForm extends React.Component<any, any> {
     //   }
     // }
 
+    if (key === 'addedFlag') {
+      if (e.target.value == 0) {
+        this.setState({
+          saleableType: true
+        });
+        let goods = Map({
+          [key]: fromJS(0)
+        });
+        editGoodsItem(goods);
+        setFieldsValue({ addedFlag: 0 });
+      } else {
+        this.setState({
+          saleableType: false
+        });
+        let goods = Map({
+          [key]: fromJS(1)
+        });
+        editGoodsItem(goods);
+        setFieldsValue({ addedFlag: 1 });
+      }
+    }
+
     if (key === 'displayFlag') {
       if (e.target.value == 0) {
         let goods = Map({

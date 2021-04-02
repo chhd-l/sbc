@@ -485,7 +485,7 @@ class InvoiceList extends Component<any, any> {
         render: (text) => <div>{+text === 233 ? 'Guest' : +text === 234 ? 'Member' : '-'}</div>
       },
       {
-        title: 'Consumer Name',
+        title: 'Pet owner name',
         dataIndex: 'consumerName',
         key: 'consumerName',
         width: '8%',

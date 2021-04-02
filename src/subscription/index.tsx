@@ -28,7 +28,7 @@ export default class SubscriptionList extends Component<any, any> {
       },
       subscriptionOption: ['Subscription Number', 'Order Number'],
 
-      consumerOption: ['Pet Owner Name', 'Consumer Account'],
+      consumerOption: ['Pet Owner Name', 'Pet Owner Account'],
       productOption: ['Product Name', 'SKU Code'],
       recipientOption: ['Receiver', 'Receiver Phone'],
       prescriberOption: ['Auditor Name', 'Auditor ID'],
@@ -99,7 +99,7 @@ export default class SubscriptionList extends Component<any, any> {
       orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
       subscriptionNumber: searchForm.subscriptionOption === 'Subscription Number' ? searchForm.number : '',
       consumerName: searchForm.consumerOption === 'Pet Owner Name' ? searchForm.consumer : '',
-      consumerAccount: searchForm.consumerOption === 'Consumer Account' ? searchForm.consumer : '',
+      consumerAccount: searchForm.consumerOption === 'Pet Owner Account' ? searchForm.consumer : '',
       productName: searchForm.productOption === 'Product Name' ? searchForm.product : '',
       skuCode: searchForm.productOption === 'SKU Code' ? searchForm.product : '',
       recipient: searchForm.recipientOption === 'Recipient' ? searchForm.recipient : '',

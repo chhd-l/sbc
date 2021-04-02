@@ -484,7 +484,6 @@ export default class AppStore extends Store {
 
         // 商品列表
         let basePriceType;
-
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
           const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
@@ -497,6 +496,7 @@ export default class AppStore extends Store {
               const detailId = detail.get('specDetailId');
               const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
               item = item.set('specId-' + specId, goodsSpecDetail.get('detailName'));
+              item = item.set('specDetailId-' + specId, goodsSpecDetail.get('mockSpecDetailId'));
             }
 
             if (item.get('goodsInfoImg')) {
@@ -1017,8 +1017,6 @@ export default class AppStore extends Store {
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
-    console.log(this.state().get('goodsList').toJS());
-    console.log(a.toJS());
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
       this.state().get('goods').get('subscriptionStatus') == 1 ) {
       message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
@@ -1140,9 +1138,11 @@ export default class AppStore extends Store {
     let valid = true;
     let flag = 0
     let goodsList = this.state().get('goodsList');
+    let reg=/^[1-9]\d*$|^0$/;
+
     if (goodsList) {
       goodsList.forEach((item) => {
-        if (!(item.get('stock') || item.get('stock') == 0)) {
+        if (reg.test(item.get('stock')) === false) {
           flag = 1
           valid = false;
           return;
@@ -1154,7 +1154,7 @@ export default class AppStore extends Store {
       });
     }
     if (flag === 1) {
-      message.error('Please input Inventory');
+      console.log('Please enter the correct value');
     }
     return valid;
   }
@@ -1166,6 +1166,9 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async (nextTab = null) => {
+    console.log(!this._validMainForms());
+    console.log(!this._validPriceFormsNew());
+    console.log(!this._validInventoryFormsNew());
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1333,7 +1336,7 @@ export default class AppStore extends Store {
         if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));
         }
-        if (key && key.indexOf('specDetailId') != -1) {
+        if (key && key.indexOf('specDetailId-') != -1) {//specDetailId
           mockSpecDetailIds = mockSpecDetailIds.push(value);
         }
       });
@@ -1484,8 +1487,10 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
+      console.log(param.toJS(), 'edit param-----')
       result = await edit(param.toJS());
     } else {
+      console.log(param.toJS(), 'new param-----')
       result = await save(param.toJS());
     }
 

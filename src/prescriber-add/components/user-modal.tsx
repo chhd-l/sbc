@@ -28,7 +28,6 @@ class UserModal extends Component<any, any> {
 
   getPrescriberRole = async () => {
     const { res } = await webapi.getAllRoles();
-    debugger
     let prescriberRole = res.context.find((x) => x.roleName === 'Prescriber');
     this.setState({
       prescriberRoleId: prescriberRole.roleInfoId

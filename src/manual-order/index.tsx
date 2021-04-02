@@ -20,6 +20,8 @@ class ManualOrder extends Component<any, any> {
       title: 'Valet order',
       current: 0,
       status: 1,
+      url:'',
+      prefix:'',
       customer: {
         customerId: '',
         customerName: '',
@@ -51,14 +53,8 @@ class ManualOrder extends Component<any, any> {
   }
 
   turnShowPage = (token) => {
-    let url ='';
-    if(['fr','ru','tr'].includes((window as any).countryEnum[this.state.storeId])){
-      url=`https://uatwedding.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
-    }else{
-      url=`https://shopstg.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
-    }
-    let winObj = window.open(`${url}/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
-    let { customer } = this.state;
+    let { customer,url,prefix } = this.state;
+    let winObj = window.open(`${url+prefix}/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
     let loop = setInterval(async () => {
       if (winObj.closed) {
         clearInterval(loop);
@@ -104,9 +100,23 @@ class ManualOrder extends Component<any, any> {
         }
       })
     }
-
-
   }
+
+  componentDidMount(){
+    let url ='',prefix='';
+    if(['fr','ru','tr'].includes((window as any).countryEnum[this.state.storeId])){
+      prefix='/shop'
+      url=`https://uatwedding.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
+    }else{
+      prefix=''
+      url=`https://shopstg.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
+    }
+    this.setState({
+      url,
+      prefix:prefix
+    })
+  }
+
 
   getCustomer = (customer) => {
     this.setState({
@@ -120,7 +130,7 @@ class ManualOrder extends Component<any, any> {
     });
   };
   render() {
-    const { current, title, customer, storeId, status } = this.state;
+    const { current, title, customer, storeId, status,url,prefix } = this.state;
     const steps = [
       {
         title: 'Consumer information',
@@ -128,7 +138,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Selected product',
-        controller: <SelectedProduct stepName={'Product list:'} carts={this.getCartsList} storeId={storeId} customer={customer} />
+        controller: <SelectedProduct url={url} prefix={prefix} stepName={'Product list:'} carts={this.getCartsList} storeId={storeId} customer={customer} />
       },
       {
         title: 'Delivery & payment information',
@@ -155,7 +165,7 @@ class ManualOrder extends Component<any, any> {
             {current === 0 && (
               <span>
                 <Button type="primary">
-                  <a style={{ color: '#fff' }} target="_blank" href={`https://shop.royalcanin.${(window as any).countryEnum[storeId]}/register/HUB`}>
+                  <a style={{ color: '#fff' }} target="_blank" href={`${url}${prefix}/register`}>
                     Register
                   </a>
                 </Button>

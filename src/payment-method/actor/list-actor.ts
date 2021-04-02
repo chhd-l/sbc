@@ -19,6 +19,7 @@ export default class ListActor extends Actor {
       switchChecked: false,
       storePaymentVOs: {},//弹框的form maxAmount
       checkedId: ""
+
     };
   }
 

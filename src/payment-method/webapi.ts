@@ -11,7 +11,7 @@ type TResult = {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 
-export const queryByStoreId = (rids) => {
+export const queryByStoreId = () => {
   return Fetch<TResult>('/storePayment/queryByStoreId', {
     method: 'GET'
   });

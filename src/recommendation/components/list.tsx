@@ -188,7 +188,9 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '11%' }}>Amount</th>
                       <th style={{ width: '10.5%' }}>Link status</th>
                       <th style={{ width: '12.5%' }}>Expert</th>
-                      <th style={{ width: '7.1%' }}>Operation</th>
+                      <th style={{ width: '10.5%' }}>Paris</th>
+                      <th style={{ width: '13.5%' }}>Pick up</th>
+                      <th >Operation</th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
@@ -246,9 +248,7 @@ export default class ListView extends React.Component<any, any> {
     let list = dataList.toJS();
     return list.map((v, index) => {
       const id = v.recommendationId;
-      const createTime = v.createTime;
       const img = v.recommendationGoodsInfoRels ? v.recommendationGoodsInfoRels : [];
-      const a = [{ a: 1 }, { b: 2 }];
       let amount = 0;
       for (let i = 0; i < img.length; ++i) {
         if (img[i].goodsInfo.marketPrice != null) {
@@ -283,7 +283,7 @@ export default class ListView extends React.Component<any, any> {
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ width: '1%' }} />
+                  {/* <td style={{ width: '1%' }} /> */}
                   {/*<td
                     style={{
                       textAlign: 'left',
@@ -301,49 +301,65 @@ export default class ListView extends React.Component<any, any> {
                   <td
                     style={{
                       textAlign: 'left',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      flexWrap: 'wrap',
-                      padding: '16px 0',
-                      width: '120px'
+
+                      padding: '16px 0 16px 16px',
+                      width: '12%'
                     }}
                   >
                     {img.length != 0
                       ? img.map((item, index) => {
-                          return <div>{item.goodsInfo.goodsInfoName}</div>;
-                        })
+                        return <div>{item.goodsInfo.goodsInfoName}</div>;
+                      })
                       : '--'}
                   </td>
-                  <td style={{ width: '15.4%' }}>{v.consumerLastName != null ? v.consumerFirstName + ' ' + v.consumerLastName : '--'}</td>
-                  <td style={{ width: '18%' }}>{v.consumerEmail != null ? v.consumerEmail : '--'}</td>
-                  <td style={{ width: '14%' }}>
+                  <td style={{ width: '12%' }}>{v.consumerLastName != null ? v.consumerFirstName + ' ' + v.consumerLastName : '--'}</td>
+                  <td style={{ width: '13.5%' }}>{v.consumerEmail != null ? v.consumerEmail : '--'}</td>
+                  <td style={{ width: '11%' }}>
                     {v.recommendationGoodsInfoRels && sessionStorage.getItem('s2b-supplier@systemGetConfig:')}
                     {v.recommendationGoodsInfoRels &&
                       v.recommendationGoodsInfoRels.reduce((sum, item) => {
                         let a = Number(sum) + Number(item.goodsInfo.marketPrice * item.recommendationNumber);
                         return a.toFixed(2);
-                      }, 0)}
+                      }, 0)}===
                   </td>
-                  <td style={{ width: '13%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td>
-                  <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td>
+                  <td style={{ width: '12.5%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td>
+                  {/* <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td> */}
+                  <th style={{ width: '12.5%' }}>{v.expert}==</th>
+                  <td style={{ width: '10.5%' }}>{v.paris ? 'Y' : 'N'}</td>
+                  <td style={{ width: '10.5%' }}>{v.pickup ? 'Y' : 'N'}</td>
                   <td
+
                     style={{
-                      width: '10.2%',
+                      fontSize: 16,
                       color: '#E1021A',
                       cursor: 'pointer',
-                      textAlign: 'right',
-                      paddingRight: 20
+
                     }}
-                    onClick={() =>
-                      history.push({
-                        pathname: '/recomm-page-detail',
-                        state: { id: v.id }
-                      })
-                    }
                   >
-                    <Tooltip placement="top" title="See details">
-                      <span className="iconfont iconDetails"></span>
+                    <div style={{
+                      textAlign: 'center',
+                      display: 'flex',
+                      justifyContent: 'space-around',
+                      alignItems: 'center'
+                    }}>
+                    <Tooltip placement="top" title="edit" >
+                      <Icon type="form" 
+                       onClick={() =>
+                        history.push({
+                          pathname: `/recommendation-edit/${v.felinRecoId}`,
+                        })
+                      }
+                      />
+
                     </Tooltip>
+                    <Tooltip placement="top" title="download pdf">
+                      <Icon type="cloud-download" />
+                    </Tooltip>
+                    <Tooltip placement="top" title="copied link">
+                      <Icon type="fork" />
+                    </Tooltip>
+                    </div>
+
                   </td>
                 </tr>
               </tbody>
@@ -378,7 +394,7 @@ export default class ListView extends React.Component<any, any> {
       onOk() {
         onRetrial(tdId);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 
@@ -407,7 +423,7 @@ export default class ListView extends React.Component<any, any> {
       onOk() {
         onConfirm(tdId);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 

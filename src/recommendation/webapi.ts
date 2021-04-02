@@ -3,7 +3,7 @@ import * as webapi from '@/order-recommendation-details/webapi';
 import { message } from 'antd';
 
 export const fetchOrderList = (filter = {}) => {
-  return Fetch<TResult>('/recommendation/findPage', {
+  return Fetch<TResult>('/felinReco/list', {
     method: 'POST',
     body: JSON.stringify(filter)
   });

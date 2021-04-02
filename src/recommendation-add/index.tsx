@@ -8,6 +8,7 @@ import ChooseProducts from './components/chooseProducts';
 import WriteTips from './components/writeTips';
 import AppStore from './store';
 import { StoreProvider } from 'plume2';
+import { fetchFindById } from './webapi'
 
 const { Step } = Steps;
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -21,7 +22,7 @@ class ManualOrder extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: 'New Prescription',
-      current: 3,
+      current: 0,
       status: 1,
       params: {},
       storeId: storeId,
@@ -32,17 +33,25 @@ class ManualOrder extends Component<any, any> {
   }
   next(e) {
     e.preventDefault();
-    let {  current } = this.state;
-    this.props.form.validateFields((err,values) => {
+    let { current } = this.state;
+    this.props.form.validateFields((err, values) => {
       if (!err) {
-        let _params={...this.state.params,...values}
+        let _params = { ...this.state.params, ...values }
         current++;
         this.setState({
           current,
-          params:_params
+          params: _params
         })
+        console.log(_params,'_params')
         this.setState({ current });
       }
+    });
+  }
+  //查询详情
+  async getRecommendationDetails(felinRecoId) {
+    const { res } = await fetchFindById({ felinRecoId })
+    this.setState({
+      params: { ...this.state.params, ...res.context }
     });
   }
 
@@ -51,16 +60,19 @@ class ManualOrder extends Component<any, any> {
     const current = this.state.current - 1;
     this.setState({ current });
   }
-
-  componentWillMount() { 
+  componentDidMount() {
+    let { id } = this.props?.match?.params ?? {};
+    if(id){
+      this.getRecommendationDetails(id);
+    }
   }
 
   getFormParams = (params) => {
     this.setState({
-      params:{...this.state.params,...params}
+      params: { ...this.state.params, ...params }
     });
   };
-  done(e){
+  done(e) {
     console.log()
   }
   render() {
@@ -68,11 +80,11 @@ class ManualOrder extends Component<any, any> {
     const steps = [
       {
         title: 'Choose your role',
-        controller: <ChooseYourRole form={this.props.form} allParams={params}  getFormParams={this.getFormParams}/>
+        controller: <ChooseYourRole form={this.props.form} allParams={params} getFormParams={this.getFormParams} />
       },
       {
         title: 'Fill in Pet Info',
-        controller: <FillinPetInfo   form={this.props.form}/>
+        controller: <FillinPetInfo form={this.props.form} allParams={params} />
       },
       {
         title: 'Choose Products',
@@ -80,7 +92,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Write Tips',
-        controller: <WriteTips  form={this.props.form}/>
+        controller: <WriteTips form={this.props.form} />
       }
     ];
     // if (noLanguageSelect) {
@@ -100,20 +112,20 @@ class ManualOrder extends Component<any, any> {
           </Steps>
           <div className="steps-content">{steps[current].controller}</div>
           <div className="steps-action">
-          
+
             {current >= 1 && (
               <Button style={{ marginRight: 15 }} onClick={() => this.prev()}>
-                 Previous
+                Previous
               </Button>
             )}
             {current < steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.next(e)}>
-                Next 
+                Next
               </Button>
             )}
             {current === steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.done(e)}>
-                Done 
+                Done
               </Button>
             )}
           </div>

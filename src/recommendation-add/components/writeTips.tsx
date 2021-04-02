@@ -21,13 +21,13 @@ export default class PaymentInformation extends React.Component<any, any> {
       <div>
         <Form >
           <Form.Item label="What we suggest/ recommend for your cat">
-            {getFieldDecorator('storeName1', {
+            {getFieldDecorator('suggest', {
 
             })(<Input placeholder="Input"/>)}
 
           </Form.Item>
           <Form.Item label="We recommend to you the following optimal nutrition">
-            {getFieldDecorator('export2', {
+            {getFieldDecorator('optimal', {
 
             })(<Input placeholder="Input"/>)}
 

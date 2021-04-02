@@ -26,12 +26,13 @@ class ConsumerInformation extends React.Component<any, any> {
     super(props);
   }
  async componentDidMount() {
+  
+ }
 
- 
-   }
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { storeName, expertName } = this.props.allParams;
+    const { storeName, expert} = this.props.allParams;
     const options = this.state.options.map((d, index) => (
       <Option key={index} value={d}>
         {d}
@@ -40,7 +41,7 @@ class ConsumerInformation extends React.Component<any, any> {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
         <Form  style={{ width: 300 }}>
-          <Form.Item>
+          {/* <Form.Item>
             {getFieldDecorator('storeName', {
               initialValue:storeName||'L’Atelier Felin',
             })(<SelectGroup
@@ -53,10 +54,10 @@ class ConsumerInformation extends React.Component<any, any> {
                 </Option>
             </SelectGroup>)}
 
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item>
-            {getFieldDecorator('export', {
-              initialValue:expertName||"Marion Ruffié"
+            {getFieldDecorator('expert', {
+              initialValue:expert||"Marion Ruffié"
             })(<SelectGroup
               label="Role"
               getPopupContainer={(trigger: any) => trigger.parentNode}

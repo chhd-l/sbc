@@ -44,13 +44,15 @@ export default class AppStore extends Store {
       form['clinicsName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
       form['prescriberName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
     }
-    webapi.fetchOrderList({ ...obj, ...form, pageNum, pageSize }).then(({ res }) => {
+    webapi.fetchOrderList({  ...form, pageNum, pageSize }).then(({ res }) => {
+      console.log(res)
       if (res.code == Const.SUCCESS_CODE) {
         this.transaction(() => {
           this.dispatch('loading:end');
-          this.dispatch('list:init', res.context);
+          this.dispatch('list:init', res.context.microPage);
           this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
           this.btnLoading = false;
+          // debugger
         });
       } else {
         this.dispatch('loading:end');

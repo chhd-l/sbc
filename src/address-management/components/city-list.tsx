@@ -82,7 +82,7 @@ export default class CityList extends Component<any, any> {
             <td style={{ wordBreak: 'break-all' }}>{city}</td>
             <td style={{ wordBreak: 'break-all' }}>{postCode}</td>
             <td>
-              <Tooltip placement="top" title="Edit">
+              <Tooltip placement="top" title={<FormattedMessage id="Setting.Edit" />}>
                 <span
                   /*className="red mgl20"*/
                   style={{ color: 'red', paddingRight: 10, cursor: 'pointer' }}
@@ -92,7 +92,7 @@ export default class CityList extends Component<any, any> {
                   {/*<FormattedMessage id="edit" />*/}
                 </span>
               </Tooltip>
-              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteRow(item.toJS())} okText="Confirm" cancelText="Cancel">
+              <Popconfirm placement="topLeft" title={<FormattedMessage id="Setting.Areyousuretodelete" />} onConfirm={() => this.deleteRow(item.toJS())} okText={<FormattedMessage id="Setting.Confirm" />} cancelText={<FormattedMessage id="Setting.Cancel" />}>
                 <Tooltip placement="top" title="Delete">
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
@@ -119,7 +119,7 @@ export default class CityList extends Component<any, any> {
       <div>
         <div>
           <Button type="primary" htmlType="submit" style={{ marginBottom: '10px' }} onClick={this.addCity}>
-            Add City
+            <FormattedMessage id="Setting.AddCity" />
           </Button>
         </div>
         {cityList ? (
@@ -136,11 +136,21 @@ export default class CityList extends Component<any, any> {
                     >
                       <thead className="ant-table-thead">
                         <tr>
-                          <th style={{ width: '10%' }}>Country</th>
-                          <th style={{ width: '10%' }}>State</th>
-                          <th style={{ width: '10%' }}>City</th>
-                          <th style={{ width: '10%' }}>Post code</th>
-                          <th style={{ width: '10%' }}>Operation</th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Setting.Country" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Setting.State" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Setting.City" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Setting.Postcode" />
+                          </th>
+                          <th style={{ width: '10%' }}>
+                            <FormattedMessage id="Setting.Operation" />
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(cityList)}</tbody>

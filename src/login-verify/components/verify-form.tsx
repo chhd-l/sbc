@@ -2,21 +2,14 @@ import React from 'react';
 import { Form, Icon, Input, Button, Col, message, Checkbox, Row } from 'antd';
 const FormItem = Form.Item;
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import PropTypes from 'prop-types';
 import { history, Const, login, cache, OktaLogout, getRoutType } from 'qmkit';
 import * as webApi from '../webapi';
 const { Search } = Input;
 import { withOktaAuth } from '@okta/okta-react';
+import { FormattedMessage } from 'react-intl';
 
 export default withOktaAuth(
   class VerifyForm extends React.Component<any, any> {
-    form;
-
-    //声明上下文依赖
-    static contextTypes = {
-      _plume$Store: PropTypes.object
-    };
-
     constructor(props, ctx) {
       super(props);
       this.state = {
@@ -71,12 +64,16 @@ export default withOktaAuth(
           <div style={styles.header}>
             <img style={styles.logo} src={loginLogo} />
             <div>
-              <label style={styles.labelService}>This service is dedicated to our customers only.</label>
+              <label style={styles.labelService}>
+                <FormattedMessage id="Public.Thisserviceis" />
+              </label>
             </div>
           </div>
           <Form style={styles.loginForm}>
             <FormItem style={{ marginBottom: 15 }}>
-              <strong style={styles.title}>Store portal</strong>
+              <strong style={styles.title}>
+                <FormattedMessage id="Public.Storeportal" />
+              </strong>
             </FormItem>
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberId', {
@@ -84,7 +81,7 @@ export default withOktaAuth(
               })(<Search size="large" placeholder="Please Search Client ID First" onSearch={(value, e) => this.search(value, e)} />)}
             </FormItem>
             <label style={styles.labelClientName}>
-              <span style={{ color: '#E1021A' }}>*</span> Your client ID is specified on your Royal Canin invoice. It can be an e-mail address or a client number
+              <span style={{ color: '#E1021A' }}>*</span> <FormattedMessage id="Public.YourclientID" />
             </label>
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberName', {
@@ -136,13 +133,15 @@ export default withOktaAuth(
               <Col span={4}></Col>
               <Col span={10}>
                 <Button type="primary" size="large" htmlType="submit" style={styles.loginBtn} onClick={(e) => this._handlePrcess(e)} disabled={this.state.prcessDisabled} loading={this.state.prcessLoadding}>
-                  Proceed
+                  <FormattedMessage id="Public.Proceed" />
                 </Button>
               </Col>
             </FormItem>
             <FormItem style={{ marginBottom: 0 }}>
               <div>
-                <p style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}>© Royal Canin SAS 2020</p>
+                <p style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}>
+                  © <FormattedMessage id="Public.RoyalCaninSAS2020" />
+                </p>
               </div>
             </FormItem>
           </Form>

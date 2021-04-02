@@ -72,7 +72,8 @@ class AutomationDetail extends Component<any, any> {
       isEvent: false,
       isOrderEvent: false,
       objectFetching: false,
-      objectNoList: []
+      objectNoList: [],
+      showTestTip:false
     };
   }
   componentDidMount() {
@@ -132,7 +133,18 @@ class AutomationDetail extends Component<any, any> {
       });
   };
   testAutomation = () => {
-    const { automationId, selectedObjectNo, isOrderEvent } = this.state;
+    const { automationId, selectedObjectNo, isOrderEvent,isEvent } = this.state;
+    if(isEvent && !selectedObjectNo){
+      this.setState({
+        showTestTip:true
+      })
+      return false
+    }
+    else{
+      this.setState({
+        showTestTip:false
+      })
+    }
     let params = {
       id: automationId,
       type: isOrderEvent ? 'Order' : 'Subscription',
@@ -224,11 +236,14 @@ class AutomationDetail extends Component<any, any> {
       startTrigger: startTrigger,
       selectedObjectNo: '',
       isOrderEvent: isOrderEvent
+    },()=>{
+      this.getObjectNoList('')
     });
   };
   handleClose = () => {
     this.setState({
       visibleTest: false,
+      showTestTip:false,
       startTrigger: '',
       selectedObjectNo: ''
     });
@@ -273,7 +288,7 @@ class AutomationDetail extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, automationId, automationDetail, visibleTest, startTrigger, isOrderEvent, objectFetching, selectedObjectNo, isEvent, objectNoList } = this.state;
+    const { loading, title, automationId, automationDetail, visibleTest, startTrigger, isOrderEvent, objectFetching, selectedObjectNo, isEvent, objectNoList,showTestTip } = this.state;
     const testStatusList = [
       { name: 'Not Tested', value: 'NotTested' },
       { name: 'Testing', value: 'Testing' },
@@ -292,6 +307,7 @@ class AutomationDetail extends Component<any, any> {
         {automationDetail.testStatus === 'Testing' ? <Tag color="#00B0F0">{testStatusList.find((item) => item.value === automationDetail.testStatus).name}</Tag> : null}
       </div>
     );
+    const testStautsObject = testStatusList.find(x=>x.value === automationDetail.testStatus)
 
     return (
       <AuthWrapper functionName="f_automation_detail">
@@ -323,7 +339,7 @@ class AutomationDetail extends Component<any, any> {
             >
               <Tabs defaultActiveKey="1">
                 <TabPane tab="Basic information" key="1">
-                  <Descriptions title={'Automation info'}>
+                  <Descriptions title={'Automation information'}>
                     <Descriptions.Item label="Automation name" span={1}>
                       {automationDetail.automationName}
                     </Descriptions.Item>
@@ -331,7 +347,7 @@ class AutomationDetail extends Component<any, any> {
                       {automationDetail.automationStatus}
                     </Descriptions.Item>
                     <Descriptions.Item label="Test status" span={1}>
-                      {automationDetail.testStatus}
+                      {testStautsObject ? testStautsObject.name : ''}
                     </Descriptions.Item>
                     <Descriptions.Item label="Automation category" span={1}>
                       {automationDetail.automationCategory}
@@ -364,7 +380,7 @@ class AutomationDetail extends Component<any, any> {
                       {automationDetail.trackingEndTime ? moment(automationDetail.trackingEndTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
                   </Descriptions>
-                  <Card title={'Workflow'} headStyle={{ padding: 0 }} bordered={false}>
+                  <Card title={'Workflow'} headStyle={{ padding: 0, fontWeight: 'bold' }} bordered={false}>
                     {this.state.automationDetail.workflow ? (
                       <GGEditor>
                         <Flow
@@ -419,7 +435,7 @@ class AutomationDetail extends Component<any, any> {
                 this.handleClose();
               }}
             >
-              Cancle
+              Cancel
             </Button>,
             <Button key="submit" type="primary" onClick={this.testAutomation}>
               Comfirm
@@ -474,6 +490,11 @@ class AutomationDetail extends Component<any, any> {
                     </Option>
                   ))}
               </Select>
+              {
+                showTestTip?<p style={{marginLeft: '125px',marginTop:'-10px',color:'#e2001a'}}>
+                  {isOrderEvent ? 'Please select order':'Please select subscription'}</p>:null
+              }
+              
             </div>
           ) : null}
           <p style={{ display: 'inline-block', color: '#a6a6a6' }}>This automation (start with time trigger) will be tested immediately.</p>

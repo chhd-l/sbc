@@ -53,34 +53,18 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      likeGoodsName,
-      onSearch,
-      onFormFieldChange,
-      brandList,
-      cateList
-    } = this.props.relaxProps;
+    const { likeGoodsName, onSearch, onFormFieldChange, brandList, cateList } = this.props.relaxProps;
     //处理分类的树形图结构数据
     const loop = (cateList) =>
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              value={item.get('cateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
       });
 
     return (
@@ -88,7 +72,7 @@ export default class SearchForm extends React.Component<any, any> {
         <Form className="filter-content" layout="inline">
           <FormItem>
             <Input
-              addonBefore={<FormattedMessage id="product.productName" />}
+              addonBefore={<FormattedMessage id="Product.productName" />}
               value={likeGoodsName}
               onChange={(e: any) => {
                 onFormFieldChange({
@@ -101,7 +85,7 @@ export default class SearchForm extends React.Component<any, any> {
           <FormItem>
             <TreeSelectGroup
               getPopupContainer={() => document.getElementById('page-content')}
-              label={<FormattedMessage id="product.platformCategory" />}
+              label={<FormattedMessage id="Product.platformCategory" />}
               placeholder="Please select category"
               notFoundContent="暂无分类"
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -119,10 +103,8 @@ export default class SearchForm extends React.Component<any, any> {
           <FormItem>
             <SelectBox>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label={<FormattedMessage id="product.brand" />}
+                getPopupContainer={() => document.getElementById('page-content')}
+                label={<FormattedMessage id="Product.brand" />}
                 defaultValue="All"
                 showSearch
                 optionFilterProp="children"
@@ -131,7 +113,7 @@ export default class SearchForm extends React.Component<any, any> {
                 }}
               >
                 <Option key="-1" value="-1">
-                  {<FormattedMessage id="all" />}
+                  {<FormattedMessage id="Product.all" />}
                 </Option>
                 {brandList.map((v, i) => {
                   return (
@@ -154,7 +136,7 @@ export default class SearchForm extends React.Component<any, any> {
                 onSearch();
               }}
             >
-              {<FormattedMessage id="product.search" />}
+              {<FormattedMessage id="Product.search" />}
             </Button>
           </FormItem>
         </Form>

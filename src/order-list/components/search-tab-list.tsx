@@ -2,7 +2,7 @@ import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Tabs } from 'antd';
 import List from './list';
-import { noop } from 'qmkit';
+import { noop, OrderStatus } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 @Relax
@@ -22,6 +22,7 @@ export default class SearchList extends React.Component<any, any> {
   render() {
     const { onTabChange, tab } = this.props.relaxProps;
     const key = tab.get('key');
+    let activeOrderStatus = OrderStatus.filter(x=>x.listShow === true)
 
     return (
       <div>
@@ -31,22 +32,16 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="Order.all" />} key="0">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane
+          {/* <Tabs.TabPane
             tab={<FormattedMessage id="order.pendingReview" />}
             key="flowState-INIT"
           >
             <List />
           </Tabs.TabPane>
-          {/* <Tabs.TabPane
-            tab={<FormattedMessage id="order.toBeFormed" />}
-            key="flowState-GROUPON"
-          >
-            <List />
-          </Tabs.TabPane> */}
 
           <Tabs.TabPane
             tab={<FormattedMessage id="order.toBeDelivered" />}
@@ -62,13 +57,6 @@ export default class SearchList extends React.Component<any, any> {
             <List />
           </Tabs.TabPane>
 
-          {/* <Tabs.TabPane
-            tab={<FormattedMessage id="order.received" />}
-            key="flowState-CONFIRMED"
-          >
-            <List />
-          </Tabs.TabPane> */}
-
           <Tabs.TabPane
             tab={<FormattedMessage id="order.completed" />}
             key="flowState-COMPLETED"
@@ -81,7 +69,13 @@ export default class SearchList extends React.Component<any, any> {
             key="flowState-VOID"
           >
             <List />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
+          { activeOrderStatus.map(item=>(
+             <Tabs.TabPane tab={<FormattedMessage id={item.langKey} />}
+             key={item.value}>
+               <List />
+             </Tabs.TabPane>
+          )) }
         </Tabs>
       </div>
     );

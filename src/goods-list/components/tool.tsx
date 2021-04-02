@@ -4,13 +4,13 @@ import { Button, Dropdown, Menu, Icon, Modal, message } from 'antd';
 import { IList } from 'typings/globalType';
 import { withRouter } from 'react-router';
 import { noop, AuthWrapper, checkAuth } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import SyncButton from './sync-product';
 const confirm = Modal.confirm;
 
 @withRouter
 @Relax
-export default class Tool extends React.Component<any, any> {
+class Tool extends React.Component<any, any> {
   props: {
     history?: any;
     relaxProps?: {
@@ -44,7 +44,7 @@ export default class Tool extends React.Component<any, any> {
         {hasMenu && (
           <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
             <Button>
-              {<FormattedMessage id="product.batchOperation" />}
+              {<FormattedMessage id="Product.batchOperation" />}
               <Icon type="down" />
             </Button>
           </Dropdown>
@@ -63,7 +63,7 @@ export default class Tool extends React.Component<any, any> {
                 this._spuOnSale();
               }}
             >
-              Batch on shelves
+              <FormattedMessage id="Product.Batchonshelves" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -74,7 +74,7 @@ export default class Tool extends React.Component<any, any> {
                 this._spuOffSale();
               }}
             >
-              Batch off shelves
+              <FormattedMessage id="Product.Batchoffshelves" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -85,7 +85,7 @@ export default class Tool extends React.Component<any, any> {
                 this._delGoods();
               }}
             >
-              Batch delete
+              <FormattedMessage id="Product.Batchdelete" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -108,7 +108,8 @@ export default class Tool extends React.Component<any, any> {
   _setFeight = () => {
     const { selectedSpuKeys, setFeightVisible } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+
+      message.error(this.props.intl.formatMessage({ id: 'Product.atLeastOneItem' }));
       return;
     } else {
       setFeightVisible(true);
@@ -117,13 +118,18 @@ export default class Tool extends React.Component<any, any> {
 
   _spuOnSale = () => {
     const { spuOnSale, selectedSpuKeys } = this.props.relaxProps;
+    
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+
+      message.error(this.props.intl.formatMessage({ id: 'Product.atLeastOneItem' }));
       return;
     }
+    let title = this.props.intl.formatMessage({ id: 'Product.Prompt' })
+    let content = this.props.intl.formatMessage({ id: 'Product.putProductsOnShelves' })
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to put these products on shelves?',
+
+      title: title,
+      content: content,
       onOk() {
         spuOnSale();
       }
@@ -133,12 +139,14 @@ export default class Tool extends React.Component<any, any> {
   _spuOffSale = () => {
     const { spuOffSale, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+      message.error(this.props.intl.formatMessage({ id: 'Product.atLeastOneItem' }));
       return;
     }
+    let title = this.props.intl.formatMessage({ id: 'Product.Prompt' })
+    let content = this.props.intl.formatMessage({ id: 'Product.putProductsOnShelves' })
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to put these products off shelves?',
+      title: title,
+      content: content,
       onOk() {
         spuOffSale();
       }
@@ -148,15 +156,19 @@ export default class Tool extends React.Component<any, any> {
   _delGoods = () => {
     const { spuDelete, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+      message.error(this.props.intl.formatMessage({ id: 'Product.atLeastOneItem' }));
       return;
     }
+
+    let title = this.props.intl.formatMessage({ id: 'Product.Prompt' })
+    let content = this.props.intl.formatMessage({ id: 'Product.deleteThisProduct' })
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete these products?',
+      title: title,
+      content: content,
       onOk() {
         spuDelete();
       }
     });
   };
 }
+export default injectIntl(Tool)

@@ -67,13 +67,13 @@ class CateList extends React.Component<any, any> {
 
   _columns = [
     {
-      title: <FormattedMessage id="roleName" />,
+      title: <FormattedMessage id="Setting.roleName" />,
       dataIndex: 'roleName',
       key: 'roleName'
     },
 
     {
-      title: <FormattedMessage id="permission" />,
+      title: <FormattedMessage id="Setting.permission" />,
       dataIndex: 'menuNames',
       key: 'menuNames',
       render: (menuNames) => {
@@ -81,7 +81,7 @@ class CateList extends React.Component<any, any> {
       }
     },
     {
-      title: <FormattedMessage id="operation" />,
+      title: <FormattedMessage id="Setting.operation" />,
       key: 'option',
       render: (rowInfo) => this._getOption(rowInfo)
     }
@@ -94,34 +94,23 @@ class CateList extends React.Component<any, any> {
     return (
       <div>
         <AuthWrapper functionName={'f_role_modify_authority'}>
-          <Tooltip placement="top" title="Set permission">
-            <Link
-              style={{ marginLeft: 20, marginRight: 20 }}
-              to={`/authority-allocating/${rowInfo.roleInfoId}/${rowInfo.roleName}`}
-              className="iconfont iconbtn-setpermission"
-            >
+          <Tooltip placement="top" title={<FormattedMessage id="Setting.setPermission" />}>
+            <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/authority-allocating/${rowInfo.roleInfoId}/${rowInfo.roleName}`} className="iconfont iconbtn-setpermission">
               {/*<FormattedMessage id="setPermission" />*/}
             </Link>
           </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_role_edit'}>
-          <Tooltip placement="top" title="Edit">
-            <a
-              style={styles.edit}
-              onClick={this._showEditModal.bind(this, rowInfo)}
-              className="iconfont iconEdit"
-            >
+          <Tooltip placement="top" title={<FormattedMessage id="Setting.Edit" />}>
+            <a style={styles.edit} onClick={this._showEditModal.bind(this, rowInfo)} className="iconfont iconEdit">
               {/*<FormattedMessage id="edit" />*/}
             </a>
           </Tooltip>
         </AuthWrapper>
 
         <AuthWrapper functionName={'f_role_delete'}>
-          <Tooltip placement="top" title="Delete">
-            <a
-              onClick={this._delete.bind(this, rowInfo.roleInfoId)}
-              className="iconfont iconDelete"
-            >
+          <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
+            <a onClick={this._delete.bind(this, rowInfo.roleInfoId)} className="iconfont iconDelete">
               {/*<FormattedMessage id="delete" />*/}
             </a>
           </Tooltip>
@@ -144,10 +133,10 @@ class CateList extends React.Component<any, any> {
   _delete = async (roleInfoId) => {
     const { deleteEquities } = this.props.relaxProps;
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete this role?',
-      okText: 'OK',
-      cancelText: 'Cancel',
+      title: <FormattedMessage id="Setting.Prompt" />,
+      content: <FormattedMessage id="Setting.deleteThisRole" />,
+      okText: <FormattedMessage id="Setting.OK" />,
+      cancelText: <FormattedMessage id="Setting.Cancel" />,
       iconType: 'exclamation-circle',
       onOk() {
         deleteEquities(roleInfoId);
@@ -167,13 +156,7 @@ class CateList extends React.Component<any, any> {
   };
 }
 
-let _dragDirection = (
-  dragIndex,
-  hoverIndex,
-  initialClientOffset,
-  clientOffset,
-  sourceClientOffset
-) => {
+let _dragDirection = (dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) => {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
   const hoverClientY = clientOffset.y - sourceClientOffset.y;
   if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY) {
@@ -185,27 +168,11 @@ let _dragDirection = (
 };
 
 let _BodyRow = (props) => {
-  const {
-    isOver,
-    connectDragSource,
-    connectDropTarget,
-    moveRow,
-    dragRow,
-    clientOffset,
-    sourceClientOffset,
-    initialClientOffset,
-    ...restProps
-  } = props;
+  const { isOver, connectDragSource, connectDropTarget, moveRow, dragRow, clientOffset, sourceClientOffset, initialClientOffset, ...restProps } = props;
   const style = { ...restProps.style, cursor: 'move' };
   let className = restProps.className;
   if (isOver && initialClientOffset) {
-    const direction = _dragDirection(
-      dragRow.index,
-      restProps.index,
-      initialClientOffset,
-      clientOffset,
-      sourceClientOffset
-    );
+    const direction = _dragDirection(dragRow.index, restProps.index, initialClientOffset, clientOffset, sourceClientOffset);
     if (direction === 'downward') {
       className += ' drop-over-downward';
     }
@@ -213,9 +180,7 @@ let _BodyRow = (props) => {
       className += ' drop-over-upward';
     }
   }
-  return connectDragSource(
-    connectDropTarget(<tr {...restProps} className={className} style={style} />)
-  );
+  return connectDragSource(connectDropTarget(<tr {...restProps} className={className} style={style} />));
 };
 
 const _rowSource = {

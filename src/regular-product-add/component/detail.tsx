@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Tabs } from 'antd';
+import { Select, Tabs } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { noop, ErrorBoundary, ReactEditor, history } from 'qmkit';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+import { ElementAccessExpression } from 'ts-morph';
 let goodsDetailTabObj = {};
 
 @Relax
@@ -83,14 +84,21 @@ export default class Detail extends React.Component<any, any> {
     // No state update necessary
     return null;
   }
-
+  changeTabsBar = (key,item) => {
+    let id=item.descriptionName + '_' + item.descriptionId;
+    item['contentType']=key;
+    item.content = ''
+    item.key=+new Date();
+    goodsDetailTabObj[id]=item;
+    this.sortDetailTab();
+  }
   render() {
     const { goods, goodsDescriptionDetailList } = this.props.relaxProps;
     goodsDetailTabObj = {};
     return (
       <div>
         {goodsDescriptionDetailList.length > 0 && (
-          <Tabs defaultActiveKey={'main' + goodsDescriptionDetailList[0].descriptionId} animated={false}>
+          <Tabs defaultActiveKey={'main' + goodsDescriptionDetailList[0].descriptionId} animated={false} >
             {goodsDescriptionDetailList.map((item, i) => {
               goodsDetailTabObj[item.descriptionName + '_' + item.descriptionId] = item;
               let resource = goods.get('resource'),
@@ -99,13 +107,19 @@ export default class Detail extends React.Component<any, any> {
                 disabled = item?.editable ?? false;
               }
               item.content = item?.content ?? '';
+              item.contentType=item?.contentType??'text'
               if (item.contentType && item.contentType.toUpperCase() === 'JSON') {
                 item.content = this.functionTurnJson(item.content);
                 item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content || '{tip:"Please enter the JSON format"}'}</xmp></code></pre>`;
               }
-
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
+                  <div style={{paddingBottom:10,position:'absolute',right:0,zIndex:99,top:10}}>
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode} key={item.descriptionId} disabled={item?.created??true} value={item.contentType} style={{ width: 200 }} onChange={(e)=>{this.changeTabsBar(e,item)}}>
+                    <Select.Option value="text">text</Select.Option>
+                    <Select.Option value="json">json</Select.Option>
+                  </Select>
+                  </div>
                   <ReactEditor
                     key={item.key}
                     id={'main-' + item.descriptionId}

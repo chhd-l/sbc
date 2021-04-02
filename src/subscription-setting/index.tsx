@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs } from 'antd';
+import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs, Spin } from 'antd';
 
 import * as webapi from './webapi';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
-export default class SubscriptionSetting extends Component<any, any> {
+ class Subscription extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Subscription setting',
+      title: <FormattedMessage id="Subscription.Subscription" />,
       settingForm: {
         newOrdersId: null,
         newOrdersStatus: 0,
@@ -18,7 +18,8 @@ export default class SubscriptionSetting extends Component<any, any> {
         cardExpirationId: null,
         cardExpirationStatus: 0,
         cardExpirationValue: 0
-      }
+      },
+      loading:false,
     };
   }
   componentDidMount() {
@@ -32,6 +33,9 @@ export default class SubscriptionSetting extends Component<any, any> {
     });
   };
   getSettingConfig = () => {
+    this.setState({
+      loading:true
+    })
     webapi
       .getSettingConfig()
       .then((data) => {
@@ -55,11 +59,16 @@ export default class SubscriptionSetting extends Component<any, any> {
             settingForm.cardExpirationValue = cardExpirationConfig.context;
           }
           this.setState({
-            settingForm
+            settingForm,
+            loading:false
           });
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        this.setState({
+          loading:false
+        })
+      });
   };
   updateSetting = () => {
     const { settingForm } = this.state;
@@ -77,26 +86,36 @@ export default class SubscriptionSetting extends Component<any, any> {
         }
       ]
     };
+    this.setState({
+      loading:true
+    })
     webapi
       .updateSetting(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operation successful');
+          message.success(this.props.intl.formatMessage({id:'Subscription.OperationSuccessful'}));
+          this.setState({
+            loading:false
+          })
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        this.setState({
+          loading:false
+        })
+      });
   };
   render() {
     const { title, settingForm } = this.state;
     return (
-      <div>
+      <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline title={title} />
           <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-            <FormItem label="Remind of new orders">
+            <FormItem label={<FormattedMessage id="Subscription.RemindOfNewOrders" />}>
               <Row>
                 <Col span={1}>
                   <Switch
@@ -126,14 +145,16 @@ export default class SubscriptionSetting extends Component<any, any> {
                           })
                         }
                       />
-                      <span style={{ marginLeft: 10 }}>Days ahead new orders being created, an email will be sent to pet owners to remind them of new orders.</span>
+                      <span style={{ marginLeft: 10 }}>
+                        <FormattedMessage id="Subscription.Days1" />
+                      </span>
                     </div>
                   </Col>
                 ) : null}
               </Row>
             </FormItem>
 
-            <FormItem label="Remind of card expiration">
+            <FormItem label={<FormattedMessage id="Subscription.RemindOfCardExpiration" />}>
               <Row>
                 <Col span={1}>
                   <Switch
@@ -163,7 +184,9 @@ export default class SubscriptionSetting extends Component<any, any> {
                           })
                         }
                       />
-                      <span style={{ marginLeft: 10 }}>Days ahead pet owners’ card expired, an email will be sent to pet owners to remind them of card expiration.</span>
+                      <span style={{ marginLeft: 10 }}>
+                        <FormattedMessage id="Subscription.Days2" />
+                      </span>
                     </div>
                   </Col>
                 ) : null}
@@ -173,10 +196,10 @@ export default class SubscriptionSetting extends Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateSetting()}>
-            {<FormattedMessage id="save" />}
+            {<FormattedMessage id="Subscription.save" />}
           </Button>
         </div>
-      </div>
+      </Spin>
     );
   }
 }
@@ -192,3 +215,4 @@ const styles = {
     margin: '20px 0 10px 0'
   }
 } as any;
+export default injectIntl(Subscription)

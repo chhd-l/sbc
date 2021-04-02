@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Row, Col, Checkbox } from 'antd';
-
+import { FormattedMessage } from 'react-intl';
 import { Relax } from 'plume2';
 import { withRouter } from 'react-router';
 import moment from 'moment';
@@ -62,48 +62,43 @@ export default class MarketingDes extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      marketingName,
-      beginTime,
-      endTime,
-      marketingType,
-      subType,
-      promotionCode,
-      publicStatus
-    } = this.props.relaxProps;
+    const { marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus } = this.props.relaxProps;
     return (
       <GreyBg>
         <Row>
           <Col span={24}>
-            <span>Promotion Name:</span>
+            <span>
+              <FormattedMessage id="Marketing.PromotionName" />:
+            </span>
             {marketingName}
           </Col>
         </Row>
         <Row>
           <Col span={24}>
-            <span>Promotion Code:</span>
+            <span>
+              <FormattedMessage id="Marketing.PromotionCode" />:
+            </span>
             {promotionCode}
-            <Checkbox
-              className="publicBox"
-              style={{ marginLeft: 20 }}
-              checked={publicStatus === '1'}
-              disabled={true}
-            >
-              Public
+            <Checkbox className="publicBox" style={{ marginLeft: 20 }} checked={publicStatus === '1'} disabled={true}>
+              <FormattedMessage id="Marketing.Public" />
             </Checkbox>
           </Col>
         </Row>
         <Row>
           <Col span={24}>
-            <span>Start and end Time:</span>
-            {moment(beginTime).format(Const.TIME_FORMAT).toString()} ~{' '}
-            {moment(endTime).format(Const.TIME_FORMAT).toString()}
+            <span>
+              <FormattedMessage id="Marketing.StartAndEndTime" />:
+            </span>
+            {moment(beginTime).format(Const.TIME_FORMAT).toString()} ~ {moment(endTime).format(Const.TIME_FORMAT).toString()}
           </Col>
         </Row>
         {subType === 6 || subType === 7 ? null : (
           <Row>
             <Col span={24}>
-              <span>{MAK_TYPE[marketingType]}Type:</span>
+              <span>
+                {MAK_TYPE[marketingType]}
+                <FormattedMessage id="Marketing.Type" />:
+              </span>
               {SUB_TYPE[subType]}
             </Col>
           </Row>

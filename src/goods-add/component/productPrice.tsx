@@ -11,6 +11,44 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
+const limitDecimals = (value: string | number): string => {
+
+  const reg = /^(\-)*(\d+)\.(\d\d\d\d).*$/;
+  if(typeof value === 'string') {
+    if (!isNaN(Number(value))) {
+      //value = Number(value).toFixed(2)
+      return value.replace(reg, '$1$2.$3')
+    } else {
+      return ""
+    }
+    // return !isNaN(Number(value)) ? value.replace(reg, '$1$2.$3') : ''
+    /*let a = !isNaN(Number(value)) ? value.replace(reg, '$1$2.$3') : ''
+
+    if (parseInt(a) === parseFloat(a))
+    {
+      return Number(a).toFixed(2)
+    }
+    else
+    {
+      return a
+    }*/
+  } else if (typeof value === 'number') {
+    let a = !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
+    return !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
+   /* if (parseInt(a) === parseFloat(a))
+    {
+      return Number(a).toFixed(2)
+    }
+    else
+    {
+      return a
+    }*/
+
+  } else {
+    return ''
+  }
+};
+
 @Relax
 export default class ProductPrice extends React.Component<any, any> {
   WrapperForm: any;
@@ -129,7 +167,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, selectedBasePrice, stockChecked, addSkUProduct, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, selectedBasePrice, goodsList, stockChecked, addSkUProduct, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -235,7 +273,8 @@ class SkuForm extends React.Component<any, any> {
       key: 'linePrice',
       render: (rowInfo) => (
         <Row>
-          <Col span={12}>
+          <Col span={12} className="flex-start-align">
+            <span style={{paddingRight:'3px'}}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('linePrice_' + rowInfo.id, {
                 // rules: [
@@ -246,7 +285,14 @@ class SkuForm extends React.Component<any, any> {
                 // ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber min={0} max={9999999} formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />)}
+              })(
+                <InputNumber
+                  min={0}
+                  max={9999999}
+                  precision={2}
+                  step={0.01}
+                  // formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              />)}
             </FormItem>
           </Col>
         </Row>
@@ -294,35 +340,77 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
-        let marketPrice = Number(parseFloat(rowInfo.marketPrice))
-        let subscriptionPrice = Number(parseFloat(rowInfo.subscriptionPrice))
-        if(addSkUProduct.length === 1) {
-          if(String(marketPrice).indexOf(".") == -1){
-            marketPrice = (marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
-          }else{
-            if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
-              marketPrice = marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
-            }else {
-              marketPrice = marketPrice.toFixed(4)
-            }
-          }
+        let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
+        let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
 
-          if(String(subscriptionPrice).indexOf(".") == -1){
-            subscriptionPrice = (subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
-          }else{
-            if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
-              subscriptionPrice = subscriptionPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
-            }else {
-              subscriptionPrice = subscriptionPrice.toFixed(4)
-            }
+        //console.log(targetGoodsIds,22222);
+        /*console.log(goods.toJS(),22222);
+        console.log(rowInfo,33333);
+        console.log(goodsList.toJS(),44444);*/
+        if (goods.get('goodsId') == null && goodsList.toJS().length == 1) {
+          console.log(addSkUProduct,111);
+
+          let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
+          /*console.log(targetGoodsIds,66666);
+          console.log(addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length,7777);
+          console.log(!rowInfo.marketPrice);
+          console.log(!rowInfo.subscriptionPrice);*/
+          if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
+            //console.log(55555)
+            marketPrice = targetGoodsIds.subMarketPrice?
+              targetGoodsIds.subMarketPrice * targetGoodsIds.bundleNum : targetGoodsIds.marketPrice?
+                targetGoodsIds.marketPrice * targetGoodsIds.bundleNum: 0
+            subscriptionPrice = targetGoodsIds.subScriptionPrice?
+              targetGoodsIds.subScriptionPrice * targetGoodsIds.bundleNum : targetGoodsIds.subscriptionPrice?
+                targetGoodsIds.subscriptionPrice * targetGoodsIds.bundleNum :0
+              /*Number(targetGoodsIds.subMarketPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.marketPrice?
+                Number(targetGoodsIds.marketPrice) * (targetGoodsIds.bundleNum): 0
+            subscriptionPrice = targetGoodsIds.subScriptionPrice?
+              Number(targetGoodsIds.subScriptionPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.subscriptionPrice?
+                Number(targetGoodsIds.subscriptionPrice) * Number(targetGoodsIds.bundleNum) :0*/
+            this._editGoodsItem(rowInfo.id, 'marketPrice', marketPrice, )
+            this._editGoodsItem(rowInfo.id, 'subscriptionPrice', subscriptionPrice, )
           }
         }
+
+
+
+        /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
+         //console.log(marketPrice,2222222);
+         console.log(rowInfo.marketPrice,33333);
+         if(addSkUProduct.length === 1 && addSkUProduct[0].targetGoodsIds.length === 1) {
+           if(String(marketPrice).indexOf(".") == -1){
+             console.log(4444444)
+             marketPrice = (addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
+           }else{
+             console.log(5555555)
+             if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
+               marketPrice = marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
+             }else {
+               marketPrice = marketPrice.toFixed(4)
+             }
+           }
+
+           if(String(subscriptionPrice).indexOf(".") == -1){
+             subscriptionPrice = (addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
+           }else{
+             if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
+               subscriptionPrice = subscriptionPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
+             }else {
+               subscriptionPrice = subscriptionPrice.toFixed(4)
+             }
+           }
+         }else {
+           marketPrice = rowInfo.marketPrice ? marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length) : 0.00
+         }*/
 
         return (
           <Row>
             <Col span={12}>
               {goods.get('subscriptionStatus') == 1 ? (
-                <div className="flex-content-center">
+                <div>
+                  <p className="flex-start-align">
+                    <span style={{paddingRight:'3px'}}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
                   <FormItem style={styles.tableFormItem}>
                     {getFieldDecorator('marketPrice_' + rowInfo.id, {
                       rules: [
@@ -346,21 +434,25 @@ class SkuForm extends React.Component<any, any> {
 
                       onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
                       //initialValue: addSkUProduct.length === 1? marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum : marketPrice ? marketPrice : 0
-                      initialValue:  marketPrice ? marketPrice : 0
+                      initialValue:  marketPrice
 
                     })(
                       <InputNumber
                         min={0}
                         max={9999999.99}
-                        //precision={2}
-                        disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                        formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? 
-                          sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
+                        //precision={marketPriceNum}
+                        style={{ width: '111px' }}
+                        //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                        formatter={limitDecimals}
+                        parser={limitDecimals}
+                        step={0.01}
                       />
                       // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                     )}
-                  </FormItem>
+                  </FormItem></p>
                   {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
+                    <p className="flex-start-align">
+                      <span style={{paddingRight:'3px'}}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
                     <FormItem style={styles.tableFormItem}>
                       {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
                         rules: [
@@ -368,20 +460,10 @@ class SkuForm extends React.Component<any, any> {
                             required: true,
                             message: 'Please input subscription price'
                           },
-                          {
-                            pattern: ValidConst.zeroPrice,
-                            message: 'Please input the legal amount with two decimal places'
-                          },
-                          {
-                            validator: (_rule, value, callback) => {
-                              if (rowInfo.subscriptionStatus === 1) {
-                                if (value === 0) {
-                                  callback('Subscription price cannot be zero');
-                                }
-                              }
-                              callback();
-                            }
-                          },
+                          // {
+                          //   pattern: ValidConst.zeroPrice,
+                          //   message: 'Please input the legal amount with two decimal places'
+                          // },
                           {
                             type: 'number',
                             max: 9999999.99,
@@ -392,20 +474,24 @@ class SkuForm extends React.Component<any, any> {
                           }
                         ],
                         onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                        initialValue:  subscriptionPrice ? subscriptionPrice : 0
+                        initialValue:  subscriptionPrice
                       })(
                         <InputNumber
                           min={0}
                           max={9999999.99}
                           //precision={4}
+                          style={{ width: '111px' }}
                           disabled={rowInfo.subscriptionStatus === 0}
-                          formatter={(value) => {
+                          formatter={limitDecimals}
+                          parser={limitDecimals}
+                          step={0.01}
+                          /*formatter={(value) => {
                             return `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`
-                          }}
+                          }}*/
                         />
                         // <Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />
                       )}
-                    </FormItem>
+                    </FormItem></p>
                   ) : null}
                 </div>
               ) : (
@@ -437,8 +523,11 @@ class SkuForm extends React.Component<any, any> {
                       min={0}
                       max={9999999.99}
                       precision={2}
-                      disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                      formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
+                      style={{ width: '111px' }}
+                      formatter={limitDecimals}
+                      parser={limitDecimals}
+                      step={0.01}
+                      //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                     />
                     // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                   )}
@@ -568,6 +657,10 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
+    console.log(id,1111);
+    console.log(key,222);
+    console.log(e,22333233);
+
     editGoodsItem(id, key, e);
     if (key == 'marketPrice') {
       editGoodsItem(id, 'flag', flag);

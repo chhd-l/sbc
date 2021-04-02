@@ -138,7 +138,7 @@ const routes = [
   },
   //订单-订单管理-订单列表-新增退单
   {
-    path: '/order-return-add',
+    path: '/order-return-add/:id',
     exact: true,
     asyncComponent: () => import('./order-return-add')
   },
@@ -757,6 +757,10 @@ const routes = [
     asyncComponent: () => import('./prescriber-reward-rate')
   },
   {
+    path: '/prescriber-setting',
+    asyncComponent: () => import('./prescriber-setting')
+  },
+  {
     path: '/prescriber-type-add',
     asyncComponent: () => import('./prescriber-type-add')
   },
@@ -961,6 +965,10 @@ const routes = [
   {
     path: '/offline-checkout',
     asyncComponent: () => import('./offline-checkout')
+  },
+  {
+    path: '/split-order-setting',
+    asyncComponent: () => import('./order-split-setting')
   }
 ];
 

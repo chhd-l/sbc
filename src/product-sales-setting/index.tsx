@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
 import { Form, Input, Select, Modal, Button, Radio, message } from 'antd';
 import ModalForm from './conponents/modal-form';
+import ModalFormClub from './conponents/modal-form-club';
+
 import { FormattedMessage } from 'react-intl';
 import { querySysDictionary, defaultProductSetting, translateAddBatch, addSysDictionary } from './webapi';
 const { Option } = Select;
@@ -9,10 +11,13 @@ const { Option } = Select;
 class ProductSearchSetting extends Component<any, any> {
   state = {
     visible: false,
+    visibleClub: false,
     disabled: false,
     options: [],
+    optionsClub: [],
     defaultPurchaseType: '',
     defaultSubscriptionFrequencyId: '',
+    defaultSubscriptionClubFrequencyId: '',
     language: [],
     purchaseType: []
   };
@@ -55,17 +60,47 @@ class ProductSearchSetting extends Component<any, any> {
     );
   };
 
+  showClubModal = () => {
+    this.setState({
+      visibleClub: true
+    });
+  };
+  handleClubCancel = () => {
+    this.setState({
+      visibleClub: false
+    });
+  };
+  handleClubSubmit = () => {
+    this.setState(
+      {
+        visibleClub: false
+      },
+      () => {
+        this.querySysDictionary();
+      }
+    );
+  };
   /**
    * 获取更新频率月｜ 周
    */
   async querySysDictionary() {
-    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), querySysDictionary({ type: 'language' }), querySysDictionary({ type: 'purchase_type' })]);
-    let { defaultPurchaseType, defaultSubscriptionFrequencyId, languageId } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+    const result = await Promise.all([
+      querySysDictionary({ type: 'Frequency_week' }),
+      querySysDictionary({ type: 'Frequency_month' }),
+      querySysDictionary({ type: 'Frequency_week_club' }),
+      querySysDictionary({ type: 'Frequency_month_club' }),
+      querySysDictionary({ type: 'language' }),
+      querySysDictionary({ type: 'purchase_type' })]);
+    let { defaultPurchaseType, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, languageId } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
-    let languageList = result[2].res?.context?.sysDictionaryVOS ?? [];
-    let purchaseType = result[3].res?.context?.sysDictionaryVOS ?? [];
+    let weeksClub = result[2].res?.context?.sysDictionaryVOS ?? [];
+    let monthsClub = result[3].res?.context?.sysDictionaryVOS ?? [];
+    let languageList = result[4].res?.context?.sysDictionaryVOS ?? [];
+    let purchaseType = result[5].res?.context?.sysDictionaryVOS ?? [];
     let options = [...months, ...weeks];
+    let optionsClub = [...monthsClub, ...weeksClub];
+
     let d = languageId.split(',');
     let language = languageList.filter((item) => {
       if (d.includes(item.id.toString())) {
@@ -74,8 +109,10 @@ class ProductSearchSetting extends Component<any, any> {
     });
     this.setState({
       options,
+      optionsClub,
       defaultPurchaseType,
       defaultSubscriptionFrequencyId,
+      defaultSubscriptionClubFrequencyId,
       language,
       purchaseType
     });
@@ -83,7 +120,8 @@ class ProductSearchSetting extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { disabled, defaultPurchaseType, visible, defaultSubscriptionFrequencyId, options, language, purchaseType } = this.state;
+    const { disabled, defaultPurchaseType, visible, visibleClub, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, options, optionsClub, language, purchaseType } = this.state;
+
     return (
       <div style={styles.container}>
         <BreadCrumb />
@@ -100,9 +138,9 @@ class ProductSearchSetting extends Component<any, any> {
                 ]
               })(
                 <Radio.Group disabled={disabled}>
-                  {purchaseType.map((item) => {
+                  {purchaseType.map((item,index) => {
                     return (
-                      <Radio.Button value={item.id} style={{ width: 150, textAlign: 'center' }}>
+                      <Radio.Button value={item.id} key={index} style={{ width: 150, textAlign: 'center' }}>
                         {item.valueEn}
                       </Radio.Button>
                     );
@@ -159,8 +197,8 @@ class ProductSearchSetting extends Component<any, any> {
               style={{ marginBottom: 0 }}
             >
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
-                {getFieldDecorator('defaultSubscriptionFrequencyId', {
-                  initialValue: defaultSubscriptionFrequencyId,
+                {getFieldDecorator('defaultSubscriptionClubFrequencyId', {
+                  initialValue: defaultSubscriptionClubFrequencyId,
                   rules: [
                     {
                       required: true,
@@ -169,7 +207,7 @@ class ProductSearchSetting extends Component<any, any> {
                   ]
                 })(
                   <Select disabled={disabled} placeholder="Please select subscription frequency !">
-                    {options.map((item) => (
+                    {optionsClub.map((item) => (
                       <Option key={item.id} value={item.id}>
                         {item.name}
                       </Option>
@@ -178,7 +216,7 @@ class ProductSearchSetting extends Component<any, any> {
                 )}
               </Form.Item>
               <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
-                <Button type="danger" size="default" onClick={this.showModal} disabled={disabled}>
+                <Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
                   Add new frequency
                 </Button>
               </Form.Item>
@@ -192,6 +230,7 @@ class ProductSearchSetting extends Component<any, any> {
         </div>
 
         <ModalForm visible={visible} languageList={language} handleOk={this.handleSubmit} handleCancel={this.handleCancel} />
+        <ModalFormClub visibleClub={visibleClub} languageList={language} handleClubOk={this.handleClubSubmit} handleClubCancel={this.handleClubCancel} />
       </div>
     );
   }

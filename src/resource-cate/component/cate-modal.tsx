@@ -7,6 +7,7 @@ import { IMap } from 'typings/globalType';
 import { Map } from 'immutable';
 import Store from '../store';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -59,13 +60,7 @@ export default class CateModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal
-        maskClosable={false}
-        title={editFlag ? 'Edit' : 'Add'}
-        visible={modalVisible}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
+      <Modal maskClosable={false} title={editFlag ? 'Edit' : 'Add'} visible={modalVisible} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
         <WrapperForm ref={(form) => (this._form = form)} />
       </Modal>
     );
@@ -124,32 +119,25 @@ class CateModalForm extends React.Component<any, any> {
 
     return (
       <Form className="login-form">
-        <FormItem {...formItemLayout} label="Category Name" hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.CategoryName" />} hasFeedback>
           {getFieldDecorator('cateName', {
             initialValue: cateName,
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please input the category name'
+                message: <FormattedMessage id="Setting.PleaseInputTheCategoryName" />
               },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorMinAndMax(
-                    rule,
-                    value,
-                    callback,
-                    'Category Name',
-                    1,
-                    10
-                  );
+                  QMMethod.validatorMinAndMax(rule, value, callback, 'Category Name', 1, 10);
                 }
               }
             ]
           })(<Input onChange={this._changeCateName} value={cateName} />)}
         </FormItem>
         {formData.get('cateParentName') && (
-          <FormItem {...formItemLayout} label="Parent category">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.ParentCategory" />}>
             {formData.get('cateParentName')}
           </FormItem>
         )}

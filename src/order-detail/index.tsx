@@ -39,24 +39,30 @@ export default class OrderDetail extends React.Component<any, any> {
 
     return (
       <div>
-        <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{<FormattedMessage id="orderDetails" />}</Breadcrumb.Item>
-        </BreadCrumb>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <a href="/order-list"><FormattedMessage id="Menu.Order" /></a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="/order-list"><FormattedMessage id="Menu.Order list" /></a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>{<FormattedMessage id="Order.OrderDetails" />}</Breadcrumb.Item>
+        </Breadcrumb>
         <div className="container-search">
-          <Headline title={<FormattedMessage id="orderDetails" />} />
+          <Headline title={<FormattedMessage id="Order.OrderDetails" />} />
         </div>
         <div className="container">
           <Tabs onChange={(key) => this.store.onTabsChange(key)} activeKey={this.store.state().get('tab')}>
-            <Tabs.TabPane tab={<FormattedMessage id="orderDetails" />} key="1">
+            <Tabs.TabPane tab={<FormattedMessage id="Order.OrderDetails" />} key="1">
               <OrderDetailTab />
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<FormattedMessage id="deliveryRecord" />} key="2">
+            <Tabs.TabPane tab={<FormattedMessage id="Order.DeliveryRecord" />} key="2">
               <OrderDelivery />
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<FormattedMessage id="collectionRecords" />} key="3">
+            <Tabs.TabPane tab={<FormattedMessage id="Order.PaymentRecords" />} key="3">
               <OrderReceive />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Comment" key="4">
+            <Tabs.TabPane tab={<FormattedMessage id="Order.Comment" />} key="4">
               <Comment orderNumber={tid} petOwnerName={this.store.state().get('detail').getIn(['buyer', 'name'])} />
             </Tabs.TabPane>
           </Tabs>
@@ -65,7 +71,7 @@ export default class OrderDetail extends React.Component<any, any> {
         </div>
         <div className="bar-button">
           <Button onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="back" />}
+            {<FormattedMessage id="Order.Back" />}
           </Button>
         </div>
       </div>

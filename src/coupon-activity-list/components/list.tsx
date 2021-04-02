@@ -5,7 +5,7 @@ import moment from 'moment';
 import { AuthWrapper, Const, DataGrid, noop, util } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Popconfirm } from 'antd';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 @Relax
 export default class List extends React.Component<any, any> {
   props: {
@@ -54,7 +54,7 @@ export default class List extends React.Component<any, any> {
           }
         }}
       >
-        <DataGrid.Column title="Activity name" dataIndex="activityName" key="activityName" />
+        <DataGrid.Column title={<FormattedMessage id="Marketing.ActivityName" />} dataIndex="activityName" key="activityName" />
         {/* <DataGrid.Column
           title="Activity type"
           dataIndex="couponActivityType"
@@ -66,9 +66,9 @@ export default class List extends React.Component<any, any> {
         <DataGrid.Column
           title={
             <p>
-              Start time
+              <FormattedMessage id="Marketing.StartTime" />
               <br />
-              End time
+              <FormattedMessage id="Marketing.EndTime" />
             </p>
           }
           dataIndex="startTime"
@@ -95,7 +95,7 @@ export default class List extends React.Component<any, any> {
           }}
         /> */}
         <DataGrid.Column
-          title="Status"
+          title={<FormattedMessage id="Marketing.Status" />}
           dataIndex="marketingStatus"
           key="marketingStatus"
           render={(text) => {
@@ -104,7 +104,7 @@ export default class List extends React.Component<any, any> {
         />
         {/*pauseFlag*/}
         <DataGrid.Column
-          title="Operation"
+          title={<FormattedMessage id="Marketing.Operation" />}
           key="operate"
           className={'operation-th'}
           dataIndex="marketingStatus"

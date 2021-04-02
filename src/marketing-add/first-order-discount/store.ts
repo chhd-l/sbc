@@ -61,4 +61,8 @@ export default class AppStore extends Store {
     }
     return response;
   };
+
+  discountBeanOnChange = (bean) => {
+    this.dispatch('marketing:discountBean', bean);
+  };
 }

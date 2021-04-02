@@ -164,7 +164,7 @@ class NewAppointment extends React.Component<any, any> {
               {getFieldDecorator('apptDateTime', {
                 initialValue: [moment() < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') ? '2021-04-20' : moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
                 rules: [{ validator: this.validateDateTime }]
-              })(<AppointmentDatePicker />)}
+              })(<AppointmentDatePicker onFetching={(state) => this.setState({ loading: state })} />)}
             </Form.Item>
             <Form.Item label="Consumer information">
               <Radio.Group value={this.state.memberType} onChange={this.onSelectMemberType}>
@@ -189,7 +189,7 @@ class NewAppointment extends React.Component<any, any> {
               {getFieldDecorator('consumerPhone', {
                 initialValue: '',
                 rules: [{ required: true, message: 'Phone number is required' }]
-              })(<Input disabled={this.state.memberType === 'member'} />)}
+              })(<Input />)}
             </Form.Item>
             <Form.Item label="Consumer email">
               {getFieldDecorator('consumerEmail', {

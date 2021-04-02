@@ -430,11 +430,11 @@ export default class EditForm extends React.Component<any, any> {
               })(<Input />)}
             </FormItem> */}
 
-          {/* {_state.get('edit') ? (
+          {_state.get('edit') ? (
             <FormItem {...formItemLayout} label="Reset Password">
               <Switch onChange={(e) => this.setState({ changePassword: e.valueOf() })} />
             </FormItem>
-          ) : null} */}
+          ) : null}
 
           {/* {this.state.changePassword ? (
             <div>

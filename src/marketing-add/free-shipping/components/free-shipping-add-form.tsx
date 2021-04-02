@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
+import { FormattedMessage, injectIntl} from 'react-intl';
 
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
@@ -41,7 +42,7 @@ const largeformItemLayout = {
 };
 
 @Relax
-export default class FreeShippingAddForm extends React.Component<any, any> {
+class FreeShippingAddForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     // const relaxProps = props.store.state();
@@ -55,6 +56,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
   }
   props: {
     form: any;
+    intl: any;
     relaxProps?: {
       allGroups: any;
       marketingBean: any;
@@ -167,43 +169,61 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     const { form } = this.props; //marketingType, marketingId,
     const { getFieldDecorator } = this.props.form;
     const { allGroups, marketingBean, loading } = this.props.relaxProps;
-    console.log(marketingBean.toJS(), 'marketingBean---------');
-    console.log(allGroups.toJS(), 'allGroups---------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <div className="bold-title">Basic Setting</div>
-        <FormItem {...smallformItemLayout} label="Free shipping name" labelAlign="left">
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />} labelAlign="left">
           {getFieldDecorator('marketingName', {
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please free shipping name'
+                message:
+                  this.props.intl.formatMessage({
+                    id: 'Marketing.Pleaseenterfreeshippingname',
+                  })
               },
-              { min: 1, max: 40, message: '1-40 words' },
+              { min: 1, max: 40, message:
+                  this.props.intl.formatMessage({
+                  id: 'Marketing.40Words',
+                })
+              },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, 'Free shipping name');
+                  QMMethod.validatorEmoji(rule, value, callback,
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.Freeshippingname',
+                    })
+                  );
                 }
               }
             ],
             onChange: (e) => this.onBeanChange({ marketingName: e.target.value }),
             initialValue: marketingBean.get('marketingName')
-          })(<Input placeholder="Please input free shipping name ,no  more than 40 words." style={{ width: 350 }} />)}
+          })(<Input placeholder={
+            this.props.intl.formatMessage({
+            id: 'Marketing.nomorethan40words',
+          })} style={{ width: 350 }} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Start and end time" labelAlign="left">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />} labelAlign="left">
           {getFieldDecorator('time', {
             rules: [
               {
                 required: true,
-                message: 'Please select Starting and end time'
+                message: this.props.intl.formatMessage({
+                  id: 'Marketing.PleaseSelectStartingAndEndTime'
+                })
               },
               {
                 validator: (_rule, value, callback) => {
                   if (value[0]) {
                     callback();
                   } else {
-                    callback('Please select Starting and end time');
+                    callback(
+                      this.props.intl.formatMessage({
+                        id: 'Marketing.PleaseSelectStartingAndEndTime'
+                      })
+                    );
                   }
                 }
               }
@@ -220,7 +240,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
             initialValue: marketingBean.get('beginTime') === undefined ? [undefined, undefined] : [moment(marketingBean.get('beginTime')), moment(marketingBean.get('endTime'))]
           })(<RangePicker getCalendarContainer={() => document.getElementById('page-content')} allowClear={false} format={Const.DATE_FORMAT} placeholder={['Start time', 'End time']} showTime={{ format: 'HH:mm' }} onOpenChange={this.handleEndOpenChange} />)}
         </FormItem>
-        <div className="bold-title">Free shipping type</div>
+        <div className="bold-title"><FormattedMessage id="Marketing.Freeshippingtype" />:</div>
         <FormItem {...smallformItemLayout} labelAlign="left">
           {getFieldDecorator(
             'subType',
@@ -234,36 +254,51 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                 <FormItem>
                   <Radio value={10}>
                     <span>
-                      Order reach &nbsp;
+                      <FormattedMessage id="Marketing.Orderreach" /> &nbsp;
                       {getFieldDecorator('shippingValue', {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
                               if (!marketingBean.get('shippingValue') && marketingBean.get('subType') === 10) {
-                                callback('Shipping value must be entered.');
+                                callback(
+                                  this.props.intl.formatMessage({
+                                    id: 'Marketing.Shippingvalueentered',
+                                  })
+                                );
                               }
                               if (marketingBean.get('shippingValue')) {
                                 if (!ValidConst.zeroPrice.test(marketingBean.get('shippingValue')) || !(marketingBean.get('shippingValue') < 10000 && marketingBean.get('shippingValue') >= 0)) {
-                                  callback('0-9999');
+                                  callback(
+                                    this.props.intl.formatMessage({
+                                      id: 'Marketing.0-9999',
+                                    })
+                                  );
                                 }
                               }
                               callback();
                             }
                           }
-                        ]
+                        ],
+                        initialValue: marketingBean.get('shippingValue')
                       })(
-                        <>
-                          <Input
-                            style={{ width: 200 }}
-                            title={'0-9999'}
-                            placeholder={'0-9999'}
-                            onChange={(e) => {
-                              this.shippingRadioOnChange(e, 'shippingValue');
-                            }}
-                            value={marketingBean.get('shippingValue')}
-                            disabled={marketingBean.get('subType') !== 10}
-                          />
-                        </>
+                        <Input
+                          style={{ width: 200 }}
+                          title={
+                            this.props.intl.formatMessage({
+                            id: 'Marketing.0-9999',
+                          })
+                          }
+                          placeholder={
+                            this.props.intl.formatMessage({
+                              id: 'Marketing.0-9999',
+                            })
+                          }
+                          onChange={(e) => {
+                            this.shippingRadioOnChange(e, 'shippingValue');
+                          }}
+                          value={marketingBean.get('shippingValue')}
+                          disabled={marketingBean.get('subType') !== 10}
+                        />
                       )}
                       <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                     </span>
@@ -272,29 +307,34 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                 <FormItem>
                   <Radio value={11}>
                     <span>
-                      Order reach &nbsp;
+                      <FormattedMessage id="Marketing.Orderreach" />&nbsp;
                       {getFieldDecorator('shippingItemValue', {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
                               if (!marketingBean.get('shippingItemValue') && marketingBean.get('subType') === 11) {
-                                callback('Items must be entered.');
+                                callback(
+                                  this.props.intl.formatMessage({
+                                    id: 'Marketing.Itemsmustbeentered',
+                                  })
+                                );
                               }
                               if (marketingBean.get('shippingItemValue')) {
                                 if (!ValidConst.zeroNumber.test(marketingBean.get('shippingItemValue')) || !(marketingBean.get('shippingItemValue') < 10000 && marketingBean.get('shippingItemValue') > 0)) {
-                                  callback('1-9999');
+                                  callback(
+                                    this.props.intl.formatMessage({
+                                      id: 'Marketing.1-9999',
+                                    })
+                                  );
                                 }
                               }
                               callback();
                             }
                           }
-                        ]
-                      })(
-                        <>
-                          <Input style={{ width: 200 }} value={marketingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={marketingBean.get('subType') !== 11} />
-                        </>
-                      )}
-                      <span>&nbsp;items</span>
+                        ],
+                        initialValue: marketingBean.get('shippingItemValue')
+                      })(<Input style={{ width: 200 }} value={marketingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={marketingBean.get('subType') !== 11} />)}
+                      <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
                     </span>
                   </Radio>
                 </FormItem>
@@ -302,7 +342,7 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
             </>
           )}
         </FormItem>
-        <div className="bold-title">Target consumer:</div>
+        <div className="bold-title"><FormattedMessage id="Marketing.TargetConsumer" />:</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
           {getFieldDecorator('joinLevel', {
             // rules: [{required: true, message: 'Please select target consumer'}],
@@ -320,8 +360,8 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
               >
                 {/*<Radio value={-1}>Full platform consumer</Radio>*/}
                 {/*{util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}*/}
-                <Radio value={-1}>All</Radio>
-                <Radio value={-3}>Select group</Radio>
+                <Radio value={-1}><FormattedMessage id="Marketing.all" /></Radio>
+                <Radio value={-3}><FormattedMessage id="Marketing.Selectgroup" /></Radio>
               </RadioGroup>
               {/*{level._levelPropsShow && (*/}
               {/*  <div>*/}
@@ -343,7 +383,11 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
                 {
                   validator: (_rule, value, callback) => {
                     if (!value && marketingBean.get('joinLevel') === -3) {
-                      callback('Please select group.');
+                      callback(
+                        this.props.intl.formatMessage({
+                          id: 'Marketing.Pleaseselectgroup'
+                        })
+                      );
                     }
                     callback();
                   }
@@ -370,10 +414,10 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
           {/*<Col span={3} />*/}
           <Col span={10}>
             <Button type="primary" htmlType="submit">
-              Save
+              <FormattedMessage id="Marketing.Save" />
             </Button>
             &nbsp;&nbsp;
-            <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
+            <Button onClick={() => history.push('/marketing-center')}><FormattedMessage id="Marketing.Cancel" /></Button>
           </Col>
         </Row>
         {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
@@ -487,3 +531,5 @@ export default class FreeShippingAddForm extends React.Component<any, any> {
     // this.setState({ saveLoading: false });
   };
 }
+
+export default injectIntl(FreeShippingAddForm)

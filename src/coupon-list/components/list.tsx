@@ -5,6 +5,7 @@ import { AuthWrapper, noop, history, cache } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Popconfirm, Table as DataGrid } from 'antd';
 import '../index.less';
+import { FormattedMessage } from 'react-intl';
 @Relax
 export default class List extends React.Component<any, any> {
   props: {
@@ -50,9 +51,9 @@ export default class List extends React.Component<any, any> {
             }
           }}
         >
-          <DataGrid.Column className="max-td" title="Coupon name" dataIndex="couponName" key="couponName" />
+          <DataGrid.Column className="max-td" title={<FormattedMessage id="Marketing.CouponName" />} dataIndex="couponName" key="couponName" />
           <DataGrid.Column title={`Face value(${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)})`} dataIndex="denominationStr" key="denominationStr" />
-          <DataGrid.Column title="Valid period" dataIndex="validity" key="validity" />
+          <DataGrid.Column title={<FormattedMessage id="Marketing.ValidPerio" />} dataIndex="validity" key="validity" />
           {/* <DataGrid.Column
           title="优惠券分类"
           dataIndex="cateNamesStr"
@@ -62,9 +63,9 @@ export default class List extends React.Component<any, any> {
           }
         /> */}
           {/* <DataGrid.Column title="Use range" dataIndex="scopeNamesStr" key="scopeNamesStr" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} /> */}
-          <DataGrid.Column title="Status" dataIndex="couponStatusStr" key="couponStatusStr" />
+          <DataGrid.Column title={<FormattedMessage id="Marketing.Status" />} dataIndex="couponStatusStr" key="couponStatusStr" />
           <DataGrid.Column
-            title="Operation"
+            title={<FormattedMessage id="Marketing.Operation" />}
             key="operate"
             className={'operation-th'}
             dataIndex="isFree"
@@ -80,13 +81,13 @@ export default class List extends React.Component<any, any> {
                         }}
                         style={{ marginRight: 10 }}
                       >
-                        Export
+                        <FormattedMessage id="Marketing.Export" />
                       </span>
                     )}
                   </AuthWrapper>
                   <AuthWrapper functionName={'f_coupon_detail'}>
                     <Link to={`/coupon-detail/${(record as any).couponId}`} style={{ marginRight: 10, paddingLeft: 0 }}>
-                      View
+                      <FormattedMessage id="Marketing.View" />
                     </Link>
                   </AuthWrapper>
                   <AuthWrapper functionName={'f_coupon_editor'}>
@@ -102,7 +103,7 @@ export default class List extends React.Component<any, any> {
                           })
                         }
                       >
-                        Edit
+                        <FormattedMessage id="Marketing.Edit" />
                       </span>
                     )}
 
@@ -112,12 +113,14 @@ export default class List extends React.Component<any, any> {
                         copyCoupon((record as any).couponId);
                       }}
                     >
-                      Copy
+                      <FormattedMessage id="Marketing.Copy" />
                     </span>
 
                     {text == 1 && (
-                      <Popconfirm title="Are you sure to delete this coupon?" onConfirm={() => deleteCoupon((record as any).couponId)} okText="Yes" cancelText="Cancel">
-                        <span className="link">Delete</span>
+                      <Popconfirm title={<FormattedMessage id="Marketing.deleteThisCoupon" />} onConfirm={() => deleteCoupon((record as any).couponId)} okText="Yes" cancelText="Cancel">
+                        <span className="link">
+                          <FormattedMessage id="Marketing.Delete" />
+                        </span>
                       </Popconfirm>
                     )}
                   </AuthWrapper>

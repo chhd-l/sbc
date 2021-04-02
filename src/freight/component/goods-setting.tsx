@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-
+import { FormattedMessage } from 'react-intl';
 import { Button } from 'antd';
 import { history, checkAuth } from 'qmkit';
 import { IList } from 'typings/globalType';
@@ -32,19 +32,11 @@ export default class GoodsSetting extends React.Component<any, any> {
     const { goodsFreights } = this.props.relaxProps;
     return [
       goodsFreights.count() < 20 && checkAuth('f_goods_temp_edit') && (
-        <Button
-          type="primary"
-          onClick={() => history.push('/goods-freight')}
-          key="button"
-        >
-          Add single product shipping template
+        <Button type="primary" onClick={() => history.push('/goods-freight')} key="button">
+          <FormattedMessage id="Setting.AddSingleProductShippingTemplate" />
         </Button>
       ),
-      <FreightList
-        key="feightList"
-        data={goodsFreights.toJS()}
-        isStore={false}
-      />
+      <FreightList key="feightList" data={goodsFreights.toJS()} isStore={false} />
     ];
   }
 }

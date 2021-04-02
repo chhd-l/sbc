@@ -43,6 +43,8 @@ import ErrorBoundary from './errorBoundary';
 import ReactEditor from './reactEditor/index'
 import Fetch from './fetch/index'
 import Fonts from './images/iconfont/iconfont.json'
+import {OrderStatus, ShippStatus, PaymentStatus, getOrderStatusValue} from './order-status-enum'
+import QRScaner from './qr-scan';
 export {
   noop,
   SelectGroup,
@@ -90,5 +92,10 @@ export {
   AssetManagement,
   ErrorBoundary,
   ReactEditor,
-  Fonts
+  Fonts,
+  OrderStatus,
+  ShippStatus,
+  PaymentStatus,
+  getOrderStatusValue,
+  QRScaner
 };

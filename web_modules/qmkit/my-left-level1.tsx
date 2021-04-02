@@ -3,6 +3,7 @@ import { Layout, Menu, Icon } from 'antd';
 const { Sider } = Layout;
 import { history, cache, util } from 'qmkit';
 import { fromJS } from 'immutable';
+import {FormattedMessage} from "react-intl";
 
 
 export default class MyLeftLevel1 extends React.PureComponent<any, any> {
@@ -99,7 +100,7 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
                     {/* <Icon type="home" style={{fontSize:30 }}/>
                     <span style={{display: 'block',lineHeight:'10px',}} >{v.title}</span> */}
                     <i className={"icon iconfont " + v.icon } style={{fontSize:30 }}></i>
-                    <span style={{display: this.state.collapsed?'none':'block',lineHeight:'10px',}} >{v.title}</span>
+                    <span style={{display: this.state.collapsed?'none':'block',lineHeight:'10px',}} ><FormattedMessage id={"Menu."+ v.title} /></span>
                 </Menu.Item>
               );
             })}

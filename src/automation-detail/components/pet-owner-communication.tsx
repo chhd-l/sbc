@@ -95,6 +95,7 @@ class PetOwnerCommunication extends Component<any, any> {
       contactId: currentRow.contactId,
       campaignId: this.props.automationId,
       nodeName: currentRow.nodeName,
+      nodeType: currentRow.nodeType,
       pageSize: modalPagination.pageSize,
       pageNum: modalPagination.current - 1,
       keyword: keyword
@@ -201,20 +202,25 @@ class PetOwnerCommunication extends Component<any, any> {
     const { petOwnerCommunicationList, loading, pagination, petOwnerCommunicationDetailList, openModalTitle, modalPagination, visible, keyword } = this.state;
 
     const petOwnerCommunicationColumns = [
+      // {
+      //   title: 'Pet owner account',
+      //   dataIndex: 'contactId',
+      //   width: '15%'
+      // },
       {
         title: 'Pet owner account',
-        dataIndex: 'contactId',
-        width: '15%'
-      },
-      {
-        title: 'Pet owner name',
         dataIndex: 'contactName',
         width: '15%'
       },
       {
+        title: 'Communication type',
+        dataIndex: 'nodeType',
+        width: '10%'
+      },
+      {
         title: 'Communication item',
         dataIndex: 'nodeName',
-        width: '15%'
+        width: '10%'
       },
       {
         title: 'counts',

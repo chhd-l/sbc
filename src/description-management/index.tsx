@@ -18,7 +18,7 @@ class DescriptionManagement extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Description management',
+      title: <FormattedMessage id="Product.DescriptionManagement" />,
       searchForm: {
         descriptionName: ''
       },
@@ -164,14 +164,14 @@ class DescriptionManagement extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failed');
+          message.error(res.message || <FormattedMessage id="Product.OperationFailed" />);
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
+        message.error(err.toString() || <FormattedMessage id="Product.OperationFailed" />);
       });
   };
   deleteDescriptionItem = (id) => {
@@ -184,19 +184,19 @@ class DescriptionManagement extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getDescriptionList();
-          message.success(res.message || 'Operate successfully');
+          message.success(res.message || <FormattedMessage id="Product.OperateSuccessfully" />);
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message.toString() || 'Operation failed');
+          message.error(res.message.toString() || <FormattedMessage id="Product.OperationFailed" />);
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
+        message.error(err.toString() || <FormattedMessage id="Product.OperationFailed" />);
       });
   };
 
@@ -217,12 +217,12 @@ class DescriptionManagement extends Component<any, any> {
           this.getDescriptionList();
         } else {
           this.setState({ loading: false });
-          message.error(res.message || 'Operation failed');
+          message.error(res.message || <FormattedMessage id="Product.OperationFailed" />);
         }
       })
       .catch((err) => {
         this.setState({ loading: false });
-        message.error(err || 'Operation failed');
+        message.error(err || <FormattedMessage id="Product.OperationFailed" />);
       });
   };
 
@@ -231,13 +231,13 @@ class DescriptionManagement extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Description name',
+        title: <FormattedMessage id="Product.DescriptionName" />,
         dataIndex: 'descriptionName',
         key: 'descriptionName',
         width: '20%'
       },
       {
-        title: 'Display name',
+        title: <FormattedMessage id="Product.DisplayName" />,
         key: 'dipName',
         width: '35%',
         render: (text, record) => (
@@ -252,30 +252,31 @@ class DescriptionManagement extends Component<any, any> {
         )
       },
       {
-        title: 'Description type',
+        title: <FormattedMessage id="Product.DescriptionType" />,
         dataIndex: 'contentType',
         key: 'contentType',
-        width: '20%'
+        width: '20%',
+        render: (text) => (<FormattedMessage id={text === 'text' ? 'Product.html' : text === 'json' ? 'Product.json' : ''} />)
       },
       {
-        title: 'Status',
+        title: <FormattedMessage id="Product.Status" />,
         dataIndex: 'displayStatus',
         key: 'status',
         width: '10%',
         render: (text, record) => <Switch onChange={(value) => this.updateDescriptionStatus(record, value)} checked={text} />
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         dataIndex: '',
         key: 'x',
         width: '15%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
               <a style={styles.edit} onClick={() => this.openEditPage(record)} className="iconfont iconEdit"></a>
             </Tooltip>
-            <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteDescriptionItem(record.id)} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Delete">
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.deleteThisItem" />} onConfirm={() => this.deleteDescriptionItem(record.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+              <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
                 <a className="iconfont iconDelete"></a>
               </Tooltip>
             </Popconfirm>
@@ -294,7 +295,9 @@ class DescriptionManagement extends Component<any, any> {
             <SearchForm descName={this.state.searchForm.descriptionName} onChangeDescName={this.onSearchFormChange} onSearch={this.onSearch} />
             <div>
               <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-                <span>Add new description</span>
+                <span>
+                  <FormattedMessage id="Product.AddNewDescription" />
+                </span>
               </Button>
             </div>
           </div>

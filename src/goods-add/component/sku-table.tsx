@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { fromJS, List } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import { noop, ValidConst, cache } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
@@ -50,6 +50,7 @@ export default class SkuTable extends React.Component<any, any> {
       baseSpecId: Number;
       onProductselectSku: Function;
       onEditSubSkuItem: Function;
+      editGoods: Function;
     };
   };
 
@@ -67,6 +68,7 @@ export default class SkuTable extends React.Component<any, any> {
     addSkUProduct: 'addSkUProduct',
     initStoreCateList: 'initStoreCateList',
     goodsInfos: 'goodsInfos',
+    editGoods: noop,
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -143,7 +145,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, goodsList, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -477,6 +479,7 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
+
         // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
         rowInfo.subscriptionStatus = goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus != null ? rowInfo.subscriptionStatus : '1';
 
@@ -488,7 +491,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0' : '1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false || goodsList.toJS().length == 1? true : false } getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>
@@ -507,23 +510,31 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
+        setTimeout(()=>{
+          console.log(rowInfo.addedFlag);
+        })
         return (
-          <Row style={{marginRight: '81px'}}>
-            <Col span={8}>
-              <FormItem style={styles.tableFormItem}>
-                {rowInfo.addedFlag === 1 ? (
-                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
-                    <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
-                  </div>
-                ) : null}
-                {rowInfo.addedFlag === 0? (
-                  <div  onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
-                    <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
-                  </div>
-                ) : null}
-              </FormItem>
-            </Col>
-          </Row>
+          <Col span={8}>
+            <FormItem style={styles.tableFormItem}>
+              {goodsList.toJS().length == 1 ? ( <div>
+                <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>
+              </div> ) : (<>
+                  {goods.get('addedFlag') == 0 ? ( <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>) : (
+                    <>
+                      {rowInfo.addedFlag == 1 ? (
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
+                          <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                        </div>
+                      ) : null}
+                      {rowInfo.addedFlag == 0? (
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
+                          <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
+                        </div>
+                      ) : null}</>)}
+                </>
+              )}
+            </FormItem>
+          </Col>
         );
       }
     });
@@ -586,13 +597,23 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any) => {
-    const { editGoodsItem, synchValue } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, editGoods, goodsList } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
 
     editGoodsItem(id, key, e);
+
+
+    if(key == "addedFlag") {
+      if(goodsList.toJS().length >1) {
+        let goods = Map({
+          ['addedFlag']: fromJS(2)
+        });
+        editGoods(goods);
+      }
+    }
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存

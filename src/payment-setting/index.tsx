@@ -44,7 +44,7 @@ export default class PaymentSetting extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      paymentVisible: true,
+      paymentVisible: false,
       enabled: true,
       paymentForm: {}, //edit
       paymentList: []
@@ -58,7 +58,7 @@ export default class PaymentSetting extends React.Component<any, any> {
     const { res } = await webapi.getPaymentSetting();
     if (res.code === Const.SUCCESS_CODE) {
       this.setState({
-        paymentList: res.context.payGatewayVOList
+        paymentList: res.context
       });
     }
   };

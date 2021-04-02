@@ -3,6 +3,7 @@ import { Modal, Button, Form, Input, Switch, message, Select } from 'antd';
 import { Const } from 'qmkit';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import { string } from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 const Option = Select.Option;
 
@@ -97,12 +98,12 @@ class CreateForm extends Component<Iprop, Istate> {
               onSubmit(res.message);
             } else {
               onChangeFormLoading(false);
-              message.error(res.message || 'Add Data Failed');
+              message.error(res.message || <FormattedMessage id="Product.AddDataFailed" />);
             }
           })
           .catch((err) => {
             onChangeFormLoading(false);
-            message.error(err || 'Add Data Failed');
+            message.error(err || <FormattedMessage id="Product.AddDataFailed" />);
           });
       }
     });
@@ -139,30 +140,30 @@ class CreateForm extends Component<Iprop, Istate> {
               onChangeFormVisibility(false);
             }}
           >
-            Close
+            <FormattedMessage id="Product.Close" />
           </Button>,
           <Button key="submit" type="primary" loading={loading} onClick={() => this.handleSubmit()}>
-            Confirm
+            <FormattedMessage id="Product.Confirm" />
           </Button>
         ]}
       >
         <Form {...formItemLayout}>
           <FormItem key="descName" label="Description name">
             {getFieldDecorator('descName', {
-              rules: [{ required: true, message: 'Description name is required' }],
+              rules: [{ required: true, message: <FormattedMessage id="Product.DescriptionNameIsRequired" /> }],
               initialValue: descriptionName
             })(<Input onChange={(e) => this.handleUpdateDescriptionName(e.target.value)} style={{ width: '80%' }} />)}
           </FormItem>
           {translateList.map((item: FormItemType, idx: number) => (
             <FormItem key={item.languageId} label={item.label} required={idx === 0} className={idx === 0 ? '' : 'emit-lable-item'}>
               {getFieldDecorator(item.languageName, {
-                rules: [{ required: idx === 0 && isRequired, message: 'Display name is required' }],
+                rules: [{ required: idx === 0 && isRequired, message: <FormattedMessage id="Product.DisplayNameIsRequired" /> }],
                 initialValue: item.translateName
               })(<Input onChange={(e) => this.handleUpdateDisplayName(item.languageId, e.target.value)} style={{ width: '80%' }} placeholder={item.languageName || ''} />)}
             </FormItem>
           ))}
           <div className="ant-form-item-required" style={{ color: '#f5222d' }}>
-            The number display name is set in shop information
+            <FormattedMessage id="Product.TheNumberDisplayName" />
           </div>
           <FormItem key="status" label="Status">
             {getFieldDecorator('status', {
@@ -176,10 +177,10 @@ class CreateForm extends Component<Iprop, Istate> {
             })(
               <Select onChange={this.handleUpdateContentType}>
                 <Option key="1" value="text">
-                  text
+                  <FormattedMessage id="Product.html" />
                 </Option>
                 <Option key="2" value="json">
-                  json
+                  <FormattedMessage id="Product.json" />
                 </Option>
               </Select>
             )}

@@ -154,6 +154,7 @@ export default class GoodsList extends React.Component<any, any> {
               })(
                 <InputNumber
                   min={0}
+                  max={rowInfo.canReturnNum}
                   onChange={this._editGoodsNum.bind(this, rowInfo.skuId)}
                 />
               )}

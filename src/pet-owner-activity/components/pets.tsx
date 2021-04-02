@@ -29,7 +29,7 @@ export default class pets extends Component<any, any> {
 
   getPetAgeString(item) {
     let ageString = '';
-    if (item.petAgeYear < 1 && item.petAgeMonth === 1) {
+    if (item.petAgeYear < 1 && item.petAgeMonth <= 1) {
       ageString = item.petAgeMonth + ' Month';
     } else if (item.petAgeYear < 1 && item.petAgeMonth > 1) {
       ageString = item.petAgeMonth + ' Months';

@@ -41,11 +41,11 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>评价管理</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search customer">
-            <Headline title={<FormattedMessage id="reviewManagement" />} />
+            <Headline title={<FormattedMessage id="Product.reviewManagement" />} />
             <EvaluateSum />
             <br />
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Tips title={<FormattedMessage id="reviewTip" />} />
+              <Tips title={<FormattedMessage id="Product.reviewTip" />} />
               {/*权限*/}
               <AuthWrapper functionName="f_goods_detail_1">
                 <span
@@ -56,7 +56,7 @@ export default class Customer extends React.Component<any, any> {
                   }}
                   onClick={this._showCateModal}
                 >
-                  <FormattedMessage id="ratingRule" />
+                  <FormattedMessage id="Product.ratingRule" />
                 </span>
               </AuthWrapper>
             </div>

@@ -3,7 +3,7 @@ import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, 
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
 import FeedBack from './component/feedback';
-import { Headline, BreadCrumb, SelectGroup, Const, cache } from 'qmkit';
+import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
@@ -93,6 +93,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   // };
 
   getSubscriptionDetail = (id: String) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .getSubscriptionDetail(id)
       .then((data) => {
@@ -764,9 +767,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     return (
       <div>
-        <BreadCrumb thirdLevel={true}>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <a href="/subscription-list">Subscription</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="/subscription-list">Subscription List</a>
+          </Breadcrumb.Item>
           <Breadcrumb.Item>{<FormattedMessage id="subscription.detail" />}</Breadcrumb.Item>
-        </BreadCrumb>
+        </Breadcrumb>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           {' '}
           <div className="container-search">
@@ -974,7 +983,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Collapse>
             </Row>
           </div>
-          <FeedBack subscriptionId={this.state.subscriptionId} />
+          <AuthWrapper functionName="f_subscription_feedback">
+            <FeedBack subscriptionId={this.state.subscriptionId} />
+          </AuthWrapper>
         </Spin>
         <div className="bar-button">
           <Button onClick={() => (history as any).go(-1)}>

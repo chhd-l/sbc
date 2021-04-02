@@ -3,6 +3,7 @@ import { DataGrid } from 'qmkit';
 import styled from 'styled-components';
 import { Row, Col, Button } from 'antd';
 import { CustomerModel } from 'biz';
+import { FormattedMessage } from 'react-intl';
 
 const TableRow = styled.div`
   margin-top: 20px;
@@ -32,7 +33,7 @@ export default class ChooseCustomer extends React.Component<any, any> {
     return (
       <div>
         <Button type="primary" icon="plus" onClick={() => this.changeModalVisible(true)}>
-          Select
+          <FormattedMessage id="Marketing.Select" />
         </Button>
         <Row type="flex" justify="start" style={styles.box}>
           {chooseCustomerList &&

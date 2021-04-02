@@ -1,9 +1,9 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Form, Input, Select, Button, Icon, message } from 'antd';
+import { Form, Input, Select, Button, Icon, message, InputNumber } from 'antd';
 import { fromJS } from 'immutable';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, history, Tips, QMMethod, QMUpload } from 'qmkit';
+import { noop, Const, history, Tips, QMMethod, QMUpload, cache } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -47,6 +47,19 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       add: Function;
       // 是否为退货
       isReturn: Boolean;
+
+      applyStatus: boolean;
+      applyPrice: number;
+      applyIntegral: number;
+      editPriceItem: Function;
+      tradeDetail: IMap;
+      // 是否是在线支付  true 是  false 否
+      isOnLine: boolean;
+      // 可申请退款金额
+      canApplyPrice: number;
+
+
+      refundableAmount: string;
     };
   };
 
@@ -70,7 +83,21 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     // 提交
     add: noop,
     // 是否为退货
-    isReturn: 'isReturn'
+    isReturn: 'isReturn',
+
+    // 申请金额
+    applyPrice: 'applyPrice',
+    // 申请积分
+    applyIntegral: 'applyIntegral',
+
+    // 订单详情
+    tradeDetail: 'tradeDetail',
+    // 是否是在线支付  true 是  false 否
+    isOnLine: 'isOnLine',
+    // 可申请退款金额
+    canApplyPrice: 'canApplyPrice',
+    //退货金额
+    refundableAmount: 'refundableAmount',
   };
 
   constructor(props) {
@@ -86,15 +113,22 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       add,
       selectedReturnReason,
       selectedReturnWay,
-      isReturn
+      isReturn,
+      applyStatus,
+      applyPrice,
+      applyIntegral,
+      tradeDetail,
+      canApplyPrice
     } = this.props.relaxProps;
+    
+
     const { getFieldDecorator } = this.props.form;
     let images = this.props.relaxProps.images.toJS();
     return (
       <div style={styles.container}>
-        <h3 style={styles.title}>Chargeback information</h3>
+        <h3 style={styles.title}>Return order information</h3>
         <Form>
-          <FormItem {...formItemLayout} label="Chargeback reason" hasFeedback>
+          <FormItem {...formItemLayout} label="Return reason">
             {getFieldDecorator('returnReason', {
               initialValue: selectedReturnReason,
               rules: [
@@ -106,7 +140,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             })(this._getReturnReasonSelect())}
           </FormItem>
           {isReturn ? (
-            <FormItem {...formItemLayout} label="Return method" hasFeedback>
+            <FormItem {...formItemLayout} label="Return method" >
               {getFieldDecorator('returnWay', {
                 initialValue: selectedReturnWay,
                 rules: [
@@ -119,26 +153,14 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             </FormItem>
           ) : null}
 
-          <FormItem {...formItemLayout} label="Return description" hasFeedback>
+          <FormItem {...formItemLayout} label="Return description" >
             {getFieldDecorator('description', {
               initialValue: description,
               rules: [
                 {
                   required: true,
-                  message: '退货说明不能为空'
+                  message: 'Return description cannot be blank !'
                 },
-                {
-                  validator: (rule, value, callback) => {
-                    QMMethod.validatorMinAndMax(
-                      rule,
-                      value,
-                      callback,
-                      '退货说明',
-                      1,
-                      100
-                    );
-                  }
-                }
               ]
             })(
               <Input.TextArea
@@ -166,16 +188,31 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             <Tips title="Please add your return credentials to the attachment. Supported picture formats: JPG, JPEG, PNG, GIF, file size no more than 5M, and upload a maximum of 10" />
           </FormItem>
 
-          {isReturn ? (
+          {isReturn? (
             <GoodsList
               form={this.props.form}
               flushState={this.state.flushState}
             />
           ) : (
-            <RefundAmount
-              form={this.props.form}
-              flushState={this.state.flushState}
-            />
+            <>
+              <FormItem {...formItemLayout} label="Refundable amount" >
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + canApplyPrice.toFixed(2)}
+              {getFieldDecorator('refundableAmount', {
+                initialValue: canApplyPrice,
+                 rules: [
+                  {
+                    required: true,
+                    message: 'Refundable amount cannot be blank !'
+                  },
+                ]
+              })
+                (<InputNumber
+                  min={0}
+                  max={+canApplyPrice}
+                  style={{marginLeft:10}}
+                  onChange={this._editInfo.bind(this, 'applyPrice')} /> )}
+              </FormItem>
+            </>
           )}
         </Form>
         <div className="bar-button">
@@ -227,7 +264,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
         <Option key={'key'} value={''}>
           Please select chargeback reason
         </Option>
-        {returnReasonList&&returnReasonList.map((item) => {
+        {returnReasonList && returnReasonList.map((item) => {
           const map: IMap = item.toMap();
           const key = map.keySeq().first();
           const value = map.valueSeq().first();
@@ -250,7 +287,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
         placeholder="Please select return method"
-        notFoundContent="暂无退货方式"
+        notFoundContent="No Data"
         onChange={this._editInfo.bind(this, 'selectedReturnWay')}
       >
         <Option key={'key'} value={''}>

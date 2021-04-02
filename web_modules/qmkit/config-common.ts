@@ -66,31 +66,17 @@ const Common = {
 
   // 发货状态
   deliverStatus: {
-    NOT_YET_SHIPPED: 'Not shipped',
-    SHIPPED: '已发货',
-    PART_SHIPPED: '部分发货',
-    VOID: '作废'
+    NOT_YET_SHIPPED: 'Not yet shipped',
+    SHIPPED: 'Shipped',
+    PART_SHIPPED: 'Part shipped',
+    VOID: 'void'
   },
 
   // 支付状态
   payState: {
-    NOT_PAID: '未支付',
-    PARTIAL_PAID: '部分支付',
+    NOT_PAID: 'Not paid',
+    PARTIAL_PAID: 'Partial paid',
     PAID: 'Paid'
-  },
-
-  // 订单状态
-  flowState: {
-    INIT: '待审核',
-    REMEDY: '修改订单',
-    REFUND: '退款',
-    AUDIT: 'To be delivered',
-    DELIVERED_PART: 'To be delivered',
-    DELIVERED: 'Ready for receiving',
-    CONFIRMED: 'Received',
-    COMPLETED: 'Finished',
-    VOID: 'Invalid',
-    REFUND_FAILED: '退款失败'
   },
   // 优惠券使用范围
   couponScopeType: {
@@ -101,16 +87,16 @@ const Common = {
     3: 'Limited store classification', //店铺分类
     4: 'Some commodities'
   },
-  // 优惠券查询类型
-  couponStatus: {
-    0: 'all',
-    1: 'in effect',
-    2: 'not effective',
-    3: 'Take effect ',
-    4: 'invalid'
+  // // 优惠券查询类型
+  // couponStatus: {
+  //   0: 'all',
+  //   1: 'in effect',
+  //   2: 'not effective',
+  //   3: 'Take effect ',
+  //   4: 'invalid'
 
 
-  },
+  // },
   // 优惠券查询类型
   couponStatus: {
     0: 'All',

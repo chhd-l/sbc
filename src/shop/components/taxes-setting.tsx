@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Modal, Form, Radio, Input, Select, Spin, InputNumber } from 'antd';
 import _ from 'lodash';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -20,6 +21,9 @@ class TaxesAdd extends React.Component<any, any> {
       zoneList: []
     };
   }
+  props: {
+    intl: any;
+  };
   componentDidMount() {}
 
   static getDerivedStateFromProps(props, state) {
@@ -74,7 +78,7 @@ class TaxesAdd extends React.Component<any, any> {
         width={600}
         maskClosable={false}
         zIndex={1000}
-        title="Tax setting"
+        title={this.props.intl.formatMessage({ id: 'Setting.Taxsetting' })}
         visible={visible}
         confirmLoading={loading}
         onCancel={() => this.handleCancel()}
@@ -88,15 +92,15 @@ class TaxesAdd extends React.Component<any, any> {
             Cancel
           </Button>,
           <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-            Submit
+            <FormattedMessage id="Setting.Submit" />
           </Button>
         ]}
       >
         <Form {...formItemLayout}>
-          <FormItem label="Calculate Tax Based on ">
+          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.CalculateTaxBasedon' })}>
             {getFieldDecorator('calculateTax', {
               initialValue: settingForm.calculateTax,
-              rules: [{ required: true, message: 'Please selected Calculate Tax Based on' }]
+              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.PleaseselectedCalculateTaxBasedon' }) }]
             })(
               <Radio.Group
                 onChange={(e) => {
@@ -107,15 +111,19 @@ class TaxesAdd extends React.Component<any, any> {
                   });
                 }}
               >
-                <Radio value={0}>Shipping address</Radio>
-                <Radio value={1}>Billing address</Radio>
+                <Radio value={0}>
+                  <FormattedMessage id="Setting.Shippingaddress" />
+                </Radio>
+                <Radio value={1}>
+                  <FormattedMessage id="Setting.Billingaddress" />
+                </Radio>
               </Radio.Group>
             )}
           </FormItem>
-          <FormItem label="Enter price">
+          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Enterprice' })}>
             {getFieldDecorator('enterPrice', {
               initialValue: settingForm.enterPrice,
-              rules: [{ required: true, message: 'Please selected enter price' }]
+              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Pleaseselectedenterprice' }) }]
             })(
               <Radio.Group
                 onChange={(e) => {
@@ -126,8 +134,12 @@ class TaxesAdd extends React.Component<any, any> {
                   });
                 }}
               >
-                <Radio value={0}>Inclusive of tax</Radio>
-                <Radio value={1}>Exclusive of tax</Radio>
+                <Radio value={0}>
+                  <FormattedMessage id="Setting.Inclusiveoftax" />
+                </Radio>
+                <Radio value={1}>
+                  <FormattedMessage id="Setting.Exclusiveoftax" />
+                </Radio>
               </Radio.Group>
             )}
           </FormItem>
@@ -145,15 +157,19 @@ class TaxesAdd extends React.Component<any, any> {
                   });
                 }}
               >
-                <Radio value={0}>Inclusive of tax</Radio>
-                <Radio value={1}>Exclusive of tax</Radio>
+                <Radio value={0}>
+                  <FormattedMessage id="Setting.Inclusiveoftax" />
+                </Radio>
+                <Radio value={1}>
+                  <FormattedMessage id="Setting.Exclusiveoftax" />
+                </Radio>
               </Radio.Group>
             )}
           </FormItem>
-          <FormItem label="Promotion calculation">
+          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Promotioncalculation' })}>
             {getFieldDecorator('promotionCalculation', {
               initialValue: settingForm.promotionCalculation,
-              rules: [{ required: true, message: 'Please selected promotion calculation' }]
+              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Pleaseselectedpromotion' }) }]
             })(
               <Radio.Group
                 onChange={(e) => {
@@ -164,8 +180,12 @@ class TaxesAdd extends React.Component<any, any> {
                   });
                 }}
               >
-                <Radio value={0}>Inclusive of tax</Radio>
-                <Radio value={1}>Exclusive of tax</Radio>
+                <Radio value={0}>
+                  <FormattedMessage id="Setting.Inclusiveoftax" />
+                </Radio>
+                <Radio value={1}>
+                  <FormattedMessage id="Setting.Exclusiveoftax" />
+                </Radio>
               </Radio.Group>
             )}
           </FormItem>
@@ -174,4 +194,4 @@ class TaxesAdd extends React.Component<any, any> {
     );
   }
 }
-export default Form.create()(TaxesAdd);
+export default Form.create()(injectIntl(TaxesAdd));

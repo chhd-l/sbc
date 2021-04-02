@@ -25,6 +25,7 @@ import VideoModal from './component/video-modal';
 import AlertInfo from './component/alret';
 import ProductPrice from './component/productPrice';
 import ProductInventory from './component/productInventory';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Main extends React.Component<any, any> {
@@ -117,10 +118,10 @@ export default class Main extends React.Component<any, any> {
       <Spin spinning={this.store.get('saveLoading')}>
         <div>
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>{gid ? 'Edit product (Bundle product)' : 'New product (Bundle product)'}</Breadcrumb.Item>
+            <Breadcrumb.Item>{gid ? <FormattedMessage id="Product.EditProduct" /> : <FormattedMessage id="Product.NewProduct" />}</Breadcrumb.Item>
           </BreadCrumb>
           <div className="container-search">
-            <Headline title={gid ? 'Edit product (Bundle product)' : 'New product (Bundle product)'} state={this._getState(gid)} />
+            <Headline title={gid ? <FormattedMessage id="Product.EditProduct" /> : <FormattedMessage id="Product.NewProduct" />} state={this._getState(gid)} />
           </div>
           <div className="container ">
             <Tabs
@@ -183,12 +184,26 @@ export default class Main extends React.Component<any, any> {
                 <AlertInfo
                   message={
                     <div>
-                      <p>You can delete these fields, including &#123; name &#125;-Royal Canin, &#123; name &#125;, &#123; subtitle &#125;, &#123; sales category &#125;, &#123; tagging &#125;, &#123; description &#125;, but can not edit the field</p>
-                      <p>1、&#123; name &#125; means the name of the product which enters in the product information tab page</p>
-                      <p>2、&#123;subtitle &#125; means the subtitle of the product which enters in the product information tab page</p>
-                      <p>3、&#123; sales category &#125; means the sales category of the product which was chosen in the product information tab page</p>
-                      <p>4、&#123; tagging &#125; means the sales category of the product which was chosen in the product information</p>
-                      <p>5、&#123;description &#125; means the description of the product which enters in the product information tab page</p>
+                      <p>
+                        <FormattedMessage id="Product.YouCan" />
+                      </p>
+                      <p>
+                        1、&#123; <FormattedMessage id="Product.name" />
+                      </p>
+                      <p>
+                        2、&#123;
+                        <FormattedMessage id="Product.subtitle" />
+                      </p>
+                      <p>
+                        3、&#123; <FormattedMessage id="Product.sales" />
+                      </p>
+                      <p>
+                        4、&#123; <FormattedMessage id="Product.tagging" />
+                      </p>
+                      <p>
+                        5、&#123;
+                        <FormattedMessage id="Product.descripion" />
+                      </p>
                     </div>
                   }
                 />

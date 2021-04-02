@@ -5,7 +5,7 @@ import { fromJS } from 'immutable';
 import { noop, QMUpload, Const } from 'qmkit';
 import { Modal, Form, Input, message, Tree, Row, Col, Button, Checkbox, Pagination } from 'antd';
 import { List } from 'immutable';
-
+import { FormattedMessage } from 'react-intl';
 import { choosedImgCountQL, clickImgsCountQL, clickEnabledQL } from '../ql';
 
 const TreeNode = Tree.TreeNode;
@@ -119,9 +119,11 @@ export default class PicModal extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div style={styles.title}>
-            <h4>Picture library</h4>
+            <h4>
+              <FormattedMessage id="Product.PictureLibrary" />
+            </h4>
             <span style={styles.grey}>
-              <strong style={styles.dark}>{clickImgsCount}</strong> has been selected and up to <strong style={styles.dark}>{choosedImgCount}</strong> can be selected
+              <strong style={styles.dark}>{clickImgsCount}</strong> <FormattedMessage id="Product.hasBeenSelected" /> <strong style={styles.dark}>{choosedImgCount}</strong> <FormattedMessage id="Product.canBeSelected" />
             </span>
           </div>
         }
@@ -149,7 +151,7 @@ export default class PicModal extends React.Component<any, any> {
                 fileList={this.state.fileList}
               >
                 <Button size="large" onClick={() => this._handleUploadClick()}>
-                  Local upload
+                  <FormattedMessage id="Product.LocalUpload" />
                 </Button>
               </QMUpload>
             </Col>
@@ -169,7 +171,7 @@ export default class PicModal extends React.Component<any, any> {
                     shape="round"
                     htmlType="submit"
                   >
-                    Search
+                    <FormattedMessage id="Product.Search" />
                   </Button>
                 </FormItem>
               </Form>
@@ -208,7 +210,7 @@ export default class PicModal extends React.Component<any, any> {
                 >
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    No data
+                    <FormattedMessage id="Product.NoData" />
                   </span>
                 </div>
               )}

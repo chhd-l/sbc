@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline } from 'qmkit';
 import { Card, Button, Modal, Form, Input, Alert, Switch } from 'antd';
-
+import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 class MessageSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       visible: false,
-      tips:
-        'Please go to SendGrid to activate Email,and set up your AccessKeyId and AccessKeySecret in the SendGrid.',
+      tips: 'Please go to SendGrid to activate Email,and set up your AccessKeyId and AccessKeySecret in the SendGrid.',
       emailApiList: [
         {
           apiName: 'SendGrid',
-          imgUrl:
-            'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202008140907121972.png'
+          imgUrl: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202008140907121972.png'
         }
       ],
       settingForm: {
@@ -61,7 +59,9 @@ class MessageSetting extends Component<any, any> {
         <BreadCrumb />
         <div className="container-search">
           <Headline title="Email Setting" />
-          <h5>Email Api</h5>
+          <h5>
+            <FormattedMessage id="Marketing.EmailApi" />
+          </h5>
           {emailApiList &&
             emailApiList.map((item, index) => (
               <Card
@@ -75,7 +75,7 @@ class MessageSetting extends Component<any, any> {
                       })
                     }
                   >
-                    Edit
+                    <FormattedMessage id="Marketing.Edit" />
                   </a>
                 }
                 style={{ width: 300 }}
@@ -90,31 +90,26 @@ class MessageSetting extends Component<any, any> {
         </div>
         <Modal
           width="450px"
-          title="SendGrid Api Setting"
+          title={<FormattedMessage id="Marketing.SendGridApiSetting" />}
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
             <Button key="back" shape="round" onClick={this.handleCancel}>
-              Cancel
+              <FormattedMessage id="Marketing.Cancel" />
             </Button>,
-            <Button
-              key="submit"
-              shape="round"
-              type="primary"
-              onClick={this.handleOk}
-            >
-              Confirm
+            <Button key="submit" shape="round" type="primary" onClick={this.handleOk}>
+              <FormattedMessage id="Marketing.Confirm" />
             </Button>
           ]}
         >
           <Form layout="vertical">
-            <FormItem label="Tips" style={styles.formItem}>
+            <FormItem label={<FormattedMessage id="Marketing.Tips" />} style={styles.formItem}>
               <Alert message={tips} type="warning" />
             </FormItem>
-            <FormItem label="Sender" style={styles.formItem}>
+            <FormItem label={<FormattedMessage id="Marketing.Sender" />} style={styles.formItem}>
               {getFieldDecorator('sender', {
-                rules: [{ required: true, message: 'Please input Sender!' }]
+                rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputSender" /> }]
               })(
                 <Input
                   onChange={(e) => {
@@ -127,11 +122,9 @@ class MessageSetting extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem label="Access Key ID" style={styles.formItem}>
+            <FormItem label={<FormattedMessage id="Marketing.AccessKeyID" />} style={styles.formItem}>
               {getFieldDecorator('accessKeyId', {
-                rules: [
-                  { required: true, message: 'Please input Access Key ID!' }
-                ]
+                rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputAccessKeyID" /> }]
               })(
                 <Input
                   onChange={(e) => {
@@ -144,11 +137,9 @@ class MessageSetting extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem label="Access Key Secret" style={styles.formItem}>
+            <FormItem label={<FormattedMessage id="Marketing.AccessKeySecret" />} style={styles.formItem}>
               {getFieldDecorator('accessKeySecret', {
-                rules: [
-                  { required: true, message: 'Please input Access Key Secret!' }
-                ]
+                rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputAccessKeySecret" /> }]
               })(
                 <Input
                   onChange={(e) => {
@@ -161,7 +152,7 @@ class MessageSetting extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem label="Enable" style={styles.formItem}>
+            <FormItem label={<FormattedMessage id="Marketing.Enable" />} style={styles.formItem}>
               {getFieldDecorator('enable', {
                 valuePropName: 'checked'
               })(

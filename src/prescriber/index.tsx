@@ -112,7 +112,7 @@ export default class ClinicList extends Component<any, any> {
       id: id
     });
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     }
   };
@@ -120,7 +120,7 @@ export default class ClinicList extends Component<any, any> {
     // message.info('API under development');
     const { res } = await webapi.enableAndDisable(id);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     }
   };
@@ -189,7 +189,7 @@ export default class ClinicList extends Component<any, any> {
           const exportHref = Const.HOST + `/prescriber/exportPrescriber/${encrypted}`;
           window.open(exportHref);
         } else {
-          message.error('Unsuccessful');
+          message.error(<FormattedMessage id="Prescriber.Unsuccessful" />);
         }
 
         resolve();
@@ -200,7 +200,7 @@ export default class ClinicList extends Component<any, any> {
   showConfirm(id) {
     const that = this;
     confirm({
-      title: 'Are you sure to delete this item?',
+      title: <FormattedMessage id="Prescriber.deleteThisItem" />,
       onOk() {
         return that.delClinic(id);
       },
@@ -212,26 +212,26 @@ export default class ClinicList extends Component<any, any> {
     const { cityArr, typeArr, searchForm } = this.state;
     const columns = [
       {
-        title: 'Prescriber ID',
+        title: <FormattedMessage id="Prescriber.PrescriberID" />,
         dataIndex: 'prescriberId',
         key: 'prescriberID',
         width: '10%'
       },
       {
-        title: 'Prescriber name',
+        title: <FormattedMessage id="Prescriber.PrescriberName" />,
         dataIndex: 'prescriberName',
         key: 'prescriberName',
         width: '15%',
         ellipsis: true
       },
       {
-        title: 'Prescriber phone',
+        title: <FormattedMessage id="Prescriber.PrescriberPhone" />,
         dataIndex: 'phone',
         key: 'prescriberPhone',
         width: '10%'
       },
       {
-        title: 'Prescriber city',
+        title: <FormattedMessage id="Prescriber.PrescriberCity" />,
         dataIndex: 'primaryCity',
         key: 'prescriberCity',
         width: '10%'
@@ -256,7 +256,7 @@ export default class ClinicList extends Component<any, any> {
       // },
 
       {
-        title: 'Prescriber type',
+        title: <FormattedMessage id="Prescriber.PrescriberType" />,
         dataIndex: 'prescriberType',
         key: 'prescriberType',
         width: '10%'
@@ -272,33 +272,33 @@ export default class ClinicList extends Component<any, any> {
       // },
 
       {
-        title: 'Recommendation code',
+        title: <FormattedMessage id="Prescriber.RecommendationCode" />,
         dataIndex: 'prescriberCode',
         key: 'prescriberCode',
         width: '10%',
         render: (text, record) => <p>{this.state.isMapMode ? '--' : text}</p>
       },
       {
-        title: 'Prescriber status',
+        title: <FormattedMessage id="Prescriber.PrescriberStatus" />,
         dataIndex: 'enabled',
         key: 'enabled',
         width: '10%',
         render: (text, record) => <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
       },
       {
-        title: 'Audit Authority',
+        title: <FormattedMessage id="Prescriber.AuditAuthority" />,
         dataIndex: 'auditAuthority',
         key: 'auditAuthority',
         width: '10%',
         render: (text, record) => <p>{record.auditAuthority ? 'Y' : 'N'}</p>
       },
       {
-        title: 'Action',
+        title: <FormattedMessage id="Prescriber.Action" />,
         key: 'action',
         width: '10%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Details">
+            <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Details" />}>
               <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
             <Divider type="vertical" />
@@ -318,7 +318,7 @@ export default class ClinicList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div id="inputs" className="container-search">
-          <Headline title="Prescriber list" />
+          <Headline title={<FormattedMessage id="Prescriber.PrescriberList" />} />
           {/*搜索条件*/}
           <Form layout="inline">
             <Row id="input-lable-wwidth">
@@ -329,7 +329,7 @@ export default class ClinicList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberId" />
+                        <FormattedMessage id="Prescriber.prescriberId" />
                       </p>
                     }
                     onChange={(e) => {
@@ -346,7 +346,11 @@ export default class ClinicList extends Component<any, any> {
                 {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
                 <FormItem style={styles.formItemStyle}>
                   <Input
-                    addonBefore={<p className="PrescriberCity">Prescriber city</p>}
+                    addonBefore={
+                      <p className="PrescriberCity">
+                        <FormattedMessage id="Prescriber.PrescriberCity" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -384,7 +388,7 @@ export default class ClinicList extends Component<any, any> {
                   <SelectGroup
                     defaultValue=""
                     getPopupContainer={() => document.getElementById('page-content')}
-                    label="Prescriber type"
+                    label={<FormattedMessage id="Prescriber.PrescriberType" />}
                     // style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -396,7 +400,7 @@ export default class ClinicList extends Component<any, any> {
                     style={styles.wrapper}
                   >
                     <Option value="">
-                      <FormattedMessage id="all" />
+                      <FormattedMessage id="Prescriber.All" />
                     </Option>
                     {typeArr.map((item) => (
                       <Option value={item.valueEn} key={item.id}>
@@ -411,7 +415,7 @@ export default class ClinicList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberName" />
+                        <FormattedMessage id="Prescriber.prescriberName" />
                       </p>
                     }
                     onChange={(e) => {
@@ -430,7 +434,7 @@ export default class ClinicList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberZip" />
+                        <FormattedMessage id="Prescriber.prescriberZip" />
                       </p>
                     }
                     onChange={(e) => {
@@ -448,7 +452,7 @@ export default class ClinicList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberPhone" />
+                        <FormattedMessage id="Prescriber.prescriberPhone" />
                       </p>
                     }
                     onChange={(e) => {
@@ -466,7 +470,7 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <SelectGroup
                     defaultValue="true"
-                    label="Prescriber status"
+                    label={<FormattedMessage id="Prescriber.PrescriberStatus" />}
                     getPopupContainer={() => document.getElementById('page-content')}
                     // style={{ width: 80 }}
                     onChange={(value) => {
@@ -479,13 +483,13 @@ export default class ClinicList extends Component<any, any> {
                     style={styles.wrapper}
                   >
                     <Option value="">
-                      <FormattedMessage id="all" />{' '}
+                      <FormattedMessage id="Prescriber.All" />{' '}
                     </Option>
                     <Option value="true" key="enabled">
-                      <FormattedMessage id="enabled" />
+                      <FormattedMessage id="Prescriber.enabled" />
                     </Option>
                     <Option value="false" key="disabled">
-                      <FormattedMessage id="disabled" />
+                      <FormattedMessage id="Prescriber.disabled" />
                     </Option>
                   </SelectGroup>
                 </FormItem>
@@ -498,7 +502,11 @@ export default class ClinicList extends Component<any, any> {
               <Col span="8">
                 <FormItem style={styles.formItemStyle}>
                   <Input
-                    addonBefore={<p className="prescriber-iput-lable">Recommendation code</p>}
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="Prescriber.RecommendationCode" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -528,7 +536,7 @@ export default class ClinicList extends Component<any, any> {
                       this.onSearch();
                     }}
                   >
-                    <FormattedMessage id="search" />
+                    <FormattedMessage id="Prescriber.search" />
                   </Button>
                 </FormItem>
                 {/* </div> */}
@@ -546,7 +554,7 @@ export default class ClinicList extends Component<any, any> {
                 this.onExport();
               }}
             >
-              <FormattedMessage id="export" />
+              <FormattedMessage id="Prescriber.export" />
             </Button>
             <Button
               style={{
@@ -556,7 +564,7 @@ export default class ClinicList extends Component<any, any> {
               }}
             >
               <Link to="/prescriber-add">
-                <FormattedMessage id="add" />
+                <FormattedMessage id="Prescriber.add" />
               </Link>
             </Button>
           </div>

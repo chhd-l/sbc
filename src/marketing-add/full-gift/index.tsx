@@ -5,7 +5,7 @@ import { Breadcrumb, Alert, Form } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
-import MarketingAddForm from '../common-components/marketing-add-form';
+import FullGiftForm from './components/full-gift-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
 
@@ -25,10 +25,11 @@ export default class MarketingFullGiftAdd extends React.Component<any, any> {
     }
     this.store.getAllGroups();
     this.store.initCategory();
+    this.store.getAllAttribute();
   }
 
   render() {
-    const WrappedForm = Form.create()(MarketingAddForm);
+    const WrappedForm = Form.create()(FullGiftForm);
     const { marketingId } = this.props.match.params;
     const state = this.props.location.state;
     const { source } = (state || {}) as any;

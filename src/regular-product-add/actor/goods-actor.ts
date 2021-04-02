@@ -24,6 +24,9 @@ export default class GoodsActor extends Actor {
         // SPU编码
         goodsNo: '',
         internalGoodsNo: '',
+        promotions: 'autoship',
+        defaultPurchaseType: '',
+        defaultFrequencyId: '',
         // 计量单位
         goodsUnit: '',
         // 上下架状态
@@ -75,7 +78,7 @@ export default class GoodsActor extends Actor {
       oldGoodsDetailTabContent: '',
       resourceCates: [],
       purchaseTypeList: [],
-      frequencyList: [],
+      frequencyList: '',
       goodsDescriptionDetailList: []
     };
   }
@@ -312,8 +315,7 @@ export default class GoodsActor extends Actor {
   }
   @Action('goodsActor:frequencyList')
   frequencyList(state, params) {
-    const { dayList, weekList, monthList } = params;
-    const frequencyList = [...dayList, ...weekList, ...monthList];
+    const frequencyList = params;
     return state.set('frequencyList', frequencyList);
   }
   @Action('goodsActor:descriptionTab')

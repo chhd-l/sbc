@@ -3,6 +3,7 @@ import moment from 'moment';
 import { DatePicker, Input, Form, Icon, Button } from 'antd';
 import { AuthWrapper, Const, noop } from 'qmkit';
 import { Relax } from 'plume2';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 
@@ -66,7 +67,9 @@ export default class ListSearchForm extends Component<any, any> {
     const { handleBatchExport, getDate } = this.props.relaxProps;
     return (
       <div className="list-head-container">
-        <h4>Product Report</h4>
+        <h4>
+          <FormattedMessage id="Analysis.ProductReport" />
+        </h4>
         <div>
           <Form layout="inline">
             <Form.Item>
@@ -74,13 +77,13 @@ export default class ListSearchForm extends Component<any, any> {
             </Form.Item>
             <Form.Item>
               <Button type="primary" shape="round" onClick={() => this.onSearch()}>
-                Search
+                <FormattedMessage id="Analysis.Search" />
               </Button>
             </Form.Item>
             <Form.Item>
               <AuthWrapper functionName="f_export_product_data">
                 <Button type="primary" shape="round" onClick={() => handleBatchExport()}>
-                  Download the report
+                  <FormattedMessage id="Analysis.DownloadTheReport" />
                 </Button>
               </AuthWrapper>
             </Form.Item>

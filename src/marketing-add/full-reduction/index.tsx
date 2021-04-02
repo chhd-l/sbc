@@ -3,16 +3,20 @@ import React from 'react';
 import { StoreProvider } from 'plume2';
 import { Breadcrumb, Alert, Form } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import AppStore from './store';
-import MarketingAddForm from '../common-components/marketing-add-form';
+import FullReductionForm from './components/full-reduction-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
+const WrappedForm = Form.create()(FullReductionForm);
+
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class MarketingFullReductionAdd extends React.Component<any, any> {
+class MarketingFullReductionAdd extends React.Component<any, any> {
   store: AppStore;
   _form;
-
+  props: {
+    intl: any
+  }
   constructor(props) {
     super(props);
   }
@@ -21,6 +25,9 @@ export default class MarketingFullReductionAdd extends React.Component<any, any>
     const { marketingId } = this.props.match.params;
     if (marketingId) {
       this.store.init(marketingId);
+    } else {
+      this.store.initReductionDefualtLevelList();
+      this.store.setSelectedProductRows({ selectedRows: [], selectedSkuIds: [] })
     }
     this.store.getAllGroups();
     this.store.initCategory();
@@ -28,7 +35,6 @@ export default class MarketingFullReductionAdd extends React.Component<any, any>
   }
 
   render() {
-    const WrappedForm = Form.create()(MarketingAddForm);
     const { marketingId } = this.props.match.params;
     const state = this.props.location.state;
     const { source } = (state || {}) as any;
@@ -39,7 +45,9 @@ export default class MarketingFullReductionAdd extends React.Component<any, any>
             {/* <Breadcrumb.Item>
               {source == 'marketCenter' ? '营销中心' : '促销活动'}
             </Breadcrumb.Item> */}
-            <Breadcrumb.Item>{marketingId ? 'Edit' : 'Create'} reduction activity</Breadcrumb.Item>
+            <Breadcrumb.Item>{marketingId ?<FormattedMessage id="Marketing.Editreductionactivity" /> :
+              <FormattedMessage id="Marketing.Createreductionactivity" />
+             } </Breadcrumb.Item>
           </BreadCrumb>
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>营销</Breadcrumb.Item>
@@ -53,8 +61,18 @@ export default class MarketingFullReductionAdd extends React.Component<any, any>
           </Breadcrumb> */}
 
           <div className="container-search marketing-container" style={{ paddingBottom: 20 }}>
-            <Headline title={marketingId ? 'Edit reduction activity' : 'Create reduction activity'} />
-            <Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full reduction activity;" type="info" showIcon />
+            <Headline title={marketingId ? this.props.intl.formatMessage({
+              id: 'Marketing.Editreductionactivity'
+            }):
+              this.props.intl.formatMessage({
+              id: 'Marketing.Createreductionactivity'
+            })
+            } />
+            <Alert message={
+              this.props.intl.formatMessage({
+                id: 'Marketing.reductionTip'
+              })
+            } type="info" showIcon />
 
             <WrappedForm
               ref={(form) => (this._form = form)}
@@ -69,3 +87,4 @@ export default class MarketingFullReductionAdd extends React.Component<any, any>
     );
   }
 }
+export default injectIntl(MarketingFullReductionAdd)

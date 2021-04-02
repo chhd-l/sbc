@@ -1,16 +1,15 @@
 import React from 'react';
-import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal } from 'qmkit';
+import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal, QRScaner } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal } from 'antd';
 import { getAppointmentList, updateAppointmentById, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
-import QRScan from './components/qr-scan';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 export default class AppointmentList extends React.Component<any, any> {
   state: any;
-  qrScan: any;
 
   constructor(props: any) {
     super(props);
@@ -39,7 +38,6 @@ export default class AppointmentList extends React.Component<any, any> {
 
   componentDidMount() {
     this.getAppointmentList();
-    this.qrScan = new QRScan();
   }
 
   getAppointmentList = () => {
@@ -175,27 +173,6 @@ export default class AppointmentList extends React.Component<any, any> {
     });
   };
 
-  beginScan = () => {
-    this.setState(
-      {
-        showScan: true
-      },
-      () => {
-        this.qrScan.startScan('scan_div', (code) => {
-          this.findByApptNo(code);
-          this.closeScan();
-        });
-      }
-    );
-  };
-
-  closeScan = () => {
-    this.qrScan.stopScan();
-    this.setState({
-      showScan: false
-    });
-  };
-
   onCloseCard = () => {
     this.setState({
       showCard: false
@@ -212,7 +189,8 @@ export default class AppointmentList extends React.Component<any, any> {
       {
         title: 'Appointment time',
         dataIndex: 'apptTime',
-        key: 'd2'
+        key: 'd2',
+        render: (text, record) => <div>{`${moment(record.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')} ${record.apptTime}`}</div>
       },
       {
         title: 'Pet owner name',
@@ -355,13 +333,17 @@ export default class AppointmentList extends React.Component<any, any> {
               </Button>
             </Col>
             <Col>
-              <Button type="primary" onClick={this.beginScan}>
-                Scan the code
-              </Button>
+              <QRScaner id="scan" onScanEnd={this.findByApptNo}>
+                <Button type="primary">
+                  Scan the code
+                </Button>
+              </QRScaner>              
             </Col>
           </Row>
           <Table
             rowKey="id"
+            className="table-overflow"
+            scroll={{ x: true }}
             rowSelection={rowSelection}
             columns={columns}
             dataSource={list}
@@ -371,18 +353,13 @@ export default class AppointmentList extends React.Component<any, any> {
           />
         </div>
         <ExportModal data={this.state.exportModalData} onHide={this.onCloseExportModal} handleByParams={this.state.exportModalData.exportByParams} handleByIds={this.state.exportModalData.exportByIds} />
-        <div id="scan_container" style={{ ...styles.scaner, display: this.state.showScan ? 'block' : 'none' }}>
-          <div id="scan_div" style={styles.camera}></div>
-          <div style={styles.scanbtn}>
-            <Button size="large" onClick={this.closeScan}>
-              Close
-            </Button>
-          </div>
-        </div>
         <Modal title="Consumer information" visible={this.state.showCard} okText="Arrived" onCancel={this.onCloseCard} onOk={() => this.updateAppointmentStatus(this.state.scanedInfo, 1)}>
           <p>Consumer name: {this.state.scanedInfo.consumerName}</p>
           <p>Consumer phone: {this.state.scanedInfo.consumerPhone}</p>
           <p>Consumer email: {this.state.scanedInfo.consumerEmail}</p>
+          <p>
+            Appointment time(YYYY-MM-DD): {this.state.scanedInfo.apptDate ? `${moment(this.state.scanedInfo.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')}` : ''} {this.state.scanedInfo.apptTime}
+          </p>
         </Modal>
       </div>
     );
@@ -396,26 +373,5 @@ const styles = {
   },
   wrapper: {
     width: 157
-  },
-  scaner: {
-    position: 'fixed',
-    width: '100%',
-    height: '100%',
-    top: '0px',
-    left: '0px',
-    zIndex: 99999,
-    backgroundColor: 'rgba(0,0,0,.7)',
-    textAlign: 'center'
-  },
-  scanbtn: {
-    position: 'absolute',
-    width: '100%',
-    left: 0,
-    bottom: 20,
-    zIndex: 101010
-  },
-  camera: {
-    display: 'inline-block',
-    width: '100%'
   }
 } as any;

@@ -34,9 +34,7 @@ export default class FinancialAccounts extends React.Component<any, any> {
             <Breadcrumb.Item>财务对账</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline
-              title={<FormattedMessage id="financialReconciliation" />}
-            />
+            <Headline title={<FormattedMessage id="Finance.FinanceReconciliation" />} />
             <SearchForm />
             {/*<AuthWrapper functionName="f_check_export">
               <div style={{ paddingBottom: '16px' }}>
@@ -47,22 +45,13 @@ export default class FinancialAccounts extends React.Component<any, any> {
             </AuthWrapper>*/}
           </div>
           <div className="container">
-            <Tabs
-              onChange={(key) => this.store.onTabChange(key)}
-              activeKey={this.store.state().get('tabKey')}
-            >
-              <Tabs.TabPane
-                tab={<FormattedMessage id="revenueReconciliation" />}
-                key="1"
-              >
+            <Tabs onChange={(key) => this.store.onTabChange(key)} activeKey={this.store.state().get('tabKey')}>
+              <Tabs.TabPane tab={<FormattedMessage id="Finance.revenueReconciliation" />} key="1">
                 {/*收入对账*/}
                 <RevenueList />
               </Tabs.TabPane>
 
-              <Tabs.TabPane
-                tab={<FormattedMessage id="refundReconciliation" />}
-                key="2"
-              >
+              <Tabs.TabPane tab={<FormattedMessage id="Finance.refundReconciliation" />} key="2">
                 {/*退款对账*/}
                 <RefundList />
               </Tabs.TabPane>

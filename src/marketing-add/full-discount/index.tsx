@@ -3,18 +3,22 @@ import React from 'react';
 import { StoreProvider } from 'plume2';
 import { Breadcrumb, Alert, Form } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb, Const } from 'qmkit';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import AppStore from './store';
-import MarketingAddForm from '../common-components/marketing-add-form';
+import FullDiscountForm from './components/full-discount-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
+const WrappedForm = Form.create()(FullDiscountForm);
+
 import * as webapi from '@/marketing-add/webapi';
 import { fromJS } from 'immutable';
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class MarketingFullDiscountAdd extends React.Component<any, any> {
+class MarketingFullDiscountAdd extends React.Component<any, any> {
   store: AppStore;
   _form;
-
+  props: {
+    intl: any
+  }
   constructor(props) {
     super(props);
   }
@@ -23,6 +27,9 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
     const { marketingId } = this.props.match.params;
     if (marketingId) {
       this.store.init(marketingId);
+    } else {
+      this.store.initDefualtLevelList();
+      this.store.setSelectedProductRows({ selectedRows: [], selectedSkuIds: [] })
     }
     this.store.getAllGroups();
     this.store.initCategory();
@@ -30,7 +37,6 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
   }
 
   render() {
-    const WrappedForm = Form.create()(MarketingAddForm);
     const state = this.props.location.state;
     const { marketingId } = this.props.match.params;
     const { source } = (state || {}) as any;
@@ -42,7 +48,7 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
             {/* <Breadcrumb.Item>
               {source == 'marketCenter' ? '营销中心' : '促销活动'}
             </Breadcrumb.Item> */}
-            <Breadcrumb.Item>{marketingId ? 'Edit' : 'Create'} Discount activity</Breadcrumb.Item>
+            <Breadcrumb.Item>{marketingId ? <FormattedMessage id="Marketing.Editdiscountactivity" /> : <FormattedMessage id="Marketing.Creatediscountactivity" />}</Breadcrumb.Item>
           </BreadCrumb>
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>营销</Breadcrumb.Item>
@@ -56,8 +62,22 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
           </Breadcrumb> */}
 
           <div className="container-search marketing-container">
-            <Headline title={marketingId ? 'Edit discount activity' : 'Create discount activity'} />
-            <Alert message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full discount activity;" type="info" showIcon />
+            <Headline title={
+              marketingId ?
+              this.props.intl.formatMessage({
+                id: 'Marketing.Editdiscountactivity'
+              })
+              :
+                this.props.intl.formatMessage({
+                  id: 'Marketing.Creatediscountactivity'
+                })
+            }
+            />
+            <Alert message={
+              this.props.intl.formatMessage({
+                id: 'Marketing.discountTip'
+              })
+            } type="info" showIcon />
 
             <WrappedForm
               ref={(form) => (this._form = form)}
@@ -72,3 +92,5 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
     );
   }
 }
+
+export default injectIntl(MarketingFullDiscountAdd)

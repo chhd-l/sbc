@@ -6,6 +6,7 @@ import * as webapi from './webapi';
 import DropList from './components/drop-list';
 //import AddCustomizedFilter from './components/add-customized-filter';
 import SelectAttribute from './components/select-attribute';
+import { FormattedMessage } from 'react-intl';
 
 const { TabPane } = Tabs;
 
@@ -13,7 +14,7 @@ class FilterSortSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Filter & Sort setting',
+      title: <FormattedMessage id="Product.FilterSortSetting" />,
       attributeFilterList: [],
       customizedFilterList: [],
       sortByList: [],
@@ -276,9 +277,15 @@ class FilterSortSetting extends Component<any, any> {
     const { title, attributeFilterList, customizedFilterList, sortByList, selectedRowKeys, selectedRowList } = this.state;
     const description = (
       <div>
-        <p>1. Filter attributes can be chosen from attributes, which are associated with product category</p>
-        <p>2. The enabled filters will show in the ‘Filter’ section for customer to choose and filter out desired products.</p>
-        <p>3. The enabled sort conditions will show in the ‘Sort by’ section for customer to sort products in desired orders.</p>
+        <p>
+          1. <FormattedMessage id="Product.FilterAttributes" />
+        </p>
+        <p>
+          2. <FormattedMessage id="Product.TheEnabledFilters" />
+        </p>
+        <p>
+          3. <FormattedMessage id="Product.TheEnabledSort" />
+        </p>
       </div>
     );
 
@@ -293,15 +300,15 @@ class FilterSortSetting extends Component<any, any> {
           </div>
           <div className="container-search">
             <Tabs defaultActiveKey="attributeFilter">
-              <TabPane tab="Attribute filter" key="attributeFilter">
+              <TabPane tab={<FormattedMessage id="Product.AttributeFilter" />} key="attributeFilter">
                 <SelectAttribute refreshList={this.findAttributeFilterList} selectedRowKeys={selectedRowKeys} selectedRowList={selectedRowList}></SelectAttribute>
                 <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} type="filter" dataSource={attributeFilterList}></DropList>
               </TabPane>
-              <TabPane tab="Customized filter" key="customizedFilter">
+              <TabPane tab={<FormattedMessage id="Product.CustomizedFilter" />} key="customizedFilter">
                 {/* <AddCustomizedFilter type="add" refreshList={this.findCustomizeFilterList}></AddCustomizedFilter> */}
                 <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} refreshListFunction={this.findCustomizeFilterList} type="filter" dataSource={customizedFilterList}></DropList>
               </TabPane>
-              <TabPane tab="Sort by" key="sortBy">
+              <TabPane tab={<FormattedMessage id="Product.SortBy" />} key="sortBy">
                 <DropList sortFunction={this.updateSortList} switchFunction={this.switchSort} type="sort" dataSource={sortByList}></DropList>
               </TabPane>
             </Tabs>

@@ -134,6 +134,7 @@ class AutomationExecution extends Component<any, any> {
       executionTime: currentRow.executionTime,
       campaignId: this.props.automationId,
       nodeName: currentRow.nodeName,
+      nodeType: currentRow.nodeType,
       keyword: keyword,
       pageSize: modalPagination.pageSize,
       pageNum: modalPagination.current - 1
@@ -252,13 +253,18 @@ class AutomationExecution extends Component<any, any> {
       {
         title: 'Execution time',
         dataIndex: 'executionTime',
-        width: '20%',
+        width: '15%',
         render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
+      },
+      {
+        title: 'Communication type',
+        dataIndex: 'nodeType',
+        width: '15%'
       },
       {
         title: 'Communication item',
         dataIndex: 'nodeName',
-        width: '20%'
+        width: '15%'
       },
       {
         title: 'counts',
@@ -301,15 +307,15 @@ class AutomationExecution extends Component<any, any> {
     ];
 
     const executionDetailsColumns = [
+      // {
+      //   title: 'Pet owner account',
+      //   dataIndex: 'contactId',
+      //   width: '15%'
+      // },
       {
         title: 'Pet owner account',
-        dataIndex: 'contactId',
-        width: '15%'
-      },
-      {
-        title: 'Pet owner name',
         dataIndex: 'contactName',
-        width: '10%'
+        width: '15%'
       },
       {
         title: 'Communication item',

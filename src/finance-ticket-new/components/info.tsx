@@ -39,12 +39,7 @@ export default class Info extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      invoiceType,
-      onChange,
-      onSwitchChange,
-      onSaveInvoiceType
-    } = this.props.relaxProps;
+    const { invoiceType, onChange, onSwitchChange, onSaveInvoiceType } = this.props.relaxProps;
 
     return (
       <AuthWrapper functionName="f_invo_type_set">
@@ -52,14 +47,11 @@ export default class Info extends React.Component<any, any> {
           <Form layout="inline">
             <FormItem>
               <label>
-                {<FormattedMessage id="supportedBillingTypes" />}
+                {<FormattedMessage id="Finance.supportedBillingTypes" />}
                 :&nbsp;&nbsp;&nbsp;&nbsp;
               </label>
-              <Switch
-                checked={invoiceType.get('isSupportInvoice') == 0}
-                onChange={(e) => onSwitchChange(e.valueOf())}
-              />
-              &nbsp;&nbsp; {<FormattedMessage id="doesNotSupportInvoicing" />}
+              <Switch checked={invoiceType.get('isSupportInvoice') == 0} onChange={(e) => onSwitchChange(e.valueOf())} />
+              &nbsp;&nbsp; {<FormattedMessage id="Finance.doesNotSupportInvoicing" />}
             </FormItem>
 
             <FormItem>
@@ -73,7 +65,7 @@ export default class Info extends React.Component<any, any> {
                   })
                 }
               >
-                {<FormattedMessage id="ordinaryInvoice" />}
+                {<FormattedMessage id="Finance.ordinaryInvoice" />}
               </Checkbox>
             </FormItem>
 
@@ -88,13 +80,13 @@ export default class Info extends React.Component<any, any> {
                   })
                 }
               >
-                {<FormattedMessage id="vatSpecialInvoice" />}
+                {<FormattedMessage id="Finance.vatSpecialInvoice" />}
               </Checkbox>
             </FormItem>
 
             <FormItem className="saveButton">
               <Button type="primary" onClick={() => onSaveInvoiceType()}>
-                {<FormattedMessage id="saveSettings" />}
+                {<FormattedMessage id="Finance.saveSettings" />}
               </Button>
             </FormItem>
           </Form>

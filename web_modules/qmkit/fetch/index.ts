@@ -81,7 +81,8 @@ export default async function Fetch<T>(
       init.body = JSON.stringify(trimValueDeep(JSON.parse(r as string)));
     }
     const merge = Object.assign({}, request, init);
-    let url = Const.HOST + input;
+    // let url = Const.HOST + input;
+    let url = input.toString().indexOf('http') !== -1 ? input.toString(): Const.HOST + input;
     //去掉url中可能存在的//
     url = url.replace(/([^:])\/\//, '$1/');
     //const res = await fetch(url, merge);

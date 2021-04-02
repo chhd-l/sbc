@@ -56,7 +56,7 @@ export default class Activities extends Component<any, any> {
         }
       ],
       isRecent: true,
-      orderType: 'asc',
+      orderType: 'desc',
       filters: [],
       keyword: '',
       visible: false

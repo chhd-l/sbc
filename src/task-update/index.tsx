@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Const, Headline, ReactEditor, history, cache } from 'qmkit';
-import { Form, Input, Button, Col, Row, Select, message, DatePicker, Tabs, Breadcrumb, Tooltip, InputNumber } from 'antd';
+import { Form, Input, Button, Col, Row, Select, message, DatePicker, Tabs, Breadcrumb, Tooltip, InputNumber, Spin } from 'antd';
 import Activity from './components/activity';
 import './style.less';
 import * as webapi from './webapi';
@@ -74,7 +74,8 @@ class TaskUpdate extends Component<any, any> {
         { value: 'Hour', name: 'Hours' },
         { value: 'Week', name: 'Weeks' }
       ],
-      associatedSubscriptionList: []
+      associatedSubscriptionList: [],
+      loading: false
     };
     this.onChange = this.onChange.bind(this);
     this.searchAssignedTo = this.searchAssignedTo.bind(this);
@@ -105,6 +106,9 @@ class TaskUpdate extends Component<any, any> {
       });
     const { id } = this.state;
     if (id) {
+      this.setState({
+        loading: true
+      });
       webapi
         .getTaskById(id)
         .then((data) => {
@@ -113,7 +117,8 @@ class TaskUpdate extends Component<any, any> {
             let taskStatus = res.context.task.status;
             this.setState({
               task: res.context.task,
-              taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled'
+              taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled',
+              loading: false
             });
             let customerAccount = res.context.task.customerAccount;
             if (customerAccount) {
@@ -123,10 +128,16 @@ class TaskUpdate extends Component<any, any> {
             }
           } else {
             message.error(res.message || 'Get data failed');
+            this.setState({
+              loading: false
+            });
           }
         })
         .catch(() => {
           message.error('Get data failed');
+          this.setState({
+            loading: false
+          });
         });
     } else {
       let currentUser = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
@@ -400,450 +411,449 @@ class TaskUpdate extends Component<any, any> {
             }}
           >
             <TabPane tab="Basic information" key="basic">
-              <Form>
-                <Row>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Task Name">
-                      {getFieldDecorator('name', {
-                        initialValue: task.name,
-                        rules: [{ required: true, message: 'Please input task name' }]
-                      })(
-                        editable ? (
-                          <Input
-                            disabled={taskCompleted}
-                            placeholder="Input task name to create a new task"
-                            onChange={(e: any) =>
-                              this.onChange({
-                                field: 'name',
-                                value: e.target.value
-                              })
-                            }
-                          />
-                        ) : (
-                          <span>{task.name}</span>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                  {id ? (
+              <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+                <Form>
+                  <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Task Status">
-                        {getFieldDecorator('status', {
-                          initialValue: task.status
+                      <FormItem {...formItemLayout} label="Task Name">
+                        {getFieldDecorator('name', {
+                          initialValue: task.name,
+                          rules: [{ required: true, message: 'Please input task name' }]
+                        })(
+                          editable ? (
+                            <Input
+                              disabled={taskCompleted}
+                              placeholder="Input task name to create a new task"
+                              onChange={(e: any) =>
+                                this.onChange({
+                                  field: 'name',
+                                  value: e.target.value
+                                })
+                              }
+                            />
+                          ) : (
+                            <span>{task.name}</span>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                    {id ? (
+                      <Col span={12}>
+                        <FormItem {...formItemLayout} label="Task Status">
+                          {getFieldDecorator('status', {
+                            initialValue: task.status
+                          })(
+                            editable ? (
+                              <Select
+                                allowClear
+                                onChange={(value) =>
+                                  this.onChange({
+                                    field: 'status',
+                                    value: value
+                                  })
+                                }
+                              >
+                                {statusList.map((item) => (
+                                  <Option value={item.value} key={item.value}>
+                                    {item.name}
+                                  </Option>
+                                ))}
+                              </Select>
+                            ) : (
+                              <span>{taskStatus ? taskStatus.name : ''}</span>
+                            )
+                          )}
+                        </FormItem>
+                      </Col>
+                    ) : null}
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Assigned to">
+                        {getFieldDecorator('assistantId', {
+                          initialValue: task.assistantName ? task.assistantName + '(' + task.assistantEmail + ')' : null
                         })(
                           editable ? (
                             <Select
                               allowClear
+                              disabled={taskCompleted}
+                              placeholder="Please input email or name"
+                              showSearch
+                              onSearch={this.searchAssignedTo}
                               onChange={(value) =>
                                 this.onChange({
-                                  field: 'status',
+                                  field: 'assistantId',
                                   value: value
                                 })
                               }
                             >
-                              {statusList.map((item) => (
+                              {assignedUsers.map((item) => (
+                                <Option value={item.employeeId} key={item.employeeId}>
+                                  {item.employeeName} {'(' + item.accountName + ')'}
+                                </Option>
+                              ))}
+                            </Select>
+                          ) : (
+                            <span>{task.assistantName ? task.assistantName + (task.assistantEmail ? '(' + task.assistantEmail + ')' : '') : null}</span>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Golden Moment">
+                        {getFieldDecorator('goldenMoment', {
+                          initialValue: task.goldenMoment
+                        })(
+                          editable ? (
+                            <Select
+                              allowClear
+                              disabled={taskCompleted}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'goldenMoment',
+                                  value: value
+                                })
+                              }
+                            >
+                              {goldenMomentList.map((item) => (
+                                <Option value={item.value} key={item.id}>
+                                  {item.value}
+                                </Option>
+                              ))}
+                            </Select>
+                          ) : (
+                            <span>{task.goldenMoment}</span>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Start Time">
+                        {getFieldDecorator('startTime', {
+                          initialValue: task.startTime ? moment(task.startTime) : null,
+                          rules: [{ required: true, message: 'Please select start time' }]
+                        })(
+                          editable ? (
+                            <DatePicker
+                              disabledDate={this.disabledEventStartDate}
+                              disabled={taskCompleted || (!!task.startTime && id)}
+                              style={{ width: '100%' }}
+                              placeholder="Start Time"
+                              format="YYYY-MM-DD"
+                              onChange={(date, dateString) => {
+                                const value = dateString ? dateString + ' 00:00:00' : null;
+                                this.onChange({
+                                  field: 'startTime',
+                                  value
+                                });
+                              }}
+                            />
+                          ) : (
+                            <span>{task.startTime}</span>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Due Time">
+                        {getFieldDecorator('dueTime', {
+                          initialValue: task.dueTime ? moment(task.dueTime) : null,
+                          rules: [{ required: true, message: 'Please select due time' }]
+                        })(
+                          editable ? (
+                            <DatePicker
+                              disabledDate={this.disabledEventEndDate}
+                              disabled={taskCompleted}
+                              style={{ width: '100%' }}
+                              placeholder="Due Time"
+                              format="YYYY-MM-DD"
+                              onChange={(date, dateString) => {
+                                const value = dateString ? dateString + ' 00:00:00' : null;
+                                this.onChange({
+                                  field: 'dueTime',
+                                  value
+                                });
+                              }}
+                            />
+                          ) : (
+                            <span>{task.dueTime}</span>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Reminder before due time">
+                        {editable ? (
+                          <Row>
+                            <Col span={8}>
+                              {getFieldDecorator('reminderNumber', {
+                                initialValue: task.reminderNumber
+                              })(
+                                <InputNumber
+                                  min={task.reminderType === 'Minute' ? 10 : 0}
+                                  disabled={taskCompleted}
+                                  onChange={(value) =>
+                                    this.onChange({
+                                      field: 'reminderNumber',
+                                      value: value
+                                    })
+                                  }
+                                />
+                              )}
+                            </Col>
+                            <Col span={16}>
+                              {getFieldDecorator('reminderType', {
+                                initialValue: task.reminderType ? task.reminderType : ''
+                              })(
+                                <Select
+                                  allowClear
+                                  disabled={taskCompleted}
+                                  onChange={(value) =>
+                                    this.onChange({
+                                      field: 'reminderType',
+                                      value: value
+                                    })
+                                  }
+                                >
+                                  {reminderTypes.map((item) => (
+                                    <Option value={item.value} key={item.value}>
+                                      {item.name}
+                                    </Option>
+                                  ))}
+                                </Select>
+                              )}
+                            </Col>
+                          </Row>
+                        ) : (
+                          <span>
+                            {task.reminderNumber} {task.reminderType ? task.reminderType + 's' : ''}
+                          </span>
+                        )}
+                      </FormItem>
+                    </Col>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Priority">
+                        {getFieldDecorator('priority', {
+                          initialValue: task.priority
+                        })(
+                          editable ? (
+                            <Select
+                              allowClear
+                              disabled={taskCompleted}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'priority',
+                                  value: value
+                                })
+                              }
+                            >
+                              {priorityList &&
+                                priorityList.map((item) => (
+                                  <Option value={item.value} key={item.value}>
+                                    {item.name}
+                                  </Option>
+                                ))}
+                            </Select>
+                          ) : (
+                            <span>{task.priority}</span>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Associated Pet Owner">
+                        {getFieldDecorator('contactId', {
+                          initialValue: task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''
+                        })(
+                          editable ? (
+                            <Select
+                              allowClear
+                              disabled={taskCompleted}
+                              placeholder="Please input pet owner account"
+                              showSearch
+                              onSearch={this.searchAssignedPetOwners}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'contactId',
+                                  value: value
+                                })
+                              }
+                            >
+                              {associatedPetOwners.map((item) => (
+                                <Option value={item.customerAccount} key={item.customerAccount}>
+                                  {item.customerName} {'(' + item.customerAccount + ')'}
+                                </Option>
+                              ))}
+                            </Select>
+                          ) : (
+                            <Link to={`/petowner-details/${task.contactId}/${task.customerAccount}`}>{task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''}</Link>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Associated Pet">
+                        {getFieldDecorator('petId', {
+                          initialValue: task.petId
+                        })(
+                          editable ? (
+                            <Select
+                              allowClear
+                              disabled={taskCompleted}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'petId',
+                                  value: value
+                                })
+                              }
+                            >
+                              {associatedPetList.map((item) => (
+                                <Option value={item.petsId} key={item.petsId}>
+                                  {item.petsName}
+                                </Option>
+                              ))}
+                            </Select>
+                          ) : (
+                            <Link to={{ pathname: `/petowner-details/${task.contactId}/${task.customerAccount}`, query: { hash: 'pets-list' } }}>{task.petName}</Link>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Associated Order">
+                        {getFieldDecorator('orderCode', {
+                          initialValue: task.orderCode
+                        })(
+                          editable ? (
+                            <Select
+                              allowClear
+                              disabled={taskCompleted}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'orderCode',
+                                  value: value
+                                })
+                              }
+                            >
+                              {associatedOrderList.map((item) => (
+                                <Option value={item.id} key={item.id}>
+                                  {item.id}
+                                </Option>
+                              ))}
+                            </Select>
+                          ) : (
+                            <Link to={`/order-detail/${task.orderCode}`}>{task.orderCode}</Link>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Action Type">
+                        {getFieldDecorator('actionType', {
+                          initialValue: task.actionType
+                        })(
+                          editable ? (
+                            <Select
+                              allowClear
+                              disabled={taskCompleted}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'actionType',
+                                  value: value
+                                })
+                              }
+                            >
+                              {actionTypeList.map((item) => (
                                 <Option value={item.value} key={item.value}>
                                   {item.name}
                                 </Option>
                               ))}
                             </Select>
                           ) : (
-                            <span>{taskStatus ? taskStatus.name : ''}</span>
+                            <span>{task.actionType}</span>
                           )
                         )}
                       </FormItem>
                     </Col>
-                  ) : null}
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Assigned to">
-                      {getFieldDecorator('assistantId', {
-                        initialValue: task.assistantName ? task.assistantName + '(' + task.assistantEmail + ')' : null
-                      })(
-                        editable ? (
-                          <Select
-                            allowClear
-                            disabled={taskCompleted}
-                            placeholder="Please input email or name"
-                            showSearch
-                            onSearch={this.searchAssignedTo}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'assistantId',
-                                value: value
-                              })
-                            }
-                          >
-                            {assignedUsers.map((item) => (
-                              <Option value={item.employeeId} key={item.employeeId}>
-                                {item.employeeName} {'(' + item.accountName + ')'}
-                              </Option>
-                            ))}
-                          </Select>
-                        ) : (
-                          <span>{task.assistantName ? task.assistantName + (task.assistantEmail ? '(' + task.assistantEmail + ')' : '') : null}</span>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Golden Moment">
-                      {getFieldDecorator('goldenMoment', {
-                        initialValue: task.goldenMoment
-                      })(
-                        editable ? (
-                          <Select
-                            allowClear
-                            disabled={taskCompleted}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'goldenMoment',
-                                value: value
-                              })
-                            }
-                          >
-                            {goldenMomentList.map((item) => (
-                              <Option value={item.value} key={item.id}>
-                                {item.value}
-                              </Option>
-                            ))}
-                          </Select>
-                        ) : (
-                          <span>{task.goldenMoment}</span>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Start Time">
-                      {getFieldDecorator('startTime', {
-                        initialValue: task.startTime ? moment(task.startTime) : null,
-                        rules: [{ required: true, message: 'Please select start time' }]
-                      })(
-                        editable ? (
-                          <DatePicker
-                            disabledDate={this.disabledEventStartDate}
-                            disabled={taskCompleted || (!!task.startTime && id)}
-                            style={{ width: '100%' }}
-                            placeholder="Start Time"
-                            format="YYYY-MM-DD"
-                            onChange={(date, dateString) => {
-                              const value = dateString ? dateString + ' 00:00:00' : null;
-                              this.onChange({
-                                field: 'startTime',
-                                value
-                              });
-                            }}
-                          />
-                        ) : (
-                          <span>{task.startTime}</span>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Due Time">
-                      {getFieldDecorator('dueTime', {
-                        initialValue: task.dueTime ? moment(task.dueTime) : null,
-                        rules: [{ required: true, message: 'Please select due time' }]
-                      })(
-                        editable ? (
-                          <DatePicker
-                            disabledDate={this.disabledEventEndDate}
-                            disabled={taskCompleted}
-                            style={{ width: '100%' }}
-                            placeholder="Due Time"
-                            format="YYYY-MM-DD"
-                            onChange={(date, dateString) => {
-                              const value = dateString ? dateString + ' 00:00:00' : null;
-                              this.onChange({
-                                field: 'dueTime',
-                                value
-                              });
-                            }}
-                          />
-                        ) : (
-                          <span>{task.dueTime}</span>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Reminder before due time">
-                      {editable ? (
-                        <Row>
-                          <Col span={8}>
-                            {getFieldDecorator('reminderNumber', {
-                              initialValue: task.reminderNumber
-                            })(
-                              <InputNumber
-                                min={task.reminderType === 'Minute' ? 10 : 0}
-                                disabled={taskCompleted}
-                                onChange={(value) =>
-                                  this.onChange({
-                                    field: 'reminderNumber',
-                                    value: value
-                                  })
-                                }
-                              />
-                            )}
-                          </Col>
-                          <Col span={16}>
-                            {getFieldDecorator('reminderType', {
-                              initialValue: task.reminderType ? task.reminderType : ''
-                            })(
-                              <Select
-                                allowClear
-                                disabled={taskCompleted}
-                                onChange={(value) =>
-                                  this.onChange({
-                                    field: 'reminderType',
-                                    value: value
-                                  })
-                                }
-                              >
-                                {reminderTypes.map((item) => (
-                                  <Option value={item.value} key={item.value}>
-                                    {item.name}
-                                  </Option>
-                                ))}
-                              </Select>
-                            )}
-                          </Col>
-                        </Row>
-                      ) : (
-                        <span>
-                          {task.reminderNumber} {task.reminderType ? task.reminderType + 's' : ''}
-                        </span>
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Priority">
-                      {getFieldDecorator('priority', {
-                        initialValue: task.priority
-                      })(
-                        editable ? (
-                          <Select
-                            allowClear
-                            disabled={taskCompleted}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'priority',
-                                value: value
-                              })
-                            }
-                          >
-                            {priorityList &&
-                              priorityList.map((item) => (
-                                <Option value={item.value} key={item.value}>
-                                  {item.name}
+                  </Row>
+                  <Row>
+                    <Col span={12}>
+                      <FormItem {...formItemLayout} label="Associate Subscription">
+                        {getFieldDecorator('subscriptionNumber', {
+                          initialValue: task.subscription
+                        })(
+                          editable ? (
+                            <Select
+                              allowClear
+                              disabled={taskCompleted}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'subscriptionNumber',
+                                  value: value
+                                })
+                              }
+                            >
+                              {associatedSubscriptionList.map((item) => (
+                                <Option value={item.subscribeId} key={item.subscribeId}>
+                                  {item.subscribeId}
                                 </Option>
                               ))}
-                          </Select>
-                        ) : (
-                          <span>{task.priority}</span>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Associated Pet Owner">
-                      {getFieldDecorator('contactId', {
-                        initialValue: task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''
-                      })(
-                        editable ? (
-                          <Select
-                            allowClear
-                            disabled={taskCompleted}
-                            placeholder="Please input pet owner account"
-                            showSearch
-                            onSearch={this.searchAssignedPetOwners}
-                            onChange={(value) =>
+                            </Select>
+                          ) : (
+                            <Link to={`/subscription-detail/${task.subscriptionNumber}`}>{task.subscriptionNumber}</Link>
+                          )
+                        )}
+                      </FormItem>
+                    </Col>
+                  </Row>
+                  <Row>
+                    {editable ? (
+                      <FormItem {...formRowItemLayout} label="Description">
+                        {taskCompleted ? (
+                          <ReactEditor id="description" height={200} disabled={true} content={task.description} onContentChange={(html) => {}} />
+                        ) : task.description ? (
+                          <ReactEditor
+                            id="description"
+                            height={200}
+                            content={task.description}
+                            onContentChange={(html) =>
                               this.onChange({
-                                field: 'contactId',
-                                value: value
+                                field: 'description',
+                                value: html
                               })
                             }
-                          >
-                            {associatedPetOwners.map((item) => (
-                              <Option value={item.customerAccount} key={item.customerAccount}>
-                                {item.customerName} {'(' + item.customerAccount + ')'}
-                              </Option>
-                            ))}
-                          </Select>
+                          />
                         ) : (
-                          <Link to={`/petowner-details/${task.contactId}/${task.customerAccount}`}>{task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''}</Link>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Associated Pet">
-                      {getFieldDecorator('petId', {
-                        initialValue: task.petId
-                      })(
-                        editable ? (
-                          <Select
-                            allowClear
-                            disabled={taskCompleted}
-                            onChange={(value) =>
+                          <ReactEditor
+                            id="description"
+                            height={200}
+                            content={''}
+                            onContentChange={(html) =>
                               this.onChange({
-                                field: 'petId',
-                                value: value
+                                field: 'description',
+                                value: html
                               })
                             }
-                          >
-                            {associatedPetList.map((item) => (
-                              <Option value={item.petsId} key={item.petsId}>
-                                {item.petsName}
-                              </Option>
-                            ))}
-                          </Select>
-                        ) : (
-                          <Link to={{ pathname: `/petowner-details/${task.contactId}/${task.customerAccount}`, query: { hash: 'pets-list' } }}>{task.petName}</Link>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Associated Order">
-                      {getFieldDecorator('orderCode', {
-                        initialValue: task.orderCode
-                      })(
-                        editable ? (
-                          <Select
-                            allowClear
-                            disabled={taskCompleted}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'orderCode',
-                                value: value
-                              })
-                            }
-                          >
-                            {associatedOrderList.map((item) => (
-                              <Option value={item.id} key={item.id}>
-                                {item.id}
-                              </Option>
-                            ))}
-                          </Select>
-                        ) : (
-                          <Link to={`/order-detail/${task.orderCode}`}>{task.orderCode}</Link>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Action Type">
-                      {getFieldDecorator('actionType', {
-                        initialValue: task.actionType
-                      })(
-                        editable ? (
-                          <Select
-                            allowClear
-                            disabled={taskCompleted}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'actionType',
-                                value: value
-                              })
-                            }
-                          >
-                            {actionTypeList.map((item) => (
-                              <Option value={item.value} key={item.value}>
-                                {item.name}
-                              </Option>
-                            ))}
-                          </Select>
-                        ) : (
-                          <span>{task.actionType}</span>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout} label="Associate Subscription">
-                      {getFieldDecorator('subscriptionNumber', {
-                        initialValue: task.subscription
-                      })(
-                        editable ? (
-                          <Select
-                            allowClear
-                            disabled={taskCompleted}
-                            onChange={(value) =>
-                              this.onChange({
-                                field: 'subscriptionNumber',
-                                value: value
-                              })
-                            }
-                          >
-                            {associatedSubscriptionList.map((item) => (
-                              <Option value={item.subscribeId} key={item.subscribeId}>
-                                {item.subscribeId}
-                              </Option>
-                            ))}
-                          </Select>
-                        ) : (
-                          <Link to={`/subscription-detail/${task.subscriptionNumber}`}>{task.subscriptionNumber}</Link>
-                        )
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row>
-                  {editable ? (
-                    <FormItem {...formRowItemLayout} label="Description">
-                      {taskCompleted ? (
-                        <ReactEditor id="description" height={200} disabled={true} content={task.description} onContentChange={(html) => {}} />
-                      ) : task.description ? (
-                        <ReactEditor
-                          id="description"
-                          height={200}
-                          content={task.description}
-                          onContentChange={(html) =>
-                            this.onChange({
-                              field: 'description',
-                              value: html
-                            })
-                          }
-                        />
-                      ) : (
-                        <ReactEditor
-                          id="description"
-                          height={200}
-                          content={''}
-                          onContentChange={(html) =>
-                            this.onChange({
-                              field: 'description',
-                              value: html
-                            })
-                          }
-                        />
-                      )}
-                    </FormItem>
-                  ) : (
-                    <FormItem {...formRowItemLayout} label="Description">
-                      <span dangerouslySetInnerHTML={{ __html: task.description }}></span>
-                    </FormItem>
-                  )}
-                </Row>
-              </Form>
+                          />
+                        )}
+                      </FormItem>
+                    ) : (
+                      <FormItem {...formRowItemLayout} label="Description">
+                        <span dangerouslySetInnerHTML={{ __html: task.description }}></span>
+                      </FormItem>
+                    )}
+                  </Row>
+                </Form>
+              </Spin>
             </TabPane>
-            {/* <TabPane tab="Service List" key="services">
-              <ServiceList goldenMomentList={goldenMomentList} goldenMoment={this.state.task.goldenMoment} />
-            </TabPane> */}
             {id ? (
               <TabPane tab="Activity" key="activity">
                 <Activity taskId={id} taskCompleted={taskCompleted} />

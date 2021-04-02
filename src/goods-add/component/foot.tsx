@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Button, Modal } from 'antd';
 import { noop, history, AuthWrapper } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const confirm = Modal.confirm;
 @Relax
-export default class Foot extends React.Component<any, any> {
+class Foot extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,47 +59,47 @@ export default class Foot extends React.Component<any, any> {
   render() {
     const { saveLoading } = this.props.relaxProps;
     return (
-      <div className="bar-button">
+      <div className="bar-button" style={{marginLeft:'-20px'}}>
         {this.props.tabType == 'main' ? (
           <AuthWrapper key="001" functionName={this.props.goodsFuncName}>
             <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }}>
-              Next
+              <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : this.props.tabType == 'price' ? (
           <AuthWrapper key="002" functionName={this.props.goodsFuncName}>
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
-              Prev
+              <FormattedMessage id="Product.Prev" />
             </Button>
             <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }}>
-              Next
+              <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : this.props.tabType == 'inventory' ? (
           <AuthWrapper key="003" functionName={this.props.goodsFuncName}>
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
-              Prev
+              <FormattedMessage id="Product.Prev" />
             </Button>
             <Button type="primary" onClick={() => this._savePrice()} style={{ marginRight: 10 }}>
-              Next
+              <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : this.props.tabType == 'related' ? (
           <AuthWrapper key="004" functionName={this.props.priceFuncName}>
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
-              Prev
+              <FormattedMessage id="Product.Prev" />
             </Button>
             <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }}>
-              Next
+              <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : (
           <AuthWrapper key="005" functionName={this.props.priceFuncName}>
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
-              Prev
+              <FormattedMessage id="Product.Prev" />
             </Button>
             <Button type="primary" onClick={this._saveSeoSetting} style={{ marginRight: 10 }}>
-              Save
+              <FormattedMessage id="Product.Save" />
             </Button>
           </AuthWrapper>
         )}
@@ -129,7 +129,7 @@ export default class Foot extends React.Component<any, any> {
         )}*/}
         {this.props.isLeave && (
           <Button type="primary" onClick={this._leavePage} style={{ marginRight: 10 }}>
-            Back to list
+            <FormattedMessage id="Product.BackToList" />
           </Button>
         )}
       </div>
@@ -161,16 +161,22 @@ export default class Foot extends React.Component<any, any> {
       this.props.relaxProps.onMainTabChange('price');
     }*/
   };
-  _leavePage() {
+  _leavePage = () => {
     // this.props.onLeave();
+    const title = this.props.intl.formatMessage({id:'Product.Prompt'});
+    const content = this.props.intl.formatMessage({id:'Product.returnToTheListPage'});
+    const okText = this.props.intl.formatMessage({id:'Product.OK'});
+    const cancelText = this.props.intl.formatMessage({id:'Product.Cancel'});
     confirm({
-      title: 'Prompt',
-      content: 'Do you want to return to the list page? The information currently filled in will be lost.',
-      okText: 'OK',
-      cancelText: 'Cancel',
+      title: title,
+      content: content,
+      okText: okText,
+      cancelText: cancelText,
       onOk() {
         history.push('/goods-list');
       }
     });
   }
 }
+
+export default injectIntl(Foot);

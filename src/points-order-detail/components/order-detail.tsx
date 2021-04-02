@@ -1,22 +1,12 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Col, Icon, Input, Modal, Popover, Row, Table } from 'antd';
-import { AuthWrapper, Const, noop, util } from 'qmkit';
+import { AuthWrapper, Const, noop, util, getOrderStatusValue } from 'qmkit';
 import { fromJS, Map } from 'immutable';
 
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
-const flowState = (status) => {
-  if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return '待发货';
-  } else if (status == 'DELIVERED') {
-    return '待收货';
-  } else if (status == 'CONFIRMED') {
-    return '已收货';
-  } else if (status == 'COMPLETED') {
-    return '已完成';
-  }
-};
 
 const columns = [
   {
@@ -129,7 +119,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               justifyContent: 'space-between'
             }}
           >
-            <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
+            <label style={styles.greenText}><FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} /></label>
 
             {this._renderBtnAction(tid)}
           </div>
@@ -258,7 +248,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
       );
-    } else if (flowState === 'DELIVERED_PART') {
+    } else if (flowState === 'PARTIALLY_SHIPPED') {
       return (
         <div>
           <AuthWrapper functionName="f_points_order_list_005">

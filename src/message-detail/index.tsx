@@ -822,7 +822,7 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Consumer Account">
+                    <FormItem label="Pet owner account">
                       {getFieldDecorator(
                         'consumerAccount',
                         {}
@@ -870,16 +870,16 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Consumer Name">
+                    <FormItem label="Pet owner name">
                       {getFieldDecorator('consumerName', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Consumer Name!'
+                            message: 'Please input Pet owner name!'
                           },
                           {
                             max: 50,
-                            message: 'Consumer Name exceed the maximum length!'
+                            message: 'Pet owner name exceed the maximum length!'
                           }
                         ]
                       })(
@@ -927,7 +927,7 @@ class MessageDetails extends Component<any, any> {
                       label={
                         <span>
                           Related pet&nbsp;
-                          <Tooltip title="Please select consumer account first!">
+                          <Tooltip title="Please select Pet owner account first!">
                             <Icon type="question-circle-o" />
                           </Tooltip>
                         </span>

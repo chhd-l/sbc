@@ -38,7 +38,7 @@ export default class ProductOverview extends React.Component<any, any> {
           </Row>
         </div>
         <div className="c-box-footer">
-          <Input.Search onChange={(e) => this.onSearch(e.target.value)} />
+          <Input.Search size="large" onChange={(e) => this.onSearch(e.target.value)} />
         </div>
       </>
     );

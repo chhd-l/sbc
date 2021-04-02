@@ -33,7 +33,14 @@ export default class Checkout extends React.Component<any, any> {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
           loading: false,
-          products: data.res.context.goodsInfoList.map(goods => ({goodsId: goods.goodsId, goodsInfoName: goods.goodsInfoName, goodsInfoBarcode: goods.goodsInfoBarcode, goodsImg: goods.goods.goodsImg, marketPrice: goods.marketPrice}))
+          products: data.res.context.goodsInfoList.map(goods => ({
+            goodsId: goods.goodsId,
+            goodsInfoNo: goods.goodsInfoNo,
+            goodsInfoName: goods.goodsInfoName,
+            goodsInfoBarcode: goods.goodsInfoBarcode,
+            goodsImg: goods.goods.goodsImg,
+            marketPrice: goods.marketPrice
+          }))
         });
       } else {
         this.setState({ loading: false });

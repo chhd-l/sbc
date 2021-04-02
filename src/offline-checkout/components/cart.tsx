@@ -29,7 +29,7 @@ export default class Cart extends React.Component<any, any> {
           <Col span={4}>Price</Col>
           <Col span={6}>Weight</Col>
           <Col span={4}>Total price</Col>
-          <Col span={2}>Remove</Col>
+          <Col span={2}></Col>
         </Row>
         <div className="c-cart-container">
           {list.map((cartItem, idx) => (

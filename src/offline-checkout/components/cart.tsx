@@ -23,10 +23,10 @@ export default class Cart extends React.Component<any, any> {
     return (
       <>
         <div className="c-box-title">Shopping cart</div>
-        <Row className="c-cart-header">
+        <Row className="c-cart-header" type="flex" align="middle">
           <Col span={4}>Product</Col>
           <Col span={4}>Product name</Col>
-          <Col span={4}>Price</Col>
+          <Col span={4}>Price(10g)</Col>
           <Col span={6}>Weight</Col>
           <Col span={4}>Total price</Col>
           <Col span={2}></Col>

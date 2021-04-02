@@ -17,7 +17,7 @@ export default class Order extends React.Component<any, any> {
   };
 
   render() {
-    const { memberType, memberInfo, products, list, onAddProduct, onRemoveProduct, onSetQuantity, onClear, onCheckout } = this.props;
+    const { memberType, memberInfo, products, list, onAddProduct, onRemoveProduct, onSetQuantity, onClear, onCheckout, onScanEnd } = this.props;
     return (
       <>
         <Header />
@@ -27,7 +27,7 @@ export default class Order extends React.Component<any, any> {
               <Cart list={list} onRemoveProduct={onRemoveProduct} onSetQuantity={onSetQuantity} />
             </div>
             <div className="c-full-box c-foot">
-              <MemberBar memberType={memberType} memberInfo={memberInfo} onChange={this.onSetMemberInfo} />
+              <MemberBar memberType={memberType} memberInfo={memberInfo} onChange={this.onSetMemberInfo} onScanEnd={onScanEnd} />
             </div>
           </Col>
           <Col span={8} style={{height: '100%'}}>

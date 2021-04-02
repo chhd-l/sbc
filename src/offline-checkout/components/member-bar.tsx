@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Button } from 'antd';
+import { QRScaner } from 'qmkit';
 import GuestForm from './guest-form';
 import CustomerList from '../../appointment-list/components/customer-list';
 
@@ -43,7 +44,7 @@ export default class MemberBar extends React.Component<any, any> {
   };
 
   render() {
-    const { memberType, memberInfo } = this.props;
+    const { memberType, memberInfo, onScanEnd } = this.props;
     return (
       <>
         {memberInfo.customerName && <Button type="link" onClick={() => this.onReset()} className="member-reset-link">Reset</Button>}
@@ -62,10 +63,12 @@ export default class MemberBar extends React.Component<any, any> {
             </Card>
           </Col>
           <Col span={4}>
-            <Card className="text-align-center" bodyStyle={{padding: '10px'}}>
-              <div><img src={qrImg} width="40" height="40" alt=""/></div>
-              <span className="action-tag small">Recommendation</span>
-            </Card>
+            <QRScaner id="innerscaner" onScanEnd={onScanEnd}>
+              <Card className="text-align-center" bodyStyle={{padding: '10px'}}>
+                <div><img src={qrImg} width="40" height="40" alt=""/></div>
+                <span className="action-tag small">Recommendation</span>
+              </Card>
+            </QRScaner>
           </Col>
         </Row> : <Row gutter={24} style={{marginTop: 34, fontWeight: 'bold'}}>
           <Col span={12}>Consumer type: {memberType}</Col>

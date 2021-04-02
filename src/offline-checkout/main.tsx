@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'antd';
+import { Icon, Modal } from 'antd';
 import { Const } from 'qmkit';
 import Order from './components/order';
 import Board from './components/board';
@@ -108,7 +108,7 @@ export default class Checkout extends React.Component<any, any> {
       memberInfo: {
         ...rest
       },
-      list: products
+      list: products.length ? products : this.state.list
     });
   }
 
@@ -146,7 +146,11 @@ export default class Checkout extends React.Component<any, any> {
   }
 
   onCheckout = () => {
-    this.switchStep(3);
+    if (this.state.memberInfo.customerName) {
+      this.switchStep(3);
+    } else {
+      Modal.warning({ title: 'Please fill consumer information!', okText: 'OK', centered: true });
+    }
   }
 
   switchStep = (step: number) => {
@@ -172,6 +176,7 @@ export default class Checkout extends React.Component<any, any> {
                 onSetQuantity={this.onSetProductQty}
                 onClear={this.onClearCart}
                 onCheckout={this.onCheckout}
+                onScanEnd={this.onScanMember}
               />
             : this.state.step === 3 
               ? <Payment onCancel={() => this.switchStep(2)} /> 

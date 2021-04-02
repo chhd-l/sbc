@@ -187,7 +187,13 @@ export default class Fields extends React.Component<any, any> {
             </Form.Item>
             <Form.Item label="Input type">
               {field.fieldName === 'City' && (
-                <Select value={field.inputDropDownBoxFlag === 1 ? '2' : '1'} onChange={(v) => this.onChangeModalField(v === '1' ? { inputFreeTextFlag: 1, inputSearchBoxFlag: 1, inputDropDownBoxFlag: 0 } : { inputFreeTextFlag: 0, inputSearchBoxFlag: 0, inputDropDownBoxFlag: 1 })}>
+                <Select
+                  value={field.inputSearchBoxFlag === 1 ? '1' : field.inputDropDownBoxFlag === 1 ? '2' : '0'}
+                  onChange={(v) => this.onChangeModalField(v === '0' ? { inputFreeTextFlag: 1, inputSearchBoxFlag: 0, inputDropDownBoxFlag: 0 } : v === '1' ? { inputFreeTextFlag: 1, inputSearchBoxFlag: 1, inputDropDownBoxFlag: 0 } : { inputFreeTextFlag: 0, inputSearchBoxFlag: 0, inputDropDownBoxFlag: 1 })}
+                >
+                  <Option value="0" key="0">
+                    Free text
+                  </Option>
                   <Option value="1" key="1">
                     Free text + Search box
                   </Option>

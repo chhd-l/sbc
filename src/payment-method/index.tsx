@@ -3,10 +3,9 @@ import { StoreProvider } from 'plume2';
 import { AuthWrapper, BreadCrumb, Headline } from 'qmkit';
 import AppStore from './store';
 //import SearchHead from './components/search-head';
-import MethodList from './components/method-list';
+import PaymentList from '@/payment-method/components/payment-list';
 import './index.less';
 import {Form} from "antd";
-const WrappedForm = Form.create()(MethodList);
 /**
  * 退单列表
  */
@@ -32,7 +31,8 @@ export default class OrderReturnList extends React.Component<any, any> {
       <BreadCrumb />
       <div className="container" style={{ height: '100vh' }}>
         <Headline title="Payment method" />
-        <WrappedForm ref={(form) => (this._form = form)} />
+        <PaymentList />
+        {/*<WrappedForm ref={(form) => (this._form = form)} />*/}
       </div>
     </div>
     );

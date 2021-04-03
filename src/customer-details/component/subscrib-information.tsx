@@ -104,7 +104,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 <tr>
                   <td colSpan={7}>
                     <div style={styles.orderCon}>
-                      <Link to={'/subscription-detail/' + item.subscribeId} style={styles.orderId}></Link>
+                      <Link to={'/subscription-detail/' + item.subscribeId} style={styles.orderId}>{item.subscribeId}</Link>
                       <span style={styles.orderTime}>Subscription time: {moment(item.createTime).format(Const.TIME_FORMAT)}</span>
                     </div>
                   </td>

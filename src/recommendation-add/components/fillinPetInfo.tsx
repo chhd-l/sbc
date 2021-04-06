@@ -102,7 +102,7 @@ export default class FillinPetInfo extends Component {
         return (
             <Row>
                 <Col span={16}>
-                    <Form>
+                    <Form >
                         <Row gutter={20}>
                             <Col span={8}>
                                 <Form.Item label="Date:">
@@ -112,6 +112,7 @@ export default class FillinPetInfo extends Component {
                                         rules: [{ required: true, message: 'Please select  date!' }],
                                     })(<DatePicker style={{ width: '100%' }}
                                         format="YYYY-MM-DD"
+                                        
                                     />)}
                                 </Form.Item>
                             </Col>
@@ -141,7 +142,7 @@ export default class FillinPetInfo extends Component {
                                         initialValue: customerPet.petsName,
                                         rules: [{ required: true, message: 'Please input pet Name' }],
                                         onChange: (e) => this._onChange(e, 'petsName')
-                                    })(<Input />)}
+                                    })(<Input disabled={petsList.length>0||funType}/>)}
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
@@ -151,7 +152,7 @@ export default class FillinPetInfo extends Component {
                                         rules: [{ required: true, message: 'Please select Gender!' }],
                                         onChange: (e,) => this._onChange(e, 'petsSex')
 
-                                    })(<Radio.Group >
+                                    })(<Radio.Group disabled={petsList.length>0||funType}>
                                         <Radio value={1}>Female</Radio>
                                         <Radio value={0}>Male</Radio>
                                     </Radio.Group>)}
@@ -164,7 +165,7 @@ export default class FillinPetInfo extends Component {
                                         rules: [{ required: true, message: 'Please select Date of birth!' }],
                                         onChange: (e,) => this._onChange(e, 'birthOfPets')
 
-                                    })(<DatePicker  style={{width:'100%'}}/>)}
+                                    })(<DatePicker disabled={petsList.length>0||funType} style={{width:'100%'}}/>)}
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
@@ -182,6 +183,7 @@ export default class FillinPetInfo extends Component {
                                         defaultActiveFirstOption={false}
                                         filterOption={false}
                                         onSearch={this.onSearch}
+                                        disabled={petsList.length>0||funType}
                                     >
                                         {this.renderSelectOptions(petsBreedList)}
                                     </Select>)}
@@ -192,10 +194,11 @@ export default class FillinPetInfo extends Component {
                                 <Form.Item label="Sensitvities:">
                                     {getFieldDecorator('sensitivity', {
                                         initialValue: customerPet.sensitivity||'',
-                                        rules: [{ required: true, message: 'Please select Sensitvities!' }],
+                                      //  rules: [{ required: true, message: 'Please select Sensitvities!' }],
                                         onChange: (e,) => this._onChange(e, 'sensitivity')
 
                                     })(<Select
+                                        disabled={petsList.length>0||funType}
                                         getPopupContainer={(trigger: any) => trigger.parentNode}
                                     >
                                         {this.renderSelectOptions(specialNeedsList)}
@@ -209,10 +212,11 @@ export default class FillinPetInfo extends Component {
                                 <Form.Item label="Lifestyle">
                                     {getFieldDecorator('lifestyle', {
                                         initialValue: customerPet.lifestyle||'',
-                                        rules: [{ required: true, message: 'Please select Lifestyle!' }],
+                                       // rules: [{ required: true, message: 'Please select Lifestyle!' }],
                                         onChange: (e,) => this._onChange(e, 'lifestyle')
 
                                     })(<Select
+                                        disabled={petsList.length>0||funType}
                                         getPopupContainer={(trigger: any) => trigger.parentNode}
                                     >
                                         {this.renderSelectOptions(lifeList)}
@@ -224,10 +228,11 @@ export default class FillinPetInfo extends Component {
                                 <Form.Item label="Activity:">
                                     {getFieldDecorator('activity', {
                                         initialValue: customerPet.activity||'',
-                                        rules: [{ required: true, message: 'Please selectActivity!' }],
+                                       // rules: [{ required: true, message: 'Please selectActivity!' }],
                                         onChange: (e,) => this._onChange(e, 'activity')
 
                                     })(<Select
+                                        disabled={petsList.length>0||funType}
                                         getPopupContainer={(trigger: any) => trigger.parentNode}
                                     >
                                         {this.renderSelectOptions(activityList)}
@@ -244,7 +249,7 @@ export default class FillinPetInfo extends Component {
                                                 initialValue: customerPet.measure||0,
                                                 rules: [{ required: true, message: 'Please input Weight!' }],
                                                 onChange: (e,) => this._onChange(e, 'measure')
-                                            })(<Input />)}
+                                            })(<Input disabled={petsList.length>0||funType}/>)}
                                             </Form.Item>
                                         </Col>
                                         <Col span={12}>
@@ -253,6 +258,7 @@ export default class FillinPetInfo extends Component {
                                                 initialValue: customerPet.measureUnit||'Kg',
                                                 onChange: (e,) => this._onChange(e, 'measureUnit')
                                             })(<Select
+                                                disabled={petsList.length>0||funType}
                                                 getPopupContainer={(trigger: any) => trigger.parentNode}
                                             >
                                                 {this.renderSelectOptions(weightList)}
@@ -270,7 +276,7 @@ export default class FillinPetInfo extends Component {
                                         initialValue: customerPet.sterilized,
                                         rules: [{ required: true, message: 'Please select Sterilzed!' }],
                                         onChange: (e,) => this._onChange(e, 'sterilized')
-                                    })(<Radio.Group >
+                                    })(<Radio.Group disabled={petsList.length>0||funType}>
                                         <Radio value={1}>Yes</Radio>
                                         <Radio value={0}>No</Radio>
                                     </Radio.Group>)}

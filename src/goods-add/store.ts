@@ -992,12 +992,35 @@ export default class AppStore extends Store {
     let addSkUProduct = this.state().toJS().addSkUProduct;
     if (goodsList) {
       goodsList.forEach((item) => {
-        console.log(this.state().get('goods').get('saleableFlag') ,111 )
-        console.log(item.get('marketPrice'),22222 )
+        //console.log(this.state().get('goods').get('saleableFlag') ,111 )
+        //console.log(item.get('marketPrice'),22222 )
 
         if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('marketPrice')) {
+          //console.log(item.get('marketPrice'),123 )
+          if(item.get('marketPrice') != undefined) {
+            //console.log(item.get('marketPrice'),345 )
             if ( item.get('marketPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }else {
+            //console.log(item.get('marketPrice'),678 )
+            if ( addSkUProduct && addSkUProduct.length == 0 ) {
+              //console.log(item.get('marketPrice'),890 )
+
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }
+        }
+
+
+
+        if (this.state().get('goods').get('saleableFlag') != 0) {
+          if(item.get('subscriptionPrice') != undefined) {
+            if ( item.get('subscriptionPrice') == 0 ) {
               tip = 1;
               valid = false;
               return;
@@ -1011,20 +1034,6 @@ export default class AppStore extends Store {
           }
         }
 
-
-        if(item.get('subscriptionPrice')) {
-          if ( item.get('subscriptionPrice') == 0 ) {
-            tip = 2;
-            valid = false;
-            return;
-          }
-        }else {
-          if ( addSkUProduct && addSkUProduct.length == 0 ) {
-            tip = 2;
-            valid = false;
-            return;
-          }
-        }
        /* if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
           tip = 2;
           valid = false;
@@ -1058,10 +1067,15 @@ export default class AppStore extends Store {
         console.log(item.get('stock'));
         console.log(reg.test(item.get('stock')));
         console.log(!ValidConst.zeroNumber.test((item.get('stock'))));
-        if (reg.test(item.get('stock')) === false && addSkUProduct[0].targetGoodsIds.length != 1) {
-          flag = 1
-          valid = false;
-          return;
+
+
+        if (reg.test(item.get('stock')) === false) {
+          if( addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length != 1 && addSkUProduct[0].minStock == undefined) {
+            flag = 1
+            valid = false;
+            return;
+          }
+
         }
         /*if(!item.get('stock')) {
           if ( addSkUProduct.length == 1 && !addSkUProduct[0].minStock ) {

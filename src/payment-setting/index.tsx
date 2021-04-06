@@ -6,7 +6,9 @@ const FormItem = Form.Item;
 import * as webapi from './webapi';
 import styled from 'styled-components';
 import PaymentModel from './components/payment-modal';
-
+import AppStore from './store';
+import { StoreProvider } from 'plume2';
+import { fromJS } from 'immutable';
 const ContainerDiv = styled.div`
   .methodItem {
     width: 100%;
@@ -39,8 +41,9 @@ const ContainerDiv = styled.div`
     }
   }
 `;
-
+@StoreProvider(AppStore, { debug: __DEV__ })
 export default class PaymentSetting extends React.Component<any, any> {
+  store: AppStore;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -52,21 +55,10 @@ export default class PaymentSetting extends React.Component<any, any> {
     this.closeModel = this.closeModel.bind(this);
   }
   componentDidMount() {
-    this.getPaymentSetting();
+    this.store.init();
   }
 
-  forceUpdate(callback?: () => void) {
-    super.forceUpdate(callback);
-  }
 
-  getPaymentSetting = async () => {
-    const { res } = await webapi.getPaymentSetting();
-    if (res.code === Const.SUCCESS_CODE) {
-      this.setState({
-        paymentList: res.context
-      });
-    }
-  };
 
   closeModel = () => {
     this.setState({
@@ -74,7 +66,7 @@ export default class PaymentSetting extends React.Component<any, any> {
     });
   };
   reflash() {
-    this.getPaymentSetting();
+    this.store.init();
   }
   onFormChange = ({ id, field, value}) => {
     let { paymentForm } = this.state
@@ -86,10 +78,10 @@ export default class PaymentSetting extends React.Component<any, any> {
     this.setState({
       paymentForm: {...paymentForm}
     })
-    this.forceUpdate()
   }
   render() {
-    const { paymentList } = this.state;
+    const paymentList  = this.store.state().get('paymentList') ? this.store.state().get('paymentList').toJS() : [];
+    console.log(paymentList, 'paymentList-----------');
     return (
       <div>
         <BreadCrumb />
@@ -122,8 +114,9 @@ export default class PaymentSetting extends React.Component<any, any> {
                               onClick={() => {
                                 this.setState({
                                   paymentVisible: true,
-                                  paymentForm: item
                                 });
+                                this.store.setCurrentPaymentForm(fromJS(item))
+                                // this.store.setCurrentTabKey(item.payPspItemVOList[0].id)
                               }}
                               /* className="links"*/
                               className="iconfont iconEdit"
@@ -138,8 +131,7 @@ export default class PaymentSetting extends React.Component<any, any> {
                 ))}
             </Row>
 
-            <PaymentModel paymentForm={this.state.paymentForm}
-                          visible={this.state.paymentVisible}
+            <PaymentModel visible={this.state.paymentVisible}
                           parent={this} reflash={() => this.reflash()}
                           onFormChange={this.onFormChange}
             />

@@ -54,6 +54,11 @@ export default class PaymentSetting extends React.Component<any, any> {
   componentDidMount() {
     this.getPaymentSetting();
   }
+
+  forceUpdate(callback?: () => void) {
+    super.forceUpdate(callback);
+  }
+
   getPaymentSetting = async () => {
     const { res } = await webapi.getPaymentSetting();
     if (res.code === Const.SUCCESS_CODE) {
@@ -70,6 +75,18 @@ export default class PaymentSetting extends React.Component<any, any> {
   };
   reflash() {
     this.getPaymentSetting();
+  }
+  onFormChange = ({ id, field, value}) => {
+    let { paymentForm } = this.state
+    paymentForm.payPspItemVOList.map(item => {
+      if(item.id === id) {
+        item[field] = value
+      }
+    })
+    this.setState({
+      paymentForm: {...paymentForm}
+    })
+    this.forceUpdate()
   }
   render() {
     const { paymentList } = this.state;
@@ -121,7 +138,11 @@ export default class PaymentSetting extends React.Component<any, any> {
                 ))}
             </Row>
 
-            <PaymentModel paymentForm={this.state.paymentForm} visible={this.state.paymentVisible} parent={this} reflash={() => this.reflash()} />
+            <PaymentModel paymentForm={this.state.paymentForm}
+                          visible={this.state.paymentVisible}
+                          parent={this} reflash={() => this.reflash()}
+                          onFormChange={this.onFormChange}
+            />
           </ContainerDiv>
         </div>
       </div>

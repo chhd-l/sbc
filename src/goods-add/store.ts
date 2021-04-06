@@ -985,17 +985,38 @@ export default class AppStore extends Store {
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
-        console.log(item.get('marketPrice'),1111111);
-        if (!(item.get('marketPrice') || item.get('marketPrice') == "0")) {
-          tip = 1;
-          valid = false;
-          return;
+        if(item.get('marketPrice')) {
+          if ( item.get('marketPrice') == 0 ) {
+            tip = 1;
+            valid = false;
+            return;
+          }
+        }else {
+          if ( this.state().get('addSkUProduct').toJS().length == 0 ) {
+            tip = 1;
+            valid = false;
+            return;
+          }
         }
-        if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+
+        if(item.get('subscriptionPrice')) {
+          if ( item.get('subscriptionPrice') == 0 ) {
+            tip = 2;
+            valid = false;
+            return;
+          }
+        }else {
+          if ( this.state().get('addSkUProduct').toJS().length == 0 ) {
+            tip = 2;
+            valid = false;
+            return;
+          }
+        }
+       /* if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
           tip = 2;
           valid = false;
           return;
-        }
+        }*/
       });
     }
     if (tip === 1) {

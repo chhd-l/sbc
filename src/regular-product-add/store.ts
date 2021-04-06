@@ -65,7 +65,7 @@ import {
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
 import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
-
+let _tempGoodsDescriptionDetailList:any={}
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -402,8 +402,13 @@ export default class AppStore extends Store {
         const cateId = goods.get('cateId');
         this.changeDescriptionTab(cateId);
       } else {
+        _tempGoodsDescriptionDetailList={
+          _cateId:goods.get('cateId'),
+          _list:tmpContext.goodsDescriptionDetailList
+        }
         this.editEditorContent(tmpContext.goodsDescriptionDetailList);
       }
+      
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
 
@@ -1995,9 +2000,13 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeDescriptionTab = async (cateId) => {
+    // const {_cateId,_list}=_tempGoodsDescriptionDetailList
     if (!cateId) return;
+    // if(_cateId===cateId){
+    //   this.editEditorContent(_list);
+    //   return
+    // }
     const result: any = await getDescriptionTab(cateId);
-
     if (result.res.code === Const.SUCCESS_CODE) {
       let content = result.res.context;
       let res = content.map((item) => {
@@ -2006,7 +2015,7 @@ export default class AppStore extends Store {
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
-          contentType: item.contentType,
+          contentType: item?.contentType??'text',
           content: '',
           sort: item?.sort??1,
           editable: true,

@@ -13,8 +13,10 @@ type DeliverParam = {
   date: string;
 };
 
-export const fetchOrder = (filter = {}) => {
+export const fetchOrderReturnList = (filter = {}) => {
+  // return Fetch<TResult>('/return', {
   return Fetch<TResult>('/return', {
+
     method: 'POST',
     body: JSON.stringify(filter)
   });
@@ -26,6 +28,8 @@ export const fetchOrder = (filter = {}) => {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export const batchAudit = (rids) => {
+  // return Fetch<TResult>('/return/audit', {
+
   return Fetch<TResult>('/return/audit', {
     method: 'POST',
     body: JSON.stringify({
@@ -39,8 +43,11 @@ export const batchAudit = (rids) => {
  * @param rid
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const realRefund = (rid: string) => {
-  return Fetch<TResult>(`/return/refund/${rid}/online`, { method: 'POST' });
+export const realRefund = (rid: string, refundPrice:any) => {
+  return Fetch<TResult>(`/return/refund/${rid}/online`, {
+    method: 'POST',
+    body: JSON.stringify({refundPrice})
+  });
 };
 
 /**
@@ -50,6 +57,7 @@ export const realRefund = (rid: string) => {
  */
 export const audit = (rid: string) => {
   return Fetch<TResult>(`/return/audit/${rid}`, { method: 'POST' });
+  // return Fetch<TResult>(`/return/audit/${rid}`, { method: 'POST' });
 };
 
 /**
@@ -73,11 +81,15 @@ export const reject = (rid: string, reason: string) => {
 export const deliver = (rid: string, values: DeliverParam) => {
   return Fetch<TResult>(`/return/deliver/${rid}`, {
     method: 'POST',
-    body: JSON.stringify({
+    
+    body: values? JSON.stringify({
       code: values.logisticCompanyCode,
       company: values.logisticCompany,
       no: values.logisticNo,
-      createTime: values.date
+      createTime: values.date,
+      skip:false
+    }):JSON.stringify({
+      skip:true
     })
   });
 };

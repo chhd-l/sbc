@@ -19,11 +19,14 @@ class MethodTips extends React.Component<any, any> {
     relaxProps?: {
       switchVisible: any;
       storePaymentVOs: any;
+      init: Function;
       onShow: Function;
       onChecked: Function;
       getEditStorePayment: Function;
       getStorePaymentVOs: Function;
     };
+    checkedId: any,
+    maxAmount: any
   };
 
   static relaxProps = {
@@ -32,7 +35,8 @@ class MethodTips extends React.Component<any, any> {
     getStorePaymentVOs: noop,
     getEditStorePayment: noop,
     onShow: noop,
-    onChecked: noop
+    onChecked: noop,
+    init: noop
   };
 
   onFormChange = (value) => {
@@ -43,12 +47,17 @@ class MethodTips extends React.Component<any, any> {
 
   render() {
     const { switchVisible, storePaymentVOs } = this.props.relaxProps;
+    // const { checkedId, maxAmount } = this.props
 
+    /*let maxAmount = 0
+    if(checkedId == storePaymentVOs.id) {
+      maxAmount = storePaymentVOs.maxAmount
+    }*/
     return (
       <Modal visible={switchVisible} title="Set rules" maskClosable={false} onOk={this.onOk} onCancel={() => this.cancel()}>
         <div className="methodTips flex-start-align">
           <span>Max order amount is</span>
-          <InputNumber min={0} max={99999} defaultValue={storePaymentVOs.maxAmount} onChange={this.onChange} />
+          <InputNumber min={0} max={99999} value={storePaymentVOs.get('maxAmount')} onChange={this.onChange} />
           <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
         </div>
       </Modal>
@@ -59,15 +68,16 @@ class MethodTips extends React.Component<any, any> {
    */
 
   onChange = (res) => {
-    const { getStorePaymentVOs, storePaymentVOs } = this.props.relaxProps;
-    storePaymentVOs.maxAmount = res;
+    const { getStorePaymentVOs,  } = this.props.relaxProps;
+    let { storePaymentVOs } = this.props.relaxProps;
+    storePaymentVOs = storePaymentVOs.set('maxAmount', res)
+    console.log(storePaymentVOs, 'storePaymentVOs------');
     getStorePaymentVOs(storePaymentVOs);
   };
 
   onOk = () => {
     const { onShow, getEditStorePayment, storePaymentVOs } = this.props.relaxProps;
     getEditStorePayment(storePaymentVOs);
-    onShow(false);
   };
 
   cancel = () => {

@@ -177,7 +177,7 @@ class CreateForm extends Component<Iprop, Istate> {
             })(
               <Select onChange={this.handleUpdateContentType}>
                 <Option key="1" value="text">
-                  <FormattedMessage id="Product.text" />
+                  <FormattedMessage id="Product.html" />
                 </Option>
                 <Option key="2" value="json">
                   <FormattedMessage id="Product.json" />

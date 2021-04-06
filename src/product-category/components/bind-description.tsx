@@ -23,7 +23,7 @@ export default class BindDescription extends Component<Iprop, any> {
       selectedRowKeys: this.props.defaultIds,
       pagination: {
         current: 1,
-        pageSize: 10,
+        pageSize: 1000,
         total: 0
       },
       descList: [],
@@ -73,7 +73,11 @@ export default class BindDescription extends Component<Iprop, any> {
               prev.push(res.context.descriptionList[idx]);
             }
             return prev;
-          }, [])
+          }, []),
+          pagination: {
+            ...pagination,
+            total: res.context.total
+          }
         });
       }
     });

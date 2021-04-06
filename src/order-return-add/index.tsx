@@ -1,6 +1,6 @@
 import React from 'react';
 import { StoreProvider } from 'plume2';
-import { Breadcrumb, Form } from 'antd';
+import { Breadcrumb, Form, Spin } from 'antd';
 import { Headline, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
@@ -16,11 +16,19 @@ export default class OrderReturnAdd extends React.Component<any, any> {
   store: AppStore;
 
   componentDidMount() {
-    const tid = this.props.location.search.split('=')[1];
+    const tid = this.props.match.params.id;
     this.store.init(tid);
   }
 
   render() {
+    if (this.state.loading) {
+      return (
+        <div style={styles.noBackgroundContainer}>
+          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}></Spin>
+        </div>
+      );
+    }
+    
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -36,3 +44,12 @@ export default class OrderReturnAdd extends React.Component<any, any> {
     );
   }
 }
+
+const styles = {
+  noBackgroundContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh'
+  } as any
+};

@@ -557,8 +557,8 @@ export default class EditForm extends React.Component<any, any> {
     callback();
   };
 
-  onChange = (ids, value) => {
-    this.setState({ value: value });
+  onChange = (ids) => {
+    this.setState({ 'departmentIdList': ids });
     //存放目标部门IDlist
     // const { setTargetDeparts } = this.props.relaxProps;
     // setTargetDeparts(ids)

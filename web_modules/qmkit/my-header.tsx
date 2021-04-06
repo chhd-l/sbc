@@ -251,6 +251,16 @@ export default class MyHeader extends React.Component {
             <Icon type="lock" /> Change My Password
           </a>
         </Menu.Item> */}
+         <Menu.Item key="1">
+          <a
+            href="#"
+            onClick={() =>
+              this.languageChange
+            }
+          >
+            <Icon type="lock" /> Language
+          </a>
+        </Menu.Item>
         <Menu.Item key="2">
           <OktaLogout type="link" text="Exit" />
         </Menu.Item>
@@ -292,11 +302,11 @@ export default class MyHeader extends React.Component {
 
           <div className="align-items-center">
             <div style={styles.headerRight}>
-              <Select defaultValue={sessionStorage.getItem(cache.LANGUAGE)} style={{ width: 120, marginRight: 40 }} onChange={this.languageChange}>
+              {/*<Select defaultValue={sessionStorage.getItem(cache.LANGUAGE)} style={{ width: 120, marginRight: 40 }} onChange={this.languageChange}>
                 <Option value="English">English</Option>
                 <Option value="Russian">Russian</Option>
                 <Option value="German">German</Option>
-              </Select>
+              </Select>*/}
             </div>
 
             <div style={styles.headerRight}>

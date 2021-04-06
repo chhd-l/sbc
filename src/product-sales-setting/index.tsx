@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
-import { Form, Input, Select, Modal, Button, Radio, message } from 'antd';
+import { Form, Input, Select, Modal, Button, Radio, message, Col, Row } from 'antd';
 import ModalForm from './conponents/modal-form';
 import ModalFormClub from './conponents/modal-form-club';
 
@@ -17,6 +17,7 @@ class ProductSearchSetting extends Component<any, any> {
     optionsClub: [],
     defaultPurchaseType: '',
     defaultSubscriptionFrequencyId: '',
+    defaultSubscriptionClubFrequencyId: '',
     language: [],
     purchaseType: []
   };
@@ -90,7 +91,7 @@ class ProductSearchSetting extends Component<any, any> {
       querySysDictionary({ type: 'Frequency_month_club' }),
       querySysDictionary({ type: 'language' }),
       querySysDictionary({ type: 'purchase_type' })]);
-    let { defaultPurchaseType, defaultSubscriptionFrequencyId, languageId } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+    let { defaultPurchaseType, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, languageId } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let weeksClub = result[2].res?.context?.sysDictionaryVOS ?? [];
@@ -111,6 +112,7 @@ class ProductSearchSetting extends Component<any, any> {
       optionsClub,
       defaultPurchaseType,
       defaultSubscriptionFrequencyId,
+      defaultSubscriptionClubFrequencyId,
       language,
       purchaseType
     });
@@ -118,12 +120,15 @@ class ProductSearchSetting extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { disabled, defaultPurchaseType, visible, visibleClub, defaultSubscriptionFrequencyId, options, optionsClub, language, purchaseType } = this.state;
+    const { disabled, defaultPurchaseType, visible, visibleClub, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, options, optionsClub, language, purchaseType } = this.state;
+
     return (
       <div style={styles.container}>
         <BreadCrumb />
         <div style={styles.formContainer}>
-          <Form name="complex" onSubmit={this.onFinish} labelAlign="left" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }}>
+          <Form name="complex" onSubmit={this.onFinish} labelAlign="left" labelCol={{ span: 4 }} wrapperCol={{ span: 15 }}>
+
+
             <Form.Item label={<span style={{ color: '#666' }}>Default purchase type</span>}>
               {getFieldDecorator('defaultPurchaseType', {
                 initialValue: defaultPurchaseType,
@@ -135,9 +140,9 @@ class ProductSearchSetting extends Component<any, any> {
                 ]
               })(
                 <Radio.Group disabled={disabled}>
-                  {purchaseType.map((item) => {
+                  {purchaseType.map((item, index) => {
                     return (
-                      <Radio.Button value={item.id} style={{ width: 150, textAlign: 'center' }}>
+                      <Radio.Button value={item.id} key={index} style={{  textAlign: 'center' }}>
                         {item.valueEn}
                       </Radio.Button>
                     );
@@ -160,30 +165,36 @@ class ProductSearchSetting extends Component<any, any> {
               }
               style={{ marginBottom: 0 }}
             >
-              <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
-                {getFieldDecorator('defaultSubscriptionFrequencyId', {
-                  initialValue: defaultSubscriptionFrequencyId,
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please select subscription frequency !'
-                    }
-                  ]
-                })(
-                  <Select disabled={disabled} placeholder="Please select subscription frequency !">
-                    {options.map((item) => (
-                      <Option key={item.id} value={item.id}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </Form.Item>
-              <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
-                <Button type="danger" size="default" onClick={this.showModal} disabled={disabled}>
-                  Add new frequency
+              <Row gutter={20}>
+                <Col span={6}>
+                  <Form.Item>
+                    {getFieldDecorator('defaultSubscriptionFrequencyId', {
+                      initialValue: defaultSubscriptionFrequencyId,
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please select subscription frequency !'
+                        }
+                      ]
+                    })(
+                      <Select disabled={disabled} placeholder="Please select subscription frequency !" style={{width:180}}>
+                        {options.map((item) => (
+                          <Option key={item.id} value={item.id}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={4}>
+                  <Button type="danger" size="default" onClick={this.showModal} disabled={disabled}>
+                    Add new frequency
                 </Button>
-              </Form.Item>
+                </Col>
+              </Row>
+
+
             </Form.Item>
             <Form.Item
               label={
@@ -193,32 +204,39 @@ class ProductSearchSetting extends Component<any, any> {
               }
               style={{ marginBottom: 0 }}
             >
-              <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
-                {getFieldDecorator('defaultSubscriptionFrequencyId', {
-                  initialValue: defaultSubscriptionFrequencyId,
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please select subscription frequency !'
-                    }
-                  ]
-                })(
-                  <Select disabled={disabled} placeholder="Please select subscription frequency !">
-                    {optionsClub.map((item) => (
-                      <Option key={item.id} value={item.id}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </Form.Item>
-              <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
-                <Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
-                  Add new frequency
+              <Row>
+                <Col span={6}>
+                  <Form.Item>
+
+                    {getFieldDecorator('defaultSubscriptionClubFrequencyId', {
+                      initialValue: defaultSubscriptionClubFrequencyId,
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please select subscription frequency !'
+                        }
+                      ]
+                    })(
+                      <Select disabled={disabled} placeholder="Please select subscription frequency !" style={{width:180}}>
+                        {optionsClub.map((item) => (
+                          <Option key={item.id} value={item.id}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </Form.Item></Col>
+                <Col span={4}>
+                  <Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
+                    Add new frequency
                 </Button>
-              </Form.Item>
+                </Col>
+              </Row>
+
+
             </Form.Item>
-            <div className="bar-button">
+            
+            <div className="bar-button" style={{marginLeft:-40}}>
               <Button type="primary" htmlType="submit">
                 Save
               </Button>

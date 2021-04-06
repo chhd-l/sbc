@@ -280,7 +280,7 @@ class comment extends Component<any, any> {
             confirmLoading={confirmLoading}
             maskClosable={false}
             onCancel={this.closeModal}
-            okText={this.props.intl.formatMessage({ id: 'Order.Confirm' })}
+            okText={this.props.intl.formatMessage({ id: 'Order.btnConfirm' })}
           >
             <Form>
               <FormItem {...layout} label={<FormattedMessage id="Order.PetOwner" />}>

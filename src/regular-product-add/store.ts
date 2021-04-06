@@ -484,7 +484,6 @@ export default class AppStore extends Store {
 
         // 商品列表
         let basePriceType;
-
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
           const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
@@ -492,11 +491,14 @@ export default class AppStore extends Store {
           item.get('mockSpecIds').forEach((specId) => {
             // 规格值保存的顺序可能不是按照规格id的顺序，多个sku的规格值列表顺序是乱序，因此此处不能按照顺序获取规格值。只能从规格规格值对应关系里面去捞一遍。
             const detail = goodsSpecDetails.find((detail) => detail.get('specId') == specId && item.get('mockSpecDetailIds').contains(detail.get('specDetailId')));
-            const detailId = detail.get('specDetailId');
 
-            const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
-            item = item.set('specId-' + specId, goodsSpecDetail.get('detailName'));
-            item = item.set('specDetailId-' + specId, detailId);
+            if(detail) {
+              const detailId = detail.get('specDetailId');
+              const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
+              item = item.set('specId-' + specId, goodsSpecDetail.get('detailName'));
+              item = item.set('specDetailId-' + specId, goodsSpecDetail.get('mockSpecDetailId'));
+            }
+
             if (item.get('goodsInfoImg')) {
               item = item.set(
                 'images',
@@ -1015,8 +1017,17 @@ export default class AppStore extends Store {
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
-    if ( (this.state().get('goodsList').toJS().length === a.toJS().length) && this.state().get('goods').get('subscriptionStatus') == 1 ) {
+    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
+      this.state().get('goods').get('subscriptionStatus') == 1 ) {
       message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
+      valid = false;
+      return;
+    }
+
+    let b = this.state().get('goodsList').filter((item)=>item.get('addedFlag') == 0)
+    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === b.toJS().length) &&
+      (this.state().get('goods').get('addedFlag') == 1 || this.state().get('goods').get('addedFlag') == 2) ) {
+      message.error('If the shelves status in SPU is Y, at lease one shelves status of Sku is Y');
       valid = false;
       return;
     }
@@ -1084,22 +1095,21 @@ export default class AppStore extends Store {
           tip = 1;
           return;
         }
-        if (this.state().get('goods').get('subscriptionStatus') == 1 ) {
-          if(item.get('subscriptionStatus') == 1) {
-            if( item.get('subscriptionPrice') == 0) {
-              tip = 4;
-              valid = false;
-              return;
-            }
-          }else {
-            valid = true;
+
+        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionStatus') !=0) {
+          if( item.get('subscriptionPrice') == 0 || item.get('subscriptionPrice') == null) {
+            tip = 4;
+            valid = false;
+            return;
           }
         }
-        if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) || item.get('subscriptionPrice') == null) {
+
+        if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0))) {
           tip = 2;
           valid = false;
           return;
         }
+
         if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
           tip = 3;
           valid = false;
@@ -1128,9 +1138,11 @@ export default class AppStore extends Store {
     let valid = true;
     let flag = 0
     let goodsList = this.state().get('goodsList');
+    let reg=/^[1-9]\d*$|^0$/;
+
     if (goodsList) {
       goodsList.forEach((item) => {
-        if (!(item.get('stock') || item.get('stock') == 0)) {
+        if (reg.test(item.get('stock')) === false) {
           flag = 1
           valid = false;
           return;
@@ -1142,7 +1154,7 @@ export default class AppStore extends Store {
       });
     }
     if (flag === 1) {
-      message.error('Please input Inventory');
+      console.log('Please enter the correct value');
     }
     return valid;
   }
@@ -1154,6 +1166,9 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async (nextTab = null) => {
+    console.log(!this._validMainForms());
+    console.log(!this._validPriceFormsNew());
+    console.log(!this._validInventoryFormsNew());
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1318,10 +1333,10 @@ export default class AppStore extends Store {
       // 规格值id集合
       let mockSpecDetailIds = List();
       item.forEach((value, key: string) => {
-        if (key.indexOf('specId-') != -1) {
+        if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));
         }
-        if (key.indexOf('specDetailId') != -1) {
+        if (key && key.indexOf('specDetailId-') != -1) {//specDetailId
           mockSpecDetailIds = mockSpecDetailIds.push(value);
         }
       });
@@ -1472,8 +1487,10 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
+      console.log(param.toJS(), 'edit param-----')
       result = await edit(param.toJS());
     } else {
+      console.log(param.toJS(), 'new param-----')
       result = await save(param.toJS());
     }
 
@@ -1817,13 +1834,15 @@ export default class AppStore extends Store {
       }
     }
   };
-
+  goodsDescriptionSort(data){
+    return data.sort((a,b)=>a.sort-b.sort)
+  }
   /**
    * 设置富文本框的值
    * @param
    */
   editEditorContent = (value) => {
-    this.dispatch('goodsActor:descriptionTab', value);
+    this.dispatch('goodsActor:descriptionTab', this.goodsDescriptionSort(value));
   };
   editEditor = (editor) => {
     this.dispatch('goodsActor: editor', editor);

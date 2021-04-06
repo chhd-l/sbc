@@ -35,6 +35,8 @@ export default class AddProductModal extends Component {
     handleCancel: any;
     goodsCount?: any
     searchCount?:Function
+    url:string,
+    prefix:string
   };
   onChange = (e, type) => {
     if (e && e.target) {
@@ -79,11 +81,10 @@ export default class AddProductModal extends Component {
     });
   };
   inputNumberChange(e, key,max) {
-    if(e<=max){
-      this.state.goodsLists[key].buyCount = e;
-    }else{
-      message.info('please selected quantity');
-    }
+    this.state.goodsLists[key].buyCount = e;
+    this.setState({
+      goodsLists: this.state.goodsLists
+    });
   }
   async addCarts(row,index) {
     let total = (window as any).goodsCount[this.props.storeId];
@@ -102,7 +103,7 @@ export default class AddProductModal extends Component {
       goodsNum: row.buyCount
     });
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('add success');
+      message.success('Add successfully');
       row.overCount+=row.buyCount
         // this.state.goodsLists[index]=row
        this.props.searchCount()
@@ -115,7 +116,7 @@ export default class AddProductModal extends Component {
   }
 
   render() {
-    const { visible, handleOk, handleCancel, goodsCount, storeId } = this.props;
+    const { visible, handleOk, handleCancel, goodsCount, storeId,url,prefix} = this.props;
     const { cateType, likeGoodsInfoNo, keyword, goodsLists, total, pageSize, currentPage, loading } = this.state;
     const columns = [
       {
@@ -173,7 +174,7 @@ export default class AddProductModal extends Component {
             <InputNumber
               min={0}
               max={max}
-              defaultValue={text}
+              value={text}
               onChange={(e) => {
                 this.inputNumberChange(e, index,max);
               }}
@@ -207,7 +208,7 @@ export default class AddProductModal extends Component {
             </Col>
             <Col span={4} style={{ textAlign: 'right' }}>
               <Button type="primary" shape="round">
-                <a target="_blank" style={{ color: '#fff' }} href={`https://shop.royalcanin.${(window as any).countryEnum[this.props.storeId]}/`}>
+                <a target="_blank" style={{ color: '#fff' }} href={url+prefix}>
                   View all
                 </a>
               </Button>

@@ -30,11 +30,11 @@ class RejectForm extends React.Component<any, any> {
               },
               {
                 max: 100,
-                message: <FormattedMessage id="Order.100Characters" />
+                message: <FormattedMessage id="Order.100charactersLimitTip" />
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={this.props.intl.formatMessage({id:'Order.rejectionReasonTip'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -57,7 +57,7 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
 
 @Relax
-export default class ListView extends React.Component<any, any> {
+ class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
@@ -136,7 +136,7 @@ export default class ListView extends React.Component<any, any> {
                         />
                       </th>
                       <th style={{ width: 200 }}>
-                        <FormattedMessage id="Order.productFirstLetterUpperCase" />
+                        <FormattedMessage id="Order.Product" />
                       </th>
                       <th style={{ width: '14%' }}>
                         <FormattedMessage id="Order.consumerName" />
@@ -154,7 +154,7 @@ export default class ListView extends React.Component<any, any> {
                         <FormattedMessage id="Order.paymentStatus" />
                       </th>
                       <th className="operation-th" style={{ width: '10%' }}>
-                        <FormattedMessage id="Order.orderStatus" />
+                        <FormattedMessage id="Order.createBy" />
                       </th>
                     </tr>
                   </thead>
@@ -182,7 +182,7 @@ export default class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
+          <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;
@@ -260,7 +260,7 @@ export default class ListView extends React.Component<any, any> {
                           />
                         </span>
 
-                        <div style={{ width: 700, display: 'inline-block' }}>
+                        <div style={{ width: 600, display: 'inline-block' }}>
                           <span
                             style={{
                               marginLeft: 20,
@@ -280,7 +280,7 @@ export default class ListView extends React.Component<any, any> {
                                 <FormattedMessage id="Order.fightTogethe" />
                               </span>
                             )}
-                            {v.get('isAutoSub') && <span style={styles.platform}>Subscription</span>}
+                            {v.get('isAutoSub') && <span style={styles.platform}><FormattedMessage id="Order.subscription" /></span>}
                             {v.get('isAutoSub') ? (
                               <span
                                 style={{
@@ -298,7 +298,7 @@ export default class ListView extends React.Component<any, any> {
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="Order.orderTime" />：
+                          <FormattedMessage id="Order.OrderTime" />：
                           {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
                                 .format(Const.TIME_FORMAT)
@@ -352,7 +352,7 @@ export default class ListView extends React.Component<any, any> {
                             // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')
                             v.getIn(['tradeState', 'payState']) === 'PAID' && (
                               <AuthWrapper functionName="fOrderDetail002">
-                                <Tooltip placement="top" title="Ship">
+                                <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
                                   <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }} className="iconfont iconbtn-shipping">
                                     {/*<FormattedMessage id="order.ship" />*/}
                                   </a>
@@ -362,7 +362,7 @@ export default class ListView extends React.Component<any, any> {
                           {/*部分发货状态显示*/}
                           {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') && (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') && v.getIn(['tradeState', 'payState']) === 'PAID' && (
                             <AuthWrapper functionName="fOrderDetail002">
-                              <Tooltip placement="top" title="Ship">
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
                                 <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
                                   {/*<FormattedMessage id="order.ship" />*/}
                                 </a>
@@ -370,9 +370,9 @@ export default class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           {/*待收货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED' && (
+                          {(v.getIn(['tradeState', 'flowState']) === 'DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'SHIPPED') && (
                             <AuthWrapper functionName="fOrderList003">
-                              <Tooltip placement="top" title="Confirm receipt">
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.confirmReceipt" />}>
                                 <a
                                   onClick={() => {
                                     this._showConfirm(id);
@@ -385,7 +385,7 @@ export default class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           <AuthWrapper functionName="fOrderDetail001">
-                            <Tooltip placement="top" title="See details">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
                               <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails">
                                 {/*<FormattedMessage id="order.seeDetails" />*/}
                               </Link>
@@ -428,7 +428,7 @@ export default class ListView extends React.Component<any, any> {
                             //@ts-ignore
                             <div style={styles.imgNum}>
                               <FormattedMessage id="Order.total" /> {v.get('tradeItems').concat(gifts).size}
-                              <FormattedMessage id="Order.items" />
+                              <FormattedMessage id="Order.Items" />
                             </div>
                           </div>
                         ) : null
@@ -447,10 +447,10 @@ export default class ListView extends React.Component<any, any> {
                     {/* Quantity */}
                     <td style={{ width: '10%' }}>{num}</td>
                     {/*发货状态*/}
-                    <td style={{ width: '14%' }}>{getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))}</td>
+                    <td style={{ width: '14%' }}><FormattedMessage id={getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))} /></td>
                     {/*支付状态*/}
                     <td style={{ width: '14%' }}>
-                      {getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))}
+                      <FormattedMessage id={getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))} />
                     </td>
                     {/*orderCreateBy*/}
                     <td style={{ width: '10%', paddingRight: 22 }}  className="operation-td">{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>
@@ -611,3 +611,6 @@ const styles = {
     borderRadius: 5
   }
 } as any;
+
+
+export default injectIntl(ListView)

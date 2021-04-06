@@ -302,6 +302,9 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
+        setTimeout(()=>{
+          console.log(rowInfo,1122);
+        })
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
 
@@ -343,7 +346,7 @@ class SkuForm extends React.Component<any, any> {
                         <InputNumber
                           min={0}
                           max={9999999.99}
-                          disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                          //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                           formatter={limitDecimals}
                           parser={limitDecimals}
                           step={0.01}
@@ -403,12 +406,12 @@ class SkuForm extends React.Component<any, any> {
                       ],
 
                       onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
-                      initialValue: marketPrice || 0
+                      initialValue: marketPrice
                     })(
                       <InputNumber
                         min={0}
                         max={9999999.99}
-                        disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                        //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                         formatter={limitDecimals}
                         parser={limitDecimals}
                         step={0.01}

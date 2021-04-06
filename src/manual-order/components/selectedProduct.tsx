@@ -69,55 +69,31 @@ export default class SelectedProduct extends React.Component<any, any> {
 
     this.state.dataSource[index] = row;
     this.setState({
-     
       dataSource: this.state.dataSource
     }, () => {
       this.getGoodsInfoCartsList();
     });
   }
-  /**
-   * 
-   * @param data 获取总的价格
-   */
-  async totalGoodsPrices(data) {
-    const { customer } = this.props;
-    let goodsInfoIds = data.map((item) => item.goodsInfoId);
-    let params = {
-      goodsInfoIds: goodsInfoIds,
-      promotionCode: '',
-      subscriptionFlag: false,
-      country: '',
-      region: '',
-      city: '',
-      street: '',
-      postalCode: '',
-      customerAccount: ''
-    };
-    const { res } = await totalGoodsPrice(customer.customerId, params);
-    this.setState({
-      totalPrice: res.context?.tradePrice ?? 0
-    });
-  }
+
   //获取购物车列表
   getGoodsInfoCartsList = async () => {
     const { res } = await getGoodsInfoCarts(this.props.storeId, this.props.customer.customerId)
     let goodsList = res.context?.goodsList ?? [];
-    let goodsCount = {}
+    let goodsCount = {}, totalPrice = 0;
     goodsList.map(item => {
       goodsCount = {
         ...goodsCount,
         [item.goodsInfoId]: item.buyCount
       }
+      totalPrice += (+item.itemTotalAmount)
     })
     this.props.carts(goodsList);
     this.setState(
       {
         dataSource: goodsList,
         loading: false,
-        goodsCount: goodsCount
-      },
-      () => {
-        this.totalGoodsPrices(goodsList);
+        goodsCount: goodsCount,
+        totalPrice:totalPrice.toFixed(2)
       }
     );
   }
@@ -142,6 +118,9 @@ export default class SelectedProduct extends React.Component<any, any> {
    */
   async deleteCartsGood(row) {
     const { storeId, customer } = this.props;
+    this.setState({
+      loading: true
+    });
     await deleteGoodsInfoCarts(storeId, {
       goodsInfoIds: [row.goodsInfoId],
       customerId: customer.customerId
@@ -151,7 +130,7 @@ export default class SelectedProduct extends React.Component<any, any> {
   render() {
     // const { getFieldDecorator } = this.props.form;
     const { options, dataSource, loading, totalPrice, goodsCount, visible } = this.state;
-    const { storeId, customer } = this.props;
+    const { storeId, customer,url, prefix } = this.props;
     const columns = [
       {
         title: 'Image',
@@ -281,7 +260,7 @@ export default class SelectedProduct extends React.Component<any, any> {
             columns={columns}
           />
           <div style={{ textAlign: 'right', padding: '20px 0' }}>Product amount ${totalPrice}</div>
-          {visible && <AddProductModal storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
+          {visible && <AddProductModal url={url} prefix={prefix} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
       </div>
     );

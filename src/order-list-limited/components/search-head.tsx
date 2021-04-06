@@ -5,7 +5,7 @@ import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,7 +16,7 @@ const InputGroup = Input.Group;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
     relaxProps?: {
       onSearch: Function;
@@ -189,7 +189,7 @@ export default class SearchHead extends Component<any, any> {
                         value={tradeState.payState}
                       >
                         <Option value="">
-                          <FormattedMessage id="Order.all" />
+                          <FormattedMessage id="Order.All" />
                         </Option>
                         <Option value="NOT_PAID">
                           <FormattedMessage id="Order.unpaid" />
@@ -218,7 +218,7 @@ export default class SearchHead extends Component<any, any> {
                         }}
                       >
                         <Option value="">
-                          <FormattedMessage id="Order.all" />
+                          <FormattedMessage id="Order.All" />
                         </Option>
                         <Option value="NOT_YET_SHIPPED">
                           <FormattedMessage id="Order.notShipped" />
@@ -238,7 +238,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue="Order Category" />
+                    <Input style={styles.leftLabel} disabled defaultValue={this.props.intl.formatMessage({id:'Order.OrderCategory'})} />
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
@@ -250,7 +250,7 @@ export default class SearchHead extends Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="all" />
+                        <FormattedMessage id="Order.All" />
                       </Option>
                       <Option value="SINGLE" title="Single purchase">
                         <FormattedMessage id="Order.SinglePurchase"/>
@@ -549,7 +549,7 @@ export default class SearchHead extends Component<any, any> {
       .toJS();
 
     if (checkedIds.length == 0) {
-      message.error('Please select the order that needs to be operated');
+      message.error(<FormattedMessage id="Order.pleaseSelectOrderToOperate" />);
       return;
     }
 
@@ -568,13 +568,15 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export filtered orders',
-      byIdsTitle: 'Export selected orders',
+      byParamsTitle: <FormattedMessage id="Order.Exportfilteredorders" />,
+      byIdsTitle: <FormattedMessage id="Order.Exportselectedorders" />,
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });
   }
 }
+
+export default injectIntl(SearchHead);
 
 const styles = {
   formItemStyle: {

@@ -150,7 +150,7 @@ export default class SearchList extends React.Component<any, any> {
                   <td
                     style={{
                       textAlign: 'left',
-                      width: '200',
+                      width: '20%',
                       padding: '16px 0'
                     }}
                   >
@@ -183,31 +183,31 @@ export default class SearchList extends React.Component<any, any> {
                       ) : null
                     }
                   </td>
-                  <td style={{ width: '14%' }}>
+                  <td style={{ width: '12%' }}>
                     {/*客户名称*/}
                     <p title={v.getIn(['buyer', 'account'])}>{v.getIn(['buyer', 'name'])}</p>
                   </td>
-                  <td style={{ width: '15%' }}>
+                  <td style={{ width: '12%' }}>
                     {/*收件人姓名*/}
                     {<FormattedMessage id="Order.recipient" />}：{v.getIn(['consignee', 'name'])}
                     <br />
                     {/*收件人手机号码*/}
                     {v.getIn(['consignee', 'phone'])}
                   </td>
-                  <td style={{ width: '10%' }}>
+                  <td style={{ width: '12%' }}>
                     {tradePrice.toFixed(2)}
                     <br />( total {num})
                   </td>
                   {/*发货状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td> */}
-                  <td style={{ width: '10%' }}>{v.getIn(['tradeState', 'deliverStatus'])}</td>
+                  <td style={{ width: '15%' }}>{v.getIn(['tradeState', 'deliverStatus'])}</td>
                   {/*订单状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.flowState[v.getIn(['tradeState', 'flowState'])]}</td> */}
-                  <td style={{ width: '10%' }}>{v.getIn(['tradeState', 'flowState'])}</td>
+                  <td style={{ width: '15%' }}>{v.getIn(['tradeState', 'flowState'])}</td>
                   {/*支付状态*/}
                   <td
                     style={{
-                      width: '10%',
+                      width: '12%',
                       textAlign: 'right',
                       paddingRight: 20
                     }}

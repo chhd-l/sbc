@@ -46,17 +46,16 @@ export default class orders extends Component<any, any> {
       () => this.getOrderList()
     );
   };
-  getOrderList = (status?) => {
+  getOrderList = () => {
     const { formData, pagination } = this.state;
-    let params = Object.assign(formData, {
+    let params = {
+      id: formData.id,
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize,
       orderType: 'ALL_ORDER',
-      buyerAccount: this.props.customerAccount
-    });
-    if (status) {
-      params.tradeState = { flowState: status };
-    }
+      buyerId: this.props.petOwnerId,
+      tradeState: { flowState: formData.status }
+    };
     this.setState({
       loading: true
     });
@@ -108,7 +107,7 @@ export default class orders extends Component<any, any> {
       },
       {
         title: 'Time',
-        dataIndex: 'creationDate',
+        dataIndex: 'tradeState.createTime',
         width: '30%',
         render: (text) => {
           return (
@@ -135,9 +134,9 @@ export default class orders extends Component<any, any> {
                 overflowY: 'auto'
               }}
               placement="bottomLeft"
-              title={<div>{record.flowState ? record.tradeState.flowState : ''}</div>}
+              title={<div><FormattedMessage id={record.tradeState ? getOrderStatusValue('OrderStatus', record.tradeState.flowState): ''}/></div>}
             >
-              <p className="overFlowtext">{record.flowState ? record.tradeState.flowState : ''}</p>
+              <p className="overFlowtext"><FormattedMessage id={record.tradeState ? getOrderStatusValue('OrderStatus', record.tradeState.flowState): ''}/></p>
             </Tooltip>
           );
         }
@@ -181,7 +180,10 @@ export default class orders extends Component<any, any> {
                 placeholder="Order Status"
                 style={{ width: '180px' }}
                 onChange={(value) => {
-                  this.getOrderList(value);
+                  this.onFormChange({
+                    field: 'status',
+                    value
+                  });
                 }}
               >
                 {OrderStatus.map((item) => (

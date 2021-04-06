@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper, getOrderStatusValue } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
@@ -34,7 +34,7 @@ const payStatus = (status) => {
   } else if (status == 'REFUND') {
     return <FormattedMessage id="Order.Refund" />;
   } else if (status == 'PAYING') {
-    return 'Paying';
+    return <FormattedMessage id="Order.Paying" />;
   } else {
     return <FormattedMessage id="Order.unknown" />;
   }
@@ -57,11 +57,11 @@ class RejectForm extends React.Component<any, any> {
               },
               {
                 max: 100,
-                message: <FormattedMessage id="Order.100Characters"/>
+                message: <FormattedMessage id="Order.100charactersLimitTip" />
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={this.props.intl.formatMessage({id:'Order.RejectionReasonTip'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -81,7 +81,7 @@ class RejectForm extends React.Component<any, any> {
   // };
 }
 
-const WrappedRejectForm = Form.create({})(RejectForm);
+const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
 
 @Relax
 export default class ListView extends React.Component<any, any> {
@@ -172,7 +172,7 @@ export default class ListView extends React.Component<any, any> {
                         <FormattedMessage id="Order.recipient" />
                       </th>
                       <th style={{ width: '10%' }}>
-                        {/* <FormattedMessage id="amount" /> */}
+                        {/* <FormattedMessage id="Order.amount" /> */}
                         {/* <br /> */}
                         <FormattedMessage id="Order.quantity" />
                       </th>
@@ -328,9 +328,8 @@ export default class ListView extends React.Component<any, any> {
                             )}
                           </span>
                         </div>
-
-                        <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="Order.orderTime" />：
+                      <span style={{ marginLeft: 60 }}>
+                          <FormattedMessage id="Order.OrderTime" />：
                           {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
                                 .format(Const.TIME_FORMAT)
@@ -395,7 +394,7 @@ export default class ListView extends React.Component<any, any> {
                                   href="javascript:void(0)"
                                   className="iconfont iconbtn-review"
                                 >
-                                  {/*<FormattedMessage id="order.review" />*/}
+                                  {/*<FormattedMessage id="Order.review" />*/}
                                 </a>
                               </Tooltip>
                             </AuthWrapper>
@@ -404,7 +403,7 @@ export default class ListView extends React.Component<any, any> {
                             <AuthWrapper functionName="fOrderDetail002_3pl">
                               <Tooltip placement="top" title={<FormattedMessage id="Order.Ship"/>}>
                                 <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }} className="iconfont iconbtn-shipping">
-                                  {/* <FormattedMessage id="order.ship" />*/}
+                                  {/* <FormattedMessage id="Order.ship" />*/}
                                 </a>
                               </Tooltip>
                             </AuthWrapper>
@@ -414,7 +413,7 @@ export default class ListView extends React.Component<any, any> {
                             <AuthWrapper functionName="fOrderDetail002_3pl">
                               <Tooltip placement="top" title={<FormattedMessage id="Order.Ship"/>}>
                                 <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
-                                  {/*<FormattedMessage id="order.ship" />*/}
+                                  {/*<FormattedMessage id="Order.ship" />*/}
                                 </a>
                               </Tooltip>
                             </AuthWrapper>
@@ -437,7 +436,7 @@ export default class ListView extends React.Component<any, any> {
                           <AuthWrapper functionName="fOrderDetail001_3pl">
                             <Tooltip placement="top" title={<FormattedMessage id="Order.SeeDetails"/>}>
                               <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail-limited/${id}`} className="iconfont iconDetails">
-                                {/* <FormattedMessage id="order.seeDetails" />*/}
+                                {/* <FormattedMessage id="Order.seeDetails" />*/}
                               </Link>
                             </Tooltip>
                           </AuthWrapper>
@@ -477,8 +476,8 @@ export default class ListView extends React.Component<any, any> {
                             />
                             //@ts-ignore
                             <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />
-                              {v.get('tradeItems').concat(gifts).size} <FormattedMessage id="Order.items" />
+                              <FormattedMessage id="Order.total" />
+                              {v.get('tradeItems').concat(gifts).size} <FormattedMessage id="Order.Items" />
                             </div>
                           </div>
                         ) : null
@@ -504,7 +503,7 @@ export default class ListView extends React.Component<any, any> {
                     <td style={{ width: '10%' }}>
                       {/* ${tradePrice.toFixed(2)}
                       <br />（{num} <FormattedMessage id="piece" />) */}
-                      {num} <FormattedMessage id="Order.piece" />
+                      {num} <FormattedMessage id="Order.Piece" />
                     </td>
                     {/* <td style={{ width: '5%' }}> */}
                     {/* 1{v.getIn(['invoice', 'postCode'])} */}
@@ -513,10 +512,10 @@ export default class ListView extends React.Component<any, any> {
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '14%' }}>{getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))}</td>
+                    <td style={{ width: '14%' }}><FormattedMessage id={getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))} /></td>
                     {/*支付状态*/}
                     <td style={{ width: '14%' }}>
-                      {getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))}
+                      <FormattedMessage id={getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))} />
                     </td>
                     {/*支付状态*/}
                     <td style={{ width: '12%', paddingRight: 22 }} className="operation-td">

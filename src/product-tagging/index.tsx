@@ -97,7 +97,8 @@ class AttributeLibrary extends Component<any, any> {
       visible: true,
       taggingForm,
       isEdit: false,
-      loading: false
+      loading: false,
+      images:[]
     });
   };
   openEditPage = (row) => {
@@ -567,7 +568,10 @@ class AttributeLibrary extends Component<any, any> {
                   <FormItem label="Tagging Image">
                     {getFieldDecorator('taggingImgUrl', {
                       rules: [{ required: true, message: <FormattedMessage id="Product.TaggingImage" /> }]
-                    })(<AssetManagement choosedImgCount={1} images={images} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />)}
+                    })(<AssetManagement choosedImgCount={1} 
+                      images={images} 
+                      selectImgFunction={this.updateImg} 
+                      deleteImgFunction={this.deleteImg} />)}
                   </FormItem>
                 )}
                 <FormItem label="Display in shop">

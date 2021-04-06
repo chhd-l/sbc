@@ -85,7 +85,7 @@ class PaymentModal extends React.Component<any, any> {
                           {getFieldDecorator(item.id + 'apiKey', {
                             initialValue: item.pspConfigVO&&item.pspConfigVO.apiKey,
                             rules: [{ required: true, message: 'Please input Api Key!' }]
-                          })(<Input value={item.pspConfigVO.apiKey} onChange={(e) => {
+                          })(<Input value={item.pspConfigVO && item.pspConfigVO.apiKey ? item.pspConfigVO.apiKey: null} onChange={(e) => {
                             onFormChange({
                               id: key,
                               field: 'apiKey',
@@ -299,6 +299,7 @@ class PaymentModal extends React.Component<any, any> {
   onSave = async () => {
     this.props.form.validateFields(null, async (errs, values) => {
       //如果校验通过
+      debugger
       const { key } = this.props.relaxProps
       let paymentForm = this.props.relaxProps.paymentForm.toJS()
       let payPspItemVOList = paymentForm.payPspItemVOList.find(item => item.id === key)
@@ -324,7 +325,7 @@ class PaymentModal extends React.Component<any, any> {
           params = {
             pspConfigSaveRequest: Object.assign({
               id: payPspItemVOList.pspConfigVO.id,
-              pspId: payPspItemVOList.pspConfigVO.pspId,
+              pspId: payPspItemVOList.pspConfigVO.pspId ,
               pspItemId: payPspItemVOList.pspConfigVO.pspItemId,
               apiKey: payPspItemVOList.pspConfigVO.apiKey,
               secret: payPspItemVOList.pspConfigVO.secret,

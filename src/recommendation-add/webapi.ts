@@ -109,7 +109,7 @@ export function querySysDictionary(filterParams = {}) {
  */
 
 export function fetchFindById(param = {}) {
-  return Fetch<TResult>('/recommendation/findById', {
+  return Fetch<TResult>('/felinReco/findById', {
     method: 'POST',
     body: JSON.stringify(param)
   });
@@ -144,16 +144,7 @@ export function fetchLinkStatus(param = {}) {
 }
 
 
-//宠物信息详情
-export function fetchFelinRecoDetails(param = {}) {
-  return Fetch<TResult>('/felinReco/findById', {
-    method: 'POST',
-    body: JSON.stringify(param)
-  });
-}
-
 //商品列表
-
 
 export function fetchFelinRecoProducts(param = {}) {
   return Fetch<TResult>('/felinReco/products', {
@@ -161,3 +152,24 @@ export function fetchFelinRecoProducts(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+/**
+ * 扫码
+ */
+ export function fetchFelinFindByNoScan(param={}){
+  return Fetch<TResult>('/appt/findByNo', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+ }
+
+ /**
+ * 保存
+ */
+  export function fetchFelinSave(param={}){
+    return Fetch<TResult>('/felinReco/save', {
+      method: 'POST',
+      body: JSON.stringify(param)
+    });
+   }
+

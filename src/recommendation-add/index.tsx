@@ -8,24 +8,19 @@ import ChooseProducts from './components/chooseProducts';
 import WriteTips from './components/writeTips';
 import AppStore from './store';
 import { StoreProvider } from 'plume2';
-import { fetchFindById } from './webapi'
 
 const { Step } = Steps;
 @StoreProvider(AppStore, { debug: __DEV__ })
-class ManualOrder extends Component<any, any> {
+class RecommendationAdd extends Component<any, any> {
   store: AppStore;
-  static propTypes = {};
-  static defaultProps = {};
+
   constructor(props) {
     super(props);
-    let { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     this.state = {
-      id: this.props.match.params.id,
       title: 'New Prescription',
       current: 0,
       status: 1,
       params: {},
-      storeId: storeId,
       list: []
     };
     this.next = this.next.bind(this);
@@ -36,25 +31,12 @@ class ManualOrder extends Component<any, any> {
     let { current } = this.state;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        let _params = { ...this.state.params, ...values }
         current++;
-        this.setState({
-          current,
-          params: _params
-        })
-        console.log(_params,'_params')
+        console.log(values)
         this.setState({ current });
       }
     });
   }
-  //查询详情
-  async getRecommendationDetails(felinRecoId) {
-    const { res } = await fetchFindById({ felinRecoId })
-    this.setState({
-      params: { ...this.state.params, ...res.context }
-    });
-  }
-
 
   prev() {
     const current = this.state.current - 1;
@@ -62,9 +44,8 @@ class ManualOrder extends Component<any, any> {
   }
   componentDidMount() {
     let { id } = this.props?.match?.params ?? {};
-    if(id){
-      this.getRecommendationDetails(id);
-    }
+    this.store.onSettingAddOrEdit(id ? true : false);
+    id && this.store.init({ felinRecoId: id })
   }
 
   getFormParams = (params) => {
@@ -73,18 +54,26 @@ class ManualOrder extends Component<any, any> {
     });
   };
   done(e) {
-    console.log()
+    const felinReco = this.store.state().get('felinReco')
+    //  const goodsQuantity=this.store.state().get('goodsQuantity')
+    const appointmentVO = this.store.state().get('appointmentVO')
+    const customerPet = this.store.state().get('customerPet')
+    const productselect = this.store.state().get('productselect')
+    let goodsQuantity = productselect.map(({ goodsInfoNo, quantity }) => {
+      return { goodsInfoNo, quantity }
+    })
+    this.store.fetchFelinSave({ ...felinReco, goodsQuantity, appointmentVO, customerPet })
   }
   render() {
-    const { current, title, params } = this.state;
+    const { current, title } = this.state;
     const steps = [
       {
         title: 'Choose your role',
-        controller: <ChooseYourRole form={this.props.form} allParams={params} getFormParams={this.getFormParams} />
+        controller: <ChooseYourRole form={this.props.form} />
       },
       {
         title: 'Fill in Pet Info',
-        controller: <FillinPetInfo form={this.props.form} allParams={params} />
+        controller: <FillinPetInfo form={this.props.form} />
       },
       {
         title: 'Choose Products',
@@ -135,4 +124,4 @@ class ManualOrder extends Component<any, any> {
   }
 }
 
-export default Form.create()(ManualOrder);
+export default Form.create()(RecommendationAdd);

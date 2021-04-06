@@ -2,9 +2,9 @@ import { IOptions, Store } from 'plume2';
 import { message } from 'antd';
 
 import { Const, history, util, ValidConst } from 'qmkit';
-import { fromJS } from 'immutable';
 import * as webapi from './webapi';
 import SettleDetailActor from './actor/settle-detail-actor';
+import FillInPetInfoActor from './actor/fillin-pet-info'
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -15,38 +15,42 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new SettleDetailActor()];
+    return [new SettleDetailActor(), new FillInPetInfoActor()];
   }
 
   init = async (param?: any) => {
     this.dispatch('loading:start');
-    const res1 = await webapi.fetchFindById(param);
-    let arr = [];
-    if (res1.res.code === Const.SUCCESS_CODE) {
-      param.total = res1.res.context.total;
-      //param.total = res1.res.context.total
-      // res1.res.context.recommendationGoodsInfoRels.map((v, i) => {
-      //   arr.push(v.goodsInfo);
-      // });
-      this.transaction(() => {
-        this.dispatch('product:detailProductList', res1.res.context);
-        this.dispatch('product:productselect', res1.res.context.recommendationGoodsInfoRels);
-        this.dispatch('loading:end');
-      });
+    const { res } = await webapi.fetchFindById(param);
+    if (res.code === Const.SUCCESS_CODE) {
+      const { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate,optimal, pickup, paris, apptId, felinRecoId } = res.context;
+      const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate,optimal }
+     let {measure=0,measureUnit=''}=customerPet.weight?JSON.parse(JSON.parse(customerPet.weight)):{}
+
+      customerPet.measure = measure;
+      customerPet.measureUnit = measureUnit;
+      console.log(measure,measureUnit,'customerPet',felinReco)
+      this.initDistaptch({ felinReco, goodsQuantity, appointmentVO, customerPet, list: [] });
     } else {
       this.dispatch('loading:end');
     }
   };
+  initDistaptch = ({ felinReco, goodsQuantity, appointmentVO, customerPet, list }) => {
+    this.transaction(() => {
+      this.dispatch('pets:felinReco', felinReco)
+      this.dispatch('pets:goodsQuantity', goodsQuantity);
+      this.dispatch('pets:appointmentVO', appointmentVO);
+      this.dispatch('pets:customerPet', customerPet);
+      this.dispatch('pets:list', list)
+
+      this.dispatch('loading:end');
+    })
+  }
   onProductForm = async (param?: any) => {
     param = Object.assign(this.state().get('onProductForm').toJS(), param);
     this.dispatch('loading:start');
     const res1 = await webapi.fetchproductTooltip();
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.goodsInfoPage.total;
-      /*let data = res1.res.context.goodsInfoPage.content.map((item, i) => {
-        console.log(item,2212211);
-        item.quantity = 1;
-      })*/
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
@@ -56,6 +60,69 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
     }
   };
+
+  onChangePestsForm = (customerPet,felinReco?:any) => {
+    this.dispatch('loading:start');
+    if(felinReco){
+      this.dispatch('pets:felinReco', customerPet)
+    }else{
+      this.dispatch('pets:customerPet', customerPet);
+    }
+    this.dispatch('loading:end');
+  }
+  //保存
+
+  fetchFelinSave=async(params={})=>{
+    this.dispatch('loading:start');
+    const { res } = await webapi.fetchFelinSave(params)
+    if(res.code===Const.SUCCESS_CODE){
+      history.push('/recommendation')
+    }
+    this.dispatch('loading:end');
+  }
+  // seting add or edit
+
+  onSettingAddOrEdit = (value: boolean) => {
+    this.dispatch('pets:funType', value)
+  }
+  //scan result
+  findByApptNo = async (apptNo = 'AP663253') => {
+    const { res } = await webapi.fetchFelinFindByNoScan({ apptNo })
+    if (res.code === Const.SUCCESS_CODE) {
+      const { settingVO, pets, felinReco } = res.context;
+      let goodsQuantity = JSON.parse(felinReco?.goodsIds ?? '[]')
+      let list = pets.map(item => {
+        let _tempWeight = JSON.parse(item?.weight ?? '{}');
+        item.measure = _tempWeight.measure;
+        item.measureUnit = _tempWeight.measureUnit;
+        return item
+      })
+      let _felinReco={...felinReco,expert:this.state().get('felinReco').expert}
+      this.initDistaptch({ felinReco:_felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list[0], list });
+    }
+  }
+
+
+  //goods info 
+
+  getGoodsInfoPage=async()=>{
+    this.dispatch('loading:start');
+    const { res } = await webapi.fetchproductTooltip();
+    if ((res as any).code == Const.SUCCESS_CODE) {
+      let goodsInfoList = (res as any).context.goodsInfoList;
+     this.dispatch('goods:infoPage', goodsInfoList)
+     let goods= this.state().get('goodsQuantity')
+      let obj={},productSelect=[]
+     goodsInfoList.map(item=>{
+      obj[item.goodsInfoNo]=item
+     })
+      goods.map(item=>{
+        productSelect.push({...obj[item.goodsInfoNo],quantity:item.quantity})
+      })
+      this.onProductselect(productSelect)
+    }
+    this.dispatch('loading:end');
+  }
 
   //productselect
   onProductselect = (addProduct) => {

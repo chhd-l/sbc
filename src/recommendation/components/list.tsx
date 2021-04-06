@@ -188,8 +188,8 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '11%' }}>Amount</th>
                       <th style={{ width: '10.5%' }}>Link status</th>
                       <th style={{ width: '12.5%' }}>Expert</th>
-                      <th style={{ width: '10.5%' }}>Paris</th>
-                      <th style={{ width: '13.5%' }}>Pick up</th>
+                      <th style={{ width: '5.5%' }}>Paris</th>
+                      <th style={{ width: '10.5%' }}>Pick up</th>
                       <th >Operation</th>
                     </tr>
                   </thead>
@@ -247,16 +247,10 @@ export default class ListView extends React.Component<any, any> {
 
     let list = dataList.toJS();
     return list.map((v, index) => {
-      const id = v.recommendationId;
-      const img = v.recommendationGoodsInfoRels ? v.recommendationGoodsInfoRels : [];
-      let amount = 0;
-      for (let i = 0; i < img.length; ++i) {
-        if (img[i].goodsInfo.marketPrice != null) {
-          amount += img[i].goodsInfo.marketPrice * img[i].recommendationNumber;
-        }
-      }
+      const img = v.goodsNames ? v.goodsNames.split(',') : [];
+     const appointmentVO=v.appointmentVO
       return (
-        <tr className="ant-table-row  ant-table-row-level-0" key={id}>
+        <tr className="ant-table-row  ant-table-row-level-0" key={v.felinRecoId}>
           <td colSpan={9} style={{ padding: 0 }}>
             <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
               <thead>
@@ -272,7 +266,7 @@ export default class ListView extends React.Component<any, any> {
                       }}
                     >
                       <div style={{ width: 510, display: 'inline-block' }}>
-                        <span> {id}</span>
+                        <span> {v.felinRecoId}</span>
                       </div>
                       <div style={{ width: 310, display: 'inline-block' }}>
                         <span> Created Time: {moment(v.createTime).format('YYYY-MM-DD')}</span>
@@ -308,28 +302,21 @@ export default class ListView extends React.Component<any, any> {
                   >
                     {img.length != 0
                       ? img.map((item, index) => {
-                        return <div>{item.goodsInfo.goodsInfoName}</div>;
+                        return <div>{item}</div>;
                       })
                       : '--'}
                   </td>
-                  <td style={{ width: '12%' }}>{v.consumerLastName != null ? v.consumerFirstName + ' ' + v.consumerLastName : '--'}</td>
-                  <td style={{ width: '13.5%' }}>{v.consumerEmail != null ? v.consumerEmail : '--'}</td>
-                  <td style={{ width: '11%' }}>
-                    {v.recommendationGoodsInfoRels && sessionStorage.getItem('s2b-supplier@systemGetConfig:')}
-                    {v.recommendationGoodsInfoRels &&
-                      v.recommendationGoodsInfoRels.reduce((sum, item) => {
-                        let a = Number(sum) + Number(item.goodsInfo.marketPrice * item.recommendationNumber);
-                        return a.toFixed(2);
-                      }, 0)}===
-                  </td>
+                  <td style={{ width: '12%' }}>{appointmentVO?.consumerName??'--'}</td>
+                  <td style={{ width: '13.5%' }}>{appointmentVO?.consumerEmail??'--'}</td>
+                  <td style={{ width: '11%' }}>{v?.price??'--'}</td>
                   <td style={{ width: '12.5%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td>
                   {/* <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td> */}
-                  <th style={{ width: '12.5%' }}>{v.expert}==</th>
-                  <td style={{ width: '10.5%' }}>{v.paris ? 'Y' : 'N'}</td>
+                  <th style={{ width: '12.5%' }}>{v?.expert??'--'}</th>
+                  <td style={{ width: '5.5%' }}>{v.paris ? 'Y' : 'N'}</td>
                   <td style={{ width: '10.5%' }}>{v.pickup ? 'Y' : 'N'}</td>
                   <td
-
                     style={{
+                      width: '10.5%',
                       fontSize: 16,
                       color: '#E1021A',
                       cursor: 'pointer',
@@ -356,7 +343,7 @@ export default class ListView extends React.Component<any, any> {
                       <Icon type="cloud-download" />
                     </Tooltip>
                     <Tooltip placement="top" title="copied link">
-                      <Icon type="fork" />
+                    <Icon type="link" />
                     </Tooltip>
                     </div>
 

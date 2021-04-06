@@ -30,46 +30,37 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   props: {
     relaxProps?: {
       productselect: any;
-      productForm: any;
-      detailProductList: any;
-      onCreateLink: Function;
+      onProductselect: Function
     };
   };
 
   static relaxProps = {
     productselect: 'productselect',
-    productForm: 'productForm',
-    detailProductList: 'detailProductList',
-    onCreateLink: noop
+    onProductselect: noop
   };
+  componentDidMount() {
 
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-    const { productselect, onCreateLink } = this.props.relaxProps;
-    let arr = productselect.map((v, i) => {
-      return {
-        goodsInfoId: v.goodsInfoId,
-        recommendationNumber: v.recommendationNumber
-      };
-    });
-    onCreateLink({
-      field: 'recommendationGoodsInfoRels',
-      value: arr
-    });
+
   }
   //改变数量
-  inputNumberChange=(value,row,index)=>{
-
+  inputNumberChange = (value, row, index) => {
+    const { productselect, onProductselect } = this.props.relaxProps;
+    let _clone = JSON.parse(JSON.stringify(productselect))
+    _clone[index].quantity = value
+    onProductselect(_clone)
   }
   //删除
-  deleteCartsGood=()=>{
-
+  deleteCartsGood = (index) => {
+    const { productselect, onProductselect } = this.props.relaxProps;
+    let _clone = JSON.parse(JSON.stringify(productselect))
+    _clone.splice(index, 1)
+    onProductselect(_clone)
   }
   render() {
-    const { productselect, detailProductList } = this.props.relaxProps;
+    const { productselect } = this.props.relaxProps;
     return (
       <TableRow>
-        <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record, index) => index} dataSource={productselect instanceof Array ? productselect : []} pagination={false}>
-         
+        <DataGrid scroll={{ y: 500 }} size="small" rowKey="goodsInfoNo" dataSource={productselect instanceof Array ? productselect : []} pagination={false}>
 
           <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
           <Column title="SPU" dataIndex="goods.goodsNo" key="goods.goodsNo" />
@@ -88,35 +79,35 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }}
             key="marketPrice"
           />
-           <Column title="Weight" dataIndex="goodsInfoWeight" key="goodsInfoWeight" />
-          <Column title="Quantity" key="quantity" dataIndex="quantity" 
-          render={(value,row,index)=>{
-            return ( <InputNumber
-              min={0}
-              max={9999}
-              defaultValue={value||0}
-              onChange={(e) => {
-                this.inputNumberChange(e, row,index);
-              }}
-            />)
-          }}
-          
+          <Column title="Weight" dataIndex="goodsInfoWeight" key="goodsInfoWeight" />
+          <Column title="Quantity" key="quantity" dataIndex="quantity"
+            render={(value, row, index) => {
+              return (<InputNumber
+                min={0}
+                max={9999}
+                defaultValue={value || 0}
+                onChange={(e) => {
+                  this.inputNumberChange(e, row, index);
+                }}
+              />)
+            }}
+
           />
-          <Column 
-          title="Operation"
-           dataIndex="Operation"
+          <Column
+            title="Operation"
+            dataIndex="Operation"
             key="Operation"
-            render={(text, record) => {
-            return (
-              <Popconfirm placement="topLeft" title="Are you sure you want to delete this product?" onConfirm={() => this.deleteCartsGood(record)} okText="Confirm" cancelText="Cancel">
-                <Tooltip placement="top" title="Delete">
-                  <a>
-                    <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 16 }} className="icon iconfont iconDelete"></span>
-                  </a>
-                </Tooltip>
-              </Popconfirm>
-            );
-          }}
+            render={(text, record, index) => {
+              return (
+                <Popconfirm placement="topLeft" title="Are you sure you want to delete this product?" onConfirm={() => this.deleteCartsGood(index)} okText="Confirm" cancelText="Cancel">
+                  <Tooltip placement="top" title="Delete">
+                    <a>
+                      <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 16 }} className="icon iconfont iconDelete"></span>
+                    </a>
+                  </Tooltip>
+                </Popconfirm>
+              );
+            }}
           />
         </DataGrid>
       </TableRow>

@@ -1,8 +1,24 @@
 import React from 'react';
 import { Row, Col, Form, Input, Select, Spin } from 'antd';
-import { SelectGroup } from 'qmkit';
+import { noop, SelectGroup } from 'qmkit';
+import { Relax } from 'plume2';
 const { Option } = Select;
-class ConsumerInformation extends React.Component<any, any> {
+
+@Relax
+export default class ChooseYourRole extends React.Component<any, any> {
+  props: {
+    form: any,
+    relaxProps?: {
+        felinReco:any,
+        onChangePestsForm:Function,
+        getGoodsInfoPage:Function
+      };
+}
+static relaxProps = {
+    felinReco: 'felinReco',
+    onChangePestsForm:noop,
+    getGoodsInfoPage:noop
+  };
   state = {
     options: [
       "Marion Ruffié",
@@ -26,13 +42,23 @@ class ConsumerInformation extends React.Component<any, any> {
     super(props);
   }
  async componentDidMount() {
-  
+  const { felinReco,onChangePestsForm ,getGoodsInfoPage} = this.props.relaxProps;
+    if(!felinReco.expert){
+      onChangePestsForm({...felinReco,expert:this.state.options[0]},'felinReco')
+    }
+    getGoodsInfoPage()
  }
-
+ _onChange(e) {
+  const { felinReco,onChangePestsForm } = this.props.relaxProps;
+  if (e && e.target) {
+      e = e.target.value;
+  }
+  onChangePestsForm({...felinReco,expert:e},'felinReco')
+}
 
   render() {
+    const { felinReco } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
-    const { storeName, expert} = this.props.allParams;
     const options = this.state.options.map((d, index) => (
       <Option key={index} value={d}>
         {d}
@@ -40,6 +66,7 @@ class ConsumerInformation extends React.Component<any, any> {
     ));
     return (
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
+      
         <Form  style={{ width: 300 }}>
           {/* <Form.Item>
             {getFieldDecorator('storeName', {
@@ -57,7 +84,8 @@ class ConsumerInformation extends React.Component<any, any> {
           </Form.Item> */}
           <Form.Item>
             {getFieldDecorator('expert', {
-              initialValue:expert||"Marion Ruffié"
+              initialValue:felinReco.expert||"Marion Ruffié",
+              onChange:(e)=>this._onChange(e)
             })(<SelectGroup
               label="Role"
               getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -73,5 +101,3 @@ class ConsumerInformation extends React.Component<any, any> {
     );
   }
 }
-
-export default ConsumerInformation;

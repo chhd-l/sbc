@@ -335,7 +335,7 @@ class PaymentModal extends React.Component<any, any> {
             }),
             payPspItemSaveRequest: Object.assign({
               id: payPspItemVOList.pspConfigVO && payPspItemVOList.pspConfigVO.pspItemId ? payPspItemVOList.pspConfigVO.pspItemId : payPspItemVOList.id,
-              isOpen: payPspItemVOList.isOpen == true ? 1 : 0,
+              isOpen: payPspItemVOList.isOpen,
               pspItemCardTypeSaveRequestList: payPspItemVOList.payPspItemCardTypeVOList,
               supportSubscription: payPspItemVOList.supportSubscription,
             })
@@ -345,7 +345,7 @@ class PaymentModal extends React.Component<any, any> {
         params = {
           payPspItemSaveRequest: Object.assign({
             id: payPspItemVOList.pspConfigVO && payPspItemVOList.pspConfigVO.pspItemId ? payPspItemVOList.pspConfigVO.pspItemId : payPspItemVOList.id,
-            isOpen: payPspItemVOList.isOpen == true ? 1 : 0,
+            isOpen: payPspItemVOList.isOpen,
             maxAmount: payPspItemVOList.maxAmount
           })
         }

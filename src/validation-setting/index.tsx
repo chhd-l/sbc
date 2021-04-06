@@ -216,8 +216,8 @@ class ValidationSetting extends Component<any, any> {
                         </Card>
                       ) : (
                         <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-                          <div style={{ textAlign: 'center' }}>
-                            <img src={item.imgUrl} style={{ width: '200px', height: '90px' }} />
+                          <div style={{ textAlign: 'center', height: '90px' }}>
+                            <img src={item.imgUrl} style={{ marginTop: 15, height: '60px' }} />
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
                             <Popconfirm title={'Are you sure to enable this?'} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Pagination, Spin, Row, Col, Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { getSubscriptionList } from '../../subscription/webapi';
@@ -103,7 +104,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 <tr>
                   <td colSpan={7}>
                     <div style={styles.orderCon}>
-                      <span style={styles.orderId}>{item.subscribeId}</span>
+                      <Link to={'/subscription-detail/' + item.subscribeId} style={styles.orderId}>{item.subscribeId}</Link>
                       <span style={styles.orderTime}>Subscription time: {moment(item.createTime).format(Const.TIME_FORMAT)}</span>
                     </div>
                   </td>

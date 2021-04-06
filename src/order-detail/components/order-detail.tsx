@@ -9,7 +9,6 @@ import moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import './style.less';
-import TodoItems from '@/home/component/todo-items';
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
@@ -38,7 +37,7 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={this.props.intl.formatMessage({id:'Order.RejectionReasonTip'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={this.props.intl.formatMessage({ id: 'Order.RejectionReasonTip' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -51,7 +50,7 @@ class RejectForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error(this.props.intl.formatMessage({id:'Order.100charactersLimitTip'})));
+      callback(new Error(this.props.intl.formatMessage({ id: 'Order.100charactersLimitTip' })));
       return;
     }
     callback();
@@ -370,14 +369,18 @@ export default class OrderDetailTab extends React.Component<any, any> {
             justifyContent: 'space-between'
           }}
         >
-          <label style={styles.greenText}><FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} /></label>
+          <label style={styles.greenText}>
+            <FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} />
+          </label>
 
           {this._renderBtnAction(tid)}
         </div>
         <Row gutter={30}>
           <Col span={12}>
             <div className="headBox">
-              <h4><FormattedMessage id="Menu.Order" /></h4>
+              <h4>
+                <FormattedMessage id="Menu.Order" />
+              </h4>
               <Row>
                 <Col span={12}>
                   <Tooltip
@@ -391,24 +394,44 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       {<FormattedMessage id="Order.OrderNumber" />}: {detail.get('id')}
                     </p>
                   </Tooltip>
-                  <p><FormattedMessage id="Order.externalOrderId" />: {detail.getIn(['tradeOms', 'orderNo'])}</p>
-                  <p><FormattedMessage id="Order.OrderStatus" />: <FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} /></p>
-                  <p><FormattedMessage id="Order.orderTyp" />: {orderDetailType ? orderDetailType.name : ''}</p>
+                  <p>
+                    <FormattedMessage id="Order.externalOrderId" />: {detail.getIn(['tradeOms', 'orderNo'])}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.OrderStatus" />: <FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} />
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.orderType" />: {orderDetailType ? orderDetailType.name : ''}
+                  </p>
                 </Col>
                 <Col span={12}>
-                  <p><FormattedMessage id="Order.OrderTime" />: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}</p>
-                  <p><FormattedMessage id="Order.orderSource" />: {detail.get('orderSource')}</p>
-                  <p><FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}</p>
+                  <p>
+                    <FormattedMessage id="Order.OrderTime" />: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.orderSource" />: {detail.get('orderSource')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}
+                  </p>
                 </Col>
               </Row>
             </div>
           </Col>
           <Col span={12}>
             <div className="headBox">
-              <h4><FormattedMessage id="Order.PetOwner" /></h4>
-              <p><FormattedMessage id="Order.Petownername" />: {detail.getIn(['buyer', 'name'])}</p>
-              <p><FormattedMessage id="Order.petOwnerType" />: {detail.getIn(['buyer', 'levelName'])}</p>
-              <p><FormattedMessage id="Order.Petowneraccount" />: {detail.getIn(['buyer', 'account'])}</p>
+              <h4>
+                <FormattedMessage id="Order.PetOwner" />
+              </h4>
+              <p>
+                <FormattedMessage id="Order.Petownername" />: {detail.getIn(['buyer', 'name'])}
+              </p>
+              <p>
+                <FormattedMessage id="Order.petOwnerType" />: {detail.getIn(['buyer', 'levelName'])}
+              </p>
+              <p>
+                <FormattedMessage id="Order.Petowneraccount" />: {detail.getIn(['buyer', 'account'])}
+              </p>
             </div>
           </Col>
         </Row>
@@ -416,10 +439,18 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {detail.get('subscribeId') ? (
             <Col span={12}>
               <div className="headBox">
-                <h4><FormattedMessage id="Order.subscription" /></h4>
-                <p><FormattedMessage id="Order.Subscriptionumber" />: {detail.get('subscribeId')}</p>
-                <p><FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionType')}</p>
-                <p><FormattedMessage id="Order.subscriptionPlanType" />: {detail.get('subscriptionPlanType')}</p>
+                <h4>
+                  <FormattedMessage id="Order.subscription" />
+                </h4>
+                <p>
+                  <FormattedMessage id="Order.Subscriptionumber" />: {detail.get('subscribeId')}
+                </p>
+                <p>
+                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery')}
+                </p>
+                <p>
+                  <FormattedMessage id="Order.subscriptionPlanType" />: {detail.get('subscriptionPlanType')}
+                </p>
               </div>
             </Col>
           ) : null}
@@ -427,11 +458,21 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
             <Col span={12}>
               <div className="headBox">
-                <h4><FormattedMessage id="Order.partner" /></h4>
-                <p><FormattedMessage id="Order.Auditorname" />: {detail.get('clinicsName')}</p>
-                <p><FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}</p>
-                <p><FormattedMessage id="Order.Recommenderid" />: {firstTradeItems.recommendationId}</p>
-                <p><FormattedMessage id="Order.Recommendername" />: {firstTradeItems.recommendationName}</p>
+                <h4>
+                  <FormattedMessage id="Order.partner" />
+                </h4>
+                <p>
+                  <FormattedMessage id="Order.Auditorname" />: {detail.get('clinicsName')}
+                </p>
+                <p>
+                  <FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}
+                </p>
+                <p>
+                  <FormattedMessage id="Order.Recommenderid" />: {firstTradeItems.recommendationId}
+                </p>
+                <p>
+                  <FormattedMessage id="Order.Recommendername" />: {firstTradeItems.recommendationName}
+                </p>
               </div>
             </Col>
           ) : null}
@@ -484,7 +525,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 ) : null}
               </Col>
               <Col span={12}>
-                <h3><FormattedMessage id="Order.specialNeeds" /></h3>
+                <h3>
+                  <FormattedMessage id="Order.specialNeeds" />
+                </h3>
                 {currentPetInfo.customerPetsPropRelations && currentPetInfo.customerPetsPropRelations.map((item) => <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>)}
               </Col>
             </Row>
@@ -577,10 +620,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
         <Row gutter={30}>
           <Col span={12}>
             <div className="headBox">
-              <h4><FormattedMessage id="Order.deliveryAddress" /></h4>
+              <h4>
+                <FormattedMessage id="Order.deliveryAddress" />
+              </h4>
               <Row>
                 <Col span={12}>
-                   <Tooltip
+                  <Tooltip
                     overlayStyle={{
                       overflowY: 'auto'
                     }}
@@ -588,7 +633,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.firstName}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.firstName" />: {consignee.firstName}
+                      <FormattedMessage id="Order.firstName" />: {consignee.firstName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -599,7 +644,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.lastName}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.firstName" />: {consignee.lastName}
+                      <FormattedMessage id="Order.firstName" />: {consignee.lastName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -610,7 +655,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.detailAddress1}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.address1" />: {consignee.detailAddress1}
+                      <FormattedMessage id="Order.address1" />: {consignee.detailAddress1}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -621,26 +666,51 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.detailAddress2}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.address2" />: {consignee.detailAddress2}
+                      <FormattedMessage id="Order.address2" />: {consignee.detailAddress2}
                     </p>
                   </Tooltip>
-                  <p><FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}</p>
+                  <p>
+                    <FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
+                  </p>
                 </Col>
                 <Col span={12}>
-                  <p><FormattedMessage id="Order.city" />: {consignee.city}</p>
-                  <p><FormattedMessage id="Order.Postalcode" />: {consignee.postCode}</p>
-                  <p><FormattedMessage id="Order.phoneNumber" />: {consignee.phone}</p>
-                  <p><FormattedMessage id="Order.state" />: {consignee.province}</p>
+                  <p>
+                    <FormattedMessage id="Order.city" />: {consignee.city}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Postalcode" />: {consignee.postCode}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.phoneNumber" />: {consignee.phone}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.state" />: {consignee.province}
+                  </p>
                 </Col>
+                {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
+                  <Col span={24}>
+                    {detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
+                      <p>
+                        <FormattedMessage id="Order.estimatedDeliveryDate" />: <FormattedMessage id="Order.estimatedDeliveryDateDesc" values={{ minDay: detail.get('minDeliveryTime'), maxDay: detail.get('maxDeliveryTime') }} />
+                      </p>
+                    ) : (
+                      <p>
+                        <FormattedMessage id="Order.estimatedDeliveryDate" />: <FormattedMessage id="Order.estimatedDeliveryDateDescEqual" values={{ day: detail.get('minDeliveryTime') }} />
+                      </p>
+                    )}
+                  </Col>
+                ) : null}
               </Row>
             </div>
           </Col>
           <Col span={12}>
             <div className="headBox">
-              <h4><FormattedMessage id="Order.billingAddress" /></h4>
+              <h4>
+                <FormattedMessage id="Order.billingAddress" />
+              </h4>
               <Row>
                 <Col span={12}>
-                <Tooltip
+                  <Tooltip
                     overlayStyle={{
                       overflowY: 'auto'
                     }}
@@ -648,7 +718,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.firstName}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.firstName" />: {invoice.firstName}
+                      <FormattedMessage id="Order.firstName" />: {invoice.firstName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -659,7 +729,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.lastName}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.firstName" />: {invoice.lastName}
+                      <FormattedMessage id="Order.firstName" />: {invoice.lastName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -670,7 +740,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.address1}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.address1" />: {invoice.address1}
+                      <FormattedMessage id="Order.address1" />: {invoice.address1}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -681,16 +751,24 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.address2}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.address2" />: {invoice.address2}
+                      <FormattedMessage id="Order.address2" />: {invoice.address2}
                     </p>
                   </Tooltip>
                   <p>Country: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
                 </Col>
                 <Col span={12}>
-                  <p><FormattedMessage id="Order.city" />: {invoice.city}</p>
-                  <p><FormattedMessage id="Order.Postalcode" />: {invoice.postCode}</p>
-                  <p><FormattedMessage id="Order.phoneNumber" />: {invoice.phone}</p>
-                  <p><FormattedMessage id="Order.state" />: {invoice.province}</p>
+                  <p>
+                    <FormattedMessage id="Order.city" />: {invoice.city}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Postalcode" />: {invoice.postCode}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.phoneNumber" />: {invoice.phone}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.state" />: {invoice.province}
+                  </p>
                 </Col>
               </Row>
             </div>
@@ -701,20 +779,40 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Row gutter={30}>
             <Col span={12}>
               <div className="headBox">
-                <h4><FormattedMessage id="Order.pet" /></h4>
+                <h4>
+                  <FormattedMessage id="Order.pet" />
+                </h4>
                 <Row>
                   <Col span={12}>
-                    <p><FormattedMessage id="Order.petName" />: {firstTradeItems.petsName} </p>
-                    <p><FormattedMessage id="Order.gender" />: </p>
-                    <p><FormattedMessage id="Order.birthday" />: </p>
-                    <p><FormattedMessage id="Order.breed" /> </p>
-                    <p><FormattedMessage id="Order.sensitivities" /> </p>
+                    <p>
+                      <FormattedMessage id="Order.petName" />: {firstTradeItems.petsName}{' '}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.gender" />:{' '}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.birthday" />:{' '}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.breed" />{' '}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.sensitivities" />{' '}
+                    </p>
                   </Col>
                   <Col span={12}>
-                    <p><FormattedMessage id="Order.lifestyle" />: </p>
-                    <p><FormattedMessage id="Order.activity" />: </p>
-                    <p><FormattedMessage id="Order.Weight" />: </p>
-                    <p><FormattedMessage id="Order.sterilized" />: </p>
+                    <p>
+                      <FormattedMessage id="Order.lifestyle" />:{' '}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.activity" />:{' '}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.Weight" />:{' '}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.sterilized" />:{' '}
+                    </p>
                   </Col>
                 </Row>
               </div>
@@ -814,7 +912,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
       );
-    } else if ((flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID')) {
+    } else if ((flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && payState === 'PAID') {
       return (
         <div>
           <AuthWrapper functionName="fOrderDetail002">

@@ -863,8 +863,7 @@ class GoodsForm extends React.Component<any, any> {
     //     });
     //   }
     // }
-    console.log(key,888888);
-    console.log(e.target.value);
+
     if (key === 'addedFlag') {
       if (e.target.value == 0) {
         this.setState({

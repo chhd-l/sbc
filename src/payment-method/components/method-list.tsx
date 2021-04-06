@@ -45,6 +45,7 @@ export default class PaymentMethod extends React.Component<any, any> {
       onShow: Function;
       onChecked: Function;
       switchChecked: any;
+      storePaymentVOs: any;
       getEditStorePayment: Function;
       getStorePaymentVOs: Function;
       getCheckedId: Function;
@@ -58,6 +59,7 @@ export default class PaymentMethod extends React.Component<any, any> {
     onChecked: noop,
     switchChecked: 'switchChecked',
     checkedId: 'checkedId',
+    storePaymentVOs: 'storePaymentVOs',
     getEditStorePayment: noop,
     getStorePaymentVOs: noop,
     getCheckedId: noop,
@@ -90,12 +92,15 @@ export default class PaymentMethod extends React.Component<any, any> {
   };
 
   onTooltip = (e,id,maxAmount) => {
-    const { onShow, switchChecked, checkedId } = this.props.relaxProps;
-
+    const { onShow, switchChecked, checkedId, getStorePaymentVOs } = this.props.relaxProps;
+    let { storePaymentVOs } = this.props.relaxProps
     if (switchChecked == true && checkedId == id) {
       this.setState({
         maxAmount: maxAmount
       })
+      storePaymentVOs = storePaymentVOs.set('id', id)
+      storePaymentVOs = storePaymentVOs.set('maxAmount', maxAmount)
+      getStorePaymentVOs(storePaymentVOs)
       onShow(true);
     } else {
       return false;

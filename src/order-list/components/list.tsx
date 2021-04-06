@@ -257,7 +257,7 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
                           />
                         </span>
 
-                        <div style={{ width: 700, display: 'inline-block' }}>
+                        <div style={{ width: 600, display: 'inline-block' }}>
                           <span
                             style={{
                               marginLeft: 20,
@@ -367,7 +367,7 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
                             </AuthWrapper>
                           )}
                           {/*待收货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED' && (
+                          {(v.getIn(['tradeState', 'flowState']) === 'DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'SHIPPED') && (
                             <AuthWrapper functionName="fOrderList003">
                               <Tooltip placement="top" title={<FormattedMessage id="Order.confirmReceipt" />}>
                                 <a

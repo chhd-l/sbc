@@ -35,6 +35,8 @@ export default class AddProductModal extends Component {
     handleCancel: any;
     goodsCount?: any
     searchCount?:Function
+    url:string,
+    prefix:string
   };
   onChange = (e, type) => {
     if (e && e.target) {
@@ -114,7 +116,7 @@ export default class AddProductModal extends Component {
   }
 
   render() {
-    const { visible, handleOk, handleCancel, goodsCount, storeId } = this.props;
+    const { visible, handleOk, handleCancel, goodsCount, storeId,url,prefix} = this.props;
     const { cateType, likeGoodsInfoNo, keyword, goodsLists, total, pageSize, currentPage, loading } = this.state;
     const columns = [
       {
@@ -206,7 +208,7 @@ export default class AddProductModal extends Component {
             </Col>
             <Col span={4} style={{ textAlign: 'right' }}>
               <Button type="primary" shape="round">
-                <a target="_blank" style={{ color: '#fff' }} href={`https://shop.royalcanin.${(window as any).countryEnum[this.props.storeId]}/`}>
+                <a target="_blank" style={{ color: '#fff' }} href={url+prefix}>
                   View all
                 </a>
               </Button>

@@ -194,7 +194,7 @@ export default class FillinPetInfo extends Component {
                                 <Form.Item label="Sensitvities:">
                                     {getFieldDecorator('sensitivity', {
                                         initialValue: customerPet.sensitivity||'',
-                                        rules: [{ required: true, message: 'Please select Sensitvities!' }],
+                                      //  rules: [{ required: true, message: 'Please select Sensitvities!' }],
                                         onChange: (e,) => this._onChange(e, 'sensitivity')
 
                                     })(<Select
@@ -212,7 +212,7 @@ export default class FillinPetInfo extends Component {
                                 <Form.Item label="Lifestyle">
                                     {getFieldDecorator('lifestyle', {
                                         initialValue: customerPet.lifestyle||'',
-                                        rules: [{ required: true, message: 'Please select Lifestyle!' }],
+                                       // rules: [{ required: true, message: 'Please select Lifestyle!' }],
                                         onChange: (e,) => this._onChange(e, 'lifestyle')
 
                                     })(<Select
@@ -228,7 +228,7 @@ export default class FillinPetInfo extends Component {
                                 <Form.Item label="Activity:">
                                     {getFieldDecorator('activity', {
                                         initialValue: customerPet.activity||'',
-                                        rules: [{ required: true, message: 'Please selectActivity!' }],
+                                       // rules: [{ required: true, message: 'Please selectActivity!' }],
                                         onChange: (e,) => this._onChange(e, 'activity')
 
                                     })(<Select

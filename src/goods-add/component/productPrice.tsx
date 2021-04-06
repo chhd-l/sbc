@@ -356,7 +356,7 @@ class SkuForm extends React.Component<any, any> {
           console.log(!rowInfo.marketPrice);
           console.log(!rowInfo.subscriptionPrice);*/
           if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
-            //console.log(55555)
+            console.log(targetGoodsIds,55555)
             marketPrice = targetGoodsIds.subMarketPrice?
               targetGoodsIds.subMarketPrice * targetGoodsIds.bundleNum : targetGoodsIds.marketPrice?
                 targetGoodsIds.marketPrice * targetGoodsIds.bundleNum: 0
@@ -662,9 +662,7 @@ class SkuForm extends React.Component<any, any> {
     console.log(e,22333233);
 
     editGoodsItem(id, key, e);
-    if (key == 'marketPrice') {
-      editGoodsItem(id, 'flag', flag);
-    }
+
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存

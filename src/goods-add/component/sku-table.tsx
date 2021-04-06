@@ -510,9 +510,7 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
-        setTimeout(()=>{
-          console.log(rowInfo.addedFlag);
-        })
+
         return (
           <Col span={8}>
             <FormItem style={styles.tableFormItem}>

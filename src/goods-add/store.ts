@@ -983,99 +983,28 @@ export default class AppStore extends Store {
     let valid = true;
     let tip = 0;
     let goodsList = this.state().get('goodsList');
-    let addSkUProduct = this.state().get('addSkUProduct')
-    //console.log(addSkUProduct);
     if (goodsList) {
       goodsList.forEach((item) => {
-       /* console.log(item.get('marketPrice'));
-
-        console.log(item.get('subscriptionPrice'),111111111111);
-        console.log(this.state().get('goods').get('subscriptionStatus'),22222222222);
-        console.log(item.toJS(),3333333);*/
-        if (goodsList.toJS().length == 1) {
-          if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
-            if (item.get('marketPrice') == 0 || item.get('subscriptionPrice') == null) {
-              tip = 1;
-              valid = false;
-              return;
-            }
-          }
-        }else {
-          //console.log(item.toJS(),555)
-          //console.log(item.get('marketPrice'),1111)
-          if (item.get('marketPrice') == 0)  {
-            tip = 1;
-            valid = false;
-            return;
-          }
-        }
-
-       /* if (!(item.get('marketPrice') || item.get('marketPrice') == 0) ) {
+        console.log(item.get('marketPrice'),1111111);
+        if (!(item.get('marketPrice') || item.get('marketPrice') == "0")) {
           tip = 1;
           valid = false;
           return;
-        }*/
-        /*if (this.state().get('goods').get('subscriptionStatus') == 1 ) {
-          if(item.get('subscriptionStatus') == 1) {
-            if( item.get('subScriptionPrice') == 0 && item.get('subscriptionPrice') == 0) {
-              tip = 4;
-              valid = false;
-              return;
-            }
-          }
-        }*/
-
-        if (goodsList.toJS().length == 1) {
-          if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
-            if (item.get('subscriptionPrice') == 0 || item.get('subscriptionPrice') == null) {
-              tip = 4;
-              valid = false;
-              return;
-            }
-          }else {
-
-            /*console.log(item.get('subscriptionPrice'));
-            console.log(item.get('subScriptionPrice'));
-            console.log(item.get('addedFlag'));*/
-            if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionStatus') !=0) {
-              console.log(item.toJS(),555)
-              //console.log(addSkUProduct[0].targetGoodsIds[0],666);
-              if( item.get('subscriptionPrice') == 0 || item.get('subscriptionPrice') == null) {
-                tip = 4;
-                valid = false;
-                return;
-              }
-            }
-            /*if ( item.get('addedFlag') == 1 && item.get('subscriptionPrice') == 0 ) {
-              tip = 4;
-              valid = false;
-              return;
-            }*/
-          }
         }
-
-
-        /*if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
-          tip = 3;
+        if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+          tip = 2;
           valid = false;
           return;
-        }*/
-
-        /* if (this.state().get('addSkUProduct').length === 1) {
-          this.state().get('addSkUProduct')[0].targetGoodsIds
-        }*/
+        }
       });
     }
     if (tip === 1) {
       message.error('Please input market price');
     } else if (tip === 2) {
       message.error('Please input subscription price');
-    } else if (tip === 3) {
-      message.error('Market price cannot be zero');
-    } else if (tip === 4) {
-      message.error('Subscription price cannot be zero');
     }
     return valid;
+
   }
   _validInventoryFormsNew() {
     let valid = true;
@@ -1088,13 +1017,14 @@ export default class AppStore extends Store {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
 
-
-        if (reg.test(item.get('stock')) === false && a == undefined) {
+        //console.log(item.get('stock'));
+        //console.log(reg.test(item.get('stock')));
+        if (reg.test(item.get('stock')) === false || a == undefined) {
           flag = 1
           valid = false;
           return;
         }
-        if (!item.get('stock') && a == undefined) {
+        if (!item.get('stock') || a == undefined) {
           flag = 1
           valid = false;
           return;
@@ -1286,7 +1216,6 @@ export default class AppStore extends Store {
       // 规格值id集合
       let mockSpecDetailIds = List();
       item.forEach((value, key: string) => {
-        console.log('itemitemitem:', key, value);
         if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));
         }

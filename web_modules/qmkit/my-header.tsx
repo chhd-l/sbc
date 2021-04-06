@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover, Empty, Tabs, notification } from 'antd';
+import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover, Empty, Tabs, notification, Modal, Row, Col } from 'antd';
 const { Header } = Layout;
 import { history, cache, util, Const } from 'qmkit';
 import QRCode from 'qrcode';
@@ -20,7 +20,11 @@ export default class MyHeader extends React.Component {
       url: '',
       taskList: [],
       reminderTasks:[],
-      visible: false
+      visible: false,
+      aLanguage: ['English', 'Russian', 'Turkey'],
+      English: util.requireLocalSrc('sys/English.png'),
+      Russian: util.requireLocalSrc('sys/Russian.png'),
+      Turkey: util.requireLocalSrc('sys/Turkey.png'),
     };
   }
 
@@ -62,6 +66,41 @@ export default class MyHeader extends React.Component {
   handleVisibleChange = visible => {
     this.setState({ visible });
   };
+
+  setImgSrc(val, type){
+    this.setState({ [val]: util.requireLocalSrc('sys/'+val+type+'.png')});
+  }
+
+  getLanguageItem() {
+    return (
+      <Row>       
+        {
+          this.state.aLanguage.map((val) => {
+            return (
+              <Col span={8} key={val}>
+                <img 
+                  style={{
+                    cursor: 'pointer',
+                    width: '200px'
+                  }}
+                  onMouseLeave={e => {
+                    this.setImgSrc(val, '');
+                  }} 
+                  onMouseEnter={e => {
+                    this.setImgSrc(val, '_act');
+                  }} 
+                  src={this.state[val]}
+                  onClick={() =>
+                    this.languageChange(val)
+                  }
+                />
+              </Col>
+            )
+          })
+        }
+      </Row>
+    )
+  }
 
 
    content=() => (
@@ -253,12 +292,11 @@ export default class MyHeader extends React.Component {
         </Menu.Item> */}
          <Menu.Item key="1">
           <a
-            href="#"
             onClick={() =>
               this.languageChange
             }
           >
-            <Icon type="lock" /> Language
+            <Icon type="global" /> Language
           </a>
         </Menu.Item>
         <Menu.Item key="2">
@@ -339,7 +377,19 @@ export default class MyHeader extends React.Component {
           </div>
 
         </Header>
-
+        <Modal
+          visible={false}
+          footer={null}
+          closable={false}
+          width="60%"
+        >
+          <p>
+            <img style={styles.logoImg} src={sessionStorage.getItem(cache.SITE_LOGO) ? sessionStorage.getItem(cache.SITE_LOGO) : util.requireLocalSrc('sys/02.jpg')} />
+          </p>
+          <div>
+            {this.getLanguageItem()}
+          </div>
+        </Modal>
       </div>
 
     );

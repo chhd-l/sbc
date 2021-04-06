@@ -110,7 +110,7 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     // addonBefore="退单编号"
-                    addonBefore={<FormattedMessage id="returnOrderNumber" />}
+                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="Finance.ReturnOrderNumber" /></p>}
                     onChange={(e) => {
                       this.setState({ rid: (e.target as any).value }, this._paramChanged);
                     }}
@@ -121,7 +121,7 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     // addonBefore="订单编号"
-                    addonBefore={<FormattedMessage id="orderNumber" />}
+                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="orderNumber" /></p>}
                     maxLength={300}
                     onChange={(e) => {
                       this.setState({ tid: (e.target as any).value }, this._paramChanged);
@@ -212,8 +212,9 @@ export default class SearchHead extends Component<any, any> {
               </Col>
               <Col span={8} id="Range-picker-width">
                 <FormItem>
-                  <RangePicker
-                    getCalendarContainer={() => document.getElementById('page-content')}
+                  <div>
+                    <RangePicker
+                    getCalendarContainer={(trigger: any) => trigger.parentNode}
                     onChange={(e) => {
                       let beginTime = '';
                       let endTime = '';
@@ -224,6 +225,8 @@ export default class SearchHead extends Component<any, any> {
                       this.setState({ beginTime: beginTime, endTime: endTime }, this._paramChanged);
                     }}
                   />
+                  </div>
+                  
                 </FormItem>
               </Col>
               <Col span={24} style={{ textAlign: 'center' }}>
@@ -254,7 +257,7 @@ export default class SearchHead extends Component<any, any> {
           </Form>
           {/* {hasMenu ? (
             <div className="handle-bar ant-form-inline filter-content">
-              <Dropdown getPopupContainer={() => document.getElementById('page-content')} overlay={batchMenu} placement="bottomLeft">
+              <Dropdown getPopupContainer={(trigger: any) => trigger.parentNode} overlay={batchMenu} placement="bottomLeft">
                 <Button>
                   <FormattedMessage id="Order.bulkOperations" /> <Icon type="down" />
                 </Button>
@@ -269,46 +272,50 @@ export default class SearchHead extends Component<any, any> {
 
   _renderGoodsOptionSelect = () => {
     return (
-      <Select
-        getPopupContainer={() => document.getElementById('page-content')}
-        onChange={(val) => {
-          if (val === 'skuName') {
-            this.setState(
-              {
-                skuName: this.state.skuNo,
-                skuNo: '',
-                goodsOptions: val
-              },
-              this._paramChanged
-            );
-          } else if (val === 'skuNo') {
-            this.setState(
-              {
-                skuName: '',
-                skuNo: this.state.skuName,
-                goodsOptions: val
-              },
-              this._paramChanged
-            );
-          }
-        }}
-        value={this.state.goodsOptions}
-        style={{ width: 130 }}
-      >
-        <Option value="skuName">
-          <FormattedMessage id="product.productName" />
-        </Option>
-        <Option value="skuNo">
-          <FormattedMessage id="product.SKU" />
-        </Option>
-      </Select>
+      <div style={{textAlign:"left"}}>
+        <Select
+          getPopupContainer={(trigger: any) => trigger.parentNode}
+          onChange={(val) => {
+            if (val === 'skuName') {
+              this.setState(
+                {
+                  skuName: this.state.skuNo,
+                  skuNo: '',
+                  goodsOptions: val
+                },
+                this._paramChanged
+              );
+            } else if (val === 'skuNo') {
+              this.setState(
+                {
+                  skuName: '',
+                  skuNo: this.state.skuName,
+                  goodsOptions: val
+                },
+                this._paramChanged
+              );
+            }
+          }}
+          value={this.state.goodsOptions}
+          style={{ width: '176px' }}
+        >
+          <Option value="skuName">
+            <FormattedMessage id="product.productName" />
+          </Option>
+          <Option value="skuNo">
+            <FormattedMessage id="product.SKU" />
+          </Option>
+        </Select>
+
+      </div>
     );
   };
 
   _renderBuyerOptionSelect = () => {
     return (
-      <Select
-        getPopupContainer={() => document.getElementById('page-content')}
+      <div style={{textAlign:"left"}}>
+        <Select
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         onChange={(val) => {
           if (val === 'buyerName') {
             this.setState(
@@ -331,7 +338,7 @@ export default class SearchHead extends Component<any, any> {
           }
         }}
         value={this.state.buyerOptions}
-        style={{ width: 150 }}
+        style={{ width: '176px' }}
       >
         <Option value="buyerName">
           <FormattedMessage id="consumerName" />
@@ -340,13 +347,16 @@ export default class SearchHead extends Component<any, any> {
           <FormattedMessage id="consumerAccount" />
         </Option>
       </Select>
-    );
+    
+      </div>
+      );
   };
 
   _renderConsigneeOptionSelect = () => {
     return (
-      <Select
-        getPopupContainer={() => document.getElementById('page-content')}
+      <div style={{textAlign:"left"}}>
+        <Select
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         onChange={(val) => {
           if (val === 'consigneeName') {
             this.setState(
@@ -369,7 +379,7 @@ export default class SearchHead extends Component<any, any> {
           }
         }}
         value={this.state.consigneeOptions}
-        style={{ width: 150 }}
+        style={{ width: '176px' }}
       >
         <Option value="consigneeName">
           <FormattedMessage id="recipient" />
@@ -378,7 +388,8 @@ export default class SearchHead extends Component<any, any> {
           <FormattedMessage id="recipientPhone" />
         </Option>
       </Select>
-    );
+   </div>
+       );
   };
 
   // 搜索条件变化，更新store的form参数
@@ -404,7 +415,7 @@ export default class SearchHead extends Component<any, any> {
       onOk() {
         return onBatchAudit(selected.toArray());
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 
@@ -425,7 +436,7 @@ export default class SearchHead extends Component<any, any> {
       onOk() {
         return onBatchReceive(selected.toArray());
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 

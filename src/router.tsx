@@ -963,6 +963,10 @@ const routes = [
     asyncComponent: () => import('./appointment-list/new')
   },
   {
+    path: '/offline-checkout',
+    asyncComponent: () => import('./offline-checkout')
+  },
+  {
     path: '/split-order-setting',
     asyncComponent: () => import('./order-split-setting')
   }

@@ -8,7 +8,8 @@ import {
   Switch,
   Popconfirm,
   message,
-  Modal
+  Modal,
+  Spin
 } from 'antd';
 import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
@@ -26,7 +27,7 @@ const Option = Select.Option;
 let loading = false;
 
 @Relax
-export default class BillingDetails extends React.Component<any, any> {
+export default class ChooseProducts extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,6 +46,8 @@ export default class BillingDetails extends React.Component<any, any> {
       linkStatus: any;
       detailProductList: any;
       createLinkType: any;
+      goodsQuantity:any
+      loading:boolean
     };
   };
 
@@ -55,7 +58,9 @@ export default class BillingDetails extends React.Component<any, any> {
     onLinkStatus: noop,
     detailProductList: 'detailProductList',
     linkStatus: 'linkStatus',
-    createLinkType: 'createLinkType'
+    createLinkType: 'createLinkType',
+    goodsQuantity:'goodsQuantity',
+    loading:'loading'
   };
 
   componentDidMount() {
@@ -104,10 +109,10 @@ export default class BillingDetails extends React.Component<any, any> {
   };
   render() {
     const {
-      createLinkType,
+      loading,
     } = this.props.relaxProps;
 
-    loading = false;
+
     return (
       <div style={styles.main}>
      
@@ -123,7 +128,7 @@ export default class BillingDetails extends React.Component<any, any> {
             <Button
               type="primary"
               shape="round"
-              disabled={createLinkType}
+              // disabled={createLinkType}
               icon="edit"
               onClick={() => this.showProduct(true)}
             >
@@ -131,7 +136,10 @@ export default class BillingDetails extends React.Component<any, any> {
             </Button>
           {/* )} */}
         </div>
+         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} >
+
         <DetailList />
+</Spin>
         {this.state.visible == true ? (
           <ProductTooltip
             onCancelBackFun={() => this.showProduct(false)}

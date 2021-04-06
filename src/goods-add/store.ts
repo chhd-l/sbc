@@ -1017,14 +1017,14 @@ export default class AppStore extends Store {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
 
-        //console.log(item.get('stock'));
-        //console.log(reg.test(item.get('stock')));
-        if (reg.test(item.get('stock')) === false || a == undefined) {
+        console.log('test:', item.get('goodsInfoNo'), addSkUProduct, a);
+        console.log(reg.test(item.get('stock')));
+        if (reg.test(item.get('stock')) === false) {
           flag = 1
           valid = false;
           return;
         }
-        if (!item.get('stock') || a == undefined) {
+        if (!item.get('stock')) {
           flag = 1
           valid = false;
           return;

@@ -93,7 +93,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         dataSource: goodsList,
         loading: false,
         goodsCount: goodsCount,
-        totalPrice
+        totalPrice:totalPrice.toFixed(2)
       }
     );
   }
@@ -130,7 +130,7 @@ export default class SelectedProduct extends React.Component<any, any> {
   render() {
     // const { getFieldDecorator } = this.props.form;
     const { options, dataSource, loading, totalPrice, goodsCount, visible } = this.state;
-    const { storeId, customer } = this.props;
+    const { storeId, customer,url, prefix } = this.props;
     const columns = [
       {
         title: 'Image',
@@ -260,7 +260,7 @@ export default class SelectedProduct extends React.Component<any, any> {
             columns={columns}
           />
           <div style={{ textAlign: 'right', padding: '20px 0' }}>Product amount ${totalPrice}</div>
-          {visible && <AddProductModal storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
+          {visible && <AddProductModal url={url} prefix={prefix} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
       </div>
     );

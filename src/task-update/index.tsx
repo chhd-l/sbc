@@ -197,7 +197,7 @@ class TaskUpdate extends Component<any, any> {
     let params = {
       pageNum: 0,
       pageSize: 20,
-      customerAccount: value
+      keyword: value
     };
     webapi
       .getPetOwnerList(params)
@@ -675,7 +675,7 @@ class TaskUpdate extends Component<any, any> {
                             <Select
                               allowClear
                               disabled={taskCompleted}
-                              placeholder="Please input pet owner account"
+                              placeholder="Please input pet owner account or name"
                               showSearch
                               onSearch={this.searchAssignedPetOwners}
                               onChange={(value) =>
@@ -684,6 +684,8 @@ class TaskUpdate extends Component<any, any> {
                                   value: value
                                 })
                               }
+                              optionFilterProp="children"
+                              filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
                               {associatedPetOwners.map((item) => (
                                 <Option value={item.customerAccount} key={item.customerAccount}>

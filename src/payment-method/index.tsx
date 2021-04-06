@@ -3,10 +3,9 @@ import { StoreProvider } from 'plume2';
 import { AuthWrapper, BreadCrumb, Headline } from 'qmkit';
 import AppStore from './store';
 //import SearchHead from './components/search-head';
-import MethodList from './components/method-list';
+import PaymentList from '@/payment-method/components/payment-list';
 import './index.less';
 import {Form} from "antd";
-const WrappedForm = Form.create()(MethodList);
 /**
  * 退单列表
  */
@@ -24,15 +23,18 @@ export default class OrderReturnList extends React.Component<any, any> {
 
   render() {
     return (
-      <AuthWrapper functionName="rolf001">
-        <div className="order-con">
-          <BreadCrumb />
-          <div className="container" style={{ height: '100vh' }}>
-            <Headline title="Payment method" />
-            <WrappedForm ref={(form) => (this._form = form)} />
-          </div>
-        </div>
-      </AuthWrapper>
+      // <AuthWrapper functionName="rolf001">
+      //
+      // </AuthWrapper>
+
+    <div className="order-con">
+      <BreadCrumb />
+      <div className="container" style={{ height: '100vh' }}>
+        <Headline title="Payment method" />
+        <PaymentList />
+        {/*<WrappedForm ref={(form) => (this._form = form)} />*/}
+      </div>
+    </div>
     );
   }
 }

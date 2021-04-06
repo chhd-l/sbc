@@ -321,12 +321,12 @@ class FeedBack extends React.Component<Iprop, any> {
                     <FormItem>{getFieldDecorator('suggestionsForImprovement', { initialValue: feedback.suggestionsForImprovement })(<Input disabled={!editable} />)}</FormItem>
                   </Col>
                 </Row>
-                <Row gutter={8}>
+                {/* <Row gutter={8}>
                   <Col span={6}><FormattedMessage id="Subscription.Comments"/>:</Col>
                   <Col span={18}>
                     <FormItem>{getFieldDecorator('comments4rd', { initialValue: feedback.comments4rd })(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
-                </Row>
+                </Row> */}
               </Col>
             </Row>
             <Row gutter={8}>

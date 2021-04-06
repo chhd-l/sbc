@@ -1017,8 +1017,6 @@ export default class AppStore extends Store {
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
-    console.log(this.state().get('goodsList').toJS());
-    console.log(a.toJS());
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
       this.state().get('goods').get('subscriptionStatus') == 1 ) {
       message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
@@ -1140,9 +1138,11 @@ export default class AppStore extends Store {
     let valid = true;
     let flag = 0
     let goodsList = this.state().get('goodsList');
+    let reg=/^[1-9]\d*$|^0$/;
+
     if (goodsList) {
       goodsList.forEach((item) => {
-        if (!(item.get('stock') || item.get('stock') == 0)) {
+        if (reg.test(item.get('stock')) === false) {
           flag = 1
           valid = false;
           return;
@@ -1154,7 +1154,7 @@ export default class AppStore extends Store {
       });
     }
     if (flag === 1) {
-      message.error('Please input Inventory');
+      console.log('Please enter the correct value');
     }
     return valid;
   }
@@ -1166,6 +1166,9 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async (nextTab = null) => {
+    console.log(!this._validMainForms());
+    console.log(!this._validPriceFormsNew());
+    console.log(!this._validInventoryFormsNew());
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1317,7 +1320,6 @@ export default class AppStore extends Store {
     let skuNoMap = Map();
     let existedSkuNo = '';
     let goodsList = List();
-    debugger
     data.get('goodsList').forEach((item) => {
       if (skuNoMap.has(item.get('goodsInfoNo') + '')) {
         existedSkuNo = item.get('goodsInfoNo') + '';
@@ -1330,7 +1332,6 @@ export default class AppStore extends Store {
       let mockSpecIds = List();
       // 规格值id集合
       let mockSpecDetailIds = List();
-      debugger
       item.forEach((value, key: string) => {
         if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));

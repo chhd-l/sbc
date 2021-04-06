@@ -210,7 +210,9 @@ export function updateUser(employee) {
 }
 
 export function getAllRoles() {
-  return Fetch('/customer/employee/roles');
+  return Fetch<TResult>('/customer/employee/roles', {
+    method: 'GET'
+  });
 }
 
 export function auditEmployee(employeeIds: string[], accountState: Number) {

@@ -195,7 +195,7 @@ class SearchHead extends Component<any, any> {
                         style={styles.wrapper}
                         onChange={(e) => {
                           this.setState({
-                            buyerOptionsValue: (e.target as any).value
+                            receiverSelectValue: (e.target as any).value
                           });
                         }}
                       />
@@ -842,6 +842,7 @@ class SearchHead extends Component<any, any> {
 
       subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
       [buyerOptions]: buyerOptionsValue,
+      [receiverSelect]: receiverSelectValue,
       subscriptionRefillType: refillNumber,
       [goodsOptions]: goodsOptionsValue,
       orderType,

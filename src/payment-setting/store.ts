@@ -23,7 +23,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.getPaymentSetting();
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('payment:paymentList', fromJS(res.context))
-      this.setCurrentTabKey(res.context[0].payPspItemVOList[0].id)
+      this.setCurrentTabKey(this.state().get('key') ? this.state().get('key') : res.context[0].payPspItemVOList[0].id)
     }
   }
 

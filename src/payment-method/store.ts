@@ -72,57 +72,57 @@ export default class AppStore extends Store {
     this.dispatch('loading:start')
     const { res } = await webapi.queryByStoreId();
     if (res.code === Const.SUCCESS_CODE) {
-      let storePaymentVOs = res.context.storePaymentVOs || {};
-      storePaymentVOs = {
-        onlinePaymentMethodList : [
-          {
-            createTime: "2021-03-17 07:04:41.000",
-            delFlag: 0,
-            delTime: null,
-            id: 25,
-            img_url: 0,
-            isOpen: 0,
-            maxAmount: 1001,
-            name: "visa",
-            paymentType: 0,
-            pspId: 1,
-            storeId: 123457910,
-            updateTime: "2021-03-23 02:12:36.000"
-          }
-        ],
-        offlinePaymentMethodList: [
-          {
-            createTime: "2021-03-17 07:04:41.000",
-            delFlag: 0,
-            delTime: null,
-            id: 28,
-            img_url: 0,
-            isOpen: 0,
-            maxAmount: 0,
-            name: "cash",
-            paymentType: 1,
-            pspId: 1,
-            storeId: 123457910,
-            updateTime: null,
-          }
-        ],
-        codPaymentMethodList: [
-          {
-            createTime: "2021-03-17 07:04:41.000",
-            delFlag: 0,
-            delTime: null,
-            id: 29,
-            img_url: 0,
-            isOpen: 0,
-            maxAmount: 67865,
-            name: "cod",
-            paymentType: 2,
-            pspId: 1,
-            storeId: 123457910,
-            updateTime: "2021-04-02 02:53:08.000"
-          }
-        ]
-      }
+      let storePaymentVOs = res.context || {};
+      // storePaymentVOs = {
+      //   onlinePaymentMethodList : [
+      //     {
+      //       createTime: "2021-03-17 07:04:41.000",
+      //       delFlag: 0,
+      //       delTime: null,
+      //       id: 25,
+      //       img_url: 0,
+      //       isOpen: 0,
+      //       maxAmount: 1001,
+      //       name: "visa",
+      //       paymentType: 0,
+      //       pspId: 1,
+      //       storeId: 123457910,
+      //       updateTime: "2021-03-23 02:12:36.000"
+      //     }
+      //   ],
+      //   offlinePaymentMethodList: [
+      //     {
+      //       createTime: "2021-03-17 07:04:41.000",
+      //       delFlag: 0,
+      //       delTime: null,
+      //       id: 28,
+      //       img_url: 0,
+      //       isOpen: 0,
+      //       maxAmount: 0,
+      //       name: "cash",
+      //       paymentType: 1,
+      //       pspId: 1,
+      //       storeId: 123457910,
+      //       updateTime: null,
+      //     }
+      //   ],
+      //   codPaymentMethodList: [
+      //     {
+      //       createTime: "2021-03-17 07:04:41.000",
+      //       delFlag: 0,
+      //       delTime: null,
+      //       id: 29,
+      //       img_url: 0,
+      //       isOpen: 0,
+      //       maxAmount: 67865,
+      //       name: "cod",
+      //       paymentType: 2,
+      //       pspId: 1,
+      //       storeId: 123457910,
+      //       updateTime: "2021-04-02 02:53:08.000"
+      //     }
+      //   ]
+      // }
       this.dispatch('list:storePaymentVOs', storePaymentVOs)
       this.dispatch('loading:end')
     }

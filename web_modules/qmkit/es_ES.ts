@@ -2745,6 +2745,8 @@ export default {
   'Setting.PageSEO': 'Page SEO',
   /* -------- 已翻译 V1.0---------------*/
   'Setting.export':'Export',
+  'Setting.SupportSubscription': 'Support Subscription',
+  'Setting.maxAmount': 'Max amount',
 
 
 

@@ -1029,11 +1029,11 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
-        if (!item.get('stock')) {
+        /*if (!item.get('stock')) {
           flag = 1
           valid = false;
           return;
-        } /*else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
+        } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
           flag = 2
           valid = false;
           return;

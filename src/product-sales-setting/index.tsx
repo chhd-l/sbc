@@ -235,7 +235,8 @@ class ProductSearchSetting extends Component<any, any> {
 
 
             </Form.Item>
-            <div className="bar-button">
+            
+            <div className="bar-button" style={{marginLeft:-40}}>
               <Button type="primary" htmlType="submit">
                 Save
               </Button>

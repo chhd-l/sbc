@@ -430,11 +430,11 @@ export default class EditForm extends React.Component<any, any> {
               })(<Input />)}
             </FormItem> */}
 
-          {_state.get('edit') ? (
+          {/* {_state.get('edit') ? (
             <FormItem {...formItemLayout} label="Reset Password">
               <Switch onChange={(e) => this.setState({ changePassword: e.valueOf() })} />
             </FormItem>
-          ) : null}
+          ) : null} */}
 
           {/* {this.state.changePassword ? (
             <div>
@@ -557,8 +557,8 @@ export default class EditForm extends React.Component<any, any> {
     callback();
   };
 
-  onChange = (ids, value) => {
-    this.setState({ value: value });
+  onChange = (ids) => {
+    this.setState({ 'departmentIdList': ids });
     //存放目标部门IDlist
     // const { setTargetDeparts } = this.props.relaxProps;
     // setTargetDeparts(ids)

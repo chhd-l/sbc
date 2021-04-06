@@ -202,7 +202,7 @@ export default class Task extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={styles.label}>Pet Assistant Name</p>}
+                      addonBefore={<p style={styles.label}>Customer Care Name</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({

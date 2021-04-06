@@ -230,7 +230,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                <FormattedMessage id="returnOrderNumber" />：{detail.get('id')}{' '}
+                <FormattedMessage id="Finance.ReturnOrderNumber" />：{detail.get('id')}{' '}
                 {detail.get('platform') != 'CUSTOMER' && (
                   <span style={styles.platform}>
                     <FormattedMessage id="Return" />

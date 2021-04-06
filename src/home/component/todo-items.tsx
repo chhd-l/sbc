@@ -447,7 +447,33 @@ export default class TodoItems extends React.Component<any, any> {
               )}
             </div>
             <div className="item-btm-r">
-
+              <div className="top-text space-between">
+                <span>Transaction Trend</span>
+                <span>
+                  <Link to="/report-transaction">more &gt;</Link>
+                </span>
+              </div>
+              {!transactionTrendView ||
+              (transactionTrendView.weekNumList && transactionTrendView.weekNumList.length === 0 && transactionTrendView.revenueList && transactionTrendView.revenueList.length === 0 && transactionTrendView.transactionList && transactionTrendView.transactionList.length === 0) ? (
+                <div className="data-img">
+                  <img src={nodataImg} className="no-data-img" />
+                </div>
+              ) : (
+                <div className="line">
+                  {transactionTrendView && (
+                    <BarLine
+                      yName={{ y1: 'Revenue', y2: 'Transaction' }}
+                      unit={{ unit1: '', unit2: '' }}
+                      nameTextStyle={{ y1: [0, 52, 0, 0], y2: [0, 22, 0, 0] }}
+                      data={{
+                        x: transactionTrendView.weekNumList,
+                        y1: transactionTrendView.revenueList,
+                        y2: transactionTrendView.transactionList
+                      }}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </Spin>

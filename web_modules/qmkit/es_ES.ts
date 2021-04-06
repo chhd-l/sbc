@@ -166,6 +166,7 @@ export default {
   'Menu.NPS list':'NPS list',
   'Menu.Shipping Fee':'Shipping Fee',
   'Menu.NPS':'NPS',
+  'Menu.Message setting':'Message setting',
 
 
 
@@ -204,7 +205,7 @@ export default {
   'Home.Activerate':'Active rate',
   'Home.Transaction':'Transaction',
   /* -------- 已翻译 V1.0---------------*/
-
+  "Home.ConversionFunnel": "Conversion funnel",
 
 
 
@@ -736,7 +737,8 @@ export default {
   "Product.NoResultsSearches": "No results searches",
   /* -------- 已翻译 V1.0---------------*/
   "Product.html":"html",
-  "Product.salesCategoryInfo": 'Sales category is the classification of products within the scope of your store. Up to 3 levels can be added. When there is No categories, all products will be classified into the default classification',
+  'Product.salesCategoryInfo':
+    'Sales category is the classification of products within the scope of your store. Up to 3 levels can be added. When there is No categories, all products will be classified into the default classification',
 
 
 

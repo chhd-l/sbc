@@ -251,6 +251,16 @@ export default class MyHeader extends React.Component {
             <Icon type="lock" /> Change My Password
           </a>
         </Menu.Item> */}
+         <Menu.Item key="1">
+          <a
+            href="#"
+            onClick={() =>
+              this.languageChange
+            }
+          >
+            <Icon type="lock" /> Language
+          </a>
+        </Menu.Item>
         <Menu.Item key="2">
           <OktaLogout type="link" text="Exit" />
         </Menu.Item>

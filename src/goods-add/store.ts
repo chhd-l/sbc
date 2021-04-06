@@ -1053,7 +1053,7 @@ export default class AppStore extends Store {
 
         // console.log('test:', item.get('goodsInfoNo'), addSkUProduct, a);
         // console.log(reg.test(item.get('stock')));
-        if (reg.test(item.get('stock')) === false) {
+
         console.log(addSkUProduct);
         console.log(item.get('stock'));
         console.log(reg.test(item.get('stock')));

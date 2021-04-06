@@ -54,7 +54,7 @@ export default class PaymentInformation extends React.Component<any, any> {
         <Form >
           <Form.Item label="What we suggest/ recommend for your cat">
             {getFieldDecorator('suggest', {
-            //  initialValue: felinReco.suggest || '',
+             initialValue: felinReco.suggest || '',
               onChange: (e) => this._onChange(e, 'suggest'),
             })(<Input placeholder="Input" />)}
 
@@ -69,17 +69,17 @@ export default class PaymentInformation extends React.Component<any, any> {
           </Form.Item>
           <Form.Item label="Paris (Y/N)" {...formItemLayout}>
             {getFieldDecorator('paris', {
-              initialValue: felinReco.paris || false,
+              initialValue: felinReco.paris,
               onChange: (e) => this._onChange(e, 'paris',true),
 
-            })(<Checkbox />)}
+            })(<Checkbox checked={felinReco.paris}/>)}
 
           </Form.Item>
           <Form.Item label="Pick up (Y/N)"  {...formItemLayout}>
             {getFieldDecorator('pickup', {
-              initialValue: felinReco.pickup ||false,
+              initialValue: felinReco.pickup,
               onChange: (e) => this._onChange(e, 'pickup',true),
-            })(<Checkbox />)}
+            })(<Checkbox checked={felinReco.pickup}/>)}
 
           </Form.Item>
         </Form>

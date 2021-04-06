@@ -20,8 +20,6 @@ class RecommendationAdd extends Component<any, any> {
       title: 'New Prescription',
       current: 0,
       status: 1,
-      params: {},
-      list: []
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);

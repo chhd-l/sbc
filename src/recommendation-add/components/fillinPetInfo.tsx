@@ -38,20 +38,13 @@ export default class FillinPetInfo extends Component {
             { value: 'kg', name: 'kg' }
             // { value: 'g', name: 'g' }
         ],
-        weightObj: {
-            measure: '',
-            measureUnit: '',
-            type: 2
-        },
     }
 
     componentDidMount() {
-        const { findByApptNo } = this.props.relaxProps;
         this.getDictAlllist('Lifestyle', 'lifeList');
         this.getDictAlllist('Activity', 'activityList');
         this.getDictAlllist('specialNeeds', 'specialNeedsList');
         this.getDictAlllist('CatBreed', 'petsBreedList')
-        // findByApptNo('AP663253')
     }
     /**
      * 获取数据字典
@@ -67,14 +60,18 @@ export default class FillinPetInfo extends Component {
             fetching: false
         });
     }
-
+/**
+ * Option 渲染
+ * @param list 
+ * @returns 
+ */
     renderSelectOptions(list) {
         return list.map(item => (<Option key={item.value} value={item.value}>{item.value}</Option>))
     }
-
+    //查询
     onSearch = async (value) => {
         this.setState({ petsBreedList: [], fetching: true });
-        this.getDictAlllist('DogBreed', 'petsBreedList', value)
+        this.getDictAlllist('CatBreed', 'petsBreedList', value)
     };
     //扫描后返回的值
     findByApptNo = async (apptNo = 'AP663253') => {
@@ -99,8 +96,8 @@ export default class FillinPetInfo extends Component {
         onChangePestsForm(pets)
     }
     render() {
-        const { felinReco, customerPet, appointmentVO, petsList, funType } = this.props.relaxProps;
         const { getFieldDecorator } = this.props.form
+        const { felinReco, customerPet, appointmentVO, petsList, funType } = this.props.relaxProps;
         const { lifeList, activityList, specialNeedsList, petsBreedList, weightList, fetching } = this.state
         return (
             <Row>
@@ -167,7 +164,7 @@ export default class FillinPetInfo extends Component {
                                         rules: [{ required: true, message: 'Please select Date of birth!' }],
                                         onChange: (e,) => this._onChange(e, 'birthOfPets')
 
-                                    })(<DatePicker />)}
+                                    })(<DatePicker  style={{width:'100%'}}/>)}
                                 </Form.Item>
                             </Col>
                             <Col span={12}>

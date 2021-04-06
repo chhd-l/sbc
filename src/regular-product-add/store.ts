@@ -65,7 +65,7 @@ import {
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
 import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
-
+let _tempGoodsDescriptionDetailList:any={}
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -402,8 +402,13 @@ export default class AppStore extends Store {
         const cateId = goods.get('cateId');
         this.changeDescriptionTab(cateId);
       } else {
+        _tempGoodsDescriptionDetailList={
+          _cateId:goods.get('cateId'),
+          _list:tmpContext.goodsDescriptionDetailList
+        }
         this.editEditorContent(tmpContext.goodsDescriptionDetailList);
       }
+      
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
 
@@ -1017,8 +1022,6 @@ export default class AppStore extends Store {
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
-    console.log(this.state().get('goodsList').toJS());
-    console.log(a.toJS());
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
       this.state().get('goods').get('subscriptionStatus') == 1 ) {
       message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
@@ -1140,9 +1143,11 @@ export default class AppStore extends Store {
     let valid = true;
     let flag = 0
     let goodsList = this.state().get('goodsList');
+    let reg=/^[1-9]\d*$|^0$/;
+
     if (goodsList) {
       goodsList.forEach((item) => {
-        if (!(item.get('stock') || item.get('stock') == 0)) {
+        if (reg.test(item.get('stock')) === false) {
           flag = 1
           valid = false;
           return;
@@ -1154,7 +1159,7 @@ export default class AppStore extends Store {
       });
     }
     if (flag === 1) {
-      message.error('Please input Inventory');
+      console.log('Please enter the correct value');
     }
     return valid;
   }
@@ -1166,6 +1171,9 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async (nextTab = null) => {
+    console.log(!this._validMainForms());
+    console.log(!this._validPriceFormsNew());
+    console.log(!this._validInventoryFormsNew());
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1317,7 +1325,6 @@ export default class AppStore extends Store {
     let skuNoMap = Map();
     let existedSkuNo = '';
     let goodsList = List();
-    debugger
     data.get('goodsList').forEach((item) => {
       if (skuNoMap.has(item.get('goodsInfoNo') + '')) {
         existedSkuNo = item.get('goodsInfoNo') + '';
@@ -1330,7 +1337,6 @@ export default class AppStore extends Store {
       let mockSpecIds = List();
       // 规格值id集合
       let mockSpecDetailIds = List();
-      debugger
       item.forEach((value, key: string) => {
         if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));
@@ -1994,9 +2000,13 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeDescriptionTab = async (cateId) => {
+    // const {_cateId,_list}=_tempGoodsDescriptionDetailList
     if (!cateId) return;
+    // if(_cateId===cateId){
+    //   this.editEditorContent(_list);
+    //   return
+    // }
     const result: any = await getDescriptionTab(cateId);
-
     if (result.res.code === Const.SUCCESS_CODE) {
       let content = result.res.context;
       let res = content.map((item) => {
@@ -2005,7 +2015,7 @@ export default class AppStore extends Store {
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
-          contentType: item.contentType,
+          contentType: item?.contentType??'text',
           content: '',
           sort: item?.sort??1,
           editable: true,

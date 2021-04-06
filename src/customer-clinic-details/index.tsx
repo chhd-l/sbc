@@ -61,7 +61,7 @@ class CustomerDetails extends React.Component<any, any> {
         <div className="container">
           {this.state.customerType !== 'Guest' ? (
             <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
-              <TabPane tab="Basic infomation" key="basic">
+              <TabPane tab="Basic Information" key="basic">
                 <BasicInfomation customerId={this.state.customerId}></BasicInfomation>
               </TabPane>
               <TabPane tab="Pet infomation" key="pet">

@@ -196,8 +196,8 @@ export default class tasks extends Component<any, any> {
             }
           >
             {statusList.map((item) => (
-              <Option value={item} key={item}>
-                {item}
+              <Option value={item.value} key={item.value}>
+                {item.name}
               </Option>
             ))}
           </Select>

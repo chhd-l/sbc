@@ -40,7 +40,7 @@ export default class OrderList extends Component<any, any> {
       <AuthWrapper
         functionName={
           history.location.pathname == '/recomm-page'
-            ? 'Recommendationlist'
+            ? 'Recommendation'
             : 'Recommendationlist_prescriber'
         }
       >

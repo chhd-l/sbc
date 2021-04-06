@@ -137,13 +137,13 @@ export default class ProductSearchDetails extends React.Component<any, any> {
         width: '15%'
       },
       {
-        title: 'Consumer Account',
+        title: 'Pet owner account',
         dataIndex: 'consumerAccount',
         key: 'consumerAccount',
         width: '15%'
       },
       {
-        title: 'Consumer Name',
+        title: 'Pet owner name',
         dataIndex: 'consumerName',
         key: 'consumerName',
         width: '15%'

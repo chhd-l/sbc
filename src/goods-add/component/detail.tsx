@@ -102,7 +102,7 @@ export default class Detail extends React.Component<any, any> {
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
                   <div style={{paddingBottom:10,position:'absolute',right:0,zIndex:99,top:10}}>
                   <Select getPopupContainer={(trigger: any) => trigger.parentNode} key={item.descriptionId} disabled={item?.created??true} value={item.contentType} style={{ width: 200 }} onChange={(e)=>{this.changeTabsBar(e,item)}}>
-                    <Select.Option value="text">text</Select.Option>
+                    <Select.Option value="text">html</Select.Option>
                     <Select.Option value="json">json</Select.Option>
                   </Select>
                   </div>

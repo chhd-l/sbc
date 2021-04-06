@@ -27,10 +27,10 @@ class UserModal extends Component<any, any> {
   }
 
   getPrescriberRole = async () => {
-    const { res: roleRes } = await webapi.getAllRoles();
-    let prescriberRole = fromJS(roleRes).find((x) => x.get('roleName') === 'Prescriber');
+    const { res } = await webapi.getAllRoles();
+    let prescriberRole = res.context.find((x) => x.roleName === 'Prescriber');
     this.setState({
-      prescriberRoleId: prescriberRole.get('roleInfoId')
+      prescriberRoleId: prescriberRole.roleInfoId
     });
   };
 

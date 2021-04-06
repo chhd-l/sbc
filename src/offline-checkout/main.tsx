@@ -158,12 +158,12 @@ export default class Checkout extends React.Component<any, any> {
     this.setState({ step });
   }
 
-  onConfirmCheckout = () => {
+  onConfirmCheckout = (paymentMethod: string) => {
     const { memberInfo, list } = this.state;
     const params = {
       customerId: memberInfo.customerId,
       orderPrice: list.reduce((a, b) => a + Number((b.marketPrice * b.quantity * 100).toFixed(2)), 0),
-      payPspItemEnum: 'ADYEN_POS',
+      payPspItemEnum: paymentMethod,
       tradeItems: list.map(p => ({ skuId: p.goodsInfoId, num: p.quantity }))
     };
     webapi.checkout(params).then(data => {

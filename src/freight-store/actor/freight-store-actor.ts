@@ -22,7 +22,8 @@ export default class FreightStoreActor extends Actor {
       // 是否默认 1: 默认 0: 非默认
       defaultFlag: 0,
       // 发货地区名字
-      destinationAreaName: []
+      destinationAreaName: [],
+      treeNode: []
     };
   }
 
@@ -58,7 +59,8 @@ export default class FreightStoreActor extends Actor {
       selectedAreas,
       destinationAreaName,
       freightTempId,
-      defaultFlag
+      defaultFlag,
+      treeNode
     }
   ) {
     return state
@@ -72,6 +74,7 @@ export default class FreightStoreActor extends Actor {
       .set('destinationAreaName', destinationAreaName)
       .set('selectedAreas', selectedAreas)
       .set('freightTempId', freightTempId)
-      .set('defaultFlag', defaultFlag);
+      .set('defaultFlag', defaultFlag)
+      .set('treeNode', treeNode);
   }
 }

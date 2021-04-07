@@ -16,7 +16,6 @@ declare interface TResult {
 }
 
 declare interface Window {
-  companyType: Boolean;
   token: any | string;
   companyType: any;
 }

@@ -1,7 +1,15 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
-import { Modal, Form, Input, Radio, Checkbox, Tooltip, Button } from 'antd';
-import { Icon } from '@ant-design/compatible';
+import {
+  Modal,
+  Form,
+  Input,
+  Radio,
+  Checkbox,
+  Tooltip,
+  Icon,
+  Button
+} from 'antd';
 import { List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
 import styled from 'styled-components';

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Input, Select, DatePicker } from 'antd';
+import { Form, Input, Select, Icon, DatePicker } from 'antd';
 import * as webapi from '../webapi';
-import { icon } from '@ant-design/compatible';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -15,7 +15,7 @@ export default class ReceiveAdd extends React.Component<any, any> {
     return (
       <div style={styles.container}>
         <div style={styles.text}>
-          <icon type="info-circle" />
+          <Icon type="info-circle" />
           <h4>请确认客户已线下付款</h4>
         </div>
 

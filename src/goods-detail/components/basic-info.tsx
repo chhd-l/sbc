@@ -176,7 +176,7 @@ export default class BasicInfo extends React.Component<any, any> {
                   <div>
                     {goods.get('goodsVideo') ? (
                       <a
-                        href=""
+                        href="javascript:void(0)"
                         onClick={() =>
                           this._videoDetail(goods.get('goodsVideo'))
                         }

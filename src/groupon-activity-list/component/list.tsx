@@ -145,7 +145,7 @@ export default class GrouponActivityList extends React.Component<any, any> {
                       okText="确定"
                       cancelText="取消"
                     >
-                      <a href="#;">删除</a>
+                      <a href="javascript:void(0);">删除</a>
                     </Popconfirm>
                   </AuthWrapper>
                 )}

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Form, Input, Select, DatePicker } from 'antd';
-import { Icon } from '@ant-design/compatible';
+import { Form, Input, Select, Icon, DatePicker } from 'antd';
 import * as webapi from '../webapi';
 
 const FormItem = Form.Item;

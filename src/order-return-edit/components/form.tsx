@@ -1,10 +1,10 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Form, Input, Select, Button, message } from 'antd';
+import { Form, Input, Select, Button, message, Icon } from 'antd';
 import { fromJS } from 'immutable';
 import { IMap, IList } from 'typings/globalType';
 import { noop, Const, history, Tips, QMMethod, QMUpload } from 'qmkit';
-import { icon } from '@ant-design/compatible';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -171,7 +171,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
               beforeUpload={this._checkUploadFile}
             >
               {images.length < 10 ? (
-                <icon type="plus" style={styles.plus} />
+                <Icon type="plus" style={styles.plus} />
               ) : null}
             </QMUpload>
             <Tips title="请将您的退货凭据添加到附件,支持的图片格式：jpg、jpeg、png、gif，文件大小不超过5M,最多上传10张" />

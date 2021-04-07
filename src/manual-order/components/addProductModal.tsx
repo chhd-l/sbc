@@ -188,6 +188,7 @@ export default class AddProductModal extends Component {
         }
       }
     ];
+    console.log(url,)
     return (
       <Modal title="Choose product" visible={visible} onOk={handleOk} width="70%" onCancel={handleCancel}>
         <Form className="filter-content" layout="inline">

@@ -46,11 +46,7 @@ class RecommendationAdd extends Component<any, any> {
     id && this.store.init({ felinRecoId: id })
   }
 
-  getFormParams = (params) => {
-    this.setState({
-      params: { ...this.state.params, ...params }
-    });
-  };
+ 
   done(e) {
     const felinReco = this.store.state().get('felinReco')
     //  const goodsQuantity=this.store.state().get('goodsQuantity')
@@ -60,7 +56,19 @@ class RecommendationAdd extends Component<any, any> {
     let goodsQuantity = productselect.map(({ goodsInfoNo, quantity }) => {
       return { goodsInfoNo, quantity }
     })
-    this.store.fetchFelinSave({ ...felinReco, goodsQuantity, appointmentVO, customerPet })
+    delete felinReco['_root']
+    delete customerPet['_root']
+    delete appointmentVO['_root']
+    delete felinReco['size']
+    delete customerPet['size']
+    delete appointmentVO['size']
+    delete felinReco['__altered']
+    delete customerPet['__altered']
+    delete appointmentVO['__altered']
+
+    let p={ ...felinReco, goodsQuantity, appointmentVO, customerPet };
+   
+    this.store.fetchFelinSave(p)
   }
   render() {
     const { current, title } = this.state;

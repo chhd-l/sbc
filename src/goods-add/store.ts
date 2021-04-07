@@ -988,19 +988,57 @@ export default class AppStore extends Store {
     let valid = true;
     let tip = 0;
     let goodsList = this.state().get('goodsList');
+
+    let addSkUProduct = this.state().toJS().addSkUProduct;
     if (goodsList) {
       goodsList.forEach((item) => {
-        console.log(item.get('marketPrice'),1111111);
-        if (!(item.get('marketPrice') || item.get('marketPrice') == "0")) {
-          tip = 1;
-          valid = false;
-          return;
+        //console.log(this.state().get('goods').get('saleableFlag') ,111 )
+        //console.log(item.get('marketPrice'),22222 )
+
+        if (this.state().get('goods').get('saleableFlag') != 0) {
+          //console.log(item.get('marketPrice'),123 )
+          if(item.get('marketPrice') != undefined) {
+            //console.log(item.get('marketPrice'),345 )
+            if ( item.get('marketPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }else {
+            //console.log(item.get('marketPrice'),678 )
+            if ( addSkUProduct && addSkUProduct.length == 0 ) {
+              //console.log(item.get('marketPrice'),890 )
+
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }
         }
-        if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+
+
+
+        if (this.state().get('goods').get('saleableFlag') != 0) {
+          if(item.get('subscriptionPrice') != undefined) {
+            if ( item.get('subscriptionPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }else {
+            if ( addSkUProduct && addSkUProduct.length == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }
+        }
+
+       /* if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
           tip = 2;
           valid = false;
           return;
-        }
+        }*/
       });
     }
     if (tip === 1) {
@@ -1015,25 +1053,51 @@ export default class AppStore extends Store {
     let valid = true;
     let flag = 0
     let goodsList = this.state().get('goodsList');
-    let addSkUProduct = this.state().get('addSkUProduct');
+    let addSkUProduct = this.state().toJS().addSkUProduct;
     let reg=/^[1-9]\d*$|^0$/;
 
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
 
-        console.log('test:', item.get('goodsInfoNo'), addSkUProduct, a);
+        // console.log('test:', item.get('goodsInfoNo'), addSkUProduct, a);
+        // console.log(reg.test(item.get('stock')));
+
+        console.log(addSkUProduct);
+        console.log(item.get('stock'));
         console.log(reg.test(item.get('stock')));
+        console.log(!ValidConst.zeroNumber.test((item.get('stock'))));
+
+
         if (reg.test(item.get('stock')) === false) {
+          if( addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length != 1 && addSkUProduct[0].minStock == undefined) {
+            flag = 1
+            valid = false;
+            return;
+          }
+
+        }
+        /*if(!item.get('stock')) {
+          if ( addSkUProduct.length == 1 && !addSkUProduct[0].minStock ) {
+            flag = 1
+            valid = false;
+            return;
+          }else if ( addSkUProduct.length > 1 && !item.get('stock') ) {
+            flag = 1
+            valid = false;
+            return;
+          }
+        }*/
+       /* if (reg.test(item.get('stock')) === false) {
           flag = 1
           valid = false;
           return;
         }
-        if (!item.get('stock')) {
+        /*if (!item.get('stock')) {
           flag = 1
           valid = false;
           return;
-        } /*else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
+        } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
           flag = 2
           valid = false;
           return;

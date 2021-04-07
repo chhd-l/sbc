@@ -3,7 +3,7 @@ import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, 
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
 import FeedBack from './component/feedback';
-import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper } from 'qmkit';
+import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
@@ -517,12 +517,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       }
     ];
-    const totalCartTitleStyle = {
-      background: '#fafafa',
-      borderBottom: '2px solid #D7D7D7',
-      color: '#8E8E8E',
-      fontWeight: 500
-    };
 
     const operatorColumns = [
       {
@@ -554,67 +548,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
     ];
 
-    const columns_no_start = [
-      {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>,
-        key: 'Product',
-        width: '20%',
-        render: (text, record) => (
-          <div>
-            {record.tradeItems &&
-              record.tradeItems.map((item, index) => (
-                <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} className="img-item" style={styles.imgItem} alt="" />
-                  <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName}</p>
-                    <p>{item.specDetails}</p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        )
-      },
-      {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>,
-        key: 'subscribeNum',
-        width: '10%',
-        render: (text, record) => (
-          <div>
-            {record.tradeItems &&
-              record.tradeItems.map((item, index) => (
-                <div style={{ height: 80 }} key={index}>
-                  <p style={{ paddingTop: 30 }}>X {item.num}</p>
-                </div>
-              ))}
-          </div>
-        )
-      },
-      // {
-      //   title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Promotion code</span>,
-      //   key: 'promotionCode',
-      //   dataIndex: 'promotionCode',
-      //   width: '20%',
-      //   render: (text, record) => <div>{text}</div>
-      // },
-      {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
-        key: 'discount',
-        width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
-      },
-      {
-        title: <span style={{ fontWeight: 500 }}>Amount</span>,
-        key: 'amount',
-        width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
-      },
-      {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
-        key: 'shipmentDate',
-        width: '10%',
-        render: (text, record) => <div>{record.tradeItems[0] && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
-      }
-    ];
     const columns_completed = [
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>,
@@ -674,7 +607,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
         width: '10%',
-        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].deliverStatus ? deliverStatus(record.tradeItems[0].deliverStatus) : '-'}</div>
+        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].deliverStatus ? 
+        <FormattedMessage id={getOrderStatusValue('OrderStatus',record.tradeItems[0].deliverStatus)} />
+        // deliverStatus(record.tradeItems[0].deliverStatus) 
+        : '-'}</div>
       },
       {
         title: 'Operation',
@@ -725,35 +661,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
     ];
 
-    const columns_foodDispenser_completed = [
-      {
-        title: 'Delivery date',
-        key: 'shipmentDate',
-        dataIndex: 'shipmentDate',
-        render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
-      },
-      {
-        title: 'Product',
-        key: 'Product',
-        render: (text, record) => (
-          <div>
-            {record.tradeItems &&
-              record.tradeItems.map((item, index) => (
-                <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
-                  <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName}</p>
-                    <p>{item.specDetails}</p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        )
-      },
-      {
-        title: ' ' // cover last th text align right
-      }
-    ];
 
     const styles = {
       backItem: {

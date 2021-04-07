@@ -15,8 +15,26 @@ export default class emails extends Component<any, any> {
       emailLoading: false,
       emailList: [],
       emailFilters: [
-        { value: 'Communication Email', label: 'Communication Email' },
-        { value: 'Automation Email', label: 'Automation Email' }
+        {
+          value: 'Order email',
+          name: 'Order email'
+        },
+        {
+          value: 'Subscription email',
+          name: 'Subscription email'
+        },
+        {
+          value: 'Recommendation email',
+          name: 'Recommendation email'
+        },
+        {
+          value: 'Prescriber creation email',
+          name: 'Prescriber creation email'
+        },
+        {
+          value: 'Automation email',
+          name: 'Automation email'
+        }
       ],
       isRecent: true,
       orderType: 'desc',
@@ -82,8 +100,8 @@ export default class emails extends Component<any, any> {
         <Col span={15} className="activities-right" style={{ marginBottom: '20px' }}>
           <Select className="filter" placeholder="Email Type" allowClear={true} dropdownMatchSelectWidth={false} maxTagCount={0} style={{ width: '120px' }} mode="multiple" onChange={(value) => this.setState({ filters: value }, () => this.getEmails())}>
             {emailFilters.map((item) => (
-              <Option value={item.value} key={item.label}>
-                {item.label}
+              <Option value={item.value} key={item.value}>
+                {item.name}
               </Option>
             ))}
           </Select>

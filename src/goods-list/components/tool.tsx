@@ -202,12 +202,7 @@ class Tool extends React.Component<any, any> {
 
   _export = () => {
     const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, storeCateId, cateId, brandId } = this.props.relaxProps;
-    console.log(likeGoodsName,1111111111)
-    console.log(likeGoodsInfoNo,222)
-    console.log(likeGoodsNo,3333)
-    console.log(storeCateId,4444)
-    console.log(cateId,5555)
-    console.log(brandId,66666)
+
     let params = {
       likeGoodsName,
       likeGoodsNo,
@@ -226,8 +221,6 @@ class Tool extends React.Component<any, any> {
 
           // 新窗口下载
           const exportHref = Const.HOST + `/goods/exportSpus/${encrypted}`;
-          console.log(result);
-          console.log(exportHref);
           window.open(exportHref);
         } else {
           message.error(<FormattedMessage id="Analysis.Unsuccessful" />);

@@ -104,7 +104,10 @@ export default class AddProductModal extends Component {
     });
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Add successfully');
+      this.props.searchCount()
+     setTimeout(() => {
       this.setState({ loading: false });
+     }, 2000);
     }
   }
 

@@ -1,4 +1,4 @@
-import { Checkbox, Col, DatePicker, Form, Icon, Input, Radio, Row, Select, Spin } from 'antd'
+import { Checkbox, Col, DatePicker, Form, Icon, Input, message, Radio, Row, Select, Spin } from 'antd'
 import React, { Component } from 'react'
 import { QRScaner, noop } from 'qmkit';
 const { Option } = Select;
@@ -74,7 +74,11 @@ export default class FillinPetInfo extends Component {
         this.getDictAlllist('CatBreed', 'petsBreedList', value)
     };
     //扫描后返回的值
-    findByApptNo = async (apptNo = 'AP663253') => {
+    findByApptNo = async (apptNo) => {
+        if(!apptNo){
+            message.error('scan error,apptNo was not find.')
+            return
+        }
         const { findByApptNo } = this.props.relaxProps;
         findByApptNo(apptNo)
     }
@@ -108,7 +112,7 @@ export default class FillinPetInfo extends Component {
                                 <Form.Item label="Date:">
                                     {getFieldDecorator('fillDate', {
                                         onChange: (e) => this._onChange(e, 'fillDate'),
-                                        initialValue: moment(felinReco?.fillDate??null, 'YYYY-MM-DD'),
+                                        initialValue: moment(felinReco?.fillDate??(new Date()), 'YYYY-MM-DD'),
                                         rules: [{ required: true, message: 'Please select  date!' }],
                                     })(<DatePicker style={{ width: '100%' }}
                                         format="YYYY-MM-DD"
@@ -127,7 +131,7 @@ export default class FillinPetInfo extends Component {
                                 <Form.Item label="pour:">
                                     {getFieldDecorator('consumerName', {
                                         initialValue: appointmentVO.consumerName,
-                                    })(<Input disabled />)}
+                                    })(<Input  />)}
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -139,7 +143,7 @@ export default class FillinPetInfo extends Component {
                                 <Form.Item label="Name:">
                                     {getFieldDecorator('petsName', {
                                         defaultValue: '',
-                                        initialValue: customerPet.petsName,
+                                        initialValue: customerPet.petsName||'',
                                         rules: [{ required: true, message: 'Please input pet Name' }],
                                         onChange: (e) => this._onChange(e, 'petsName')
                                     })(<Input disabled={petsList.length>0||funType}/>)}
@@ -161,7 +165,7 @@ export default class FillinPetInfo extends Component {
                             <Col span={12}>
                                 <Form.Item label="Date of birth:">
                                     {getFieldDecorator('birthOfPets', {
-                                        initialValue: moment(customerPet?.birthOfPets??null, 'YYYY-MM-DD'),
+                                        initialValue: moment(customerPet?.birthOfPets??(''), 'YYYY-MM-DD'),
                                         rules: [{ required: true, message: 'Please select Date of birth!' }],
                                         onChange: (e,) => this._onChange(e, 'birthOfPets')
 

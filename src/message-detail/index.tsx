@@ -792,12 +792,12 @@ class MessageDetails extends Component<any, any> {
               <Form layout="horizontal" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} labelAlign="right">
                 <Row style={{ marginTop: 20 }}>
                   <Col span={8}>
-                    <FormItem label="Consumer Type">
+                    <FormItem label="Pet Owner Type">
                       {getFieldDecorator('consumerType', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Consumer Type!'
+                            message: 'Please input Pet Owner Type!'
                           }
                         ]
                       })(

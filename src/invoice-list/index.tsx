@@ -478,7 +478,7 @@ class InvoiceList extends Component<any, any> {
         render: (text) => <p>{text ? text : '-'}</p>
       },
       {
-        title: 'Consumer type',
+        title: 'Pet owner type',
         dataIndex: 'consumerLevelId',
         key: 'consumerLevelId',
         width: '8%',
@@ -587,7 +587,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Consumer type" />
+                    <Input style={styles.label} disabled defaultValue="Pet owner type" />
                     <Select
                       style={styles.wrapper}
                       onChange={(value) => {

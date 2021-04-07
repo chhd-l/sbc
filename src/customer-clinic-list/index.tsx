@@ -24,7 +24,7 @@ export default class Customer extends React.Component<any, any> {
           key: 'consumerName'
         },
         {
-          title: 'Consumer type',
+          title: 'Pet owner type',
           dataIndex: 'customerLevelName',
           key: 'consumerType'
         },

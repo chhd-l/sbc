@@ -52,7 +52,9 @@ export default class ChooseTaskForm extends Component<any, any> {
       ],
       variableValueList: [],
 
-      nodeId: ''
+      nodeId: '',
+      petAssistantLoading: false,
+      petOwnerLoading: false
     };
     this.onChange = this.onChange.bind(this);
     this.getEmployees = this.getEmployees.bind(this);
@@ -125,6 +127,9 @@ export default class ChooseTaskForm extends Component<any, any> {
   };
 
   getEmployees(value?: String) {
+    this.setState({
+      petAssistantLoading: true
+    })
     let params = {
       pageNum: 0,
       pageSize: 20,
@@ -137,14 +142,21 @@ export default class ChooseTaskForm extends Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            assignedUsers: res.context.employees
+            assignedUsers: res.context.employees,
+            petAssistantLoading: false
           });
         } else {
           message.error(res.message || 'Get data failed');
+          this.setState({
+            petAssistantLoading: false
+          })
         }
       })
       .catch(() => {
         message.error('Get data failed');
+        this.setState({
+          petAssistantLoading: false
+        })
       });
   }
 
@@ -176,7 +188,7 @@ export default class ChooseTaskForm extends Component<any, any> {
   }
 
   render() {
-    const { form, assignedUsers, priorityList, actionTypeList, timeType, variableList, variableValueList } = this.state;
+    const { form, assignedUsers, priorityList, actionTypeList, timeType, variableList, variableValueList, petAssistantLoading } = this.state;
     const { goldenMomentList } = this.props;
     return (
       <React.Fragment>
@@ -233,6 +245,7 @@ export default class ChooseTaskForm extends Component<any, any> {
               dropdownClassName="normalSelect"
               placeholder="Please input email or name"
               showSearch
+              loading={petAssistantLoading}
               value={form.assistantId}
               onSearch={this.searchAssignedTo}
               onChange={(value) => {
@@ -241,10 +254,12 @@ export default class ChooseTaskForm extends Component<any, any> {
                 let assistantName = assistant ? assistant.employeeName + '(' + assistant.accountName + ')' : '';
                 this.onChange('assistantName', assistantName);
               }}
+              optionFilterProp="children"
+              filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
               {assignedUsers.map((item) => (
                 <Option value={item.employeeId} key={item.employeeId}>
-                  {item.employeeName} {'(' + item.accountName + ')'})
+                  {item.employeeName} {item.accountName ? '(' + item.accountName + ')' : ''}
                 </Option>
               ))}
             </Select>

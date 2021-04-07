@@ -1284,7 +1284,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   Pet owner account : <span>{subscriptionInfo.consumerAccount}</span>
                 </p>
                 <p>
-                  Consumer type : <span>{subscriptionInfo.consumerType}</span>
+                  Pet owner type : <span>{subscriptionInfo.consumerType}</span>
                 </p>
                 <p>
                   Phone Number : <span>{subscriptionInfo.phoneNumber}</span>

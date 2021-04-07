@@ -98,7 +98,7 @@ export default class AppStore extends Store {
         return item
       })
       let _felinReco={...felinReco,expert:this.state().get('felinReco').expert}
-      this.initDistaptch({ felinReco:_felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list[0], list });
+      this.initDistaptch({ felinReco:_felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length>0?list[0]:{}, list });
     }
   }
 

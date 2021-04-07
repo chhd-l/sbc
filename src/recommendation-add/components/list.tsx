@@ -83,7 +83,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           <Column title="Quantity" key="quantity" dataIndex="quantity"
             render={(value, row, index) => {
               return (<InputNumber
-                min={0}
+                min={1}
                 max={9999}
                 defaultValue={value || 0}
                 onChange={(e) => {

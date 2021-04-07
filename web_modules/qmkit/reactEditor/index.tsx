@@ -7,19 +7,19 @@ import { message, Spin } from 'antd';
 import { cache } from 'qmkit'
 import _ from 'lodash';
 import './index.less'
+import HtmlMenu from './html';
 interface StringArray {
     [index: number]: string;
 }
 class ReactEditor extends Component<any, any> {
     editor: any;
     props: {
-
         id: String;
         content: string;
         disabled?: boolean;
         height: number;
         onContentChange: Function;
-        toolbars?: StringArray;
+        toolbars?: any;
         tabNanme?: string
         count?: number
         contentType?: string
@@ -35,6 +35,7 @@ class ReactEditor extends Component<any, any> {
     }
     static defaultProps = {
         toolbars: [
+           
             'head',  // 标题
             'bold',  // 粗体
             'fontSize',  // 字号
@@ -82,33 +83,34 @@ class ReactEditor extends Component<any, any> {
      * 初始化编辑器
      */
     initEditor() {
-        const { id, tabNanme, disabled, onContentChange, toolbars, fontNames, content } = this.props
+        const { id, tabNanme, disabled, onContentChange,count, toolbars,contentType, fontNames, content } = this.props
         const elemMenu = ".editorElem-menu-" + id;
         const elemBody = ".editorElem-body-" + id;
-
         this.editor = new E(elemBody)
-        // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
-        this.editor.config.onchange = (html: any) => {
+        const menuKey = "html"
+        this.editor.menus.extend(menuKey, HtmlMenu)
+        this.editor.config.focus = false
+        this.editor.config.menus =contentType==='json'?[...toolbars]:['html',...toolbars]
+        this.editor.config.fontNames = fontNames
+        this.editor.config.showFullScreen = true
+        this.editor.config.zIndex = 90
+        this.editor.config.onchangeTimeout = 500
+        this.uploadImage();
+        this.editor.config.lang = 'en'
+        this.editor.i18next = i18next
+         // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
+         this.editor.config.onchange = (html: any) => {
             let text = this.editor.txt.text();
-            if (this.props.count && text.length > this.props.count) {
+            if (count && text.length > count) {
                 message.info('More than 1000 words, please delete some after retry')
                 return
             }
             onContentChange(html, tabNanme);
 
         }
-        this.editor.config.focus = false
-        this.editor.config.menus = toolbars
-        this.editor.config.fontNames = fontNames
-        this. editor.config.showFullScreen = true
-        this.editor.config.zIndex = 90
-        this.editor.config.onchangeTimeout = 500
-        this.uploadImage();
-        this.editor.config.lang = 'en'
-        this.editor.i18next = i18next
         this.editor.create()
 
-        this.editor.txt.html(content)
+        this.editor.txt.html(content===''?'<p></p>':content)
         disabled && this.editor.disable()
     }
     uploadImage = () => {
@@ -181,7 +183,7 @@ class ReactEditor extends Component<any, any> {
                     </div>
                     <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
                         <div
-                            
+
                             ref="editorElemBody" className={'editorElem-body-' + this.props.id}>
 
                         </div>

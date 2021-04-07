@@ -37,13 +37,13 @@ export default class OrderList extends Component<any, any> {
 
   render() {
     return (
-      // <AuthWrapper
-      //   functionName={
-      //     history.location.pathname == '/recomm-page'
-      //       ? 'Recommendationlist'
-      //       : 'Recommendationlist_prescriber'
-      //   }
-      // >
+      <AuthWrapper
+        functionName={
+          history.location.pathname == '/recommendation'
+            ? 'f_recommendation_list'
+            : 'f_recommendation_save'
+        }
+      >
         <div className="order-con">
           <BreadCrumb />
           <div className="container-search">

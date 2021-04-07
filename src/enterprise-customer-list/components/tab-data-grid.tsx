@@ -23,19 +23,19 @@ export default class TabDataGrid extends React.Component<any, any> {
     const key = form.get('enterpriseCheckState');
     return (
       <Tabs onChange={(key) => onTabChange(key)} activeKey={key}>
-        <Tabs.TabPane tab="All" key="-1">
+        <Tabs.TabPane tab="全部" key="-1">
           <CustomerList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Audited" key="2">
+        <Tabs.TabPane tab="已审核" key="2">
           <CustomerList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Pending" key="1">
+        <Tabs.TabPane tab="待审核" key="1">
           <CustomerList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Audit failed" key="3">
+        <Tabs.TabPane tab="审核未通过" key="3">
           <CustomerList />
         </Tabs.TabPane>
       </Tabs>

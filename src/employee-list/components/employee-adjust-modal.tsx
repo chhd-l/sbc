@@ -88,32 +88,29 @@ export default class EmployeeAdjustModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title="Adjustment department"
+        title="调整部门"
         visible={adjustmodalVisible}
         onCancel={() => toggleAdjustModal()}
         onOk={this._handleOk}
       >
-        <Alert
-          message="The employees will belong to the department you set up"
-          type="info"
-        />
+        <Alert message="所属员工将归属于您设置的部门" type="info" />
         <Form>
           <FormItem
-            label="Attribution Department"
+            label="归属部门"
             required={true}
             style={{ marginTop: 16 }}
             {...formItemLayout}
           >
             {getFieldDecorator('connectEmployee', {
               initialValue: connectEmployee,
-              rules: [{ required: true, message: 'Please select a department' }]
+              rules: [{ required: true, message: '请选择部门' }]
             })(
               <TreeSelect
                 showSearch={false}
                 style={{ width: '100%' }}
                 value={this.state.value}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                placeholder="Please select a department"
+                placeholder="请选择部门"
                 allowClear
                 multiple
                 treeDefaultExpandAll
@@ -163,7 +160,7 @@ export default class EmployeeAdjustModal extends React.Component<any, any> {
     if (departmentIds.length == 0 || departmentIds.size == 0) {
       this.props.form.setFieldsValue({
         connectEmployee: {
-          errors: [new Error('Please select a department')]
+          errors: [new Error('请选择部门')]
         }
       });
     } else {

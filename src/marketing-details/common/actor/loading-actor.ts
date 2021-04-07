@@ -3,13 +3,12 @@ import { Actor, Action, IMap } from 'plume2';
 export default class LoadingActor extends Actor {
   defaultState() {
     return {
-      loading: true
+      loading: false
     };
   }
 
   @Action('loading:start')
   start(state: IMap) {
-    debugger;
     return state.set('loading', true);
   }
 

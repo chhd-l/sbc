@@ -61,7 +61,7 @@ export function querySysDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function enableAndDisable(id = '') {
-  return Fetch<TResult>('/prescriber/enableAndDisable?id=' + id, {
+  return Fetch<TResult>('/prescriber/enableAndDisable?prescriberId=' + id, {
     method: 'POST'
   });
 }

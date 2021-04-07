@@ -22,13 +22,13 @@ export default class AppStore extends Store {
     this.dispatch('loading:start');
     const { res } = await webapi.fetchFindById(param);
     if (res.code === Const.SUCCESS_CODE) {
-      const { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate,optimal, pickup, paris, apptId, felinRecoId } = res.context;
-      const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate,optimal }
-     let {measure=0,measureUnit=''}=customerPet.weight?JSON.parse(JSON.parse(customerPet.weight)):{}
+      const { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
+      const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate, optimal }
+      let { measure = 0, measureUnit = '' } = customerPet.weight ? JSON.parse(JSON.parse(customerPet.weight)) : {}
 
       customerPet.measure = measure;
       customerPet.measureUnit = measureUnit;
-      console.log(measure,measureUnit,'customerPet',felinReco)
+      console.log(measure, measureUnit, 'customerPet', felinReco)
       this.initDistaptch({ felinReco, goodsQuantity, appointmentVO, customerPet, list: [] });
     } else {
       this.dispatch('loading:end');
@@ -61,21 +61,17 @@ export default class AppStore extends Store {
     }
   };
 
-  onChangePestsForm = (customerPet,felinReco?:any) => {
+  onChangePestsForm = (params, type?: any) => {
     this.dispatch('loading:start');
-    if(felinReco){
-      this.dispatch('pets:felinReco', customerPet)
-    }else{
-      this.dispatch('pets:customerPet', customerPet);
-    }
+    this.dispatch(`pets:${type}`, params)
     this.dispatch('loading:end');
   }
   //保存
 
-  fetchFelinSave=async(params={})=>{
+  fetchFelinSave = async (params = {}) => {
     this.dispatch('loading:start');
     const { res } = await webapi.fetchFelinSave(params)
-    if(res.code===Const.SUCCESS_CODE){
+    if (res.code === Const.SUCCESS_CODE) {
       history.push('/recommendation')
     }
     this.dispatch('loading:end');
@@ -97,27 +93,27 @@ export default class AppStore extends Store {
         item.measureUnit = _tempWeight.measureUnit;
         return item
       })
-      let _felinReco={...felinReco,expert:this.state().get('felinReco').expert}
-      this.initDistaptch({ felinReco:_felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list[0], list });
+      let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
+      this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
     }
   }
 
 
   //goods info 
 
-  getGoodsInfoPage=async()=>{
+  getGoodsInfoPage = async () => {
     this.dispatch('loading:start');
     const { res } = await webapi.fetchproductTooltip();
     if ((res as any).code == Const.SUCCESS_CODE) {
       let goodsInfoList = (res as any).context.goodsInfoList;
-     this.dispatch('goods:infoPage', goodsInfoList)
-     let goods= this.state().get('goodsQuantity')
-      let obj={},productSelect=[]
-     goodsInfoList.map(item=>{
-      obj[item.goodsInfoNo]=item
-     })
-      goods.map(item=>{
-        productSelect.push({...obj[item.goodsInfoNo],quantity:item.quantity})
+      this.dispatch('goods:infoPage', goodsInfoList)
+      let goods = this.state().get('goodsQuantity')
+      let obj = {}, productSelect = []
+      goodsInfoList.map(item => {
+        obj[item.goodsInfoNo] = item
+      })
+      goods.map(item => {
+        productSelect.push({ ...obj[item.goodsInfoNo], quantity: item.quantity })
       })
       this.onProductselect(productSelect)
     }

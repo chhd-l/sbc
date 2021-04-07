@@ -104,7 +104,10 @@ export default class AddProductModal extends Component {
     });
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Add successfully');
+      this.props.searchCount()
+     setTimeout(() => {
       this.setState({ loading: false });
+     }, 2000);
     }
   }
 
@@ -185,6 +188,7 @@ export default class AddProductModal extends Component {
         }
       }
     ];
+    console.log(url,)
     return (
       <Modal title="Choose product" visible={visible} onOk={handleOk} width="70%" onCancel={handleCancel}>
         <Form className="filter-content" layout="inline">

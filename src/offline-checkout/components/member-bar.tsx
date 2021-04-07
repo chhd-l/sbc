@@ -71,7 +71,7 @@ export default class MemberBar extends React.Component<any, any> {
             </QRScaner>
           </Col>
         </Row> : <Row gutter={24} style={{marginTop: 34, fontWeight: 'bold'}}>
-          <Col span={12}>Consumer type: {memberType}</Col>
+          <Col span={12}>Pet owner type: {memberType}</Col>
           <Col span={12}>Email: {memberInfo.email}</Col>
           <Col span={12}>Consumer name: {memberInfo.customerName}</Col>
           <Col span={12}>Phone: {memberInfo.contactPhone}</Col>

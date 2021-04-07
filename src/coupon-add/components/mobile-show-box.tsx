@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Relax } from 'plume2';
 import { cache } from 'qmkit';
 
-import { Icon } from 'antd';
-
+import { icon } from '@ant-design/compatible';
 import { couponDescQL } from '../ql';
 
 const COUPON_TYPE = {
@@ -69,7 +68,7 @@ export default class MobileShowBox extends Component<any, any> {
             <img src={StatusImg} alt="" width="292" />
           </div>
           <div style={styles.headBox}>
-            <Icon style={{ width: 0 }} type="left" />
+            <icon style={{ width: 0 }} type="left" />
             <p style={{ flex: 1 }}>我的优惠券</p>
           </div>
           <div style={styles.content}>

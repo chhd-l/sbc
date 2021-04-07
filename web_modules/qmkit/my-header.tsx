@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover, Empty, Tabs, notification } from 'antd';
+import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover, Empty, Tabs, notification, Modal } from 'antd';
 const { Header } = Layout;
 import { history, cache, util, Const } from 'qmkit';
 import QRCode from 'qrcode';
@@ -20,7 +20,11 @@ export default class MyHeader extends React.Component {
       url: '',
       taskList: [],
       reminderTasks:[],
-      visible: false
+      visible: false,
+      modalVisible: false,
+      English: util.requireLocalSrc('sys/English.png'),
+      Russian: util.requireLocalSrc('sys/Russian.png'),
+      Turkey: util.requireLocalSrc('sys/Turkey.png'),
     };
   }
 
@@ -62,6 +66,52 @@ export default class MyHeader extends React.Component {
   handleVisibleChange = visible => {
     this.setState({ visible });
   };
+
+  setImgSrc(val, type){
+    this.setState({ [val]: util.requireLocalSrc('sys/'+val+type+'.png')});
+  }
+
+  getLanguageItem() {
+    const aLanguage = ['English', 'Russian', 'Turkey'];
+    return (
+      <div style={{position: 'relative',height: 640}}>
+        <div style={{width: '60%',position: 'absolute',top:'23%',left:'20%'}}>
+          <p style={{textAlign: 'center',fontSize: 56, color:'#e1021a', marginBottom: 50}}>
+            <Icon type="environment" style={{ fontSize: 48 }} />
+            &nbsp;&nbsp;
+            <span>
+              <FormattedMessage id="Public.ChooseLocation" />
+            </span>
+          </p>
+          <div className="space-around">      
+          {
+            aLanguage.map((val) => {
+              return (
+                <img 
+                  key={val}
+                  style={{
+                    cursor: 'pointer',
+                    width: '30%'
+                  }}
+                  onMouseLeave={e => {
+                    this.setImgSrc(val, '');
+                  }} 
+                  onMouseEnter={e => {
+                    this.setImgSrc(val, '_act');
+                  }} 
+                  src={this.state[val]}
+                  onClick={() =>
+                    this.languageChange(val)
+                  }
+                />
+              )
+            })
+          }
+          </div>
+        </div> 
+      </div>
+    )
+  }
 
 
    content=() => (
@@ -253,12 +303,11 @@ export default class MyHeader extends React.Component {
         </Menu.Item> */}
          <Menu.Item key="1">
           <a
-            href="#"
             onClick={() =>
-              this.languageChange
+              this.setState({modalVisible: true})
             }
           >
-            <Icon type="lock" /> Language
+            <Icon type="global" /> Language
           </a>
         </Menu.Item>
         <Menu.Item key="2">
@@ -339,7 +388,21 @@ export default class MyHeader extends React.Component {
           </div>
 
         </Header>
-
+        <Modal
+          visible={this.state.modalVisible}
+          footer={null}
+          closable={false}
+          width="60%"
+          centered={true}
+          onCancel={() => this.setState({modalVisible: false})}
+        >
+          <p>
+            <img style={styles.logoImg} src={sessionStorage.getItem(cache.SITE_LOGO) ? sessionStorage.getItem(cache.SITE_LOGO) : util.requireLocalSrc('sys/02.jpg')} />
+          </p>
+          <div>
+            {this.getLanguageItem()}
+          </div>
+        </Modal>
       </div>
 
     );

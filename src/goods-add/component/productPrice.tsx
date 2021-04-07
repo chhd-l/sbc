@@ -340,6 +340,9 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
+        console.log(rowInfo.marketPrice,1111111111);
+        console.log(addSkUProduct,2222222);
+
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
 
@@ -348,7 +351,6 @@ class SkuForm extends React.Component<any, any> {
         console.log(rowInfo,33333);
         console.log(goodsList.toJS(),44444);*/
         if (goods.get('goodsId') == null && goodsList.toJS().length == 1) {
-          console.log(addSkUProduct,111);
 
           let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
           /*console.log(targetGoodsIds,66666);
@@ -356,24 +358,31 @@ class SkuForm extends React.Component<any, any> {
           console.log(!rowInfo.marketPrice);
           console.log(!rowInfo.subscriptionPrice);*/
           if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
-            console.log(targetGoodsIds,55555)
-            marketPrice = targetGoodsIds.subMarketPrice?
-              targetGoodsIds.subMarketPrice * targetGoodsIds.bundleNum : targetGoodsIds.marketPrice?
-                targetGoodsIds.marketPrice * targetGoodsIds.bundleNum: 0
-            subscriptionPrice = targetGoodsIds.subScriptionPrice?
-              targetGoodsIds.subScriptionPrice * targetGoodsIds.bundleNum : targetGoodsIds.subscriptionPrice?
-                targetGoodsIds.subscriptionPrice * targetGoodsIds.bundleNum :0
-              /*Number(targetGoodsIds.subMarketPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.marketPrice?
-                Number(targetGoodsIds.marketPrice) * (targetGoodsIds.bundleNum): 0
-            subscriptionPrice = targetGoodsIds.subScriptionPrice?
-              Number(targetGoodsIds.subScriptionPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.subscriptionPrice?
-                Number(targetGoodsIds.subscriptionPrice) * Number(targetGoodsIds.bundleNum) :0*/
-            this._editGoodsItem(rowInfo.id, 'marketPrice', marketPrice, )
-            this._editGoodsItem(rowInfo.id, 'subscriptionPrice', subscriptionPrice, )
+            marketPrice = targetGoodsIds.marketPrice * targetGoodsIds.bundleNum
+            console.log(marketPrice,55555555);
+
+            subscriptionPrice = targetGoodsIds.subscriptionPrice * targetGoodsIds.bundleNum
+            /*Number(targetGoodsIds.subMarketPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.marketPrice?
+              Number(targetGoodsIds.marketPrice) * (targetGoodsIds.bundleNum): 0
+          subscriptionPrice = targetGoodsIds.subScriptionPrice?
+            Number(targetGoodsIds.subScriptionPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.subscriptionPrice?
+              Number(targetGoodsIds.subscriptionPrice) * Number(targetGoodsIds.bundleNum) :0*/
+            //this._editGoodsItem(rowInfo.id, 'marketPrice', marketPrice, )
+            //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', subscriptionPrice, )
+          }else if (addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length == 0){
+            console.log(rowInfo,33333);
+            console.log(addSkUProduct,444444);
+            marketPrice = 0
+            subscriptionPrice = 0
+            //this._editGoodsItem(rowInfo.id, 'marketPrice', 0, )
+            //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', 0, )
           }
+        }else {
+          //this._editGoodsItem(rowInfo.id, 'marketPrice', 0, )
+          //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', 0, )
         }
 
-
+        console.log(marketPrice,666666);
 
         /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
          //console.log(marketPrice,2222222);

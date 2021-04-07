@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import {Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select, Popconfirm} from 'antd';
+import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import {fromJS, List, Map} from 'immutable';
-import {AuthWrapper, cache, noop, ValidConst} from 'qmkit';
+import { fromJS, List, Map } from 'immutable';
+import { noop, ValidConst, cache } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
-import ProductTooltip from './productTooltip';
+import ProductTooltipSKU from './productTooltip-sku';
+import * as _ from 'lodash';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -15,6 +16,15 @@ const { TextArea } = Input;
 @Relax
 export default class SkuTable extends React.Component<any, any> {
   WrapperForm: any;
+
+  constructor(props) {
+    super(props);
+    this.WrapperForm = Form.create({})(SkuForm);
+    this.state = {
+      visible: false,
+      EANList: []
+    };
+  }
 
   props: {
     relaxProps?: {
@@ -25,6 +35,9 @@ export default class SkuTable extends React.Component<any, any> {
       specSingleFlag: boolean;
       spuMarketPrice: number;
       priceOpt: number;
+      initStoreCateList: any;
+      goodsInfos: any;
+      addSkUProduct: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
@@ -35,6 +48,8 @@ export default class SkuTable extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
+      onProductselectSku: Function;
+      onEditSubSkuItem: Function;
       editGoods: Function;
     };
   };
@@ -50,6 +65,9 @@ export default class SkuTable extends React.Component<any, any> {
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
+    addSkUProduct: 'addSkUProduct',
+    initStoreCateList: 'initStoreCateList',
+    goodsInfos: 'goodsInfos',
     editGoods: noop,
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
@@ -58,16 +76,10 @@ export default class SkuTable extends React.Component<any, any> {
     synchValue: noop,
     clickImg: noop,
     removeImg: noop,
-    modalVisible: noop
+    modalVisible: noop,
+    onProductselectSku: noop,
+    onEditSubSkuItem: noop
   };
-
-  constructor(props) {
-    super(props);
-    this.WrapperForm = Form.create({})(SkuForm);
-    this.state = {
-      visible: false
-    };
-  }
 
   render() {
     const WrapperForm = this.WrapperForm;
@@ -87,19 +99,41 @@ class SkuForm extends React.Component<any, any> {
     super(props);
     this.state = {
       count: 0,
-      visible: false
+      visible: false,
+      pid: ''
     };
   }
 
   render() {
-    const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    const { goodsList, onProductselectSku, addSkUProduct } = this.props.relaxProps;
+
+    if ( goodsList.toJS().length == 0 ) {
+      let a = []
+      onProductselectSku(a)
+    }else {
+      if (addSkUProduct.length>0) {
+        //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
+        let b = goodsList.toJS().filter(i => addSkUProduct.some(j => j.pid === i.goodsInfoNo))
+        console.log(b,111);
+        let c = addSkUProduct.filter(i => i.pid != b)
+        //onProductselectSku(c)
+        console.log(c,444444);
+
+      }
+    }
+    console.log(addSkUProduct, 333333);
+
     // const {  } = this.state
     const columns = this._getColumns();
-    console.log(goodsList.toJS(), 'goodsList----------');
-    console.log(goodsSpecs.toJS(), 'goodsSpecs----------');
+    // if(this.state.count < 100) {
+    //   let count = this.state.count + 1
+    //   this.setState({count: count})
+    // }else {
+    //   return false
+    // }
     return (
       <div style={{ marginBottom: 20 }}>
-        {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
+        {this.state.visible == true ? <ProductTooltipSKU pid={this.state.pid} visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
@@ -107,33 +141,47 @@ class SkuForm extends React.Component<any, any> {
     );
   }
 
-  showProduct = (res) => {
+  showProduct = (res, e) => {
+    let type = res.type == 1 ? true : false;
+    if (e) {
+      this.setState({
+        pid: e
+      });
+    }
     this.setState({
-      visible: res
+      visible: type
     });
   };
+
+  addEAN = (res, e) => {
+    let EANList = [];
+    this.setState({
+      EANList: EANList
+    });
+  };
+
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId, goodsList } = this.props.relaxProps;
+    const { goodsSpecs, goodsList, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
-
       columns = goodsSpecs
-        .map((item, i) => {
+        .map((item) => {
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
-              return rowInfo
+              return rowInfo;
             }
           };
         })
         .toList();
     }
-
+    //console.log(columns.toJS(), 'columns');
     columns = columns.unshift({
       title: (
         <div>
@@ -184,9 +232,19 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'goodsInfoNo',
       render: (rowInfo) => {
+        const { addSkUProduct } = this.props.relaxProps;
+
+        let a = '';
+
+        if (rowInfo.goodsInfoNo == '') {
+          a = addSkUProduct[rowInfo.index - 1] ? addSkUProduct[rowInfo.index - 1].pid : '';
+        } else {
+          a = rowInfo.goodsInfoNo;
+        }
+
         return (
           <Row>
-            <Col span={8}>
+            <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoNo_' + rowInfo.id, {
                   rules: [
@@ -202,8 +260,82 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
-                  initialValue: rowInfo.goodsInfoNo
-                })(<Input style={{ width: '116px' }} />)}
+                  initialValue: a
+                })(<Input style={{ width: '115px' }} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    //Sub-SKU
+    columns = columns.push({
+      title: (
+        <div>
+          <p>Sub-SKU</p>
+          <p style={{ fontSize: '12px', color: '#ccc' }}>Maximum 10 products</p>
+        </div>
+      ),
+      key: 'goodsInfoBundleRels',
+      render: (rowInfo) => {
+        const { addSkUProduct } = this.props.relaxProps;
+        return (
+          <Row>
+            <Col span={16}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsInfoBundleRels' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input SKU code'
+                    },
+                    {
+                      pattern: ValidConst.number,
+                      message: 'Please enter a positive integer'
+                    }
+                  ]
+                })(
+                  <div className="space-between-align">
+                    <div style={{ paddingTop: 6 }}>
+                      {' '}
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo)} />
+                    </div>
+                    <div style={{ lineHeight: 2 }}>
+                      {addSkUProduct &&
+                      addSkUProduct.map((i, index) => {
+                        return (
+                          i.pid == rowInfo.goodsInfoNo &&
+                          i.targetGoodsIds.map((item, index) => {
+                            return (
+                              <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
+                                <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
+                                <InputNumber
+                                  style={{ width: '60px', height: '28px', textAlign: 'center' }}
+                                  defaultValue={item.bundleNum}
+                                  key={item.subGoodsInfoNo}
+                                  min={1}
+                                  onChange={(e) => {
+                                    if (i.pid == rowInfo.goodsInfoNo) {
+                                      const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoNo)[0];
+                                      if (target) {
+                                        target['bundleNum'] = e;
+                                      }
+                                      let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
+                                      this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
+                                    }
+                                  }}
+                                />
+                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id)}></a>
+                              </div>
+                            );
+                          })
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </FormItem>
             </Col>
           </Row>
@@ -218,7 +350,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         return (
           <Row>
-            <Col span={8}>
+            <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('externalSku' + rowInfo.id, {
                   rules: [
@@ -233,7 +365,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
                   initialValue: rowInfo.externalSku
-                })(<Input style={{ width: '116px' }} maxLength={45}/>)}
+                })(<Input style={{ width: '116px' }} maxLength={45} />)}
               </FormItem>
             </Col>
           </Row>
@@ -248,7 +380,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         return (
           <Row>
-            <Col span={8}>
+            <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoBarcode' + rowInfo.id, {
                   rules: [
@@ -277,7 +409,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         return (
           <Row>
-            <Col span={8}>
+            <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoWeight' + rowInfo.id, {
                   rules: [
@@ -286,13 +418,13 @@ class SkuForm extends React.Component<any, any> {
                       message: 'Please input weight value'
                     }
                     /*{
-                      pattern: ValidConst.number,
+                      pattern: ValidConst.noMinus,
                       message: 'Please enter the correct value'
                     }*/
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<Input type="number" style={{ width: '116px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
+                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
               </FormItem>
             </Col>
           </Row>
@@ -310,9 +442,9 @@ class SkuForm extends React.Component<any, any> {
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
-                  initialValue: rowInfo.goodsInfoUnit !== null ? rowInfo.goodsInfoUnit : 'kg'
+                  initialValue: rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '60px' }} >
+                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} >
                     <Option value="kg">kg</Option>
                     <Option value="g">g</Option>
                     <Option value="lb">lb</Option>
@@ -356,59 +488,27 @@ class SkuForm extends React.Component<any, any> {
       }
     });*/
 
-    /*columns = columns.push({
-      title: <div>Description</div>,
-      key: 'description',
-      render: (rowInfo) => (
-        <Row>
-          <Col span={12}>
-            <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('description_' + rowInfo.id, {
-                rules: [
-                  // {
-                  //   pattern: ValidConst.number,
-                  //   message: 'Please enter the correct value'
-                  // }
-                ],
-                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'description'),
-                initialValue: rowInfo.description
-              })(<TextArea rows={2} style={{ width: '300px' }} disabled={rowInfo.description === 0} />)}
-            </FormItem>
-          </Col>
-        </Row>
-      )
-    });*/
-
     columns = columns.push({
       title: (
-        <div style={{
-          marginRight: '81px',
-        }}>
+        <div>
           Subscription
         </div>
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
-        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
-        let disable = false
-        if (goods.get('subscriptionStatus') == 0) {
-          disable = true
-        }else {
-          if(goodsList.toJS().length == 1 ) {
-            disable = true
-          }else {
-            disable = false
-          }
-        }
+
+        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
+        rowInfo.subscriptionStatus = goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus != null ? rowInfo.subscriptionStatus : '1';
+
         return (
           <Row>
-            <Col span={8}>
+            <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
-                  initialValue: rowInfo.subscriptionStatus == 0 ? '0':'1'
+                  initialValue: rowInfo.subscriptionStatus == 0 ? '0' : '1'
                 })(
-                  <Select disabled={disable} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false || goodsList.toJS().length == 1? true : false } getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>
@@ -416,8 +516,10 @@ class SkuForm extends React.Component<any, any> {
               </FormItem>
             </Col>
           </Row>
-        )}
+        );
+      }
     });
+
 
     columns = columns.push({
       title: (
@@ -427,12 +529,11 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
 
         return (
-          <Row style={{marginRight: '81px'}}>
-            <Col span={8}>
-              <FormItem style={styles.tableFormItem}>
-                {goodsList.toJS().length == 1 ? ( <div>
-                  <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>
-                </div> ) : (<>
+          <Col span={8}>
+            <FormItem style={styles.tableFormItem}>
+              {goodsList.toJS().length == 1 ? ( <div>
+                <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>
+              </div> ) : (<>
                   {goods.get('addedFlag') == 0 ? ( <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>) : (
                     <>
                       {rowInfo.addedFlag == 1 ? (
@@ -445,19 +546,29 @@ class SkuForm extends React.Component<any, any> {
                           <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
                         </div>
                       ) : null}</>)}
-                    </>
-                  )}
-              </FormItem>
-            </Col>
-          </Row>
+                </>
+              )}
+            </FormItem>
+          </Col>
         );
       }
     });
 
+    /*columns = columns.push({
+      title: (
+        <div>
 
-    /* let a = columns.toJS();
-    let b = a.splice(a.length - 4, 1);
-    a.splice(3, 0, b[0]);*/
+        </div>
+      ),
+      key: 'subscriptionStatus',
+      render: (rowInfo) => (
+        <Row>
+        </Row>
+      )
+    });*/
+    /*let a = columns.toJS()
+    let b = a.splice(a.length-5,1)
+    a.splice(3,0,b[0])*/
     return columns.toJS();
   };
   _handleChange = (value) => {
@@ -469,9 +580,14 @@ class SkuForm extends React.Component<any, any> {
     deleteGoodsInfo(id);
   };
 
-  onAddedFlag = (id: string) => {
+  _getSubSkulist = (id: string) => {
+    const { addSkUProduct } = this.props.relaxProps;
+    if (addSkUProduct) {
+      addSkUProduct.map((item) => {
+        return <div>{item.goodsInfoNo}</div>;
+      });
+    }
   };
-
 
   /**
    * 检查文件格式
@@ -504,6 +620,7 @@ class SkuForm extends React.Component<any, any> {
 
     editGoodsItem(id, key, e);
 
+
     if(key == "addedFlag") {
       if(goodsList.toJS().length >1) {
         let goods = Map({
@@ -531,6 +648,12 @@ class SkuForm extends React.Component<any, any> {
         this.props.form.setFieldsValue(values);
       }
     }
+  };
+
+  _editSubSkuItem = (id: string, key: string, e: any) => {
+    const { onEditSubSkuItem } = this.props.relaxProps;
+
+    onEditSubSkuItem(e);
   };
 
   /**
@@ -567,9 +690,35 @@ class SkuForm extends React.Component<any, any> {
     }
   };
 
+  onDel = (item, pid, id) => {
+    const { addSkUProduct, onProductselectSku, goodsList } = this.props.relaxProps;
+    let a = [];
+    let b = [];
+    let c = [];
+    addSkUProduct.map((i) => {
+      if (i.pid == pid) {
+        i.targetGoodsIds.map((o) => {
+          if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
+            a.push(o);
+          }
+        });
+        b.push({
+          pid: pid,
+          targetGoodsIds: a
+        });
+      } else {
+        c.push(i);
+      }
+    });
+    let d = b.concat(c);
+    this._editGoodsItem(id, 'goodsInfoBundleRels', a);
+    console.log(d,123);
+    console.log(goodsList.get('goodsInfoNo'),234);
+    onProductselectSku(d);
+  };
+
   noMinus = (e) => {
     let val = e.target.value;
-    //限制只能输入一个小数点
     if (val.indexOf('.') != -1) {
       let str = val.substr(val.indexOf('.') + 1);
       if (str.indexOf('.') != -1) {

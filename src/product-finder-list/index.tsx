@@ -128,7 +128,7 @@ class ProductFinderList extends Component<any, any> {
         width: '10%'
       },
       {
-        title: 'Consumer Type',
+        title: 'Pet Owner Type',
         dataIndex: 'consumerType',
         key: 'consumerType',
         width: '10%',
@@ -192,7 +192,7 @@ class ProductFinderList extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}>Consumer type</p>}
+                    label={<p style={styles.label}>Pet owner type</p>}
                     style={{ width: 195 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;

@@ -97,7 +97,7 @@ export default class See extends React.Component<any, any> {
                   Pet owner name ：{goodsEvaluate.customerName}
                 </span>
                 <span className="text mar-lr">
-                  Consumer type：{goodsEvaluate.consumerType}
+                  Pet owner type：{goodsEvaluate.consumerType}
                 </span>
               </div>
               <div className="detail">

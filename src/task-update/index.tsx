@@ -75,7 +75,9 @@ class TaskUpdate extends Component<any, any> {
         { value: 'Week', name: 'Weeks' }
       ],
       associatedSubscriptionList: [],
-      loading: false
+      loading: false,
+      petAssistantLoading: false,
+      petOwnerLoading: false
     };
     this.onChange = this.onChange.bind(this);
     this.searchAssignedTo = this.searchAssignedTo.bind(this);
@@ -171,6 +173,9 @@ class TaskUpdate extends Component<any, any> {
   }
 
   getEmployees(value?: String) {
+    this.setState({
+      petAssistantLoading: true
+    })
     let params = {
       pageNum: 0,
       pageSize: 20,
@@ -182,18 +187,28 @@ class TaskUpdate extends Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            assignedUsers: res.context.employees
+            assignedUsers: res.context.employees,
+            petAssistantLoading: false
           });
         } else {
           message.error(res.message || 'Get data failed');
+          this.setState({
+            petAssistantLoading: false
+          })
         }
       })
       .catch(() => {
         message.error('Get data failed');
+        this.setState({
+          petAssistantLoading: false
+        })
       });
   }
 
   getPetOwners(value?: String) {
+    this.setState({
+      petOwnerLoading: true
+    })
     let params = {
       pageNum: 0,
       pageSize: 20,
@@ -205,14 +220,21 @@ class TaskUpdate extends Component<any, any> {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            associatedPetOwners: res.context.detailResponseList
+            associatedPetOwners: res.context.detailResponseList,
+            petOwnerLoading: false
           });
         } else {
           message.error(res.message || 'Get data failed');
+          this.setState({
+            petOwnerLoading: false
+          })
         }
       })
       .catch(() => {
         message.error('Get data failed');
+        this.setState({
+          petOwnerLoading: false
+        })
       });
   }
 
@@ -366,7 +388,7 @@ class TaskUpdate extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { title, tabKey, editable, task, id, taskCompleted, assignedUsers } = this.state;
+    const { title, tabKey, editable, task, id, taskCompleted, assignedUsers, petAssistantLoading, petOwnerLoading } = this.state;
     const { associatedPetOwners, associatedPetList, associatedOrderList } = this.state;
     const { goldenMomentList, actionTypeList, priorityList, statusList, reminderTypes, associatedSubscriptionList } = this.state;
     let taskStatus = statusList.find((x) => x.value === task.status);
@@ -471,7 +493,7 @@ class TaskUpdate extends Component<any, any> {
                     <Col span={12}>
                       <FormItem {...formItemLayout} label="Assigned to">
                         {getFieldDecorator('assistantId', {
-                          initialValue: task.assistantName ? task.assistantName + '(' + task.assistantEmail + ')' : null
+                          initialValue: task.assistantName ? task.assistantName + (task.assistantEmail ? '(' + task.assistantEmail + ')' : '') : ''
                         })(
                           editable ? (
                             <Select
@@ -479,6 +501,7 @@ class TaskUpdate extends Component<any, any> {
                               disabled={taskCompleted}
                               placeholder="Please input email or name"
                               showSearch
+                              loading={petAssistantLoading}
                               onSearch={this.searchAssignedTo}
                               onChange={(value) =>
                                 this.onChange({
@@ -486,15 +509,17 @@ class TaskUpdate extends Component<any, any> {
                                   value: value
                                 })
                               }
+                              optionFilterProp="children"
+                              filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
                               {assignedUsers.map((item) => (
                                 <Option value={item.employeeId} key={item.employeeId}>
-                                  {item.employeeName} {'(' + item.accountName + ')'}
+                                  {item.employeeName} {item.accountName ? '(' + item.accountName + ')' : ''}
                                 </Option>
                               ))}
                             </Select>
                           ) : (
-                            <span>{task.assistantName ? task.assistantName + (task.assistantEmail ? '(' + task.assistantEmail + ')' : '') : null}</span>
+                            <span>{task.assistantName ? task.assistantName + (task.assistantEmail ? '(' + task.assistantEmail + ')' : '') : ''}</span>
                           )
                         )}
                       </FormItem>
@@ -677,6 +702,7 @@ class TaskUpdate extends Component<any, any> {
                               disabled={taskCompleted}
                               placeholder="Please input pet owner account or name"
                               showSearch
+                              loading={petOwnerLoading}
                               onSearch={this.searchAssignedPetOwners}
                               onChange={(value) =>
                                 this.onChange({

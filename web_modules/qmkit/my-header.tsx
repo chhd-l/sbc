@@ -29,7 +29,9 @@ export default class MyHeader extends React.Component {
   }
 
   componentDidMount() {
-    this.getTaskList();
+    if((window as any).token){
+      this.getTaskList();
+    }
   }
 
   async getTaskList() {

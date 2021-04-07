@@ -166,6 +166,7 @@ export default {
   'Menu.NPS list':'NPS list',
   'Menu.Shipping Fee':'Shipping Fee',
   'Menu.NPS':'NPS',
+  'Menu.Message setting':'Message setting',
 
 
 
@@ -404,7 +405,7 @@ export default {
   "Product.Consumeraccount": "Pet owner account",
   "Product.SearchNumber": "Search No.",
   "Product.SearchTime": "Search Time",
-  "Product.ConsumerType": "Consumer Type",
+  "Product.ConsumerType": "Pet Owner Type",
   "Product.ConsumerName": "Pet owner name",
   "Product.Back": "Back",
   "Product.Descriptionmanagement": "Description management",
@@ -754,6 +755,8 @@ export default {
   "Product.NoResultsSearches": "No results searches",
   /* -------- 已翻译 V1.0---------------*/
   "Product.html":"html",
+  'Product.salesCategoryInfo':
+    'Sales category is the classification of products within the scope of your store. Up to 3 levels can be added. When there is No categories, all products will be classified into the default classification',
 
 
 
@@ -893,7 +896,7 @@ export default {
   'Order.DeliveryRecord': 'Delivery Record',
   'Order.PaymentRecords': 'Payment Records',
   'Order.Ordertime': 'Order time',
-  'Order.Consumertype': 'Consumer type',
+  'Order.Consumertype': 'Pet owner type',
   'Order.Phonenumber': 'Phone number',
   'Order.ProductName': 'Product Name',
   'Order.Weight': 'Weight',
@@ -1435,7 +1438,7 @@ export default {
   'Subscription.ColSpan.AuditorName':'Auditor Name',
   'Subscription.ColSpan.ConsumerName':'Pet owner name',
   'Subscription.ColSpan.ConsumerAccount':'Pet owner account',
-  'Subscription.ColSpan.ConsumerType':'Consumer type',
+  'Subscription.ColSpan.ConsumerType':'Pet owner type',
   'Subscription.ColSpan.PhoneNumber':'Phone Number',
   'Subscription.ColSpan.Subtotal':'Subtotal',
   'Subscription.ColSpan.Promotion':'Promotion',
@@ -1618,7 +1621,7 @@ export default {
   'Subscription.Active.AuditorName':'Auditor Name',
   'Subscription.Active.ConsumerName':'Pet owner name',
   'Subscription.Active.ConsumerAccount':'Pet owner account',
-  'Subscription.Active.ConsumerType':'Consumer type',
+  'Subscription.Active.ConsumerType':'Pet owner type',
   'Subscription.Active.PhoneNumber':'Phone Number',
   'Subscription.Active.Subtotal':'Subtotal',
   'Subscription.Active.Promotion':'Promotion',
@@ -1762,12 +1765,14 @@ export default {
   'Subscription.Billing information':'Billing information',
   'Subscription.On':'On',
   "Subscription.Off": 'Off',
-  "Subscription.Setting": 'Subscription Setting', "Subscription.Draft": 'Subscription Draft',
+  "Subscription.Setting": 'Subscription Setting', 
+  "Subscription.Draft": 'Subscription Draft',
+  'Subscription.Restart':'Restart',
 
   /*-----------------------------  Pet owner  ----------------------------------------*/
   'PetOwner.ConsumerAccount':'Pet owner account',
   'PetOwner.ConsumerName':'Pet owner name',
-  'PetOwner.ConsumerType':'Consumer type',
+  'PetOwner.ConsumerType':'Pet owner type',
   'PetOwner.Email':'Email',
   'PetOwner.PhoneNumber':'Phone Number',
   'PetOwner.DefaultPrescriberName':'Default prescriber name',
@@ -1919,7 +1924,7 @@ export default {
   'PetOwner.BillingInfomation':'Billing infomation',
   'PetOwner.levelName':'Type name',
   'PetOwner.levelBadge':'Type badge',
-  'PetOwner.consumerLevel':'Consumer type',
+  'PetOwner.consumerLevel':'Pet owner type',
   /* -------- 已翻译 V1.0---------------*/
 
 
@@ -2008,7 +2013,7 @@ export default {
   'Finance.PaymentStatus':'Payment status',
   'Finance.SubscriptionNumber':'Subscription number',
   'Finance.ConsumerEmail':'Consumer email',
-  'Finance.ConsumerType':'Consumer type',
+  'Finance.ConsumerType':'Pet owner type',
   'Finance.ConsumerName':'Pet owner name',
   'Finance.doThis':'Are you sure to do this?',
   'Finance.Invoice':'Invoice',
@@ -2217,7 +2222,7 @@ export default {
   'Marketing.CouponList':'Coupon list',
   'Marketing.ConsumerAccount':'Pet owner account',
   'Marketing.ConsumerName':'Pet owner name',
-  'Marketing.ConsumerType':'Consumer Type',
+  'Marketing.ConsumerType':'Pet Owner Type',
   'Marketing.Email':'Email',
   'Marketing.SentTime':'Sent Time',
   'Marketing.MessageDetails':'Message Details',
@@ -2240,7 +2245,7 @@ export default {
   'Marketing.SelectTime':'Select Time',
   'Marketing.PleaseSelectTime':'Please select Time!',
   'Marketing.RecipientDetails':'Recipient details',
-  'Marketing.PleaseInputConsumerType':'Please input Consumer Type!',
+  'Marketing.PleaseInputConsumerType':'Please input Pet Owner Type!',
   'Marketing.PleaseInputConsumerName':'Please input Pet owner name!',
   'Marketing.ConsumerNameMaximumLength':'Pet owner name exceed the maximum length!',
   'Marketing.Preview':'Preview',
@@ -2346,6 +2351,7 @@ export default {
   'Marketing.Promotiontype':'Promotion type',
   'Marketing.CampaignStatus2': 'Campaign Status',
   'Marketing.Download': 'Download',
+  'Marketing.Club': 'Club',
 
 
 
@@ -3022,6 +3028,8 @@ export default {
   'Setting.PageSEO': 'Page SEO',
   /* -------- 已翻译 V1.0---------------*/
   'Setting.export':'Export',
+  'Setting.SupportSubscription': 'Support Subscription',
+  'Setting.maxAmount': 'Max amount',
 
 
 
@@ -3347,7 +3355,7 @@ export default {
   taxRate: 'Tax rate',
   detailAddress: 'Detail address',
   selectAddress: 'Please select an address',
-  consumerType: 'Consumer type',
+  consumerType: 'Pet owner type',
   platformLevel: 'customer Level',
   accountStatus: 'Account status',
   accountNumber: 'Account Number',
@@ -3361,7 +3369,7 @@ export default {
   enable: 'Enable',
   disabled: 'Disabled',
   enabled: 'Enabled',
-  consumerLevel: 'Consumer type',
+  consumerLevel: 'Pet owner type',
   levelName: 'Type name',
   levelBadge: 'Type badge',
   view: 'View',

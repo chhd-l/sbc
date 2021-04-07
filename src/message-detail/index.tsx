@@ -792,12 +792,12 @@ class MessageDetails extends Component<any, any> {
               <Form layout="horizontal" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} labelAlign="right">
                 <Row style={{ marginTop: 20 }}>
                   <Col span={8}>
-                    <FormItem label="Consumer Type">
+                    <FormItem label="Pet Owner Type">
                       {getFieldDecorator('consumerType', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Consumer Type!'
+                            message: 'Please input Pet Owner Type!'
                           }
                         ]
                       })(
@@ -822,7 +822,7 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Pet owner account">
+                    <FormItem label="Pet Owner Account">
                       {getFieldDecorator(
                         'consumerAccount',
                         {}
@@ -870,7 +870,7 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Pet owner name">
+                    <FormItem label="Pet Owner Name">
                       {getFieldDecorator('consumerName', {
                         rules: [
                           {
@@ -926,7 +926,7 @@ class MessageDetails extends Component<any, any> {
                     <FormItem
                       label={
                         <span>
-                          Related pet&nbsp;
+                          Related Pet&nbsp;
                           <Tooltip title="Please select Pet owner account first!">
                             <Icon type="question-circle-o" />
                           </Tooltip>

@@ -256,7 +256,7 @@ class DescriptionManagement extends Component<any, any> {
         dataIndex: 'contentType',
         key: 'contentType',
         width: '20%',
-        render: (text) => (<FormattedMessage id={text === 'text' ? 'Product.html' : text === 'json' ? 'Product.json' : ''} />)
+        render: (text) => (text ? <FormattedMessage id={text === 'text' ? 'Product.html' : 'Product.json'} /> : '')
       },
       {
         title: <FormattedMessage id="Product.Status" />,

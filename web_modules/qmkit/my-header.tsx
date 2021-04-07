@@ -74,10 +74,10 @@ export default class MyHeader extends React.Component {
   getLanguageItem() {
     const aLanguage = ['English', 'Russian', 'Turkey'];
     return (
-      <div style={{position: 'relative',height: 480}}>
-        <div style={{width: '60%',position: 'absolute',top:'26%',left:'20%'}}>
-          <p style={{textAlign: 'center',fontSize: 40, color:'#e1021a'}}>
-            <Icon type="environment" style={{ fontSize: 32 }} />
+      <div style={{position: 'relative',height: 640}}>
+        <div style={{width: '60%',position: 'absolute',top:'23%',left:'20%'}}>
+          <p style={{textAlign: 'center',fontSize: 56, color:'#e1021a', marginBottom: 50}}>
+            <Icon type="environment" style={{ fontSize: 48 }} />
             &nbsp;&nbsp;
             <span>
               <FormattedMessage id="Public.ChooseLocation" />
@@ -393,6 +393,8 @@ export default class MyHeader extends React.Component {
           footer={null}
           closable={false}
           width="60%"
+          centered={true}
+          onCancel={() => this.setState({modalVisible: false})}
         >
           <p>
             <img style={styles.logoImg} src={sessionStorage.getItem(cache.SITE_LOGO) ? sessionStorage.getItem(cache.SITE_LOGO) : util.requireLocalSrc('sys/02.jpg')} />

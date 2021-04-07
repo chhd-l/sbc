@@ -79,13 +79,13 @@ export default class TemplateConponent extends Component<any, any> {
                   <Tag>{viewParams.toEmail}</Tag>
                 </Col>
               </Row>
-              <Row className="emailRow">
+              <Row className="emailRow" style={{ marginTop: 10 }}>
                 <Col span={3} className="templateLable">
                   Cc List
                 </Col>
                 <Col span={21}>
-                  { viewParams.ccList.map((item, index) => (
-                    <Tag key={index}>{item.email}</Tag>
+                  { viewParams.ccList.length > 0 && viewParams.ccList.map((item, index) => (
+                    <Tag key={index}>{item}</Tag>
                   ))}
                 </Col>
               </Row>

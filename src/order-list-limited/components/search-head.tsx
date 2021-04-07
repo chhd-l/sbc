@@ -101,7 +101,7 @@ class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="order.orderList" />} />
+        <Headline title={<FormattedMessage id="Order.orderList" />} />
         <div>
           <Form className="filter-content" layout="inline">
             <Row>
@@ -252,14 +252,14 @@ class SearchHead extends Component<any, any> {
                       <Option value="">
                         <FormattedMessage id="Order.All" />
                       </Option>
-                      <Option value="SINGLE" title={this.props.intl.formatMessage({id:'Order.Singlepurchase'})}>
-                        <FormattedMessage id="Order.Singlepurchase" />
+                      <Option value="SINGLE" title="Single purchase">
+                        <FormattedMessage id="Order.SinglePurchase"/>
                       </Option>
-                      <Option value="FIRST_AUTOSHIP" title={this.props.intl.formatMessage({id:'Order.1stautoshiporder'})}>
-                        <FormattedMessage id="Order.1stautoshiporder" />
+                      <Option value="FIRST_AUTOSHIP" title="1st autoship order">
+                      <FormattedMessage id="Order.1stAutoshipOrder"/>
                       </Option>
-                      <Option value="RECURRENT_AUTOSHIP" title={this.props.intl.formatMessage({id:'Order.Recurrentorders of autoship'})}>
-                        <FormattedMessage id="Order.Recurrentorders of autoship" />
+                      <Option value="RECURRENT_AUTOSHIP" title="Recurrent orders of autoship">
+                      <FormattedMessage id="Order.RecurrentOrders"/>
                       </Option>
                     </Select>
                   </InputGroup>
@@ -397,10 +397,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.consumerName'})} value="buyerName">
+        <Option title="Pet owner name " value="buyerName">
           <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.consumerAccount'})} value="buyerAccount">
+        <Option title="Pet owner account" value="buyerAccount">
           <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
@@ -419,10 +419,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.productName'})} value="skuName">
+        <Option title="Product name" value="skuName">
           <FormattedMessage id="Order.productName" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.skuCode'})} value="skuNo">
+        <Option title="Sku code" value="skuNo">
           <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
@@ -441,10 +441,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.recipient'})} value="consigneeName">
+        <Option title="Recipient" value="consigneeName">
           <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.recipientPhone'})} value="consigneePhone">
+        <Option title="Recipient phone" value="consigneePhone">
           <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
@@ -463,10 +463,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.clinicSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.clinicName'})} value="clinicsName">
+        <Option title="Auditor name" value="clinicsName">
           <FormattedMessage id="Order.clinicName" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.clinicID'})} value="clinicsIds">
+        <Option title="Auditor ID" value="clinicsIds">
           <FormattedMessage id="Order.clinicID" />
         </Option>
       </Select>
@@ -484,10 +484,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.OrderNumber'})} value="orderNumber">
-          <FormattedMessage id="Order.OrderNumber" />
+        <Option title="Order number" value="orderNumber">
+          <FormattedMessage id="Order.orderNumber" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.subscriptionNumber'})} value="subscriptionNumber">
+        <Option title="Subscription number" value="subscriptionNumber">
           <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
@@ -506,10 +506,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.statusSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.paymentStatus'})} value="paymentStatus">
+        <Option title="Payment status" value="paymentStatus">
           <FormattedMessage id="Order.paymentStatus" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.shippingStatus'})} value="shippingStatus">
+        <Option title="Shipping status" value="shippingStatus">
           <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
@@ -527,10 +527,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.recommenderSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.recommenderId'})} value="recommenderId">
+        <Option title="Recommender id" value="recommenderId">
           <FormattedMessage id="Order.recommenderId" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.recommenderName'})} value="recommenderName">
+        <Option title="Recommender name" value="recommenderName">
           <FormattedMessage id="Order.recommenderName" />
         </Option>
       </Select>

@@ -328,8 +328,7 @@ export default class ListView extends React.Component<any, any> {
                             )}
                           </span>
                         </div>
-
-                        <span style={{ marginLeft: 60 }}>
+                      <span style={{ marginLeft: 60 }}>
                           <FormattedMessage id="Order.OrderTime" />：
                           {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
@@ -341,7 +340,7 @@ export default class ListView extends React.Component<any, any> {
                           {/*只有未审核状态才显示修改*/}
                           {(v.getIn(['tradeState', 'flowState']) === 'INIT' || v.getIn(['tradeState', 'flowState']) === 'AUDIT') && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && v.get('tradeItems') && !v.get('tradeItems').get(0).get('isFlashSaleGoods') && (
                             <AuthWrapper functionName="edit_order_f_001_3pl">
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.Edit"/>}>
                                 <a
                                   style={{ marginLeft: 20 }}
                                   onClick={() => {
@@ -386,7 +385,7 @@ export default class ListView extends React.Component<any, any> {
                           {/*待发货状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'AUDIT' && v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && (
                             <AuthWrapper functionName="fOrderList002_3pl">
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.review" />}>
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.Review"/>}>
                                 <a
                                   style={{ marginLeft: 20 }}
                                   onClick={() => {
@@ -402,7 +401,7 @@ export default class ListView extends React.Component<any, any> {
                           )}
                           {v.getIn(['tradeState', 'flowState']) === 'AUDIT' && v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID') && (
                             <AuthWrapper functionName="fOrderDetail002_3pl">
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.Ship"/>}>
                                 <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }} className="iconfont iconbtn-shipping">
                                   {/* <FormattedMessage id="Order.ship" />*/}
                                 </a>
@@ -412,7 +411,7 @@ export default class ListView extends React.Component<any, any> {
                           {/*部分发货状态显示*/}
                           {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') && (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') && v.getIn(['tradeState', 'payState']) === 'PAID' && (
                             <AuthWrapper functionName="fOrderDetail002_3pl">
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.Ship"/>}>
                                 <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
                                   {/*<FormattedMessage id="Order.ship" />*/}
                                 </a>
@@ -422,7 +421,7 @@ export default class ListView extends React.Component<any, any> {
                           {/*待收货状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'DELIVERED' && (
                             <AuthWrapper functionName="fOrderList003_3pl">
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.confirmReceipt" />}>
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.ConfirmReceipt"/>}>
                                 <a
                                   onClick={() => {
                                     this._showConfirm(id);
@@ -435,7 +434,7 @@ export default class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           <AuthWrapper functionName="fOrderDetail001_3pl">
-                            <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.SeeDetails"/>}>
                               <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail-limited/${id}`} className="iconfont iconDetails">
                                 {/* <FormattedMessage id="Order.seeDetails" />*/}
                               </Link>
@@ -580,8 +579,8 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="Order.ConfirmReceipt" />,
-      content: <FormattedMessage id="Order.confirmReceivedAllProducts" />,
+      title: <FormattedMessage id="Order.ConfirmReceipt"/>,
+      content: <FormattedMessage id="Order.allProductsHave"/>,
       onOk() {
         onConfirm(tdId);
       },

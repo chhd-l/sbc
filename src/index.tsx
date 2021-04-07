@@ -26,6 +26,7 @@ import es_ES from '../web_modules/qmkit/es_ES';
 import es_RUS from '../web_modules/qmkit/es_RUS';
 
 import configOkta from '../web_modules/qmkit/config-okta';
+import { i } from 'plume2';
 moment.locale('zh-cn');
 
 let language = es_ES;

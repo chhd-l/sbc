@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, Spin } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Headline, BreadCrumb } from 'qmkit';
 
@@ -10,7 +10,7 @@ import GoodsList from './common/components/goods-list';
 import Bottom from './common/components/bottom';
 import GiftList from './gift-details/components/gift-list';
 import MarketingRule from './common/components/marketing-rule';
-
+import './index.css'
 const MAK_TYPE = {
   0: 'Full reduction',
   1: 'Full discount'
@@ -34,26 +34,34 @@ export default class MarketingDetails extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{title}</Breadcrumb.Item>
         </BreadCrumb>
-        <div className="container-search">
-          <Headline title={title} />
+        {
+          !this.store.state().get('loading') ?
+            <>
+              <div className="container-search">
+                <Headline title={title} />
 
-          {/*满赠顶部描述*/}
-          <MarketingDes />
-          {marketingType === 1 ? (
-            <MarketingRule />
-          ) : marketingType === 2 ? (
-            <GiftList />
-          ) : (
-            <MarketingRule />
-          )}
-          {/*商品列表*/}
-        </div>
-        <div className="container">
-          <GoodsList />
+                {/*满赠顶部描述*/}
+                <MarketingDes />
+                {marketingType === 1 ? (
+                  <MarketingRule />
+                ) : marketingType === 2 ? (
+                  <GiftList />
+                ) : (
+                  <MarketingRule />
+                )}
+                {/*商品列表*/}
+              </div>
+              <div className="container">
 
-          {/*满赠底部*/}
-          <Bottom />
-        </div>
+                <GoodsList />
+
+                {/*满赠底部*/}
+                <Bottom />
+              </div>
+            </> :
+            <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />
+        }
+
       </div>
     );
   }

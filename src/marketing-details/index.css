@@ -8,3 +8,15 @@
   width: 400px !important;
   display: inline-block;
 }
+
+.loading-spin {
+  left: 50%;
+  top: 50%;
+  position: fixed;
+  z-index: 2;
+}
+
+.loading-spin .ant-spin-dot {
+  width: 90px;
+  height: 90px;
+}

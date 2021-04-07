@@ -2,7 +2,7 @@ import { Checkbox, Col, DatePicker, Form, Icon, Input, message, Radio, Row, Sele
 import React, { Component } from 'react'
 import { QRScaner, noop } from 'qmkit';
 const { Option } = Select;
-import { querySysDictionary, fetchFelinFindByNoScan } from '../webapi'
+import { querySysDictionary } from '../webapi'
 import { Relax } from 'plume2';
 import moment from 'moment';
 @Relax
@@ -51,7 +51,7 @@ export default class FillinPetInfo extends Component {
      */
     async getDictAlllist(type, name, keywords?: string) {
         let { res: lifesOptions } = await querySysDictionary({ type, name: keywords });
-        let lifeList = lifesOptions.context.sysDictionaryVOS.map((el) => {
+        let lifeList = lifesOptions?.context?.sysDictionaryVOS.map((el) => {
             el.value = el.valueEn;
             return el;
         });
@@ -165,7 +165,7 @@ export default class FillinPetInfo extends Component {
                             <Col span={12}>
                                 <Form.Item label="Date of birth:">
                                     {getFieldDecorator('birthOfPets', {
-                                        initialValue: moment(customerPet?.birthOfPets??(''), 'YYYY-MM-DD'),
+                                        initialValue:customerPet.birthOfPets? moment(customerPet?.birthOfPets, 'YYYY-MM-DD'):'',
                                         rules: [{ required: true, message: 'Please select Date of birth!' }],
                                         onChange: (e,) => this._onChange(e, 'birthOfPets')
 

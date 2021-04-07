@@ -176,7 +176,7 @@ export default class SubscriptionPlan extends Component<any, any> {
         dataIndex: 'status',
         key: 'status',
         width: '7%',
-        render: (text) => (text === 0 ? 'Draft' : 'Publish')
+        render: (text) => (text === 0 ? <FormattedMessage id="Subscription.Draft"/> : <FormattedMessage id="Subscription.Publish"/>)
       },
       {
         title: <FormattedMessage id="Subscription.Enable"/>,
@@ -200,11 +200,11 @@ export default class SubscriptionPlan extends Component<any, any> {
         width: '8%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Detail">
+            <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
               <Link to={'/subscription-plan-detail/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
             {record.status === 0 && (
-              <Tooltip placement="top" title="Edit">
+              <Tooltip placement="top" title={<FormattedMessage id="Subscription.Edit"/>}>
                 <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit" style={{ paddingLeft: 10 }}></Link>
               </Tooltip>
             )}

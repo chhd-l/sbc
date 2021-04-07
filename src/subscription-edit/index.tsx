@@ -124,7 +124,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
-            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? 'Active' : 'Inactive',
+            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : <FormattedMessage id="Subscription.Inactive" />,
             subscriptionNumber: subscriptionDetail.subscribeId,
             subscriptionTime: subscriptionDetail.createTime,
             presciberID: subscriptionDetail.prescriberId,
@@ -1122,7 +1122,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <Popover content={content} trigger="click" visible={visibleDate && currentDateId === record.tradeItems[0].skuId} onVisibleChange={() => this.handleVisibleDateChange(record)}>
-              <Tooltip placement="top" title="Select Date">
+              <Tooltip placement="top" title={<FormattedMessage id="Subscription.SelectDate"/>}>
                 <a style={styles.edit} className="iconfont icondata"></a>
               </Tooltip>
             </Popover>
@@ -1136,7 +1136,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               okText="Confirm"
               cancelText="Cancel"
             >
-              <Tooltip placement="top" title="Skip delivery">
+              <Tooltip placement="top" title={<FormattedMessage id="Subscription.SkipDelivery"/>}>
                 <a className="iconfont iconskip"></a>
               </Tooltip>
             </Popconfirm>
@@ -1206,7 +1206,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].deliverStatus ? deliverStatus(record.tradeItems[0].deliverStatus) : '-'}</div>
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Subscription.Operation"/>,
         dataIndex: '',
         key: 'x',
         width: '10%',
@@ -1214,7 +1214,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <>
             {record.id ? (
               <Link to={'/order-detail/' + record.id}>
-                <Tooltip placement="top" title="Details">
+                <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
                   <a style={styles.edit} className="iconfont iconDetails"></a>
                 </Tooltip>
               </Link>
@@ -1238,7 +1238,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <FormattedMessage id="Subscription.edit" />
               </a>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>{this.state.addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
+            <Breadcrumb.Item>{this.state.addressType === 'delivery' ? <FormattedMessage id="Subscription.Delivery information" /> : <FormattedMessage id="Subscription.Billing information" />}</Breadcrumb.Item>
           </BreadCrumb>
           <DeliveryItem customerId={this.state.customerId} delivery={this.state.addressItem} addressType={this.state.addressType} backToDetail={this.backToSubscriptionEdit} />
         </div>
@@ -1253,7 +1253,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           {' '}
           <div className="container-search">
-            <Headline title={title} />
+            <Headline title={<FormattedMessage id="Subscription.edit" />} />
             {/* subscription 基本信息 */}
             <Row className="subscription-basic-info">
               <Col span={24}>
@@ -1619,7 +1619,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </div>
           <div className="container-search" style={{ marginBottom: 20 }}>
             <Headline
-              title="Autoship order"
+              title={<FormattedMessage id="Subscription.AutoshipOrder"/>}
               // extra={
               //   <div>
               //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
@@ -1631,10 +1631,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               // }
             />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
-              <TabPane tab="No start" key="noStart">
+              <TabPane tab={<FormattedMessage id="Subscription.NoStart"/>} key="noStart">
                 <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
               </TabPane>
-              <TabPane tab="Completed" key="completed">
+              <TabPane tab={<FormattedMessage id="Subscription.Completed"/>} key="completed">
                 <Table
                   rowKey={(record, index) => index.toString()}
                   rowClassName={(record, index) => {

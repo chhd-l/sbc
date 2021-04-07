@@ -105,7 +105,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
-            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? 'Active' : 'Inactive',
+            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : <FormattedMessage id="Subscription.Inactive" />,
             subscriptionNumber: subscriptionDetail.subscribeId,
             subscriptionTime: subscriptionDetail.createTime,
             presciberID: subscriptionDetail.prescriberId,
@@ -678,7 +678,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].deliverStatus ? deliverStatus(record.tradeItems[0].deliverStatus) : '-'}</div>
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Subscription.Operation"/>,
         dataIndex: '',
         key: 'x',
         width: '10%',
@@ -686,7 +686,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <>
             {record.id ? (
               <Link to={'/order-detail/' + record.id}>
-                <Tooltip placement="top" title="Details">
+                <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
                   <a style={styles.edit} className="iconfont iconDetails"></a>
                 </Tooltip>
               </Link>
@@ -698,13 +698,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     const columns_foodDispenser_no_start = [
       {
-        title: 'Delivery date',
+        title: <FormattedMessage id="Subscription.noStar.DeliveryDate"/>,
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
-        title: 'Product',
+        title: <FormattedMessage id="Subscription.noStar.Product"/>,
         key: 'Product',
         render: (text, record) => (
           <div>
@@ -780,7 +780,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           {' '}
           <div className="container-search">
-            <Headline title={title} />
+            <Headline title={<FormattedMessage id="Subscription.detail"/>} />
             <Row className="subscription-basic-info">
               <Col span={24}>
                 <span style={{ fontSize: '16px', color: '#3DB014' }}>{subscriptionInfo.subscriptionStatus}</span>
@@ -827,7 +827,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </div>
 
                 <div className="flex-between">
-                  <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span>
+                  {/* <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span> */}
+                  <span>
+                    <FormattedMessage id="Subscription.ColSpan.Promotion"/>
+                  </span>
                   <span style={styles.priceStyle}>{currencySymbol + '  -' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
                 </div>
 
@@ -943,7 +946,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </div>
           <div className="container-search">
             <Headline
-              title="Autoship order"
+              title={<FormattedMessage id="Subscription.AutoshipOrder"/>}
               // extra={
               //   <div>
               //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
@@ -955,10 +958,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               // }
             />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
-              <TabPane tab="No start" key="noStart">
+              <TabPane tab={<FormattedMessage id="Subscription.NoStart"/>} key="noStart">
                 <Table rowKey={(record, index) => index.toString()} columns={columns_foodDispenser_no_start} dataSource={noStartOrder} pagination={false}></Table>
               </TabPane>
-              <TabPane tab="Completed" key="completed">
+              <TabPane tab={<FormattedMessage id="Subscription.Completed"/>} key="completed">
                 <Table
                   rowKey={(record, index) => index.toString()}
                   rowClassName={(record, index) => {

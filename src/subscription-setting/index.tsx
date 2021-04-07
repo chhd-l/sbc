@@ -10,7 +10,7 @@ const FormItem = Form.Item;
   constructor(props: any) {
     super(props);
     this.state = {
-      title: <FormattedMessage id="Subscription.Subscription" />,
+      title: <FormattedMessage id="Subscription.Setting" />,
       settingForm: {
         newOrdersId: null,
         newOrdersStatus: 0,
@@ -119,8 +119,8 @@ const FormItem = Form.Item;
               <Row>
                 <Col span={1}>
                   <Switch
-                    checkedChildren="On"
-                    unCheckedChildren="Off"
+                    checkedChildren={<FormattedMessage id="Subscription.On" />}
+                    unCheckedChildren={<FormattedMessage id="Subscription.Off" />}
                     checked={settingForm.newOrdersStatus ? true : false}
                     onChange={(value) =>
                       this.settingFormChange({
@@ -158,8 +158,8 @@ const FormItem = Form.Item;
               <Row>
                 <Col span={1}>
                   <Switch
-                    checkedChildren="On"
-                    unCheckedChildren="Off"
+                    checkedChildren={<FormattedMessage id="Subscription.On" />}
+                    unCheckedChildren={<FormattedMessage id="Subscription.Off" />}
                     checked={settingForm.cardExpirationStatus ? true : false}
                     onChange={(value) =>
                       this.settingFormChange({

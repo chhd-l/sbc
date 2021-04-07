@@ -20,7 +20,8 @@ export default class Checkout extends React.Component<any, any> {
       scanedInfoVisible: false,
       scanedInfo: {},
       products: [],
-      list: []
+      list: [],
+      orderId: ''
     };
   }
 
@@ -171,6 +172,35 @@ export default class Checkout extends React.Component<any, any> {
     });
   }
 
+  queryOrderStatus = async (tid) => {
+    return await webapi.queryStatus({
+      tidList: [tid]
+    }).then(data => {
+      if (data.res.context === Const.SUCCESS_CODE) {
+        return true;
+      } else {
+        return false;
+      }
+    }).catch(() => {
+      return false;
+    });
+  };
+
+  refillOrder = (refill: boolean) => {
+    const { orderId } = this.state;
+    const { onClose } = this.props;
+    this.setState({ loading: true });
+    webapi.refillOrder(orderId, refill).then(data => {
+      if (data.res.context === Const.SUCCESS_CODE && onClose) {
+        onClose(false);
+      } else {
+        this.setState({ loading: false });
+      }
+    }).catch(() => {
+      this.setState({ loading: false });
+    });
+  };
+
   render() {
     const { onClose } = this.props;
     return (
@@ -194,7 +224,7 @@ export default class Checkout extends React.Component<any, any> {
               />
             : this.state.step === 3 
               ? <Payment onCancel={() => this.switchStep(2)} onPay={this.onConfirmCheckout} /> 
-              : <Result />}
+              : <Result onRefill={this.refillOrder} onClose={() => onClose(false)} />}
         <ScanedInfo visible={this.state.scanedInfoVisible} scanedInfo={this.state.scanedInfo} onChoose={this.onConfirmScanedInfo} />
       </div>
     );

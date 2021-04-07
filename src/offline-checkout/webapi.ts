@@ -67,5 +67,5 @@ export function refillOrder(tid: string, repeat: true | false) {
       tid,
       repeat
     })
-  }, { isHandleResult: true, customerTip: true });
+  });
 }

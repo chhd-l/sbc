@@ -34,9 +34,36 @@ export default class Activities extends Component<any, any> {
           title: 'Communication',
           value: 'Communication',
           key: 'Communication',
+          // children: [
+          //   { value: 'Automation Email', key: 'Automation Email', title: 'Automation Email' },
+          //   { value: 'Communication Email', key: 'Communication Email', title: 'Communication Email' }
+          // ]
           children: [
-            { value: 'Automation Email', key: 'Automation Email', title: 'Automation Email' },
-            { value: 'Communication Email', key: 'Communication Email', title: 'Communication Email' }
+            {
+              title: 'Order',
+              value: 'Order',
+              key: 'Order'
+            },
+            {
+              title: 'Subscription',
+              value: 'Subscription',
+              key: 'Subscription'
+            },
+            {
+              title: 'Recommendation',
+              value: 'Recommendation',
+              key: 'Recommendation'
+            },
+            {
+              title: 'Prescriber creation',
+              value: 'Prescriber creation',
+              key: 'Prescriber creation'
+            },
+            {
+              title: 'Automation',
+              value: 'Automation',
+              key: 'Automation'
+            }
           ]
         },
         {

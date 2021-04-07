@@ -12,11 +12,20 @@ export default class TemplateConponent extends Component<any, any> {
     const { avtivity } = this.props;
     const { viewVisible } = this.state;
     let viewParams = {
-      toEmail: avtivity.detailsResponse && avtivity.detailsResponse.email ? avtivity.detailsResponse.email : '',
-      ccList: avtivity.detailsResponse && avtivity.detailsResponse.ccList ? avtivity.detailsResponse.ccList : [],
-      templateName: avtivity.emailTemplate,
-      templateContent: avtivity.emailTemplateHtml ? avtivity.emailTemplateHtml : ''
+      toEmail: '',
+      ccList: [],
+      templateName: '',
+      templateContent: ''
     };
+    if(avtivity) {
+      let ccListString = avtivity.detailsResponse && avtivity.detailsResponse.ccList ? avtivity.detailsResponse.ccList : '';
+      viewParams = {
+        toEmail: avtivity.detailsResponse && avtivity.detailsResponse.email ? avtivity.detailsResponse.email : '',
+        ccList: ccListString ? ccListString.split(';'): [],
+        templateName: avtivity.emailTemplate,
+        templateContent: avtivity.emailTemplateHtml ? avtivity.emailTemplateHtml : ''
+      };
+    }
     return (
       <div className="template-component">
         <Card style={{ width: '95%', overflow: 'hidden' }}>
@@ -75,7 +84,7 @@ export default class TemplateConponent extends Component<any, any> {
                   Cc List
                 </Col>
                 <Col span={21}>
-                  {viewParams.ccList.map((item, index) => (
+                  { viewParams.ccList.map((item, index) => (
                     <Tag key={index}>{item.email}</Tag>
                   ))}
                 </Col>

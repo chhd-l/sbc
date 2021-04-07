@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Button, Dropdown, Menu, Icon, Modal, message } from 'antd';
 import { IList } from 'typings/globalType';
 import { withRouter } from 'react-router';
-import { noop, AuthWrapper, checkAuth } from 'qmkit';
+import {noop, AuthWrapper, checkAuth, util, Const} from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import SyncButton from './sync-product';
 const confirm = Modal.confirm;
@@ -19,15 +19,32 @@ class Tool extends React.Component<any, any> {
       spuOffSale: Function;
       selectedSpuKeys: IList;
       setFeightVisible: Function;
+      likeGoodsName: string;
+      likeGoodsInfoNo: string;
+      likeGoodsNo: string;
+      storeCateId: string;
+      brandId: string;
+      cateId: string;
     };
   };
-
   static relaxProps = {
     spuDelete: noop,
     spuOnSale: noop,
     spuOffSale: noop,
     selectedSpuKeys: 'selectedSpuKeys',
-    setFeightVisible: noop
+    field: 'field',
+    setFeightVisible: noop,
+    // 模糊条件-商品名称
+    likeGoodsName: 'likeGoodsName',
+    // 模糊条件-SKU编码
+    likeGoodsInfoNo: 'likeGoodsInfoNo',
+    // 模糊条件-SPU编码
+    likeGoodsNo: 'likeGoodsNo',
+    // 商品分类
+    storeCateId: 'storeCateId',
+    // 品牌编号
+    brandId: 'brandId',
+    cateId: 'cateId',
   };
 
   render() {
@@ -86,6 +103,17 @@ class Tool extends React.Component<any, any> {
               }}
             >
               <FormattedMessage id="Product.Batchdelete" />
+            </a>
+          </AuthWrapper>
+        </Menu.Item>
+        <Menu.Item>
+          <AuthWrapper functionName="f_goods_6">
+            <a
+              onClick={() => {
+                this._export();
+              }}
+            >
+              Batch export Stock&Price
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -168,6 +196,45 @@ class Tool extends React.Component<any, any> {
       onOk() {
         spuDelete();
       }
+    });
+  };
+
+
+  _export = () => {
+    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, storeCateId, cateId, brandId } = this.props.relaxProps;
+    console.log(likeGoodsName,1111111111)
+    console.log(likeGoodsInfoNo,222)
+    console.log(likeGoodsNo,3333)
+    console.log(storeCateId,4444)
+    console.log(cateId,5555)
+    console.log(brandId,66666)
+    let params = {
+      likeGoodsName,
+      likeGoodsNo,
+      likeGoodsInfoNo,
+      storeCateId,
+      cateId,
+      brandId,
+    };
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          let result = JSON.stringify({ ...params, token: token });
+          let encrypted = base64.urlEncode(result);
+
+          // 新窗口下载
+          const exportHref = Const.HOST + `/goods/exportSpus/${encrypted}`;
+          console.log(result);
+          console.log(exportHref);
+          window.open(exportHref);
+        } else {
+          message.error(<FormattedMessage id="Analysis.Unsuccessful" />);
+        }
+
+        resolve();
+      }, 500);
     });
   };
 }

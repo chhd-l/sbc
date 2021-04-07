@@ -6,7 +6,6 @@ import { fromJS } from 'immutable';
 import styled from 'styled-components';
 import { IList } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
-
 const { Column } = Table;
 
 const GreyBg = styled.div`
@@ -80,7 +79,7 @@ export default class GoodsList extends React.Component<any, any> {
             </Col>
             <Col span={12} >
               {
-                scopeType === 0 ? <span><FormattedMessage id="Marketing.all" /></span> :
+                scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
                   scopeType === 1 ?
                     <Table dataSource={dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId">
                       <Column width="15%" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />
@@ -91,7 +90,7 @@ export default class GoodsList extends React.Component<any, any> {
                       <Column width="20%" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
                     </Table> :  scopeType === 2 ?
                     currentCategary && currentCategary.map(item=> (
-                      <span key={item.storeCateId}>{item.get('cateName')}</span>
+                      <span className="text-align-center" key={item.storeCateId}>{item.get('cateName')}</span>
                     ))
                     : <span>
                       {

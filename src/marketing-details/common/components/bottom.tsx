@@ -57,15 +57,17 @@ export default class Bottom extends React.Component<any, any> {
       <div>
         <GreyBg>
           <Row>
-            <Col span={24}>
-              <span>
+            <Col span={3}>
+              <span >
                 <FormattedMessage id="Marketing.TargetConsumer" />:
               </span>
+            </Col>
+            <Col >
               {
                 joinLevel == -1 ?
-                  <span><FormattedMessage id="Marketing.all" /></span> : joinLevel == -3 ?
+                  <span className="left-span"><FormattedMessage id="Marketing.all" /></span> : joinLevel == -3 ?
                   <span>{currentGroup && currentGroup.get('name')}</span>
-                   : joinLevel == -4 ?
+                  : joinLevel == -4 ?
                     <span>
                       {emailSuffixList && emailSuffixList.toJS()[0]}
                     </span>: null

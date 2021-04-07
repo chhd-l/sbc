@@ -30,19 +30,19 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab="All" key="0">
+          <Tabs.TabPane tab="全部" key="0">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Ready for shipping" key="flowState-AUDIT">
+          <Tabs.TabPane tab="待发货" key="flowState-AUDIT">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Ready for receiving" key="flowState-DELIVERED">
+          <Tabs.TabPane tab="待收货" key="flowState-DELIVERED">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Accomplished" key="flowState-COMPLETED">
+          <Tabs.TabPane tab="已完成" key="flowState-COMPLETED">
             <List />
           </Tabs.TabPane>
         </Tabs>

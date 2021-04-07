@@ -6,8 +6,6 @@ import QQModal from './components/qq-modal';
 import { StoreProvider } from 'plume2';
 import AppStore from './store';
 
-import { FormattedMessage } from 'react-intl';
-
 const QQForm = Form.create()(QQModal as any); //品牌弹框
 const ContainerDiv = styled.div`
   .methodItem {
@@ -66,9 +64,7 @@ export default class OnlineService extends React.Component<any, any> {
         </Breadcrumb> */}
         <div className="container">
           <ContainerDiv>
-            <Headline
-              title={<FormattedMessage id="OnlineService"></FormattedMessage>}
-            />
+            <Headline title="Online Service" />
             <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
               <div className="methodItem">
                 <img src={require('./img/qq.png')} />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Store } from 'plume2';
-import { Form, Input, AutoComplete, Icon, message } from 'antd';
+import { Form, Input, AutoComplete, message } from 'antd';
+import { Icon } from '@ant-design/compatible';
 import PropTypes from 'prop-types';
 const FormItem = Form.Item;
 import { Const, Tips, ValidConst, QMMethod, QMUpload } from 'qmkit';

@@ -28,6 +28,8 @@ export default class BillingDetails extends React.Component<any, any> {
   componentDidMount() {
     const { settleId } = this.props.match.params;
     this.store.init(settleId);
+    console.log(history.location.state.settlementType, 11111);
+    console.log(this.store.state(), 11111);
   }
 
   render() {

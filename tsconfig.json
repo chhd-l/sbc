@@ -1,7 +1,18 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["es5", "es6", "dom", "es7", "esnext", "esnext.intl", "es2017.intl", "es2018.intl", "dom.iterable","scripthost"],
+    "lib": [
+      "es5",
+      "es6",
+      "dom",
+      "es7",
+      "esnext",
+      "esnext.intl",
+      "es2017.intl",
+      "es2018.intl",
+      "dom.iterable",
+      "scripthost"
+    ],
     "module": "esnext",
     "sourceMap": false,
     "noImplicitAny": false,
@@ -11,32 +22,37 @@
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
     "baseUrl": ".",
-    "rootDirs": ["src", "web_modules", "."],
-    "paths": {
-      "qmkit": ["web_modules/qmkit"],
-      "biz": ["web_modules/biz"],
-      "wmservice/*": ["web_modules/wmservice/*"],
-      "api": ["web_modules/api"],
-      "api/*": ["web_modules/api/*"],
-      "wmkit": ["web_modules/wmkit"],
-      "wmkit/*": ["web_modules/wmkit/*"],
-      "wmui/*": ["web_modules/wmui/*"],
-      "uikit/*": ["./uikit/*"],
-      "@/typings": ["./typings"],
-      "typings": ["./typings"],
-      "@/*": ["./src/*"],
-      "components/*": ["./components/*"]
-    },
+    "rootDirs": [
+      "src",
+      "web_modules",
+      "."
+    ],
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
-  "exclude": ["node_modules", "dist"],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "awesomeTypescriptLoaderOptions": {
     "useCache": true,
     "useBabel": true,
     "isolatedModules": true,
     "forceIsolatedModules": true,
     "transpileOnly": true,
-    "reportFiles": ["src/**/*.{ts,tsx}", "web_modules/**/*.{ts,tsx}"]
-  }
+    "reportFiles": [
+      "src/**/*.{ts,tsx}",
+      "web_modules/**/*.{ts,tsx}"
+    ]
+  },
+  "include": [
+    "src"
+  ]
 }

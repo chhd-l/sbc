@@ -11,10 +11,10 @@ export const getCateList = () => {
 /**
  * 添加
  */
-export const addCate = (formData = {}) => {
+export const addCate = (formData: IMap) => {
   return Fetch('/storeCate', {
     method: 'POST',
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(formData.toJS())
   });
 };
 
@@ -30,10 +30,10 @@ export const deleteCate = (storeCateId: string) => {
 /**
  * 修改
  */
-export const editCate = (formData = {}) => {
+export const editCate = (formData: IMap) => {
   return Fetch('/storeCate', {
     method: 'PUT',
-    body: JSON.stringify({ ...formData })
+    body: JSON.stringify(formData.toJS())
   });
 };
 

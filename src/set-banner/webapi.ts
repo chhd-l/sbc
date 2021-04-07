@@ -25,24 +25,18 @@ export const getList = (filter = {}) => {
  * 删除
  */
 export const deleteRow = (params) => {
-  return Fetch<TResult>(api.deleteRow, {
-    method: 'POST',
-    body: JSON.stringify(params)
-  });
+  return Fetch<TResult>(api.deleteRow);
 };
 /**
  * 编辑
  */
 export const editRow = (params) => {
-  return Fetch<TResult>(api.editRow, {
-    method: 'POST',
-    body: JSON.stringify(params)
-  });
+  return Fetch<TResult>(api.editRow);
 };
 /**
  * 编辑
  */
-export const uploadBanner = (params) => {
+export const updateBanner = (params) => {
   return Fetch<TResult>(api.upload, {
     method: 'POST',
     body: JSON.stringify(params)

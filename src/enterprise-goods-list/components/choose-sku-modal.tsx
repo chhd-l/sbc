@@ -246,10 +246,7 @@ class EditChoseSkuModalForm extends React.Component<any, any> {
             key="option"
             render={(rowInfo) => {
               return (
-                <a
-                  href="javascript:void(0);"
-                  onClick={() => onDelChoseSku(rowInfo.goodsInfoId)}
-                >
+                <a href="#;" onClick={() => onDelChoseSku(rowInfo.goodsInfoId)}>
                   删除
                 </a>
               );

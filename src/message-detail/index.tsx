@@ -822,7 +822,7 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Pet owner account">
+                    <FormItem label="Pet Owner Account">
                       {getFieldDecorator(
                         'consumerAccount',
                         {}
@@ -870,7 +870,7 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Pet owner name">
+                    <FormItem label="Pet Owner Name">
                       {getFieldDecorator('consumerName', {
                         rules: [
                           {
@@ -926,7 +926,7 @@ class MessageDetails extends Component<any, any> {
                     <FormItem
                       label={
                         <span>
-                          Related pet&nbsp;
+                          Related Pet&nbsp;
                           <Tooltip title="Please select Pet owner account first!">
                             <Icon type="question-circle-o" />
                           </Tooltip>

@@ -16,24 +16,24 @@ export default class emails extends Component<any, any> {
       emailList: [],
       emailFilters: [
         {
-          value: 'Order',
-          name: 'Order'
+          value: 'Order email',
+          name: 'Order email'
         },
         {
-          value: 'Subscription',
-          name: 'Subscription'
+          value: 'Subscription email',
+          name: 'Subscription email'
         },
         {
-          value: 'Recommendation',
-          name: 'Recommendation'
+          value: 'Recommendation email',
+          name: 'Recommendation email'
         },
         {
-          value: 'Prescriber creation',
-          name: 'Prescriber creation'
+          value: 'Prescriber creation email',
+          name: 'Prescriber creation email'
         },
         {
-          value: 'Automation',
-          name: 'Automation'
+          value: 'Automation email',
+          name: 'Automation email'
         }
       ],
       isRecent: true,

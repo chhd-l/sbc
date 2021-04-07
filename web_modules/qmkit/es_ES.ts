@@ -2071,6 +2071,7 @@ export default {
   'Marketing.Promotiontype':'Promotion type',
   'Marketing.CampaignStatus2': 'Campaign Status',
   'Marketing.Download': 'Download',
+  'Marketing.Club': 'Club',
 
 
 

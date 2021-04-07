@@ -223,6 +223,8 @@ class SkuForm extends React.Component<any, any> {
             console.log(addSkUProduct,444444);
             c = 0
 
+          }else {
+            c = 0
           }
         }else {
 
@@ -255,6 +257,7 @@ class SkuForm extends React.Component<any, any> {
                     style={{ width: '121px' }}
                     min={0}
                     max={b}
+                    //onBlur={this.onInputNumber.bind(this, rowInfo.id, 'stock')}
                   />
                 )}
               </FormItem>
@@ -361,6 +364,18 @@ class SkuForm extends React.Component<any, any> {
       e = e.target.value;
     }
     editGoodsItem(id, key, e);
+  };
+
+  onInputNumber = (id: string, key: string, e: any, flag?: any) => {
+    const { editGoodsItem,} = this.props.relaxProps;
+    if (e && e.target) {
+      e = e.target.value;
+    }
+    if (e == "") {
+      editGoodsItem(id, key, 0);
+    }
+
+    console.log(e,77777);
   };
 }
 

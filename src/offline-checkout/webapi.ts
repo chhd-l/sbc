@@ -36,7 +36,7 @@ export function findAppointmentByAppointmentNo(apptNo: string) {
  */
 export function checkout(params = {}) {
   const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || '';
-  return Fetch<TResult>(`http://40.87.29.46:8090/123457909/${storeId}/all/pos/checkout`, {
+  return Fetch<TResult>(`/${storeId}/all/pos/checkout`, {
     method: 'POST',
     body: JSON.stringify(params)
   });

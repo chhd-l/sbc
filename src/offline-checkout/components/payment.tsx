@@ -21,6 +21,15 @@ export default class Payment extends React.Component<any, any> {
     this.setState({ showConfirm: false });
   };
 
+  onConfirmPayment = () => {
+    const { onPay } = this.props;
+    const { paymentMethod } = this.state;
+    if (onPay) {
+      onPay(paymentMethod);
+      this.setState({ showConfirm: false });
+    }
+  };
+
   render() {
     const { onCancel, onPay } = this.props;
     const { paymentMethod } = this.state;
@@ -49,7 +58,7 @@ export default class Payment extends React.Component<any, any> {
         </Row>
         <Modal width={300} visible={this.state.showConfirm} centered={true} footer={null} onCancel={this.onCancelPayment}>
           <div style={{margin: '30px 0'}}>
-            <Button type="primary" size="large" block onClick={() => onPay(paymentMethod)}>Confirm</Button>
+            <Button type="primary" size="large" block onClick={this.onConfirmPayment}>Confirm</Button>
           </div>
           <div style={{margin: '30px 0'}}>
             <Button type="default" size="large" block onClick={this.onCancelPayment}>Cancel</Button>

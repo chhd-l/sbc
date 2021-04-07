@@ -26,6 +26,7 @@ export default class GoodsSpecActor extends Actor {
           addedFlag: 1,
           goodsInfoNo: this._randomGoodsInfoNo(),
           subscriptionStatus: 1,
+          stock: 0
         }
       ],
       stockChecked: false,

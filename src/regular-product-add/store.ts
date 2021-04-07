@@ -1095,7 +1095,26 @@ export default class AppStore extends Store {
       goodsList.forEach((item) => {
 
 
-        if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
+        if (this.state().get('goods').get('saleableFlag') != 0) {
+          //console.log(item.get('marketPrice'),123 )
+          if ( item.get('marketPrice') == 0 ) {
+            tip = 1;
+            valid = false;
+            return;
+          }
+        }
+
+
+
+        if (this.state().get('goods').get('saleableFlag') != 0) {
+          if ( item.get('marketPrice') == 0 ) {
+            tip = 1;
+            valid = false;
+            return;
+          }
+        }
+
+        /*if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           valid = false;
           tip = 1;
           return;
@@ -1119,7 +1138,7 @@ export default class AppStore extends Store {
           tip = 3;
           valid = false;
           return;
-        }
+        }*/
 
        /* if (!(item.get('subscriptionStatus') || item.get('subscriptionStatus') == 0)) {
           tip = 4;
@@ -1159,7 +1178,9 @@ export default class AppStore extends Store {
       });
     }
     if (flag === 1) {
-      console.log('Please enter the correct value');
+      message.error('Please input Inventory');
+    } else if(flag === 2){
+      message.error('Please enter the correct value');
     }
     return valid;
   }

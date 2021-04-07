@@ -1063,20 +1063,45 @@ export default class AppStore extends Store {
         // console.log('test:', item.get('goodsInfoNo'), addSkUProduct, a);
         // console.log(reg.test(item.get('stock')));
 
-        console.log(addSkUProduct);
+        console.log(addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds.length);
         console.log(item.get('stock'));
         console.log(reg.test(item.get('stock')));
-        console.log(!ValidConst.zeroNumber.test((item.get('stock'))));
-
-
-        if (reg.test(item.get('stock')) === false) {
-          if( addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length != 1 && addSkUProduct[0].minStock == undefined) {
-            flag = 1
+        console.log(ValidConst.zeroNumber.test((item.get('stock'))) === true);
+        if (reg.test(item.get('stock')) === false ) {
+          console.log(333333)
+          flag = 2
+          valid = false;
+          return;
+        }
+        /*if (addSkUProduct.length == 1) {
+          if (addSkUProduct[0].targetGoodsIds.length != 1 ) {
+            console.log(1111111)
+            flag = 2
+            valid = false;
+            return;
+          } else {
+            if (reg.test(item.get('stock')) === false ) {
+              console.log(22222)
+              flag = 2
+              valid = false;
+              return;
+            }
+          }
+        } else {
+          if (reg.test(item.get('stock')) === false ) {
+            console.log(333333)
+            flag = 2
             valid = false;
             return;
           }
+        }*/
 
-        }
+
+      /*if( addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length != 1 && addSkUProduct[0].minStock == undefined) {
+        flag = 2
+        valid = false;
+        return;
+      }*/
         /*if(!item.get('stock')) {
           if ( addSkUProduct.length == 1 && !addSkUProduct[0].minStock ) {
             flag = 1
@@ -1107,7 +1132,7 @@ export default class AppStore extends Store {
     if (flag === 1) {
       message.error('Please input Inventory');
     } else if(flag === 2){
-      console.log('Please enter the correct value');
+      message.error('Please enter the correct value');
     }
     return valid;
   }

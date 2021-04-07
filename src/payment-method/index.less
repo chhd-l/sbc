@@ -61,6 +61,10 @@
 
   .method-list {
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 }
 
@@ -75,4 +79,16 @@
 
 .color1 {
   color: #8e8e8e;
+}
+
+.loading-spin {
+  left: 50%;
+  top: 50%;
+  position: fixed;
+  z-index: 2;
+
+  .ant-spin-dot {
+    width: 90px;
+    height: 90px;
+  }
 }

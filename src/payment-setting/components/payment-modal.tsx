@@ -40,16 +40,28 @@ class PaymentModal extends React.Component<any, any> {
     relaxProps?: {
       key: any;
       paymentForm: any;
+      saveLoading: boolean;
+      visible: boolean;
+      paymentFormSource: any;
       setCurrentTabKey: Function;
       onFormChange: Function;
+      save: Function;
+      handelModelOpenOClose: Function;
+      init: Function;
     };
   };
 
   static relaxProps = {
     key: 'key',
     paymentForm: 'paymentForm',
+    visible: 'visible',
+    saveLoading: 'saveLoading',
+    paymentFormSource: 'paymentFormSource',
+    init: noop,
     setCurrentTabKey: noop,
-    onFormChange: noop
+    onFormChange: noop,
+    save: noop,
+    handelModelOpenOClose: noop,
   };
   onFormChange = (value) => {
     this.setState({
@@ -66,13 +78,12 @@ class PaymentModal extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
 
-    const { key, onFormChange } = this.props.relaxProps
+    const { key, onFormChange, visible, saveLoading } = this.props.relaxProps
     let paymentForm =  this.props.relaxProps.paymentForm.toJS()
     console.log(key, 'key----------');
     console.log(paymentForm, 'paymentForm----------');
-
     return (
-      <Modal maskClosable={false} title="Edit Payment Setting" visible={this.props.visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
+      <Modal confirmLoading={saveLoading} maskClosable={false} title="Edit Payment Setting" visible={visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Tabs defaultActiveKey={key ? key.toString() : null} onChange={this._handleClick}>
           {paymentForm&&paymentForm.payPspItemVOList&&paymentForm.payPspItemVOList.map((item, index)=>{
             return(
@@ -189,8 +200,8 @@ class PaymentModal extends React.Component<any, any> {
                       <Col span={24}>
                         <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
                           {getFieldDecorator(item.id + 'isOpen', {
-                            initialValue: item.isOpen == 1? true : false
-                          })(<Switch defaultChecked={item.isOpen == 1? true : false} onChange={(value)=> {
+                            initialValue: item.isOpen == 1
+                          })(<Switch defaultChecked={item.isOpen == 1} checked={item.isOpen == 1} onChange={(value)=> {
                             this.onFormChange(value)
                             onFormChange({
                               id: key,
@@ -230,8 +241,8 @@ class PaymentModal extends React.Component<any, any> {
                       <Col span={24}>
                         <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
                           {getFieldDecorator(item.id + 'isOpen', {
-                            initialValue: item.isOpen == 1? true : false
-                          })(<Switch defaultChecked={item.isOpen == 1? true : false}
+                            initialValue: item.isOpen == 1
+                          })(<Switch defaultChecked={item.isOpen == 1} checked={item.isOpen == 1}
                                      onChange={(value)=> {
                                        onFormChange({
                                          id: key,
@@ -280,11 +291,10 @@ class PaymentModal extends React.Component<any, any> {
   };
 
   cancel = () => {
-    this.props.parent.closeModel();
+    const { handelModelOpenOClose, init } = this.props.relaxProps
     this.props.form.resetFields();
-    this.setState({
-      isOpen: null
-    });
+    handelModelOpenOClose(false)
+    init()
   };
 
   union = (arr1,arr2) =>{
@@ -299,8 +309,7 @@ class PaymentModal extends React.Component<any, any> {
   onSave = async () => {
     this.props.form.validateFields(null, async (errs, values) => {
       //如果校验通过
-      debugger
-      const { key } = this.props.relaxProps
+      const { key, save } = this.props.relaxProps
       let paymentForm = this.props.relaxProps.paymentForm.toJS()
       let payPspItemVOList = paymentForm.payPspItemVOList.find(item => item.id === key)
       // let pspItemCardTypeSaveRequestList = []
@@ -352,12 +361,7 @@ class PaymentModal extends React.Component<any, any> {
       }
       console.log(params, 'params-----');
       if (!errs) {
-        const { res } = await webapi.savePaymentSetting(params);
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
-          this.props.reflash();
-          this.cancel();
-        }
+        save(params)
       }
     });
   };

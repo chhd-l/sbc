@@ -6,6 +6,7 @@ import * as webapi from './webapi';
 import { Const, cache } from 'qmkit';
 import { fromJS } from 'immutable';
 import PaymentSettingActor from './actor/payment-list-actor';
+import { message } from 'antd';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -20,10 +21,14 @@ export default class AppStore extends Store {
   }
 
   init = async () => {
+    this.dispatch('loading:start')
     const { res } = await webapi.getPaymentSetting();
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('payment:paymentList', fromJS(res.context))
       this.setCurrentTabKey(this.state().get('key') ? this.state().get('key') : res.context[0].payPspItemVOList[0].id)
+      this.dispatch('loading:end')
+    } else {
+      this.dispatch('loading:end')
     }
   }
 
@@ -35,8 +40,23 @@ export default class AppStore extends Store {
   }
 
   onFormChange = ({id, field, value}) => {
-    debugger
     this.dispatch('payment:onFormChange', { id, field, value })
   }
 
+  save = async (params) => {
+    this.dispatch('payment:saveLoading', true)
+    const { res } = await webapi.savePaymentSetting(params);
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success('Operate successfully');
+      this.handelModelOpenOClose(false);
+      this.init()
+      this.dispatch('payment:saveLoading', false)
+    } else {
+      this.dispatch('payment:saveLoading', false)
+    }
+  }
+
+  handelModelOpenOClose = (visible) => {
+    this.dispatch('payment:visible', visible)
+  }
 }

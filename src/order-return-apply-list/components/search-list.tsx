@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import { Spin, Pagination, Tooltip } from 'antd';
 import moment from 'moment';
 import { IList } from 'typings/globalType';
-import { Const, noop } from 'qmkit';
+import { Const, getOrderStatusValue, noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 const defaultImg = require('../img/none.png');
@@ -200,10 +200,18 @@ export default class SearchList extends React.Component<any, any> {
                   </td>
                   {/*发货状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td> */}
-                  <td style={{ width: '15%' }}>{v.getIn(['tradeState', 'deliverStatus'])}</td>
+                  <td style={{ width: '15%' }}>
+                    {/* {v.getIn(['tradeState', 'deliverStatus'])}*/}
+                    <FormattedMessage id={getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))} />
+                    </td>
+                  
+                   
                   {/*订单状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.flowState[v.getIn(['tradeState', 'flowState'])]}</td> */}
-                  <td style={{ width: '15%' }}>{v.getIn(['tradeState', 'flowState'])}</td>
+                  <td style={{ width: '15%' }}>
+                  <FormattedMessage id={getOrderStatusValue('OrderStatus',v.getIn(['tradeState', 'flowState']))} />
+                    {/* {v.getIn(['tradeState', 'flowState'])} */}
+                    </td>
                   {/*支付状态*/}
                   <td
                     style={{
@@ -212,8 +220,9 @@ export default class SearchList extends React.Component<any, any> {
                       paddingRight: 20
                     }}
                   >
+                    <FormattedMessage id={getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))} />
                     {/* {Const.payState[v.getIn(['tradeState', 'payState'])]} */}
-                    {v.getIn(['tradeState', 'payState'])}
+                    {/* {v.getIn(['tradeState', 'payState'])} */}
                   </td>
                 </tr>
               </tbody>

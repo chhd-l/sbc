@@ -6,8 +6,20 @@ export default class PaymentSettingActor extends Actor {
     return {
       paymentList: [],
       paymentForm: {},
-      key: null //当前tab id
+      key: null, //当前tab id
+      visible: false,
+      saveLoading: false
     };
+  }
+
+  @Action('payment:saveLoading')
+  saveLoading(state, saveLoading) {
+    return state.set('saveLoading', saveLoading);
+  }
+
+  @Action('payment:visible')
+  paymentModalVisible(state, visible) {
+    return state.set('visible', visible);
   }
 
   @Action('payment:key')
@@ -18,6 +30,7 @@ export default class PaymentSettingActor extends Actor {
   paymentForm(state, paymentForm) {
     return state.set('paymentForm', paymentForm);
   }
+
   @Action('payment:paymentList')
   paymentList(state, paymentList) {
     return state.set('paymentList', paymentList);

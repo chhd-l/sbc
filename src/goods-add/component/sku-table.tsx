@@ -105,24 +105,7 @@ class SkuForm extends React.Component<any, any> {
   }
 
   render() {
-    const { goodsList, onProductselectSku, addSkUProduct } = this.props.relaxProps;
-
-    if ( goodsList.toJS().length == 0 ) {
-      let a = []
-      onProductselectSku(a)
-    }else {
-      if (addSkUProduct.length>0) {
-        //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
-        let b = goodsList.toJS().filter(i => addSkUProduct.some(j => j.pid === i.goodsInfoNo))
-        console.log(b,111);
-        let c = addSkUProduct.filter(i => i.pid != b)
-        //onProductselectSku(c)
-        console.log(c,444444);
-
-      }
-    }
-    console.log(addSkUProduct, 333333);
-
+    const { goodsList } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
     // if(this.state.count < 100) {
@@ -691,7 +674,7 @@ class SkuForm extends React.Component<any, any> {
   };
 
   onDel = (item, pid, id) => {
-    const { addSkUProduct, onProductselectSku, goodsList } = this.props.relaxProps;
+    const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
     let a = [];
     let b = [];
     let c = [];
@@ -712,8 +695,6 @@ class SkuForm extends React.Component<any, any> {
     });
     let d = b.concat(c);
     this._editGoodsItem(id, 'goodsInfoBundleRels', a);
-    console.log(d,123);
-    console.log(goodsList.get('goodsInfoNo'),234);
     onProductselectSku(d);
   };
 

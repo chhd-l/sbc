@@ -1093,35 +1093,26 @@ export default class AppStore extends Store {
 
     if (goodsList) {
       goodsList.forEach((item) => {
+
+
         if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('marketPrice') == undefined) {
-              tip = 1;
-              valid = false;
-              return;
-          }else {
-            if ( item.get('marketPrice') == 0 ) {
-              tip = 1;
-              valid = false;
-              return;
-            }
+          //console.log(item.get('marketPrice'),123 )
+          if ( item.get('marketPrice') == 0 ) {
+            tip = 1;
+            valid = false;
+            return;
           }
         }
 
 
+
         if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0) {
-              tip = 2;
-              valid = false;
-              return;
-          }else {
-            if ( item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
-              tip = 2;
-              valid = false;
-              return;
-            }
+          if ( item.get('marketPrice') == 0 ) {
+            tip = 1;
+            valid = false;
+            return;
           }
         }
-
 
         /*if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           valid = false;
@@ -1169,20 +1160,6 @@ export default class AppStore extends Store {
   }
   _validInventoryFormsNew() {
     let valid = true;
-    let goodsList = this.state().get('goodsList');
-    if (goodsList) {
-      goodsList.forEach((item) => {
-        if (!(item.get('stock') || item.get('stock') == 0)) {
-          valid = false;
-          return;
-        }
-      });
-    }
-    if (!valid) {
-      message.error('Please input Inventory');
-    }
-    return valid;
-    /*let valid = true;
     let flag = 0
     let goodsList = this.state().get('goodsList');
     let reg=/^[1-9]\d*$|^0$/;
@@ -1193,11 +1170,11 @@ export default class AppStore extends Store {
           flag = 1
           valid = false;
           return;
-        }/!* else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
+        } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
           flag = 2
           valid = false;
           return;
-        }*!/
+        }
       });
     }
     if (flag === 1) {
@@ -1205,7 +1182,7 @@ export default class AppStore extends Store {
     } else if(flag === 2){
       message.error('Please enter the correct value');
     }
-    return valid;*/
+    return valid;
   }
   validMain = () => {
     return this._validMainForms();
@@ -1215,6 +1192,9 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async (nextTab = null) => {
+    console.log(!this._validMainForms());
+    console.log(!this._validPriceFormsNew());
+    console.log(!this._validInventoryFormsNew());
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }

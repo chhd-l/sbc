@@ -993,41 +993,9 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         //console.log(this.state().get('goods').get('saleableFlag') ,111 )
-        console.log(addSkUProduct,111111);
-        console.log(item.get('marketPrice'),22222 )
+        //console.log(item.get('marketPrice'),22222 )
 
         if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('marketPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) ) {
-            tip = 1;
-            valid = false;
-            return;
-          }else {
-            if ( item.get('marketPrice') == 0 ) {
-              tip = 1;
-              valid = false;
-              return;
-            }
-          }
-        }
-
-        if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('marketPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) ) {
-            if ( item.get('subscriptionPrice') == 0 ) {
-              tip = 1;
-              valid = false;
-              return;
-            }
-          }else {
-            if ( item.get('subscriptionPrice') == 0 ) {
-              tip = 1;
-              valid = false;
-              return;
-            }
-          }
-        }
-
-
-        /*if (this.state().get('goods').get('saleableFlag') != 0) {
           //console.log(item.get('marketPrice'),123 )
           if(item.get('marketPrice') != undefined) {
             //console.log(item.get('marketPrice'),345 )
@@ -1046,11 +1014,11 @@ export default class AppStore extends Store {
               return;
             }
           }
-        }*/
+        }
 
 
 
-        /*if (this.state().get('goods').get('saleableFlag') != 0) {
+        if (this.state().get('goods').get('saleableFlag') != 0) {
           if(item.get('subscriptionPrice') != undefined) {
             if ( item.get('subscriptionPrice') == 0 ) {
               tip = 1;
@@ -1064,7 +1032,7 @@ export default class AppStore extends Store {
               return;
             }
           }
-        }*/
+        }
 
        /* if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
           tip = 2;
@@ -2133,28 +2101,6 @@ export default class AppStore extends Store {
       }
     }
     this.dispatch('sku:addSkUProduct', newJson);
-   /* if (addProduct.length != 0) {
-      let a = addProduct.concat(this.state().toJS().addSkUProduct);
-      let newJson = []; //盛放去重后数据的新数组
-      for (let item1 of a) {
-        let flag = true;
-        for (let item2 of newJson) {
-          if (item1.pid == item2.pid) {
-            flag = false;
-          }
-        }
-        if (flag) {
-          //判断是否重复
-          newJson.push(item1); //不重复的放入新数组。  新数组的内容会继续进行上边的循环。
-        }
-      }
-      this.dispatch('sku:addSkUProduct', newJson);
-
-    }else {
-      this.dispatch('sku:addSkUProduct', addProduct);
-
-    }*/
-
   };
 
   onRelatedList = async (param?: any) => {

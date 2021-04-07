@@ -34,7 +34,7 @@ export default {
   'Public.all':'all',
   'Public.Search':'Search',
   /* -------- 已翻译 V1.0---------------*/
-
+  'Public.ChooseLocation':'Choose your location',
 
 
 

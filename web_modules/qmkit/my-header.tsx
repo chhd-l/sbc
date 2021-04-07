@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover, Empty, Tabs, notification, Modal, Row, Col } from 'antd';
+import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover, Empty, Tabs, notification, Modal } from 'antd';
 const { Header } = Layout;
 import { history, cache, util, Const } from 'qmkit';
 import QRCode from 'qrcode';
@@ -21,7 +21,7 @@ export default class MyHeader extends React.Component {
       taskList: [],
       reminderTasks:[],
       visible: false,
-      aLanguage: ['English', 'Russian', 'Turkey'],
+      modalVisible: false,
       English: util.requireLocalSrc('sys/English.png'),
       Russian: util.requireLocalSrc('sys/Russian.png'),
       Turkey: util.requireLocalSrc('sys/Turkey.png'),
@@ -72,16 +72,26 @@ export default class MyHeader extends React.Component {
   }
 
   getLanguageItem() {
+    const aLanguage = ['English', 'Russian', 'Turkey'];
     return (
-      <Row>       
-        {
-          this.state.aLanguage.map((val) => {
-            return (
-              <Col span={8} key={val}>
+      <div style={{position: 'relative',height: 480}}>
+        <div style={{width: '60%',position: 'absolute',top:'26%',left:'20%'}}>
+          <p style={{textAlign: 'center',fontSize: 40, color:'#e1021a'}}>
+            <Icon type="environment" style={{ fontSize: 32 }} />
+            &nbsp;&nbsp;
+            <span>
+              <FormattedMessage id="Public.ChooseLocation" />
+            </span>
+          </p>
+          <div className="space-around">      
+          {
+            aLanguage.map((val) => {
+              return (
                 <img 
+                  key={val}
                   style={{
                     cursor: 'pointer',
-                    width: '200px'
+                    width: '30%'
                   }}
                   onMouseLeave={e => {
                     this.setImgSrc(val, '');
@@ -94,11 +104,12 @@ export default class MyHeader extends React.Component {
                     this.languageChange(val)
                   }
                 />
-              </Col>
-            )
-          })
-        }
-      </Row>
+              )
+            })
+          }
+          </div>
+        </div> 
+      </div>
     )
   }
 
@@ -293,7 +304,7 @@ export default class MyHeader extends React.Component {
          <Menu.Item key="1">
           <a
             onClick={() =>
-              this.languageChange
+              this.setState({modalVisible: true})
             }
           >
             <Icon type="global" /> Language
@@ -378,7 +389,7 @@ export default class MyHeader extends React.Component {
 
         </Header>
         <Modal
-          visible={false}
+          visible={this.state.modalVisible}
           footer={null}
           closable={false}
           width="60%"

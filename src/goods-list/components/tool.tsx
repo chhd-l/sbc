@@ -22,7 +22,7 @@ class Tool extends React.Component<any, any> {
       likeGoodsName: string;
       likeGoodsInfoNo: string;
       likeGoodsNo: string;
-      storeCateId: string;
+      storeCateIdList: string;
       brandId: string;
       cateId: string;
     };
@@ -41,7 +41,7 @@ class Tool extends React.Component<any, any> {
     // 模糊条件-SPU编码
     likeGoodsNo: 'likeGoodsNo',
     // 商品分类
-    storeCateId: 'storeCateId',
+    storeCateIdList: 'storeCateIdList',
     // 品牌编号
     brandId: 'brandId',
     cateId: 'cateId',
@@ -201,13 +201,13 @@ class Tool extends React.Component<any, any> {
 
 
   _export = () => {
-    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, storeCateId, cateId, brandId } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, storeCateIdList, cateId, brandId } = this.props.relaxProps;
 
     let params = {
       likeGoodsName,
       likeGoodsNo,
       likeGoodsInfoNo,
-      storeCateId,
+      storeCateIdList,
       cateId,
       brandId,
     };

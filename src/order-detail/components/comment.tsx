@@ -194,7 +194,7 @@ class comment extends Component<any, any> {
     return (
       <div>
         <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
-          <Search placeholder={this.props.intl.formatMessage({ id: 'Order.PleaseInputComment' })} id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
+          <Search placeholder={this.props.intl.formatMessage({ id: 'Order.Pleaseinputcomment' })} id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
           <span style={{ marginLeft: '10px' }}>
             <Button
               type="primary"
@@ -296,11 +296,11 @@ class comment extends Component<any, any> {
               <FormItem {...layout} label={<FormattedMessage id="Order.Comment" />}>
                 {getFieldDecorator('name', {
                   initialValue: comment,
-                  rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Order.PleaseInputComment' }) }]
+                  rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Order.Pleaseinputcomment' }) }]
                 })(
                   <Input.TextArea
                     maxLength={2000}
-                    placeholder={this.props.intl.formatMessage({ id: 'Order.PleaseInputComment' })}
+                    placeholder={this.props.intl.formatMessage({ id: 'Order.Pleaseinputcomment' })}
                     autoSize={{ minRows: 5, maxRows: 10 }}
                     onChange={(e) => {
                       const value = (e.target as any).value;

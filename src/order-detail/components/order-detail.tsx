@@ -379,7 +379,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Col span={12}>
             <div className="headBox">
               <h4>
-                <FormattedMessage id="Menu.Order" />
+                <FormattedMessage id="Order.delivery.Order" />
               </h4>
               <Row>
                 <Col span={12}>
@@ -395,7 +395,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p>
-                    <FormattedMessage id="Order.externalOrderId" />: {detail.getIn(['tradeOms', 'orderNo'])}
+                    <FormattedMessage id="Order.ExternalOrderId" />: {detail.getIn(['tradeOms', 'orderNo'])}
                   </p>
                   <p>
                     <FormattedMessage id="Order.OrderStatus" />: <FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} />
@@ -633,7 +633,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.firstName}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.firstName" />: {consignee.firstName}
+                      <FormattedMessage id="Order.FirstName" />: {consignee.firstName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -644,7 +644,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.lastName}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.firstName" />: {consignee.lastName}
+                      <FormattedMessage id="Order.FirstName" />: {consignee.lastName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -718,7 +718,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.firstName}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.firstName" />: {invoice.firstName}
+                      <FormattedMessage id="Order.FirstName" />: {invoice.firstName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -729,7 +729,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{invoice.lastName}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.firstName" />: {invoice.lastName}
+                      <FormattedMessage id="Order.FirstName" />: {invoice.lastName}
                     </p>
                   </Tooltip>
                   <Tooltip

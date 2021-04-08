@@ -22,9 +22,10 @@ class Tool extends React.Component<any, any> {
       likeGoodsName: string;
       likeGoodsInfoNo: string;
       likeGoodsNo: string;
-      storeCateIdList: string;
+      storeCateId: string;
       brandId: string;
       cateId: string;
+      addedFlag: string;
     };
   };
   static relaxProps = {
@@ -41,10 +42,11 @@ class Tool extends React.Component<any, any> {
     // 模糊条件-SPU编码
     likeGoodsNo: 'likeGoodsNo',
     // 商品分类
-    storeCateIdList: 'storeCateIdList',
+    storeCateId: 'storeCateId',
     // 品牌编号
     brandId: 'brandId',
     cateId: 'cateId',
+    addedFlag: 'addedFlag'
   };
 
   render() {
@@ -201,15 +203,16 @@ class Tool extends React.Component<any, any> {
 
 
   _export = () => {
-    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, storeCateIdList, cateId, brandId } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, storeCateId, cateId, brandId, addedFlag } = this.props.relaxProps;
 
     let params = {
       likeGoodsName,
       likeGoodsNo,
       likeGoodsInfoNo,
-      storeCateIdList,
+      storeCateIdList:storeCateId,
       cateId,
       brandId,
+      addedFlag
     };
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -221,7 +224,6 @@ class Tool extends React.Component<any, any> {
 
           // 新窗口下载
           const exportHref = Const.HOST + `/goods/exportSpus/${encrypted}`;
-
           window.open(exportHref);
         } else {
           message.error(<FormattedMessage id="Analysis.Unsuccessful" />);

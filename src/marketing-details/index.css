@@ -25,3 +25,10 @@
   text-align: left!important;
   margin-left: 30px!important;
 }
+.more-left-span {
+  width: auto!important;
+  text-align: left!important;
+}
+.more-left-span:first-child {
+  margin-left: 30px!important;
+}

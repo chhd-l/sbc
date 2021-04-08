@@ -133,10 +133,10 @@ export default class SearchList extends React.Component<any, any> {
                     >
                       <span style={{ marginLeft: 20, color: '#000' }}>{id}</span>
                       <span style={{ marginLeft: 60 }}>
-                        {<FormattedMessage id="Order.orderTime" />}:{moment(v.getIn(['tradeState', 'createTime'])).format(Const.TIME_FORMAT)}
+                        {<FormattedMessage id="Order.OrderTime" />}:{moment(v.getIn(['tradeState', 'createTime'])).format(Const.TIME_FORMAT)}
                       </span>
                       <span style={{ marginRight: 20, float: 'right' }}>
-                        <Tooltip placement="top" title="Application">
+                        <Tooltip placement="top" title={<FormattedMessage id="Order.Application" />}>
                           <Link to={`/order-return-add/${id}`} className="iconfont iconApplication" style={{ padding: '0 5px' }}></Link>
                         </Tooltip>
                       </span>
@@ -196,7 +196,7 @@ export default class SearchList extends React.Component<any, any> {
                   </td>
                   <td style={{ width: '12%' }}>
                     {tradePrice.toFixed(2)}
-                    <br />( total {num})
+                    <br />( <FormattedMessage id="Order.total" /> {num})
                   </td>
                   {/*发货状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td> */}

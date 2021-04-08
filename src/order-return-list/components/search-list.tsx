@@ -7,7 +7,7 @@ import { Checkbox, Input, InputNumber, message, Modal, Pagination, Popconfirm, S
 import { AuthWrapper, Const, getOrderStatusValue, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { cache } from 'qmkit';
 const defaultImg = require('../img/none.png');
 
@@ -15,8 +15,9 @@ const confirm = Modal.confirm;
 type TList = List<any>;
 
 @Relax
-export default class SearchList extends React.Component<any, any> {
+class SearchList extends React.Component<any, any> {
   props: {
+    intl?: any;
     relaxProps?: {
       loading: boolean;
       selected: TList;
@@ -256,30 +257,30 @@ export default class SearchList extends React.Component<any, any> {
                         />
                       </span> */}
                       <span style={{ marginLeft: 20, color: '#000' }}>
-                        {rid} {v.get('platform') != 'CUSTOMER' && <span style={styles.platform}>Return</span>}
+                        {rid} {v.get('platform') != 'CUSTOMER' && <span style={styles.platform}><FormattedMessage id="Order.Return" /></span>}
                       </span>
                       <span style={{ marginRight: 0, float: 'right' }}>
                         {returnFlowState === 'PENDING_REVIEW' && (
                           <AuthWrapper functionName="f_return_review">
 
-                            <Tooltip placement="top" title="Approve">
+                            <Tooltip placement="top" title={this.props.intl.formatMessage({id:'Order.Approve'})}>
                               <a style={{ marginLeft: 20 }} onClick={
                                 () => {
                                   this._showAudit(onAudit, rid);
                                 }
                               }>
-                                Approve
+                                <FormattedMessage id="Order.Approve" />
                                 </a>
 
                             </Tooltip>
 
-                            <Tooltip placement="top" title="Reject">
+                            <Tooltip placement="top" title={this.props.intl.formatMessage({id:'Order.Reject'})}>
                               <a style={{ marginLeft: 20 }} onClick={
                                 () => {
                                   this._showReject(onReject, rid);
                                 }
                               }>
-                                Reject
+                                <FormattedMessage id="Order.Reject" />
                                 </a>
                             </Tooltip>
                           </AuthWrapper>
@@ -287,18 +288,18 @@ export default class SearchList extends React.Component<any, any> {
 
                         {returnFlowState === 'TO_BE_DELIVERED' && (
                           <AuthWrapper functionName="f_return_delivered">
-                            <Popconfirm placement="topLeft" title="Are you sure skip logistics?" onConfirm={() => {
+                            <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.skipLogisticsAlert"/>} onConfirm={() => {
                               this._showDeliver(onDeliver, rid, false)
-                            }} okText="Confirm" cancelText="Cancel">
-                              <Tooltip placement="top" title="Skip logistics">
+                            }} okText={<FormattedMessage id="Order.btnConfirm"/>} cancelText={<FormattedMessage id="Order.btnCancel"/>}>
+                              <Tooltip placement="top" title={this.props.intl.formatMessage({id:'Order.skipLogistics'})}>
                                 <a style={{ marginLeft: 20 }}>
-                                  Skip logistics
+                                  <FormattedMessage id="Order.skipLogistics"/>
                                 </a>
                               </Tooltip>
                             </Popconfirm>
-                            <Tooltip placement="top" title="Fill in logistics">
+                            <Tooltip placement="top" title={this.props.intl.formatMessage({id:'Order.fillLogistics'})}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
-                                Fill in logistics
+                                <FormattedMessage id="Order.fillLogistics"/>
                               </a>
                             </Tooltip>
                           </AuthWrapper>
@@ -306,14 +307,14 @@ export default class SearchList extends React.Component<any, any> {
 
                         {returnFlowState === 'TO_BE_RECEIVED' && (
                           <AuthWrapper functionName="f_return_received">
-                            <Tooltip placement="top" title="Recipient accepted">
+                            <Tooltip placement="top" title={this.props.intl.formatMessage({id:'Order.RecipientAccepted'})}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
-                                Recipient accepted
+                                <FormattedMessage id="Order.RecipientAccepted"/>
                               </a>
                             </Tooltip>
-                            <Tooltip placement="top" title="Recipient rejected">
+                            <Tooltip placement="top" title={this.props.intl.formatMessage({id:'Order.RecipientRejected'})}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
-                                Recipient rejected
+                                <FormattedMessage id="Order.RecipientRejected"/>
                               </a>
                             </Tooltip>
 
@@ -321,7 +322,7 @@ export default class SearchList extends React.Component<any, any> {
                         )}
                         {returnFlowState === 'PENDING_REFUND' && (
                           <AuthWrapper functionName="f_return_refund">
-                            <Tooltip placement="top" title="Refused to refund">
+                            <Tooltip placement="top" title={this.props.intl.formatMessage({id:'Order.refusedToRefund'})}>
                               <a
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
@@ -330,10 +331,10 @@ export default class SearchList extends React.Component<any, any> {
                                   this._showRejectRefund(onRejectRefund, rid, 0 == payType);
                                 }}
                               >
-                                <FormattedMessage id="refusedToRefund" />
+                                <FormattedMessage id="Order.refusedToRefund" />
                               </a>
                             </Tooltip>
-                            <Tooltip placement="top" title="Real refund">
+                            <Tooltip placement="top" title={this.props.intl.formatMessage({id:'Order.RealRefund'})}>
                               <a
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
@@ -341,14 +342,14 @@ export default class SearchList extends React.Component<any, any> {
                                   this._showRealRefund(onRealRefund, rid, returnType == 'REFUND'?applyPrice:totalPrice);
                                 }}
                               >
-                                <FormattedMessage id="realRefund" />
+                                <FormattedMessage id="Order.RealRefund" />
                               </a>
                             </Tooltip>
                           </AuthWrapper>
                         )}
                        
                         <AuthWrapper functionName="f_retrun_detail">
-                          <Tooltip placement="top" title="Detail">
+                          <Tooltip placement="top" title={this.props.intl.formatMessage({id:'Order.detail'})}>
                             <Link style={{ marginRight: 18, marginLeft: 20 }} to={`/order-return-detail/${rid}`} className="iconfont iconDetails">
                               {/*<FormattedMessage id="order.seeDetails" />*/}
                             </Link>
@@ -383,7 +384,7 @@ export default class SearchList extends React.Component<any, any> {
                             style={styles.imgFourth}
                           />
                           //@ts-ignore
-                          <div style={styles.imgNum}>Total {v.get('returnItems').concat(returnGifts).size}</div>
+                          <div style={styles.imgNum}><FormattedMessage id="Order.Total"/> {v.get('returnItems').concat(returnGifts).size}</div>
                         </div>
                       ) : null
                     }
@@ -441,11 +442,14 @@ export default class SearchList extends React.Component<any, any> {
   }
 
   async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
+    const title = this.props.intl.formatMessage({id:'Order.confirmRefund'});
+    const alert1 = this.props.intl.formatMessage({id:'Order.refundAlert1'});
+    const alert2 = this.props.intl.formatMessage({id:'Order.refundAlert2'});
     confirm({
-      title: 'Confirm Refund',
+      title: title,
       content: <div>
-        <p>Do you confirm the refund?</p>
-        <p>What is the amount of the refund?</p>
+        <p>{alert1}</p>
+        <p>{alert2}</p>
 
 
         <InputNumber
@@ -468,9 +472,11 @@ export default class SearchList extends React.Component<any, any> {
 
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
+    const alert = this.props.intl.formatMessage({id:'Order.approveAlert'});
+    const title = this.props.intl.formatMessage({id:'Order.Approve'});
     confirm({
-      title: 'Approve',
-      content: 'Is the audit approved?',
+      title: title,
+      content: alert,
       onOk() {
         return onAudit(rid);
       },
@@ -506,9 +512,11 @@ export default class SearchList extends React.Component<any, any> {
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
+    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
+    const alert = this.props.intl.formatMessage({id:'Order.receiptAlert'});
     confirm({
-      title: 'Confirm receipt',
-      content: 'Do you confirm receipt of the goods?',
+      title: title,
+      content: alert,
       onOk() {
         return onReceive(rid);
       },
@@ -592,6 +600,8 @@ export default class SearchList extends React.Component<any, any> {
     })
   }
 }
+
+export default injectIntl(SearchList);
 
 const styles = {
   loading: {

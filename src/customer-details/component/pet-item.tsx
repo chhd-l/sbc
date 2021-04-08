@@ -404,7 +404,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Sensitivities">
+                    <Form.Item label="Special needs">
                       {editable ? (
                         getFieldDecorator('customerPetsPropRelations', {
                           initialValue: pet.customerPetsPropRelations ? pet.customerPetsPropRelations.map((v) => v.propName) : null,

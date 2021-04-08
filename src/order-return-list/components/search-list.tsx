@@ -4,7 +4,7 @@ import { fromJS, List } from 'immutable';
 import momnet from 'moment';
 import { Link } from 'react-router-dom';
 import { Checkbox, Input, InputNumber, message, Modal, Pagination, Popconfirm, Spin, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop } from 'qmkit';
+import { AuthWrapper, Const, getOrderStatusValue, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
 import { FormattedMessage } from 'react-intl';
@@ -121,7 +121,7 @@ export default class SearchList extends React.Component<any, any> {
                       <th style={{ width: '10%' }}>
                         <FormattedMessage id="Order.orderNumber" />
                       </th>
-                      <th style={{ width: '98px' }}>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="Order.refundTime" />
                       </th>
                       <th style={{ width: '10%' }}>
@@ -130,17 +130,17 @@ export default class SearchList extends React.Component<any, any> {
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="Order.refundableAmount" />
                       </th>
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="Order.pointsRefundable" />
-                      </th>
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="Order.chargebackStatus" />
+                      {/* <th style={{ width: '10%' }}>
+                        <FormattedMessage id="pointsRefundable" />
+                      </th> */}
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="Order.returnOrderStatus" />
                       </th>
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="Order.actualRefundAmount" />
                       </th>
                       <th style={{ width: '10%', textAlign: 'right' }}>
-                        <FormattedMessage id="Order.actualRefundPoints" />
+                        <FormattedMessage id="Order.remark" />
                       </th>
                     </tr>
                   </thead>
@@ -408,7 +408,7 @@ export default class SearchList extends React.Component<any, any> {
                   {/* <td style={{ width: '10%' }}>{applyPoints}</td> */}
                   {/*状态*/}
                   <td style={{ width: '12%' }}>
-                    {returnFlowState}
+                  <FormattedMessage id={getOrderStatusValue('ReturnOrderStatus',returnFlowState)} />
                     {/* {returnFlowState == 'REFUND_FAILED' && (
                       <Tooltip title={v.get('refundFailedReason')}>
                         <a style={{ display: 'block' }}>原因</a>

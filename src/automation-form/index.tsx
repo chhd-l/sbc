@@ -185,7 +185,7 @@ class AutomationForm extends Component<any, any> {
     if (!startValue || !endValue) {
       return false;
     }
-    return startValue.valueOf() > endValue.valueOf()
+    return startValue.valueOf() <= endValue.valueOf()
   };
 
   disabledTrackingEndDate = (endValue) => {

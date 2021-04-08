@@ -1369,7 +1369,7 @@ export default {
   'Order.offline.consumerNameRequired':'Consumer name is required',
   'Order.offline.consumerPhone':'Consumer phone',
   'Order.offline.consumerEmail':'Consumer email',
-  'Order.offline.consumerEmailRequired':'Consumer email is required',
+  'Order.offline.consumerEmailRequired':'Please fill in correct email',
   'Order.offline.offlineStore':'Offline store',
   'Order.offline.Guest':'Guest',
   'Order.offline.Member':'Member',
@@ -1391,6 +1391,16 @@ export default {
   'Order.offline.canceled':'Canceled',
   'Order.offline.queryStateTitle':'Check payment status',
   'Order.offline.queryStateContent':'Your can check payment status after customer authorization!',
+  'Order.returnDescription':'Return description',
+  'Order.returnOrderAttachment':'Return order attachment',
+  'Order.returnReason': 'Return reason',
+  'Order.logisticsInformation':'Logistics information',
+  'Order.returnOrderStatus':'Return order status',
+  'Order.remark':'Remark',
+
+  'Order.reviewRejected': 'Review rejected', 
+  'Order.receiedRejected': 'Receied rejected', 
+  'Order.refundRejected': 'Refund rejected', 
 
 
 
@@ -1800,21 +1810,21 @@ export default {
   'Subscription.noData':'no data',
   'Subscription.subscriptionDate':'Subscription date',
   'Subscription.SaveFeedbackSuccessfully':'Save feedback successfully',
-  'Subscription.AfterWelcomePackReceived':'After welcome pack received',
+  'Subscription.AfterWelcomePackReceived':'After 1st delivery',
   'Subscription.RateDelivery':'Rate delivery',
   'Subscription.scaleFrom':'scale from 1 to 5',
   'Subscription.RateThePack':'Rate the pack',
   'Subscription.Comments':'Comments',
-  'Subscription.deliveryConfirmation':'During 2nd delivery confirmation',
+  'Subscription.deliveryConfirmation':'After 4th delivery',
   'Subscription.NPS':'NPS',
   'Subscription.scaleFrom10':'scale from 1 to 10',
   'Subscription.DeliveryScheduleFit':'Delivery schedule fit',
   'Subscription.ReasonOfInterest':'Reason of interest of the Club',
-  'Subscription.After3rdDelivery':'After 3rd delivery, during 4th delivery confirmation',
+  'Subscription.After3rdDelivery':'1 year subscription',
   'Subscription.ConsultationQuality':'Rate PA consultation quality',
   'Subscription.UnnecessaryServices':'Unnecessary services',
   'Subscription.NecessaryServices':'Necessary services',
-  'Subscription.Feedback':'Feedback 4 (completion of Club)',
+  'Subscription.Feedback':'Subscription program cancellation',
   'Subscription.ReasonForCancellation':'Reason for cancellation of membership',
   'Subscription.SuggestionsForImprovement':'Suggestions for improvement',
   'Subscription.FeedbackForClinics':'Feedback for clinics',
@@ -1913,6 +1923,12 @@ export default {
   "Subscription.Setting": 'Subscription Setting', 
   "Subscription.Draft": 'Subscription Draft',
   'Subscription.Restart':'Restart',
+  'Subscription.ReminderSwitchProduct':'Reminder to switch product (Club)',
+  'Subscription.ReminderSwitchProductDesc':'Days before the next lifestage, an email will be sent to pet owners to recommend a new product',
+  'Subscription.EmailReminderIntervals':'Email reminder intervals',
+  'Subscription.EmailReminderIntervalsDesc':'Attempts between first and last emails due to inventory issues',
+  
+
 
   /*-----------------------------  Pet owner  ----------------------------------------*/
   'PetOwner.ConsumerAccount':'Pet owner account',
@@ -3691,14 +3707,12 @@ export default {
 
   attachmentTips:
     'Please add your return receipt to the attachment, the supported picture formats: jpg, jpeg, png, gif, the file size does not exceed 5M, and the maximum upload is 10',
-  refundableAmount: 'Refundable amount',
+  
   pointsRefundable: 'Points refundable',
   commodity: 'Commodity',
   refundList: 'Refund list',
   chargebackNumber: 'Chargeback number',
-  refundTime: 'Refund time',
   chargebackStatus: 'Chargeback status',
-  actualRefundAmount: 'Actual refund amount',
   actualRefundPoints: 'Actual refund points',
   toBeFilledOutLogisticsInformation: 'To be filled out logistics information',
   waitingForTheMerchantToReceiveTheGoods:

@@ -113,15 +113,10 @@ class SkuForm extends React.Component<any, any> {
     }else {
       if (addSkUProduct.length>0) {
         //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
-        let b = goodsList.toJS().filter(i => addSkUProduct.some(j => j.pid === i.goodsInfoNo))
-        console.log(b,111);
-        let c = addSkUProduct.filter(i => i.pid != b)
-        //onProductselectSku(c)
-        console.log(c,444444);
-
+        let b = addSkUProduct.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
+        onProductselectSku(b)
       }
     }
-    console.log(addSkUProduct, 333333);
 
     // const {  } = this.state
     const columns = this._getColumns();

@@ -8,12 +8,12 @@ import { AuthWrapper, cache, Const, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { fromJS } from 'immutable';
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const confirm = Modal.confirm;
 
 @Relax
-export default class OrderStatusHead extends React.Component<any, any> {
+class OrderStatusHead extends React.Component<any, any> {
   props: {
     relaxProps?: {
       detail: IMap;
@@ -278,9 +278,11 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
+    const content = this.props.intl.formatMessage({id:'Order.approveAlert'});
+    const title = this.props.intl.formatMessage({id:'Order.Approve'});
     confirm({
-      title: 'approve',
-      content: 'Is the audit approved?',
+      title: title,
+      content: content,
       onOk() {
         return onAudit(rid);
       },
@@ -313,9 +315,11 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
+    const content = this.props.intl.formatMessage({id:'Order.receiptAlert'});
+    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
     confirm({
-      title: 'Confirm receipt',
-      content: 'Do you confirm receipt of the goods?',
+      title: title,
+      content: content,
       onOk() {
         return onReceive(rid);
       },
@@ -389,11 +393,14 @@ export default class OrderStatusHead extends React.Component<any, any> {
     }
   }
   async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
+    const content = this.props.intl.formatMessage({id:'Order.refundAlert1'});
+    const content1 = this.props.intl.formatMessage({id:'Order.refundAlert2'});
+    const title = this.props.intl.formatMessage({id:'Order.confirmRefund'});
     confirm({
-      title: 'Confirm Refund',
+      title: title,
       content: <div>
-        <p>Do you confirm the refund?</p>
-        <p>What is the amount of the refund?</p>
+        <p>{content}</p>
+        <p>{content1}</p>
 
 
         <InputNumber
@@ -421,6 +428,8 @@ export default class OrderStatusHead extends React.Component<any, any> {
     })
   }
 }
+
+export default injectIntl(OrderStatusHead);
 
 const styles = {
   container: {

@@ -442,28 +442,28 @@ const deliverStatus = (status) => {
         <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
       </div>
     );
-    const cartExtra = (
-      <div>
-        <Popconfirm placement="topRight" title="Are you sure skip next delivery?" onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
-          <Tooltip placement="top" title="Skip Next Delivery">
-            <Button type="link" style={{ fontSize: 16 }}>
-              <FormattedMessage id="Subscription.SkipNextDelivery"/>
-            </Button>
-          </Tooltip>
-        </Popconfirm>
-        {/* <Popconfirm
-          placement="topRight"
-          title="Are you sure order now?"
-          onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
-          okText="Confirm"
-          cancelText="Cancel"
-        >
-          <Button type="link" style={{ fontSize: 16 }}>
-            Order Now
-          </Button>
-        </Popconfirm> */}
-      </div>
-    );
+    // const cartExtra = (
+    //   <div>
+    //     <Popconfirm placement="topRight" title="Are you sure skip next delivery?" onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
+    //       <Tooltip placement="top" title="Skip Next Delivery">
+    //         <Button type="link" style={{ fontSize: 16 }}>
+    //           <FormattedMessage id="Subscription.SkipNextDelivery"/>
+    //         </Button>
+    //       </Tooltip>
+    //     </Popconfirm>
+    //     {/* <Popconfirm
+    //       placement="topRight"
+    //       title="Are you sure order now?"
+    //       onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
+    //       okText="Confirm"
+    //       cancelText="Cancel"
+    //     >
+    //       <Button type="link" style={{ fontSize: 16 }}>
+    //         Order Now
+    //       </Button>
+    //     </Popconfirm> */}
+    //   </div>
+    // );
     const columns = [
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product"/></span>,
@@ -572,6 +572,11 @@ const deliverStatus = (status) => {
         width: '50%'
       }
     ];
+
+    // 翻译title
+    operatorColumns.forEach(obj => {
+      (obj.title as any) = <FormattedMessage id={`Order.${obj.title}`} />
+    });
 
     const columns_completed = [
       {

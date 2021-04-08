@@ -2,8 +2,9 @@ import React from 'react';
 import { Table, Input, Modal } from 'antd';
 import { Const } from 'qmkit';
 import { getCustomerList } from '../webapi';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-export default class CustomerList extends React.Component<any, any> {
+class CustomerList extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -91,17 +92,17 @@ export default class CustomerList extends React.Component<any, any> {
   render() {
     const columns = [
       {
-        title: 'Name',
+        title: <FormattedMessage id="Order.offline.consumerName" />,
         dataIndex: 'customerName',
         key: 'd1'
       },
       {
-        title: 'Email',
+        title: <FormattedMessage id="Order.offline.consumerEmail" />,
         dataIndex: 'email',
         key: 'd2'
       },
       {
-        title: 'Phone number',
+        title: <FormattedMessage id="Order.offline.consumerPhone" />,
         dataIndex: 'contactPhone',
         key: 'd3'
       }
@@ -119,9 +120,9 @@ export default class CustomerList extends React.Component<any, any> {
       columnTitle: ' '
     };
     return (
-      <Modal width={900} title="Member information" visible={visible} okText="Confirm" cancelText="Cancel" okButtonProps={{ disabled: selectedRowKeys.length === 0 }} onOk={this.onConfirmChoose} onCancel={this.onCloseModal}>
+      <Modal width={900} title={<FormattedMessage id="Order.offline.consumerInformation" />} visible={visible} okText={<FormattedMessage id="Order.btnConfirm" />} cancelText={<FormattedMessage id="Order.btnCancel" />} okButtonProps={{ disabled: selectedRowKeys.length === 0 }} onOk={this.onConfirmChoose} onCancel={this.onCloseModal}>
         <div style={{ marginBottom: 10 }}>
-          <Input.Search placeholder="consumer email" onChange={this.onChangeSearchTxt} onSearch={this.onSearchMember} />
+          <Input.Search placeholder={this.props.intl.formatMessage({id:'Order.offline.consumerEmail'})} onChange={this.onChangeSearchTxt} onSearch={this.onSearchMember} />
         </div>
         <Table
           rowKey="customerDetailId"
@@ -136,3 +137,5 @@ export default class CustomerList extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(CustomerList);

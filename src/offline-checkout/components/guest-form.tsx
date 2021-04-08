@@ -13,6 +13,7 @@ class GuestForm extends React.Component<any, any> {
     this.props.form.validateFields((err, fields) => {
       if(!err) {
         onClose(fields);
+        this.props.form.resetFields();
       }
     });
   };
@@ -32,7 +33,7 @@ class GuestForm extends React.Component<any, any> {
           <Form.Item label={<FormattedMessage id="Order.offline.consumerEmail" />}>
             {getFieldDecorator('email', {
               initialValue: '',
-              rules: [{ required: true, message: this.props.intl.formatMessage({id:'Order.offline.consumerEmailRequired'}) }]
+              rules: [{ type: 'email', required: true, message: this.props.intl.formatMessage({id:'Order.offline.consumerEmailRequired'}) }]
             })(<Input />)}
           </Form.Item>
           <Form.Item label={<FormattedMessage id="Order.offline.consumerPhone" />}>

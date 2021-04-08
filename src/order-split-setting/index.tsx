@@ -26,7 +26,7 @@ class OrderSplitSetting extends Component<any, any> {
 
 
 
-    const columns = [
+    /*const columns = [
       {
         title: 'Category',
         dataIndex: 'parentCateName',
@@ -46,7 +46,7 @@ class OrderSplitSetting extends Component<any, any> {
         key: 'prescriberFlag',
         width: '33%',
       }
-    ];
+    ];*/
 
     return (
       <AuthWrapper functionName="f_split_order_setting">

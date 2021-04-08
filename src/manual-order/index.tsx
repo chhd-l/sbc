@@ -5,7 +5,7 @@ import './index.less';
 import ConsumerInformation from './components/consumerInformation';
 import SelectedProduct from './components/selectedProduct';
 import PaymentInformation from './components/paymentInformation';
-
+import { FormattedMessage } from 'react-intl';
 import { getShopToken, queryOrderStatus } from './webapi';
 
 const { Step } = Steps;
@@ -17,7 +17,7 @@ class ManualOrder extends Component<any, any> {
     let { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     this.state = {
       id: this.props.match.params.id,
-      title: 'Valet order',
+      title: <FormattedMessage id="Order.valetOrder" />,
       current: 0,
       status: 1,
       url:'',
@@ -138,7 +138,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Selected product',
-        controller: <SelectedProduct url={url} prefix={prefix} stepName={'Product list:'} carts={this.getCartsList} storeId={storeId} customer={customer} />
+        controller: <SelectedProduct url={url} prefix={prefix} stepName={'Product list'} carts={this.getCartsList} storeId={storeId} customer={customer} />
       },
       {
         title: 'Delivery & payment information',
@@ -157,7 +157,7 @@ class ManualOrder extends Component<any, any> {
           <Headline title={title} />
           <Steps current={current} labelPlacement="vertical">
             {steps.map((item) => (
-              <Step key={item.title} title={item.title} />
+              <Step key={item.title} title={<FormattedMessage id={`Order.${item.title}`} />} />
             ))}
           </Steps>
           <div className="steps-content">{steps[current].controller}</div>
@@ -166,7 +166,7 @@ class ManualOrder extends Component<any, any> {
               <span>
                 <Button type="primary">
                   <a style={{ color: '#fff' }} target="_blank" href={`${url}${prefix}${prefix?'':'/'}register`}>
-                    Register
+                    <FormattedMessage id="Order.Register" />
                   </a>
                 </Button>
                 <Button
@@ -175,18 +175,18 @@ class ManualOrder extends Component<any, any> {
                     history.push('/customer-list');
                   }}
                 >
-                  Pet owner list
+                  <FormattedMessage id="Order.Pet owner list" />
                 </Button>
               </span>
             )}
             {current === 1 && (
               <Button style={{ marginRight: 15 }} onClick={() => this.prev()}>
-                <Icon type="left" /> Return
+                <Icon type="left" /> <FormattedMessage id="Order.Return" />
               </Button>
             )}
             {current < steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.next(e)}>
-                Next step <Icon type="right" />
+                <FormattedMessage id="Order.Next step" /> <Icon type="right" />
               </Button>
             )}
             {/* {current !== steps.length - 1 && (

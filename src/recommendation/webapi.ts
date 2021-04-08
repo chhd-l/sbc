@@ -25,3 +25,10 @@ export function fetchFindById(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+// export function fetchDownloadPDF(felinRecoId) {
+//   return Fetch<TResult>(`/api/felinReco/export/${felinRecoId}`, {
+//     method: 'GET',
+//   });
+// }
+

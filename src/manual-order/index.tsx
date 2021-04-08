@@ -54,7 +54,7 @@ class ManualOrder extends Component<any, any> {
 
   turnShowPage = (token) => {
     let { customer,url,prefix } = this.state;
-    let winObj = window.open(`${url+prefix}/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+    let winObj = window.open(`${url+prefix}${prefix?'':'/'}cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
     let loop = setInterval(async () => {
       if (winObj.closed) {
         clearInterval(loop);

@@ -1371,6 +1371,28 @@ export default {
     'Order.offline.canceled':'Canceled',
     'Order.offline.queryStateTitle':'Check payment status',
     'Order.offline.queryStateContent':'Your can check payment status after customer authorization!',
+    'Order.returnDescription':'Return description',
+    'Order.returnOrderAttachment':'Return order attachment',
+    'Order.returnReason': 'Return reason',
+    'Order.logisticsInformation':'Logistics information',
+    'Order.returnOrderStatus':'Return order status',
+    'Order.remark':'Remark',
+  
+    'Order.reviewRejected': 'Review rejected', 
+    'Order.receiedRejected': 'Receied rejected', 
+    'Order.refundRejected': 'Refund rejected', 
+    'Order.skipLogistics':'Skip logistics',
+    'Order.skipLogisticsAlert':'Are you sure skip logistics?',
+    'Order.fillLogistics':'Fill in logistics',
+    'Order.detail':'Detail',
+    'Order.confirmRefund':'Confirm Refund',
+    'Order.refundAlert1':'Do you confirm the refund?',
+    'Order.refundAlert2':'What is the amount of the refund?',
+    'Order.approveAlert':'Is the audit approved?',
+    'Order.receiptAlert':'Do you confirm receipt of the goods?',
+    'Order.reasonIsEmpty':'reason is empty!',
+    'Order.oneToOneHun':'1 to 100 words',
+    'Order.pleaseInputReason':'Please input the reason for',
 
 
 

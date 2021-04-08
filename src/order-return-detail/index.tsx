@@ -39,12 +39,12 @@ export default class ReturnOrderDetail extends React.Component<any, any> {
       <div>
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
-            <FormattedMessage id="refundDetails" />
+            <FormattedMessage id="Order.returnDetails" />
           </Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container-search">
-          <Headline title={<FormattedMessage id="refundDetails" />} />
+          <Headline title={<FormattedMessage id="Order.returnDetails" />} />
         </div>
         <div className="container">
           <OrderStatusHead />

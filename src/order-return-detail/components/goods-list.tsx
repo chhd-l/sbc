@@ -7,47 +7,10 @@ import { fromJS } from 'immutable';
 import { cache, Const, Logistics } from 'qmkit';
 
 import { Table } from 'antd';
-import { FormattedMessage } from 'react-intl';
-
-const columns = [
-  {
-    title: <FormattedMessage id="product.SKU" />,
-    dataIndex: 'skuNo',
-    key: 'skuNo',
-    render: (text) => <span>{text}</span>
-  },
-  {
-    title: <FormattedMessage id="product.productName" />,
-    dataIndex: 'skuName',
-    key: 'skuName'
-  },
-  {
-    title: <FormattedMessage id="weigth" />,
-    dataIndex: 'specDetails',
-    key: 'specDetails',
-    render: (s) => <div>{s}</div>
-  },
-  // {
-  //   title: <FormattedMessage id="returnUnitPrice" />,
-  //   dataIndex: 'price',
-  //   key: 'price',
-  //   render: (price) => <div>${price.toFixed(2)}</div>
-  // },
-  {
-    title: <FormattedMessage id="quantityReturned" />,
-    dataIndex: 'num',
-    key: 'num'
-  },
-  {
-    title: <FormattedMessage id="subtotalOfReturnAmount" />,
-    dataIndex: 'splitPrice',
-    key: 'splitPriceTotal',
-    render: (splitPrice) => <div>${splitPrice.toFixed(2)}</div>
-  }
-];
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 @Relax
-export default class GoodsList extends React.Component<any, any> {
+class GoodsList extends React.Component<any, any> {
   props: {
     relaxProps?: {
       detail: IMap;
@@ -132,15 +95,52 @@ export default class GoodsList extends React.Component<any, any> {
     let rejectLabel = '';
     switch (returnFlowStatus) {
       case 'REJECT_RECEIVE':
-        rejectLabel = 'Reasons for rejection';
+        rejectLabel = this.props.intl.formatMessage({id:'Order.reasonForRejection'});
         break;
       case 'REJECT_REFUND':
-        rejectLabel = 'Reason for Refusal of Refund';
+        rejectLabel = this.props.intl.formatMessage({id:'Order.reasonForRefuse'});
         break;
       case 'VOID':
-        rejectLabel = 'Reasons for rejection';
+        rejectLabel = this.props.intl.formatMessage({id:'Order.reasonForReject'});
         break;
     }
+
+    const columns = [
+      {
+        title: <FormattedMessage id="Order.SKU" />,
+        dataIndex: 'skuNo',
+        key: 'skuNo',
+        render: (text) => <span>{text}</span>
+      },
+      {
+        title: <FormattedMessage id="Order.Product name" />,
+        dataIndex: 'skuName',
+        key: 'skuName'
+      },
+      {
+        title: <FormattedMessage id="Order.Weight" />,
+        dataIndex: 'specDetails',
+        key: 'specDetails',
+        render: (s) => <div>{s}</div>
+      },
+      // {
+      //   title: <FormattedMessage id="returnUnitPrice" />,
+      //   dataIndex: 'price',
+      //   key: 'price',
+      //   render: (price) => <div>${price.toFixed(2)}</div>
+      // },
+      {
+        title: <FormattedMessage id="Order.quantityReturned" />,
+        dataIndex: 'num',
+        key: 'num'
+      },
+      {
+        title: <FormattedMessage id="Order.Subtotalofreturnamount" />,
+        dataIndex: 'splitPrice',
+        key: 'splitPriceTotal',
+        render: (splitPrice) => <div>${splitPrice.toFixed(2)}</div>
+      }
+    ];
 
     return (
       <div style={styles.container}>
@@ -280,6 +280,8 @@ export default class GoodsList extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(GoodsList);
 
 const styles = {
   container: {

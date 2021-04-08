@@ -1470,6 +1470,18 @@ export default {
   'Order.reasonIsEmpty':'reason is empty!',
   'Order.oneToOneHun':'1 to 100 words',
   'Order.pleaseInputReason':'Please input the reason for',
+  'Order.refundSerialNumber':'Refund serial number',
+  'Order.refundPoint':'Refund point',
+  'Order.refundAmount':'Refund amount',
+  'Order.priceChange':'Chargeback price change',
+  'Order.refundMethod':'Refund method',
+  'Order.refundAccount':'Refund account',
+  'Order.collectAccount':'Customer collection account',
+  'Order.refundStatus':'Refund status',
+  'Order.quantityReturned':'Quantity returned',
+  'Order.reasonForRejection':'Reasons for rejection',
+  'Order.reasonForRefuse':'Reason for Refusal of Refund',
+  'Order.reasonForReject':'Reasons for rejection',
   
 
 

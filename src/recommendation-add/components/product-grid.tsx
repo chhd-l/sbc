@@ -136,9 +136,9 @@ export default class GoodsGrid extends React.Component<any, any> {
             key="Signed"
             width="20%"
             ellipsis
-            render={(value) => <span>{value?.goods?.goodsCateName??'-'}</span>}
+            render={(value) => <span>{value?.goods?.cateName??'-'}</span>}
           />
-          <Column title="Sales category" key="salesCategory" dataIndex="salesCategory" />
+          <Column title="Sales category" key="brandName" dataIndex="brandName" />
 
           <Column title="Price" key="marketPrice" dataIndex="marketPrice" />
 

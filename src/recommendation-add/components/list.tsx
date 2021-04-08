@@ -65,8 +65,8 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
           <Column title="SPU" dataIndex="goods.goodsNo" key="goods.goodsNo" />
           <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title="Product category" dataIndex="cateId" key="cateId" />
-          <Column title="Sales category" dataIndex="storeCateIds" key="storeCateIds" />
+          <Column title="Product category" dataIndex="cateName" key="cateName" />
+          <Column title="Sales category" dataIndex="brandName" key="brandName" />
           <Column
             title="Price"
             dataIndex="marketPrice"

@@ -105,11 +105,11 @@ class ManualOrder extends Component<any, any> {
   componentDidMount(){
     let url ='',prefix='';
     if(['fr','ru','tr'].includes((window as any).countryEnum[this.state.storeId])){
-      prefix='/shop'
-      url=`https://uatwedding.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}/`
+      prefix='/shop/'
+      url=`https://uatwedding.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
     }else{
       prefix=''
-      url=`https://shopstg.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}/`
+      url=`https://shopstg.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
     }
     this.setState({
       url,

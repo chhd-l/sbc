@@ -1427,10 +1427,19 @@ export default {
   'Order.logisticsInformation':'Logistics information',
   'Order.returnOrderStatus':'Return order status',
   'Order.remark':'Remark',
-
   'Order.reviewRejected': 'Review rejected', 
   'Order.receiedRejected': 'Receied rejected', 
-  'Order.refundRejected': 'Refund rejected', 
+  'Order.refundRejected': 'Refund rejected',
+  'Order.Selectreturnproducts': 'Order.Select return products',
+  'Order.Specification': 'Specification',
+  'Order.Returnunitprice': 'Return unit price',
+  'Order.Returnquantity': 'Return quantity',
+  'Order.Pleaseenterreturnquantity': 'Please enter return quantity',
+  'Order.Returnquantityshould': 'Return quantity should be in round numbers only',
+  'Order.Theamountreturnedmustnotexceed': 'The amount returned must not exceed the amount refundable',
+  'Order.Returnablenumber': 'Returnable number',
+  'Order.Subtotalofreturnamount': 'Subtotal of return amount',
+
 
 
 

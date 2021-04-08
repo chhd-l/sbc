@@ -147,7 +147,7 @@ class SearchHead extends Component<any, any> {
           </Col>
           <Col span={12} style={{ textAlign: 'right' }}>
             <span style={{ color: '#e82f3d', cursor: 'pointer' }} onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
-              <FormattedMessage id="Order.advanceSearch" /> <Icon type={showAdvanceSearch ? 'up' : 'down'} />
+              <FormattedMessage id="Order.AdvanceSearch" /> <Icon type={showAdvanceSearch ? 'up' : 'down'} />
             </span>
           </Col>
         </Row>

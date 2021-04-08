@@ -95,14 +95,14 @@ class comment extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || this.props.intl.formatMessage({ id: 'Order.GetDataFailed' }));
+          message.error(res.message || this.props.intl.formatMessage({ id: 'Public.GetDataFailed' }));
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || this.props.intl.formatMessage({ id: 'Order.GetDataFailed' }));
+        message.error(err || this.props.intl.formatMessage({ id: 'Public.GetDataFailed' }));
         this.setState({
           loading: false
         });

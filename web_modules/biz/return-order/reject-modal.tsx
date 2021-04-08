@@ -4,6 +4,7 @@ import { noop } from 'qmkit';
 import { IMap } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Button from 'antd/lib/button/button';
+import { FormattedMessage } from 'react-intl';
 
 export default class RejectModal extends React.Component<any, any> {
   _form: any;
@@ -39,12 +40,18 @@ export default class RejectModal extends React.Component<any, any> {
 
     return (
       <Modal  maskClosable={false}
-        title={'Please fill out the ' + data.get('type') + ' reason'}
+        title={
+          <span>
+            <FormattedMessage id="Order.PleaseFillOutThe" />
+            {data.get('type')}
+            <FormattedMessage id="Order.reason" />
+          </span>
+        }
         visible={data.get('visible')}
         onCancel={() => onHide()}
         footer={[
           <Button key="back" size="large" onClick={() => onHide()}>
-            Cancel
+            <FormattedMessage id="Order.btnCancel" />
           </Button>,
           <Button
             key="submit"
@@ -53,7 +60,7 @@ export default class RejectModal extends React.Component<any, any> {
             loading={this.state.posting}
             onClick={() => this._handleOk(handleOk)}
           >
-            Confirm
+            <FormattedMessage id="Order.btnConfirm" />
           </Button>
         ]}
       >

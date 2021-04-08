@@ -34,6 +34,7 @@ export default class FillinPetInfo extends Component {
         specialNeedsList: [],
         petsBreedList: [],
         fetching: false,
+        loading:false,
         weightList: [
             { value: 'kg', name: 'kg' }
             // { value: 'g', name: 'g' }
@@ -50,6 +51,7 @@ export default class FillinPetInfo extends Component {
      * 获取数据字典
      */
     async getDictAlllist(type, name, keywords?: string) {
+        this.setState({ loading:true})
         let { res: lifesOptions } = await querySysDictionary({ type, name: keywords });
         let lifeList = lifesOptions?.context?.sysDictionaryVOS.map((el) => {
             el.value = el.valueEn;
@@ -57,7 +59,8 @@ export default class FillinPetInfo extends Component {
         });
         this.setState({
             [name]: lifeList,
-            fetching: false
+            fetching: false,
+            loading:false
         });
     }
 /**
@@ -66,7 +69,7 @@ export default class FillinPetInfo extends Component {
  * @returns 
  */
     renderSelectOptions(list) {
-        return list.map(item => (<Option key={item.value} value={item.value}>{item.value}</Option>))
+        return list.map(((item,index) => (<Option key={index} value={item.value}>{item.value}</Option>)))
     }
     //查询
     onSearch = async (value) => {
@@ -83,27 +86,31 @@ export default class FillinPetInfo extends Component {
         findByApptNo(apptNo)
     }
     _onChange(e, key: string) {
-        const { onChangePestsForm, customerPet, felinReco } = this.props.relaxProps;
+        const { onChangePestsForm, customerPet, felinReco,appointmentVO } = this.props.relaxProps;
         if (e && e.target) {
             e = e.target.value;
         }
         if (key === 'fillDate') {
             onChangePestsForm({ ...felinReco, [key]: moment(e).format('YYYY-MM-DD') }, 'felinReco')
-        } else {
-            onChangePestsForm({ ...customerPet, [key]: e })
+        } else if(key==='consumerName'){
+            onChangePestsForm({ ...appointmentVO, [key]: e }, 'appointmentVO')
+        }else {
+            onChangePestsForm({ ...customerPet, [key]: e },'customerPet')
         }
     }
     //选择下拉宠物
     _onChangePets = (e) => {
         const { onChangePestsForm, petsList } = this.props.relaxProps;
         let pets = petsList.find(item => item.petsId === e)
-        onChangePestsForm(pets)
+        onChangePestsForm(pets,'customerPet')
     }
     render() {
         const { getFieldDecorator } = this.props.form
         const { felinReco, customerPet, appointmentVO, petsList, funType } = this.props.relaxProps;
-        const { lifeList, activityList, specialNeedsList, petsBreedList, weightList, fetching } = this.state
+        const { lifeList,loading, activityList, specialNeedsList, petsBreedList, weightList, fetching } = this.state
         return (
+            <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} >
+
             <Row>
                 <Col span={16}>
                     <Form >
@@ -130,8 +137,9 @@ export default class FillinPetInfo extends Component {
                             <Col span={8}>
                                 <Form.Item label="pour:">
                                     {getFieldDecorator('consumerName', {
-                                        initialValue: appointmentVO.consumerName,
-                                    })(<Input  />)}
+                                        onChange: (e) => this._onChange(e, 'consumerName'),
+                                        initialValue: appointmentVO.consumerName||'',
+                                    })(<Input  disabled={petsList.length>0||funType}/>)}
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -165,7 +173,7 @@ export default class FillinPetInfo extends Component {
                             <Col span={12}>
                                 <Form.Item label="Date of birth:">
                                     {getFieldDecorator('birthOfPets', {
-                                        initialValue:customerPet.birthOfPets? moment(customerPet?.birthOfPets, 'YYYY-MM-DD'):'',
+                                        initialValue:moment(felinReco?.fillDate??(new Date()), 'YYYY-MM-DD'),
                                         rules: [{ required: true, message: 'Please select Date of birth!' }],
                                         onChange: (e,) => this._onChange(e, 'birthOfPets')
 
@@ -183,7 +191,7 @@ export default class FillinPetInfo extends Component {
                                         showSearch
                                         getPopupContainer={(trigger: any) => trigger.parentNode}
                                         notFoundContent={fetching ? <Spin size="small" /> : null}
-                                        placeholder="Please input your Pet owner account!"
+                                        placeholder="Please input your Breed."
                                         defaultActiveFirstOption={false}
                                         filterOption={false}
                                         onSearch={this.onSearch}
@@ -315,7 +323,7 @@ export default class FillinPetInfo extends Component {
                     }
                 </Col>
             </Row>
-
+</Spin>
         )
     }
 }

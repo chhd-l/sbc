@@ -2,6 +2,7 @@ import { Button, Icon, Popconfirm, Select, Table, Tooltip } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
 import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts, totalGoodsPrice } from '../webapi';
+import { cache } from 'qmkit';
 const defaultImg = require('./img/none.png');
 const { Option } = Select;
 export default class SelectedProduct extends React.Component<any, any> {
@@ -259,7 +260,7 @@ export default class SelectedProduct extends React.Component<any, any> {
             dataSource={dataSource}
             columns={columns}
           />
-          <div style={{ textAlign: 'right', padding: '20px 0' }}>Product amount ${totalPrice}</div>
+          <div style={{ textAlign: 'right', padding: '20px 0' }}>Product amount {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
           {visible && <AddProductModal url={url} prefix={prefix} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { Action, Actor } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import { fromJS } from 'immutable';
+import moment from 'moment';
 export default class FillInPetInfoActor extends Actor {
   defaultState() {
     return {
@@ -10,11 +11,11 @@ export default class FillInPetInfoActor extends Actor {
         storeId: null,
         apptId: null,
         expert: '',
-        paris: false,
+        paris: true,
         suggest: '',
         optimal: '',
-        pickup: false,
-        fillDate: null
+        pickup: true,
+        fillDate:  moment(new Date()).format('YYYY-MM-DD')
       },//基础
       appointmentVO: {},//扫码信息
       customerPet: {},//宠物信息

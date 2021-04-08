@@ -1,63 +1,14 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Icon } from 'antd';
+import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Icon, message } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, history } from 'qmkit';
+import { noop, Const, AuthWrapper, history, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
-import { accDiv } from '../../qmkit/float';
-const defaultImg = require('../../goods-list/img/none.png');
 import moment from 'moment';
-
-const deliverStatus = (status) => {
-  if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="order.notShipped" />;
-  } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="order.allShipments" />;
-  } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="order.partialShipment" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.invalid" />;
-  } else {
-    return <FormattedMessage id="order.unknown" />;
-  }
-};
-
-const payStatus = (status) => {
-  if (status == 'NOT_PAID') {
-    return <FormattedMessage id="order.unpaid" />;
-  } else if (status == 'UNCONFIRMED') {
-    return <FormattedMessage id="order.toBeConfirmed" />;
-  } else if (status == 'PAID') {
-    return <FormattedMessage id="order.paid" />;
-  } else if (status == 'REFUND') {
-    return <FormattedMessage id="Refund" />;
-  } else {
-    return <FormattedMessage id="order.unknown" />;
-  }
-};
-
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return <FormattedMessage id="order.pendingReview" />;
-  } else if (status == 'GROUPON') {
-    return <FormattedMessage id="order.toBeFormed" />;
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="order.toBeDelivered" />;
-  } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="order.toBeReceived" />;
-  } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="order.received" />;
-  } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="order.completed" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.outOfDate" />;
-  }
-};
-
+import copy from 'copy-to-clipboard';
 type TList = List<any>;
 
 class RejectForm extends React.Component<any, any> {
@@ -159,7 +110,7 @@ export default class ListView extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible, onFindById } = this.props.relaxProps;
+    const { loading, total, pageSize, dataList,  init, currentPage, orderRejectModalVisible, onFindById } = this.props.relaxProps;
 
     return (
       <div>
@@ -170,16 +121,6 @@ export default class ListView extends React.Component<any, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      {/*<th style={{ width: '5%' }}>
-                        <Checkbox
-                          style={{ borderSpacing: 0 }}
-                          checked={allChecked}
-                          onChange={(e) => {
-                            const checked = (e.target as any).checked;
-                            onCheckedAll(checked);
-                          }}
-                        />
-                      </th>*/}
                       <th style={{ width: '11%' }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
@@ -239,9 +180,25 @@ export default class ListView extends React.Component<any, any> {
     );
   }
 
-  onDetail(e) {
+  handleCopy = (value) => {
+    if(!value){
+      message.error('copylink failed.');
+      return 
+    }
+    if (copy(value)) {
+      message.success('Operate successfully');
+    }
   }
-
+  newUrl = (oldUrl) => {
+    if(!oldUrl){
+      return false
+    }
+    let tempArr = oldUrl.split('?');
+    let pcWebsite = JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).pcWebsite;
+    if (pcWebsite && tempArr[1]) {
+      return pcWebsite + '?' + tempArr[1];
+    } else return oldUrl;
+  };
   _renderContent(dataList) {
     const { onChecked, onAudit, verify, onFindById } = this.props.relaxProps;
 
@@ -340,10 +297,13 @@ export default class ListView extends React.Component<any, any> {
 
                     </Tooltip>
                     <Tooltip placement="top" title="download pdf">
+                     
+                      <a href={`/api/felinReco/export/${v.felinRecoId}`} target="_blank">
                       <Icon type="cloud-download" />
+                      </a>
                     </Tooltip>
                     <Tooltip placement="top" title="copied link">
-                    <Icon type="link" />
+                    <Icon type="link"  onClick={() => this.handleCopy(this.newUrl(v.linkAddr))} />
                     </Tooltip>
                     </div>
 

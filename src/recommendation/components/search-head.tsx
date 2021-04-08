@@ -275,8 +275,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="PO Name">PO Name</Option>
-        <Option value="PO E-mail">PO E-mail</Option>
+        <Option value="PO name">PO Name</Option>
+        <Option value="PO e-mail">PO E-mail</Option>
       </Select>
     );
   };

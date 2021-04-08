@@ -9,6 +9,8 @@ import Result from './components/result';
 import * as webapi from './webapi';
 import './style.less';
 
+import { FormattedMessage } from 'react-intl';
+
 export default class Checkout extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -151,7 +153,7 @@ export default class Checkout extends React.Component<any, any> {
     if (this.state.memberInfo.customerName) {
       this.switchStep(3);
     } else {
-      Modal.warning({ title: 'Please fill consumer information!', okText: 'OK', centered: true });
+      Modal.warning({ title: <FormattedMessage id="Order.offline.noCustomerAlert" />, okText: <FormattedMessage id="Order.OK" />, centered: true });
     }
   }
 
@@ -183,7 +185,7 @@ export default class Checkout extends React.Component<any, any> {
           this.setState({
             loading: false
           }, () => {
-            Modal.warning({ title: 'Order not successfull', content: 'You can switch payment type or try it again!', okText: 'OK', centered: true });
+            Modal.warning({ title: <FormattedMessage id="Order.offline.orderNotSuccess" />, content: <FormattedMessage id="Order.offline.retryAlert" />, okText: <FormattedMessage id="Order.OK" />, centered: true });
           });
         }
       } else {

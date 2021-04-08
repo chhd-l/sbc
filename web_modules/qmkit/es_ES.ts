@@ -1457,6 +1457,20 @@ export default {
   'Order.cancel': 'Cancel',
   'Order.Addreturnorder': 'Add return order',
   'Order.Thereisnoreasonforthereturn': 'There is no reason for the return',
+  'Order.refundRejected': 'Refund rejected', 
+  'Order.skipLogistics':'Skip logistics',
+  'Order.skipLogisticsAlert':'Are you sure skip logistics?',
+  'Order.fillLogistics':'Fill in logistics',
+  'Order.detail':'Detail',
+  'Order.confirmRefund':'Confirm Refund',
+  'Order.refundAlert1':'Do you confirm the refund?',
+  'Order.refundAlert2':'What is the amount of the refund?',
+  'Order.approveAlert':'Is the audit approved?',
+  'Order.receiptAlert':'Do you confirm receipt of the goods?',
+  'Order.reasonIsEmpty':'reason is empty!',
+  'Order.oneToOneHun':'1 to 100 words',
+  'Order.pleaseInputReason':'Please input the reason for',
+  
 
 
 

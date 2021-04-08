@@ -1439,11 +1439,7 @@ export default {
   'Order.Theamountreturnedmustnotexceed': 'The amount returned must not exceed the amount refundable',
   'Order.Returnablenumber': 'Returnable number',
   'Order.Subtotalofreturnamount': 'Subtotal of return amount',
-  'Order.refundRejected': 'Refund rejected',
   'Order.RetractableIntegral': 'Retractable integral',
-
-
-
   'Order.Returnreason': 'Return reason',
   'Order.Pleaseselectchargebackreason': 'Please select chargeback reason',
   'Order.Returnmethod': 'Return method',

@@ -136,7 +136,7 @@ export default class ListView extends Component<any, any> {
         width: '10%'
       },
       {
-        title: <FormattedMessage id="task.PetAssistantName"/>,
+        title: <FormattedMessage id="task.PetAssistant"/>,
         dataIndex: 'assistantName',
         width: '10%'
       },

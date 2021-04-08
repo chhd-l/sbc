@@ -213,7 +213,9 @@ class SkuForm extends React.Component<any, any> {
           let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
 
           if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
-            c = targetGoodsIds.marketPrice * targetGoodsIds.bundleNum
+            //c = c * targetGoodsIds.bundleNum
+            c = Number(String(c / targetGoodsIds.bundleNum).replace(/\.\d+/g, ''))
+
             console.log(c,55555555);
 
 

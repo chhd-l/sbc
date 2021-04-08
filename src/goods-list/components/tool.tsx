@@ -212,7 +212,8 @@ class Tool extends React.Component<any, any> {
       storeCateIdList:storeCateId,
       cateId,
       brandId,
-      addedFlag
+      auditStatus: 1,
+      addedFlag:addedFlag == "-1" ? undefined : addedFlag
     };
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -221,7 +222,6 @@ class Tool extends React.Component<any, any> {
         if (token) {
           let result = JSON.stringify({ ...params, token: token });
           let encrypted = base64.urlEncode(result);
-
           // 新窗口下载
           const exportHref = Const.HOST + `/goods/exportSpus/${encrypted}`;
           window.open(exportHref);

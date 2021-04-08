@@ -17,7 +17,13 @@ const FormItem = Form.Item;
         newOrdersValue: 0,
         cardExpirationId: null,
         cardExpirationStatus: 0,
-        cardExpirationValue: 0
+        cardExpirationValue: 0,
+        switchProductId:null,
+        switchProductStatus:0,
+        switchProductValue:0,
+        emailReminderId:null,
+        emailReminderStatus:0,
+        emailReminderValue:0,
       },
       loading:false,
     };
@@ -48,6 +54,12 @@ const FormItem = Form.Item;
           let cardExpirationConfig = res.context.find((item) => {
             return item.configType === 'subscription_tied_card_failure';
           });
+          let switchProductConfig = res.context.find((item) => {
+            return item.configType === 'subscription_next_life_stage';
+          });
+          let emailReminderConfig = res.context.find((item) => {
+            return item.configType === 'subscription_create_order_error_number';
+          });
           if (newOrderConfig) {
             settingForm.newOrdersId = newOrderConfig.id;
             settingForm.newOrdersStatus = newOrderConfig.status;
@@ -57,6 +69,16 @@ const FormItem = Form.Item;
             settingForm.cardExpirationId = cardExpirationConfig.id;
             settingForm.cardExpirationStatus = cardExpirationConfig.status;
             settingForm.cardExpirationValue = cardExpirationConfig.context;
+          }
+          if (switchProductConfig) {
+            settingForm.switchProductId = switchProductConfig.id;
+            settingForm.switchProductStatus = switchProductConfig.status;
+            settingForm.switchProductValue = switchProductConfig.context;
+          }
+          if (emailReminderConfig) {
+            settingForm.emailReminderId = emailReminderConfig.id;
+            settingForm.emailReminderStatus = emailReminderConfig.status;
+            settingForm.emailReminderValue = emailReminderConfig.context;
           }
           this.setState({
             settingForm,
@@ -83,6 +105,16 @@ const FormItem = Form.Item;
           context: settingForm.cardExpirationValue,
           id: settingForm.cardExpirationId,
           status: settingForm.cardExpirationStatus ? 1 : 0
+        },
+        {
+          context: settingForm.switchProductValue,
+          id: settingForm.switchProductId,
+          status: settingForm.switchProductStatus ? 1 : 0
+        },
+        {
+          context: settingForm.emailReminderValue,
+          id: settingForm.emailReminderId,
+          status: settingForm.emailReminderStatus ? 1 : 0
         }
       ]
     };
@@ -186,6 +218,84 @@ const FormItem = Form.Item;
                       />
                       <span style={{ marginLeft: 10 }}>
                         <FormattedMessage id="Subscription.Days2" />
+                      </span>
+                    </div>
+                  </Col>
+                ) : null}
+              </Row>
+            </FormItem>
+
+            <FormItem label={<FormattedMessage id="Subscription.ReminderSwitchProduct" />}>
+              <Row>
+                <Col span={1}>
+                  <Switch
+                    checkedChildren="On"
+                    unCheckedChildren="Off"
+                    checked={settingForm.switchProductStatus ? true : false}
+                    onChange={(value) =>
+                      this.settingFormChange({
+                        field: 'switchProductStatus',
+                        value: value
+                      })
+                    }
+                  />
+                </Col>
+                {settingForm.switchProductStatus ? (
+                  <Col span={20}>
+                    <div style={styles.inputStyle}>
+                      <InputNumber
+                        precision={0}
+                        min={0}
+                        max={9999}
+                        value={settingForm.switchProductValue}
+                        onChange={(value) =>
+                          this.settingFormChange({
+                            field: 'switchProductValue',
+                            value: value
+                          })
+                        }
+                      />
+                      <span style={{ marginLeft: 10 }}>
+                        <FormattedMessage id="Subscription.ReminderSwitchProductDesc" />
+                      </span>
+                    </div>
+                  </Col>
+                ) : null}
+              </Row>
+            </FormItem>
+
+            <FormItem label={<FormattedMessage id="Subscription.EmailReminderIntervals" />}>
+              <Row>
+                <Col span={1}>
+                  <Switch
+                    checkedChildren="On"
+                    unCheckedChildren="Off"
+                    checked={settingForm.emailReminderStatus ? true : false}
+                    onChange={(value) =>
+                      this.settingFormChange({
+                        field: 'emailReminderStatus',
+                        value: value
+                      })
+                    }
+                  />
+                </Col>
+                {settingForm.emailReminderStatus ? (
+                  <Col span={20}>
+                    <div style={styles.inputStyle}>
+                      <InputNumber
+                        precision={0}
+                        min={0}
+                        max={9999}
+                        value={settingForm.emailReminderValue}
+                        onChange={(value) =>
+                          this.settingFormChange({
+                            field: 'emailReminderValue',
+                            value: value
+                          })
+                        }
+                      />
+                      <span style={{ marginLeft: 10 }}>
+                        <FormattedMessage id="Subscription.EmailReminderIntervalsDesc" />
                       </span>
                     </div>
                   </Col>

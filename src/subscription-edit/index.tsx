@@ -1344,7 +1344,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <Tooltip placement="top" title="Change">
+                    <Tooltip placement="top" title={<FormattedMessage id="Subscription.Active.Change"/>}>
                       <a style={styles.edit} onClick={() => this.deliveryOpen()} className="iconfont iconEdit"></a>
                     </Tooltip>
                   </Col>
@@ -1385,7 +1385,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <label className="info-title"><FormattedMessage id="Subscription.BillingAddress"/></label>
                   </Col>
                   <Col span={12}>
-                    <Tooltip placement="top" title="Change">
+                    <Tooltip placement="top" title={<FormattedMessage id="Subscription.Active.Change"/>}>
                       <a style={styles.edit} onClick={() => this.billingOpen()} className="iconfont iconEdit"></a>
                     </Tooltip>
                   </Col>
@@ -1441,7 +1441,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
             <Modal
               style={{ width: '500px' }}
-              title="Choose From Saved Delivery Address"
+              title={<FormattedMessage id="Subscription.Active.ChooseDeliveryAddress"/>}
               visible={this.state.visibleShipping}
               onOk={() => this.deliveryOK()}
               onCancel={() => {
@@ -1543,7 +1543,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Modal>
 
             <Modal
-              title="Choose From Saved Billing Address"
+              title={<FormattedMessage id="Subscription.Active.ChooseBillingAddress"/>}
               style={{ width: '500px' }}
               visible={this.state.visibleBilling}
               onOk={() => this.billingOK()}

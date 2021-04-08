@@ -1997,6 +1997,11 @@ export default {
   'Subscription.ReminderSwitchProductDesc':'Days before the next lifestage, an email will be sent to pet owners to recommend a new product',
   'Subscription.EmailReminderIntervals':'Email reminder intervals',
   'Subscription.EmailReminderIntervalsDesc':'Attempts between first and last emails due to inventory issues',
+  'Subscription.Operator Type':'Operator Type',
+  'Subscription.Operator':'Operator',
+  'Subscription.Time':'Time',
+  'Subscription.Operation Category':'Operation Category',
+  'Subscription.Operation Log':'Operation Log',
   
 
 

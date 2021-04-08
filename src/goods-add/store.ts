@@ -355,7 +355,6 @@ export default class AppStore extends Store {
 
     if (tmpContext && tmpContext.goodsInfos && tmpContext.goodsInfos.length > 0) {
       let addSkUProduct = tmpContext.goodsInfos.map((item) => {
-        console.log(item,44444);
         return {
           pid: item.goodsInfoNo,
           marketPrice: item.marketPrice,
@@ -1011,15 +1010,15 @@ export default class AppStore extends Store {
         }
 
         if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('marketPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) ) {
+          if(item.get('subscriptionPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].subscriptionPrice == 0) ) {
             if ( item.get('subscriptionPrice') == 0 ) {
-              tip = 1;
+              tip = 2;
               valid = false;
               return;
             }
           }else {
             if ( item.get('subscriptionPrice') == 0 ) {
-              tip = 1;
+              tip = 2;
               valid = false;
               return;
             }

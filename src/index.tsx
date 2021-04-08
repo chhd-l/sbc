@@ -23,6 +23,7 @@ import ruRU from 'antd/es/locale/ru_RU';
 import enUS from 'antd/es/locale/en_US';
 import deDE from 'antd/es/locale/de_DE';
 import es_ES from '../web_modules/qmkit/es_ES';
+import es_ES_new from '../web_modules/qmkit/es_ES_new';
 import es_RUS from '../web_modules/qmkit/es_RUS';
 
 import configOkta from '../web_modules/qmkit/config-okta';
@@ -43,8 +44,9 @@ if (sessionStorage.getItem(cache.LANGUAGE) == 'English') {
 }
 
 // let a = '';
-// for (let i in es_ES) {
-//   a += "'" + i + "'"+ ':'+ "'" +'\n';
+// for (let i in es_ES_new) {
+//   // a += "'" + i + "'"+ ':'+ "'" +'\n';
+//   a += es_ES_new[i] +'\n';
 // }
 // console.log(a);
 

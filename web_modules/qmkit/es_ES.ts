@@ -1431,6 +1431,7 @@ export default {
   'Order.reviewRejected': 'Review rejected', 
   'Order.receiedRejected': 'Receied rejected', 
   'Order.refundRejected': 'Refund rejected',
+  'Order.RetractableIntegral': 'Retractable integral',
 
 
 

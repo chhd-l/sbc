@@ -1369,7 +1369,7 @@ export default {
   'Order.offline.consumerNameRequired':'Consumer name is required',
   'Order.offline.consumerPhone':'Consumer phone',
   'Order.offline.consumerEmail':'Consumer email',
-  'Order.offline.consumerEmailRequired':'Consumer email is required',
+  'Order.offline.consumerEmailRequired':'Please fill in correct email',
   'Order.offline.offlineStore':'Offline store',
   'Order.offline.Guest':'Guest',
   'Order.offline.Member':'Member',

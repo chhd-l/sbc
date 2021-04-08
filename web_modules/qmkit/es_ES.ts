@@ -1219,6 +1219,8 @@ export default {
   'Order.offline.booked':'Booked',
   'Order.offline.arrived':'Arrived',
   'Order.offline.canceled':'Canceled',
+  'Order.offline.queryStateTitle':'Check payment status',
+  'Order.offline.queryStateContent':'Your can check payment status after customer authorization!',
 
 
 

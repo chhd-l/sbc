@@ -80,8 +80,8 @@ export default class GiftLevels extends React.Component<any, any> {
   // }
 
   render() {
-    const { goodsModal, isFullCount, fullGiftLevelList } = this.props;
-
+    const { isFullCount, fullGiftLevelList } = this.props;
+    const { goodsModal } = this.state
     const { form } = this.props;
 
     const { getFieldDecorator } = form;
@@ -281,7 +281,7 @@ export default class GiftLevels extends React.Component<any, any> {
           Add multi-level promotions
         </Button>
         &nbsp;&nbsp;up to 5 levels can be set
-        {fullGiftLevelList && fullGiftLevelList.length > 0 && goodsModal._modalVisible && (
+        {fullGiftLevelList && fullGiftLevelList.length > 0 && goodsModal && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}
             visible={goodsModal._modalVisible}
@@ -301,7 +301,8 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param goodsInfoId
    */
   deleteRows = (_index, goodsInfoId) => {
-    let { selectedRows, fullGiftLevelList, onChangeBack } = this.props;
+    let { fullGiftLevelList, onChangeBack } = this.props;
+    let { selectedRows } = this.state
     fullGiftLevelList.forEach((level) => {
       let levelIndex = level.fullGiftDetailList.findIndex((detail) => detail.productId == goodsInfoId);
       if (levelIndex > -1) {
@@ -319,7 +320,7 @@ export default class GiftLevels extends React.Component<any, any> {
 
     this.setState({
       selectedRows: selectedRows,
-      fullGiftLevelList: fullGiftLevelList
+      // fullGiftLevelList: fullGiftLevelList
     });
     onChangeBack(fullGiftLevelList);
   };
@@ -335,7 +336,7 @@ export default class GiftLevels extends React.Component<any, any> {
       [`level_rule_value_${fullGiftLevelList.length - 1}`]: null
     });
     fullGiftLevelList.splice(index, 1);
-    this.setState({ fullGiftLevelList: fullGiftLevelList });
+    // this.setState({ fullGiftLevelList: fullGiftLevelList });
     //传递到父页面
     onChangeBack(fullGiftLevelList);
   };
@@ -353,7 +354,7 @@ export default class GiftLevels extends React.Component<any, any> {
       giftType: 1,
       fullGiftDetailList: []
     });
-    this.setState({ fullGiftLevelList: fullGiftLevelList });
+    // this.setState({ fullGiftLevelList: fullGiftLevelList });
 
     //传递到父页面
     onChangeBack(fullGiftLevelList);
@@ -372,7 +373,7 @@ export default class GiftLevels extends React.Component<any, any> {
         fullGiftDetailList: []
       }
     ];
-    this.setState({ fullGiftLevelList: initLevel });
+    // this.setState({ fullGiftLevelList: initLevel });
 
     const { onChangeBack } = this.props;
     onChangeBack(initLevel);
@@ -402,7 +403,7 @@ export default class GiftLevels extends React.Component<any, any> {
     } else if (props == 'fullCount') {
       fullGiftLevelList[index]['fullAmount'] = null;
     }
-    this.setState({ fullGiftLevelList: fullGiftLevelList });
+    // this.setState({ fullGiftLevelList: fullGiftLevelList });
 
     //传递到父页面
     const { onChangeBack } = this.props;

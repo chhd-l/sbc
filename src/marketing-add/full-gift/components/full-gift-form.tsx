@@ -343,6 +343,8 @@ export default class FullGiftForm extends React.Component<any, any> {
     );
   };
 
+
+
   // @ts-ignore
   render() {
     const { marketingId, form } = this.props;
@@ -502,7 +504,7 @@ export default class FullGiftForm extends React.Component<any, any> {
             ],
             initialValue: marketingBean.get('subType')
           })(
-            <RadioGroup onChange={(e) => this.subTypeChange(e)}>
+            <RadioGroup onChange={(e) => this.subTypeChange(e)} value={marketingBean.get('subType')}>
               <Radio style={radioStyle} value={2}>
                 Direct gift
               </Radio>
@@ -742,7 +744,12 @@ export default class FullGiftForm extends React.Component<any, any> {
           </Col>
         </Row>
         {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
-        <GoodsModal visible={this.state.goodsModal._modalVisible} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
+        <GoodsModal visible={this.state.goodsModal._modalVisible}
+                    selectedSkuIds={this.state.goodsModal._selectedSkuIds}
+                    selectedRows={this.state.goodsModal._selectedRows}
+                    onOkBackFun={this.skuSelectedBackFun}
+                    onCancelBackFun={this.closeGoodsModal}
+        />
       </Form>
     );
   }

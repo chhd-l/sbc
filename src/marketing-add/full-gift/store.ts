@@ -98,4 +98,14 @@ export default class AppStore extends Store {
       // message.error('load group error.');
     }
   };
+
+  initDefualtLevelList= () => {
+    this.dispatch('marketing:initBeanLevelList')
+  }
+
+
+  setSelectedProductRows = ({ selectedRows = [], selectedSkuIds = [] }) => {
+    this.dispatch('marketing:selectedRows', selectedRows);
+    this.dispatch('marketing:selectedSkuIds', selectedSkuIds);
+  };
 }

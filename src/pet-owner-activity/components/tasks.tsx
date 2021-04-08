@@ -55,7 +55,7 @@ export default class tasks extends Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
         }
       })
       .catch(() => {
@@ -88,7 +88,7 @@ export default class tasks extends Component<any, any> {
             taskLoading: false
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             taskLoading: false
           });

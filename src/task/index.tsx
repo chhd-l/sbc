@@ -23,15 +23,15 @@ export default class Task extends React.Component<any, any> {
       isCardView: true,
       goldenMomentList: [],
       taskStatus: [
-        { name: 'To Do', value: 'To Do' },
-        { name: 'On-going', value: 'On-going' },
-        { name: 'Completed', value: 'Completed' },
-        { name: 'Cancelled', value: 'Cancelled' }
+        { name: <FormattedMessage id="task.ToDo"/>, value: 'To Do' },
+        { name: <FormattedMessage id="task.On-going"/>, value: 'On-going' },
+        { name: <FormattedMessage id="task.Completed"/>, value: 'Completed' },
+        { name: <FormattedMessage id="task.Cancelled"/>, value: 'Cancelled' }
       ],
       priorityList: [
-        { name: 'Low', value: 'Low' },
-        { name: 'Medium', value: 'Medium' },
-        { name: 'High', value: 'High' }
+        { name: <FormattedMessage id="task.Low"/>, value: 'Low' },
+        { name: <FormattedMessage id="task.Medium"/>, value: 'Medium' },
+        { name: <FormattedMessage id="task.High"/>, value: 'High' }
       ],
       taskForm: {
         status: ''
@@ -56,7 +56,7 @@ export default class Task extends React.Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
         }
       })
       .catch(() => {

@@ -100,7 +100,7 @@ class TaskUpdate extends Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
         }
       })
       .catch(() => {
@@ -129,7 +129,7 @@ class TaskUpdate extends Component<any, any> {
               this.getPetOwnerSubscriptions(customerAccount);
             }
           } else {
-            message.error(res.message || 'Get data failed');
+            message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
             this.setState({
               loading: false
             });
@@ -191,7 +191,7 @@ class TaskUpdate extends Component<any, any> {
             petAssistantLoading: false
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             petAssistantLoading: false
           })
@@ -224,7 +224,7 @@ class TaskUpdate extends Component<any, any> {
             petOwnerLoading: false
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             petOwnerLoading: false
           })
@@ -248,7 +248,7 @@ class TaskUpdate extends Component<any, any> {
             associatedPetList: res.context.context
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
         }
       })
       .catch(() => {
@@ -266,7 +266,7 @@ class TaskUpdate extends Component<any, any> {
             associatedOrderList: res.context.content
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
         }
       })
       .catch(() => {
@@ -284,7 +284,7 @@ class TaskUpdate extends Component<any, any> {
             associatedSubscriptionList: res.context.subscriptionResponses
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
         }
       })
       .catch(() => {

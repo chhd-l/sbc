@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table } from 'antd';
-import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
+import { message, Tooltip, Table } from 'antd';
+import { Const } from 'qmkit';
 import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 export default class ListView extends Component<any, any> {
   constructor(props) {
@@ -17,10 +18,10 @@ export default class ListView extends Component<any, any> {
         total: 0
       },
       taskStatus: [
-        { name: 'To Do', value: 'To Do' },
-        { name: 'On-going', value: 'On-going' },
-        { name: 'Completed', value: 'Completed' },
-        { name: 'Cancelled', value: 'Cancelled' }
+        { name: <FormattedMessage id="task.ToDo"/>, value: 'To Do' },
+        { name: <FormattedMessage id="task.On-going"/>, value: 'On-going' },
+        { name: <FormattedMessage id="task.Completed"/>, value: 'Completed' },
+        { name: <FormattedMessage id="task.Cancelled"/>, value: 'Cancelled' }
       ],
       loading: false,
       queryType: '1'
@@ -76,14 +77,14 @@ export default class ListView extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
+          message.error(res.message ||<FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
+        message.error(err || <FormattedMessage id="Public.GetDataFailed"/>);
         this.setState({
           loading: false
         });
@@ -111,17 +112,17 @@ export default class ListView extends Component<any, any> {
     const { taskList, taskStatus } = this.state;
     const columns = [
       {
-        title: 'Task Name',
+        title: <FormattedMessage id="task.TaskName"/>,
         dataIndex: 'name',
         width: '10%'
       },
       {
-        title: 'Golden Moment',
+        title: <FormattedMessage id="task.GoldenMoment"/>,
         dataIndex: 'goldenMoment',
         width: '15%'
       },
       {
-        title: 'Task Status',
+        title: <FormattedMessage id="task.TaskStatus"/>,
         dataIndex: 'status',
         width: '10%',
         render: (text) => {
@@ -130,28 +131,28 @@ export default class ListView extends Component<any, any> {
         }
       },
       {
-        title: 'Priority',
+        title: <FormattedMessage id="task.Priority"/>,
         dataIndex: 'priority',
         width: '10%'
       },
       {
-        title: 'Customer Care',
+        title: <FormattedMessage id="task.PetAssistantName"/>,
         dataIndex: 'assistantName',
         width: '10%'
       },
       {
-        title: 'Pet Owner',
+        title: <FormattedMessage id="task.PetOwner"/>,
         dataIndex: 'petOwner',
         width: '10%'
       },
       {
-        title: 'Due Time',
+        title: <FormattedMessage id="task.DueTime"/>,
         dataIndex: 'dueTime',
         width: '15%',
         render: (text, record) => (moment(text) < moment(new Date()) && (record.status === 'To Do' || record.status === 'On-going') ? <div style={{ color: 'rgba(239,28,51)' }}>{text}</div> : text)
       },
       {
-        title: 'Operation',
+        title:<FormattedMessage id="Order.Operation"/>,
         key: 'operation',
         width: '10%',
         render: (text, record) => (

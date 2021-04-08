@@ -76,14 +76,14 @@ export default class ChooseTemplataeForm extends Component<any, any> {
             emailContent: res.context.emailTemplateHtml
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             previewLoading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
+        message.error(err || <FormattedMessage id="Public.GetDataFailed"/>);
         this.setState({
           previewLoading: false
         });

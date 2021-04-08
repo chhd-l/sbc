@@ -48,7 +48,7 @@ export default withPropsAPI(
               });
             }
           } else {
-            message.error(res.message || 'Get data failed');
+            message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           }
         })
         .catch(() => {

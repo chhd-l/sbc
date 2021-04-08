@@ -2,6 +2,7 @@ import { Row, Col, Input, Button, Form, message, Tooltip } from 'antd';
 import React, { Component } from 'react';
 import * as webapi from '../webapi';
 import { Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -31,7 +32,7 @@ export default class Activity extends Component<any, any> {
             activities: res.context.taskLogList.reverse()
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
         }
       })
       .catch(() => {

@@ -38,7 +38,7 @@ export default class PrescriberSetting extends Component<any, any> {
             listSystemConfig: res.context
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             loading: false
           });
@@ -64,7 +64,7 @@ export default class PrescriberSetting extends Component<any, any> {
             showConfig: needPrescriberCategory.length > 0
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             loading: false
           });

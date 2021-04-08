@@ -217,9 +217,9 @@ export default class SearchHead extends Component<any, any> {
                       e.preventDefault();
                       const { felinRecoId, buyerOptions, goodsNames, buyerOptionsValue } = this.state;
                       const params = {
-                        felinRecoId,
-                        [buyerOptions == 'PO name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue,
-                        goodsNames,
+                        felinRecoId:felinRecoId||null,
+                        [buyerOptions == 'PO name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue||null,
+                        goodsNames:goodsNames||null,
                       };
                       onSearch(params);
                     }}

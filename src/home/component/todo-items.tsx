@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Spin } from 'antd';
 //import { fromJS } from 'immutable';
 
-import { cache, history, noop } from 'qmkit';
+import { AuthWrapper, cache, history, noop } from 'qmkit';
 /*import { IList } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';*/
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';
@@ -270,7 +270,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="top-text space-between">
                     <span>Task</span>
                     <span>
-                    <Link to="/tasks">more &gt;</Link>
+                    <AuthWrapper functionName="f_home_task_icon"><Link to="/tasks">more &gt;</Link></AuthWrapper>
                   </span>
                   </div>
                   <div className="traffic ">

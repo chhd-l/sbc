@@ -173,7 +173,7 @@ export default class FillinPetInfo extends Component {
                             <Col span={12}>
                                 <Form.Item label="Date of birth:">
                                     {getFieldDecorator('birthOfPets', {
-                                        initialValue:moment(felinReco?.fillDate??(new Date()), 'YYYY-MM-DD'),
+                                        initialValue:moment(customerPet?.birthOfPets??(new Date()), 'YYYY-MM-DD'),
                                         rules: [{ required: true, message: 'Please select Date of birth!' }],
                                         onChange: (e,) => this._onChange(e, 'birthOfPets')
 
@@ -306,12 +306,11 @@ export default class FillinPetInfo extends Component {
                                 cursor: 'pointer',
                             }} />
                         </QRScaner>
-                        <div>
+                        <div style={{marginTop:20}}>
                             {petsList.length > 0 && <Select style={{ width: 200 }}
                                 defaultValue={petsList[0].petsId}
                                 onChange={this._onChangePets}
                             >
-
                                 {petsList.map(item => {
                                     return <Option key={item.petsId} value={item.petsId}>{item.petsName}</Option>
                                 })}

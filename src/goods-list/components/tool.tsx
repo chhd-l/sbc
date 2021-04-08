@@ -25,6 +25,7 @@ class Tool extends React.Component<any, any> {
       storeCateId: string;
       brandId: string;
       cateId: string;
+      addedFlag: string;
     };
   };
   static relaxProps = {
@@ -45,6 +46,7 @@ class Tool extends React.Component<any, any> {
     // 品牌编号
     brandId: 'brandId',
     cateId: 'cateId',
+    addedFlag: 'addedFlag'
   };
 
   render() {
@@ -201,15 +203,17 @@ class Tool extends React.Component<any, any> {
 
 
   _export = () => {
-    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, storeCateId, cateId, brandId } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, storeCateId, cateId, brandId, addedFlag } = this.props.relaxProps;
 
     let params = {
       likeGoodsName,
       likeGoodsNo,
       likeGoodsInfoNo,
-      storeCateId,
+      storeCateIdList:storeCateId,
       cateId,
       brandId,
+      auditStatus: 1,
+      addedFlag:addedFlag == "-1" ? undefined : addedFlag
     };
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -218,10 +222,8 @@ class Tool extends React.Component<any, any> {
         if (token) {
           let result = JSON.stringify({ ...params, token: token });
           let encrypted = base64.urlEncode(result);
-
           // 新窗口下载
           const exportHref = Const.HOST + `/goods/exportSpus/${encrypted}`;
-
           window.open(exportHref);
         } else {
           message.error(<FormattedMessage id="Analysis.Unsuccessful" />);

@@ -72,12 +72,10 @@ export default class GoodsList extends React.Component<any, any> {
       <div>
         <GreyBg>
           <Row>
-            <Col span={3}>
+            <Col span={24}>
               <span>
                 <FormattedMessage id="Marketing.SelectedGoods" />:
               </span>
-            </Col>
-            <Col span={12} >
               {
                 scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
                   scopeType === 1 ?
@@ -100,7 +98,6 @@ export default class GoodsList extends React.Component<any, any> {
             </Col>
           </Row>
         </GreyBg>
-
       </div>
     );
   }

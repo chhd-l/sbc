@@ -29,7 +29,7 @@ export default class OrderReturnList extends React.Component<any, any> {
 
     <div className="order-con">
       <BreadCrumb />
-      <div className="container" style={{ height: '100vh' }}>
+      <div className="container method-container">
         <Headline title="Payment method" />
         <PaymentList />
         {/*<WrappedForm ref={(form) => (this._form = form)} />*/}

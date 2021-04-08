@@ -252,7 +252,7 @@ export default class AddProductModal extends Component {
               total={total}
               pageSize={pageSize}
               onChange={(pageNum, pageSize) => {
-                this.getGoodsSKUSList({ cateType, likeGoodsInfoNo, keyword, pageNum: pageNum - 1, pageSize, saleableFlag: 1 });
+                this.getGoodsSKUSList({ cateType, likeGoodsInfoNo, likeGoodsName, pageNum: pageNum - 1, pageSize, saleableFlag: 1 });
               }}
             />
           ) : null}

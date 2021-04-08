@@ -5,6 +5,7 @@ import { Headline, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
 import ReturnOrderForm from './components/form';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const WrapperForm = Form.create({})(ReturnOrderForm);
 
@@ -12,9 +13,12 @@ const WrapperForm = Form.create({})(ReturnOrderForm);
  * 新增退单
  */
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class OrderReturnAdd extends React.Component<any, any> {
+class OrderReturnAdd extends React.Component<any, any> {
   store: AppStore;
 
+  props: {
+    intl;
+  }
   componentDidMount() {
     const tid = this.props.match.params.id;
     this.store.init(tid);
@@ -32,10 +36,10 @@ export default class OrderReturnAdd extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Add return order</Breadcrumb.Item>
+          <Breadcrumb.Item><FormattedMessage id="Order.Addreturnorder" /></Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title="Add return order" />
+          <Headline title={<FormattedMessage id="Order.Addreturnorder" />} />
         </div>
         <div className="container">
           <WrapperForm ref={(form) => (window['_form'] = form)} />
@@ -44,7 +48,7 @@ export default class OrderReturnAdd extends React.Component<any, any> {
     );
   }
 }
-
+export default injectIntl(OrderReturnAdd)
 const styles = {
   noBackgroundContainer: {
     display: 'flex',

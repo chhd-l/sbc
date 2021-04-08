@@ -1,6 +1,6 @@
 import {FormattedMessage} from "react-intl";
 import React from "react";
-import {Button, Checkbox, Radio} from "antd";
+import { Breadcrumb, Button, Checkbox, Radio } from 'antd';
 
 /**
  * 多语言英文
@@ -1400,7 +1400,27 @@ export default {
 
   'Order.reviewRejected': 'Review rejected', 
   'Order.receiedRejected': 'Receied rejected', 
-  'Order.refundRejected': 'Refund rejected', 
+  'Order.refundRejected': 'Refund rejected',
+
+
+
+  'Order.Returnreason': 'Return reason',
+  'Order.Pleaseselectchargebackreason': 'Please select chargeback reason',
+  'Order.Returnmethod': 'Return method',
+  'Order.Pleaseselectreturnmethod': 'Please select return method',
+  'Order.Returndescription': 'Return description',
+  'Order.Returndescriptioncannotbeblank': 'Return description cannot be blank !',
+  'Order.Attachmentinformation': 'Attachment information',
+  'Order.PleaseaddyourreturOrder.savencredentialsTip': 'Please add your return credentials to the attachment. Supported picture formats: JPG, JPEG, PNG, GIF, file size no more than 5M, and upload a maximum of 10',
+  'Order.Refundableamountcannotbeblank': 'Refundable amount cannot be blank !',
+  'Order.Refundableamount': 'Refundable amount',
+  'Order.Uploaderror': 'Upload error',
+  'Order.Filesizecannotexceed 5M' : 'File size cannot exceed 5M',
+  'Order.Fileformaterror': 'File format error',
+  'Order.NoData': 'No Data',
+  'Order.cancel': 'Cancel',
+  'Order.Addreturnorder': 'Add return order',
+  'Order.Thereisnoreasonforthereturn': 'There is no reason for the return',
 
 
 

@@ -90,15 +90,12 @@ export default class GoodsList extends React.Component<any, any> {
                       <Column width="20%" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
                     </Table> :  scopeType === 2 ?
                     currentCategary && currentCategary.map(item=> (
-                      <span className="text-align-center" key={item.storeCateId}>{item.get('cateName')}</span>
+                      <span className="more-left-span" key={item.storeCateId}>{item.get('cateName')}</span>
                     ))
-                    : <span>
-                      {
-                        currentAttribute && currentAttribute.map(item=> (
-                          <span key={item.id}>{item.get('attributeName') || item.get('attributeDetailName')} </span>
-                        ))
-                      }
-                      </span>
+                    :
+                    currentAttribute && currentAttribute.map(item=> (
+                      <span key={item.id} className="more-left-span" >{item.get('attributeName') || item.get('attributeDetailName')} </span>
+                    ))
               }
             </Col>
           </Row>

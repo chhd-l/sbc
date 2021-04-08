@@ -65,8 +65,8 @@ export default class PaymentSetting extends React.Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search" style={{ height: '100vh', background: '#fff' }}>
-          <ContainerDiv>
+        <div className="container-search" style={{ background: '#fff' }}>
+          <ContainerDiv className="setting-container">
             <Headline title={<FormattedMessage id="paymentSetting" />} />
             {!this.store.state().get('loading') ?
               <Row>

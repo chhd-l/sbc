@@ -124,6 +124,7 @@ export default class Task extends React.Component<any, any> {
                     <SelectGroup
                       defaultValue=""
                       showSearch
+                      dropdownMatchSelectWidth={false}
                       label={<p style={styles.label}><FormattedMessage id="task.GoldenMoment"/></p>}
                       style={{ width: 195 }}
                       onChange={(value) => {
@@ -149,6 +150,7 @@ export default class Task extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <SelectGroup
+                      dropdownMatchSelectWidth={false}
                       value={taskForm.status}
                       label={<p style={styles.label}><FormattedMessage id="task.TaskStatus"/></p>}
                       style={{ width: 195 }}
@@ -294,6 +296,7 @@ export default class Task extends React.Component<any, any> {
                     this.listViewRef.current.getTaskList(value)
                   }
                 }}
+                dropdownMatchSelectWidth={false}
               >
                 <Option value={'1'}><FormattedMessage id="task.MyTasks"/></Option>
                 <Option value={'0'}><FormattedMessage id="task.AllTasks"/></Option>
@@ -306,6 +309,7 @@ export default class Task extends React.Component<any, any> {
                     isCardView: value === 0
                   })
                 }
+                dropdownMatchSelectWidth={false}
               >
                 <Option value={0}><FormattedMessage id="task.CardView"/></Option>
                 <Option value={1}><FormattedMessage id="task.ListView"/></Option>

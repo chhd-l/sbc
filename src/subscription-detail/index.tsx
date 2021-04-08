@@ -4,7 +4,7 @@ import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
 import FeedBack from './component/feedback';
 import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
 const Panel = Collapse.Panel;
@@ -33,12 +33,17 @@ const deliverStatus = (status) => {
 /**
  * 订单详情
  */
-export default class SubscriptionDetail extends React.Component<any, any> {
+ class SubscriptionDetail extends React.Component<any, any> {
+
+  props: {
+    intl;
+    match: any;
+  }
   constructor(props) {
     super(props);
     this.state = {
       title: 'Subscription details',
-      subscriptionId: this.props.match.params.subId,
+      subscriptionId: null,
       loading: true,
       orderInfo: {},
       subscriptionInfo: {},
@@ -68,10 +73,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.getCurrencySymbol();
-    this.getDict();
-    this.getSubscriptionDetail(this.state.subscriptionId);
-    this.getBySubscribeId(this.state.subscriptionId);
+    this.setState({
+      subscriptionId: this.props.match &&  this.props.match.params? this.props.match.params.subId : null
+    },()=> {
+      this.getCurrencySymbol();
+      this.getDict();
+      this.getSubscriptionDetail(this.state.subscriptionId);
+      this.getBySubscribeId(this.state.subscriptionId);
+    })
   }
 
   //查询frequency
@@ -433,28 +442,28 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
       </div>
     );
-    const cartExtra = (
-      <div>
-        <Popconfirm placement="topRight" title="Are you sure skip next delivery?" onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
-          <Tooltip placement="top" title="Skip Next Delivery">
-            <Button type="link" style={{ fontSize: 16 }}>
-              <FormattedMessage id="Subscription.SkipNextDelivery"/>
-            </Button>
-          </Tooltip>
-        </Popconfirm>
-        {/* <Popconfirm
-          placement="topRight"
-          title="Are you sure order now?"
-          onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
-          okText="Confirm"
-          cancelText="Cancel"
-        >
-          <Button type="link" style={{ fontSize: 16 }}>
-            Order Now
-          </Button>
-        </Popconfirm> */}
-      </div>
-    );
+    // const cartExtra = (
+    //   <div>
+    //     <Popconfirm placement="topRight" title="Are you sure skip next delivery?" onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
+    //       <Tooltip placement="top" title="Skip Next Delivery">
+    //         <Button type="link" style={{ fontSize: 16 }}>
+    //           <FormattedMessage id="Subscription.SkipNextDelivery"/>
+    //         </Button>
+    //       </Tooltip>
+    //     </Popconfirm>
+    //     {/* <Popconfirm
+    //       placement="topRight"
+    //       title="Are you sure order now?"
+    //       onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
+    //       okText="Confirm"
+    //       cancelText="Cancel"
+    //     >
+    //       <Button type="link" style={{ fontSize: 16 }}>
+    //         Order Now
+    //       </Button>
+    //     </Popconfirm> */}
+    //   </div>
+    // );
     const columns = [
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product"/></span>,
@@ -521,33 +530,53 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     const operatorColumns = [
       {
-        title: 'Operator Type',
+        title:
+          this.props.intl.formatMessage({
+          id: 'Order.OperatorType'
+        }),
         dataIndex: 'operatorType',
         key: 'operatorType'
       },
       {
-        title: 'Operator',
+        title:
+          this.props.intl.formatMessage({
+            id: 'Order.Operator'
+          }),
         dataIndex: 'operator',
         key: 'operator'
       },
       {
-        title: 'Time',
+        title:
+          this.props.intl.formatMessage({
+            id: 'Order.Time'
+          }),
         dataIndex: 'time',
         key: 'time',
         render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
       },
       {
-        title: 'Operation Category',
+        title:
+          this.props.intl.formatMessage({
+            id: 'Order.OperationCategory'
+          }),
         dataIndex: 'operationCategory',
         key: 'operationCategory'
       },
       {
-        title: 'Operation Log',
+        title:
+          this.props.intl.formatMessage({
+            id: 'Order.OperationLog'
+          }),
         dataIndex: 'operationLog',
         key: 'operationLog',
         width: '50%'
       }
     ];
+
+    // 翻译title
+    operatorColumns.forEach(obj => {
+      (obj.title as any) = <FormattedMessage id={`Order.${obj.title}`} />
+    });
 
     const columns_completed = [
       {
@@ -907,6 +936,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     );
   }
 }
+export default injectIntl(SubscriptionDetail)
 const styles = {
   priceStyle: {
     marginRight: 15

@@ -170,18 +170,18 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
                         {returnFlowState === 'TO_BE_DELIVERED' && (
                           <AuthWrapper functionName="f_return_delivered">
-                            <Popconfirm placement="topLeft" title="Are you sure skip logistics?" onConfirm={() => {
+                            <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.skipLogisticsAlert" />} onConfirm={() => {
                               this._showDeliver(onDeliver, rid, false)
-                            }} okText="Confirm" cancelText="Cancel">
-                              <Tooltip placement="top" title="Skip logistics">
+                            }} okText={<FormattedMessage id="Order.btnConfirm" />} cancelText={<FormattedMessage id="Order.cancel" />}>
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.skipLogistics" />}>
                                 <a style={{ marginLeft: 20 }}>
-                                  Skip logistics
+                                <FormattedMessage id="Order.skipLogistics" />
                                 </a>
                               </Tooltip>
                             </Popconfirm>
-                            <Tooltip placement="top" title="Fill in logistics">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.fillLogistics" />}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
-                                Fill in logistics
+                              <FormattedMessage id="Order.fillLogistics" />
                               </a>
                             </Tooltip>
                           </AuthWrapper>

@@ -34,7 +34,7 @@ export default {
   'Public.all':'all',
   'Public.Search':'Search',
   /* -------- 已翻译 V1.0---------------*/
-  'Public.ChooseLocation':'Choose your location',
+  'Public.ChooseLocation':'Choose your language',
   'Public.Export':'Export',
   'Public.Cancel':'Cancel',
   'Public.Batch Export':'Batch Export',
@@ -1456,8 +1456,7 @@ export default {
   'Order.NoData': 'No Data',
   'Order.cancel': 'Cancel',
   'Order.Addreturnorder': 'Add return order',
-  'Order.Thereisnoreasonforthereturn': 'There is no reason for the return',
-  'Order.refundRejected': 'Refund rejected', 
+  'Order.Thereisnoreasonforthereturn': 'There is no reason for the return', 
   'Order.skipLogistics':'Skip logistics',
   'Order.skipLogisticsAlert':'Are you sure skip logistics?',
   'Order.fillLogistics':'Fill in logistics',
@@ -2009,6 +2008,11 @@ export default {
   'Subscription.ReminderSwitchProductDesc':'Days before the next lifestage, an email will be sent to pet owners to recommend a new product',
   'Subscription.EmailReminderIntervals':'Email reminder intervals',
   'Subscription.EmailReminderIntervalsDesc':'Attempts between first and last emails due to inventory issues',
+  'Subscription.Operator Type':'Operator Type',
+  'Subscription.Operator':'Operator',
+  'Subscription.Time':'Time',
+  'Subscription.Operation Category':'Operation Category',
+  'Subscription.Operation Log':'Operation Log',
   
 
 

@@ -9,7 +9,7 @@ const defaultImg = require('./img/none.png');
 interface IParams {
   cateType: string;
   likeGoodsInfoNo: string;
-  keyword: string;
+  likeGoodsName: string;
   pageNum: number;
   pageSize: number;
   saleableFlag: number,
@@ -20,7 +20,7 @@ export default class AddProductModal extends Component {
   state = {
     cateType: '',
     likeGoodsInfoNo: '',
-    keyword: '',
+    likeGoodsName: '',
     goodsLists: [],
     currentPage: 0,
     total: 0,
@@ -70,11 +70,11 @@ export default class AddProductModal extends Component {
     );
   }
   search = () => {
-    const { cateType, likeGoodsInfoNo, keyword } = this.state;
+    const { cateType, likeGoodsInfoNo, likeGoodsName } = this.state;
     this.getGoodsSKUSList({
       cateType,
       likeGoodsInfoNo,
-      keyword,
+      likeGoodsName,
       pageNum: 0,
       pageSize: 5,
       saleableFlag: 1
@@ -113,7 +113,7 @@ export default class AddProductModal extends Component {
 
   render() {
     const { visible, handleOk, handleCancel, goodsCount, storeId,url,prefix} = this.props;
-    const { cateType, likeGoodsInfoNo, keyword, goodsLists, total, pageSize, currentPage, loading } = this.state;
+    const { cateType, likeGoodsInfoNo, likeGoodsName, goodsLists, total, pageSize, currentPage, loading } = this.state;
     const columns = [
       {
         title: 'Image',
@@ -188,6 +188,7 @@ export default class AddProductModal extends Component {
         }
       }
     ];
+    console.log(url,)
     return (
       <Modal title="Choose product" visible={visible} onOk={handleOk} width="70%" onCancel={handleCancel}>
         <Form className="filter-content" layout="inline">
@@ -224,7 +225,7 @@ export default class AddProductModal extends Component {
             </Col>
             <Col span={12}>
               <FormItem>
-                <Input addonBefore={<p style={styles.label}>Product name</p>} value={keyword} onChange={(e) => this.onChange(e, 'keyword')} />
+                <Input addonBefore={<p style={styles.label}>Product name</p>} value={likeGoodsName} onChange={(e) => this.onChange(e, 'likeGoodsName')} />
               </FormItem>
             </Col>
             <Col span={24} style={{ textAlign: 'center' }}>

@@ -2,6 +2,8 @@ import React from 'react';
 import { Input, Row, Col } from 'antd';
 import _ from 'lodash';
 
+import { FormattedMessage } from 'react-intl';
+
 export default class ProductOverview extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -23,7 +25,7 @@ export default class ProductOverview extends React.Component<any, any> {
     const disProducts = products.filter(p => searchStr.trim() === '' || p.goodsInfoName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 || p.goodsInfoBarcode.toLowerCase().indexOf(searchStr.toLowerCase()) > -1);
     return (
       <>
-        <div className="c-box-title">Product overview</div>
+        <div className="c-box-title"><FormattedMessage id="Order.offline.productOverview"/></div>
         <div className="c-product-overview">
           <Row gutter={[16, 16]}>
             {disProducts.map((product, idx) => (

@@ -9,7 +9,9 @@ import Result from './components/result';
 import * as webapi from './webapi';
 import './style.less';
 
-export default class Checkout extends React.Component<any, any> {
+import { FormattedMessage, injectIntl } from 'react-intl';
+
+class Checkout extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -151,7 +153,9 @@ export default class Checkout extends React.Component<any, any> {
     if (this.state.memberInfo.customerName) {
       this.switchStep(3);
     } else {
-      Modal.warning({ title: 'Please fill consumer information!', okText: 'OK', centered: true });
+      const alertTitle = this.props.intl.formatMessage({id:'Order.offline.noCustomerAlert'});
+      const okText = this.props.intl.formatMessage({id:'Order.OK'});
+      Modal.warning({ title: alertTitle, okText: okText, centered: true });
     }
   }
 
@@ -171,19 +175,28 @@ export default class Checkout extends React.Component<any, any> {
       tradeItems: list.map(p => ({ skuId: p.goodsInfoId, num: p.quantity }))
     };
     this.setState({ loading: true });
-    webapi.checkout(params).then(async (data) => {
+    webapi.checkout(params).then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
-        if (await this.queryOrderStatus(data.res.context)) {
+        const context = data.res.context;
+        if (context && context.trade && context.trade.tradeState && context.trade.tradeState.payState && context.trade.tradeState.payState === 'PAID') {
           this.setState({
-            orderId: data.res.context.tradeState.tid,
+            orderId: data.res.context.tid,
             step: 4,
             loading: false
           });
+        } else if (context.tid) {
+          this.setState({
+            orderId: context.tid,
+            loading: false
+          }, this.showQueryModal);
         } else {
           this.setState({
             loading: false
           }, () => {
-            Modal.warning({ title: 'Order not successfull', content: 'You can switch payment type or try it again!', okText: 'OK', centered: true });
+            const alertTitle = this.props.intl.formatMessage({id:'Order.offline.orderNotSuccess'});
+            const alertContent = this.props.intl.formatMessage({id:'Order.offline.retryAlert'});
+            const okText = this.props.intl.formatMessage({id:'Order.OK'});
+            Modal.warning({ title: alertTitle, content: alertContent, okText: okText, centered: true });
           });
         }
       } else {
@@ -194,20 +207,34 @@ export default class Checkout extends React.Component<any, any> {
     });
   }
 
-  queryOrderStatus = async (context) => {
-    if (context && context.tradeState && context.tradeState.payState && context.tradeState.payState === 'PAID') {
-      return true;
-    }
-    return await webapi.queryStatus({
-      tidList: [context.tradeState.tid]
+  showQueryModal = () => {
+    const infoTitle = this.props.intl.formatMessage({id:'Order.offline.queryStateTitle'});
+    const infoContent = this.props.intl.formatMessage({id:'Order.offline.queryStateContent'});
+    const okText = this.props.intl.formatMessage({id:'Order.offline.yes'});
+    const noText = this.props.intl.formatMessage({id:'Order.offline.no'});
+    Modal.confirm({ title: infoTitle, content: infoContent, okText: okText, cancelText: noText, centered: true, onOk: this.queryOrderStatus, onCancel: () => {} });
+  }
+
+  queryOrderStatus = () => {
+    const { orderId } = this.state;
+    this.setState({ loading: true });
+    webapi.queryStatus({
+      tidList: [orderId]
     }).then(data => {
-      if (data.res.context === Const.SUCCESS_CODE) {
-        return true;
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          step: 4,
+          loading: false
+        });
       } else {
-        return false;
+        this.setState({
+          loading: false
+        }, this.showQueryModal);
       }
     }).catch(() => {
-      return false;
+      this.setState({
+        loading: false
+      }, this.showQueryModal);
     });
   };
 
@@ -216,7 +243,7 @@ export default class Checkout extends React.Component<any, any> {
     const { onClose } = this.props;
     this.setState({ loading: true });
     webapi.refillOrder(orderId, refill).then(data => {
-      if (data.res.context === Const.SUCCESS_CODE && onClose) {
+      if (data.res.code === Const.SUCCESS_CODE && onClose) {
         onClose(false);
       } else {
         this.setState({ loading: false });
@@ -255,3 +282,5 @@ export default class Checkout extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(Checkout);

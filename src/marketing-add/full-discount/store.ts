@@ -28,7 +28,7 @@ export default class AppStore extends Store {
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      if (res.context.promotionType === 1) {
+      if (res.context.promotionType === 1 || res.context.promotionType === 2) {
         res.context.firstSubscriptionOrderDiscount = res.context.fullDiscountLevelList ? res.context.fullDiscountLevelList[0].firstSubscriptionOrderDiscount * 10 : null;
         res.context.restSubscriptionOrderDiscount = res.context.fullDiscountLevelList ? res.context.fullDiscountLevelList[0].restSubscriptionOrderDiscount * 10 : null;
       }

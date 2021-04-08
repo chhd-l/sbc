@@ -7,7 +7,7 @@ import { AuthWrapper, BreadCrumb, history } from 'qmkit';
 import SearchHead from './components/search-head';
 import SearchList from './components/search-tab-list';
 import config from '../qmkit/config';
-
+import List from './components/list';
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class OrderList extends Component<any, any> {
   store: AppStore;
@@ -50,7 +50,7 @@ export default class OrderList extends Component<any, any> {
             <SearchHead />
           </div>
           <div className="container">
-            <SearchList />
+              <List />
           </div>
         </div>
       // </AuthWrapper>

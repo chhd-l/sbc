@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Table, InputNumber, Form } from 'antd';
 import { IMap } from 'typings/globalType';
 import { noop, ValidConst, QMFloat } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 import './goods-list-style.css';
 import Amount from './amount';
@@ -35,7 +36,7 @@ export default class GoodsList extends React.Component<any, any> {
 
     return (
       <div>
-        <h3 style={styles.title}>Select return products</h3>
+        <h3 style={styles.title}><FormattedMessage id="Order.Selectreturnproducts" /></h3>
         <Table
           bordered
           dataSource={dataSource}
@@ -86,26 +87,26 @@ export default class GoodsList extends React.Component<any, any> {
 
     return [
       {
-        title: 'SKU code',
+        title: <FormattedMessage id="Order.SKU Code" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
         width: 150
       },
       {
-        title: 'Product name',
+        title: <FormattedMessage id="Order.Product Name" />,
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
         render: (text) => `${itemType == 1 ? '[Gift]' : ''}${text}`
       },
       {
-        title: 'Specification',
+        title: <FormattedMessage id="Order.Specification" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
         width: 150
       },
       {
-        title: 'Return unit price',
+        title: <FormattedMessage id="Order.Returnunitprice" />,
         key: 'price',
         width: 100,
         render: (rowInfo) => {
@@ -117,7 +118,7 @@ export default class GoodsList extends React.Component<any, any> {
         }
       },
       {
-        title: 'Return quantity',
+        title: <FormattedMessage id="Order.Returnquantity" />,
         key: 'num',
         width: 100,
         className: 'centerItem',
@@ -133,18 +134,18 @@ export default class GoodsList extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please enter return quantity'
+                    message: <FormattedMessage id="Order.Pleaseenterreturnquantity" />
                   },
                   {
                     pattern: ValidConst.number,
-                    message: 'Return quantity should be in round numbers only'
+                    message: <FormattedMessage id="Order.Returnquantityshould" />
                   },
                   {
                     validator: (_rule, value, callback) => {
                       const canReturnNum = rowInfo.canReturnNum;
 
                       if (value > canReturnNum) {
-                        callback('The amount returned must not exceed the amount refundable');
+                        callback(<FormattedMessage id="Order.Theamountreturnedmustnotexceed" />);
                       }
 
                       callback();
@@ -158,13 +159,13 @@ export default class GoodsList extends React.Component<any, any> {
                   onChange={this._editGoodsNum.bind(this, rowInfo.skuId)}
                 />
               )}
-              <p>{`Returnable number ${rowInfo.canReturnNum}`}</p>
+              <p><FormattedMessage id="Order.Returnablenumber" />{` ${rowInfo.canReturnNum}`}</p>
             </FormItem>
           );
         }
       },
       {
-        title: 'Subtotal of return amount',
+        title: <FormattedMessage id="Order.Subtotalofreturnamount" />,
         key: 'total',
         width: 100,
         render: (rowInfo) => {

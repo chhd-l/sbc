@@ -104,14 +104,10 @@ export default class AddProductModal extends Component {
     });
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Add successfully');
-      row.overCount+=row.buyCount
-        // this.state.goodsLists[index]=row
-       this.props.searchCount()
-        
-      this.setState({ 
-        loading: false ,
-        //goodsLists:this.state.goodsLists
-      });
+      this.props.searchCount()
+     setTimeout(() => {
+      this.setState({ loading: false });
+     }, 2000);
     }
   }
 

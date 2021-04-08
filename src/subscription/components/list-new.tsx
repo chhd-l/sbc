@@ -310,21 +310,21 @@ export default class ListView extends React.Component<any, any> {
                     </td> */}
                     {/*Operation*/}
                     <td style={{ width: '15%' }} className="operation-td">
-                      <Tooltip placement="top" title="Details">
+                      <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
                         <Button type="link" style={{ padding: '0 5px' }}>
                           <Link to={'/subscription-detail/' + v.subscribeId} className="iconfont iconDetails"></Link>
                         </Button>
                       </Tooltip>
                       {v.subscribeStatus === '0' ? (
-                        <Tooltip placement="top" title="Edit">
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Edit"/>}>
                           <Button type="link" style={{ padding: '0 5px' }}>
                             <Link to={'/subscription-edit/' + v.subscribeId} className="iconfont iconEdit"></Link>
                           </Button>
                         </Tooltip>
                       ) : null}
                       {v.subscribeStatus === '0' ? (
-                        <Popconfirm placement="topRight" title="Are you sure cancel the subscription?" onConfirm={() => this.cancelAll(v.subscribeId)} okText="Confirm" cancelText="Cancel">
-                          <Tooltip placement="top" title="Cancel all">
+                        <Popconfirm placement="topRight" title={<FormattedMessage id="Subscription.AreYouSureCancel"/>} onConfirm={() => this.cancelAll(v.subscribeId)} okText={<FormattedMessage id="Subscription.Confirm"/>}cancelText={<FormattedMessage id="Subscription.Cancel"/>}>
+                          <Tooltip placement="top" title={<FormattedMessage id="Subscription.CancelAll"/>}>
                             <a type="link" style={{ padding: '0 5px' }} className="iconfont iconbtn-cancelall">
                               {/*Cancel all*/}
                             </a>
@@ -332,14 +332,14 @@ export default class ListView extends React.Component<any, any> {
                         </Popconfirm>
                       ) : null}
                       {v.subscribeStatus === '0' ? (
-                        <Tooltip placement="top" title="Pause">
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Pause"/>}>
                           <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '1')}>
                             <i className="iconfont iconbtn-pause"></i>
                           </Button>
                         </Tooltip>
                       ) : null}
                       {v.subscribeStatus === '1' ? (
-                        <Tooltip placement="top" title="Restart">
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Restart"/>}>
                           <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '0')}>
                             <i className="iconfont iconbtn-open"></i>
                           </Button>

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, AuthWrapper, history, Const } from 'qmkit';
-import { Row, Col, Form, Modal, message, Button, Card, Tooltip } from 'antd';
+import { Row, Col, Form, Modal, message, Button, Card, Tooltip, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 import * as webapi from './webapi';
 import styled from 'styled-components';
 import PaymentModel from './components/payment-modal';
-
+import AppStore from './store';
+import { StoreProvider } from 'plume2';
+import { fromJS } from 'immutable';
+import './index.less'
 const ContainerDiv = styled.div`
   .methodItem {
     width: 100%;
@@ -39,8 +42,9 @@ const ContainerDiv = styled.div`
     }
   }
 `;
-
+@StoreProvider(AppStore, { debug: __DEV__ })
 export default class PaymentSetting extends React.Component<any, any> {
+  store: AppStore;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -49,30 +53,14 @@ export default class PaymentSetting extends React.Component<any, any> {
       paymentForm: {}, //edit
       paymentList: []
     };
-    this.closeModel = this.closeModel.bind(this);
   }
   componentDidMount() {
-    this.getPaymentSetting();
+    this.store.init();
   }
-  getPaymentSetting = async () => {
-    const { res } = await webapi.getPaymentSetting();
-    if (res.code === Const.SUCCESS_CODE) {
-      this.setState({
-        paymentList: res.context
-      });
-    }
-  };
 
-  closeModel = () => {
-    this.setState({
-      paymentVisible: false
-    });
-  };
-  reflash() {
-    this.getPaymentSetting();
-  }
   render() {
-    const { paymentList } = this.state;
+    const paymentList  = this.store.state().get('paymentList') ? this.store.state().get('paymentList').toJS() : [];
+    console.log(paymentList, 'paymentList-----------');
     return (
       <div>
         <BreadCrumb />
@@ -80,8 +68,9 @@ export default class PaymentSetting extends React.Component<any, any> {
         <div className="container-search" style={{ height: '100vh', background: '#fff' }}>
           <ContainerDiv>
             <Headline title={<FormattedMessage id="paymentSetting" />} />
-            <Row>
-              {paymentList &&
+            {!this.store.state().get('loading') ?
+              <Row>
+                {paymentList &&
                 paymentList.map((item, index) => (
                   <Col span={8} key={index}>
                     <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
@@ -103,10 +92,8 @@ export default class PaymentSetting extends React.Component<any, any> {
                               style={{ color: 'red' }}
                               type="link"
                               onClick={() => {
-                                this.setState({
-                                  paymentVisible: true,
-                                  paymentForm: item
-                                });
+                                this.store.setCurrentPaymentForm(fromJS(item))
+                                this.store.handelModelOpenOClose(true)
                               }}
                               /* className="links"*/
                               className="iconfont iconEdit"
@@ -119,9 +106,10 @@ export default class PaymentSetting extends React.Component<any, any> {
                     </Card>
                   </Col>
                 ))}
-            </Row>
-
-            <PaymentModel paymentForm={this.state.paymentForm} visible={this.state.paymentVisible} parent={this} reflash={() => this.reflash()} />
+              </Row> :
+              <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />
+            }
+            <PaymentModel />
           </ContainerDiv>
         </div>
       </div>

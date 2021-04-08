@@ -190,107 +190,7 @@ export default class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
               <div className="item-top-l-btm">
-                <div className="top-text"><FormattedMessage id="Home.ConversionFunnel"/></div>
-                <div className="Funnel">
-                  <Funnel data={conversionFunnelDashboardView && conversionFunnelDashboardView.dataList} />
-                  <div className="Funnel-l">
-                    <div className="Funnel-l-text">
-                      <p><FormattedMessage id="Home.LandingPage"/></p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList && conversionFunnelDashboardView.dataList[0] != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</p>
-                      <p className="Funnel-l-dash1"></p>
-                    </div>
-                    <div className="Funnel-l-text">
-                      <p><FormattedMessage id="Home.ShoppingCart"/></p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList && conversionFunnelDashboardView.dataList[1] != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</p>
-                      <p className="Funnel-l-dash2"></p>
-                    </div>
-                    <div className="Funnel-l-text">
-                      <p><FormattedMessage id="Home.Checkout"/></p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList && conversionFunnelDashboardView.dataList[2] != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</p>
-                      <p className="Funnel-l-dash3"></p>
-                    </div>
-                    <div className="Funnel-l-text">
-                      <p><FormattedMessage id="Home.Payment"/></p>
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList && conversionFunnelDashboardView.dataList[3] != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</p>
-                      <p className="Funnel-l-dash4"></p>
-                    </div>
-                  </div>
-                  <div className="Funnel-r">
-                    <div className="Funnel-r-top"></div>
-                    <div className="Funnel-r-mid">
-                      <div className="text1"><FormattedMessage id="Home.ConversionRate"/></div>
-                      <div className="text2">
-                        {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} decimals={2} {...countUpProps} /> : '--'}
-                        <i>%</i>
-                      </div>
-                      <div className="text3">
-                        {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? <img src={conversionFunnelDashboardView.payLoginRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                        <span className={conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? (conversionFunnelDashboardView.payLoginRateRate >= 0 ? 'green' : 'red') : ''}>
-                          {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? <CountUp end={Math.abs(conversionFunnelDashboardView.payLoginRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="Funnel-r-btm"></div>
-                  </div>
-                  <div className="Funnel-per1 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
-                    <p>%</p>
-                  </div>
-                  <div className="Funnel-per2 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
-                    <p>%</p>
-                  </div>
-                  <div className="Funnel-per3 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
-                    <p>%</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="item-top-r flex-content">
-              <div className="item-top-r-top">
-                <div className="top-text"><FormattedMessage id="Home.Consumer"/></div>
-                <div className="consumer flex-content">
-                  <div className="consumer-top flex-start">
-                    <div className="mode">
-                      <div className="mode-text"><FormattedMessage id="Home.ActiveConsumers"/></div>
-                      <div className="mode-num">
-                        {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
-                        <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
-                      </div>
-                      <div className="mode-per">
-                        {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <img src={tradeCustomerView.activeConsumersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                        <span className={tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? (tradeCustomerView.activeConsumersRate >= 0 ? 'green' : 'red') : ''}>
-                          {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mode">
-                      <div className="mode-text"><FormattedMessage id="Home.ActiveConsumerRate"/></div>
-                      <div className="mode-num">
-                        <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} suffix={'%'} decimals={2} {...countUpProps} /> : '--'}</span>
-                      </div>
-                      <div className="mode-per">
-                        {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <img src={tradeCustomerView.activeConsumerRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                        <span className={tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? (tradeCustomerView.activeConsumerRateRate >= 0 ? 'green' : 'red') : ''}>
-                          {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumerRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="consumer-btm flex-content">
-                    <div className="mode">
-                      <div className="mode-text"><FormattedMessage id="Home.TotalConsumers"/></div>
-                      <div className="mode-num">
-                        <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="item-top-r-btm">
-                <div className="top-text"><FormattedMessage id="Home.Subscription"/></div>
+                <div className="top-text">Subscription</div>
                 <div className="subscription space-between">
                   <div className="subscription-l">
                     <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />
@@ -324,17 +224,58 @@ export default class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
             </div>
-            {/* begin */}
-            <div className="item-top-m flex-content">
-              <div className="item-top-m-top">
-                <div className="top-text space-between">
-                  <span><FormattedMessage id="Home.Task"/></span>
-                  <span>
-                    <Link to="/tasks"><FormattedMessage id="Home.more"/> &gt;</Link>
-                  </span>
+
+            <div className="item-top-r flex-content">
+              <div className="item-top-r-top flex-content">
+                <div className="item-top-r-top-l">
+                  <div className="top-text">Consumer</div>
+                  <div className="consumer flex-content">
+                    <div className="consumer-top flex-start">
+                      <div className="mode">
+                        <div className="mode-text">Active consumers</div>
+                        <div className="mode-num">
+                          {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
+                          <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
+                        </div>
+                        <div className="mode-per">
+                          {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <img src={tradeCustomerView.activeConsumersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          <span className={tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? (tradeCustomerView.activeConsumersRate >= 0 ? 'green' : 'red') : ''}>
+                          {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                        </span>
+                        </div>
+                      </div>
+                      <div className="mode">
+                        <div className="mode-text">Active consumer rate</div>
+                        <div className="mode-num">
+                          <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} suffix={'%'} decimals={2} {...countUpProps} /> : '--'}</span>
+                        </div>
+                        <div className="mode-per">
+                          {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <img src={tradeCustomerView.activeConsumerRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          <span className={tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? (tradeCustomerView.activeConsumerRateRate >= 0 ? 'green' : 'red') : ''}>
+                          {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumerRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                        </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="consumer-btm flex-content">
+                      <div className="mode">
+                        <div className="mode-text">Total consumers</div>
+                        <div className="mode-num">
+                          <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="traffic ">
-                  {/* <div className="traffic-l"
+                <div className="item-top-r-top-r">
+                  <div className="top-text space-between">
+                    <span>Task</span>
+                    <span>
+                    <Link to="/tasks">more &gt;</Link>
+                  </span>
+                  </div>
+                  <div className="traffic ">
+                    {/* <div className="traffic-l"
                     <img
                       width="40"
                       height="40"
@@ -342,36 +283,36 @@ export default class TodoItems extends React.Component<any, any> {
                       alt=""
                     />
                   </div> */}
-                  <div className="traffic-r flex-content" style={{ width: '97%' }}>
-                    <div className="traffic-r-btm" style={{display: 'flex',alignItems: 'center',height:'100%' }}>
-                      <div className="mode" style={{textAlign:'center'}}>
-                        <div className="mode-text" >
-                          <FormattedMessage id="Home.ToDo"/>
+                    <div className="traffic-r flex-content" style={{ width: '97%' }}>
+                      <div className="traffic-r-btm" style={{display: 'flex',alignItems: 'center',height:'100%' }}>
+                        <div className="mode" style={{textAlign:'center'}}>
+                          <div className="mode-text" >
+                            To do
+                          </div>
+                          <div className="mode-num" >
+                            <span> {<CountUp end={taskEmployeeStatisticsView?.toDoTaskCount ?? 0} {...countUpProps} />}</span>
+                          </div>
                         </div>
-                        <div className="mode-num" >
-                          <span> {<CountUp end={taskEmployeeStatisticsView?.toDoTaskCount ?? 0} {...countUpProps} />}</span>
+                        <div className="mode" style={{textAlign:'center',borderLeft:'1px solid #ccc',borderRight:'1px solid #ccc'}}>
+                          <div className="mode-text" >
+                            On going
+                          </div>
+                          <div className="mode-num num" >
+                            {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
+                            <span> {<CountUp end={taskEmployeeStatisticsView?.onGoingTaskCount ?? 0} {...countUpProps} />}</span>
+                          </div>
+                        </div>
+                        <div className="mode"  style={{textAlign:'center'}}>
+                          <div className="mode-text" >
+                            Overdue
+                          </div>
+                          <div className="mode-num num" >
+                            {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
+                            <span > {<CountUp style={{color:'#e2001a'}} end={taskEmployeeStatisticsView?.overdueTaskCount ?? 0} {...countUpProps} />}</span>
+                          </div>
                         </div>
                       </div>
-                      <div className="mode" style={{textAlign:'center',borderLeft:'1px solid #ccc',borderRight:'1px solid #ccc'}}>
-                        <div className="mode-text" >
-                        <FormattedMessage id="Home.OnGoing"/>
-                        </div>
-                        <div className="mode-num num" >
-                          {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
-                          <span> {<CountUp end={taskEmployeeStatisticsView?.onGoingTaskCount ?? 0} {...countUpProps} />}</span>
-                        </div>
-                      </div>
-                      <div className="mode"  style={{textAlign:'center'}}>
-                        <div className="mode-text" >
-                        <FormattedMessage id="Home.Overdue"/>
-                        </div>
-                        <div className="mode-num num" >
-                          {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
-                          <span > {<CountUp style={{color:'#e2001a'}} end={taskEmployeeStatisticsView?.overdueTaskCount ?? 0} {...countUpProps} />}</span>
-                        </div>
-                      </div>
-                    </div>
-                    {/* <div className="traffic-r-btm flex-content" style={{ padding: '25px 0 0 0' }}>
+                      {/* <div className="traffic-r-btm flex-content" style={{ padding: '25px 0 0 0' }}>
                       <div className="mode" style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div className="mode-text" >
                           Completed
@@ -389,10 +330,11 @@ export default class TodoItems extends React.Component<any, any> {
                         </div>
                       </div>
                     </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="item-top-m-btm">
+              <div className="item-top-r-btm">
                 <div className="top-text space-between">
                   <span><FormattedMessage id="Home.Transaction"/></span>
                   <span>
@@ -455,6 +397,8 @@ export default class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
             </div>
+            {/* begin */}
+
             {/* end */}
           </div>
           <div className="item-mid space-between">
@@ -546,41 +490,7 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           </div>
           <div className="item-btm space-between">
-            <div className="item-btm-l">
-              <div className="top-text">
-                <div className="top-text space-between">
-                  <span><FormattedMessage id="Home.TrafficTrend"/></span>
-                  <span>
-                    <Link to="/report-traffic"><FormattedMessage id="Home.more"/> &gt;</Link>
-                  </span>
-                </div>
-              </div>
 
-              {!trafficTrendDashboardView ||
-              (trafficTrendDashboardView.weekNumList &&
-                trafficTrendDashboardView.weekNumList.length === 0 &&
-                trafficTrendDashboardView.totalPVList &&
-                trafficTrendDashboardView.totalPVList.length === 0 &&
-                trafficTrendDashboardView.conversionRateList &&
-                trafficTrendDashboardView.conversionRateList.length === 0) ? (
-                <div className="data-img">
-                  <img src={nodataImg} className="no-data-img" />
-                </div>
-              ) : (
-                <div className="line">
-                  <BarLine
-                    yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
-                    unit={{ unit1: '', unit2: '%' }}
-                    nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
-                    data={{
-                      x: trafficTrendDashboardView.weekNumList,
-                      y1: trafficTrendDashboardView.totalPVList,
-                      y2: trafficTrendDashboardView.conversionRateList
-                    }}
-                  />
-                </div>
-              )}
-            </div>
             <div className="item-btm-m">
               <div className="top-text"><FormattedMessage id="Home.PrescribersTrend"/></div>
               {!prescriberTrendView ||

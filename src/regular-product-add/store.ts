@@ -65,7 +65,7 @@ import {
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
 import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
-
+let _tempGoodsDescriptionDetailList:any={}
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -352,18 +352,18 @@ export default class AppStore extends Store {
     }
     let productFilter = tmpContext.filterList
       ? tmpContext.filterList.map((x) => {
-          return {
-            filterId: x.filterId,
-            filterValueId: x.id
-          };
-        })
+        return {
+          filterId: x.filterId,
+          filterValueId: x.id
+        };
+      })
       : [];
     this.onProductFilter(productFilter);
 
     let taggingIds = tmpContext.taggingList
       ? tmpContext.taggingList.map((x) => {
-          return { taggingId: x.id };
-        })
+        return { taggingId: x.id };
+      })
       : [];
 
     this.onGoodsTaggingRelList(taggingIds);
@@ -402,8 +402,13 @@ export default class AppStore extends Store {
         const cateId = goods.get('cateId');
         this.changeDescriptionTab(cateId);
       } else {
+        _tempGoodsDescriptionDetailList={
+          _cateId:goods.get('cateId'),
+          _list:tmpContext.goodsDescriptionDetailList
+        }
         this.editEditorContent(tmpContext.goodsDescriptionDetailList);
       }
+
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
 
@@ -975,12 +980,12 @@ export default class AppStore extends Store {
     let valid = true;
     // 校验表单
     this.state()
-      .get('goodsForm')
-      .validateFieldsAndScroll(null, (errs) => {
-        valid = valid && !errs;
-        if (!errs) {
-        }
-      });
+        .get('goodsForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
     // this.state()
     //   .get('skuForm')
     //   .validateFieldsAndScroll(null, (errs) => {
@@ -990,30 +995,30 @@ export default class AppStore extends Store {
     //   });
     if (this.state().get('specForm') && this.state().get('specForm').validateFieldsAndScroll) {
       this.state()
-        .get('specForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('specForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
     if (this.state().get('logisticsForm') && this.state().get('logisticsForm').validateFieldsAndScroll) {
       this.state()
-        .get('logisticsForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('logisticsForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
     if (this.state().get('attributesForm') && this.state().get('attributesForm').validateFieldsAndScroll) {
       this.state()
-        .get('attributesForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('attributesForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
@@ -1053,30 +1058,30 @@ export default class AppStore extends Store {
     // 校验表单
     if (this.state().get('levelPriceForm') && this.state().get('levelPriceForm').validateFieldsAndScroll) {
       this.state()
-        .get('levelPriceForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('levelPriceForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
     if (this.state().get('userPriceForm') && this.state().get('userPriceForm').validateFieldsAndScroll) {
       this.state()
-        .get('userPriceForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('userPriceForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
     if (this.state().get('areaPriceForm') && this.state().get('areaPriceForm').validateFieldsAndScroll) {
       this.state()
-        .get('areaPriceForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('areaPriceForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
 
     return valid;
@@ -1088,9 +1093,37 @@ export default class AppStore extends Store {
 
     if (goodsList) {
       goodsList.forEach((item) => {
+        if (this.state().get('goods').get('saleableFlag') != 0) {
+          if(item.get('marketPrice') == undefined) {
+            tip = 1;
+            valid = false;
+            return;
+          }else {
+            if ( item.get('marketPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }
+        }
 
 
-        if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
+        if (this.state().get('goods').get('saleableFlag') != 0) {
+          if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0) {
+            tip = 2;
+            valid = false;
+            return;
+          }else {
+            if ( item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
+              tip = 2;
+              valid = false;
+              return;
+            }
+          }
+        }
+
+
+        /*if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
           valid = false;
           tip = 1;
           return;
@@ -1114,13 +1147,13 @@ export default class AppStore extends Store {
           tip = 3;
           valid = false;
           return;
-        }
-
-       /* if (!(item.get('subscriptionStatus') || item.get('subscriptionStatus') == 0)) {
-          tip = 4;
-          valid = false;
-          return;
         }*/
+
+        /* if (!(item.get('subscriptionStatus') || item.get('subscriptionStatus') == 0)) {
+           tip = 4;
+           valid = false;
+           return;
+         }*/
       });
     }
     if (tip === 1) {
@@ -1136,6 +1169,20 @@ export default class AppStore extends Store {
   }
   _validInventoryFormsNew() {
     let valid = true;
+    let goodsList = this.state().get('goodsList');
+    if (goodsList) {
+      goodsList.forEach((item) => {
+        if (!(item.get('stock') || item.get('stock') == 0)) {
+          valid = false;
+          return;
+        }
+      });
+    }
+    if (!valid) {
+      message.error('Please input Inventory');
+    }
+    return valid;
+    /*let valid = true;
     let flag = 0
     let goodsList = this.state().get('goodsList');
     let reg=/^[1-9]\d*$|^0$/;
@@ -1146,17 +1193,19 @@ export default class AppStore extends Store {
           flag = 1
           valid = false;
           return;
-        } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
+        }/!* else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
           flag = 2
           valid = false;
           return;
-        }
+        }*!/
       });
     }
     if (flag === 1) {
-      console.log('Please enter the correct value');
+      message.error('Please input Inventory');
+    } else if(flag === 2){
+      message.error('Please enter the correct value');
     }
-    return valid;
+    return valid;*/
   }
   validMain = () => {
     return this._validMainForms();
@@ -1166,9 +1215,6 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async (nextTab = null) => {
-    console.log(!this._validMainForms());
-    console.log(!this._validPriceFormsNew());
-    console.log(!this._validInventoryFormsNew());
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
@@ -1529,8 +1575,8 @@ export default class AppStore extends Store {
     //判断是否是自营店铺 自营店铺根据用户名查询 非自营店铺前台过滤查询
     if (util.isThirdStore()) {
       const userList = this.state()
-        .get('sourceUserList')
-        .filter((user) => user.get('customerName').indexOf(customerName) > -1);
+                           .get('sourceUserList')
+                           .filter((user) => user.get('customerName').indexOf(customerName) > -1);
       this.dispatch('userActor: setUserList', userList);
     } else {
       if (customerName) {
@@ -1606,8 +1652,8 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: initBrandList', fromJS(brandList.res));
 
       this.state()
-        .get('goodsForm')
-        .setFieldsValue({ brandId: result.res.context + '' });
+          .get('goodsForm')
+          .setFieldsValue({ brandId: result.res.context + '' });
       this.dispatch('goodsActor: editGoods', Map({ ['brandId']: result.res.context + '' }));
     }
   };
@@ -1824,13 +1870,13 @@ export default class AppStore extends Store {
     } else {
       if (this.state().get('editor') === 'detail') {
         this.state()
-          .get('detailEditor')
-          .execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
+            .get('detailEditor')
+            .execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
       } else {
         const name = this.state().get('editor');
         this.state()
-          .get(name)
-          .val.execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
+            .get(name)
+            .val.execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
       }
     }
   };
@@ -1928,12 +1974,12 @@ export default class AppStore extends Store {
           isSingle: a.attributeType === 'Single choice',
           goodsPropDetails: a.attributesValuesVOList
             ? a.attributesValuesVOList.map((v) => {
-                return {
-                  detailId: v.id,
-                  propId: v.attributeId,
-                  detailName: v.attributeDetailName
-                };
-              })
+              return {
+                detailId: v.id,
+                propId: v.attributeId,
+                detailName: v.attributeDetailName
+              };
+            })
             : []
         });
       });
@@ -1995,9 +2041,13 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeDescriptionTab = async (cateId) => {
+    // const {_cateId,_list}=_tempGoodsDescriptionDetailList
     if (!cateId) return;
+    // if(_cateId===cateId){
+    //   this.editEditorContent(_list);
+    //   return
+    // }
     const result: any = await getDescriptionTab(cateId);
-
     if (result.res.code === Const.SUCCESS_CODE) {
       let content = result.res.context;
       let res = content.map((item) => {
@@ -2006,7 +2056,7 @@ export default class AppStore extends Store {
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
-          contentType: item.contentType,
+          contentType: item?.contentType??'text',
           content: '',
           sort: item?.sort??1,
           editable: true,
@@ -2287,10 +2337,10 @@ export default class AppStore extends Store {
   };
   setDefaultBaseSpecId = () => {
     const item = this.state()
-      .get('goodsSpecs')
-      .find((item) => {
-        return item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT);
-      });
+                     .get('goodsSpecs')
+                     .find((item) => {
+                       return item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT);
+                     });
     this.dispatch('goodsSpecActor: baseSpecId', item.get('mockSpecId'));
   };
 

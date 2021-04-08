@@ -96,7 +96,7 @@ export default class GoodsList extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
-        render: (text) => `${itemType == 1 ? '【赠品】' : ''}${text}`
+        render: (text) => `${itemType == 1 ? '[Gift]' : ''}${text}`
       },
       {
         title: 'Specification',
@@ -133,18 +133,18 @@ export default class GoodsList extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: '请填写退货数量'
+                    message: 'Please enter return quantity'
                   },
                   {
                     pattern: ValidConst.number,
-                    message: '退货数量只能是整数'
+                    message: 'Return quantity should be in round numbers only'
                   },
                   {
                     validator: (_rule, value, callback) => {
                       const canReturnNum = rowInfo.canReturnNum;
 
                       if (value > canReturnNum) {
-                        callback('退货数量不可超过可退数量');
+                        callback('The amount returned must not exceed the amount refundable');
                       }
 
                       callback();
@@ -158,7 +158,7 @@ export default class GoodsList extends React.Component<any, any> {
                   onChange={this._editGoodsNum.bind(this, rowInfo.skuId)}
                 />
               )}
-              <p>{`eturnable number ${rowInfo.canReturnNum}`}</p>
+              <p>{`Returnable number ${rowInfo.canReturnNum}`}</p>
             </FormItem>
           );
         }

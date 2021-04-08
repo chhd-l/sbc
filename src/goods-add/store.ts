@@ -51,6 +51,7 @@ import {
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
+let _tempGoodsDescriptionDetailList:any={}
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -334,18 +335,18 @@ export default class AppStore extends Store {
     }
     let productFilter = tmpContext.filterList
       ? tmpContext.filterList.map((x) => {
-          return {
-            filterId: x.filterId,
-            filterValueId: x.id
-          };
-        })
+        return {
+          filterId: x.filterId,
+          filterValueId: x.id
+        };
+      })
       : [];
     this.onProductFilter(productFilter);
 
     let taggingIds = tmpContext.taggingList
       ? tmpContext.taggingList.map((x) => {
-          return { taggingId: x.id };
-        })
+        return { taggingId: x.id };
+      })
       : [];
 
     this.onGoodsTaggingRelList(taggingIds);
@@ -388,6 +389,10 @@ export default class AppStore extends Store {
         const cateId = goods.get('cateId');
         this.changeDescriptionTab(cateId);
       } else {
+        _tempGoodsDescriptionDetailList={
+          _cateId:goods.get('cateId'),
+          _list:tmpContext.goodsDescriptionDetailList
+        }
         this.editEditorContent(tmpContext.goodsDescriptionDetailList);
       }
       // 如果不是已审核状态，都可以编辑平台类目
@@ -872,12 +877,12 @@ export default class AppStore extends Store {
     let valid = true;
     // 校验表单
     this.state()
-      .get('goodsForm')
-      .validateFieldsAndScroll(null, (errs) => {
-        valid = valid && !errs;
-        if (!errs) {
-        }
-      });
+        .get('goodsForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
     // this.state()
     //   .get('skuForm')
     //   .validateFieldsAndScroll(null, (errs) => {
@@ -887,31 +892,31 @@ export default class AppStore extends Store {
     //   });
     if (this.state().get('specForm') && this.state().get('specForm').validateFieldsAndScroll) {
       this.state()
-        .get('specForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('specForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
     if (this.state().get('logisticsForm') && this.state().get('logisticsForm').validateFieldsAndScroll) {
       this.state()
-        .get('logisticsForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('logisticsForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
 
     if (this.state().get('attributesForm') && this.state().get('attributesForm').validateFieldsAndScroll) {
       this.state()
-        .get('attributesForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('attributesForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
 
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
@@ -951,30 +956,30 @@ export default class AppStore extends Store {
     // 校验表单
     if (this.state().get('levelPriceForm') && this.state().get('levelPriceForm').validateFieldsAndScroll) {
       this.state()
-        .get('levelPriceForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('levelPriceForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
     if (this.state().get('userPriceForm') && this.state().get('userPriceForm').validateFieldsAndScroll) {
       this.state()
-        .get('userPriceForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('userPriceForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
     if (this.state().get('areaPriceForm') && this.state().get('areaPriceForm').validateFieldsAndScroll) {
       this.state()
-        .get('areaPriceForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+          .get('areaPriceForm')
+          .validateFieldsAndScroll(null, (errs) => {
+            valid = valid && !errs;
+            if (!errs) {
+            }
+          });
     }
 
     return valid;
@@ -983,19 +988,89 @@ export default class AppStore extends Store {
     let valid = true;
     let tip = 0;
     let goodsList = this.state().get('goodsList');
+
+    let addSkUProduct = this.state().toJS().addSkUProduct;
     if (goodsList) {
       goodsList.forEach((item) => {
-        console.log(item.get('marketPrice'),1111111);
-        if (!(item.get('marketPrice') || item.get('marketPrice') == "0")) {
-          tip = 1;
-          valid = false;
-          return;
+        //console.log(this.state().get('goods').get('saleableFlag') ,111 )
+        console.log(addSkUProduct,111111);
+        console.log(item.get('marketPrice'),22222 )
+
+        if (this.state().get('goods').get('saleableFlag') != 0) {
+          if(item.get('marketPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) ) {
+            tip = 1;
+            valid = false;
+            return;
+          }else {
+            if ( item.get('marketPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }
         }
-        if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
-          tip = 2;
-          valid = false;
-          return;
+
+        if (this.state().get('goods').get('saleableFlag') != 0) {
+          if(item.get('marketPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) ) {
+            if ( item.get('subscriptionPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }else {
+            if ( item.get('subscriptionPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }
         }
+
+
+        /*if (this.state().get('goods').get('saleableFlag') != 0) {
+          //console.log(item.get('marketPrice'),123 )
+          if(item.get('marketPrice') != undefined) {
+            //console.log(item.get('marketPrice'),345 )
+            if ( item.get('marketPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }else {
+            //console.log(item.get('marketPrice'),678 )
+            if ( addSkUProduct && addSkUProduct.length == 0 ) {
+              //console.log(item.get('marketPrice'),890 )
+
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }
+        }*/
+
+
+
+        /*if (this.state().get('goods').get('saleableFlag') != 0) {
+          if(item.get('subscriptionPrice') != undefined) {
+            if ( item.get('subscriptionPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }else {
+            if ( addSkUProduct && addSkUProduct.length == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+          }
+        }*/
+
+        /* if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+           tip = 2;
+           valid = false;
+           return;
+         }*/
       });
     }
     if (tip === 1) {
@@ -1010,35 +1085,86 @@ export default class AppStore extends Store {
     let valid = true;
     let flag = 0
     let goodsList = this.state().get('goodsList');
-    let addSkUProduct = this.state().get('addSkUProduct');
+    let addSkUProduct = this.state().toJS().addSkUProduct;
     let reg=/^[1-9]\d*$|^0$/;
 
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
 
-        //console.log(item.get('stock'));
-        //console.log(reg.test(item.get('stock')));
-        if (reg.test(item.get('stock')) === false || a == undefined) {
-          flag = 1
+        // console.log('test:', item.get('goodsInfoNo'), addSkUProduct, a);
+        // console.log(reg.test(item.get('stock')));
+
+        console.log(addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds.length);
+        console.log(item.get('stock'));
+        console.log(reg.test(item.get('stock')));
+        console.log(ValidConst.zeroNumber.test((item.get('stock'))) === true);
+        if (reg.test(item.get('stock')) === false ) {
+          console.log(333333)
+          flag = 2
           valid = false;
           return;
         }
-        if (!item.get('stock') || a == undefined) {
-          flag = 1
-          valid = false;
-          return;
-        } /*else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
+        /*if (addSkUProduct.length == 1) {
+          if (addSkUProduct[0].targetGoodsIds.length != 1 ) {
+            console.log(1111111)
+            flag = 2
+            valid = false;
+            return;
+          } else {
+            if (reg.test(item.get('stock')) === false ) {
+              console.log(22222)
+              flag = 2
+              valid = false;
+              return;
+            }
+          }
+        } else {
+          if (reg.test(item.get('stock')) === false ) {
+            console.log(333333)
+            flag = 2
+            valid = false;
+            return;
+          }
+        }*/
+
+
+        /*if( addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length != 1 && addSkUProduct[0].minStock == undefined) {
           flag = 2
           valid = false;
           return;
         }*/
+        /*if(!item.get('stock')) {
+          if ( addSkUProduct.length == 1 && !addSkUProduct[0].minStock ) {
+            flag = 1
+            valid = false;
+            return;
+          }else if ( addSkUProduct.length > 1 && !item.get('stock') ) {
+            flag = 1
+            valid = false;
+            return;
+          }
+        }*/
+        /* if (reg.test(item.get('stock')) === false) {
+           flag = 1
+           valid = false;
+           return;
+         }
+         /*if (!item.get('stock')) {
+           flag = 1
+           valid = false;
+           return;
+         } else if (!ValidConst.zeroNumber.test((item.get('stock')))) {
+           flag = 2
+           valid = false;
+           return;
+         }*/
       });
     }
     if (flag === 1) {
       message.error('Please input Inventory');
     } else if(flag === 2){
-      console.log('Please enter the correct value');
+      message.error('Please enter the correct value');
     }
     return valid;
   }
@@ -1234,8 +1360,8 @@ export default class AppStore extends Store {
         }
       }
       let a = this.state()
-        .get('addSkUProduct')
-        .filter((a) => a.pid == item.toJS().goodsInfoNo);
+                  .get('addSkUProduct')
+                  .filter((a) => a.pid == item.toJS().goodsInfoNo);
       let b = [];
       let c = '';
       a.map((i) => {
@@ -1421,8 +1547,8 @@ export default class AppStore extends Store {
     //判断是否是自营店铺 自营店铺根据用户名查询 非自营店铺前台过滤查询
     if (util.isThirdStore()) {
       const userList = this.state()
-        .get('sourceUserList')
-        .filter((user) => user.get('customerName').indexOf(customerName) > -1);
+                           .get('sourceUserList')
+                           .filter((user) => user.get('customerName').indexOf(customerName) > -1);
       this.dispatch('userActor: setUserList', userList);
     } else {
       if (customerName) {
@@ -1498,8 +1624,8 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: initBrandList', fromJS(brandList.res));
 
       this.state()
-        .get('goodsForm')
-        .setFieldsValue({ brandId: result.res.context + '' });
+          .get('goodsForm')
+          .setFieldsValue({ brandId: result.res.context + '' });
       this.dispatch('goodsActor: editGoods', Map({ ['brandId']: result.res.context + '' }));
     } else {
     }
@@ -1718,13 +1844,13 @@ export default class AppStore extends Store {
     } else {
       if (this.state().get('editor') === 'detail') {
         this.state()
-          .get('detailEditor')
-          .execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
+            .get('detailEditor')
+            .execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
       } else {
         const name = this.state().get('editor');
         this.state()
-          .get(name)
-          .val.execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
+            .get(name)
+            .val.execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
       }
     }
   };
@@ -1819,12 +1945,12 @@ export default class AppStore extends Store {
           isSingle: a.attributeType === 'Single choice',
           goodsPropDetails: a.attributesValuesVOList
             ? a.attributesValuesVOList.map((v) => {
-                return {
-                  detailId: v.id,
-                  propId: v.attributeId,
-                  detailName: v.attributeDetailName
-                };
-              })
+              return {
+                detailId: v.id,
+                propId: v.attributeId,
+                detailName: v.attributeDetailName
+              };
+            })
             : []
         });
       });
@@ -1887,8 +2013,13 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeDescriptionTab = async (cateId) => {
+    // const {_cateId,_list}=_tempGoodsDescriptionDetailList
+    if (!cateId) return;
+    // if(_cateId===cateId){
+    //   this.editEditorContent(_list);
+    //   return
+    // }
     const result: any = await getDescriptionTab(cateId);
-
     if (result.res.code === Const.SUCCESS_CODE) {
       let content = result.res.context;
       let res = content.map((item) => {
@@ -1897,7 +2028,7 @@ export default class AppStore extends Store {
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
-          contentType: item.contentType,
+          contentType: item?.contentType??'text',
           content: '',
           sort: item?.sort??1,
           editable: true,
@@ -2002,6 +2133,28 @@ export default class AppStore extends Store {
       }
     }
     this.dispatch('sku:addSkUProduct', newJson);
+    /* if (addProduct.length != 0) {
+       let a = addProduct.concat(this.state().toJS().addSkUProduct);
+       let newJson = []; //盛放去重后数据的新数组
+       for (let item1 of a) {
+         let flag = true;
+         for (let item2 of newJson) {
+           if (item1.pid == item2.pid) {
+             flag = false;
+           }
+         }
+         if (flag) {
+           //判断是否重复
+           newJson.push(item1); //不重复的放入新数组。  新数组的内容会继续进行上边的循环。
+         }
+       }
+       this.dispatch('sku:addSkUProduct', newJson);
+
+     }else {
+       this.dispatch('sku:addSkUProduct', addProduct);
+
+     }*/
+
   };
 
   onRelatedList = async (param?: any) => {
@@ -2289,10 +2442,10 @@ export default class AppStore extends Store {
   };
   setDefaultBaseSpecId = () => {
     const item = this.state()
-      .get('goodsSpecs')
-      .find((item) => {
-        return item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT);
-      });
+                     .get('goodsSpecs')
+                     .find((item) => {
+                       return item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT);
+                     });
     this.dispatch('goodsSpecActor: baseSpecId', item.get('mockSpecId'));
   };
 

@@ -124,7 +124,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, addSkUProduct, specSingleFlag, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, addSkUProduct, specSingleFlag, goods, goodsList, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -202,11 +202,34 @@ class SkuForm extends React.Component<any, any> {
           b = 999999;
         }
 
-        if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+    /*    if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
           console.log(c);
           console.log(addSkUProduct[0].targetGoodsIds[0].bundleNum);
           c = Number(String(c / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+        }*/
+
+        if (goods.get('goodsId') == null && goodsList.toJS().length == 1) {
+
+          let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
+
+          if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
+            c = targetGoodsIds.marketPrice * targetGoodsIds.bundleNum
+            console.log(c,55555555);
+
+
+
+          }else if (addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length == 0){
+            console.log(rowInfo,33333);
+            console.log(addSkUProduct,444444);
+            c = 0
+
+          }else {
+            c = 0
+          }
+        }else {
+
         }
+
 
         return (
           <Row>
@@ -234,6 +257,7 @@ class SkuForm extends React.Component<any, any> {
                     style={{ width: '121px' }}
                     min={0}
                     max={b}
+                    //onBlur={this.onInputNumber.bind(this, rowInfo.id, 'stock')}
                   />
                 )}
               </FormItem>
@@ -340,6 +364,18 @@ class SkuForm extends React.Component<any, any> {
       e = e.target.value;
     }
     editGoodsItem(id, key, e);
+  };
+
+  onInputNumber = (id: string, key: string, e: any, flag?: any) => {
+    const { editGoodsItem,} = this.props.relaxProps;
+    if (e && e.target) {
+      e = e.target.value;
+    }
+    if (e == "") {
+      editGoodsItem(id, key, 0);
+    }
+
+    console.log(e,77777);
   };
 }
 

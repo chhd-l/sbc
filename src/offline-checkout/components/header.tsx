@@ -29,7 +29,7 @@ export default class Header extends React.Component<any, any> {
   render() {
     return (
       <Row type="flex" justify="space-between" className="c-head">
-        <Col>Offline store: LAtelierFelin</Col>
+        <Col>Offline store: L'Atelier Feline</Col>
         <Col>{this.state.time}</Col>
       </Row>
     );

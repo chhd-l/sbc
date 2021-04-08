@@ -33,7 +33,7 @@ class PaymentModal extends React.Component<any, any> {
       enabled: null,
     };
   }
-
+  form;
   props: {
     visible: any;
     form: any;
@@ -74,7 +74,9 @@ class PaymentModal extends React.Component<any, any> {
     setCurrentTabKey(Number(value))
   };
 
-
+  afterClose = () => {
+    // this.form.resetFields()
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -83,20 +85,20 @@ class PaymentModal extends React.Component<any, any> {
     console.log(key, 'key----------');
     console.log(paymentForm, 'paymentForm----------');
     return (
-      <Modal confirmLoading={saveLoading} maskClosable={false} title="Edit Payment Setting" visible={visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
+      <Modal afterClose={this.afterClose} confirmLoading={saveLoading} maskClosable={false} title="Edit Payment Setting" visible={visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Tabs defaultActiveKey={key ? key.toString() : null} onChange={this._handleClick}>
           {paymentForm&&paymentForm.payPspItemVOList&&paymentForm.payPspItemVOList.map((item, index)=>{
             return(
               item.name !== 'COD' ?
                 <TabPane tab={item.name} key={item.id}>
-                  <Form name={item.name+'_form'}>
+                  <Form name={item.name+'_form'} ref={(form) => (this.form = form)}>
                     <Row>
                       <Col span={24}>
                         <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="apiKey" />}>
                           {getFieldDecorator(item.id + 'apiKey', {
                             initialValue: item.pspConfigVO&&item.pspConfigVO.apiKey,
                             rules: [{ required: true, message: 'Please input Api Key!' }]
-                          })(<Input value={item.pspConfigVO && item.pspConfigVO.apiKey ? item.pspConfigVO.apiKey: null} onChange={(e) => {
+                          })(<Input onChange={(e) => {
                             onFormChange({
                               id: key,
                               field: 'apiKey',

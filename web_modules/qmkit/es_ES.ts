@@ -1221,6 +1221,19 @@ export default {
   'Order.offline.canceled':'Canceled',
   'Order.offline.queryStateTitle':'Check payment status',
   'Order.offline.queryStateContent':'Your can check payment status after customer authorization!',
+  'Order.returnDescription':'Return description',
+  'Order.returnOrderAttachment':'Return order attachment',
+  'Order.returnReason': 'Return reason',
+  'Order.logisticsInformation':'Logistics information',
+  'Order.returnOrderStatus':'Return order status',
+  'Order.refundTime': 'Refund time',
+  'Order.actualRefundAmount': 'Actual refund amount',
+  'Order.remark':'Remark',
+  'Order.refundableAmount': 'Refundable amount',
+
+  'Order.reviewRejected': 'Review rejected', 
+  'Order.receiedRejected': 'Receied rejected', 
+  'Order.refundRejected': 'Refund rejected', 
 
 
 
@@ -1528,7 +1541,11 @@ export default {
   'Subscription.Active.ChooseBillingAddress':'Choose From Saved Billing Address',
   'Subscription.Active.UnfoldedAllDeliveryAddresses':'Unfolded all delivery addresses',
   /* -------- 已翻译 V1.0---------------*/
-
+  'Subscription.ReminderSwitchProduct':'Reminder to switch product (Club)',
+  'Subscription.ReminderSwitchProductDesc':'Days before the next lifestage, an email will be sent to pet owners to recommend a new product',
+  'Subscription.EmailReminderIntervals':'Email reminder intervals',
+  'Subscription.EmailReminderIntervalsDesc':'Attempts between first and last emails due to inventory issues',
+  
 
 
   /*-----------------------------  Pet owner  ----------------------------------------*/
@@ -3308,14 +3325,12 @@ export default {
 
   attachmentTips:
     'Please add your return receipt to the attachment, the supported picture formats: jpg, jpeg, png, gif, the file size does not exceed 5M, and the maximum upload is 10',
-  refundableAmount: 'Refundable amount',
+  
   pointsRefundable: 'Points refundable',
   commodity: 'Commodity',
   refundList: 'Refund list',
   chargebackNumber: 'Chargeback number',
-  refundTime: 'Refund time',
   chargebackStatus: 'Chargeback status',
-  actualRefundAmount: 'Actual refund amount',
   actualRefundPoints: 'Actual refund points',
   toBeFilledOutLogisticsInformation: 'To be filled out logistics information',
   waitingForTheMerchantToReceiveTheGoods:

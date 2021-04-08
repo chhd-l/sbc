@@ -56,7 +56,7 @@ export function restartSubscription(subscriptionId: string) {
     method: 'POST',
     body: JSON.stringify({
       subscribeId: subscriptionId,
-      subscribeStatus: '1'
+      subscribeStatus: '0'
     })
   });
 }

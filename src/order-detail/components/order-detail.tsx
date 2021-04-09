@@ -754,7 +754,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       <FormattedMessage id="Order.address2" />: {invoice.address2}
                     </p>
                   </Tooltip>
-                  <p>Country: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
+                  <p><FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
                 </Col>
                 <Col span={12}>
                   <p>

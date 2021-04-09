@@ -1488,7 +1488,7 @@ export default {
   'Order.reasonForRefuse':'Reason for Refusal of Refund',
   'Order.reasonForReject':'Reasons for rejection',
   /* -------- 已翻译 V2.0---------------*/
-  
+  'Order.offline.Reset':'Reset',
 
 
 

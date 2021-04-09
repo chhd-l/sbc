@@ -1034,7 +1034,7 @@ export default class AppStore extends Store {
           if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0
             && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
             if (addSkUProduct[0].targetGoodsIds[0].saleableFlag == 0) {
-              tip = 1;
+              tip = 2;
               valid = false;
               return;
             }

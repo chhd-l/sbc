@@ -682,7 +682,7 @@ class CouponInfoForm extends Component<any, any> {
                         disabled={fullBuyType === 0}
                         placeholder={
                           this.props.intl.formatMessage({
-                          id: 'Marketing.integerfrom1to9999'
+                          id: 'Marketing.integerfrom1to99999'
                         })
                         }
                         maxLength={5}
@@ -707,7 +707,7 @@ class CouponInfoForm extends Component<any, any> {
           <FormItem {...formItemLayout} required={true}>
             <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
-                <span style={styles.darkColor}><FormattedMessage id="Marketing.Allproducts" /></span>
+                <span style={styles.darkColor}><FormattedMessage id="Marketing.AllProducts" /></span>
               </Radio>
               <Radio value={5}>
                 <span style={styles.darkColor}><FormattedMessage id="Marketing.Category" /></span>

@@ -512,8 +512,8 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="Order.ConfirmReceipt"/>,
-      content: <FormattedMessage id="Order.ConfirmThatAllProducts"/>,
+      title: this.props.intl.formatMessage({id:'Order.ConfirmReceipt'}),
+      content: this.props.intl.formatMessage({id:'Order.ConfirmThatAllProducts'}),
       onOk() {
         onConfirm(tdId);
       },

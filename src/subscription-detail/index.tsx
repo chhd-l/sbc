@@ -33,12 +33,11 @@ const deliverStatus = (status) => {
 /**
  * 订单详情
  */
- class SubscriptionDetail extends React.Component<any, any> {
-
+class SubscriptionDetail extends React.Component<any, any> {
   props: {
     intl;
     match: any;
-  }
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -73,14 +72,17 @@ const deliverStatus = (status) => {
   }
 
   componentDidMount() {
-    this.setState({
-      subscriptionId: this.props.match &&  this.props.match.params? this.props.match.params.subId : null
-    },()=> {
-      this.getCurrencySymbol();
-      this.getDict();
-      this.getSubscriptionDetail(this.state.subscriptionId);
-      this.getBySubscribeId(this.state.subscriptionId);
-    })
+    this.setState(
+      {
+        subscriptionId: this.props.match && this.props.match.params ? this.props.match.params.subId : null
+      },
+      () => {
+        this.getCurrencySymbol();
+        this.getDict();
+        this.getSubscriptionDetail(this.state.subscriptionId);
+        this.getBySubscribeId(this.state.subscriptionId);
+      }
+    );
   }
 
   //查询frequency
@@ -184,7 +186,7 @@ const deliverStatus = (status) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail(this.state.subscriptionId);
-          message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
+          message.success(<FormattedMessage id="Subscription.OperateSuccessfully" />);
         } else {
           this.setState({
             loading: false
@@ -208,7 +210,7 @@ const deliverStatus = (status) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail(this.state.subscriptionId);
-          message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
+          message.success(<FormattedMessage id="Subscription.OperateSuccessfully" />);
         } else {
           this.setState({
             loading: false
@@ -438,7 +440,9 @@ const deliverStatus = (status) => {
     const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, noStartOrder, completedOrder, deliveryCityName, billingCityName, currencySymbol } = this.state;
     const cartTitle = (
       <div className="cart-title">
-        <span><FormattedMessage id="Subscription.SubscriptionDetails"/></span>
+        <span>
+          <FormattedMessage id="Subscription.SubscriptionDetails" />
+        </span>
         <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
       </div>
     );
@@ -466,7 +470,11 @@ const deliverStatus = (status) => {
     // );
     const columns = [
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Product" />
+          </span>
+        ),
         key: 'Product',
         width: '40%',
         render: (text, record) => (
@@ -477,7 +485,11 @@ const deliverStatus = (status) => {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Price"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Price" />
+          </span>
+        ),
         key: 'Price',
         width: '15%',
         render: (text, record) => (
@@ -488,7 +500,11 @@ const deliverStatus = (status) => {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Quantity"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Quantity" />
+          </span>
+        ),
         dataIndex: 'subscribeNum',
         key: 'subscribeNum',
         width: '15%'
@@ -499,7 +515,11 @@ const deliverStatus = (status) => {
         // )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.DeliveryFrequency"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.DeliveryFrequency" />
+          </span>
+        ),
         dataIndex: 'frequency',
         key: 'frequency',
         width: '15%',
@@ -516,7 +536,11 @@ const deliverStatus = (status) => {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Total"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Total" />
+          </span>
+        ),
         dataIndex: 'Total',
         key: 'Total',
         width: '15%',
@@ -530,43 +554,38 @@ const deliverStatus = (status) => {
 
     const operatorColumns = [
       {
-        title:
-          this.props.intl.formatMessage({
+        title: this.props.intl.formatMessage({
           id: 'Order.OperatorType'
         }),
         dataIndex: 'operatorType',
         key: 'operatorType'
       },
       {
-        title:
-          this.props.intl.formatMessage({
-            id: 'Order.Operator'
-          }),
+        title: this.props.intl.formatMessage({
+          id: 'Order.Operator'
+        }),
         dataIndex: 'operator',
         key: 'operator'
       },
       {
-        title:
-          this.props.intl.formatMessage({
-            id: 'Order.Time'
-          }),
+        title: this.props.intl.formatMessage({
+          id: 'Order.Time'
+        }),
         dataIndex: 'time',
         key: 'time',
         render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
       },
       {
-        title:
-          this.props.intl.formatMessage({
-            id: 'Order.OperationCategory'
-          }),
+        title: this.props.intl.formatMessage({
+          id: 'Order.OperationCategory'
+        }),
         dataIndex: 'operationCategory',
         key: 'operationCategory'
       },
       {
-        title:
-          this.props.intl.formatMessage({
-            id: 'Order.OperationLog'
-          }),
+        title: this.props.intl.formatMessage({
+          id: 'Order.OperationLog'
+        }),
         dataIndex: 'operationLog',
         key: 'operationLog',
         width: '50%'
@@ -574,13 +593,17 @@ const deliverStatus = (status) => {
     ];
 
     // 翻译title
-    operatorColumns.forEach(obj => {
-      (obj.title as any) = <FormattedMessage id={`Order.${obj.title}`} />
+    operatorColumns.forEach((obj) => {
+      (obj.title as any) = <FormattedMessage id={`Order.${obj.title}`} />;
     });
 
     const columns_completed = [
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Product" />
+          </span>
+        ),
         key: 'Product',
         width: '30%',
         render: (text, record) => (
@@ -599,7 +622,11 @@ const deliverStatus = (status) => {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Quantity"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Quantity" />
+          </span>
+        ),
         key: 'subscribeNum',
         width: '10%',
         render: (text, record) => (
@@ -614,36 +641,60 @@ const deliverStatus = (status) => {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.EnjoyDiscount"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.EnjoyDiscount" />
+          </span>
+        ),
         key: 'discount',
         width: '10%',
         render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
-        title: <span style={{ fontWeight: 500 }}><FormattedMessage id="Subscription.Amount"/></span>,
+        title: (
+          <span style={{ fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.Amount" />
+          </span>
+        ),
         key: 'amount',
         width: '10%',
         render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.ShipmentDate"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.ShipmentDate" />
+          </span>
+        ),
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         width: '10%',
         render: (text, record) => <div>{record.tradeItems[0] && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.OrderStatus"/></span>,
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="Subscription.OrderStatus" />
+          </span>
+        ),
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
         width: '10%',
-        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].flowState ? 
-        <FormattedMessage id={getOrderStatusValue('OrderStatus',record.tradeItems[0].flowState)} />
-        // deliverStatus(record.tradeItems[0].deliverStatus) 
-        : '-'}</div>
+        render: (text, record) => (
+          <div>
+            {!record.id ? (
+              'Autoship skiped'
+            ) : record.tradeItems && record.tradeItems[0].flowState ? (
+              <FormattedMessage id={getOrderStatusValue('OrderStatus', record.tradeItems[0].flowState)} />
+            ) : (
+              // deliverStatus(record.tradeItems[0].deliverStatus)
+              '-'
+            )}
+          </div>
+        )
       },
       {
-        title: <FormattedMessage id="Subscription.Operation"/>,
+        title: <FormattedMessage id="Subscription.Operation" />,
         dataIndex: '',
         key: 'x',
         width: '10%',
@@ -651,7 +702,7 @@ const deliverStatus = (status) => {
           <>
             {record.id ? (
               <Link to={'/order-detail/' + record.id}>
-                <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
+                <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail" />}>
                   <a style={styles.edit} className="iconfont iconDetails"></a>
                 </Tooltip>
               </Link>
@@ -663,13 +714,13 @@ const deliverStatus = (status) => {
 
     const columns_foodDispenser_no_start = [
       {
-        title: <FormattedMessage id="Subscription.noStar.DeliveryDate"/>,
+        title: <FormattedMessage id="Subscription.noStar.DeliveryDate" />,
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
-        title: <FormattedMessage id="Subscription.noStar.Product"/>,
+        title: <FormattedMessage id="Subscription.noStar.Product" />,
         key: 'Product',
         render: (text, record) => (
           <div>
@@ -691,7 +742,6 @@ const deliverStatus = (status) => {
       }
     ];
 
-
     const styles = {
       backItem: {
         display: 'flex',
@@ -702,51 +752,57 @@ const deliverStatus = (status) => {
       }
     } as any;
 
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
+
     return (
       <div>
         <Breadcrumb>
           <Breadcrumb.Item>
-            <a href="/subscription-list"><FormattedMessage id="Subscription.Subscription"/></a>
+            <a href="/subscription-list">
+              <FormattedMessage id="Subscription.Subscription" />
+            </a>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <a href="/subscription-list"><FormattedMessage id="Subscription.SubscriptionList"/></a>
+            <a href="/subscription-list">
+              <FormattedMessage id="Subscription.SubscriptionList" />
+            </a>
           </Breadcrumb.Item>
           <Breadcrumb.Item>{<FormattedMessage id="Subscription.detail" />}</Breadcrumb.Item>
         </Breadcrumb>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           {' '}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="Subscription.detail"/>} />
+            <Headline title={<FormattedMessage id="Subscription.detail" />} />
             <Row className="subscription-basic-info">
               <Col span={24}>
                 <span style={{ fontSize: '16px', color: '#3DB014' }}>{subscriptionInfo.subscriptionStatus}</span>
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                  <FormattedMessage id="Subscription.SubscriptionNumber"/> : <span>{subscriptionInfo.subscriptionNumber}</span>
+                  <FormattedMessage id="Subscription.SubscriptionNumber" /> : <span>{subscriptionInfo.subscriptionNumber}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.SubscriptionDate"/> :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>
+                  <FormattedMessage id="Subscription.SubscriptionDate" /> :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.AuditorID"/> : <span>{subscriptionInfo.presciberID}</span>
+                  <FormattedMessage id="Subscription.AuditorID" /> : <span>{subscriptionInfo.presciberID}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.AuditorName"/> : <span>{subscriptionInfo.presciberName}</span>
+                  <FormattedMessage id="Subscription.AuditorName" /> : <span>{subscriptionInfo.presciberName}</span>
                 </p>
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                <FormattedMessage id="Subscription.PetOwnerName"/> : <span>{subscriptionInfo.consumer}</span>
+                  <FormattedMessage id="Subscription.PetOwnerName" /> : <span>{subscriptionInfo.consumer}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.ConsumerAccount"/> : <span>{subscriptionInfo.consumerAccount}</span>
+                  <FormattedMessage id="Subscription.ConsumerAccount" /> : <span>{subscriptionInfo.consumerAccount}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.ConsumerType"/> : <span>{subscriptionInfo.consumerType}</span>
+                  <FormattedMessage id="Subscription.ConsumerType" /> : <span>{subscriptionInfo.consumerType}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.PhoneNumber"/> : <span>{subscriptionInfo.phoneNumber}</span>
+                  <FormattedMessage id="Subscription.PhoneNumber" /> : <span>{subscriptionInfo.phoneNumber}</span>
                 </p>
               </Col>
             </Row>
@@ -758,32 +814,42 @@ const deliverStatus = (status) => {
 
               <Col span={8} offset={16}>
                 <div className="flex-between">
-                  <span><FormattedMessage id="Subscription.Subtotal"/></span>
+                  <span>
+                    <FormattedMessage id="Subscription.Subtotal" />
+                  </span>
                   <span style={styles.priceStyle}>{currencySymbol + this.subTotal().toFixed(2)}</span>
                 </div>
 
                 <div className="flex-between">
                   {/* <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span> */}
                   <span>
-                    <FormattedMessage id="Subscription.ColSpan.Promotion"/>
+                    <FormattedMessage id="Subscription.ColSpan.Promotion" />
                   </span>
                   <span style={styles.priceStyle}>{currencySymbol + '  -' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
                 </div>
 
                 <div className="flex-between">
-                  <span><FormattedMessage id="Subscription.Shipping"/></span>
+                  <span>
+                    <FormattedMessage id="Subscription.Shipping" />
+                  </span>
                   <span style={styles.priceStyle}>{currencySymbol + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
                 {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                   <div className="flex-between">
-                    <span><FormattedMessage id="Subscription.Tax"/></span>
+                    <span>
+                      <FormattedMessage id="Subscription.Tax" />
+                    </span>
                     <span style={styles.priceStyle}>{currencySymbol + (this.state.taxFeePrice ? this.state.taxFeePrice : 0).toFixed(2)}</span>
                   </div>
                 ) : null}
 
                 <div className="flex-between">
                   <span>
-                    <span><FormattedMessage id="Subscription.Total"/></span> (<FormattedMessage id="Subscription.IVAInclude"/>):
+                    <span>
+                      <FormattedMessage id="Subscription.Total" />
+                    </span>{' '}
+                    (<FormattedMessage id="Subscription.IVAInclude" />
+                    ):
                   </span>
                   <span style={styles.priceStyle}>{currencySymbol + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice).toFixed(2)}</span>
                 </div>
@@ -793,87 +859,123 @@ const deliverStatus = (status) => {
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title"><FormattedMessage id="Subscription.DeliveryAddress"/></label>
+                    <label className="info-title">
+                      <FormattedMessage id="Subscription.DeliveryAddress" />
+                    </label>
                   </Col>
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Name"/>: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="Subscription.Name" />:{' '}
+                    </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.City"/>: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="Subscription.City" />:{' '}
+                    </p>
                     <p>{deliveryAddressInfo.city}</p>
                   </Col>
                   {deliveryAddressInfo.province ? (
                     <Col span={24}>
-                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.State"/>: </p>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.State" />:{' '}
+                      </p>
                       <p>{deliveryAddressInfo.province}</p>
                     </Col>
                   ) : null}
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country"/>: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="Subscription.Country" />:{' '}
+                    </p>
                     <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address1"/>: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="Subscription.Address1" />:{' '}
+                    </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
                   </Col>
                 </Row>
                 <Col span={24}>
-                  <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2"/>: </p>
+                  <p style={{ width: 140 }}>
+                    <FormattedMessage id="Subscription.Address2" />:{' '}
+                  </p>
                   <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                 </Col>
               </Col>
               <Col span={8}>
-                <Row>
-                  <Col span={12}>
-                    <label className="info-title"><FormattedMessage id="Subscription.BillingAddress"/></label>
-                  </Col>
-
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Name"/>: </p>
-                    <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
-                  </Col>
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.City"/>: </p>
-                    <p>{billingAddressInfo.city}</p>
-                  </Col>
-                  {billingAddressInfo.province ? (
-                    <Col span={24}>
-                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.State"/>: </p>
-                      <p>{billingAddressInfo.province}</p>
+                {storeId === 123457907 || storeId === 123457910 ? null : (
+                  <Row>
+                    <Col span={12}>
+                      <label className="info-title">
+                        <FormattedMessage id="Subscription.BillingAddress" />
+                      </label>
                     </Col>
-                  ) : null}
 
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country"/>: </p>
-                    <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
-                  </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.Name" />:{' '}
+                      </p>
+                      <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
+                    </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.City" />:{' '}
+                      </p>
+                      <p>{billingAddressInfo.city}</p>
+                    </Col>
+                    {billingAddressInfo.province ? (
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.State" />:{' '}
+                        </p>
+                        <p>{billingAddressInfo.province}</p>
+                      </Col>
+                    ) : null}
 
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address1"/>: </p>
-                    <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
-                  </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.Country" />:{' '}
+                      </p>
+                      <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                    </Col>
 
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2"/>: </p>
-                    <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
-                  </Col>
-                </Row>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.Address1" />:{' '}
+                      </p>
+                      <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
+                    </Col>
+
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.Address2" />:{' '}
+                      </p>
+                      <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                    </Col>
+                  </Row>
+                )}
               </Col>
               <Col span={8}>
                 <Row>
                   <Col span={24}>
-                    <label className="info-title"><FormattedMessage id="Subscription.PaymentMethod"/></label>
+                    <label className="info-title">
+                      <FormattedMessage id="Subscription.PaymentMethod" />
+                    </label>
                   </Col>
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
+                    </p>
                     <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.CardNumber"/>: </p>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="Subscription.CardNumber" />:{' '}
+                    </p>
                     <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
                   </Col>
                 </Row>
@@ -882,7 +984,7 @@ const deliverStatus = (status) => {
           </div>
           <div className="container-search">
             <Headline
-              title={<FormattedMessage id="Subscription.AutoshipOrder"/>}
+              title={<FormattedMessage id="Subscription.AutoshipOrder" />}
               // extra={
               //   <div>
               //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
@@ -894,10 +996,10 @@ const deliverStatus = (status) => {
               // }
             />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
-              <TabPane tab={<FormattedMessage id="Subscription.NoStart"/>} key="noStart">
+              <TabPane tab={<FormattedMessage id="Subscription.NoStart" />} key="noStart">
                 <Table rowKey={(record, index) => index.toString()} columns={columns_foodDispenser_no_start} dataSource={noStartOrder} pagination={false}></Table>
               </TabPane>
-              <TabPane tab={<FormattedMessage id="Subscription.Completed"/>} key="completed">
+              <TabPane tab={<FormattedMessage id="Subscription.Completed" />} key="completed">
                 <Table
                   rowKey={(record, index) => index.toString()}
                   rowClassName={(record, index) => {
@@ -928,15 +1030,13 @@ const deliverStatus = (status) => {
           </AuthWrapper>
         </Spin>
         <div className="bar-button">
-          <Button onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="Subscription.back" />}
-          </Button>
+          <Button onClick={() => (history as any).go(-1)}>{<FormattedMessage id="Subscription.back" />}</Button>
         </div>
       </div>
     );
   }
 }
-export default injectIntl(SubscriptionDetail)
+export default injectIntl(SubscriptionDetail);
 const styles = {
   priceStyle: {
     marginRight: 15

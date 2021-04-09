@@ -154,8 +154,7 @@ export default class FullGiftForm extends React.Component<any, any> {
       giftBeanOnChange: Function;
       deleteSelectedSku: Function;
       setSelectedProductRows: Function;
-      initDefualtLevelList: Function;
-      initReductionDefualtLevelList: Function;
+      initGiftDefualtLevelList: Function;
     };
   };
   static relaxProps = {
@@ -167,6 +166,7 @@ export default class FullGiftForm extends React.Component<any, any> {
     attributesList: 'attributesList',
     selectedRows: 'selectedRows',
     selectedSkuIds: 'selectedSkuIds',
+    initGiftDefualtLevelList: noop,
     submitFullGift: noop,
     submitFullDiscount: noop,
     submitFullReduction: noop,
@@ -175,8 +175,6 @@ export default class FullGiftForm extends React.Component<any, any> {
     giftBeanOnChange: noop,
     deleteSelectedSku: noop,
     setSelectedProductRows: noop,
-    initDefualtLevelList: noop,
-    initReductionDefualtLevelList: noop
   };
 
   componentDidMount() {
@@ -343,6 +341,8 @@ export default class FullGiftForm extends React.Component<any, any> {
     );
   };
 
+
+
   // @ts-ignore
   render() {
     const { marketingId, form } = this.props;
@@ -370,7 +370,7 @@ export default class FullGiftForm extends React.Component<any, any> {
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
-
+    console.log(marketingBean.toJS(), 'marketingBean------------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
@@ -502,22 +502,22 @@ export default class FullGiftForm extends React.Component<any, any> {
             ],
             initialValue: marketingBean.get('subType')
           })(
-            <RadioGroup onChange={(e) => this.subTypeChange(e)}>
-              <Radio style={radioStyle} value={2}>
-                Direct gift
-              </Radio>
+            <RadioGroup onChange={(e) => this.subTypeChange(e)} value={marketingBean.get('subType')}>
+              {/*<Radio style={radioStyle} value={2}>*/}
+              {/*  Direct gift*/}
+              {/*</Radio>*/}
               {marketingBean.get('promotionType') === 1 && (
                 <Radio value={3} style={radioStyle}>
                   For <Input /> refill
                 </Radio>
               )}
               {marketingBean.get('promotionType') === 0 && (
-                <Radio value={0} style={radioStyle}>
+                <Radio value={4} style={radioStyle}>
                   Full amount gift
                 </Radio>
               )}
               {marketingBean.get('promotionType') === 0 && (
-                <Radio value={1} style={radioStyle}>
+                <Radio value={5} style={radioStyle}>
                   Full quantity gift{' '}
                 </Radio>
               )}
@@ -742,7 +742,12 @@ export default class FullGiftForm extends React.Component<any, any> {
           </Col>
         </Row>
         {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
-        <GoodsModal visible={this.state.goodsModal._modalVisible} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
+        <GoodsModal visible={this.state.goodsModal._modalVisible}
+                    selectedSkuIds={this.state.goodsModal._selectedSkuIds}
+                    selectedRows={this.state.goodsModal._selectedRows}
+                    onOkBackFun={this.skuSelectedBackFun}
+                    onCancelBackFun={this.closeGoodsModal}
+        />
       </Form>
     );
   }
@@ -833,12 +838,12 @@ export default class FullGiftForm extends React.Component<any, any> {
    * @param joinLevel
    */
   promotionType = (e) => {
-    const { initDefualtLevelList, initReductionDefualtLevelList } = this.props.relaxProps
+    const { initGiftDefualtLevelList } = this.props.relaxProps
     this.onBeanChange({
       promotionType: e.target.value,
-      subType: 9
+      subType: e.target.value === 0 ? 4 : 3
     });
-    // initReductionDefualtLevelList()
+    initGiftDefualtLevelList()
   };
 
   /**
@@ -1020,18 +1025,7 @@ export default class FullGiftForm extends React.Component<any, any> {
       }
     });
   };
-  initLevel = (levelType) => {
-    const { ma }
-    const initLevel = [
-      {
-        key: this.makeRandom(),
-        fullAmount: null,
-        fullCount: null,
-        discount: null
-      }
-    ];
-    ma
-  }
+
   /**
    * 生成随机数，作为key值
    * @returns {string}
@@ -1045,7 +1039,7 @@ export default class FullGiftForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (e) => {
-    const { initDefualtLevelList, initReductionDefualtLevelList, marketingBean } = this.props.relaxProps
+    const { initGiftDefualtLevelList, marketingBean } = this.props.relaxProps
     const _thisRef = this;
     let levelType = '';
     // Session 有状态登录，保存一个seesion, 返回相应的cookie，
@@ -1059,7 +1053,8 @@ export default class FullGiftForm extends React.Component<any, any> {
         content: 'Switching types will clear the set rules. Do you want to continue?',
         onOk() {
           for (let i = 0; i < marketingBean.get(levelType).size; i++) {
-            _thisRef.props.form.resetFields(`level_${i}`);
+            // _thisRef.props.form.resetFields(`level_${i}`);
+            _thisRef.props.form.resetFields();
           }
           let beanObject = {
             // [levelType]: fromJS([]),
@@ -1067,7 +1062,7 @@ export default class FullGiftForm extends React.Component<any, any> {
           };
           _thisRef.onBeanChange(beanObject);
           //gift需要替换
-          initReductionDefualtLevelList()
+          initGiftDefualtLevelList()
         }
         // onCancel() {
         //   _thisRef.props.form.setFieldsValue({ subType: isFullCount });
@@ -1140,6 +1135,7 @@ export default class FullGiftForm extends React.Component<any, any> {
    * @param rules
    */
   onRulesChange = (rules) => {
+    debugger
     this.props.form.resetFields('rules');
     this.onBeanChange({ fullGiftLevelList: rules });
   };

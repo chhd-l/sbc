@@ -108,4 +108,8 @@ export default class AppStore extends Store {
     this.dispatch('marketing:selectedRows', selectedRows);
     this.dispatch('marketing:selectedSkuIds', selectedSkuIds);
   };
+
+  initGiftDefualtLevelList= () => {
+    this.dispatch('marketing:initBeanLevelList')
+  }
 }

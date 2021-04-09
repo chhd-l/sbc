@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Const, history } from 'qmkit';
+import { Const, history, cache } from 'qmkit';
 import { Input, Icon, Row, Col, Select, message, Dropdown, Button, Menu, Timeline, Tooltip, Empty, Spin } from 'antd';
 import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
 import { assign } from 'lodash';
 import moment from 'moment';
 import AddComment from './add-comment';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const Option = Select.Option;
 
@@ -55,7 +56,7 @@ export default class tasks extends Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
         }
       })
       .catch(() => {
@@ -88,7 +89,7 @@ export default class tasks extends Component<any, any> {
             taskLoading: false
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             taskLoading: false
           });
@@ -148,16 +149,19 @@ export default class tasks extends Component<any, any> {
     const { taskLoading, taskList, isAll, orderBy } = this.state;
     const { goldenMomentList, statusList, visible } = this.state;
     const { petOwner } = this.props;
+    const hasTaskRole = sessionStorage.getItem(cache.LOGIN_FUNCTIONS) && JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS)).includes('f_petowner_task');
     const menu = (
       <Menu>
         <Menu.Item key={1}>
           {' '}
           <a onClick={() => this.setState({ visible: true })}> Add Comment</a>
         </Menu.Item>
-        <Menu.Item key={2}>
-          {' '}
-          <a onClick={() => history.push('/add-task', { petOwner: { contactId: this.props.petOwnerId, petOwnerName: petOwner.contactName, customerAccount: petOwner.customerAccount } })}>Add Task</a>
-        </Menu.Item>
+        {hasTaskRole ? (
+          <Menu.Item key={2}>
+            {' '}
+            <a onClick={() => history.push('/add-task', { petOwner: { contactId: this.props.petOwnerId, petOwnerName: petOwner.contactName, customerAccount: petOwner.customerAccount } })}>Add Task</a>
+          </Menu.Item>
+        ) : null}
       </Menu>
     );
     return (

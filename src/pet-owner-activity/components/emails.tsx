@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Const } from 'qmkit';
+import { Const, cache, history } from 'qmkit';
 import { Row, Col, Dropdown, Button, Menu, Timeline, Select, Empty, Spin, message } from 'antd';
 import { replaceLink } from '../common';
 import TemplateConponent from './template-conponent';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
 import AddComment from './add-comment';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const Option = Select.Option;
 export default class emails extends Component<any, any> {
@@ -84,14 +85,19 @@ export default class emails extends Component<any, any> {
   }
   render() {
     const { emailLoading, emailList, emailFilters, orderType, isRecent, visible } = this.state;
+    const { petOwner } = this.props;
+    const hasTaskRole = sessionStorage.getItem(cache.LOGIN_FUNCTIONS) && JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS)).includes('f_petowner_task');
     const menu = (
       <Menu>
         <Menu.Item key={1}>
           <a onClick={() => this.setState({ visible: true })}> Add Comment</a>
         </Menu.Item>
-        <Menu.Item key={2}>
-          <Link to={'/add-task'}>Add Task</Link>
-        </Menu.Item>
+        {hasTaskRole ? (
+          <Menu.Item key={2}>
+            {' '}
+            <a onClick={() => history.push('/add-task', { petOwner: { contactId: this.props.petOwnerId, petOwnerName: petOwner.contactName, customerAccount: petOwner.customerAccount } })}>Add Task</a>
+          </Menu.Item>
+        ) : null}
       </Menu>
     );
     return (

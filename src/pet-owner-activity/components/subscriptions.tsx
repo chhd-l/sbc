@@ -4,6 +4,7 @@ import * as webapi from '../webapi';
 import { history, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { string } from 'prop-types';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const { RangePicker } = DatePicker;
 

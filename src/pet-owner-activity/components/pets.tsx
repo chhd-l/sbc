@@ -6,6 +6,7 @@ const catFemale = require('../components/image/cat2.png');
 const dog = require('../components/image/dog.png');
 const dogFemale = require('../components/image/dog2.png');
 import * as webapi from '../webapi';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 export default class pets extends Component<any, any> {
   constructor(props) {

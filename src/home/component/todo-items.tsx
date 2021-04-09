@@ -209,7 +209,7 @@ export default class TodoItems extends React.Component<any, any> {
                       </div>
                     </div>
                     <div className="subscription-content space-around">
-                      <div className="text"><FormattedMessage id="Home.SalesVolume"/></div>
+                      <div className="text"><FormattedMessage id="Home.Salesvolume"/></div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
@@ -356,7 +356,7 @@ export default class TodoItems extends React.Component<any, any> {
                       </div>
                     </div>
                     <div className="transaction-l space-around">
-                      <div className="text"><FormattedMessage id="Home.SalesVolume"/></div>
+                      <div className="text"><FormattedMessage id="Home.Salesvolume"/></div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.salesVolume != null ? <CountUp end={tradeCustomerView.salesVolume} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">

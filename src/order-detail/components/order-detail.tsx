@@ -161,6 +161,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
       firstName: string;
       lastName: string;
       comment: string;
+      entrance: string;
+      apartment:string;
     };
 
     //发票信息
@@ -188,6 +190,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
           postCode: string;
           city: string;
           comment: string;
+          entrance: string;
+          apartment:string;
         })
       : null;
 
@@ -675,6 +679,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
                   </p>
+                  <p>
+                    <FormattedMessage id="Order.Entrance" />:  {consignee.entrance}
+                  </p>
                 </Col>
                 <Col span={12}>
                   <p>
@@ -688,6 +695,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   </p>
                   <p>
                     <FormattedMessage id="Order.state" />: {consignee.province}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
                   </p>
                 </Col>
                 <Col span={24}>
@@ -771,7 +781,10 @@ export default class OrderDetailTab extends React.Component<any, any> {
                         <FormattedMessage id="Order.address2" />: {invoice.address2}
                       </p>
                     </Tooltip>
-                    <p>Country: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
+                    <p><FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
+                    <p>
+                    <FormattedMessage id="Order.Entrance" />:  {invoice.entrance}
+                  </p>
                   </Col>
                   <Col span={12}>
                     <p>
@@ -786,6 +799,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     <p>
                       <FormattedMessage id="Order.state" />: {invoice.province}
                     </p>
+                    <p>
+                    <FormattedMessage id="Order.Apartment" />: {invoice.apartment}
+                  </p>
                   </Col>
                   <Col span={24}>
                     <Tooltip

@@ -607,13 +607,26 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any) => {
-    const { editGoodsItem, synchValue, editGoods, goodsList } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, editGoods, goodsList, addSkUProduct } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
 
-    editGoodsItem(id, key, e);
+    if (key = "goodsInfoBundleRels") {
+      if (goodsList.toJS().length == 1 && addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+        let id = goodsList.toJS()[0].id
+        let marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
+        let subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
+        let stock = Number(String(addSkUProduct[0].targetGoodsIds[0].stock?addSkUProduct[0].targetGoodsIds[0].stock:0 / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+        editGoodsItem(id, key, e);
+        editGoodsItem(id, 'marketPrice', marketPrice);
+        editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
+        editGoodsItem(id, 'stock', stock);
+      }
+    }else {
+      editGoodsItem(id, key, e);
+    }
 
 
     if(key == "addedFlag") {

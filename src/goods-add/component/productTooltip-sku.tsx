@@ -57,7 +57,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
     initCateList: 'initCateList',
     addSkUProduct: 'addSkUProduct',
     goodsList: 'goodsList',
-    onFormFieldChange:noop
+    onFormFieldChange:noop,
+    editGoodsItem: noop,
+
   };
   constructor(props) {
     super(props);
@@ -96,8 +98,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
   };
 
   handleOK=()=>{
-    const {selectedRowKeys,selectedRows, addSkUProduct, editGoodsItem} = this.state
-    const { onProductselectSku, goodsList } = this.props.relaxProps;
+    const {selectedRowKeys,selectedRows, addSkUProduct, } = this.state
+    const { onProductselectSku, goodsList, editGoodsItem } = this.props.relaxProps;
     // let a = [];
     let minStock = []
     // selectedRowKeys.map((item) => {
@@ -106,9 +108,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //   });
     // });
     console.log(goodsList.toJS(),1111);
-    let id = goodsList.toJS().length == 1? goodsList.toJS()[0].id : ''
+
+
     selectedRows && selectedRows.map((item) => {
-        console.log(item,555555);
         if(item.stock){
           minStock.push(item.stock)
         }else if(sessionStorage.getItem('minStock')){
@@ -134,15 +136,25 @@ class ProductTooltipSKU extends React.Component<any, any> {
     sessionStorage.setItem('minStock',tempMinStock)
     targetGoodsList.push({
       pid: this.props.pid,
-      id: id,
       targetGoodsIds: goodsIds,
       minStock: tempMinStock
     });
+
+    console.log(goodsIds,11111111);
+    if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
+      let id = goodsList.toJS()[0].id
+      let marketPrice = goodsIds[0].marketPrice * goodsIds[0].bundleNum
+      let subscriptionPrice = goodsIds[0].subscriptionPrice * goodsIds[0].bundleNum
+      let stock = Number(String(goodsIds[0].stock?goodsIds[0].stock:0 / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+
+      editGoodsItem(id, 'marketPrice', marketPrice);
+      editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
+      editGoodsItem(id, 'stock', stock);
+    }
     if (targetGoodsIds.length <= 10) {
       if (targetGoodsIds.length !== 0) {
         onProductselectSku(targetGoodsList);
-        console.log()
-        //editGoodsItem(id, key, e);
+
       }
       targetGoodsIds = [];
       this.props.showModal({ type: 0 }, this.props.pid);

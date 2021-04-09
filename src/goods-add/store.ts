@@ -1007,8 +1007,12 @@ export default class AppStore extends Store {
               return;
             }
 
-          }else if(item.get('marketPrice') == undefined && addSkUProduct.length == 0) {
-            consolw.log(55555)
+          }else if(item.get('marketPrice') == undefined && (addSkUProduct.length == 1 && (addSkUProduct[0].targetGoodsIds.length == 0 || addSkUProduct[0].targetGoodsIds.length > 1)) ) {
+            tip = 1;
+            valid = false;
+            return;
+
+          }else if(item.get('marketPrice') == undefined && (addSkUProduct.length == 0 || addSkUProduct.length > 1)) {
             tip = 1;
             valid = false;
             return;
@@ -1022,22 +1026,7 @@ export default class AppStore extends Store {
           }
         }
 
-        /*if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('subscriptionPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds.length == 1 && addSkUProduct[0].targetGoodsIds[0].subscriptionPrice == 0) ) {
-            console.log(item.get('subscriptionPrice'),4444 )
-            if ( item.get('subscriptionPrice') == 0 ) {
-              tip = 2;
-              valid = false;
-              return;
-            }
-          }else {
-            if ( item.get('subscriptionPrice') == 0 ) {
-              tip = 2;
-              valid = false;
-              return;
-            }
-          }
-        }*/
+
         if (this.state().get('goods').get('saleableFlag') != 0) {
           if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0
             && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
@@ -1046,12 +1035,16 @@ export default class AppStore extends Store {
               valid = false;
               return;
             }
-          }else if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0 && addSkUProduct.length == 0) {
+          }else if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0 && (addSkUProduct.length == 1 && (addSkUProduct[0].targetGoodsIds.length == 0 || addSkUProduct[0].targetGoodsIds.length > 1)) ) {
             tip = 2;
             valid = false;
             return;
 
-          }else {
+          }else if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0 && (addSkUProduct.length == 0 || addSkUProduct.length > 1)) {
+            tip = 2;
+            valid = false;
+            return;
+          } else {
             if ( item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
               tip = 2;
               valid = false;

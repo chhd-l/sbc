@@ -271,7 +271,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="top-text space-between">
                     <span>Task</span>
                     <span>
-                    <AuthWrapper functionName="f_home_task_icon"><Link to="/tasks">more &gt;</Link></AuthWrapper>
+                    <AuthWrapper functionName="f_petowner_task"><Link to="/tasks">more &gt;</Link></AuthWrapper>
                   </span>
                   </div>
                   <div className="traffic ">

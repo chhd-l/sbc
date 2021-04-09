@@ -1293,6 +1293,7 @@ export default {
   'Order.contractProduct':'Contract product',
   'Order.club':'Club',
   'Order.autoship':'Autoship',
+  'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
   'Order.felin':`L'Atelier Feline`,
   'Order.subscriptionType':'Subscription type',
@@ -1489,6 +1490,7 @@ export default {
   'Order.reasonForReject':'Reasons for rejection',
   /* -------- 已翻译 V2.0---------------*/
   'Order.offline.Reset':'Reset',
+  'Order.Club&Autoship':'Club & Autoship',
 
 
 
@@ -2607,6 +2609,21 @@ export default {
   'Marketing.CampaignStatus2': 'Campaign Status',
   'Marketing.Download': 'Download',
   'Marketing.Club': 'Club',
+  'Marketing.Percentage': 'Percentage',
+  'Marketing.BasicSetting': 'Basic Setting',
+  'Marketing.Nomorethanonehundredwords': 'No more than one hundred words',
+  'Marketing.Coupondiscount': 'Coupon discount',
+  'Marketing.integerfrom1to99999': 'integer from 1 to 99999',
+  'Marketing.Instructionsareupto500': 'Instructions are up to 500 characters',
+  'Marketing.Coupontype': 'Coupon type',
+  'Marketing.Pleaseinputcoupondiscount': 'Please input coupon discount',
+  'Marketing.starttimecannotbelessthancurrenttime': 'The start time cannot be less than the current time',
+  'Marketing.Activitydetails': 'Activity details',
+  'Marketing.Clubpromotion': 'Club promotion',
+  'Marketing.Editgift': 'Edit gift',
+  'Marketing.Creategift': 'Create gift',
+
+
 
 
 

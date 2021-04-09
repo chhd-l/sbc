@@ -40,7 +40,7 @@ export default {
   'Public.Batch Export':'Batch Export',
   'Public.Reminder100records':'Reminder: up to 100 records',
   "Public.GetDataFailed": 'Get Data Failed',
-  
+  /* -------- 已翻译 V2.0---------------*/
 
 
 
@@ -176,7 +176,6 @@ export default {
 
 
 
-
   /*-----------------------------  Home -----------------------------------------------*/
   'Home.Overview':'Overview',
   'Home.Revenue':'Revenue',
@@ -233,6 +232,13 @@ export default {
   'Home.PrescriberRewardTop': 'Prescriber reward Top',
   'Home.BestSeller': 'Best seller',
   'Home.TOP': 'TOP',
+  'Home.HeaderTip': 'The data is updated every 15 minutes',
+  'Home.SelectWeek': 'Select week',
+  'Home.Prescriber.success': 'Prescriber choosed here will be setted as default for other pages.',
+  'Home.SelectPrescriber': 'Select Prescriber Data',
+  'Home.All': 'All',
+  'Home.ManagePrescriber': 'Manage Prescriber',
+  'Home.Rate': 'Rate',
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
   "Product.Productname": "Product name",
@@ -1287,6 +1293,8 @@ export default {
   'Order.contractProduct':'Contract product',
   'Order.club':'Club',
   'Order.autoship':'Autoship',
+  'Order.Club&Autoship':'Club & Autoship',
+  'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
   'Order.felin':`L'Atelier Feline`,
   'Order.subscriptionType':'Subscription type',
@@ -1481,6 +1489,7 @@ export default {
   'Order.reasonForRejection':'Reasons for rejection',
   'Order.reasonForRefuse':'Reason for Refusal of Refund',
   'Order.reasonForReject':'Reasons for rejection',
+  /* -------- 已翻译 V2.0---------------*/
   
 
 
@@ -2013,6 +2022,7 @@ export default {
   'Subscription.Time':'Time',
   'Subscription.Operation Category':'Operation Category',
   'Subscription.Operation Log':'Operation Log',
+  /* -------- 已翻译 V2.0---------------*/
   
 
 
@@ -2599,6 +2609,21 @@ export default {
   'Marketing.CampaignStatus2': 'Campaign Status',
   'Marketing.Download': 'Download',
   'Marketing.Club': 'Club',
+  'Marketing.Percentage': 'Percentage',
+  'Marketing.BasicSetting': 'Basic Setting',
+  'Marketing.Nomorethanonehundredwords': 'No more than one hundred words',
+  'Marketing.Coupondiscount': 'Coupon discount',
+  'Marketing.integerfrom1to99999': 'integer from 1 to 99999',
+  'Marketing.Instructionsareupto500': 'Instructions are up to 500 characters',
+  'Marketing.Coupontype': 'Coupon type',
+  'Marketing.Pleaseinputcoupondiscount': 'Please input coupon discount',
+  'Marketing.starttimecannotbelessthancurrenttime': 'The start time cannot be less than the current time',
+  'Marketing.Activitydetails': 'Activity details',
+  'Marketing.Clubpromotion': 'Club promotion',
+  'Marketing.Editgift': 'Edit gift',
+  'Marketing.Creategift': 'Create gift',
+
+
 
 
 

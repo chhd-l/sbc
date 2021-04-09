@@ -112,12 +112,13 @@ export default class GoodsList extends React.Component<any, any> {
 
     if (returnLogistics) {
       logisticInfo =
-        ' 发货日期：' +
-        moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT) +
-        ' 物流公司：' +
-        returnLogistics.get('company') +
-        ' 物流单号：' +
-        returnLogistics.get('no');
+        ' Delivery date: ' +
+        (moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT)? 
+        moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT):' - ') + 
+        ' Logistics company: ' + 
+        (returnLogistics.get('company')?returnLogistics.get('company'):' - ') + 
+        ' Tracking number: ' +
+        (returnLogistics.get('no')?returnLogistics.get('no'):'-');
 
       returnLogisticInfo = {
         logisticCompanyName: returnLogistics.get('company'),
@@ -166,7 +167,7 @@ export default class GoodsList extends React.Component<any, any> {
 
             <label style={styles.priceItem as any}>
               <span style={styles.name}>
-                <FormattedMessage id="refundableAmount" />:{' '}
+                <FormattedMessage id="Order.refundableAmount" />:{' '}
               </span>
               <strong>
               {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'} 
@@ -184,7 +185,7 @@ export default class GoodsList extends React.Component<any, any> {
             {refundStatus === 2 && (
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>
-                  <FormattedMessage id="actualRefundAmount" />:{' '}
+                  <FormattedMessage id="Order.actualRefundAmount" />:{' '}
                 </span>
                 <strong>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'} 
@@ -206,7 +207,7 @@ export default class GoodsList extends React.Component<any, any> {
         </div>
         <div style={styles.returnReason}>
           <label style={styles.inforItem}>
-            <FormattedMessage id="returnReason" />:{' '}
+            <FormattedMessage id="Order.returnReason" />:{' '}
             {Object.getOwnPropertyNames(returnReason).map(
               (key) => returnReason[key]
             )}
@@ -214,7 +215,7 @@ export default class GoodsList extends React.Component<any, any> {
           </label>
           <label style={styles.inforItem}>
             
-            <FormattedMessage id="returnDescription" />:{' '}
+            <FormattedMessage id="Order.returnDescription" />:{' '}
             {detail.get('description')}
           </label>
           {
@@ -230,7 +231,7 @@ export default class GoodsList extends React.Component<any, any> {
           }
           <div style={styles.inforItem}>
             <label>
-            <FormattedMessage id="returnOrderAttachment" />:{' '}
+            <FormattedMessage id="Order.returnOrderAttachment" />:{' '}
             </label>
             {images.map((imageObj, index) => (
               <Popover
@@ -258,7 +259,8 @@ export default class GoodsList extends React.Component<any, any> {
           </div>
           {returnType == 'RETURN' && returnWay['1'] ? (
             <label style={styles.inforItem}>
-              logistics information: {logisticInfo}
+              <FormattedMessage id="Order.logisticsInformation" />
+              : <p>{logisticInfo}</p> 
               {returnLogisticInfo && (
                 <Logistics
                   companyInfo={fromJS(returnLogisticInfo)}

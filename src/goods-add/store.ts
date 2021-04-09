@@ -995,7 +995,8 @@ export default class AppStore extends Store {
         console.log(addSkUProduct,111111);
         console.log(item.get('marketPrice'),22222 )
         console.log(item.get('subscriptionPrice'),33333 )
-
+        let reg=/^[1-9]\d*$|^0$/;
+        console.log(reg.test(item.get('marketPrice')),44444);
         if (this.state().get('goods').get('saleableFlag') != 0) {
           if(item.get('marketPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) ) {
             tip = 1;
@@ -1027,7 +1028,8 @@ export default class AppStore extends Store {
           }
         }*/
         if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0) {
+          if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0
+            && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].subscriptionStatus == 0) ) {
             tip = 2;
             valid = false;
             return;

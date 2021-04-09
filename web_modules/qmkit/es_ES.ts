@@ -176,7 +176,6 @@ export default {
 
 
 
-
   /*-----------------------------  Home -----------------------------------------------*/
   'Home.Overview':'Overview',
   'Home.Revenue':'Revenue',
@@ -233,6 +232,13 @@ export default {
   'Home.PrescriberRewardTop': 'Prescriber reward Top',
   'Home.BestSeller': 'Best seller',
   'Home.TOP': 'TOP',
+  'Home.HeaderTip': 'The data is updated every 15 minutes',
+  'Home.SelectWeek': 'Select week',
+  'Home.Prescriber.success': 'Prescriber choosed here will be setted as default for other pages.',
+  'Home.SelectPrescriber': 'Select Prescriber Data',
+  'Home.All': 'All',
+  'Home.ManagePrescriber': 'Manage Prescriber',
+  'Home.Rate': 'Rate',
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
   "Product.Productname": "Product name",

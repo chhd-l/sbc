@@ -21,10 +21,12 @@ import { IntlProvider } from 'react-intl';
 
 import ruRU from 'antd/es/locale/ru_RU';
 import enUS from 'antd/es/locale/en_US';
+import trTR from 'antd/es/locale/tr_TR';
 import deDE from 'antd/es/locale/de_DE';
 import es_ES from '../web_modules/qmkit/es_ES';
 import es_ES_new from '../web_modules/qmkit/es_ES_new';
 import es_RUS from '../web_modules/qmkit/es_RUS';
+import es_TUR from '../web_modules/qmkit/es_TUR';
 
 import configOkta from '../web_modules/qmkit/config-okta';
 import { i } from 'plume2';
@@ -32,15 +34,15 @@ moment.locale('zh-cn');
 
 let language = es_ES;
 let antLanguage = enUS;
-if (sessionStorage.getItem(cache.LANGUAGE) == 'English') {
+if (sessionStorage.getItem(cache.LANGUAGE) == 'en-US') {
   language = es_ES;
   antLanguage = enUS;
-} else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
+} else if (sessionStorage.getItem(cache.LANGUAGE) == 'ru') {
   language = es_RUS;
   antLanguage = ruRU;
-} else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
-  language = es_RUS;
-  antLanguage = deDE;
+} else if (sessionStorage.getItem(cache.LANGUAGE) == 'tr') {
+  language = es_TUR;
+  antLanguage = trTR;
 }
 
 // let a = '';

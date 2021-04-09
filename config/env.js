@@ -48,6 +48,7 @@ let evnMap = {
   sit: require('./env-config/sit.js'),
   prod_fa: require('./env-config/prod_fa.js'),
   prod_de: require('./env-config/prod_de.js'),
+  prod_us: require('./env-config/prod_us'),
 }
 
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be

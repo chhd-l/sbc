@@ -14,7 +14,7 @@ export default class CheckoutAction extends React.Component<any, any> {
       <>
         <div style={{fontSize: 22, lineHeight: '80px', fontWeight: 'bold'}}>
           <span style={{marginRight: 10}}><FormattedMessage id="Order.Subtotal" />:</span>
-          <span style={{color: '#e2001a'}}>€{list.reduce((a, b) => a + (b.marketPrice * 100 * b.quantity * 100), 0) / 100}</span>
+          <span style={{color: '#e2001a'}}>€{(list.reduce((a, b) => a + (b.marketPrice * 100 * b.quantity * 100), 0) / 100).toFixed(2)}</span>
         </div>
         <Divider style={{margin: '0 0 15px'}} />
         <Row gutter={24}>

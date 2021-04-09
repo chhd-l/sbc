@@ -5,9 +5,11 @@ import { message, Modal } from 'antd';
 
 import GoodsGrid from './goods-grid';
 import { IList } from '../../../typings/globalType';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-export default class GoodsModal extends React.Component<any, any> {
+class GoodsModal extends React.Component<any, any> {
   props: {
+    intl;
     selectedSkuIds: IList;
     selectedRows: IList;
     visible: boolean;
@@ -58,9 +60,10 @@ export default class GoodsModal extends React.Component<any, any> {
       <Modal  maskClosable={false}
         title={
           <div>
-            Choose goods&nbsp;
+            <FormattedMessage id="Product.ChooseGoods"/>
+            &nbsp;
             <small>
-              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> items have been selected
+              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> <FormattedMessage id="Product.itemsHaveBeenSelected"/>
             </small>
           </div>
         }
@@ -105,3 +108,5 @@ export default class GoodsModal extends React.Component<any, any> {
     });
   };
 }
+
+export default injectIntl(GoodsModal)

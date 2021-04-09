@@ -113,6 +113,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
         targetGoodsIds.push({
           subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
           bundleNum: 1,
+          saleableFlag: item.saleableFlag,
           marketPrice: item.marketPrice,
           subMarketPrice: item.subMarketPrice,
           subScriptionPrice: item.subScriptionPrice,

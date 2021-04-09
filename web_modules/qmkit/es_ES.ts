@@ -2607,6 +2607,17 @@ export default {
   'Marketing.CampaignStatus2': 'Campaign Status',
   'Marketing.Download': 'Download',
   'Marketing.Club': 'Club',
+  'Marketing.Percentage': 'Percentage',
+  'Marketing.BasicSetting': 'Basic Setting',
+  'Marketing.Nomorethanonehundredwords': 'No more than one hundred words',
+  'Marketing.Coupondiscount': 'Coupon discount',
+  'Marketing.integerfrom1to99999': 'integer from 1 to 99999',
+  'Marketing.Instructionsareupto500': 'Instructions are up to 500 characters',
+  'Marketing.Coupontype': 'Coupon type',
+  'Marketing.Pleaseinputcoupondiscount': 'Please input coupon discount',
+  'Marketing.starttimecannotbelessthancurrenttime': 'The start time cannot be less than the current time',
+
+
 
 
 

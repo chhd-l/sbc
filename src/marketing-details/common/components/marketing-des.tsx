@@ -70,7 +70,7 @@ export default class MarketingDes extends React.Component<any, any> {
             <span>
               <FormattedMessage id="Marketing.PromotionName" />:
             </span>
-            {marketingName}222
+            {marketingName}
           </Col>
         </Row>
         <Row>

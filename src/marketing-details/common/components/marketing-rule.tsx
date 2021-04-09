@@ -83,10 +83,10 @@ export default class MarketingRule extends React.Component<any, any> {
                     <div className="rule-span">
                       <div>
                         <FormattedMessage id="Marketing.theFirstSubscriptionOrder" />
-                        {level.firstSubscriptionOrderDiscount * 10} discount
+                        {level.firstSubscriptionOrderDiscount * 10} <FormattedMessage id="Marketing.discount" />
                       </div>
                       <div>
-                        <FormattedMessage id="Marketing.theFirstSubscriptionOrder" /> {level.restSubscriptionOrderDiscount * 10} discount
+                        <FormattedMessage id="Marketing.theFirstSubscriptionOrder" /> {level.restSubscriptionOrderDiscount * 10} <FormattedMessage id="Marketing.discount" />
                       </div>
                     </div>
                   ) : null}

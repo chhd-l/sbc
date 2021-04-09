@@ -9,6 +9,7 @@ import Activities from './components/activities';
 import Orders from './components/order';
 import Bookings from './components/subscriptions';
 import * as webapi from './webapi';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import './style.less';
 
@@ -118,10 +119,10 @@ export default class PetOwnerActivity extends Component<any, any> {
                       </TabPane>
                     ) : null}
                     <TabPane tab="Emails" key="2">
-                      <Emails petOwnerId={id} />
+                      <Emails petOwnerId={id}  petOwner={petOwner}/>
                     </TabPane>
                     <TabPane tab="Activities" key="3">
-                      {activityKey === '3' ? <Activities petOwnerId={id} /> : null}
+                      {activityKey === '3' ? <Activities petOwnerId={id}  petOwner={petOwner}/> : null}
                     </TabPane>
                   </Tabs>
                 </Card>

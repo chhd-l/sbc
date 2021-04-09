@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Input, Modal, Form, message } from 'antd';
 import * as webapi from '../webapi';
 import { Const } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 

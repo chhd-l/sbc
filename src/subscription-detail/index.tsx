@@ -130,14 +130,14 @@ const deliverStatus = (status) => {
           };
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
-            orderStatus: subscriptionDetail.trades ? subscriptionDetail.trades[0].tradeState.deliverStatus : ''
+            orderStatus: subscriptionDetail.trades ? subscriptionDetail.trades[0].tradeState.flowState : ''
           };
           let recentOrderList = [];
           if (subscriptionDetail.trades) {
             for (let i = 0; i < subscriptionDetail.trades.length; i++) {
               let recentOrder = {
                 recentOrderId: subscriptionDetail.trades[i].id,
-                orderStatus: subscriptionDetail.trades[i].tradeState.deliverStatus
+                orderStatus: subscriptionDetail.trades[i].tradeState.flowState
               };
               recentOrderList.push(recentOrder);
             }
@@ -637,8 +637,8 @@ const deliverStatus = (status) => {
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
         width: '10%',
-        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].deliverStatus ? 
-        <FormattedMessage id={getOrderStatusValue('OrderStatus',record.tradeItems[0].deliverStatus)} />
+        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].flowState ? 
+        <FormattedMessage id={getOrderStatusValue('OrderStatus',record.tradeItems[0].flowState)} />
         // deliverStatus(record.tradeItems[0].deliverStatus) 
         : '-'}</div>
       },

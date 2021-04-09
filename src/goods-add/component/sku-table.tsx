@@ -697,6 +697,7 @@ class SkuForm extends React.Component<any, any> {
             a.push(o);
           }
         });
+        console.log(i);
         b.push({
           pid: pid,
           targetGoodsIds: a
@@ -707,9 +708,18 @@ class SkuForm extends React.Component<any, any> {
     });
     let d = b.concat(c);
     this._editGoodsItem(id, 'goodsInfoBundleRels', a);
-    console.log(d,123);
-    console.log(goodsList.get('goodsInfoNo'),234);
-    onProductselectSku(d);
+    let e = d.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
+    if (goodsList.toJS().length == 1) {
+
+    }
+    console.log(e,123);
+    if (e.length == 1 && e[0].targetGoodsIds.length == 0) {
+      e = []
+    }else {
+      e = d
+    }
+    console.log(e,456);
+    onProductselectSku(e);
   };
 
   noMinus = (e) => {

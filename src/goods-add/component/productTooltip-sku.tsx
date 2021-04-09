@@ -25,6 +25,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
       getGoodsId: any;
       addSkUProduct: any;
       onFormFieldChange:Function;
+      editGoodsItem: Function;
+      goodsList: IList;
+
     };
     showModal: Function;
     selectedRows: IList;
@@ -40,7 +43,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     application?: string;
     pid: any;
     initCateList: any;
-    
+
   };
 
   static relaxProps = {
@@ -53,6 +56,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     getGoodsId: 'getGoodsId',
     initCateList: 'initCateList',
     addSkUProduct: 'addSkUProduct',
+    goodsList: 'goodsList',
     onFormFieldChange:noop
   };
   constructor(props) {
@@ -69,7 +73,6 @@ class ProductTooltipSKU extends React.Component<any, any> {
 
   init = () => {
     const { addSkUProduct } = this.props.relaxProps;
-    console.log(addSkUProduct,666666);
 
     let obj = addSkUProduct;
     if (Array.isArray(obj) &&obj.length>0) {
@@ -93,8 +96,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
   };
 
   handleOK=()=>{
-    const {selectedRowKeys,selectedRows, addSkUProduct} = this.state
-    const { onProductselectSku } = this.props.relaxProps;
+    const {selectedRowKeys,selectedRows, addSkUProduct, editGoodsItem} = this.state
+    const { onProductselectSku, goodsList } = this.props.relaxProps;
     // let a = [];
     let minStock = []
     // selectedRowKeys.map((item) => {
@@ -102,7 +105,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //     goodsInfoNo: item
     //   });
     // });
-
+    console.log(goodsList.toJS(),1111);
+    let id = goodsList.toJS().length == 1? goodsList.toJS()[0].id : ''
     selectedRows && selectedRows.map((item) => {
         console.log(item,555555);
         if(item.stock){
@@ -130,12 +134,15 @@ class ProductTooltipSKU extends React.Component<any, any> {
     sessionStorage.setItem('minStock',tempMinStock)
     targetGoodsList.push({
       pid: this.props.pid,
+      id: id,
       targetGoodsIds: goodsIds,
       minStock: tempMinStock
     });
     if (targetGoodsIds.length <= 10) {
       if (targetGoodsIds.length !== 0) {
         onProductselectSku(targetGoodsList);
+        console.log()
+        //editGoodsItem(id, key, e);
       }
       targetGoodsIds = [];
       this.props.showModal({ type: 0 }, this.props.pid);

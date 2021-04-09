@@ -1056,8 +1056,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: <FormattedMessage id="Order.confirmReceipt" />,
-      content: <FormattedMessage id="Order.Confirmreceiptofallitems" />,
+      title: this.props.intl.formatMessage({id:'Order.ConfirmReceipt'}),
+      content: this.props.intl.formatMessage({id:'Order.ConfirmThatAllProducts'}),
       onOk() {
         confirm(tdId);
       },

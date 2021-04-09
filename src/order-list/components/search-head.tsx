@@ -109,7 +109,9 @@ class SearchHead extends Component<any, any> {
     const subscriptionTypeList = [
       { value: 'ContractProduct', name: this.props.intl.formatMessage({id:'Order.contractProduct'}) },
       { value: 'Club', name: this.props.intl.formatMessage({id:'Order.club'}) },
-      { value: 'Autoship', name: this.props.intl.formatMessage({id:'Order.autoship'}) }
+      { value: 'Autoship', name: this.props.intl.formatMessage({id:'Order.autoship'}) },
+      { value: 'Club_Autoship', name: this.props.intl.formatMessage({id:'Order.Club&Autoship'}) },
+      { value: 'Cat_Dog', name: this.props.intl.formatMessage({id:'Order.Cat&Dog'}) }
     ];
 
     const orderSourceList = [

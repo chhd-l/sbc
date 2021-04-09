@@ -40,7 +40,7 @@ export default {
   'Public.Batch Export':'Batch Export',
   'Public.Reminder100records':'Reminder: up to 100 records',
   "Public.GetDataFailed": 'Get Data Failed',
-  
+  /* -------- 已翻译 V2.0---------------*/
 
 
 
@@ -1487,6 +1487,7 @@ export default {
   'Order.reasonForRejection':'Reasons for rejection',
   'Order.reasonForRefuse':'Reason for Refusal of Refund',
   'Order.reasonForReject':'Reasons for rejection',
+  /* -------- 已翻译 V2.0---------------*/
   
 
 
@@ -2019,6 +2020,7 @@ export default {
   'Subscription.Time':'Time',
   'Subscription.Operation Category':'Operation Category',
   'Subscription.Operation Log':'Operation Log',
+  /* -------- 已翻译 V2.0---------------*/
   
 
 

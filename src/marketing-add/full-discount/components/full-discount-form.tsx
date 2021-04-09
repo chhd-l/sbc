@@ -1191,18 +1191,7 @@ class FullDiscountForm extends React.Component<any, any> {
       }
     });
   };
-  initLevel = (levelType) => {
-    const { ma }
-    const initLevel = [
-      {
-        key: this.makeRandom(),
-        fullAmount: null,
-        fullCount: null,
-        discount: null
-      }
-    ];
-    ma
-  }
+
   /**
    * 生成随机数，作为key值
    * @returns {string}

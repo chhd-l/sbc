@@ -21,7 +21,5 @@ module.exports = {
 
 
   CDN_PATH: '/',
-  X_XITE_ADMIN_HOST: 'http://121.37.129.70:3000',
-  X_XITE_OPEN_HOST: 'http://121.37.129.70:3000',
   ...Common
 };

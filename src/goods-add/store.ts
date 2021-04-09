@@ -998,10 +998,13 @@ export default class AppStore extends Store {
         let reg=/^[1-9]\d*$|^0$/;
         console.log(reg.test(item.get('marketPrice')),44444);
         if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('marketPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].marketPrice == 0) ) {
-            tip = 1;
-            valid = false;
-            return;
+          if(item.get('marketPrice') == undefined && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
+            if (addSkUProduct[0].targetGoodsIds[0].saleableFlag == 0) {
+              tip = 1;
+              valid = false;
+              return;
+            }
+
           }else {
             if ( item.get('marketPrice') == 0 ) {
               tip = 1;
@@ -1029,10 +1032,12 @@ export default class AppStore extends Store {
         }*/
         if (this.state().get('goods').get('saleableFlag') != 0) {
           if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0
-            && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0] && addSkUProduct[0].targetGoodsIds[0].subscriptionStatus == 0) ) {
-            tip = 2;
-            valid = false;
-            return;
+            && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
+            if (addSkUProduct[0].targetGoodsIds[0].saleableFlag == 0) {
+              tip = 2;
+              valid = false;
+              return;
+            }
           }else {
             if ( item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
               tip = 2;

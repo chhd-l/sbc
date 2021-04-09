@@ -1293,6 +1293,8 @@ export default {
   'Order.contractProduct':'Contract product',
   'Order.club':'Club',
   'Order.autoship':'Autoship',
+  'Order.Club&Autoship':'Club & Autoship',
+  'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
   'Order.felin':`L'Atelier Feline`,
   'Order.subscriptionType':'Subscription type',
@@ -2617,6 +2619,9 @@ export default {
   'Marketing.Pleaseinputcoupondiscount': 'Please input coupon discount',
   'Marketing.starttimecannotbelessthancurrenttime': 'The start time cannot be less than the current time',
   'Marketing.Activitydetails': 'Activity details',
+  'Marketing.Clubpromotion': 'Club promotion',
+  'Marketing.Editgift': 'Edit gift',
+  'Marketing.Creategift': 'Create gift',
 
 
 

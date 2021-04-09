@@ -1282,6 +1282,8 @@ export default {
   'Order.contractProduct':'Contract product',
   'Order.club':'Club',
   'Order.autoship':'Autoship',
+  'Order.Club&Autoship':'Club & Autoship',
+  'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
   'Order.felin':`L'Atelier Feline`,
   'Order.subscriptionType':'Subscription type',

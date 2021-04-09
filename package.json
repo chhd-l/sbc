@@ -7,8 +7,9 @@
   "scripts": {
     "start": "node ./web_modules/qmkit/build.ts dev && cross-env NODE_ENV=development node scripts/start.js dev --hot --plugins dynamic-import-node",
     "build:dev": "node ./web_modules/qmkit/build.ts dev && cross-env NODE_ENV=development --info=true node scripts/build.js dev",
-    "build:stg": "node ./web_modules/qmkit/build.ts stg && cross-env NODE_ENV=production --info=true node scripts/build.js stg",
-    "build:sit": "node ./web_modules/qmkit/build.ts sit && cross-env NODE_ENV=production node scripts/build.js sit",
+    "build:stg": "node ./web_modules/qmkit/build.ts stg && cross-env NODE_ENV=stg --info=true node scripts/build.js stg",
+    "build:sit": "node ./web_modules/qmkit/build.ts sit && cross-env NODE_ENV=sit --info=true node scripts/build.js sit",
+    "build:uat": "node ./web_modules/qmkit/build.ts uat && cross-env NODE_ENV=uat --info=true node scripts/build.js uat",
     "build:prod_de": "node ./web_modules/qmkit/build.ts prod_de && cross-env NODE_ENV=production --info=true node scripts/build.js prod_de",
     "build:prod_fa": "node ./web_modules/qmkit/build.ts prod_fa && cross-env NODE_ENV=production --info=true node scripts/build.js prod_fa",
     "build:prod_us": "node ./web_modules/qmkit/build.ts prod_us && cross-env NODE_ENV=production --info=true node scripts/build.js prod_us",

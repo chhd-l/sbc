@@ -290,7 +290,7 @@ class SkuForm extends React.Component<any, any> {
                   min={0}
                   max={9999999}
                   precision={2}
-                  step={0.01}
+                  // step={0.01}
                   // formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               />)}
             </FormItem>
@@ -454,7 +454,7 @@ class SkuForm extends React.Component<any, any> {
                         //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                         formatter={limitDecimals}
                         parser={limitDecimals}
-                        step={0.01}
+                        // step={0.01}
                       />
                       // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                     )}
@@ -493,7 +493,7 @@ class SkuForm extends React.Component<any, any> {
                           disabled={rowInfo.subscriptionStatus === 0}
                           formatter={limitDecimals}
                           parser={limitDecimals}
-                          step={0.01}
+                          // step={0.01}
                           /*formatter={(value) => {
                             return `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`
                           }}*/
@@ -535,7 +535,7 @@ class SkuForm extends React.Component<any, any> {
                       style={{ width: '111px' }}
                       formatter={limitDecimals}
                       parser={limitDecimals}
-                      step={0.01}
+                      // step={0.01}
                       //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                     />
                     // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />

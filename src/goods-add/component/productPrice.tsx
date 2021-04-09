@@ -80,6 +80,7 @@ export default class ProductPrice extends React.Component<any, any> {
       updateAllBasePrice: Function;
       setDefaultBaseSpecId: Function;
       setSelectedBasePrice: Function;
+      onProductselectSku: Function;
     };
   };
 
@@ -109,7 +110,8 @@ export default class ProductPrice extends React.Component<any, any> {
     updateBasePrice: noop,
     updateAllBasePrice: noop,
     setDefaultBaseSpecId: noop,
-    setSelectedBasePrice: noop
+    setSelectedBasePrice: noop,
+    onProductselectSku: noop,
   };
 
   constructor(props) {
@@ -153,8 +155,9 @@ class SkuForm extends React.Component<any, any> {
   };
 
   render() {
-    const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    const { goodsList, addSkUProduct, onProductselectSku, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
+
     const columns = this._getColumns();
     return (
       <div style={{ marginBottom: 20 }}>
@@ -342,6 +345,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         console.log(rowInfo.marketPrice,1111111111);
         console.log(addSkUProduct,2222222);
+        console.log(goodsList.toJS(),3333);
 
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
@@ -359,7 +363,7 @@ class SkuForm extends React.Component<any, any> {
           console.log(!rowInfo.subscriptionPrice);*/
           if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
             marketPrice = targetGoodsIds.marketPrice * targetGoodsIds.bundleNum
-            console.log(marketPrice,55555555);
+            //console.log(marketPrice,55555555);
 
             subscriptionPrice = targetGoodsIds.subscriptionPrice * targetGoodsIds.bundleNum
             /*Number(targetGoodsIds.subMarketPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.marketPrice?
@@ -370,8 +374,8 @@ class SkuForm extends React.Component<any, any> {
             //this._editGoodsItem(rowInfo.id, 'marketPrice', marketPrice, )
             //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', subscriptionPrice, )
           }else if (addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length == 0){
-            console.log(rowInfo,33333);
-            console.log(addSkUProduct,444444);
+            //console.log(rowInfo,33333);
+            //console.log(addSkUProduct,444444);
             marketPrice = 0
             subscriptionPrice = 0
             //this._editGoodsItem(rowInfo.id, 'marketPrice', 0, )
@@ -382,7 +386,7 @@ class SkuForm extends React.Component<any, any> {
           //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', 0, )
         }
 
-        console.log(marketPrice,666666);
+        //console.log(marketPrice,666666);
 
         /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
          //console.log(marketPrice,2222222);
@@ -666,12 +670,11 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    console.log(id,1111);
-    console.log(key,222);
-    console.log(e,22333233);
+    console.log(id);
+    console.log(key);
+    console.log(e);
 
     editGoodsItem(id, key, e);
-
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存

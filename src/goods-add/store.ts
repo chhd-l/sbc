@@ -882,6 +882,8 @@ export default class AppStore extends Store {
           if (!errs) {
           }
         });
+
+
     // this.state()
     //   .get('skuForm')
     //   .validateFieldsAndScroll(null, (errs) => {
@@ -1005,6 +1007,16 @@ export default class AppStore extends Store {
               return;
             }
 
+          }else if(item.get('marketPrice') == undefined && (addSkUProduct.length == 1 && (addSkUProduct[0].targetGoodsIds.length == 0 || addSkUProduct[0].targetGoodsIds.length > 1)) ) {
+            tip = 1;
+            valid = false;
+            return;
+
+          }else if(item.get('marketPrice') == undefined && (addSkUProduct.length == 0 || addSkUProduct.length > 1)) {
+            tip = 1;
+            valid = false;
+            return;
+
           }else {
             if ( item.get('marketPrice') == 0 ) {
               tip = 1;
@@ -1014,22 +1026,7 @@ export default class AppStore extends Store {
           }
         }
 
-        /*if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('subscriptionPrice') == undefined && (addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds.length == 1 && addSkUProduct[0].targetGoodsIds[0].subscriptionPrice == 0) ) {
-            console.log(item.get('subscriptionPrice'),4444 )
-            if ( item.get('subscriptionPrice') == 0 ) {
-              tip = 2;
-              valid = false;
-              return;
-            }
-          }else {
-            if ( item.get('subscriptionPrice') == 0 ) {
-              tip = 2;
-              valid = false;
-              return;
-            }
-          }
-        }*/
+
         if (this.state().get('goods').get('saleableFlag') != 0) {
           if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0
             && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
@@ -1038,7 +1035,16 @@ export default class AppStore extends Store {
               valid = false;
               return;
             }
-          }else {
+          }else if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0 && (addSkUProduct.length == 1 && (addSkUProduct[0].targetGoodsIds.length == 0 || addSkUProduct[0].targetGoodsIds.length > 1)) ) {
+            tip = 2;
+            valid = false;
+            return;
+
+          }else if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0 && (addSkUProduct.length == 0 || addSkUProduct.length > 1)) {
+            tip = 2;
+            valid = false;
+            return;
+          } else {
             if ( item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
               tip = 2;
               valid = false;
@@ -1119,10 +1125,10 @@ export default class AppStore extends Store {
         console.log(addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds.length);
         console.log(item.get('stock'));
         console.log(reg.test(item.get('stock')));
-        console.log(ValidConst.zeroNumber.test((item.get('stock'))) === true);
+        //console.log(ValidConst.zeroNumber.test((item.get('stock'))) === true);
         if (reg.test(item.get('stock')) === false ) {
           console.log(333333)
-          flag = 2
+          flag = 1
           valid = false;
           return;
         }
@@ -2139,20 +2145,26 @@ export default class AppStore extends Store {
   };
 
   onProductselectSku = (addProduct) => {
-    let a = addProduct.concat(this.state().toJS().addSkUProduct);
     let newJson = []; //盛放去重后数据的新数组
-    for (let item1 of a) {
-      let flag = true;
-      for (let item2 of newJson) {
-        if (item1.pid == item2.pid) {
-          flag = false;
+
+    if (addProduct.length != 0) {
+      let a = addProduct.concat(this.state().toJS().addSkUProduct);
+      for (let item1 of a) {
+        let flag = true;
+        for (let item2 of newJson) {
+          if (item1.pid == item2.pid) {
+            flag = false;
+          }
+        }
+        if (flag) {
+          //判断是否重复
+          newJson.push(item1); //不重复的放入新数组。  新数组的内容会继续进行上边的循环。
         }
       }
-      if (flag) {
-        //判断是否重复
-        newJson.push(item1); //不重复的放入新数组。  新数组的内容会继续进行上边的循环。
-      }
+    }else {
+      newJson = []
     }
+
     this.dispatch('sku:addSkUProduct', newJson);
     /* if (addProduct.length != 0) {
        let a = addProduct.concat(this.state().toJS().addSkUProduct);

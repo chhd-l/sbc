@@ -827,7 +827,7 @@ class CouponInfoForm extends Component<any, any> {
               )}
             </FormItem>
           )}
-          <div className="bold-title"><FormattedMessage id="Marketing.Targetconsumer" /></div>
+          <div className="bold-title"><FormattedMessage id="Marketing.TargetConsumer" /></div>
           <FormItem {...formItemLayout} required={true}>
             <RadioGroup defaultValue={couponJoinLevel} value={couponJoinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
               <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>

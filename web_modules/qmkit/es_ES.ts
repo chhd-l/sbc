@@ -2616,6 +2616,7 @@ export default {
   'Marketing.Coupontype': 'Coupon type',
   'Marketing.Pleaseinputcoupondiscount': 'Please input coupon discount',
   'Marketing.starttimecannotbelessthancurrenttime': 'The start time cannot be less than the current time',
+  'Marketing.Activitydetails': 'Activity details',
 
 
 

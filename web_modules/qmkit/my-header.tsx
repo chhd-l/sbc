@@ -303,7 +303,7 @@ export default class MyHeader extends React.Component {
 
             <div style={styles.headerRight}>
               <div style={{ marginRight: 30, marginTop: 15, height: 64 }}>
-                <AuthWrapper functionName="f_home_task_icon">
+                <AuthWrapper functionName="f_petowner_task">
                   <Badge count={this.state.reminderTasks.length}>
                     <Popover style={{ padding: 0 }}
                       // visible={this.state.visible}

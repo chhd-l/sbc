@@ -3,7 +3,7 @@ import React from 'react';
 import { Breadcrumb, Spin } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Headline, BreadCrumb } from 'qmkit';
-
+import { injectIntl } from 'react-intl';
 import AppStore from './store';
 import MarketingDes from './common/components/marketing-des';
 import GoodsList from './common/components/goods-list';
@@ -18,17 +18,23 @@ const MAK_TYPE = {
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class MarketingDetails extends React.Component<any, any> {
+class MarketingDetails extends React.Component<any, any> {
   store: AppStore;
 
+  props: {
+    intl;
+    match: any
+  }
   componentDidMount() {
-    const { marketingId } = this.props.match.params;
+    const  marketingId  = this.props.match && this.props.match.params ? this.props.match.params.marketingId : null
     this.store.init(marketingId);
   }
 
   render() {
     const marketingType = this.store.state().get('marketingType');
-    const title = MAK_TYPE[marketingType] + 'Activity details';
+    const title = MAK_TYPE[marketingType] + this.props.intl.formatMessage({
+      id: 'Marketing.Activitydetails'
+    });
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -66,3 +72,5 @@ export default class MarketingDetails extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(MarketingDetails)

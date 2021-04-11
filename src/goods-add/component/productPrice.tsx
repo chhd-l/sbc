@@ -349,73 +349,41 @@ class SkuForm extends React.Component<any, any> {
 
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
+        if(goods.get('goodsId') == null) {
+          if (goodsList.toJS().length == 1) {
 
-        //console.log(targetGoodsIds,22222);
-        /*console.log(goods.toJS(),22222);
-        console.log(rowInfo,33333);
-        console.log(goodsList.toJS(),44444);*/
-        if (goods.get('goodsId') == null && goodsList.toJS().length == 1) {
+            let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
 
-          let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
-          /*console.log(targetGoodsIds,66666);
-          console.log(addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length,7777);
-          console.log(!rowInfo.marketPrice);
-          console.log(!rowInfo.subscriptionPrice);*/
-          if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
-            marketPrice = targetGoodsIds.marketPrice * targetGoodsIds.bundleNum
-            //console.log(marketPrice,55555555);
+            if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
+              marketPrice = targetGoodsIds.marketPrice * targetGoodsIds.bundleNum
+              //console.log(marketPrice,55555555);
 
-            subscriptionPrice = targetGoodsIds.subscriptionPrice * targetGoodsIds.bundleNum
-            /*Number(targetGoodsIds.subMarketPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.marketPrice?
-              Number(targetGoodsIds.marketPrice) * (targetGoodsIds.bundleNum): 0
-          subscriptionPrice = targetGoodsIds.subScriptionPrice?
-            Number(targetGoodsIds.subScriptionPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.subscriptionPrice?
-              Number(targetGoodsIds.subscriptionPrice) * Number(targetGoodsIds.bundleNum) :0*/
-            //this._editGoodsItem(rowInfo.id, 'marketPrice', marketPrice, )
-            //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', subscriptionPrice, )
-          }else if (addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length == 0){
-            //console.log(rowInfo,33333);
-            //console.log(addSkUProduct,444444);
+              subscriptionPrice = targetGoodsIds.subscriptionPrice * targetGoodsIds.bundleNum
+
+            }/*else if (addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length == 0){
+
+            marketPrice = 0
+            subscriptionPrice = 0
+
+          }*/else if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 0 ){
+              marketPrice = 0
+              subscriptionPrice = 0
+            }else if (addSkUProduct.length == 0 || addSkUProduct.length == undefined ){
+              console.log(rowInfo,77);
+              console.log(addSkUProduct,88);
+              marketPrice = 0
+              subscriptionPrice = 0
+            }
+          }else {
             marketPrice = 0
             subscriptionPrice = 0
             //this._editGoodsItem(rowInfo.id, 'marketPrice', 0, )
             //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', 0, )
           }
-        }else {
-          //this._editGoodsItem(rowInfo.id, 'marketPrice', 0, )
-          //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', 0, )
         }
 
-        //console.log(marketPrice,666666);
 
-        /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
-         //console.log(marketPrice,2222222);
-         console.log(rowInfo.marketPrice,33333);
-         if(addSkUProduct.length === 1 && addSkUProduct[0].targetGoodsIds.length === 1) {
-           if(String(marketPrice).indexOf(".") == -1){
-             console.log(4444444)
-             marketPrice = (addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
-           }else{
-             console.log(5555555)
-             if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
-               marketPrice = marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
-             }else {
-               marketPrice = marketPrice.toFixed(4)
-             }
-           }
 
-           if(String(subscriptionPrice).indexOf(".") == -1){
-             subscriptionPrice = (addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
-           }else{
-             if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
-               subscriptionPrice = subscriptionPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
-             }else {
-               subscriptionPrice = subscriptionPrice.toFixed(4)
-             }
-           }
-         }else {
-           marketPrice = rowInfo.marketPrice ? marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length) : 0.00
-         }*/
 
         return (
           <Row>

@@ -6,13 +6,13 @@ import { IMap, IList } from 'typings/globalType';
 import { noop, Const, AuthWrapper, Logistics } from 'qmkit';
 import DeliveryForm from './delivery-form';
 import Moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 /**
  * 订单发货记录
  */
 @Relax
-export default class OrderDelivery extends React.Component<any, any> {
+class OrderDelivery extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +22,7 @@ export default class OrderDelivery extends React.Component<any, any> {
   }
 
   props: {
+    intl?:any;
     relaxProps?: {
       detail: IMap;
       deliver: Function;
@@ -324,9 +325,11 @@ export default class OrderDelivery extends React.Component<any, any> {
     const { obsoleteDeliver } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.prompt'});
+    const content = this.props.intl.formatMessage({id:'Order.Whethertoinvalidate'});
     confirm({
-      title: <FormattedMessage id="Order.prompt" />,
-      content: <FormattedMessage id="Order.Whethertoinvalidate" />,
+      title: title,
+      content: content,
       onOk() {
         obsoleteDeliver(tdId);
       },
@@ -343,9 +346,11 @@ export default class OrderDelivery extends React.Component<any, any> {
     const { confirm, detail } = this.props.relaxProps;
     const tid = detail.get('id');
     const confirmModal = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.confirmReceipt'});
+    const content = this.props.intl.formatMessage({id:'Order.Confirmreceiptofallitems'});
     confirmModal({
-      title: <FormattedMessage id="Order.confirmReceipt" />,
-      content: <FormattedMessage id="Order.Confirmreceiptofallitems" />,
+      title: title,
+      content: content,
       onOk() {
         confirm(tid);
       },
@@ -353,6 +358,8 @@ export default class OrderDelivery extends React.Component<any, any> {
     });
   };
 }
+
+export default injectIntl(OrderDelivery);
 
 const styles = {
   buttonBox: {

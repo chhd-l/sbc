@@ -614,7 +614,7 @@ class AttributeLibrary extends Component<any, any> {
                         }}
                       >
                         {shopPageList.map((item) => (
-                          <Option value={item.value} key={item.id}>
+                          <Option value={item.valueEn} key={item.id}>
                             {item.name}
                           </Option>
                         ))}

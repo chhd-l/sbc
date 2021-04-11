@@ -144,7 +144,7 @@ export default class bookings extends Component<any, any> {
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Details">
-              <Link to={'/subscription-detail/' + record.id} className="iconfont iconDetails"></Link>
+              <Link to={'/subscription-detail/' + record.subscribeId} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
         )

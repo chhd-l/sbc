@@ -18,6 +18,7 @@ const InputGroup = Input.Group;
 @Relax
 class SearchHead extends Component<any, any> {
   props: {
+    intl;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -568,8 +569,13 @@ class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: <FormattedMessage id="Order.Exportfilteredorders" />,
-      byIdsTitle: <FormattedMessage id="Order.Exportselectedorders" />,
+      byParamsTitle: this.props.intl.formatMessage({
+        id: 'Order.Exportfilteredorders'
+      }),
+      byIdsTitle:
+        this.props.intl.formatMessage({
+          id: 'Order.Exportselectedorders'
+        }),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

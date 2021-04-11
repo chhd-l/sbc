@@ -18,6 +18,7 @@ const InputGroup = Input.Group;
 @Relax
 class SearchHead extends Component<any, any> {
   props: {
+    intl;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;

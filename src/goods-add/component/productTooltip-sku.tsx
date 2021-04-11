@@ -139,17 +139,24 @@ class ProductTooltipSKU extends React.Component<any, any> {
       targetGoodsIds: goodsIds,
       minStock: tempMinStock
     });
+    let id = goodsList.toJS()[0].id
+    let marketPrice = goodsIds[0].marketPrice * goodsIds[0].bundleNum
+    let subscriptionPrice = goodsIds[0].subscriptionPrice * goodsIds[0].bundleNum
+    let stock = Number(String(goodsIds[0].stock?goodsIds[0].stock:0 / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+    console.log(stock,1111)
 
-    console.log(goodsIds,11111111);
     if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
-      let id = goodsList.toJS()[0].id
-      let marketPrice = goodsIds[0].marketPrice * goodsIds[0].bundleNum
-      let subscriptionPrice = goodsIds[0].subscriptionPrice * goodsIds[0].bundleNum
-      let stock = Number(String(goodsIds[0].stock?goodsIds[0].stock:0 / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
-
       editGoodsItem(id, 'marketPrice', marketPrice);
       editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
       editGoodsItem(id, 'stock', stock);
+    }/*else if (targetGoodsList.length == 0){
+      editGoodsItem(id, 'marketPrice', 0);
+      editGoodsItem(id, 'subscriptionPrice', 0);
+    }*/else {
+      editGoodsItem(id, 'marketPrice', 0);
+      editGoodsItem(id, 'subscriptionPrice', 0);
+      editGoodsItem(id, 'stock', tempMinStock);
+
     }
     if (targetGoodsIds.length <= 10) {
       if (targetGoodsIds.length !== 0) {

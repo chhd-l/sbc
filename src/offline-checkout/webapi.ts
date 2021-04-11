@@ -69,3 +69,14 @@ export function refillOrder(tid: string, repeat: true | false) {
     })
   });
 }
+
+/**
+ * 获取consent
+ * @returns 
+ */
+export function getConsent() {
+  return Fetch<TResult>('/appt/listApptPageConsent', {
+    method: 'POST',
+    body: JSON.stringify({consentGroup: "offline-pay"})
+  })
+}

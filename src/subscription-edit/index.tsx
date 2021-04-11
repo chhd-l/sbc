@@ -496,12 +496,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
   selectedOnTop = (addressList, selectedId) => {
-    let selectedAddress = addressList.find((item) => {
+    const selectedAddressIdx = addressList.findIndex((item) => {
       return item.deliveryAddressId === selectedId;
     });
-    if (selectedAddress) {
-      addressList.unshift(selectedAddress);
-      addressList = Array.from(new Set(addressList));
+    if (selectedAddressIdx > -1) {
+      const selectedAddress = addressList[selectedAddressIdx];
+      addressList.splice(selectedAddressIdx, 1);
+      addressList.splice(0, 0, selectedAddressIdx);
     }
     return addressList;
   };

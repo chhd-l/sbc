@@ -5,7 +5,7 @@ import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -15,8 +15,9 @@ const RangePicker = DatePicker.RangePicker;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -523,9 +524,11 @@ export default class SearchHead extends Component<any, any> {
     }
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'order.audit'});
+    const content = this.props.intl.formatMessage({id:'order.confirmAudit'});
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: title,
+      content: content,
       onOk() {
         onBatchAudit();
       },
@@ -544,3 +547,5 @@ export default class SearchHead extends Component<any, any> {
     });
   }
 }
+
+export default injectIntl(SearchHead);

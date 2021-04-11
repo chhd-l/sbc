@@ -616,9 +616,11 @@ class SkuForm extends React.Component<any, any> {
     if (key = "goodsInfoBundleRels") {
       if (goodsList.toJS().length == 1 && addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
         let id = goodsList.toJS()[0].id
+        console.log(addSkUProduct[0],33333);
+        console.log(addSkUProduct[0].targetGoodsIds[0].bundleNum,222);
         let marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
         let subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
-        let stock = Number(String(addSkUProduct[0].targetGoodsIds[0].stock?addSkUProduct[0].targetGoodsIds[0].stock:0 / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+        let stock = Number(String(addSkUProduct[0].minStock / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
         editGoodsItem(id, key, e);
         editGoodsItem(id, 'marketPrice', marketPrice);
         editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);

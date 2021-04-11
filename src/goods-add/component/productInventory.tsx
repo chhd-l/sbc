@@ -210,7 +210,7 @@ class SkuForm extends React.Component<any, any> {
           if (goodsList.toJS().length == 1) {
             let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
             console.log(addSkUProduct.length,11111);
-            console.log(addSkUProduct[0].targetGoodsIds.length,2222222);
+            console.log(addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds.length,2222222);
             console.log(c,333333);
             if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 ) {
               //c = c * targetGoodsIds.bundleNum

@@ -502,7 +502,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (selectedAddressIdx > -1) {
       const selectedAddress = addressList[selectedAddressIdx];
       addressList.splice(selectedAddressIdx, 1);
-      addressList.splice(0, 0, selectedAddressIdx);
+      addressList.splice(0, 0, selectedAddress);
     }
     return addressList;
   };

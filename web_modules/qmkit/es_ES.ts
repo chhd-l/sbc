@@ -2622,6 +2622,12 @@ export default {
   'Marketing.Clubpromotion': 'Club promotion',
   'Marketing.Editgift': 'Edit gift',
   'Marketing.Creategift': 'Create gift',
+  'Marketing.Gifttype': 'Gift type',
+  'Marketing.full gift type': 'full gift type',
+  'Marketing.Fullamountgift': 'Full amount gift',
+  'Marketing.Fullquantitygift': 'Full quantity gift',
+  'Marketing.For': 'For',
+  'Marketing.refill': 'refill',
 
 
 

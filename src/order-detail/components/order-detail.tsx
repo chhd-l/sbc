@@ -63,11 +63,12 @@ const WrappedRejectForm = Form.create()(injectIntl(RejectForm));
  * 订单详情
  */
 @Relax
-export default class OrderDetailTab extends React.Component<any, any> {
+class OrderDetailTab extends React.Component<any, any> {
   onAudit: any;
   _rejectForm;
 
   props: {
+    intl?:any;
     relaxProps?: {
       detail: IMap;
       countryDict: List<any>;
@@ -1036,9 +1037,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { retrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.Re-review'});
+    const content = this.props.intl.formatMessage({id:'Order.Confirmtoreturntheselected'});
     confirm({
-      title: <FormattedMessage id="Order.Re-review" />,
-      content: <FormattedMessage id="Order.Confirmtoreturntheselected" />,
+      title: title,
+      content: content,
       onOk() {
         retrial(tdId);
       },
@@ -1055,9 +1058,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { confirm } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
+    const content = this.props.intl.formatMessage({id:'Order.ConfirmThatAllProducts'});
     confirmModal({
-      title: this.props.intl.formatMessage({id:'Order.ConfirmReceipt'}),
-      content: this.props.intl.formatMessage({id:'Order.ConfirmThatAllProducts'}),
+      title: title,
+      content: content,
       onOk() {
         confirm(tdId);
       },
@@ -1071,6 +1076,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
     });
   };
 }
+
+export default injectIntl(OrderDetailTab);
 
 const styles = {
   greenText: {

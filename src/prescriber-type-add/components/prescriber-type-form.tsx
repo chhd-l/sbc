@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, InputNumber, Button, Select, message } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
-import { Const } from 'qmkit';
+import { Const, history } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -67,10 +67,10 @@ class PrescriberTypeForm extends React.Component<any, any> {
       priority: 0,
       delFlag: 0
     };
-
     const { res } = await webapi.addClinicsDictionary(params);
     if (res.code === Const.SUCCESS_CODE) {
       message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
+      history.push('/prescriber-type')
     }
   };
   onUpdate = async () => {

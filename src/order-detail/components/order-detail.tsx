@@ -162,7 +162,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       lastName: string;
       comment: string;
       entrance: string;
-      apartment:string;
+      apartment: string;
     };
 
     //发票信息
@@ -191,7 +191,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           city: string;
           comment: string;
           entrance: string;
-          apartment:string;
+          apartment: string;
         })
       : null;
 
@@ -626,7 +626,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           <Col span={12}>
-            <div className="headBox" style={{ height: 220 }}>
+            <div className="headBox" style={{ height: 235 }}>
               <h4>
                 <FormattedMessage id="Order.deliveryAddress" />
               </h4>
@@ -680,7 +680,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.Entrance" />:  {consignee.entrance}
+                    <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
                   </p>
                 </Col>
                 <Col span={12}>
@@ -713,17 +713,18 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                 </Col>
-                {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
+                {storeId === 123457907 ? (
                   <Col span={24}>
-                    {detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
-                      <p>
-                        <FormattedMessage id="Order.estimatedDeliveryDate" />: <FormattedMessage id="Order.estimatedDeliveryDateDesc" values={{ minDay: detail.get('minDeliveryTime'), maxDay: detail.get('maxDeliveryTime') }} />
-                      </p>
-                    ) : (
-                      <p>
-                        <FormattedMessage id="Order.estimatedDeliveryDate" />: <FormattedMessage id="Order.estimatedDeliveryDateDescEqual" values={{ day: detail.get('minDeliveryTime') }} />
-                      </p>
-                    )}
+                    <p>
+                      <FormattedMessage id="Order.estimatedDeliveryDate" />:
+                      {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
+                        detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
+                          <FormattedMessage id="Order.estimatedDeliveryDateDesc" values={{ minDay: detail.get('minDeliveryTime'), maxDay: detail.get('maxDeliveryTime') }} />
+                        ) : (
+                          <FormattedMessage id="Order.estimatedDeliveryDateDescEqual" values={{ day: detail.get('minDeliveryTime') }} />
+                        )
+                      ) : null}
+                    </p>
                   </Col>
                 ) : null}
               </Row>
@@ -781,10 +782,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
                         <FormattedMessage id="Order.address2" />: {invoice.address2}
                       </p>
                     </Tooltip>
-                    <p><FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
                     <p>
-                    <FormattedMessage id="Order.Entrance" />:  {invoice.entrance}
-                  </p>
+                      <FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.Entrance" />: {invoice.entrance}
+                    </p>
                   </Col>
                   <Col span={12}>
                     <p>
@@ -800,8 +803,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       <FormattedMessage id="Order.state" />: {invoice.province}
                     </p>
                     <p>
-                    <FormattedMessage id="Order.Apartment" />: {invoice.apartment}
-                  </p>
+                      <FormattedMessage id="Order.Apartment" />: {invoice.apartment}
+                    </p>
                   </Col>
                   <Col span={24}>
                     <Tooltip

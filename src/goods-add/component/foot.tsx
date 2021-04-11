@@ -149,7 +149,7 @@ class Foot extends React.Component<any, any> {
   _savePrice = async () => {
     const { saveAll, goodsList } = this.props.relaxProps;
     console.log(goodsList.toJS());
-    //saveAll();
+    saveAll();
   };
 
   _prev = (res) => {

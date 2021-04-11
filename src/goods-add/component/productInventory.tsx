@@ -376,7 +376,6 @@ class SkuForm extends React.Component<any, any> {
       editGoodsItem(id, key, 0);
     }
 
-    console.log(e,77777);
   };
 }
 

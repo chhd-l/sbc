@@ -6,7 +6,7 @@ import { DataGrid, noop, AuthWrapper, Const } from 'qmkit';
 const defaultImg = require('../img/none.png');
 import Moment from 'moment';
 import { deleteGoodsById } from '../webapi';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 import { message, Modal, Table, Tooltip } from 'antd';
@@ -27,11 +27,12 @@ const isShowFunction = (status) => {
 @withRouter
 @Relax
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class CustomerList extends React.Component<any, any> {
+class CustomerList extends React.Component<any, any> {
   store: AppStore;
 
   props: {
     history?: any;
+    intl?:any;
     relaxProps?: {
       loading: boolean;
       dataList: IList;
@@ -61,9 +62,11 @@ export default class CustomerList extends React.Component<any, any> {
       evaluateId: evaluateId
     };
     const { evaluateDelete } = this.props.relaxProps;
+    const title = this.props.intl.formatMessage({id:'Product.Prompt'});
+    const content = this.props.intl.formatMessage({id:'Product.deleteThisEvaluation'});
     confirm({
-      title: <FormattedMessage id="Product.Prompt" />,
-      content: <FormattedMessage id="Product.deleteThisEvaluation" />,
+      title: title,
+      content: content,
       onOk() {
         evaluateDelete(params);
       }
@@ -215,6 +218,8 @@ export default class CustomerList extends React.Component<any, any> {
   //   modal(true);
   // };
 }
+
+export default injectIntl(CustomerList);
 
 const styles = {
   imgItem: {

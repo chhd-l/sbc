@@ -53,7 +53,7 @@ module.exports = function (webpackEnv, envCode) {
 
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv !== 'development';
-  const shouldGenerateReport = envCode === 'dev' || envCode === 'stg';  //dev和stg环境生成report
+  const shouldGenerateReport = isEnvProduction && (envCode === 'dev' || envCode === 'stg');  //build模式下，dev和stg环境生成report
 
   const env = getClientEnvironment(envCode);
 

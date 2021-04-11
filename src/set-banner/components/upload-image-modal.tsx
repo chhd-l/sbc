@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { cache, Const, noop, SelectGroup } from 'qmkit';
 import * as webapi from '../webapi';
 import { Form, Select, Input, Button, Table, Divider, message, Checkbox, Pagination, Spin, Tooltip, Modal, Rate, TreeSelect, Icon, Upload, Tree } from 'antd';
@@ -30,7 +30,7 @@ const formItemLayout = {
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 @Relax
-export default class UploadImageModal extends Component<any, any> {
+class UploadImageModal extends Component<any, any> {
   _rejectForm;
 
   WrapperForm: any;
@@ -50,6 +50,7 @@ export default class UploadImageModal extends Component<any, any> {
   };
   props: {
     form: any;
+    intl?:any;
     relaxProps?: {
       modalVisible: boolean;
       tableDatas: TList;
@@ -175,10 +176,14 @@ export default class UploadImageModal extends Component<any, any> {
     const { getList, getStoreId, uploadBanner } = this.props.relaxProps;
     const ref = this;
     const res = await uploadBanner(params);
+    const title = this.props.intl.formatMessage({id:'Setting.Tip'});
+    const content = this.props.intl.formatMessage({id:'Setting.AddBanner'});
+    const ok = this.props.intl.formatMessage({id:'Setting.OK'});
+    const cancel = this.props.intl.formatMessage({id:'Setting.Cancel'});
     if (res != -1) {
       confirm({
-        title: <FormattedMessage id="Setting.Tip" />,
-        content: <FormattedMessage id="Setting.AddBanner" />,
+        title: title,
+        content: content,
         onOk() {
           ref.resetImageForm();
           getList({ storeId: getStoreId() });
@@ -187,8 +192,8 @@ export default class UploadImageModal extends Component<any, any> {
           ref._handleModelCancel();
           getList({ storeId: getStoreId() });
         },
-        okText: <FormattedMessage id="Setting.OK" />,
-        cancelText: <FormattedMessage id="Setting.Cancel" />
+        okText: ok,
+        cancelText: cancel
       });
     }
   };
@@ -550,3 +555,5 @@ export default class UploadImageModal extends Component<any, any> {
     );
   }
 }
+
+export default injectIntl(UploadImageModal);

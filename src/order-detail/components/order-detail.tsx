@@ -63,11 +63,12 @@ const WrappedRejectForm = Form.create()(injectIntl(RejectForm));
  * 订单详情
  */
 @Relax
-export default class OrderDetailTab extends React.Component<any, any> {
+class OrderDetailTab extends React.Component<any, any> {
   onAudit: any;
   _rejectForm;
 
   props: {
+    intl?:any;
     relaxProps?: {
       detail: IMap;
       countryDict: List<any>;
@@ -162,7 +163,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       lastName: string;
       comment: string;
       entrance: string;
-      apartment:string;
+      apartment: string;
     };
 
     //发票信息
@@ -191,7 +192,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           city: string;
           comment: string;
           entrance: string;
-          apartment:string;
+          apartment: string;
         })
       : null;
 
@@ -626,7 +627,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           <Col span={12}>
-            <div className="headBox" style={{ height: 220 }}>
+            <div className="headBox" style={{ height: 235 }}>
               <h4>
                 <FormattedMessage id="Order.deliveryAddress" />
               </h4>
@@ -680,7 +681,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.Entrance" />:  {consignee.entrance}
+                    <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
                   </p>
                 </Col>
                 <Col span={12}>
@@ -713,17 +714,18 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                 </Col>
-                {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
+                {storeId === 123457907 ? (
                   <Col span={24}>
-                    {detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
-                      <p>
-                        <FormattedMessage id="Order.estimatedDeliveryDate" />: <FormattedMessage id="Order.estimatedDeliveryDateDesc" values={{ minDay: detail.get('minDeliveryTime'), maxDay: detail.get('maxDeliveryTime') }} />
-                      </p>
-                    ) : (
-                      <p>
-                        <FormattedMessage id="Order.estimatedDeliveryDate" />: <FormattedMessage id="Order.estimatedDeliveryDateDescEqual" values={{ day: detail.get('minDeliveryTime') }} />
-                      </p>
-                    )}
+                    <p>
+                      <FormattedMessage id="Order.estimatedDeliveryDate" />:
+                      {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
+                        detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
+                          <FormattedMessage id="Order.estimatedDeliveryDateDesc" values={{ minDay: detail.get('minDeliveryTime'), maxDay: detail.get('maxDeliveryTime') }} />
+                        ) : (
+                          <FormattedMessage id="Order.estimatedDeliveryDateDescEqual" values={{ day: detail.get('minDeliveryTime') }} />
+                        )
+                      ) : null}
+                    </p>
                   </Col>
                 ) : null}
               </Row>
@@ -781,10 +783,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
                         <FormattedMessage id="Order.address2" />: {invoice.address2}
                       </p>
                     </Tooltip>
-                    <p><FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}</p>
                     <p>
-                    <FormattedMessage id="Order.Entrance" />:  {invoice.entrance}
-                  </p>
+                      <FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.Entrance" />: {invoice.entrance}
+                    </p>
                   </Col>
                   <Col span={12}>
                     <p>
@@ -800,8 +804,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       <FormattedMessage id="Order.state" />: {invoice.province}
                     </p>
                     <p>
-                    <FormattedMessage id="Order.Apartment" />: {invoice.apartment}
-                  </p>
+                      <FormattedMessage id="Order.Apartment" />: {invoice.apartment}
+                    </p>
                   </Col>
                   <Col span={24}>
                     <Tooltip
@@ -1033,9 +1037,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { retrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.Re-review'});
+    const content = this.props.intl.formatMessage({id:'Order.Confirmtoreturntheselected'});
     confirm({
-      title: <FormattedMessage id="Order.Re-review" />,
-      content: <FormattedMessage id="Order.Confirmtoreturntheselected" />,
+      title: title,
+      content: content,
       onOk() {
         retrial(tdId);
       },
@@ -1052,9 +1058,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { confirm } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
+    const content = this.props.intl.formatMessage({id:'Order.ConfirmThatAllProducts'});
     confirmModal({
-      title: <FormattedMessage id="Order.confirmReceipt" />,
-      content: <FormattedMessage id="Order.Confirmreceiptofallitems" />,
+      title: title,
+      content: content,
       onOk() {
         confirm(tdId);
       },
@@ -1068,6 +1076,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
     });
   };
 }
+
+export default injectIntl(OrderDetailTab);
 
 const styles = {
   greenText: {

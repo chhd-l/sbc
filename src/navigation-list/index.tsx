@@ -4,7 +4,7 @@ import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { getStoreLanguages } from './storeLanguage';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -96,9 +96,12 @@ class NavigationList extends Component<any, any> {
   updateNavigationStatus(record, checked) {
     let tipMessage = checked ? 'enable' : 'disable';
     let that = this;
+    const title = this.props.intl.formatMessage({id:'Content.Prompt'});
+    const content = checked ? this.props.intl.formatMessage({id:'Content.enableTheNavigation'}) : this.props.intl.formatMessage({id:'Content.disableTheNavigation'});
+    const sucMessage = this.props.intl.formatMessage({id:'Content.OperateSuccessfully'});
     confirm({
-      title: <FormattedMessage id="Content.Prompt" />,
-      content: checked ? <FormattedMessage id="Content.enableTheNavigation" /> : <FormattedMessage id="Content.disableTheNavigation" />,
+      title: title,
+      content: content,
       onOk() {
         that.setState({
           loading: true
@@ -109,7 +112,7 @@ class NavigationList extends Component<any, any> {
           .then((data) => {
             const { res } = data;
             if (res.code === Const.SUCCESS_CODE) {
-              message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
+              message.success(sucMessage);
               that.getNavigationList(that.state.selectLanguage);
             } else {
               that.setState({
@@ -126,6 +129,7 @@ class NavigationList extends Component<any, any> {
     });
   }
   sortNavigation(sortList) {
+    const sucMessage = this.props.intl.formatMessage({id:'Content.OperateSuccessfully'});
     this.setState({
       loading: true
     });
@@ -134,7 +138,7 @@ class NavigationList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
+          message.success(sucMessage);
           this.setState({
             loading: false
           });
@@ -143,8 +147,10 @@ class NavigationList extends Component<any, any> {
       .catch((err) => {});
   }
   deleteNavigation(record) {
+    const wrnMessage = this.props.intl.formatMessage({id:'Content.theNavigationFirstly'});
+    const sucMessage = this.props.intl.formatMessage({id:'Content.OperateSuccessfully'});
     if (record.children && record.children.length > 0) {
-      message.warning(<FormattedMessage id="Content.theNavigationFirstly" />);
+      message.warning(wrnMessage);
       return;
     }
     this.setState({
@@ -155,7 +161,7 @@ class NavigationList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
+          message.success(sucMessage);
           this.getNavigationList(this.state.selectLanguage);
         } else {
           this.setState({
@@ -276,4 +282,4 @@ class NavigationList extends Component<any, any> {
     );
   }
 }
-export default Form.create()(NavigationList);
+export default Form.create()(injectIntl(NavigationList));

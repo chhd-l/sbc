@@ -201,37 +201,33 @@ class SkuForm extends React.Component<any, any> {
         } else {
           b = 999999;
         }
-
     /*    if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
           console.log(c);
           console.log(addSkUProduct[0].targetGoodsIds[0].bundleNum);
           c = Number(String(c / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
         }*/
+        if (goods.get('goodsId') == null) {
+          if (goodsList.toJS().length == 1) {
+            let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
+            console.log(addSkUProduct.length,11111);
+            console.log(addSkUProduct[0].targetGoodsIds.length,2222222);
+            if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
+              //c = c * targetGoodsIds.bundleNum
+              console.log(c,666666);
+              c = Number(String(c?c:0 / targetGoodsIds.bundleNum).replace(/\.\d+/g, ''))
 
-        if (goods.get('goodsId') == null && goodsList.toJS().length == 1) {
+            }else if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 0 ){
+              c = 0
+              console.log(c,77777);
+            }else if (addSkUProduct.length == 0 || addSkUProduct.length == undefined ){
 
-          let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
-
-          if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
-            //c = c * targetGoodsIds.bundleNum
-            console.log(targetGoodsIds.bundleNum,121);
-            console.log(c,222);
-
-            c = Number(String(c?c:0 / targetGoodsIds.bundleNum).replace(/\.\d+/g, ''))
-
-            console.log(c,55555555);
-
-
-
-          }else if (addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length == 0){
-            console.log(rowInfo,33333);
-            console.log(addSkUProduct,444444);
-            c = 0
-
+              c = 0
+              console.log(c,88888);
+            }
           }else {
-            c = 0
+            //c = 0
+            console.log(c,9999999);
           }
-        }else {
 
         }
 
@@ -380,7 +376,6 @@ class SkuForm extends React.Component<any, any> {
       editGoodsItem(id, key, 0);
     }
 
-    console.log(e,77777);
   };
 }
 

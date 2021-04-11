@@ -39,6 +39,7 @@ const confirm = Modal.confirm;
 @Relax
 class FreightItem extends React.Component<any, any> {
   props: {
+    intl?:any;
     // 展示数据
     data: any;
     // 展示标题
@@ -240,8 +241,9 @@ class FreightItem extends React.Component<any, any> {
    */
   _del = (freightId, isStore) => {
     const { del } = this.props.relaxProps;
+    const content = this.props.intl.formatMessage({id:'Setting.deletethisTemplate'});
     confirm({
-      content: this.props.intl.formatMessage({id:'Setting.deletethisTemplate'}),
+      content: content,
       iconType: 'exclamation-circle',
       onOk() {
         del(freightId, isStore);
@@ -250,4 +252,4 @@ class FreightItem extends React.Component<any, any> {
   };
 }
 
-export default injectIntl(FreightItem)
+export default injectIntl(FreightItem);

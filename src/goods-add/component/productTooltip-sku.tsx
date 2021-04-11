@@ -142,8 +142,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
     let id = goodsList.toJS()[0].id
     let marketPrice = goodsIds[0].marketPrice * goodsIds[0].bundleNum
     let subscriptionPrice = goodsIds[0].subscriptionPrice * goodsIds[0].bundleNum
-    let stock = Number(String(goodsIds[0].stock?goodsIds[0].stock:0 / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+    let stock = Number(String(tempMinStock / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
     console.log(stock,1111)
+    console.log(goodsIds[0].stock,2222)
 
     if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
       editGoodsItem(id, 'marketPrice', marketPrice);

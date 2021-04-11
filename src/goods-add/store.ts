@@ -1356,7 +1356,6 @@ export default class AppStore extends Store {
     let skuNoMap = Map();
     let existedSkuNo = '';
     let goodsList = List();
-    console.log('goodsListgoodsListgoodsList:', data.get('goodsList').toJS());
     data.get('goodsList').forEach((item) => {
       if (skuNoMap.has(item.get('goodsInfoNo') + '')) {
         existedSkuNo = item.get('goodsInfoNo') + '';

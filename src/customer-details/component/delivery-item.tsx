@@ -77,6 +77,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
   }
 
   getDics = async () => {
+    this.setState({ loading: true });
     const addressInputType = await getAddressInputTypeSetting();
     let fields = [];
     let isAddressValidation = false;
@@ -91,6 +92,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       isAddressValidation = await getIsAddressValidation();
     }
     this.setState({
+      loading: false,
       addressInputType: addressInputType,
       formFieldList: fields,
       countryList: countries,
@@ -359,7 +361,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
             </Form>
           </div>
           <div className="bar-button">
-            <Button type="primary" onClick={() => this.validateAddress()}>
+            <Button type="primary" disabled={this.state.formFieldList.length === 0} onClick={() => this.validateAddress()}>
               Save
             </Button>
             <Button onClick={this.backToCustomerDetail} style={{ marginLeft: '20px' }}>

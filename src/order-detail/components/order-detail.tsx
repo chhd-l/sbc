@@ -652,7 +652,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.lastName}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.FirstName" />: {consignee.lastName}
+                      <FormattedMessage id="Order.LastName" />: {consignee.lastName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -758,7 +758,7 @@ class OrderDetailTab extends React.Component<any, any> {
                       title={<div>{invoice.lastName}</div>}
                     >
                       <p className="overFlowtext">
-                        <FormattedMessage id="Order.FirstName" />: {invoice.lastName}
+                        <FormattedMessage id="Order.LastName" />: {invoice.lastName}
                       </p>
                     </Tooltip>
                     <Tooltip

@@ -1490,8 +1490,11 @@ export default {
   'Order.reasonForRefuse':'Reason for Refusal of Refund',
   'Order.reasonForReject':'Reasons for rejection',
   /* -------- 已翻译 V2.0---------------*/
-  
-
+  'Order.offline.Reset':'Reset',
+  'Order.Club&Autoship':'Club & Autoship',
+  'Order.Entrance': 'Entrance',
+  'Order.Apartment': 'Apartment',
+  'Order.LastName': 'Last name',
 
 
 

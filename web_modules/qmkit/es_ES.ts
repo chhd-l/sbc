@@ -1493,7 +1493,7 @@ export default {
   'Order.Club&Autoship':'Club & Autoship',
   'Order.Entrance': 'Entrance',
   'Order.Apartment': 'Apartment',
-
+  'Order.LastName': 'Last name',
 
 
 

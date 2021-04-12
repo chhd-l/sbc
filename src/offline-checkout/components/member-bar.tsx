@@ -46,7 +46,7 @@ export default class MemberBar extends React.Component<any, any> {
   };
 
   render() {
-    const { memberType, memberInfo, onScanEnd, consents, onSelectConsent } = this.props;
+    const { memberType, memberInfo, onScanEnd, consents, selectedConsents, onSelectConsent } = this.props;
     return (
       <>
         {memberInfo.customerName && <Button type="link" onClick={() => this.onReset()} className="member-reset-link">Reset</Button>}
@@ -79,8 +79,8 @@ export default class MemberBar extends React.Component<any, any> {
           <Col span={10} style={{fontWeight:'bold'}}><FormattedMessage id="Order.offline.consumerPhone" />: {memberInfo.contactPhone}</Col>
           <Col span={24} style={{fontSize:12}}>
             <FormattedMessage id="Setting.consent" />:
-            <Checkbox.Group onChange={onSelectConsent}>
-              {consents.map(c => <div><Checkbox key={c.id} value={c.id}><div className="offline-consent-line" dangerouslySetInnerHTML={{__html:c.consentTitle}}></div></Checkbox></div>)}
+            <Checkbox.Group value={selectedConsents} onChange={onSelectConsent}>
+              {consents.map((c, idx) => <div><Checkbox key={c.id} value={c.id} disabled={idx === 0}><div className="offline-consent-line" dangerouslySetInnerHTML={{__html:c.consentTitle}}></div></Checkbox></div>)}
             </Checkbox.Group>
           </Col>
         </Row>}

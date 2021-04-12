@@ -18,6 +18,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import 'moment/locale/ru';
 import { IntlProvider } from 'react-intl';
+// import {language,antLanguage} from '../web_modules/qmkit/lang';
 
 import ruRU from 'antd/es/locale/ru_RU';
 import enUS from 'antd/es/locale/en_US';

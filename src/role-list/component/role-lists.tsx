@@ -6,7 +6,7 @@ import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import { Link } from 'react-router-dom';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { AuthWrapper, noop } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 const confirm = Modal.confirm;
@@ -20,6 +20,7 @@ const styles = {
 @Relax
 class CateList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       equitiesList: IList;
       cateSort: Function;
@@ -132,11 +133,15 @@ class CateList extends React.Component<any, any> {
    */
   _delete = async (roleInfoId) => {
     const { deleteEquities } = this.props.relaxProps;
+    const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
+    const content = this.props.intl.formatMessage({id:'Setting.deleteThisRole'});
+    const oktext = this.props.intl.formatMessage({id:'Setting.OK'});
+    const canceltext = this.props.intl.formatMessage({id:'Setting.Cancel'});
     confirm({
-      title: <FormattedMessage id="Setting.Prompt" />,
-      content: <FormattedMessage id="Setting.deleteThisRole" />,
-      okText: <FormattedMessage id="Setting.OK" />,
-      cancelText: <FormattedMessage id="Setting.Cancel" />,
+      title: title,
+      content: content,
+      okText: oktext,
+      cancelText: canceltext,
       iconType: 'exclamation-circle',
       onOk() {
         deleteEquities(roleInfoId);
@@ -218,4 +223,4 @@ _BodyRow = DropTarget('row', _rowTarget, (connect, monitor) => ({
   }))(_BodyRow)
 );
 
-export default DragDropContext(HTML5Backend)(CateList);
+export default DragDropContext(HTML5Backend)(injectIntl(CateList));

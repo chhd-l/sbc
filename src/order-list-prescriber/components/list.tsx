@@ -101,7 +101,7 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
 
 @Relax
-export default class ListView extends React.Component<any, any> {
+class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
@@ -110,6 +110,7 @@ export default class ListView extends React.Component<any, any> {
 
   props: {
     histroy?: Object;
+    intl?:any;
     relaxProps?: {
       loading: boolean;
       orderRejectModalVisible: boolean;
@@ -559,9 +560,11 @@ export default class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.review'});
+    const content = this.props.intl.formatMessage({id:'Order.confirmReview'});
     confirm({
-      title: <FormattedMessage id="Order.review" />,
-      content: <FormattedMessage id="Order.confirmReview" />,
+      title: title,
+      content: content,
       onOk() {
         onRetrial(tdId);
       },
@@ -587,8 +590,9 @@ export default class ListView extends React.Component<any, any> {
     const { onAudit } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
+    const content = this.props.intl.formatMessage({id:'Order.Doyouconfirmthat'});
     confirmModal({
-      content: <FormattedMessage id="Order.Doyouconfirmthat" />,
+      content: content,
       onOk() {
         onAudit(tid, 'CHECKED');
       },
@@ -605,9 +609,11 @@ export default class ListView extends React.Component<any, any> {
     const { onConfirm } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
+    const content = this.props.intl.formatMessage({id:'Order.confirmReceivedAllProducts'});
     confirm({
-      title: <FormattedMessage id="Order.ConfirmReceipt" />,
-      content: <FormattedMessage id="Order.confirmReceivedAllProducts" />,
+      title: title,
+      content: content,
       onOk() {
         onConfirm(tdId);
       },
@@ -647,6 +653,8 @@ export default class ListView extends React.Component<any, any> {
     }
   };
 }
+
+export default injectIntl(ListView);
 
 const styles = {
   loading: {

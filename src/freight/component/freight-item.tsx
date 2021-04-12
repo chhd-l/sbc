@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Table, Modal, message, Tooltip } from 'antd';
 import { history, noop, QMFloat, AuthWrapper, cache, checkAuth } from 'qmkit';
 import styled from 'styled-components';
@@ -37,8 +37,9 @@ const confirm = Modal.confirm;
  * 运费模板Item
  */
 @Relax
-export default class FreightItem extends React.Component<any, any> {
+class FreightItem extends React.Component<any, any> {
   props: {
+    intl?:any;
     // 展示数据
     data: any;
     // 展示标题
@@ -240,8 +241,9 @@ export default class FreightItem extends React.Component<any, any> {
    */
   _del = (freightId, isStore) => {
     const { del } = this.props.relaxProps;
+    const content = this.props.intl.formatMessage({id:'Setting.deletethisTemplate'});
     confirm({
-      content: <FormattedMessage id="Setting.deletethisTemplate" />,
+      content: content,
       iconType: 'exclamation-circle',
       onOk() {
         del(freightId, isStore);
@@ -249,3 +251,5 @@ export default class FreightItem extends React.Component<any, any> {
     });
   };
 }
+
+export default injectIntl(FreightItem);

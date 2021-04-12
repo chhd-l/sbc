@@ -18,6 +18,7 @@ const InputGroup = Input.Group;
 @Relax
 class SearchHead extends Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -109,7 +110,9 @@ class SearchHead extends Component<any, any> {
     const subscriptionTypeList = [
       { value: 'ContractProduct', name: this.props.intl.formatMessage({id:'Order.contractProduct'}) },
       { value: 'Club', name: this.props.intl.formatMessage({id:'Order.club'}) },
-      { value: 'Autoship', name: this.props.intl.formatMessage({id:'Order.autoship'}) }
+      { value: 'Autoship', name: this.props.intl.formatMessage({id:'Order.autoship'}) },
+      { value: 'Club_Autoship', name: this.props.intl.formatMessage({id:'Order.Club&Autoship'}) },
+      { value: 'Cat_Dog', name: this.props.intl.formatMessage({id:'Order.Cat&Dog'}) }
     ];
 
     const orderSourceList = [
@@ -703,16 +706,18 @@ class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-
+    const mess = this.props.intl.formatMessage({id:'Order.pleaseSelectOrderToOperate'});
     if (checkedIds.length == 0) {
-      message.error(<FormattedMessage id="Order.pleaseSelectOrderToOperate" />);
+      message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.audit'});
+    const content = this.props.intl.formatMessage({id:'Order.confirmAudit'});
     confirm({
-      title: <FormattedMessage id="Order.audit" />,
-      content: <FormattedMessage id="Order.confirmAudit" />,
+      title: title,
+      content: content,
       onOk() {
         onBatchAudit();
       },

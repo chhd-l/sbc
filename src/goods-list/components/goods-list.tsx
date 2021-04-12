@@ -10,13 +10,14 @@ import { Table } from 'antd';
 const Column = Table.Column;
 const confirm = Modal.confirm;
 const defaultImg = require('../img/none.png');
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import './goods-list.css';
 
 @withRouter
 @Relax
-export default class CateList extends React.Component<any, any> {
+class CateList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       goodsPageContent: IList;
       goodsInfoList: IList;
@@ -464,15 +465,19 @@ export default class CateList extends React.Component<any, any> {
    */
   _delete = (goodsId: string) => {
     const { spuDelete } = this.props.relaxProps;
+    const title = this.props.intl.formatMessage({id:'Product.Prompt'});
+    const content = this.props.intl.formatMessage({id:'Product.deleteThisProduct'});
     confirm({
-      title: <FormattedMessage id="Product.Prompt" />,
-      content: <FormattedMessage id="Product.deleteThisProduct" />,
+      title: title,
+      content: content,
       onOk() {
         spuDelete([goodsId]);
       }
     });
   };
 }
+
+export default injectIntl(CateList);
 
 const styles = {
   item: {

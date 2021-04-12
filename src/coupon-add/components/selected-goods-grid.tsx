@@ -96,7 +96,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               key="operate"
               width="10%"
               render={(row) => {
-                return <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>Delete</a>;
+                return <a onClick={() => deleteSelectedSku(row.goodsInfoId)}><FormattedMessage id="Marketing.Delete" /></a>;
               }}
             />
           </DataGrid>

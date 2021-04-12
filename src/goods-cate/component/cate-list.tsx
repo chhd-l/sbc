@@ -5,7 +5,7 @@ import { Modal, Table, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, checkAuth } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 const confirm = Modal.confirm;
@@ -19,6 +19,7 @@ const styles = {
 @Relax
 class CateList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       dataList: IList;
       allDataList: IList;
@@ -182,18 +183,23 @@ class CateList extends React.Component<any, any> {
 
   _confirm = (storeCateId: string) => {
     const { doDelete, childFlag, goodsFlag } = this.props.relaxProps;
-
+    const Prompt = this.props.intl.formatMessage({id:'Product.Prompt'});
+    const hasBeenAssociated = this.props.intl.formatMessage({id:'Product.hasBeenAssociated'});
+    const DeleteTheCurrentCategory = this.props.intl.formatMessage({id:'Product.DeleteTheCurrentCategory'});
+    const ContinueToDelete = this.props.intl.formatMessage({id:'Product.ContinueToDelete'});
+    const Cancel = this.props.intl.formatMessage({id:'Product.Cancel'});
+    const wantToDeleteThisCategory = this.props.intl.formatMessage({id:'Product.wantToDeleteThisCategory'});
     if (goodsFlag) {
       //该分类下有商品
       confirm({
-        title: <FormattedMessage id="Product.Prompt" />,
-        content: <FormattedMessage id="Product.hasBeenAssociated" />,
+        title: Prompt,
+        content: hasBeenAssociated,
         onOk() {
           if (childFlag) {
             //有子分类
             confirm({
-              title: <FormattedMessage id="Product.Prompt" />,
-              content: <FormattedMessage id="Product.DeleteTheCurrentCategory" />,
+              title: Prompt,
+              content: DeleteTheCurrentCategory,
               onOk() {
                 doDelete(storeCateId);
               }
@@ -202,14 +208,14 @@ class CateList extends React.Component<any, any> {
             doDelete(storeCateId);
           }
         },
-        okText: <FormattedMessage id="Product.ContinueToDelete" />,
-        cancelText: <FormattedMessage id="Product.Cancel" />
+        okText: ContinueToDelete,
+        cancelText: Cancel
       });
     } else if (childFlag) {
       //有子分类
       confirm({
-        title: <FormattedMessage id="Product.Prompt" />,
-        content: <FormattedMessage id="Product.DeleteTheCurrentCategory" />,
+        title: Prompt,
+        content: DeleteTheCurrentCategory,
         onOk() {
           doDelete(storeCateId);
         }
@@ -217,8 +223,8 @@ class CateList extends React.Component<any, any> {
     } else {
       //没有子分类
       confirm({
-        title: <FormattedMessage id="Product.Prompt" />,
-        content: <FormattedMessage id="Product.wantToDeleteThisCategory" />,
+        title: Prompt,
+        content: wantToDeleteThisCategory,
         onOk() {
           doDelete(storeCateId);
         }
@@ -313,4 +319,4 @@ _BodyRow = DropTarget('row', _rowTarget, (connect, monitor) => ({
   }))(_BodyRow)
 );
 
-export default DragDropContext(HTML5Backend)(CateList);
+export default DragDropContext(HTML5Backend)(injectIntl(CateList));

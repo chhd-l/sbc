@@ -379,7 +379,7 @@ class FullReductionForm extends React.Component<any, any> {
     }
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Promotiontype" />} labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
               <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
@@ -395,8 +395,8 @@ class FullReductionForm extends React.Component<any, any> {
             {/*) : null}*/}
           </div>
         </FormItem>
-        <div className="bold-title">Basic Setting</div>
-        <FormItem {...smallformItemLayout} label="Promotion Code" labelAlign="left">
+        <div className="bold-title"><FormattedMessage id="Marketing.BasicSetting" /></div>
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionCode" />} labelAlign="left">
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode(),
             rules: [
@@ -445,7 +445,7 @@ class FullReductionForm extends React.Component<any, any> {
               });
             }}
           >
-            Public
+            <FormattedMessage id="Marketing.Public" />
           </Checkbox>
         </FormItem>
 
@@ -535,7 +535,7 @@ class FullReductionForm extends React.Component<any, any> {
           )}
         </FormItem>
 
-        <div className="bold-title">Reduction type:</div>
+        <div className="bold-title"><FormattedMessage id="Reductiontype" />:</div>
         {marketingBean.get('promotionType') === 0 && (
           <FormItem {...formItemLayout} labelAlign="left">
             {getFieldDecorator('subType', {
@@ -1205,18 +1205,7 @@ class FullReductionForm extends React.Component<any, any> {
       }
     });
   };
-  initLevel = (levelType) => {
-    const { ma }
-    const initLevel = [
-      {
-        key: this.makeRandom(),
-        fullAmount: null,
-        fullCount: null,
-        discount: null
-      }
-    ];
-    ma
-  }
+
   /**
    * 生成随机数，作为key值
    * @returns {string}

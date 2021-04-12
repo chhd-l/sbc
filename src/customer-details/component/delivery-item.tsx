@@ -77,6 +77,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
   }
 
   getDics = async () => {
+    this.setState({ loading: true });
     const addressInputType = await getAddressInputTypeSetting();
     let fields = [];
     let isAddressValidation = false;
@@ -91,6 +92,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       isAddressValidation = await getIsAddressValidation();
     }
     this.setState({
+      loading: false,
       addressInputType: addressInputType,
       formFieldList: fields,
       countryList: countries,
@@ -243,25 +245,31 @@ class DeliveryItem extends React.Component<Iprop, any> {
     });
   };
 
-  onSelectRuAddress = (value, option) => {
-    const address = this.state.searchAddressList[option.key];
-    this.setState({
-      dadataAddress: address
-    });
-    this.props.form.setFieldsValue({ postCode: address.postCode || '' });
+  onSelectRuAddress = () => {
+    const address1 = this.props.form.getFieldValue('address1');
+    const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === address1);
+    if (address) {
+      this.setState({
+        dadataAddress: address
+      });
+      this.props.form.setFieldsValue({ postCode: address.postCode || '' });
+    } else {
+      this.props.form.setFieldsValue({ address1: this.props.delivery.address1 });
+    }
   };
 
   renderField = (field: any) => {
     if (field.fieldName === 'Address1') {
       if (field.inputSearchBoxFlag === 1) {
         return (
-          <Select showSearch filterOption={false} onSearch={this.searchAddress} onChange={this.onSelectRuAddress}>
-            {this.state.searchAddressList.map((item, idx) => (
-              <Option value={item.unrestrictedValue} key={idx}>
-                {item.unrestrictedValue}
-              </Option>
-            ))}
-          </Select>
+          <AutoComplete dataSource={this.state.searchAddressList.map(addr => addr.unrestrictedValue)} onSearch={this.searchAddress} onBlur={this.onSelectRuAddress} />
+          // <Select showSearch filterOption={false} onSearch={this.searchAddress} onChange={this.onSelectRuAddress}>
+          //   {this.state.searchAddressList.map((item, idx) => (
+          //     <Option value={item.unrestrictedValue} key={idx}>
+          //       {item.unrestrictedValue}
+          //     </Option>
+          //   ))}
+          // </Select>
         );
       } else {
         return <Input />;
@@ -359,7 +367,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
             </Form>
           </div>
           <div className="bar-button">
-            <Button type="primary" onClick={() => this.validateAddress()}>
+            <Button type="primary" disabled={this.state.formFieldList.length === 0} onClick={() => this.validateAddress()}>
               Save
             </Button>
             <Button onClick={this.backToCustomerDetail} style={{ marginLeft: '20px' }}>

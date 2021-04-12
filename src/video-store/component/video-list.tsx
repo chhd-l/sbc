@@ -6,15 +6,16 @@ import Checkbox from 'antd/lib/checkbox/Checkbox';
 import { Modal, Pagination, message, Tooltip } from 'antd';
 import { allCheckedQL } from '../ql';
 import Input from 'antd/lib/input/Input';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 
 const confirm = Modal.confirm;
 
 @Relax
-export default class VideoList extends React.Component<any, any> {
+class VideoList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       videoList: IList; //视频列表
       queryVideoPage: Function; //初始化
@@ -116,9 +117,11 @@ export default class VideoList extends React.Component<any, any> {
    */
   _delete = (videoId: string) => {
     const { doDelete } = this.props.relaxProps;
+    const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
+    const content = this.props.intl.formatMessage({id:'Setting.theSelectedVideo'});
     confirm({
-      title: <FormattedMessage id="Setting.Prompt" />,
-      content: <FormattedMessage id="Setting.theSelectedVideo" />,
+      title: title,
+      content: content,
       onOk() {
         doDelete(videoId);
       }
@@ -131,8 +134,9 @@ export default class VideoList extends React.Component<any, any> {
    */
   _showModal = () => {
     const { videoList, showMoveVideoModal } = this.props.relaxProps;
+    const err = this.props.intl.formatMessage({id:'Setting.theVideoToMoveFirst'});
     if (videoList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error(<FormattedMessage id="Setting.theVideoToMoveFirst" />);
+      message.error(err);
       return;
     }
     showMoveVideoModal(true);
@@ -147,17 +151,20 @@ export default class VideoList extends React.Component<any, any> {
     //修改了视频名称才真正的请求接口进行修改
     if (e.target.value != oldVal) {
       if (!e.target.value.trim()) {
-        message.error(<FormattedMessage id="Setting.PleaseInputAFileName" />);
+        const err = this.props.intl.formatMessage({id:'Setting.PleaseInputAFileName'});
+        message.error(err);
         return false;
       }
 
       if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(e.target.value)) {
-        message.error(<FormattedMessage id="Setting.theCorrectFormat" />);
+        const err = this.props.intl.formatMessage({id:'Setting.theCorrectFormat'});
+        message.error(err);
         return false;
       }
 
       if (e.target.value.length > 40) {
-        message.error(<FormattedMessage id="Setting.FileNameIsTooLong" />);
+        const err = this.props.intl.formatMessage({id:'Setting.FileNameIsTooLong'});
+        message.error(err);
         return false;
       }
 
@@ -201,6 +208,8 @@ export default class VideoList extends React.Component<any, any> {
     queryVideoPage({ pageNum: pageNum - 1, pageSize: pageSize });
   };
 }
+
+export default injectIntl(VideoList);
 
 const styles = {
   greyHeader: {

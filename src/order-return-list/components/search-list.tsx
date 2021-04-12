@@ -452,8 +452,11 @@ export default class SearchList extends React.Component<any, any> {
           min={0}
           max={applyPrice}
           defaultValue={applyPrice}
-          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || '$'} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          parser={value => value.replace(/\$\s?|(,*)/g, '')}
+          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          parser={value => {
+            value = value.replace(sessionStorage.getItem(cache.SYSTEM_GET_CONFIG),'')
+            return value.replace(/\s?|(,*)/g, '')}
+          }
           onChange={this.changeRealRefund}
         />
       </div>,
@@ -587,6 +590,9 @@ export default class SearchList extends React.Component<any, any> {
     // }
   }
   changeRealRefund = (value) => {
+    debugger
+
+
     this.props.relaxProps.changeRefundPrice({
       refundPrice:value
     })

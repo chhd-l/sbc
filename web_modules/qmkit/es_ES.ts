@@ -1597,6 +1597,8 @@ export default {
   'Order.LastName': 'Last name',
   'Order.On':'On',
   "Order.Off": 'Off',
+  "Order.InputQuantity": 'Please input the delivery quantity',
+  "Order.modifiedErr":"The customer has been deleted and cannot be modified!",
 
 
 

@@ -18,28 +18,13 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import 'moment/locale/ru';
 import { IntlProvider } from 'react-intl';
+import {language,antLanguage} from '../web_modules/qmkit/lang';
 
-import ruRU from 'antd/es/locale/ru_RU';
-import enUS from 'antd/es/locale/en_US';
-import deDE from 'antd/es/locale/de_DE';
-import es_ES from '../web_modules/qmkit/es_ES';
-import es_RUS from '../web_modules/qmkit/es_RUS';
 
 import configOkta from '../web_modules/qmkit/config-okta';
 moment.locale('zh-cn');
 
-let language = es_ES;
-let antLanguage = enUS;
-if (sessionStorage.getItem(cache.LANGUAGE) == 'English') {
-  language = es_ES;
-  antLanguage = enUS;
-} else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
-  language = es_RUS;
-  antLanguage = ruRU;
-} else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
-  language = es_RUS;
-  antLanguage = deDE;
-}
+
 
 /*let a = '';
 for (let i in es_ES) {

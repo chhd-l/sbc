@@ -1049,9 +1049,7 @@ class FullGiftForm extends React.Component<any, any> {
     if (this.state.promotionCode) {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
     }
-    if (!marketingBean.get('publicStatus')) {
-      marketingBean = marketingBean.set('publicStatus', '1');
-    }
+
     form.validateFieldsAndScroll((err) => {
       if (Object.keys(errorObject).length != 0) {
         form.setFields(errorObject);

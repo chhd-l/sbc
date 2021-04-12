@@ -83,8 +83,6 @@ export default class GiftLevels extends React.Component<any, any> {
     const { isFullCount, fullGiftLevelList, isNormal } = this.props;
     const { goodsModal } = this.state
     const { form } = this.props;
-    debugger
-    console.log(fullGiftLevelList, 'fullGiftLevelList-----------');
     const { getFieldDecorator } = form;
 
     return (

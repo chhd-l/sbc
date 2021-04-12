@@ -247,7 +247,6 @@ export default class AppStore extends Store {
     const tid = this.state().getIn(['detail', 'id']);
 
     // if (__DEV__) {
-    //   console.log('保存发货', tradeItems, tid)
     // }
     // const shippingItemList = tradeItems.filter((v) => {
     //   return v.get('deliveringNum') && v.get('deliveringNum') != 0

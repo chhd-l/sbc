@@ -350,8 +350,6 @@ class CouponInfoForm extends Component<any, any> {
       attributesList,
       attributeValueIds
     } = this.props.relaxProps;
-    console.log(segmentIds, 'segmentIds----');
-    console.log(attributeValueIds, 'attributeValueIds----');
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
     if (storeCateIds) {

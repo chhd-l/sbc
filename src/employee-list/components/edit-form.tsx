@@ -531,7 +531,6 @@ export default class EditForm extends React.Component<any, any> {
     let roleNames = [];
     roleIdList.map((x) => {
       let role = roles&&roles.find((r) => r.get('roleInfoId').toString() === x)||undefined;
-      console.log(role,'rolerolerolerolerolerolerolerolerolerolerole')
       if (role) {
         roleNames.push(role.get('roleName')||'');
       }

@@ -395,7 +395,6 @@ class SearchHead extends Component<any, any> {
 
   // 搜索条件变化，更新store的form参数
   _paramChanged() {
-    // console.log(this.props.relaxProps);
     this.props.relaxProps.onSearchFormChange(this.state);
   }
 

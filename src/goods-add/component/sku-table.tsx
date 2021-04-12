@@ -176,7 +176,6 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
-    //console.log(columns.toJS(), 'columns');
     columns = columns.unshift({
       title: (
         <div>
@@ -616,8 +615,7 @@ class SkuForm extends React.Component<any, any> {
     if (key = "goodsInfoBundleRels") {
       if (goodsList.toJS().length == 1 && addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
         let id = goodsList.toJS()[0].id
-        console.log(addSkUProduct[0],33333);
-        console.log(addSkUProduct[0].targetGoodsIds[0].bundleNum,222);
+
         let marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
         let subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
         let stock = Number(String(addSkUProduct[0].minStock / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
@@ -712,7 +710,6 @@ class SkuForm extends React.Component<any, any> {
             a.push(o);
           }
         });
-        console.log(i);
         b.push({
           pid: pid,
           targetGoodsIds: a
@@ -727,13 +724,11 @@ class SkuForm extends React.Component<any, any> {
     if (goodsList.toJS().length == 1) {
 
     }
-    console.log(e,123);
     if (e.length == 1 && e[0].targetGoodsIds.length == 0) {
       e = []
     }else {
       e = d
     }
-    console.log(e,456);
     onProductselectSku(e);
   };
 

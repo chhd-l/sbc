@@ -432,7 +432,6 @@ class CateModalForm extends React.Component<any, any> {
   // _onChange = (value) => {
   //   const { showGoodsPropDetail } = this.props.relaxProps;
   //   showGoodsPropDetail(value);
-  //   console.log(value, 'value')
   //   // changeStoreCategory
   // };
 }

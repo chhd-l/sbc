@@ -95,8 +95,6 @@ class SkuForm extends React.Component<any, any> {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
-    console.log(goodsList.toJS(), 'goodsList----------');
-    console.log(goodsSpecs.toJS(), 'goodsSpecs----------');
     return (
       <div style={{ marginBottom: 20 }}>
         {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}

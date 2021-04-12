@@ -117,11 +117,14 @@ class ProductSearchSetting extends Component<any, any> {
       purchaseType
     });
   }
-  deleteDict =async (item,e) => {
-    e.preventDefault()
+  async deleteDict(item,key){
   const {res}=  await delSysDictionary({id:item.id})
+  // let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
    message.success(res.message)
-   this.querySysDictionary();
+   this.setState({
+     [key]:''
+   })
+   
   }
 
   render() {
@@ -182,21 +185,23 @@ class ProductSearchSetting extends Component<any, any> {
                           message: 'Please select subscription frequency !'
                         }
                       ],
-                      onChange:(e)=>{e.preventDefault()}
                     })(
-                      <Select disabled={disabled}  optionLabelProp="label" placeholder="Please select subscription frequency !" style={{ width: 180 }}>
+                      <Select disabled={disabled}  
+                      optionLabelProp="label" 
+                      placeholder="Please select subscription frequency !" style={{ width: 180 }}>
                         {options.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }} >
+                          <div style={{ display: 'flex', justifyContent: 'space-between' ,position:'relative'}} >
                             <span >{item.name}</span>
-                            <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,e)} okText="Confirm" cancelText="Cancel">
+                           
+                            <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionFrequencyId')} okText="Confirm" cancelText="Cancel">
                               <Tooltip placement="top" title="Delete">
                                 <a>
-                                  <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
+                                  <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                 </a>
                               </Tooltip>
                             </Popconfirm>
-
+                      
 
                           </div>
                         </Option>
@@ -234,7 +239,11 @@ class ProductSearchSetting extends Component<any, any> {
                           message: 'Please select subscription frequency !'
                         }
                       ],
-                      onChange:(e)=>{e.preventDefault()}
+                
+                      // onChange:(e)=>{
+                      //   this.setState({
+                      //     defaultSubscriptionClubFrequencyId:e.replace('删除','')
+                      // })}
                     })(
                       <Select disabled={disabled}
                         optionLabelProp="label"
@@ -244,10 +253,10 @@ class ProductSearchSetting extends Component<any, any> {
                             <div style={{ display: 'flex', justifyContent: 'space-between' }} >
                               <span >{item.name}</span>
   
-                              <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,e)} okText="Confirm" cancelText="Cancel">
+                              <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
                                   <a>
-                                    <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
+                                    <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                   </a>
                                 </Tooltip>
                               </Popconfirm>

@@ -273,10 +273,12 @@ class Checkout extends React.Component<any, any> {
   submitCustomerConsent = () => {
     const { memberInfo, consents, selectedConsents } = this.state;
     if (memberInfo.memberType === 'member') {
-      webapi.setConsent(memberInfo.customerId, consents.map(c => ({
-       id: c.id,
-       selectedFlag: selectedConsents.indexOf(c.id) > -1 
-      })));
+      webapi.setConsent(memberInfo.customerId, {
+        optionalList: consents.map(c => ({
+          id: c.id,
+          selectedFlag: selectedConsents.indexOf(c.id) > -1
+        }))
+      });
     }
   }
 

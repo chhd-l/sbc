@@ -133,7 +133,6 @@ export default class AppStore extends Store {
           for (let j = i + 1; j < accounts.size; j++) {
             if (temp == accounts.get(j)) {
               repeatNo.push(temp);
-              // console.log('第' + (i + 1) + '个跟第' + (j + 1) + '个重复，值是：' + temp);
             }
           }
         }

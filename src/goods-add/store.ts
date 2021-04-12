@@ -993,12 +993,7 @@ export default class AppStore extends Store {
     let addSkUProduct = this.state().toJS().addSkUProduct;
     if (goodsList) {
       goodsList.forEach((item) => {
-        //console.log(this.state().get('goods').get('saleableFlag') ,111 )
-        console.log(addSkUProduct,111111);
-        console.log(item.get('marketPrice'),22222 )
-        console.log(item.get('subscriptionPrice'),33333 )
         let reg=/^[1-9]\d*$|^0$/;
-        console.log(reg.test(item.get('marketPrice')),44444);
         if (this.state().get('goods').get('saleableFlag') != 0) {
           if(item.get('marketPrice') == undefined && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
             if (addSkUProduct[0].targetGoodsIds[0].saleableFlag == 0) {
@@ -1055,7 +1050,6 @@ export default class AppStore extends Store {
 
 
         /*if (this.state().get('goods').get('saleableFlag') != 0) {
-          //console.log(item.get('marketPrice'),123 )
           if(item.get('marketPrice') != undefined) {
             //console.log(item.get('marketPrice'),345 )
             if ( item.get('marketPrice') == 0 ) {
@@ -1119,28 +1113,18 @@ export default class AppStore extends Store {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
 
-        // console.log('test:', item.get('goodsInfoNo'), addSkUProduct, a);
-        // console.log(reg.test(item.get('stock')));
-
-        console.log(addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds.length);
-        console.log(item.get('stock'));
-        console.log(reg.test(item.get('stock')));
-        //console.log(ValidConst.zeroNumber.test((item.get('stock'))) === true);
         if (reg.test(item.get('stock')) === false ) {
-          console.log(333333)
           flag = 1
           valid = false;
           return;
         }
         /*if (addSkUProduct.length == 1) {
           if (addSkUProduct[0].targetGoodsIds.length != 1 ) {
-            console.log(1111111)
             flag = 2
             valid = false;
             return;
           } else {
             if (reg.test(item.get('stock')) === false ) {
-              console.log(22222)
               flag = 2
               valid = false;
               return;

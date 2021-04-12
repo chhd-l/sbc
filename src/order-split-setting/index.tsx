@@ -54,7 +54,7 @@ class OrderSplitSetting extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
-          <Headline title={title} />
+          <Headline title={<FormattedMessage id="Order.Split order setting" />} />
             <div style={{ margin: 20 }}>
               <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}><FormattedMessage id="Order.whetherToSplitOrder" />:</p>
               <Radio.Group disabled value={configForm.isSplit}>

@@ -155,7 +155,7 @@ class GoodsList extends React.Component<any, any> {
           <div style={styles.priceBox}>
           <label style={styles.priceItem as any}>
               <span style={styles.name}>
-                Total amount:{' '}
+              <FormattedMessage id="Order.Total amount" />:{' '}
               </span>
               <strong>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'} 
@@ -222,7 +222,7 @@ class GoodsList extends React.Component<any, any> {
             /**退货才有退货方式**/
             returnType == 'RETURN' ? (
               <label style={styles.inforItem}>
-                Return method:{' '}
+                <FormattedMessage id="Order.Returnmethod" />:{' '}
                 {Object.getOwnPropertyNames(returnWay).map(
                   (key) => returnWay[key]
                 )}

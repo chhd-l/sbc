@@ -205,7 +205,6 @@ class SearchHead extends Component<any, any> {
                       // }
                       /* onChange={(e) => {
                         let a = e.target.value.split(',');
-                        console.log(a.map(Number), 111);
 
                         this.setState({
                           clinicSelectValue:
@@ -232,7 +231,6 @@ class SearchHead extends Component<any, any> {
                       // }
                       /* onChange={(e) => {
                         let a = e.target.value.split(',');
-                        console.log(a.map(Number), 111);
 
                         this.setState({
                           clinicSelectValue:

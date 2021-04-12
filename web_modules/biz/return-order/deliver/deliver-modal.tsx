@@ -8,7 +8,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class DeliverModal extends React.Component<any, any> {
+class DeliverModal extends React.Component<any, any> {
   store: AppStore;
   _form: any;
   WrapperForm: any;
@@ -54,6 +54,7 @@ export default class DeliverModal extends React.Component<any, any> {
         ]}
       >
         <WrapperForm
+          intl={this.props.intl}
           ref={(form) => (this['_form'] = form)}
           {...{
             formType: data.get('type'),
@@ -170,4 +171,4 @@ class DeliverForm extends React.Component<any, any> {
   }
 }
 
-injectIntl(DeliverForm)
+export default injectIntl(DeliverModal)

@@ -342,7 +342,6 @@ export default class QQModal extends React.Component<any, any> {
           });
         }
       }
-      // console.log('--------------->', errs, values);
       //如果校验通过
       if (!errs) {
         onSaveOnlineServer();

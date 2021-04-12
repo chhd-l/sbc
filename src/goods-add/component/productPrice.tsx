@@ -343,9 +343,6 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
-        console.log(rowInfo.marketPrice,1111111111);
-        console.log(addSkUProduct,2222222);
-        console.log(goodsList.toJS(),3333);
 
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
@@ -356,7 +353,6 @@ class SkuForm extends React.Component<any, any> {
 
             if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
               marketPrice = targetGoodsIds.marketPrice * targetGoodsIds.bundleNum
-              //console.log(marketPrice,55555555);
 
               subscriptionPrice = targetGoodsIds.subscriptionPrice * targetGoodsIds.bundleNum
 
@@ -369,8 +365,6 @@ class SkuForm extends React.Component<any, any> {
               marketPrice = 0
               subscriptionPrice = 0
             }else if (addSkUProduct.length == 0 || addSkUProduct.length == undefined ){
-              console.log(rowInfo,77);
-              console.log(addSkUProduct,88);
               marketPrice = 0
               subscriptionPrice = 0
             }
@@ -638,9 +632,6 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    console.log(id);
-    console.log(key);
-    console.log(e);
 
     editGoodsItem(id, key, e);
 

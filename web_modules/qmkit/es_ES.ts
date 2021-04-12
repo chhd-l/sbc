@@ -1494,7 +1494,10 @@ export default {
   'Order.Refund date':'Refund date',
   'Order.selectLogisticsCompany':'Please select logistics company',
   'Order.fillreturndate':'Please fill in the return date',
-
+  'Order.Split order setting':'Split order setting',
+  'Order.LastName': 'Last name',
+  'Order.On':'On',
+  "Order.Off": 'Off',
 
 
 

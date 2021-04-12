@@ -146,7 +146,7 @@ class OrderDetailTab extends React.Component<any, any> {
     const tradePrice = detail.get('tradePrice').toJS() as any;
 
     //收货人信息
-    const consignee = detail.get('consignee').toJS() as {
+    const consignee = detail.get('consignee') ? detail.get('consignee').toJS() as {
       detailAddress: string;
       name: string;
       phone: string;
@@ -164,7 +164,7 @@ class OrderDetailTab extends React.Component<any, any> {
       comment: string;
       entrance: string;
       apartment: string;
-    };
+    } : {};
 
     //发票信息
     const invoice = detail.get('invoice')
@@ -194,7 +194,7 @@ class OrderDetailTab extends React.Component<any, any> {
           entrance: string;
           apartment: string;
         })
-      : null;
+      : {};
 
     //附件信息
     const encloses = detail.get('encloses') ? detail.get('encloses').split(',') : [];

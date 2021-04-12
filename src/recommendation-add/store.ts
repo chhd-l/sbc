@@ -5,6 +5,7 @@ import { Const, history, util, ValidConst } from 'qmkit';
 import * as webapi from './webapi';
 import SettleDetailActor from './actor/settle-detail-actor';
 import FillInPetInfoActor from './actor/fillin-pet-info'
+import moment from 'moment';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -28,6 +29,7 @@ export default class AppStore extends Store {
 
       customerPet.measure = measure;
       customerPet.measureUnit = measureUnit;
+      customerPet.birthOfPets=moment(customerPet.birthOfPets).format('YYYY-MM-DD')
       console.log(measure, measureUnit, 'customerPet', felinReco)
       this.initDistaptch({ felinReco, goodsQuantity, appointmentVO, customerPet, list: [] });
     } else {
@@ -93,6 +95,11 @@ export default class AppStore extends Store {
         item.measureUnit = _tempWeight.measureUnit;
         return item
       })
+      if(list.length>0){
+        list.map(item=>{
+          item.birthOfPets=moment(item.birthOfPets).format('YYYY-MM-DD')
+        })
+      }
       let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
       this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
     }

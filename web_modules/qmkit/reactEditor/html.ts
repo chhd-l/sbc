@@ -7,7 +7,7 @@ export default class HtmlMenu extends BtnMenu implements MenuActive {
     isHTML:boolean
     constructor(editor) {
         const $elem = E.$(
-            `<div class="w-e-menu" data-title="source">
+            `<div class="w-e-menu" data-title="源码">
                <i>Html</i>
             </div>`
         )

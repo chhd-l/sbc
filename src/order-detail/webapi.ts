@@ -204,6 +204,9 @@ export function getPaymentInfo(tid: string) {
 }
 
 export function queryCityById(filterParams = {}) {
+  if (!filterParams.id) {
+    return Promise.resolve({ res: { context: null } });
+  }
   return Fetch<TResult>('/system-city/query-system-city-by-id', {
     method: 'POST',
     body: JSON.stringify({

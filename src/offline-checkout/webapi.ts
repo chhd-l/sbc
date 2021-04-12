@@ -75,8 +75,21 @@ export function refillOrder(tid: string, repeat: true | false) {
  * @returns 
  */
 export function getConsent() {
-  return Fetch<TResult>('/appt/listApptPageConsent', {
+  return Fetch<TResult>('/consent/list', {
     method: 'POST',
     body: JSON.stringify({consentGroup: "offline-pay"})
-  })
+  }, { isHandleResult: true, customerTip: true });
+}
+
+/**
+ * 设置consent
+ * @param customerId 
+ * @param consent 
+ * @returns 
+ */
+export function setConsent(customerId, consent = {}) {
+  return Fetch<TResult>(`/consent/binds/${customerId}`, {
+    method: 'POST',
+    body: JSON.stringify(consent)
+  }, { isHandleResult: true, customerTip: true });
 }

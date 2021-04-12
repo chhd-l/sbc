@@ -77,7 +77,6 @@ class ReductionLevels extends React.Component<any, any> {
     const { isFullCount, fullReductionLevelList, isNormal } = this.props;
     const { form } = this.props;
     const { getFieldDecorator } = form;
-    // console.log(fullReductionLevelList, 'fullReductionLevelList------------inernnnnnnnnnn');
     return (
       <div>
         {fullReductionLevelList && fullReductionLevelList.map((level, index) => {
@@ -212,7 +211,7 @@ class ReductionLevels extends React.Component<any, any> {
             <Button onClick={this.addLevels} disabled={fullReductionLevelList.length >= 5}>
               <FormattedMessage id="Marketing.Marketing.Addmulti-levelpromotions" />
             </Button>
-            &nbsp;&nbsp;<FormattedMessage id="Marketing.Marketing.upto5levels" />
+            &nbsp;&nbsp;<FormattedMessage id="Marketing.upto5levels" />
           </div>
         ) : null}
       </div>

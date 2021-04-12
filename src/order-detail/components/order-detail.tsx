@@ -358,7 +358,7 @@ class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {row.price.toFixed(2)}
+            {row.price && row.price.toFixed(2)}
             {/*{(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}*/}
           </span>
         )

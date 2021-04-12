@@ -2632,6 +2632,7 @@ export default {
   'Marketing.For': 'For',
   'Marketing.refill': 'refill',
   'Marketing.Mustenterrules': 'Must enter rules',
+  'Marketing.fullgifttype': 'full gift type',
 
 
 

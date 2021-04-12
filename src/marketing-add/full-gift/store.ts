@@ -120,4 +120,8 @@ export default class AppStore extends Store {
   initGiftDefualtLevelList= () => {
     this.dispatch('marketing:initBeanLevelList')
   }
+  setSelectedGiftRows = (rows) => {
+    this.dispatch('marketing:selectedGiftRows', rows)
+  }
+
 }

@@ -77,7 +77,6 @@ class ReductionLevels extends React.Component<any, any> {
     const { isFullCount, fullReductionLevelList, isNormal } = this.props;
     const { form } = this.props;
     const { getFieldDecorator } = form;
-    // console.log(fullReductionLevelList, 'fullReductionLevelList------------inernnnnnnnnnn');
     return (
       <div>
         {fullReductionLevelList && fullReductionLevelList.map((level, index) => {

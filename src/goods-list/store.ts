@@ -72,8 +72,8 @@ export default class AppStore extends Store {
   onSearch = async () => {
     this.dispatch('form:field', { key: 'pageNum', value: 0 });
     //message.error(`<FormattedMessage id="Public.Overview" />`);
-    this.intl.get("Public.Overview")
-    //this.onPageSearch();
+   // this.intl.get("Public.Overview")
+    this.onPageSearch();
   };
 
   /**

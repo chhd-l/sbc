@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button } from 'antd';
+import { Row, Col, Card, Button, Checkbox } from 'antd';
 import { QRScaner } from 'qmkit';
 import GuestForm from './guest-form';
 import CustomerList from '../../appointment-list/components/customer-list';
@@ -46,7 +46,7 @@ export default class MemberBar extends React.Component<any, any> {
   };
 
   render() {
-    const { memberType, memberInfo, onScanEnd } = this.props;
+    const { memberType, memberInfo, onScanEnd, consents, onSelectConsent } = this.props;
     return (
       <>
         {memberInfo.customerName && <Button type="link" onClick={() => this.onReset()} className="member-reset-link"><FormattedMessage id="Order.offline.Reset" /></Button>}
@@ -72,11 +72,17 @@ export default class MemberBar extends React.Component<any, any> {
               </Card>
             </QRScaner>
           </Col>
-        </Row> : <Row gutter={24} style={{marginTop: 34, fontWeight: 'bold'}}>
-          <Col span={12}><FormattedMessage id="Order.offline.petOwnerType" />: <FormattedMessage id={`Order.offline.${memberType}`} /></Col>
-          <Col span={12}><FormattedMessage id="Order.Email" />: {memberInfo.email}</Col>
-          <Col span={12}><FormattedMessage id="Order.offline.consumerName" />: {memberInfo.customerName}</Col>
-          <Col span={12}><FormattedMessage id="Order.offline.consumerPhone" />: {memberInfo.contactPhone}</Col>
+        </Row> : <Row gutter={24} style={{marginTop: 10}}>
+          <Col span={10} style={{fontWeight:'bold'}}><FormattedMessage id="Order.offline.petOwnerType" />: <FormattedMessage id={`Order.offline.${memberType}`} /></Col>
+          <Col span={10} style={{fontWeight:'bold'}}><FormattedMessage id="Order.Email" />: {memberInfo.email}</Col>
+          <Col span={10} style={{fontWeight:'bold'}}><FormattedMessage id="Order.offline.consumerName" />: {memberInfo.customerName}</Col>
+          <Col span={10} style={{fontWeight:'bold'}}><FormattedMessage id="Order.offline.consumerPhone" />: {memberInfo.contactPhone}</Col>
+          <Col span={24} style={{fontSize:12}}>
+            <FormattedMessage id="Setting.consent" />:
+            <Checkbox.Group onChange={onSelectConsent}>
+              {consents.map(c => <div><Checkbox key={c.id} value={c.id}><div className="offline-consent-line" dangerouslySetInnerHTML={{__html:c.consentTitle}}></div></Checkbox></div>)}
+            </Checkbox.Group>
+          </Col>
         </Row>}
         <GuestForm visible={this.state.guestFormVisible} onClose={this.onConfirmGuestInfo} />
         <CustomerList visible={this.state.memberFormVisible} onConfirm={this.onConfirmMemberInfo} onClose={this.onConfirmMemberInfo} />

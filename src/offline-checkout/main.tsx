@@ -34,7 +34,8 @@ class Checkout extends React.Component<any, any> {
     webapi.getConsent().then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          consents: data.res.context?.consentVOList ?? []
+          consents: data.res.context?.consentVOList ?? [],
+          selectedConsents: (data.res.context?.consentVOList ?? []).filter((c, idx) => idx === 0).map(d => d.id)
         });
       }
     });
@@ -303,6 +304,7 @@ class Checkout extends React.Component<any, any> {
                 onCheckout={this.onCheckout}
                 onScanEnd={this.onScanMember}
                 consents={this.state.consents}
+                selectedConsents={this.state.selectedConsents}
                 onSelectConsent={this.onSelectConsent}
               />
             : this.state.step === 3 

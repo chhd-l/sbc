@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Icon, message } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper, history, cache } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
 import moment from 'moment';
@@ -53,7 +53,7 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create({})(RejectForm);
 
 @Relax
-export default class ListView extends React.Component<any, any> {
+class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
@@ -335,9 +335,11 @@ export default class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'order.review'});
+    const content = this.props.intl.formatMessage({id:'order.confirmReview'});
     confirm({
-      title: <FormattedMessage id="order.review" />,
-      content: <FormattedMessage id="order.confirmReview" />,
+      title: title,
+      content: content,
       onOk() {
         onRetrial(tdId);
       },
@@ -397,6 +399,8 @@ export default class ListView extends React.Component<any, any> {
     this._rejectForm.setFieldsValue({ comment: '' });
   };
 }
+
+export default injectIntl(ListView);
 
 const styles = {
   loading: {

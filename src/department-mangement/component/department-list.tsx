@@ -5,7 +5,7 @@ import { Modal, Table, Icon, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, AuthWrapper } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const confirm = Modal.confirm;
 
@@ -19,6 +19,7 @@ const styles = {
 @Relax
 class DepartmentList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       departments: IList;
       allDepartments: IList;
@@ -176,10 +177,13 @@ class DepartmentList extends React.Component<any, any> {
       });
       showLeaderModal(department);
     } else {
+      const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
+      const content = this.props.intl.formatMessage({id:'Setting.IfThere'});
+      const okText = this.props.intl.formatMessage({id:'Setting.ShutDown'});
       Modal.warning({
-        title: <FormattedMessage id="Setting.Prompt" />,
-        content: <FormattedMessage id="Setting.IfThere" />,
-        okText: <FormattedMessage id="Setting.ShutDown" />
+        title: title,
+        content: content,
+        okText: okText
       });
     }
   };
@@ -211,10 +215,13 @@ class DepartmentList extends React.Component<any, any> {
    */
   _delete = async (departmentId: number, employeeNum: number) => {
     if (employeeNum > 0) {
+      const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
+      const content = this.props.intl.formatMessage({id:'Setting.TheExisting'});
+      const okText = this.props.intl.formatMessage({id:'Setting.ShutDown'});
       Modal.warning({
-        title: <FormattedMessage id="Setting.Prompt" />,
-        content: <FormattedMessage id="Setting.TheExisting" />,
-        okText: <FormattedMessage id="Setting.ShutDown" />
+        title: title,
+        content: content,
+        okText: okText
       });
     } else {
       this._confirm(departmentId);
@@ -226,12 +233,15 @@ class DepartmentList extends React.Component<any, any> {
    */
   _confirm = (departmentId: number) => {
     const { doDelete } = this.props.relaxProps;
-
+    const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
+    const content = this.props.intl.formatMessage({id:'Setting.DeleteTheCurrent'});
+    const okText = this.props.intl.formatMessage({id:'Setting.Confirm'});
+    const cancelText = this.props.intl.formatMessage({id:'Setting.Close'});
     confirm({
-      title: <FormattedMessage id="Setting.Prompt" />,
-      content: <FormattedMessage id="Setting.DeleteTheCurrent" />,
-      okText: <FormattedMessage id="Setting.Confirm" />,
-      cancelText: <FormattedMessage id="Setting.Close" />,
+      title: title,
+      content: content,
+      okText: okText,
+      cancelText: cancelText,
       iconType: 'exclamation-circle',
       onOk() {
         doDelete(departmentId);
@@ -330,4 +340,4 @@ _BodyRow = DropTarget('row', _rowTarget, (connect, monitor) => ({
   }))(_BodyRow)
 );
 
-export default DragDropContext(HTML5Backend)(DepartmentList);
+export default DragDropContext(HTML5Backend)(injectIntl(DepartmentList));

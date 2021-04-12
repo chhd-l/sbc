@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { history, Const } from 'qmkit';
 import { Card, Icon, Row, Col, message, Tooltip } from 'antd';
 import * as webapi from '../webapi';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 export default class petowner extends Component<any, any> {
   constructor(props) {

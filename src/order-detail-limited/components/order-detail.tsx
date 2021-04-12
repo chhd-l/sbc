@@ -289,7 +289,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     ? 'Consumer Level:  '
                     : 'Platform Level:  ') +
                     detail.getIn(['buyer', 'levelName'])} */}
-                  {'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}
+                  {'Pet owner type:  ' + detail.getIn(['buyer', 'levelName'])}
                 </p>
               )}
               <p style={styles.darkText}>

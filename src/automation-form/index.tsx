@@ -89,11 +89,24 @@ class AutomationForm extends Component<any, any> {
           goal: automationForm.automationGoal,
           eventStartTime: moment(automationForm.eventStartTime).format('YYYY-MM-DD HH:mm:ss'),
           eventEndTime: moment(automationForm.eventEndTime).format('YYYY-MM-DD HH:mm:ss'),
-          trackingStartTime: moment(automationForm.eventEndtrackingStartTimeTime).format('YYYY-MM-DD HH:mm:ss'),
+          trackingStartTime: moment(automationForm.trackingStartTime).format('YYYY-MM-DD HH:mm:ss'),
           trackingEndTime: moment(automationForm.trackingEndTime).format('YYYY-MM-DD HH:mm:ss'),
           communicationChannel: automationForm.communicationChannel ? automationForm.communicationChannel.join(';') : null,
           workflow: automationForm.workflow
         };
+        debugger
+        if(new Date(params.eventStartTime) > new Date(params.trackingStartTime)){
+          return message.error("'Tracking start time' not later than 'Event start time'")
+        }
+        if(new Date(params.eventEndTime) > new Date(params.trackingEndTime)){
+          return message.error("'Tracking end time' not later than 'Event end time'")
+        }
+        if(new Date(params.eventStartTime)>new Date(params.eventEndTime)){
+          return message.error("'Event end time' not later than 'Event start time'")
+        }
+        if(new Date(params.trackingStartTime)>new Date(params.trackingEndTime)){
+          return message.error("'Tracking end time' not later than 'Tracking start time'")
+        }
         if (automationId) {
           params = Object.assign(params, {
             id: automationId,

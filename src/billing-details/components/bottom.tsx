@@ -4,11 +4,12 @@ import { IMap } from 'typings/globalType';
 import { Relax } from 'plume2';
 
 import { history, noop } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const confirm = Modal.confirm;
 @Relax
-export default class Bottom extends React.Component<any, any> {
+class Bottom extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       settlement: IMap;
       changeSettleStatus: Function;
@@ -68,9 +69,10 @@ export default class Bottom extends React.Component<any, any> {
 
   _handleSettleStatus = (settleId, status) => {
     const { changeSettleStatus } = this.props.relaxProps;
+    const content = status == 1 ? this.props.intl.formatMessage({id:'Finance.recordAsSettled'}) : this.props.intl.formatMessage({id:'Finance.beProcessedTemporarily'});
     confirm({
       title: 'Tips',
-      content: status == 1 ? <FormattedMessage id="Finance.recordAsSettled" /> : <FormattedMessage id="Finance.beProcessedTemporarily" />,
+      content: content,
       onOk() {
         changeSettleStatus([settleId], status);
         history.goBack();
@@ -78,3 +80,5 @@ export default class Bottom extends React.Component<any, any> {
     });
   };
 }
+
+export default injectIntl(Bottom);

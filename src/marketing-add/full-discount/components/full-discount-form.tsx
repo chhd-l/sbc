@@ -367,7 +367,7 @@ class FullDiscountForm extends React.Component<any, any> {
     }
 
     let settingRuleFrom = { ...formItemLayout };
-    if (marketingBean.get('promotionType') === 1) {
+    if (marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2) {
       settingRuleFrom = { ...largeformItemLayout };
     }
     console.log(marketingBean.toJS(), 'marketingBean-----------');
@@ -378,6 +378,7 @@ class FullDiscountForm extends React.Component<any, any> {
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
               <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
               <Radio value={1}><FormattedMessage id="Marketing.SubscriptionPromotion" /></Radio>
+              <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
             </Radio.Group>
           </div>
         </FormItem>
@@ -415,14 +416,14 @@ class FullDiscountForm extends React.Component<any, any> {
                   promotionCode: e.target.value
                 });
               }}
-              disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('publicStatus') == 1}
+              disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2 || marketingBean.get('publicStatus') == 1}
               style={{ width: 160 }}
             />
           )}
 
           <Checkbox
             style={{ marginLeft: 20 }}
-            disabled={marketingBean.get('promotionType') === 1}
+            disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2}
             checked={marketingBean.get('publicStatus') == 1}
             onChange={(e) => {
               this.onBeanChange({
@@ -611,7 +612,7 @@ class FullDiscountForm extends React.Component<any, any> {
           )}
         </FormItem>
 
-        {marketingBean.get('promotionType') == 1 && (
+        {(marketingBean.get('promotionType') == 1 || marketingBean.get('promotionType') == 2) && (
           <FormItem {...settingRuleFrom} label={<FormattedMessage id="Marketing.Fortherestsubscription" />} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
             <div style={{ display: 'flex' }}>
               <FormItem>
@@ -1190,18 +1191,7 @@ class FullDiscountForm extends React.Component<any, any> {
       }
     });
   };
-  initLevel = (levelType) => {
-    const { ma }
-    const initLevel = [
-      {
-        key: this.makeRandom(),
-        fullAmount: null,
-        fullCount: null,
-        discount: null
-      }
-    ];
-    ma
-  }
+
   /**
    * 生成随机数，作为key值
    * @returns {string}

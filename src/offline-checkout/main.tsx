@@ -9,7 +9,9 @@ import Result from './components/result';
 import * as webapi from './webapi';
 import './style.less';
 
-export default class Checkout extends React.Component<any, any> {
+import { FormattedMessage, injectIntl } from 'react-intl';
+
+class Checkout extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -20,7 +22,8 @@ export default class Checkout extends React.Component<any, any> {
       scanedInfoVisible: false,
       scanedInfo: {},
       products: [],
-      list: []
+      list: [],
+      orderId: ''
     };
   }
 
@@ -150,7 +153,9 @@ export default class Checkout extends React.Component<any, any> {
     if (this.state.memberInfo.customerName) {
       this.switchStep(3);
     } else {
-      Modal.warning({ title: 'Please fill consumer information!', okText: 'OK', centered: true });
+      const alertTitle = this.props.intl.formatMessage({id:'Order.offline.noCustomerAlert'});
+      const okText = this.props.intl.formatMessage({id:'Order.OK'});
+      Modal.warning({ title: alertTitle, okText: okText, centered: true });
     }
   }
 
@@ -158,18 +163,95 @@ export default class Checkout extends React.Component<any, any> {
     this.setState({ step });
   }
 
-  onConfirmCheckout = () => {
-    const { memberInfo, list } = this.state;
+  onConfirmCheckout = (paymentMethod: string) => {
+    const { memberInfo: { customerId, customerName, contactPhone, email }, list } = this.state;
     const params = {
-      customerId: memberInfo.customerId,
-      orderPrice: list.reduce((a, b) => a + Number((b.marketPrice * b.quantity * 100).toFixed(2)), 0),
-      payPspItemEnum: 'ADYEN_POS',
+      customerId,
+      customerName,
+      contactPhone,
+      email,
+      orderPrice: +(list.reduce((a, b) => a + (b.marketPrice * 100 * b.quantity * 100), 0) / 100).toFixed(2),
+      payPspItemEnum: paymentMethod,
       tradeItems: list.map(p => ({ skuId: p.goodsInfoId, num: p.quantity }))
     };
-    webapi.checkout(params).then(data => {
-      console.log(data);
+    this.setState({ loading: true });
+    webapi.checkout(params).then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        const context = data.res.context;
+        if (context && context.trade && context.trade.tradeState && context.trade.tradeState.payState && context.trade.tradeState.payState === 'PAID') {
+          this.setState({
+            orderId: data.res.context.tid,
+            step: 4,
+            loading: false
+          });
+        } else if (context.tid) {
+          this.setState({
+            orderId: context.tid,
+            loading: false
+          }, this.showQueryModal);
+        } else {
+          this.setState({
+            loading: false
+          }, () => {
+            const alertTitle = this.props.intl.formatMessage({id:'Order.offline.orderNotSuccess'});
+            const alertContent = this.props.intl.formatMessage({id:'Order.offline.retryAlert'});
+            const okText = this.props.intl.formatMessage({id:'Order.OK'});
+            Modal.warning({ title: alertTitle, content: alertContent, okText: okText, centered: true });
+          });
+        }
+      } else {
+        this.setState({ loading: false });
+      }
+    }).catch(() => {
+      this.setState({ loading: false });
     });
   }
+
+  showQueryModal = () => {
+    const infoTitle = this.props.intl.formatMessage({id:'Order.offline.queryStateTitle'});
+    const infoContent = this.props.intl.formatMessage({id:'Order.offline.queryStateContent'});
+    const okText = this.props.intl.formatMessage({id:'Order.offline.yes'});
+    const noText = this.props.intl.formatMessage({id:'Order.offline.no'});
+    Modal.confirm({ title: infoTitle, content: infoContent, okText: okText, cancelText: noText, centered: true, onOk: this.queryOrderStatus, onCancel: () => {} });
+  }
+
+  queryOrderStatus = () => {
+    const { orderId } = this.state;
+    this.setState({ loading: true });
+    webapi.queryStatus({
+      tidList: [orderId]
+    }).then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          step: 4,
+          loading: false
+        });
+      } else {
+        this.setState({
+          loading: false
+        }, this.showQueryModal);
+      }
+    }).catch(() => {
+      this.setState({
+        loading: false
+      }, this.showQueryModal);
+    });
+  };
+
+  refillOrder = (refill: boolean) => {
+    const { orderId } = this.state;
+    const { onClose } = this.props;
+    this.setState({ loading: true });
+    webapi.refillOrder(orderId, refill).then(data => {
+      if (data.res.code === Const.SUCCESS_CODE && onClose) {
+        onClose(false);
+      } else {
+        this.setState({ loading: false });
+      }
+    }).catch(() => {
+      this.setState({ loading: false });
+    });
+  };
 
   render() {
     const { onClose } = this.props;
@@ -194,9 +276,11 @@ export default class Checkout extends React.Component<any, any> {
               />
             : this.state.step === 3 
               ? <Payment onCancel={() => this.switchStep(2)} onPay={this.onConfirmCheckout} /> 
-              : <Result />}
+              : <Result onRefill={this.refillOrder} onClose={() => onClose(false)} />}
         <ScanedInfo visible={this.state.scanedInfoVisible} scanedInfo={this.state.scanedInfo} onChoose={this.onConfirmScanedInfo} />
       </div>
     );
   }
 }
+
+export default injectIntl(Checkout);

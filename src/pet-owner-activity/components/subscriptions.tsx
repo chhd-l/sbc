@@ -4,6 +4,7 @@ import * as webapi from '../webapi';
 import { history, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { string } from 'prop-types';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const { RangePicker } = DatePicker;
 
@@ -143,7 +144,7 @@ export default class bookings extends Component<any, any> {
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Details">
-              <Link to={'/subscription-detail/' + record.id} className="iconfont iconDetails"></Link>
+              <Link to={'/subscription-detail/' + record.subscribeId} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
         )

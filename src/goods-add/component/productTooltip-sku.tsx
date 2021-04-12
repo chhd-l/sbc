@@ -25,6 +25,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
       getGoodsId: any;
       addSkUProduct: any;
       onFormFieldChange:Function;
+      editGoodsItem: Function;
+      goodsList: IList;
+
     };
     showModal: Function;
     selectedRows: IList;
@@ -40,7 +43,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     application?: string;
     pid: any;
     initCateList: any;
-    
+
   };
 
   static relaxProps = {
@@ -53,7 +56,10 @@ class ProductTooltipSKU extends React.Component<any, any> {
     getGoodsId: 'getGoodsId',
     initCateList: 'initCateList',
     addSkUProduct: 'addSkUProduct',
-    onFormFieldChange:noop
+    goodsList: 'goodsList',
+    onFormFieldChange:noop,
+    editGoodsItem: noop,
+
   };
   constructor(props) {
     super(props);
@@ -69,7 +75,6 @@ class ProductTooltipSKU extends React.Component<any, any> {
 
   init = () => {
     const { addSkUProduct } = this.props.relaxProps;
-    console.log(addSkUProduct,666666);
 
     let obj = addSkUProduct;
     if (Array.isArray(obj) &&obj.length>0) {
@@ -93,8 +98,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
   };
 
   handleOK=()=>{
-    const {selectedRowKeys,selectedRows, addSkUProduct} = this.state
-    const { onProductselectSku } = this.props.relaxProps;
+    const {selectedRowKeys,selectedRows, addSkUProduct, } = this.state
+    const { onProductselectSku, goodsList, editGoodsItem } = this.props.relaxProps;
     // let a = [];
     let minStock = []
     // selectedRowKeys.map((item) => {
@@ -102,9 +107,10 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //     goodsInfoNo: item
     //   });
     // });
+    console.log(goodsList.toJS(),1111);
+
 
     selectedRows && selectedRows.map((item) => {
-        console.log(item,555555);
         if(item.stock){
           minStock.push(item.stock)
         }else if(sessionStorage.getItem('minStock')){
@@ -113,6 +119,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
         targetGoodsIds.push({
           subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
           bundleNum: 1,
+          saleableFlag: item.saleableFlag,
           marketPrice: item.marketPrice,
           subMarketPrice: item.subMarketPrice,
           subScriptionPrice: item.subScriptionPrice,
@@ -132,9 +139,30 @@ class ProductTooltipSKU extends React.Component<any, any> {
       targetGoodsIds: goodsIds,
       minStock: tempMinStock
     });
+    let id = goodsList.toJS()[0].id
+    let marketPrice = goodsIds[0].marketPrice * goodsIds[0].bundleNum
+    let subscriptionPrice = goodsIds[0].subscriptionPrice * goodsIds[0].bundleNum
+    let stock = Number(String(tempMinStock / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+    console.log(stock,1111)
+    console.log(goodsIds[0].stock,2222)
+
+    if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
+      editGoodsItem(id, 'marketPrice', marketPrice);
+      editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
+      editGoodsItem(id, 'stock', stock);
+    }/*else if (targetGoodsList.length == 0){
+      editGoodsItem(id, 'marketPrice', 0);
+      editGoodsItem(id, 'subscriptionPrice', 0);
+    }*/else {
+      editGoodsItem(id, 'marketPrice', 0);
+      editGoodsItem(id, 'subscriptionPrice', 0);
+      editGoodsItem(id, 'stock', tempMinStock);
+
+    }
     if (targetGoodsIds.length <= 10) {
       if (targetGoodsIds.length !== 0) {
         onProductselectSku(targetGoodsList);
+
       }
       targetGoodsIds = [];
       this.props.showModal({ type: 0 }, this.props.pid);

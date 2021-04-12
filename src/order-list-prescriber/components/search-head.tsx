@@ -18,6 +18,7 @@ const InputGroup = Input.Group;
 @Relax
 class SearchHead extends Component<any, any> {
   props: {
+    intl;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -647,16 +648,18 @@ class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-
+    const mess = this.props.intl.formatMessage({id:'Order.pleaseSelectOrderToOperate'});
     if (checkedIds.length == 0) {
-      message.error(<FormattedMessage id="Order.pleaseSelectOrderToOperate" />);
+      message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.audit'});
+    const content = this.props.intl.formatMessage({id:'Order.confirmAudit'});
     confirm({
-      title: <FormattedMessage id="Order.audit" />,
-      content: <FormattedMessage id="Order.confirmAudit" />,
+      title: title,
+      content: content,
       onOk() {
         onBatchAudit();
       },
@@ -668,8 +671,13 @@ class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: <FormattedMessage id="Order.Exportfilteredorders" />,
-      byIdsTitle: <FormattedMessage id="Order.Exportselectedorders" />,
+      byParamsTitle: this.props.intl.formatMessage({
+        id: 'Order.Exportfilteredorders'
+      }),
+      byIdsTitle:
+        this.props.intl.formatMessage({
+          id: 'Order.Exportselectedorders'
+        }),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

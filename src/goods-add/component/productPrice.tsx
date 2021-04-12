@@ -80,6 +80,7 @@ export default class ProductPrice extends React.Component<any, any> {
       updateAllBasePrice: Function;
       setDefaultBaseSpecId: Function;
       setSelectedBasePrice: Function;
+      onProductselectSku: Function;
     };
   };
 
@@ -109,7 +110,8 @@ export default class ProductPrice extends React.Component<any, any> {
     updateBasePrice: noop,
     updateAllBasePrice: noop,
     setDefaultBaseSpecId: noop,
-    setSelectedBasePrice: noop
+    setSelectedBasePrice: noop,
+    onProductselectSku: noop,
   };
 
   constructor(props) {
@@ -153,8 +155,9 @@ class SkuForm extends React.Component<any, any> {
   };
 
   render() {
-    const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    const { goodsList, addSkUProduct, onProductselectSku, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
+
     const columns = this._getColumns();
     return (
       <div style={{ marginBottom: 20 }}>
@@ -290,7 +293,7 @@ class SkuForm extends React.Component<any, any> {
                   min={0}
                   max={9999999}
                   precision={2}
-                  step={0.01}
+                  // step={0.01}
                   // formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               />)}
             </FormItem>
@@ -342,76 +345,45 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         console.log(rowInfo.marketPrice,1111111111);
         console.log(addSkUProduct,2222222);
+        console.log(goodsList.toJS(),3333);
 
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
+        if(goods.get('goodsId') == null) {
+          if (goodsList.toJS().length == 1) {
 
-        //console.log(targetGoodsIds,22222);
-        /*console.log(goods.toJS(),22222);
-        console.log(rowInfo,33333);
-        console.log(goodsList.toJS(),44444);*/
-        if (goods.get('goodsId') == null && goodsList.toJS().length == 1) {
+            let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
 
-          let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
-          /*console.log(targetGoodsIds,66666);
-          console.log(addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length,7777);
-          console.log(!rowInfo.marketPrice);
-          console.log(!rowInfo.subscriptionPrice);*/
-          if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
-            marketPrice = targetGoodsIds.marketPrice * targetGoodsIds.bundleNum
-            console.log(marketPrice,55555555);
+            if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 /*&& !rowInfo.marketPrice && !rowInfo.subscriptionPrice*/) {
+              marketPrice = targetGoodsIds.marketPrice * targetGoodsIds.bundleNum
+              //console.log(marketPrice,55555555);
 
-            subscriptionPrice = targetGoodsIds.subscriptionPrice * targetGoodsIds.bundleNum
-            /*Number(targetGoodsIds.subMarketPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.marketPrice?
-              Number(targetGoodsIds.marketPrice) * (targetGoodsIds.bundleNum): 0
-          subscriptionPrice = targetGoodsIds.subScriptionPrice?
-            Number(targetGoodsIds.subScriptionPrice) * Number(targetGoodsIds.bundleNum) : targetGoodsIds.subscriptionPrice?
-              Number(targetGoodsIds.subscriptionPrice) * Number(targetGoodsIds.bundleNum) :0*/
-            //this._editGoodsItem(rowInfo.id, 'marketPrice', marketPrice, )
-            //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', subscriptionPrice, )
-          }else if (addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length == 0){
-            console.log(rowInfo,33333);
-            console.log(addSkUProduct,444444);
+              subscriptionPrice = targetGoodsIds.subscriptionPrice * targetGoodsIds.bundleNum
+
+            }/*else if (addSkUProduct[0] && addSkUProduct[0].targetGoodsIds.length == 0){
+
+            marketPrice = 0
+            subscriptionPrice = 0
+
+          }*/else if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 0 ){
+              marketPrice = 0
+              subscriptionPrice = 0
+            }else if (addSkUProduct.length == 0 || addSkUProduct.length == undefined ){
+              console.log(rowInfo,77);
+              console.log(addSkUProduct,88);
+              marketPrice = 0
+              subscriptionPrice = 0
+            }
+          }else {
             marketPrice = 0
             subscriptionPrice = 0
             //this._editGoodsItem(rowInfo.id, 'marketPrice', 0, )
             //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', 0, )
           }
-        }else {
-          //this._editGoodsItem(rowInfo.id, 'marketPrice', 0, )
-          //this._editGoodsItem(rowInfo.id, 'subscriptionPrice', 0, )
         }
 
-        console.log(marketPrice,666666);
 
-        /* console.log(addSkUProduct[0].targetGoodsIds[0],11111111);
-         //console.log(marketPrice,2222222);
-         console.log(rowInfo.marketPrice,33333);
-         if(addSkUProduct.length === 1 && addSkUProduct[0].targetGoodsIds.length === 1) {
-           if(String(marketPrice).indexOf(".") == -1){
-             console.log(4444444)
-             marketPrice = (addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
-           }else{
-             console.log(5555555)
-             if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
-               marketPrice = marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
-             }else {
-               marketPrice = marketPrice.toFixed(4)
-             }
-           }
 
-           if(String(subscriptionPrice).indexOf(".") == -1){
-             subscriptionPrice = (addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum).toFixed(2)
-           }else{
-             if ( rowInfo.marketPrice.toString().split(".")[1].length <= 4) {
-               subscriptionPrice = subscriptionPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length)
-             }else {
-               subscriptionPrice = subscriptionPrice.toFixed(4)
-             }
-           }
-         }else {
-           marketPrice = rowInfo.marketPrice ? marketPrice.toFixed(rowInfo.marketPrice.toString().split(".")[1].length) : 0.00
-         }*/
 
         return (
           <Row>
@@ -454,7 +426,7 @@ class SkuForm extends React.Component<any, any> {
                         //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                         formatter={limitDecimals}
                         parser={limitDecimals}
-                        step={0.01}
+                        // step={0.01}
                       />
                       // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                     )}
@@ -493,7 +465,7 @@ class SkuForm extends React.Component<any, any> {
                           disabled={rowInfo.subscriptionStatus === 0}
                           formatter={limitDecimals}
                           parser={limitDecimals}
-                          step={0.01}
+                          // step={0.01}
                           /*formatter={(value) => {
                             return `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`
                           }}*/
@@ -535,7 +507,7 @@ class SkuForm extends React.Component<any, any> {
                       style={{ width: '111px' }}
                       formatter={limitDecimals}
                       parser={limitDecimals}
-                      step={0.01}
+                      // step={0.01}
                       //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                     />
                     // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
@@ -666,12 +638,11 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    console.log(id,1111);
-    console.log(key,222);
-    console.log(e,22333233);
+    console.log(id);
+    console.log(key);
+    console.log(e);
 
     editGoodsItem(id, key, e);
-
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存

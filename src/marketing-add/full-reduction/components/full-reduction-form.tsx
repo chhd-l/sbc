@@ -371,7 +371,7 @@ class FullReductionForm extends React.Component<any, any> {
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
-    if (marketingBean.get('promotionType') === 1) {
+    if (marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2) {
       settingRuleFrom = { ...largeformItemLayout };
       settingLabel = 'For the first subscription order,reduction';
       settingLabel1 = 'For the rest subscription order,reduction';
@@ -379,23 +379,24 @@ class FullReductionForm extends React.Component<any, any> {
     }
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <FormItem {...formItemLayout} label="Promotion type:" labelAlign="left">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Promotiontype" />} labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
               <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
               <Radio value={1}><FormattedMessage id="Marketing.SubscriptionPromotion" /></Radio>
+              <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
             </Radio.Group>
             {/*{marketingBean.get('promotionType') === 1 ? (*/}
             {/*  <Checkbox onChange={(e) => this.onBeanChange({*/}
             {/*    isClub: e.target.checked*/}
-            {/*  })} checked={marketingBean.get('isClub')}>*/}
+            {/*  })} checked={marketinmarketingBean.get('promotionType') === 1gBean.get('isClub')}>*/}
             {/*    Club*/}
             {/*  </Checkbox>*/}
             {/*) : null}*/}
           </div>
         </FormItem>
-        <div className="bold-title">Basic Setting</div>
-        <FormItem {...smallformItemLayout} label="Promotion Code" labelAlign="left">
+        <div className="bold-title"><FormattedMessage id="Marketing.BasicSetting" /></div>
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionCode" />} labelAlign="left">
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode(),
             rules: [
@@ -429,14 +430,14 @@ class FullReductionForm extends React.Component<any, any> {
                   promotionCode: e.target.value
                 });
               }}
-              disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('publicStatus') == 1}
+              disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2 || marketingBean.get('publicStatus') == 1}
               style={{ width: 160 }}
             />
           )}
 
           <Checkbox
             style={{ marginLeft: 20 }}
-            disabled={marketingBean.get('promotionType') === 1}
+            disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2}
             checked={marketingBean.get('publicStatus') == 1}
             onChange={(e) => {
               this.onBeanChange({
@@ -444,7 +445,7 @@ class FullReductionForm extends React.Component<any, any> {
               });
             }}
           >
-            Public
+            <FormattedMessage id="Marketing.Public" />
           </Checkbox>
         </FormItem>
 
@@ -534,7 +535,7 @@ class FullReductionForm extends React.Component<any, any> {
           )}
         </FormItem>
 
-        <div className="bold-title">Reduction type:</div>
+        <div className="bold-title"><FormattedMessage id="Reductiontype" />:</div>
         {marketingBean.get('promotionType') === 0 && (
           <FormItem {...formItemLayout} labelAlign="left">
             {getFieldDecorator('subType', {
@@ -623,7 +624,7 @@ class FullReductionForm extends React.Component<any, any> {
           )}
         </FormItem>
 
-        {marketingBean.get('promotionType') == 1 && (
+        {(marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2) && (
           <FormItem {...settingRuleFrom} label={settingLabel1} required={true} labelAlign="left" style={{ marginTop: '-50px' }}>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
             {getFieldDecorator('restSubscriptionOrderReduction', {
@@ -1204,18 +1205,7 @@ class FullReductionForm extends React.Component<any, any> {
       }
     });
   };
-  initLevel = (levelType) => {
-    const { ma }
-    const initLevel = [
-      {
-        key: this.makeRandom(),
-        fullAmount: null,
-        fullCount: null,
-        discount: null
-      }
-    ];
-    ma
-  }
+
   /**
    * 生成随机数，作为key值
    * @returns {string}

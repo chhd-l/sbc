@@ -54,19 +54,19 @@ export default class MarketingRule extends React.Component<any, any> {
                   </span>
                   {subType === 0 ? ( // full amount reduction
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </span>
                   ) : subType === 1 ? ( // full quantity reduction
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount ? level.fullAmount : level.fullCount} items reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </span>
                   ) : subType === 2 ? ( //full amount discount
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {level.discount * 10} discount
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {level.discount * 10} discount
                     </span>
                   ) : subType === 3 ? ( //full quantity discount
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount ? level.fullAmount : level.fullCount} items discount {level.discount * 10} discount
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items discount {level.discount * 10} discount
                     </span>
                   ) : subType === 6 ? ( // subsctiption reduction
                     <div className="rule-span">
@@ -83,10 +83,10 @@ export default class MarketingRule extends React.Component<any, any> {
                     <div className="rule-span">
                       <div>
                         <FormattedMessage id="Marketing.theFirstSubscriptionOrder" />
-                        {level.firstSubscriptionOrderDiscount * 10} discount
+                        {level.firstSubscriptionOrderDiscount * 10} <FormattedMessage id="Marketing.discount" />
                       </div>
                       <div>
-                        <FormattedMessage id="Marketing.theFirstSubscriptionOrder" /> {level.restSubscriptionOrderDiscount * 10} discount
+                        <FormattedMessage id="Marketing.theFirstSubscriptionOrder" /> {level.restSubscriptionOrderDiscount * 10} <FormattedMessage id="Marketing.discount" />
                       </div>
                     </div>
                   ) : null}

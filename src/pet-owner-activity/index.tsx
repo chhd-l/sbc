@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline, history, AuthWrapper } from 'qmkit';
+import { BreadCrumb, SelectGroup, Const, Headline, history, AuthWrapper, cache } from 'qmkit';
 import { Row, Col, Tabs, Card, Breadcrumb, Button, message, Spin } from 'antd';
 import PetOwner from './components/petowner';
 import Pets from './components/pets';
@@ -9,6 +9,7 @@ import Activities from './components/activities';
 import Orders from './components/order';
 import Bookings from './components/subscriptions';
 import * as webapi from './webapi';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import './style.less';
 
@@ -18,7 +19,7 @@ export default class PetOwnerActivity extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      activityKey: '1',
+      activityKey: '',
       id: this.props.match.params.id ? this.props.match.params.id : '',
       title: 'Pet Owner activity',
       petOwner: {},
@@ -61,6 +62,7 @@ export default class PetOwnerActivity extends Component<any, any> {
   };
   render() {
     const { title, id, petOwner, loading, activityKey } = this.state;
+    const hasTaskRole = sessionStorage.getItem(cache.LOGIN_FUNCTIONS) && JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS)).includes('f_petowner_task');
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -104,21 +106,23 @@ export default class PetOwnerActivity extends Component<any, any> {
               <Col span={10} id="middle">
                 <Card>
                   <Tabs
-                    defaultActiveKey="1"
+                    defaultActiveKey={hasTaskRole ? '1' : '2'}
                     onChange={(key) =>
                       this.setState({
                         activityKey: key
                       })
                     }
                   >
-                    <TabPane tab="Task" key="1">
-                      <Tasks petOwnerId={id} petOwner={petOwner} />
-                    </TabPane>
+                    {hasTaskRole ? (
+                      <TabPane tab="Task" key="1">
+                        <Tasks petOwnerId={id} petOwner={petOwner} />
+                      </TabPane>
+                    ) : null}
                     <TabPane tab="Emails" key="2">
-                      <Emails petOwnerId={id} />
+                      <Emails petOwnerId={id}  petOwner={petOwner}/>
                     </TabPane>
                     <TabPane tab="Activities" key="3">
-                      {activityKey === '3' ? <Activities petOwnerId={id} /> : null}
+                      {activityKey === '3' ? <Activities petOwnerId={id}  petOwner={petOwner}/> : null}
                     </TabPane>
                   </Tabs>
                 </Card>

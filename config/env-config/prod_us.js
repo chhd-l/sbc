@@ -8,8 +8,10 @@
  **/
 
 var Common = require('./common');
+
+var Common = require('./common');
 module.exports = {
-  HOST: 'https://eurostore.royalcanin.com/api',
+  HOST: 'https://store.royalcanin.com/api',
   CDN_PATH: '/',
   //CDN_PATH: 'https://d2cde.azureedge.net/rs/',
   ...Common

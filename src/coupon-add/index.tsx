@@ -3,7 +3,7 @@ import { Relax, StoreProvider } from 'plume2';
 
 import { Breadcrumb, Form } from 'antd';
 import { Headline, BreadCrumb } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 import Appstore from './store';
 import MobileShowBox from './components/mobile-show-box';
 import CouponInfoForm from './components/coupon-info-form';
@@ -33,10 +33,10 @@ export default class CouponInfo extends Component<any, any> {
     return (
       <>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{id ? 'Edit ' : 'Create '}coupon</Breadcrumb.Item>
+          <Breadcrumb.Item>{id ? <FormattedMessage id="Marketing.EditCoupon" /> : <FormattedMessage id="Marketing.CreateCoupon" />}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container" style={{ paddingLeft: 60 }}>
-          <Headline title={id ? 'Edit coupon' : 'Create coupon'} />
+          <Headline title={id ? <FormattedMessage id="Marketing.EditCoupon" /> : <FormattedMessage id="Marketing.CreateCoupon" />} />
           <div style={styles.container}>
             {/*<MobileShowBox />*/}
             <CouponInfoRelax />

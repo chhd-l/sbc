@@ -117,13 +117,11 @@ class ProductSearchSetting extends Component<any, any> {
       purchaseType
     });
   }
-  async deleteDict(item,key){
+  async deleteDict(item){
   const {res}=  await delSysDictionary({id:item.id})
   // let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
    message.success(res.message)
-   this.setState({
-     [key]:''
-   })
+   this.querySysDictionary();
    
   }
 
@@ -184,7 +182,7 @@ class ProductSearchSetting extends Component<any, any> {
                           required: true,
                           message: 'Please select subscription frequency !'
                         }
-                      ],
+                      ]
                     })(
                       <Select disabled={disabled}  
                       optionLabelProp="label" 
@@ -194,14 +192,15 @@ class ProductSearchSetting extends Component<any, any> {
                           <div style={{ display: 'flex', justifyContent: 'space-between' ,position:'relative'}} >
                             <span >{item.name}</span>
                            
-                            <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionFrequencyId')} okText="Confirm" cancelText="Cancel">
+                            <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
+                            <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item)} okText="Confirm" cancelText="Cancel">
                               <Tooltip placement="top" title="Delete">
                                 <a>
                                   <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                 </a>
                               </Tooltip>
                             </Popconfirm>
-                      
+                         </div>
 
                           </div>
                         </Option>
@@ -239,28 +238,25 @@ class ProductSearchSetting extends Component<any, any> {
                           message: 'Please select subscription frequency !'
                         }
                       ],
-                
-                      // onChange:(e)=>{
-                      //   this.setState({
-                      //     defaultSubscriptionClubFrequencyId:e.replace('删除','')
-                      // })}
+                     
                     })(
                       <Select disabled={disabled}
                         optionLabelProp="label"
                         placeholder="Please select subscription frequency !" style={{ width: 180 }}>
                         {optionsClub.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }} >
+                            <div style={{ display: 'flex', justifyContent: 'space-between',position:'relative' }} >
                               <span >{item.name}</span>
   
-                              <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
+                              <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
+                              <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item)} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
                                   <a>
                                     <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                   </a>
                                 </Tooltip>
                               </Popconfirm>
-
+                          </div>
 
                             </div>
                           </Option>

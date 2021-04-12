@@ -97,6 +97,7 @@ class ReactEditor extends Component<any, any> {
         this.editor.config.onchangeTimeout = 500
         this.uploadImage();
         this.editor.config.lang = 'en'
+        this.editor.config.languages['en']=lang['en']
         this.editor.i18next = i18next
          // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
          this.editor.config.onchange = (html: any) => {
@@ -110,7 +111,7 @@ class ReactEditor extends Component<any, any> {
         }
         this.editor.create()
 
-        this.editor.txt.html(content===''?'<p></p>':content)
+        this.editor.txt.html(content===''?'<p>&nbsp;</p>':content)
         disabled && this.editor.disable()
     }
     uploadImage = () => {

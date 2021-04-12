@@ -118,7 +118,7 @@ class SearchHead extends Component<any, any> {
 
     const orderSourceList = [
       { value: 'FGS', name: this.props.intl.formatMessage({id:'Order.fgs'}) },
-      { value: 'L_ATELIER_FELINE', name: this.props.intl.formatMessage({id:'Order.felin'}) }
+      { value: 'L_ATELIER_FELIN', name: this.props.intl.formatMessage({id:'Order.felin'}) }
     ];
 
     const menu = (

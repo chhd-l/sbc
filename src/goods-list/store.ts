@@ -8,8 +8,10 @@ import FreightActor from './actor/freight-actor';
 import { message } from 'antd';
 import { Const } from 'qmkit';
 import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getProductCategories, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight } from './webapi';
+import { intl  } from 'react-intl';
 
 import { IList } from 'typings/globalType';
+import React from "react";
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -69,7 +71,9 @@ export default class AppStore extends Store {
    */
   onSearch = async () => {
     this.dispatch('form:field', { key: 'pageNum', value: 0 });
-    this.onPageSearch();
+    //message.error(`<FormattedMessage id="Public.Overview" />`);
+    this.intl.get("Public.Overview")
+    //this.onPageSearch();
   };
 
   /**

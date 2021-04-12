@@ -2631,6 +2631,7 @@ export default {
   'Marketing.Fullquantitygift': 'Full quantity gift',
   'Marketing.For': 'For',
   'Marketing.refill': 'refill',
+  'Marketing.Mustenterrules': 'Must enter rules',
 
 
 

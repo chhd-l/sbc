@@ -5,7 +5,7 @@ import es_ES from '../es_ES';
 import es_RUS from '../es_RUS';
 import { cache } from 'qmkit';
 
-const lang = require.context('./files',true, /\.ts$/)
+const lang = (require as any).context('./files',true, /\.ts$/)
 
 lang.keys().forEach(i => {
     

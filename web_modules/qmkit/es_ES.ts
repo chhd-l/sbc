@@ -225,12 +225,6 @@ export default {
   'Home.ToDo': 'To do',
   'Home.OnGoing': 'On going',
   'Home.Overdue': 'Overdue',
-  'Home.UnitsSold': 'Units sold',
-  'Home.RetentionRate': 'Retention rate',
-  'Home.ActivePrescriberRates': 'Active prescriber rates',
-  'Home.ActivePrescribers': 'Active prescribers',
-  'Home.PrescriberRewardTop': 'Prescriber reward Top',
-  'Home.BestSeller': 'Best seller',
   'Home.TOP': 'TOP',
   'Home.HeaderTip': 'The data is updated every 15 minutes',
   'Home.SelectWeek': 'Select week',
@@ -239,6 +233,7 @@ export default {
   'Home.All': 'All',
   'Home.ManagePrescriber': 'Manage Prescriber',
   'Home.Rate': 'Rate',
+  'Home.units': 'units',
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
   "Product.Productname": "Product name",
@@ -1493,6 +1488,12 @@ export default {
   'Order.Club&Autoship':'Club & Autoship',
   'Order.Entrance': 'Entrance',
   'Order.Apartment': 'Apartment',
+  'Order.refundList': 'Refund list',
+  'Order.Refundrecord': 'Refund record',
+  'Order.FillLogisticsInformation':'Fill in logistics information',
+  'Order.Refund date':'Refund date',
+  'Order.selectLogisticsCompany':'Please select logistics company',
+  'Order.fillreturndate':'Please fill in the return date',
 
 
 

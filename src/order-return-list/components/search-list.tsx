@@ -447,6 +447,7 @@ class SearchList extends React.Component<any, any> {
     const alert2 = this.props.intl.formatMessage({id:'Order.refundAlert2'});
     confirm({
       title: title,
+      okText: this.props.intl.formatMessage({id:'Order.OK'}),
       content: <div>
         <p>{alert1}</p>
         <p>{alert2}</p>

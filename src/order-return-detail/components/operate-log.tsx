@@ -31,7 +31,7 @@ const columns = [
     render: (operator) => operator.name
   },
   {
-    title: <FormattedMessage id="time" />,
+    title: <FormattedMessage id="Order.Time" />,
     dataIndex: 'eventTime',
     key: 'eventTime',
     render: (t) => moment(t).format(Const.TIME_FORMAT)

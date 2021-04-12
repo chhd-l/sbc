@@ -126,7 +126,7 @@ export default class ReturnRecord extends React.Component<any, any> {
 
     return list.length > 0 ? (
       <div style={styles.container}>
-        <h2 style={{ fontSize: 18, paddingBottom: 16 }}>Refund record</h2>
+        <h2 style={{ fontSize: 18, paddingBottom: 16 }}><FormattedMessage id="Order.Refundrecord" /></h2>
         <Table
           rowKey="refundId"
           columns={this.columns}

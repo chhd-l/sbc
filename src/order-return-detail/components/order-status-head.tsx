@@ -283,6 +283,7 @@ class OrderStatusHead extends React.Component<any, any> {
     confirm({
       title: title,
       content: content,
+      okText: this.props.intl.formatMessage({id:'Order.OK'}),
       onOk() {
         return onAudit(rid);
       },

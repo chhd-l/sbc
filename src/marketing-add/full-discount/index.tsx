@@ -25,7 +25,7 @@ class MarketingFullDiscountAdd extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    const { marketingId } = this.props.match.params;
+    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
     if (marketingId) {
       this.store.init(marketingId);
     } else {
@@ -38,7 +38,7 @@ class MarketingFullDiscountAdd extends React.Component<any, any> {
   }
 
   render() {
-    const { marketingId } = this.props.match.params;
+    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
 
     return (
       <AuthWrapper functionName="f_marketing_discount_add">

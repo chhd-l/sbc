@@ -510,21 +510,21 @@ const routes = [
     path: '/marketing-full-reduction/:marketingId?',
     asyncComponent: () => import('./marketing-add/full-reduction')
   },
-  // //新增 / 编辑营销-首次折扣
-  // {
-  //   path: '/marketing-first-order-discount/:marketingId?',
-  //   asyncComponent: () => import('./marketing-add/first-order-discount')
-  // },
-  // //新增 / 编辑营销-免运费
-  // {
-  //   path: '/marketing-free-shipping/:marketingId?',
-  //   asyncComponent: () => import('./marketing-add/free-shipping')
-  // },
-  // //新增 / 编辑营销-一口价
-  // {
-  //   path: '/marketing-fixed-price/:marketingId?',
-  //   asyncComponent: () => import('./marketing-add/fixed-price')
-  // },
+  //新增 / 编辑营销-首次折扣
+  {
+    path: '/marketing-first-order-discount/:marketingId?',
+    asyncComponent: () => import('./marketing-add/first-order-discount')
+  },
+  //新增 / 编辑营销-免运费
+  {
+    path: '/marketing-free-shipping/:marketingId?',
+    asyncComponent: () => import('./marketing-add/free-shipping')
+  },
+  //新增 / 编辑营销-一口价
+  {
+    path: '/marketing-fixed-price/:marketingId?',
+    asyncComponent: () => import('./marketing-add/fixed-price')
+  },
   //营销列表
   {
     path: '/marketing-list',

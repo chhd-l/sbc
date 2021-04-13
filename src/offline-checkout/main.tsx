@@ -23,12 +23,22 @@ class Checkout extends React.Component<any, any> {
       scanedInfo: {},
       products: [],
       list: [],
+      consents: [],
+      selectedConsents: [],
       orderId: ''
     };
   }
 
   componentDidMount() {
     this.getAllProducts();
+    webapi.getConsent().then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          consents: data.res.context?.consentVOList ?? [],
+          selectedConsents: (data.res.context?.consentVOList ?? []).filter((c, idx) => idx === 0).map(d => d.id)
+        });
+      }
+    });
   }
 
   getAllProducts = () => {
@@ -184,11 +194,13 @@ class Checkout extends React.Component<any, any> {
             step: 4,
             loading: false
           });
+          this.submitCustomerConsent();
         } else if (context.tid) {
           this.setState({
             orderId: context.tid,
             loading: false
           }, this.showQueryModal);
+          this.submitCustomerConsent();
         } else {
           this.setState({
             loading: false
@@ -253,6 +265,24 @@ class Checkout extends React.Component<any, any> {
     });
   };
 
+  onSelectConsent = (consents) => {
+    this.setState({
+      selectedConsents: consents
+    });
+  }
+
+  submitCustomerConsent = () => {
+    const { memberInfo, consents, selectedConsents } = this.state;
+    if (memberInfo.memberType === 'member') {
+      webapi.setConsent(memberInfo.customerId, {
+        optionalList: consents.map(c => ({
+          id: c.id,
+          selectedFlag: selectedConsents.indexOf(c.id) > -1
+        }))
+      });
+    }
+  }
+
   render() {
     const { onClose } = this.props;
     return (
@@ -273,6 +303,9 @@ class Checkout extends React.Component<any, any> {
                 onClear={this.onClearCart}
                 onCheckout={this.onCheckout}
                 onScanEnd={this.onScanMember}
+                consents={this.state.consents}
+                selectedConsents={this.state.selectedConsents}
+                onSelectConsent={this.onSelectConsent}
               />
             : this.state.step === 3 
               ? <Payment onCancel={() => this.switchStep(2)} onPay={this.onConfirmCheckout} /> 

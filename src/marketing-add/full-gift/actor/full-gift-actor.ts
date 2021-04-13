@@ -26,6 +26,8 @@ export default class FullGiftActor extends Actor {
       //营销活动已选的商品信息
       selectedSkuIds: [],
       selectedRows: [],
+
+      selectedGiftRows: []
     };
   }
 
@@ -93,6 +95,13 @@ export default class FullGiftActor extends Actor {
   selectedRows(state, selectedRows) {
     return state.set('selectedRows', fromJS(selectedRows));
   }
+
+  @Action('marketing:selectedGiftRows')
+  selectedGiftRows(state, selectedGiftRows) {
+    return state.set('selectedGiftRows', fromJS(selectedGiftRows));
+  }
+
+
   @Action('marketing:selectedSkuIds')
   selectedSkuIds(state, selectedSkuIds) {
     return state.set('selectedSkuIds', selectedSkuIds);

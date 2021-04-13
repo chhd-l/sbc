@@ -147,6 +147,7 @@ class FullGiftForm extends React.Component<any, any> {
       attributesList: any;
       selectedRows: any;
       selectedSkuIds: any;
+      selectedGiftRows: any;
       submitFullGift: Function;
       submitFullDiscount: Function;
       submitFullReduction: Function;
@@ -156,6 +157,7 @@ class FullGiftForm extends React.Component<any, any> {
       deleteSelectedSku: Function;
       setSelectedProductRows: Function;
       initGiftDefualtLevelList: Function;
+      setSelectedGiftRows: Function;
     };
   };
   static relaxProps = {
@@ -167,6 +169,8 @@ class FullGiftForm extends React.Component<any, any> {
     attributesList: 'attributesList',
     selectedRows: 'selectedRows',
     selectedSkuIds: 'selectedSkuIds',
+    selectedGiftRows: 'selectedGiftRows',
+    setSelectedGiftRows: noop,
     initGiftDefualtLevelList: noop,
     submitFullGift: noop,
     submitFullDiscount: noop,
@@ -342,14 +346,17 @@ class FullGiftForm extends React.Component<any, any> {
     );
   };
 
-
+  GiftRowsOnChange = (rows) => {
+    const { setSelectedGiftRows } = this.props.relaxProps
+    setSelectedGiftRows(rows)
+  }
 
   // @ts-ignore
   render() {
     const { marketingId, form } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { customerLevel, sourceGoodCateList, skuExists, saveLoading } = this.state;
-    const { marketingBean, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds } = this.props.relaxProps;
+    const { marketingBean, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds,selectedGiftRows } = this.props.relaxProps;
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
     const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
@@ -519,7 +526,7 @@ class FullGiftForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        <div className="bold-title"><FormattedMessage id="Gifttype" />:</div>
+        <div className="bold-title"><FormattedMessage id="Marketing.Gifttype" />:</div>
         <FormItem {...formItemLayout} labelAlign="left">
           {getFieldDecorator('subType', {
             rules: [
@@ -564,11 +571,12 @@ class FullGiftForm extends React.Component<any, any> {
           )(
             <GiftLevels
               form={this.props.form}
-              selectedRows={selectedRows}
+              selectedRows={selectedGiftRows}
               isNormal={marketingBean.get('promotionType') === 0}
               fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()}
               onChangeBack={this.onRulesChange}
               isFullCount={marketingBean.get('subType') % 2 }
+              GiftRowsOnChange={this.GiftRowsOnChange}
             />
           )}
         </FormItem>
@@ -717,8 +725,8 @@ class FullGiftForm extends React.Component<any, any> {
                 {/*<Radio value={-1}>Full platform consumer</Radio>*/}
                 {/*{util.isThirdStore() && <Radio value={0}>In-store customer</Radio>}*/}
                 <Radio value={-1}><FormattedMessage id="Marketing.All" /></Radio>
-                <Radio value={-3}><FormattedMessage id="Marketing.Select group" /></Radio>
-                <Radio value={-4}><FormattedMessage id="Marketing.By email" /></Radio>
+                <Radio value={-3}><FormattedMessage id="Marketing.Selectgroup" /></Radio>
+                <Radio value={-4}><FormattedMessage id="Marketing.Byemail" /></Radio>
               </RadioGroup>
               {/*{level._levelPropsShow && (*/}
               {/*  <div>*/}
@@ -797,10 +805,10 @@ class FullGiftForm extends React.Component<any, any> {
           {/*<Col span={3} />*/}
           <Col span={10}>
             <Button type="primary" htmlType="submit" loading={saveLoading}>
-              Save
+              <FormattedMessage id="Marketing.Save" />
             </Button>
             &nbsp;&nbsp;
-            <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
+            <Button onClick={() => history.push('/marketing-center')}><FormattedMessage id="Marketing.Cancel" /></Button>
           </Col>
         </Row>
         {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
@@ -1049,9 +1057,7 @@ class FullGiftForm extends React.Component<any, any> {
     if (this.state.promotionCode) {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
     }
-    if (!marketingBean.get('publicStatus')) {
-      marketingBean = marketingBean.set('publicStatus', '1');
-    }
+
     form.validateFieldsAndScroll((err) => {
       if (Object.keys(errorObject).length != 0) {
         form.setFields(errorObject);

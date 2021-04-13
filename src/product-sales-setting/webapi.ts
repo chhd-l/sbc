@@ -55,3 +55,16 @@ export function addSysDictionary(filterParams = {}) {
     })
   });
 }
+
+/**
+ * 删除字典
+ * @param filterParams
+ */
+ export function delSysDictionary(filterParams = {}) {
+  return Fetch<TResult>('/sysdict/delSysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

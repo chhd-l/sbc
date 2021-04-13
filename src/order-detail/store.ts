@@ -39,7 +39,7 @@ export default class AppStore extends Store {
 
       const { res: payRecordResult2 } = (await webapi.getPaymentInfo(orderInfo.totalTid)) as any;
       const { res: cityDictRes } = (await webapi.queryCityById({
-        id: [orderInfo.consignee.cityId]
+        id: orderInfo.consignee ? [orderInfo.consignee.cityId] : undefined
       })) as any;
       const { res: countryDictRes } = (await queryDictionary({
         type: 'country'
@@ -52,7 +52,7 @@ export default class AppStore extends Store {
         this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context);
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
-        this.dispatch('dict:initCity', cityDictRes.context.systemCityVO);
+        this.dispatch('dict:initCity', cityDictRes.context?.systemCityVO ?? []);
         this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
         this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
       });
@@ -76,7 +76,7 @@ export default class AppStore extends Store {
         // webapi.getOrderNeedAudit(),
         webapi.getPaymentInfo(orderInfo.totalTid),
         webapi.queryCityById({
-          id: [orderInfo.consignee.cityId]
+          id: orderInfo.consignee ? [orderInfo.consignee.cityId] : undefined
         }),
         queryDictionary({
           type: 'country'
@@ -98,7 +98,7 @@ export default class AppStore extends Store {
           this.dispatch('detail-actor:setSellerRemarkVisible', true);
           this.dispatch('logistics:init', logistics.context);
           // this.dispatch('detail:setNeedAudit', needRes.context.audit);
-          this.dispatch('dict:initCity', cityDictRes.context.systemCityVO);
+          this.dispatch('dict:initCity', cityDictRes.context?.systemCityVO ?? []);
           this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
           this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
         });

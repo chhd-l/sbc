@@ -8,6 +8,7 @@ import ChooseProducts from './components/chooseProducts';
 import WriteTips from './components/writeTips';
 import AppStore from './store';
 import { StoreProvider } from 'plume2';
+import moment from 'moment';
 
 const { Step } = Steps;
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -65,7 +66,6 @@ class RecommendationAdd extends Component<any, any> {
     delete felinReco['__altered']
     delete customerPet['__altered']
     delete appointmentVO['__altered']
-
     let p={ ...felinReco, goodsQuantity, appointmentVO, customerPet };
    
     this.store.fetchFelinSave(p)

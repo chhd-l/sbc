@@ -1395,7 +1395,7 @@ export default {
   'Order.Club&Autoship':'Club & Autoship',
   'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
-  'Order.felin':`L'Atelier Feline`,
+  'Order.felin':`L'Atelier Felin`,
   'Order.subscriptionType':'Subscription type',
   'Order.subscriptionOrderTime':'Subscription order time',
   'Order.subscriptionPlanType':'Subscription plan type',

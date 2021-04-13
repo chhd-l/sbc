@@ -7,7 +7,7 @@ type TResult = {
 };
 
 export function getPetOwner(id) {
-  return Fetch<TResult>('/customer/detail/' + id, {
+  return Fetch<TResult>('/customer/detail2/' + id, {
     method: 'GET'
   });
 }

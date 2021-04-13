@@ -329,7 +329,7 @@ class GiftLevels extends React.Component<any, any> {
         <Button onClick={this.addLevels} disabled={fullGiftLevelList && fullGiftLevelList.length >= 5}>
           <FormattedMessage id="Marketing.Addmulti-levelpromotions" />
         </Button>
-        &nbsp;&nbsp; <FormattedMessage id="Marketing.Addmulti-upto5levels" />
+        &nbsp;&nbsp; <FormattedMessage id="Marketing.upto5levels" />
         {fullGiftLevelList && fullGiftLevelList.length > 0 && goodsModal && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}

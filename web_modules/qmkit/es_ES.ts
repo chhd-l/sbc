@@ -1593,6 +1593,11 @@ export default {
   'Order.Entrance': 'Entrance',
   'Order.Apartment': 'Apartment',
   'Order.LastName': 'Last name',
+  'Order.mixedOrder': 'Mixed order',
+  'Order.Autoship&Club': 'Autoship & Club',
+  'Order.Autoship&singePurchase': 'Autoship & Single purchase',
+  'Order.Club&singePurchase': 'Club & Single purchase',
+  'Order.Autoship&Club&singePurchase': 'Autoship & Club & Single purchase',
 
 
 

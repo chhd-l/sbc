@@ -1285,7 +1285,7 @@ export default {
   'Order.Club&Autoship':'Club & Autoship',
   'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
-  'Order.felin':`L'Atelier Feline`,
+  'Order.felin':`L'Atelier Felin`,
   'Order.subscriptionType':'Subscription type',
   'Order.subscriptionOrderTime':'Subscription order time',
   'Order.subscriptionPlanType':'Subscription plan type',
@@ -1480,6 +1480,15 @@ export default {
   'Order.reasonForReject':'Reasons for rejection',
   /* -------- 已翻译 V2.0---------------*/
 
+  'Order.offline.Reset':'Reset',
+  'Order.Entrance': 'Entrance',
+  'Order.Apartment': 'Apartment',
+  'Order.LastName': 'Last name',
+  'Order.mixedOrder': 'Mixed order',
+  'Order.Autoship&Club': 'Autoship & Club',
+  'Order.Autoship&singePurchase': 'Autoship & Single purchase',
+  'Order.Club&singePurchase': 'Club & Single purchase',
+  'Order.Autoship&Club&singePurchase': 'Autoship & Club & Single purchase',
   
   /*-----------------------------  Task  ----------------------------------------------*/
   'task.CardView':'Просмотр карты',

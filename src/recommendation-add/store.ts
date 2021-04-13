@@ -119,8 +119,17 @@ export default class AppStore extends Store {
       goodsInfoList.map(item => {
         obj[item.goodsInfoNo] = item
       })
+     // _clone[index].goodsInfoWeight = value * (_clone[index].goodsInfoWeight/_clone[index].quantity)
       goods.map(item => {
-        productSelect.push({ ...obj[item.goodsInfoNo], quantity: item.quantity })
+       let goodsInfoWeight:any=0,goodsInfoUnit=(obj[item.goodsInfoNo]?.goodsInfoUnit??'').toLowerCase();
+       if(goodsInfoUnit==='g'){
+          goodsInfoWeight=item.quantity*obj[item.goodsInfoNo].goodsInfoWeight
+       }else if(goodsInfoUnit==='kg'){
+          let d:any=(item.quantity*obj[item.goodsInfoNo].goodsInfoWeight)/1000
+          goodsInfoWeight=parseInt(d)
+       }
+
+        productSelect.push({ ...obj[item.goodsInfoNo], quantity: item.quantity ,goodsInfoWeight})
       })
       this.onProductselect(productSelect)
     }

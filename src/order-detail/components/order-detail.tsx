@@ -7,6 +7,7 @@ import FormItem from 'antd/lib/form/FormItem';
 
 import moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import PetItem from '@/customer-details/component/pet-item';
 
 import './style.less';
 
@@ -68,17 +69,13 @@ class OrderDetailTab extends React.Component<any, any> {
   _rejectForm;
 
   props: {
-    intl?:any;
+    intl?: any;
     relaxProps?: {
       detail: IMap;
       countryDict: List<any>;
-      cityDict: List<any>;
       onAudit: Function;
       confirm: Function;
       retrial: Function;
-      sellerRemarkVisible: boolean;
-
-      setSellerRemarkVisible: Function;
       remedySellerRemark: Function;
       setSellerRemark: Function;
       verify: Function;
@@ -92,14 +89,11 @@ class OrderDetailTab extends React.Component<any, any> {
   static relaxProps = {
     detail: 'detail',
     countryDict: 'countryDict',
-    cityDict: 'cityDict',
     onAudit: noop,
     confirm: noop,
     retrial: noop,
-    sellerRemarkVisible: 'sellerRemarkVisible',
 
     orderRejectModalVisible: 'orderRejectModalVisible',
-    setSellerRemarkVisible: noop,
     remedySellerRemark: noop,
     setSellerRemark: noop,
     verify: noop,
@@ -109,20 +103,11 @@ class OrderDetailTab extends React.Component<any, any> {
   };
   state = {
     visiblePetDetails: false,
-    havePet: false,
-    currentPetInfo: {
-      petsName: '',
-      birthOfPets: '',
-      petsBreed: '',
-      petsSex: 0,
-      petsType: '',
-      petsSizeValueName: '',
-      customerPetsPropRelations: []
-    }
+    currentPetId: ''
   };
 
   render() {
-    const { currentPetInfo, havePet } = this.state;
+    const { currentPetId } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
     //当前的订单号
     const tid = detail.get('id');
@@ -210,93 +195,8 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     });
     let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
-    const columns = [
-      {
-        title: <FormattedMessage id="Order.SKUcode" />,
-        dataIndex: 'skuNo',
-        key: 'skuNo',
-        render: (text) => text
-      },
-      {
-        title: <FormattedMessage id="Order.Productname" />,
-        dataIndex: 'skuName',
-        key: 'skuName',
-        width: '50%'
-      },
-      {
-        title: <FormattedMessage id="Order.Weight" />,
-        dataIndex: 'specDetails',
-        key: 'specDetails'
-      },
-      {
-        title: <FormattedMessage id="Order.petCategory" />,
-        dataIndex: 'petCategory',
-        key: 'petCategory',
-        width: '10%',
-        render: (text, record) => <>{record.petsInfo && record.petsInfo.petsType ? <p>{record.petsInfo.petsType}</p> : null}</>
-      },
-      {
-        title: <FormattedMessage id="Order.petName" />,
-        dataIndex: 'petName',
-        key: 'petName',
-        width: '10%',
-        render: (text, record) => <>{record.petsInfo && record.petsInfo.petsName ? <p>{record.petsInfo.petsName}</p> : null}</>
-      },
-      {
-        title: <FormattedMessage id="Order.petDetails" />,
-        dataIndex: 'petDetails',
-        key: 'petDetails',
-        width: '10%',
-        render: (text, record) => (
-          <>
-            {record.petsInfo ? (
-              <Button type="link" onClick={() => this._openPetDetails(record.petsInfo)}>
-                <FormattedMessage id="Order.view" />
-              </Button>
-            ) : null}
-          </>
-        )
-      },
-      {
-        title: <FormattedMessage id="Order.Quantity" />,
-        dataIndex: 'num',
-        key: 'num'
-      },
-      {
-        title: <FormattedMessage id="Order.Price" />,
-        dataIndex: 'originalPrice',
-        key: 'originalPrice',
-        render: (originalPrice, record) =>
-          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
-            <div>
-              <span>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {record.subscriptionPrice.toFixed(2)}
-              </span>
-              <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {originalPrice && originalPrice.toFixed(2)}
-              </span>
-            </div>
-          ) : (
-            <span>
-              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              {originalPrice && originalPrice.toFixed(2)}
-            </span>
-          )
-      },
-      {
-        title: <FormattedMessage id="Order.Subtotal" />,
-        render: (row) => (
-          <span>
-            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}
-          </span>
-        )
-      }
-    ];
 
-    const columnsNoPet = [
+    const columns = [
       {
         title: <FormattedMessage id="Order.SKUcode" />,
         dataIndex: 'skuNo',
@@ -362,6 +262,17 @@ class OrderDetailTab extends React.Component<any, any> {
             {/*{(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}*/}
           </span>
         )
+      },
+      {
+        title: <FormattedMessage id="Order.purchaseType" />,
+        dataIndex: 'purchaseType',
+        key: 'purchaseType'
+      },
+      {
+        title: <FormattedMessage id="Order.petName" />,
+        dataIndex: 'petName',
+        key: 'petName',
+        render: (text, record) => <a onClick={() => this._openPetDetails(record.petsId)}>{text}</a>
       }
     ];
 
@@ -495,10 +406,11 @@ class OrderDetailTab extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Table rowKey={(_record, index) => index.toString()} columns={havePet ? columns : columnsNoPet} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
+          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
 
           <Modal
-            title={currentPetInfo.petsName}
+            title={<FormattedMessage id="PetOwner.PetInformation" />}
+            width={1100}
             visible={this.state.visiblePetDetails}
             onOk={() => {
               this.setState({
@@ -512,32 +424,7 @@ class OrderDetailTab extends React.Component<any, any> {
             }}
           >
             <Row>
-              <Col span={12}>
-                <p>
-                  {currentPetInfo.petsType === 'dog' ? <i className="iconfont icondog" style={styles.iconRight}></i> : <i className="iconfont iconcat" style={styles.iconRight}></i>}
-                  {currentPetInfo.petsBreed}
-                </p>
-                <p>
-                  <i className="iconfont iconbirthday" style={styles.iconRight}></i>
-                  {currentPetInfo.birthOfPets}
-                </p>
-                <p>
-                  {currentPetInfo.petsSex === 0 ? <i className="iconfont iconman" style={styles.iconRight}></i> : <i className="iconfont iconwoman" style={styles.iconRight}></i>}
-                  {currentPetInfo.petsSex === 0 ? 'male' : 'female'}
-                </p>
-                {currentPetInfo.petsSizeValueName ? (
-                  <p>
-                    <i className="iconfont iconweight" style={styles.iconRight}></i>
-                    {currentPetInfo.petsSizeValueName}
-                  </p>
-                ) : null}
-              </Col>
-              <Col span={12}>
-                <h3>
-                  <FormattedMessage id="Order.specialNeeds" />
-                </h3>
-                {currentPetInfo.customerPetsPropRelations && currentPetInfo.customerPetsPropRelations.map((item) => <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>)}
-              </Col>
+              <PetItem petId={currentPetId} showCancel={false} showTitle={false}/>
             </Row>
           </Modal>
 
@@ -826,51 +713,6 @@ class OrderDetailTab extends React.Component<any, any> {
           ) : null}
         </Row>
 
-        {firstTradeItems.petsName ? (
-          <Row gutter={30}>
-            <Col span={12}>
-              <div className="headBox">
-                <h4>
-                  <FormattedMessage id="Order.pet" />
-                </h4>
-                <Row>
-                  <Col span={12}>
-                    <p>
-                      <FormattedMessage id="Order.petName" />: {firstTradeItems.petsName}{' '}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.gender" />:{' '}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.birthday" />:{' '}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.breed" />{' '}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.sensitivities" />{' '}
-                    </p>
-                  </Col>
-                  <Col span={12}>
-                    <p>
-                      <FormattedMessage id="Order.lifestyle" />:{' '}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.activity" />:{' '}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.Weight" />:{' '}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.sterilized" />:{' '}
-                    </p>
-                  </Col>
-                </Row>
-              </div>
-            </Col>
-          </Row>
-        ) : null}
-
         <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm
             ref={(form) => {
@@ -1037,8 +879,8 @@ class OrderDetailTab extends React.Component<any, any> {
     const { retrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.Re-review'});
-    const content = this.props.intl.formatMessage({id:'Order.Confirmtoreturntheselected'});
+    const title = this.props.intl.formatMessage({ id: 'Order.Re-review' });
+    const content = this.props.intl.formatMessage({ id: 'Order.Confirmtoreturntheselected' });
     confirm({
       title: title,
       content: content,
@@ -1058,8 +900,8 @@ class OrderDetailTab extends React.Component<any, any> {
     const { confirm } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
-    const content = this.props.intl.formatMessage({id:'Order.ConfirmThatAllProducts'});
+    const title = this.props.intl.formatMessage({ id: 'Order.ConfirmReceipt' });
+    const content = this.props.intl.formatMessage({ id: 'Order.ConfirmThatAllProducts' });
     confirmModal({
       title: title,
       content: content,
@@ -1069,10 +911,10 @@ class OrderDetailTab extends React.Component<any, any> {
       onCancel() {}
     });
   };
-  _openPetDetails = (petInfo) => {
+  _openPetDetails = (petsId) => {
     this.setState({
       visiblePetDetails: true,
-      currentPetInfo: petInfo
+      currentPetId: petsId
     });
   };
 }

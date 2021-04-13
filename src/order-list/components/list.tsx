@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
+import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Radio, Row, Col } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper, cache, getOrderStatusValue } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -31,7 +31,7 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={this.props.intl.formatMessage({id:'Order.rejectionReasonTip'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={this.props.intl.formatMessage({ id: 'Order.rejectionReasonTip' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -54,11 +54,12 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
 
 @Relax
- class ListView extends React.Component<any, any> {
+class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
     selectedOrderId: null;
+    orderAduit: null;
   };
 
   props: {
@@ -66,6 +67,7 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
     relaxProps?: {
       loading: boolean;
       orderRejectModalVisible: boolean;
+      orderAuditModalVisible: boolean;
       total: number;
       pageSize: number;
       currentPage: number;
@@ -75,13 +77,16 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
       onCheckedAll: Function;
       allChecked: boolean;
       onAudit: Function;
+      onValidateAudit:Function;
       init: Function;
       onRetrial: Function;
       onConfirm: Function;
       onCheckReturn: Function;
       verify: Function;
       hideRejectModal: Function;
+      hideAuditModal: Function;
       showRejectModal: Function;
+      showAuditModal: Function;
     };
   };
 
@@ -100,18 +105,22 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
     onCheckedAll: noop,
     allChecked: allCheckedQL,
     onAudit: noop,
+    onValidateAudit: noop,
     init: noop,
     onRetrial: noop,
     onConfirm: noop,
     onCheckReturn: noop,
     verify: noop,
     orderRejectModalVisible: 'orderRejectModalVisible',
+    orderAuditModalVisible: 'orderAuditModalVisible',
     hideRejectModal: noop,
-    showRejectModal: noop
+    hideAuditModal: noop,
+    showRejectModal: noop,
+    showAuditModal: noop
   };
 
   render() {
-    const { loading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible } = this.props.relaxProps;
+    const { loading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible, orderAuditModalVisible } = this.props.relaxProps;
 
     return (
       <div>
@@ -186,6 +195,27 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
               }}
             />
           </Modal>
+          <Modal maskClosable={false} title={<FormattedMessage id="Order.previewThisOrder" />} visible={orderAuditModalVisible} okText={<FormattedMessage id="Order.OK" />} onOk={() => this._handleAuditOK()} onCancel={() => this._handleAuditCancel()}>
+            <h3><strong>{<FormattedMessage id="Order.confirmThisOrder" />}</strong></h3>
+            <p className="ant-form-item-required" style={{ margin: '20px 0' }}> <span></span> {<FormattedMessage id="Order.auditBasis" />}</p>
+            <Row>
+              <Col span={6}>{<FormattedMessage id="Order.selectType" />}</Col>
+              <Col span={12}>
+                <Radio.Group
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.setState({
+                      orderAduit: value
+                    });
+                  }}
+                  defaultValue={0}
+                >
+                  <Radio value={0}>{<FormattedMessage id="Order.auditPassed" />}</Radio>
+                  <Radio value={1}>{<FormattedMessage id="Order.auditFailed" />}</Radio>
+                </Radio.Group>
+              </Col>
+            </Row>
+          </Modal>
         </div>
       </div>
     );
@@ -202,7 +232,7 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
   }
 
   _renderContent(dataList) {
-    const { onChecked, onAudit, verify } = this.props.relaxProps;
+    const { onChecked, onAudit, verify, onValidateAudit } = this.props.relaxProps;
 
     return (
       dataList &&
@@ -277,7 +307,11 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
                                 <FormattedMessage id="Order.fightTogether" />
                               </span>
                             )}
-                            {v.get('isAutoSub') && <span style={styles.platform}><FormattedMessage id="Order.subscription" /></span>}
+                            {v.get('isAutoSub') && (
+                              <span style={styles.platform}>
+                                <FormattedMessage id="Order.subscription" />
+                              </span>
+                            )}
                             {v.get('isAutoSub') ? (
                               <span
                                 style={{
@@ -304,7 +338,10 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
                         </span>
                         <span style={{ marginRight: 0, float: 'right' }}>
                           {/*只有未审核状态才显示修改*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'INIT' || v.getIn(['tradeState', 'flowState']) === 'AUDIT') && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && v.get('tradeItems') && !v.get('tradeItems').get(0).get('isFlashSaleGoods') && (
+                          {(v.getIn(['tradeState', 'flowState']) === 'INIT' || v.getIn(['tradeState', 'flowState']) === 'AUDIT') &&
+                            v.getIn(['tradeState', 'payState']) === 'NOT_PAID' &&
+                            v.get('tradeItems') &&
+                            !v.get('tradeItems').get(0).get('isFlashSaleGoods') &&
                             // <AuthWrapper functionName="edit_order_f_001">
                             //   <Tooltip placement="top" title="Edit">
                             //     <a
@@ -318,8 +355,7 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
                             //     </a>
                             //   </Tooltip>
                             // </AuthWrapper>
-                            null
-                          )}
+                            null}
                           {/*审核按钮显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
                             <AuthWrapper functionName="fOrderList002">
@@ -357,15 +393,17 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
                               </AuthWrapper>
                             )}
                           {/*部分发货状态显示*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') && (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') && v.getIn(['tradeState', 'payState']) === 'PAID' && (
-                            <AuthWrapper functionName="fOrderDetail002">
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
-                                <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
-                                  {/*<FormattedMessage id="order.ship" />*/}
-                                </a>
-                              </Tooltip>
-                            </AuthWrapper>
-                          )}
+                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&
+                            (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') &&
+                            v.getIn(['tradeState', 'payState']) === 'PAID' && (
+                              <AuthWrapper functionName="fOrderDetail002">
+                                <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                                  <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
+                                    {/*<FormattedMessage id="order.ship" />*/}
+                                  </a>
+                                </Tooltip>
+                              </AuthWrapper>
+                            )}
                           {/*待收货状态显示*/}
                           {(v.getIn(['tradeState', 'flowState']) === 'DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'SHIPPED') && (
                             <AuthWrapper functionName="fOrderList003">
@@ -381,6 +419,11 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
                               </Tooltip>
                             </AuthWrapper>
                           )}
+                          {v.getIn(['tradeState', 'flowState']) === 'PENDING_REVIEW' ? (
+                            <Tooltip placement="top" title="Audit">
+                              <a onClick={() => this._showAuditConfirm(id)} className="iconfont iconaudit"></a>
+                            </Tooltip>
+                          ) : null}
                           <AuthWrapper functionName="fOrderDetail001">
                             <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
                               <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails">
@@ -444,13 +487,17 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
                     {/* Quantity */}
                     <td style={{ width: '10%' }}>{num}</td>
                     {/*发货状态*/}
-                    <td style={{ width: '14%' }}><FormattedMessage id={getOrderStatusValue('ShippStatus',v.getIn(['tradeState', 'deliverStatus']))} /></td>
+                    <td style={{ width: '14%' }}>
+                      <FormattedMessage id={getOrderStatusValue('ShippStatus', v.getIn(['tradeState', 'deliverStatus']))} />
+                    </td>
                     {/*支付状态*/}
                     <td style={{ width: '14%' }}>
-                      <FormattedMessage id={getOrderStatusValue('PaymentStatus',v.getIn(['tradeState', 'payState']))} />
+                      <FormattedMessage id={getOrderStatusValue('PaymentStatus', v.getIn(['tradeState', 'payState']))} />
                     </td>
                     {/*orderCreateBy*/}
-                    <td style={{ width: '10%', paddingRight: 22 }}  className="operation-td">{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>
+                    <td style={{ width: '10%', paddingRight: 22 }} className="operation-td">
+                      {v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -470,6 +517,11 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
     this.setState({ selectedOrderId: tdId }, showRejectModal());
   };
 
+  _showAuditConfirm = (tdId: string) => {
+    const { showAuditModal } = this.props.relaxProps;
+    this.setState({ selectedOrderId: tdId }, showAuditModal());
+  };
+
   /**
    * 回审订单确认提示
    * @param tdId
@@ -477,8 +529,8 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
    */
   _showRetrialConfirm = (tdId: string) => {
     const { onRetrial } = this.props.relaxProps;
-    let title = this.props.intl.formatMessage({id:'Order.review'})
-    let content = this.props.intl.formatMessage({id:'Order.confirmReview'})
+    let title = this.props.intl.formatMessage({ id: 'Order.review' });
+    let content = this.props.intl.formatMessage({ id: 'Order.confirmReview' });
 
     const confirm = Modal.confirm;
     confirm({
@@ -509,8 +561,8 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
   _showConfirm = (tdId: string) => {
     const { onConfirm } = this.props.relaxProps;
 
-    let title = this.props.intl.formatMessage({id:'Order.confirmReceipt'})
-    let content = this.props.intl.formatMessage({id:'Order.confirmReceivedAllProducts'})
+    let title = this.props.intl.formatMessage({ id: 'Order.confirmReceipt' });
+    let content = this.props.intl.formatMessage({ id: 'Order.confirmReceivedAllProducts' });
     const confirm = Modal.confirm;
     confirm({
       title: title,
@@ -536,6 +588,11 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
     });
   };
 
+  _handleAuditOK = () => {
+    const { onValidateAudit } = this.props.relaxProps;
+    onValidateAudit(this.state.selectedOrderId, this.state.orderAduit);
+  };
+
   /**
    * 处理取消
    */
@@ -544,6 +601,10 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
     hideRejectModal();
     this._rejectForm.setFieldsValue({ comment: '' });
   };
+  _handleAuditCancel=()=>{
+    const { hideAuditModal } = this.props.relaxProps;
+    hideAuditModal();
+  }
   isPrescriber = () => {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     let roleName = employee.roleName;
@@ -613,5 +674,4 @@ const styles = {
   }
 } as any;
 
-
-export default injectIntl(ListView)
+export default injectIntl(ListView);

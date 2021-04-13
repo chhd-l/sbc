@@ -13,13 +13,15 @@ const catImg = require('../img/cat.png');
 
 interface Iprop extends FormComponentProps {
   petId: string;
+  showCancel: boolean;
+  showTitle: boolean;
 }
 
 const calcPetWeight = (jsonStr: string) => {
   try {
     const weightObj = JSON.parse(jsonStr);
     return `${weightObj['measure']} ${weightObj['measureUnit']}`;
-  } catch(e) {
+  } catch (e) {
     return '';
   }
 };
@@ -221,7 +223,7 @@ class PetItem extends React.Component<Iprop, any> {
     return (
       <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
         <div className="container petowner-noedit-form">
-          <Headline title="Pet information" />
+          {this.props.showTitle === false ? null : <Headline title="Pet information" />}
           <Form {...formItemLayout}>
             <Row gutter={16}>
               <Col span={4} style={{ paddingLeft: '30px' }}>
@@ -234,11 +236,13 @@ class PetItem extends React.Component<Iprop, any> {
                 </div>
               </Col>
               <Col span={20}>
-                <Row gutter={16}>
-                  <Col span={24}>
-                    <div style={{ fontSize: 16, color: '#666' }}>Basic information</div>
-                  </Col>
-                </Row>
+                {this.props.showTitle === false ? null : (
+                  <Row gutter={16}>
+                    <Col span={24}>
+                      <div style={{ fontSize: 16, color: '#666' }}>Basic information</div>
+                    </Col>
+                  </Row>
+                )}
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item label="Pet category">
@@ -643,20 +647,22 @@ class PetItem extends React.Component<Iprop, any> {
             </Row>
           </Form>
         </div>
-        <div className="bar-button">
-          {editable && (
-            <Button type="primary" onClick={this.savePet} style={{ marginRight: '20px' }}>
-              Save
+        {this.props.showCancel === false ? null : (
+          <div className="bar-button">
+            {editable && (
+              <Button type="primary" onClick={this.savePet} style={{ marginRight: '20px' }}>
+                Save
+              </Button>
+            )}
+            <Button
+              onClick={() => {
+                history.go(-1);
+              }}
+            >
+              Cancel
             </Button>
-          )}
-          <Button
-            onClick={() => {
-              history.go(-1);
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
+          </div>
+        )}
       </Spin>
     );
   }

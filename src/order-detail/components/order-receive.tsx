@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
-import { Table, Tooltip, Menu, Popover, Row, Col } from 'antd';
+import { Table, Tooltip, Menu, Popover, Row, Col, Card } from 'antd';
 import { noop, Const, util } from 'qmkit';
 import { IList } from 'typings/globalType';
 import moment from 'moment';
@@ -25,7 +25,6 @@ export default class OrderReceive extends React.Component<any, any> {
   props: {
     relaxProps?: {
       detail: IMap;
-      payRecord: IList;
       paymentInfo: IMap;
       onSavePayOrder: Function;
       destroyOrder: Function;
@@ -49,7 +48,6 @@ export default class OrderReceive extends React.Component<any, any> {
 
   static relaxProps = {
     detail: 'detail',
-    payRecord: 'payRecord',
     paymentInfo: 'paymentInfo',
     onSavePayOrder: noop,
     destroyOrder: noop,
@@ -62,48 +60,22 @@ export default class OrderReceive extends React.Component<any, any> {
   //收款列表
   receiveColumns = [
     {
-      title: 'Collection Serial Number',
-      dataIndex: 'receivableNo',
-      key: 'receivableNo'
-    },
-    {
       title: 'Collection Time',
-      dataIndex: 'receiveTime',
-      key: 'receiveTime',
-      render: (receiveTime) => receiveTime && moment(receiveTime).format(Const.TIME_FORMAT).toString()
+      dataIndex: 'createTime',
+      key: 'createTime',
+      render: (createTime) => createTime && moment(createTime).format(Const.TIME_FORMAT).toString()
     },
     {
       title: 'Amount Received',
-      dataIndex: 'payOrderPrice',
-      key: 'payOrderPrice',
+      dataIndex: 'practicalPrice',
+      key: 'practicalPrice',
       render: (text, record) => (record.payOrderStatus == 1 ? '' : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (text || 0).toFixed(2))
     },
     {
-      title: 'Accounts Receivable',
-      dataIndex: 'receivableAccount',
-      key: 'receivableAccount',
-      render: (receivableAccount) => (receivableAccount ? this._desensitizeAccount(receivableAccount) : '-')
-    },
-    {
-      title: 'Accessories',
-      dataIndex: 'encloses',
-      key: 'encloses',
-      render: (encloses) =>
-        encloses ? (
-          <Popover key={'encloses'} placement="topRight" title={''} trigger="click" content={<img style={styles.attachmentView} src={encloses} />}>
-            <a href="#">
-              <img style={styles.attachment} src={encloses} />
-            </a>
-          </Popover>
-        ) : (
-          '-'
-        )
-    },
-    {
       title: 'Status',
-      dataIndex: 'payOrderStatus',
-      key: 'payOrderStatus',
-      render: (payOrderStatus) => payOrderStatusDic[payOrderStatus]
+      dataIndex: 'tradeType',
+      key: 'tradeType',
+      // render: (status) => status ? payOrderStatusDic[status] : ''
     },
     ,
     {
@@ -131,7 +103,7 @@ export default class OrderReceive extends React.Component<any, any> {
   ];
 
   render() {
-    const { detail, payRecord, paymentInfo } = this.props.relaxProps;
+    const { detail, paymentInfo } = this.props.relaxProps;
     const id = detail.get('id');
     // const toExternalOrderId = detail.get('toExternalOrderId');
     const totalPayCash = detail.getIn(['tradePrice', 'totalPrice']) || 0;
@@ -153,32 +125,30 @@ export default class OrderReceive extends React.Component<any, any> {
         </div>
 
         <div>
-          <Table columns={this.receiveColumns} dataSource={payRecord.toJS()} pagination={false} bordered rowKey={(_record, index) => index.toString()} />
+          <Table columns={this.receiveColumns} dataSource={ paymentInfo ? [paymentInfo.toJS()] : []} pagination={false} bordered rowKey={(_record, index) => index.toString()} />
         </div>
 
         <Row>
-          <Col span={16}>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="paymentId" />}: {paymentInfo.get('chargeId')}
+          <Col span={12} className="headBox" style={{ height: 200, marginTop:10 }}>
+            <h4><FormattedMessage id="Order.paymentDetails" /></h4>
+            <p>
+              {<FormattedMessage id="Order.purchaseType" />}: {paymentInfo.get('holderName')}
             </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="paymentTime" />}: {tradeState.get('createTime')}
+            <p>
+              {<FormattedMessage id="Order.PSP" />}: {paymentInfo.get('pspName')}
             </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="name" />}: {paymentInfo.get('holderName')}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="email" />}: {paymentInfo.get('email')}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="phoneNumber" />}: {paymentInfo.get('phone')}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="cardNumber" />}: {paymentInfo.get('lastFourDigits')}
-            </p>
-            <p style={styles.inforItem}>
+            <p>
               {<FormattedMessage id="paymentMethod" />}: {paymentInfo.get('paymentVendor')}
             </p>
+            <p>
+              {<FormattedMessage id="Order.cardLast4Digits" />}: {paymentInfo.get('lastFourDigits')}
+            </p>
+            <p>
+              {<FormattedMessage id="paymentId" />}: {paymentInfo.get('chargeId')}
+            </p>
+            <p>
+              {<FormattedMessage id="phoneNumber" />}: {paymentInfo.get('phone')}
+            </p>  
           </Col>
         </Row>
       </div>

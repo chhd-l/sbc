@@ -1479,7 +1479,19 @@ export default {
   'Order.reasonForRefuse':'Reason for Refusal of Refund',
   'Order.reasonForReject':'Reasons for rejection',
   /* -------- 已翻译 V2.0---------------*/
-
+  'Order.Apartment': 'Apartment',
+  'Order.Entrance': 'Entrance',
+  'Order.purchaseType': 'Purchase type',
+  'Order.cardHolderName': 'Card Holder Name',
+  'Order.PSP': 'PSP',
+  'Order.cardLast4Digits': 'Card Last 4 Digits',
+  'Order.paymentDetails': 'Payment Details',
+  'Order.previewThisOrder': 'Please review this order manually',
+  'Order.confirmThisOrder': 'Do you confirm if this order can be validated?',
+  'Order.auditBasis': 'Audit basis: product type, product amount, product quantity, whether the product is in stock',
+  'Order.selectType': 'Selection Type',
+  'Order.auditPassed': 'Audit passed',
+  'Order.auditFailed': 'Audit failed',
   
   /*-----------------------------  Task  ----------------------------------------------*/
   'task.CardView':'Просмотр карты',
@@ -2168,7 +2180,7 @@ export default {
   'PetOwner.levelBadge': 'Type badge',
   'PetOwner.consumerLevel': 'Pet owner type',
   /* -------- 已翻译 V1.0---------------*/
-
+ 
 
 
 

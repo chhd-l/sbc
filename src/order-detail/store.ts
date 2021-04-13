@@ -38,9 +38,6 @@ export default class AppStore extends Store {
       const { context: logistics } = (await fetchLogistics()) as any;
 
       const { res: payRecordResult2 } = (await webapi.getPaymentInfo(orderInfo.totalTid)) as any;
-      const { res: cityDictRes } = (await webapi.queryCityById({
-        id: [orderInfo.consignee.cityId]
-      })) as any;
       const { res: countryDictRes } = (await queryDictionary({
         type: 'country'
       })) as any;
@@ -52,7 +49,6 @@ export default class AppStore extends Store {
         this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context);
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
-        this.dispatch('dict:initCity', cityDictRes.context.systemCityVO);
         this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
         this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
       });
@@ -75,9 +71,6 @@ export default class AppStore extends Store {
         fetchLogistics(),
         // webapi.getOrderNeedAudit(),
         webapi.getPaymentInfo(orderInfo.totalTid),
-        webapi.queryCityById({
-          id: [orderInfo.consignee.cityId]
-        }),
         queryDictionary({
           type: 'country'
         })
@@ -87,8 +80,7 @@ export default class AppStore extends Store {
         const { res: logistics } = results[1] as any;
         // const { res: needRes } = results[2] as any;
         const { res: payRecordResult2 } = results[2] as any;
-        const { res: cityDictRes } = results[3] as any;
-        const { res: countryDictRes } = results[4] as any;
+        const { res: countryDictRes } = results[3] as any;
         // const { res: refresh } = (results[6]) as any;
         this.transaction(() => {
           this.dispatch('loading:end');
@@ -98,7 +90,6 @@ export default class AppStore extends Store {
           this.dispatch('detail-actor:setSellerRemarkVisible', true);
           this.dispatch('logistics:init', logistics.context);
           // this.dispatch('detail:setNeedAudit', needRes.context.audit);
-          this.dispatch('dict:initCity', cityDictRes.context.systemCityVO);
           this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
           this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
         });

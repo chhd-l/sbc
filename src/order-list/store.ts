@@ -140,6 +140,17 @@ export default class AppStore extends Store {
     }
   };
 
+  onValidateAudit = async (tid: string, audit: string)=> {
+    const { res } = await webapi.audit(tid, audit, '');
+    if (res.code == Const.SUCCESS_CODE) {
+      message.success('Operate successfully');
+      this.hideAuditModal();
+      this.init();
+    } else {
+      this.hideAuditModal();
+    }
+  }
+
   onRetrial = async (tid: string) => {
     const { res } = await webapi.retrial(tid);
     if (res.code == Const.SUCCESS_CODE) {
@@ -282,10 +293,18 @@ export default class AppStore extends Store {
     this.dispatch('order:list:reject:show');
   };
 
+  showAuditModal = () => {
+    this.dispatch('order:list:audit:show');
+  };
+
   /**
    *关闭驳回弹框
    */
   hideRejectModal = () => {
     this.dispatch('order:list:reject:hide');
+  };
+
+  hideAuditModal = () => {
+    this.dispatch('order:list:audit:hide');
   };
 }

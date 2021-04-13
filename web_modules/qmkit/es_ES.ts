@@ -1460,7 +1460,7 @@ export default {
   'Order.offline.noCustomerAlert':'Please fill consumer information!',
   'Order.offline.orderNotSuccess':'Order not successful',
   'Order.offline.retryAlert':'You can switch payment type or try it again!',
-  'Order.offline.felin':"L'Atelier Feline",
+  'Order.offline.felin':"L'Atelier Felin",
   'Order.offline.directCheckout':'Direct check-out',
   'Order.offline.recommendation':'Recommendation',
   'Order.offline.shoppingCart':'Shopping cart',

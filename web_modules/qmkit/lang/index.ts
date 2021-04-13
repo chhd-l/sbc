@@ -10,7 +10,7 @@ const importAll = context => {
   }
   return map
 }
-let key = sessionStorage.getItem(cache.LANGUAGE)
+let key = sessionStorage.getItem(cache.LANGUAGE)||'es_ES'
 let langFile = importAll(context)
 let language: any = langFile[key];
 let antLanguage: any = langFile[key + '_antd'];

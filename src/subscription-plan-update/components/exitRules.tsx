@@ -11,7 +11,7 @@ export default class exitRules extends Component<any, any> {
     this.state = {};
   }
   render() {
-    const { editable, Subscription, addField } = this.props;
+    const { editable, subscriptionPlan, addField } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
@@ -35,7 +35,7 @@ export default class exitRules extends Component<any, any> {
                 </Col>
                 <Col span={4}>
                   {getFieldDecorator('canCancelPlan', {
-                    initialValue: Subscription.canCancelPlan
+                    initialValue: subscriptionPlan.canCancelPlan
                   })(
                     <Radio.Group
                       disabled={true}
@@ -62,13 +62,13 @@ export default class exitRules extends Component<any, any> {
                 </Col>
                 <Col span={4}>
                   {getFieldDecorator('SubscriptionFlag', {
-                    initialValue: Subscription.SubscriptionFlag
+                    initialValue: subscriptionPlan.subscriptionPlanFlag
                   })(
                     <Radio.Group
                       disabled={true}
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        addField('SubscriptionFlag', value);
+                        addField('subscriptionPlanFlag', value);
                       }}
                     >
                       <Radio value={true}>
@@ -82,7 +82,7 @@ export default class exitRules extends Component<any, any> {
                 </Col>
               </FormItem>
             </Row>
-            {Subscription.canCancelPlan && Subscription.SubscriptionFlag ? (
+            {subscriptionPlan.canCancelPlan && subscriptionPlan.subscriptionPlanFlag ? (
               <div>
                 <h5>
                   <FormattedMessage id="Subscription.TermsOfCancellation" />
@@ -93,7 +93,7 @@ export default class exitRules extends Component<any, any> {
                       <FormattedMessage id="Subscription.ConsumerIsChargedBefore" />
                     </strong>
                     {getFieldDecorator('cancellationRefillTimes', {
-                      initialValue: Subscription.cancellationRefillTimes,
+                      initialValue: subscriptionPlan.cancellationRefillTimes,
                       rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                     })(
                       <InputNumber
@@ -116,7 +116,7 @@ export default class exitRules extends Component<any, any> {
                       <FormattedMessage id="Subscription.remainingNumberOfRefills" /> *
                     </strong>
                     {getFieldDecorator('cancellationRefillFee', {
-                      initialValue: Subscription.cancellationRefillFee,
+                      initialValue: subscriptionPlan.cancellationRefillFee,
                       rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                     })(
                       <InputNumber
@@ -146,7 +146,7 @@ export default class exitRules extends Component<any, any> {
                 </Col>
                 <Col span={4}>
                   {getFieldDecorator('changeDeliveryDateFlag', {
-                    initialValue: Subscription.changeDeliveryDateFlag
+                    initialValue: subscriptionPlan.changeDeliveryDateFlag
                   })(
                     <Radio.Group
                       disabled={!editable}
@@ -165,13 +165,13 @@ export default class exitRules extends Component<any, any> {
                   )}
                 </Col>
               </FormItem>
-              {Subscription.changeDeliveryDateFlag ? (
+              {subscriptionPlan.changeDeliveryDateFlag ? (
                 <FormItem>
                   <strong>
                     <FormattedMessage id="Subscription.After" />
                   </strong>
                   {getFieldDecorator('changeDeliveryDateAfterTimes', {
-                    initialValue: Subscription.changeDeliveryDateAfterTimes,
+                    initialValue: subscriptionPlan.changeDeliveryDateAfterTimes,
                     rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                   })(
                     <InputNumber
@@ -197,7 +197,7 @@ export default class exitRules extends Component<any, any> {
                 </Col>
                 <Col span={4}>
                   {getFieldDecorator('skipNextDeliveryFlag', {
-                    initialValue: Subscription.skipNextDeliveryFlag
+                    initialValue: subscriptionPlan.skipNextDeliveryFlag
                   })(
                     <Radio.Group
                       disabled
@@ -216,13 +216,13 @@ export default class exitRules extends Component<any, any> {
                   )}
                 </Col>
               </FormItem>
-              {Subscription.skipNextDeliveryFlag ? (
+              {subscriptionPlan.skipNextDeliveryFlag ? (
                 <FormItem>
                   <strong>
                     <FormattedMessage id="Subscription.After" />
                   </strong>
                   {getFieldDecorator('skipNextDeliveryTimes', {
-                    initialValue: Subscription.skipNextDeliveryTimes,
+                    initialValue: subscriptionPlan.skipNextDeliveryTimes,
                     rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                   })(
                     <InputNumber

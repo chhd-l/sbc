@@ -191,7 +191,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           <Breadcrumb.Item>{editable ? title : subscriptionPlan.name}</Breadcrumb.Item>
         </BreadCrumb>
 
-        <div className="container-search" id="subscriptionPlanStep">
+        <div className="container-search" id="SubscriptionStep">
           <Headline title={title} />
           <Steps current={current} labelPlacement="vertical">
             {steps.map((item) => (

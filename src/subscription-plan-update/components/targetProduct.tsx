@@ -15,10 +15,10 @@ export default class targetProduct extends Component<any, any> {
   }
 
   deleteProduct(key) {
-    const { Subscription, addField, allSkuProduct } = this.props;
+    const { subscriptionPlan, addField, allSkuProduct } = this.props;
 
     let newTargetProductIds = [];
-    Subscription.targetGoodsIds.map((item) => {
+    subscriptionPlan.targetGoodsIds.map((item) => {
       if (item !== key) {
         newTargetProductIds.push(item);
       }
@@ -47,7 +47,7 @@ export default class targetProduct extends Component<any, any> {
 
   render() {
     const { loading, visible } = this.state;
-    const { editable, Subscription } = this.props;
+    const { editable, subscriptionPlan } = this.props;
     return (
       <div>
         <h3>
@@ -89,8 +89,8 @@ export default class targetProduct extends Component<any, any> {
                         </tr>
                       </thead>
                       <tbody className="ant-table-tbody">
-                        {Subscription.targetGoods &&
-                          Subscription.targetGoods.map((item) => (
+                        {subscriptionPlan.targetGoods &&
+                          subscriptionPlan.targetGoods.map((item) => (
                             <tr key={item.goodsInfoId}>
                               <td>
                                 <img src={item.goodsInfoImg} />

@@ -379,6 +379,7 @@ class FullGiftForm extends React.Component<any, any> {
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
     console.log(marketingBean.toJS(), 'marketingBean------------');
+    console.log(selectedRows.toJS(), 'selectedRows------------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Promotiontype" />} labelAlign="left">

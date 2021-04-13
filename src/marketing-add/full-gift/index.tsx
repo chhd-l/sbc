@@ -44,10 +44,10 @@ class MarketingFullGiftAdd extends React.Component<any, any> {
       <AuthWrapper functionName="f_marketing_gift_add">
         <div>
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>{marketingId ? <FormattedMessage id="Edit gift"/>: <FormattedMessage id="Create gift"/>}</Breadcrumb.Item>
+            <Breadcrumb.Item>{marketingId ? <FormattedMessage id="Marketing.Editgift"/>: <FormattedMessage id="Marketing.Creategift"/>}</Breadcrumb.Item>
           </BreadCrumb>
           <div className="container marketing-container">
-            <Headline title={marketingId ? <FormattedMessage id="Edit gift"/>: <FormattedMessage id="Create gift"/>} />
+            <Headline title={marketingId ? <FormattedMessage id="Marketing.Editgift"/>: <FormattedMessage id="Marketing.Creategift"/>} />
             {/*<Alert*/}
             {/*  message="同一商品同一时间可参加不同类型的促销活动，但只可参加一个满赠活动；"*/}
             {/*  type="info"*/}

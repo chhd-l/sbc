@@ -18,7 +18,7 @@ const InputGroup = Input.Group;
 @Relax
 class SearchHead extends Component<any, any> {
   props: {
-    intl?:any;
+    intl?: any;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -73,10 +73,27 @@ class SearchHead extends Component<any, any> {
       subscriptionPlanType: '',
       codeSelect: 'promotionCode',
       codeSelectValue: '',
-      planTypeList: [
-        { value: 'Cat ', name: props.intl.formatMessage({id:'Order.cat'}), rel: 'club' },
-        { value: 'Dog', name: props.intl.formatMessage({id:'Order.dog'}), rel: 'club' },
-        { value: 'SmartFeeder', name: props.intl.formatMessage({id:'Order.smartFeeder'}), rel: 'contractProduct' }
+      orderTypeList: [
+        { value: 'SINGLE_PURCHASE', name: props.intl.formatMessage({ id: 'Order.Singlepurchase' }) },
+        { value: 'SUBSCRIPTION', name: props.intl.formatMessage({ id: 'Order.subscription' }) },
+        { value: 'MIXED_ORDER', name: props.intl.formatMessage({ id: 'Order.mixedOrder' }) }
+      ],
+      subscriptionPlanTypeList: [],
+      subscriptionPlanTypeListClone: [
+        { value: 'Cat', name: props.intl.formatMessage({ id: 'Order.cat' }) },
+        { value: 'Dog', name: props.intl.formatMessage({ id: 'Order.dog' }) },
+        { value: 'Cat_Dog', name: props.intl.formatMessage({ id: 'Order.Cat&Dog' }) },
+        { value: 'SmartFeeder', name: props.intl.formatMessage({ id: 'Order.smartFeeder' }) }
+      ],
+      subscriptionTypeList: [],
+      subscriptionTypeListClone: [
+        { value: 'ContractProduct', name: props.intl.formatMessage({ id: 'Order.contractProduct' }), isMixed: false },
+        { value: 'Club', name: props.intl.formatMessage({ id: 'Order.club' }), isMixed: false },
+        { value: 'Autoship', name: props.intl.formatMessage({ id: 'Order.autoship' }), isMixed: false },
+        { value: 'Autoship_Club', name: props.intl.formatMessage({ id: 'Order.Autoship&Club' }), isMixed: true },
+        { value: 'Autoship_SingePurchase', name: props.intl.formatMessage({ id: 'Order.Autoship&singePurchase' }), isMixed: true },
+        { value: 'Club_SingePurchase', name: props.intl.formatMessage({ id: 'Order.Club&singePurchase' }), isMixed: true },
+        { value: 'Autoship_Club_SingePurchase', name: props.intl.formatMessage({ id: 'Order.Autoship&Club&singePurchase' }), isMixed: true }
       ],
 
       tradeState: {
@@ -89,36 +106,23 @@ class SearchHead extends Component<any, any> {
       orderTypeSelect: 'Order type'
     };
   }
-
   render() {
     const { tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState, orderType, orderSource, subscriptionType, refillNumber, subscriptionPlanType, planTypeList, showAdvanceSearch } = this.state;
+    const { tradeState, orderType, orderSource, subscriptionType, refillNumber, subscriptionPlanType } = this.state;
+    const { orderTypeList, subscriptionTypeList, subscriptionPlanTypeList, showAdvanceSearch } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
     }
     const refillNumberList = [
-      { value: 'First', name: this.props.intl.formatMessage({id:'Order.first'}) },
-      { value: 'Recurrent', name: this.props.intl.formatMessage({id:'Order.recurrent'}) }
-    ];
-
-    const orderTypeList = [
-      { value: 'SINGLE_PURCHASE', name: this.props.intl.formatMessage({id:'Order.Singlepurchase'}) },
-      { value: 'SUBSCRIPTION', name: this.props.intl.formatMessage({id:'Order.subscription'}) }
-    ];
-
-    const subscriptionTypeList = [
-      { value: 'ContractProduct', name: this.props.intl.formatMessage({id:'Order.contractProduct'}) },
-      { value: 'Club', name: this.props.intl.formatMessage({id:'Order.club'}) },
-      { value: 'Autoship', name: this.props.intl.formatMessage({id:'Order.autoship'}) },
-      { value: 'Club_Autoship', name: this.props.intl.formatMessage({id:'Order.Club&Autoship'}) },
-      { value: 'Cat_Dog', name: this.props.intl.formatMessage({id:'Order.Cat&Dog'}) }
+      { value: 'First', name: this.props.intl.formatMessage({ id: 'Order.first' }) },
+      { value: 'Recurrent', name: this.props.intl.formatMessage({ id: 'Order.recurrent' }) }
     ];
 
     const orderSourceList = [
-      { value: 'FGS', name: this.props.intl.formatMessage({id:'Order.fgs'}) },
-      { value: 'L_ATELIER_FELIN', name: this.props.intl.formatMessage({id:'Order.felin'}) }
+      { value: 'FGS', name: this.props.intl.formatMessage({ id: 'Order.fgs' }) },
+      { value: 'L_ATELIER_FELIN', name: this.props.intl.formatMessage({ id: 'Order.felin' }) }
     ];
 
     const menu = (
@@ -219,18 +223,7 @@ class SearchHead extends Component<any, any> {
                             value={orderType}
                             getPopupContainer={(trigger: any) => trigger.parentNode}
                             onChange={(value) => {
-                              if (value !== 'SUBSCRIPTION') {
-                                this.setState({
-                                  orderType: value,
-                                  subscriptionType: '',
-                                  subscriptionPlanType: '',
-                                  refillNumber: ''
-                                });
-                              } else {
-                                this.setState({
-                                  orderType: value
-                                });
-                              }
+                              this.getSubscriptionType(value);
                             }}
                           >
                             {orderTypeList &&
@@ -279,7 +272,7 @@ class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
-                  
+
                   <Col span={8} id="input-group-width">
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -300,11 +293,9 @@ class SearchHead extends Component<any, any> {
                             }
                             value={tradeState.payState}
                           >
-                             { PaymentStatus.map(item=> (
-                                <Option value={item.value}>
-                                {item.name}
-                              </Option>
-                             )) }
+                            {PaymentStatus.map((item) => (
+                              <Option value={item.value}>{item.name}</Option>
+                            ))}
                           </Select>
                         ) : (
                           <Select
@@ -322,11 +313,9 @@ class SearchHead extends Component<any, any> {
                               });
                             }}
                           >
-                              { ShippStatus.map(item=> (
-                                <Option value={item.value}>
-                                {item.name}
-                              </Option>
-                             )) }
+                            {ShippStatus.map((item) => (
+                              <Option value={item.value}>{item.name}</Option>
+                            ))}
                           </Select>
                         )}
                       </InputGroup>
@@ -339,9 +328,10 @@ class SearchHead extends Component<any, any> {
                         <Input style={styles.leftLabel} disabled defaultValue={this.props.intl.formatMessage({ id: 'Order.subscriptionType' })} />
                         <Select
                           style={styles.wrapper}
+                          dropdownMatchSelectWidth={false}
                           allowClear
                           value={subscriptionType}
-                          disabled={orderType !== 'SUBSCRIPTION'}
+                          disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState(
@@ -349,7 +339,7 @@ class SearchHead extends Component<any, any> {
                                 subscriptionType: value
                               },
                               () => {
-                                this.getPlanType(value);
+                                this.getSubsrciptionPlanType(value);
                               }
                             );
                           }}
@@ -398,12 +388,12 @@ class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} title={this.props.intl.formatMessage({id:'Order.subscriptionOrderTime'})} disabled defaultValue={this.props.intl.formatMessage({id:'Order.subscriptionOrderTime'})} />
+                        <Input style={styles.leftLabel} title={this.props.intl.formatMessage({ id: 'Order.subscriptionOrderTime' })} disabled defaultValue={this.props.intl.formatMessage({ id: 'Order.subscriptionOrderTime' })} />
                         <Select
                           style={styles.wrapper}
                           allowClear
                           value={refillNumber}
-                          disabled={orderType !== 'SUBSCRIPTION'}
+                          disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({
@@ -425,12 +415,12 @@ class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} title={this.props.intl.formatMessage({id:'Order.subscriptionPlanType'})} disabled defaultValue={this.props.intl.formatMessage({id:'Order.subscriptionPlanType'})} />
+                        <Input style={styles.leftLabel} title={this.props.intl.formatMessage({ id: 'Order.subscriptionPlanType' })} disabled defaultValue={this.props.intl.formatMessage({ id: 'Order.subscriptionPlanType' })} />
                         <Select
                           style={styles.wrapper}
                           allowClear
                           value={subscriptionPlanType}
-                          disabled={orderType !== 'SUBSCRIPTION'}
+                          disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({
@@ -438,8 +428,8 @@ class SearchHead extends Component<any, any> {
                             });
                           }}
                         >
-                          {planTypeList &&
-                            planTypeList.map((item, index) => (
+                          {subscriptionPlanTypeList &&
+                            subscriptionPlanTypeList.map((item, index) => (
                               <Option value={item.value} title={item.name} key={index}>
                                 {item.name}
                               </Option>
@@ -535,10 +525,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.consumerName'})} value="buyerName">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.consumerName' })} value="buyerName">
           <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.consumerAccount'})} value="buyerAccount">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.consumerAccount' })} value="buyerAccount">
           <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
@@ -557,10 +547,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.productName'})} value="skuName">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.productName' })} value="skuName">
           <FormattedMessage id="Order.productName" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.skuCode'})} value="skuNo">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.skuCode' })} value="skuNo">
           <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
@@ -579,10 +569,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.recipient'})} value="consigneeName">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.recipient' })} value="consigneeName">
           <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.recipientPhone'})} value="consigneePhone">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.recipientPhone' })} value="consigneePhone">
           <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
@@ -601,10 +591,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.orderTypeSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.orderType'})} value="Order type">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.orderType' })} value="Order type">
           <FormattedMessage id="Order.orderType" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.orderSource'})} value="Order source">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.orderSource' })} value="Order source">
           <FormattedMessage id="Order.orderSource" />
         </Option>
       </Select>
@@ -623,10 +613,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.clinicSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.clinicName'})} value="clinicsName">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.clinicName' })} value="clinicsName">
           <FormattedMessage id="Order.clinicName" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.clinicID'})} value="clinicsIds">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.clinicID' })} value="clinicsIds">
           <FormattedMessage id="Order.clinicID" />
         </Option>
       </Select>
@@ -644,10 +634,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.OrderNumber'})} value="orderNumber">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.OrderNumber' })} value="orderNumber">
           <FormattedMessage id="Order.OrderNumber" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.subscriptionNumber'})} value="subscriptionNumber">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.subscriptionNumber' })} value="subscriptionNumber">
           <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
@@ -665,10 +655,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.recommenderSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.recommenderId'})} value="recommenderId">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.recommenderId' })} value="recommenderId">
           <FormattedMessage id="Order.recommenderId" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.recommenderName'})} value="recommenderName">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.recommenderName' })} value="recommenderName">
           <FormattedMessage id="Order.recommenderName" />
         </Option>
       </Select>
@@ -687,10 +677,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.statusSelect}
         style={styles.label}
       >
-        <Option title={this.props.intl.formatMessage({id:'Order.paymentStatus'})} value="paymentStatus">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.paymentStatus' })} value="paymentStatus">
           <FormattedMessage id="Order.paymentStatus" />
         </Option>
-        <Option title={this.props.intl.formatMessage({id:'Order.shippingStatus'})} value="shippingStatus">
+        <Option title={this.props.intl.formatMessage({ id: 'Order.shippingStatus' })} value="shippingStatus">
           <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
@@ -707,15 +697,15 @@ class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-    const mess = this.props.intl.formatMessage({id:'Order.pleaseSelectOrderToOperate'});
+    const mess = this.props.intl.formatMessage({ id: 'Order.pleaseSelectOrderToOperate' });
     if (checkedIds.length == 0) {
       message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.audit'});
-    const content = this.props.intl.formatMessage({id:'Order.confirmAudit'});
+    const title = this.props.intl.formatMessage({ id: 'Order.audit' });
+    const content = this.props.intl.formatMessage({ id: 'Order.confirmAudit' });
     confirm({
       title: title,
       content: content,
@@ -730,8 +720,8 @@ class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: this.props.intl.formatMessage({id:'Order.Exportfilteredorders'}),
-      byIdsTitle: this.props.intl.formatMessage({id:'Order.Exportselectedorders'}),
+      byParamsTitle: this.props.intl.formatMessage({ id: 'Order.Exportfilteredorders' }),
+      byIdsTitle: this.props.intl.formatMessage({ id: 'Order.Exportselectedorders' }),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });
@@ -739,8 +729,8 @@ class SearchHead extends Component<any, any> {
 
   _renderCodeSelect = () => {
     const codeTypeList = [
-      { value: 'promotionCode', name: this.props.intl.formatMessage({id:'Order.promotionCode'}) },
-      { value: 'couponCode', name: this.props.intl.formatMessage({id:'Order.couponCode'}) }
+      { value: 'promotionCode', name: this.props.intl.formatMessage({ id: 'Order.promotionCode' }) },
+      { value: 'couponCode', name: this.props.intl.formatMessage({ id: 'Order.couponCode' }) }
     ];
     return (
       <Select
@@ -762,22 +752,36 @@ class SearchHead extends Component<any, any> {
       </Select>
     );
   };
-  getPlanType = (rel) => {
-    const subscriptionPlanTypeList = [
-      { value: 'Cat ', name: this.props.intl.formatMessage({id:'Order.cat'}), rel: 'Club' },
-      { value: 'Dog', name: this.props.intl.formatMessage({id:'Order.dog'}), rel: 'Club' },
-      { value: 'SmartFeeder', name: this.props.intl.formatMessage({id:'Order.smartFeeder'}), rel: 'ContractProduct' }
-    ];
-    if (rel) {
-      let planTypeList = subscriptionPlanTypeList.filter((item) => item.rel === rel);
-      this.setState({
-        planTypeList
-      });
-    } else {
-      this.setState({
-        planTypeList: subscriptionPlanTypeList
-      });
+  getSubscriptionType = (orderType) => {
+    const { subscriptionTypeListClone } = this.state;
+    this.setState({
+      orderType: orderType,
+      subscriptionType: '',
+      subscriptionPlanType: '',
+      refillNumber: ''
+    });
+    let newSubscriptionTypeList = [];
+    if (orderType === 'SUBSCRIPTION') {
+      newSubscriptionTypeList = subscriptionTypeListClone.filter((x) => x.isMixed === false);
     }
+    if (orderType === 'MIXED_ORDER') {
+      newSubscriptionTypeList = subscriptionTypeListClone.filter((x) => x.isMixed === true);
+    }
+    this.setState({
+      subscriptionTypeList: newSubscriptionTypeList
+    });
+  };
+  getSubsrciptionPlanType = (subsriptionType) => {
+    const { subscriptionPlanTypeListClone } = this.state;
+    let newSubscriptionPlanTypeList = [];
+    if (subsriptionType === 'ContractProduct') {
+      newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'SmartFeeder');
+    } else if (subsriptionType.indexOf('Club') >= 0) {
+      newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat');
+    }
+    this.setState({
+      subscriptionPlanTypeList: newSubscriptionPlanTypeList
+    });
   };
   handleSearch = (e) => {
     const { onSearch } = this.props.relaxProps;

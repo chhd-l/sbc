@@ -248,14 +248,14 @@ class PeoductCategory extends Component<any, any> {
             bindDescriptionIds: res.context.map((item) => item.id)
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Product.GetDataFailed" />);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || <FormattedMessage id="Product.GetDataFailed" />);
+        message.error(err || <FormattedMessage id="Public.GetDataFailed" />);
         this.setState({
           loading: false
         });

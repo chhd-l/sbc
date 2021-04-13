@@ -5,12 +5,25 @@ import es_ES from '../es_ES';
 import es_RUS from '../es_RUS';
 import { cache } from 'qmkit';
 
-const lang = (require as any).context('./files',true, /\.ts$/)
+const context = (require as any).context('./files',true, /\.ts$/)
 
-lang.keys().forEach(i => {
-    
-    console.log(i)
-});
+const importAll = context => {
+    const map = {}
+  
+    for (const key of context.keys()) {
+      const keyArr = key.split('/')
+      keyArr.shift() // 移除.
+      map[keyArr.join('.').replace(/\.ts$/g, '')] = context(key)
+    }
+  
+    return map
+  }
+
+ let langFile= importAll(context)
+
+ console.log(langFile)
+
+
 
 let language: any = es_ES;
 let antLanguage: any = enUS;

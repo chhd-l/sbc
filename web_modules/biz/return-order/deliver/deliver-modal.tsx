@@ -2,12 +2,13 @@ import React from 'react';
 import { Button, DatePicker, Form, Input, Select, Modal } from 'antd';
 import { StoreProvider } from 'plume2';
 import AppStore from './store';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class DeliverModal extends React.Component<any, any> {
+class DeliverModal extends React.Component<any, any> {
   store: AppStore;
   _form: any;
   WrapperForm: any;
@@ -34,12 +35,12 @@ export default class DeliverModal extends React.Component<any, any> {
 
     return (
       <Modal  maskClosable={false}
-        title="Fill in logistics information"
+        title={<FormattedMessage id="Order.FillLogisticsInformation" />}
         visible={data.get('visible')}
         onCancel={() => onHide()}
         footer={[
           <Button key="back" size="large" onClick={() => onHide()}>
-            Cancel
+            <FormattedMessage id="Order.btnCancel" />
           </Button>,
           <Button
             key="submit"
@@ -48,11 +49,12 @@ export default class DeliverModal extends React.Component<any, any> {
             loading={this.state.posting}
             onClick={() => this._handleOk(handleOk)}
           >
-            Confirm
+            <FormattedMessage id="Order.btnConfirm" />
           </Button>
         ]}
       >
         <WrapperForm
+          intl={this.props.intl}
           ref={(form) => (this['_form'] = form)}
           {...{
             formType: data.get('type'),
@@ -116,12 +118,12 @@ class DeliverForm extends React.Component<any, any> {
 
     return (
       <Form>
-        <FormItem {...formItemLayout} label="Logistics company" hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.LogisticsCompany" />} hasFeedback>
           {getFieldDecorator('logisticCompanyCode', {
             rules: [
               {
                 required: true,
-                message: '请选择物流公司'
+                message: this.props.intl.formatMessage({id:'Order.selectLogisticsCompany'})
               }
             ]
           })(
@@ -139,22 +141,22 @@ class DeliverForm extends React.Component<any, any> {
             </Select>
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label="Logistics order" hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.LogisticsOrder" />} hasFeedback>
           {getFieldDecorator('logisticNo', {
             rules: [
               {
                 required: true,
-                message: 'Please input logistics weight'
+                message: this.props.intl.formatMessage({id:'Order.inputLogisticsOrder'})
               }
             ]
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Refund date" hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Refund date" />} hasFeedback>
           {getFieldDecorator('date', {
             rules: [
               {
                 required: true,
-                message: '请填写退货日期'
+                message: this.props.intl.formatMessage({id:'Order.fillreturndate'})
               }
             ]
           })(<DatePicker disabledDate={this.disabledDate} />)}
@@ -168,3 +170,5 @@ class DeliverForm extends React.Component<any, any> {
     return current && current.valueOf() > Date.now();
   }
 }
+
+export default injectIntl(DeliverModal)

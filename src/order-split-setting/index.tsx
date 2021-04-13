@@ -26,7 +26,7 @@ class OrderSplitSetting extends Component<any, any> {
 
 
 
-    const columns = [
+    /*const columns = [
       {
         title: 'Category',
         dataIndex: 'parentCateName',
@@ -46,7 +46,7 @@ class OrderSplitSetting extends Component<any, any> {
         key: 'prescriberFlag',
         width: '33%',
       }
-    ];
+    ];*/
 
     return (
       <AuthWrapper functionName="f_split_order_setting">
@@ -54,12 +54,12 @@ class OrderSplitSetting extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
-          <Headline title={title} />
+          <Headline title={<FormattedMessage id="Order.Split order setting" />} />
             <div style={{ margin: 20 }}>
               <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}><FormattedMessage id="Order.whetherToSplitOrder" />:</p>
               <Radio.Group disabled value={configForm.isSplit}>
-                <Radio value={true}><FormattedMessage id="yes" /></Radio>
-                <Radio value={false}><FormattedMessage id="no" /></Radio>
+                <Radio value={true}><FormattedMessage id="Order.yes" /></Radio>
+                <Radio value={false}><FormattedMessage id="Order.no" /></Radio>
               </Radio.Group>
             </div>
         </div>

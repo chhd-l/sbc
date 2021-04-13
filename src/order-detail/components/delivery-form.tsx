@@ -5,6 +5,7 @@ import { QMMethod } from 'qmkit';
 import { fromJS } from 'immutable';
 
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -74,7 +75,7 @@ export default class DeliveryForm extends React.Component<any, any> {
     return (
       <div>
         <Form className="login-form">
-          <FormItem {...formRadioItemLayout} label="Logistic info is mandotory">
+          <FormItem {...formRadioItemLayout} label={<FormattedMessage id="Order.LogisticMandotory"/>}>
             <Radio.Group
               value={this.state.logistciIsMandotory}
               onChange={(e) => {
@@ -88,30 +89,30 @@ export default class DeliveryForm extends React.Component<any, any> {
                 });
               }}
             >
-              <Radio value={true}>Yes</Radio>
-              <Radio value={false}>No</Radio>
+              <Radio value={true}><FormattedMessage id="Order.Yes"/></Radio>
+              <Radio value={false}><FormattedMessage id="Order.No"/></Radio>
             </Radio.Group>
           </FormItem>
           {this.state.logistciIsMandotory ? (
             <React.Fragment>
-              <FormItem {...formItemLayout} required={true} label="Logistics company">
+              <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="Order.LogisticsCompany"/>}>
                 {getFieldDecorator('deliverId', {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input logistics company'
+                      message: <FormattedMessage id="Order.inputLogisticsCompany"/>
                     }
                   ]
                 })(
-                  <Select dropdownStyle={{ zIndex: 1053 }} notFoundContent="You have not set up a common logistics company">
+                  <Select dropdownStyle={{ zIndex: 1053 }} notFoundContent={<FormattedMessage id="Order.notLogisticsCompany"/>}>
                     {options}
                   </Select>
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} required={true} label="Logistics order">
+              <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="Order.LogisticsOrder"/>}>
                 {getFieldDecorator('deliverNo', {
                   rules: [
-                    { required: true, message: 'Please input logistics order' },
+                    { required: true, message: <FormattedMessage id="Order.inputLogisticsOrder"/> },
                     {
                       validator: (rule, value, callback) => {
                         QMMethod.validatorDeliveryCode(rule, value, callback, 'logistics order');
@@ -120,12 +121,12 @@ export default class DeliveryForm extends React.Component<any, any> {
                   ]
                 })(<Input placeholder="" />)}
               </FormItem>
-              <FormItem {...formItemLayout} required={true} label="Deliver Date">
+              <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="Order.DeliverDate"/>}>
                 {getFieldDecorator('deliverTime', {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input deliver date'
+                      message: <FormattedMessage id="Order.inputDeliverDate"/>
                     }
                   ]
                 })(<DatePicker disabledDate={this.disabledDate} style={{ width: '100%' }} />)}

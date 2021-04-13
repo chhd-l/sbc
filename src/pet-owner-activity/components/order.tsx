@@ -71,14 +71,14 @@ export default class orders extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
+        message.error(err || <FormattedMessage id="Public.GetDataFailed"/>);
         this.setState({
           loading: false
         });

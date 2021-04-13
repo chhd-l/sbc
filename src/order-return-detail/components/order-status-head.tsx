@@ -8,12 +8,12 @@ import { AuthWrapper, cache, Const, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { fromJS } from 'immutable';
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const confirm = Modal.confirm;
 
 @Relax
-export default class OrderStatusHead extends React.Component<any, any> {
+class OrderStatusHead extends React.Component<any, any> {
   props: {
     relaxProps?: {
       detail: IMap;
@@ -130,35 +130,39 @@ export default class OrderStatusHead extends React.Component<any, any> {
     refundRecord = refundRecord || fromJS({});
     const enableReturn = (returnFlowState === 'RECEIVED' || (returnType == 'REFUND' && returnFlowState === 'AUDIT')) && refundRecord.get('refundStatus') != null && refundRecord.get('refundStatus') != 2 && refundRecord.get('refundStatus') != 3;
 
+    const labelText = returnType == 'RETURN' ? Const.returnGoodsState[returnFlowState] : Const.returnMoneyState[returnFlowState] || '';
+
     return (
       <div>
         <div style={styles.container as any}>
           <div style={styles.row}>
             <div style={styles.orderPre}>
-              <label style={styles.greenText}>{returnType == 'RETURN' ? Const.returnGoodsState[returnFlowState] : Const.returnMoneyState[returnFlowState] || ''}</label>
+              <label style={styles.greenText}>
+                <FormattedMessage id={`Order.${labelText}`} />
+              </label>
             </div>
             <div style={styles.orderEnd}>
               {returnFlowState === 'PENDING_REVIEW' && (
                           <AuthWrapper functionName="f_return_review">
 
-                            <Tooltip placement="top" title="Approve">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.Approve" />}>
                               <a style={{ marginLeft: 20 }} onClick={
                                 () => {
                                   this._showAudit(onAudit, rid);
                                 }
                               }>
-                                Approve
+                                <FormattedMessage id="Order.Approve" />
                                 </a>
 
                             </Tooltip>
 
-                            <Tooltip placement="top" title="Reject">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.Reject" />}>
                               <a style={{ marginLeft: 20 }} onClick={
                                 () => {
                                   this._showReject(onReject, rid);
                                 }
                               }>
-                                Reject
+                                <FormattedMessage id="Order.Reject" />
                                 </a>
                             </Tooltip>
                           </AuthWrapper>
@@ -166,18 +170,18 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
                         {returnFlowState === 'TO_BE_DELIVERED' && (
                           <AuthWrapper functionName="f_return_delivered">
-                            <Popconfirm placement="topLeft" title="Are you sure skip logistics?" onConfirm={() => {
+                            <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.skipLogisticsAlert" />} onConfirm={() => {
                               this._showDeliver(onDeliver, rid, false)
-                            }} okText="Confirm" cancelText="Cancel">
-                              <Tooltip placement="top" title="Skip logistics">
+                            }} okText={<FormattedMessage id="Order.btnConfirm" />} cancelText={<FormattedMessage id="Order.cancel" />}>
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.skipLogistics" />}>
                                 <a style={{ marginLeft: 20 }}>
-                                  Skip logistics
+                                <FormattedMessage id="Order.skipLogistics" />
                                 </a>
                               </Tooltip>
                             </Popconfirm>
-                            <Tooltip placement="top" title="Fill in logistics">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.fillLogistics" />}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
-                                Fill in logistics
+                              <FormattedMessage id="Order.fillLogistics" />
                               </a>
                             </Tooltip>
                           </AuthWrapper>
@@ -185,14 +189,14 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
                         {returnFlowState === 'TO_BE_RECEIVED' && (
                           <AuthWrapper functionName="f_return_received">
-                            <Tooltip placement="top" title="Recipient accepted">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.RecipientAccepted" />}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
-                                Recipient accepted
+                                <FormattedMessage id="Order.RecipientAccepted" />
                               </a>
                             </Tooltip>
-                            <Tooltip placement="top" title="Recipient rejected">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.RecipientRejected" />}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
-                                Recipient rejected
+                                <FormattedMessage id="Order.RecipientRejected" />
                               </a>
                             </Tooltip>
 
@@ -200,7 +204,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                         )}
                         {returnFlowState === 'PENDING_REFUND' && (
                           <AuthWrapper functionName="f_return_refund">
-                            <Tooltip placement="top" title="Refused to refund">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.refusedToRefund" />}>
                               <a
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
@@ -209,10 +213,10 @@ export default class OrderStatusHead extends React.Component<any, any> {
                                   this._showRejectRefund(onRejectRefund, rid, 0 == payType);
                                 }}
                               >
-                                <FormattedMessage id="refusedToRefund" />
+                                <FormattedMessage id="Order.refusedToRefund" />
                               </a>
                             </Tooltip>
-                            <Tooltip placement="top" title="Real refund">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.RealRefund" />}>
                               <a
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
@@ -220,7 +224,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                                   this._showRealRefund(onRealRefund, rid, applyPrice);
                                 }}
                               >
-                                <FormattedMessage id="realRefund" />
+                                <FormattedMessage id="Order.RealRefund" />
                               </a>
                             </Tooltip>
                           </AuthWrapper>
@@ -230,34 +234,34 @@ export default class OrderStatusHead extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                <FormattedMessage id="Finance.ReturnOrderNumber" />：{detail.get('id')}{' '}
+                <FormattedMessage id="Order.ReturnOrderNumber" />：{detail.get('id')}{' '}
                 {detail.get('platform') != 'CUSTOMER' && (
                   <span style={styles.platform}>
-                    <FormattedMessage id="Return" />
+                    <FormattedMessage id="Order.Return" />
                   </span>
                 )}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="applicationTime" />：{moment(detail.get('createTime')).format(Const.TIME_FORMAT)}
+                <FormattedMessage id="Order.applicationTime" />：{moment(detail.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="orderNumber" />：{detail.get('tid')}
+                <FormattedMessage id="Order.orderNumber" />：{detail.get('tid')}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="payWay" />：{detail.get('payWay')}
+                <FormattedMessage id="Order.payWay" />：{detail.get('payWay')}
               </p>
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                <FormattedMessage id="consumer" />：{detail.getIn(['buyer', 'name'])}
+                <FormattedMessage id="Order.consumer" />：{detail.getIn(['buyer', 'name'])}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="consumerAccount" />:{this._parsePhone(detail.getIn(['buyer', 'account']))}
+                <FormattedMessage id="Order.consumerAccount" />:{this._parsePhone(detail.getIn(['buyer', 'account']))}
               </p>
 
               {detail.getIn(['buyer', 'customerFlag']) && (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="consumerLevel" />:
+                  <FormattedMessage id="Order.consumerLevel" />:
                   {detail.getIn(['buyer', 'levelName'])}
                 </p>
               )}
@@ -274,9 +278,12 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
+    const content = this.props.intl.formatMessage({id:'Order.approveAlert'});
+    const title = this.props.intl.formatMessage({id:'Order.Approve'});
     confirm({
-      title: 'approve',
-      content: 'Is the audit approved?',
+      title: title,
+      content: content,
+      okText: this.props.intl.formatMessage({id:'Order.OK'}),
       onOk() {
         return onAudit(rid);
       },
@@ -309,9 +316,11 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
+    const content = this.props.intl.formatMessage({id:'Order.receiptAlert'});
+    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
     confirm({
-      title: 'Confirm receipt',
-      content: 'Do you confirm receipt of the goods?',
+      title: title,
+      content: content,
       onOk() {
         return onReceive(rid);
       },
@@ -385,11 +394,14 @@ export default class OrderStatusHead extends React.Component<any, any> {
     }
   }
   async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
+    const content = this.props.intl.formatMessage({id:'Order.refundAlert1'});
+    const content1 = this.props.intl.formatMessage({id:'Order.refundAlert2'});
+    const title = this.props.intl.formatMessage({id:'Order.confirmRefund'});
     confirm({
-      title: 'Confirm Refund',
+      title: title,
       content: <div>
-        <p>Do you confirm the refund?</p>
-        <p>What is the amount of the refund?</p>
+        <p>{content}</p>
+        <p>{content1}</p>
 
 
         <InputNumber
@@ -417,6 +429,8 @@ export default class OrderStatusHead extends React.Component<any, any> {
     })
   }
 }
+
+export default injectIntl(OrderStatusHead);
 
 const styles = {
   container: {

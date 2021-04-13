@@ -3,6 +3,7 @@ import { Form, Input, DatePicker, Select, Row, Col, message, InputNumber, Switch
 import moment from 'moment';
 import { Const } from 'qmkit';
 import * as webapi from '../webapi';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -40,14 +41,14 @@ export default class basicInformation extends Component<any, any> {
 
     return (
       <div>
-        <h3>Step1</h3>
-        <h4>Basic Information</h4>
+        <h3><FormattedMessage id="Subscription.Step1"/></h3>
+        <h4><FormattedMessage id="Subscription.BasicInformation"/></h4>
         <div className="basicInformation">
           <Form>
-            <FormItem {...layout} label="Subscription type">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.SubscriptionType"/>}>
               {getFieldDecorator('type', {
                 initialValue: subscriptionPlan.type,
-                rules: [{ required: true, message: 'Please input Subscription Plan Type' }]
+                rules: [{ required: true, message: <FormattedMessage id="Subscription.PleaseInput"/> }]
               })(
                 <Select
                   disabled={!editable}
@@ -63,10 +64,10 @@ export default class basicInformation extends Component<any, any> {
                 </Select>
               )}
             </FormItem>
-            <FormItem {...layout} label="Subscription Plan name">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.SubscriptionPlanName"/>}>
               {getFieldDecorator('name', {
                 initialValue: subscriptionPlan.name,
-                rules: [{ required: true, message: 'Please input Subscription Plan Name' }]
+                rules: [{ required: true, message: <FormattedMessage id="Subscription.PleasePlanName"/> }]
               })(
                 <Input
                   disabled={!editable}
@@ -77,16 +78,16 @@ export default class basicInformation extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...layout} label="Subscription Plan ID">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.SubscriptionPlanID"/>}>
               {getFieldDecorator('subscriptionPlanId ', {
                 initialValue: subscriptionPlan.subscriptionPlanId,
-                rules: [{ required: true, message: 'Please input Subscription Plan ID' }]
+                rules: [{ required: true, message: <FormattedMessage id="Subscription.PleasePlanID"/> }]
               })(<Input disabled={true} />)}
             </FormItem>
-            <FormItem {...layout} label="Quantity">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.Quantity"/>}>
               {getFieldDecorator('quantity', {
                 initialValue: subscriptionPlan.quantity,
-                rules: [{ required: true, message: 'Please input Quantity' }]
+                rules: [{ required: true, message: <FormattedMessage id="Subscription.PleaseInputQuantity"/> }]
               })(
                 <InputNumber
                   precision={0}
@@ -99,10 +100,10 @@ export default class basicInformation extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...layout} label="Landing page">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.LandingPage"/>}>
               {getFieldDecorator('landingPage', {
                 initialValue: subscriptionPlan.landingPage,
-                rules: [{ required: true, message: 'Please input Landing page' }]
+                rules: [{ required: true, message: <FormattedMessage id="Subscription.PleaseInputLanding"/> }]
               })(
                 <Input
                   disabled={!editable}
@@ -113,16 +114,16 @@ export default class basicInformation extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...layout} label="Enable landing page">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.EnableLandingPage"/>}>
               {getFieldDecorator('landingFlag', {
                 valuePropName: 'checked',
                 initialValue: subscriptionPlan.landingFlag
               })(<Switch disabled={!editable} onChange={(value) => addField('landingFlag', value)} />)}
             </FormItem>
-            <FormItem {...layout} label="Offer time period">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.OfferTimePeriod"/>}>
               {getFieldDecorator('offerTimePeriod', {
                 initialValue: subscriptionPlan.startDate && subscriptionPlan.endDate ? [moment(subscriptionPlan.startDate), moment(subscriptionPlan.endDate)] : undefined,
-                rules: [{ required: true, message: 'Please select Offer time period' }, { validator: this.offerTimePeriodValidator }]
+                rules: [{ required: true, message: <FormattedMessage id="Subscription.PleaseSelectOffer"/> }, { validator: this.offerTimePeriodValidator }]
               })(
                 <RangePicker
                   disabled={!editable}
@@ -134,15 +135,15 @@ export default class basicInformation extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...layout} label="Frequency">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.Frequency"/>}>
               <Row style={{ color: '#222222' }}>
                 <Col span={4}>
-                  <span>Once every</span>
+                  <span><FormattedMessage id="Subscription.OnceEvery"/></span>
                 </Col>
                 <Col span={20}>
                   {getFieldDecorator('frequency', {
                     initialValue: subscriptionPlan.frequency.map((fre) => parseInt(fre)),
-                    rules: [{ required: true, message: 'Please select Frequency' }]
+                    rules: [{ required: true, message: <FormattedMessage id="Subscription.PleaseSelectFrequency"/> }]
                   })(
                     <Select
                       disabled={!editable}
@@ -161,10 +162,10 @@ export default class basicInformation extends Component<any, any> {
                 </Col>
               </Row>
             </FormItem>
-            <FormItem {...layout} label="Number of delivery">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.NumberOfDelivery"/>}>
               {getFieldDecorator('delivery', {
                 initialValue: subscriptionPlan.deliveryTimes,
-                rules: [{ required: true, message: 'Please input Number of delivery' }]
+                rules: [{ required: true, message: <FormattedMessage id="Subscription.PleaseInputNumber"/> }]
               })(
                 <InputNumber
                   disabled={!editable}
@@ -177,7 +178,7 @@ export default class basicInformation extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem {...layout} label="Description">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.Description"/>}>
               {getFieldDecorator('description', {
                 initialValue: subscriptionPlan.description
               })(

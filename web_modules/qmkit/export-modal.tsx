@@ -4,6 +4,7 @@ import { noop } from 'qmkit';
 import { IMap } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Button from 'antd/lib/button/button';
+import { FormattedMessage } from 'react-intl';
 
 const RadioGroup = Radio.Group;
 
@@ -56,12 +57,12 @@ export default class ExportModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={'Batch Export'}
+        title={<FormattedMessage id="Public.Batch Export" />}
         visible={visible}
         onCancel={() => onHide()}
         footer={[
           <Button key="back" size="large" onClick={() => onHide()}>
-            Cancel
+            <FormattedMessage id="Public.Cancel" />
           </Button>,
           <Button
             key="submit"
@@ -70,7 +71,7 @@ export default class ExportModal extends React.Component<any, any> {
             loading={this.state.posting}
             onClick={() => this._handleOk()}
           >
-            Export
+            <FormattedMessage id="Public.Export" />
           </Button>
         ]}
       >
@@ -136,7 +137,7 @@ class ExportForm extends React.Component<any, any> {
           </FormItem>
 
         </Form>
-        <p style={{ color: '#e2001a', lineHeight: 0.5 }}>Reminder: up to 100 records</p>
+        <p style={{ color: '#e2001a', lineHeight: 0.5 }}><FormattedMessage id="Public.Reminder100records" /></p>
       </div>
 
     );

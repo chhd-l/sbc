@@ -52,17 +52,17 @@ export default class SearchList extends React.Component<any, any> {
               <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                 <thead className="ant-table-thead">
                   <tr>
-                    <th style={{ width: '20%' }}>{<FormattedMessage id="commodity" />}</th>
-                    <th style={{ width: '12%' }}>{<FormattedMessage id="consumerName" />}</th>
-                    <th style={{ width: '12%' }}>{<FormattedMessage id="recipient" />}</th>
-                    <th style={{ width: '12%' }}>
-                      {<FormattedMessage id="amount" />}
+                    <th style={{ width: '200' }}>{<FormattedMessage id="Order.commodity" />}</th>
+                    <th style={{ width: '15%' }}>{<FormattedMessage id="Order.consumerName" />}</th>
+                    <th style={{ width: '15%' }}>{<FormattedMessage id="Order.recipient" />}</th>
+                    <th style={{ width: '10%' }}>
+                      {<FormattedMessage id="Order.amount" />}
                       <br />
-                      {<FormattedMessage id="quantity" />}
+                      {<FormattedMessage id="Order.quantity" />}
                     </th>
-                    <th style={{ width: '15%' }}>{<FormattedMessage id="shippingStatus" />}</th>
-                    <th style={{ width: '15%' }}>{<FormattedMessage id="orderStatus" />}</th>
-                    <th style={{ width: '12%', textAlign: 'right' }}>{<FormattedMessage id="paymentStatus" />}</th>
+                    <th style={{ width: '10%' }}>{<FormattedMessage id="Order.shippingStatus" />}</th>
+                    <th style={{ width: '10%' }}>{<FormattedMessage id="Order.orderStatus" />}</th>
+                    <th style={{ width: '10%', textAlign: 'right' }}>{<FormattedMessage id="Order.paymentStatus" />}</th>
                   </tr>
                 </thead>
                 <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList, apply)}</tbody>
@@ -72,7 +72,7 @@ export default class SearchList extends React.Component<any, any> {
               <div className="ant-table-placeholder">
                 <span>
                   <i className="anticon anticon-frown-o" />
-                  {<FormattedMessage id="noData" />}
+                  {<FormattedMessage id="Order.noData" />}
                 </span>
               </div>
             ) : null}
@@ -133,10 +133,10 @@ export default class SearchList extends React.Component<any, any> {
                     >
                       <span style={{ marginLeft: 20, color: '#000' }}>{id}</span>
                       <span style={{ marginLeft: 60 }}>
-                        {<FormattedMessage id="orderTime" />}:{moment(v.getIn(['tradeState', 'createTime'])).format(Const.TIME_FORMAT)}
+                        {<FormattedMessage id="Order.OrderTime" />}:{moment(v.getIn(['tradeState', 'createTime'])).format(Const.TIME_FORMAT)}
                       </span>
                       <span style={{ marginRight: 20, float: 'right' }}>
-                        <Tooltip placement="top" title="Application">
+                        <Tooltip placement="top" title={<FormattedMessage id="Order.Application" />}>
                           <Link to={`/order-return-add/${id}`} className="iconfont iconApplication" style={{ padding: '0 5px' }}></Link>
                         </Tooltip>
                       </span>
@@ -178,7 +178,7 @@ export default class SearchList extends React.Component<any, any> {
                             style={styles.imgFourth}
                           />
                           //@ts-ignore
-                          <div style={styles.imgNum}>total {v.get('tradeItems').concat(gifts).size}</div>
+                          <div style={styles.imgNum}><FormattedMessage id="Order.total"/> {v.get('tradeItems').concat(gifts).size}</div>
                         </div>
                       ) : null
                     }
@@ -189,14 +189,14 @@ export default class SearchList extends React.Component<any, any> {
                   </td>
                   <td style={{ width: '12%' }}>
                     {/*收件人姓名*/}
-                    {<FormattedMessage id="recipient" />}：{v.getIn(['consignee', 'name'])}
+                    {<FormattedMessage id="Order.recipient" />}：{v.getIn(['consignee', 'name'])}
                     <br />
                     {/*收件人手机号码*/}
                     {v.getIn(['consignee', 'phone'])}
                   </td>
                   <td style={{ width: '12%' }}>
                     {tradePrice.toFixed(2)}
-                    <br />( total {num})
+                    <br />( <FormattedMessage id="Order.total" /> {num})
                   </td>
                   {/*发货状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td> */}

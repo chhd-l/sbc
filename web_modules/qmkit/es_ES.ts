@@ -2735,6 +2735,7 @@ export default {
   'Marketing.Yes':'Yes',
   'Marketing.No':'No',
   'Marketing.Mustenterrules': 'Must enter rules',
+  'Marketing.fullgifttype': 'full gift type',
 
 
 

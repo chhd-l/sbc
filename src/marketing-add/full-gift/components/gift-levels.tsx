@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
 import { InputNumber, Input, Button, Select, Form } from 'antd';
-import { DataGrid, ValidConst, cache } from 'qmkit';
+import { DataGrid, ValidConst, cache, noop } from 'qmkit';
 
 import { GoodsModal } from 'biz';
 
@@ -13,6 +13,7 @@ const Column = Table.Column;
 const FormItem = Form.Item;
 
 import styled from 'styled-components';
+import { Relax } from 'plume2';
 
 const HasError = styled.div`
   display: flex;
@@ -31,7 +32,7 @@ export default class GiftLevels extends React.Component<any, any> {
     super(props);
     this.state = {
       isFullCount: props.isFullCount,
-      selectedRows: props.selectedRows,
+
       fullGiftLevelList: props.fullGiftLevelList ? props.fullGiftLevelList : [],
       //公用的商品弹出框
       goodsModal: {
@@ -41,6 +42,7 @@ export default class GiftLevels extends React.Component<any, any> {
       PromotionTypeValue: 0
     };
   }
+
 
   componentDidMount() {
     // if (!this.props.fullGiftLevelList || this.props.fullGiftLevelList.length == 0) {
@@ -80,11 +82,11 @@ export default class GiftLevels extends React.Component<any, any> {
   // }
 
   render() {
-    const { isFullCount, fullGiftLevelList, isNormal } = this.props;
+    const { isFullCount, fullGiftLevelList, isNormal, selectedRows } = this.props;
     const { goodsModal } = this.state
     const { form } = this.props;
     const { getFieldDecorator } = form;
-
+    console.log(selectedRows.toJS(), 'selectedGiftRows-------');
     return (
       <div>
         {fullGiftLevelList &&
@@ -319,8 +321,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param goodsInfoId
    */
   deleteRows = (_index, goodsInfoId) => {
-    let { fullGiftLevelList, onChangeBack } = this.props;
-    let { selectedRows } = this.state
+    let { fullGiftLevelList, onChangeBack, selectedRows } = this.props;
     fullGiftLevelList.forEach((level) => {
       let levelIndex = level.fullGiftDetailList.findIndex((detail) => detail.productId == goodsInfoId);
       if (levelIndex > -1) {
@@ -336,10 +337,7 @@ export default class GiftLevels extends React.Component<any, any> {
     }
     selectedRows = fromJS(newRows);
 
-    this.setState({
-      selectedRows: selectedRows,
-      // fullGiftLevelList: fullGiftLevelList
-    });
+    this.props.GiftRowsOnChange(selectedRows)
     onChangeBack(fullGiftLevelList);
   };
 
@@ -403,7 +401,6 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param value
    */
   ruleValueChange = (index, value) => {
-    debugger
     const { isFullCount } = this.props;
     this.onChange(index, !isFullCount ? 'fullAmount' : 'fullCount', value);
   };
@@ -415,7 +412,6 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param value
    */
   onChange = (index, props, value) => {
-    debugger
     const { fullGiftLevelList } = this.props;
     fullGiftLevelList[index][props] = value;
     if (props == 'fullAmount') {
@@ -445,7 +441,8 @@ export default class GiftLevels extends React.Component<any, any> {
       })
     );
     let rows = (selectedRows.isEmpty() ? Set([]) : selectedRows.toSet()).concat(fromJS(this.props.selectedRows).toSet());
-    this.setState({ goodsModal: { _modalVisible: false }, selectedRows: rows });
+    this.props.GiftRowsOnChange(rows)
+    this.setState({ goodsModal: { _modalVisible: false }});
   };
 
   /**
@@ -482,7 +479,8 @@ export default class GiftLevels extends React.Component<any, any> {
    * @returns {Array}
    */
   getSelectedRowByIds = (ids) => {
-    const { selectedRows } = this.state;
+    debugger
+    const { selectedRows } = this.props;
     const rows = selectedRows.filter((row) => ids.includes(row.get('goodsInfoId')));
     return rows && !rows.isEmpty() ? rows.toJS() : [];
   };

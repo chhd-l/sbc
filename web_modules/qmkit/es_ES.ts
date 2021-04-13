@@ -1395,7 +1395,7 @@ export default {
   'Order.Club&Autoship':'Club & Autoship',
   'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
-  'Order.felin':`L'Atelier Feline`,
+  'Order.felin':`L'Atelier Felin`,
   'Order.subscriptionType':'Subscription type',
   'Order.subscriptionOrderTime':'Subscription order time',
   'Order.subscriptionPlanType':'Subscription plan type',
@@ -1590,7 +1590,6 @@ export default {
   'Order.reasonForReject':'Reasons for rejection',
   /* -------- 已翻译 V2.0---------------*/
   'Order.offline.Reset':'Reset',
-  'Order.Club&Autoship':'Club & Autoship',
   'Order.Entrance': 'Entrance',
   'Order.Apartment': 'Apartment',
   'Order.LastName': 'Last name',
@@ -2668,6 +2667,7 @@ export default {
   'Marketing.Invalid':'Invalid',
   'Marketing.Valid':'Valid',
   /* -------- 已翻译 V1.0---------------*/
+  
 
   'Marketing.DiscountType': 'Discount type',
   'Marketing.Forthefirstsubscription': 'For the first subscription order,discount',
@@ -2730,7 +2730,12 @@ export default {
   'Marketing.Fullquantitygift': 'Full quantity gift',
   'Marketing.For': 'For',
   'Marketing.refill': 'refill',
+  'Marketing.Message.settingTips':'Please go to SendGrid to activate Email,and set up your AccessKeyId and AccessKeySecret in the SendGrid.',
+  'Marketing.Message.editTips':'Are you sure to enable this?',
+  'Marketing.Yes':'Yes',
+  'Marketing.No':'No',
   'Marketing.Mustenterrules': 'Must enter rules',
+  'Marketing.fullgifttype': 'full gift type',
 
 
 

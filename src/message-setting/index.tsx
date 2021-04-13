@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline } from 'qmkit';
-import { Card, Button, Modal, Form, Input, Alert, Switch } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { Card, Button, Modal, Form, Input, Alert, Switch, Row, Col, Popconfirm } from 'antd';
+import { FormattedMessage,injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 class MessageSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       visible: false,
-      tips: 'Please go to SendGrid to activate Email,and set up your AccessKeyId and AccessKeySecret in the SendGrid.',
+      // this.props.intl.formatMessage({id:'Order.offline.consumerEmail'})
+      
       emailApiList: [
         {
           apiName: 'SendGrid',
-          imgUrl: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202008140907121972.png'
+          imgUrl: 'https://d2cstgstorage.z13.web.core.windows.net/202104120251509449.png',
+          isOpen:true
+        },
+        {
+          apiName: 'SendSay',
+          imgUrl: 'https://d2cstgstorage.z13.web.core.windows.net/202104120250527111.png',
+          isOpen:false
         }
       ],
       settingForm: {
@@ -23,7 +30,7 @@ class MessageSetting extends Component<any, any> {
       }
     };
   }
-  componentDidMount() {}
+  componentDidMount() { }
 
   onFormChange = ({ field, value }) => {
     let data = this.state.settingForm;
@@ -48,45 +55,67 @@ class MessageSetting extends Component<any, any> {
       visible: false
     });
   };
+  changeSettingStatus = (id) => {
+    console.log('');
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form;
 
-    const { tips, emailApiList } = this.state;
+    const { emailApiList } = this.state;
     return (
       <div>
         {/*导航面包屑*/}
         <BreadCrumb />
         <div className="container-search">
           <Headline title="Email Setting" />
-          <h5>
+          <h4>
             <FormattedMessage id="Marketing.EmailApi" />
-          </h5>
-          {emailApiList &&
-            emailApiList.map((item, index) => (
-              <Card
-                size="small"
-                extra={
-                  <a
-                    style={styles.btn}
-                    onClick={() =>
-                      this.setState({
-                        visible: true
-                      })
+          </h4>
+          <Row>
+            {emailApiList &&
+              emailApiList.map((item, index) => (
+                <Col span={8}>
+                  <Card
+                    size="small"
+                    extra={
+                      <a
+                        style={styles.btn}
+                        onClick={() =>
+                          this.setState({
+                            visible: true
+                          })
+                        }
+                      >
+                        <FormattedMessage id="Marketing.Edit" />
+                      </a>
                     }
+                    style={{ width: 300 }}
+                    key={index}
                   >
-                    <FormattedMessage id="Marketing.Edit" />
-                  </a>
-                }
-                style={{ width: 300 }}
-                key={index}
-              >
-                <div style={styles.center}>
-                  <img style={styles.img} src={item.imgUrl} alt="" />
-                  <p style={styles.font}>{item.apiName}</p>
-                </div>
-              </Card>
-            ))}
+                    <div style={styles.center}>
+                      <div style={styles.imgCenter}>
+                        <img style={styles.img} src={item.imgUrl} alt="" />
+                      </div>
+
+                      <p style={{ fontWeight: 600 }}>{item.apiName}</p>
+                      <div style={ styles.switchPositionStyle}>
+                        <Popconfirm title={this.props.intl.formatMessage({id:'Marketing.Message.editTips'})}
+                          disabled={+item.isOpen === 1}
+                          onConfirm={() => this.changeSettingStatus(item.id)} 
+                          okText={this.props.intl.formatMessage({id:'Marketing.Yes'})} 
+                          cancelText={this.props.intl.formatMessage({id:'Marketing.No'})}>
+                          <Switch checked={+item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
+                        </Popconfirm>
+                      </div>
+                    </div>
+                  </Card>
+
+                </Col>
+              ))}
+
+          </Row>
+
         </div>
         <Modal
           width="450px"
@@ -105,7 +134,7 @@ class MessageSetting extends Component<any, any> {
         >
           <Form layout="vertical">
             <FormItem label={<FormattedMessage id="Marketing.Tips" />} style={styles.formItem}>
-              <Alert message={tips} type="warning" />
+              <Alert message={this.props.intl.formatMessage({id:'Marketing.Message.settingTips'})} type="warning" />
             </FormItem>
             <FormItem label={<FormattedMessage id="Marketing.Sender" />} style={styles.formItem}>
               {getFieldDecorator('sender', {
@@ -127,6 +156,7 @@ class MessageSetting extends Component<any, any> {
                 rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputAccessKeyID" /> }]
               })(
                 <Input
+                  disabled
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.onFormChange({
@@ -142,6 +172,7 @@ class MessageSetting extends Component<any, any> {
                 rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputAccessKeySecret" /> }]
               })(
                 <Input
+                  disabled
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.onFormChange({
@@ -152,22 +183,7 @@ class MessageSetting extends Component<any, any> {
                 />
               )}
             </FormItem>
-            <FormItem label={<FormattedMessage id="Marketing.Enable" />} style={styles.formItem}>
-              {getFieldDecorator('enable', {
-                valuePropName: 'checked'
-              })(
-                <Switch
-                  checkedChildren="on"
-                  unCheckedChildren="off"
-                  onChange={(checked) => {
-                    this.onFormChange({
-                      field: 'enable',
-                      value: checked
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
+
           </Form>
         </Modal>
       </div>
@@ -176,22 +192,34 @@ class MessageSetting extends Component<any, any> {
 }
 
 const styles = {
+  imgCenter: {
+    margin: '0 auto',
+    width: '200px',
+    height: '100px',
+    lineHeight: '100px',
+    textAlign: 'center',
+  },
   center: {
-    textAlign: 'center'
+    textAlign: 'center',
+
   },
   img: {
-    width: 200
+    width: 200,
+    verticalAlign: 'middle',
   },
-  font: {
-    fontWeight: 600
-  },
+
   btn: {
     margin: 0,
     padding: 0
   },
   formItem: {
     marginBottom: 0
+  },
+  switchPositionStyle:{
+    position: 'absolute',
+    right: '10px',
+    bottom: '10px',
   }
 } as any;
 
-export default Form.create()(MessageSetting);
+export default Form.create()(injectIntl(MessageSetting));

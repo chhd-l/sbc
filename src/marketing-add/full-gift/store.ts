@@ -6,6 +6,7 @@ import { Const, history } from 'qmkit';
 import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
 import FullGiftActor from './actor/full-gift-actor';
+import LoadingActor from './actor/loading-actor';
 import { fromJS } from 'immutable';
 
 export default class AppStore extends Store {
@@ -17,10 +18,11 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new FullGiftActor()];
+    return [new FullGiftActor(), new LoadingActor()];
   }
 
   init = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
@@ -32,6 +34,8 @@ export default class AppStore extends Store {
         this.dispatch('marketing:selectedRows', selectedRows);
         this.dispatch('marketing:selectedSkuIds', scopeIds.toJS());
       }
+      const selectedGiftRows = this.makeSelectedRows(null);
+      this.dispatch('marketing:selectedGiftRows', selectedGiftRows)
     } else if (res.code == 'K-080016') {
       history.go(-1);
     } else {

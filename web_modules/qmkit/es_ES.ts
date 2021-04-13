@@ -333,6 +333,7 @@ export default {
   'Home.ManagePrescriber': 'Manage Prescriber',
   'Home.Rate': 'Rate',
   'Home.units': 'units',
+  'Home.Week':'Week',
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
   "Product.Productname": "Product name",

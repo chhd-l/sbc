@@ -9,8 +9,9 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-export default class Line extends React.Component {
+class Line extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,7 +60,7 @@ export default class Line extends React.Component {
               color: '#999',
               fontsize: '11'
             },
-            formatter: 'Week-{value}'
+            formatter: this.props.intl.formatMessage({id:'Home.Week'})+'-{value}'
           },
           data: data.x
         }
@@ -166,3 +167,4 @@ export default class Line extends React.Component {
     );
   }
 }
+export default injectIntl(Line)

@@ -190,7 +190,7 @@ class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
               <div className="item-top-l-btm">
-                <div className="top-text">Subscription</div>
+                <div className="top-text"><FormattedMessage id="Home.Subscription" /></div>
                 <div className="subscription space-between">
                   <div className="subscription-l">
                     <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />

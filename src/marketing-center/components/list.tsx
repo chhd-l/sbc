@@ -338,8 +338,8 @@ export default class List extends React.Component<any, any> {
                       <img src={images.shipping_icon} />
                     </span>
                     <div className="info">
-                      <h5>Free shipping</h5>
-                      <p>Free shipping when order meets specific conditions</p>
+                      <h5><FormattedMessage id="Marketing.Freeshipping" /></h5>
+                      <p><FormattedMessage id="Marketing.Freeshippingwhenorder" /></p>
                     </div>
                   </a>
                 </Col>

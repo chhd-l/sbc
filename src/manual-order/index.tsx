@@ -103,6 +103,7 @@ class ManualOrder extends Component<any, any> {
   }
 
   componentDidMount(){
+    debugger
     let url ='',prefix='';
     if(['fr','ru','tr'].includes((window as any).countryEnum[this.state.storeId])){
       prefix='/shop/'

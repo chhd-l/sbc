@@ -121,7 +121,7 @@ export default class Main extends React.Component<any, any> {
             <Breadcrumb.Item>{gid ? <FormattedMessage id="Product.EditProduct" /> : <FormattedMessage id="Product.NewProduct" />}</Breadcrumb.Item>
           </BreadCrumb>
           <div className="container-search">
-            <Headline title={gid ? <FormattedMessage id="Product.EditProduct" /> : <FormattedMessage id="Product.NewProduct" />} state={this._getState(gid)} />
+            <Headline title={gid ? <FormattedMessage id="Product.EditProduct" /> : <FormattedMessage id="Product.NewProduct" />} state={<FormattedMessage id={`Product.${this._getState(gid)}`}/>} />
           </div>
           <div className="container ">
             <Tabs
@@ -134,7 +134,7 @@ export default class Main extends React.Component<any, any> {
               onChange={(activeKey) => this.onMainTabChange(activeKey)}
             >
               {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-                <Tabs.TabPane tab="Product information" key="main">
+                <Tabs.TabPane tab={<FormattedMessage id="Product.Productinformation" />} key="main">
                   <AlertInfo />
                   {/*商品基本信息*/}
                   <Goods />
@@ -154,19 +154,19 @@ export default class Main extends React.Component<any, any> {
                   <Detail />
                 </Tabs.TabPane>
               )}
-              <Tabs.TabPane tab="Product price" key="price">
+              <Tabs.TabPane tab={<FormattedMessage id="Product.Productprice" />} key="price">
                 <AlertInfo />
 
                 <ProductPrice />
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Product inventory" key="inventory">
+              <Tabs.TabPane tab={<FormattedMessage id="Product.Productinventory" />}key="inventory">
                 <AlertInfo />
 
                 <ProductInventory />
               </Tabs.TabPane>
 
               <Tabs.TabPane
-                tab="Related product"
+                tab={<FormattedMessage id="Product.Relatedproduct" />}
                 key="related"
 
                 //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
@@ -176,7 +176,7 @@ export default class Main extends React.Component<any, any> {
                 <Related />
               </Tabs.TabPane>
               <Tabs.TabPane
-                tab="SEO Setting"
+                tab={<FormattedMessage id="Product.SEOsetting" />}
                 key="seo"
 
                 // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
@@ -188,20 +188,18 @@ export default class Main extends React.Component<any, any> {
                         <FormattedMessage id="Product.YouCan" />
                       </p>
                       <p>
-                        1、&#123; <FormattedMessage id="Product.name" />
+                        <FormattedMessage id="Product.name" />
                       </p>
                       <p>
-                        2、&#123;
                         <FormattedMessage id="Product.subtitle" />
                       </p>
                       <p>
-                        3、&#123; <FormattedMessage id="Product.sales" />
+                        <FormattedMessage id="Product.sales" />
                       </p>
                       <p>
-                        4、&#123; <FormattedMessage id="Product.tagging" />
+                        <FormattedMessage id="Product.tagging" />
                       </p>
                       <p>
-                        5、&#123;
                         <FormattedMessage id="Product.descripion" />
                       </p>
                     </div>

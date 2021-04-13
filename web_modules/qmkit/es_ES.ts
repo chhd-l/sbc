@@ -642,12 +642,12 @@ export default {
   "Product.ChooseProductCharacteristic": "Choose a product characteristic",
   "Product.EditProduct": "Edit product (Bundle product)",
   "Product.NewProduct": "New product (Bundle product)",
-  "Product.YouCan": "You can delete these fields, including &#123; name &#125;-Royal Canin, &#123; name &#125;, &#123; subtitle &#125;, &#123; sales category &#125;, &#123; tagging &#125;, &#123; description &#125;, but can not edit the field",
-  "Product.name": "name &#125; means the name of the product which enters in the product information tab page",
-  "Product.subtitle": "subtitle &#125; means the subtitle of the product which enters in the product information tab page",
-  "Product.sales": "sales category &#125; means the sales category of the product which was chosen in the product information tab page",
-  "Product.tagging": "tagging &#125; means the sales category of the product which was chosen in the product information",
-  "Product.descripion": "description &#125; means the description of the product which enters in the product information tab page",
+  "Product.YouCan": "You can delete these fields, including{ name }-Royal Canin,{ name },{ subtitle },{ sales category },{ tagging },{ description }, but can not edit the field",
+  "Product.name": "1、{ name } means the name of the product which enters in the product information tab page",
+  "Product.subtitle": "2、{ subtitle } means the subtitle of the product which enters in the product information tab page",
+  "Product.sales": "3、{ sales category } means the sales category of the product which was chosen in the product information tab page",
+  "Product.tagging": "4、{ tagging } means the sales category of the product which was chosen in the product information",
+  "Product.descripion": "5、{ description } means the description of the product which enters in the product information tab page",
   "Product.categoryName": "categoryName",
   "Product.operation": "Operation",
   "Product.AddSubcategory": "Add subcategory",
@@ -863,6 +863,10 @@ export default {
   "Product.html":"html",
   'Product.salesCategoryInfo':
     'Sales category is the classification of products within the scope of your store. Up to 3 levels can be added. When there is No categories, all products will be classified into the default classification',
+  "Product.Synchronize":"Synchronize",
+  "Product.exportStockPrice":"Batch export Stock&Price",
+  "Product.Audited":"Audited",
+  "Product.No sale":"No sale",
 
 
 
@@ -2742,6 +2746,8 @@ export default {
   'Marketing.No':'No',
   'Marketing.Mustenterrules': 'Must enter rules',
   'Marketing.fullgifttype': 'full gift type',
+  'Marketing.Addgift': 'Add gift',
+  'Marketing.greaterthan0andlessthan999': 'Value must only be integers greater than 0 and less than 999',
 
 
 

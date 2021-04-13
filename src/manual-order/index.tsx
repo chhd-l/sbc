@@ -103,10 +103,12 @@ class ManualOrder extends Component<any, any> {
   }
 
   componentDidMount(){
+    debugger
     let url ='',prefix='';
     if(['fr','ru','tr'].includes((window as any).countryEnum[this.state.storeId])){
       prefix='/shop/'
       url=`${(Const as any).VALET_ORDER_URL}${(window as any).countryEnum[this.state.storeId]}`
+      debugger
     }else{
       prefix=''
       url=`${(Const as any).VALET_ORDER_NOMAL_URL}${(window as any).countryEnum[this.state.storeId]}`
@@ -115,6 +117,7 @@ class ManualOrder extends Component<any, any> {
       url,
       prefix:prefix
     })
+    debugger
   }
 
 

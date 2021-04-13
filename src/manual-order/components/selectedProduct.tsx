@@ -1,7 +1,7 @@
 import { Button, Icon, Popconfirm, Select, Table, Tooltip } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
-import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts, totalGoodsPrice } from '../webapi';
+import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
 import { cache } from 'qmkit';
 const defaultImg = require('./img/none.png');
 const { Option } = Select;
@@ -50,7 +50,7 @@ export default class SelectedProduct extends React.Component<any, any> {
     const { customer } = this.props;
     const { options } = this.state
     if (name === 'subscriptionStatus' && e === 0) {
-      row['periodTypeId'] = null;
+      row['periodTypeId'] = 0;
     } else if (name === 'subscriptionStatus' && e === 1) {
       row.periodTypeId = row.periodTypeId ? row.periodTypeId : options[0].id
     }

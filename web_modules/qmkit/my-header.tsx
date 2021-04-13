@@ -73,7 +73,7 @@ export default class MyHeader extends React.Component {
 
   getLanguageItem() {
     const aLanguage = [
-      { name: 'English', value: 'en-US' },
+      { name: 'English', value: 'es_ES' },
       { name: 'Russian', value: 'ru' },
       { name: 'Turkey', value: 'tr' }
     ];

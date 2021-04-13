@@ -15,13 +15,15 @@ class MarketingFreeShippingAdd extends React.Component<any, any> {
 
   props: {
     intl: any;
+    match: any;
+    location;
   }
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    const { marketingId } = this.props.match.params;
+    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
     if (marketingId) {
       this.store.init(marketingId);
     } else {
@@ -32,11 +34,11 @@ class MarketingFreeShippingAdd extends React.Component<any, any> {
   }
 
   render() {
-    const state = this.props.location.state;
-    const { marketingId } = this.props.match.params;
-    const { source } = (state || {}) as any;
+    // const state = this.props.location.state;
+    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
+    // const { source } = (state || {}) as any;
     return (
-      <AuthWrapper functionName="f_marketing_discount_add">
+      <AuthWrapper functionName="f_marketing_free_shipping_add">
         <div>
           <BreadCrumb thirdLevel={true}>
             <Breadcrumb.Item>{marketingId ?

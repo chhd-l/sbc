@@ -12,9 +12,10 @@ import GiftList from './gift-details/components/gift-list';
 import MarketingRule from './common/components/marketing-rule';
 import './index.css'
 const MAK_TYPE = {
-  0: 'Full reduction',
-  1: 'Full discount'
+  0: 'Full reduction ',
+  1: 'Full discount ',
   // 2: '满赠'
+  3: 'Free shipping '
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -52,7 +53,7 @@ class MarketingDetails extends React.Component<any, any> {
                   <MarketingRule />
                 ) : marketingType === 2 ? (
                   <GiftList />
-                ) : (
+                ) : marketingType === 3 ? null : (
                   <MarketingRule />
                 )}
                 {/*商品列表*/}

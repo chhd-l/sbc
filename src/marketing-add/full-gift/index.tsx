@@ -3,7 +3,7 @@ import React from 'react';
 import { StoreProvider } from 'plume2';
 import { Breadcrumb, Alert, Form } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import AppStore from './store';
 import FullGiftForm from './components/full-gift-form';
 import * as Enum from '../common-components/marketing-enum';
@@ -11,16 +11,20 @@ import '../index.less';
 const WrappedForm = Form.create()(FullGiftForm);
 
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class MarketingFullGiftAdd extends React.Component<any, any> {
+class MarketingFullGiftAdd extends React.Component<any, any> {
   store: AppStore;
   _form;
 
+  props: {
+    intl;
+    match;
+  }
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    const { marketingId } = this.props.match.params;
+    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
     if (marketingId) {
       this.store.init(marketingId);
     } else {
@@ -33,9 +37,9 @@ export default class MarketingFullGiftAdd extends React.Component<any, any> {
   }
 
   render() {
-    const { marketingId } = this.props.match.params;
-    const state = this.props.location.state;
-    const { source } = (state || {}) as any;
+    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
+    // const state = this.props.location.state;
+    // const { source } = (state || {}) as any;
     return (
       <AuthWrapper functionName="f_marketing_gift_add">
         <div>
@@ -63,3 +67,4 @@ export default class MarketingFullGiftAdd extends React.Component<any, any> {
     );
   }
 }
+export default injectIntl(MarketingFullGiftAdd)

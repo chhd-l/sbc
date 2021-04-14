@@ -1411,6 +1411,7 @@ export default class AppStore extends Store {
           goodsInfoUnit: item.get('goodsInfoUnit') || 'kg',
           linePrice: item.get('linePrice') || 0,
           packSize: item.get('packSize') || '',
+          promotions: item.get('promotions'),
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           addedFlag: item.get('addedFlag'),

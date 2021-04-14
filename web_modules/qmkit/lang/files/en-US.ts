@@ -2799,6 +2799,7 @@ export default {
   'Prescriber.search':'Search',
   'Prescriber.export':'Export',
   'Prescriber.add':'Add',
+  'Prescriber.enterPlaceholder':'please enter you code number',
   'Prescriber.PrescriberIDDoesNotExist':'Prescriber ID does not exist',
   'Prescriber.PleaseModify':'Prescriber Basic Information is not verified. Please modify!',
   'Prescriber.PleaseEnterTheCorrectPhone':'Please enter the correct phone!',

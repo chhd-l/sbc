@@ -59,7 +59,7 @@ export default class Info extends React.Component<any, any> {
       images: IList;
       video: IMap;
       maxCount: number;
-
+      goodsList: any;
       editImages: Function;
       showGoodsPropDetail: Function;
       changeStoreCategory: Function;
@@ -134,7 +134,8 @@ export default class Info extends React.Component<any, any> {
     productFilter: 'productFilter',
     sourceGoodCateList: 'sourceGoodCateList',
     purchaseTypeList: 'purchaseTypeList',
-    frequencyList: 'frequencyList'
+    frequencyList: 'frequencyList',
+    goodsList: 'goodsList'
   };
 
   constructor(props) {
@@ -847,12 +848,17 @@ class GoodsForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
+    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm, goodsList } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
+    console.log(key,123);
 
+
+    if (e && e.target) {
+      e = e.target.value;
+    }
 
     if (key === 'addedFlag') {
-      if (e.target.value == 0) {
+      if (e == 0) {
         this.setState({
           saleableType: true
         });
@@ -874,7 +880,7 @@ class GoodsForm extends React.Component<any, any> {
     }
 
     if (key === 'saleableFlag') {
-      if (e.target.value == 0) {
+      if (e == 0) {
         this.setState({
           saleableType: true
         });
@@ -896,7 +902,7 @@ class GoodsForm extends React.Component<any, any> {
     }
 
     if (key === 'displayFlag') {
-      if (e.target.value == 0) {
+      if (e == 0) {
         let goods = Map({
           subscriptionStatus: fromJS(0)
         });
@@ -913,9 +919,18 @@ class GoodsForm extends React.Component<any, any> {
       }
     }
 
-    if (e && e.target) {
-      e = e.target.value;
+    if (key === 'promotions') {
+      let goods = Map({
+        promotions: fromJS(e)
+      });
+      setFieldsValue({ promotions: e });
+      editGoods(goods);
+      goodsList.toJS()&&goodsList.toJS().map(item=>{
+        editGoodsItem(item.id,'promotions',e);
+      })
     }
+
+
     if (key === 'cateId') {
       this._onChange(e);
       if (e === '-1') {
@@ -984,8 +999,14 @@ class GoodsForm extends React.Component<any, any> {
       updateGoodsForm(this.props.form);
       editGoods(goods);
     }
-
     if (key === 'subscriptionStatus' && e == 0) {
+      console.log(e);
+
+      let goods = Map({
+        subscriptionStatus: fromJS(0)
+      });
+      editGoodsItem(goods);
+
       this.props.form.setFieldsValue({
         defaultPurchaseType: null
       });
@@ -993,7 +1014,10 @@ class GoodsForm extends React.Component<any, any> {
         defaultFrequencyId: null
       });
     }else {
-
+      let goods = Map({
+        subscriptionStatus: fromJS(1)
+      });
+      editGoodsItem(goods);
     }
   };
 

@@ -1,10 +1,11 @@
 import { Checkbox, Col, DatePicker, Form, Icon, Input, message, Radio, Row, Select, Spin } from 'antd'
 import React, { Component } from 'react'
-import { QRScaner, noop } from 'qmkit';
+import { QRScaner, noop, RCi18n } from 'qmkit';
 const { Option } = Select;
 import { querySysDictionary } from '../webapi'
 import { Relax } from 'plume2';
 import moment from 'moment';
+const { Search } = Input;
 @Relax
 export default class FillinPetInfo extends Component {
     props: {
@@ -297,7 +298,7 @@ export default class FillinPetInfo extends Component {
                         </Row>
                     </Form>
                 </Col>
-                <Col offset={2} span={6}>
+                <Col offset={2} span={6} style={{textAlign:'center'}}>
                     {!funType && <div >
                         <QRScaner id="scan" onScanEnd={this.findByApptNo}>
                             <Icon type="scan" style={{
@@ -317,6 +318,10 @@ export default class FillinPetInfo extends Component {
 
                             </Select>
                             }
+                        </div>
+
+                        <div style={{marginTop:20}}>
+                        <Search placeholder={RCi18n({id:'Prescriber.enterPlaceholder'})} onSearch={value => this.findByApptNo(value)} enterButton />
                         </div>
                     </div>
                     }

@@ -3,7 +3,7 @@ import { IMap, Relax } from 'plume2';
 import { Icon, Modal, Checkbox, Spin } from 'antd';
 //import { fromJS } from 'immutable';
 
-import { cache, history, noop } from 'qmkit';
+import { cache, RCi18n,  history, noop } from 'qmkit';
 //import { IList } from 'typings/globalType';
 //import { FormattedMessage } from 'react-intl';
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';
@@ -425,7 +425,7 @@ class Prescriber extends React.Component<any, any> {
                 <div className="line">
                   {trafficTrendDashboardView && (
                     <BarLine
-                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Traffic' }), y2: this.props.intl.formatMessage({ id: 'Home.Conversionrate' }) }}
+                      yName={{ y1: RCi18n({ id: 'Home.Traffic' }), y2: RCi18n({ id: 'Home.Conversionrate' }) }}
                       nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
                       unit={{ unit1: '', unit2: '%' }}
                       data={{
@@ -453,7 +453,7 @@ class Prescriber extends React.Component<any, any> {
                 <div className="line">
                   {transactionTrendView && (
                     <BarLine
-                      yName={{ y1: this.props.intl.formatMessage({ id: 'Home.Revenue' }), y2: this.props.intl.formatMessage({ id: 'Home.Transaction' }) }}
+                      yName={{ y1: RCi18n({ id: 'Home.Revenue' }), y2: RCi18n({ id: 'Home.Transaction' }) }}
                       unit={{ unit1: '', unit2: '' }}
                       nameTextStyle={{ y1: [0, 0, 0, 0], y2: [0, 22, 0, 0] }}
                       data={{

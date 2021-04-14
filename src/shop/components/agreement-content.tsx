@@ -65,7 +65,7 @@ class AgreementContent extends React.Component<any, any> {
     const { agree, agreeOrNot, passAgree, businessEnter } = this.props.relaxProps;
     return (
       <div>
-        <Header postTxt={this.props.intl.formatMessage({ id: 'Setting.Youdonthave' })} />
+        <Header postTxt={RCi18n({ id: 'Setting.Youdonthave' })} />
         <div className="shopContent">
           <h1>
             <FormattedMessage id="Setting.Toapplyforopen" />

@@ -4,7 +4,7 @@ import '../editcomponents/style.less';
 import { Relax } from 'plume2';
 //import { fromJS } from 'immutable';
 
-import { SelectGroup, noop, ReactEditor } from 'qmkit';
+import { SelectGroup, noop, ReactEditor, RCi18n } from 'qmkit';
 const { Option } = Select;
 const FormItem = Form.Item;
 const { SHOW_PARENT } = TreeSelect;
@@ -196,7 +196,7 @@ class StepConsentDetail extends Component<any, any> {
           consentForm.consentDetailList = _content;
           onFormChange(consentForm);
 
-          message.success(this.props.intl.formatMessage({ id: 'Setting.Deletionsucceeded' }) + '!');
+          message.success(RCi18n({ id: 'Setting.Deletionsucceeded' }) + '!');
         }
       }
     );
@@ -239,7 +239,7 @@ class StepConsentDetail extends Component<any, any> {
       onChange: this.onTreeChange,
       treeCheckable: true,
       showCheckedStrategy: SHOW_PARENT,
-      searchPlaceholder: this.props.intl.formatMessage({ id: 'Setting.Pleaseselect' }),
+      searchPlaceholder: RCi18n({ id: 'Setting.Pleaseselect' }),
       style: {
         width: '100%'
       }
@@ -251,7 +251,7 @@ class StepConsentDetail extends Component<any, any> {
           <div className="detail-form">
             <FormItem className="input-consent">
               <SelectGroup
-                label={this.props.intl.formatMessage({ id: 'Setting.Category' })}
+                label={RCi18n({ id: 'Setting.Category' })}
                 defaultValue={editList.consentCategory ? editList.consentCategory : 'Prescriber'}
                 style={{ width: 280 }}
                 onChange={(value) => {
@@ -274,7 +274,7 @@ class StepConsentDetail extends Component<any, any> {
             </FormItem>
             <FormItem className="input-consent">
               <Input
-                addonBefore={this.props.intl.formatMessage({ id: 'Setting.Consentid' })}
+                addonBefore={RCi18n({ id: 'Setting.Consentid' })}
                 defaultValue={editList.consentId ? editList.consentId : ''}
                 onChange={(e) => {
                   const value = (e.target as any).value;
@@ -289,7 +289,7 @@ class StepConsentDetail extends Component<any, any> {
             <FormItem className="input-consent">
               <SelectGroup
                 defaultValue={editList.filedType ? editList.filedType : 'Optional'}
-                label={this.props.intl.formatMessage({ id: 'Setting.Fieldtype' })}
+                label={RCi18n({ id: 'Setting.Fieldtype' })}
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -307,7 +307,7 @@ class StepConsentDetail extends Component<any, any> {
             </FormItem>
             <FormItem className="input-consent">
               <Input
-                addonBefore={this.props.intl.formatMessage({ id: 'Setting.Consentcode' })}
+                addonBefore={RCi18n({ id: 'Setting.Consentcode' })}
                 defaultValue={editList.consentCode ? editList.consentCode : ''}
                 onChange={(e) => {
                   const value = (e.target as any).value;
@@ -328,8 +328,8 @@ class StepConsentDetail extends Component<any, any> {
             </FormItem> */}
             <FormItem className="input-consent">
               <SelectGroup
-                defaultValue={editList.consentType ? editList.consentType : this.props.intl.formatMessage({ id: 'Setting.E-mailin' })}
-                label={this.props.intl.formatMessage({ id: 'Setting.Consenttype' })}
+                defaultValue={editList.consentType ? editList.consentType : RCi18n({ id: 'Setting.E-mailin' })}
+                label={RCi18n({ id: 'Setting.Consenttype' })}
                 style={{ width: 280 }}
                 onChange={(value, index) => {
                   value = value === '' ? null : value;
@@ -351,8 +351,8 @@ class StepConsentDetail extends Component<any, any> {
             <div className="edit-consent">
               <FormItem className="input-consent">
                 <SelectGroup
-                  defaultValue={editList.consentTitleType ? editList.consentTitleType : this.props.intl.formatMessage({ id: 'Setting.Content' })}
-                  label={this.props.intl.formatMessage({ id: 'Setting.Consenttitle' })}
+                  defaultValue={editList.consentTitleType ? editList.consentTitleType : RCi18n({ id: 'Setting.Content' })}
+                  label={RCi18n({ id: 'Setting.Consenttitle' })}
                   onChange={(value, index) => {
                     value = value === '' ? null : value;
                     this.handleConsentTitle(index);
@@ -389,7 +389,7 @@ class StepConsentDetail extends Component<any, any> {
                 </FormItem>
               ) : (
                 <Input
-                  placeholder={this.props.intl.formatMessage({ id: 'Setting.PleaseenterURLaddress' })}
+                  placeholder={RCi18n({ id: 'Setting.PleaseenterURLaddress' })}
                   defaultValue={editList.consentTitle ? editList.consentTitle : ''}
                   onChange={(e) => {
                     const value = (e.target as any).value;
@@ -428,7 +428,7 @@ class StepConsentDetail extends Component<any, any> {
                         <div className="add-i">
                           <Input
                             maxLength={100}
-                            placeholder={this.props.intl.formatMessage({ id: 'Setting.Pleaseenterkeywords' })}
+                            placeholder={RCi18n({ id: 'Setting.Pleaseenterkeywords' })}
                             defaultValue={item.contentTitle}
                             key={item.contentTitle}
                             onChange={(e) => {

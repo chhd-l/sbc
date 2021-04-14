@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Input, Select, Button, Menu, Dropdown, DatePicker, Row, Col, message, Cascader } from 'antd';
-import { noop, AuthWrapper, checkAuth, Headline, history, SelectGroup } from 'qmkit';
+import { noop, AuthWrapper, checkAuth, Headline, history,RCi18n, SelectGroup } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -459,15 +459,15 @@ class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-    const mess = this.props.intl.formatMessage({id:'Marketing.needsToBeOperated'});
+    const mess = RCi18n({id:'Marketing.needsToBeOperated'});
     if (checkedIds.length == 0) {
       message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.audit'});
-    const content = this.props.intl.formatMessage({id:'Order.confirmAudit'});
+    const title = RCi18n({id:'Order.audit'});
+    const content = RCi18n({id:'Order.confirmAudit'});
     confirm({
       title: title,
       content: content,

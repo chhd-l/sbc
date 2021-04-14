@@ -62,8 +62,8 @@ class CustomerList extends React.Component<any, any> {
       evaluateId: evaluateId
     };
     const { evaluateDelete } = this.props.relaxProps;
-    const title = this.props.intl.formatMessage({id:'Product.Prompt'});
-    const content = this.props.intl.formatMessage({id:'Product.deleteThisEvaluation'});
+    const title = RCi18n({id:'Product.Prompt'});
+    const content = RCi18n({id:'Product.deleteThisEvaluation'});
     confirm({
       title: title,
       content: content,

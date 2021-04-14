@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Modal, Row, Col, Tree, Icon, Tooltip, message } from 'antd';
 
 import styled from 'styled-components';
-import { noop, DataGrid, QMUpload, Const } from 'qmkit';
+import { noop, DataGrid, QMUpload, Const, RCi18n } from 'qmkit';
 import { IList } from 'typings/globalType';
 
 const TreeNode = Tree.TreeNode;
@@ -120,15 +120,15 @@ class SortModal extends React.Component<any, any> {
           <Col span={18}>
             <TableBox>
               <DataGrid dataSource={cates.toJS()} scroll={{ y: 400 }} pagination={false} rowKey={(record) => record.cateId}>
-                <Column title={this.props.intl.formatMessage({ id: 'Setting.Category' })} dataIndex="cateName" key="cateName" width="12%" />
-                <Column title={this.props.intl.formatMessage({ id: 'Setting.SuperiorCategory' })} dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
-                <Column title={this.props.intl.formatMessage({ id: 'Setting.CategoryDeductionRate' })} dataIndex="cateRate" key="cateRate" width="20%" render={(text, record: any) => (text ? text : record.platformCateRate ? record.platformCateRate : 0) + '%'} />
+                <Column title={RCi18n({ id: 'Setting.Category' })} dataIndex="cateName" key="cateName" width="12%" />
+                <Column title={RCi18n({ id: 'Setting.SuperiorCategory' })} dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
+                <Column title={RCi18n({ id: 'Setting.CategoryDeductionRate' })} dataIndex="cateRate" key="cateRate" width="20%" render={(text, record: any) => (text ? text : record.platformCateRate ? record.platformCateRate : 0) + '%'} />
                 <Column
                   title={
                     <div>
                       <p>
                         Business Qualification&nbsp;
-                        <Tooltip title={this.props.intl.formatMessage({ id: 'Setting.Supportjpg' })}>
+                        <Tooltip title={RCi18n({ id: 'Setting.Supportjpg' })}>
                           <Icon style={{ color: '#F56C1D' }} type="question-circle-o" />
                         </Tooltip>
                       </p>
@@ -158,7 +158,7 @@ class SortModal extends React.Component<any, any> {
                   }}
                 />
                 <Column
-                  title={this.props.intl.formatMessage({ id: 'Setting.Operating' })}
+                  title={RCi18n({ id: 'Setting.Operating' })}
                   dataIndex="operation"
                   key="operation"
                   width="13%"
@@ -235,16 +235,16 @@ class SortModal extends React.Component<any, any> {
   _editImages = (info, cateId) => {
     const { file, fileList } = info;
     if (fileList.length > 10) {
-      message.error(this.props.intl.formatMessage({ id: 'Setting.Youcanonlyupload' }));
+      message.error(RCi18n({ id: 'Setting.Youcanonlyupload' }));
       return;
     }
     const { changeImg } = this.props.relaxProps;
     if (file.status == 'removed' || fileList.length == 0 || (fileList.length > 0 && this._checkUploadFile(file))) {
       const status = file.status;
       if (status === 'done') {
-        message.success(`${file.name} ${this.props.intl.formatMessage({ id: 'Setting.Uploadedsuccessfully' })}!`);
+        message.success(`${file.name} ${RCi18n({ id: 'Setting.Uploadedsuccessfully' })}!`);
       } else if (status === 'error') {
-        message.error(`${file.name} ${this.props.intl.formatMessage({ id: 'Setting.Uploadedfailed' })}!`);
+        message.error(`${file.name} ${RCi18n({ id: 'Setting.Uploadedfailed' })}!`);
       }
       changeImg({ cateId, imgs: JSON.stringify(fileList) });
     }
@@ -260,11 +260,11 @@ class SortModal extends React.Component<any, any> {
       if (file.size <= Const.fileSize.TWO) {
         return true;
       } else {
-        message.error(this.props.intl.formatMessage({ id: 'Setting.Filesizecannotexceed2M' }));
+        message.error(RCi18n({ id: 'Setting.Filesizecannotexceed2M' }));
         return false;
       }
     } else {
-      message.error(this.props.intl.formatMessage({ id: 'Setting.Fileformaterror' }));
+      message.error(RCi18n({ id: 'Setting.Fileformaterror' }));
       return false;
     }
   };

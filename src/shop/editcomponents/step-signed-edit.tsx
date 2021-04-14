@@ -3,7 +3,7 @@ import { Relax, IMap } from 'plume2';
 
 import { Button, Modal, message, DatePicker, Radio } from 'antd';
 import styled from 'styled-components';
-import { noop, DataGrid } from 'qmkit';
+import { noop, DataGrid, RCi18n } from 'qmkit';
 import moment from 'moment';
 import { IList } from 'typings/globalType';
 
@@ -124,10 +124,10 @@ class StepThree extends React.Component<any, any> {
           </div>
           <TableBox>
             <DataGrid dataSource={cateList} scroll={{ y: 240 }} pagination={false}>
-              <Column title={this.props.intl.formatMessage({ id: 'Setting.Productcategory' })} dataIndex="cateName" key="cateName" width="15%" />
-              <Column title={this.props.intl.formatMessage({ id: 'Setting.Superiorcategory' })} dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
+              <Column title={RCi18n({ id: 'Setting.Productcategory' })} dataIndex="cateName" key="cateName" width="15%" />
+              <Column title={RCi18n({ id: 'Setting.Superiorcategory' })} dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
               <Column
-                title={this.props.intl.formatMessage({ id: 'Setting.CategoryDeductionRate' })}
+                title={RCi18n({ id: 'Setting.CategoryDeductionRate' })}
                 dataIndex="cateRate"
                 key="cateRate"
                 width="15%"
@@ -141,7 +141,7 @@ class StepThree extends React.Component<any, any> {
               />
               <Column
                 align="left"
-                title={this.props.intl.formatMessage({ id: 'Setting.BusinessQualification' })}
+                title={RCi18n({ id: 'Setting.BusinessQualification' })}
                 dataIndex="qualificationPics"
                 key="qualificationPics"
                 width="50%"
@@ -178,7 +178,7 @@ class StepThree extends React.Component<any, any> {
             <DataGrid dataSource={brandList} scroll={{ y: 240 }} pagination={false}>
               <Column title="Brand Name" dataIndex="brandName" key="brandName" width="15%" />
               <Column
-                title={this.props.intl.formatMessage({ id: 'Setting.BrandAlias' })}
+                title={RCi18n({ id: 'Setting.BrandAlias' })}
                 dataIndex="nickName"
                 key="nickName"
                 width="20%"
@@ -187,7 +187,7 @@ class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title={this.props.intl.formatMessage({ id: 'Setting.BrandLogo' })}
+                title={RCi18n({ id: 'Setting.BrandLogo' })}
                 dataIndex="logo"
                 key="log"
                 width="15%"
@@ -202,7 +202,7 @@ class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title={this.props.intl.formatMessage({ id: 'Setting.AuthorizationDocument' })}
+                title={RCi18n({ id: 'Setting.AuthorizationDocument' })}
                 dataIndex="authorizePic"
                 key="authorizePic"
                 width="50%"
@@ -220,7 +220,7 @@ class StepThree extends React.Component<any, any> {
             </DataGrid>
             {checkBrand.length == 0 ? null : (
               <DataGrid dataSource={checkBrand} rowKey="contractBrandId" scroll={{ y: 240 }} pagination={false}>
-                <Column title={this.props.intl.formatMessage({ id: 'Setting.Shopincrease' })} dataIndex="name" key="name" width="15%" />
+                <Column title={RCi18n({ id: 'Setting.Shopincrease' })} dataIndex="name" key="name" width="15%" />
                 <Column dataIndex="nickName" key="nickName" width="20%" />
                 <Column
                   dataIndex="logo"
@@ -336,7 +336,7 @@ class StepThree extends React.Component<any, any> {
     if (count == 0) {
       storeRenewAll();
     } else {
-      message.error(this.props.intl.formatMessage({ id: 'Setting.Custombrandrepeats' }) + '!');
+      message.error(RCi18n({ id: 'Setting.Custombrandrepeats' }) + '!');
     }
   };
 

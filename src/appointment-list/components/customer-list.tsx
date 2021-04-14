@@ -122,7 +122,7 @@ class CustomerList extends React.Component<any, any> {
     return (
       <Modal width={900} title={<FormattedMessage id="Order.offline.consumerInformation" />} visible={visible} okText={<FormattedMessage id="Order.btnConfirm" />} cancelText={<FormattedMessage id="Order.btnCancel" />} okButtonProps={{ disabled: selectedRowKeys.length === 0 }} onOk={this.onConfirmChoose} onCancel={this.onCloseModal}>
         <div style={{ marginBottom: 10 }}>
-          <Input.Search placeholder={this.props.intl.formatMessage({id:'Order.offline.consumerEmail'})} onChange={this.onChangeSearchTxt} onSearch={this.onSearchMember} />
+          <Input.Search placeholder={RCi18n({id:'Order.offline.consumerEmail'})} onChange={this.onChangeSearchTxt} onSearch={this.onSearchMember} />
         </div>
         <Table
           rowKey="customerDetailId"

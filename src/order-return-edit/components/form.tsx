@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Form, Input, Select, Button, message, Icon } from 'antd';
 import { fromJS } from 'immutable';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, history, Tips, QMMethod, QMUpload } from 'qmkit';
+import { noop, Const, history, Tips, QMMethod, QMUpload, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -118,7 +118,7 @@ class ReturnOrderForm extends React.Component<any, any> {
             })(this._getReturnReasonSelect())}
           </FormItem>
           {isReturn ? (
-            <FormItem {...formItemLayout} label={this.props.intl.formatMessage({id:'Order.Returnmethod'})} hasFeedback>
+            <FormItem {...formItemLayout} label={RCi18n({id:'Order.Returnmethod'})} hasFeedback>
               {getFieldDecorator('returnWay', {
                 initialValue: selectedReturnWay,
                 rules: [

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Breadcrumb, Spin } from 'antd';
 import { StoreProvider } from 'plume2';
-import { Headline, BreadCrumb } from 'qmkit';
+import { Headline, BreadCrumb, RCi18n } from 'qmkit';
 import { injectIntl } from 'react-intl';
 import AppStore from './store';
 import MarketingDes from './common/components/marketing-des';
@@ -33,7 +33,7 @@ class MarketingDetails extends React.Component<any, any> {
 
   render() {
     const marketingType = this.store.state().get('marketingType');
-    const title = MAK_TYPE[marketingType] + this.props.intl.formatMessage({
+    const title = MAK_TYPE[marketingType] + RCi18n({
       id: 'Marketing.Activitydetails'
     });
     return (

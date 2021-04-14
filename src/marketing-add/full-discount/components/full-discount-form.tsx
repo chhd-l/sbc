@@ -373,7 +373,7 @@ class FullDiscountForm extends React.Component<any, any> {
     console.log(marketingBean.toJS(), 'marketingBean-----------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="FormattedMessageMarketing.PromotionType"/>} labelAlign="left">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionType"/>} labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
               <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
@@ -390,19 +390,19 @@ class FullDiscountForm extends React.Component<any, any> {
               {
                 required: true,
                 whitespace: true,
-                message: this.props.intl.formatMessage({
+                message: RCi18n({
                   id: 'Marketing.PleaseInputPromotionCode'
                 })
               },
               { min: 1, max: 20, message:
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.words'
                   })
               },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback,
-                    this.props.intl.formatMessage({
+                    RCi18n({
                       id: 'Marketing.PromotionCode'
                     })
                   );
@@ -443,19 +443,19 @@ class FullDiscountForm extends React.Component<any, any> {
                 required: true,
                 whitespace: true,
                 message:
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.PleaseInputPromotionName'
                   })
               },
               { min: 1, max: 40, message:
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.40Words'
                   })
               },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback,
-                    this.props.intl.formatMessage({
+                    RCi18n({
                       id: 'Marketing.PromotionName'
                     })
                   );
@@ -464,7 +464,7 @@ class FullDiscountForm extends React.Component<any, any> {
             ],
             onChange: (e) => this.onBeanChange({ marketingName: e.target.value }),
             initialValue: marketingBean.get('marketingName')
-          })(<Input placeholder={this.props.intl.formatMessage({
+          })(<Input placeholder={RCi18n({
             id: 'Marketing.noMoreThan40Words'
           })} style={{ width: 360 }} />)}
         </FormItem>
@@ -473,7 +473,7 @@ class FullDiscountForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: this.props.intl.formatMessage({
+                message: RCi18n({
                   id: 'Marketing.PleaseSelectStartingAndEndTime'
                 })
               },
@@ -482,7 +482,7 @@ class FullDiscountForm extends React.Component<any, any> {
                   if (value[0]) {
                     callback();
                   } else {
-                    callback(this.props.intl.formatMessage({
+                    callback(RCi18n({
                       id: 'Marketing.PleaseSelectStartingAndEndTime'
                     }));
                   }
@@ -508,9 +508,9 @@ class FullDiscountForm extends React.Component<any, any> {
               //format={'YYYY-MM-DD' + ' ' + moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')}
               // format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
               placeholder={[
-                this.props.intl.formatMessage({
+                RCi18n({
                 id: 'Marketing.StartTime'
-              }), this.props.intl.formatMessage({
+              }), RCi18n({
                 id: 'Marketing.EndTime'
               })
               ]}
@@ -526,7 +526,7 @@ class FullDiscountForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: this.props.intl.formatMessage({
+                  message: RCi18n({
                     id: 'Marketing.fulldiscounttype',
                   })
                 }
@@ -568,7 +568,7 @@ class FullDiscountForm extends React.Component<any, any> {
                   {getFieldDecorator('firstSubscriptionOrderDiscount', {
                     rules: [
                       { required: true, message:
-                          this.props.intl.formatMessage({
+                          RCi18n({
                             id: 'Marketing.AmountMustBeEntered',
                           })
                       },
@@ -577,7 +577,7 @@ class FullDiscountForm extends React.Component<any, any> {
                           if (value) {
                             if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
                               callback(
-                                this.props.intl.formatMessage({
+                                RCi18n({
                                   id: 'Marketing.InputValueBetween',
                                 })
                               );
@@ -592,12 +592,12 @@ class FullDiscountForm extends React.Component<any, any> {
                     <Input
                       style={{ width: 100 }}
                       title={
-                        this.props.intl.formatMessage({
+                        RCi18n({
                           id: 'Marketing.InputValueBetween'
                         })
                       }
                       placeholder={
-                        this.props.intl.formatMessage({
+                        RCi18n({
                           id: 'Marketing.InputValueBetween'
                         })
                       }
@@ -621,7 +621,7 @@ class FullDiscountForm extends React.Component<any, any> {
                 {getFieldDecorator('restSubscriptionOrderDiscount', {
                   rules: [
                     { required: true, message:
-                        this.props.intl.formatMessage({
+                        RCi18n({
                         id: 'Marketing.AmountMustBeEntered'
                       })
                     },
@@ -630,7 +630,7 @@ class FullDiscountForm extends React.Component<any, any> {
                         if (value) {
                           if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
                             callback(
-                              this.props.intl.formatMessage({
+                              RCi18n({
                                 id: 'Marketing.InputValueBetween'
                               })
                             );
@@ -645,12 +645,12 @@ class FullDiscountForm extends React.Component<any, any> {
                   <Input
                     style={{ width: 100 }}
                     title={
-                      this.props.intl.formatMessage({
+                      RCi18n({
                         id: 'Marketing.InputValueBetween'
                       })
                     }
                     placeholder={
-                      this.props.intl.formatMessage({
+                      RCi18n({
                         id: 'Marketing.InputValueBetween'
                       })
                     }
@@ -705,12 +705,12 @@ class FullDiscountForm extends React.Component<any, any> {
                 //treeData ={getGoodsCate}
                 // showCheckedStrategy = {SHOW_PARENT}
                 placeholder={
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.Pleaseselectcategory'
                   })
                 }
                 notFoundContent={
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.Nosalescategory'
                   })
                 }
@@ -751,7 +751,7 @@ class FullDiscountForm extends React.Component<any, any> {
                     if ((!value && marketingBean.get('scopeType') === 3)) { //marketingBean.get('attributeValueIds') || marketingBean.get('attributeValueIds').size === 0)
                       //
                       callback(
-                        this.props.intl.formatMessage({
+                        RCi18n({
                           id: 'Marketing.Pleaseselectattribute'
                         })
                       );
@@ -771,12 +771,12 @@ class FullDiscountForm extends React.Component<any, any> {
                 //treeData ={getGoodsCate}
                 // showCheckedStrategy = {SHOW_PARENT}
                 placeholder={
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.Pleaseselectattribute'
                   })
                 }
                 notFoundContent={
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.Noattribute'
                   })
                 }
@@ -829,7 +829,7 @@ class FullDiscountForm extends React.Component<any, any> {
                   validator: (_rule, value, callback) => {
                     if (!value && marketingBean.get('joinLevel') === -3) {
                       callback(
-                        this.props.intl.formatMessage({
+                        RCi18n({
                           id: 'Marketing.Pleaseselectgroup'
                         })
 
@@ -860,7 +860,7 @@ class FullDiscountForm extends React.Component<any, any> {
                   validator: (_rule, value, callback) => {
                     if (!value && marketingBean.get('joinLevel') === -4) {
                       callback(
-                        this.props.intl.formatMessage({
+                        RCi18n({
                           id: 'Marketing.Pleaseenteremailsuffix'
                         })
 
@@ -1095,7 +1095,7 @@ class FullDiscountForm extends React.Component<any, any> {
         errorObject['goods'] = {
           value: null,
           errors: [new Error(
-            this.props.intl.formatMessage({
+            RCi18n({
               id: 'Marketing.theProductToBeMarketed'
             })
           )]
@@ -1104,7 +1104,7 @@ class FullDiscountForm extends React.Component<any, any> {
         errorObject['storeCateIds'] = {
           value: null,
           errors: [new Error(
-            this.props.intl.formatMessage({
+            RCi18n({
               id: 'Marketing.Pleaseselectcategory'
             })
           )]
@@ -1113,7 +1113,7 @@ class FullDiscountForm extends React.Component<any, any> {
         errorObject['attributeValueIds'] = {
           value: null,
           errors: [new Error(
-            this.props.intl.formatMessage({
+            RCi18n({
               id: 'Marketing.Pleaseselectattribute'
             })
           )]
@@ -1185,7 +1185,7 @@ class FullDiscountForm extends React.Component<any, any> {
             };
 
             marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
-            submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
+            submitFullDiscount(marketingBean.toJS()); //.then((res) => this._responseThen(res))
           }
         }
       }
@@ -1214,10 +1214,10 @@ class FullDiscountForm extends React.Component<any, any> {
     if (levelType == '' || !marketingBean.get(levelType)) return;
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
-        title: this.props.intl.formatMessage({
+        title: RCi18n({
           id: 'Marketing.SwitchType'
         }),
-        content: this.props.intl.formatMessage({
+        content: RCi18n({
           id: 'Marketing.SwitchingTypes'
         }),
         onOk() {

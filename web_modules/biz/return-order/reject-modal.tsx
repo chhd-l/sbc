@@ -75,7 +75,7 @@ class RejectModal extends React.Component<any, any> {
   _handleOk(handleOk: Function) {
     const { data, onHide } = this.props;
     const form = this._form as WrappedFormUtils;
-    const text = this.props.intl.formatMessage({id:'Order.reasonIsEmpty'});
+    const text = RCi18n({id:'Order.reasonIsEmpty'});
     form.validateFields(null, (errs, values) => {
       if (!errs) {
         if(values.reason == null || values.reason.trim() == ''){
@@ -104,8 +104,8 @@ class RejectForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const alert1 = this.props.intl.formatMessage({id:'Order.pleaseInputReason'}) + ' ' + this.props.formType;
-    const alert2 = this.props.intl.formatMessage({id:'Order.oneToOneHun'});
+    const alert1 = RCi18n({id:'Order.pleaseInputReason'}) + ' ' + this.props.formType;
+    const alert2 = RCi18n({id:'Order.oneToOneHun'});
 
     return (
       <Form>

@@ -418,6 +418,35 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
+      title:
+        <div>
+          Subscription type
+        </div>
+      ,
+      key: 'promotions',
+      render: (rowInfo) => {
+        console.log(rowInfo,1234);
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('promotions' + rowInfo.id, {
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'promotions', e),
+                  initialValue: rowInfo.promotions
+                })(
+                  <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={goods.get('promotions') == 'autoship'} >
+                    <Option value='autoship'>Auto ship</Option>
+                    <Option value='club'>Club</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    columns = columns.push({
       title: (
         <div style={{marginRight: '81px'}}>On/Off shelves</div>
       ),

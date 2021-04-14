@@ -577,7 +577,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.OrderNumber'})} />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Finance.OrderNumber'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -595,7 +595,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.ConsumerType'})} />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Finance.ConsumerType'})} />
                     <Select
                       style={styles.wrapper}
                       onChange={(value) => {
@@ -623,7 +623,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.ConsumerName'})} />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Finance.ConsumerName'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -641,7 +641,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.InvoiceDate'})} />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Finance.InvoiceDate'})} />
                     <RangePicker style={styles.wrapper} onChange={this.onChangeDate} disabledDate={this.disabledDate} format={'YYYY-MM-DD'} />
                   </InputGroup>
                 </FormItem>
@@ -650,7 +650,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.InvoiceStatus'})} />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Finance.InvoiceStatus'})} />
                     <Select
                       defaultValue=""
                       style={styles.wrapper}

@@ -4,7 +4,7 @@ import { IMap } from 'typings/globalType';
 import { Popover } from 'antd';
 import moment from 'moment';
 import { fromJS } from 'immutable';
-import { cache, Const, Logistics } from 'qmkit';
+import { cache, Const, Logistics, RCi18n } from 'qmkit';
 
 import { Table } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -95,13 +95,13 @@ class GoodsList extends React.Component<any, any> {
     let rejectLabel = '';
     switch (returnFlowStatus) {
       case 'REJECT_RECEIVE':
-        rejectLabel = this.props.intl.formatMessage({id:'Order.reasonForRejection'});
+        rejectLabel = RCi18n({id:'Order.reasonForRejection'});
         break;
       case 'REJECT_REFUND':
-        rejectLabel = this.props.intl.formatMessage({id:'Order.reasonForRefuse'});
+        rejectLabel = RCi18n({id:'Order.reasonForRefuse'});
         break;
       case 'VOID':
-        rejectLabel = this.props.intl.formatMessage({id:'Order.reasonForReject'});
+        rejectLabel = RCi18n({id:'Order.reasonForReject'});
         break;
     }
 

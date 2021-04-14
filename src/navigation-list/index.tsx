@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb, DragTable, Const } from 'qmkit';
+import { Headline, BreadCrumb, DragTable, Const, RCi18n } from 'qmkit';
 import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch, Form, Modal, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -96,9 +96,9 @@ class NavigationList extends Component<any, any> {
   updateNavigationStatus(record, checked) {
     let tipMessage = checked ? 'enable' : 'disable';
     let that = this;
-    const title = this.props.intl.formatMessage({id:'Content.Prompt'});
-    const content = checked ? this.props.intl.formatMessage({id:'Content.enableTheNavigation'}) : this.props.intl.formatMessage({id:'Content.disableTheNavigation'});
-    const sucMessage = this.props.intl.formatMessage({id:'Content.OperateSuccessfully'});
+    const title = RCi18n({id:'Content.Prompt'});
+    const content = checked ? RCi18n({id:'Content.enableTheNavigation'}) : RCi18n({id:'Content.disableTheNavigation'});
+    const sucMessage = RCi18n({id:'Content.OperateSuccessfully'});
     confirm({
       title: title,
       content: content,
@@ -129,7 +129,7 @@ class NavigationList extends Component<any, any> {
     });
   }
   sortNavigation(sortList) {
-    const sucMessage = this.props.intl.formatMessage({id:'Content.OperateSuccessfully'});
+    const sucMessage = RCi18n({id:'Content.OperateSuccessfully'});
     this.setState({
       loading: true
     });
@@ -147,8 +147,8 @@ class NavigationList extends Component<any, any> {
       .catch((err) => {});
   }
   deleteNavigation(record) {
-    const wrnMessage = this.props.intl.formatMessage({id:'Content.theNavigationFirstly'});
-    const sucMessage = this.props.intl.formatMessage({id:'Content.OperateSuccessfully'});
+    const wrnMessage = RCi18n({id:'Content.theNavigationFirstly'});
+    const sucMessage = RCi18n({id:'Content.OperateSuccessfully'});
     if (record.children && record.children.length > 0) {
       message.warning(wrnMessage);
       return;

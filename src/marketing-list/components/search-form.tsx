@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
 import { Form, Select, Input, Button, DatePicker, Row, Col } from 'antd';
-import { SelectGroup, noop, Const, util } from 'qmkit';
+import { SelectGroup, noop, Const, RCi18n, util } from 'qmkit';
 import { List } from 'immutable';
 // import locale from 'antd/es/date-picker/locale/lv_LV';
 import moment from 'moment';
@@ -135,7 +135,7 @@ class SearchForm extends React.Component<any, any> {
                 format={Const.DATE_FORMAT}
                 value={startValue}
                 placeholder={
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.StartTime'
                   })
                 }
@@ -154,7 +154,7 @@ class SearchForm extends React.Component<any, any> {
                 format={Const.DATE_FORMAT}
                 value={endValue}
                 placeholder={
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.EndTime'
                   })
                 }

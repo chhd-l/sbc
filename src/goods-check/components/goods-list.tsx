@@ -230,8 +230,8 @@ class CateList extends React.Component<any, any> {
    */
   _delete = (goodsId: string) => {
     const { onSpuDelete } = this.props.relaxProps;
-    const title = this.props.intl.formatMessage({id:'Product.Prompt'});
-    const content = this.props.intl.formatMessage({id:'Product.DeleteConfirmTip'});
+    const title = RCi18n({id:'Product.Prompt'});
+    const content = RCi18n({id:'Product.DeleteConfirmTip'});
     confirm({
       title: title,
       content: content,

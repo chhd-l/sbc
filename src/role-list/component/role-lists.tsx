@@ -5,7 +5,7 @@ import { Icon, Modal, Table, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import { Link } from 'react-router-dom';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { AuthWrapper, noop } from 'qmkit';
+import { AuthWrapper, noop, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
@@ -133,10 +133,10 @@ class CateList extends React.Component<any, any> {
    */
   _delete = async (roleInfoId) => {
     const { deleteEquities } = this.props.relaxProps;
-    const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
-    const content = this.props.intl.formatMessage({id:'Setting.deleteThisRole'});
-    const oktext = this.props.intl.formatMessage({id:'Setting.OK'});
-    const canceltext = this.props.intl.formatMessage({id:'Setting.Cancel'});
+    const title = RCi18n({id:'Setting.Prompt'});
+    const content = RCi18n({id:'Setting.deleteThisRole'});
+    const oktext = RCi18n({id:'Setting.OK'});
+    const canceltext = RCi18n({id:'Setting.Cancel'});
     confirm({
       title: title,
       content: content,

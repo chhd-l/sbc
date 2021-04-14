@@ -453,8 +453,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderExpirationTimeStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -490,8 +490,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderConfirmReceiptStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -527,8 +527,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderRefundsStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -564,8 +564,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderAutomaticReviewStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -601,8 +601,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderAutomaticConfirmationStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -644,8 +644,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentCashForm.orderExpirationTimeStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -681,8 +681,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentCashForm.orderConfirmReceiptStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -718,8 +718,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentCashForm.orderRefundsStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -755,8 +755,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentCashForm.orderAutomaticReviewStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -792,8 +792,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                            checkedChildren={RCi18n({id:'Order.On'})}
+                            unCheckedChildren={RCi18n({id:'Order.Off'})}
                             checked={paymentCashForm.orderAutomaticConfirmationStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -837,8 +837,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                        checkedChildren={RCi18n({id:'Order.On'})}
+                        unCheckedChildren={RCi18n({id:'Order.Off'})}
                         checked={unlimitedForm.orderExpirationTimeStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({
@@ -874,8 +874,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                        checkedChildren={RCi18n({id:'Order.On'})}
+                        unCheckedChildren={RCi18n({id:'Order.Off'})}
                         checked={unlimitedForm.orderConfirmReceiptStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({
@@ -911,8 +911,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                        checkedChildren={RCi18n({id:'Order.On'})}
+                        unCheckedChildren={RCi18n({id:'Order.Off'})}
                         checked={unlimitedForm.orderRefundsStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({
@@ -948,8 +948,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                        checkedChildren={RCi18n({id:'Order.On'})}
+                        unCheckedChildren={RCi18n({id:'Order.Off'})}
                         checked={unlimitedForm.orderAutomaticReviewStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({
@@ -985,8 +985,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
-                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
+                        checkedChildren={RCi18n({id:'Order.On'})}
+                        unCheckedChildren={RCi18n({id:'Order.Off'})}
                         checked={unlimitedForm.orderAutomaticConfirmationStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({

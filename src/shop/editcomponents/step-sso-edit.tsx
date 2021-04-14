@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Form, Input, Button, Icon, DatePicker, message, Popover } from 'antd';
-import { QMUpload, noop, Const, ValidConst, QMMethod } from 'qmkit';
+import { QMUpload, noop, Const, RCi18n, ValidConst, QMMethod } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
 
@@ -241,7 +241,7 @@ export default class StepTwo extends React.Component<any, any> {
       ...ssoForm
     });
     if (res.code === Const.SUCCESS_CODE) {
-      message.success(this.props.intl.formatMessage({ id: 'Setting.Operatesuccessfully' }));
+      message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
     }
   };
 }

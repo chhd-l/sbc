@@ -132,11 +132,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
       }
     );
     let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
-    console.log(minStock,123);
 
     targetGoodsList = [];
     let tempMinStock = Math.min.apply(Math, minStock)
-    console.log(tempMinStock,456);
 
     //sessionStorage.setItem('minStock',tempMinStock)
     targetGoodsList.push({

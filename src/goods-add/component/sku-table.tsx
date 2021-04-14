@@ -523,7 +523,6 @@ class SkuForm extends React.Component<any, any> {
       ,
       key: 'promotions',
       render: (rowInfo) => {
-        console.log(rowInfo,1234);
         return (
           <Row>
             <Col span={12}>

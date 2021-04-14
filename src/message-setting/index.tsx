@@ -1,36 +1,119 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline } from 'qmkit';
-import { Card, Button, Modal, Form, Input, Alert, Switch, Row, Col, Popconfirm } from 'antd';
-import { FormattedMessage,injectIntl } from 'react-intl';
+import { AuthWrapper, BreadCrumb, Const, Headline } from 'qmkit';
+import { Card, Button, Modal, Form, Input, Alert, Switch, Row, Col, Popconfirm, message, Spin, Radio, Select } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import * as webapi from './webapi';
+import settingForm from '@/distribution-setting/components/setting-form';
 const FormItem = Form.Item;
+const Option = Select.Option;
 class MessageSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       visible: false,
       // this.props.intl.formatMessage({id:'Order.offline.consumerEmail'})
-      
+
       emailApiList: [
-        {
-          apiName: 'SendGrid',
-          imgUrl: 'https://d2cstgstorage.z13.web.core.windows.net/202104120251509449.png',
-          isOpen:true
-        },
-        {
-          apiName: 'SendSay',
-          imgUrl: 'https://d2cstgstorage.z13.web.core.windows.net/202104120250527111.png',
-          isOpen:false
-        }
+        // {
+        //   apiName: 'SendGrid',
+        //   imgUrl: 'https://d2cstgstorage.z13.web.core.windows.net/202104120251509449.png',
+        //   isOpen: true
+        // },
+        // {
+        //   apiName: 'SendSay',
+        //   imgUrl: 'https://d2cstgstorage.z13.web.core.windows.net/202104120250527111.png',
+        //   isOpen: false
+        // }
       ],
-      settingForm: {
-        sender: '',
-        accessKeyId: '',
-        accessKeySecret: '',
-        enable: false
+      senderList:[],
+      settingForm:{
+        fromEmail:''
+      },
+      currentSettingForm: {
       }
     };
   }
-  componentDidMount() { }
+  componentDidMount() {
+    this.getSettingList()
+  }
+
+  getSettingList = () => {
+    this.setState({
+      loading: true
+    })
+    webapi.getApiSettingList().then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        console.log(res);
+        let settingList = res.context.list 
+        
+        this.setState({
+          loading: false,
+          emailApiList:settingList
+        })
+      }
+    }).catch(err => {
+      this.setState({
+        loading: false
+      })
+      message.error(err.toString() || 'Operation failure')
+    })
+  }
+
+
+  saveSetting = () => {
+    const { settingForm } = this.state
+    let params = {
+      id: settingForm.id,
+      fromEmail:settingForm.fromEmail
+    }
+    webapi.saveApiSetting(params).then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(res.message)
+        this.getSettingList()
+        this.setState({
+          visible: false
+        },()=>{
+          this.props.form.resetFields()
+        })
+        
+        
+      }else{
+        this.setState({
+          loading: false
+        })
+      }
+    }).catch(err => {
+      this.setState({
+        loading: false
+      })
+      message.error(err.toString() || 'Operation failure')
+    })
+  }
+  openEditModal=(item)=>{
+    this.setState({
+      loading: true
+    })
+    webapi.getApiSenderList(item.emailType).then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        console.log(res);
+        let senderList = res.context.list
+        this.setState({
+          settingForm:item,
+          loading: false,
+          senderList,
+          visible:true
+        })
+      }
+    }).catch(err => {
+      this.setState({
+        loading: false
+      })
+      message.error(err.toString() || 'Operation failure')
+    })
+  }
 
   onFormChange = ({ field, value }) => {
     let data = this.state.settingForm;
@@ -39,13 +122,10 @@ class MessageSetting extends Component<any, any> {
       searchForm: data
     });
   };
-
   handleOk = () => {
     this.props.form.validateFields((err) => {
       if (!err) {
-        this.setState({
-          visible: false
-        });
+        this.saveSetting()
       }
     });
   };
@@ -53,140 +133,172 @@ class MessageSetting extends Component<any, any> {
   handleCancel = (e) => {
     this.setState({
       visible: false
+    },()=>{
+      this.props.form.resetFields()
     });
   };
+
   changeSettingStatus = (id) => {
-    console.log('');
+    let params={
+      id: id,
+      status: 1,
+    }
+    webapi.updateApiSettingStatus(params).then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(res.message)
+        this.getSettingList()
+      }else{
+        this.setState({
+          loading: false
+        })
+      }
+    }).catch(err => {
+      this.setState({
+        loading: false
+      })
+      message.error(err.toString() || 'Operation failure')
+    })
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
 
-    const { emailApiList } = this.state;
+    const { emailApiList, settingForm, loading,senderList } = this.state;
     return (
-      <div>
-        {/*导航面包屑*/}
-        <BreadCrumb />
-        <div className="container-search">
-          <Headline title="Email Setting" />
-          <h4>
-            <FormattedMessage id="Marketing.EmailApi" />
-          </h4>
-          <Row>
-            {emailApiList &&
-              emailApiList.map((item, index) => (
-                <Col span={8}>
-                  <Card
-                    size="small"
-                    extra={
-                      <a
-                        style={styles.btn}
-                        onClick={() =>
-                          this.setState({
-                            visible: true
-                          })
+      <AuthWrapper functionName="f_message_setting">
+        <div>
+          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            {/*导航面包屑*/}
+            <BreadCrumb />
+            <div className="container-search">
+              <Headline title="Email Setting" />
+              <h4>
+                <FormattedMessage id="Marketing.EmailApi" />
+              </h4>
+              <Row>
+                {emailApiList &&
+                  emailApiList.map((item, index) => (
+                    <Col span={8}>
+                      <Card
+                        size="small"
+                        extra={
+                          <a style={styles.btn}
+                            onClick={() =>
+                              this.openEditModal(item)
+                            }
+                          >
+                            <FormattedMessage id="Marketing.Edit" />
+                          </a>
                         }
+                        style={{ width: 300 }}
+                        key={index}
                       >
-                        <FormattedMessage id="Marketing.Edit" />
-                      </a>
-                    }
-                    style={{ width: 300 }}
-                    key={index}
-                  >
-                    <div style={styles.center}>
-                      <div style={styles.imgCenter}>
-                        <img style={styles.img} src={item.imgUrl} alt="" />
-                      </div>
+                        <div style={styles.center}>
+                          <div style={styles.imgCenter}>
+                            <img style={styles.img} src={item.imgUrl} alt="" />
+                          </div>
 
-                      <p style={{ fontWeight: 600 }}>{item.apiName}</p>
-                      <div style={ styles.switchPositionStyle}>
-                        <Popconfirm title={this.props.intl.formatMessage({id:'Marketing.Message.editTips'})}
-                          disabled={+item.isOpen === 1}
-                          onConfirm={() => this.changeSettingStatus(item.id)} 
-                          okText={this.props.intl.formatMessage({id:'Marketing.Yes'})} 
-                          cancelText={this.props.intl.formatMessage({id:'Marketing.No'})}>
-                          <Switch checked={+item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
-                        </Popconfirm>
-                      </div>
-                    </div>
-                  </Card>
+                          <p style={{ fontWeight: 600 }}>{item.emailTypeName}</p>
+                          <div style={styles.switchPositionStyle}>
+                            <Popconfirm title={this.props.intl.formatMessage({ id: 'Marketing.Message.editTips' })}
+                              disabled={+item.status === 1}
+                              onConfirm={() => this.changeSettingStatus(item.id)}
+                              okText={this.props.intl.formatMessage({ id: 'Marketing.Yes' })}
+                              cancelText={this.props.intl.formatMessage({ id: 'Marketing.No' })}>
+                              <Switch checked={+item.status === 1} disabled={+item.status === 1} size="small" />
+                            </Popconfirm>
+                          </div>
+                        </div>
+                      </Card>
 
-                </Col>
-              ))}
+                    </Col>
+                  ))}
 
-          </Row>
+              </Row>
 
+            </div>
+            <Modal
+              width="450px"
+              title={<FormattedMessage id="Marketing.SendGridApiSetting" />}
+              visible={this.state.visible}
+              maskClosable={false}
+              // onOk={this.handleOk}
+              onCancel={this.handleCancel}
+              footer={[
+                <Button key="back" shape="round" onClick={this.handleCancel}>
+                  <FormattedMessage id="Marketing.Cancel" />
+                </Button>,
+                <Button key="submit" shape="round" type="primary" onClick={this.handleOk}>
+                  <FormattedMessage id="Marketing.Confirm" />
+                </Button>
+              ]}
+            >
+              <Form layout="vertical">
+                <FormItem label={<FormattedMessage id="Marketing.Tips" />} style={styles.formItem}>
+                  <Alert message={this.props.intl.formatMessage({ id: 'Marketing.Message.settingTips' })} type="warning" />
+                </FormItem>
+                <FormItem label={<FormattedMessage id="Marketing.Sender" />} style={styles.formItem}>
+                  {getFieldDecorator('fromEmail', {
+                    rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputSender" /> }],
+                    initialValue: settingForm.fromEmail
+                  })(
+                    <Select
+                      onChange={(value) => {
+                        this.onFormChange({
+                          field: 'fromEmail',
+                          value
+                        });
+                      }}
+                    >
+                      {
+                        senderList&&senderList.map((item,index)=>(
+                          <Option value={item.senderEmail} key={index}>{item.senderEmail}</Option>
+                        ))
+                      }
+                    </Select>
+                  )}
+                </FormItem>
+                <FormItem label={<FormattedMessage id="Marketing.AccessKeyID" />} style={styles.formItem}>
+                  {getFieldDecorator('accessKeyId', {
+                    initialValue: settingForm.apiKeyId
+                  })(
+                    <Input
+                      disabled
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'accessKeyId',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+                <FormItem label={<FormattedMessage id="Marketing.AccessKeySecret" />} style={styles.formItem}>
+                  {getFieldDecorator('apiKey', {
+                    initialValue: settingForm.apiKey
+                  })(
+                    <Input.TextArea
+                      disabled
+                      autoSize={{ minRows: 2, maxRows: 4 }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'apiKey',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Form>
+            </Modal>
+          </Spin>
         </div>
-        <Modal
-          width="450px"
-          title={<FormattedMessage id="Marketing.SendGridApiSetting" />}
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          footer={[
-            <Button key="back" shape="round" onClick={this.handleCancel}>
-              <FormattedMessage id="Marketing.Cancel" />
-            </Button>,
-            <Button key="submit" shape="round" type="primary" onClick={this.handleOk}>
-              <FormattedMessage id="Marketing.Confirm" />
-            </Button>
-          ]}
-        >
-          <Form layout="vertical">
-            <FormItem label={<FormattedMessage id="Marketing.Tips" />} style={styles.formItem}>
-              <Alert message={this.props.intl.formatMessage({id:'Marketing.Message.settingTips'})} type="warning" />
-            </FormItem>
-            <FormItem label={<FormattedMessage id="Marketing.Sender" />} style={styles.formItem}>
-              {getFieldDecorator('sender', {
-                rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputSender" /> }]
-              })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'sender',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem label={<FormattedMessage id="Marketing.AccessKeyID" />} style={styles.formItem}>
-              {getFieldDecorator('accessKeyId', {
-                rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputAccessKeyID" /> }]
-              })(
-                <Input
-                  disabled
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'accessKeyId',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem label={<FormattedMessage id="Marketing.AccessKeySecret" />} style={styles.formItem}>
-              {getFieldDecorator('accessKeySecret', {
-                rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputAccessKeySecret" /> }]
-              })(
-                <Input
-                  disabled
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'accessKeySecret',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
 
-          </Form>
-        </Modal>
-      </div>
+
+      </AuthWrapper>
     );
   }
 }
@@ -215,7 +327,7 @@ const styles = {
   formItem: {
     marginBottom: 0
   },
-  switchPositionStyle:{
+  switchPositionStyle: {
     position: 'absolute',
     right: '10px',
     bottom: '10px',

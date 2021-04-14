@@ -452,7 +452,7 @@ export default class SearchList extends React.Component<any, any> {
           min={0}
           max={applyPrice}
           defaultValue={applyPrice}
-          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${value}`}
           parser={value => {
             value = value.replace(sessionStorage.getItem(cache.SYSTEM_GET_CONFIG), '');
             value = value.replace(/\s?|(,*)/g, '');

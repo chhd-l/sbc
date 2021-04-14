@@ -95,13 +95,13 @@ class GoodsList extends React.Component<any, any> {
     let rejectLabel = '';
     switch (returnFlowStatus) {
       case 'REJECT_RECEIVE':
-        rejectLabel = RCi18n({id:'Order.reasonForRejection'});
+        rejectLabel = (window as any).RCi18n({id:'Order.reasonForRejection'});
         break;
       case 'REJECT_REFUND':
-        rejectLabel = RCi18n({id:'Order.reasonForRefuse'});
+        rejectLabel = (window as any).RCi18n({id:'Order.reasonForRefuse'});
         break;
       case 'VOID':
-        rejectLabel = RCi18n({id:'Order.reasonForReject'});
+        rejectLabel = (window as any).RCi18n({id:'Order.reasonForReject'});
         break;
     }
 

@@ -136,7 +136,7 @@ class ReturnOrderForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: RCi18n({
+                  message: (window as any).RCi18n({
                     id: 'Order.Pleaseselectchargebackreason'
                   })
                 }
@@ -150,7 +150,7 @@ class ReturnOrderForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: RCi18n({
+                    message: (window as any).RCi18n({
                       id: 'Order.Pleaseselectreturnmethod'
                     })
                   }
@@ -165,7 +165,7 @@ class ReturnOrderForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: RCi18n({
+                  message: (window as any).RCi18n({
                     id: 'Order.Returndescriptioncannotbeblank'
                   })
                 },
@@ -212,7 +212,7 @@ class ReturnOrderForm extends React.Component<any, any> {
                  rules: [
                   {
                     required: true,
-                    message: RCi18n({
+                    message: (window as any).RCi18n({
                       id: 'Order.Refundableamountcannotbeblank'
                     })
                   },
@@ -270,12 +270,12 @@ class ReturnOrderForm extends React.Component<any, any> {
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
         placeholder={
-          RCi18n({
+          (window as any).RCi18n({
             id: 'Order.Pleaseselectchargebackreason'
           })
         }
         notFoundContent={
-          RCi18n({
+          (window as any).RCi18n({
             id: 'Order.Thereisnoreasonforthereturn'
           })
         }
@@ -307,12 +307,12 @@ class ReturnOrderForm extends React.Component<any, any> {
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
         placeholder={
-          RCi18n({
+          (window as any).RCi18n({
             id: 'Order.Pleaseselectreturnmethod'
           })
         }
         notFoundContent={
-          RCi18n({
+          (window as any).RCi18n({
             id: 'Order.NoData'
           })
         }
@@ -352,7 +352,7 @@ class ReturnOrderForm extends React.Component<any, any> {
   _editImages = ({ file, fileList }) => {
     if (file.status == 'error') {
       message.error(
-        RCi18n({
+        (window as any).RCi18n({
           id: 'Order.Uploaderror'
         })
       );
@@ -378,7 +378,7 @@ class ReturnOrderForm extends React.Component<any, any> {
         return true;
       } else {
         message.error(
-          RCi18n({
+          (window as any).RCi18n({
             id: 'Order.Filesizecannotexceed'
           })
         );
@@ -387,7 +387,7 @@ class ReturnOrderForm extends React.Component<any, any> {
     } else {
 
       message.error(
-        RCi18n({
+        (window as any).RCi18n({
           id: 'Order.Fileformaterror'
         })
       );

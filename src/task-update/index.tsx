@@ -452,7 +452,7 @@ class TaskUpdate extends Component<any, any> {
                           editable ? (
                             <Input
                               disabled={taskCompleted}
-                              placeholder={RCi18n({id:'task.Inputtasknametocreateanewtask'})}
+                              placeholder={(window as any).RCi18n({id:'task.Inputtasknametocreateanewtask'})}
                               onChange={(e: any) =>
                                 this.onChange({
                                   field: 'name',
@@ -506,7 +506,7 @@ class TaskUpdate extends Component<any, any> {
                             <Select
                               allowClear
                               disabled={taskCompleted}
-                              placeholder={RCi18n({id:'task.Pleaseinputemailorname'})}
+                              placeholder={(window as any).RCi18n({id:'task.Pleaseinputemailorname'})}
                               showSearch
                               loading={petAssistantLoading}
                               onSearch={this.searchAssignedTo}
@@ -572,7 +572,7 @@ class TaskUpdate extends Component<any, any> {
                               disabledDate={this.disabledEventStartDate}
                               disabled={taskCompleted || (!!task.startTime && id)}
                               style={{ width: '100%' }}
-                              placeholder={RCi18n({id:'task.StartTime'})}
+                              placeholder={(window as any).RCi18n({id:'task.StartTime'})}
                               format="YYYY-MM-DD"
                               onChange={(date, dateString) => {
                                 const value = dateString ? dateString + ' 00:00:00' : null;
@@ -599,7 +599,7 @@ class TaskUpdate extends Component<any, any> {
                               disabledDate={this.disabledEventEndDate}
                               disabled={taskCompleted}
                               style={{ width: '100%' }}
-                              placeholder={RCi18n({id:'task.DueTime'})}
+                              placeholder={(window as any).RCi18n({id:'task.DueTime'})}
                               format="YYYY-MM-DD"
                               onChange={(date, dateString) => {
                                 const value = dateString ? dateString + ' 00:00:00' : null;
@@ -707,7 +707,7 @@ class TaskUpdate extends Component<any, any> {
                             <Select
                               allowClear
                               disabled={taskCompleted}
-                              placeholder={RCi18n({id:'task.Pleaseinputpetowneraccountorname'})}
+                              placeholder={(window as any).RCi18n({id:'task.Pleaseinputpetowneraccountorname'})}
                               showSearch
                               loading={petOwnerLoading}
                               onSearch={this.searchAssignedPetOwners}

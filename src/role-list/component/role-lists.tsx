@@ -133,10 +133,10 @@ class CateList extends React.Component<any, any> {
    */
   _delete = async (roleInfoId) => {
     const { deleteEquities } = this.props.relaxProps;
-    const title = RCi18n({id:'Setting.Prompt'});
-    const content = RCi18n({id:'Setting.deleteThisRole'});
-    const oktext = RCi18n({id:'Setting.OK'});
-    const canceltext = RCi18n({id:'Setting.Cancel'});
+    const title = (window as any).RCi18n({id:'Setting.Prompt'});
+    const content = (window as any).RCi18n({id:'Setting.deleteThisRole'});
+    const oktext = (window as any).RCi18n({id:'Setting.OK'});
+    const canceltext = (window as any).RCi18n({id:'Setting.Cancel'});
     confirm({
       title: title,
       content: content,

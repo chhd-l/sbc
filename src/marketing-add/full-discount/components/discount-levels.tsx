@@ -93,7 +93,7 @@ class DiscountLevels extends React.Component<any, any> {
                             {getFieldDecorator(`level_rule_value_${index}`, {
                               rules: [
                                 { required: true, message:
-                                    RCi18n({
+                                    (window as any).RCi18n({
                                       id: 'Marketing.Mustenterrules'
                                     })
                                 },
@@ -106,7 +106,7 @@ class DiscountLevels extends React.Component<any, any> {
                                         }
                                         if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
                                           callback(
-                                            RCi18n({
+                                            (window as any).RCi18n({
                                               id: 'Marketing.0-99999999.99'
                                             })
                                           );
@@ -114,7 +114,7 @@ class DiscountLevels extends React.Component<any, any> {
                                       } else {
                                         if (!ValidConst.noZeroNineNumber.test(value) || !(value < 10000 && value > 0)) {
                                           callback(
-                                            RCi18n({
+                                            (window as any).RCi18n({
                                               id: 'Marketing.1-9999'
                                             })
                                           );
@@ -131,11 +131,11 @@ class DiscountLevels extends React.Component<any, any> {
                                   // style={{ width: 200 }}
                                   className="input-width"
                                   placeholder={isFullCount === 0 ?
-                                    RCi18n({
+                                    (window as any).RCi18n({
                                       id: 'Marketing.0-99999999.99'
                                     })
                                     : isFullCount === 1 ?
-                                      RCi18n({
+                                      (window as any).RCi18n({
                                         id: 'Marketing.1-9999'
                                       })
                                       : 0}
@@ -161,7 +161,7 @@ class DiscountLevels extends React.Component<any, any> {
                           rules: [
                             {
                               required: true,
-                              message: RCi18n({
+                              message: (window as any).RCi18n({
                                 id: 'Marketing.Discountmustbeentered'
                               })
                             },
@@ -170,7 +170,7 @@ class DiscountLevels extends React.Component<any, any> {
                                 if (value) {
                                   if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
                                     callback(
-                                      RCi18n({
+                                      (window as any).RCi18n({
                                         id: 'Marketing.InputValueBetween'
                                       })
                                     );
@@ -186,12 +186,12 @@ class DiscountLevels extends React.Component<any, any> {
                               // style={{ width: 200 }}
                               className="input-width"
                               title={
-                                RCi18n({
+                                (window as any).RCi18n({
                                 id: 'Marketing.InputValueBetween'
                               })
                               }
                               placeholder={
-                                RCi18n({
+                                (window as any).RCi18n({
                                   id: 'Marketing.InputValueBetween'
                                 })
                               }
@@ -213,7 +213,7 @@ class DiscountLevels extends React.Component<any, any> {
                                 if (value) {
                                   if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
                                     callback(
-                                      RCi18n({
+                                      (window as any).RCi18n({
                                         id: 'Marketing.1-9999'
                                       })
                                     );
@@ -232,12 +232,12 @@ class DiscountLevels extends React.Component<any, any> {
                               // style={{ width: 200 }}
                               className="input-width"
                               title={
-                                RCi18n({
+                                (window as any).RCi18n({
                                 id: 'Marketing.1-9999'
                               })
                               }
                               placeholder={
-                                RCi18n({
+                                (window as any).RCi18n({
                                   id: 'Marketing.1-9999'
                                 })
                               }

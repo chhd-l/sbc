@@ -69,7 +69,7 @@ class Bottom extends React.Component<any, any> {
 
   _handleSettleStatus = (settleId, status) => {
     const { changeSettleStatus } = this.props.relaxProps;
-    const content = status == 1 ? RCi18n({id:'Finance.recordAsSettled'}) : RCi18n({id:'Finance.beProcessedTemporarily'});
+    const content = status == 1 ? (window as any).RCi18n({id:'Finance.recordAsSettled'}) : (window as any).RCi18n({id:'Finance.beProcessedTemporarily'});
     confirm({
       title: 'Tips',
       content: content,

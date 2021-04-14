@@ -129,7 +129,7 @@ class TabList extends React.Component<any, any> {
     // message.success('Click on Yes');
   };
   cancel = () => {
-    message.info(RCi18n({ id: 'Setting.canceled' }));
+    message.info((window as any).RCi18n({ id: 'Setting.canceled' }));
   };
   /**
    * 获取操作项
@@ -147,18 +147,18 @@ class TabList extends React.Component<any, any> {
         </Tooltip>
         <Popconfirm
           className="deleted"
-          title={RCi18n({ id: 'Setting.Confirmdeletion?' })}
+          title={(window as any).RCi18n({ id: 'Setting.Confirmdeletion?' })}
           onConfirm={() => {
             const { getConsentDelete } = this.props.relaxProps;
             getConsentDelete(rowInfo.get('id'));
           }}
         >
-          <Tooltip placement="top" title={RCi18n({ id: 'Setting.Delete?' })}>
+          <Tooltip placement="top" title={(window as any).RCi18n({ id: 'Setting.Delete?' })}>
             <a href="javascript:void(0)" className="iconfont iconDelete"></a>
           </Tooltip>
         </Popconfirm>
         <div className="switch">
-          <Popconfirm title={check ? RCi18n({ id: 'Setting.Areyousuredisable' }) : RCi18n({ id: 'Setting.Areyousureable' })} onConfirm={() => this.confirm(check, rowInfo.get('id'))} onCancel={this.cancel} okText="Yes" cancelText="No">
+          <Popconfirm title={check ? (window as any).RCi18n({ id: 'Setting.Areyousuredisable' }) : (window as any).RCi18n({ id: 'Setting.Areyousureable' })} onConfirm={() => this.confirm(check, rowInfo.get('id'))} onCancel={this.cancel} okText="Yes" cancelText="No">
             <Switch
               //loading={loading}
               checked={check}

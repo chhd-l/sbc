@@ -91,7 +91,7 @@ class ReductionLevels extends React.Component<any, any> {
                       {getFieldDecorator(`level_rule_value_${index}`, {
                         rules: [
                           { required: true, message:
-                            RCi18n({
+                            (window as any).RCi18n({
                               id: 'Marketing.ustenterrules',
                             })
                           },
@@ -104,7 +104,7 @@ class ReductionLevels extends React.Component<any, any> {
                                   }
                                   if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
                                     callback(
-                                      RCi18n({
+                                      (window as any).RCi18n({
                                         id: 'Marketing.0-99999999.99',
                                       })
                                     );
@@ -112,7 +112,7 @@ class ReductionLevels extends React.Component<any, any> {
                                 } else {
                                   if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
                                     callback(
-                                      RCi18n({
+                                      (window as any).RCi18n({
                                         id: 'Marketing.1-9999',
                                       })
                                     );
@@ -130,11 +130,11 @@ class ReductionLevels extends React.Component<any, any> {
                             style={{ width: 180 }}
                             value={!isFullCount ? level.fullAmount : level.fullCount}
                             placeholder={!isFullCount ?
-                              RCi18n({
+                              (window as any).RCi18n({
                                 id: 'Marketing.0-99999999.99',
                               })
                               :
-                              RCi18n({
+                              (window as any).RCi18n({
                                 id: 'Marketing.1-9999',
                               })
                               }
@@ -158,7 +158,7 @@ class ReductionLevels extends React.Component<any, any> {
                     {getFieldDecorator(`level_rule_reduction_${index}`, {
                       rules: [
                         { required: true, message:
-                            RCi18n({
+                            (window as any).RCi18n({
                               id: 'Marketing.AmountMustBeEntered',
                             })
                         },
@@ -167,7 +167,7 @@ class ReductionLevels extends React.Component<any, any> {
                             if (value) {
                               if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
                                 callback(
-                                  RCi18n({
+                                  (window as any).RCi18n({
                                     id: 'Marketing.0.01-99999999.99',
                                   })
                                 );
@@ -182,7 +182,7 @@ class ReductionLevels extends React.Component<any, any> {
                         <Input
                           style={{ width: 200 }}
                           placeholder={
-                            RCi18n({
+                            (window as any).RCi18n({
                               id: 'Marketing.0.01-99999999.99',
                             })
                           }

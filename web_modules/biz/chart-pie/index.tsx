@@ -19,7 +19,7 @@ class Line extends React.Component {
     let option = {
       title: [
         {
-          text: RCi18n({id:'Home.Rate'}),
+          text: (window as any).RCi18n({id:'Home.Rate'}),
           x: 'center',
           top: '32%',
           textStyle: {

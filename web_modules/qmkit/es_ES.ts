@@ -1395,7 +1395,7 @@ export default {
   'Order.Club&Autoship':'Club & Autoship',
   'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
-  'Order.felin':`L'Atelier Feline`,
+  'Order.felin':`L'Atelier Felin`,
   'Order.subscriptionType':'Subscription type',
   'Order.subscriptionOrderTime':'Subscription order time',
   'Order.subscriptionPlanType':'Subscription plan type',
@@ -1460,7 +1460,7 @@ export default {
   'Order.offline.noCustomerAlert':'Please fill consumer information!',
   'Order.offline.orderNotSuccess':'Order not successful',
   'Order.offline.retryAlert':'You can switch payment type or try it again!',
-  'Order.offline.felin':"L'Atelier Feline",
+  'Order.offline.felin':"L'Atelier Felin",
   'Order.offline.directCheckout':'Direct check-out',
   'Order.offline.recommendation':'Recommendation',
   'Order.offline.shoppingCart':'Shopping cart',
@@ -1593,6 +1593,11 @@ export default {
   'Order.Entrance': 'Entrance',
   'Order.Apartment': 'Apartment',
   'Order.LastName': 'Last name',
+  'Order.mixedOrder': 'Mixed order',
+  'Order.Autoship&Club': 'Autoship & Club',
+  'Order.Autoship&singePurchase': 'Autoship & Single purchase',
+  'Order.Club&singePurchase': 'Club & Single purchase',
+  'Order.Autoship&Club&singePurchase': 'Autoship & Club & Single purchase',
 
 
 
@@ -2736,6 +2741,8 @@ export default {
   'Marketing.No':'No',
   'Marketing.Mustenterrules': 'Must enter rules',
   'Marketing.fullgifttype': 'full gift type',
+  'Marketing.Addgift': 'Add gift',
+  'Marketing.greaterthan0andlessthan999': 'Value must only be integers greater than 0 and less than 999',
 
 
 

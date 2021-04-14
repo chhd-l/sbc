@@ -1226,8 +1226,12 @@ class FullReductionForm extends React.Component<any, any> {
     if (levelType == '' || !marketingBean.get(levelType)) return;
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
-        title: 'Switch type',
-        content: 'Switching types will clear the set rules. Do you want to continue?',
+        title: this.props.intl.formatMessage({
+          id: 'Marketing.SwitchType'
+        }),
+        content: this.props.intl.formatMessage({
+          id: 'Marketing.SwitchingTypes'
+        }),
         onOk() {
           for (let i = 0; i < marketingBean.get(levelType).size; i++) {
             _thisRef.props.form.resetFields(`level_${i}`);

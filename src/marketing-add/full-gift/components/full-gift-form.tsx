@@ -379,6 +379,9 @@ class FullGiftForm extends React.Component<any, any> {
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
     console.log(marketingBean.toJS(), 'marketingBean------------');
+    console.log(selectedRows.toJS(), 'selectedRows------------');
+    console.log(selectedGiftRows.toJS(), 'selectedGiftRows------------');
+
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Promotiontype" />} labelAlign="left">
@@ -404,9 +407,15 @@ class FullGiftForm extends React.Component<any, any> {
               {
                 required: true,
                 whitespace: true,
-                message: 'Please input promotion code'
+                message: this.props.intl.formatMessage({
+                  id: 'Marketing.PleaseInputPromotionCode'
+                })
               },
-              { min: 1, max: 20, message: '1-20 words' },
+              { min: 1, max: 20, message:
+                  this.props.intl.formatMessage({
+                    id: 'Marketing.words'
+                  })
+              },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, 'Promotion code');
@@ -1117,8 +1126,12 @@ class FullGiftForm extends React.Component<any, any> {
     if (levelType == '' || !marketingBean.get(levelType)) return;
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
-        title: 'Switch type',
-        content: 'Switching types will clear the set rules. Do you want to continue?',
+        title: this.props.intl.formatMessage({
+          id: 'Marketing.SwitchType'
+        }),
+        content: this.props.intl.formatMessage({
+          id: 'Marketing.SwitchingTypes'
+        }),
         onOk() {
           for (let i = 0; i < marketingBean.get(levelType).size; i++) {
             // _thisRef.props.form.resetFields(`level_${i}`);
@@ -1203,7 +1216,6 @@ class FullGiftForm extends React.Component<any, any> {
    * @param rules
    */
   onRulesChange = (rules) => {
-    debugger
     this.props.form.resetFields('rules');
     this.onBeanChange({ fullGiftLevelList: rules });
   };

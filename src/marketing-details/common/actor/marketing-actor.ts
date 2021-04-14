@@ -19,6 +19,7 @@ export default class MarketingActor extends Actor {
       marketingScopeList: [],
       fullReductionLevelList: [],
       fullDiscountLevelList: [],
+      marketingFreeShippingLevel: null,
       emailSuffixList: [],
       goodsList: {
         // 商品分页数据

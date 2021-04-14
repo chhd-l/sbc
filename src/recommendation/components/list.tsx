@@ -199,6 +199,17 @@ class ListView extends React.Component<any, any> {
       return pcWebsite + '?' + tempArr[1];
     } else return oldUrl;
   };
+
+  timeDiffSaven(item){
+    if(!item.linkStatus)return '--';
+    let _now=moment();
+    let _temp=moment(item.linkStatus);
+
+    let c= (_temp.diff(_now,'day')-7)<0?'Invalid':'Valid';
+    return c
+  }
+
+
   _renderContent(dataList) {
     const { onChecked, onAudit, verify, onFindById } = this.props.relaxProps;
 
@@ -266,7 +277,7 @@ class ListView extends React.Component<any, any> {
                   <td style={{ width: '12%' }}>{appointmentVO?.consumerName??'--'}</td>
                   <td style={{ width: '13.5%' }}>{appointmentVO?.consumerEmail??'--'}</td>
                   <td style={{ width: '11%' }}>{v?.price??'--'}</td>
-                  <td style={{ width: '12.5%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td>
+                  <td style={{ width: '12.5%' }}>{this.timeDiffSaven(v)}</td>
                   {/* <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td> */}
                   <th style={{ width: '12.5%' }}>{v?.expert??'--'}</th>
                   <td style={{ width: '5.5%' }}>{v.paris ? 'Y' : 'N'}</td>

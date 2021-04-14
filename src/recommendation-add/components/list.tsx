@@ -46,7 +46,19 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   inputNumberChange = (value, row, index) => {
     const { productselect, onProductselect } = this.props.relaxProps;
     let _clone = JSON.parse(JSON.stringify(productselect))
-    _clone[index].quantity = value
+
+    let goodsInfoWeight:any=0,goodsInfoUnit=( row?.goodsInfoUnit??'').toLowerCase();
+    if(goodsInfoUnit==='g'){
+       goodsInfoWeight= value * (row.goodsInfoWeight/row.quantity)
+    }else if(goodsInfoUnit==='kg'){
+       let d:any=(value * (row.goodsInfoWeight/row.quantity))/1000
+       goodsInfoWeight=parseInt(d)
+    }
+    
+    row.goodsInfoWeight=goodsInfoWeight;
+    row.quantity=value;
+    
+    _clone[index] = row
     onProductselect(_clone)
   }
   //删除
@@ -79,7 +91,8 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }}
             key="marketPrice"
           />
-          <Column title="Weight" dataIndex="goodsInfoWeight" key="goodsInfoWeight" />
+          <Column title='Weight (g)' dataIndex="goodsInfoWeight" key="goodsInfoWeight" 
+          />
           <Column title="Quantity" key="quantity" dataIndex="quantity"
             render={(value, row, index) => {
               return (<InputNumber

@@ -5,12 +5,12 @@ import '../index.less';
 import { cache, noop } from 'qmkit';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-//import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const { WeekPicker } = DatePicker;
 const { Option } = Select;
 
 @Relax
-export default class Header extends React.Component<any, any> {
+class Header extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -201,7 +201,7 @@ export default class Header extends React.Component<any, any> {
         prescriberName: a.props.val.prescriberName
       })
     );
-    message.success('Prescriber choosed here will be setted as default for other pages.');
+    message.success(this.props.intl.formatMessage({id:'Home.Prescriber.success'}));
   };
 
   render() {
@@ -221,12 +221,12 @@ export default class Header extends React.Component<any, any> {
               }
             }}
             onChange={this.dateChange}
-            placeholder="Select week"
+            placeholder={this.props.intl.formatMessage({id:'Home.SelectWeek'})}
           />
-          <div className="Header-date-text">* The data is updated every 15 minutes</div>
+          <div className="Header-date-text">* <FormattedMessage id="Home.HeaderTip" /></div>
         </div>
         <div className="home-prescriber flex-start-end">
-          <span style={{ marginRight: 8 }}>Prescriber: </span>
+          <span style={{ marginRight: 8 }}><FormattedMessage id="Home.Prescriber" />: </span>
           {this.state.prescriber == '' ? (
             this.state.searchType == false ? (
               <Input
@@ -242,7 +242,7 @@ export default class Header extends React.Component<any, any> {
                 autoFocus={false}
                 open={this.state.openType}
                 style={{ width: 200, marginRight: 8 }}
-                placeholder="Select Prescriber Data"
+                placeholder={this.props.intl.formatMessage({id:'Home.SelectPrescriber'})}
                 defaultValue="All"
                 //optionFilterProp="children"
                 onChange={this.onChange}
@@ -254,7 +254,7 @@ export default class Header extends React.Component<any, any> {
                   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }*/
               >
-                <Option value="all">All</Option>
+                <Option value="all"><FormattedMessage id="Home.All" /></Option>
                 {this.state.selectList && this.state.selectList.length !== 0
                   ? this.state.selectList.map((item, index) => {
                       return (
@@ -268,7 +268,7 @@ export default class Header extends React.Component<any, any> {
             )
           ) : (
             this.state.defaultValue && (
-              <Select showArrow={false} autoFocus={false} open={this.state.openType} style={{ width: 200, marginRight: 8 }} placeholder="Select Prescriber Data" defaultValue={this.state.defaultValue} onChange={this.onPrescriberChange} onDropdownVisibleChange={this.selectClick}>
+              <Select showArrow={false} autoFocus={false} open={this.state.openType} style={{ width: 200, marginRight: 8 }} placeholder={this.props.intl.formatMessage({id:'Home.SelectPrescriber'})} defaultValue={this.state.defaultValue} onChange={this.onPrescriberChange} onDropdownVisibleChange={this.selectClick}>
                 {this.state.selectList.length !== 0
                   ? this.state.selectList.map((item, index) => {
                       return (
@@ -286,7 +286,7 @@ export default class Header extends React.Component<any, any> {
         {this.state.prescriber.id ? (
           <div>
             <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.id}>
-              Manage Prescriber
+              <FormattedMessage id="Home.ManagePrescriber" />
             </Link>
           </div>
         ) : (
@@ -296,3 +296,5 @@ export default class Header extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(Header)

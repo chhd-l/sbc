@@ -188,13 +188,16 @@ export default class AddProductModal extends Component {
         }
       }
     ];
-    console.log(url,)
+    // 翻译title
+    columns.forEach(obj => {
+      (obj.title as any) = <FormattedMessage id={`Order.${obj.title}`} />
+    });
     return (
-      <Modal title="Choose product" visible={visible} onOk={handleOk} width="70%" onCancel={handleCancel}>
+      <Modal title={<FormattedMessage id="Order.Choose product" />} visible={visible} onOk={handleOk} width="70%" onCancel={handleCancel}>
         <Form className="filter-content" layout="inline">
           <Row>
             <Col span={20}>
-              <FormItem label="Product category">
+              <FormItem label={<FormattedMessage id="Order.Product category" />}>
                 <Radio.Group onChange={(e) => this.onChange(e, 'cateType')} value={cateType}>
                   <Radio value="Cat SPT">Cat SPT</Radio>
                   <Radio value="Dog SPT">Dog SPT</Radio>
@@ -206,7 +209,7 @@ export default class AddProductModal extends Component {
             <Col span={4} style={{ textAlign: 'right' }}>
               <Button type="primary" shape="round">
                 <a target="_blank" style={{ color: '#fff' }} href={url+prefix}>
-                  View all
+                  <FormattedMessage id="Order.View all" />
                 </a>
               </Button>
             </Col>
@@ -225,13 +228,13 @@ export default class AddProductModal extends Component {
             </Col>
             <Col span={12}>
               <FormItem>
-                <Input addonBefore={<p style={styles.label}>Product name</p>} value={likeGoodsName} onChange={(e) => this.onChange(e, 'likeGoodsName')} />
+                <Input addonBefore={<p style={styles.label}><FormattedMessage id="Order.Product name" /></p>} value={likeGoodsName} onChange={(e) => this.onChange(e, 'likeGoodsName')} />
               </FormItem>
             </Col>
             <Col span={24} style={{ textAlign: 'center' }}>
               <Button type="primary" icon="search" htmlType="submit" shape="round" style={{ textAlign: 'center' }} onClick={this.search}>
                 <span>
-                  <FormattedMessage id="search" />
+                  <FormattedMessage id="Order.search" />
                 </span>
               </Button>
             </Col>

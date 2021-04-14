@@ -136,7 +136,12 @@ export default class AppStore extends Store {
       response = await webapi.addFullDiscount(discountBean);
     }
     this.dispatch('loading:end');
-    return response;
+    if(response.res && response.res.code === Const.SUCCESS_CODE) {
+      message.success('Operate successfully');
+      history.push('/marketing-list');
+    } else if(response.res && response.res.code === 'K-000009') {
+      message.error('Pomotion Code has exited.')
+    }
   };
   //
 

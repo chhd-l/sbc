@@ -156,7 +156,7 @@ export default class Info extends React.Component<any, any> {
             fontWeight: 'bold'
           }}
         >
-          <FormattedMessage id="product.basicInformation" />
+          <FormattedMessage id="Product.basicInformation" />
         </div>
         <div>
           <WrapperForm
@@ -301,7 +301,7 @@ class GoodsForm extends React.Component<any, any> {
       <Form>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.SPU" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.SPU" />}>
               {getFieldDecorator('goodsNo', {
                 rules: [
                   {
@@ -326,7 +326,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.InternalSPU" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.InternalSPU" />}>
               {getFieldDecorator('internalGoodsNo', {
                 rules: [
                   {
@@ -353,7 +353,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.productName" />}>
               {getFieldDecorator('goodsName', {
                 rules: [
                   {
@@ -378,7 +378,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.onOrOffShelves" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.onOrOffShelves" />}>
               {getFieldDecorator('addedFlag', {
                 rules: [
                   {
@@ -391,14 +391,14 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <RadioGroup>
                   <Radio value={1}>
-                    <FormattedMessage id="product.onShelves" />
+                    <FormattedMessage id="Product.onShelves" />
                   </Radio>
                   <Radio value={0}>
-                    <FormattedMessage id="product.offShelves" />
+                    <FormattedMessage id="Product.offShelves" />
                   </Radio>
                   {/* {isEditGoods && (
                     <Radio value={2} disabled={true}>
-                      <FormattedMessage id="product.partialOnShelves" />
+                      <FormattedMessage id="Product.partialOnShelves" />
                     </Radio>
                   )} */}
                 </RadioGroup>
@@ -408,7 +408,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.subscriptionStatus" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.subscriptionStatus" />}>
               {getFieldDecorator('subscriptionStatus', {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
@@ -441,7 +441,7 @@ class GoodsForm extends React.Component<any, any> {
         {/*修改*/}
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.defaultPurchaseType" />}>
               {getFieldDecorator('defaultPurchaseType', {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'defaultPurchaseType'),
@@ -459,7 +459,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.defaultFrequency" />}>
               {getFieldDecorator('defaultFrequencyId', {
                 // rules: [
                 //   {
@@ -570,7 +570,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.brand" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.brand" />}>
               {getFieldDecorator(
                 'brandId',
                 brandExists
@@ -614,7 +614,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           {/*<Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.unitMeasurement" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.unitMeasurement" />}>
               {getFieldDecorator('goodsUnit', {
                 rules: [
                   {
@@ -679,7 +679,7 @@ class GoodsForm extends React.Component<any, any> {
                 xs: { span: 24 },
                 sm: { span: 18 }
               }}
-              label={<FormattedMessage id="product.productSubtitle" />}
+              label={<FormattedMessage id="Product.productSubtitle" />}
             >
               {getFieldDecorator('goodsSubtitle', {
                 rules: [
@@ -714,7 +714,7 @@ class GoodsForm extends React.Component<any, any> {
                 sm: { span: 18 }
               }}
               // {...formItemLayout}
-              label={<FormattedMessage id="product.productDescription" />}
+              label={<FormattedMessage id="Product.productDescription" />}
             >
               {getFieldDecorator('goodsDescription', {
                 rules: [
@@ -810,24 +810,24 @@ class GoodsForm extends React.Component<any, any> {
               {...formItemLayout}
               label={
                 <span>
-                  <FormattedMessage id="product.productImage" />
+                  <FormattedMessage id="Product.productImage" />
                 </span>
               }
             >
               <div style={{ width: 550 }}>
                 <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
               </div>
-              <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
+              <Tips title={<FormattedMessage id="Product.recommendedSizeImg" />} />
             </FormItem>
           </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.productVideo" />}>
               <div style={{ width: 550 }}>
                 <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
               </div>
-              <Tips title={<FormattedMessage id="product.recommendedSizeVideo" />} />
+              <Tips title={<FormattedMessage id="Product.recommendedSizeVideo" />} />
             </FormItem>
           </Col>
         </Row>

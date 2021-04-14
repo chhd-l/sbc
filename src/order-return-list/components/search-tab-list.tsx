@@ -31,25 +31,25 @@ export default class SearchTabList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="Order.all" />} key="0">
             {tab.get('key') === '0' ? <List /> : null}
           </Tabs.TabPane>
           <Tabs.TabPane
-            tab={<FormattedMessage id="pendingReview" />}
+            tab={<FormattedMessage id="Order.pendingReview" />}
             key="PENDING_REVIEW"
           >
             {tab.get('key') === 'PENDING_REVIEW' ? <List /> : null}
           </Tabs.TabPane>
           {/*{<FormattedMessage id="pendingReview" />}*/}
           <Tabs.TabPane
-            tab={<FormattedMessage id="toBeDelivered" />}
+            tab={<FormattedMessage id="Order.toBeDelivered" />}
             key="TO_BE_DELIVERED"
           >
             {tab.get('key') === 'TO_BE_DELIVERED' ? <List /> : null}
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <FormattedMessage id="order.toBeReceived" />
+              <FormattedMessage id="Order.toBeReceived" />
             }
             key="TO_BE_RECEIVED"
           >
@@ -57,21 +57,21 @@ export default class SearchTabList extends React.Component<any, any> {
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<FormattedMessage id="pendingRefund" />}
+            tab={<FormattedMessage id="Order.pendingRefund" />}
             key="PENDING_REFUND"
           >
             {tab.get('key') === 'PENDING_REFUND' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<FormattedMessage id="order.completed" />}
+            tab={<FormattedMessage id="Order.completed" />}
             key="COMPLETED"
           >
             {tab.get('key') === 'COMPLETED' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<FormattedMessage id="rejected" />}
+            tab={<FormattedMessage id="Order.rejected" />}
             key="REJECTED"
           >
             {tab.get('key') === 'REJECTED' ? <List /> : null}

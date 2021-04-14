@@ -10,6 +10,7 @@ const Option = Select.Option;
 
 import GoodsList from './goods-list';
 import RefundAmount from './refund-amount';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 const formItemLayout = {
   labelCol: {
@@ -26,9 +27,10 @@ const FILE_MAX_SIZE = 5 * 1024 * 1024;
  * 退单form
  */
 @Relax
-export default class ReturnOrderForm extends React.Component<any, any> {
+class ReturnOrderForm extends React.Component<any, any> {
   props: {
     form?: any;
+    intl;
     relaxProps?: {
       // 选中的退货原因
       selectedReturnReason: string;
@@ -128,38 +130,44 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       <div style={styles.container}>
         <h3 style={styles.title}>Return order information</h3>
         <Form>
-          <FormItem {...formItemLayout} label="Return reason">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Returnreason" />}>
             {getFieldDecorator('returnReason', {
               initialValue: selectedReturnReason,
               rules: [
                 {
                   required: true,
-                  message: 'Please select chargeback reason'
+                  message: this.props.intl.formatMessage({
+                    id: 'Order.Pleaseselectchargebackreason'
+                  })
                 }
               ]
             })(this._getReturnReasonSelect())}
           </FormItem>
           {isReturn ? (
-            <FormItem {...formItemLayout} label="Return method" >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Returnmethod" />}>
               {getFieldDecorator('returnWay', {
                 initialValue: selectedReturnWay,
                 rules: [
                   {
                     required: true,
-                    message: 'Please select return method'
+                    message: this.props.intl.formatMessage({
+                      id: 'Order.Pleaseselectreturnmethod'
+                    })
                   }
                 ]
               })(this._getReturnWaySelect())}
             </FormItem>
           ) : null}
 
-          <FormItem {...formItemLayout} label="Return description" >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Returndescription" />}>
             {getFieldDecorator('description', {
               initialValue: description,
               rules: [
                 {
                   required: true,
-                  message: 'Return description cannot be blank !'
+                  message: this.props.intl.formatMessage({
+                    id: 'Order.Returndescriptioncannotbeblank'
+                  })
                 },
               ]
             })(
@@ -168,7 +176,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="Attachment information">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Attachmentinformation" />}>
             <QMUpload
               name="uploadFile"
               style={styles.box}
@@ -185,7 +193,9 @@ export default class ReturnOrderForm extends React.Component<any, any> {
                 <Icon type="plus" style={styles.plus} />
               ) : null}
             </QMUpload>
-            <Tips title="Please add your return credentials to the attachment. Supported picture formats: JPG, JPEG, PNG, GIF, file size no more than 5M, and upload a maximum of 10" />
+            <Tips
+              title={<FormattedMessage id="Order.PleaseaddyourreturncredentialsTip" />}
+           />
           </FormItem>
 
           {isReturn? (
@@ -195,14 +205,16 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             />
           ) : (
             <>
-              <FormItem {...formItemLayout} label="Refundable amount" >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Refundableamount" />}>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + canApplyPrice.toFixed(2)}
               {getFieldDecorator('refundableAmount', {
                 initialValue: canApplyPrice,
                  rules: [
                   {
                     required: true,
-                    message: 'Refundable amount cannot be blank !'
+                    message: this.props.intl.formatMessage({
+                      id: 'Order.Refundableamountcannotbeblank'
+                    })
                   },
                 ]
               })
@@ -233,7 +245,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
               });
             }}
           >
-            Save
+            <FormattedMessage id="Order.save" />
           </Button>
           &nbsp;&nbsp;
           <Button
@@ -242,7 +254,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
               history.go(-1);
             }}
           >
-            Cancel
+            <FormattedMessage id="Order.cancel" />
           </Button>
         </div>
       </div>
@@ -257,12 +269,20 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        placeholder="Please select chargeback reason"
-        notFoundContent="There is no reason for the return"
+        placeholder={
+          this.props.intl.formatMessage({
+            id: 'Order.Pleaseselectchargebackreason'
+          })
+        }
+        notFoundContent={
+          this.props.intl.formatMessage({
+            id: 'Order.Thereisnoreasonforthereturn'
+          })
+        }
         onChange={this._editInfo.bind(this, 'selectedReturnReason')}
       >
         <Option key={'key'} value={''}>
-          Please select chargeback reason
+          <FormattedMessage id="Order.Pleaseselectchargebackreason" />
         </Option>
         {returnReasonList && returnReasonList.map((item) => {
           const map: IMap = item.toMap();
@@ -286,12 +306,20 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        placeholder="Please select return method"
-        notFoundContent="No Data"
+        placeholder={
+          this.props.intl.formatMessage({
+            id: 'Order.Pleaseselectreturnmethod'
+          })
+        }
+        notFoundContent={
+          this.props.intl.formatMessage({
+            id: 'Order.NoData'
+          })
+        }
         onChange={this._editInfo.bind(this, 'selectedReturnWay')}
       >
         <Option key={'key'} value={''}>
-          Please select return method
+          <FormattedMessage id="Order.Pleaseselectreturnmethod" />
         </Option>
         {returnWayList.map((item) => {
           const map: IMap = item.toMap();
@@ -323,7 +351,11 @@ export default class ReturnOrderForm extends React.Component<any, any> {
    */
   _editImages = ({ file, fileList }) => {
     if (file.status == 'error') {
-      message.error('上传失败');
+      message.error(
+        this.props.intl.formatMessage({
+          id: 'Order.Uploaderror'
+        })
+      );
     }
 
     const { editImages } = this.props.relaxProps;
@@ -345,16 +377,25 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('文件大小不能超过5M');
+        message.error(
+          this.props.intl.formatMessage({
+            id: 'Order.Filesizecannotexceed'
+          })
+        );
         return false;
       }
     } else {
-      message.error('文件格式错误');
+
+      message.error(
+        this.props.intl.formatMessage({
+          id: 'Order.Fileformaterror'
+        })
+      );
       return false;
     }
   };
 }
-
+export default injectIntl(ReturnOrderForm)
 const styles = {
   container: {
     display: 'flex',

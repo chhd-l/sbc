@@ -6,7 +6,7 @@ import './style.less';
 import * as webapi from './webapi';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -37,42 +37,43 @@ const formRowItemLayout = {
     sm: { span: 20 }
   }
 };
+@injectIntl
 class TaskUpdate extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: this.props.match.params.id ? 'Task edition' : 'Task creation',
+      title: this.props.match.params.id ? <FormattedMessage id="task.Taskedition" /> : <FormattedMessage id="task.Taskcreation" />,
       taskCompleted: false,
       tabKey: '',
       task: {},
       assignedUsers: [],
       goldenMomentList: [],
       actionTypeList: [
-        { name: 'Call', value: 'Call' },
-        { name: 'Email', value: 'Email' },
-        { name: 'N/A', value: 'N/A' }
+        { name: <FormattedMessage id="task.Call" />, value: 'Call' },
+        { name: <FormattedMessage id="task.Email" />, value: 'Email' },
+        { name: <FormattedMessage id="task.N/A" />, value: 'N/A' }
       ],
       priorityList: [
-        { name: 'Low', value: 'Low' },
-        { name: 'Medium', value: 'Medium' },
-        { name: 'High', value: 'High' }
+        { name: <FormattedMessage id="task.Low" />, value: 'Low' },
+        { name: <FormattedMessage id="task.Medium" />, value: 'Medium' },
+        { name: <FormattedMessage id="task.High" />, value: 'High' }
       ],
       associatedPetOwners: [],
       associatedPetList: [],
       associatedOrderList: [],
       statusList: [
-        { name: 'To Do', value: 'To Do' },
-        { name: 'On-going', value: 'On-going' },
-        { name: 'Completed', value: 'Completed' },
-        { name: 'Cancelled', value: 'Cancelled' }
+        { name: <FormattedMessage id="task.ToDo" />, value: 'To Do' },
+        { name: <FormattedMessage id="task.On-going" />, value: 'On-going' },
+        { name: <FormattedMessage id="task.Completed" />, value: 'Completed' },
+        { name: <FormattedMessage id="task.Cancelled" />, value: 'Cancelled' }
       ],
       editable: !this.props.match.params.id,
       reminderTypes: [
-        { value: 'Day', name: 'Days' },
-        { value: 'Minute', name: 'Minutes' },
-        { value: 'Hour', name: 'Hours' },
-        { value: 'Week', name: 'Weeks' }
+        { value: <FormattedMessage id="task.Days" />, name: 'Days' },
+        { value: <FormattedMessage id="task.Minutes" />, name: 'Minutes' },
+        { value: <FormattedMessage id="task.Hours" />, name: 'Hours' },
+        { value: <FormattedMessage id="task.Weeks" />, name: 'Weeks' }
       ],
       associatedSubscriptionList: [],
       loading: false,
@@ -100,11 +101,11 @@ class TaskUpdate extends Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(<FormattedMessage id="Public.GetDataFailed" />);
       });
     const { id } = this.state;
     if (id) {
@@ -129,14 +130,14 @@ class TaskUpdate extends Component<any, any> {
               this.getPetOwnerSubscriptions(customerAccount);
             }
           } else {
-            message.error(res.message || 'Get data failed');
+            message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
             this.setState({
               loading: false
             });
           }
         })
         .catch(() => {
-          message.error('Get data failed');
+          message.error(<FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             loading: false
           });
@@ -175,7 +176,7 @@ class TaskUpdate extends Component<any, any> {
   getEmployees(value?: String) {
     this.setState({
       petAssistantLoading: true
-    })
+    });
     let params = {
       pageNum: 0,
       pageSize: 20,
@@ -191,24 +192,24 @@ class TaskUpdate extends Component<any, any> {
             petAssistantLoading: false
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             petAssistantLoading: false
-          })
+          });
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(<FormattedMessage id="Public.GetDataFailed" />);
         this.setState({
           petAssistantLoading: false
-        })
+        });
       });
   }
 
   getPetOwners(value?: String) {
     this.setState({
       petOwnerLoading: true
-    })
+    });
     let params = {
       pageNum: 0,
       pageSize: 20,
@@ -224,17 +225,17 @@ class TaskUpdate extends Component<any, any> {
             petOwnerLoading: false
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             petOwnerLoading: false
-          })
+          });
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(<FormattedMessage id="Public.GetDataFailed" />);
         this.setState({
           petOwnerLoading: false
-        })
+        });
       });
   }
 
@@ -248,11 +249,11 @@ class TaskUpdate extends Component<any, any> {
             associatedPetList: res.context.context
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(<FormattedMessage id="Public.GetDataFailed" />);
       });
   }
 
@@ -266,11 +267,11 @@ class TaskUpdate extends Component<any, any> {
             associatedOrderList: res.context.content
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(<FormattedMessage id="Public.GetDataFailed" />);
       });
   }
 
@@ -284,11 +285,11 @@ class TaskUpdate extends Component<any, any> {
             associatedSubscriptionList: res.context.subscriptionResponses
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(<FormattedMessage id="Public.GetDataFailed" />);
       });
   }
 
@@ -339,14 +340,14 @@ class TaskUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success('Operate successfully');
+                message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
                 history.goBack();
               } else {
-                message.error(res.message || 'Update Failed');
+                message.error(res.message || <FormattedMessage id="Order.UpdateFailed" />);
               }
             })
             .catch((err) => {
-              message.error(err || 'Update Failed');
+              message.error(err || <FormattedMessage id="Order.UpdateFailed" />);
             });
         } else {
           webapi
@@ -354,14 +355,14 @@ class TaskUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success('Operate successfully');
+                message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
                 history.push({ pathname: '/tasks' });
               } else {
-                message.error(res.message || 'Add Failed');
+                message.error(res.message || <FormattedMessage id="Order.AddFailed" />);
               }
             })
             .catch((err) => {
-              message.error(err || 'Add Failed');
+              message.error(err || <FormattedMessage id="Order.AddFailed" />);
             });
         }
       }
@@ -396,10 +397,14 @@ class TaskUpdate extends Component<any, any> {
       <div>
         <Breadcrumb>
           <Breadcrumb.Item>
-            <a href="/">Home</a>
+            <a href="/">
+              <FormattedMessage id="Menu.Home" />
+            </a>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <a href="/tasks">Task board</a>
+            <a href="/tasks">
+              <FormattedMessage id="task.TaskBoard" />
+            </a>
           </Breadcrumb.Item>
           <Breadcrumb.Item>{title}</Breadcrumb.Item>
         </Breadcrumb>
@@ -413,12 +418,14 @@ class TaskUpdate extends Component<any, any> {
                 {!editable ? (
                   <Tooltip placement="top" title="Edit">
                     <Button style={{ marginRight: '20px' }} type="primary" onClick={() => this.setState({ editable: true })}>
-                      Edit
+                      <FormattedMessage id="Order.Edit" />
                     </Button>
                   </Tooltip>
                 ) : (
                   <Tooltip placement="top" title="Cancel">
-                    <Button onClick={() => this.setState({ editable: false })}>Cancel</Button>
+                    <Button onClick={() => this.setState({ editable: false })}>
+                      <FormattedMessage id="Order.btnCancel" />
+                    </Button>
                   </Tooltip>
                 )}
               </Col>
@@ -432,12 +439,12 @@ class TaskUpdate extends Component<any, any> {
               this.setState({ tabKey: key });
             }}
           >
-            <TabPane tab="Basic information" key="basic">
+            <TabPane tab={<FormattedMessage id="task.BasicInformation" />} key="basic">
               <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
                 <Form>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Task Name">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.TaskName" />}>
                         {getFieldDecorator('name', {
                           initialValue: task.name,
                           rules: [{ required: true, message: 'Please input task name' }]
@@ -445,7 +452,7 @@ class TaskUpdate extends Component<any, any> {
                           editable ? (
                             <Input
                               disabled={taskCompleted}
-                              placeholder="Input task name to create a new task"
+                              placeholder={this.props.intl.formatMessage({id:'task.Inputtasknametocreateanewtask'})}
                               onChange={(e: any) =>
                                 this.onChange({
                                   field: 'name',
@@ -461,7 +468,7 @@ class TaskUpdate extends Component<any, any> {
                     </Col>
                     {id ? (
                       <Col span={12}>
-                        <FormItem {...formItemLayout} label="Task Status">
+                        <FormItem {...formItemLayout} label={<FormattedMessage id="task.TaskStatus" />}>
                           {getFieldDecorator('status', {
                             initialValue: task.status
                           })(
@@ -491,7 +498,7 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Assigned to">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.Assignedto" />}>
                         {getFieldDecorator('assistantId', {
                           initialValue: task.assistantName ? task.assistantName + (task.assistantEmail ? '(' + task.assistantEmail + ')' : '') : ''
                         })(
@@ -499,7 +506,7 @@ class TaskUpdate extends Component<any, any> {
                             <Select
                               allowClear
                               disabled={taskCompleted}
-                              placeholder="Please input email or name"
+                              placeholder={this.props.intl.formatMessage({id:'task.Pleaseinputemailorname'})}
                               showSearch
                               loading={petAssistantLoading}
                               onSearch={this.searchAssignedTo}
@@ -525,7 +532,7 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Golden Moment">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.GoldenMoment" />}>
                         {getFieldDecorator('goldenMoment', {
                           initialValue: task.goldenMoment
                         })(
@@ -555,17 +562,17 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Start Time">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.StartTime" />}>
                         {getFieldDecorator('startTime', {
                           initialValue: task.startTime ? moment(task.startTime) : null,
-                          rules: [{ required: true, message: 'Please select start time' }]
+                          rules: [{ required: true, message: <FormattedMessage id="task.Pleaseselectstarttime" /> }]
                         })(
                           editable ? (
                             <DatePicker
                               disabledDate={this.disabledEventStartDate}
                               disabled={taskCompleted || (!!task.startTime && id)}
                               style={{ width: '100%' }}
-                              placeholder="Start Time"
+                              placeholder={this.props.intl.formatMessage({id:'task.StartTime'})}
                               format="YYYY-MM-DD"
                               onChange={(date, dateString) => {
                                 const value = dateString ? dateString + ' 00:00:00' : null;
@@ -582,17 +589,17 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Due Time">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.DueTime" />}>
                         {getFieldDecorator('dueTime', {
                           initialValue: task.dueTime ? moment(task.dueTime) : null,
-                          rules: [{ required: true, message: 'Please select due time' }]
+                          rules: [{ required: true, message: <FormattedMessage id="task.Pleaseselectduetime" /> }]
                         })(
                           editable ? (
                             <DatePicker
                               disabledDate={this.disabledEventEndDate}
                               disabled={taskCompleted}
                               style={{ width: '100%' }}
-                              placeholder="Due Time"
+                              placeholder={this.props.intl.formatMessage({id:'task.DueTime'})}
                               format="YYYY-MM-DD"
                               onChange={(date, dateString) => {
                                 const value = dateString ? dateString + ' 00:00:00' : null;
@@ -611,7 +618,7 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Reminder before due time">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.Reminderbeforeduetime" />}>
                         {editable ? (
                           <Row>
                             <Col span={8}>
@@ -661,7 +668,7 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Priority">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.Priority"/>}>
                         {getFieldDecorator('priority', {
                           initialValue: task.priority
                         })(
@@ -692,7 +699,7 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Associated Pet Owner">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedPetOwner"/>}>
                         {getFieldDecorator('contactId', {
                           initialValue: task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''
                         })(
@@ -700,7 +707,7 @@ class TaskUpdate extends Component<any, any> {
                             <Select
                               allowClear
                               disabled={taskCompleted}
-                              placeholder="Please input pet owner account or name"
+                              placeholder={this.props.intl.formatMessage({id:'task.Pleaseinputpetowneraccountorname'})}
                               showSearch
                               loading={petOwnerLoading}
                               onSearch={this.searchAssignedPetOwners}
@@ -726,7 +733,7 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Associated Pet">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedPet"/>}>
                         {getFieldDecorator('petId', {
                           initialValue: task.petId
                         })(
@@ -756,7 +763,7 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Associated Order">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedOrder"/>}>
                         {getFieldDecorator('orderCode', {
                           initialValue: task.orderCode
                         })(
@@ -784,7 +791,7 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Action Type">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.ActionType"/>}>
                         {getFieldDecorator('actionType', {
                           initialValue: task.actionType
                         })(
@@ -814,7 +821,7 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label="Associate Subscription">
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociateSubscription"/>}>
                         {getFieldDecorator('subscriptionNumber', {
                           initialValue: task.subscription
                         })(
@@ -844,7 +851,7 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     {editable ? (
-                      <FormItem {...formRowItemLayout} label="Description">
+                      <FormItem {...formRowItemLayout} label={<FormattedMessage id="task.Description"/>}>
                         {taskCompleted ? (
                           <ReactEditor id="description" height={200} disabled={true} content={task.description} onContentChange={(html) => {}} />
                         ) : task.description ? (
@@ -883,7 +890,7 @@ class TaskUpdate extends Component<any, any> {
               </Spin>
             </TabPane>
             {id ? (
-              <TabPane tab="Activity" key="activity">
+              <TabPane tab={<FormattedMessage id="task.Activity" />} key="activity">
                 <Activity taskId={id} taskCompleted={taskCompleted} />
               </TabPane>
             ) : null}
@@ -893,10 +900,10 @@ class TaskUpdate extends Component<any, any> {
           <div className="bar-button" style={{ left: '134px' }}>
             {editable ? (
               <Button type="primary" style={{ marginRight: '10px' }} onClick={(e) => this.updateTask(e)}>
-                Save
+                <FormattedMessage id="task.Save" />
               </Button>
             ) : null}
-            <Button onClick={() => history.goBack()}>{<FormattedMessage id="back" />}</Button>
+            <Button onClick={() => history.goBack()}>{<FormattedMessage id="task.Back" />}</Button>
           </div>
         ) : null}
       </div>

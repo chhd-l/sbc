@@ -8,7 +8,8 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
-export default class Line extends React.Component {
+import { FormattedMessage, injectIntl } from 'react-intl';
+class Line extends React.Component {
   constructor(props, ctx) {
     super(props);
   }
@@ -17,7 +18,7 @@ export default class Line extends React.Component {
     let option = {
       title: [
         {
-          text: 'Rate',
+          text: this.props.intl.formatMessage({id:'Home.Rate'}),
           x: 'center',
           top: '32%',
           textStyle: {
@@ -95,3 +96,4 @@ export default class Line extends React.Component {
     );
   }
 }
+export default injectIntl(Line)

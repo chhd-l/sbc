@@ -192,7 +192,7 @@ class OrderDelivery extends React.Component<any, any> {
 
         <Modal
           maskClosable={false}
-          title="Deliver goods"
+          title={<FormattedMessage id="Order.DeliverGoods"/>}
           visible={modalVisible}
           onCancel={this._hideDeliveryModal}
           onOk={() => {

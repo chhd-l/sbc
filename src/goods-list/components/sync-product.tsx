@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'antd';
 import { Const } from 'qmkit';
 import { syncProduct } from '../webapi';
+import { FormattedMessage } from 'react-intl';
 
 export default class SyncButton extends React.Component<any, any> {
   constructor(props: any) {
@@ -53,7 +54,7 @@ export default class SyncButton extends React.Component<any, any> {
     const { loading, count } = this.state;
     return (
       <Button type="primary" disabled={loading} onClick={this.onSync}>
-        {loading ? `Synchronize(${count})` : 'Synchronize'}
+        <FormattedMessage id="Product.Synchronize" />{loading ? `(${count})` : ''}
       </Button>
     );
   }

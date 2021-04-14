@@ -205,7 +205,7 @@ class ListView extends React.Component<any, any> {
     let _now=moment();
     let _temp=moment(item.linkStatus);
 
-    let c= (_temp.diff(_now,'day')-7)<0?'Invalid':'Valid';
+    let c= (_now.diff(_temp,'day'))>7?'Invalid':'Valid';
     return c
   }
 

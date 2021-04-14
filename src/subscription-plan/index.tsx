@@ -16,7 +16,7 @@ export default class SubscriptionPlan extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Subscription Plan',
+      title: <FormattedMessage id="Subscription.SubscriptionPlan"/>,
       subscriptionForm: {},
       typeList: [],
       subscriptionPlanList: [],
@@ -136,50 +136,50 @@ export default class SubscriptionPlan extends Component<any, any> {
     const { title, typeList, subscriptionPlanList } = this.state;
     const columns = [
       {
-        title: 'Subscription Plan ID',
+        title: <FormattedMessage id="Subscription.SubscriptionPlanID"/>,
         dataIndex: 'planId',
         key: 'planId',
         width: '18%'
       },
       {
-        title: 'Subscription Plan Name',
+        title: <FormattedMessage id="Subscription.SubscriptionPlanName"/>,
         dataIndex: 'planName',
         key: 'planName',
         width: '18%'
       },
       {
-        title: 'Subscription Type',
+        title: <FormattedMessage id="Subscription.SubscriptionType"/>,
         dataIndex: 'planType',
         key: 'planType',
         width: '12%'
       },
       {
-        title: 'Quantity',
+        title: <FormattedMessage id="Subscription.Quantity"/>,
         dataIndex: 'quantity',
         key: 'quantity',
         width: '8%'
       },
       {
-        title: 'Offer Time Period',
+        title: <FormattedMessage id="Subscription.OfferTimePeriod"/>,
         key: 'timePeriod',
         width: '13%',
         render: (text, record) => moment(record.startDate).format('YYYY.MM.DD') + '-' + moment(record.endDate).format('YYYY.MM.DD')
       },
       {
-        title: 'Number of Delivery',
+        title: <FormattedMessage id="Subscription.NumberOfDelivery"/>,
         dataIndex: 'deliveryTimes',
         key: 'deliveryTimes',
         width: '10%'
       },
       {
-        title: 'Status',
+        title: <FormattedMessage id="Subscription.Status"/>,
         dataIndex: 'status',
         key: 'status',
         width: '7%',
-        render: (text) => (text === 0 ? 'Draft' : 'Publish')
+        render: (text) => (text === 0 ? <FormattedMessage id="Subscription.Draft"/> : <FormattedMessage id="Subscription.Publish"/>)
       },
       {
-        title: 'Enable',
+        title: <FormattedMessage id="Subscription.Enable"/>,
         dataIndex: 'enableFlag',
         key: 'enable',
         width: '8%',
@@ -195,16 +195,16 @@ export default class SubscriptionPlan extends Component<any, any> {
         )
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Subscription.Operation"/>,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Detail">
+            <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
               <Link to={'/subscription-plan-detail/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
             {record.status === 0 && (
-              <Tooltip placement="top" title="Edit">
+              <Tooltip placement="top" title={<FormattedMessage id="Subscription.Edit"/>}>
                 <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit" style={{ paddingLeft: 10 }}></Link>
               </Tooltip>
             )}
@@ -222,7 +222,7 @@ export default class SubscriptionPlan extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Subscription Plan Name</p>}
+                    addonBefore={<p style={styles.label}><FormattedMessage id="Subscription.SubscriptionPlanName"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -236,7 +236,7 @@ export default class SubscriptionPlan extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Subscription Plan ID</p>}
+                    addonBefore={<p style={styles.label}><FormattedMessage id="Subscription.SubscriptionPlanID"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -251,7 +251,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}>Subscription Type</p>}
+                    label={<p style={styles.label}><FormattedMessage id="Subscription.SubscriptionType"/></p>}
                     style={{ width: 195 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -262,7 +262,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                     }}
                   >
                     <Option value="">
-                      <FormattedMessage id="all" />
+                      <FormattedMessage id="Subscription.all" />
                     </Option>
                     {typeList &&
                       typeList.map((item, index) => (
@@ -288,7 +288,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Subscription.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -298,7 +298,7 @@ export default class SubscriptionPlan extends Component<any, any> {
         </div>
         <div className="container">
           <Button type="primary" htmlType="submit" style={{ marginBottom: '20px' }}>
-            <Link to={{ pathname: '/subscription-plan-add' }}>Add New Plan</Link>
+            <Link to={{ pathname: '/subscription-plan-add' }}><FormattedMessage id="Subscription.AddNewPlan"/></Link>
           </Button>
           <Table
             rowKey="id"

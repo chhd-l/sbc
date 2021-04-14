@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Form, Input, Select, Spin } from 'antd';
 import { getCustomerDetails } from '../webapi';
 import debounce from 'lodash/debounce';
+import { FormattedMessage } from 'react-intl';
 const { Option } = Select;
 class ConsumerInformation extends React.Component<any, any> {
   state = {
@@ -76,19 +77,20 @@ class ConsumerInformation extends React.Component<any, any> {
     ));
     return (
       <div>
-        <h3>Step1</h3>
+        <h3><FormattedMessage id="Order.Step1" /></h3>
         <h4>
-          {this.props.stepName} <span className="ant-form-item-required"></span>
+          <FormattedMessage id={`Order.${this.props.stepName}`} /> 
+          <span className="ant-form-item-required"></span>
         </h4>
         <div className="selectLanguage">
           <Form {...formItemLayout}>
-            <Form.Item label="Pet owner account">
+            <Form.Item label={<FormattedMessage id="Order.PetOwnerAccount" />}>
               {getFieldDecorator('customerAccount', {
                 initialValue: customerAccount,
                 rules: [
                   {
                     required: true,
-                    message: 'Please input your Pet owner account!'
+                    message: <FormattedMessage id="Order.piypoa" />
                   }
                 ]
               })(
@@ -97,7 +99,7 @@ class ConsumerInformation extends React.Component<any, any> {
                 </Select>
               )}
             </Form.Item>
-            <Form.Item label="Pet owner name">
+            <Form.Item label={<FormattedMessage id="Order.PetOwnerName" />}>
               {getFieldDecorator('customerName', {
                 initialValue: customerName
               })(<Input disabled />)}

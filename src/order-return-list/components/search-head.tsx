@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Button, Dropdown, Form, Icon, Input, Menu, Modal, Select, DatePicker, message, Row, Col } from 'antd';
 import { ExportModal, Headline, noop, Const, AuthWrapper, checkAuth } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -14,8 +14,9 @@ const RangePicker = DatePicker.RangePicker;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
+    intl?: any;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -92,7 +93,7 @@ export default class SearchHead extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="rolf006">
             <a href="#" onClick={() => this._handleBatchExport()}>
-              Bulk export
+              <FormattedMessage id="Order.BatchExport" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -101,7 +102,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="refundList" />} />
+        <Headline title={<FormattedMessage id="Order.refundList" />} />
 
         <div>
           <Form className="filter-content" layout="inline">
@@ -110,7 +111,7 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     // addonBefore="退单编号"
-                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="Finance.ReturnOrderNumber" /></p>}
+                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="Order.ReturnOrderNumber" /></p>}
                     onChange={(e) => {
                       this.setState({ rid: (e.target as any).value }, this._paramChanged);
                     }}
@@ -121,7 +122,7 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     // addonBefore="订单编号"
-                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="orderNumber" /></p>}
+                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="Order.Ordernumber" /></p>}
                     maxLength={300}
                     onChange={(e) => {
                       this.setState({ tid: (e.target as any).value }, this._paramChanged);
@@ -248,7 +249,7 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Order.Search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -300,10 +301,10 @@ export default class SearchHead extends Component<any, any> {
           style={{ width: '176px' }}
         >
           <Option value="skuName">
-            <FormattedMessage id="product.productName" />
+            <FormattedMessage id="Order.productName" />
           </Option>
           <Option value="skuNo">
-            <FormattedMessage id="product.SKU" />
+            <FormattedMessage id="Order.skuCode" />
           </Option>
         </Select>
 
@@ -341,10 +342,10 @@ export default class SearchHead extends Component<any, any> {
         style={{ width: '176px' }}
       >
         <Option value="buyerName">
-          <FormattedMessage id="consumerName" />
+          <FormattedMessage id="Order.consumerName" />
         </Option>
         <Option value="buyerAccount">
-          <FormattedMessage id="consumerAccount" />
+          <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
     
@@ -382,10 +383,10 @@ export default class SearchHead extends Component<any, any> {
         style={{ width: '176px' }}
       >
         <Option value="consigneeName">
-          <FormattedMessage id="recipient" />
+          <FormattedMessage id="Order.recipient" />
         </Option>
         <Option value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
+          <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
    </div>
@@ -440,13 +441,17 @@ export default class SearchHead extends Component<any, any> {
   }
 
   _handleBatchExport() {
+    const paramTitle = this.props.intl.formatMessage({id:'Order.Exportfilteredorders'});
+    const idTitle = this.props.intl.formatMessage({id:'Order.Exportselectedorders'});
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: '导出筛选出的订单',
-      byIdsTitle: '导出选中的订单',
+      byParamsTitle: paramTitle,
+      byIdsTitle: idTitle,
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });
   }
 }
+
+export default injectIntl(SearchHead);

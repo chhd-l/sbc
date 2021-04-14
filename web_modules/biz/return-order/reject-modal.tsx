@@ -4,8 +4,9 @@ import { noop } from 'qmkit';
 import { IMap } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Button from 'antd/lib/button/button';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-export default class RejectModal extends React.Component<any, any> {
+class RejectModal extends React.Component<any, any> {
   _form: any;
   WrapperForm: any;
 
@@ -27,7 +28,7 @@ export default class RejectModal extends React.Component<any, any> {
 
   constructor(props) {
     super(props);
-    this.WrapperForm = Form.create({})(RejectForm);
+    this.WrapperForm = Form.create({})(injectIntl(RejectForm));
   }
 
   render() {
@@ -39,12 +40,18 @@ export default class RejectModal extends React.Component<any, any> {
 
     return (
       <Modal  maskClosable={false}
-        title={'Please fill out the ' + data.get('type') + ' reason'}
+        title={
+          <span>
+            <FormattedMessage id="Order.PleaseFillOutThe" />
+            {data.get('type')}
+            <FormattedMessage id="Order.reason" />
+          </span>
+        }
         visible={data.get('visible')}
         onCancel={() => onHide()}
         footer={[
           <Button key="back" size="large" onClick={() => onHide()}>
-            Cancel
+            <FormattedMessage id="Order.btnCancel" />
           </Button>,
           <Button
             key="submit"
@@ -53,7 +60,7 @@ export default class RejectModal extends React.Component<any, any> {
             loading={this.state.posting}
             onClick={() => this._handleOk(handleOk)}
           >
-            Confirm
+            <FormattedMessage id="Order.btnConfirm" />
           </Button>
         ]}
       >
@@ -68,10 +75,11 @@ export default class RejectModal extends React.Component<any, any> {
   _handleOk(handleOk: Function) {
     const { data, onHide } = this.props;
     const form = this._form as WrappedFormUtils;
+    const text = this.props.intl.formatMessage({id:'Order.reasonIsEmpty'});
     form.validateFields(null, (errs, values) => {
       if (!errs) {
         if(values.reason == null || values.reason.trim() == ''){
-          message.error(data.get('type') + '原因不可为空！');
+          message.error(data.get('type') + text);
           return;
         }
         this.setState({ posting: true });
@@ -96,6 +104,8 @@ class RejectForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const alert1 = this.props.intl.formatMessage({id:'Order.pleaseInputReason'}) + ' ' + this.props.formType;
+    const alert2 = this.props.intl.formatMessage({id:'Order.oneToOneHun'});
 
     return (
       <Form>
@@ -104,12 +114,12 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: 'Please input the reason for ' + this.props.formType
+                message: alert1
               },
               {
                 min: 1,
                 max: 100,
-                message: '1-100字'
+                message: alert2
               }
             ]
           })(<Input.TextArea />)}
@@ -118,3 +128,5 @@ class RejectForm extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(RejectModal);

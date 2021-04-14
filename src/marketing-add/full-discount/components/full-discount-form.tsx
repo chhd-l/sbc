@@ -373,7 +373,7 @@ class FullDiscountForm extends React.Component<any, any> {
     console.log(marketingBean.toJS(), 'marketingBean-----------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="FormattedMessageMarketing.PromotionType"/>} labelAlign="left">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionType"/>} labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
               <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
@@ -1185,7 +1185,7 @@ class FullDiscountForm extends React.Component<any, any> {
             };
 
             marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
-            submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
+            submitFullDiscount(marketingBean.toJS()); //.then((res) => this._responseThen(res))
           }
         }
       }

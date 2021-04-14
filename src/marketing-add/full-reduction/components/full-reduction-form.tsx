@@ -1198,7 +1198,7 @@ class FullReductionForm extends React.Component<any, any> {
               subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
             };
             marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
-            submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
+            submitFullReduction(marketingBean.toJS())//.then((res) => this._responseThen(res));
           }
         }
       }

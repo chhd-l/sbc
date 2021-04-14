@@ -508,7 +508,6 @@ class GiftLevels extends React.Component<any, any> {
    * @returns {Array}
    */
   getSelectedRowByIds = (ids) => {
-    debugger
     const { selectedRows } = this.props;
     const rows = selectedRows.filter((row) => ids.includes(row.get('goodsInfoId')));
     return rows && !rows.isEmpty() ? rows.toJS() : [];

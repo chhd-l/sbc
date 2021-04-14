@@ -100,7 +100,8 @@ class SkuForm extends React.Component<any, any> {
     this.state = {
       count: 0,
       visible: false,
-      pid: ''
+      pid: '',
+      id: ''
     };
   }
 
@@ -128,7 +129,7 @@ class SkuForm extends React.Component<any, any> {
     // }
     return (
       <div style={{ marginBottom: 20 }}>
-        {this.state.visible == true ? <ProductTooltipSKU pid={this.state.pid} visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
+        {this.state.visible == true ? <ProductTooltipSKU id={this.state.id} pid={this.state.pid} visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
@@ -136,11 +137,12 @@ class SkuForm extends React.Component<any, any> {
     );
   }
 
-  showProduct = (res, e) => {
+  showProduct = (res, e, id) => {
     let type = res.type == 1 ? true : false;
     if (e) {
       this.setState({
-        pid: e
+        pid: e,
+        id: id
       });
     }
     this.setState({
@@ -294,7 +296,7 @@ class SkuForm extends React.Component<any, any> {
                   <div className="space-between-align">
                     <div style={{ paddingTop: 6 }}>
                       {' '}
-                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo)} />
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo, rowInfo.id )} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
                       {addSkUProduct &&
@@ -748,9 +750,14 @@ class SkuForm extends React.Component<any, any> {
             minStock.push(o.stock / o.bundleNum)
           }
         });
-        console.log(tempMinStock,1111122);
-        tempMinStock = Math.min.apply(Math, minStock)
-        tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
+        if (tempMinStock != 0) {
+          tempMinStock = Math.min.apply(Math, minStock)
+          tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
+        }else {
+          tempMinStock = 0
+        }
+
+
         b.push({
           pid: pid,
           targetGoodsIds: a,
@@ -772,7 +779,6 @@ class SkuForm extends React.Component<any, any> {
     }else {
       e = d
     }
-    console.log(e,11111);
     onProductselectSku(e);
   };
 

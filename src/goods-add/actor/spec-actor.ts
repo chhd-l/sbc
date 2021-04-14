@@ -339,8 +339,6 @@ export default class GoodsSpecActor extends Actor {
    */
   _convertSpev = (spec: IMap) => {
     let a = spec.toJS()
-    console.log(a);
-    debugger
     return spec.get('specValues').map((item, index) => {
       const specId = 'specId-' + spec.get('specId');
       const specDetailId = 'specDetailId-' + spec.get('specId');

@@ -753,7 +753,6 @@ class FullReductionForm extends React.Component<any, any> {
               rules: [
                 {
                   validator: (_rule, value, callback) => {
-                    debugger
                     if ((!value && marketingBean.get('scopeType') === 3)) { //marketingBean.get('attributeValueIds') || marketingBean.get('attributeValueIds').size === 0)
                       //
                       callback(

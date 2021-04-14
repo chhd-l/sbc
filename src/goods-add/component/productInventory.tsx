@@ -184,21 +184,32 @@ class SkuForm extends React.Component<any, any> {
         </div>
       ),
       key: 'stock',
-      render: (rowInfo) => {
+      render: (rowInfo,index) => {
         let a = null;
         let b = null;
         let c = 0;
         let d = true
-        console.log(addSkUProduct.length,1111111);
+        console.log(addSkUProduct,1111111);
+        console.log(rowInfo,3445);
 
-        if (addSkUProduct.length != undefined) {
-          c = rowInfo.stock
-          d = true
+        if (addSkUProduct.length == undefined || addSkUProduct.length == []) {
+          c = 0
+          d = false
           console.log(rowInfo,222222);
 
         }else {
-          c = 0
-          d = false
+          addSkUProduct.map(item=>{
+            if (item.pid == rowInfo.goodsInfoNo) {
+              c = rowInfo.stock
+              d = true
+            }else {
+              c = 0
+              d = false
+            }
+
+          })
+
+
           console.log(rowInfo,333333);
 
         }

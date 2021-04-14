@@ -1309,7 +1309,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </div>
                 <div className="flex-between">
                   <span><FormattedMessage id="Subscription.Promotion"/></span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
                 </div>
                 {/* <div className="flex-between">
                       <span>Promotion Code</span>
@@ -1336,7 +1336,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>
                     <span><FormattedMessage id="Subscription.Total"/></span> (<FormattedMessage id="Subscription.IVAInclude"/>):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.taxFeePrice + +this.state.deliveryPrice).toFixed(2)}</span>
                 </div>
               </Col>
             </Row>

@@ -43,6 +43,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     application?: string;
     pid: any;
     initCateList: any;
+    id: any
 
   };
 
@@ -92,8 +93,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
           this.setState({ selectedRows, selectedRowKeys });
         }
       }
-      
-      
+
+
     }
   };
 
@@ -107,18 +108,18 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //     goodsInfoNo: item
     //   });
     // });
-    console.log(goodsList.toJS(),1111);
-
 
     selectedRows && selectedRows.map((item) => {
-        if(item.stock){
+        /*if(item.stock){
           minStock.push(item.stock)
         }else if(sessionStorage.getItem('minStock')){
           minStock.push(sessionStorage.getItem('minStock'))
-        }
+        }*/
+      minStock.push(item.stock)
         targetGoodsIds.push({
           subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
           bundleNum: 1,
+          stock: item.stock,
           saleableFlag: item.saleableFlag,
           marketPrice: item.marketPrice,
           subMarketPrice: item.subMarketPrice,
@@ -130,10 +131,13 @@ class ProductTooltipSKU extends React.Component<any, any> {
       }
     );
     let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
+    console.log(minStock,123);
 
     targetGoodsList = [];
     let tempMinStock = Math.min.apply(Math, minStock)
-    sessionStorage.setItem('minStock',tempMinStock)
+    console.log(tempMinStock,456);
+
+    //sessionStorage.setItem('minStock',tempMinStock)
     targetGoodsList.push({
       pid: this.props.pid,
       targetGoodsIds: goodsIds,
@@ -142,22 +146,21 @@ class ProductTooltipSKU extends React.Component<any, any> {
     let id = goodsList.toJS()[0].id
     let marketPrice = goodsIds[0].marketPrice * goodsIds[0].bundleNum
     let subscriptionPrice = goodsIds[0].subscriptionPrice * goodsIds[0].bundleNum
-    let stock = Number(String(tempMinStock / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
-    console.log(stock,1111)
-    console.log(goodsIds[0].stock,2222)
-
+    //let stock = Number(String(goodsIds[0].stock?goodsIds[0].stock:0 / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+    goodsList.toJS().map(item=>{
+      if (item.id == this.props.id) {
+        editGoodsItem(this.props.id, 'stock', tempMinStock);
+      }
+    })
     if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
       editGoodsItem(id, 'marketPrice', marketPrice);
       editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
-      editGoodsItem(id, 'stock', stock);
     }/*else if (targetGoodsList.length == 0){
       editGoodsItem(id, 'marketPrice', 0);
       editGoodsItem(id, 'subscriptionPrice', 0);
     }*/else {
       editGoodsItem(id, 'marketPrice', 0);
       editGoodsItem(id, 'subscriptionPrice', 0);
-      editGoodsItem(id, 'stock', tempMinStock);
-
     }
     if (targetGoodsIds.length <= 10) {
       if (targetGoodsIds.length !== 0) {
@@ -184,7 +187,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
   render() {
     const { visible, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedRowKeys, selectedRows } = this.state;
-    
+
 
     return (
       <Modal
@@ -202,7 +205,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
         onOk={() => {
           this.handleOK()
         }
-          
+
         }
         onCancel={() => {
           this.props.showModal({ type: 0 }, this.props.pid);

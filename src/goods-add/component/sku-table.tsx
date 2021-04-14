@@ -100,7 +100,8 @@ class SkuForm extends React.Component<any, any> {
     this.state = {
       count: 0,
       visible: false,
-      pid: ''
+      pid: '',
+      id: ''
     };
   }
 
@@ -128,7 +129,7 @@ class SkuForm extends React.Component<any, any> {
     // }
     return (
       <div style={{ marginBottom: 20 }}>
-        {this.state.visible == true ? <ProductTooltipSKU pid={this.state.pid} visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
+        {this.state.visible == true ? <ProductTooltipSKU pid={this.state.pid} id={this.state.id} visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
@@ -136,11 +137,12 @@ class SkuForm extends React.Component<any, any> {
     );
   }
 
-  showProduct = (res, e) => {
+  showProduct = (res, e, id) => {
     let type = res.type == 1 ? true : false;
     if (e) {
       this.setState({
-        pid: e
+        pid: e,
+        id: id
       });
     }
     this.setState({
@@ -273,6 +275,7 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'goodsInfoBundleRels',
       render: (rowInfo) => {
+
         const { addSkUProduct } = this.props.relaxProps;
         return (
           <Row>
@@ -294,7 +297,7 @@ class SkuForm extends React.Component<any, any> {
                   <div className="space-between-align">
                     <div style={{ paddingTop: 6 }}>
                       {' '}
-                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo)} />
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo, rowInfo.id)} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
                       {addSkUProduct &&
@@ -612,18 +615,26 @@ class SkuForm extends React.Component<any, any> {
       e = e.target.value;
     }
 
-    if (key = "goodsInfoBundleRels") {
+    if (key == "goodsInfoBundleRels") {
+      let minStock = []
+      for (let i = 0; i<e.length; i++) {
+        minStock.push(e[i].stock / e[i].bundleNum)
+      }
+
+      let tempMinStock = Math.min.apply(Math, minStock)
+      tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
+
       if (goodsList.toJS().length == 1 && addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
         let id = goodsList.toJS()[0].id
 
         let marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
         let subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
-        let stock = Number(String(addSkUProduct[0].minStock / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
         editGoodsItem(id, key, e);
         editGoodsItem(id, 'marketPrice', marketPrice);
         editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
-        editGoodsItem(id, 'stock', stock);
       }
+      editGoodsItem(id, 'stock', tempMinStock);
+
     }else {
       editGoodsItem(id, key, e);
     }
@@ -703,32 +714,39 @@ class SkuForm extends React.Component<any, any> {
     let a = [];
     let b = [];
     let c = [];
+    let minStock = []
+
     addSkUProduct.map((i) => {
       if (i.pid == pid) {
         i.targetGoodsIds.map((o) => {
           if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
             a.push(o);
+            minStock.push(o.stock / o.bundleNum)
           }
         });
+        let tempMinStock = Math.min.apply(Math, minStock)
+        tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
         b.push({
           pid: pid,
-          targetGoodsIds: a
+          targetGoodsIds: a,
+          mStock: tempMinStock
         });
+
       } else {
         c.push(i);
       }
     });
     let d = b.concat(c);
     this._editGoodsItem(id, 'goodsInfoBundleRels', a);
+    this._editGoodsItem(id, 'stock', minStock);
     let e = d.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
-    if (goodsList.toJS().length == 1) {
 
-    }
     if (e.length == 1 && e[0].targetGoodsIds.length == 0) {
       e = []
     }else {
       e = d
     }
+    console.log(e,11111);
     onProductselectSku(e);
   };
 

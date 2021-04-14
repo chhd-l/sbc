@@ -989,110 +989,114 @@ export default class AppStore extends Store {
     let valid = true;
     let tip = 0;
     let goodsList = this.state().get('goodsList');
+    let reg=/^[1-9]\d*$|^0$/;
 
     let addSkUProduct = this.state().toJS().addSkUProduct;
     if (goodsList) {
-      goodsList.forEach((item) => {
-        let reg=/^[1-9]\d*$|^0$/;
-        if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('marketPrice') == undefined && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
-            if (addSkUProduct[0].targetGoodsIds[0].saleableFlag == 0) {
+      console.log(this.state().get('goods').get('subscriptionStatus'),123);
+      if (this.state().get('goods').get('subscriptionStatus') != 0) {
+        goodsList.forEach((item) => {
+          if (this.state().get('goods').get('saleableFlag') != 0 || this.state().get('goods').get('subscriptionStatus') !=0 ) {
+            if(item.get('marketPrice') == undefined && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
+              if (addSkUProduct[0].targetGoodsIds[0].saleableFlag == 0) {
+                tip = 1;
+                valid = false;
+                return;
+              }
+
+            }else if(item.get('marketPrice') == undefined && (addSkUProduct.length == 1 && (addSkUProduct[0].targetGoodsIds.length == 0 || addSkUProduct[0].targetGoodsIds.length > 1)) ) {
               tip = 1;
               valid = false;
               return;
-            }
 
-          }else if(item.get('marketPrice') == undefined && (addSkUProduct.length == 1 && (addSkUProduct[0].targetGoodsIds.length == 0 || addSkUProduct[0].targetGoodsIds.length > 1)) ) {
-            tip = 1;
-            valid = false;
-            return;
-
-          }else if(item.get('marketPrice') == undefined && (addSkUProduct.length == 0 || addSkUProduct.length > 1)) {
-            tip = 1;
-            valid = false;
-            return;
-
-          }else {
-            if ( item.get('marketPrice') == 0 ) {
+            }else if(item.get('marketPrice') == undefined && (addSkUProduct.length == 0 || addSkUProduct.length > 1)) {
               tip = 1;
               valid = false;
               return;
+
+            }else {
+              if ( item.get('marketPrice') == 0 ) {
+                tip = 1;
+                valid = false;
+                return;
+              }
             }
           }
-        }
 
 
-        if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0
-            && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
-            if (addSkUProduct[0].targetGoodsIds[0].saleableFlag == 0) {
+          if (this.state().get('goods').get('saleableFlag') != 0) {
+            if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0
+              && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
+              if (addSkUProduct[0].targetGoodsIds[0].saleableFlag == 0) {
+                tip = 2;
+                valid = false;
+                return;
+              }
+            }else if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0 && (addSkUProduct.length == 1 && (addSkUProduct[0].targetGoodsIds.length == 0 || addSkUProduct[0].targetGoodsIds.length > 1)) ) {
               tip = 2;
               valid = false;
               return;
-            }
-          }else if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0 && (addSkUProduct.length == 1 && (addSkUProduct[0].targetGoodsIds.length == 0 || addSkUProduct[0].targetGoodsIds.length > 1)) ) {
-            tip = 2;
-            valid = false;
-            return;
 
-          }else if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0 && (addSkUProduct.length == 0 || addSkUProduct.length > 1)) {
-            tip = 2;
-            valid = false;
-            return;
-          } else {
-            if ( item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
+            }else if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0 && (addSkUProduct.length == 0 || addSkUProduct.length > 1)) {
               tip = 2;
               valid = false;
               return;
+            } else {
+              if ( item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
+                tip = 2;
+                valid = false;
+                return;
+              }
             }
           }
-        }
 
 
-        /*if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('marketPrice') != undefined) {
-            //console.log(item.get('marketPrice'),345 )
-            if ( item.get('marketPrice') == 0 ) {
-              tip = 1;
-              valid = false;
-              return;
+          /*if (this.state().get('goods').get('saleableFlag') != 0) {
+            if(item.get('marketPrice') != undefined) {
+              //console.log(item.get('marketPrice'),345 )
+              if ( item.get('marketPrice') == 0 ) {
+                tip = 1;
+                valid = false;
+                return;
+              }
+            }else {
+              //console.log(item.get('marketPrice'),678 )
+              if ( addSkUProduct && addSkUProduct.length == 0 ) {
+                //console.log(item.get('marketPrice'),890 )
+
+                tip = 1;
+                valid = false;
+                return;
+              }
             }
-          }else {
-            //console.log(item.get('marketPrice'),678 )
-            if ( addSkUProduct && addSkUProduct.length == 0 ) {
-              //console.log(item.get('marketPrice'),890 )
+          }*/
 
-              tip = 1;
-              valid = false;
-              return;
+
+
+          /*if (this.state().get('goods').get('saleableFlag') != 0) {
+            if(item.get('subscriptionPrice') != undefined) {
+              if ( item.get('subscriptionPrice') == 0 ) {
+                tip = 1;
+                valid = false;
+                return;
+              }
+            }else {
+              if ( addSkUProduct && addSkUProduct.length == 0 ) {
+                tip = 1;
+                valid = false;
+                return;
+              }
             }
-          }
-        }*/
+          }*/
 
+          /* if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+             tip = 2;
+             valid = false;
+             return;
+           }*/
+        });
+      }
 
-
-        /*if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('subscriptionPrice') != undefined) {
-            if ( item.get('subscriptionPrice') == 0 ) {
-              tip = 1;
-              valid = false;
-              return;
-            }
-          }else {
-            if ( addSkUProduct && addSkUProduct.length == 0 ) {
-              tip = 1;
-              valid = false;
-              return;
-            }
-          }
-        }*/
-
-        /* if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
-           tip = 2;
-           valid = false;
-           return;
-         }*/
-      });
     }
     if (tip === 1) {
       message.error('Please input market price');

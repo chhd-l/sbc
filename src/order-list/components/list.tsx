@@ -211,10 +211,10 @@ class ListView extends React.Component<any, any> {
                       orderAduit: value
                     });
                   }}
-                  defaultValue={0}
+                  defaultValue={1}
                 >
-                  <Radio value={0}>{<FormattedMessage id="Order.auditPassed" />}</Radio>
-                  <Radio value={1}>{<FormattedMessage id="Order.auditFailed" />}</Radio>
+                  <Radio value={1}>{<FormattedMessage id="Order.auditPassed" />}</Radio>
+                  <Radio value={2}>{<FormattedMessage id="Order.auditFailed" />}</Radio>
                 </Radio.Group>
               </Col>
             </Row>
@@ -522,7 +522,7 @@ class ListView extends React.Component<any, any> {
 
   _showAuditConfirm = (tdId: string) => {
     const { showAuditModal } = this.props.relaxProps;
-    this.setState({ selectedOrderId: tdId }, showAuditModal());
+    this.setState({ selectedOrderId: tdId, orderAduit: 1 }, showAuditModal());
   };
 
   /**

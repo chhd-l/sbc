@@ -140,8 +140,8 @@ export default class AppStore extends Store {
     }
   };
 
-  onValidateAudit = async (tid: string, audit: string)=> {
-    const { res } = await webapi.audit(tid, audit, '');
+  onValidateAudit = async (tid: string, audit)=> {
+    const { res } = await webapi.audit(tid, audit);
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.hideAuditModal();

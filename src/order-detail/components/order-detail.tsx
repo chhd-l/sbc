@@ -10,6 +10,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import PetItem from '@/customer-details/component/pet-item';
 
 import './style.less';
+import { debug } from 'console';
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
@@ -586,7 +587,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p>
-                    <FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
+                    <FormattedMessage id="Order.country" />: {countryDict ? countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId : ''}
                   </p>
                   <p>
                     <FormattedMessage id="Order.Entrance" />: {consignee.entrance}

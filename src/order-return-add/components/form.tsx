@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Form, Input, Select, Button, Icon, message, InputNumber } from 'antd';
 import { fromJS } from 'immutable';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, history, Tips, QMMethod, QMUpload, cache } from 'qmkit';
+import { noop, Const, history, Tips, QMMethod, QMUpload, cache, RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -136,7 +136,7 @@ class ReturnOrderForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: this.props.intl.formatMessage({
+                  message: (window as any).RCi18n({
                     id: 'Order.Pleaseselectchargebackreason'
                   })
                 }
@@ -150,7 +150,7 @@ class ReturnOrderForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: this.props.intl.formatMessage({
+                    message: (window as any).RCi18n({
                       id: 'Order.Pleaseselectreturnmethod'
                     })
                   }
@@ -165,7 +165,7 @@ class ReturnOrderForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: this.props.intl.formatMessage({
+                  message: (window as any).RCi18n({
                     id: 'Order.Returndescriptioncannotbeblank'
                   })
                 },
@@ -212,7 +212,7 @@ class ReturnOrderForm extends React.Component<any, any> {
                  rules: [
                   {
                     required: true,
-                    message: this.props.intl.formatMessage({
+                    message: (window as any).RCi18n({
                       id: 'Order.Refundableamountcannotbeblank'
                     })
                   },
@@ -270,12 +270,12 @@ class ReturnOrderForm extends React.Component<any, any> {
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
         placeholder={
-          this.props.intl.formatMessage({
+          (window as any).RCi18n({
             id: 'Order.Pleaseselectchargebackreason'
           })
         }
         notFoundContent={
-          this.props.intl.formatMessage({
+          (window as any).RCi18n({
             id: 'Order.Thereisnoreasonforthereturn'
           })
         }
@@ -307,12 +307,12 @@ class ReturnOrderForm extends React.Component<any, any> {
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
         placeholder={
-          this.props.intl.formatMessage({
+          (window as any).RCi18n({
             id: 'Order.Pleaseselectreturnmethod'
           })
         }
         notFoundContent={
-          this.props.intl.formatMessage({
+          (window as any).RCi18n({
             id: 'Order.NoData'
           })
         }
@@ -352,7 +352,7 @@ class ReturnOrderForm extends React.Component<any, any> {
   _editImages = ({ file, fileList }) => {
     if (file.status == 'error') {
       message.error(
-        this.props.intl.formatMessage({
+        (window as any).RCi18n({
           id: 'Order.Uploaderror'
         })
       );
@@ -378,7 +378,7 @@ class ReturnOrderForm extends React.Component<any, any> {
         return true;
       } else {
         message.error(
-          this.props.intl.formatMessage({
+          (window as any).RCi18n({
             id: 'Order.Filesizecannotexceed'
           })
         );
@@ -387,7 +387,7 @@ class ReturnOrderForm extends React.Component<any, any> {
     } else {
 
       message.error(
-        this.props.intl.formatMessage({
+        (window as any).RCi18n({
           id: 'Order.Fileformaterror'
         })
       );

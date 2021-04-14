@@ -50,7 +50,7 @@ class DitionaryList extends Component<any, any> {
 
               <Divider type="vertical" />
 
-              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteDictionary(record.id)} okText={this.props.intl.formatMessage({ id: 'Setting.Confirm' })} cancelText={this.props.intl.formatMessage({ id: 'Setting.Cancel' })}>
+              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteDictionary(record.id)} okText={(window as any).RCi18n({ id: 'Setting.Confirm' })} cancelText={(window as any).RCi18n({ id: 'Setting.Cancel' })}>
                 <Tooltip placement="top" title="Delete">
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
@@ -157,14 +157,14 @@ class DitionaryList extends Component<any, any> {
                     value
                   });
                 }}
-                placeholder={this.props.intl.formatMessage({ id: 'Setting.Pleaseinputnameordiscription' })}
+                placeholder={(window as any).RCi18n({ id: 'Setting.Pleaseinputnameordiscription' })}
                 style={{ width: 300 }}
               />
             </FormItem>
             <FormItem>
               <SelectGroup
                 defaultValue="All"
-                label={this.props.intl.formatMessage({ id: 'Setting.Type' })}
+                label={(window as any).RCi18n({ id: 'Setting.Type' })}
                 showSearch
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -175,7 +175,7 @@ class DitionaryList extends Component<any, any> {
                 }}
                 style={{ width: 300 }}
               >
-                <Option value="">{this.props.intl.formatMessage({ id: 'Setting.All' })}</Option>
+                <Option value="">{(window as any).RCi18n({ id: 'Setting.All' })}</Option>
                 {dictionaryTypes.map((item) => (
                   <Option value={item} key={item}>
                     {item}

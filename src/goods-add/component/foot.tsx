@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { Button, Modal } from 'antd';
-import { noop, history, AuthWrapper } from 'qmkit';
+import { noop, history, AuthWrapper, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 const confirm = Modal.confirm;
 @Relax
@@ -165,10 +165,10 @@ class Foot extends React.Component<any, any> {
   };
   _leavePage = () => {
     // this.props.onLeave();
-    const title = this.props.intl.formatMessage({id:'Product.Prompt'});
-    const content = this.props.intl.formatMessage({id:'Product.returnToTheListPage'});
-    const okText = this.props.intl.formatMessage({id:'Product.OK'});
-    const cancelText = this.props.intl.formatMessage({id:'Product.Cancel'});
+    const title = (window as any).RCi18n({id:'Product.Prompt'});
+    const content = (window as any).RCi18n({id:'Product.returnToTheListPage'});
+    const okText = (window as any).RCi18n({id:'Product.OK'});
+    const cancelText = (window as any).RCi18n({id:'Product.Cancel'});
     confirm({
       title: title,
       content: content,

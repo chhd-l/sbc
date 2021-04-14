@@ -108,7 +108,7 @@ class GiftLevels extends React.Component<any, any> {
                         {getFieldDecorator(`level_rule_value_${index}`, {
                           rules: [
                             { required: true, message:
-                                this.props.intl.formatMessage({
+                                (window as any).RCi18n({
                                   id: 'Marketing.Mustenterrules'
                                 })
                             },
@@ -118,7 +118,7 @@ class GiftLevels extends React.Component<any, any> {
                                   if (!isFullCount) {
                                     if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
                                       callback(
-                                        this.props.intl.formatMessage({
+                                        (window as any).RCi18n({
                                           id: 'Marketing.0-99999999.99'
                                         })
                                       );
@@ -126,7 +126,7 @@ class GiftLevels extends React.Component<any, any> {
                                   } else {
                                     if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
                                       callback(
-                                        this.props.intl.formatMessage({
+                                        (window as any).RCi18n({
                                           id: 'Marketing.1-9999'
                                         })
                                       );
@@ -151,11 +151,11 @@ class GiftLevels extends React.Component<any, any> {
                             style={{ width: 180 }}
                             value={!isFullCount ? level.fullAmount : level.fullCount}
                             // placeholder={!isFullCount ?
-                            //   this.props.intl.formatMessage({
+                            //   (window as any).RCi18n({
                             //     id: 'Marketing.0-99999999.99',
                             //   })
                             //   :
-                            //   this.props.intl.formatMessage({
+                            //   (window as any).RCi18n({
                             //     id: 'Marketing.1-9999',
                             //   })
                             // }
@@ -277,13 +277,13 @@ class GiftLevels extends React.Component<any, any> {
                             initialValue: fullGiftLevelList[index]['fullGiftDetailList'][detailIndex] ? fullGiftLevelList[index]['fullGiftDetailList'][detailIndex]['productNum'] : 1,
                             rules: [
                               { required: true, message:
-                                  this.props.intl.formatMessage({
+                                  (window as any).RCi18n({
                                     id: 'Marketing.greaterthan0andlessthan999'
                                   })
                               },
                               {
                                 pattern: ValidConst.noZeroNumber,
-                                message: this.props.intl.formatMessage({
+                                message: (window as any).RCi18n({
                                   id: 'Marketing.greaterthan0andlessthan999'
                                 })
                               },
@@ -291,7 +291,7 @@ class GiftLevels extends React.Component<any, any> {
                                 validator: (_rule, value, callback) => {
                                   if (value && ValidConst.noZeroNumber.test(value) && (value > 999 || value < 1)) {
                                     callback(
-                                      this.props.intl.formatMessage({
+                                      (window as any).RCi18n({
                                         id: 'Marketing.greaterthan0andlessthan999'
                                       })
                                     );

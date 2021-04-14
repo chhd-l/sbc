@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, cache } from 'qmkit';
+import { noop, Const, AuthWrapper, cache, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
@@ -63,7 +63,7 @@ class RejectForm extends React.Component<any, any> {
             ]
           })(
             <div>
-              <Input.TextArea placeholder={this.props.intl.formatMessage({id:'Order.Comment'})} autosize={{ minRows: 4, maxRows: 4 }} />
+              <Input.TextArea placeholder={(window as any).RCi18n({id:'Order.Comment'})} autosize={{ minRows: 4, maxRows: 4 }} />
               <p>
                 <span
                   style={{
@@ -560,8 +560,8 @@ class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.review'});
-    const content = this.props.intl.formatMessage({id:'Order.confirmReview'});
+    const title = (window as any).RCi18n({id:'Order.review'});
+    const content = (window as any).RCi18n({id:'Order.confirmReview'});
     confirm({
       title: title,
       content: content,
@@ -590,7 +590,7 @@ class ListView extends React.Component<any, any> {
     const { onAudit } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
-    const content = this.props.intl.formatMessage({id:'Order.Doyouconfirmthat'});
+    const content = (window as any).RCi18n({id:'Order.Doyouconfirmthat'});
     confirmModal({
       content: content,
       onOk() {
@@ -609,8 +609,8 @@ class ListView extends React.Component<any, any> {
     const { onConfirm } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
-    const content = this.props.intl.formatMessage({id:'Order.confirmReceivedAllProducts'});
+    const title = (window as any).RCi18n({id:'Order.ConfirmReceipt'});
+    const content = (window as any).RCi18n({id:'Order.confirmReceivedAllProducts'});
     confirm({
       title: title,
       content: content,

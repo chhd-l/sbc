@@ -441,8 +441,8 @@ class SearchHead extends Component<any, any> {
   }
 
   _handleBatchExport() {
-    const paramTitle = this.props.intl.formatMessage({id:'Order.Exportfilteredorders'});
-    const idTitle = this.props.intl.formatMessage({id:'Order.Exportselectedorders'});
+    const paramTitle = (window as any).RCi18n({id:'Order.Exportfilteredorders'});
+    const idTitle = (window as any).RCi18n({id:'Order.Exportselectedorders'});
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,

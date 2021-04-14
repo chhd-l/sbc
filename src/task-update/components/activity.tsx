@@ -90,7 +90,7 @@ export default class Activity extends Component<any, any> {
               </Row>
               <Row>
                 <Col span={14}>
-                  <span>{item.type === 0 ? item.action : this.props.intl.formatMessage({ id: 'task.Feedback' })} </span>
+                  <span>{item.type === 0 ? item.action : (window as any).RCi18n({ id: 'task.Feedback' })} </span>
                 </Col>
                 <Col span={10}>
                   <span>{item.dateAdded}</span>
@@ -109,7 +109,7 @@ export default class Activity extends Component<any, any> {
                   onChange={(e) => {
                     this.setState({ feedback: (e.target as any).value });
                   }}
-                  placeholder={this.props.intl.formatMessage({ id: 'task.Feedback' })}
+                  placeholder={(window as any).RCi18n({ id: 'task.Feedback' })}
                   maxLength={255}
                   rows={3}
                   style={{ marginTop: '30px' }}

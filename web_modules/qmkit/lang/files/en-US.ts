@@ -1608,6 +1608,18 @@ export default {
   "Order.Off": 'Off',
   "Order.InputQuantity": 'Please input the delivery quantity',
   "Order.modifiedErr":"The customer has been deleted and cannot be modified!",
+  'Order.shippingFeesDiscount': 'Shipping fee discount',
+  'Order.purchaseType': 'Purchase type',
+  'Order.cardHolderName': 'Card Holder Name',
+  'Order.PSP': 'PSP',
+  'Order.cardLast4Digits': 'Card Last 4 Digits',
+  'Order.paymentDetails': 'Payment Details',
+  'Order.previewThisOrder': 'Please review this order manually',
+  'Order.confirmThisOrder': 'Do you confirm if this order can be validated?',
+  'Order.auditBasis': 'Audit basis: product type, product amount, product quantity, whether the product is in stock',
+  'Order.selectType': 'Selection Type',
+  'Order.auditPassed': 'Audit passed',
+  'Order.auditFailed': 'Audit failed',
 
 
 
@@ -2757,6 +2769,7 @@ export default {
   'Marketing.fullgifttype': 'full gift type',
   'Marketing.Addgift': 'Add gift',
   'Marketing.greaterthan0andlessthan999': 'Value must only be integers greater than 0 and less than 999',
+  'Marketing.PomotionCodehasexited.': 'Pomotion Code has exited.',
 
 
 
@@ -2860,6 +2873,8 @@ export default {
   'Prescriber.EditPrescriber':'Edit Prescriber',
   'Prescriber.NewPrescriber':'New Prescriber',
   'Prescriber.BookingDetail':'Booking Detail',
+  'Prescriber.appointmentId':'Appointment ID：',
+  'Prescriber.appointmentIdNotExist':'The Appointment ID you are searching does not exist!',
   'Prescriber.BookDate':'Book date',
   'Prescriber.valid':'valid',
   'Prescriber.invalid':'invalid',

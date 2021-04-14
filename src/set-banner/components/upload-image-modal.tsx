@@ -176,10 +176,10 @@ class UploadImageModal extends Component<any, any> {
     const { getList, getStoreId, uploadBanner } = this.props.relaxProps;
     const ref = this;
     const res = await uploadBanner(params);
-    const title = this.props.intl.formatMessage({id:'Setting.Tip'});
-    const content = this.props.intl.formatMessage({id:'Setting.AddBanner'});
-    const ok = this.props.intl.formatMessage({id:'Setting.OK'});
-    const cancel = this.props.intl.formatMessage({id:'Setting.Cancel'});
+    const title = (window as any).RCi18n({id:'Setting.Tip'});
+    const content = (window as any).RCi18n({id:'Setting.AddBanner'});
+    const ok = (window as any).RCi18n({id:'Setting.OK'});
+    const cancel = (window as any).RCi18n({id:'Setting.Cancel'});
     if (res != -1) {
       confirm({
         title: title,

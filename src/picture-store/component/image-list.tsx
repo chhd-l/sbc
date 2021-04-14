@@ -105,9 +105,9 @@ class ImageList extends React.Component<any, any> {
    */
   _delete = () => {
     const { imageList, doDelete } = this.props.relaxProps;
-    const err = this.props.intl.formatMessage({id:'Setting.deleteFirst'});
-    const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
-    const content = this.props.intl.formatMessage({id:'Setting.deleteTheSelectedPicture'});
+    const err = (window as any).RCi18n({id:'Setting.deleteFirst'});
+    const title = (window as any).RCi18n({id:'Setting.Prompt'});
+    const content = (window as any).RCi18n({id:'Setting.deleteTheSelectedPicture'});
     if (imageList.filter((item) => item.get('checked') == true).size < 1) {
       message.error(err);
       return;
@@ -127,7 +127,7 @@ class ImageList extends React.Component<any, any> {
    */
   _showModal = () => {
     const { imageList, showMoveImageModal } = this.props.relaxProps;
-    const err = this.props.intl.formatMessage({id:'Setting.moveFirst'});
+    const err = (window as any).RCi18n({id:'Setting.moveFirst'});
     if (imageList.filter((item) => item.get('checked') == true).size < 1) {
       message.error(err);
       return;
@@ -144,19 +144,19 @@ class ImageList extends React.Component<any, any> {
     //修改了图片名称才真正的请求接口进行修改
     if (e.target.value != oldVal) {
       if (!e.target.value.trim()) {
-        const err = this.props.intl.formatMessage({id:'Setting.PleaseInputAFileName'});
+        const err = (window as any).RCi18n({id:'Setting.PleaseInputAFileName'});
         message.error(err);
         return false;
       }
 
       if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(e.target.value)) {
-        const err = this.props.intl.formatMessage({id:'Setting.theCorrectFormat'});
+        const err = (window as any).RCi18n({id:'Setting.theCorrectFormat'});
         message.error(err);
         return false;
       }
 
       if (e.target.value.length > 40) {
-        const err = this.props.intl.formatMessage({id:'Setting.FileNameIsTooLong'});
+        const err = (window as any).RCi18n({id:'Setting.FileNameIsTooLong'});
         message.error(err);
         return false;
       }

@@ -123,7 +123,7 @@ class DeliverForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: this.props.intl.formatMessage({id:'Order.selectLogisticsCompany'})
+                message: (window as any).RCi18n({id:'Order.selectLogisticsCompany'})
               }
             ]
           })(
@@ -146,7 +146,7 @@ class DeliverForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: this.props.intl.formatMessage({id:'Order.inputLogisticsOrder'})
+                message: (window as any).RCi18n({id:'Order.inputLogisticsOrder'})
               }
             ]
           })(<Input />)}
@@ -156,7 +156,7 @@ class DeliverForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: this.props.intl.formatMessage({id:'Order.fillreturndate'})
+                message: (window as any).RCi18n({id:'Order.fillreturndate'})
               }
             ]
           })(<DatePicker disabledDate={this.disabledDate} />)}

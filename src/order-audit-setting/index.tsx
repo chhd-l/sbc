@@ -407,7 +407,7 @@ class OrderSetting extends Component<any, any> {
                 });
               }}
             >
-              Close
+              <FormattedMessage id="Order.Close" />
             </Button>
           ]}
           onOk={() => {
@@ -441,7 +441,7 @@ class OrderSetting extends Component<any, any> {
                 });
               }}
             >
-              Close
+              <FormattedMessage id="Order.Close" />
             </Button>
           ]}
           onOk={() => {

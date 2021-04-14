@@ -59,7 +59,7 @@ export default class Info extends React.Component<any, any> {
       images: IList;
       video: IMap;
       maxCount: number;
-
+      goodsList: any;
       editImages: Function;
       showGoodsPropDetail: Function;
       changeStoreCategory: Function;
@@ -106,7 +106,7 @@ export default class Info extends React.Component<any, any> {
     // 视频
     video: 'video',
     maxCount: 'maxCount',
-
+    goodsList: 'goodsList',
     // 修改图片
     editImages: noop,
     showGoodsPropDetail: noop,
@@ -848,7 +848,7 @@ class GoodsForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
+    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm, goodsList } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
     console.error(key, e);
 
@@ -902,6 +902,17 @@ class GoodsForm extends React.Component<any, any> {
         editGoodsItem(goods);
         setFieldsValue({ subscriptionStatus: 1 });
       }
+    }
+
+    if (key === 'promotions') {
+      let goods = Map({
+        promotions: fromJS(e)
+      });
+      setFieldsValue({ promotions: e });
+      editGoods(goods);
+      goodsList.toJS()&&goodsList.toJS().map(item=>{
+        editGoodsItem(item.id,'promotions',e);
+      })
     }
 
     if (e && e.target) {

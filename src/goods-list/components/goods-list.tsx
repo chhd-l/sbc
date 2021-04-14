@@ -146,7 +146,8 @@ class CateList extends React.Component<any, any> {
               <div>
                 <p style={styles.lineThrough}>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                  {marketPrice == null ? 0.0 : marketPrice.toFixed(2)}
+                  {/*.toFixed(2)*/}
+                  {marketPrice == null ? 0.0 : marketPrice}
                 </p>
               </div>
             );

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Spin } from 'antd';
 //import { fromJS } from 'immutable';
 
-import { AuthWrapper, cache, history, noop } from 'qmkit';
+import { AuthWrapper, cache, RCi18n, history, noop } from 'qmkit';
 /*import { IList } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';*/
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';

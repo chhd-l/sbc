@@ -10,6 +10,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n } from 'qmkit'
 
 class Line extends React.Component {
   constructor(props) {

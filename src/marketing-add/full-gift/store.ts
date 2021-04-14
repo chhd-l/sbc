@@ -69,12 +69,19 @@ export default class AppStore extends Store {
    */
   submitFullGift = async (giftBean) => {
     let response;
+    this.dispatch('loading:start');
     if (giftBean.marketingId) {
       response = await webapi.updateFullGift(giftBean);
     } else {
       response = await webapi.addFullGift(giftBean);
     }
-    return response;
+    this.dispatch('loading:end');
+    if(response.res && response.res.code === Const.SUCCESS_CODE) {
+      message.success('Operate successfully');
+      history.push('/marketing-list');
+    } else if(response.res && response.res.code === 'K-000009') {
+      message.error('Pomotion Code has exited.')
+    }
   };
 
   /**

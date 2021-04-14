@@ -242,7 +242,7 @@ class DiscountLevels extends React.Component<any, any> {
                                 })
                               }
                               onChange={(e) => {
-                                this.onChange(index, 'limitAmount', parseInt(e.target.value));
+                                this.onChange(index, 'limitAmount', e.target.value);//parseInt
                               }}
                               value={level.limitAmount}
                             />

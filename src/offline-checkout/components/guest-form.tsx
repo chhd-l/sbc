@@ -27,13 +27,13 @@ class GuestForm extends React.Component<any, any> {
           <Form.Item label={<FormattedMessage id="Order.offline.consumerName" />}>
             {getFieldDecorator('customerName', {
               initialValue: '',
-              rules: [{ required: true, message: RCi18n({id:'Order.offline.consumerNameRequired'}) }]
+              rules: [{ required: true, message: (window as any).RCi18n({id:'Order.offline.consumerNameRequired'}) }]
             })(<Input />)}
           </Form.Item>
           <Form.Item label={<FormattedMessage id="Order.offline.consumerEmail" />}>
             {getFieldDecorator('email', {
               initialValue: '',
-              rules: [{ type: 'email', required: true, message: RCi18n({id:'Order.offline.consumerEmailRequired'}) }]
+              rules: [{ type: 'email', required: true, message: (window as any).RCi18n({id:'Order.offline.consumerEmailRequired'}) }]
             })(<Input />)}
           </Form.Item>
           <Form.Item label={<FormattedMessage id="Order.offline.consumerPhone" />}>

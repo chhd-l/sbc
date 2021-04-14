@@ -61,7 +61,7 @@ class Line extends React.Component {
               color: '#999',
               fontsize: '11'
             },
-            formatter: RCi18n({id:'Home.Week'})+'-{value}'
+            formatter: (window as any).RCi18n({id:'Home.Week'})+'-{value}'
           },
           data: data.x
         }

@@ -44,9 +44,9 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   }
   //改变数量
   inputNumberChange = (value, row, index) => {
+    if(!value)return;
     const { productselect, onProductselect } = this.props.relaxProps;
     let _clone = JSON.parse(JSON.stringify(productselect))
-
     let goodsInfoWeight:any=0,goodsInfoUnit=( row?.goodsInfoUnit??'').toLowerCase();
     if(goodsInfoUnit==='g'){
        goodsInfoWeight= value * (row.goodsInfoWeight/row.quantity)

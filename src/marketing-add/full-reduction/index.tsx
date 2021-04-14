@@ -62,15 +62,15 @@ class MarketingFullReductionAdd extends React.Component<any, any> {
           </Breadcrumb> */}
 
           <div className="container-search marketing-container" style={{ paddingBottom: 20 }}>
-            <Headline title={marketingId ? RCi18n({
+            <Headline title={marketingId ? (window as any).RCi18n({
               id: 'Marketing.Editreductionactivity'
             }):
-              RCi18n({
+              (window as any).RCi18n({
               id: 'Marketing.Createreductionactivity'
             })
             } />
             <Alert message={
-              RCi18n({
+              (window as any).RCi18n({
                 id: 'Marketing.reductionTip'
               })
             } type="info" showIcon />

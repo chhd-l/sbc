@@ -98,24 +98,24 @@ class SearchHead extends Component<any, any> {
       hasMenu = true;
     }
     const refillNumberList = [
-      { value: 'First', name: RCi18n({id:'Order.first'}) },
-      { value: 'Recurrent', name: RCi18n({id:'Order.recurrent'}) }
+      { value: 'First', name: (window as any).RCi18n({id:'Order.first'}) },
+      { value: 'Recurrent', name: (window as any).RCi18n({id:'Order.recurrent'}) }
     ];
 
     const orderTypeList = [
-      { value: 'SINGLE_PURCHASE', name: RCi18n({id:'Order.Singlepurchase'}) },
-      { value: 'SUBSCRIPTION', name: RCi18n({id:'Order.subscription'}) }
+      { value: 'SINGLE_PURCHASE', name: (window as any).RCi18n({id:'Order.Singlepurchase'}) },
+      { value: 'SUBSCRIPTION', name: (window as any).RCi18n({id:'Order.subscription'}) }
     ];
 
     const subscriptionTypeList = [
-      { value: 'ContractProduct', name: RCi18n({id:'Order.contractProduct'}) },
-      { value: 'Club', name: RCi18n({id:'Order.club'}) },
-      { value: 'Autoship', name: RCi18n({id:'Order.autoship'}) }
+      { value: 'ContractProduct', name: (window as any).RCi18n({id:'Order.contractProduct'}) },
+      { value: 'Club', name: (window as any).RCi18n({id:'Order.club'}) },
+      { value: 'Autoship', name: (window as any).RCi18n({id:'Order.autoship'}) }
     ];
 
     const orderSourceList = [
-      { value: 'FGS', name: RCi18n({id:'Order.fgs'}) },
-      { value: 'L_ATELIER_FELINE', name: RCi18n({id:'Order.felin'}) }
+      { value: 'FGS', name: (window as any).RCi18n({id:'Order.fgs'}) },
+      { value: 'L_ATELIER_FELINE', name: (window as any).RCi18n({id:'Order.felin'}) }
     ];
 
     const menu = (
@@ -164,7 +164,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                  <Input style={styles.leftLabel} title={RCi18n({id:'Order.subscriptionOrderTime'})} disabled defaultValue={RCi18n({id:'Order.subscriptionOrderTime'})} />
+                  <Input style={styles.leftLabel} title={(window as any).RCi18n({id:'Order.subscriptionOrderTime'})} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionOrderTime'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -205,7 +205,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={RCi18n({id:'Order.orderType'})} />
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.orderType'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -238,7 +238,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={RCi18n({id:'Order.orderSource'})} />
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.orderSource'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -325,7 +325,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={RCi18n({id:'Order.subscriptionType'})} />
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionType'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -390,7 +390,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} title={RCi18n({id:'Order.subscriptionPlanType'})} disabled defaultValue={RCi18n({id:'Order.subscriptionPlanType'})} />
+                    <Input style={styles.leftLabel} title={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -496,10 +496,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title={RCi18n({id:'Order.consumerName'})} value="buyerName">
+        <Option title={(window as any).RCi18n({id:'Order.consumerName'})} value="buyerName">
           <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option title={RCi18n({id:'Order.consumerAccount'})} value="buyerAccount">
+        <Option title={(window as any).RCi18n({id:'Order.consumerAccount'})} value="buyerAccount">
           <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
@@ -518,10 +518,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option title={RCi18n({id:'Order.productName'})} value="skuName">
+        <Option title={(window as any).RCi18n({id:'Order.productName'})} value="skuName">
           <FormattedMessage id="Order.productName" />
         </Option>
-        <Option title={RCi18n({id:'Order.skuCode'})} value="skuNo">
+        <Option title={(window as any).RCi18n({id:'Order.skuCode'})} value="skuNo">
           <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
@@ -540,10 +540,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option title={RCi18n({id:'Order.recipient'})} value="consigneeName">
+        <Option title={(window as any).RCi18n({id:'Order.recipient'})} value="consigneeName">
           <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option title={RCi18n({id:'Order.recipientPhone'})} value="consigneePhone">
+        <Option title={(window as any).RCi18n({id:'Order.recipientPhone'})} value="consigneePhone">
           <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
@@ -562,10 +562,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.recommenderSelect}
         style={styles.label}
       >
-        <Option title={RCi18n({id:'Order.recommenderId'})} value="recommenderId">
+        <Option title={(window as any).RCi18n({id:'Order.recommenderId'})} value="recommenderId">
           <FormattedMessage id="Order.recommenderId" />
         </Option>
-        <Option title={RCi18n({id:'Order.recommenderName'})} value="recommenderName">
+        <Option title={(window as any).RCi18n({id:'Order.recommenderName'})} value="recommenderName">
           <FormattedMessage id="Order.recommenderName" />
         </Option>
       </Select>
@@ -585,10 +585,10 @@ class SearchHead extends Component<any, any> {
         style={styles.label}
         disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
-        <Option title={RCi18n({id:'Order.clinicName'})} value="clinicsName">
+        <Option title={(window as any).RCi18n({id:'Order.clinicName'})} value="clinicsName">
           <FormattedMessage id="Order.clinicName" />
         </Option>
-        <Option title={RCi18n({id:'Order.clinicID'})} value="clinicsIds">
+        <Option title={(window as any).RCi18n({id:'Order.clinicID'})} value="clinicsIds">
           <FormattedMessage id="Order.clinicID" />
         </Option>
       </Select>
@@ -606,10 +606,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title={RCi18n({id:'Order.OrderNumber'})} value="orderNumber">
+        <Option title={(window as any).RCi18n({id:'Order.OrderNumber'})} value="orderNumber">
           <FormattedMessage id="Order.OrderNumber" />
         </Option>
-        <Option title={RCi18n({id:'Order.subscriptionNumber'})} value="subscriptionNumber">
+        <Option title={(window as any).RCi18n({id:'Order.subscriptionNumber'})} value="subscriptionNumber">
           <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
@@ -628,10 +628,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.statusSelect}
         style={styles.label}
       >
-        <Option title={RCi18n({id:'Order.paymentStatus'})} value="paymentStatus">
+        <Option title={(window as any).RCi18n({id:'Order.paymentStatus'})} value="paymentStatus">
           <FormattedMessage id="Order.paymentStatus" />
         </Option>
-        <Option title={RCi18n({id:'Order.shippingStatus'})} value="shippingStatus">
+        <Option title={(window as any).RCi18n({id:'Order.shippingStatus'})} value="shippingStatus">
           <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
@@ -648,15 +648,15 @@ class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-    const mess = RCi18n({id:'Order.pleaseSelectOrderToOperate'});
+    const mess = (window as any).RCi18n({id:'Order.pleaseSelectOrderToOperate'});
     if (checkedIds.length == 0) {
       message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
-    const title = RCi18n({id:'Order.audit'});
-    const content = RCi18n({id:'Order.confirmAudit'});
+    const title = (window as any).RCi18n({id:'Order.audit'});
+    const content = (window as any).RCi18n({id:'Order.confirmAudit'});
     confirm({
       title: title,
       content: content,
@@ -671,11 +671,11 @@ class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: RCi18n({
+      byParamsTitle: (window as any).RCi18n({
         id: 'Order.Exportfilteredorders'
       }),
       byIdsTitle:
-        RCi18n({
+        (window as any).RCi18n({
           id: 'Order.Exportselectedorders'
         }),
       exportByParams: onExportByParams,
@@ -685,8 +685,8 @@ class SearchHead extends Component<any, any> {
 
   _renderCodeSelect = () => {
     const codeTypeList = [
-      { value: 'promotionCode', name: RCi18n({id:'Order.promotionCode'}) },
-      { value: 'couponCode', name: RCi18n({id:'Order.couponCode'}) }
+      { value: 'promotionCode', name: (window as any).RCi18n({id:'Order.promotionCode'}) },
+      { value: 'couponCode', name: (window as any).RCi18n({id:'Order.couponCode'}) }
     ];
     return (
       <Select
@@ -710,9 +710,9 @@ class SearchHead extends Component<any, any> {
   };
   getPlanType = (rel) => {
     const subscriptionPlanTypeList = [
-      { value: 'Cat ', name: RCi18n({id:'Order.cat'}), rel: 'Club' },
-      { value: 'Dog', name: RCi18n({id:'Order.dog'}), rel: 'Club' },
-      { value: 'SmartFeeder', name: RCi18n({id:'Order.smartFeeder'}), rel: 'ContractProduct' }
+      { value: 'Cat ', name: (window as any).RCi18n({id:'Order.cat'}), rel: 'Club' },
+      { value: 'Dog', name: (window as any).RCi18n({id:'Order.dog'}), rel: 'Club' },
+      { value: 'SmartFeeder', name: (window as any).RCi18n({id:'Order.smartFeeder'}), rel: 'ContractProduct' }
     ];
     if (rel) {
       let planTypeList = subscriptionPlanTypeList.filter((item) => item.rel === rel);

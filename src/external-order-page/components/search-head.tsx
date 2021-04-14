@@ -523,8 +523,8 @@ class SearchHead extends Component<any, any> {
     }
 
     const confirm = Modal.confirm;
-    const title = RCi18n({id:'order.audit'});
-    const content = RCi18n({id:'order.confirmAudit'});
+    const title = (window as any).RCi18n({id:'order.audit'});
+    const content = (window as any).RCi18n({id:'order.confirmAudit'});
     confirm({
       title: title,
       content: content,

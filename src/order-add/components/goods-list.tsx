@@ -201,7 +201,7 @@ class GoodsList extends React.Component<any, any> {
             type="primary"
             onClick={() => {
               if (!selectedCustomerId) {
-                message.error(RCi18n({ id: 'Order.Pleaseselectmember' }));
+                message.error((window as any).RCi18n({ id: 'Order.Pleaseselectmember' }));
                 return;
               }
 
@@ -220,7 +220,7 @@ class GoodsList extends React.Component<any, any> {
             rules: [
               {
                 required: selectedCustomerId ? true : false,
-                message: RCi18n({ id: 'Order.Mustselectaproduct' })
+                message: (window as any).RCi18n({ id: 'Order.Mustselectaproduct' })
               }
             ]
           })(<input type="hidden" />)}
@@ -313,11 +313,11 @@ class GoodsList extends React.Component<any, any> {
                     rules: [
                       {
                         required: true,
-                        message: RCi18n({ id: 'Order.Purchasequantity' })
+                        message: (window as any).RCi18n({ id: 'Order.Purchasequantity' })
                       },
                       {
                         pattern: ValidConst.noZeroNumber,
-                        message: RCi18n({ id: 'Order.Purchasevolume' })
+                        message: (window as any).RCi18n({ id: 'Order.Purchasevolume' })
                       },
                       {
                         validator: (_rule, value, callback) => {
@@ -335,9 +335,9 @@ class GoodsList extends React.Component<any, any> {
                           }
                           if (stock < value) {
                             if (this.props.edit) {
-                              callback(RCi18n({ id: 'Order.Thepurchasevolume' }));
+                              callback((window as any).RCi18n({ id: 'Order.Thepurchasevolume' }));
                             } else {
-                              callback(RCi18n({ id: 'Order.Purchasevolumecannot' }));
+                              callback((window as any).RCi18n({ id: 'Order.Purchasevolumecannot' }));
                             }
                             return;
                           }
@@ -345,11 +345,11 @@ class GoodsList extends React.Component<any, any> {
                             const maxCount = record.maxCount;
                             const count = record.count;
                             if (maxCount && maxCount < value) {
-                              callback(RCi18n({ id: 'Order.Thepurchasevolumecannot' }));
+                              callback((window as any).RCi18n({ id: 'Order.Thepurchasevolumecannot' }));
                               return;
                             }
                             if (count && count > value) {
-                              callback(RCi18n({ id: 'Order.Thepurchasevolumecannotbeless' }));
+                              callback((window as any).RCi18n({ id: 'Order.Thepurchasevolumecannotbeless' }));
                               return;
                             }
                           }
@@ -369,7 +369,7 @@ class GoodsList extends React.Component<any, any> {
                     {this.props.edit && (record.initBuyCount || (buySku && buySku.get('buyCount')))
                       ? null
                       : `${(<FormattedMessage id="Order.stock" />)}: ${record.stock} ${
-                          record.priceType === 0 ? (record.count ? RCi18n({ id: 'Order.Minimumorderquantity' }) + ': ' + record.count : '') + (record.maxCount ? 'Maximum amount: ' + record.maxCount : '') : ''
+                          record.priceType === 0 ? (record.count ? (window as any).RCi18n({ id: 'Order.Minimumorderquantity' }) + ': ' + record.count : '') + (record.maxCount ? 'Maximum amount: ' + record.maxCount : '') : ''
                         }`}
                   </p>
                 </FormItem>
@@ -442,7 +442,7 @@ class GoodsList extends React.Component<any, any> {
                     disabled={selectedCustomerId ? false : true}
                     onChange={(e: any) => {
                       if (!selectedCustomerId) {
-                        message.error(RCi18n({ id: 'Order.Pleaseselectmember' }));
+                        message.error((window as any).RCi18n({ id: 'Order.Pleaseselectmember' }));
                         return;
                       }
                       //开启或者取消特价
@@ -459,11 +459,11 @@ class GoodsList extends React.Component<any, any> {
                   rules: [
                     {
                       required: goodsList.get('isEnableSpecVal'),
-                      message: RCi18n({ id: 'Order.Pleaseentertheamount' })
+                      message: (window as any).RCi18n({ id: 'Order.Pleaseentertheamount' })
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: RCi18n({ id: 'Order.Pleaseenterthecorrectamount' })
+                      message: (window as any).RCi18n({ id: 'Order.Pleaseenterthecorrectamount' })
                     }
                   ]
                 })(
@@ -496,7 +496,7 @@ class GoodsList extends React.Component<any, any> {
                     disabled={selectedCustomerId ? false : true}
                     onChange={(e) => {
                       if (!selectedCustomerId) {
-                        message.error(RCi18n({ id: 'Order.Pleaseselectmember' }));
+                        message.error((window as any).RCi18n({ id: 'Order.Pleaseselectmember' }));
                         return;
                       }
                       const checked = (e.target as any).checked;
@@ -513,11 +513,11 @@ class GoodsList extends React.Component<any, any> {
                   rules: [
                     {
                       required: goodsList.get('isEnableDeliverFee'),
-                      message: RCi18n({ id: 'Order.Pleaseentertheamount' })
+                      message: (window as any).RCi18n({ id: 'Order.Pleaseentertheamount' })
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: RCi18n({ id: 'Order.Pleaseenterthecorrectamount' })
+                      message: (window as any).RCi18n({ id: 'Order.Pleaseenterthecorrectamount' })
                     }
                   ]
                 })(
@@ -589,7 +589,7 @@ class GoodsList extends React.Component<any, any> {
         {this.state.addAddressVisible && (
           <Modal
             maskClosable={false}
-            title={RCi18n({ id: 'Order.Selectproduct' })}
+            title={(window as any).RCi18n({ id: 'Order.Selectproduct' })}
             width={1100}
             visible={this.state.addAddressVisible}
             onOk={async () => {
@@ -599,7 +599,7 @@ class GoodsList extends React.Component<any, any> {
               const newKeys = selectedKeys.map((key) => key.substring(4)).filter((key) => oldSkuIds.findIndex((o) => o == key) < 0);
               const wholeKeys = newSkuIds.toSet().concat(newKeys.toSet()).toList();
               if (wholeKeys.count() > 50) {
-                message.error(RCi18n({ id: 'Order.Nomorethan50' }));
+                message.error((window as any).RCi18n({ id: 'Order.Nomorethan50' }));
                 return;
               }
               saveNewSkuIds(wholeKeys);

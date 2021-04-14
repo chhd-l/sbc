@@ -146,7 +146,8 @@ class CateList extends React.Component<any, any> {
               <div>
                 <p style={styles.lineThrough}>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                  {marketPrice == null ? 0.0 : marketPrice.toFixed(2)}
+                  {/*.toFixed(2)*/}
+                  {marketPrice == null ? 0.0 : marketPrice}
                 </p>
               </div>
             );
@@ -465,8 +466,8 @@ class CateList extends React.Component<any, any> {
    */
   _delete = (goodsId: string) => {
     const { spuDelete } = this.props.relaxProps;
-    const title = RCi18n({id:'Product.Prompt'});
-    const content = RCi18n({id:'Product.deleteThisProduct'});
+    const title = (window as any).RCi18n({id:'Product.Prompt'});
+    const content = (window as any).RCi18n({id:'Product.deleteThisProduct'});
     confirm({
       title: title,
       content: content,

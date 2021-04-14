@@ -126,7 +126,7 @@ const FormItem = Form.Item;
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(RCi18n({id:'Subscription.OperationSuccessful'}));
+          message.success((window as any).RCi18n({id:'Subscription.OperationSuccessful'}));
           this.setState({
             loading:false
           })

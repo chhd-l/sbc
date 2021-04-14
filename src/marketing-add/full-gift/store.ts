@@ -77,12 +77,12 @@ export default class AppStore extends Store {
     }
     this.dispatch('loading:end');
     if(response.res && response.res.code === Const.SUCCESS_CODE) {
-      message.error(RCi18n({
+      message.error((window as any).RCi18n({
         id: 'Marketing.OperateSuccessfully'
       }))
       history.push('/marketing-list');
     } else if(response.res && response.res.code === 'K-000009') {
-      message.error(RCi18n({
+      message.error((window as any).RCi18n({
         id: 'Marketing.PomotionCodehasexited'
       }))
     }

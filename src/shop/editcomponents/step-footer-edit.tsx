@@ -80,7 +80,7 @@ class StepFour extends React.Component<any, any> {
                   rules: [
                     {
                       required: false,
-                      message: RCi18n({ id: 'Setting.PleaseinputContactUsUrl' })
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputContactUsUrl' })
                     }
                   ]
                 })(
@@ -188,7 +188,7 @@ class StepFour extends React.Component<any, any> {
                   rules: [
                     {
                       required: false,
-                      message: RCi18n({ id: 'Setting.PleaseinputStoreContactEmail' }) + '!'
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputStoreContactEmail' }) + '!'
                     }
                   ]
                 })(
@@ -210,7 +210,7 @@ class StepFour extends React.Component<any, any> {
                   rules: [
                     {
                       required: false,
-                      message: RCi18n({ id: 'Setting.PleaseinputStoreContactPhoneNumber' }) + '!'
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputStoreContactPhoneNumber' }) + '!'
                     }
                   ]
                 })(
@@ -232,7 +232,7 @@ class StepFour extends React.Component<any, any> {
                   rules: [
                     {
                       required: false,
-                      message: RCi18n({ id: 'Setting.PleaseinputContactTimePeriodEamil' }) + '!'
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputContactTimePeriodEamil' }) + '!'
                     }
                   ]
                 })(
@@ -254,7 +254,7 @@ class StepFour extends React.Component<any, any> {
                   rules: [
                     {
                       required: false,
-                      message: RCi18n({ id: 'Setting.PleaseinputConfirmationEmail' }) + '!'
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputConfirmationEmail' }) + '!'
                     }
                   ]
                 })(
@@ -299,7 +299,7 @@ class StepFour extends React.Component<any, any> {
       ...contentForm
     });
     if (res.code === Const.SUCCESS_CODE) {
-      message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
+      message.success((window as any).RCi18n({ id: 'Setting.Operatesuccessfully' }));
     }
   };
 }

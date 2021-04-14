@@ -641,17 +641,24 @@ class SkuForm extends React.Component<any, any> {
     }
 
     if (key == "goodsInfoBundleRels") {
+      let minStock = []
+      for (let i = 0; i<e.length; i++) {
+        minStock.push(e[i].stock / e[i].bundleNum)
+      }
+
+      let tempMinStock = Math.min.apply(Math, minStock)
+      tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
+
       if (goodsList.toJS().length == 1 && addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
         let id = goodsList.toJS()[0].id
 
         let marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
         let subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
-        let stock = Number(String(addSkUProduct[0].minStock / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
         editGoodsItem(id, key, e);
         editGoodsItem(id, 'marketPrice', marketPrice);
         editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
-        editGoodsItem(id, 'stock', stock);
       }
+      editGoodsItem(id, 'stock', tempMinStock);
     }else {
       editGoodsItem(id, key, e);
     }
@@ -727,36 +734,45 @@ class SkuForm extends React.Component<any, any> {
   };
 
   onDel = (item, pid, id) => {
-    const { addSkUProduct, onProductselectSku, goodsList } = this.props.relaxProps;
+    const { addSkUProduct, onProductselectSku, goodsList, editGoodsItem } = this.props.relaxProps;
     let a = [];
     let b = [];
     let c = [];
+    let minStock = []
+    let tempMinStock = 0
     addSkUProduct.map((i) => {
       if (i.pid == pid) {
         i.targetGoodsIds.map((o) => {
           if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
             a.push(o);
+            minStock.push(o.stock / o.bundleNum)
           }
         });
+        console.log(tempMinStock,1111122);
+        tempMinStock = Math.min.apply(Math, minStock)
+        tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
         b.push({
           pid: pid,
-          targetGoodsIds: a
+          targetGoodsIds: a,
+          mStock: tempMinStock
         });
+
       } else {
         c.push(i);
       }
     });
+    editGoodsItem(id, 'stock', tempMinStock);
     let d = b.concat(c);
     this._editGoodsItem(id, 'goodsInfoBundleRels', a);
+    this._editGoodsItem(id, 'stock', tempMinStock);
     let e = d.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
-    if (goodsList.toJS().length == 1) {
 
-    }
     if (e.length == 1 && e[0].targetGoodsIds.length == 0) {
       e = []
     }else {
       e = d
     }
+    console.log(e,11111);
     onProductselectSku(e);
   };
 

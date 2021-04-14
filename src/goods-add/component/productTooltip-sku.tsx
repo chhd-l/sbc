@@ -148,7 +148,6 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //let stock = Number(String(goodsIds[0].stock?goodsIds[0].stock:0 / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
     goodsList.toJS().map(item=>{
       if (item.id == this.props.id) {
-        console.log(tempMinStock);
         editGoodsItem(this.props.id, 'stock', tempMinStock);
       }
     })

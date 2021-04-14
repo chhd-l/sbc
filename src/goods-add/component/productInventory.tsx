@@ -199,18 +199,29 @@ class SkuForm extends React.Component<any, any> {
 
         }else {
           addSkUProduct.map(item=>{
-            if (item.pid == rowInfo.goodsInfoNo) {
-              c = rowInfo.stock
-              d = true
-            }else {
+            console.log(item.targetGoodsIds.length,4444444);
+            if (item.targetGoodsIds.length > 0) {
+              console.log(5555555);
+
+              if (item.pid == rowInfo.goodsInfoNo) {
+                c = rowInfo.stock
+                d = true
+              }else {
+                c = 0
+                d = true
+              }
+            } else {
+              console.log(6666666);
+
               c = 0
               d = false
             }
 
+
           })
 
 
-          console.log(rowInfo,333333);
+          console.log(d,8888888);
 
         }
         /*a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || null;
@@ -259,7 +270,6 @@ class SkuForm extends React.Component<any, any> {
           }
 
         }*/
-
 
         return (
           <Row>

@@ -246,7 +246,7 @@ class CateList extends React.Component<any, any> {
     return (
       <div className="operation-box">
         <AuthWrapper functionName="f_goods_sku_edit_2">
-          <Tooltip placement="top" title="Edit">
+          <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
             {rowInfo.goodsType != 2 ? (
               <a
                 onClick={() =>
@@ -291,7 +291,7 @@ class CateList extends React.Component<any, any> {
         </AuthWrapper> */}
         {rowInfo.addedFlag == 0 ? (
           <AuthWrapper functionName="f_goods_up_down">
-            <Tooltip placement="top" title="On Shelves">
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Onshelves" />}>
               <a
                 href="#!"
                 onClick={() => {
@@ -306,8 +306,8 @@ class CateList extends React.Component<any, any> {
         ) : null}
         {rowInfo.addedFlag == 1 || rowInfo.addedFlag == 2 ? (
           <AuthWrapper functionName="f_goods_up_down">
-            <Popconfirm placement="topLeft" title="Are you sure you want off to shelves this product?" onConfirm={() => spuOffSale([rowInfo.goodsId])} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Off Shelves">
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.OffshelvesConfirmTip" />} onConfirm={() => spuOffSale([rowInfo.goodsId])} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+              <Tooltip placement="top" title={<FormattedMessage id="Product.Offshelves" />}>
                 <a>
                   <span className="icon iconfont iconOffShelves" style={{ fontSize: 20 }}></span>
                 </a>
@@ -316,8 +316,8 @@ class CateList extends React.Component<any, any> {
           </AuthWrapper>
         ) : null}
         <AuthWrapper functionName="f_goods_6">
-          <Popconfirm placement="topLeft" title="Are you sure you want to delete this product?" onConfirm={() => spuDelete([rowInfo.goodsId])} okText="Confirm" cancelText="Cancel">
-            <Tooltip placement="top" title="Delete">
+          <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.deleteThisProduct" />} onConfirm={() => spuDelete([rowInfo.goodsId])} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
               <a>
                 <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
               </a>

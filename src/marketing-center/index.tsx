@@ -4,6 +4,7 @@ import { Breadcrumb } from 'antd';
 import { BreadCrumb } from 'qmkit';
 
 import List from './components/list';
+import './index.less';
 
 export default class MarketingCenter extends React.Component<any, any> {
   render() {

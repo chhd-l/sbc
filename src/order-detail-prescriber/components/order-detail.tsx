@@ -47,11 +47,11 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.rejectionReasonTip" />
               },
               {
                 max: 100,
-                message: 'Please input less than 100 characters'
+                message: <FormattedMessage id="Order.100Characters"/>
               }
             ]
           })(
@@ -68,7 +68,7 @@ class RejectForm extends React.Component<any, any> {
                 >
                   *
                 </span>
-                Once rejected, we will return the payment for this order to the consumer
+                <FormattedMessage id="Order.OnceRejected"/>
               </p>
             </div>
           )}
@@ -235,38 +235,38 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const columns = [
       {
-        title: 'SKU Code',
+        title: <FormattedMessage id="Order.SKUCode"/>,
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text
       },
       {
-        title: 'Product Name',
+        title: <FormattedMessage id="Order.ProductName"/>,
         dataIndex: 'skuName',
         key: 'skuName',
         width: '20%'
       },
       {
-        title: 'Weight',
+        title: <FormattedMessage id="Order.Weight"/>,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
       {
-        title: 'Pet category',
+        title: <FormattedMessage id="Order.PetCategory"/>,
         dataIndex: 'petCategory',
         key: 'petCategory',
         width: '10%',
         render: (text, record) => <>{record.petsInfo && record.petsInfo.petsType ? <p>{record.petsInfo.petsType}</p> : null}</>
       },
       {
-        title: 'Pet name',
+        title: <FormattedMessage id="Order.PetName"/>,
         dataIndex: 'petName',
         key: 'petName',
         width: '10%',
         render: (text, record) => <>{record.petsInfo && record.petsInfo.petsName ? <p>{record.petsInfo.petsName}</p> : null}</>
       },
       {
-        title: 'Pet details',
+        title: <FormattedMessage id="Order.PetDetails"/>,
         dataIndex: 'petDetails',
         key: 'petDetails',
         width: '10%',
@@ -274,19 +274,19 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <>
             {record.petsInfo ? (
               <Button type="link" onClick={() => this._openPetDetails(record.petsInfo)}>
-                view
+                <FormattedMessage id="Order.view"/>
               </Button>
             ) : null}
           </>
         )
       },
       {
-        title: 'Quantity',
+        title: <FormattedMessage id="Order.Quantity"/>,
         dataIndex: 'num',
         key: 'num'
       },
       {
-        title: 'Price',
+        title: <FormattedMessage id="Order.Price"/>,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
         render: (originalPrice, record) =>
@@ -309,7 +309,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )
       },
       {
-        title: 'Subtotal',
+        title: <FormattedMessage id="Order.Subtotal"/>,
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -346,29 +346,29 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const columnsNoPet = [
       {
-        title: 'SKU Code',
+        title: <FormattedMessage id="Order.SKUCode"/>,
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text
       },
       {
-        title: 'Product Name',
+        title: <FormattedMessage id="Order.ProductName"/>,
         dataIndex: 'skuName',
         key: 'skuName',
         width: '20%'
       },
       {
-        title: 'Weight',
+        title: <FormattedMessage id="Order.Weight"/>,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
       {
-        title: 'Quantity',
+        title: <FormattedMessage id="Order.Quantity"/>,
         dataIndex: 'num',
         key: 'num'
       },
       {
-        title: 'Price',
+        title: <FormattedMessage id="Order.Price"/>,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
         render: (originalPrice, record) =>
@@ -391,7 +391,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )
       },
       {
-        title: 'Subtotal',
+        title: <FormattedMessage id="Order.Subtotal"/>,
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -443,32 +443,32 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="orderNumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
+                {<FormattedMessage id="Order.orderNumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
                 {/*<span style={styles.platform}>代下单</span>*/}
                 {/* <span style={styles.platform}>{orderType}</span> */}
                 {detail.get('grouponFlag') && <span style={styles.platform}>拼团</span>}
                 {/*)}*/}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="orderTime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
+                {<FormattedMessage id="Order.orderTime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
               {detail.get('isAutoSub') ? (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="order.subscriptionNumber" /> : {detail.get('subscribeId')}
+                  <FormattedMessage id="Order.subscriptionNumber" /> : {detail.get('subscribeId')}
                 </p>
               ) : (
                 ''
               )}
               <p style={styles.darkText}>
-                {<FormattedMessage id="clinicID" />}: {detail.get('clinicsId')}
+                {<FormattedMessage id="Order.clinicID" />}: {detail.get('clinicsId')}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="clinicName" />}: {detail.get('clinicsName')}
+                {<FormattedMessage id="Order.clinicName" />}: {detail.get('clinicsName')}
               </p>
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
+                {<FormattedMessage id="Order.consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
               {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Pet owner type:  ' + detail.getIn(['buyer', 'levelName'])}</p>}
               {/* <p style={styles.darkText}>
@@ -496,7 +496,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
             <div style={styles.priceBox}>
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="productAmount" />}:</span>
+                <span style={styles.name}>{<FormattedMessage id="Order.productAmount" />}:</span>
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.goodsPrice || 0).toFixed(2)}
@@ -517,7 +517,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
               {discount && (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
+                  <span style={styles.name}>{<FormattedMessage id="Order.promotionAmount" />}:</span>
                   <strong>$-{discount.discounts.toFixed(2)}</strong>
                 </label>
               )}
@@ -574,7 +574,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="shippingFees" />}: </span>
+                <span style={styles.name}>{<FormattedMessage id="Order.shippingFees" />}: </span>
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.deliveryPrice || 0).toFixed(2)}
@@ -583,7 +583,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
               {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{<FormattedMessage id="tax" />}: </span>
+                  <span style={styles.name}>{<FormattedMessage id="Order.tax" />}: </span>
                   <strong>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     {(tradePrice.taxFeePrice || 0).toFixed(2)}
@@ -592,7 +592,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="total" />}: </span>
+                <span style={styles.name}>{<FormattedMessage id="Order.total" />}: </span>
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.totalPrice || 0).toFixed(2)}
@@ -711,7 +711,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
          */}
-        <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
+        <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm
             ref={(form) => {
               this._rejectForm = form;
@@ -755,7 +755,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null}
             </Col>
             <Col span={12}>
-              <h3>special Needs</h3>
+              <h3><FormattedMessage id="Order.specialNeeds"/></h3>
               {currentPetInfo.customerPetsPropRelations && currentPetInfo.customerPetsPropRelations.map((item) => <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>)}
             </Col>
           </Row>
@@ -767,7 +767,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   //附件
   _renderEncloses(encloses) {
     if (encloses.size == 0 || encloses[0] === '') {
-      return <span>{<FormattedMessage id="none" />}</span>;
+      return <span>{<FormattedMessage id="Order.none" />}</span>;
     }
 
     return encloses.map((v, k) => {
@@ -795,7 +795,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {payState === 'NOT_PAID' && (
             <AuthWrapper functionName="edit_order_f_001">
-              <Tooltip placement="top" title="Modify">
+              <Tooltip placement="top" title={<FormattedMessage id="Order.Modify"/>}>
                 <a
                   onClick={() => {
                     verify(tid);
@@ -821,7 +821,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             <div>
               {payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
                 <AuthWrapper functionName="fOrderList002_prescriber">
-                  <Tooltip placement="top" title="Re-review">
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.ReReview"/>}>
                     <a
                       onClick={() => {
                         this._showRetrialConfirm(tid);
@@ -829,7 +829,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       href="javascript:void(0)"
                       style={styles.pr20}
                     >
-                      Re-review
+                      <FormattedMessage id="Order.ReReview"/>
                     </a>
                   </Tooltip>
                 </AuthWrapper>
@@ -852,7 +852,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {/*未审核需要处理的*/}
           {flowState === 'INIT' && payState === 'PAID' && auditState === 'NON_CHECKED' && this.isPrescriber() && (
             <AuthWrapper functionName="fOrderList002_prescriber">
-              <Tooltip placement="top" title="Audit">
+              <Tooltip placement="top" title={<FormattedMessage id="Order.Audit"/>}>
                 <a
                   // onClick={() => {
                   //   onAudit(tid, 'CHECKED');
@@ -872,7 +872,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {/*驳回*/}
           {flowState === 'INIT' && payState === 'PAID' && auditState === 'NON_CHECKED' && this.isPrescriber() && (
             <AuthWrapper functionName="fOrderList002_prescriber">
-              <Tooltip placement="top" title="Reject">
+              <Tooltip placement="top" title={<FormattedMessage id="Order.Reject"/>}>
                 <a onClick={() => showRejectModal()} href="javascript:void(0)" style={styles.pr20} className="iconfont iconbtn-cancelall">
                   {/*<FormattedMessage id="order.turnDown" />*/}
                 </a>
@@ -901,7 +901,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       return (
         <div>
           <AuthWrapper functionName="fOrderList003">
-            <Tooltip placement="top" title="Confirm Receipt">
+            <Tooltip placement="top" title={<FormattedMessage id="Order.ConfirmReceipt"/>}>
               <a
                 onClick={() => {
                   this._showConfirm(tid);
@@ -909,7 +909,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 href="javascript:void(0)"
                 style={styles.pr20}
               >
-                Confirm Receipt
+                <FormattedMessage id="Order.ConfirmReceipt"/>
               </a>
             </Tooltip>
           </AuthWrapper>
@@ -953,8 +953,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: 'Re-review',
-      content: 'Confirm to return the selected order for re approval ?',
+      title: <FormattedMessage id="Order.ReReview"/>,
+      content: <FormattedMessage id="Order.ConfirmToReturn"/>,
       onOk() {
         retrial(tdId);
       },
@@ -971,7 +971,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      content: 'Do you confirm that the order has been approved?',
+      content: <FormattedMessage id="Order.hasBeenApproved"/>,
       onOk() {
         onAudit(tid, 'CHECKED');
       },
@@ -989,8 +989,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: 'Confirm receipt',
-      content: 'Confirm receipt of all items?',
+      title: <FormattedMessage id="Order.ConfirmReceipt"/>,
+      content: <FormattedMessage id="Order.ConfirmReceiptOf"/>,
       onOk() {
         confirm(tdId);
       },

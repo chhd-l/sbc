@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper, cache, getOrderStatusValue } from 'qmkit';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage,injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
@@ -13,6 +13,9 @@ const defaultImg = require('../../goods-list/img/none.png');
 type TList = List<any>;
 
 class RejectForm extends React.Component<any, any> {
+  props:{
+    intl: any;
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -274,7 +277,7 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
                             )}
                             {v.get('grouponFlag') && (
                               <span style={styles.platform}>
-                                <FormattedMessage id="Order.fightTogether" />
+                                <FormattedMessage id="Order.fightTogethe" />
                               </span>
                             )}
                             {v.get('isAutoSub') && <span style={styles.platform}><FormattedMessage id="Order.subscription" /></span>}
@@ -477,13 +480,11 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
    */
   _showRetrialConfirm = (tdId: string) => {
     const { onRetrial } = this.props.relaxProps;
-    let title = this.props.intl.formatMessage({id:'Order.review'})
-    let content = this.props.intl.formatMessage({id:'Order.confirmReview'})
 
     const confirm = Modal.confirm;
     confirm({
-      title: title,
-      content: content,
+      title: <FormattedMessage id="Order.review" />,
+      content: <FormattedMessage id="Order.confirmReview" />,
       onOk() {
         onRetrial(tdId);
       },
@@ -509,12 +510,10 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
   _showConfirm = (tdId: string) => {
     const { onConfirm } = this.props.relaxProps;
 
-    let title = this.props.intl.formatMessage({id:'Order.confirmReceipt'})
-    let content = this.props.intl.formatMessage({id:'Order.confirmReceivedAllProducts'})
     const confirm = Modal.confirm;
     confirm({
-      title: title,
-      content: content,
+      title: this.props.intl.formatMessage({id:'Order.ConfirmReceipt'}),
+      content: this.props.intl.formatMessage({id:'Order.ConfirmThatAllProducts'}),
       onOk() {
         onConfirm(tdId);
       },

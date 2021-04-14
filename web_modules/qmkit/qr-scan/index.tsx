@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Button } from 'antd';
 import Html5Qrcode from './tools/html5-qr-code';
+import { FormattedMessage } from 'react-intl';
 
 type Iprop = {
   id: string;
@@ -82,7 +83,7 @@ export default class QRScaner extends React.Component<Iprop, any> {
           <div id={`${id}_div`} style={styles.camera}></div>
           <div style={styles.scanbtn}>
             <Button size="large" onClick={this.closeScan}>
-              Close
+              <FormattedMessage id="Order.Close" />
             </Button>
           </div>
         </div>

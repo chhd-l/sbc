@@ -104,7 +104,7 @@ class SearchForm extends React.Component<any, any> {
                 {(txt) => (
                   <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label={txt.toString()} dropdownStyle={{ zIndex: 1053 }}>
                     <Option key="0" value="0">
-                      <FormattedMessage id="Public.all" />
+                      <FormattedMessage id="Order.all" />
                     </Option>
                     {brands.map((v) => (
                       <Option key={v.brandId} value={v.brandId + ''}>
@@ -135,7 +135,7 @@ class SearchForm extends React.Component<any, any> {
             }}
           >
             <span>
-              <FormattedMessage id="Public.Search" />
+              <FormattedMessage id="Order.search" />
             </span>
           </Button>
         </Form>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { noop, QMFloat } from 'qmkit';
 import { IMap } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Amount extends React.Component<any, any> {
@@ -104,7 +105,9 @@ export default class Amount extends React.Component<any, any> {
           <div style={styles.applyPrice} />
           <div style={styles.priceBox}>
             <label style={styles.priceItem as any}>
-              <span style={styles.name}>Refundable amount: </span>
+              <span style={styles.name}>
+                 <FormattedMessage id="Order.Refundableamount" />:
+              </span>
               <strong>
                 $
                 {applyStatus

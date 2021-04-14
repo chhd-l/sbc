@@ -46,7 +46,7 @@ export default class BillingDetails extends React.Component<any, any> {
         </BreadCrumb>
 
         <div className="container-search">
-          <Headline title={history.location.state.settlementType} />
+          <Headline title={<FormattedMessage id={`Finance.${history.location.state.settlementType}`} />} />
           {/*<OptionDiv>
             <Tooltip
               overlayStyle={{

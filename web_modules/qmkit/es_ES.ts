@@ -324,12 +324,6 @@ export default {
   'Home.ToDo': 'To do',
   'Home.OnGoing': 'On going',
   'Home.Overdue': 'Overdue',
-  'Home.UnitsSold': 'Units sold',
-  'Home.RetentionRate': 'Retention rate',
-  'Home.ActivePrescriberRates': 'Active prescriber rates',
-  'Home.ActivePrescribers': 'Active prescribers',
-  'Home.PrescriberRewardTop': 'Prescriber reward Top',
-  'Home.BestSeller': 'Best seller',
   'Home.TOP': 'TOP',
   'Home.HeaderTip': 'The data is updated every 15 minutes',
   'Home.SelectWeek': 'Select week',
@@ -338,6 +332,8 @@ export default {
   'Home.All': 'All',
   'Home.ManagePrescriber': 'Manage Prescriber',
   'Home.Rate': 'Rate',
+  'Home.units': 'units',
+  'Home.Week':'Week',
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
   "Product.Productname": "Product name",
@@ -646,12 +642,12 @@ export default {
   "Product.ChooseProductCharacteristic": "Choose a product characteristic",
   "Product.EditProduct": "Edit product (Bundle product)",
   "Product.NewProduct": "New product (Bundle product)",
-  "Product.YouCan": "You can delete these fields, including &#123; name &#125;-Royal Canin, &#123; name &#125;, &#123; subtitle &#125;, &#123; sales category &#125;, &#123; tagging &#125;, &#123; description &#125;, but can not edit the field",
-  "Product.name": "name &#125; means the name of the product which enters in the product information tab page",
-  "Product.subtitle": "subtitle &#125; means the subtitle of the product which enters in the product information tab page",
-  "Product.sales": "sales category &#125; means the sales category of the product which was chosen in the product information tab page",
-  "Product.tagging": "tagging &#125; means the sales category of the product which was chosen in the product information",
-  "Product.descripion": "description &#125; means the description of the product which enters in the product information tab page",
+  "Product.YouCan": "You can delete these fields, including{ name }-Royal Canin,{ name },{ subtitle },{ sales category },{ tagging },{ description }, but can not edit the field",
+  "Product.name": "1、{ name } means the name of the product which enters in the product information tab page",
+  "Product.subtitle": "2、{ subtitle } means the subtitle of the product which enters in the product information tab page",
+  "Product.sales": "3、{ sales category } means the sales category of the product which was chosen in the product information tab page",
+  "Product.tagging": "4、{ tagging } means the sales category of the product which was chosen in the product information",
+  "Product.descripion": "5、{ description } means the description of the product which enters in the product information tab page",
   "Product.categoryName": "categoryName",
   "Product.operation": "Operation",
   "Product.AddSubcategory": "Add subcategory",
@@ -867,6 +863,10 @@ export default {
   "Product.html":"html",
   'Product.salesCategoryInfo':
     'Sales category is the classification of products within the scope of your store. Up to 3 levels can be added. When there is No categories, all products will be classified into the default classification',
+  "Product.Synchronize":"Synchronize",
+  "Product.exportStockPrice":"Batch export Stock&Price",
+  "Product.Audited":"Audited",
+  "Product.No sale":"No sale",
 
 
 
@@ -1392,10 +1392,9 @@ export default {
   'Order.contractProduct':'Contract product',
   'Order.club':'Club',
   'Order.autoship':'Autoship',
-  'Order.Club&Autoship':'Club & Autoship',
   'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
-  'Order.felin':`L'Atelier Feline`,
+  'Order.felin':`L'Atelier Felin`,
   'Order.subscriptionType':'Subscription type',
   'Order.subscriptionOrderTime':'Subscription order time',
   'Order.subscriptionPlanType':'Subscription plan type',
@@ -1460,7 +1459,7 @@ export default {
   'Order.offline.noCustomerAlert':'Please fill consumer information!',
   'Order.offline.orderNotSuccess':'Order not successful',
   'Order.offline.retryAlert':'You can switch payment type or try it again!',
-  'Order.offline.felin':"L'Atelier Feline",
+  'Order.offline.felin':"L'Atelier Felin",
   'Order.offline.directCheckout':'Direct check-out',
   'Order.offline.recommendation':'Recommendation',
   'Order.offline.shoppingCart':'Shopping cart',
@@ -1592,7 +1591,23 @@ export default {
   'Order.offline.Reset':'Reset',
   'Order.Entrance': 'Entrance',
   'Order.Apartment': 'Apartment',
+  'Order.refundList': 'Refund list',
+  'Order.Refundrecord': 'Refund record',
+  'Order.FillLogisticsInformation':'Fill in logistics information',
+  'Order.Refund date':'Refund date',
+  'Order.selectLogisticsCompany':'Please select logistics company',
+  'Order.fillreturndate':'Please fill in the return date',
+  'Order.Split order setting':'Split order setting',
   'Order.LastName': 'Last name',
+  'Order.mixedOrder': 'Mixed order',
+  'Order.Autoship&Club': 'Autoship & Club',
+  'Order.Autoship&singePurchase': 'Autoship & Single purchase',
+  'Order.Club&singePurchase': 'Club & Single purchase',
+  'Order.Autoship&Club&singePurchase': 'Autoship & Club & Single purchase',
+  'Order.On':'On',
+  "Order.Off": 'Off',
+  "Order.InputQuantity": 'Please input the delivery quantity',
+  "Order.modifiedErr":"The customer has been deleted and cannot be modified!",
 
 
 
@@ -2424,6 +2439,10 @@ export default {
   'Finance.saveSettings':'Save Settings',
   'Finance.add':'add',
   /* -------- 已翻译 V1.0---------------*/
+  'Finance.UnSettlement details':'UnSettlement details',
+  'Finance.Settlement details':'Settlement details',
+  "Finance.Guest": "Guest",
+  "Finance.Member": "Member",
 
 
 
@@ -2736,6 +2755,8 @@ export default {
   'Marketing.No':'No',
   'Marketing.Mustenterrules': 'Must enter rules',
   'Marketing.fullgifttype': 'full gift type',
+  'Marketing.Addgift': 'Add gift',
+  'Marketing.greaterthan0andlessthan999': 'Value must only be integers greater than 0 and less than 999',
 
 
 

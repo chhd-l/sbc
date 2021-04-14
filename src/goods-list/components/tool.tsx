@@ -115,7 +115,7 @@ class Tool extends React.Component<any, any> {
                 this._export();
               }}
             >
-              Batch export Stock&Price
+              <FormattedMessage id="Product.exportStockPrice" />
             </a>
           </AuthWrapper>
         </Menu.Item>

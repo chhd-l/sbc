@@ -5,27 +5,38 @@ import es_ES from '../es_ES';
 import es_RUS from '../es_RUS';
 import { cache } from 'qmkit';
 
-const lang = (require as any).context('./files',true, /\.ts$/)
+const context = (require as any).context('./files',true, /\.ts$/)
 
-lang.keys().forEach(i => {
-    
-    console.log(i)
-});
-
-let language: any = es_ES;
-let antLanguage: any = enUS;
-if (sessionStorage.getItem(cache.LANGUAGE) == 'English') {
-    language = es_ES;
-    antLanguage = enUS;
-} else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
-    language = es_RUS;
-    antLanguage = ruRU;
-} else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
-    language = es_RUS;
-    antLanguage = deDE;
-}
-
-export  {
-    language,
-    antLanguage
+const importAll = context => {
+    const map = {}
+  
+    for (const key of context.keys()) {
+      const keyArr = key.split('/')
+      keyArr.shift() // 移除.
+      map[keyArr.join('.').replace(/\.ts$/g, '')] =context(key).default|| context(key)
+    }
+  
+    return map
+  }
+//  let langFile= importAll(context)
+//  console.log(langFile)
+// let language: any = es_ES;
+// let antLanguage: any = enUS;
+// if (sessionStorage.getItem(cache.LANGUAGE) == 'English') {
+//     language = es_ES;
+//     antLanguage = enUS;
+// } else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
+//     language = es_RUS;
+//     antLanguage = ruRU;
+// } else if (sessionStorage.getItem(cache.LANGUAGE) == 'Russian') {
+//     language = es_RUS;
+//     antLanguage = deDE;
+// }
+let key = sessionStorage.getItem(cache.LANGUAGE)||'es_ES'
+let langFile = importAll(context)
+let language: any = langFile[key];
+let antLanguage: any = langFile[key + '_antd'];
+export {
+  language,
+  antLanguage
 }

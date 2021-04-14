@@ -81,7 +81,7 @@ export default class pets extends Component<any, any> {
             petPagination: petPagination
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             loading: false
           });

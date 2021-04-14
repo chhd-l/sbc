@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, SelectGroup, history, Const, util, cache } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker, Dropdown, Menu, Icon, Modal } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -58,7 +58,7 @@ class InvoiceList extends Component<any, any> {
           value: 1
         },
         {
-          name: 'Not invoiced',
+          name: 'NotInvoiced',
           value: 0
         }
       ],
@@ -400,21 +400,21 @@ class InvoiceList extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Invoice number',
+        title: 'InvoiceNumber',
         dataIndex: 'orderInvoiceNo',
         key: 'orderInvoiceNo',
         width: '8%',
         render: (text) => <p>{text ? text : '-'}</p>
       },
       {
-        title: 'Invoice date',
+        title: 'InvoiceDate',
         dataIndex: 'invoiceTime',
         key: 'invoiceTime',
         width: '8%',
         render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD') : '-'}</p>
       },
       {
-        title: 'Invoice status',
+        title: 'InvoiceStatus',
         dataIndex: 'invoiceState',
         key: 'invoiceState',
         width: '8%',
@@ -422,18 +422,18 @@ class InvoiceList extends Component<any, any> {
           <div>
             {text ? (
               <p>
-                <span style={styles.successPoint}></span>Invoiced
+                <span style={styles.successPoint}></span><FormattedMessage id="Finance.Invoiced" />
               </p>
             ) : (
               <p>
-                <span style={styles.warningPoint}></span>Not invoiced
+                <span style={styles.warningPoint}></span><FormattedMessage id="Finance.NotInvoiced" />
               </p>
             )}
           </div>
         )
       },
       {
-        title: 'Order date',
+        title: 'OrderDate',
         dataIndex: 'orderTime',
         key: 'orderTime',
         width: '8%',
@@ -442,8 +442,8 @@ class InvoiceList extends Component<any, any> {
       {
         title: (
           <div>
-            <p>Order number</p>
-            <p>Subscription number</p>
+            <p><FormattedMessage id="Finance.OrderNumber" /></p>
+            <p><FormattedMessage id="Finance.SubscriptionNumber" /></p>
           </div>
         ),
         dataIndex: 'orderNo',
@@ -457,35 +457,35 @@ class InvoiceList extends Component<any, any> {
         )
       },
       {
-        title: 'Order amount',
+        title: 'orderAmount',
         dataIndex: 'invoiceAmount',
         key: 'invoiceAmount',
         width: '8%',
         render: (text) => <p>{text ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + text : '-'}</p>
       },
       {
-        title: 'Payment status',
+        title: 'PaymentStatus',
         dataIndex: 'payOrderStatus',
         key: 'payOrderStatus',
         width: '8%',
         render: (text) => <p>{text}</p>
       },
       {
-        title: 'Consumer email',
+        title: 'ConsumerEmail',
         dataIndex: 'consumerEmail',
         key: 'consumerEmail',
         width: '8%',
         render: (text) => <p>{text ? text : '-'}</p>
       },
       {
-        title: 'Pet owner type',
+        title: 'ConsumerType',
         dataIndex: 'consumerLevelId',
         key: 'consumerLevelId',
         width: '8%',
-        render: (text) => <div>{+text === 233 ? 'Guest' : +text === 234 ? 'Member' : '-'}</div>
+        render: (text) => <div>{+text === 233 ? <FormattedMessage id="Finance.Guest" /> : +text === 234 ? <FormattedMessage id="Finance.Member" /> : '-'}</div>
       },
       {
-        title: 'Pet owner name',
+        title: 'ConsumerName',
         dataIndex: 'consumerName',
         key: 'consumerName',
         width: '8%',
@@ -501,8 +501,8 @@ class InvoiceList extends Component<any, any> {
             {+record.delFlag === 1 ? null : (
               <div>
                 {record.invoiceState === 0 ? (
-                  <Popconfirm placement="topLeft" title="Are you sure to do this?" onConfirm={() => this.invoice(record.orderInvoiceId)} okText="Confirm" cancelText="Cancel">
-                    <Tooltip placement="top" title="Invoice">
+                  <Popconfirm placement="topLeft" title={<FormattedMessage id="Finance.doThis" />} onConfirm={() => this.invoice(record.orderInvoiceId)} okText={<FormattedMessage id="Finance.Confirm" />} cancelText={<FormattedMessage id="Finance.Cancel" />}>
+                    <Tooltip placement="top" title={<FormattedMessage id="Finance.Invoice" />}>
                       <a className="iconfont iconkaipiao"></a>
                     </Tooltip>
                   </Popconfirm>
@@ -511,12 +511,12 @@ class InvoiceList extends Component<any, any> {
                     {/* <Tooltip placement="top" title="Details">
                   <Link to={'/invoice-details/' + record.id} className="iconfont iconxiangqing" style={{ marginRight: 10 }}></Link>
                 </Tooltip> */}
-                    <Popconfirm placement="topLeft" title="Are you sure to disable this item?" onConfirm={() => this.disableInvoice(record.orderInvoiceId)} okText="Confirm" cancelText="Cancel">
+                    <Popconfirm placement="topLeft" title={<FormattedMessage id="Finance.disableThisItem" />} onConfirm={() => this.disableInvoice(record.orderInvoiceId)} okText={<FormattedMessage id="Finance.Confirm" />} cancelText={<FormattedMessage id="Finance.Cancel" />}>
                       <Tooltip placement="top" title="Disable">
                         <a className="iconfont iconjinyong" style={{ marginRight: 10 }}></a>
                       </Tooltip>
                     </Popconfirm>
-                    <Tooltip placement="top" title="Download">
+                    <Tooltip placement="top" title={<FormattedMessage id="Finance.Download" />}>
                       <Icon type="download" style={{ color: '#e2001a', fontSize: 16 }} onClick={() => this.downloadInvoice(record.orderInvoiceId)} />
                     </Tooltip>
                   </>
@@ -527,6 +527,14 @@ class InvoiceList extends Component<any, any> {
         )
       }
     ];
+
+    // 翻译title
+    columns.forEach(obj => {
+      if(typeof obj.title === 'string'){
+        (obj.title as any) = <FormattedMessage id={`Finance.${obj.title}`} />
+      }
+    });
+
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -538,12 +546,12 @@ class InvoiceList extends Component<any, any> {
       <Menu>
         <Menu.Item>
           <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchInvoice()}>
-            Batch invoice
+            <FormattedMessage id="Finance.BatchInvoice" />
           </a>
         </Menu.Item>
         <Menu.Item>
           <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchDownload()}>
-            Batch download
+            <FormattedMessage id="Finance.BatchDownload" />
           </a>
         </Menu.Item>
       </Menu>
@@ -563,13 +571,13 @@ class InvoiceList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
-          <Headline title={title} />
+          <Headline title={<FormattedMessage id="Finance.InvoiceList" />} />
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Order number" />
+                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.OrderNumber'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -587,7 +595,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Pet owner type" />
+                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.ConsumerType'})} />
                     <Select
                       style={styles.wrapper}
                       onChange={(value) => {
@@ -599,12 +607,12 @@ class InvoiceList extends Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="all" />
+                        <FormattedMessage id="Finance.all" />
                       </Option>
                       {comsumerTypeList &&
                         comsumerTypeList.map((item, index) => (
                           <Option value={item.value} key={index}>
-                            {item.name}
+                            <FormattedMessage id={`Finance.${item.name}`} />
                           </Option>
                         ))}
                     </Select>
@@ -615,7 +623,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Pet owner name " />
+                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.ConsumerName'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -633,7 +641,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Invoice date" />
+                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.InvoiceDate'})} />
                     <RangePicker style={styles.wrapper} onChange={this.onChangeDate} disabledDate={this.disabledDate} format={'YYYY-MM-DD'} />
                   </InputGroup>
                 </FormItem>
@@ -642,7 +650,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Invoice status" />
+                    <Input style={styles.label} disabled defaultValue={this.props.intl.formatMessage({id:'Finance.InvoiceStatus'})} />
                     <Select
                       defaultValue=""
                       style={styles.wrapper}
@@ -655,12 +663,12 @@ class InvoiceList extends Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="all" />
+                        <FormattedMessage id="Finance.all" />
                       </Option>
                       {invoiceStatusList &&
                         invoiceStatusList.map((item, index) => (
                           <Option value={item.value} key={index}>
-                            {item.name}
+                            <FormattedMessage id={`Finance.${item.name}`} />
                           </Option>
                         ))}
                     </Select>
@@ -680,7 +688,7 @@ class InvoiceList extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Finance.Search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -690,11 +698,11 @@ class InvoiceList extends Component<any, any> {
         </div>
         <div className="container">
           <Button type="primary" style={{ margin: '10px 10px 10px 0' }} onClick={() => this.openAddPage()}>
-            <span>Add new</span>
+            <span><FormattedMessage id="Finance.AddNew" /></span>
           </Button>
           <Dropdown overlay={menu} placement="bottomCenter">
             <Button>
-              <span className="icon iconfont iconBatchInvoicing" style={{ marginRight: 5 }}></span> Batch operation
+              <span className="icon iconfont iconBatchInvoicing" style={{ marginRight: 5 }}></span> <FormattedMessage id="Finance.BatchOperation" />
             </Button>
           </Dropdown>
           <Table
@@ -846,4 +854,4 @@ const styles = {
   }
 } as any;
 
-export default Form.create()(InvoiceList);
+export default Form.create()(injectIntl(InvoiceList));

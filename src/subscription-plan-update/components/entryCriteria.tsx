@@ -61,7 +61,7 @@ export default class entryCriteria extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { editable, Subscription, addField } = this.props;
+    const { editable, subscriptionPlan, addField } = this.props;
     const { visible, allConsents } = this.state;
     return (
       <div>
@@ -76,10 +76,10 @@ export default class entryCriteria extends Component<any, any> {
             <FormItem {...layout} label={<FormattedMessage id="Subscription.Subscription" />}>
               <Checkbox
                 disabled={!editable}
-                checked={Subscription.signOnSubscriptionFlag}
+                checked={subscriptionPlan.signOnSubscriptionFlag}
                 onChange={(e) => {
-                  Subscription.signOnSubscriptionFlag = e.target.checked;
-                  addField('signOnSubscriptionFlag', Subscription.signOnSubscriptionFlag);
+                  subscriptionPlan.signOnSubscriptionFlag = e.target.checked;
+                  addField('signOnSubscriptionFlag', subscriptionPlan.signOnSubscriptionFlag);
                 }}
               >
                 <span className="checkBoxTip">
@@ -87,12 +87,12 @@ export default class entryCriteria extends Component<any, any> {
                 </span>
               </Checkbox>
             </FormItem>
-            {Subscription.signOnSubscriptionFlag ? (
+            {subscriptionPlan.signOnSubscriptionFlag ? (
               <FormItem {...layout} label={<FormattedMessage id="Subscription.Consent" />}>
                 <Row>
                   <Col span={16}>
                     {getFieldDecorator('consentIds', {
-                      initialValue: Subscription.consentIds.map((cons) => parseInt(cons)),
+                      initialValue: subscriptionPlan.consentIds.map((cons) => parseInt(cons)),
                       rules: [{ required: true, message: <FormattedMessage id="PleaseAddConsent" /> }]
                     })(
                       <Select
@@ -124,7 +124,7 @@ export default class entryCriteria extends Component<any, any> {
                   <Col span={1}></Col>
                   <Col span={4}>
                     <Button type="primary" onClick={this.showAddConsent} disabled={!editable}>
-                      Add
+                      <FormattedMessage id="Subscription.Add"/>
                     </Button>
                   </Col>
                 </Row>
@@ -134,10 +134,10 @@ export default class entryCriteria extends Component<any, any> {
             <FormItem {...layout} label={<FormattedMessage id="Subscription.Subscription" />}>
               <Checkbox
                 disabled={!editable}
-                checked={Subscription.SubscriptionFlag}
+                checked={subscriptionPlan.subscriptionPlanFlag}
                 onChange={(e) => {
-                  Subscription.SubscriptionFlag = e.target.checked;
-                  addField('SubscriptionFlag', Subscription.SubscriptionFlag);
+                  subscriptionPlan.subscriptionPlanFlag = e.target.checked;
+                  addField('subscriptionPlanFlag', subscriptionPlan.subscriptionPlanFlag);
                 }}
               >
                 <span className="checkBoxTip">
@@ -146,7 +146,7 @@ export default class entryCriteria extends Component<any, any> {
               </Checkbox>
             </FormItem>
           </Form>
-          <AddConsent getAllConsent={this.getAllConsent} visible={visible} updateTable={this.updateTable} selectedRowKeys={Subscription.consentIds} />
+          <AddConsent getAllConsent={this.getAllConsent} visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.consentIds} />
         </div>
       </div>
     );

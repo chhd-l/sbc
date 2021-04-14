@@ -14,29 +14,29 @@ import moment from 'moment';
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="order.notShipped" />;
+    return <FormattedMessage id="Order.notShipped" />;
   } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="order.allShipments" />;
+    return <FormattedMessage id="Order.allShipments" />;
   } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="order.partialShipment" />;
+    return <FormattedMessage id="Order.partialShipment" />;
   } else if (status == 'VOID') {
-    return <FormattedMessage id="order.invalid" />;
+    return <FormattedMessage id="Order.invalid" />;
   } else {
-    return <FormattedMessage id="order.unknown" />;
+    return <FormattedMessage id="Order.unknown" />;
   }
 };
 
 const payStatus = (status) => {
   if (status == 'NOT_PAID') {
-    return <FormattedMessage id="order.unpaid" />;
+    return <FormattedMessage id="Order.unpaid" />;
   } else if (status == 'UNCONFIRMED') {
-    return <FormattedMessage id="order.toBeConfirmed" />;
+    return <FormattedMessage id="Order.toBeConfirmed" />;
   } else if (status == 'PAID') {
-    return <FormattedMessage id="order.paid" />;
+    return <FormattedMessage id="Order.paid" />;
   } else if (status == 'REFUND') {
-    return <FormattedMessage id="Refund" />;
+    return <FormattedMessage id="Order.Refund" />;
   } else {
-    return <FormattedMessage id="order.unknown" />;
+    return <FormattedMessage id="Order.unknown" />;
   }
 };
 
@@ -54,11 +54,11 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.rejectionReasonTip" />
               },
               {
                 max: 100,
-                message: <FormattedMessage id="Marketing.lessThan100Characters" />
+                message: <FormattedMessage id="Order.100Characters" />
               }
               // { validator: this.checkComment }
             ]
@@ -165,7 +165,7 @@ class ListView extends React.Component<any, any> {
                         />
                       </th>*/}
                       <th style={{ width: '11%' }}>
-                        <FormattedMessage id="productFirstLetterUpperCase" />
+                        <FormattedMessage id="Order.Product" />
                       </th>
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="Marketing.RecipientName" />
@@ -211,7 +211,7 @@ class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
+          <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;

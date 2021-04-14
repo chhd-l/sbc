@@ -3,7 +3,7 @@ import { BreadCrumb, Headline, Const, history } from 'qmkit';
 import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs } from 'antd';
 
 import * as webapi from './webapi';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import './index.less';
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
@@ -453,8 +453,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderExpirationTimeStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -490,8 +490,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderConfirmReceiptStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -527,8 +527,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderRefundsStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -564,8 +564,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderAutomaticReviewStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -601,8 +601,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentOnlineForm.orderAutomaticConfirmationStatus}
                             onChange={(value) =>
                               this.paymentOnlineFormChange({
@@ -644,8 +644,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentCashForm.orderExpirationTimeStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -681,8 +681,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentCashForm.orderConfirmReceiptStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -718,8 +718,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentCashForm.orderRefundsStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -755,8 +755,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentCashForm.orderAutomaticReviewStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -792,8 +792,8 @@ class OrderSetting extends Component<any, any> {
                       <Row>
                         <Col span={1}>
                           <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
+                            checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                            unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                             checked={paymentCashForm.orderAutomaticConfirmationStatus}
                             onChange={(value) =>
                               this.paymentCashFormChange({
@@ -837,8 +837,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
+                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                         checked={unlimitedForm.orderExpirationTimeStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({
@@ -874,8 +874,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
+                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                         checked={unlimitedForm.orderConfirmReceiptStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({
@@ -911,8 +911,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
+                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                         checked={unlimitedForm.orderRefundsStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({
@@ -948,8 +948,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
+                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                         checked={unlimitedForm.orderAutomaticReviewStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({
@@ -985,8 +985,8 @@ class OrderSetting extends Component<any, any> {
                   <Row>
                     <Col span={1}>
                       <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
+                        checkedChildren={this.props.intl.formatMessage({id:'Order.On'})}
+                        unCheckedChildren={this.props.intl.formatMessage({id:'Order.Off'})}
                         checked={unlimitedForm.orderAutomaticConfirmationStatus}
                         onChange={(value) =>
                           this.unlimitedFormChange({
@@ -1024,13 +1024,13 @@ class OrderSetting extends Component<any, any> {
             </TabPane>
             <TabPane tab={<FormattedMessage id="Order.fieldRuleSetting" />} key="Filed rule setting">
               <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 4 }} labelAlign="right">
-                <FormItem label="Order number">
+                <FormItem label={<FormattedMessage id="Order.OrderNumber"/>}>
                   <Input addonBefore="RCF" value={fieldForm.orderField} />
                 </FormItem>
-                <FormItem label="Subscription number">
+                <FormItem label={<FormattedMessage id="Order.SubscriptionNumber"/>}>
                   <Input addonBefore="SRCF" value={fieldForm.subscriptionField} />
                 </FormItem>
-                <FormItem label="Return order number">
+                <FormItem label={<FormattedMessage id="Order.ReturnOrderNumber"/>}>
                   <Input addonBefore="RRCF" value={fieldForm.returnOrderField} />
                 </FormItem>
               </Form>
@@ -1039,7 +1039,7 @@ class OrderSetting extends Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateOrderSettingConfig()}>
-            {<FormattedMessage id="save" />}
+            {<FormattedMessage id="Order.save" />}
           </Button>
         </div>
       </div>
@@ -1058,4 +1058,4 @@ const styles = {
   }
 } as any;
 
-export default Form.create()(OrderSetting);
+export default Form.create()(injectIntl(OrderSetting));

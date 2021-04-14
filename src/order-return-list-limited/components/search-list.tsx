@@ -7,6 +7,7 @@ import { Checkbox, message, Modal, Pagination, Spin, Tooltip } from 'antd';
 import { AuthWrapper, Const, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const defaultImg = require('../img/none.png');
 
@@ -262,7 +263,7 @@ export default class SearchList extends React.Component<any, any> {
                         {returnFlowState === 'AUDIT' && returnType == 'RETURN' && (
                           <AuthWrapper functionName="rolf003">
                             <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid)}>
-                              Fill in logistics
+                            <FormattedMessage id="Order.fillLogistics" />
                             </a>
                           </AuthWrapper>
                         )}

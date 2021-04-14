@@ -49,7 +49,7 @@ export default class MemberBar extends React.Component<any, any> {
     const { memberType, memberInfo, onScanEnd, consents, selectedConsents, onSelectConsent } = this.props;
     return (
       <>
-        {memberInfo.customerName && <Button type="link" onClick={() => this.onReset()} className="member-reset-link">Reset</Button>}
+        {memberInfo.customerName && <Button type="link" onClick={() => this.onReset()} className="member-reset-link"><FormattedMessage id="Order.offline.Reset" /></Button>}
         {!memberInfo.customerName ? <Row type="flex" justify="space-between" align="middle" style={{marginTop: 34}}>
           <Col span={4} style={{fontWeight: 'bold'}}><FormattedMessage id="Order.offline.consumerInformation" /></Col>
           <Col span={4}>

@@ -2,7 +2,7 @@ import React, { Component, LegacyRef } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
 import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse, Breadcrumb, Icon } from 'antd';
 import * as webapi from './webapi';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import ListView from './components/list-view';
 import CardView from './components/card-view';
 import { Link } from 'react-router-dom';
@@ -13,25 +13,26 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const { Panel } = Collapse;
 
+@injectIntl
 export default class Task extends React.Component<any, any> {
   cardViewRef: React.RefObject<any>;
   listViewRef: React.RefObject<any>;
   constructor(props) {
-    super(props);    
+    super(props);
     this.state = {
-      title: 'Task Board',
+      title: <FormattedMessage id="task.TaskBoard" />,
       isCardView: true,
       goldenMomentList: [],
       taskStatus: [
-        { name: 'To Do', value: 'To Do' },
-        { name: 'On-going', value: 'On-going' },
-        { name: 'Completed', value: 'Completed' },
-        { name: 'Cancelled', value: 'Cancelled' }
+        { name: <FormattedMessage id="task.ToDo" />, value: 'To Do' },
+        { name: <FormattedMessage id="task.On-going" />, value: 'On-going' },
+        { name: <FormattedMessage id="task.Completed" />, value: 'Completed' },
+        { name: <FormattedMessage id="task.Cancelled" />, value: 'Cancelled' }
       ],
       priorityList: [
-        { name: 'Low', value: 'Low' },
-        { name: 'Medium', value: 'Medium' },
-        { name: 'High', value: 'High' }
+        { name: <FormattedMessage id="task.Low" />, value: 'Low' },
+        { name: <FormattedMessage id="task.Medium" />, value: 'Medium' },
+        { name: <FormattedMessage id="task.High" />, value: 'High' }
       ],
       taskForm: {
         status: ''
@@ -56,7 +57,7 @@ export default class Task extends React.Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
         }
       })
       .catch(() => {
@@ -86,9 +87,13 @@ export default class Task extends React.Component<any, any> {
       <div>
         <Breadcrumb>
           <Breadcrumb.Item>
-            <a href="/">Home</a>
+            <a href="/">
+              <FormattedMessage id="Menu.Home" />
+            </a>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>Task board</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="task.TaskBoard" />
+          </Breadcrumb.Item>
         </Breadcrumb>
         <div className="container">
           <Row>
@@ -97,7 +102,7 @@ export default class Task extends React.Component<any, any> {
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               <span className="advanceSearch" onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
-                Advance Search <Icon type={showAdvanceSearch ? 'up' : 'down'} />
+                <FormattedMessage id="task.AdvanceSearch" /> <Icon type={showAdvanceSearch ? 'up' : 'down'} />
               </span>
             </Col>
           </Row>
@@ -107,7 +112,11 @@ export default class Task extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={styles.label}>Task Name</p>}
+                      addonBefore={
+                        <p style={styles.label}>
+                          <FormattedMessage id="task.TaskName" />
+                        </p>
+                      }
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -123,7 +132,12 @@ export default class Task extends React.Component<any, any> {
                     <SelectGroup
                       defaultValue=""
                       showSearch
-                      label={<p style={styles.label}>Golden Moment</p>}
+                      dropdownMatchSelectWidth={false}
+                      label={
+                        <p style={styles.label}>
+                          <FormattedMessage id="task.GoldenMoment" />
+                        </p>
+                      }
                       style={{ width: 195 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -148,8 +162,13 @@ export default class Task extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <SelectGroup
+                      dropdownMatchSelectWidth={false}
                       value={taskForm.status}
-                      label={<p style={styles.label}>Task Status</p>}
+                      label={
+                        <p style={styles.label}>
+                          <FormattedMessage id="task.TaskStatus" />
+                        </p>
+                      }
                       style={{ width: 195 }}
                       onChange={(value) => {
                         this.onFormChange({
@@ -176,7 +195,11 @@ export default class Task extends React.Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={styles.label}>Priority</p>}
+                      label={
+                        <p style={styles.label}>
+                          <FormattedMessage id="task.Priority" />
+                        </p>
+                      }
                       style={{ width: 195 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -202,7 +225,19 @@ export default class Task extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={styles.label}>Customer Care Name</p>}
+                      addonBefore={
+                        <Tooltip
+                          overlayStyle={{
+                            overflowY: 'auto'
+                          }}
+                          placement="bottomLeft"
+                          title={<div>{<FormattedMessage id="task.PetAssistantName" />}</div>}
+                        >
+                          <p style={styles.label} className="overFlowtext">
+                            {<FormattedMessage id="task.PetAssistantName" />}
+                          </p>
+                        </Tooltip>
+                      }
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -216,7 +251,19 @@ export default class Task extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={styles.label}>Pet Owner Name</p>}
+                      addonBefore={
+                        <Tooltip
+                          overlayStyle={{
+                            overflowY: 'auto'
+                          }}
+                          placement="bottomLeft"
+                          title={<div>{<FormattedMessage id="task.PetOwnerName" />}</div>}
+                        >
+                          <p style={styles.label} className="overFlowtext">
+                            {<FormattedMessage id="task.PetOwnerName" />}
+                          </p>
+                        </Tooltip>
+                      }
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -231,7 +278,7 @@ export default class Task extends React.Component<any, any> {
               <Row>
                 <Col span={8}>
                   <RangePicker
-                    placeholder={['Due Start time', 'Due End time']}
+                    placeholder={[this.props.intl.formatMessage({ id: 'task.DueStarttime' }), this.props.intl.formatMessage({ id: 'task.DueEndtime' })]}
                     format="YYYY-MM-DD"
                     onChange={(date, dateString) => {
                       this.onFormChange({
@@ -257,14 +304,14 @@ export default class Task extends React.Component<any, any> {
                       onClick={(e) => {
                         e.preventDefault();
                         if (isCardView) {
-                          this.cardViewRef.current.getTaskList(queryType)
+                          this.cardViewRef.current.getTaskList(queryType);
                         } else {
-                          this.listViewRef.current.getTaskList(queryType)
+                          this.listViewRef.current.getTaskList(queryType);
                         }
                       }}
                     >
                       <span>
-                        <FormattedMessage id="search" />
+                        <FormattedMessage id="Order.search" />
                       </span>
                     </Button>
                   </FormItem>
@@ -276,7 +323,9 @@ export default class Task extends React.Component<any, any> {
           <Row style={{ marginBottom: '20px' }}>
             <Col span={12}>
               <Button type="primary" htmlType="submit">
-                <Link to={{ pathname: '/add-task' }}>Add New Task</Link>
+                <Link to={{ pathname: '/add-task' }}>
+                  <FormattedMessage id="task.AddNewTask" />
+                </Link>
               </Button>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
@@ -288,14 +337,19 @@ export default class Task extends React.Component<any, any> {
                     queryType: value
                   });
                   if (isCardView) {
-                    this.cardViewRef.current.getTaskList(value)
+                    this.cardViewRef.current.getTaskList(value);
                   } else {
-                    this.listViewRef.current.getTaskList(value)
+                    this.listViewRef.current.getTaskList(value);
                   }
                 }}
+                dropdownMatchSelectWidth={false}
               >
-                <Option value={'1'}>My Task</Option>
-                <Option value={'0'}>All Task</Option>
+                <Option value={'1'}>
+                  <FormattedMessage id="task.MyTasks" />
+                </Option>
+                <Option value={'0'}>
+                  <FormattedMessage id="task.AllTasks" />
+                </Option>
               </Select>
               <Select
                 value={isCardView ? 0 : 1}
@@ -305,9 +359,14 @@ export default class Task extends React.Component<any, any> {
                     isCardView: value === 0
                   })
                 }
+                dropdownMatchSelectWidth={false}
               >
-                <Option value={0}>Card View</Option>
-                <Option value={1}>List View</Option>
+                <Option value={0}>
+                  <FormattedMessage id="task.CardView" />
+                </Option>
+                <Option value={1}>
+                  <FormattedMessage id="task.ListView" />
+                </Option>
               </Select>
             </Col>
           </Row>

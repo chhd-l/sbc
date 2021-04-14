@@ -1,8 +1,9 @@
 import { Button, Icon, Popconfirm, Select, Table, Tooltip } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
-import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts, totalGoodsPrice } from '../webapi';
+import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
 import { cache } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const defaultImg = require('./img/none.png');
 const { Option } = Select;
 export default class SelectedProduct extends React.Component<any, any> {
@@ -50,7 +51,7 @@ export default class SelectedProduct extends React.Component<any, any> {
     const { customer } = this.props;
     const { options } = this.state
     if (name === 'subscriptionStatus' && e === 0) {
-      row['periodTypeId'] = null;
+      row['periodTypeId'] = 0;
     } else if (name === 'subscriptionStatus' && e === 1) {
       row.periodTypeId = row.periodTypeId ? row.periodTypeId : options[0].id
     }
@@ -213,7 +214,7 @@ export default class SelectedProduct extends React.Component<any, any> {
       },
 
       {
-        title: ' Total amount',
+        title: 'Total amount',
         dataIndex: 'itemTotalAmount',
         key: 'itemTotalAmount',
         return: (text, record) => {
@@ -231,7 +232,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         key: 'Operation',
         render: (text, record) => {
           return (
-            <Popconfirm placement="topLeft" title="Are you sure you want to delete this product?" onConfirm={() => this.deleteCartsGood(record)} okText="Confirm" cancelText="Cancel">
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.deleteproduct" />}  onConfirm={() => this.deleteCartsGood(record)} okText={<FormattedMessage id="Order.confirm" />} cancelText={<FormattedMessage id="Order.btnCancel" />}>
               <Tooltip placement="top" title="Delete">
                 <a>
                   <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 16 }} className="icon iconfont iconDelete"></span>
@@ -242,15 +243,19 @@ export default class SelectedProduct extends React.Component<any, any> {
         }
       }
     ];
+    // 翻译title
+    columns.forEach(obj => {
+      (obj.title as any) = <FormattedMessage id={`Order.${obj.title}`} />
+    });
     return (
       <div>
-        <h3>Step2</h3>
+        <h3><FormattedMessage id="Order.Step2" /></h3>
         <h4>
-          {this.props.stepName}
+          <FormattedMessage id={`Order.${this.props.stepName}`} />:
           {/* <span className="ant-form-item-required"></span> */}
         </h4>
         <Button type="primary" onClick={this.addProduct} style={{ marginTop: 10 }}>
-          Add product
+          <FormattedMessage id="Order.addProduct" />
         </Button>
         <div className="basicInformation">
           <Table
@@ -260,7 +265,8 @@ export default class SelectedProduct extends React.Component<any, any> {
             dataSource={dataSource}
             columns={columns}
           />
-          <div style={{ textAlign: 'right', padding: '20px 0' }}>Product amount {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
+          <div style={{ textAlign: 'right', padding: '20px 0' }}>
+          <FormattedMessage id="Order.Product amount" /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
           {visible && <AddProductModal url={url} prefix={prefix} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
       </div>

@@ -96,7 +96,7 @@ export default class ListView extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
           this.init();
         } else {
           this.setState({
@@ -160,11 +160,11 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th> */}
-                      <th style={{ width: '15%' }}>Product</th>
-                      <th style={{ width: '15%' }}>Product name</th>
-                      <th style={{ width: '10%' }}>Subscription status</th>
+                      <th style={{ width: '15%' }}><FormattedMessage id="Subscription.Product"/></th>
+                      <th style={{ width: '15%' }}><FormattedMessage id="Subscription.ProductName"/></th>
+                      <th style={{ width: '10%' }}><FormattedMessage id="Subscription.SubscriptionStatus"/></th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="subscription.consumerName" />
+                        <FormattedMessage id="Subscription.consumerName" />
                       </th>
                       {/* <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.receiver" />
@@ -176,7 +176,7 @@ export default class ListView extends React.Component<any, any> {
                         <FormattedMessage id="subscription.quantity" />
                       </th> */}
                       <th style={{ width: '15%' }}>
-                        <FormattedMessage id="subscription.operation" />
+                        <FormattedMessage id="Subscription.Operation" />
                       </th>
                     </tr>
                   </thead>
@@ -187,7 +187,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="Subscription.noData" />
                   </span>
                 </div>
               ) : null}
@@ -250,7 +250,7 @@ export default class ListView extends React.Component<any, any> {
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="subscription.subscriptionDate" />:{v.createTime ? moment(new Date(v.createTime.replace(/ /g, 'T'))).format('YYYY-MM-DD HH:mm:ss') : ''}
+                          <FormattedMessage id="Subscription.subscriptionDate" />:{v.createTime ? moment(new Date(v.createTime.replace(/ /g, 'T'))).format('YYYY-MM-DD HH:mm:ss') : ''}
                         </span>
                       </div>
                     </td>
@@ -275,8 +275,8 @@ export default class ListView extends React.Component<any, any> {
                               style={styles.imgFourth}
                             />
                             <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />
-                              {v.goodsInfo.size} <FormattedMessage id="piece" />
+                              <FormattedMessage id="Subscription.total" />
+                              {v.goodsInfo.size} <FormattedMessage id="Subscription.piece" />
                             </div>
                           </div>
                         ) : null
@@ -291,7 +291,9 @@ export default class ListView extends React.Component<any, any> {
                         ))}
                     </td>
                     {/*subscription status*/}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscribeStatus === '0' ? 'Active' : v.subscribeStatus === '1' ? 'Pause' : 'Inactive'}</td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>
+                    {v.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : v.subscribeStatus === '1' ? <FormattedMessage id="Subscription.Pause" /> : <FormattedMessage id="Subscription.Inactive" />}
+                    </td>
                     {/* consumerName */}
                     <td style={{ width: '10%', paddingLeft: 20 }}>{v.customerName ? v.customerName : ''}</td>
                     {/* Recipient */}
@@ -308,21 +310,21 @@ export default class ListView extends React.Component<any, any> {
                     </td> */}
                     {/*Operation*/}
                     <td style={{ width: '15%' }} className="operation-td">
-                      <Tooltip placement="top" title="Details">
+                      <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
                         <Button type="link" style={{ padding: '0 5px' }}>
                           <Link to={'/subscription-detail/' + v.subscribeId} className="iconfont iconDetails"></Link>
                         </Button>
                       </Tooltip>
                       {v.subscribeStatus === '0' ? (
-                        <Tooltip placement="top" title="Edit">
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Edit"/>}>
                           <Button type="link" style={{ padding: '0 5px' }}>
                             <Link to={'/subscription-edit/' + v.subscribeId} className="iconfont iconEdit"></Link>
                           </Button>
                         </Tooltip>
                       ) : null}
                       {v.subscribeStatus === '0' ? (
-                        <Popconfirm placement="topRight" title="Are you sure cancel the subscription?" onConfirm={() => this.cancelAll(v.subscribeId)} okText="Confirm" cancelText="Cancel">
-                          <Tooltip placement="top" title="Cancel all">
+                        <Popconfirm placement="topRight" title={<FormattedMessage id="Subscription.AreYouSureCancel"/>} onConfirm={() => this.cancelAll(v.subscribeId)} okText={<FormattedMessage id="Subscription.Confirm"/>}cancelText={<FormattedMessage id="Subscription.Cancel"/>}>
+                          <Tooltip placement="top" title={<FormattedMessage id="Subscription.CancelAll"/>}>
                             <a type="link" style={{ padding: '0 5px' }} className="iconfont iconbtn-cancelall">
                               {/*Cancel all*/}
                             </a>
@@ -330,14 +332,14 @@ export default class ListView extends React.Component<any, any> {
                         </Popconfirm>
                       ) : null}
                       {v.subscribeStatus === '0' ? (
-                        <Tooltip placement="top" title="Pause">
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Pause"/>}>
                           <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '1')}>
                             <i className="iconfont iconbtn-pause"></i>
                           </Button>
                         </Tooltip>
                       ) : null}
                       {v.subscribeStatus === '1' ? (
-                        <Tooltip placement="top" title="Restart">
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Restart"/>}>
                           <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '0')}>
                             <i className="iconfont iconbtn-open"></i>
                           </Button>

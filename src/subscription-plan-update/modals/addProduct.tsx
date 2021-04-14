@@ -171,44 +171,44 @@ export default class addTargetProduct extends Component<any, any> {
     const { visible } = this.props;
     const columns = [
       {
-        title: 'Image',
+        title: <FormattedMessage id="Subscription.Image"/>,
         dataIndex: 'goodsInfoImg',
         key: 'goodsInfoImg',
         render: (text) => <img src={text} alt="" style={{ width: 20 }} />,
         width: '10%'
       },
       {
-        title: 'SKU',
+        title: <FormattedMessage id="Subscription.SKU"/>,
         dataIndex: 'goodsInfoNo',
         key: 'goodsInfoNo',
         width: '15%'
       },
       {
-        title: 'Product name',
+        title: <FormattedMessage id="Subscription.ProductName"/>,
         dataIndex: 'goodsInfoName',
         key: 'goodsInfoName',
         width: '20%'
       },
       {
-        title: 'Specification',
+        title: <FormattedMessage id="Subscription.Specification"/>,
         dataIndex: 'specName',
         key: 'specName',
         width: '15%'
       },
       {
-        title: 'Product category',
+        title: <FormattedMessage id="Subscription.ProductCategory"/>,
         dataIndex: 'goodsCateName',
         key: 'goodsCateName',
         width: '15%'
       },
       {
-        title: 'Brand',
+        title: <FormattedMessage id="Subscription.Brand"/>,
         dataIndex: 'brandName',
         key: 'brandName',
         width: '15%'
       },
       {
-        title: 'Price',
+        title: <FormattedMessage id="Subscription.Price"/>,
         dataIndex: 'marketPrice',
         key: 'marketPrice',
         width: '10%'
@@ -225,7 +225,7 @@ export default class addTargetProduct extends Component<any, any> {
     };
     return (
       <div>
-        <Modal className="addTargetProductModal" width="1100px" maskClosable={false} title="Add products" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel} okText="Confirm" cancelText="Cancel">
+        <Modal className="addTargetProductModal" width="1100px" maskClosable={false} title={<FormattedMessage id="Subscription.AddProducts"/>} visible={visible} onOk={this.handleOk} onCancel={this.handleCancel} okText={<FormattedMessage id="Subscription.Confirm"/>} cancelText={<FormattedMessage id="Subscription.Cancel"/>}>
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
@@ -233,7 +233,7 @@ export default class addTargetProduct extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="formLable">
-                        <FormattedMessage id="product.SKU" />
+                        <FormattedMessage id="Subscription.SKU" />
                       </p>
                     }
                     style={{ width: 300 }}
@@ -248,7 +248,7 @@ export default class addTargetProduct extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="formLable">
-                        <FormattedMessage id="product.productName" />
+                        <FormattedMessage id="Subscription.productName" />
                       </p>
                     }
                     style={{ width: 300 }}
@@ -266,7 +266,7 @@ export default class addTargetProduct extends Component<any, any> {
                       getPopupContainer={() => document.getElementById('page-content')}
                       label={
                         <p className="formLable">
-                          <FormattedMessage id="product.brand" />
+                          <FormattedMessage id="Subscription.brand" />
                         </p>
                       }
                       defaultValue="All"
@@ -294,7 +294,7 @@ export default class addTargetProduct extends Component<any, any> {
                     <TreeSelectGroup
                       allowClear
                       getPopupContainer={() => document.getElementById('page-content')}
-                      label={<p className="formLable">Product category</p>}
+                      label={<p className="formLable"><FormattedMessage id="Subscription.ProductCategory"/></p>}
                       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                       treeDefaultExpandAll
                       onChange={(value) => {
@@ -319,7 +319,7 @@ export default class addTargetProduct extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="product.search" />
+                      <FormattedMessage id="Subscription.search" />
                     </span>
                   </Button>
                 </FormItem>

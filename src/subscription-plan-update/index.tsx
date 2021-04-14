@@ -9,6 +9,7 @@ import ExitRules from './components/exitRules';
 import Details from './components/details';
 import * as webapi from './webapi';
 import { edit } from '@/regular-product-add/webapi';
+import {FormattedMessage} from 'react-intl';
 
 const { Step } = Steps;
 
@@ -24,7 +25,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId;
     this.state = {
       id,
-      title: id ? 'Edit Plan (Food Dispenser)' : 'Add New Plan (Food Dispenser)',
+      title: id ? <FormattedMessage id="Subscription.EditPlan"/> : <FormattedMessage id="Subscription.AddNewPlanFood"/>,
       current: 0,
       storeId,
       subscriptionPlan: {
@@ -122,7 +123,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       if (!err) {
         const { subscriptionPlan, id } = this.state;
         if (subscriptionPlan.mainGoods.findIndex((g) => !g.settingPrice || g.settingPrice <= 0) > -1) {
-          message.warning('Setting price is required');
+          message.warning(<FormattedMessage id="Subscription.SettingPriceIs"/>);
           return;
         }
         if (isDraft) {
@@ -136,7 +137,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           webapi.updateSubscriptionPlan(subscriptionPlan).then((data) => {
             const { res } = data;
             if (res.code === Const.SUCCESS_CODE) {
-              message.success('Operate successfully');
+              message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
               history.push({ pathname: '/subscription-plan' });
             }
           });
@@ -144,7 +145,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           webapi.addSubscriptionPlan(subscriptionPlan).then((data) => {
             const { res } = data;
             if (res.code === Const.SUCCESS_CODE) {
-              message.success('Operate successfully');
+              message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
               history.push({ pathname: '/subscription-plan' });
             }
           });
@@ -165,23 +166,23 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     }
     const steps = [
       {
-        title: 'Basic Information',
+        title: <FormattedMessage id="Subscription.BasicInformation"/>,
         controller: <BasicInformation subscriptionPlan={subscriptionPlan} frequencyList={frequencyList} planTypeList={planTypeList} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: 'Target Product',
+        title: <FormattedMessage id="Subscription.TargetProduct"/>,
         controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       },
       {
-        title: 'Entry Criteria',
+        title: <FormattedMessage id="Subscription.EntryCriteria"/>,
         controller: <EntryCriteria subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: 'Exit Rules',
+        title: <FormattedMessage id="Subscription.ExitRules"/>,
         controller: <ExitRules subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: 'Details',
+        title: <FormattedMessage id="Subscription.Details"/>,
         controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       }
     ];
@@ -191,7 +192,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           <Breadcrumb.Item>{editable ? title : subscriptionPlan.name}</Breadcrumb.Item>
         </BreadCrumb>
 
-        <div className="container-search" id="subscriptionPlanStep">
+        <div className="container-search" id="SubscriptionStep">
           <Headline title={title} />
           <Steps current={current} labelPlacement="vertical">
             {steps.map((item) => (
@@ -203,21 +204,21 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           <div className="steps-action">
             {current > 0 && (
               <Button style={{ marginRight: 15 }} onClick={() => this.prev()}>
-                <Icon type="left" /> Return
+                <Icon type="left" /> <FormattedMessage id="Subscription.Return"/>
               </Button>
             )}
             {current < steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.next(e)} disabled={targetDisabled}>
-                Next step <Icon type="right" />
+                <FormattedMessage id="Subscription.NextStep"/> <Icon type="right" />
               </Button>
             )}
             {current === steps.length - 1 && editable ? (
               <div className="saveBtn">
                 <Button disabled={saveDisabled} style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, true)}>
-                  Save <Icon type="right" />
+                <FormattedMessage id="Subscription.Save"/> <Icon type="right" />
                 </Button>
                 <Button disabled={saveDisabled} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, false)}>
-                  Publish <Icon type="right" />
+                <FormattedMessage id="Subscription.Publish"/> <Icon type="right" />
                 </Button>
               </div>
             ) : null}

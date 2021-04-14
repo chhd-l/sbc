@@ -84,7 +84,7 @@ class SearchHead extends Component<any, any> {
           <Menu.Item>
             <AuthWrapper functionName="fOrderList002">
               <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
-                <FormattedMessage id="order.batchReview" />
+                <FormattedMessage id="Order.batchReview" />
               </a>
             </AuthWrapper>
           </Menu.Item>
@@ -92,7 +92,7 @@ class SearchHead extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExport" />
+              <FormattedMessage id="Order.batchExport" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -422,7 +422,7 @@ class SearchHead extends Component<any, any> {
           <FormattedMessage id="Order.OrderNumber" />
         </Option>
         <Option value="subscriptionNumber">
-          <FormattedMessage id="order.subscriptionNumber" />
+          <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
     );
@@ -440,10 +440,10 @@ class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option value="paymentStatus">
-          <FormattedMessage id="order.paymentStatus" />
+          <FormattedMessage id="Order.paymentStatus" />
         </Option>
         <Option value="shippingStatus">
-          <FormattedMessage id="order.shippingStatus" />
+          <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
     );
@@ -466,8 +466,8 @@ class SearchHead extends Component<any, any> {
     }
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.review'});
-    const content = this.props.intl.formatMessage({id:'Order.confirmReview'});
+    const title = this.props.intl.formatMessage({id:'Order.audit'});
+    const content = this.props.intl.formatMessage({id:'Order.confirmAudit'});
     confirm({
       title: title,
       content: content,

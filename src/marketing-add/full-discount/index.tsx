@@ -17,14 +17,15 @@ class MarketingFullDiscountAdd extends React.Component<any, any> {
   store: AppStore;
   _form;
   props: {
-    intl: any
+    intl: any;
+    match: any;
   }
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    const { marketingId } = this.props.match.params;
+    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
     if (marketingId) {
       this.store.init(marketingId);
     } else {
@@ -37,9 +38,7 @@ class MarketingFullDiscountAdd extends React.Component<any, any> {
   }
 
   render() {
-    const state = this.props.location.state;
-    const { marketingId } = this.props.match.params;
-    const { source } = (state || {}) as any;
+    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
 
     return (
       <AuthWrapper functionName="f_marketing_discount_add">

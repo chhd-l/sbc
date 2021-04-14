@@ -146,7 +146,7 @@ export default class ChooseTaskForm extends Component<any, any> {
             petAssistantLoading: false
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
             petAssistantLoading: false
           })

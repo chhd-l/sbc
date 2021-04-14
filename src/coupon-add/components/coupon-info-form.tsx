@@ -4,7 +4,7 @@ import { Button, Col, DatePicker, Form, Input, message, Radio, Row, Select, Spin
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Const, noop, QMMethod, ValidConst, history, cache } from 'qmkit';
+import { Const, noop, QMMethod, ValidConst, history, cache, RCi18n } from 'qmkit';
 import moment from 'moment';
 import SelectedGoodsGrid from './selected-goods-grid';
 import { fromJS } from 'immutable';

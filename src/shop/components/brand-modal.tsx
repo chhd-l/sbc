@@ -3,7 +3,7 @@ import { Relax, IMap } from 'plume2';
 import { Modal, Input, Row, Col, Icon, Tooltip, Form, message } from 'antd';
 
 import styled from 'styled-components';
-import { noop, DataGrid, QMUpload, QMMethod, Const, ValidConst } from 'qmkit';
+import { noop, DataGrid, QMUpload, QMMethod, Const, ValidConst, RCi18n} from 'qmkit';
 import { IList } from 'typings/globalType';
 import Button from 'antd/lib/button/button';
 

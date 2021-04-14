@@ -4,7 +4,7 @@ import '../editcomponents/style.less';
 import { Relax } from 'plume2';
 //import { fromJS } from 'immutable';
 
-import { SelectGroup, noop, ReactEditor } from 'qmkit';
+import { SelectGroup, noop, ReactEditor, RCi18n } from 'qmkit';
 const { Option } = Select;
 const FormItem = Form.Item;
 const { SHOW_PARENT } = TreeSelect;

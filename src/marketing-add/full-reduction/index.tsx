@@ -2,7 +2,7 @@ import React from 'react';
 
 import { StoreProvider } from 'plume2';
 import { Breadcrumb, Alert, Form } from 'antd';
-import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, BreadCrumb, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import AppStore from './store';
 import FullReductionForm from './components/full-reduction-form';

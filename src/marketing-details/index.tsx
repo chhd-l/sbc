@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Breadcrumb, Spin } from 'antd';
 import { StoreProvider } from 'plume2';
-import { Headline, BreadCrumb } from 'qmkit';
+import { Headline, BreadCrumb, RCi18n } from 'qmkit';
 import { injectIntl } from 'react-intl';
 import AppStore from './store';
 import MarketingDes from './common/components/marketing-des';

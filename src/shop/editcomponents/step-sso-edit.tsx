@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Form, Input, Button, Icon, DatePicker, message, Popover } from 'antd';
-import { QMUpload, noop, Const, ValidConst, QMMethod } from 'qmkit';
+import { QMUpload, noop, Const, RCi18n, ValidConst, QMMethod } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Input, Select, Button, Menu, Dropdown, Icon, DatePicker, Row, Col, Modal, message } from 'antd';
-import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup, ShippStatus, PaymentStatus } from 'qmkit';
+import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup, ShippStatus, PaymentStatus, RCi18n } from 'qmkit';
 // import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 

@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Form, Input, Select, Button, Icon, message, InputNumber } from 'antd';
 import { fromJS } from 'immutable';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, history, Tips, QMMethod, QMUpload, cache } from 'qmkit';
+import { noop, Const, history, Tips, QMMethod, QMUpload, cache, RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

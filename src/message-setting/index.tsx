@@ -179,7 +179,7 @@ class MessageSetting extends Component<any, any> {
               <Row>
                 {emailApiList &&
                   emailApiList.map((item, index) => (
-                    <Col span={8}>
+                    <Col span={8} key={index}>
                       <Card
                         size="small"
                         extra={
@@ -226,10 +226,10 @@ class MessageSetting extends Component<any, any> {
               // onOk={this.handleOk}
               onCancel={this.handleCancel}
               footer={[
-                <Button key="back" shape="round" onClick={this.handleCancel}>
+                <Button key="back" onClick={this.handleCancel}>
                   <FormattedMessage id="Marketing.Cancel" />
                 </Button>,
-                <Button key="submit" shape="round" type="primary" onClick={this.handleOk}>
+                <Button key="submit" type="primary" onClick={this.handleOk}>
                   <FormattedMessage id="Marketing.Confirm" />
                 </Button>
               ]}

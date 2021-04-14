@@ -126,7 +126,7 @@ class MarketingList extends React.Component<any, any> {
             return SUB_TYPE[subType];
           }}
         />
-        <Column title="Promotion code" key="promotionCode" dataIndex="promotionCode" />
+        <Column title={<FormattedMessage id="Marketing.Promotioncode" />} key="promotionCode" dataIndex="promotionCode" />
         <Column
           title={<FormattedMessage id="Marketing.Time" />}
           width="15%"

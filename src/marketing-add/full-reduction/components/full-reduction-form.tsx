@@ -430,14 +430,15 @@ class FullReductionForm extends React.Component<any, any> {
                   promotionCode: e.target.value
                 });
               }}
-              disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2 || marketingBean.get('publicStatus') == 1}
+              // marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2 ||
+              disabled={marketingBean.get('publicStatus') == 1}
               style={{ width: 160 }}
             />
           )}
 
           <Checkbox
             style={{ marginLeft: 20 }}
-            disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2}
+            // disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2}
             checked={marketingBean.get('publicStatus') == 1}
             onChange={(e) => {
               this.onBeanChange({
@@ -748,10 +749,11 @@ class FullReductionForm extends React.Component<any, any> {
         {marketingBean.get('scopeType') === 3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
             {getFieldDecorator('attributeValueIds', {
-              // initialValue: marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null,
+              initialValue: attributeDefaultValue,
               rules: [
                 {
                   validator: (_rule, value, callback) => {
+                    debugger
                     if ((!value && marketingBean.get('scopeType') === 3)) { //marketingBean.get('attributeValueIds') || marketingBean.get('attributeValueIds').size === 0)
                       //
                       callback(
@@ -1115,7 +1117,6 @@ class FullReductionForm extends React.Component<any, any> {
           });
         });
     }
-
     //判断选择商品
     if (selectedSkuIds.length > 0) {
       marketingBean = marketingBean.set('skuIds', selectedSkuIds);
@@ -1197,7 +1198,7 @@ class FullReductionForm extends React.Component<any, any> {
               subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
             };
             marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
-            submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
+            submitFullReduction(marketingBean.toJS())//.then((res) => this._responseThen(res));
           }
         }
       }

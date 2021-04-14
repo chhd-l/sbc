@@ -1486,6 +1486,7 @@ export default {
   'Order.Autoship&singePurchase': 'Autoship & Single purchase',
   'Order.Club&singePurchase': 'Club & Single purchase',
   'Order.Autoship&Club&singePurchase': 'Autoship & Club & Single purchase',
+  'Order.shippingFeesDiscount': 'Shipping fee discount',
 
 
 

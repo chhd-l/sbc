@@ -305,6 +305,8 @@ export default class FillinPetInfo extends Component {
                     </Col>
                     <Col offset={2} span={6} style={{ textAlign: 'center' }}>
                         {!funType && <div >
+                            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                           <span>{(window as any).RCi18n({ id: 'Prescriber.appointmentId' })}</span>
                             <QRScaner id="scan" onScanEnd={this.findByApptNo}>
                                 <Icon type="scan" style={{
                                     fontSize: 40,
@@ -312,8 +314,12 @@ export default class FillinPetInfo extends Component {
                                     cursor: 'pointer',
                                 }} />
                             </QRScaner>
+                            </div>
+                            <div style={{ marginTop: 3}}>
+                                <Search placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />
+                            </div>
                             <div style={{ marginTop: 20 }}>
-                                {petsList.length > 0 && <Select style={{ width: 200 }}
+                                {petsList.length > 0 && <Select style={{ width: '100' }}
                                     defaultValue={petsList[0].petsId}
                                     onChange={this._onChangePets}
                                 >
@@ -325,9 +331,7 @@ export default class FillinPetInfo extends Component {
                                 }
                             </div>
 
-                            <div style={{ marginTop: 20 }}>
-                                <Search placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />
-                            </div>
+                           
                         </div>
                         }
                     </Col>

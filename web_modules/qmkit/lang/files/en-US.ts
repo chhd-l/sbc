@@ -2862,6 +2862,7 @@ export default {
   'Prescriber.EditPrescriber':'Edit Prescriber',
   'Prescriber.NewPrescriber':'New Prescriber',
   'Prescriber.BookingDetail':'Booking Detail',
+  'Prescriber.appointmentId':'Appointment ID：',
   'Prescriber.BookDate':'Book date',
   'Prescriber.valid':'valid',
   'Prescriber.invalid':'invalid',

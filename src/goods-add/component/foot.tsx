@@ -29,6 +29,7 @@ class Foot extends React.Component<any, any> {
       saveSeoSetting: Function;
       saveSuccessful: string;
       getGoodsId: string;
+      goodsList: any;
     };
   };
 
@@ -40,7 +41,8 @@ class Foot extends React.Component<any, any> {
     onMainTabChange: noop,
     saveSeoSetting: noop,
     saveSuccessful: 'saveSuccessful',
-    getGoodsId: 'getGoodsId'
+    getGoodsId: 'getGoodsId',
+    goodsList: 'goodsList'
   };
   _saveSeoSetting = () => {
     const { saveSeoSetting, getGoodsId } = this.props.relaxProps;
@@ -145,7 +147,7 @@ class Foot extends React.Component<any, any> {
   };
 
   _savePrice = async () => {
-    const { saveAll } = this.props.relaxProps;
+    const { saveAll, goodsList } = this.props.relaxProps;
     saveAll();
   };
 

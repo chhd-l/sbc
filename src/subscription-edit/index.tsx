@@ -99,6 +99,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
       // operationLog: []
       showAddressForm: false,
+      addressLoading: false,
       addressItem: {},
       addressType: 'delivery',
       customerId: ''
@@ -139,14 +140,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           };
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
-            orderStatus: subscriptionDetail.trades ? subscriptionDetail.trades[0].tradeState.deliverStatus : ''
+            orderStatus: subscriptionDetail.trades ? subscriptionDetail.trades[0].tradeState.flowState : ''
           };
           let recentOrderList = [];
           if (subscriptionDetail.trades) {
             for (let i = 0; i < subscriptionDetail.trades.length; i++) {
               let recentOrder = {
                 recentOrderId: subscriptionDetail.trades[i].id,
-                orderStatus: subscriptionDetail.trades[i].tradeState.deliverStatus
+                orderStatus: subscriptionDetail.trades[i].tradeState.flowState
               };
               recentOrderList.push(recentOrder);
             }
@@ -495,12 +496,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
   selectedOnTop = (addressList, selectedId) => {
-    let selectedAddress = addressList.find((item) => {
+    const selectedAddressIdx = addressList.findIndex((item) => {
       return item.deliveryAddressId === selectedId;
     });
-    if (selectedAddress) {
-      addressList.unshift(selectedAddress);
-      addressList = Array.from(new Set(addressList));
+    if (selectedAddressIdx > -1) {
+      const selectedAddress = addressList[selectedAddressIdx];
+      addressList.splice(selectedAddressIdx, 1);
+      addressList.splice(0, 0, selectedAddress);
     }
     return addressList;
   };
@@ -516,18 +518,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
   deliveryOK = async () => {
-    const { deliveryList, deliveryAddressId } = this.state;
+    let { deliveryList, deliveryAddressId, deliveryPrice } = this.state;
     let deliveryAddressInfo = deliveryList.find((item) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
     let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
     //计算运费
+    this.setState({ addressLoading: true });
     if (await webapi.getAddressInputTypeSetting() === 'AUTOMATICALLY') {
-      const feeRes = webapi.calcShippingFee(deliveryAddressInfo.address1);
+      const feeRes = await webapi.calcShippingFee(deliveryAddressInfo.address1);
       if (feeRes.res.code === Const.SUCCESS_CODE && feeRes.res.context.success) {
-        this.setState({
-          deliveryPrice: feeRes.res.context.tariffs && feeRes.res.context.tariffs[0]['deliveryPrice']
-        });
+        deliveryPrice = feeRes.res.context.tariffs[0]?.deliveryPrice ?? 0
       } else {
         message.error('Address is not within shipping area');
         return;
@@ -535,6 +536,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     if (this.state.sameFlag) {
       this.setState({
+        addressLoading: false,
+        deliveryPrice: deliveryPrice,
         deliveryAddressInfo: deliveryAddressInfo,
         billingAddressInfo: deliveryAddressInfo,
         deliveryList: addressList,
@@ -542,6 +545,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
     } else {
       this.setState({
+        addressLoading: false,
+        deliveryPrice: deliveryPrice,
         deliveryAddressInfo: deliveryAddressInfo,
         deliveryList: addressList,
         visibleShipping: false
@@ -1203,8 +1208,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
         width: '10%',
-        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].deliverStatus ? 
-        <FormattedMessage id={getOrderStatusValue('OrderStatus',record.tradeItems[0].deliverStatus)} />
+        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].flowState ? 
+        <FormattedMessage id={getOrderStatusValue('OrderStatus',record.tradeItems[0].flowState)} />
         // deliverStatus(record.tradeItems[0].deliverStatus) 
         : '-'}</div>
       },
@@ -1247,7 +1252,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </div>
       );
     }
-
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -1380,6 +1385,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Row>
               </Col>
               <Col span={8}>
+              {storeId === 123457907 || storeId === 123457910 ? null : (
                 <Row>
                   <Col span={12}>
                     <label className="info-title">Billing Address</label>
@@ -1420,6 +1426,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                   </Col>
                 </Row>
+              )}
               </Col>
               <Col span={8}>
                 <Row>
@@ -1443,6 +1450,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               style={{ width: '500px' }}
               title="Choose From Saved Delivery Address"
               visible={this.state.visibleShipping}
+              confirmLoading={this.state.addressLoading}
               onOk={() => this.deliveryOK()}
               onCancel={() => {
                 this.setState({

@@ -4,7 +4,7 @@ import { fromJS, List } from 'immutable';
 import momnet from 'moment';
 import { Link } from 'react-router-dom';
 import { Checkbox, Input, InputNumber, message, Modal, Pagination, Popconfirm, Spin, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop } from 'qmkit';
+import { AuthWrapper, Const, getOrderStatusValue, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
 import { FormattedMessage } from 'react-intl';
@@ -54,7 +54,7 @@ export default class SearchList extends React.Component<any, any> {
       onRefundOnlineModalChange: Function;
       onlineRefundModalData: IMap;
       onlineRefundModalHide: Function;
-      changeRefundPrice:Function;
+      changeRefundPrice: Function;
     };
   };
 
@@ -92,7 +92,7 @@ export default class SearchList extends React.Component<any, any> {
     onRefundOnlineModalChange: noop,
     onlineRefundModalData: 'onlineRefundModalData',
     onlineRefundModalHide: noop,
-    changeRefundPrice:noop
+    changeRefundPrice: noop
   };
 
   render() {
@@ -122,25 +122,25 @@ export default class SearchList extends React.Component<any, any> {
                         <FormattedMessage id="orderNumber" />
                       </th>
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="refundTime" />
+                        <FormattedMessage id="Order.refundTime" />
                       </th>
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="consumerName" />
                       </th>
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="refundableAmount" />
+                        <FormattedMessage id="Order.refundableAmount" />
                       </th>
                       {/* <th style={{ width: '10%' }}>
                         <FormattedMessage id="pointsRefundable" />
                       </th> */}
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="returnOrderStatus" />
+                        <FormattedMessage id="Order.returnOrderStatus" />
                       </th>
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="actualRefundAmount" />
+                        <FormattedMessage id="Order.actualRefundAmount" />
                       </th>
                       <th style={{ width: '10%', textAlign: 'right' }}>
-                        <FormattedMessage id="remark" />
+                        <FormattedMessage id="Order.remark" />
                       </th>
                     </tr>
                   </thead>
@@ -338,7 +338,7 @@ export default class SearchList extends React.Component<any, any> {
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
                                 onClick={() => {
-                                  this._showRealRefund(onRealRefund, rid, returnType == 'REFUND'?applyPrice:totalPrice);
+                                  this._showRealRefund(onRealRefund, rid, returnType == 'REFUND' ? applyPrice : totalPrice);
                                 }}
                               >
                                 <FormattedMessage id="realRefund" />
@@ -346,7 +346,7 @@ export default class SearchList extends React.Component<any, any> {
                             </Tooltip>
                           </AuthWrapper>
                         )}
-                       
+
                         <AuthWrapper functionName="f_retrun_detail">
                           <Tooltip placement="top" title="Detail">
                             <Link style={{ marginRight: 18, marginLeft: 20 }} to={`/order-return-detail/${rid}`} className="iconfont iconDetails">
@@ -401,14 +401,14 @@ export default class SearchList extends React.Component<any, any> {
                     {v.get('buyer') ? v.getIn(['buyer', 'name']) : ''}
                   </td>
                   <td style={{ width: '12%' }}>{
-                    returnType === 'REFUND'?
-                  (applyPrice|| applyPrice===0?sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(applyPrice).toFixed(2):'-'):
-                  (totalPrice|| totalPrice===0?sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(totalPrice).toFixed(2):'-')}</td>
+                    returnType === 'REFUND' ?
+                      (applyPrice || applyPrice === 0 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(applyPrice).toFixed(2) : '-') :
+                      (totalPrice || totalPrice === 0 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(totalPrice).toFixed(2) : '-')}</td>
                   {/*应退积分*/}
                   {/* <td style={{ width: '10%' }}>{applyPoints}</td> */}
                   {/*状态*/}
                   <td style={{ width: '12%' }}>
-                    {returnFlowState}
+                    <FormattedMessage id={getOrderStatusValue('ReturnOrderStatus', returnFlowState)} />
                     {/* {returnFlowState == 'REFUND_FAILED' && (
                       <Tooltip title={v.get('refundFailedReason')}>
                         <a style={{ display: 'block' }}>原因</a>
@@ -429,7 +429,7 @@ export default class SearchList extends React.Component<any, any> {
                   </td> */}
                   <td style={{ width: '10%' }}>
                     {/*订单编号*/}
-                    {v.get('rejectReason')?v.get('rejectReason'):'-'}
+                    {v.get('rejectReason') ? v.get('rejectReason') : '-'}
                   </td>
                 </tr>
               </tbody>
@@ -452,13 +452,18 @@ export default class SearchList extends React.Component<any, any> {
           min={0}
           max={applyPrice}
           defaultValue={applyPrice}
-          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || '$'} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          parser={value => value.replace(/\$\s?|(,*)/g, '')}
+          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          parser={value => {
+            value = value.replace(sessionStorage.getItem(cache.SYSTEM_GET_CONFIG), '');
+            value = value.replace(/\s?|(,*)/g, '');
+            return value;
+          }
+          }
           onChange={this.changeRealRefund}
         />
       </div>,
       onOk() {
-        return onRealRefund(rid,applyPrice);
+        return onRealRefund(rid, applyPrice);
       },
       onCancel() {
 
@@ -588,7 +593,7 @@ export default class SearchList extends React.Component<any, any> {
   }
   changeRealRefund = (value) => {
     this.props.relaxProps.changeRefundPrice({
-      refundPrice:value
+      refundPrice: value
     })
   }
 }

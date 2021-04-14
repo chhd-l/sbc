@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover, Empty, Tabs, notification } from 'antd';
 const { Header } = Layout;
-import { history, cache, util, Const } from 'qmkit';
+import { history, cache, util, Const, AuthWrapper } from 'qmkit';
 import QRCode from 'qrcode';
 import copy from 'copy-to-clipboard';
 import OktaLogout from './okta/okta-logout';
@@ -294,23 +294,25 @@ export default class MyHeader extends React.Component {
 
           <div className="align-items-center">
             <div style={styles.headerRight}>
-              {/*<Select defaultValue={sessionStorage.getItem(cache.LANGUAGE)} style={{ width: 120, marginRight: 40 }} onChange={this.languageChange}>
-                <Option value="English">English</Option>
-                <Option value="Russian">Russian</Option>
-                <Option value="German">German</Option>
-              </Select>*/}
+              {/*<Select defaultValue={sessionStorage.getItem(cache.LANGUAGE)} style={{ width: 120, marginRight: 40 }} onChange={this.languageChange}>*/}
+              {/*  <Option value="English">English</Option>*/}
+              {/*  <Option value="Russian">Russian</Option>*/}
+              {/*  <Option value="German">German</Option>*/}
+              {/*</Select>*/}
             </div>
 
             <div style={styles.headerRight}>
-              <div style={{ marginRight: 30, marginTop: 15 }}>
-                <Badge count={this.state.reminderTasks.length}>
-                  <Popover style={{ padding: 0 }}
-                    // visible={this.state.visible}
-                    // onVisibleChange={this.handleVisibleChange}
-                           placement="bottomRight" content={this.content()} trigger="click">
-                    <Icon type="bell" style={{ fontSize: 25 }} />
-                  </Popover>
-                </Badge>
+              <div style={{ marginRight: 30, marginTop: 15, height: 64 }}>
+                <AuthWrapper functionName="f_petowner_task">
+                  <Badge count={this.state.reminderTasks.length}>
+                    <Popover style={{ padding: 0 }}
+                      // visible={this.state.visible}
+                      // onVisibleChange={this.handleVisibleChange}
+                            placement="bottomRight" content={this.content()} trigger="click">
+                      <Icon type="bell" style={{ fontSize: 25 }} />
+                    </Popover>
+                  </Badge>
+                </AuthWrapper>
               </div>
               <div style={{ height: 20, textAlign: 'right', }}>
                 <div style={{ height: 20 }}>

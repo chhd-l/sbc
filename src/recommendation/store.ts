@@ -28,23 +28,10 @@ export default class AppStore extends Store {
    * @param pageNum
    * @param pageSize
    */
-  init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+  init = async ({ pageNum, pageSize,...result } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
-    //获取form数据
-    let form = this.state().get('form').toJS();
-    const key = this.state().getIn(['tab', 'key']);
-    let obj = {
-      linkStatus: 2
-    };
 
-    if (key != '0') {
-      obj.linkStatus = key == 'Invalid' ? 1 : 0;
-    }
-    if (sessionStorage.getItem('PrescriberSelect')) {
-      form['clinicsName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
-      form['prescriberName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
-    }
-    webapi.fetchOrderList({  ...form, pageNum, pageSize }).then(({ res }) => {
+    webapi.fetchOrderList({  ...result, pageNum, pageSize }).then(({ res }) => {
       console.log(res)
       if (res.code == Const.SUCCESS_CODE) {
         this.transaction(() => {
@@ -90,7 +77,7 @@ export default class AppStore extends Store {
   onSearch = (params) => {
     this.dispatch('form:clear');
     this.dispatch('form:field', params);
-    this.init({ pageNum: 0, pageSize: 10 });
+    this.init({ pageNum: 0, pageSize: 10,...params });
   };
 
   /**

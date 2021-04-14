@@ -426,12 +426,13 @@ class FullDiscountForm extends React.Component<any, any> {
             disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2}
             checked={marketingBean.get('publicStatus') == 1}
             onChange={(e) => {
+              debugger
               this.onBeanChange({
                 publicStatus: e.target.checked ? 1 : 0
               });
             }}
           >
-            Public
+            <FormattedMessage id="Marketing.Public" />
           </Checkbox>
         </FormItem>
 
@@ -1141,9 +1142,7 @@ class FullDiscountForm extends React.Component<any, any> {
     if (this.state.promotionCode) {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
     }
-    if (!marketingBean.get('publicStatus')) {
-      marketingBean = marketingBean.set('publicStatus', '1');
-    }
+
     form.validateFieldsAndScroll((err) => {
       if (Object.keys(errorObject).length != 0) {
         form.setFields(errorObject);
@@ -1191,18 +1190,7 @@ class FullDiscountForm extends React.Component<any, any> {
       }
     });
   };
-  initLevel = (levelType) => {
-    const { ma }
-    const initLevel = [
-      {
-        key: this.makeRandom(),
-        fullAmount: null,
-        fullCount: null,
-        discount: null
-      }
-    ];
-    ma
-  }
+
   /**
    * 生成随机数，作为key值
    * @returns {string}

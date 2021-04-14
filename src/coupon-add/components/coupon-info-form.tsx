@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Button, Col, DatePicker, Form, Input, message, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Const, noop, QMMethod, ValidConst, history, cache } from 'qmkit';
 import moment from 'moment';
 import SelectedGoodsGrid from './selected-goods-grid';
@@ -49,10 +49,11 @@ const { RangePicker } = DatePicker;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
 const TreeNode = Tree.TreeNode;
-export default class CouponInfoForm extends Component<any, any> {
+class CouponInfoForm extends Component<any, any> {
   props: {
     form: any;
     location: any;
+    intl;
     relaxProps?: {
       // 优惠券Id
       couponId: string;
@@ -349,8 +350,6 @@ export default class CouponInfoForm extends Component<any, any> {
       attributesList,
       attributeValueIds
     } = this.props.relaxProps;
-    console.log(segmentIds, 'segmentIds----');
-    console.log(attributeValueIds, 'attributeValueIds----');
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
     if (storeCateIds) {
@@ -369,24 +368,24 @@ export default class CouponInfoForm extends Component<any, any> {
     return (
       <RightContent>
         <Form labelAlign={'left'}>
-          <FormItem {...formItemSmall} label="Coupon type" required={true}>
+          <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.Coupontype" />} required={true}>
             {getFieldDecorator('couponPromotionType', {
               initialValue: couponPromotionType
             })(
               <>
                 <RadioGroup value={couponPromotionType} onChange={(e) => this.couponPromotionTypeOnChange((e as any).target.value)}>
                   <Radio value={0}>
-                    <span style={styles.darkColor}>Amount</span>
+                    <span style={styles.darkColor}><FormattedMessage id="Marketing.Amount" /></span>
                   </Radio>
                   <Radio value={1}>
-                    <span style={styles.darkColor}>Percentage</span>
+                    <span style={styles.darkColor}><FormattedMessage id="Marketing.Percentage" /></span>
                   </Radio>
                 </RadioGroup>
               </>
             )}
           </FormItem>
-          <div className="bold-title">Basic Setting</div>
-          <FormItem {...formItemSmall} label="Coupon name" required={true}>
+          <div className="bold-title"><FormattedMessage id="Marketing.BasicSetting" /></div>
+          <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.CouponName" />} required={true}>
             {getFieldDecorator('couponName', {
               initialValue: couponName,
               rules: [
@@ -398,7 +397,9 @@ export default class CouponInfoForm extends Component<any, any> {
               ]
             })(
               <Input
-                placeholder="No more than one hundred words"
+                placeholder={this.props.intl.formatMessage({
+                  id: 'Marketing.Nomorethanonehundredwords'
+                })}
                 maxLength={100}
                 onChange={(e) => {
                   fieldsValue({
@@ -451,7 +452,7 @@ export default class CouponInfoForm extends Component<any, any> {
               <span style={styles.greyColor}>&nbsp;&nbsp;最多可选三个分类</span>
             </Col>
           </FormItem>*/}
-          <FormItem {...formItemLayout} label="Start and end time" required={true}>
+          <FormItem {...formItemLayout}  label={<FormattedMessage id="Marketing.StartAndEndTime" />} required={true}>
             {/* <RadioGroup
               value={rangeDayType}
               onChange={(e) => {
@@ -465,7 +466,9 @@ export default class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     required: rangeDayType === 0,
-                    message: 'Please input the start and end time'
+                    message: this.props.intl.formatMessage({
+                        id: 'Marketing.PleaseInputTheStart'
+                      })
                   }
                 ]
               })(
@@ -475,7 +478,14 @@ export default class CouponInfoForm extends Component<any, any> {
                   disabled={rangeDayType === 1}
                   getCalendarContainer={() => document.getElementById('page-content')}
                   format="YYYY-MM-DD"
-                  placeholder={['Start date', 'End date']}
+                  placeholder={[
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.StartTime'
+                    }),
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.EndTime'
+                    })
+                  ]}
                   onChange={(e) => {
                     if (e.length > 0) {
                       changeDateRange({
@@ -486,7 +496,7 @@ export default class CouponInfoForm extends Component<any, any> {
                   }}
                 />
               )}
-              <span style={styles.greyColor}>&nbsp;&nbsp;Coupons can be created but not used before the start time</span>
+              <span style={styles.greyColor}>&nbsp;&nbsp;<FormattedMessage id="Marketing.CouponsCanBe" /></span>
               {/* </Radio> */}
             </FormItem>
             {/* <FormItem>
@@ -526,16 +536,25 @@ export default class CouponInfoForm extends Component<any, any> {
             {/* </RadioGroup> */}
           </FormItem>
           {couponPromotionType === 0 && (
-            <FormItem {...formItemSmall} label="Coupon value" required={true}>
+            <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.CouponValue" />} required={true}>
               <Row>
                 {getFieldDecorator('denomination', {
                   initialValue: denomination,
                   rules: [
-                    { required: true, message: 'Please input the face value of coupon' },
+                    { required: true,
+                      message:
+                        this.props.intl.formatMessage({
+                          id: 'Marketing.theFaceValueOfCoupon'
+                        })
+                    },
                     {
                       validator: (_rule, value, callback) => {
                         if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                          callback('Integers between 1-99999 are allowed');
+                          callback(
+                            this.props.intl.formatMessage({
+                              id: 'Marketing.IntegersBetweenAreAllowed'
+                            })
+                          );
                           return;
                         }
                         callback();
@@ -544,7 +563,11 @@ export default class CouponInfoForm extends Component<any, any> {
                   ]
                 })(
                   <Input
-                    placeholder="integer from 1 to 99999"
+                    placeholder={
+                      this.props.intl.formatMessage({
+                        id: 'Marketing.integerfrom1to99999'
+                      })
+                    }
                     prefix={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     maxLength={5}
                     onChange={async (e) => {
@@ -564,17 +587,29 @@ export default class CouponInfoForm extends Component<any, any> {
             </FormItem>
           )}
           {couponPromotionType === 1 && (
-            <FormItem {...formItemSmall} label="Coupon discount" required={true}>
+            <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.Coupondiscount" />} required={true}>
               <Row>
                 {getFieldDecorator('couponDiscount', {
                   initialValue: couponDiscount,
                   rules: [
-                    { required: true, message: 'Please input coupon discount.' },
+                    { required: true,
+                      message:
+                        this.props.intl.formatMessage({
+                          id: 'Marketing.Pleaseinputcoupondiscount'
+                        })
+                    },
                     {
                       validator: (_rule, value, callback) => {
                         if (value) {
                           if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                            callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
+                            this.props.intl.formatMessage({
+                              id: 'Marketing.integerfrom1to99999'
+                            })
+                            callback(
+                              this.props.intl.formatMessage({
+                                id: 'Marketing.InputValueBetween'
+                              })
+                            );
                           }
                         }
                         callback();
@@ -600,7 +635,7 @@ export default class CouponInfoForm extends Component<any, any> {
             </FormItem>
           )}
           <ErrorDiv>
-            <FormItem {...formItemLayout} label="Threshold" required={true} style={{ marginTop: '40px' }}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />} required={true} style={{ marginTop: '40px' }}>
               <RadioGroup value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)}>
                 <FormItem>
                   <Radio value={1}>
@@ -610,16 +645,26 @@ export default class CouponInfoForm extends Component<any, any> {
                       rules: [
                         {
                           required: fullBuyType === 1,
-                          message: 'Please input the usage threshold'
+                          message: this.props.intl.formatMessage({
+                            id: 'Marketing.theUsageThreshold'
+                          })
                         },
                         {
                           validator: (_rule, value, callback) => {
                             if (fullBuyType == 1 && (value || value === 0)) {
                               if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                                callback('Integers between 1-99999 are allowed');
+                                callback(
+                                  this.props.intl.formatMessage({
+                                    id: 'Marketing.IntegersBetweenAreAllowed'
+                                  })
+                                );
                                 return;
                               } else if (value <= parseInt(`${denomination}`)) {
-                                callback('The threshold must be greater than the face value of the coupon');
+                                callback(
+                                  this.props.intl.formatMessage({
+                                    id: 'Marketing.TheThresholdMust'
+                                  })
+                                );
                                 return;
                               }
                             }
@@ -633,7 +678,11 @@ export default class CouponInfoForm extends Component<any, any> {
                         style={{ width: 338 }}
                         prefix={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                         disabled={fullBuyType === 0}
-                        placeholder="integer from 1 to 9999"
+                        placeholder={
+                          this.props.intl.formatMessage({
+                          id: 'Marketing.integerfrom1to99999'
+                        })
+                        }
                         maxLength={5}
                         onChange={(e) => {
                           fieldsValue({
@@ -645,27 +694,27 @@ export default class CouponInfoForm extends Component<any, any> {
                     )}
                   </Radio>
                   <Radio value={0}>
-                    <span style={styles.darkColor}>No threshold</span>
+                    <span style={styles.darkColor}><FormattedMessage id="Marketing.NoThreshold" /></span>
                   </Radio>
                 </FormItem>
               </RadioGroup>
             </FormItem>
           </ErrorDiv>
 
-          <div className="bold-title">Select product</div>
+          <div className="bold-title"><FormattedMessage id="Marketing.SelectProducts" /></div>
           <FormItem {...formItemLayout} required={true}>
             <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
-                <span style={styles.darkColor}>All products</span>
+                <span style={styles.darkColor}><FormattedMessage id="Marketing.AllProducts" /></span>
               </Radio>
               <Radio value={5}>
-                <span style={styles.darkColor}>Category</span>
+                <span style={styles.darkColor}><FormattedMessage id="Marketing.Category" /></span>
               </Radio>
               <Radio value={4}>
-                <span style={styles.darkColor}>Custom</span>
+                <span style={styles.darkColor}><FormattedMessage id="Marketing.Custom" /></span>
               </Radio>
               <Radio value={6}>
-                <span style={styles.darkColor}>Attribute</span>
+                <span style={styles.darkColor}><FormattedMessage id="Marketing.Attribute" /></span>
               </Radio>
             </RadioGroup>
           </FormItem>
@@ -685,7 +734,11 @@ export default class CouponInfoForm extends Component<any, any> {
                     validator: (_rule, value, callback) => {
                       if ((!value || value.length === 0) && scopeType === 5) {
                         //storeCateIds.size === 0
-                        callback('Please select store cate.');
+                        callback(
+                          this.props.intl.formatMessage({
+                            id: 'Marketing.Pleaseselectcategory'
+                          })
+                        );
                       }
                       callback();
                     }
@@ -701,8 +754,16 @@ export default class CouponInfoForm extends Component<any, any> {
                   treeCheckStrictly={true}
                   //treeData ={getGoodsCate}
                   // showCheckedStrategy = {SHOW_PARENT}
-                  placeholder="Please select category"
-                  notFoundContent="No sales category"
+                  placeholder={
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.Pleaseselectcategory'
+                    })
+                  }
+                  notFoundContent={
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.Nosalescategory'
+                    })
+                  }
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
                   onChange={this.storeCateChange}
@@ -722,7 +783,11 @@ export default class CouponInfoForm extends Component<any, any> {
                     validator: (_rule, value, callback) => {
                       if ((!value || value.length === 0) && scopeType === 6) {
                         //attributeValueIds.size === 0
-                        callback('Please select attribute.');
+                        callback(
+                          this.props.intl.formatMessage({
+                            id: 'Marketing.Pleaseselectattribute'
+                          })
+                          );
                       }
                       callback();
                     }
@@ -739,8 +804,16 @@ export default class CouponInfoForm extends Component<any, any> {
                   treeCheckStrictly={true}
                   //treeData ={getGoodsCate}
                   // showCheckedStrategy = {SHOW_PARENT}
-                  placeholder="Please select attribute"
-                  notFoundContent="No sales attribute"
+                  placeholder={
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.Pleaseselectattribute'
+                    })
+                  }
+                  notFoundContent={
+                    this.props.intl.formatMessage({
+                      id: 'Marketing.Noattribute'
+                    })
+                  }
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
                   onChange={this.attributeChange}
@@ -752,11 +825,11 @@ export default class CouponInfoForm extends Component<any, any> {
               )}
             </FormItem>
           )}
-          <div className="bold-title">Target consumer</div>
+          <div className="bold-title"><FormattedMessage id="Marketing.TargetConsumer" /></div>
           <FormItem {...formItemLayout} required={true}>
             <RadioGroup defaultValue={couponJoinLevel} value={couponJoinLevel} onChange={(e) => this.targetCustomerRadioChange(e.target.value)}>
-              <Radio value={0}>All</Radio>
-              <Radio value={-3}>Select group</Radio>
+              <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
+              <Radio value={-3}><FormattedMessage id="Marketing.Selectgroup" /></Radio>
             </RadioGroup>
           </FormItem>
           {couponJoinLevel === -3 && (
@@ -766,7 +839,11 @@ export default class CouponInfoForm extends Component<any, any> {
                   {
                     validator: (_rule, value, callback) => {
                       if (segmentIds.size === 0 && couponJoinLevel === -3) {
-                        callback('Please select group.');
+                        callback(
+                          this.props.intl.formatMessage({
+                            id: 'Marketing.Pleaseselectgroup'
+                          })
+                        );
                       }
                       callback();
                     }
@@ -786,16 +863,24 @@ export default class CouponInfoForm extends Component<any, any> {
               )}
             </FormItem>
           )}
-          <div className="bold-title">Instructions for use</div>
+          <div className="bold-title"> <FormattedMessage id="Marketing.InstructionsForUse" /></div>
           <FormItem {...formItemLayout}>
             {getFieldDecorator('couponDesc', {
               initialValue: couponDesc,
-              rules: [{ max: 500, message: '使用说明最多500个字符' }]
+              rules: [{ max: 500, message:
+                  this.props.intl.formatMessage({
+                    id: 'Marketing.Instructionsareupto500'
+                  })
+              }]
             })(
               <TextArea
                 maxLength={500}
                 style={{ width: 800, marginTop: '10px' }}
-                placeholder={'0 to 500 Words'}
+                placeholder={
+                  this.props.intl.formatMessage({
+                    id: 'Marketing.Instructionsareupto500'
+                  })
+                }
                 onChange={(e) => {
                   fieldsValue({
                     field: 'couponDesc',
@@ -808,10 +893,10 @@ export default class CouponInfoForm extends Component<any, any> {
         </Form>
         <div className="bar-button">
           <Button disabled={btnDisabled} type="primary" onClick={() => this.saveCoupon()} style={{ marginRight: 10 }}>
-            Save
+            <FormattedMessage id="Marketing.Save" />
           </Button>
           <Button onClick={() => history.goBack()} style={{ marginLeft: 10 }}>
-            Cancel
+            <FormattedMessage id="Marketing.Cancel" />
           </Button>
         </div>
         {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
@@ -946,7 +1031,11 @@ export default class CouponInfoForm extends Component<any, any> {
       ) {
         this.props.form.setFields({
           rangeDay: {
-            errors: [new Error('开始时间不能小于当前时间')]
+            errors: [new Error(
+              this.props.intl.formatMessage({
+                id: 'Marketing.starttimecannotbelessthancurrenttime'
+              })
+            )]
           }
         });
         changeBtnDisabled();
@@ -1064,6 +1153,7 @@ export default class CouponInfoForm extends Component<any, any> {
   };
 }
 
+export default injectIntl(CouponInfoForm)
 const styles = {
   greyColor: {
     fontSize: 12,

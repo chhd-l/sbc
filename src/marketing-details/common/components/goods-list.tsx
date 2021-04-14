@@ -72,12 +72,10 @@ export default class GoodsList extends React.Component<any, any> {
       <div>
         <GreyBg>
           <Row>
-            <Col span={3}>
+            <Col span={24}>
               <span>
                 <FormattedMessage id="Marketing.SelectedGoods" />:
               </span>
-            </Col>
-            <Col span={12} >
               {
                 scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
                   scopeType === 1 ?
@@ -90,20 +88,16 @@ export default class GoodsList extends React.Component<any, any> {
                       <Column width="20%" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
                     </Table> :  scopeType === 2 ?
                     currentCategary && currentCategary.map(item=> (
-                      <span className="text-align-center" key={item.storeCateId}>{item.get('cateName')}</span>
+                      <span className="more-left-span" key={item.storeCateId}>{item.get('cateName')}</span>
                     ))
-                    : <span>
-                      {
-                        currentAttribute && currentAttribute.map(item=> (
-                          <span key={item.id}>{item.get('attributeName') || item.get('attributeDetailName')} </span>
-                        ))
-                      }
-                      </span>
+                    :
+                    currentAttribute && currentAttribute.map(item=> (
+                      <span key={item.id} className="more-left-span" >{item.get('attributeName') || item.get('attributeDetailName')} </span>
+                    ))
               }
             </Col>
           </Row>
         </GreyBg>
-
       </div>
     );
   }

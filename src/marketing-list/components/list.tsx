@@ -26,7 +26,8 @@ const SUB_TYPE = {
 };
 const PROMOTION_TYPE = {
   0: 'Normal promotion',
-  1: 'Subscription promotion'
+  1: 'Subscription promotion',
+  2: 'Club promotion'
 };
 
 //默认每页展示的数量

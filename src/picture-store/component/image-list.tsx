@@ -6,15 +6,16 @@ import Checkbox from 'antd/lib/checkbox/Checkbox';
 import { Modal, Pagination, message, Tooltip } from 'antd';
 import { allCheckedQL } from '../ql';
 import Input from 'antd/lib/input/Input';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 
 const confirm = Modal.confirm;
 
 @Relax
-export default class ImageList extends React.Component<any, any> {
+class ImageList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       imageList: IList; //图片列表
       queryImagePage: Function; //初始化
@@ -104,13 +105,16 @@ export default class ImageList extends React.Component<any, any> {
    */
   _delete = () => {
     const { imageList, doDelete } = this.props.relaxProps;
+    const err = this.props.intl.formatMessage({id:'Setting.deleteFirst'});
+    const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
+    const content = this.props.intl.formatMessage({id:'Setting.deleteTheSelectedPicture'});
     if (imageList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error(<FormattedMessage id="Setting.deleteFirst" />);
+      message.error(err);
       return;
     }
     confirm({
-      title: <FormattedMessage id="Setting.Prompt" />,
-      content: <FormattedMessage id="Setting.deleteTheSelectedPicture" />,
+      title: title,
+      content: content,
       onOk() {
         doDelete();
       }
@@ -123,8 +127,9 @@ export default class ImageList extends React.Component<any, any> {
    */
   _showModal = () => {
     const { imageList, showMoveImageModal } = this.props.relaxProps;
+    const err = this.props.intl.formatMessage({id:'Setting.moveFirst'});
     if (imageList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error(<FormattedMessage id="Setting.moveFirst" />);
+      message.error(err);
       return;
     }
     showMoveImageModal(true);
@@ -139,17 +144,20 @@ export default class ImageList extends React.Component<any, any> {
     //修改了图片名称才真正的请求接口进行修改
     if (e.target.value != oldVal) {
       if (!e.target.value.trim()) {
-        message.error(<FormattedMessage id="Setting.PleaseInputAFileName" />);
+        const err = this.props.intl.formatMessage({id:'Setting.PleaseInputAFileName'});
+        message.error(err);
         return false;
       }
 
       if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(e.target.value)) {
-        message.error(<FormattedMessage id="Setting.theCorrectFormat" />);
+        const err = this.props.intl.formatMessage({id:'Setting.theCorrectFormat'});
+        message.error(err);
         return false;
       }
 
       if (e.target.value.length > 40) {
-        message.error(<FormattedMessage id="Setting.FileNameIsTooLong" />);
+        const err = this.props.intl.formatMessage({id:'Setting.FileNameIsTooLong'});
+        message.error(err);
         return false;
       }
 
@@ -193,6 +201,8 @@ export default class ImageList extends React.Component<any, any> {
     queryImagePage({ pageNum: pageNum - 1, pageSize: pageSize });
   };
 }
+
+export default injectIntl(ImageList);
 
 const styles = {
   greyHeader: {

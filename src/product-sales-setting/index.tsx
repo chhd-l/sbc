@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
-import { Form, Input, Select, Modal, Button, Radio, message, Col, Row } from 'antd';
+import { Form, Input, Select, Modal, Button, Radio, message, Col, Row, Popconfirm, Tooltip } from 'antd';
 import ModalForm from './conponents/modal-form';
 import ModalFormClub from './conponents/modal-form-club';
 
 import { FormattedMessage } from 'react-intl';
-import { querySysDictionary, defaultProductSetting, translateAddBatch, addSysDictionary } from './webapi';
+import { querySysDictionary,delSysDictionary, defaultProductSetting, translateAddBatch, addSysDictionary } from './webapi';
 const { Option } = Select;
 
 class ProductSearchSetting extends Component<any, any> {
@@ -117,6 +117,13 @@ class ProductSearchSetting extends Component<any, any> {
       purchaseType
     });
   }
+  async deleteDict(item){
+  const {res}=  await delSysDictionary({id:item.id})
+  // let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+   message.success(res.message)
+   this.querySysDictionary();
+   
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -142,7 +149,7 @@ class ProductSearchSetting extends Component<any, any> {
                 <Radio.Group disabled={disabled}>
                   {purchaseType.map((item, index) => {
                     return (
-                      <Radio.Button value={item.id} key={index} style={{  textAlign: 'center' }}>
+                      <Radio.Button value={item.id} key={index} style={{ textAlign: 'center' }}>
                         {item.valueEn}
                       </Radio.Button>
                     );
@@ -177,11 +184,26 @@ class ProductSearchSetting extends Component<any, any> {
                         }
                       ]
                     })(
-                      <Select disabled={disabled} placeholder="Please select subscription frequency !" style={{width:180}}>
+                      <Select disabled={disabled}  
+                      optionLabelProp="label" 
+                      placeholder="Please select subscription frequency !" style={{ width: 180 }}>
                         {options.map((item) => (
-                          <Option key={item.id} value={item.id}>
-                            {item.name}
-                          </Option>
+                          <Option key={item.id} value={item.id} label={item.name}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between' ,position:'relative'}} >
+                            <span >{item.name}</span>
+                           
+                            <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
+                            <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item)} okText="Confirm" cancelText="Cancel">
+                              <Tooltip placement="top" title="Delete">
+                                <a>
+                                  <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
+                                </a>
+                              </Tooltip>
+                            </Popconfirm>
+                         </div>
+
+                          </div>
+                        </Option>
                         ))}
                       </Select>
                     )}
@@ -215,12 +237,28 @@ class ProductSearchSetting extends Component<any, any> {
                           required: true,
                           message: 'Please select subscription frequency !'
                         }
-                      ]
+                      ],
+                     
                     })(
-                      <Select disabled={disabled} placeholder="Please select subscription frequency !" style={{width:180}}>
+                      <Select disabled={disabled}
+                        optionLabelProp="label"
+                        placeholder="Please select subscription frequency !" style={{ width: 180 }}>
                         {optionsClub.map((item) => (
-                          <Option key={item.id} value={item.id}>
-                            {item.name}
+                          <Option key={item.id} value={item.id} label={item.name}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between',position:'relative' }} >
+                              <span >{item.name}</span>
+  
+                              <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
+                              <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item)} okText="Confirm" cancelText="Cancel">
+                                <Tooltip placement="top" title="Delete">
+                                  <a>
+                                    <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
+                                  </a>
+                                </Tooltip>
+                              </Popconfirm>
+                          </div>
+
+                            </div>
                           </Option>
                         ))}
                       </Select>
@@ -235,8 +273,8 @@ class ProductSearchSetting extends Component<any, any> {
 
 
             </Form.Item>
-            
-            <div className="bar-button" style={{marginLeft:-40}}>
+
+            <div className="bar-button" style={{ marginLeft: -40 }}>
               <Button type="primary" htmlType="submit">
                 Save
               </Button>

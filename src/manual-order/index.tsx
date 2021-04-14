@@ -54,7 +54,7 @@ class ManualOrder extends Component<any, any> {
 
   turnShowPage = (token) => {
     let { customer,url,prefix } = this.state;
-    let winObj = window.open(`${url+prefix}/cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+    let winObj = window.open(`${url+prefix}${prefix?'':'/'}cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
     let loop = setInterval(async () => {
       if (winObj.closed) {
         clearInterval(loop);
@@ -106,10 +106,10 @@ class ManualOrder extends Component<any, any> {
     let url ='',prefix='';
     if(['fr','ru','tr'].includes((window as any).countryEnum[this.state.storeId])){
       prefix='/shop/'
-      url=`https://uatwedding.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
+      url=`${(Const as any).VALET_ORDER_URL}${(window as any).countryEnum[this.state.storeId]}`
     }else{
       prefix=''
-      url=`https://shopstg.royalcanin.com/${(window as any).countryEnum[this.state.storeId]}`
+      url=`${(Const as any).VALET_ORDER_NOMAL_URL}${(window as any).countryEnum[this.state.storeId]}`
     }
     this.setState({
       url,
@@ -165,7 +165,7 @@ class ManualOrder extends Component<any, any> {
             {current === 0 && (
               <span>
                 <Button type="primary">
-                  <a style={{ color: '#fff' }} target="_blank" href={`${url}${prefix}/register`}>
+                  <a style={{ color: '#fff' }} target="_blank" href={`${url}${prefix}${prefix?'':'/'}register`}>
                     Register
                   </a>
                 </Button>

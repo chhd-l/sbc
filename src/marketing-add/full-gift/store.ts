@@ -23,6 +23,14 @@ export default class AppStore extends Store {
   init = async (marketingId) => {
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
+      // const scopeArray = res.context.marketingScopeList ? fromJS(res.context.marketingScopeList) : null;
+      // if (scopeArray) {
+      //   const scopeIds = scopeArray.map((scope) => scope.get('scopeId'));
+      //   const selectedRows = this.makeSelectedRows(scopeIds);
+      //   this.dispatch('marketing:selectedRows', selectedRows);
+      //   this.dispatch('marketing:selectedSkuIds', scopeIds.toJS());
+      // }
       this.dispatch('marketing:giftBean', res.context);
     } else if (res.code == 'K-080016') {
       history.go(-1);
@@ -98,4 +106,22 @@ export default class AppStore extends Store {
       // message.error('load group error.');
     }
   };
+
+  initDefualtLevelList= () => {
+    this.dispatch('marketing:initBeanLevelList')
+  }
+
+
+  setSelectedProductRows = ({ selectedRows = [], selectedSkuIds = [] }) => {
+    this.dispatch('marketing:selectedRows', selectedRows);
+    this.dispatch('marketing:selectedSkuIds', selectedSkuIds);
+  };
+
+  initGiftDefualtLevelList= () => {
+    this.dispatch('marketing:initBeanLevelList')
+  }
+  setSelectedGiftRows = (rows) => {
+    this.dispatch('marketing:selectedGiftRows', rows)
+  }
+
 }

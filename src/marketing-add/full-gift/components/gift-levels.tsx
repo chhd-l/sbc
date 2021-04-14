@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
 import { InputNumber, Input, Button, Select, Form } from 'antd';
-import { DataGrid, ValidConst, cache } from 'qmkit';
+import { DataGrid, ValidConst, cache, noop } from 'qmkit';
 
 import { GoodsModal } from 'biz';
 
@@ -13,6 +13,7 @@ const Column = Table.Column;
 const FormItem = Form.Item;
 
 import styled from 'styled-components';
+import { Relax } from 'plume2';
 
 const HasError = styled.div`
   display: flex;
@@ -31,7 +32,7 @@ export default class GiftLevels extends React.Component<any, any> {
     super(props);
     this.state = {
       isFullCount: props.isFullCount,
-      selectedRows: props.selectedRows,
+
       fullGiftLevelList: props.fullGiftLevelList ? props.fullGiftLevelList : [],
       //公用的商品弹出框
       goodsModal: {
@@ -41,6 +42,7 @@ export default class GiftLevels extends React.Component<any, any> {
       PromotionTypeValue: 0
     };
   }
+
 
   componentDidMount() {
     // if (!this.props.fullGiftLevelList || this.props.fullGiftLevelList.length == 0) {
@@ -80,12 +82,11 @@ export default class GiftLevels extends React.Component<any, any> {
   // }
 
   render() {
-    const { goodsModal, isFullCount, fullGiftLevelList } = this.props;
-
+    const { isFullCount, fullGiftLevelList, isNormal, selectedRows } = this.props;
+    const { goodsModal } = this.state
     const { form } = this.props;
-
     const { getFieldDecorator } = form;
-
+    console.log(selectedRows.toJS(), 'selectedGiftRows-------');
     return (
       <div>
         {fullGiftLevelList &&
@@ -93,10 +94,10 @@ export default class GiftLevels extends React.Component<any, any> {
             return (
               <div key={level.key ? level.key : level.giftLevelId}>
                 <HasError>
-                  {this.props.isNormal && (
-                    <>
+                  {isNormal && (
+                    <div>
                       <span>Full&nbsp;</span>
-                      <FormItem>
+                      <FormItem style={{ display: 'inline-block' }}>
                         {getFieldDecorator(`level_rule_value_${index}`, {
                           rules: [
                             { required: true, message: 'Must enter rules' },
@@ -119,13 +120,32 @@ export default class GiftLevels extends React.Component<any, any> {
                           ],
                           initialValue: !isFullCount ? level.fullAmount : level.fullCount
                         })(
+                          // <Input
+                          //   value={isFullCount ? level.fullAmount : null}
+                          //   style={{ width: 200 }}
+                          //   placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
+                          //   onChange={(e) => {
+                          //     this.ruleValueChange(index, e.target.value);
+                          //   }}
+                          // />
                           <Input
-                            style={{ width: 200 }}
-                            placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
+                            style={{ width: 180 }}
+                            value={!isFullCount ? level.fullAmount : level.fullCount}
+                            // placeholder={!isFullCount ?
+                            //   this.props.intl.formatMessage({
+                            //     id: 'Marketing.0-99999999.99',
+                            //   })
+                            //   :
+                            //   this.props.intl.formatMessage({
+                            //     id: 'Marketing.1-9999',
+                            //   })
+                            // }
                             onChange={(e) => {
                               this.ruleValueChange(index, e.target.value);
                             }}
+                            disabled={isFullCount === 2}
                           />
+
                         )}
                       </FormItem>
                       <span>
@@ -133,7 +153,7 @@ export default class GiftLevels extends React.Component<any, any> {
                         {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
-                    </>
+                    </div>
                   )}
                   <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5 }}>
                     Add gift
@@ -281,7 +301,7 @@ export default class GiftLevels extends React.Component<any, any> {
           Add multi-level promotions
         </Button>
         &nbsp;&nbsp;up to 5 levels can be set
-        {fullGiftLevelList && fullGiftLevelList.length > 0 && goodsModal._modalVisible && (
+        {fullGiftLevelList && fullGiftLevelList.length > 0 && goodsModal && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}
             visible={goodsModal._modalVisible}
@@ -301,7 +321,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param goodsInfoId
    */
   deleteRows = (_index, goodsInfoId) => {
-    let { selectedRows, fullGiftLevelList, onChangeBack } = this.props;
+    let { fullGiftLevelList, onChangeBack, selectedRows } = this.props;
     fullGiftLevelList.forEach((level) => {
       let levelIndex = level.fullGiftDetailList.findIndex((detail) => detail.productId == goodsInfoId);
       if (levelIndex > -1) {
@@ -317,10 +337,7 @@ export default class GiftLevels extends React.Component<any, any> {
     }
     selectedRows = fromJS(newRows);
 
-    this.setState({
-      selectedRows: selectedRows,
-      fullGiftLevelList: fullGiftLevelList
-    });
+    this.props.GiftRowsOnChange(selectedRows)
     onChangeBack(fullGiftLevelList);
   };
 
@@ -335,7 +352,7 @@ export default class GiftLevels extends React.Component<any, any> {
       [`level_rule_value_${fullGiftLevelList.length - 1}`]: null
     });
     fullGiftLevelList.splice(index, 1);
-    this.setState({ fullGiftLevelList: fullGiftLevelList });
+    // this.setState({ fullGiftLevelList: fullGiftLevelList });
     //传递到父页面
     onChangeBack(fullGiftLevelList);
   };
@@ -353,7 +370,7 @@ export default class GiftLevels extends React.Component<any, any> {
       giftType: 1,
       fullGiftDetailList: []
     });
-    this.setState({ fullGiftLevelList: fullGiftLevelList });
+    // this.setState({ fullGiftLevelList: fullGiftLevelList });
 
     //传递到父页面
     onChangeBack(fullGiftLevelList);
@@ -372,7 +389,7 @@ export default class GiftLevels extends React.Component<any, any> {
         fullGiftDetailList: []
       }
     ];
-    this.setState({ fullGiftLevelList: initLevel });
+    // this.setState({ fullGiftLevelList: initLevel });
 
     const { onChangeBack } = this.props;
     onChangeBack(initLevel);
@@ -424,7 +441,8 @@ export default class GiftLevels extends React.Component<any, any> {
       })
     );
     let rows = (selectedRows.isEmpty() ? Set([]) : selectedRows.toSet()).concat(fromJS(this.props.selectedRows).toSet());
-    this.setState({ goodsModal: { _modalVisible: false }, selectedRows: rows });
+    this.props.GiftRowsOnChange(rows)
+    this.setState({ goodsModal: { _modalVisible: false }});
   };
 
   /**
@@ -461,6 +479,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @returns {Array}
    */
   getSelectedRowByIds = (ids) => {
+    debugger
     const { selectedRows } = this.props;
     const rows = selectedRows.filter((row) => ids.includes(row.get('goodsInfoId')));
     return rows && !rows.isEmpty() ? rows.toJS() : [];

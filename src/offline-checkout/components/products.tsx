@@ -1,6 +1,8 @@
 import React from 'react';
-import { Input, Row, Col } from 'antd';
+import { Input, Row, Col, Empty } from 'antd';
 import _ from 'lodash';
+
+import { FormattedMessage } from 'react-intl';
 
 export default class ProductOverview extends React.Component<any, any> {
   constructor(props: any) {
@@ -23,10 +25,10 @@ export default class ProductOverview extends React.Component<any, any> {
     const disProducts = products.filter(p => searchStr.trim() === '' || p.goodsInfoName.toLowerCase().indexOf(searchStr.toLowerCase()) > -1 || p.goodsInfoBarcode.toLowerCase().indexOf(searchStr.toLowerCase()) > -1);
     return (
       <>
-        <div className="c-box-title">Product overview</div>
+        <div className="c-box-title"><FormattedMessage id="Order.offline.productOverview"/></div>
         <div className="c-product-overview">
           <Row gutter={[16, 16]}>
-            {disProducts.map((product, idx) => (
+            {disProducts && disProducts.length ? disProducts.map((product, idx) => (
               <Col span={12} key={idx}>
                 <div className={`c-product-item ${list.findIndex(p => p.goodsId === product.goodsId) > -1 ? 'selected' : ''}`} onClick={(e) => {e.preventDefault();onAddProduct(product);}}>
                   <img src={product.goodsImg} alt=""/>
@@ -34,7 +36,7 @@ export default class ProductOverview extends React.Component<any, any> {
                   <div className="ean">EAN:{product.goodsInfoBarcode}</div>
                 </div>
               </Col>
-            ))}
+            )) : <Col span={24}><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /></Col>}
           </Row>
         </div>
         <div className="c-box-footer">

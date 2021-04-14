@@ -106,7 +106,7 @@ class FeedBack extends React.Component<Iprop, any> {
           <Form labelAlign="left" className="petowner-feedback-form">
             <Row gutter={8}>
               <Col span={6}>
-                <span className="text-highlight">After welcome pack received</span>
+                <span className="text-highlight">After 1st delivery</span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
@@ -161,7 +161,7 @@ class FeedBack extends React.Component<Iprop, any> {
             </Row>
             <Row gutter={8}>
               <Col span={6}>
-                <span className="text-highlight">During 2nd delivery confirmation</span>
+                <span className="text-highlight">After 4th delivery</span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
@@ -219,7 +219,7 @@ class FeedBack extends React.Component<Iprop, any> {
             </Row>
             <Row gutter={8}>
               <Col span={6}>
-                <span className="text-highlight">After 3rd delivery, during 4th delivery confirmation</span>
+                <span className="text-highlight">1 year subscription</span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
@@ -284,7 +284,7 @@ class FeedBack extends React.Component<Iprop, any> {
             </Row>
             <Row gutter={8}>
               <Col span={6}>
-                <span className="text-highlight">Feedback 4 (completion of Club)</span>
+                <span className="text-highlight">Subscription program cancellation</span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>

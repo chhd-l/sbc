@@ -130,7 +130,6 @@ class RelatedProduct extends React.Component<any, any> {
   confirm = (check, id) => {
     this.onChange(!check, id);
     // this.setState({ showSwich: true });
-    // console.log(check);
     // message.success('Click on Yes');
   };
   cancel = () => {

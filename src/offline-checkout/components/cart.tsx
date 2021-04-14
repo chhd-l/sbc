@@ -1,6 +1,8 @@
 import React from 'react';
 import { Row, Col, InputNumber, Icon, Button } from 'antd';
 
+import { FormattedMessage } from 'react-intl';
+
 export default class Cart extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -22,13 +24,13 @@ export default class Cart extends React.Component<any, any> {
     const { list, onRemoveProduct, onSetQuantity } = this.props;
     return (
       <>
-        <div className="c-box-title">Shopping cart</div>
+        <div className="c-box-title"><FormattedMessage id="Order.offline.shoppingCart" /></div>
         <Row className="c-cart-header" type="flex" align="middle">
-          <Col span={4}>Product</Col>
-          <Col span={4}>Product name</Col>
-          <Col span={4}>Price(10g)</Col>
-          <Col span={6}>Weight</Col>
-          <Col span={4}>Total price</Col>
+          <Col span={4}><FormattedMessage id="Order.Product" /></Col>
+          <Col span={4}><FormattedMessage id="Order.ProductName" /></Col>
+          <Col span={4}><FormattedMessage id="Order.Price" /></Col>
+          <Col span={6}><FormattedMessage id="Order.Weight" /></Col>
+          <Col span={4}><FormattedMessage id="Order.offline.totalPrice" /></Col>
           <Col span={2}></Col>
         </Row>
         <div className="c-cart-container">
@@ -55,8 +57,8 @@ export default class Cart extends React.Component<any, any> {
           ))}
         </div>
         <div className="c-box-footer" style={{textAlign: 'right', lineHeight: '40px', fontSize: 16, fontWeight: 'bold'}}>
-          <span style={{marginRight: 20}}>No. of products: {list.length}</span>
-          <span>Total weight: {list.map(p => p.quantity).reduce((a, b) => a + b, 0)}kg</span>
+          <span style={{marginRight: 20}}><FormattedMessage id="Order.offline.noOfProducts" />: {list.length}</span>
+          <span><FormattedMessage id="Order.offline.totalWeight" />: {list.map(p => p.quantity).reduce((a, b) => a + b, 0)}kg</span>
         </div>
       </>
     );

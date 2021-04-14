@@ -52,7 +52,8 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 module.exports = function (webpackEnv, envCode) {
 
   const isEnvDevelopment = webpackEnv === 'development';
-  const isEnvProduction = webpackEnv !== 'development'
+  const isEnvProduction = webpackEnv !== 'development';
+  const shouldGenerateReport = isEnvProduction && envCode === 'dev';  //build模式下，dev环境生成report
 
   const env = getClientEnvironment(envCode);
 
@@ -410,7 +411,7 @@ module.exports = function (webpackEnv, envCode) {
 
          }
        ),*/
-      isEnvProduction && new BundleAnalyzerPlugin(
+       shouldGenerateReport && new BundleAnalyzerPlugin(
         {
           //  可以是`server`，`static`或`disabled`。
           //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。
@@ -420,7 +421,7 @@ module.exports = function (webpackEnv, envCode) {
           //  将在“服务器”模式下使用的主机启动HTTP服务器。
           analyzerHost: '127.0.0.1',
           //  将在“服务器”模式下使用的端口启动HTTP服务器。
-          analyzerPort: 8000,
+          analyzerPort: 8371,
           //  路径捆绑，将在`static`模式下生成的报告文件。
           //  相对于捆绑输出目录。
           reportFilename: 'report.html',

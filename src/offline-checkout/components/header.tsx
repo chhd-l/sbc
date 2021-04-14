@@ -2,6 +2,8 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import moment from 'moment';
 
+import { FormattedMessage } from 'react-intl';
+
 let ins = null;
 
 export default class Header extends React.Component<any, any> {
@@ -29,7 +31,7 @@ export default class Header extends React.Component<any, any> {
   render() {
     return (
       <Row type="flex" justify="space-between" className="c-head">
-        <Col>Offline store: LAtelierFelin</Col>
+        <Col><FormattedMessage id="Order.offline.offlineStore" />: <FormattedMessage id="Order.offline.felin" /></Col>
         <Col>{this.state.time}</Col>
       </Row>
     );

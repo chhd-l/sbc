@@ -4,7 +4,7 @@ import { Form, Input, Select, Button, Menu, Dropdown, DatePicker, Row, Col, mess
 import { noop, AuthWrapper, checkAuth, Headline, history, SelectGroup } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -14,7 +14,7 @@ const InputGroup = Input.Group;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
     relaxProps?: {
       onSearch: Function;
@@ -45,7 +45,7 @@ export default class SearchHead extends Component<any, any> {
     super(props);
 
     this.state = {
-      recommendationId: '',
+      felinRecoId: '',
       goodsOptions: 'Product name',
       receiverSelect: 'consigneeName',
       clinicSelect: 'clinicsName',
@@ -56,7 +56,7 @@ export default class SearchHead extends Component<any, any> {
       id: '',
       subscribeId: '',
       buyerOptionsValue: '',
-      goodsOptionsValue: '',
+      goodsNames: '',
       receiverSelectValue: '',
       clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName : '',
       numberSelectValue: '',
@@ -126,7 +126,7 @@ export default class SearchHead extends Component<any, any> {
                     addonBefore="Recommendation No"
                     onChange={(e) => {
                       this.setState({
-                        recommendationId: (e.target as any).value
+                        felinRecoId: (e.target as any).value
                       });
                     }}
                   />
@@ -150,10 +150,10 @@ export default class SearchHead extends Component<any, any> {
                 {/*商品名称、SKU编码*/}
                 <FormItem>
                   <Input
-                    addonBefore={this._renderGoodsOptionSelect()}
+                   addonBefore="Product name"
                     onChange={(e) => {
                       this.setState({
-                        goodsOptionsValue: (e.target as any).value
+                        goodsNames: (e.target as any).value
                       });
                     }}
                   />
@@ -215,14 +215,11 @@ export default class SearchHead extends Component<any, any> {
                     style={{ textAlign: 'center', marginTop: '20px' }}
                     onClick={(e) => {
                       e.preventDefault();
-                      const { recommendationId, buyerOptions, goodsOptions, receiverSelect, clinicSelect, linkStatus, buyerOptionsValue, goodsOptionsValue, receiverSelectValue, clinicSelectValue } = this.state;
+                      const { felinRecoId, buyerOptions, goodsNames, buyerOptionsValue } = this.state;
                       const params = {
-                        recommendationId,
-                        [buyerOptions == 'PO name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue,
-                        [goodsOptions == 'Product name' ? 'goodsInfoName' : 'goodsInfoNo']: goodsOptionsValue,
-                        [receiverSelect]: receiverSelectValue,
-                        [clinicSelect == 'clinicsName' ? 'prescriberName' : 'prescriberId']: clinicSelectValue,
-                        linkStatus
+                        felinRecoId:felinRecoId||null,
+                        [buyerOptions == 'PO name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue||null,
+                        goodsNames:goodsNames||null,
                       };
                       onSearch(params);
                     }}
@@ -278,109 +275,13 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="consumerName">PO Name</Option>
-        <Option value="consumerEmail">PO E-mail</Option>
+        <Option value="PO name">PO Name</Option>
+        <Option value="PO e-mail">PO E-mail</Option>
       </Select>
     );
   };
 
-  _renderGoodsOptionSelect = () => {
-    return (
-      <Select
-        onChange={(val) => {
-          this.setState({
-            goodsOptions: val
-          });
-        }}
-        defaultValue="Product name"
-        value={this.state.goodsOptions}
-        style={styles.label}
-      >
-        <Option value="goodsInfoName">Product name</Option>
-        <Option value="goodsInfoNo">Product SKU</Option>
-      </Select>
-    );
-  };
-
-  _renderReceiverSelect = () => {
-    return (
-      <Select
-        onChange={(val) =>
-          this.setState({
-            receiverSelect: val
-          })
-        }
-        value={this.state.receiverSelect}
-        style={styles.label}
-      >
-        <Option value="consigneeName">
-          <FormattedMessage id="recipient" />
-        </Option>
-        <Option value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
-        </Option>
-      </Select>
-    );
-  };
-
-  _renderClinicSelect = () => {
-    return (
-      <Select
-        onChange={(val, a) => {
-          this.setState({
-            clinicSelect: val
-          });
-        }}
-        value={this.state.clinicSelect}
-        style={styles.label}
-        disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
-      >
-        <Option value="clinicsName">Prescriber name</Option>
-        <Option value="clinicsIds">Prescriber id</Option>
-      </Select>
-    );
-  };
-  _renderNumberSelect = () => {
-    return (
-      <Select
-        onChange={(val, a) => {
-          this.setState({
-            numberSelect: val
-          });
-        }}
-        value={this.state.numberSelect}
-        style={styles.label}
-      >
-        <Option value="orderNumber">
-          <FormattedMessage id="order.orderNumber" />
-        </Option>
-        <Option value="subscriptionNumber">
-          <FormattedMessage id="order.subscriptionNumber" />
-        </Option>
-      </Select>
-    );
-  };
-
-  _renderStatusSelect = () => {
-    return (
-      <Select
-        onChange={(val, a) => {
-          this.setState({
-            statusSelect: val
-          });
-        }}
-        value={this.state.statusSelect}
-        style={styles.label}
-      >
-        <Option value="paymentStatus">
-          <FormattedMessage id="order.paymentStatus" />
-        </Option>
-        <Option value="shippingStatus">
-          <FormattedMessage id="order.shippingStatus" />
-        </Option>
-      </Select>
-    );
-  };
+ 
 
   /**
    * 批量审核确认提示
@@ -399,9 +300,11 @@ export default class SearchHead extends Component<any, any> {
     }
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'order.audit'});
+    const content = this.props.intl.formatMessage({id:'order.confirmAudit'});
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: title,
+      content: content,
       onOk() {
         onBatchAudit();
       },
@@ -420,6 +323,8 @@ export default class SearchHead extends Component<any, any> {
     });
   }
 }
+
+export default injectIntl(SearchHead);
 
 const styles = {
   label: {

@@ -4,7 +4,7 @@ import { Form, Input, Select, Button, Menu, Dropdown, DatePicker, Row, Col, mess
 import { noop, AuthWrapper, checkAuth, Headline, history, SelectGroup } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -14,8 +14,9 @@ const InputGroup = Input.Group;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -204,7 +205,6 @@ export default class SearchHead extends Component<any, any> {
                       // }
                       /* onChange={(e) => {
                         let a = e.target.value.split(',');
-                        console.log(a.map(Number), 111);
 
                         this.setState({
                           clinicSelectValue:
@@ -231,7 +231,6 @@ export default class SearchHead extends Component<any, any> {
                       // }
                       /* onChange={(e) => {
                         let a = e.target.value.split(',');
-                        console.log(a.map(Number), 111);
 
                         this.setState({
                           clinicSelectValue:
@@ -460,16 +459,18 @@ export default class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-
+    const mess = this.props.intl.formatMessage({id:'Marketing.needsToBeOperated'});
     if (checkedIds.length == 0) {
-      message.error(<FormattedMessage id="Marketing.needsToBeOperated" />);
+      message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
+    const title = this.props.intl.formatMessage({id:'Order.review'});
+    const content = this.props.intl.formatMessage({id:'Order.confirmReview'});
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: title,
+      content: content,
       onOk() {
         onBatchAudit();
       },
@@ -488,6 +489,8 @@ export default class SearchHead extends Component<any, any> {
     });
   }
 }
+
+export default injectIntl(SearchHead);
 
 const styles = {
   label: {

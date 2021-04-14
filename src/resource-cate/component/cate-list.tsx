@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { DataGrid, noop, AuthWrapper } from 'qmkit';
 import { List, Map, fromJS } from 'immutable';
 import { Modal } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 import { Table, Tooltip } from 'antd';
@@ -18,8 +18,9 @@ const styles = {
 };
 
 @Relax
-export default class CateList extends React.Component<any, any> {
+class CateList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       childFlag: boolean; //是否有子类
       resourceFlag: boolean; //该分类下是否有素材
@@ -135,23 +136,29 @@ export default class CateList extends React.Component<any, any> {
 
   _confirm = (cateId: string) => {
     const { doDelete, childFlag, resourceFlag } = this.props.relaxProps;
+    const Prompt = this.props.intl.formatMessage({id:'Setting.Prompt'});
+    const DeleteTheCurrentCategory = this.props.intl.formatMessage({id:'Setting.DeleteTheCurrentCategory'});
+    const TheCurrentClassification = this.props.intl.formatMessage({id:'Setting.TheCurrentClassification'});
+    const ContinueToDelete = this.props.intl.formatMessage({id:'Setting.ContinueToDelete'});
+    const Cancel = this.props.intl.formatMessage({id:'Setting.Cancel'});
+    const deleteThisCategory = this.props.intl.formatMessage({id:'Setting.deleteThisCategory'});
 
     if (childFlag) {
       //有子分类
       confirm({
-        title: <FormattedMessage id="Setting.Prompt" />,
-        content: <FormattedMessage id="Setting.DeleteTheCurrentCategory" />,
+        title: Prompt,
+        content: DeleteTheCurrentCategory,
         onOk() {
           if (resourceFlag) {
             //该分类下有素材
             confirm({
-              title: <FormattedMessage id="Setting.Prompt" />,
-              content: <FormattedMessage id="Setting.TheCurrentClassification" />,
+              title: Prompt,
+              content: TheCurrentClassification,
               onOk() {
                 doDelete(cateId);
               },
-              okText: <FormattedMessage id="Setting.ContinueToDelete" />,
-              cancelText: <FormattedMessage id="Setting.Cancel" />
+              okText: ContinueToDelete,
+              cancelText: Cancel
             });
           } else {
             doDelete(cateId);
@@ -161,19 +168,19 @@ export default class CateList extends React.Component<any, any> {
     } else if (resourceFlag) {
       //该分类下有素材
       confirm({
-        title: <FormattedMessage id="Setting.Prompt" />,
-        content: <FormattedMessage id="Setting.TheCurrentClassification" />,
+        title: Prompt,
+        content: TheCurrentClassification,
         onOk() {
           doDelete(cateId);
         },
-        okText: <FormattedMessage id="Setting.ContinueToDelete" />,
-        cancelText: <FormattedMessage id="Setting.Cancel" />
+        okText: ContinueToDelete,
+        cancelText: Cancel
       });
     } else {
       //没有子分类
       confirm({
-        title: <FormattedMessage id="Setting.Prompt" />,
-        content: <FormattedMessage id="Setting.deleteThisCategory" />,
+        title: Prompt,
+        content: deleteThisCategory,
         onOk() {
           doDelete(cateId);
         }
@@ -189,3 +196,5 @@ export default class CateList extends React.Component<any, any> {
     showEditModal(Map({ cateParentId, cateParentName }), false);
   };
 }
+
+export default injectIntl(CateList);

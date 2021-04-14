@@ -100,12 +100,25 @@ class SkuForm extends React.Component<any, any> {
     this.state = {
       count: 0,
       visible: false,
-      pid: ''
+      pid: '',
+      id: ''
     };
   }
 
   render() {
-    const { goodsList } = this.props.relaxProps;
+    const { goodsList, onProductselectSku, addSkUProduct } = this.props.relaxProps;
+
+    if ( goodsList.toJS().length == 0 ) {
+      let a = []
+      onProductselectSku(a)
+    }else {
+      if (addSkUProduct.length>0) {
+        //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
+        let b = addSkUProduct.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
+        onProductselectSku(b)
+      }
+    }
+
     // const {  } = this.state
     const columns = this._getColumns();
     // if(this.state.count < 100) {
@@ -116,7 +129,7 @@ class SkuForm extends React.Component<any, any> {
     // }
     return (
       <div style={{ marginBottom: 20 }}>
-        {this.state.visible == true ? <ProductTooltipSKU pid={this.state.pid} visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
+        {this.state.visible == true ? <ProductTooltipSKU pid={this.state.pid} id={this.state.id} visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
@@ -124,11 +137,12 @@ class SkuForm extends React.Component<any, any> {
     );
   }
 
-  showProduct = (res, e) => {
+  showProduct = (res, e, id) => {
     let type = res.type == 1 ? true : false;
     if (e) {
       this.setState({
-        pid: e
+        pid: e,
+        id: id
       });
     }
     this.setState({
@@ -164,7 +178,6 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
-    //console.log(columns.toJS(), 'columns');
     columns = columns.unshift({
       title: (
         <div>
@@ -262,6 +275,7 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'goodsInfoBundleRels',
       render: (rowInfo) => {
+
         const { addSkUProduct } = this.props.relaxProps;
         return (
           <Row>
@@ -283,39 +297,39 @@ class SkuForm extends React.Component<any, any> {
                   <div className="space-between-align">
                     <div style={{ paddingTop: 6 }}>
                       {' '}
-                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo)} />
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo, rowInfo.id)} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
                       {addSkUProduct &&
-                        addSkUProduct.map((i, index) => {
-                          return (
-                            i.pid == rowInfo.goodsInfoNo &&
-                            i.targetGoodsIds.map((item, index) => {
-                              return (
-                                <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
-                                  <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
-                                  <InputNumber
-                                    style={{ width: '60px', height: '28px', textAlign: 'center' }}
-                                    defaultValue={item.bundleNum}
-                                    key={item.subGoodsInfoNo}
-                                    min={1}
-                                    onChange={(e) => {
-                                      if (i.pid == rowInfo.goodsInfoNo) {
-                                        const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoNo)[0];
-                                        if (target) {
-                                          target['bundleNum'] = e;
-                                        }
-                                        let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
-                                        this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
+                      addSkUProduct.map((i, index) => {
+                        return (
+                          i.pid == rowInfo.goodsInfoNo &&
+                          i.targetGoodsIds.map((item, index) => {
+                            return (
+                              <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
+                                <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
+                                <InputNumber
+                                  style={{ width: '60px', height: '28px', textAlign: 'center' }}
+                                  defaultValue={item.bundleNum}
+                                  key={item.subGoodsInfoNo}
+                                  min={1}
+                                  onChange={(e) => {
+                                    if (i.pid == rowInfo.goodsInfoNo) {
+                                      const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoNo)[0];
+                                      if (target) {
+                                        target['bundleNum'] = e;
                                       }
-                                    }}
-                                  />
-                                  <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id)}></a>
-                                </div>
-                              );
-                            })
-                          );
-                        })}
+                                      let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
+                                      this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
+                                    }
+                                  }}
+                                />
+                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id)}></a>
+                              </div>
+                            );
+                          })
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -595,13 +609,39 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any) => {
-    const { editGoodsItem, synchValue, editGoods, goodsList } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, editGoods, goodsList, addSkUProduct } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
 
-    editGoodsItem(id, key, e);
+    if (key = "goodsInfoBundleRels") {
+      let minStock = []
+      for (let i = 0; i<e.length; i++) {
+        minStock.push(e[i].stock / e[i].bundleNum)
+      }
+      /*e.map((item,i)=>{
+        minStock.push(item.stock / item.bundleNum)
+      })*/
+
+      let tempMinStock = Math.min.apply(Math, minStock)
+      tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
+      //let stock = Number(String(addSkUProduct[0].minStock / e).replace(/\.\d+/g, ''))
+
+      if (goodsList.toJS().length == 1 && addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+        let id = goodsList.toJS()[0].id
+
+        let marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
+        let subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
+        editGoodsItem(id, key, e);
+        editGoodsItem(id, 'marketPrice', marketPrice);
+        editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
+      }
+      editGoodsItem(id, 'stock', tempMinStock);
+
+    }else {
+      editGoodsItem(id, key, e);
+    }
 
 
     if(key == "addedFlag") {
@@ -674,28 +714,44 @@ class SkuForm extends React.Component<any, any> {
   };
 
   onDel = (item, pid, id) => {
-    const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
+    const { addSkUProduct, onProductselectSku, goodsList } = this.props.relaxProps;
     let a = [];
     let b = [];
     let c = [];
+    let minStock = []
+
     addSkUProduct.map((i) => {
       if (i.pid == pid) {
         i.targetGoodsIds.map((o) => {
           if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
             a.push(o);
+            minStock.push(o.stock / o.bundleNum)
           }
         });
+        let tempMinStock = Math.min.apply(Math, minStock)
+        tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
         b.push({
           pid: pid,
-          targetGoodsIds: a
+          targetGoodsIds: a,
+          mStock: tempMinStock
         });
+
       } else {
         c.push(i);
       }
     });
     let d = b.concat(c);
     this._editGoodsItem(id, 'goodsInfoBundleRels', a);
-    onProductselectSku(d);
+    this._editGoodsItem(id, 'stock', minStock);
+    let e = d.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
+
+    if (e.length == 1 && e[0].targetGoodsIds.length == 0) {
+      e = []
+    }else {
+      e = d
+    }
+    console.log(e,11111);
+    onProductselectSku(e);
   };
 
   noMinus = (e) => {

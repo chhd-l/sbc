@@ -43,9 +43,7 @@ export default class FillInPetInfoActor extends Actor {
 
   @Action('pets:customerPet')
   petsCustomerPet(state, customerPet) {
-   // customerPet.weight=JSON.stringify({"measure":customerPet.measure,"measureUnit":customerPet.measureUnit,"type":2})
-    // delete customerPet['measure'];
-    // delete customerPet['measureUnit'];
+    customerPet.birthOfPets=moment(customerPet.birthOfPets).format('YYYY-MM-DD')
     return state.set('customerPet', customerPet);
   }
 

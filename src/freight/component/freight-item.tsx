@@ -241,7 +241,7 @@ class FreightItem extends React.Component<any, any> {
    */
   _del = (freightId, isStore) => {
     const { del } = this.props.relaxProps;
-    const content = this.props.intl.formatMessage({id:'Setting.deletethisTemplate'});
+    const content = RCi18n({id:'Setting.deletethisTemplate'});
     confirm({
       content: content,
       iconType: 'exclamation-circle',

@@ -163,8 +163,8 @@ class Checkout extends React.Component<any, any> {
     if (this.state.memberInfo.customerName) {
       this.switchStep(3);
     } else {
-      const alertTitle = this.props.intl.formatMessage({id:'Order.offline.noCustomerAlert'});
-      const okText = this.props.intl.formatMessage({id:'Order.OK'});
+      const alertTitle = RCi18n({id:'Order.offline.noCustomerAlert'});
+      const okText = RCi18n({id:'Order.OK'});
       Modal.warning({ title: alertTitle, okText: okText, centered: true });
     }
   }
@@ -205,9 +205,9 @@ class Checkout extends React.Component<any, any> {
           this.setState({
             loading: false
           }, () => {
-            const alertTitle = this.props.intl.formatMessage({id:'Order.offline.orderNotSuccess'});
-            const alertContent = this.props.intl.formatMessage({id:'Order.offline.retryAlert'});
-            const okText = this.props.intl.formatMessage({id:'Order.OK'});
+            const alertTitle = RCi18n({id:'Order.offline.orderNotSuccess'});
+            const alertContent = RCi18n({id:'Order.offline.retryAlert'});
+            const okText = RCi18n({id:'Order.OK'});
             Modal.warning({ title: alertTitle, content: alertContent, okText: okText, centered: true });
           });
         }
@@ -220,10 +220,10 @@ class Checkout extends React.Component<any, any> {
   }
 
   showQueryModal = () => {
-    const infoTitle = this.props.intl.formatMessage({id:'Order.offline.queryStateTitle'});
-    const infoContent = this.props.intl.formatMessage({id:'Order.offline.queryStateContent'});
-    const okText = this.props.intl.formatMessage({id:'Order.offline.yes'});
-    const noText = this.props.intl.formatMessage({id:'Order.offline.no'});
+    const infoTitle = RCi18n({id:'Order.offline.queryStateTitle'});
+    const infoContent = RCi18n({id:'Order.offline.queryStateContent'});
+    const okText = RCi18n({id:'Order.offline.yes'});
+    const noText = RCi18n({id:'Order.offline.no'});
     Modal.confirm({ title: infoTitle, content: infoContent, okText: okText, cancelText: noText, centered: true, onOk: this.queryOrderStatus, onCancel: () => {} });
   }
 

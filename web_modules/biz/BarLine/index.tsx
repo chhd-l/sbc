@@ -60,7 +60,7 @@ class Line extends React.Component {
               color: '#999',
               fontsize: '11'
             },
-            formatter: this.props.intl.formatMessage({id:'Home.Week'})+'-{value}'
+            formatter: RCi18n({id:'Home.Week'})+'-{value}'
           },
           data: data.x
         }

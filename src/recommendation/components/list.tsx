@@ -346,8 +346,8 @@ class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'order.review'});
-    const content = this.props.intl.formatMessage({id:'order.confirmReview'});
+    const title = RCi18n({id:'order.review'});
+    const content = RCi18n({id:'order.confirmReview'});
     confirm({
       title: title,
       content: content,

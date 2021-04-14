@@ -118,7 +118,7 @@ class ReturnOrderForm extends React.Component<any, any> {
             })(this._getReturnReasonSelect())}
           </FormItem>
           {isReturn ? (
-            <FormItem {...formItemLayout} label={this.props.intl.formatMessage({id:'Order.Returnmethod'})} hasFeedback>
+            <FormItem {...formItemLayout} label={RCi18n({id:'Order.Returnmethod'})} hasFeedback>
               {getFieldDecorator('returnWay', {
                 initialValue: selectedReturnWay,
                 rules: [

@@ -201,7 +201,7 @@ class GoodsList extends React.Component<any, any> {
             type="primary"
             onClick={() => {
               if (!selectedCustomerId) {
-                message.error(this.props.intl.formatMessage({ id: 'Order.Pleaseselectmember' }));
+                message.error(RCi18n({ id: 'Order.Pleaseselectmember' }));
                 return;
               }
 
@@ -220,7 +220,7 @@ class GoodsList extends React.Component<any, any> {
             rules: [
               {
                 required: selectedCustomerId ? true : false,
-                message: this.props.intl.formatMessage({ id: 'Order.Mustselectaproduct' })
+                message: RCi18n({ id: 'Order.Mustselectaproduct' })
               }
             ]
           })(<input type="hidden" />)}
@@ -313,11 +313,11 @@ class GoodsList extends React.Component<any, any> {
                     rules: [
                       {
                         required: true,
-                        message: this.props.intl.formatMessage({ id: 'Order.Purchasequantity' })
+                        message: RCi18n({ id: 'Order.Purchasequantity' })
                       },
                       {
                         pattern: ValidConst.noZeroNumber,
-                        message: this.props.intl.formatMessage({ id: 'Order.Purchasevolume' })
+                        message: RCi18n({ id: 'Order.Purchasevolume' })
                       },
                       {
                         validator: (_rule, value, callback) => {
@@ -335,9 +335,9 @@ class GoodsList extends React.Component<any, any> {
                           }
                           if (stock < value) {
                             if (this.props.edit) {
-                              callback(this.props.intl.formatMessage({ id: 'Order.Thepurchasevolume' }));
+                              callback(RCi18n({ id: 'Order.Thepurchasevolume' }));
                             } else {
-                              callback(this.props.intl.formatMessage({ id: 'Order.Purchasevolumecannot' }));
+                              callback(RCi18n({ id: 'Order.Purchasevolumecannot' }));
                             }
                             return;
                           }
@@ -345,11 +345,11 @@ class GoodsList extends React.Component<any, any> {
                             const maxCount = record.maxCount;
                             const count = record.count;
                             if (maxCount && maxCount < value) {
-                              callback(this.props.intl.formatMessage({ id: 'Order.Thepurchasevolumecannot' }));
+                              callback(RCi18n({ id: 'Order.Thepurchasevolumecannot' }));
                               return;
                             }
                             if (count && count > value) {
-                              callback(this.props.intl.formatMessage({ id: 'Order.Thepurchasevolumecannotbeless' }));
+                              callback(RCi18n({ id: 'Order.Thepurchasevolumecannotbeless' }));
                               return;
                             }
                           }
@@ -369,7 +369,7 @@ class GoodsList extends React.Component<any, any> {
                     {this.props.edit && (record.initBuyCount || (buySku && buySku.get('buyCount')))
                       ? null
                       : `${(<FormattedMessage id="Order.stock" />)}: ${record.stock} ${
-                          record.priceType === 0 ? (record.count ? this.props.intl.formatMessage({ id: 'Order.Minimumorderquantity' }) + ': ' + record.count : '') + (record.maxCount ? 'Maximum amount: ' + record.maxCount : '') : ''
+                          record.priceType === 0 ? (record.count ? RCi18n({ id: 'Order.Minimumorderquantity' }) + ': ' + record.count : '') + (record.maxCount ? 'Maximum amount: ' + record.maxCount : '') : ''
                         }`}
                   </p>
                 </FormItem>
@@ -442,7 +442,7 @@ class GoodsList extends React.Component<any, any> {
                     disabled={selectedCustomerId ? false : true}
                     onChange={(e: any) => {
                       if (!selectedCustomerId) {
-                        message.error(this.props.intl.formatMessage({ id: 'Order.Pleaseselectmember' }));
+                        message.error(RCi18n({ id: 'Order.Pleaseselectmember' }));
                         return;
                       }
                       //开启或者取消特价
@@ -459,11 +459,11 @@ class GoodsList extends React.Component<any, any> {
                   rules: [
                     {
                       required: goodsList.get('isEnableSpecVal'),
-                      message: this.props.intl.formatMessage({ id: 'Order.Pleaseentertheamount' })
+                      message: RCi18n({ id: 'Order.Pleaseentertheamount' })
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: this.props.intl.formatMessage({ id: 'Order.Pleaseenterthecorrectamount' })
+                      message: RCi18n({ id: 'Order.Pleaseenterthecorrectamount' })
                     }
                   ]
                 })(
@@ -496,7 +496,7 @@ class GoodsList extends React.Component<any, any> {
                     disabled={selectedCustomerId ? false : true}
                     onChange={(e) => {
                       if (!selectedCustomerId) {
-                        message.error(this.props.intl.formatMessage({ id: 'Order.Pleaseselectmember' }));
+                        message.error(RCi18n({ id: 'Order.Pleaseselectmember' }));
                         return;
                       }
                       const checked = (e.target as any).checked;
@@ -513,11 +513,11 @@ class GoodsList extends React.Component<any, any> {
                   rules: [
                     {
                       required: goodsList.get('isEnableDeliverFee'),
-                      message: this.props.intl.formatMessage({ id: 'Order.Pleaseentertheamount' })
+                      message: RCi18n({ id: 'Order.Pleaseentertheamount' })
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: this.props.intl.formatMessage({ id: 'Order.Pleaseenterthecorrectamount' })
+                      message: RCi18n({ id: 'Order.Pleaseenterthecorrectamount' })
                     }
                   ]
                 })(
@@ -589,7 +589,7 @@ class GoodsList extends React.Component<any, any> {
         {this.state.addAddressVisible && (
           <Modal
             maskClosable={false}
-            title={this.props.intl.formatMessage({ id: 'Order.Selectproduct' })}
+            title={RCi18n({ id: 'Order.Selectproduct' })}
             width={1100}
             visible={this.state.addAddressVisible}
             onOk={async () => {
@@ -599,7 +599,7 @@ class GoodsList extends React.Component<any, any> {
               const newKeys = selectedKeys.map((key) => key.substring(4)).filter((key) => oldSkuIds.findIndex((o) => o == key) < 0);
               const wholeKeys = newSkuIds.toSet().concat(newKeys.toSet()).toList();
               if (wholeKeys.count() > 50) {
-                message.error(this.props.intl.formatMessage({ id: 'Order.Nomorethan50' }));
+                message.error(RCi18n({ id: 'Order.Nomorethan50' }));
                 return;
               }
               saveNewSkuIds(wholeKeys);

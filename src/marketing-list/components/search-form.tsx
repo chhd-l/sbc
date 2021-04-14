@@ -135,7 +135,7 @@ class SearchForm extends React.Component<any, any> {
                 format={Const.DATE_FORMAT}
                 value={startValue}
                 placeholder={
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.StartTime'
                   })
                 }
@@ -154,7 +154,7 @@ class SearchForm extends React.Component<any, any> {
                 format={Const.DATE_FORMAT}
                 value={endValue}
                 placeholder={
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.EndTime'
                   })
                 }

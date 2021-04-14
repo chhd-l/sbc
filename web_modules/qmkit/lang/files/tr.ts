@@ -1,4 +1,4 @@
-import es_ES from './es_ES';
+import es_ES from './en-US';
 
 /**
  * 多语言土耳其

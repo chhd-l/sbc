@@ -849,6 +849,8 @@ class GoodsForm extends React.Component<any, any> {
   _editGoods = (key: string, e) => {
     const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
+    console.log(key,123);
+
 
 
     if (key === 'addedFlag') {
@@ -984,8 +986,14 @@ class GoodsForm extends React.Component<any, any> {
       updateGoodsForm(this.props.form);
       editGoods(goods);
     }
-
     if (key === 'subscriptionStatus' && e == 0) {
+      console.log(e);
+
+      let goods = Map({
+        subscriptionStatus: fromJS(0)
+      });
+      editGoodsItem(goods);
+
       this.props.form.setFieldsValue({
         defaultPurchaseType: null
       });
@@ -993,7 +1001,10 @@ class GoodsForm extends React.Component<any, any> {
         defaultFrequencyId: null
       });
     }else {
-
+      let goods = Map({
+        subscriptionStatus: fromJS(1)
+      });
+      editGoodsItem(goods);
     }
   };
 

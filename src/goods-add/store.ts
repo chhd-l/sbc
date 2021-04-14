@@ -1403,6 +1403,7 @@ export default class AppStore extends Store {
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice'),
           goodsInfoBundleRels: b,
+          promotions: item.get('promotions'),
           addedFlag: item.get('addedFlag'),
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,
           description: item.get('description'),

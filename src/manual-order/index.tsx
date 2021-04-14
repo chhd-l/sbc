@@ -59,15 +59,22 @@ class ManualOrder extends Component<any, any> {
       if (winObj.closed) {
         clearInterval(loop);
         const { res } = await queryOrderStatus(customer.customerId, token);
-        let d = {
-           'string':1,
-           'boolean':2,
-           'object':3
+        if(res.code===Const.SUCCESS_CODE){
+          let d = {
+            'string':1,
+            'boolean':2,
+            'object':3
+         }
+         let status = d[typeof res.context];
+         this.setState({
+           status
+         });
+        }else{
+          this.setState({
+            status:2
+          });
         }
-        let status = d[typeof res.context];
-        this.setState({
-          status
-        });
+       
       }
     }, 500);
   };

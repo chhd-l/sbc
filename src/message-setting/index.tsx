@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AuthWrapper, BreadCrumb, Const, Headline } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
 import { Card, Button, Modal, Form, Input, Alert, Switch, Row, Col, Popconfirm, message, Spin, Radio, Select } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import * as webapi from './webapi';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { noop, checkAuth } from 'qmkit';
+import { noop, checkAuth, RCi18n } from 'qmkit';
 import { List, Map, fromJS } from 'immutable';
 import { Table, Popconfirm, Switch, message, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';

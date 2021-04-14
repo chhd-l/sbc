@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb, DragTable, Const } from 'qmkit';
+import { Headline, BreadCrumb, DragTable, Const, RCi18n } from 'qmkit';
 import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch, Form, Modal, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';

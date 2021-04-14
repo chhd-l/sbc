@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { Button, Modal } from 'antd';
-import { noop, history, AuthWrapper } from 'qmkit';
+import { noop, history, AuthWrapper, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 const confirm = Modal.confirm;
 @Relax

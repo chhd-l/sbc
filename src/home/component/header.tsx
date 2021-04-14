@@ -2,7 +2,7 @@ import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { DatePicker, Icon, Select, Input, Button, message } from 'antd';
 import '../index.less';
-import { cache, noop } from 'qmkit';
+import { cache, noop, RCi18n } from 'qmkit';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';

@@ -3,7 +3,7 @@ import { Relax, IMap } from 'plume2';
 
 import { Button, Modal, message, DatePicker, Radio } from 'antd';
 import styled from 'styled-components';
-import { noop, DataGrid } from 'qmkit';
+import { noop, DataGrid, RCi18n } from 'qmkit';
 import moment from 'moment';
 import { IList } from 'typings/globalType';
 

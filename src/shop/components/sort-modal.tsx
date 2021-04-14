@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Modal, Row, Col, Tree, Icon, Tooltip, message } from 'antd';
 
 import styled from 'styled-components';
-import { noop, DataGrid, QMUpload, Const } from 'qmkit';
+import { noop, DataGrid, QMUpload, Const, RCi18n } from 'qmkit';
 import { IList } from 'typings/globalType';
 
 const TreeNode = Tree.TreeNode;

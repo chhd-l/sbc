@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Button, message, Input, DatePicker } from 'antd';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 
 import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;

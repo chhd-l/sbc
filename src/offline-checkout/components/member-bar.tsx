@@ -80,7 +80,7 @@ export default class MemberBar extends React.Component<any, any> {
           <Col span={24} style={{fontSize:12}}>
             <FormattedMessage id="Setting.consent" />:
             <Checkbox.Group value={selectedConsents} onChange={onSelectConsent}>
-              {consents.map((c, idx) => <div key={idx}><Checkbox value={c.id} disabled={idx === 0}><div className="offline-consent-line" dangerouslySetInnerHTML={{__html:c.consentTitle}}></div></Checkbox></div>)}
+              {consents.map((c, idx) => <div key={idx}><Checkbox value={c.id} disabled={c.required}><div className="offline-consent-line" dangerouslySetInnerHTML={{__html:c.consentTitle}}></div></Checkbox></div>)}
             </Checkbox.Group>
           </Col>
         </Row>}

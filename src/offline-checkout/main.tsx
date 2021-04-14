@@ -34,8 +34,8 @@ class Checkout extends React.Component<any, any> {
     webapi.getConsent().then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          consents: data.res.context?.consentVOList ?? [],
-          selectedConsents: (data.res.context?.consentVOList ?? []).filter((c, idx) => idx === 0).map(d => d.id)
+          consents: (data.res.context.requiredList.map(ct => ({...ct, required: true}))).concat(data.res.context.optionalList.map(ct => ({...ct,required:false}))),
+          selectedConsents: data.res.context.requiredList.map(ct => ct.id)
         });
       }
     });
@@ -272,10 +272,11 @@ class Checkout extends React.Component<any, any> {
   }
 
   submitCustomerConsent = () => {
-    const { memberInfo, consents, selectedConsents } = this.state;
-    if (memberInfo.memberType === 'member') {
+    const { memberType, memberInfo, consents, selectedConsents } = this.state;
+    if (memberType === 'Member') {
       webapi.setConsent(memberInfo.customerId, {
-        optionalList: consents.map(c => ({
+        requiredList: consents.filter(ct => ct.required).map(ct => ({id:ct.id,selectedFlag:true})),
+        optionalList: consents.filter(ct => !ct.required).map(c => ({
           id: c.id,
           selectedFlag: selectedConsents.indexOf(c.id) > -1
         }))

@@ -163,10 +163,10 @@ class Foot extends React.Component<any, any> {
   };
   _leavePage = () => {
     // this.props.onLeave();
-    const title = RCi18n({id:'Product.Prompt'});
-    const content = RCi18n({id:'Product.returnToTheListPage'});
-    const okText = RCi18n({id:'Product.OK'});
-    const cancelText = RCi18n({id:'Product.Cancel'});
+    const title = (window as any).RCi18n({id:'Product.Prompt'});
+    const content = (window as any).RCi18n({id:'Product.returnToTheListPage'});
+    const okText = (window as any).RCi18n({id:'Product.OK'});
+    const cancelText = (window as any).RCi18n({id:'Product.Cancel'});
     Modal.confirm({
       title: title,
       content: content,

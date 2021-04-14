@@ -136,12 +136,12 @@ class CateList extends React.Component<any, any> {
 
   _confirm = (cateId: string) => {
     const { doDelete, childFlag, resourceFlag } = this.props.relaxProps;
-    const Prompt = RCi18n({id:'Setting.Prompt'});
-    const DeleteTheCurrentCategory = RCi18n({id:'Setting.DeleteTheCurrentCategory'});
-    const TheCurrentClassification = RCi18n({id:'Setting.TheCurrentClassification'});
-    const ContinueToDelete = RCi18n({id:'Setting.ContinueToDelete'});
-    const Cancel = RCi18n({id:'Setting.Cancel'});
-    const deleteThisCategory = RCi18n({id:'Setting.deleteThisCategory'});
+    const Prompt = (window as any).RCi18n({id:'Setting.Prompt'});
+    const DeleteTheCurrentCategory = (window as any).RCi18n({id:'Setting.DeleteTheCurrentCategory'});
+    const TheCurrentClassification = (window as any).RCi18n({id:'Setting.TheCurrentClassification'});
+    const ContinueToDelete = (window as any).RCi18n({id:'Setting.ContinueToDelete'});
+    const Cancel = (window as any).RCi18n({id:'Setting.Cancel'});
+    const deleteThisCategory = (window as any).RCi18n({id:'Setting.deleteThisCategory'});
 
     if (childFlag) {
       //有子分类

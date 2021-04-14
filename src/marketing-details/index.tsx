@@ -33,7 +33,7 @@ class MarketingDetails extends React.Component<any, any> {
 
   render() {
     const marketingType = this.store.state().get('marketingType');
-    const title = MAK_TYPE[marketingType] + RCi18n({
+    const title = MAK_TYPE[marketingType] + (window as any).RCi18n({
       id: 'Marketing.Activitydetails'
     });
     return (

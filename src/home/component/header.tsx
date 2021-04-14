@@ -201,7 +201,7 @@ class Header extends React.Component<any, any> {
         prescriberName: a.props.val.prescriberName
       })
     );
-    message.success(RCi18n({id:'Home.Prescriber.success'}));
+    message.success((window as any).RCi18n({id:'Home.Prescriber.success'}));
   };
 
   render() {
@@ -221,7 +221,7 @@ class Header extends React.Component<any, any> {
               }
             }}
             onChange={this.dateChange}
-            placeholder={RCi18n({id:'Home.SelectWeek'})}
+            placeholder={(window as any).RCi18n({id:'Home.SelectWeek'})}
           />
           <div className="Header-date-text">* <FormattedMessage id="Home.HeaderTip" /></div>
         </div>
@@ -242,7 +242,7 @@ class Header extends React.Component<any, any> {
                 autoFocus={false}
                 open={this.state.openType}
                 style={{ width: 200, marginRight: 8 }}
-                placeholder={RCi18n({id:'Home.SelectPrescriber'})}
+                placeholder={(window as any).RCi18n({id:'Home.SelectPrescriber'})}
                 defaultValue="All"
                 //optionFilterProp="children"
                 onChange={this.onChange}
@@ -268,7 +268,7 @@ class Header extends React.Component<any, any> {
             )
           ) : (
             this.state.defaultValue && (
-              <Select showArrow={false} autoFocus={false} open={this.state.openType} style={{ width: 200, marginRight: 8 }} placeholder={RCi18n({id:'Home.SelectPrescriber'})} defaultValue={this.state.defaultValue} onChange={this.onPrescriberChange} onDropdownVisibleChange={this.selectClick}>
+              <Select showArrow={false} autoFocus={false} open={this.state.openType} style={{ width: 200, marginRight: 8 }} placeholder={(window as any).RCi18n({id:'Home.SelectPrescriber'})} defaultValue={this.state.defaultValue} onChange={this.onPrescriberChange} onDropdownVisibleChange={this.selectClick}>
                 {this.state.selectList.length !== 0
                   ? this.state.selectList.map((item, index) => {
                       return (

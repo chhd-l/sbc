@@ -325,8 +325,8 @@ class OrderDelivery extends React.Component<any, any> {
     const { obsoleteDeliver } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = RCi18n({id:'Order.prompt'});
-    const content = RCi18n({id:'Order.Whethertoinvalidate'});
+    const title = (window as any).RCi18n({id:'Order.prompt'});
+    const content = (window as any).RCi18n({id:'Order.Whethertoinvalidate'});
     confirm({
       title: title,
       content: content,
@@ -346,8 +346,8 @@ class OrderDelivery extends React.Component<any, any> {
     const { confirm, detail } = this.props.relaxProps;
     const tid = detail.get('id');
     const confirmModal = Modal.confirm;
-    const title = RCi18n({id:'Order.confirmReceipt'});
-    const content = RCi18n({id:'Order.Confirmreceiptofallitems'});
+    const title = (window as any).RCi18n({id:'Order.confirmReceipt'});
+    const content = (window as any).RCi18n({id:'Order.Confirmreceiptofallitems'});
     confirmModal({
       title: title,
       content: content,

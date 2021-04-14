@@ -124,10 +124,10 @@ class StepThree extends React.Component<any, any> {
           </div>
           <TableBox>
             <DataGrid dataSource={cateList} scroll={{ y: 240 }} pagination={false}>
-              <Column title={RCi18n({ id: 'Setting.Productcategory' })} dataIndex="cateName" key="cateName" width="15%" />
-              <Column title={RCi18n({ id: 'Setting.Superiorcategory' })} dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
+              <Column title={(window as any).RCi18n({ id: 'Setting.Productcategory' })} dataIndex="cateName" key="cateName" width="15%" />
+              <Column title={(window as any).RCi18n({ id: 'Setting.Superiorcategory' })} dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
               <Column
-                title={RCi18n({ id: 'Setting.CategoryDeductionRate' })}
+                title={(window as any).RCi18n({ id: 'Setting.CategoryDeductionRate' })}
                 dataIndex="cateRate"
                 key="cateRate"
                 width="15%"
@@ -141,7 +141,7 @@ class StepThree extends React.Component<any, any> {
               />
               <Column
                 align="left"
-                title={RCi18n({ id: 'Setting.BusinessQualification' })}
+                title={(window as any).RCi18n({ id: 'Setting.BusinessQualification' })}
                 dataIndex="qualificationPics"
                 key="qualificationPics"
                 width="50%"
@@ -178,7 +178,7 @@ class StepThree extends React.Component<any, any> {
             <DataGrid dataSource={brandList} scroll={{ y: 240 }} pagination={false}>
               <Column title="Brand Name" dataIndex="brandName" key="brandName" width="15%" />
               <Column
-                title={RCi18n({ id: 'Setting.BrandAlias' })}
+                title={(window as any).RCi18n({ id: 'Setting.BrandAlias' })}
                 dataIndex="nickName"
                 key="nickName"
                 width="20%"
@@ -187,7 +187,7 @@ class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title={RCi18n({ id: 'Setting.BrandLogo' })}
+                title={(window as any).RCi18n({ id: 'Setting.BrandLogo' })}
                 dataIndex="logo"
                 key="log"
                 width="15%"
@@ -202,7 +202,7 @@ class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title={RCi18n({ id: 'Setting.AuthorizationDocument' })}
+                title={(window as any).RCi18n({ id: 'Setting.AuthorizationDocument' })}
                 dataIndex="authorizePic"
                 key="authorizePic"
                 width="50%"
@@ -220,7 +220,7 @@ class StepThree extends React.Component<any, any> {
             </DataGrid>
             {checkBrand.length == 0 ? null : (
               <DataGrid dataSource={checkBrand} rowKey="contractBrandId" scroll={{ y: 240 }} pagination={false}>
-                <Column title={RCi18n({ id: 'Setting.Shopincrease' })} dataIndex="name" key="name" width="15%" />
+                <Column title={(window as any).RCi18n({ id: 'Setting.Shopincrease' })} dataIndex="name" key="name" width="15%" />
                 <Column dataIndex="nickName" key="nickName" width="20%" />
                 <Column
                   dataIndex="logo"
@@ -336,7 +336,7 @@ class StepThree extends React.Component<any, any> {
     if (count == 0) {
       storeRenewAll();
     } else {
-      message.error(RCi18n({ id: 'Setting.Custombrandrepeats' }) + '!');
+      message.error((window as any).RCi18n({ id: 'Setting.Custombrandrepeats' }) + '!');
     }
   };
 

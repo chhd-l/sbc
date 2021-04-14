@@ -68,7 +68,7 @@ export default class MarketingFullDiscountAdd extends React.Component<any, any> 
             }
             />
             <Alert message={
-              RCi18n({
+              (window as any).RCi18n({
                 id: 'Marketing.discountTip'
               })
             } type="info" showIcon />

@@ -241,7 +241,7 @@ export default class StepTwo extends React.Component<any, any> {
       ...ssoForm
     });
     if (res.code === Const.SUCCESS_CODE) {
-      message.success(RCi18n({ id: 'Setting.Operatesuccessfully' }));
+      message.success((window as any).RCi18n({ id: 'Setting.Operatesuccessfully' }));
     }
   };
 }

@@ -459,15 +459,15 @@ class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-    const mess = RCi18n({id:'Marketing.needsToBeOperated'});
+    const mess = (window as any).RCi18n({id:'Marketing.needsToBeOperated'});
     if (checkedIds.length == 0) {
       message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
-    const title = RCi18n({id:'Order.audit'});
-    const content = RCi18n({id:'Order.confirmAudit'});
+    const title = (window as any).RCi18n({id:'Order.audit'});
+    const content = (window as any).RCi18n({id:'Order.confirmAudit'});
     confirm({
       title: title,
       content: content,

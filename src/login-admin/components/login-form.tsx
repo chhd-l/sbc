@@ -4,7 +4,7 @@ const FormItem = Form.Item;
 const logo = require('../img/logo.png');
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
-import { history, Const, login, cache } from 'qmkit';
+import { history, Const, login, RCi18n, } from 'qmkit';
 //import { TIMEOUT } from 'dns';
 const pcLogo = require('../../../public/images/login/logo1.png');
 import { FormattedMessage, injectIntl } from 'react-intl';

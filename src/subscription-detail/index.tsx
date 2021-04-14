@@ -3,7 +3,7 @@ import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, 
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
 import FeedBack from './component/feedback';
-import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue } from 'qmkit';
+import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';

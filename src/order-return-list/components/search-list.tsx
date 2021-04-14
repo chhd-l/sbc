@@ -8,7 +8,7 @@ import { AuthWrapper, Const, getOrderStatusValue, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { cache } from 'qmkit';
+import { cache, RCi18n } from 'qmkit';
 const defaultImg = require('../img/none.png');
 
 const confirm = Modal.confirm;

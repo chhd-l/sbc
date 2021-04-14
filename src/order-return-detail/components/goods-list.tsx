@@ -4,7 +4,7 @@ import { IMap } from 'typings/globalType';
 import { Popover } from 'antd';
 import moment from 'moment';
 import { fromJS } from 'immutable';
-import { cache, Const, Logistics } from 'qmkit';
+import { cache, Const, Logistics, RCi18n } from 'qmkit';
 
 import { Table } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';

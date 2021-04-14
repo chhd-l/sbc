@@ -3,7 +3,7 @@ import { IMap, Relax } from 'plume2';
 import { Icon, Modal, Checkbox, Spin } from 'antd';
 //import { fromJS } from 'immutable';
 
-import { cache, history, noop } from 'qmkit';
+import { cache, RCi18n,  history, noop } from 'qmkit';
 //import { IList } from 'typings/globalType';
 //import { FormattedMessage } from 'react-intl';
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';

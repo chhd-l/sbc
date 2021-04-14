@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { List, Tooltip, Popconfirm, Input, Row, Button, Modal, Form, message, Spin } from 'antd';
 import * as webapi from '../webapi';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;

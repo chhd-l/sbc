@@ -10,6 +10,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n } from 'qmkit'
 
 class Line extends React.Component {
   constructor(props) {
@@ -60,7 +61,7 @@ class Line extends React.Component {
               color: '#999',
               fontsize: '11'
             },
-            formatter: RCi18n({id:'Home.Week'})+'-{value}'
+            formatter: (window as any).RCi18n({id:'Home.Week'})+'-{value}'
           },
           data: data.x
         }

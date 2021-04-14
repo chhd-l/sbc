@@ -39,7 +39,7 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={RCi18n({ id: 'Order.RejectionReasonTip' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={(window as any).RCi18n({ id: 'Order.RejectionReasonTip' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -52,7 +52,7 @@ class RejectForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error(RCi18n({ id: 'Order.100charactersLimitTip' })));
+      callback(new Error((window as any).RCi18n({ id: 'Order.100charactersLimitTip' })));
       return;
     }
     callback();
@@ -901,8 +901,8 @@ class OrderDetailTab extends React.Component<any, any> {
     const { retrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = RCi18n({ id: 'Order.Re-review' });
-    const content = RCi18n({ id: 'Order.Confirmtoreturntheselected' });
+    const title = (window as any).RCi18n({ id: 'Order.Re-review' });
+    const content = (window as any).RCi18n({ id: 'Order.Confirmtoreturntheselected' });
     confirm({
       title: title,
       content: content,
@@ -922,8 +922,8 @@ class OrderDetailTab extends React.Component<any, any> {
     const { confirm } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
-    const title = RCi18n({ id: 'Order.ConfirmReceipt' });
-    const content = RCi18n({ id: 'Order.ConfirmThatAllProducts' });
+    const title = (window as any).RCi18n({ id: 'Order.ConfirmReceipt' });
+    const content = (window as any).RCi18n({ id: 'Order.ConfirmThatAllProducts' });
     confirmModal({
       title: title,
       content: content,

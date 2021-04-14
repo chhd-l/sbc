@@ -67,7 +67,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={RCi18n({id:'Order.orderNumber'})} />
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.orderNumber'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {

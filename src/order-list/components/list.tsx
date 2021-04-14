@@ -34,7 +34,7 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={RCi18n({id:'Order.rejectionReasonTip'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={(window as any).RCi18n({id:'Order.rejectionReasonTip'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -564,8 +564,8 @@ class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: RCi18n({id:'Order.ConfirmReceipt'}),
-      content: RCi18n({id:'Order.ConfirmThatAllProducts'}),
+      title: (window as any).RCi18n({id:'Order.ConfirmReceipt'}),
+      content: (window as any).RCi18n({id:'Order.ConfirmThatAllProducts'}),
       onOk() {
         onConfirm(tdId);
       },

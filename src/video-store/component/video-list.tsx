@@ -117,8 +117,8 @@ class VideoList extends React.Component<any, any> {
    */
   _delete = (videoId: string) => {
     const { doDelete } = this.props.relaxProps;
-    const title = RCi18n({id:'Setting.Prompt'});
-    const content = RCi18n({id:'Setting.theSelectedVideo'});
+    const title = (window as any).RCi18n({id:'Setting.Prompt'});
+    const content = (window as any).RCi18n({id:'Setting.theSelectedVideo'});
     confirm({
       title: title,
       content: content,
@@ -134,7 +134,7 @@ class VideoList extends React.Component<any, any> {
    */
   _showModal = () => {
     const { videoList, showMoveVideoModal } = this.props.relaxProps;
-    const err = RCi18n({id:'Setting.theVideoToMoveFirst'});
+    const err = (window as any).RCi18n({id:'Setting.theVideoToMoveFirst'});
     if (videoList.filter((item) => item.get('checked') == true).size < 1) {
       message.error(err);
       return;
@@ -151,19 +151,19 @@ class VideoList extends React.Component<any, any> {
     //修改了视频名称才真正的请求接口进行修改
     if (e.target.value != oldVal) {
       if (!e.target.value.trim()) {
-        const err = RCi18n({id:'Setting.PleaseInputAFileName'});
+        const err = (window as any).RCi18n({id:'Setting.PleaseInputAFileName'});
         message.error(err);
         return false;
       }
 
       if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(e.target.value)) {
-        const err = RCi18n({id:'Setting.theCorrectFormat'});
+        const err = (window as any).RCi18n({id:'Setting.theCorrectFormat'});
         message.error(err);
         return false;
       }
 
       if (e.target.value.length > 40) {
-        const err = RCi18n({id:'Setting.FileNameIsTooLong'});
+        const err = (window as any).RCi18n({id:'Setting.FileNameIsTooLong'});
         message.error(err);
         return false;
       }

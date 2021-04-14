@@ -118,7 +118,7 @@ class MarketingDes extends React.Component<any, any> {
                   {
                     subType === 10 ?
                       sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)  :
-                      RCi18n({
+                      (window as any).RCi18n({
                         id: 'Marketing.items'
                       })
                   }

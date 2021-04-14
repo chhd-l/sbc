@@ -96,9 +96,9 @@ class NavigationList extends Component<any, any> {
   updateNavigationStatus(record, checked) {
     let tipMessage = checked ? 'enable' : 'disable';
     let that = this;
-    const title = RCi18n({id:'Content.Prompt'});
-    const content = checked ? RCi18n({id:'Content.enableTheNavigation'}) : RCi18n({id:'Content.disableTheNavigation'});
-    const sucMessage = RCi18n({id:'Content.OperateSuccessfully'});
+    const title = (window as any).RCi18n({id:'Content.Prompt'});
+    const content = checked ? (window as any).RCi18n({id:'Content.enableTheNavigation'}) : (window as any).RCi18n({id:'Content.disableTheNavigation'});
+    const sucMessage = (window as any).RCi18n({id:'Content.OperateSuccessfully'});
     confirm({
       title: title,
       content: content,
@@ -129,7 +129,7 @@ class NavigationList extends Component<any, any> {
     });
   }
   sortNavigation(sortList) {
-    const sucMessage = RCi18n({id:'Content.OperateSuccessfully'});
+    const sucMessage = (window as any).RCi18n({id:'Content.OperateSuccessfully'});
     this.setState({
       loading: true
     });
@@ -147,8 +147,8 @@ class NavigationList extends Component<any, any> {
       .catch((err) => {});
   }
   deleteNavigation(record) {
-    const wrnMessage = RCi18n({id:'Content.theNavigationFirstly'});
-    const sucMessage = RCi18n({id:'Content.OperateSuccessfully'});
+    const wrnMessage = (window as any).RCi18n({id:'Content.theNavigationFirstly'});
+    const sucMessage = (window as any).RCi18n({id:'Content.OperateSuccessfully'});
     if (record.children && record.children.length > 0) {
       message.warning(wrnMessage);
       return;

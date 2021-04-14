@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { List, Tooltip, Popconfirm, Input, Row, Button, Modal, Form, message, Spin } from 'antd';
 import * as webapi from '../webapi';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -56,14 +56,14 @@ class comment extends Component<any, any> {
           message.success(<FormattedMessage id="Order.DeleteSuccessfully"/>);
           this.searchComment(this.state.searchValue);
         } else {
-          message.error(res.message || RCi18n({ id: 'Order.DeleteFailed' }));
+          message.error(res.message || (window as any).RCi18n({ id: 'Order.DeleteFailed' }));
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || RCi18n({ id: 'Order.DeleteFailed' }));
+        message.error(err || (window as any).RCi18n({ id: 'Order.DeleteFailed' }));
         this.setState({
           loading: false
         });
@@ -95,14 +95,14 @@ class comment extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || RCi18n({ id: 'Public.GetDataFailed' }));
+          message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || RCi18n({ id: 'Public.GetDataFailed' }));
+        message.error(err || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         this.setState({
           loading: false
         });
@@ -138,14 +138,14 @@ class comment extends Component<any, any> {
                 });
                 this.searchComment(searchValue);
               } else {
-                message.error(res.message || RCi18n({ id: 'Order.AddFailed' }));
+                message.error(res.message || (window as any).RCi18n({ id: 'Order.AddFailed' }));
                 this.setState({
                   confirmLoading: false
                 });
               }
             })
             .catch((err) => {
-              message.error(err || RCi18n({ id: 'Order.AddFailed' }));
+              message.error(err || (window as any).RCi18n({ id: 'Order.AddFailed' }));
               this.setState({
                 confirmLoading: false
               });
@@ -163,14 +163,14 @@ class comment extends Component<any, any> {
                 });
                 this.searchComment(searchValue);
               } else {
-                message.error(res.message || RCi18n({ id: 'Order.UpdateFailed' }));
+                message.error(res.message || (window as any).RCi18n({ id: 'Order.UpdateFailed' }));
                 this.setState({
                   confirmLoading: false
                 });
               }
             })
             .catch((err) => {
-              message.error(err || RCi18n({ id: 'Order.UpdateFailed' }));
+              message.error(err || (window as any).RCi18n({ id: 'Order.UpdateFailed' }));
               this.setState({
                 confirmLoading: false
               });
@@ -194,7 +194,7 @@ class comment extends Component<any, any> {
     return (
       <div>
         <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
-          <Search placeholder={RCi18n({ id: 'Order.Pleaseinputcomment' })} id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
+          <Search placeholder={(window as any).RCi18n({ id: 'Order.Pleaseinputcomment' })} id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
           <span style={{ marginLeft: '10px' }}>
             <Button
               type="primary"
@@ -273,14 +273,14 @@ class comment extends Component<any, any> {
           <Modal
             width={700}
             visible={commentVisible}
-            title={RCi18n({
+            title={(window as any).RCi18n({
               id: 'Order.AddComment'
             })}
             onOk={this.handleSubmit}
             confirmLoading={confirmLoading}
             maskClosable={false}
             onCancel={this.closeModal}
-            okText={RCi18n({ id: 'Order.btnConfirm' })}
+            okText={(window as any).RCi18n({ id: 'Order.btnConfirm' })}
           >
             <Form>
               <FormItem {...layout} label={<FormattedMessage id="Order.PetOwner" />}>
@@ -296,11 +296,11 @@ class comment extends Component<any, any> {
               <FormItem {...layout} label={<FormattedMessage id="Order.Comment" />}>
                 {getFieldDecorator('name', {
                   initialValue: comment,
-                  rules: [{ required: true, message: RCi18n({ id: 'Order.Pleaseinputcomment' }) }]
+                  rules: [{ required: true, message: (window as any).RCi18n({ id: 'Order.Pleaseinputcomment' }) }]
                 })(
                   <Input.TextArea
                     maxLength={2000}
-                    placeholder={RCi18n({ id: 'Order.Pleaseinputcomment' })}
+                    placeholder={(window as any).RCi18n({ id: 'Order.Pleaseinputcomment' })}
                     autoSize={{ minRows: 5, maxRows: 10 }}
                     onChange={(e) => {
                       const value = (e.target as any).value;

@@ -34,8 +34,8 @@ class Checkout extends React.Component<any, any> {
     webapi.getConsent().then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          consents: data.res.context?.consentVOList ?? [],
-          selectedConsents: (data.res.context?.consentVOList ?? []).filter((c, idx) => idx === 0).map(d => d.id)
+          consents: (data.res.context.requiredList.map(ct => ({...ct, required: true}))).concat(data.res.context.optionalList.map(ct => ({...ct,required:false}))),
+          selectedConsents: data.res.context.requiredList.map(ct => ct.id)
         });
       }
     });
@@ -163,8 +163,8 @@ class Checkout extends React.Component<any, any> {
     if (this.state.memberInfo.customerName) {
       this.switchStep(3);
     } else {
-      const alertTitle = RCi18n({id:'Order.offline.noCustomerAlert'});
-      const okText = RCi18n({id:'Order.OK'});
+      const alertTitle = (window as any).RCi18n({id:'Order.offline.noCustomerAlert'});
+      const okText = (window as any).RCi18n({id:'Order.OK'});
       Modal.warning({ title: alertTitle, okText: okText, centered: true });
     }
   }
@@ -205,9 +205,9 @@ class Checkout extends React.Component<any, any> {
           this.setState({
             loading: false
           }, () => {
-            const alertTitle = RCi18n({id:'Order.offline.orderNotSuccess'});
-            const alertContent = RCi18n({id:'Order.offline.retryAlert'});
-            const okText = RCi18n({id:'Order.OK'});
+            const alertTitle = (window as any).RCi18n({id:'Order.offline.orderNotSuccess'});
+            const alertContent = (window as any).RCi18n({id:'Order.offline.retryAlert'});
+            const okText = (window as any).RCi18n({id:'Order.OK'});
             Modal.warning({ title: alertTitle, content: alertContent, okText: okText, centered: true });
           });
         }
@@ -220,10 +220,10 @@ class Checkout extends React.Component<any, any> {
   }
 
   showQueryModal = () => {
-    const infoTitle = RCi18n({id:'Order.offline.queryStateTitle'});
-    const infoContent = RCi18n({id:'Order.offline.queryStateContent'});
-    const okText = RCi18n({id:'Order.offline.yes'});
-    const noText = RCi18n({id:'Order.offline.no'});
+    const infoTitle = (window as any).RCi18n({id:'Order.offline.queryStateTitle'});
+    const infoContent = (window as any).RCi18n({id:'Order.offline.queryStateContent'});
+    const okText = (window as any).RCi18n({id:'Order.offline.yes'});
+    const noText = (window as any).RCi18n({id:'Order.offline.no'});
     Modal.confirm({ title: infoTitle, content: infoContent, okText: okText, cancelText: noText, centered: true, onOk: this.queryOrderStatus, onCancel: () => {} });
   }
 
@@ -272,10 +272,11 @@ class Checkout extends React.Component<any, any> {
   }
 
   submitCustomerConsent = () => {
-    const { memberInfo, consents, selectedConsents } = this.state;
-    if (memberInfo.memberType === 'member') {
+    const { memberType, memberInfo, consents, selectedConsents } = this.state;
+    if (memberType === 'Member') {
       webapi.setConsent(memberInfo.customerId, {
-        optionalList: consents.map(c => ({
+        requiredList: consents.filter(ct => ct.required).map(ct => ({id:ct.id,selectedFlag:true})),
+        optionalList: consents.filter(ct => !ct.required).map(c => ({
           id: c.id,
           selectedFlag: selectedConsents.indexOf(c.id) > -1
         }))

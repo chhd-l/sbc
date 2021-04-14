@@ -8,7 +8,7 @@ import { AuthWrapper, Const, getOrderStatusValue, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { cache } from 'qmkit';
+import { cache, RCi18n } from 'qmkit';
 const defaultImg = require('../img/none.png');
 
 const confirm = Modal.confirm;
@@ -263,7 +263,7 @@ class SearchList extends React.Component<any, any> {
                         {returnFlowState === 'PENDING_REVIEW' && (
                           <AuthWrapper functionName="f_return_review">
 
-                            <Tooltip placement="top" title={RCi18n({id:'Order.Approve'})}>
+                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.Approve'})}>
                               <a style={{ marginLeft: 20 }} onClick={
                                 () => {
                                   this._showAudit(onAudit, rid);
@@ -274,7 +274,7 @@ class SearchList extends React.Component<any, any> {
 
                             </Tooltip>
 
-                            <Tooltip placement="top" title={RCi18n({id:'Order.Reject'})}>
+                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.Reject'})}>
                               <a style={{ marginLeft: 20 }} onClick={
                                 () => {
                                   this._showReject(onReject, rid);
@@ -291,13 +291,13 @@ class SearchList extends React.Component<any, any> {
                             <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.skipLogisticsAlert"/>} onConfirm={() => {
                               this._showDeliver(onDeliver, rid, false)
                             }} okText={<FormattedMessage id="Order.btnConfirm"/>} cancelText={<FormattedMessage id="Order.btnCancel"/>}>
-                              <Tooltip placement="top" title={RCi18n({id:'Order.skipLogistics'})}>
+                              <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.skipLogistics'})}>
                                 <a style={{ marginLeft: 20 }}>
                                   <FormattedMessage id="Order.skipLogistics"/>
                                 </a>
                               </Tooltip>
                             </Popconfirm>
-                            <Tooltip placement="top" title={RCi18n({id:'Order.fillLogistics'})}>
+                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.fillLogistics'})}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
                                 <FormattedMessage id="Order.fillLogistics"/>
                               </a>
@@ -307,12 +307,12 @@ class SearchList extends React.Component<any, any> {
 
                         {returnFlowState === 'TO_BE_RECEIVED' && (
                           <AuthWrapper functionName="f_return_received">
-                            <Tooltip placement="top" title={RCi18n({id:'Order.RecipientAccepted'})}>
+                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.RecipientAccepted'})}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
                                 <FormattedMessage id="Order.RecipientAccepted"/>
                               </a>
                             </Tooltip>
-                            <Tooltip placement="top" title={RCi18n({id:'Order.RecipientRejected'})}>
+                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.RecipientRejected'})}>
                               <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
                                 <FormattedMessage id="Order.RecipientRejected"/>
                               </a>
@@ -322,7 +322,7 @@ class SearchList extends React.Component<any, any> {
                         )}
                         {returnFlowState === 'PENDING_REFUND' && (
                           <AuthWrapper functionName="f_return_refund">
-                            <Tooltip placement="top" title={RCi18n({id:'Order.refusedToRefund'})}>
+                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.refusedToRefund'})}>
                               <a
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
@@ -334,7 +334,7 @@ class SearchList extends React.Component<any, any> {
                                 <FormattedMessage id="Order.refusedToRefund" />
                               </a>
                             </Tooltip>
-                            <Tooltip placement="top" title={RCi18n({id:'Order.RealRefund'})}>
+                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.RealRefund'})}>
                               <a
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
@@ -349,7 +349,7 @@ class SearchList extends React.Component<any, any> {
                         )}
 
                         <AuthWrapper functionName="f_retrun_detail">
-                          <Tooltip placement="top" title={RCi18n({id:'Order.detail'})}>
+                          <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.detail'})}>
                             <Link style={{ marginRight: 18, marginLeft: 20 }} to={`/order-return-detail/${rid}`} className="iconfont iconDetails">
                               {/*<FormattedMessage id="order.seeDetails" />*/}
                             </Link>
@@ -442,12 +442,12 @@ class SearchList extends React.Component<any, any> {
   }
 
   async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
-    const title = RCi18n({id:'Order.confirmRefund'});
-    const alert1 = RCi18n({id:'Order.refundAlert1'});
-    const alert2 = RCi18n({id:'Order.refundAlert2'});
+    const title = (window as any).RCi18n({id:'Order.confirmRefund'});
+    const alert1 = (window as any).RCi18n({id:'Order.refundAlert1'});
+    const alert2 = (window as any).RCi18n({id:'Order.refundAlert2'});
     confirm({
       title: title,
-      okText: RCi18n({id:'Order.OK'}),
+      okText: (window as any).RCi18n({id:'Order.OK'}),
       content: <div>
         <p>{alert1}</p>
         <p>{alert2}</p>
@@ -479,8 +479,8 @@ class SearchList extends React.Component<any, any> {
 
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
-    const alert = RCi18n({id:'Order.approveAlert'});
-    const title = RCi18n({id:'Order.Approve'});
+    const alert = (window as any).RCi18n({id:'Order.approveAlert'});
+    const title = (window as any).RCi18n({id:'Order.Approve'});
     confirm({
       title: title,
       content: alert,
@@ -519,8 +519,8 @@ class SearchList extends React.Component<any, any> {
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
-    const title = RCi18n({id:'Order.ConfirmReceipt'});
-    const alert = RCi18n({id:'Order.receiptAlert'});
+    const title = (window as any).RCi18n({id:'Order.ConfirmReceipt'});
+    const alert = (window as any).RCi18n({id:'Order.receiptAlert'});
     confirm({
       title: title,
       content: alert,

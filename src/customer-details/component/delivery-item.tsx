@@ -312,7 +312,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   //手机校验
   comparePhone = (rule, value, callback) => {
-    if (!/^[0-9+-\\(\\)\s]{6,20}$/.test(value)) {
+    if (!/^[0-9+-\\(\\)\s]{6,25}$/.test(value)) {
       callback('Please enter the correct phone');
     } else {
       callback();

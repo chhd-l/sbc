@@ -47,14 +47,14 @@ class LoginForm extends React.Component<any, any> {
         </label>
         <FormItem style={{ marginTop: 10 }}>
           {getFieldDecorator('account', {
-            rules: [{ required: true, message: RCi18n({ id: 'Public.Passwordcannotbeempty' }) }]
-          })(<Input size="large" prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder={RCi18n({ id: 'Public.Pleaseinputyour' })} />)}
+            rules: [{ required: true, message: (window as any).RCi18n({ id: 'Public.Passwordcannotbeempty' }) }]
+          })(<Input size="large" prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder={(window as any).RCi18n({ id: 'Public.Pleaseinputyour' })} />)}
         </FormItem>
         <label style={styles.label}>Password</label>
         <FormItem style={{ marginTop: 10 }}>
           {getFieldDecorator('password', {
-            rules: [{ required: true, message: RCi18n({ id: 'Public.Passwordcannotbeempty' }) }]
-          })(<Input size="large" prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder={RCi18n({ id: 'Public.Password' })} />)}
+            rules: [{ required: true, message: (window as any).RCi18n({ id: 'Public.Passwordcannotbeempty' }) }]
+          })(<Input size="large" prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder={(window as any).RCi18n({ id: 'Public.Password' })} />)}
         </FormItem>
         <FormItem>
           {/*{getFieldDecorator('isRemember', {

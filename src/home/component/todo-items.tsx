@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Spin } from 'antd';
 //import { fromJS } from 'immutable';
 
-import { AuthWrapper, cache, history, noop } from 'qmkit';
+import { AuthWrapper, cache, RCi18n, history, noop } from 'qmkit';
 /*import { IList } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';*/
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';
@@ -502,7 +502,7 @@ class TodoItems extends React.Component<any, any> {
                 <div className="line">
                   {prescriberTrendView && (
                     <BarLine
-                      yName={{ y1: RCi18n({id:'Home.Prescriberreward'}), y2: RCi18n({id:'Home.Activerate'}) }}
+                      yName={{ y1: (window as any).RCi18n({id:'Home.Prescriberreward'}), y2: (window as any).RCi18n({id:'Home.Activerate'}) }}
                       unit={{ unit1: '', unit2: '%' }}
                       nameTextStyle={{ y1: [0, 0, 0, 42], y2: [0, 0, 0, 22] }}
                       data={{
@@ -531,7 +531,7 @@ class TodoItems extends React.Component<any, any> {
                 <div className="line">
                   {transactionTrendView && (
                     <BarLine
-                      yName={{ y1: RCi18n({id:'Home.Revenue'}), y2: RCi18n({id:'Home.Transaction'}) }}
+                      yName={{ y1: (window as any).RCi18n({id:'Home.Revenue'}), y2: (window as any).RCi18n({id:'Home.Transaction'}) }}
                       unit={{ unit1: '', unit2: '' }}
                       nameTextStyle={{ y1: [0, 52, 0, 0], y2: [0, 22, 0, 0] }}
                       data={{

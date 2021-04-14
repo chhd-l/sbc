@@ -75,9 +75,8 @@ export function refillOrder(tid: string, repeat: true | false) {
  * @returns 
  */
 export function getConsent() {
-  return Fetch<TResult>('/consent/list', {
-    method: 'POST',
-    body: JSON.stringify({consentGroup: "offline-pay"})
+  return Fetch<TResult>('/consent/group?consentGroup=offline-pay', {
+    method: 'GET'
   }, { isHandleResult: true, customerTip: true });
 }
 
@@ -88,7 +87,7 @@ export function getConsent() {
  * @returns 
  */
 export function setConsent(customerId, consent = {}) {
-  return Fetch<TResult>(`/consent/binds/${customerId}`, {
+  return Fetch<TResult>(`/consent/binds/customer-id=${customerId}`, {
     method: 'POST',
     body: JSON.stringify(consent)
   }, { isHandleResult: true, customerTip: true });

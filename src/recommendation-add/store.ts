@@ -102,6 +102,12 @@ export default class AppStore extends Store {
       }
       let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
       this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
+     if(settingVO.apptNo){
+      message.success(res.message)
+     }else{
+      message.success((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
+     }
+      
     }
   }
 
@@ -119,9 +125,9 @@ export default class AppStore extends Store {
       goodsInfoList.map(item => {
         obj[item.goodsInfoNo] = item
       })
-     // _clone[index].goodsInfoWeight = value * (_clone[index].goodsInfoWeight/_clone[index].quantity)
       goods.map(item => {
        let goodsInfoWeight:any=0,goodsInfoUnit=(obj[item.goodsInfoNo]?.goodsInfoUnit??'').toLowerCase();
+       obj[item.goodsInfoNo].goodsInfoWeight=obj[item.goodsInfoNo]?.goodsInfoWeight??0
        if(goodsInfoUnit==='g'){
           goodsInfoWeight=item.quantity*obj[item.goodsInfoNo].goodsInfoWeight
        }else if(goodsInfoUnit==='kg'){

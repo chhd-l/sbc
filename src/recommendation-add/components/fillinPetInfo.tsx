@@ -318,8 +318,8 @@ export default class FillinPetInfo extends Component {
                             <div style={{ marginTop: 3}}>
                                 <Search placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />
                             </div>
-                            <div style={{ marginTop: 20 }}>
-                                {petsList.length > 0 && <Select style={{ width: '100' }}
+                            <div style={{ marginTop: 20,position:'relative' ,width:'100%'}}>
+                                {petsList.length > 0 && <Select style={{ width: '100%' }}
                                     defaultValue={petsList[0].petsId}
                                     onChange={this._onChangePets}
                                 >

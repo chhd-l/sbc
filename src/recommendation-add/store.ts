@@ -102,7 +102,12 @@ export default class AppStore extends Store {
       }
       let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
       this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
+     if(settingVO.apptNo){
       message.success(res.message)
+     }else{
+      message.success((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
+     }
+      
     }
   }
 

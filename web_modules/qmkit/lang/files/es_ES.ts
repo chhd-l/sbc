@@ -2439,6 +2439,10 @@ export default {
   'Finance.saveSettings':'Save Settings',
   'Finance.add':'add',
   /* -------- 已翻译 V1.0---------------*/
+  'Finance.UnSettlement details':'UnSettlement details',
+  'Finance.Settlement details':'Settlement details',
+  "Finance.Guest": "Guest",
+  "Finance.Member": "Member",
 
 
 

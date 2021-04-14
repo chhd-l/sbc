@@ -68,7 +68,7 @@ class OrderDetailTab extends React.Component<any, any> {
   _rejectForm;
 
   props: {
-    intl?:any;
+    intl?: any;
     relaxProps?: {
       detail: IMap;
       countryDict: List<any>;
@@ -146,25 +146,27 @@ class OrderDetailTab extends React.Component<any, any> {
     const tradePrice = detail.get('tradePrice').toJS() as any;
 
     //收货人信息
-    const consignee = detail.get('consignee') ? detail.get('consignee').toJS() as {
-      detailAddress: string;
-      name: string;
-      phone: string;
-      countryId: string;
-      city: string;
-      province: string;
-      cityId: number;
-      address: string;
-      detailAddress1: string;
-      detailAddress2: string;
-      rfc: string;
-      postCode: string;
-      firstName: string;
-      lastName: string;
-      comment: string;
-      entrance: string;
-      apartment: string;
-    } : {};
+    const consignee = detail.get('consignee')
+      ? (detail.get('consignee').toJS() as {
+          detailAddress: string;
+          name: string;
+          phone: string;
+          countryId: string;
+          city: string;
+          province: string;
+          cityId: number;
+          address: string;
+          detailAddress1: string;
+          detailAddress2: string;
+          rfc: string;
+          postCode: string;
+          firstName: string;
+          lastName: string;
+          comment: string;
+          entrance: string;
+          apartment: string;
+        })
+      : {};
 
     //发票信息
     const invoice = detail.get('invoice')
@@ -604,6 +606,15 @@ class OrderDetailTab extends React.Component<any, any> {
                   {(tradePrice.deliveryPrice || 0).toFixed(2)}
                 </strong>
               </label>
+              {tradePrice.freeShippingFlag ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>{<FormattedMessage id="Order.shippingFeesDiscount" />}: </span>
+                  <strong>
+                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {(tradePrice.freeShippingDiscountPrice || 0).toFixed(2)}
+                  </strong>
+                </label>
+              ) : null}
               {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="Order.Tax" />}: </span>
@@ -1037,8 +1048,8 @@ class OrderDetailTab extends React.Component<any, any> {
     const { retrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.Re-review'});
-    const content = this.props.intl.formatMessage({id:'Order.Confirmtoreturntheselected'});
+    const title = this.props.intl.formatMessage({ id: 'Order.Re-review' });
+    const content = this.props.intl.formatMessage({ id: 'Order.Confirmtoreturntheselected' });
     confirm({
       title: title,
       content: content,
@@ -1058,8 +1069,8 @@ class OrderDetailTab extends React.Component<any, any> {
     const { confirm } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
-    const content = this.props.intl.formatMessage({id:'Order.ConfirmThatAllProducts'});
+    const title = this.props.intl.formatMessage({ id: 'Order.ConfirmReceipt' });
+    const content = this.props.intl.formatMessage({ id: 'Order.ConfirmThatAllProducts' });
     confirmModal({
       title: title,
       content: content,

@@ -11,24 +11,7 @@ import * as webapi from './webapi';
 import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary, refresh } from './webapi';
 import { message } from 'antd';
 import LogisticActor from './actor/logistic-actor';
-import { Const, history, ValidConst, cache } from 'qmkit';
-
-import es_ES from '../../web_modules/qmkit/es_ES';
-import es_RUS from '../../web_modules/qmkit/es_RUS';
-import es_TUR from '../../web_modules/qmkit/es_TUR';
-
-let language = es_ES;
-if (sessionStorage.getItem(cache.LANGUAGE) == 'en-US') {
-  language = es_ES;
-} else if (sessionStorage.getItem(cache.LANGUAGE) == 'ru') {
-  language = es_RUS;
-} else if (sessionStorage.getItem(cache.LANGUAGE) == 'tr') {
-  language = es_TUR;
-}
-
-function i18n({id}) {
-  return language[id] || id;
-}
+import { Const, history, ValidConst, RCi18n as i18n } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {

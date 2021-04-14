@@ -85,7 +85,7 @@ class Checkout extends React.Component<any, any> {
           goodsInfoNos.forEach(item => {
             const targetProduct = products.find(p => p.goodsInfoNo === item.goodsInfoNo);
             if (targetProduct) {
-              recoProducts.push({ ...targetProduct, quantity: item.quantity });
+              recoProducts.push({ ...targetProduct, quantity: item.quantity / 100 });
             }
           });
         }

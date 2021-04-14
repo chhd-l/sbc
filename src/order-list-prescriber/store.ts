@@ -6,7 +6,7 @@ import FormActor from './actor/form-actor';
 import TabActor from './actor/tab-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
-import { Const, history, util } from 'qmkit';
+import { Const, history, util, RCi18n } from 'qmkit';
 
 export default class AppStore extends Store {
   //btn加载
@@ -282,7 +282,7 @@ export default class AppStore extends Store {
   verify = async (tid: string, buyerId: string) => {
     const { res } = await webapi.verifyBuyer(buyerId);
     if (res) {
-      message.error('The customer has been deleted and cannot be modified！');
+      message.error(RCi18n({id:'Order.modifiedErr'}));
       return;
     } else {
       history.push('/order-edit/' + tid);

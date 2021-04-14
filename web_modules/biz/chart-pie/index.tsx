@@ -18,7 +18,7 @@ class Line extends React.Component {
     let option = {
       title: [
         {
-          text: this.props.intl.formatMessage({id:'Home.Rate'}),
+          text: RCi18n({id:'Home.Rate'}),
           x: 'center',
           top: '32%',
           textStyle: {

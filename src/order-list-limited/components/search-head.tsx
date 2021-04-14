@@ -239,7 +239,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={this.props.intl.formatMessage({id:'Order.OrderCategory'})} />
+                    <Input style={styles.leftLabel} disabled defaultValue={RCi18n({id:'Order.OrderCategory'})} />
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
@@ -548,15 +548,15 @@ class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-    const mess = this.props.intl.formatMessage({id:'Order.pleaseSelectOrderToOperate'});
+    const mess = RCi18n({id:'Order.pleaseSelectOrderToOperate'});
     if (checkedIds.length == 0) {
       message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.audit'});
-    const content = this.props.intl.formatMessage({id:'Order.confirmAudit'});
+    const title = RCi18n({id:'Order.audit'});
+    const content = RCi18n({id:'Order.confirmAudit'});
     confirm({
       title: title,
       content: content,
@@ -571,11 +571,11 @@ class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: this.props.intl.formatMessage({
+      byParamsTitle: RCi18n({
         id: 'Order.Exportfilteredorders'
       }),
       byIdsTitle:
-        this.props.intl.formatMessage({
+        RCi18n({
           id: 'Order.Exportselectedorders'
         }),
       exportByParams: onExportByParams,

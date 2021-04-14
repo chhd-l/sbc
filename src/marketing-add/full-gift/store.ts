@@ -1,7 +1,7 @@
 import { IOptions, Store } from 'plume2';
 import { message } from 'antd';
 
-import { Const, history } from 'qmkit';
+import { Const, history, RCi18n } from 'qmkit';
 
 import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
@@ -77,10 +77,14 @@ export default class AppStore extends Store {
     }
     this.dispatch('loading:end');
     if(response.res && response.res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.error(RCi18n({
+        id: 'Marketing.OperateSuccessfully'
+      }))
       history.push('/marketing-list');
     } else if(response.res && response.res.code === 'K-000009') {
-      message.error('Pomotion Code has exited.')
+      message.error(RCi18n({
+        id: 'Marketing.PomotionCodehasexited'
+      }))
     }
   };
 

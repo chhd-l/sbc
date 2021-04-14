@@ -63,7 +63,7 @@ class RejectForm extends React.Component<any, any> {
             ]
           })(
             <div>
-              <Input.TextArea placeholder={this.props.intl.formatMessage({id:'Order.Comment'})} autosize={{ minRows: 4, maxRows: 4 }} />
+              <Input.TextArea placeholder={RCi18n({id:'Order.Comment'})} autosize={{ minRows: 4, maxRows: 4 }} />
               <p>
                 <span
                   style={{
@@ -560,8 +560,8 @@ class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.review'});
-    const content = this.props.intl.formatMessage({id:'Order.confirmReview'});
+    const title = RCi18n({id:'Order.review'});
+    const content = RCi18n({id:'Order.confirmReview'});
     confirm({
       title: title,
       content: content,
@@ -590,7 +590,7 @@ class ListView extends React.Component<any, any> {
     const { onAudit } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
-    const content = this.props.intl.formatMessage({id:'Order.Doyouconfirmthat'});
+    const content = RCi18n({id:'Order.Doyouconfirmthat'});
     confirmModal({
       content: content,
       onOk() {
@@ -609,8 +609,8 @@ class ListView extends React.Component<any, any> {
     const { onConfirm } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
-    const content = this.props.intl.formatMessage({id:'Order.confirmReceivedAllProducts'});
+    const title = RCi18n({id:'Order.ConfirmReceipt'});
+    const content = RCi18n({id:'Order.confirmReceivedAllProducts'});
     confirm({
       title: title,
       content: content,

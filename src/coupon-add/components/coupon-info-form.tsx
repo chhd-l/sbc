@@ -397,7 +397,7 @@ class CouponInfoForm extends Component<any, any> {
               ]
             })(
               <Input
-                placeholder={this.props.intl.formatMessage({
+                placeholder={RCi18n({
                   id: 'Marketing.Nomorethanonehundredwords'
                 })}
                 maxLength={100}
@@ -466,7 +466,7 @@ class CouponInfoForm extends Component<any, any> {
                 rules: [
                   {
                     required: rangeDayType === 0,
-                    message: this.props.intl.formatMessage({
+                    message: RCi18n({
                         id: 'Marketing.PleaseInputTheStart'
                       })
                   }
@@ -479,10 +479,10 @@ class CouponInfoForm extends Component<any, any> {
                   getCalendarContainer={() => document.getElementById('page-content')}
                   format="YYYY-MM-DD"
                   placeholder={[
-                    this.props.intl.formatMessage({
+                    RCi18n({
                       id: 'Marketing.StartTime'
                     }),
-                    this.props.intl.formatMessage({
+                    RCi18n({
                       id: 'Marketing.EndTime'
                     })
                   ]}
@@ -543,7 +543,7 @@ class CouponInfoForm extends Component<any, any> {
                   rules: [
                     { required: true,
                       message:
-                        this.props.intl.formatMessage({
+                        RCi18n({
                           id: 'Marketing.theFaceValueOfCoupon'
                         })
                     },
@@ -551,7 +551,7 @@ class CouponInfoForm extends Component<any, any> {
                       validator: (_rule, value, callback) => {
                         if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
                           callback(
-                            this.props.intl.formatMessage({
+                            RCi18n({
                               id: 'Marketing.IntegersBetweenAreAllowed'
                             })
                           );
@@ -564,7 +564,7 @@ class CouponInfoForm extends Component<any, any> {
                 })(
                   <Input
                     placeholder={
-                      this.props.intl.formatMessage({
+                      RCi18n({
                         id: 'Marketing.integerfrom1to99999'
                       })
                     }
@@ -594,7 +594,7 @@ class CouponInfoForm extends Component<any, any> {
                   rules: [
                     { required: true,
                       message:
-                        this.props.intl.formatMessage({
+                        RCi18n({
                           id: 'Marketing.Pleaseinputcoupondiscount'
                         })
                     },
@@ -602,11 +602,11 @@ class CouponInfoForm extends Component<any, any> {
                       validator: (_rule, value, callback) => {
                         if (value) {
                           if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                            this.props.intl.formatMessage({
+                            RCi18n({
                               id: 'Marketing.integerfrom1to99999'
                             })
                             callback(
-                              this.props.intl.formatMessage({
+                              RCi18n({
                                 id: 'Marketing.InputValueBetween'
                               })
                             );
@@ -645,7 +645,7 @@ class CouponInfoForm extends Component<any, any> {
                       rules: [
                         {
                           required: fullBuyType === 1,
-                          message: this.props.intl.formatMessage({
+                          message: RCi18n({
                             id: 'Marketing.theUsageThreshold'
                           })
                         },
@@ -654,14 +654,14 @@ class CouponInfoForm extends Component<any, any> {
                             if (fullBuyType == 1 && (value || value === 0)) {
                               if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
                                 callback(
-                                  this.props.intl.formatMessage({
+                                  RCi18n({
                                     id: 'Marketing.IntegersBetweenAreAllowed'
                                   })
                                 );
                                 return;
                               } else if (value <= parseInt(`${denomination}`)) {
                                 callback(
-                                  this.props.intl.formatMessage({
+                                  RCi18n({
                                     id: 'Marketing.TheThresholdMust'
                                   })
                                 );
@@ -679,7 +679,7 @@ class CouponInfoForm extends Component<any, any> {
                         prefix={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                         disabled={fullBuyType === 0}
                         placeholder={
-                          this.props.intl.formatMessage({
+                          RCi18n({
                           id: 'Marketing.integerfrom1to99999'
                         })
                         }
@@ -735,7 +735,7 @@ class CouponInfoForm extends Component<any, any> {
                       if ((!value || value.length === 0) && scopeType === 5) {
                         //storeCateIds.size === 0
                         callback(
-                          this.props.intl.formatMessage({
+                          RCi18n({
                             id: 'Marketing.Pleaseselectcategory'
                           })
                         );
@@ -755,12 +755,12 @@ class CouponInfoForm extends Component<any, any> {
                   //treeData ={getGoodsCate}
                   // showCheckedStrategy = {SHOW_PARENT}
                   placeholder={
-                    this.props.intl.formatMessage({
+                    RCi18n({
                       id: 'Marketing.Pleaseselectcategory'
                     })
                   }
                   notFoundContent={
-                    this.props.intl.formatMessage({
+                    RCi18n({
                       id: 'Marketing.Nosalescategory'
                     })
                   }
@@ -784,7 +784,7 @@ class CouponInfoForm extends Component<any, any> {
                       if ((!value || value.length === 0) && scopeType === 6) {
                         //attributeValueIds.size === 0
                         callback(
-                          this.props.intl.formatMessage({
+                          RCi18n({
                             id: 'Marketing.Pleaseselectattribute'
                           })
                           );
@@ -805,12 +805,12 @@ class CouponInfoForm extends Component<any, any> {
                   //treeData ={getGoodsCate}
                   // showCheckedStrategy = {SHOW_PARENT}
                   placeholder={
-                    this.props.intl.formatMessage({
+                    RCi18n({
                       id: 'Marketing.Pleaseselectattribute'
                     })
                   }
                   notFoundContent={
-                    this.props.intl.formatMessage({
+                    RCi18n({
                       id: 'Marketing.Noattribute'
                     })
                   }
@@ -840,7 +840,7 @@ class CouponInfoForm extends Component<any, any> {
                     validator: (_rule, value, callback) => {
                       if (segmentIds.size === 0 && couponJoinLevel === -3) {
                         callback(
-                          this.props.intl.formatMessage({
+                          RCi18n({
                             id: 'Marketing.Pleaseselectgroup'
                           })
                         );
@@ -868,7 +868,7 @@ class CouponInfoForm extends Component<any, any> {
             {getFieldDecorator('couponDesc', {
               initialValue: couponDesc,
               rules: [{ max: 500, message:
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.Instructionsareupto500'
                   })
               }]
@@ -877,7 +877,7 @@ class CouponInfoForm extends Component<any, any> {
                 maxLength={500}
                 style={{ width: 800, marginTop: '10px' }}
                 placeholder={
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.Instructionsareupto500'
                   })
                 }
@@ -1032,7 +1032,7 @@ class CouponInfoForm extends Component<any, any> {
         this.props.form.setFields({
           rangeDay: {
             errors: [new Error(
-              this.props.intl.formatMessage({
+              RCi18n({
                 id: 'Marketing.starttimecannotbelessthancurrenttime'
               })
             )]

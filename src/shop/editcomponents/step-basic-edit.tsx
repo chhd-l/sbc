@@ -249,7 +249,7 @@ class StepOneEdit extends React.Component<any, any> {
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.storeLanguage" />}>
                   {getFieldDecorator('languageId', {
                     initialValue: Array.isArray(storeInfo.get('languageId')) ? storeInfo.get('languageId') : storeInfo.get('languageId') ? storeInfo.get('languageId').toJS() : [],
-                    rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseselectLanguage' }) + '!' }]
+                    rules: [{ required: false, message: RCi18n({ id: 'Setting.PleaseselectLanguage' }) + '!' }]
                   })(
                     // <Input
                     //   placeholder="商家名称不得超过20字符"
@@ -285,7 +285,7 @@ class StepOneEdit extends React.Component<any, any> {
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.timeZone" />}>
                   {getFieldDecorator('timeZoneId', {
                     initialValue: storeInfo.get('timeZoneId'),
-                    rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseselectTimeZone' }) + '!' }]
+                    rules: [{ required: false, message: RCi18n({ id: 'Setting.PleaseselectTimeZone' }) + '!' }]
                   })(
                     <Select
                       showSearch
@@ -313,7 +313,7 @@ class StepOneEdit extends React.Component<any, any> {
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.targetCountry" />}>
                   {getFieldDecorator('countryId', {
                     initialValue: storeInfo.get('countryId'),
-                    rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseselectCountry' }) + '!' }]
+                    rules: [{ required: false, message: RCi18n({ id: 'Setting.PleaseselectCountry' }) + '!' }]
                   })(
                     <Select
                       onChange={(value) => {
@@ -336,7 +336,7 @@ class StepOneEdit extends React.Component<any, any> {
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.targetCity" />}>
                   {getFieldDecorator('cityIds', {
                     initialValue: Array.isArray(storeInfo.get('cityIds')) ? storeInfo.get('cityIds') : storeInfo.get('cityIds') ? storeInfo.get('cityIds').toJS() : [],
-                    rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseselectCity' }) + '!' }]
+                    rules: [{ required: false, message: RCi18n({ id: 'Setting.PleaseselectCity' }) + '!' }]
                   })(
                     <Select
                       mode="multiple"
@@ -364,7 +364,7 @@ class StepOneEdit extends React.Component<any, any> {
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.currency" />}>
                   {getFieldDecorator('currencyId', {
                     initialValue: storeInfo.get('currencyId'),
-                    rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseselectCurrency' }) + '!' }]
+                    rules: [{ required: false, message: RCi18n({ id: 'Setting.PleaseselectCurrency' }) + '!' }]
                   })(
                     <Select
                       onChange={(value) =>
@@ -387,7 +387,7 @@ class StepOneEdit extends React.Component<any, any> {
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.taxRate" />}>
                   {getFieldDecorator('taxRate', {
                     initialValue: parseInt(storeInfo.get('taxRate')),
-                    rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseinputTaxRate' }) + '!' }]
+                    rules: [{ required: false, message: RCi18n({ id: 'Setting.PleaseinputTaxRate' }) + '!' }]
                   })(
                     <InputNumber
                       min={0}
@@ -408,7 +408,7 @@ class StepOneEdit extends React.Component<any, any> {
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.domainName" />}>
                   {getFieldDecorator('domainName', {
                     initialValue: storeInfo.get('domainName'),
-                    rules: [{ required: false, message: this.props.intl.formatMessage({ id: 'Setting.PleaseinputDomainName' }) + '!' }]
+                    rules: [{ required: false, message: RCi18n({ id: 'Setting.PleaseinputDomainName' }) + '!' }]
                   })(
                     <Input
                       addonBefore="URL"
@@ -429,7 +429,7 @@ class StepOneEdit extends React.Component<any, any> {
                     rules: [
                       {
                         required: false,
-                        message: this.props.intl.formatMessage({ id: 'Setting.PleaseinputMinimumCharge' }) + '!'
+                        message: RCi18n({ id: 'Setting.PleaseinputMinimumCharge' }) + '!'
                       }
                     ]
                   })(
@@ -452,7 +452,7 @@ class StepOneEdit extends React.Component<any, any> {
                     rules: [
                       {
                         required: false,
-                        message: this.props.intl.formatMessage({ id: 'Setting.PleaseinputPrescriberMap' }) + '!'
+                        message: RCi18n({ id: 'Setting.PleaseinputPrescriberMap' }) + '!'
                       }
                     ]
                   })(
@@ -521,7 +521,7 @@ class StepOneEdit extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem {...formItemLayout} required={false} label={this.props.intl.formatMessage({ id: 'Setting.CitySelect' })}>
+                <FormItem {...formItemLayout} required={false} label={RCi18n({ id: 'Setting.CitySelect' })}>
                   {getFieldDecorator('citySelection', {
                     initialValue: storeInfo.get('citySelection') === 0 ? false : true // default checked
                   })(
@@ -590,7 +590,7 @@ class StepOneEdit extends React.Component<any, any> {
     }
 
     if (file.status == 'error') {
-      message.error(this.props.intl.formatMessage({ id: 'Setting.uploadfailed' }));
+      message.error(RCi18n({ id: 'Setting.uploadfailed' }));
       return;
     }
 
@@ -616,11 +616,11 @@ class StepOneEdit extends React.Component<any, any> {
       if (file.size <= size * 1024 * 1024) {
         return true;
       } else {
-        message.error(this.props.intl.formatMessage({ id: 'Setting.Filesizecannotexceed' }) + size + 'M');
+        message.error(RCi18n({ id: 'Setting.Filesizecannotexceed' }) + size + 'M');
         return false;
       }
     } else {
-      message.error(this.props.intl.formatMessage({ id: 'Setting.Fileformaterror' }));
+      message.error(RCi18n({ id: 'Setting.Fileformaterror' }));
       return false;
     }
   };

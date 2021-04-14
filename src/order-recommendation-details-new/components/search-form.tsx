@@ -302,8 +302,8 @@ class SearchHead extends Component<any, any> {
     }
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'order.audit'});
-    const content = this.props.intl.formatMessage({id:'order.confirmAudit'});
+    const title = RCi18n({id:'order.audit'});
+    const content = RCi18n({id:'order.confirmAudit'});
     confirm({
       title: title,
       content: content,

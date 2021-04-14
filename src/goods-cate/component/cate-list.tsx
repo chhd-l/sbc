@@ -183,12 +183,12 @@ class CateList extends React.Component<any, any> {
 
   _confirm = (storeCateId: string) => {
     const { doDelete, childFlag, goodsFlag } = this.props.relaxProps;
-    const Prompt = this.props.intl.formatMessage({id:'Product.Prompt'});
-    const hasBeenAssociated = this.props.intl.formatMessage({id:'Product.hasBeenAssociated'});
-    const DeleteTheCurrentCategory = this.props.intl.formatMessage({id:'Product.DeleteTheCurrentCategory'});
-    const ContinueToDelete = this.props.intl.formatMessage({id:'Product.ContinueToDelete'});
-    const Cancel = this.props.intl.formatMessage({id:'Product.Cancel'});
-    const wantToDeleteThisCategory = this.props.intl.formatMessage({id:'Product.wantToDeleteThisCategory'});
+    const Prompt = RCi18n({id:'Product.Prompt'});
+    const hasBeenAssociated = RCi18n({id:'Product.hasBeenAssociated'});
+    const DeleteTheCurrentCategory = RCi18n({id:'Product.DeleteTheCurrentCategory'});
+    const ContinueToDelete = RCi18n({id:'Product.ContinueToDelete'});
+    const Cancel = RCi18n({id:'Product.Cancel'});
+    const wantToDeleteThisCategory = RCi18n({id:'Product.wantToDeleteThisCategory'});
     if (goodsFlag) {
       //该分类下有商品
       confirm({

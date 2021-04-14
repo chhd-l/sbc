@@ -139,7 +139,7 @@ class BrandModal extends React.Component<any, any> {
                 <FormattedMessage id="Setting.ChoosePlatformBrand" />
               </h3>
               <div style={{ paddingRight: 10 }}>
-                <Search placeholder={this.props.intl.formatMessage({ id: 'Setting.Pleaseenterthebrandname' })} onChange={(e) => filterBrandName(e.target.value)} />
+                <Search placeholder={RCi18n({ id: 'Setting.Pleaseenterthebrandname' })} onChange={(e) => filterBrandName(e.target.value)} />
                 <div
                   style={{
                     height: 470,
@@ -207,8 +207,8 @@ class BrandModal extends React.Component<any, any> {
                         <RedPoint>*</RedPoint>
                         <FormattedMessage id="Setting.BrandLogo" />
                         <Tooltip
-                          title={`${this.props.intl.formatMessage({ id: 'Setting.Size' })} 120px*50px, 
-                        ${this.props.intl.formatMessage({ id: 'Setting.support' })}jpg, jpeg, png, gif, ${this.props.intl.formatMessage({ id: 'Setting.nomorethan' })} 50kb`}
+                          title={`${RCi18n({ id: 'Setting.Size' })} 120px*50px, 
+                        ${RCi18n({ id: 'Setting.support' })}jpg, jpeg, png, gif, ${RCi18n({ id: 'Setting.nomorethan' })} 50kb`}
                         >
                           &nbsp;
                           <Icon type="question-circle-o" style={{ color: '#F56C1D' }} />
@@ -228,7 +228,7 @@ class BrandModal extends React.Component<any, any> {
                         <p>
                           <RedPoint>*</RedPoint>
                           <FormattedMessage id="Setting.BrandLogo" />
-                          <Tooltip title={this.props.intl.formatMessage({ id: 'Setting.Supportjpgjpegpng' })}>
+                          <Tooltip title={RCi18n({ id: 'Setting.Supportjpgjpegpng' })}>
                             &nbsp;
                             <Icon type="question-circle-o" style={{ color: '#F56C1D' }} />
                           </Tooltip>
@@ -267,7 +267,7 @@ class BrandModal extends React.Component<any, any> {
                     }}
                   />
                   <Column
-                    title={this.props.intl.formatMessage({ id: 'Setting.Operating' })}
+                    title={RCi18n({ id: 'Setting.Operating' })}
                     dataIndex="operation"
                     key="operation"
                     width="13%"
@@ -307,7 +307,7 @@ class BrandModal extends React.Component<any, any> {
                                 rules: [
                                   {
                                     pattern: ValidConst.noChar,
-                                    message: this.props.intl.formatMessage({ id: 'Setting.Specialcharactersarenotallowed' })
+                                    message: RCi18n({ id: 'Setting.Specialcharactersarenotallowed' })
                                   },
                                   {
                                     validator: (rule, value, callback) => this._checkBrandName(rule, value, callback, record)
@@ -344,7 +344,7 @@ class BrandModal extends React.Component<any, any> {
                                 rules: [
                                   {
                                     validator: (rule, value, callback) => {
-                                      QMMethod.validatorMinAndMax(rule, value, callback, this.props.intl.formatMessage({ id: 'Setting.Brandalias' }), 1, 30);
+                                      QMMethod.validatorMinAndMax(rule, value, callback, RCi18n({ id: 'Setting.Brandalias' }), 1, 30);
                                     }
                                   }
                                 ]
@@ -482,7 +482,7 @@ class BrandModal extends React.Component<any, any> {
   _editLogos = (info, contractId, brandId) => {
     const { file, fileList } = info;
     if (file.status == 'error' || fileList == null) {
-      message.error(this.props.intl.formatMessage({ id: 'Setting.UploadFailed' }));
+      message.error(RCi18n({ id: 'Setting.UploadFailed' }));
       return;
     }
     const { changeLogoImg } = this.props.relaxProps;
@@ -500,7 +500,7 @@ class BrandModal extends React.Component<any, any> {
   _editImages = (info, contractId, brandId, value) => {
     let { file, fileList } = info;
     if (file.status == 'error' || fileList == null) {
-      message.error(this.props.intl.formatMessage({ id: 'Setting.UploadFailed' }));
+      message.error(RCi18n({ id: 'Setting.UploadFailed' }));
       return;
     }
     const { changeBrandImg, changeOtherBrandImg } = this.props.relaxProps;
@@ -529,11 +529,11 @@ class BrandModal extends React.Component<any, any> {
       if (file.size <= 50 * 1024) {
         return true;
       } else {
-        message.error(this.props.intl.formatMessage({ id: 'Setting.Filesizecannotexceedkb' }));
+        message.error(RCi18n({ id: 'Setting.Filesizecannotexceedkb' }));
         return false;
       }
     } else {
-      message.error(this.props.intl.formatMessage({ id: 'Setting.Fileformaterror' }));
+      message.error(RCi18n({ id: 'Setting.Fileformaterror' }));
       return false;
     }
   };
@@ -548,11 +548,11 @@ class BrandModal extends React.Component<any, any> {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error(this.props.intl.formatMessage({ id: 'Setting.Filesizecannotexceed2M' }));
+        message.error(RCi18n({ id: 'Setting.Filesizecannotexceed2M' }));
         return false;
       }
     } else {
-      message.error(this.props.intl.formatMessage({ id: 'Setting.Fileformaterror' }));
+      message.error(RCi18n({ id: 'Setting.Fileformaterror' }));
       return false;
     }
   };
@@ -567,7 +567,7 @@ class BrandModal extends React.Component<any, any> {
     const brandList = company.get('brandList').toJS();
     if (brandList.length + otherBrands.filter((v) => v.get('name') != '').toJS().length < 1) {
       //非空自定义品牌和选中的平台品牌加起来小于1时
-      message.error(this.props.intl.formatMessage({ id: 'Setting.Pleaseaddatleastonecontractedbrand' }));
+      message.error(RCi18n({ id: 'Setting.Pleaseaddatleastonecontractedbrand' }));
     } else {
       //对非空的进行校验
       form.validateFields(null, (errs) => {
@@ -584,13 +584,13 @@ class BrandModal extends React.Component<any, any> {
   //检查授权文件
   checkAuthImg = (_rule, value, callback) => {
     if (!value) {
-      callback(new Error(this.props.intl.formatMessage({ id: 'Setting.Pleaseuploadthebrandauthorization' })));
+      callback(new Error(RCi18n({ id: 'Setting.Pleaseuploadthebrandauthorization' })));
       return;
     }
     if (!value[0] || !value[0].url) {
       if (!value.fileList || value.fileList.length == 0) {
         if (!value.length) {
-          callback(new Error(this.props.intl.formatMessage({ id: 'Setting.Pleaseuploadthebrandauthorizationfile' })));
+          callback(new Error(RCi18n({ id: 'Setting.Pleaseuploadthebrandauthorizationfile' })));
           return;
         }
       }
@@ -601,7 +601,7 @@ class BrandModal extends React.Component<any, any> {
   //检查logo文件
   checkLogoImg = (_rule, value, callback) => {
     if (!value) {
-      callback(new Error(this.props.intl.formatMessage({ id: 'Setting.Pleaseuploadthebrandlogo' })));
+      callback(new Error(RCi18n({ id: 'Setting.Pleaseuploadthebrandlogo' })));
       return;
     }
     if (!value[0] || !value[0].url) {
@@ -610,7 +610,7 @@ class BrandModal extends React.Component<any, any> {
         return;
       }
       if (!value.fileList || value.fileList.length == 0) {
-        callback(new Error(this.props.intl.formatMessage({ id: 'Setting.Pleaseuploadthebrandlogo' })));
+        callback(new Error(RCi18n({ id: 'Setting.Pleaseuploadthebrandlogo' })));
         return;
       }
     }
@@ -626,11 +626,11 @@ class BrandModal extends React.Component<any, any> {
    */
   _checkBrandName = (_rule, value, callback, record) => {
     if (!value) {
-      callback(new Error(this.props.intl.formatMessage({ id: 'Setting.Pleaseinputthebrandname' })));
+      callback(new Error(RCi18n({ id: 'Setting.Pleaseinputthebrandname' })));
       return;
     } else {
       if (value.length > 30 || value.length < 1) {
-        callback(new Error(this.props.intl.formatMessage({ id: 'Setting.Brandlengthisbetween' })));
+        callback(new Error(RCi18n({ id: 'Setting.Brandlengthisbetween' })));
         return;
       } else {
         const { allBrands, otherBrands } = this.props.relaxProps;
@@ -641,11 +641,11 @@ class BrandModal extends React.Component<any, any> {
           //无重复的
         } else {
           if (repeatPlatForm.length > 0) {
-            callback(new Error(this.props.intl.formatMessage({ id: 'Setting.Brandnameduplicates' })));
+            callback(new Error(RCi18n({ id: 'Setting.Brandnameduplicates' })));
             return;
           }
           if (repeatOther.length > 0) {
-            callback(new Error(this.props.intl.formatMessage({ id: 'Setting.Duplicatecustombrandname' })));
+            callback(new Error(RCi18n({ id: 'Setting.Duplicatecustombrandname' })));
             return;
           }
         }

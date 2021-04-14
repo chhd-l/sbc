@@ -278,12 +278,12 @@ class OrderStatusHead extends React.Component<any, any> {
 
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
-    const content = this.props.intl.formatMessage({id:'Order.approveAlert'});
-    const title = this.props.intl.formatMessage({id:'Order.Approve'});
+    const content = RCi18n({id:'Order.approveAlert'});
+    const title = RCi18n({id:'Order.Approve'});
     confirm({
       title: title,
       content: content,
-      okText: this.props.intl.formatMessage({id:'Order.OK'}),
+      okText: RCi18n({id:'Order.OK'}),
       onOk() {
         return onAudit(rid);
       },
@@ -316,8 +316,8 @@ class OrderStatusHead extends React.Component<any, any> {
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
-    const content = this.props.intl.formatMessage({id:'Order.receiptAlert'});
-    const title = this.props.intl.formatMessage({id:'Order.ConfirmReceipt'});
+    const content = RCi18n({id:'Order.receiptAlert'});
+    const title = RCi18n({id:'Order.ConfirmReceipt'});
     confirm({
       title: title,
       content: content,
@@ -394,9 +394,9 @@ class OrderStatusHead extends React.Component<any, any> {
     }
   }
   async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
-    const content = this.props.intl.formatMessage({id:'Order.refundAlert1'});
-    const content1 = this.props.intl.formatMessage({id:'Order.refundAlert2'});
-    const title = this.props.intl.formatMessage({id:'Order.confirmRefund'});
+    const content = RCi18n({id:'Order.refundAlert1'});
+    const content1 = RCi18n({id:'Order.refundAlert2'});
+    const title = RCi18n({id:'Order.confirmRefund'});
     confirm({
       title: title,
       content: <div>

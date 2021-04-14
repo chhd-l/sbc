@@ -554,21 +554,21 @@ class SubscriptionDetail extends React.Component<any, any> {
 
     const operatorColumns = [
       {
-        title: this.props.intl.formatMessage({
+        title: RCi18n({
           id: 'Order.OperatorType'
         }),
         dataIndex: 'operatorType',
         key: 'operatorType'
       },
       {
-        title: this.props.intl.formatMessage({
+        title: RCi18n({
           id: 'Order.Operator'
         }),
         dataIndex: 'operator',
         key: 'operator'
       },
       {
-        title: this.props.intl.formatMessage({
+        title: RCi18n({
           id: 'Order.Time'
         }),
         dataIndex: 'time',
@@ -576,14 +576,14 @@ class SubscriptionDetail extends React.Component<any, any> {
         render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
       },
       {
-        title: this.props.intl.formatMessage({
+        title: RCi18n({
           id: 'Order.OperationCategory'
         }),
         dataIndex: 'operationCategory',
         key: 'operationCategory'
       },
       {
-        title: this.props.intl.formatMessage({
+        title: RCi18n({
           id: 'Order.OperationLog'
         }),
         dataIndex: 'operationLog',

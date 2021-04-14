@@ -56,14 +56,14 @@ class comment extends Component<any, any> {
           message.success(<FormattedMessage id="Order.DeleteSuccessfully"/>);
           this.searchComment(this.state.searchValue);
         } else {
-          message.error(res.message || this.props.intl.formatMessage({ id: 'Order.DeleteFailed' }));
+          message.error(res.message || RCi18n({ id: 'Order.DeleteFailed' }));
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || this.props.intl.formatMessage({ id: 'Order.DeleteFailed' }));
+        message.error(err || RCi18n({ id: 'Order.DeleteFailed' }));
         this.setState({
           loading: false
         });
@@ -95,14 +95,14 @@ class comment extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || this.props.intl.formatMessage({ id: 'Public.GetDataFailed' }));
+          message.error(res.message || RCi18n({ id: 'Public.GetDataFailed' }));
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || this.props.intl.formatMessage({ id: 'Public.GetDataFailed' }));
+        message.error(err || RCi18n({ id: 'Public.GetDataFailed' }));
         this.setState({
           loading: false
         });
@@ -138,14 +138,14 @@ class comment extends Component<any, any> {
                 });
                 this.searchComment(searchValue);
               } else {
-                message.error(res.message || this.props.intl.formatMessage({ id: 'Order.AddFailed' }));
+                message.error(res.message || RCi18n({ id: 'Order.AddFailed' }));
                 this.setState({
                   confirmLoading: false
                 });
               }
             })
             .catch((err) => {
-              message.error(err || this.props.intl.formatMessage({ id: 'Order.AddFailed' }));
+              message.error(err || RCi18n({ id: 'Order.AddFailed' }));
               this.setState({
                 confirmLoading: false
               });
@@ -163,14 +163,14 @@ class comment extends Component<any, any> {
                 });
                 this.searchComment(searchValue);
               } else {
-                message.error(res.message || this.props.intl.formatMessage({ id: 'Order.UpdateFailed' }));
+                message.error(res.message || RCi18n({ id: 'Order.UpdateFailed' }));
                 this.setState({
                   confirmLoading: false
                 });
               }
             })
             .catch((err) => {
-              message.error(err || this.props.intl.formatMessage({ id: 'Order.UpdateFailed' }));
+              message.error(err || RCi18n({ id: 'Order.UpdateFailed' }));
               this.setState({
                 confirmLoading: false
               });
@@ -194,7 +194,7 @@ class comment extends Component<any, any> {
     return (
       <div>
         <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
-          <Search placeholder={this.props.intl.formatMessage({ id: 'Order.Pleaseinputcomment' })} id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
+          <Search placeholder={RCi18n({ id: 'Order.Pleaseinputcomment' })} id="input-search" style={{ marginLeft: '16px', width: '272px' }} onSearch={this.searchComment} />
           <span style={{ marginLeft: '10px' }}>
             <Button
               type="primary"
@@ -273,14 +273,14 @@ class comment extends Component<any, any> {
           <Modal
             width={700}
             visible={commentVisible}
-            title={this.props.intl.formatMessage({
+            title={RCi18n({
               id: 'Order.AddComment'
             })}
             onOk={this.handleSubmit}
             confirmLoading={confirmLoading}
             maskClosable={false}
             onCancel={this.closeModal}
-            okText={this.props.intl.formatMessage({ id: 'Order.btnConfirm' })}
+            okText={RCi18n({ id: 'Order.btnConfirm' })}
           >
             <Form>
               <FormItem {...layout} label={<FormattedMessage id="Order.PetOwner" />}>
@@ -296,11 +296,11 @@ class comment extends Component<any, any> {
               <FormItem {...layout} label={<FormattedMessage id="Order.Comment" />}>
                 {getFieldDecorator('name', {
                   initialValue: comment,
-                  rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Order.Pleaseinputcomment' }) }]
+                  rules: [{ required: true, message: RCi18n({ id: 'Order.Pleaseinputcomment' }) }]
                 })(
                   <Input.TextArea
                     maxLength={2000}
-                    placeholder={this.props.intl.formatMessage({ id: 'Order.Pleaseinputcomment' })}
+                    placeholder={RCi18n({ id: 'Order.Pleaseinputcomment' })}
                     autoSize={{ minRows: 5, maxRows: 10 }}
                     onChange={(e) => {
                       const value = (e.target as any).value;

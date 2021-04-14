@@ -62,15 +62,15 @@ class MarketingFullReductionAdd extends React.Component<any, any> {
           </Breadcrumb> */}
 
           <div className="container-search marketing-container" style={{ paddingBottom: 20 }}>
-            <Headline title={marketingId ? this.props.intl.formatMessage({
+            <Headline title={marketingId ? RCi18n({
               id: 'Marketing.Editreductionactivity'
             }):
-              this.props.intl.formatMessage({
+              RCi18n({
               id: 'Marketing.Createreductionactivity'
             })
             } />
             <Alert message={
-              this.props.intl.formatMessage({
+              RCi18n({
                 id: 'Marketing.reductionTip'
               })
             } type="info" showIcon />

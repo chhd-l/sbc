@@ -179,19 +179,19 @@ class FreeShippingAddForm extends React.Component<any, any> {
                 required: true,
                 whitespace: true,
                 message:
-                  this.props.intl.formatMessage({
+                  RCi18n({
                     id: 'Marketing.Pleaseenterfreeshippingname',
                   })
               },
               { min: 1, max: 40, message:
-                  this.props.intl.formatMessage({
+                  RCi18n({
                   id: 'Marketing.40Words',
                 })
               },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback,
-                    this.props.intl.formatMessage({
+                    RCi18n({
                       id: 'Marketing.Freeshippingname',
                     })
                   );
@@ -201,7 +201,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
             onChange: (e) => this.onBeanChange({ marketingName: e.target.value }),
             initialValue: marketingBean.get('marketingName')
           })(<Input placeholder={
-            this.props.intl.formatMessage({
+            RCi18n({
             id: 'Marketing.nomorethan40words',
           })} style={{ width: 350 }} />)}
         </FormItem>
@@ -210,7 +210,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: this.props.intl.formatMessage({
+                message: RCi18n({
                   id: 'Marketing.PleaseSelectStartingAndEndTime'
                 })
               },
@@ -220,7 +220,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                     callback();
                   } else {
                     callback(
-                      this.props.intl.formatMessage({
+                      RCi18n({
                         id: 'Marketing.PleaseSelectStartingAndEndTime'
                       })
                     );
@@ -262,7 +262,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                               debugger
                               if (!value && marketingBean.get('subType') === 10) {//marketingBean.get('shippingValue')
                                 callback(
-                                  this.props.intl.formatMessage({
+                                  RCi18n({
                                     id: 'Marketing.Shippingvalueentered',
                                   })
                                 );
@@ -270,7 +270,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                               if (marketingBean.get('shippingValue')) {
                                 if (!ValidConst.zeroPrice.test(marketingBean.get('shippingValue')) || !(marketingBean.get('shippingValue') < 10000 && marketingBean.get('shippingValue') >= 0)) {
                                   callback(
-                                    this.props.intl.formatMessage({
+                                    RCi18n({
                                       id: 'Marketing.0-9999',
                                     })
                                   );
@@ -285,12 +285,12 @@ class FreeShippingAddForm extends React.Component<any, any> {
                         <Input
                           style={{ width: 200 }}
                           title={
-                            this.props.intl.formatMessage({
+                            RCi18n({
                             id: 'Marketing.0-9999',
                           })
                           }
                           placeholder={
-                            this.props.intl.formatMessage({
+                            RCi18n({
                               id: 'Marketing.0-9999',
                             })
                           }
@@ -315,7 +315,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                             validator: (_rule, value, callback) => {
                               if (!value&& marketingBean.get('subType') === 11) {//marketingBean.get('shippingItemValue')
                                 callback(
-                                  this.props.intl.formatMessage({
+                                  RCi18n({
                                     id: 'Marketing.Itemsmustbeentered',
                                   })
                                 );
@@ -323,7 +323,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                               if (marketingBean.get('shippingItemValue')) {
                                 if (!ValidConst.zeroNumber.test(marketingBean.get('shippingItemValue')) || !(marketingBean.get('shippingItemValue') < 10000 && marketingBean.get('shippingItemValue') > 0)) {
                                   callback(
-                                    this.props.intl.formatMessage({
+                                    RCi18n({
                                       id: 'Marketing.1-9999',
                                     })
                                   );
@@ -385,7 +385,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                   validator: (_rule, value, callback) => {
                     if (!value && marketingBean.get('joinLevel') === -3) {
                       callback(
-                        this.props.intl.formatMessage({
+                        RCi18n({
                           id: 'Marketing.Pleaseselectgroup'
                         })
                       );

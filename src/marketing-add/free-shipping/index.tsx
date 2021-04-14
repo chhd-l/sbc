@@ -47,16 +47,16 @@ class MarketingFreeShippingAdd extends React.Component<any, any> {
 
           <div className="container-search marketing-container">
             <Headline title={marketingId ?
-              this.props.intl.formatMessage({
+              RCi18n({
                 id: 'Marketing.EditfreeShipping',
               })
               :
-              this.props.intl.formatMessage({
+              RCi18n({
                 id: 'Marketing.CreatefreeShipping',
               })
             } />
             <Alert message={
-              this.props.intl.formatMessage({
+              RCi18n({
                 id: 'Marketing.reductionTip',
               })
             } type="info" showIcon />

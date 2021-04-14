@@ -119,14 +119,14 @@ class TaxesAdd extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationsuccessful' }));
+          message.success(res.message || RCi18n({ id: 'Setting.Operationsuccessful' }));
           this.props.closeFunction(true);
         } else {
-          message.error(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
+          message.error(res.message || RCi18n({ id: 'Setting.Operationfailure' }));
         }
       })
       .catch((err) => {
-        message.error(err.toString() || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
+        message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
       });
   };
   updateTaxZone = (params) => {
@@ -135,14 +135,14 @@ class TaxesAdd extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationsuccessful' }));
+          message.success(res.message || RCi18n({ id: 'Setting.Operationsuccessful' }));
           this.props.closeFunction(true);
         } else {
-          message.error(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
+          message.error(res.message || RCi18n({ id: 'Setting.Operationfailure' }));
         }
       })
       .catch((err) => {
-        message.error(err.toString() || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
+        message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
       });
   };
 
@@ -169,14 +169,14 @@ class TaxesAdd extends React.Component<any, any> {
           this.setState({
             fetching: false
           });
-          message.error(res.message || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
+          message.error(res.message || RCi18n({ id: 'Setting.Operationfailure' }));
         }
       })
       .catch((err) => {
         this.setState({
           fetching: false
         });
-        message.error(err.toString() || this.props.intl.formatMessage({ id: 'Setting.Operationfailure' }));
+        message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
       });
   };
 
@@ -198,7 +198,7 @@ class TaxesAdd extends React.Component<any, any> {
       <Modal
         width={600}
         maskClosable={false}
-        title={isEdit ? this.props.intl.formatMessage({ id: 'Setting.Edittaxzone' }) : this.props.intl.formatMessage({ id: 'Setting.Newtaxzone' })}
+        title={isEdit ? RCi18n({ id: 'Setting.Edittaxzone' }) : RCi18n({ id: 'Setting.Newtaxzone' })}
         visible={visible}
         confirmLoading={loading}
         onCancel={() => this.handleCancel()}
@@ -213,21 +213,21 @@ class TaxesAdd extends React.Component<any, any> {
               this.handleCancel();
             }}
           >
-            {this.props.intl.formatMessage({ id: 'Setting.Cancel' })}
+            {RCi18n({ id: 'Setting.Cancel' })}
           </Button>,
           <Button key="submit" type="primary" onClick={this.handleSubmit}>
-            {this.props.intl.formatMessage({ id: 'Setting.Submit' })}
+            {RCi18n({ id: 'Setting.Submit' })}
           </Button>
         ]}
       >
         <Form {...formItemLayout}>
-          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Taxzonename' })}>
+          <FormItem label={RCi18n({ id: 'Setting.Taxzonename' })}>
             {getFieldDecorator('taxZoneName', {
               rules: [
-                { required: true, message: this.props.intl.formatMessage({ id: 'Setting.Taxzonenameisrequired' }) },
+                { required: true, message: RCi18n({ id: 'Setting.Taxzonenameisrequired' }) },
                 {
                   max: 50,
-                  message: this.props.intl.formatMessage({ id: 'Setting.Exceedmaximumlength' })
+                  message: RCi18n({ id: 'Setting.Exceedmaximumlength' })
                 }
               ],
               initialValue: taxForm.taxZoneName
@@ -244,12 +244,12 @@ class TaxesAdd extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Taxzonedescription' })}>
+          <FormItem label={RCi18n({ id: 'Setting.Taxzonedescription' })}>
             {getFieldDecorator('taxZoneDescription', {
               rules: [
                 {
                   max: 500,
-                  message: this.props.intl.formatMessage({ id: 'Setting.Exceedmaximumlength' })
+                  message: RCi18n({ id: 'Setting.Exceedmaximumlength' })
                 }
               ],
               initialValue: taxForm.taxZoneDescription
@@ -266,9 +266,9 @@ class TaxesAdd extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Taxzonetype' })}>
+          <FormItem label={RCi18n({ id: 'Setting.Taxzonetype' })}>
             {getFieldDecorator('taxZoneType', {
-              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Taxzonetypeisrequired' }) }],
+              rules: [{ required: true, message: RCi18n({ id: 'Setting.Taxzonetypeisrequired' }) }],
               initialValue: taxForm.taxZoneType
             })(
               <Select
@@ -290,12 +290,12 @@ class TaxesAdd extends React.Component<any, any> {
               </Select>
             )}
           </FormItem>
-          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Zoneincludes' })}>
+          <FormItem label={RCi18n({ id: 'Setting.Zoneincludes' })}>
             {getFieldDecorator('zoneIncludes', {
               rules: [
                 {
                   required: true,
-                  message: this.props.intl.formatMessage({ id: 'Setting.PleaseSelectzone' })
+                  message: RCi18n({ id: 'Setting.PleaseSelectzone' })
                 }
               ],
               initialValue: taxForm.zoneIncludes
@@ -303,7 +303,7 @@ class TaxesAdd extends React.Component<any, any> {
               <Select
                 style={{ width: '80%' }}
                 showSearch
-                placeholder={this.props.intl.formatMessage({ id: 'Setting.Selectzone' })}
+                placeholder={RCi18n({ id: 'Setting.Selectzone' })}
                 optionFilterProp="children"
                 mode="multiple"
                 disabled={taxForm.taxZoneType === 1}
@@ -326,9 +326,9 @@ class TaxesAdd extends React.Component<any, any> {
               </Select>
             )}
           </FormItem>
-          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Taxrates' })}>
+          <FormItem label={RCi18n({ id: 'Setting.Taxrates' })}>
             {getFieldDecorator('taxRates', {
-              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Taxratesisrequired' }) }],
+              rules: [{ required: true, message: RCi18n({ id: 'Setting.Taxratesisrequired' }) }],
               initialValue: taxForm.taxRates ? taxForm.taxRates : 0
             })(
               <InputNumber

@@ -34,7 +34,7 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={this.props.intl.formatMessage({id:'Order.rejectionReasonTip'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={RCi18n({id:'Order.rejectionReasonTip'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -512,8 +512,8 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
 
     const confirm = Modal.confirm;
     confirm({
-      title: this.props.intl.formatMessage({id:'Order.ConfirmReceipt'}),
-      content: this.props.intl.formatMessage({id:'Order.ConfirmThatAllProducts'}),
+      title: RCi18n({id:'Order.ConfirmReceipt'}),
+      content: RCi18n({id:'Order.ConfirmThatAllProducts'}),
       onOk() {
         onConfirm(tdId);
       },

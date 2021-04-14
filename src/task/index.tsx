@@ -278,7 +278,7 @@ export default class Task extends React.Component<any, any> {
               <Row>
                 <Col span={8}>
                   <RangePicker
-                    placeholder={[this.props.intl.formatMessage({ id: 'task.DueStarttime' }), this.props.intl.formatMessage({ id: 'task.DueEndtime' })]}
+                    placeholder={[RCi18n({ id: 'task.DueStarttime' }), RCi18n({ id: 'task.DueEndtime' })]}
                     format="YYYY-MM-DD"
                     onChange={(date, dateString) => {
                       this.onFormChange({

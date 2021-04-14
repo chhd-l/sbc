@@ -36,7 +36,13 @@ let key = sessionStorage.getItem(cache.LANGUAGE)||'es_ES'
 let langFile = importAll(context)
 let language: any = langFile[key];
 let antLanguage: any = langFile[key + '_antd'];
+
+function RCi18n({id}) {
+    return language[id] || id;
+}
+
 export {
   language,
-  antLanguage
+  antLanguage,
+  RCi18n
 }

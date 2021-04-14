@@ -45,6 +45,7 @@ import Fetch from './fetch/index'
 import Fonts from './images/iconfont/iconfont.json'
 import {OrderStatus, ShippStatus, PaymentStatus, getOrderStatusValue} from './order-status-enum'
 import QRScaner from './qr-scan';
+import {RCi18n} from './lang';
 export {
   noop,
   SelectGroup,
@@ -97,5 +98,6 @@ export {
   ShippStatus,
   PaymentStatus,
   getOrderStatusValue,
-  QRScaner
+  QRScaner,
+  RCi18n
 };

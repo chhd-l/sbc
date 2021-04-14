@@ -259,7 +259,8 @@ class FreeShippingAddForm extends React.Component<any, any> {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              if (!marketingBean.get('shippingValue') && marketingBean.get('subType') === 10) {
+                              debugger
+                              if (!value && marketingBean.get('subType') === 10) {//marketingBean.get('shippingValue')
                                 callback(
                                   this.props.intl.formatMessage({
                                     id: 'Marketing.Shippingvalueentered',
@@ -312,7 +313,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              if (!marketingBean.get('shippingItemValue') && marketingBean.get('subType') === 11) {
+                              if (!value&& marketingBean.get('subType') === 11) {//marketingBean.get('shippingItemValue')
                                 callback(
                                   this.props.intl.formatMessage({
                                     id: 'Marketing.Itemsmustbeentered',

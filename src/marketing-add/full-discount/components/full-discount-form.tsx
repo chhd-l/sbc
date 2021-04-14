@@ -416,17 +416,17 @@ class FullDiscountForm extends React.Component<any, any> {
                   promotionCode: e.target.value
                 });
               }}
-              disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2 || marketingBean.get('publicStatus') == 1}
+              // marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2 ||
+              disabled={marketingBean.get('publicStatus') == 1}
               style={{ width: 160 }}
             />
           )}
 
           <Checkbox
             style={{ marginLeft: 20 }}
-            disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2}
+            // disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2}
             checked={marketingBean.get('publicStatus') == 1}
             onChange={(e) => {
-              debugger
               this.onBeanChange({
                 publicStatus: e.target.checked ? 1 : 0
               });
@@ -744,7 +744,7 @@ class FullDiscountForm extends React.Component<any, any> {
         {marketingBean.get('scopeType') === 3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
             {getFieldDecorator('attributeValueIds', {
-              // initialValue: marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null,
+              initialValue: attributeDefaultValue,
               rules: [
                 {
                   validator: (_rule, value, callback) => {
@@ -988,6 +988,7 @@ class FullDiscountForm extends React.Component<any, any> {
   promotionType = (e) => {
     const { initDefualtLevelList, initReductionDefualtLevelList } = this.props.relaxProps
     this.onBeanChange({
+      // publicStatus: 1,
       promotionType: e.target.value,
       subType: e.target.value === 0 ? 2 : 7
     });

@@ -2746,6 +2746,10 @@ export default {
   'Marketing.Automationlist': 'Automation list',
   'Marketing.Freeshipping': 'Free shipping',
   'Marketing.Freeshippingwhenorder': 'Free shipping when order meets specific conditions',
+  'Marketing.Firstorderdiscount': 'First order discount',
+  'Marketing.Creatediscountforfirstorder': 'Create discount for first order',
+  'Marketing.Gift': 'Gift',
+  'Marketing.Definemainproductandgift': 'Define main product and gift',
 
 
 

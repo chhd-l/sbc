@@ -267,8 +267,18 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.purchaseType" />,
-        dataIndex: 'purchaseType',
-        key: 'purchaseType'
+        dataIndex: 'goodsInfoFlag',
+        key: 'goodsInfoFlag',
+        render: (text) => {
+          switch (text) {
+            case 0:
+              return <FormattedMessage id="Order.SinglePurchase" />;
+            case 1:
+              return <FormattedMessage id="Order.autoship" />;
+            case 2:
+              return <FormattedMessage id="Order.club" />;
+          }
+        }
       },
       {
         title: <FormattedMessage id="Order.petName" />,
@@ -426,7 +436,7 @@ class OrderDetailTab extends React.Component<any, any> {
             }}
           >
             <Row>
-              <PetItem petId={currentPetId} showCancel={false} showTitle={false}/>
+              <PetItem petId={currentPetId} showCancel={false} showTitle={false} />
             </Row>
           </Modal>
 

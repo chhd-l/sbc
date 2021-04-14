@@ -6,6 +6,7 @@ import { Const, history } from 'qmkit';
 import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
 import FullGiftActor from './actor/full-gift-actor';
+import LoadingActor from './actor/loading-actor';
 import { fromJS } from 'immutable';
 
 export default class AppStore extends Store {
@@ -17,21 +18,24 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new FullGiftActor()];
+    return [new FullGiftActor(), new LoadingActor()];
   }
 
   init = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      // const scopeArray = res.context.marketingScopeList ? fromJS(res.context.marketingScopeList) : null;
-      // if (scopeArray) {
-      //   const scopeIds = scopeArray.map((scope) => scope.get('scopeId'));
-      //   const selectedRows = this.makeSelectedRows(scopeIds);
-      //   this.dispatch('marketing:selectedRows', selectedRows);
-      //   this.dispatch('marketing:selectedSkuIds', scopeIds.toJS());
-      // }
       this.dispatch('marketing:giftBean', res.context);
+      const scopeArray = res.context.marketingScopeList ? fromJS(res.context.marketingScopeList) : null;
+      if (scopeArray) {
+        const scopeIds = scopeArray.map((scope) => scope.get('scopeId'));
+        const selectedRows = this.makeSelectedRows(scopeIds);
+        this.dispatch('marketing:selectedRows', selectedRows);
+        this.dispatch('marketing:selectedSkuIds', scopeIds.toJS());
+      }
+      const selectedGiftRows = this.makeSelectedRows(null);
+      this.dispatch('marketing:selectedGiftRows', selectedGiftRows)
     } else if (res.code == 'K-080016') {
       history.go(-1);
     } else {
@@ -123,5 +127,62 @@ export default class AppStore extends Store {
   setSelectedGiftRows = (rows) => {
     this.dispatch('marketing:selectedGiftRows', rows)
   }
+
+
+  /**
+   * 将skuIds转换成gridSource
+   * @param scopeIds
+   * @returns {any}
+   */
+  makeSelectedRows = (scopeIds) => {
+    const marketingBean = this.state().get('marketingBean');
+    const goodsList = marketingBean.get('goodsList');
+    if (goodsList) {
+      const goodsList = marketingBean.get('goodsList');
+      let selectedRows;
+      if (scopeIds) {
+        selectedRows = goodsList
+          .get('goodsInfoPage')
+          .get('content')
+          .filter((goodInfo) => scopeIds.includes(goodInfo.get('goodsInfoId')));
+      } else {
+        selectedRows = goodsList.get('goodsInfoPage').get('content');
+      }
+      return fromJS(
+        selectedRows.toJS().map((goodInfo) => {
+          const cId = fromJS(goodsList.get('goodses'))
+            .find((s) => s.get('goodsId') === goodInfo.goodsId)
+            .get('cateId');
+          const cate = fromJS(goodsList.get('cates') || []).find((s) => s.get('cateId') === cId);
+          goodInfo.cateName = cate ? cate.get('cateName') : '';
+
+          const bId = fromJS(goodsList.get('goodses'))
+            .find((s) => s.get('goodsId') === goodInfo.goodsId)
+            .get('brandId');
+          const brand = fromJS(goodsList.get('brands') || []).find((s) => s.get('brandId') === bId);
+          goodInfo.brandName = brand ? brand.get('brandName') : '';
+          return goodInfo;
+        })
+      );
+    } else {
+      return fromJS([]);
+    }
+  };
+
+  /**
+   * 已选商品的删除方法
+   * @param skuId
+   */
+  deleteSelectedSku = (skuId) => {
+    let selectedRows = this.state().get('selectedRows');
+    let selectedSkuIds = this.state().get('selectedSkuIds');
+    selectedSkuIds.splice(
+      selectedSkuIds.findIndex((item) => item == skuId),
+      1
+    );
+    selectedRows = selectedRows.delete(selectedRows.findIndex((row) => row.get('goodsInfoId') == skuId));
+    this.dispatch('marketing:selectedRows', selectedRows);
+    this.dispatch('marketing:selectedSkuIds', selectedSkuIds);
+  };
 
 }

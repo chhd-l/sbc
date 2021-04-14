@@ -419,7 +419,7 @@ class PetItem extends React.Component<Iprop, any> {
                           </Select>
                         )
                       ) : (
-                        <span>{pet.sensitivity}</span>
+                        <span>{pet.needs}</span>
                       )}
                     </Form.Item>
                   </Col>

@@ -159,7 +159,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                     </div>
                   </td>
                   <td key="2" style={{ width: '10%' }}>
-                    {item.consignee.name}
+                    {item.consignee ? item.consignee.name : ''}
                   </td>
                   <td key="3" style={{ width: '10%' }}>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
@@ -168,7 +168,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                     {num}
                   </td>
                   <td key="5" style={{ width: '20%' }}>
-                    {item.buyer.name}
+                    {item.buyer ? item.buyer.name : ''}
                   </td>
                   <td key="6" style={{ width: '10%' }}>
                     <FormattedMessage id={getOrderStatusValue('ShippStatus',(item.tradeState.deliverStatus))} />

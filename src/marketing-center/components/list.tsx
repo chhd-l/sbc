@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Col, message, Row } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { AuthWrapper, Headline, history } from 'qmkit';
-// import '../index.less';
 
 const images = {
   new_01: require('../images/new/01.png'),
@@ -22,7 +21,10 @@ const images = {
   customer_02: require('../images/customer/02.png'),
   customer_03: require('../images/customer/03.png'),
   order_001: require('../images/order/001.png'),
-  order_003: require('../images/order/003.png')
+  order_003: require('../images/order/003.png'),
+  shipping_icon:require('../images/full/icon_Free shipping.png'),
+  gift_icon:require('../images/full/icon_Gift.png'),
+  first_order_icon:require('../images/full/icon_First order discount.png'),
 };
 
 const iconSpanStyle = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
@@ -269,55 +271,55 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>
             </Row>
-            <Row>
-              <AuthWrapper functionName="f_marketing_gift_add">
-                <Col span={6}>
-                  <a
-                    className="createMarket"
-                    onClick={() =>
-                      history.push({
-                        pathname: './marketing-first-order-discount',
-                        state: {
-                          source: 'marketCenter'
-                        }
-                      })
-                    }
-                  >
-                    <span className="left">
-                      <img src={images.full_001} />
-                    </span>
-                    <div className="info">
-                      <h5>First order discount</h5>
-                      <p>Create discount for first order</p>
-                    </div>
-                  </a>
-                </Col>
-              </AuthWrapper>
-
-              <AuthWrapper functionName="f_marketing_gift_add">
-                <Col span={6}>
-                  <a
-                    className="createMarket"
-                    onClick={() =>
-                      history.push({
-                        pathname: '/marketing-full-gift',
-                        state: {
-                          source: 'marketCenter'
-                        }
-                      })
-                    }
-                  >
-                    <span className="left">
-                      <img src={images.full_001} />
-                    </span>
-                    <div className="info">
-                      <h5>Gift</h5>
-                      <p>Define main product and gift</p>
-                    </div>
-                  </a>
-                </Col>
-              </AuthWrapper>
-            </Row>
+            {/*<Row>*/}
+            {/*  <AuthWrapper functionName="f_marketing_gift_add">*/}
+            {/*    <Col span={6}>*/}
+            {/*      <a*/}
+            {/*        className="createMarket"*/}
+            {/*        onClick={() =>*/}
+            {/*          history.push({*/}
+            {/*            pathname: './marketing-first-order-discount',*/}
+            {/*            state: {*/}
+            {/*              source: 'marketCenter'*/}
+            {/*            }*/}
+            {/*          })*/}
+            {/*        }*/}
+            {/*      >*/}
+            {/*        <span className="left left2">*/}
+            {/*          <img src={images.first_order_icon} />*/}
+            {/*        </span>*/}
+            {/*        <div className="info">*/}
+            {/*          <h5>First order discount</h5>*/}
+            {/*          <p>Create discount for first order</p>*/}
+            {/*        </div>*/}
+            {/*      </a>*/}
+            {/*    </Col>*/}
+            {/*  </AuthWrapper>*/}
+            
+            {/*  <AuthWrapper functionName="f_marketing_gift_add">*/}
+            {/*    <Col span={6}>*/}
+            {/*      <a*/}
+            {/*        className="createMarket"*/}
+            {/*        onClick={() =>*/}
+            {/*          history.push({*/}
+            {/*            pathname: '/marketing-full-gift',*/}
+            {/*            state: {*/}
+            {/*              source: 'marketCenter'*/}
+            {/*            }*/}
+            {/*          })*/}
+            {/*        }*/}
+            {/*      >*/}
+            {/*        <span className="left left2">*/}
+            {/*          <img src={images.gift_icon} />*/}
+            {/*        </span>*/}
+            {/*        <div className="info">*/}
+            {/*          <h5>Gift</h5>*/}
+            {/*          <p>Define main product and gift</p>*/}
+            {/*        </div>*/}
+            {/*      </a>*/}
+            {/*    </Col>*/}
+            {/*  </AuthWrapper>*/}
+            {/*</Row>*/}
             <Row>
               <AuthWrapper functionName="f_marketing_gift_add">
                 <Col span={6}>
@@ -332,8 +334,8 @@ export default class List extends React.Component<any, any> {
                       })
                     }
                   >
-                    <span className="left">
-                      <img src={images.full_001} />
+                    <span className="left left2">
+                      <img src={images.shipping_icon} />
                     </span>
                     <div className="info">
                       <h5>Free shipping</h5>

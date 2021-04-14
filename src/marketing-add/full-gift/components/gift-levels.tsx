@@ -3,7 +3,7 @@ import { fromJS, Set } from 'immutable';
 
 import { InputNumber, Input, Button, Select, Form } from 'antd';
 import { DataGrid, ValidConst, cache, noop } from 'qmkit';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { GoodsModal } from 'biz';
 
 const Option = Select.Option;
@@ -27,7 +27,14 @@ const HasError = styled.div`
   }
 `;
 
-export default class GiftLevels extends React.Component<any, any> {
+class GiftLevels extends React.Component<any, any> {
+  props: {
+    intl;
+    isFullCount;
+    fullGiftLevelList;
+    isNormal;
+    selectedRows
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -100,17 +107,29 @@ export default class GiftLevels extends React.Component<any, any> {
                       <FormItem style={{ display: 'inline-block' }}>
                         {getFieldDecorator(`level_rule_value_${index}`, {
                           rules: [
-                            { required: true, message: 'Must enter rules' },
+                            { required: true, message:
+                                this.props.intl.formatMessage({
+                                  id: 'Marketing.Mustenterrules'
+                                })
+                            },
                             {
                               validator: (_rule, value, callback) => {
                                 if (value) {
                                   if (!isFullCount) {
                                     if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                      callback('0.01-99999999.99');
+                                      callback(
+                                        this.props.intl.formatMessage({
+                                          id: 'Marketing.0-99999999.99'
+                                        })
+                                      );
                                     }
                                   } else {
                                     if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                                      callback('1-9999');
+                                      callback(
+                                        this.props.intl.formatMessage({
+                                          id: 'Marketing.1-9999'
+                                        })
+                                      );
                                     }
                                   }
                                 }
@@ -156,7 +175,7 @@ export default class GiftLevels extends React.Component<any, any> {
                     </div>
                   )}
                   <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5 }}>
-                    Add gift
+                    <FormattedMessage id="Marketing.Addgift" />
                   </Button>
                   {/*&nbsp;&nbsp;*/}
                   {/*<Select*/}
@@ -178,7 +197,7 @@ export default class GiftLevels extends React.Component<any, any> {
                   <Column title="SKU code" dataIndex="goodsInfoNo" key="goodsInfoNo" width="10%" />
 
                   <Column
-                    title="Product Name"
+                    title={<FormattedMessage id="Marketing.ProductName" />}
                     dataIndex="goodsInfoName"
                     key="goodsInfoName"
                     width="20%"
@@ -188,7 +207,7 @@ export default class GiftLevels extends React.Component<any, any> {
                   />
 
                   <Column
-                    title="Specification"
+                    title={<FormattedMessage id="Marketing.Specification" />}
                     dataIndex="specText"
                     key="specText"
                     width="8%"
@@ -201,10 +220,10 @@ export default class GiftLevels extends React.Component<any, any> {
                     }}
                   />
 
-                  <Column title="Category" key="cateName" dataIndex="cateName" width="8%" />
+                  <Column  title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" width="8%" />
 
                   <Column
-                    title="Brand"
+                    title={<FormattedMessage id="Marketing.Brand" />}
                     key="brandName"
                     dataIndex="brandName"
                     width="8%"
@@ -218,7 +237,7 @@ export default class GiftLevels extends React.Component<any, any> {
                   />
 
                   <Column
-                    title="Price"
+                    title={<FormattedMessage id="Marketing.Price" />}
                     key="marketPrice"
                     dataIndex="marketPrice"
                     width="10%"
@@ -228,7 +247,7 @@ export default class GiftLevels extends React.Component<any, any> {
                   />
 
                   <Column
-                    title="Inventory"
+                    title={<FormattedMessage id="Marketing.Inventory" />}
                     key="stock"
                     dataIndex="stock"
                     width="10%"
@@ -247,7 +266,7 @@ export default class GiftLevels extends React.Component<any, any> {
                   />
 
                   <Column
-                    title="Give the number"
+                    title={<FormattedMessage id="Marketing.GiveTheNumber" />}
                     className="centerItem"
                     key="count"
                     width="20%"
@@ -257,15 +276,25 @@ export default class GiftLevels extends React.Component<any, any> {
                           {getFieldDecorator(`${row.goodsInfoId}level_detail${index}${detailIndex}`, {
                             initialValue: fullGiftLevelList[index]['fullGiftDetailList'][detailIndex] ? fullGiftLevelList[index]['fullGiftDetailList'][detailIndex]['productNum'] : 1,
                             rules: [
-                              { required: true, message: '必须输入赠送数量' },
+                              { required: true, message:
+                                  this.props.intl.formatMessage({
+                                    id: 'Marketing.greaterthan0andlessthan999'
+                                  })
+                              },
                               {
                                 pattern: ValidConst.noZeroNumber,
-                                message: '只能是大于0的整数'
+                                message: this.props.intl.formatMessage({
+                                  id: 'Marketing.greaterthan0andlessthan999'
+                                })
                               },
                               {
                                 validator: (_rule, value, callback) => {
                                   if (value && ValidConst.noZeroNumber.test(value) && (value > 999 || value < 1)) {
-                                    callback('仅限1-999间的整数');
+                                    callback(
+                                      this.props.intl.formatMessage({
+                                        id: 'Marketing.greaterthan0andlessthan999'
+                                      })
+                                    );
                                   }
                                   callback();
                                 }
@@ -285,7 +314,7 @@ export default class GiftLevels extends React.Component<any, any> {
                   />
 
                   <Column
-                    title="Operation"
+                    title={<FormattedMessage id="Marketing.Operation" />}
                     key="operate"
                     width="12%"
                     render={(row) => {
@@ -298,9 +327,9 @@ export default class GiftLevels extends React.Component<any, any> {
             );
           })}
         <Button onClick={this.addLevels} disabled={fullGiftLevelList && fullGiftLevelList.length >= 5}>
-          Add multi-level promotions
+          <FormattedMessage id="Marketing.Addmulti-levelpromotions" />
         </Button>
-        &nbsp;&nbsp;up to 5 levels can be set
+        &nbsp;&nbsp; <FormattedMessage id="Marketing.upto5levels" />
         {fullGiftLevelList && fullGiftLevelList.length > 0 && goodsModal && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}
@@ -506,3 +535,4 @@ export default class GiftLevels extends React.Component<any, any> {
     return 'key' + (Math.random() as any).toFixed(6) * 1000000;
   };
 }
+export default injectIntl(GiftLevels)

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Row, Col, Checkbox } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Relax } from 'plume2';
 import { withRouter } from 'react-router';
 import moment from 'moment';
-import { Const } from 'qmkit';
+import { cache, Const } from 'qmkit';
 import '../../index.css';
 import styled from 'styled-components';
 
@@ -23,23 +23,27 @@ const GreyBg = styled.div`
 
 const MAK_TYPE = {
   0: 'Full reduction',
-  1: 'Full discount'
+  1: 'Full discount',
   // 2: '满赠'
+  3: 'Free shipping'
 };
 
 const SUB_TYPE = {
   0: 'Full amount reduction',
   1: 'Full quantity reduction',
   2: 'Full amount discount',
-  3: 'Full quantity discount'
+  3: 'Full quantity discount',
   // 4: '满金额赠',
   // 5: '满数量赠'
+  10: 'Order reach',
+  11: 'Order reach',
 };
 
 @withRouter
 @Relax
-export default class MarketingDes extends React.Component<any, any> {
+class MarketingDes extends React.Component<any, any> {
   props: {
+    intl;
     relaxProps?: {
       marketingName: any;
       publicStatus: any;
@@ -48,6 +52,7 @@ export default class MarketingDes extends React.Component<any, any> {
       marketingType: any;
       subType: any;
       promotionCode: any;
+      marketingFreeShippingLevel: any;
     };
   };
 
@@ -58,11 +63,13 @@ export default class MarketingDes extends React.Component<any, any> {
     marketingType: 'marketingType',
     subType: 'subType',
     promotionCode: 'promotionCode',
-    publicStatus: 'publicStatus'
+    publicStatus: 'publicStatus',
+    marketingFreeShippingLevel: 'marketingFreeShippingLevel'
   };
 
   render() {
-    const { marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus } = this.props.relaxProps;
+    const { marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel } = this.props.relaxProps;
+    console.log(marketingFreeShippingLevel, 'marketingFreeShippingLevel------------');
     return (
       <GreyBg>
         <Row>
@@ -99,7 +106,25 @@ export default class MarketingDes extends React.Component<any, any> {
                 {MAK_TYPE[marketingType]}
                 <FormattedMessage id="Marketing.Type" />:
               </span>
-              {SUB_TYPE[subType]}
+              {SUB_TYPE[subType]}&nbsp;&nbsp;
+              {marketingType === 3 && marketingFreeShippingLevel  ?
+                <>
+                  {
+                    subType === 10 ?
+                      marketingFreeShippingLevel.toJS().fullAmount:
+                      marketingFreeShippingLevel.toJS().fullCount
+                  }
+                  &nbsp;&nbsp;
+                  {
+                    subType === 10 ?
+                      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)  :
+                      this.props.intl.formatMessage({
+                        id: 'Marketing.items'
+                      })
+                  }
+                </>
+               : null
+              }
             </Col>
           </Row>
         )}
@@ -107,3 +132,5 @@ export default class MarketingDes extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(MarketingDes)

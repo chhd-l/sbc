@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, cache, getOrderStatusValue } from 'qmkit';
+import { noop, Const, AuthWrapper, cache, getOrderStatusValue, RCi18n } from 'qmkit';
 import { FormattedMessage,injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';

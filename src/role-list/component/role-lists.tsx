@@ -5,7 +5,7 @@ import { Icon, Modal, Table, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import { Link } from 'react-router-dom';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { AuthWrapper, noop } from 'qmkit';
+import { AuthWrapper, noop, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;

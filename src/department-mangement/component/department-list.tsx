@@ -4,7 +4,7 @@ import { List, Map, fromJS } from 'immutable';
 import { Modal, Table, Icon, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { noop, AuthWrapper } from 'qmkit';
+import { noop, AuthWrapper, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 const confirm = Modal.confirm;

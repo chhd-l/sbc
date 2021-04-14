@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Relax } from 'plume2';
 import {} from 'immutable';
 import { Form, Input, Select, Button, Row, Col } from 'antd';
-import { Headline, noop } from 'qmkit';
+import { Headline, noop, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;

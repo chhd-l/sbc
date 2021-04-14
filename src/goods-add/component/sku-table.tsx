@@ -615,18 +615,14 @@ class SkuForm extends React.Component<any, any> {
       e = e.target.value;
     }
 
-    if (key = "goodsInfoBundleRels") {
+    if (key == "goodsInfoBundleRels") {
       let minStock = []
       for (let i = 0; i<e.length; i++) {
         minStock.push(e[i].stock / e[i].bundleNum)
       }
-      /*e.map((item,i)=>{
-        minStock.push(item.stock / item.bundleNum)
-      })*/
 
       let tempMinStock = Math.min.apply(Math, minStock)
       tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
-      //let stock = Number(String(addSkUProduct[0].minStock / e).replace(/\.\d+/g, ''))
 
       if (goodsList.toJS().length == 1 && addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
         let id = goodsList.toJS()[0].id

@@ -6,7 +6,8 @@ export default class FormActor extends Actor {
     return {
       form: {
         tradeState: {},
-        orderRejectModalVisible: false
+        orderRejectModalVisible: false,
+        orderAuditModalVisible: false,
       }
     };
   }
@@ -30,6 +31,11 @@ export default class FormActor extends Actor {
     return state.set('orderRejectModalVisible', true);
   }
 
+  @Action('order:list:audit:show')
+  showAuditModal(state: IMap) {
+    return state.set('orderAuditModalVisible', true);
+  }
+
   /**
    *关闭驳回弹框
    * @param state
@@ -37,5 +43,10 @@ export default class FormActor extends Actor {
   @Action('order:list:reject:hide')
   hideRejectModal(state: IMap) {
     return state.set('orderRejectModalVisible', false);
+  }
+
+  @Action('order:list:audit:hide')
+  hideAuditModal(state: IMap) {
+    return state.set('orderAuditModalVisible', false);
   }
 }

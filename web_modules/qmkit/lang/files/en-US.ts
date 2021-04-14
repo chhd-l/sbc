@@ -1609,6 +1609,17 @@ export default {
   "Order.InputQuantity": 'Please input the delivery quantity',
   "Order.modifiedErr":"The customer has been deleted and cannot be modified!",
   'Order.shippingFeesDiscount': 'Shipping fee discount',
+  'Order.purchaseType': 'Purchase type',
+  'Order.cardHolderName': 'Card Holder Name',
+  'Order.PSP': 'PSP',
+  'Order.cardLast4Digits': 'Card Last 4 Digits',
+  'Order.paymentDetails': 'Payment Details',
+  'Order.previewThisOrder': 'Please review this order manually',
+  'Order.confirmThisOrder': 'Do you confirm if this order can be validated?',
+  'Order.auditBasis': 'Audit basis: product type, product amount, product quantity, whether the product is in stock',
+  'Order.selectType': 'Selection Type',
+  'Order.auditPassed': 'Audit passed',
+  'Order.auditFailed': 'Audit failed',
 
 
 

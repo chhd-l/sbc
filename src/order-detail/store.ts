@@ -87,8 +87,7 @@ export default class AppStore extends Store {
         const { res: logistics } = results[1] as any;
         // const { res: needRes } = results[2] as any;
         const { res: payRecordResult2 } = results[2] as any;
-        const { res: cityDictRes } = results[3] as any;
-        const { res: countryDictRes } = results[4] as any;
+        const { res: countryDictRes } = results[3] as any;
         // const { res: refresh } = (results[6]) as any;
         this.transaction(() => {
           this.dispatch('loading:end');

@@ -188,10 +188,23 @@ class SkuForm extends React.Component<any, any> {
         let a = null;
         let b = null;
         let c = 0;
-        a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || null;
-        // a == null? a = {minStock:''}: a
+        let d = true
+        console.log(addSkUProduct.length,1111111);
+
+        if (addSkUProduct.length != undefined) {
+          c = rowInfo.stock
+          d = true
+          console.log(rowInfo,222222);
+
+        }else {
+          c = 0
+          d = false
+          console.log(rowInfo,333333);
+
+        }
+        /*a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || null;
         a = a ? a : { minStock: '' };
-        c = a.minStock - rowInfo.maxStock >= 0 ? rowInfo.stock? rowInfo.stock: 0 : a.minStock?a.minStock:0;
+        c = rowInfo.stock || 0
         if (a && a.minStock && rowInfo.maxStock) {
           b = a.minStock - rowInfo.maxStock >= 0 ? a.minStock : rowInfo.maxStock;
         } else if (a && a.minStock) {
@@ -200,13 +213,17 @@ class SkuForm extends React.Component<any, any> {
           b = a.maxStock;
         } else {
           b = 999999;
-        }
-    /*    if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+        }*/
+
+        /*let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
+        c = Number(String(c / targetGoodsIds.bundleNum).replace(/\.\d+/g, ''))*/
+
+        /* if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
           console.log(c);
           console.log(addSkUProduct[0].targetGoodsIds[0].bundleNum);
           c = Number(String(c / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
         }*/
-        if (goods.get('goodsId') == null) {
+        /*if (goods.get('goodsId') == null) {
           if (goodsList.toJS().length == 1) {
             let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
             console.log(addSkUProduct.length,11111);
@@ -230,7 +247,7 @@ class SkuForm extends React.Component<any, any> {
             console.log(c,9999999);
           }
 
-        }
+        }*/
 
 
         return (
@@ -258,7 +275,9 @@ class SkuForm extends React.Component<any, any> {
                   <InputNumber
                     style={{ width: '121px' }}
                     min={0}
-                    max={b}
+                    max={99999999}
+                    disabled={d}
+                    //max={b}
                     //onBlur={this.onInputNumber.bind(this, rowInfo.id, 'stock')}
                   />
                 )}

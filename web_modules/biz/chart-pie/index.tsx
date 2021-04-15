@@ -9,6 +9,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n } from 'qmkit'
 class Line extends React.Component {
   constructor(props, ctx) {
     super(props);
@@ -18,7 +19,7 @@ class Line extends React.Component {
     let option = {
       title: [
         {
-          text: this.props.intl.formatMessage({id:'Home.Rate'}),
+          text: (window as any).RCi18n({id:'Home.Rate'}),
           x: 'center',
           top: '32%',
           textStyle: {

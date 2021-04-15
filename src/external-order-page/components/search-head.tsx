@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Input, Select, Button, Menu, Dropdown, Icon, DatePicker, Row, Col } from 'antd';
-import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup } from 'qmkit';
+import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, RCi18n, SelectGroup } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
@@ -523,8 +523,8 @@ class SearchHead extends Component<any, any> {
     }
 
     const confirm = Modal.confirm;
-    const title = this.props.intl.formatMessage({id:'order.audit'});
-    const content = this.props.intl.formatMessage({id:'order.confirmAudit'});
+    const title = (window as any).RCi18n({id:'order.audit'});
+    const content = (window as any).RCi18n({id:'order.confirmAudit'});
     confirm({
       title: title,
       content: content,

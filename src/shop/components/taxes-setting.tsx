@@ -78,7 +78,7 @@ class TaxesAdd extends React.Component<any, any> {
         width={600}
         maskClosable={false}
         zIndex={1000}
-        title={this.props.intl.formatMessage({ id: 'Setting.Taxsetting' })}
+        title={(window as any).RCi18n({ id: 'Setting.Taxsetting' })}
         visible={visible}
         confirmLoading={loading}
         onCancel={() => this.handleCancel()}
@@ -97,10 +97,10 @@ class TaxesAdd extends React.Component<any, any> {
         ]}
       >
         <Form {...formItemLayout}>
-          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.CalculateTaxBasedon' })}>
+          <FormItem label={(window as any).RCi18n({ id: 'Setting.CalculateTaxBasedon' })}>
             {getFieldDecorator('calculateTax', {
               initialValue: settingForm.calculateTax,
-              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.PleaseselectedCalculateTaxBasedon' }) }]
+              rules: [{ required: true, message: (window as any).RCi18n({ id: 'Setting.PleaseselectedCalculateTaxBasedon' }) }]
             })(
               <Radio.Group
                 onChange={(e) => {
@@ -120,10 +120,10 @@ class TaxesAdd extends React.Component<any, any> {
               </Radio.Group>
             )}
           </FormItem>
-          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Enterprice' })}>
+          <FormItem label={(window as any).RCi18n({ id: 'Setting.Enterprice' })}>
             {getFieldDecorator('enterPrice', {
               initialValue: settingForm.enterPrice,
-              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Pleaseselectedenterprice' }) }]
+              rules: [{ required: true, message: (window as any).RCi18n({ id: 'Setting.Pleaseselectedenterprice' }) }]
             })(
               <Radio.Group
                 onChange={(e) => {
@@ -166,10 +166,10 @@ class TaxesAdd extends React.Component<any, any> {
               </Radio.Group>
             )}
           </FormItem>
-          <FormItem label={this.props.intl.formatMessage({ id: 'Setting.Promotioncalculation' })}>
+          <FormItem label={(window as any).RCi18n({ id: 'Setting.Promotioncalculation' })}>
             {getFieldDecorator('promotionCalculation', {
               initialValue: settingForm.promotionCalculation,
-              rules: [{ required: true, message: this.props.intl.formatMessage({ id: 'Setting.Pleaseselectedpromotion' }) }]
+              rules: [{ required: true, message: (window as any).RCi18n({ id: 'Setting.Pleaseselectedpromotion' }) }]
             })(
               <Radio.Group
                 onChange={(e) => {

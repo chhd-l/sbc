@@ -1,7 +1,7 @@
 import { IOptions, Store } from 'plume2';
 import { message } from 'antd';
 
-import { Const, history } from 'qmkit';
+import { Const, history, RCi18n } from 'qmkit';
 
 import * as webapi from './webapi';
 import * as commonWebapi from './../webapi';
@@ -128,6 +128,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   submitFullDiscount = async (discountBean) => {
+    debugger
     let response;
     this.dispatch('loading:start');
     if (discountBean.marketingId) {
@@ -137,11 +138,16 @@ export default class AppStore extends Store {
     }
     this.dispatch('loading:end');
     if(response.res && response.res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success((window as any).RCi18n({
+        id: 'Marketing.OperateSuccessfully'
+      }))
       history.push('/marketing-list');
-    } else if(response.res && response.res.code === 'K-000009') {
-      message.error('Pomotion Code has exited.')
+    } else if(response.res && response.res.code === 'K-080217') {
+      message.error((window as any).RCi18n({
+        id: 'Marketing.PomotionCodehasexited'
+      }))
     }
+    return response
   };
   //
 

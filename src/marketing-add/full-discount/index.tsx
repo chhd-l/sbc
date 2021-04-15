@@ -2,22 +2,21 @@ import React from 'react';
 
 import { StoreProvider } from 'plume2';
 import { Breadcrumb, Alert, Form } from 'antd';
-import { Headline, AuthWrapper, BreadCrumb, Const } from 'qmkit';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { Headline, AuthWrapper, BreadCrumb, RCi18n, Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 import AppStore from './store';
 import FullDiscountForm from './components/full-discount-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
 const WrappedForm = Form.create()(FullDiscountForm);
-
+import '../index.less'
 import * as webapi from '@/marketing-add/webapi';
 import { fromJS } from 'immutable';
 @StoreProvider(AppStore, { debug: __DEV__ })
-class MarketingFullDiscountAdd extends React.Component<any, any> {
+export default class MarketingFullDiscountAdd extends React.Component<any, any> {
   store: AppStore;
   _form;
   props: {
-    intl: any;
     match: any;
   }
   constructor(props) {
@@ -63,17 +62,13 @@ class MarketingFullDiscountAdd extends React.Component<any, any> {
           <div className="container-search marketing-container">
             <Headline title={
               marketingId ?
-              this.props.intl.formatMessage({
-                id: 'Marketing.Editdiscountactivity'
-              })
+                <FormattedMessage id="Marketing.Editdiscountactivity" />
               :
-                this.props.intl.formatMessage({
-                  id: 'Marketing.Creatediscountactivity'
-                })
+                <FormattedMessage id="Marketing.Creatediscountactivity" />
             }
             />
             <Alert message={
-              this.props.intl.formatMessage({
+              (window as any).RCi18n({
                 id: 'Marketing.discountTip'
               })
             } type="info" showIcon />
@@ -92,4 +87,4 @@ class MarketingFullDiscountAdd extends React.Component<any, any> {
   }
 }
 
-export default injectIntl(MarketingFullDiscountAdd)
+

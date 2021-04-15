@@ -217,11 +217,11 @@ class CateList extends React.Component<any, any> {
 
   _confirm = (storeCateId: string) => {
     const { doDelete, childFlag, goodsFlag } = this.props.relaxProps;
-    let okText = this.props.intl.formatMessage({id:'Product.OK'});
-    let title = this.props.intl.formatMessage({id:'Product.Prompt'});
+    let okText = (window as any).RCi18n({id:'Product.OK'});
+    let title = (window as any).RCi18n({id:'Product.Prompt'});
     
     if (goodsFlag) {
-      let content = this.props.intl.formatMessage({id:'Product.TheCurrentCategory'});
+      let content = (window as any).RCi18n({id:'Product.TheCurrentCategory'});
       //该分类下有商品
       Modal.info({
         title:title ,
@@ -229,7 +229,7 @@ class CateList extends React.Component<any, any> {
         okText: okText
       });
     } else if (childFlag) {
-      let content = this.props.intl.formatMessage({id:'Product.PleaseDelete'});
+      let content = (window as any).RCi18n({id:'Product.PleaseDelete'});
       //有子分类
       Modal.info({
         title: title ,
@@ -244,7 +244,7 @@ class CateList extends React.Component<any, any> {
       //   }
       // });
     } else {
-      let content = this.props.intl.formatMessage({id:'Product.deleteThisCategory'});
+      let content = (window as any).RCi18n({id:'Product.deleteThisCategory'});
       //没有子分类
       confirm({
         title: title,

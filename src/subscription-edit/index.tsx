@@ -60,6 +60,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       subscriptionInfo: {},
       recentOrderList: [],
       frequencyList: [],
+      frequencyClubList: [],
       goodsInfo: [],
       petsId: '',
       petsInfo: {},
@@ -248,6 +249,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
 
     this.querySysDictionary('Frequency_day');
+    this.querySysDictionary('Frequency_day_club');
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -272,6 +274,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               () => this.querySysDictionary('Frequency_week')
             );
           }
+          if (type === 'Frequency_day_club') {
+            let frequencyClubList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyClubList: frequencyClubList
+              },
+              () => this.querySysDictionary('Frequency_week_club')
+            );
+          }
           if (type === 'Frequency_week') {
             let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState(
@@ -281,10 +292,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               () => this.querySysDictionary('Frequency_month')
             );
           }
+          if (type === 'Frequency_week_club') {
+            let frequencyClubList = [...this.state.frequencyClubList, ...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyClubList: frequencyClubList
+              },
+              () => this.querySysDictionary('Frequency_month_club')
+            );
+          }
           if (type === 'Frequency_month') {
             let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState({
               frequencyList: frequencyList
+            });
+          }
+          if (type === 'Frequency_month_club') {
+            let frequencyClubList = [...this.state.frequencyClubList, ...res.context.sysDictionaryVOS];
+            this.setState({
+              frequencyClubList: frequencyClubList
             });
           }
         } else {
@@ -850,6 +876,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       recentOrderList,
       subscriptionInfo,
       frequencyList,
+      frequencyClubList,
       goodsInfo,
       petsInfo,
       paymentInfo,
@@ -944,7 +971,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 });
               }}
             >
-              {frequencyList.map((item) => (
+              {(record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions === 'club' ? frequencyClubList : frequencyList).map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
                 </Option>
@@ -1309,7 +1336,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </div>
                 <div className="flex-between">
                   <span><FormattedMessage id="Subscription.Promotion"/></span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
                 </div>
                 {/* <div className="flex-between">
                       <span>Promotion Code</span>
@@ -1336,7 +1363,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>
                     <span><FormattedMessage id="Subscription.Total"/></span> (<FormattedMessage id="Subscription.IVAInclude"/>):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.taxFeePrice + +this.state.deliveryPrice).toFixed(2)}</span>
                 </div>
               </Col>
             </Row>

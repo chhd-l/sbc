@@ -2,7 +2,7 @@ import React from 'react';
 import { Relax, IMap } from 'plume2';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Table, Modal, message, Tooltip } from 'antd';
-import { history, noop, QMFloat, AuthWrapper, cache, checkAuth } from 'qmkit';
+import { history, noop, QMFloat, AuthWrapper, cache, checkAuth, RCi18n } from 'qmkit';
 import styled from 'styled-components';
 const TableDiv = styled.div`
   margin-top: 20px;
@@ -241,7 +241,7 @@ class FreightItem extends React.Component<any, any> {
    */
   _del = (freightId, isStore) => {
     const { del } = this.props.relaxProps;
-    const content = this.props.intl.formatMessage({id:'Setting.deletethisTemplate'});
+    const content = (window as any).RCi18n({id:'Setting.deletethisTemplate'});
     confirm({
       content: content,
       iconType: 'exclamation-circle',

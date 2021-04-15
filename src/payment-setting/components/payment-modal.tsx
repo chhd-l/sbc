@@ -165,7 +165,6 @@ class PaymentModal extends React.Component<any, any> {
                             ]
                           })(
                             <Select mode="multiple" onChange={(values) => {
-                              debugger
                               let paymentMethodList = []
                                 paymentForm.payPspCardTypeVOList.map(item=>{
                                   values.map(value => {

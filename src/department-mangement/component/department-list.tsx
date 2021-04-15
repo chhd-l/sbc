@@ -4,7 +4,7 @@ import { List, Map, fromJS } from 'immutable';
 import { Modal, Table, Icon, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { noop, AuthWrapper } from 'qmkit';
+import { noop, AuthWrapper, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 const confirm = Modal.confirm;
@@ -177,9 +177,9 @@ class DepartmentList extends React.Component<any, any> {
       });
       showLeaderModal(department);
     } else {
-      const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
-      const content = this.props.intl.formatMessage({id:'Setting.IfThere'});
-      const okText = this.props.intl.formatMessage({id:'Setting.ShutDown'});
+      const title = (window as any).RCi18n({id:'Setting.Prompt'});
+      const content = (window as any).RCi18n({id:'Setting.IfThere'});
+      const okText = (window as any).RCi18n({id:'Setting.ShutDown'});
       Modal.warning({
         title: title,
         content: content,
@@ -215,9 +215,9 @@ class DepartmentList extends React.Component<any, any> {
    */
   _delete = async (departmentId: number, employeeNum: number) => {
     if (employeeNum > 0) {
-      const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
-      const content = this.props.intl.formatMessage({id:'Setting.TheExisting'});
-      const okText = this.props.intl.formatMessage({id:'Setting.ShutDown'});
+      const title = (window as any).RCi18n({id:'Setting.Prompt'});
+      const content = (window as any).RCi18n({id:'Setting.TheExisting'});
+      const okText = (window as any).RCi18n({id:'Setting.ShutDown'});
       Modal.warning({
         title: title,
         content: content,
@@ -233,10 +233,10 @@ class DepartmentList extends React.Component<any, any> {
    */
   _confirm = (departmentId: number) => {
     const { doDelete } = this.props.relaxProps;
-    const title = this.props.intl.formatMessage({id:'Setting.Prompt'});
-    const content = this.props.intl.formatMessage({id:'Setting.DeleteTheCurrent'});
-    const okText = this.props.intl.formatMessage({id:'Setting.Confirm'});
-    const cancelText = this.props.intl.formatMessage({id:'Setting.Close'});
+    const title = (window as any).RCi18n({id:'Setting.Prompt'});
+    const content = (window as any).RCi18n({id:'Setting.DeleteTheCurrent'});
+    const okText = (window as any).RCi18n({id:'Setting.Confirm'});
+    const cancelText = (window as any).RCi18n({id:'Setting.Close'});
     confirm({
       title: title,
       content: content,

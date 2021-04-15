@@ -84,13 +84,13 @@ export default class AppStore extends Store {
     this.dispatch('pets:funType', value)
   }
   //scan result
-  findByApptNo = async (apptNo = 'AP663253') => {
+  findByApptNo = async (apptNo) => {
     const { res } = await webapi.fetchFelinFindByNoScan({ apptNo })
     if (res.code === Const.SUCCESS_CODE) {
       const { settingVO, pets, felinReco } = res.context;
       let goodsQuantity = JSON.parse(felinReco?.goodsIds ?? '[]')
       let list = pets.map(item => {
-        let _tempWeight =JSON.parse(JSON.parse(item.weight))
+        let _tempWeight =item.weight.indexOf('/')>-1?JSON.parse(JSON.parse(item.weight)):JSON.parse(item.weight)
         item.measure = _tempWeight.measure;
         item.measureUnit = _tempWeight.measureUnit;
         return item
@@ -102,6 +102,12 @@ export default class AppStore extends Store {
       }
       let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
       this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
+     if(settingVO.apptNo){
+      message.success(res.message)
+     }else{
+      message.error((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
+     }
+      
     }
   }
 
@@ -119,9 +125,9 @@ export default class AppStore extends Store {
       goodsInfoList.map(item => {
         obj[item.goodsInfoNo] = item
       })
-     // _clone[index].goodsInfoWeight = value * (_clone[index].goodsInfoWeight/_clone[index].quantity)
       goods.map(item => {
        let goodsInfoWeight:any=0,goodsInfoUnit=(obj[item.goodsInfoNo]?.goodsInfoUnit??'').toLowerCase();
+       obj[item.goodsInfoNo].goodsInfoWeight=obj[item.goodsInfoNo]?.goodsInfoWeight??0
        if(goodsInfoUnit==='g'){
           goodsInfoWeight=item.quantity*obj[item.goodsInfoNo].goodsInfoWeight
        }else if(goodsInfoUnit==='kg'){

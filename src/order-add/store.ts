@@ -231,7 +231,7 @@ export default class AppStore extends Store {
     const detail = fromJS(orderInfo);
     const tradeState = detail.get('tradeState');
     if (tradeState.get('flowState') == 'VOID') {
-      message.error('The order has been cancelled and cannot be modified!');
+      message.error(RCi18n({id:'Order.cannotModified'}));
       history.push('/order-list');
       return;
     }
@@ -241,7 +241,7 @@ export default class AppStore extends Store {
     const { res: newBuyer } = await webapi.fetchSingleCustomer(buyer.get('id'));
     const { context } = newBuyer as any;
     if (!context || !fromJS(context).get('customerId')) {
-      message.error('The customer has been deleted and the order cannot be modified!');
+      message.error(RCi18n({id:'Order.customerCannotModified'}));
       history.push('/order-list');
       return;
     }
@@ -478,7 +478,7 @@ export default class AppStore extends Store {
   addCustomer = async (customer) => {
     const { res } = await webapi.addCustomer(customer);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       this.switchCustomerFormVisible(false);
     } else {
     }
@@ -525,7 +525,7 @@ export default class AppStore extends Store {
     });
 
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       const { res } = (await webapi.addressList(customerId)) as any;
       let { code, context, message: errorInfo } = res;
 
@@ -553,7 +553,7 @@ export default class AppStore extends Store {
     });
     if (res.code === Const.SUCCESS_CODE) {
       address = fromJS(res).get('context');
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       let editId = '';
       if (this.state().get('addressType') == 1) {
         editId = this.state().get('editDeliveryAddressId');
@@ -934,7 +934,7 @@ export default class AppStore extends Store {
     this.dispatch('order:submitting', false);
 
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       history.push('/order-list');
     }
   };

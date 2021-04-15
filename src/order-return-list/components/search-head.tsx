@@ -398,51 +398,51 @@ class SearchHead extends Component<any, any> {
     this.props.relaxProps.onSearchFormChange(this.state);
   }
 
-  _handleBatchAudit() {
-    const { selected, onBatchAudit } = this.props.relaxProps;
-    if (selected.count() === 0) {
-      message.error('请选择退单');
-      return;
-    }
-    confirm({
-      title: '批量审核',
-      content: (
-        <div>
-          <div>您确定要批量通过已选择退单？</div>
-          <div style={{ color: 'gray' }}>请先确保您已仔细查看过已选退单</div>
-        </div>
-      ),
-      onOk() {
-        return onBatchAudit(selected.toArray());
-      },
-      onCancel() { }
-    });
-  }
+  // _handleBatchAudit() {
+  //   const { selected, onBatchAudit } = this.props.relaxProps;
+  //   if (selected.count() === 0) {
+  //     message.error('请选择退单');
+  //     return;
+  //   }
+  //   confirm({
+  //     title: '批量审核',
+  //     content: (
+  //       <div>
+  //         <div>您确定要批量通过已选择退单？</div>
+  //         <div style={{ color: 'gray' }}>请先确保您已仔细查看过已选退单</div>
+  //       </div>
+  //     ),
+  //     onOk() {
+  //       return onBatchAudit(selected.toArray());
+  //     },
+  //     onCancel() { }
+  //   });
+  // }
 
-  _handleBatchReceive() {
-    const { selected, onBatchReceive } = this.props.relaxProps;
-    if (selected.count() === 0) {
-      message.error('请选择退单');
-      return;
-    }
-    confirm({
-      title: '批量收货',
-      content: (
-        <div>
-          <div>您确定要批量收货已选择退单？</div>
-          <div style={{ color: 'gray' }}>请先确保您已仔细查看过已选退单</div>
-        </div>
-      ),
-      onOk() {
-        return onBatchReceive(selected.toArray());
-      },
-      onCancel() { }
-    });
-  }
+  // _handleBatchReceive() {
+  //   const { selected, onBatchReceive } = this.props.relaxProps;
+  //   if (selected.count() === 0) {
+  //     message.error('请选择退单');
+  //     return;
+  //   }
+  //   confirm({
+  //     title: '批量收货',
+  //     content: (
+  //       <div>
+  //         <div>您确定要批量收货已选择退单？</div>
+  //         <div style={{ color: 'gray' }}>请先确保您已仔细查看过已选退单</div>
+  //       </div>
+  //     ),
+  //     onOk() {
+  //       return onBatchReceive(selected.toArray());
+  //     },
+  //     onCancel() { }
+  //   });
+  // }
 
   _handleBatchExport() {
-    const paramTitle = this.props.intl.formatMessage({id:'Order.Exportfilteredorders'});
-    const idTitle = this.props.intl.formatMessage({id:'Order.Exportselectedorders'});
+    const paramTitle = (window as any).RCi18n({id:'Order.Exportfilteredorders'});
+    const idTitle = (window as any).RCi18n({id:'Order.Exportselectedorders'});
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,

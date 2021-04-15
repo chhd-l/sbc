@@ -82,107 +82,108 @@ class ReductionLevels extends React.Component<any, any> {
         {fullReductionLevelList && fullReductionLevelList.map((level, index) => {
           return (
             <div key={level.key ? level.key : level.reductionLevelId}>
-              <HasError>
-                {isNormal ? (
-                  <div>
-                    <span>Full&nbsp;</span>
+              <div className="flex-wrap">
+                <HasError>
+                  {isNormal ? (
+                    <div className="flex-inline">
+                      <span>Full&nbsp;</span>
 
-                    <FormItem style={{ display: 'inline-block' }}>
-                      {getFieldDecorator(`level_rule_value_${index}`, {
-                        rules: [
-                          { required: true, message:
-                            this.props.intl.formatMessage({
-                              id: 'Marketing.ustenterrules',
-                            })
-                          },
-                          {
-                            validator: (_rule, value, callback) => {
-                              if (value) {
-                                if (!isFullCount) {
-                                  if (value == 0) {
-                                    callback();
-                                  }
-                                  if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                    callback(
-                                      this.props.intl.formatMessage({
-                                        id: 'Marketing.0-99999999.99',
-                                      })
-                                    );
-                                  }
-                                } else {
-                                  if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                                    callback(
-                                      this.props.intl.formatMessage({
-                                        id: 'Marketing.1-9999',
-                                      })
-                                    );
+                      <FormItem style={{ display: 'inline-block' }}>
+                        {getFieldDecorator(`level_rule_value_${index}`, {
+                          rules: [
+                            { required: true, message:
+                                (window as any).RCi18n({
+                                  id: 'Marketing.ustenterrules',
+                                })
+                            },
+                            {
+                              validator: (_rule, value, callback) => {
+                                if (value) {
+                                  if (!isFullCount) {
+                                    if (value == 0) {
+                                      callback();
+                                    }
+                                    if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                                      callback(
+                                        (window as any).RCi18n({
+                                          id: 'Marketing.0-99999999.99',
+                                        })
+                                      );
+                                    }
+                                  } else {
+                                    if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                      callback(
+                                        (window as any).RCi18n({
+                                          id: 'Marketing.1-9999',
+                                        })
+                                      );
+                                    }
                                   }
                                 }
+                                callback();
                               }
-                              callback();
+                              // callback();
                             }
-                            // callback();
-                          }
-                        ],
-                        initialValue: !isFullCount ? level.fullAmount : level.fullCount
-                      })(
+                          ],
+                          initialValue: !isFullCount ? level.fullAmount : level.fullCount
+                        })(
                           <Input
                             style={{ width: 180 }}
                             value={!isFullCount ? level.fullAmount : level.fullCount}
                             placeholder={!isFullCount ?
-                              this.props.intl.formatMessage({
+                              (window as any).RCi18n({
                                 id: 'Marketing.0-99999999.99',
                               })
                               :
-                              this.props.intl.formatMessage({
+                              (window as any).RCi18n({
                                 id: 'Marketing.1-9999',
                               })
-                              }
+                            }
                             onChange={(e) => {
                               this.ruleValueChange(index, e.target.value);
                             }}
                             disabled={isFullCount === 2}
                           />
-                      )}
-                    </FormItem>
-                    <span>
+                        )}
+                      </FormItem>
+                      <span>
                             &nbsp;
-                      {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : <FormattedMessage id="Marketing.items" />}，
+                        {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : <FormattedMessage id="Marketing.items" />}，
                           </span>
-                  </div>
-                ) : null}
-                <div>
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
+                    </div>
+                  ) : null}
+                  <div className="flex-inline">
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
 
-                  <FormItem style={{ display: 'inline-block' }}>
-                    {getFieldDecorator(`level_rule_reduction_${index}`, {
-                      rules: [
-                        { required: true, message:
-                            this.props.intl.formatMessage({
-                              id: 'Marketing.AmountMustBeEntered',
-                            })
-                        },
-                        {
-                          validator: (_rule, value, callback) => {
-                            if (value) {
-                              if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                callback(
-                                  this.props.intl.formatMessage({
-                                    id: 'Marketing.0.01-99999999.99',
-                                  })
-                                );
+                    <FormItem style={{ display: 'inline-block' }}>
+                      {getFieldDecorator(`level_rule_reduction_${index}`, {
+                        rules: [
+                          { required: true, message:
+                              (window as any).RCi18n({
+                                id: 'Marketing.AmountMustBeEntered',
+                              })
+                          },
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (value) {
+                                if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                                  callback(
+                                    (window as any).RCi18n({
+                                      id: 'Marketing.0.01-99999999.99',
+                                    })
+                                  );
+                                }
                               }
+                              callback();
                             }
-                            callback();
                           }
-                        }
-                      ],
-                      initialValue: level.reduction
-                    })(
+                        ],
+                        initialValue: level.reduction
+                      })(
                         <Input
                           style={{ width: 200 }}
                           placeholder={
-                            this.props.intl.formatMessage({
+                            (window as any).RCi18n({
                               id: 'Marketing.0.01-99999999.99',
                             })
                           }
@@ -191,18 +192,19 @@ class ReductionLevels extends React.Component<any, any> {
                             this.onChange(index, 'reduction', e.target.value);
                           }}
                         />
-                    )}
-                  </FormItem>
-                  <span>
+                      )}
+                    </FormItem>
+                    <span>
                           &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                    &nbsp;&nbsp;
+                      &nbsp;&nbsp;
                         </span>
-                </div>
-                {index > 0 && <a onClick={() => this.deleteLevels(index)}>
-                  <FormattedMessage id="Marketing.Delete" />
+                  </div>
+                  {index > 0 && <a onClick={() => this.deleteLevels(index)}>
+                    <FormattedMessage id="Marketing.Delete" />
                   </a>
-                }
-              </HasError>
+                  }
+                </HasError>
+              </div>
             </div>
           );
         })}

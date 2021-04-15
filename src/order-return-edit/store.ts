@@ -253,7 +253,7 @@ export default class AppStore extends Store {
     result = await remedy(param.toJS());
 
     if (result.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       history.go(-1);
     } else {
       return;

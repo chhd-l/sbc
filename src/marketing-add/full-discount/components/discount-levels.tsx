@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Input, Button, Form } from 'antd';
-import { noop, ValidConst, cache } from 'qmkit';
+import { noop, ValidConst, cache, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl'
 const FormItem = Form.Item;
 
@@ -80,62 +80,63 @@ class DiscountLevels extends React.Component<any, any> {
           fullDiscountLevelList.map((level, index) => {
             return (
               <div key={level.key ? level.key : level.discountLevelId}>
-                <FormItem key={index}>
+                <FormItem key={index} >
                   {getFieldDecorator(
                     `level_${index}`,
                     {}
                   )(
                     <HasError>
-                      {isNormal ? (
-                        <div>
-                          <span>Full&nbsp;</span>
-                          <FormItem style={{ display: 'inline-block' }}>
-                            {getFieldDecorator(`level_rule_value_${index}`, {
-                              rules: [
-                                { required: true, message:
-                                    this.props.intl.formatMessage({
-                                      id: 'Marketing.Mustenterrules'
-                                    })
-                                },
-                                {
-                                  validator: (_rule, value, callback) => {
-                                    if (value) {
-                                      if (!isFullCount) {
-                                        if (value == 0) {
-                                          callback();
-                                        }
-                                        if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                                          callback(
-                                            this.props.intl.formatMessage({
-                                              id: 'Marketing.0-99999999.99'
-                                            })
-                                          );
-                                        }
-                                      } else {
-                                        if (!ValidConst.noZeroNineNumber.test(value) || !(value < 10000 && value > 0)) {
-                                          callback(
-                                            this.props.intl.formatMessage({
-                                              id: 'Marketing.1-9999'
-                                            })
-                                          );
+                      <div className="flex-wrap" >
+                        {isNormal ? (
+                          <div className="flex-inline">
+                            <span>Full&nbsp;</span>
+                            <FormItem style={{ display: 'inline-block' }}>
+                              {getFieldDecorator(`level_rule_value_${index}`, {
+                                rules: [
+                                  { required: true, message:
+                                      (window as any).RCi18n({
+                                        id: 'Marketing.Mustenterrules'
+                                      })
+                                  },
+                                  {
+                                    validator: (_rule, value, callback) => {
+                                      if (value) {
+                                        if (!isFullCount) {
+                                          if (value == 0) {
+                                            callback();
+                                          }
+                                          if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                                            callback(
+                                              (window as any).RCi18n({
+                                                id: 'Marketing.0-99999999.99'
+                                              })
+                                            );
+                                          }
+                                        } else {
+                                          if (!ValidConst.noZeroNineNumber.test(value) || !(value < 10000 && value > 0)) {
+                                            callback(
+                                              (window as any).RCi18n({
+                                                id: 'Marketing.1-9999'
+                                              })
+                                            );
+                                          }
                                         }
                                       }
+                                      callback();
                                     }
-                                    callback();
                                   }
-                                }
-                              ],
-                              initialValue: !isFullCount ? level.fullAmount : level.fullCount
-                            })(
+                                ],
+                                initialValue: !isFullCount ? level.fullAmount : level.fullCount
+                              })(
                                 <Input
                                   // style={{ width: 200 }}
                                   className="input-width"
                                   placeholder={isFullCount === 0 ?
-                                    this.props.intl.formatMessage({
+                                    (window as any).RCi18n({
                                       id: 'Marketing.0-99999999.99'
                                     })
                                     : isFullCount === 1 ?
-                                      this.props.intl.formatMessage({
+                                      (window as any).RCi18n({
                                         id: 'Marketing.1-9999'
                                       })
                                       : 0}
@@ -146,111 +147,114 @@ class DiscountLevels extends React.Component<any, any> {
                                   disabled={isFullCount === 2}
                                 />
 
-                            )}
-                          </FormItem>
-                          <span>
+                              )}
+                            </FormItem>
+                            <span>
                             {' '}
-                            &nbsp;
-                            {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'},
+                              &nbsp;
+                              {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'},
                           </span>
+                          </div>
+                        ) : null}
+                        <div  className="flex-inline">
+                          <FormItem>
+                            <span>&nbsp;discount price&nbsp;&nbsp;</span>
+                            {getFieldDecorator(`level_rule_discount_${index}`, {
+                              rules: [
+                                {
+                                  required: true,
+                                  message: (window as any).RCi18n({
+                                    id: 'Marketing.Discountmustbeentered'
+                                  })
+                                },
+                                {
+                                  validator: (_rule, value, callback) => {
+                                    if (value) {
+                                      if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
+                                        callback(
+                                          (window as any).RCi18n({
+                                            id: 'Marketing.InputValueBetween'
+                                          })
+                                        );
+                                      }
+                                    }
+                                    callback();
+                                  }
+                                }
+                              ],
+                              initialValue: level.discount
+                            })(
+                              <Input
+                                // style={{ width: 200 }}
+                                className="input-width"
+                                title={
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.InputValueBetween'
+                                  })
+                                }
+                                placeholder={
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.InputValueBetween'
+                                  })
+                                }
+                                onChange={(e) => {
+                                  this.onChange(index, 'discount', e.target.value); //parseFloat()
+                                }}
+                                value={level.discount}
+                              />
+                            )}
+                            <span>&nbsp;of orginal price,</span>
+                          </FormItem>
                         </div>
-                      ) : null}
-                      <FormItem>
-                        <span>&nbsp;discount price&nbsp;&nbsp;</span>
-                        {getFieldDecorator(`level_rule_discount_${index}`, {
-                          rules: [
-                            {
-                              required: true,
-                              message: this.props.intl.formatMessage({
-                                id: 'Marketing.Discountmustbeentered'
-                              })
-                            },
-                            {
-                              validator: (_rule, value, callback) => {
-                                if (value) {
-                                  if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                                    callback(
-                                      this.props.intl.formatMessage({
-                                        id: 'Marketing.InputValueBetween'
-                                      })
-                                    );
-                                  }
-                                }
-                                callback();
-                              }
-                            }
-                          ],
-                          initialValue: level.discount
-                        })(
-                            <Input
-                              // style={{ width: 200 }}
-                              className="input-width"
-                              title={
-                                this.props.intl.formatMessage({
-                                id: 'Marketing.InputValueBetween'
-                              })
-                              }
-                              placeholder={
-                                this.props.intl.formatMessage({
-                                  id: 'Marketing.InputValueBetween'
-                                })
-                              }
-                              onChange={(e) => {
-                                this.onChange(index, 'discount', e.target.value); //parseFloat()
-                              }}
-                              value={level.discount}
-                            />
-                        )}
-                        <span>&nbsp;of orginal price,</span>
-                      </FormItem>
 
-                      <FormItem>
-                        {getFieldDecorator(`level_rule_discount_limit${index}`, {
-                          rules: [
-                            // { required: true, message: 'Must enter rules' },
-                            {
-                              validator: (_rule, value, callback) => {
-                                if (value) {
-                                  if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                                    callback(
-                                      this.props.intl.formatMessage({
-                                        id: 'Marketing.1-9999'
-                                      })
-                                    );
-                                  }
-                                }
-                                callback();
-                              }
-                              // callback();
-                            }
-                          ],
-                          initialValue: level.limitAmount
-                        })(
-                          <>
+                        <div className="flex-inline">
+                          <FormItem>
                             <span>&nbsp;discount limit&nbsp;&nbsp;</span>
-                            <Input
-                              // style={{ width: 200 }}
-                              className="input-width"
-                              title={
-                                this.props.intl.formatMessage({
-                                id: 'Marketing.1-9999'
-                              })
-                              }
-                              placeholder={
-                                this.props.intl.formatMessage({
-                                  id: 'Marketing.1-9999'
-                                })
-                              }
-                              onChange={(e) => {
-                                this.onChange(index, 'limitAmount', e.target.value);//parseInt
-                              }}
-                              value={level.limitAmount}
-                            />
+                            {getFieldDecorator(`level_rule_discount_limit${index}`, {
+                              rules: [
+                                // { required: true, message: 'Must enter rules' },
+                                {
+                                  validator: (_rule, value, callback) => {
+                                    if (value) {
+                                      if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                        callback(
+                                          (window as any).RCi18n({
+                                            id: 'Marketing.1-9999'
+                                          })
+                                        );
+                                      }
+                                    }
+                                    callback();
+                                  }
+                                  // callback();
+                                }
+                              ],
+                              initialValue: level.limitAmount
+                            })(
+                              <Input
+                                // style={{ width: 200 }}
+                                className="input-width"
+                                title={
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.1-9999'
+                                  })
+                                }
+                                placeholder={
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.1-9999'
+                                  })
+                                }
+                                onChange={(e) => {
+                                  this.onChange(index, 'limitAmount', e.target.value);//parseInt
+                                }}
+                                value={level.limitAmount}
+                              />
+                            )}
                             &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                          </>
-                        )}
-                      </FormItem>
-                      {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
+                          </FormItem>
+                          {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
+                        </div>
+                      </div>
                     </HasError>
                   )}
                 </FormItem>

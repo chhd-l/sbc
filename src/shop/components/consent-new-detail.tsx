@@ -23,7 +23,7 @@ class StepNewConsent extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      pageType: this.props.intl.formatMessage({ id: 'Setting.Detail' }),
+      pageType: (window as any).RCi18n({ id: 'Setting.Detail' }),
       content: [],
       consentTitle: true,
       detailType: false,
@@ -152,7 +152,7 @@ class StepNewConsent extends Component<any, any> {
           <div className="detail-form">
             <FormItem>
               <SelectGroup
-                label={this.props.intl.formatMessage({ id: 'Setting.Category' })}
+                label={(window as any).RCi18n({ id: 'Setting.Category' })}
                 //defaultValue={this.state.editList.consentCategory}
                 style={{ width: 280 }}
                 onChange={(value) => {
@@ -172,7 +172,7 @@ class StepNewConsent extends Component<any, any> {
             </FormItem>
             <FormItem>
               <Input
-                addonBefore={this.props.intl.formatMessage({ id: 'Setting.Consentid' })}
+                addonBefore={(window as any).RCi18n({ id: 'Setting.Consentid' })}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -188,7 +188,7 @@ class StepNewConsent extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue="Optional"
-                label={this.props.intl.formatMessage({ id: 'Setting.Fieldtype' })}
+                label={(window as any).RCi18n({ id: 'Setting.Fieldtype' })}
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -213,7 +213,7 @@ class StepNewConsent extends Component<any, any> {
             </FormItem>
             <FormItem>
               <Input
-                addonBefore={this.props.intl.formatMessage({ id: 'Setting.Consentcode' })}
+                addonBefore={(window as any).RCi18n({ id: 'Setting.Consentcode' })}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -229,7 +229,7 @@ class StepNewConsent extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue="Landing page"
-                label={this.props.intl.formatMessage({ id: 'Setting.Page' })}
+                label={(window as any).RCi18n({ id: 'Setting.Page' })}
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -250,7 +250,7 @@ class StepNewConsent extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue="E-mail in"
-                label={this.props.intl.formatMessage({ id: 'Setting.Consenttype' })}
+                label={(window as any).RCi18n({ id: 'Setting.Consenttype' })}
                 style={{ width: 280 }}
                 onChange={(value, index) => {
                   value = value === '' ? null : value;
@@ -276,7 +276,7 @@ class StepNewConsent extends Component<any, any> {
               <FormItem>
                 <SelectGroup
                   defaultValue="Content"
-                  label={this.props.intl.formatMessage({ id: 'Setting.Consenttitle' })}
+                  label={(window as any).RCi18n({ id: 'Setting.Consenttitle' })}
                   onChange={(value, index) => {
                     value = value === '' ? null : value;
                     this.handleConsentTitle(index);
@@ -296,7 +296,7 @@ class StepNewConsent extends Component<any, any> {
               </FormItem>
             </div>
 
-            <BraftEditor className="my-editor" controls={controls} placeholder={this.props.intl.formatMessage({ id: 'Setting.Pleaseenterthetext' })} />
+            <BraftEditor className="my-editor" controls={controls} placeholder={(window as any).RCi18n({ id: 'Setting.Pleaseenterthetext' })} />
 
             {/*
             <div className="edit-content">
@@ -354,7 +354,7 @@ class StepNewConsent extends Component<any, any> {
                       </div>
                       <div className="add-i">
                         <Input
-                          placeholder={this.props.intl.formatMessage({ id: 'Setting.Pleaseenterkeywords' })}
+                          placeholder={(window as any).RCi18n({ id: 'Setting.Pleaseenterkeywords' })}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             content1 = value;

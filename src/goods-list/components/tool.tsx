@@ -139,7 +139,7 @@ class Tool extends React.Component<any, any> {
     const { selectedSpuKeys, setFeightVisible } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
 
-      message.error(this.props.intl.formatMessage({ id: 'Product.atLeastOneItem' }));
+      message.error((window as any).RCi18n({ id: 'Product.atLeastOneItem' }));
       return;
     } else {
       setFeightVisible(true);
@@ -151,11 +151,11 @@ class Tool extends React.Component<any, any> {
 
     if (selectedSpuKeys.count() < 1) {
 
-      message.error(this.props.intl.formatMessage({ id: 'Product.atLeastOneItem' }));
+      message.error((window as any).RCi18n({ id: 'Product.atLeastOneItem' }));
       return;
     }
-    let title = this.props.intl.formatMessage({ id: 'Product.Prompt' })
-    let content = this.props.intl.formatMessage({ id: 'Product.putProductsOnShelves' })
+    let title = (window as any).RCi18n({ id: 'Product.Prompt' })
+    let content = (window as any).RCi18n({ id: 'Product.putProductsOnShelves' })
     confirm({
 
       title: title,
@@ -169,11 +169,11 @@ class Tool extends React.Component<any, any> {
   _spuOffSale = () => {
     const { spuOffSale, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error(this.props.intl.formatMessage({ id: 'Product.atLeastOneItem' }));
+      message.error((window as any).RCi18n({ id: 'Product.atLeastOneItem' }));
       return;
     }
-    let title = this.props.intl.formatMessage({ id: 'Product.Prompt' })
-    let content = this.props.intl.formatMessage({ id: 'Product.putProductsOnShelves' })
+    let title = (window as any).RCi18n({ id: 'Product.Prompt' })
+    let content = (window as any).RCi18n({ id: 'Product.putProductsOnShelves' })
     confirm({
       title: title,
       content: content,
@@ -186,12 +186,12 @@ class Tool extends React.Component<any, any> {
   _delGoods = () => {
     const { spuDelete, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error(this.props.intl.formatMessage({ id: 'Product.atLeastOneItem' }));
+      message.error((window as any).RCi18n({ id: 'Product.atLeastOneItem' }));
       return;
     }
 
-    let title = this.props.intl.formatMessage({ id: 'Product.Prompt' })
-    let content = this.props.intl.formatMessage({ id: 'Product.deleteThisProduct' })
+    let title = (window as any).RCi18n({ id: 'Product.Prompt' })
+    let content = (window as any).RCi18n({ id: 'Product.deleteThisProduct' })
     confirm({
       title: title,
       content: content,

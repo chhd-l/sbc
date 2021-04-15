@@ -407,12 +407,12 @@ class FullGiftForm extends React.Component<any, any> {
               {
                 required: true,
                 whitespace: true,
-                message: this.props.intl.formatMessage({
+                message: (window as any).RCi18n({
                   id: 'Marketing.PleaseInputPromotionCode'
                 })
               },
               { min: 1, max: 20, message:
-                  this.props.intl.formatMessage({
+                  (window as any).RCi18n({
                     id: 'Marketing.words'
                   })
               },
@@ -455,19 +455,19 @@ class FullGiftForm extends React.Component<any, any> {
                 required: true,
                 whitespace: true,
                 message:
-                  this.props.intl.formatMessage({
+                  (window as any).RCi18n({
                     id: 'Marketing.PleaseInputPromotionName'
                   })
               },
               { min: 1, max: 40, message:
-                  this.props.intl.formatMessage({
+                  (window as any).RCi18n({
                     id: 'Marketing.40Words'
                   })
               },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback,
-                    this.props.intl.formatMessage({
+                    (window as any).RCi18n({
                       id: 'Marketing.PromotionName'
                     })
                   );
@@ -477,7 +477,7 @@ class FullGiftForm extends React.Component<any, any> {
             onChange: (e) => this.onBeanChange({ marketingName: e.target.value }),
             initialValue: marketingBean.get('marketingName')
           })(<Input
-            placeholder={this.props.intl.formatMessage({
+            placeholder={(window as any).RCi18n({
               id: 'Marketing.noMoreThan40Words'
             })}
             style={{ width: 360 }} />)}
@@ -487,7 +487,7 @@ class FullGiftForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: this.props.intl.formatMessage({
+                message: (window as any).RCi18n({
                   id: 'Marketing.PleaseSelectStartingAndEndTime'
                 })
               },
@@ -497,7 +497,7 @@ class FullGiftForm extends React.Component<any, any> {
                     callback();
                   } else {
                     callback(
-                      this.props.intl.formatMessage({
+                      (window as any).RCi18n({
                         id: 'Marketing.PleaseSelectStartingAndEndTime'
                       })
                     );
@@ -524,9 +524,9 @@ class FullGiftForm extends React.Component<any, any> {
               //format={'YYYY-MM-DD' + ' ' + moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')}
               // format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
               placeholder={[
-                this.props.intl.formatMessage({
+                (window as any).RCi18n({
                   id: 'Marketing.StartTime'
-                }), this.props.intl.formatMessage({
+                }), (window as any).RCi18n({
                   id: 'Marketing.EndTime'
                 })
               ]}
@@ -541,7 +541,7 @@ class FullGiftForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: this.props.intl.formatMessage({
+                message: (window as any).RCi18n({
                   id: 'Marketing.fullgifttype',
                 })
               }
@@ -612,7 +612,7 @@ class FullGiftForm extends React.Component<any, any> {
                     if ((!value)) {//!marketingBean.get('storeCateIds') || marketingBean.get('storeCateIds').size === 0)
                       //
                       callback(
-                        this.props.intl.formatMessage({
+                        (window as any).RCi18n({
                           id: 'Marketing.Pleaseselectcategory'
                         })
                       );
@@ -633,12 +633,12 @@ class FullGiftForm extends React.Component<any, any> {
                 //treeData ={getGoodsCate}
                 // showCheckedStrategy = {SHOW_PARENT}
                 placeholder={
-                  this.props.intl.formatMessage({
+                  (window as any).RCi18n({
                     id: 'Marketing.Pleaseselectcategory'
                   })
                 }
                 notFoundContent={
-                  this.props.intl.formatMessage({
+                  (window as any).RCi18n({
                     id: 'Marketing.Nosalescategory'
                   })
                 }
@@ -679,7 +679,7 @@ class FullGiftForm extends React.Component<any, any> {
                     if ((!value && marketingBean.get('scopeType') === 3)) { //marketingBean.get('attributeValueIds') || marketingBean.get('attributeValueIds').size === 0)
                       //
                       callback(
-                        this.props.intl.formatMessage({
+                        (window as any).RCi18n({
                           id: 'Marketing.Pleaseselectattribute'
                         })
                       );
@@ -699,12 +699,12 @@ class FullGiftForm extends React.Component<any, any> {
                 //treeData ={getGoodsCate}
                 // showCheckedStrategy = {SHOW_PARENT}
                 placeholder={
-                  this.props.intl.formatMessage({
+                  (window as any).RCi18n({
                     id: 'Marketing.Pleaseselectattribute'
                   })
                 }
                 notFoundContent={
-                  this.props.intl.formatMessage({
+                  (window as any).RCi18n({
                     id: 'Marketing.Noattribute'
                   })
                 }
@@ -757,7 +757,7 @@ class FullGiftForm extends React.Component<any, any> {
                   validator: (_rule, value, callback) => {
                     if (!value && marketingBean.get('joinLevel') === -3) {
                       callback(
-                        this.props.intl.formatMessage({
+                        (window as any).RCi18n({
                           id: 'Marketing.Pleaseselectgroup'
                         })
                       );
@@ -787,7 +787,7 @@ class FullGiftForm extends React.Component<any, any> {
                   validator: (_rule, value, callback) => {
                     if (!value && marketingBean.get('joinLevel') === -4) {
                       callback(
-                        this.props.intl.formatMessage({
+                        (window as any).RCi18n({
                           id: 'Marketing.Pleaseenteremailsuffix'
                         })
                       );
@@ -1096,7 +1096,7 @@ class FullGiftForm extends React.Component<any, any> {
             //   .then(({ res }) => {
             // if (res.code == Const.SUCCESS_CODE) {
 
-            submitFullGift(marketingBean.toJS())//.then((res) => this._responseThen(res));
+            submitFullGift(marketingBean.toJS()).then((res) => this._responseThen(res));
           }
         }
       }
@@ -1126,10 +1126,10 @@ class FullGiftForm extends React.Component<any, any> {
     if (levelType == '' || !marketingBean.get(levelType)) return;
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
-        title: this.props.intl.formatMessage({
+        title: (window as any).RCi18n({
           id: 'Marketing.SwitchType'
         }),
-        content: this.props.intl.formatMessage({
+        content: (window as any).RCi18n({
           id: 'Marketing.SwitchingTypes'
         }),
         onOk() {
@@ -1286,10 +1286,10 @@ class FullGiftForm extends React.Component<any, any> {
    * @private
    */
   _responseThen = (response) => {
-    if (response.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
-      history.push('/marketing-list');
-    }
+    // if (response.res.code == Const.SUCCESS_CODE) {
+    //   message.success('Operate successfully');
+    //   history.push('/marketing-list');
+    // }
     this.setState({ saveLoading: false });
   };
 }

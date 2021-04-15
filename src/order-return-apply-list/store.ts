@@ -1,7 +1,7 @@
 import { Store } from 'plume2';
 import { message } from 'antd';
 import { fromJS } from 'immutable';
-import { Const, history, QMFloat } from 'qmkit';
+import { Const, history, QMFloat,RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import ListActor from './actor/list-actor';
 import LoadingActor from './actor/loading-actor';
@@ -85,7 +85,7 @@ export default class AppStore extends Store {
           if (v.returnFlowState != 'REFUNDED' && v.returnFlowState != 'COMPLETED' && v.returnFlowState != 'REJECT_REFUND' && v.returnFlowState != 'REJECT_RECEIVE' && v.returnFlowState != 'VOID') {
             // 有未处理完的
             canApply = false;
-            errMsg = '该订单关联了处理中的退单，不可再次申请';
+            errMsg = RCi18n({id:'Order.returnOrder.errMsg1'});
           }
         });
 
@@ -97,14 +97,14 @@ export default class AppStore extends Store {
               // 已完成申请的
               if (v.returnFlowState == 'COMPLETED') {
                 canApply = false;
-                errMsg = '无可退商品';
+                errMsg =RCi18n({id:'Order.returnOrder.errMsg2'});
               }
             });
           } else {
             if (trade.getIn(['context', 'tradeItems']) && trade.getIn(['context', 'tradeItems']).filter((v) => v.get('canReturnNum') > 0).length == 0) {
               // 退货申请，如果没有可退商品则不允许申请
               canApply = false;
-              errMsg = '无可退商品';
+              errMsg = RCi18n({id:'Order.returnOrder.errMsg2'});
             } else if (trade.getIn(['context', 'payInfo', 'payTypeId']) == '0') {
               // 在线支付需判断退款金额
               let totalApplyPrice = 0;
@@ -117,7 +117,7 @@ export default class AppStore extends Store {
 
               if (totalApplyPrice >= trade.getIn(['context', 'tradePrice', 'totalPrice']) && trade.getIn(['context', 'tradePrice', 'totalPrice']) !== 0) {
                 canApply = false;
-                errMsg = '无可退金额';
+                errMsg =RCi18n({id:'Order.returnOrder.errMsg3'});
               }
             }
           }

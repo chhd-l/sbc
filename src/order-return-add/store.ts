@@ -2,7 +2,7 @@ import { IOptions, Store } from 'plume2';
 import { fromJS, Map } from 'immutable';
 import { message, Modal } from 'antd';
 import { IList } from 'typings/globalType';
-import { Const, history, QMFloat } from 'qmkit';
+import { Const, history, QMFloat,RCi18n } from 'qmkit';
 import FormActor from './actor/form-actor';
 import TradeActor from './actor/trade-actor';
 import PriceActor from './actor/price-actor';
@@ -316,7 +316,7 @@ export default class AppStore extends Store {
 
       // 如果所有商品的退货数量都为0
       if (tradeItems.size == 0) {
-        message.error('请填写退货数量');
+        message.error(RCi18n({id: 'Order.returnOrder.returnQuantity'}));
         return;
       }
 
@@ -412,7 +412,7 @@ export default class AppStore extends Store {
     result = await addApply(param.toJS());
 
     if (result.res.code == Const.SUCCESS_CODE) {
-      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
+      message.success(result.res.message);
       history.push('/order-return-list');
     }
     this.dispatch('loading:end');

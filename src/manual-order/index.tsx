@@ -168,7 +168,7 @@ class ManualOrder extends Component<any, any> {
             {current === 0 && (
               <span>
                 <Button type="primary">
-                  <a style={{ color: '#fff' }} target="_blank" href={`${url}${prefix}${prefix?'':'/'}register`}>
+                  <a style={{ color: '#fff' }} target="_blank" href={`${url}register`}>
                     <FormattedMessage id="Order.Register" />
                   </a>
                 </Button>

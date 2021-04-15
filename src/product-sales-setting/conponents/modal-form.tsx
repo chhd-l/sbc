@@ -130,7 +130,7 @@ class ModalForm extends Component<Props, any> {
                   message: <FormattedMessage id="Product.PleaseInputFrequencyValue" />
                 }
               ]
-            })(<Input placeholder="Please input  frequency value!" />)}
+            })(<Input type="number" placeholder="Please input  frequency value!" />)}
           </Form.Item>
           <Form.Item
             label={

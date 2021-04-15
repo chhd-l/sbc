@@ -47,6 +47,11 @@ const largeformItemLayout = {
     span: 10
   }
 };
+const discountFormLayout = {
+  wrapperCol: {
+    span: 24
+  }
+}
 const radioStyle = {
   display: 'block',
   height: '40px',
@@ -548,7 +553,7 @@ class FullDiscountForm extends React.Component<any, any> {
           </FormItem>
         )}
 
-        <FormItem {...settingRuleFrom} label={marketingBean.get('promotionType') === 0 ? '': <FormattedMessage id="Marketing.Forthefirstsubscription" />} required={true} labelAlign="left">
+        <FormItem {...discountFormLayout} label={marketingBean.get('promotionType') === 0 ? '': <FormattedMessage id="Marketing.Forthefirstsubscription" />} required={true} labelAlign="left">
           {getFieldDecorator(
             'rules',
             {}

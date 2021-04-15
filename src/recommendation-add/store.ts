@@ -84,7 +84,7 @@ export default class AppStore extends Store {
     this.dispatch('pets:funType', value)
   }
   //scan result
-  findByApptNo = async (apptNo = 'AP663253') => {
+  findByApptNo = async (apptNo) => {
     const { res } = await webapi.fetchFelinFindByNoScan({ apptNo })
     if (res.code === Const.SUCCESS_CODE) {
       const { settingVO, pets, felinReco } = res.context;
@@ -105,7 +105,7 @@ export default class AppStore extends Store {
      if(settingVO.apptNo){
       message.success(res.message)
      }else{
-      message.success((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
+      message.error((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
      }
       
     }

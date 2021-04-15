@@ -15,7 +15,7 @@ export default class FillInPetInfoActor extends Actor {
         suggest: '',
         optimal: '',
         pickup: true,
-        fillDate: ''
+        fillDate: null
       },//基础
       appointmentVO: {},//扫码信息
       customerPet: {},//宠物信息

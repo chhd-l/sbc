@@ -21,7 +21,6 @@ class ManualOrder extends Component<any, any> {
       current: 0,
       status: 1,
       url:'',
-      prefix:'',
       customer: {
         customerId: '',
         customerName: '',
@@ -53,8 +52,8 @@ class ManualOrder extends Component<any, any> {
   }
 
   turnShowPage = (token) => {
-    let { customer,url,prefix } = this.state;
-    let winObj = window.open(`${url+prefix}${prefix?'':'/'}cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+    let { customer,url } = this.state;
+    let winObj = window.open(`${url}cart?stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
     let loop = setInterval(async () => {
       if (winObj.closed) {
         clearInterval(loop);
@@ -110,17 +109,14 @@ class ManualOrder extends Component<any, any> {
   }
 
   componentDidMount(){
-    let url ='',prefix='';
-    if(['fr','ru','tr'].includes((window as any).countryEnum[this.state.storeId])){
-      prefix='/shop/'
-      url=`${(Const as any).VALET_ORDER_URL}${(window as any).countryEnum[this.state.storeId]}`
+    let url ='',storeId=(window as any).countryEnum[this.state.storeId];
+    if(['fr','ru','tr'].includes(storeId)){
+      url=`${(Const as any).VALET_ORDER_URL(storeId)}`
     }else{
-      prefix=''
-      url=`${(Const as any).VALET_ORDER_NOMAL_URL}${(window as any).countryEnum[this.state.storeId]}`
+      url=`${(Const as any).VALET_ORDER_NOMAL_URL}${storeId}`
     }
     this.setState({
-      url,
-      prefix:prefix
+      url
     })
   }
 
@@ -145,7 +141,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Selected product',
-        controller: <SelectedProduct url={url} prefix={prefix} stepName={'Product list'} carts={this.getCartsList} storeId={storeId} customer={customer} />
+        controller: <SelectedProduct url={url} stepName={'Product list'} carts={this.getCartsList} storeId={storeId} customer={customer} />
       },
       {
         title: 'Delivery & payment information',

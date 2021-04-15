@@ -5,6 +5,8 @@ import moment from 'moment';
 import CustomerList from './components/customer-list';
 import AppointmentDatePicker from './components/appointment-date-picker';
 import { addNewAppointment, findAppointmentById, updateAppointmentById } from './webapi';
+import { FormattedMessage } from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 import './index.less';
 
@@ -143,20 +145,20 @@ class NewAppointment extends React.Component<any, any> {
       <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
         <Breadcrumb>
           <Breadcrumb.Item>
-            <a href="/appointment-list">Appointment list</a>
+            <a href="/appointment-list"><FormattedMessage id="Appointment.list" /></a>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>Appointment</Breadcrumb.Item>
+          <Breadcrumb.Item><FormattedMessage id="Appointment.Appointment" /></Breadcrumb.Item>
         </Breadcrumb>
         <div className="container">
-          <Headline title={this.props.match.params.id ? 'Update appointment' : 'Add new appointment'} />
+          <Headline title={this.props.match.params.id ? RCi18n({id:'Appointment Update appointment'}) : RCi18n({id:'Appointment ANA'})} />
           <Form wrapperCol={{ sm: { span: 16 } }} labelCol={{ sm: { span: 4 } }}>
-            <Form.Item label="Select appointment type">
+            <Form.Item label={RCi18n({id:'Appointment SAT'})}>
               {getFieldDecorator('type', {
                 initialValue: '1'
               })(
                 <Radio.Group>
-                  <Radio value="1">Offline</Radio>
-                  <Radio value="0">Online</Radio>
+                  <Radio value="1"><FormattedMessage id="Appointment.Offline" /></Radio>
+                  <Radio value="0"><FormattedMessage id="Appointment.Online" /></Radio>
                 </Radio.Group>
               )}
             </Form.Item>

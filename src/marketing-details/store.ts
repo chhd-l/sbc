@@ -87,7 +87,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.getGoodsCate();
     if (res && res.code === Const.SUCCESS_CODE) {
       const allCategary = res.context
-      debugger
       let  currentCategary = []
        allCategary.map(item => {
          storeCateIds.map(cate => {
@@ -111,7 +110,6 @@ export default class AppStore extends Store {
       pageNum: 0
     };
     const { res } = await webapi.getAllAttribute(params);
-debugger
     if (res.code == Const.SUCCESS_CODE) {
       let  currentAttribute = []
       let attributesList = fromJS(res.context.attributesList)

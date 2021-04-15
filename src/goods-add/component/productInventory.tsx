@@ -184,24 +184,22 @@ class SkuForm extends React.Component<any, any> {
         </div>
       ),
       key: 'stock',
-      render: (rowInfo) => {
+      render: (rowInfo,index) => {
         let a = null;
         let b = null;
         let c = 0;
         let d = true
-        console.log(addSkUProduct.length,1111111);
-
-        if (addSkUProduct.length != undefined) {
+        console.log(addSkUProduct,1111111);
+        console.log(rowInfo,3445);
+        if (rowInfo.goodsInfoBundleRels.length != 0) {
           c = rowInfo.stock
           d = true
-          console.log(rowInfo,222222);
-
         }else {
           c = 0
           d = false
-          console.log(rowInfo,333333);
-
         }
+
+
         /*a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || null;
         a = a ? a : { minStock: '' };
         c = rowInfo.stock || 0
@@ -248,7 +246,6 @@ class SkuForm extends React.Component<any, any> {
           }
 
         }*/
-
 
         return (
           <Row>

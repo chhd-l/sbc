@@ -94,7 +94,6 @@ class AutomationForm extends Component<any, any> {
           communicationChannel: automationForm.communicationChannel ? automationForm.communicationChannel.join(';') : null,
           workflow: automationForm.workflow
         };
-        debugger
         if(new Date(params.eventStartTime) > new Date(params.trackingStartTime)){
           return message.error("'Tracking start time' not later than 'Event start time'")
         }

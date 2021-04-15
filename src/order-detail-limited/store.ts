@@ -73,7 +73,7 @@ export default class AppStore extends Store {
     const { res } = await addPay(copy);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       //刷新
       const tid = this.state().get('tid');
       this.setReceiveVisible();
@@ -110,7 +110,7 @@ export default class AppStore extends Store {
 
     this.hideRejectModal();
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       const tid = this.state().get('tid');
       this.init(tid);
     } else {
@@ -142,7 +142,7 @@ export default class AppStore extends Store {
         })
         .toJS();
       if (shippingItemList.length <= 0 || fromJS(shippingItemList).some((val) => !ValidConst.noZeroNumber.test(val.get('itemNum')))) {
-        message.error('Please input the delivery quantity');
+        message.error(RCi18n({id:'Order.InputQuantity'}));
       } else {
         this.showDeliveryModal();
       }
@@ -161,7 +161,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       //刷新
       const tid = this.state().get('tid');
       this.init(tid);
@@ -215,7 +215,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.deliver(tid, tradeDelivery);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       //刷新
       this.init(tid);
     }
@@ -246,7 +246,7 @@ export default class AppStore extends Store {
 
     const { res } = await webapi.obsoleteDeliver(tid, params);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       this.init(tid);
     }
   };
@@ -262,7 +262,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.retrial(tid);
     if (res.code == Const.SUCCESS_CODE) {
       this.init(tid);
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
     }
   };
 
@@ -283,7 +283,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.destroyOrder(params);
 
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       this.init(tid);
     }
   };
@@ -318,7 +318,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.remedySellerRemark(tid, sellerRemark);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
     }
@@ -342,7 +342,7 @@ export default class AppStore extends Store {
     const buyerId = this.state().getIn(['detail', 'buyer', 'id']);
     const { res } = await webapi.verifyBuyer(buyerId);
     if (res) {
-      message.error('The customer has been deleted and cannot be modified！');
+      message.error(RCi18n({id:'Order.modifiedErr'}));
       return;
     } else {
       history.push('/order-edit/' + tid);
@@ -381,7 +381,7 @@ export default class AppStore extends Store {
     ids.push(id);
     const { res } = await webapi.payConfirm(ids);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
     }

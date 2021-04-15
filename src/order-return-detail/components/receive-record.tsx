@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Modal } from 'antd';
 
 import LogisticsAdd from './logistics-add';
+import { RCi18n } from 'qmkit';
 
 /**
  * 退款记录
@@ -20,22 +21,24 @@ export default class ReceiverRecord extends React.Component<any, any> {
     return (
       <div style={styles.container}>
         <label>
-          【物流信息】<a
+          { '[' + RCi18n({id:'Order.logisticsInformation'}) +']' }<a
             href="javascript:void(1)"
             onClick={() => this.setState({ addLogisticsVisible: true })}
           >
-            填写物流信息
+            {
+              RCi18n({id:'Order.FillLogisticsInformation'})
+            }
           </a>
         </label>
         <Modal  maskClosable={false}
-          title="填写物流信息"
+          title={RCi18n({id:'Order.FillLogisticsInformation'})}
           visible={this.state.addLogisticsVisible}
           onOk={() => {}}
           onCancel={() => {
             this.setState({ addLogisticsVisible: false });
           }}
-          okText="确认"
-          cancelText="取消"
+          okText={RCi18n({id:'Order.btnConfirm'})}
+          cancelText={RCi18n({id:'Order.btnCancel'})}
         >
           <LogisticsAdd />
         </Modal>

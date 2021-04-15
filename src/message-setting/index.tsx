@@ -11,7 +11,7 @@ class MessageSetting extends Component<any, any> {
     super(props);
     this.state = {
       visible: false,
-      // (window as any).RCi18n({id:'Order.offline.consumerEmail'})
+      // RCi18n({id:'Order.offline.consumerEmail'})
 
       emailApiList: [
         // {
@@ -56,7 +56,7 @@ class MessageSetting extends Component<any, any> {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
     })
   }
 
@@ -89,7 +89,7 @@ class MessageSetting extends Component<any, any> {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
     })
   }
   openEditModal=(item)=>{
@@ -118,7 +118,7 @@ class MessageSetting extends Component<any, any> {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
     })
   }
 
@@ -165,7 +165,7 @@ class MessageSetting extends Component<any, any> {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
     })
   }
 
@@ -209,11 +209,11 @@ class MessageSetting extends Component<any, any> {
 
                           <p style={{ fontWeight: 600 }}>{item.emailTypeName}</p>
                           <div style={styles.switchPositionStyle}>
-                            <Popconfirm title={(window as any).RCi18n({ id: 'Marketing.Message.editTips' })}
+                            <Popconfirm title={RCi18n({ id: 'Marketing.Message.editTips' })}
                               disabled={+item.status === 1}
                               onConfirm={() => this.changeSettingStatus(item.id)}
-                              okText={(window as any).RCi18n({ id: 'Marketing.Yes' })}
-                              cancelText={(window as any).RCi18n({ id: 'Marketing.No' })}>
+                              okText={RCi18n({ id: 'Marketing.Yes' })}
+                              cancelText={RCi18n({ id: 'Marketing.No' })}>
                               <Switch checked={+item.status === 1} disabled={+item.status === 1} size="small" />
                             </Popconfirm>
                           </div>
@@ -244,7 +244,7 @@ class MessageSetting extends Component<any, any> {
             >
               <Form layout="vertical">
                 <FormItem label={<FormattedMessage id="Marketing.Tips" />} style={styles.formItem}>
-                  <Alert message={(window as any).RCi18n({ id: 'Marketing.Message.settingTips' })} type="warning" />
+                  <Alert message={RCi18n({ id: 'Marketing.Message.settingTips' })} type="warning" />
                 </FormItem>
                 <FormItem label={<FormattedMessage id="Marketing.Sender" />} style={styles.formItem}>
                   {getFieldDecorator('fromEmail', {

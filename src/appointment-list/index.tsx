@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal } from 'antd';
 import { getAppointmentList, updateAppointmentById, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -142,7 +144,7 @@ export default class AppointmentList extends React.Component<any, any> {
     if (pagination.total > 0) {
       return exportAppointmentList(searchForm);
     } else {
-      message.error('no record has found');
+      message.error(RCi18n({id:'Appointment.NRHF'}));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });
@@ -152,7 +154,7 @@ export default class AppointmentList extends React.Component<any, any> {
   onExportSelected = () => {
     const { selectedRowKeys } = this.state;
     if (selectedRowKeys.length === 0) {
-      message.error('no appointment has been selected');
+      message.error(RCi18n({id:'Appointment.NAHBS'}));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });
@@ -168,7 +170,7 @@ export default class AppointmentList extends React.Component<any, any> {
           showCard: true
         });
       } else {
-        message.error('Can not find consumer, please try again');
+        message.error(RCi18n({id:'Appointment.NAHBS'}));
       }
     });
   };
@@ -182,61 +184,61 @@ export default class AppointmentList extends React.Component<any, any> {
   render() {
     const columns = [
       {
-        title: 'Appointment no',
+        title: RCi18n({id:'Appointment.No.'}),
         dataIndex: 'apptNo',
         key: 'd1'
       },
       {
-        title: 'Appointment time',
+        title: RCi18n({id:'Appointment.Time'}),
         dataIndex: 'apptTime',
         key: 'd2',
         render: (text, record) => <div>{`${moment(record.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')} ${record.apptTime}`}</div>
       },
       {
-        title: 'Pet owner name',
+        title:  RCi18n({id:'Appointment.PON'}),
         dataIndex: 'consumerName',
         key: 'd3'
       },
       {
-        title: 'Pet owner email',
+        title:  RCi18n({id:'Appointment.Pet OE'}),
         dataIndex: 'consumerEmail',
         key: 'd4'
       },
       {
-        title: 'Phone number',
+        title: RCi18n({id:'Appointment.Phone number'}),
         dataIndex: 'consumerPhone',
         key: 'd8'
       },
       {
-        title: 'Appointment type',
+        title: RCi18n({id:'Appointment.Type'}),
         dataIndex: 'type',
         key: 'd5',
-        render: (text) => <div>{text === '0' ? 'Online' : text === '1' ? 'Offline' : ''}</div>
+        render: (text) => <div>{text === '0' ? RCi18n({id:'Appointment.Online'}) : text === '1' ? RCi18n({id:'Appointment.Offline'}) : ''}</div>
       },
       {
-        title: 'Status',
+        title: RCi18n({id:'Appointment.Operation'}),
         dataIndex: 'status',
         key: 'd6',
-        render: (text) => <div>{text === 0 ? 'Booked' : text === 1 ? 'Arrived' : text === 2 ? 'Canceled' : ''}</div>
+        render: (text) => <div>{text === 0 ? RCi18n({id:'Appointment.Booked'}) : text === 1 ? RCi18n({id:'Appointment.Arrived'})  : text === 2 ? RCi18n({id:'Appointment.Canceled'}) : ''}</div>
       },
       {
-        title: 'Operation',
+        title: RCi18n({id:'Appointment.Operatio'}),
         dataIndex: 'status',
         key: 'd7',
         render: (text, record) => (
           <>
-            <Tooltip title="Edit">
+            <Tooltip title={RCi18n({id:'Appointment.Edit'})}>
               <Link to={`/appointment-update/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
             </Tooltip>
             {text === 0 && (
-              <Tooltip title="Arrived">
+              <Tooltip title={RCi18n({id:'Appointment.Arrived'})}>
                 <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
-                  <i className="iconfont iconEnabled"></i>
+                  <i className="iconfont iconbtn-disable"></i>
                 </Button>
               </Tooltip>
             )}
             {text === 0 && (
-              <Tooltip title="Cancel">
+              <Tooltip title={RCi18n({id:'Appointment.Cancel'})}>
                 <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 2)} style={{ padding: '0 5px' }}>
                   <i className="iconfont iconbtn-disable"></i>
                 </Button>
@@ -255,13 +257,13 @@ export default class AppointmentList extends React.Component<any, any> {
       <div>
         <BreadCrumb />
         <div className="container-search">
-          <Headline title="Appointment list" />
+          <Headline title={<FormattedMessage id="Appointment.list" />} />
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Appointment no.</p>}
+                    addonBefore={<p style={styles.label}>{<FormattedMessage id="Appointment.No." />}</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value || undefined;
                       this.onSearchFormFieldChange('apptNo', value);
@@ -272,7 +274,7 @@ export default class AppointmentList extends React.Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Pet owner name</p>}
+                    addonBefore={<p style={styles.label}>{<FormattedMessage id="Appointment.PON" />}</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value || undefined;
                       this.onSearchFormFieldChange('consumerName', value);
@@ -282,13 +284,13 @@ export default class AppointmentList extends React.Component<any, any> {
               </Col>
               <Col span={8}>
                 <FormItem>
-                  <DatePicker format="YYYYMMDD" placeholder="Start time" onChange={(date, dateStr) => this.onSearchFormFieldChange('apptDate', dateStr || undefined)} />
+                  <DatePicker format="YYYYMMDD" placeholder={RCi18n({id:'Appointment.Start time'})} onChange={(date, dateStr) => this.onSearchFormFieldChange('apptDate', dateStr || undefined)} />
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Email</p>}
+                    addonBefore={<p style={styles.label}>{<FormattedMessage id="Appointment.Email" />}</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value || undefined;
                       this.onSearchFormFieldChange('consumerEmail', value);
@@ -300,23 +302,23 @@ export default class AppointmentList extends React.Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}>Status</p>}
+                    label={<p style={styles.label}>{<FormattedMessage id="Appointment.Status" />}</p>}
                     style={{ width: 80 }}
                     onChange={(value) => {
                       value = value || undefined;
                       this.onSearchFormFieldChange('status', value);
                     }}
                   >
-                    <Option value="">All</Option>
-                    <Option value="0">Booked</Option>
-                    <Option value="1">Arrived</Option>
-                    <Option value="2">Canceled</Option>
+                    <Option value="">{<FormattedMessage id="Appointment.All" />}</Option>
+                    <Option value="0">{<FormattedMessage id="Appointment.Booked" />}</Option>
+                    <Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Option>
+                    <Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Option>
                   </SelectGroup>
                 </FormItem>
               </Col>
               <Col span={24} style={{ textAlign: 'center' }}>
                 <Button type="primary" onClick={this.onSearch}>
-                  Search
+                {<FormattedMessage id="Appointment.Search" />}
                 </Button>
               </Col>
             </Row>
@@ -326,16 +328,16 @@ export default class AppointmentList extends React.Component<any, any> {
           <Row style={{ marginBottom: 10 }} type="flex" justify="space-between">
             <Col>
               <Button style={{ marginRight: 10 }} onClick={this.onOpenExportModal}>
-                Batch export
+                {<FormattedMessage id="Appointment.Batch export" />}
               </Button>
               <Button type="primary" onClick={() => history.push('/appointment-add')}>
-                Add new
+                {<FormattedMessage id="Appointment.Add new" />}
               </Button>
             </Col>
             <Col>
               <QRScaner id="scan" onScanEnd={this.findByApptNo}>
                 <Button type="primary">
-                  Scan the code
+                {<FormattedMessage id="Appointment.STC" />}
                 </Button>
               </QRScaner>              
             </Col>
@@ -354,11 +356,11 @@ export default class AppointmentList extends React.Component<any, any> {
         </div>
         <ExportModal data={this.state.exportModalData} onHide={this.onCloseExportModal} handleByParams={this.state.exportModalData.exportByParams} handleByIds={this.state.exportModalData.exportByIds} />
         <Modal title="Consumer information" visible={this.state.showCard} okText="Arrived" onCancel={this.onCloseCard} onOk={() => this.updateAppointmentStatus(this.state.scanedInfo, 1)}>
-          <p>Pet owner name: {this.state.scanedInfo.consumerName}</p>
-          <p>Consumer phone: {this.state.scanedInfo.consumerPhone}</p>
-          <p>Consumer email: {this.state.scanedInfo.consumerEmail}</p>
+          <p>{<FormattedMessage id="Appointment.PON" />}: {this.state.scanedInfo.consumerName}</p>
+          <p>{<FormattedMessage id="Appointment.Consumer phone'" />}: {this.state.scanedInfo.consumerPhone}</p>
+          <p>{<FormattedMessage id="Appointment.Consumer.email" />}: {this.state.scanedInfo.consumerEmail}</p>
           <p>
-            Appointment time(YYYY-MM-DD): {this.state.scanedInfo.apptDate ? `${moment(this.state.scanedInfo.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')}` : ''} {this.state.scanedInfo.apptTime}
+          {<FormattedMessage id="Appointment.Time" />}: {this.state.scanedInfo.apptDate ? `${moment(this.state.scanedInfo.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')}` : ''} {this.state.scanedInfo.apptTime}
           </p>
         </Modal>
       </div>

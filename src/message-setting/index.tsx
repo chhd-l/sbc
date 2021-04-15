@@ -73,7 +73,8 @@ class MessageSetting extends Component<any, any> {
         message.success(res.message)
         this.getSettingList()
         this.setState({
-          visible: false
+          visible: false,
+          senderList:[]
         },()=>{
           this.props.form.resetFields()
         })
@@ -100,6 +101,12 @@ class MessageSetting extends Component<any, any> {
       if (res.code === Const.SUCCESS_CODE) {
         console.log(res);
         let senderList = res.context.list
+        // senderList 去重; 重复邮件名会引发UI 框架bug
+        let senderListTemp = []
+        senderList.forEach(item => {
+          senderListTemp.push(item.senderEmail)
+        });
+        senderList = [...new Set(senderListTemp)]
         this.setState({
           settingForm:item,
           loading: false,
@@ -132,7 +139,8 @@ class MessageSetting extends Component<any, any> {
 
   handleCancel = (e) => {
     this.setState({
-      visible: false
+      visible: false,
+      senderList:[]
     },()=>{
       this.props.form.resetFields()
     });
@@ -253,7 +261,7 @@ class MessageSetting extends Component<any, any> {
                     >
                       {
                         senderList&&senderList.map((item,index)=>(
-                          <Option value={item.senderEmail} key={index}>{item.senderEmail}</Option>
+                          <Option value={item} key={index}>{item}</Option>
                         ))
                       }
                     </Select>

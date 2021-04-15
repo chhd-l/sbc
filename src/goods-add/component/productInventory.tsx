@@ -189,8 +189,6 @@ class SkuForm extends React.Component<any, any> {
         let b = null;
         let c = 0;
         let d = true
-        console.log(addSkUProduct,1111111);
-        console.log(rowInfo,3445);
         if (rowInfo.goodsInfoBundleRels.length != 0) {
           c = rowInfo.stock
           d = true

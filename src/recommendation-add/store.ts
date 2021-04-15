@@ -100,6 +100,7 @@ export default class AppStore extends Store {
           item.birthOfPets=moment(item.birthOfPets).format('YYYY-MM-DD')
         })
       }
+      felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')
       let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
       this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
      if(settingVO.apptNo){

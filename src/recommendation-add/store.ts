@@ -90,7 +90,7 @@ export default class AppStore extends Store {
       const { settingVO, pets, felinReco } = res.context;
       let goodsQuantity = JSON.parse(felinReco?.goodsIds ?? '[]')
       let list = pets.map(item => {
-        let _tempWeight =JSON.parse(JSON.parse(item.weight))
+        let _tempWeight =item.weight.indexOf('/')>-1?JSON.parse(JSON.parse(item.weight)):JSON.parse(item.weight)
         item.measure = _tempWeight.measure;
         item.measureUnit = _tempWeight.measureUnit;
         return item

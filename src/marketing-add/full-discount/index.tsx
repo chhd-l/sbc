@@ -9,7 +9,7 @@ import FullDiscountForm from './components/full-discount-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
 const WrappedForm = Form.create()(FullDiscountForm);
-
+import '../index.less'
 import * as webapi from '@/marketing-add/webapi';
 import { fromJS } from 'immutable';
 @StoreProvider(AppStore, { debug: __DEV__ })

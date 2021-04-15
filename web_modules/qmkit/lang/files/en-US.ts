@@ -1303,7 +1303,7 @@ export default {
   'Order.UpdateFailed': 'Update Failed',
   'Order.PleaseInputComment': 'Please input comment',
   'Order.deleteThisComment': 'Are you sure you want to delete this comment?',
-  'Order.LogisticMandotory': 'Logistic info is mandotory',
+  'Order.LogisticMandotory': 'Logistic info is mandatory',
   'Order.LogisticsCompany': 'Logistics company',
   'Order.Yes': 'Yes',
   'Order.No': 'No',
@@ -1629,6 +1629,16 @@ export default {
   'Order.ruturnOrder.verifyTip1':'The input is not valid E-mail!',
   'Order.ruturnOrder.verifyTip2':'Please input your E-mail!',
   'Order.ruturnOrder.verifyTip3':'Please input your password!',
+  'Order.cannotModified':'The order has been cancelled and cannot be modified!',
+  'Order.customerCannotModified':'The customer has been deleted and the order cannot be modified',
+  'Order.receipt':'Confirm successful receipt!',
+  'Order.SaveDeliverTip':'Save deliver successfully!',
+  'Order.VoidTip':'Void shipment record succeeded!',
+  'Order.exportedTip':'Please select the order to be exported',
+  'Order.sendSuccessfully':'send successfully!',
+  'Order.sendFailed':'send failed!',
+  'Order.switchFailed':'switch failed!',
+  'Order.exportedTip2':'Please select data to export',
 
 
 

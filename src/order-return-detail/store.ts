@@ -161,7 +161,7 @@ export default class AppStore extends Store {
       if (code != Const.SUCCESS_CODE) {
       } else {
         // 退款的回调是异步的，立刻刷新页面可能退单的状态还没有被回调修改。所以先给个提示信息，延迟3秒后再刷新列表
-        message.error(errorInfo);
+        message.success(errorInfo);
       }
 
       setTimeout(() => this.init(rid), 3000);
@@ -214,7 +214,7 @@ export default class AppStore extends Store {
       .realRefund(rid,refundPrice)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Order.OperateSuccessfully'}));
           this.dispatch('change-refund-price', {
             refundPrice:null
           });

@@ -295,7 +295,7 @@ export default class AppStore extends Store {
     let selected = this.state().get('selected');
 
     if (selected.count() === 0) {
-      message.error('Please select data to export');
+      message.error(RCi18n({id:'Order.exportedTip2'}));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

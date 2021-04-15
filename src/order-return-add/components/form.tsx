@@ -194,7 +194,7 @@ class ReturnOrderForm extends React.Component<any, any> {
               ) : null}
             </QMUpload>
             <Tips
-              title={<FormattedMessage id="Order.PleaseaddyourreturncredentialsTip" />}
+              title={<FormattedMessage id="Order.PleaseaddyourreturOrder.savencredentialsTip" />}
            />
           </FormItem>
 

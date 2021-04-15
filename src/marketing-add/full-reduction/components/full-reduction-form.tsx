@@ -1197,7 +1197,7 @@ class FullReductionForm extends React.Component<any, any> {
               subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
             };
             marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
-            submitFullReduction(marketingBean.toJS())//.then((res) => this._responseThen(res));
+            submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
           }
         }
       }
@@ -1384,10 +1384,10 @@ class FullReductionForm extends React.Component<any, any> {
    * @private
    */
   _responseThen = (response) => {
-    if (response.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
-      history.push('/marketing-list');
-    }
+    // if (response.res.code == Const.SUCCESS_CODE) {
+    //   message.success('Operate successfully');
+    //   history.push('/marketing-list');
+    // }
     this.setState({ saveLoading: false });
   };
 }

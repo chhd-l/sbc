@@ -84,13 +84,13 @@ export default class AppStore extends Store {
     this.dispatch('pets:funType', value)
   }
   //scan result
-  findByApptNo = async (apptNo = 'AP663253') => {
+  findByApptNo = async (apptNo) => {
     const { res } = await webapi.fetchFelinFindByNoScan({ apptNo })
     if (res.code === Const.SUCCESS_CODE) {
       const { settingVO, pets, felinReco } = res.context;
       let goodsQuantity = JSON.parse(felinReco?.goodsIds ?? '[]')
       let list = pets.map(item => {
-        let _tempWeight =JSON.parse(JSON.parse(item.weight))
+        let _tempWeight =item.weight.indexOf('/')>-1?JSON.parse(JSON.parse(item.weight)):JSON.parse(item.weight)
         item.measure = _tempWeight.measure;
         item.measureUnit = _tempWeight.measureUnit;
         return item
@@ -105,7 +105,7 @@ export default class AppStore extends Store {
      if(settingVO.apptNo){
       message.success(res.message)
      }else{
-      message.success((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
+      message.error((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
      }
       
     }

@@ -126,6 +126,12 @@ class Checkout extends React.Component<any, any> {
     });
   }
 
+  onCancelScanedInfo = () => {
+    this.setState({
+      scanedInfoVisible: false
+    });
+  }
+
   onAddProduct = (product: any) => {
     const { list } = this.state;
     if (list.findIndex(p => p.goodsId === product.goodsId) === -1) {
@@ -311,7 +317,7 @@ class Checkout extends React.Component<any, any> {
             : this.state.step === 3 
               ? <Payment onCancel={() => this.switchStep(2)} onPay={this.onConfirmCheckout} /> 
               : <Result onRefill={this.refillOrder} onClose={() => onClose(false)} />}
-        <ScanedInfo visible={this.state.scanedInfoVisible} scanedInfo={this.state.scanedInfo} onChoose={this.onConfirmScanedInfo} />
+        <ScanedInfo visible={this.state.scanedInfoVisible} scanedInfo={this.state.scanedInfo} onChoose={this.onConfirmScanedInfo} onCancel={this.onCancelScanedInfo} />
       </div>
     );
   }

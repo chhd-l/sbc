@@ -118,7 +118,7 @@ export default class AppStore extends Store {
 
     const { res } = await webapi.batchAudit(checkedIds);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       //refresh
       this.init();
     } else {
@@ -142,7 +142,7 @@ export default class AppStore extends Store {
       const { res } = await webapi.audit(tid, audit, reason);
       this.hideRejectModal();
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('Operate successfully');
+        message.success(RCi18n({id:'Order.OperateSuccessfully'}));
         this.init();
       } else {
         message.error(res.message || (audit == 'CHECKED' ? '审核失败' : '驳回失败'));
@@ -157,7 +157,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.retrial(tid);
     if (res.code == Const.SUCCESS_CODE) {
       this.init();
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
     } else {
     }
   };
@@ -169,7 +169,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('Confirm successful receipt!');
+      message.success(RCi18n({id:'Order.receipt'}));
       //刷新
       this.init();
     } else if (res.code == 'K-000001') {
@@ -219,7 +219,7 @@ export default class AppStore extends Store {
       .toJS();
 
     if (selected.length === 0) {
-      message.error('Please select the order to be exported');
+      message.error(RCi18n({id:'Order.exportedTip'}));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

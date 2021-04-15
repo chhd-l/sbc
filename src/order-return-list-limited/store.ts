@@ -122,7 +122,7 @@ export default class AppStore extends Store {
       .audit(rid)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Order.OperateSuccessfully'}));
           this.init();
         }
       })
@@ -134,7 +134,7 @@ export default class AppStore extends Store {
       .batchAudit(ids)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Order.OperateSuccessfully'}));
           this.init();
         }
       })
@@ -146,7 +146,7 @@ export default class AppStore extends Store {
       .reject(rid, reason)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Order.OperateSuccessfully'}));
           this.init();
         }
       })
@@ -158,7 +158,7 @@ export default class AppStore extends Store {
       .deliver(rid, values)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Order.OperateSuccessfully'}));
           this.init();
         }
       })
@@ -170,7 +170,7 @@ export default class AppStore extends Store {
       .receive(rid)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Order.OperateSuccessfully'}));
           this.init();
         }
       })
@@ -182,7 +182,7 @@ export default class AppStore extends Store {
       .batchReceive(ids)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Order.OperateSuccessfully'}));
           this.init();
         }
       })
@@ -192,7 +192,7 @@ export default class AppStore extends Store {
   onRejectReceive = (rid: string, reason: string) => {
     return webapi.rejectReceive(rid, reason).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('Operate successfully');
+        message.success(RCi18n({id:'Order.OperateSuccessfully'}));
         this.init();
       }
     });
@@ -201,7 +201,7 @@ export default class AppStore extends Store {
   onRejectRefund = (rid: string, reason: string) => {
     return webapi.rejectRefund(rid, reason).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('Operate successfully');
+        message.success(RCi18n({id:'Order.OperateSuccessfully'}));
         this.init();
       }
     });
@@ -221,7 +221,7 @@ export default class AppStore extends Store {
       if (code != Const.SUCCESS_CODE) {
       } else {
         // 退款的回调是异步的，立刻刷新页面可能退单的状态还没有被回调修改。所以先给个提示信息，延迟3秒后再刷新列表
-        message.success('Operate successfully');
+        message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       }
 
       setTimeout(this.init, 3000);
@@ -239,7 +239,7 @@ export default class AppStore extends Store {
           throw Error('K-040017');
         }
       } else {
-        message.success('Operate successfully');
+        message.success(RCi18n({id:'Order.OperateSuccessfully'}));
         this.init();
       }
     });
@@ -273,7 +273,7 @@ export default class AppStore extends Store {
     let selected = this.state().get('selected');
 
     if (selected.count() === 0) {
-      message.error('Please select data to export');
+      message.error(RCi18n({id:'Order.exportedTip2'}));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

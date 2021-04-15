@@ -38,6 +38,7 @@ export default class SkuTable extends React.Component<any, any> {
       initStoreCateList: any;
       goodsInfos: any;
       addSkUProduct: any;
+      goodsId: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
@@ -68,6 +69,7 @@ export default class SkuTable extends React.Component<any, any> {
     addSkUProduct: 'addSkUProduct',
     initStoreCateList: 'initStoreCateList',
     goodsInfos: 'goodsInfos',
+    goodsId: 'goodsId',
     editGoods: noop,
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
@@ -106,18 +108,23 @@ class SkuForm extends React.Component<any, any> {
   }
 
   render() {
-    const { goodsList, onProductselectSku, addSkUProduct } = this.props.relaxProps;
+    const { goodsList, onProductselectSku, addSkUProduct, goodsId } = this.props.relaxProps;
 
-    if ( goodsList.toJS().length == 0 ) {
-      let a = []
-      onProductselectSku(a)
-    }else {
-      if (addSkUProduct.length>0) {
-        //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
-        let b = addSkUProduct.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
-        onProductselectSku(b)
+    if (goodsId == undefined) {
+      if ( goodsList.toJS().length == 0 ) {
+        let a = []
+        onProductselectSku(a)
+      }else {
+        if (addSkUProduct.length>0) {
+          //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
+          let b = addSkUProduct.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
+          onProductselectSku(b)
+        }
       }
+    }else {
+
     }
+
 
     // const {  } = this.state
     const columns = this._getColumns();
@@ -531,9 +538,9 @@ class SkuForm extends React.Component<any, any> {
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('promotions' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'promotions', e),
-                  initialValue: rowInfo.promotions
+                  initialValue: rowInfo.promotions || "autoship"
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={goods.get('promotions') == 'autoship'} >
+                  <Select style={{ width: 100 }} getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={goods.get('promotions') == 'autoship'} >
                     <Option value='autoship'>Auto ship</Option>
                     <Option value='club'>Club</Option>
                   </Select>
@@ -742,14 +749,17 @@ class SkuForm extends React.Component<any, any> {
     let c = [];
     let minStock = []
     let tempMinStock = 0
+    console.log(addSkUProduct,221);
+    console.log(goodsList.toJS(),112);
     addSkUProduct.map((i) => {
       if (i.pid == pid) {
         i.targetGoodsIds.map((o) => {
           if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
             a.push(o);
-            minStock.push(o.stock / o.bundleNum)
+            minStock.push(i.minStock / o.bundleNum)
           }
         });
+        //console.log(minStock,212);
         if (tempMinStock != 0) {
           tempMinStock = Math.min.apply(Math, minStock)
           tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
@@ -769,9 +779,11 @@ class SkuForm extends React.Component<any, any> {
       }
     });
     editGoodsItem(id, 'stock', tempMinStock);
+    editGoodsItem(id, 'goodsInfoBundleRels', a);
     let d = b.concat(c);
-    this._editGoodsItem(id, 'goodsInfoBundleRels', a);
-    this._editGoodsItem(id, 'stock', tempMinStock);
+    //this._editGoodsItem(id, 'goodsInfoBundleRels', a);
+    //this._editGoodsItem(id, 'stock', tempMinStock);
+
     let e = d.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
 
     if (e.length == 1 && e[0].targetGoodsIds.length == 0) {

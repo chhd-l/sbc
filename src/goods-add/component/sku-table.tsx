@@ -756,18 +756,15 @@ class SkuForm extends React.Component<any, any> {
         i.targetGoodsIds.map((o) => {
           if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
             a.push(o);
-            minStock.push(i.minStock / o.bundleNum)
+            minStock.push(o.subStock / o.bundleNum)
           }
         });
-        //console.log(minStock,212);
+        tempMinStock = Math.min.apply(Math, minStock)
         if (tempMinStock != 0) {
-          tempMinStock = Math.min.apply(Math, minStock)
           tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
         }else {
           tempMinStock = 0
         }
-
-
         b.push({
           pid: pid,
           targetGoodsIds: a,

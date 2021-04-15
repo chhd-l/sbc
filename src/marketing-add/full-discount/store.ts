@@ -128,6 +128,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   submitFullDiscount = async (discountBean) => {
+    debugger
     let response;
     this.dispatch('loading:start');
     if (discountBean.marketingId) {
@@ -137,15 +138,16 @@ export default class AppStore extends Store {
     }
     this.dispatch('loading:end');
     if(response.res && response.res.code === Const.SUCCESS_CODE) {
-      message.error((window as any).RCi18n({
+      message.success((window as any).RCi18n({
         id: 'Marketing.OperateSuccessfully'
       }))
       history.push('/marketing-list');
-    } else if(response.res && response.res.code === 'K-000009') {
+    } else if(response.res && response.res.code === 'K-080217') {
       message.error((window as any).RCi18n({
         id: 'Marketing.PomotionCodehasexited'
       }))
     }
+    return response
   };
   //
 

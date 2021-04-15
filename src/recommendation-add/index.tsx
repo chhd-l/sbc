@@ -67,7 +67,7 @@ class RecommendationAdd extends Component<any, any> {
     delete customerPet['__altered']
     delete appointmentVO['__altered']
     let p={ ...felinReco, goodsQuantity, appointmentVO, customerPet };
-   
+  
     this.store.fetchFelinSave(p)
   }
   render() {

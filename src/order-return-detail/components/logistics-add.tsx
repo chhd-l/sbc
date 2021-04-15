@@ -1,6 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Form, Input, Select, DatePicker } from 'antd';
+import { RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
 
@@ -55,26 +56,26 @@ class ReceiveForm extends React.Component<any, any> {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormItem {...formItemLayout} label="物流公司" hasFeedback>
+        <FormItem {...formItemLayout} label={RCi18n({id:'Order.LogisticsCompany'})} hasFeedback>
           {getFieldDecorator('email', {
             rules: [
               {
                 type: 'email',
-                message: 'The input is not valid E-mail!'
+                message: RCi18n({id:'Order.ruturnOrder.verifyTip1'})
               },
               {
                 required: true,
-                message: 'Please input your E-mail!'
+                message: RCi18n({id:'Order.ruturnOrder.verifyTip2'})
               }
             ]
           })(<Select />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="物流单号" hasFeedback>
+        <FormItem {...formItemLayout} label={RCi18n({id:'Order.returnOrder.logisticsNumber'})} hasFeedback>
           {getFieldDecorator('password', {
             rules: [
               {
                 required: true,
-                message: 'Please input your password!'
+                message: RCi18n({id:'Order.ruturnOrder.verifyTip3'})
               },
               {
                 validator: this.checkConfirm
@@ -82,12 +83,12 @@ class ReceiveForm extends React.Component<any, any> {
             ]
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="退货日期" hasFeedback>
+        <FormItem {...formItemLayout} label={RCi18n({id:'Order.returnOrder.returnDate'})} hasFeedback>
           {getFieldDecorator('password', {
             rules: [
               {
                 required: true,
-                message: 'Please input your password!'
+                message: RCi18n({id:'Order.ruturnOrder.verifyTip3'})
               },
               {
                 validator: this.checkConfirm

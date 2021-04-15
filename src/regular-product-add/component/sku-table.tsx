@@ -425,16 +425,15 @@ class SkuForm extends React.Component<any, any> {
       ,
       key: 'promotions',
       render: (rowInfo) => {
-        console.log(rowInfo,1234);
         return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('promotions' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'promotions', e),
-                  initialValue: rowInfo.promotions
+                  initialValue:  rowInfo.promotions || "autoship"
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={goods.get('promotions') == 'autoship'} >
+                  <Select style={{ width: 100 }} getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={goods.get('promotions') == 'autoship'} >
                     <Option value='autoship'>Auto ship</Option>
                     <Option value='club'>Club</Option>
                   </Select>

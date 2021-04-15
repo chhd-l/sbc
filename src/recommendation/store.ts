@@ -39,7 +39,6 @@ export default class AppStore extends Store {
           this.dispatch('list:init', res.context.microPage);
           this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
           this.btnLoading = false;
-          // debugger
         });
       } else {
         this.dispatch('loading:end');

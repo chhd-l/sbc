@@ -25,8 +25,9 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       const { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
       const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate, optimal }
-      let { measure = 0, measureUnit = '' } = customerPet.weight ? JSON.parse(JSON.parse(customerPet.weight)) : {}
-
+      let _tempWeight =customerPet.weight.indexOf('\\')>-1?JSON.parse(JSON.parse(customerPet.weight)):JSON.parse(customerPet.weight)
+      let { measure = 0, measureUnit = '' } = customerPet.weight ? _tempWeight : {}
+      
       customerPet.measure = measure;
       customerPet.measureUnit = measureUnit;
       customerPet.birthOfPets=moment(customerPet.birthOfPets).format('YYYY-MM-DD')
@@ -84,13 +85,13 @@ export default class AppStore extends Store {
     this.dispatch('pets:funType', value)
   }
   //scan result
-  findByApptNo = async (apptNo = 'AP663253') => {
+  findByApptNo = async (apptNo) => {
     const { res } = await webapi.fetchFelinFindByNoScan({ apptNo })
     if (res.code === Const.SUCCESS_CODE) {
       const { settingVO, pets, felinReco } = res.context;
       let goodsQuantity = JSON.parse(felinReco?.goodsIds ?? '[]')
       let list = pets.map(item => {
-        let _tempWeight =JSON.parse(JSON.parse(item.weight))
+        let _tempWeight =item.weight.indexOf('\\')>-1?JSON.parse(JSON.parse(item.weight)):JSON.parse(item.weight)
         item.measure = _tempWeight.measure;
         item.measureUnit = _tempWeight.measureUnit;
         return item
@@ -100,12 +101,13 @@ export default class AppStore extends Store {
           item.birthOfPets=moment(item.birthOfPets).format('YYYY-MM-DD')
         })
       }
+      felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')
       let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
       this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
      if(settingVO.apptNo){
       message.success(res.message)
      }else{
-      message.success((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
+      message.error((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
      }
       
     }

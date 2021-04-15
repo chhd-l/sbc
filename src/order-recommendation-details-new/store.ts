@@ -98,7 +98,7 @@ export default class AppStore extends Store {
   onSend = async (type, param?: any) => {
     const res = await webapi.fetchModify(param);
     if (res.res.code === Const.SUCCESS_CODE) {
-      message.success('send successfully!');
+      message.success(RCi18n({id:'Order.sendSuccessfully'}));
       if (type == 'send') {
         history.goBack();
       } else {
@@ -106,7 +106,7 @@ export default class AppStore extends Store {
       }
     } else {
       if (res.res.code === 'K-110001') {
-        message.success('send failed!');
+        message.success(RCi18n({id:'Order.sendFailed'}));
         return false;
       }
     }
@@ -121,7 +121,7 @@ export default class AppStore extends Store {
       this.dispatch('get:linkStatus', res.res.context);
     } else {
       if (res.res.code === 'K-110001') {
-        message.success('switch failed!');
+        message.success(RCi18n({id:'Order.switchFailed'}));
         return false;
       }
     }

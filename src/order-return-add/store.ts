@@ -412,7 +412,7 @@ export default class AppStore extends Store {
     result = await addApply(param.toJS());
 
     if (result.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       history.push('/order-return-list');
     }
     this.dispatch('loading:end');

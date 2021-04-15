@@ -1620,6 +1620,16 @@ export default {
   'Order.selectType': 'Selection Type',
   'Order.auditPassed': 'Audit passed',
   'Order.auditFailed': 'Audit failed',
+  'Order.cannotModified':'The order has been cancelled and cannot be modified!',
+  'Order.customerCannotModified':'The customer has been deleted and the order cannot be modified',
+  'Order.receipt':'Confirm successful receipt!',
+  'Order.SaveDeliverTip':'Save deliver successfully!',
+  'Order.VoidTip':'Void shipment record succeeded!',
+  'Order.exportedTip':'Please select the order to be exported',
+  'Order.sendSuccessfully':'send successfully!',
+  'Order.sendFailed':'send failed!',
+  'Order.switchFailed':'switch failed!',
+  'Order.exportedTip2':'Please select data to export',
 
 
 

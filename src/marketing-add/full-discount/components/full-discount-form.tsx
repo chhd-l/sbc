@@ -1190,7 +1190,7 @@ class FullDiscountForm extends React.Component<any, any> {
             };
 
             marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
-            submitFullDiscount(marketingBean.toJS()); //.then((res) => this._responseThen(res))
+            submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
           }
         }
       }
@@ -1377,10 +1377,10 @@ class FullDiscountForm extends React.Component<any, any> {
    * @private
    */
   _responseThen = (response) => {
-    if (response.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
-      history.push('/marketing-list');
-    }
+    // if (response.res.code == Const.SUCCESS_CODE) {
+    //   message.success('Operate successfully');
+    //   history.push('/marketing-list');
+    // }
     this.setState({ saveLoading: false });
   };
 }

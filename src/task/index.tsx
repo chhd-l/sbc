@@ -148,7 +148,7 @@ export default class Task extends React.Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="all" />
+                        <FormattedMessage id="Order.All" />
                       </Option>
                       {goldenMomentList &&
                         goldenMomentList.map((item) => (
@@ -178,7 +178,7 @@ export default class Task extends React.Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="all" />
+                        <FormattedMessage id="Order.All" />
                       </Option>
                       {taskStatus &&
                         taskStatus.map((item, index) => (
@@ -210,7 +210,7 @@ export default class Task extends React.Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="all" />
+                        <FormattedMessage id="Order.All" />
                       </Option>
 
                       {priorityList &&

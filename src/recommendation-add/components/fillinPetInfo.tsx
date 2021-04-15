@@ -315,8 +315,8 @@ export default class FillinPetInfo extends Component {
                                 }} />
                             </QRScaner>
                             </div>
-                            <div style={{ marginTop: 3}}>
-                                <Search placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />
+                            <div style={{ marginTop: 3}} className="pets-search-app">
+                                <Search style={{width:'100%'}} placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />
                             </div>
                             <div style={{ marginTop: 20,position:'relative' ,width:'100%'}}>
                                 {petsList.length > 0 && <Select style={{ width: '100%' }}

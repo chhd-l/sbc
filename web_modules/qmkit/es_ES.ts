@@ -1303,7 +1303,7 @@ export default {
   'Order.UpdateFailed': 'Update Failed',
   'Order.PleaseInputComment': 'Please input comment',
   'Order.deleteThisComment': 'Are you sure you want to delete this comment?',
-  'Order.LogisticMandotory': 'Logistic info is mandotory',
+  'Order.LogisticMandotory': 'Logistic info is mandatory',
   'Order.LogisticsCompany': 'Logistics company',
   'Order.Yes': 'Yes',
   'Order.No': 'No',

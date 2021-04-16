@@ -3472,7 +3472,10 @@ export default {
   'Setting.export':'Export',
   'Setting.SupportSubscription': 'Support Subscription',
   'Setting.maxAmount': 'Max amount',
-
+  'Setting.Onlinepayment': 'Online payment',
+  'Setting.Setinpaymentmethodmodel': 'Set in payment method model',
+  'Setting.Offlinepayment': 'Offline payment',
+  'Setting.COD': 'COD',
 
 
   /*-----------------------------  Fetch  ----------------------------------------*/

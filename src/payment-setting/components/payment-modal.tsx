@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import * as webapi from '../webapi';
-import { SelectGroup, Const, noop } from 'qmkit';
+import { SelectGroup, Const, noop, RCi18n } from 'qmkit';
 import List from "@/groupon-activity-list/component/list";
 import { Relax } from 'plume2';
 const { TabPane } = Tabs;
@@ -97,7 +97,7 @@ class PaymentModal extends React.Component<any, any> {
                         <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="apiKey" />}>
                           {getFieldDecorator(item.id + 'apiKey', {
                             initialValue: item.pspConfigVO&&item.pspConfigVO.apiKey,
-                            rules: [{ required: true, message: 'Please input Api Key!' }]
+                            rules: [{ required: true, message: RCi18n({id: 'Setting.PleaseinputApiKey'}) }]
                           })(<Input onChange={(e) => {
                             onFormChange({
                               id: key,
@@ -111,7 +111,7 @@ class PaymentModal extends React.Component<any, any> {
                         <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="appID" />}>
                           {getFieldDecorator(item.id+'appId', {
                             initialValue: item.pspConfigVO&&item.pspConfigVO.appId,
-                            rules: [{ required: false, message: 'Please input App ID!' }]
+                            rules: [{ required: false, message:  RCi18n({id: 'Setting.PleaseinputAppID'}) }]
                           })(<Input onChange={(e) => {
                             onFormChange({
                               id: key,
@@ -125,7 +125,7 @@ class PaymentModal extends React.Component<any, any> {
                         <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="privateKey" />}>
                           {getFieldDecorator(item.id + 'privateKey', {
                             initialValue: item.pspConfigVO&&item.pspConfigVO.privateKey,
-                            rules: [{ required: false, message: 'Please input Private Key!' }]
+                            rules: [{ required: false, message: RCi18n({id: 'Setting.PleaseinputPrivateKey'}) }]
                           })(<Input.TextArea onChange={(e) => {
                             onFormChange({
                               id: key,
@@ -139,7 +139,7 @@ class PaymentModal extends React.Component<any, any> {
                         <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="publicKey" />}>
                           {getFieldDecorator(item.id + 'publicKey', {
                             initialValue: item.pspConfigVO&&item.pspConfigVO.publicKey,
-                            rules: [{ required: false, message: 'Please input Public Key!' }]
+                            rules: [{ required: false, message: RCi18n({id: 'Setting.PleaseinputPublicKey'})}]
                           })(<Input.TextArea onChange={(e) => {
                             onFormChange({
                               id: key,
@@ -160,7 +160,7 @@ class PaymentModal extends React.Component<any, any> {
                             rules: [
                               {
                                 required: false,
-                                message: 'Please select Payment Method.'
+                                message: RCi18n({id: 'Setting.PleaseselectPayment'})
                               }
                             ]
                           })(

@@ -60,8 +60,8 @@ export default class PaymentList extends React.Component<any, any> {
                   {storePaymentVOs.get('onlinePaymentMethodList') && storePaymentVOs.get('onlinePaymentMethodList').size!==0 && (
                     <div className="method-title flex-start-align">
                       <span></span>
-                      <span>Online payment</span>
-                      <span>Set in payment method model</span>
+                      <span><FormattedMessage id="Setting.Onlinepayment" /></span>
+                      <span><FormattedMessage id="Setting.Setinpaymentmethodmodel" /></span>
                     </div>
                   )}
                   <div className="method-list flex-start-align">
@@ -96,7 +96,7 @@ export default class PaymentList extends React.Component<any, any> {
                   {storePaymentVOs.get('offlinePaymentMethodList') && storePaymentVOs.get('offlinePaymentMethodList').size!==0 && (
                     <div className="method-title flex-start-align">
                       <span></span>
-                      <span>Offline payment</span>
+                      <span><FormattedMessage id="Setting.Offlinepayment" /></span>
                     </div>
                   )}
                   <div className="flex-start-align">
@@ -135,7 +135,7 @@ export default class PaymentList extends React.Component<any, any> {
                   {storePaymentVOs.get('codPaymentMethodList') && storePaymentVOs.get('codPaymentMethodList').size !==0 && (
                     <div className="method-title flex-start-align">
                       <span></span>
-                      <span>COD</span>
+                      <span><FormattedMessage id="Setting.COD" /></span>
                     </div>
                   )}
                   <div className="flex-start-align">

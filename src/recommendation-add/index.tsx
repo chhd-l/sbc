@@ -31,7 +31,6 @@ class RecommendationAdd extends Component<any, any> {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         current++;
-        console.log(values)
         this.setState({ current });
       }
     });

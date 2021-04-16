@@ -95,7 +95,6 @@ export default class FillinPetInfo extends Component {
         } else {
             onChangePestsForm({ ...customerPet, [key]: e }, 'customerPet')
         }
-        console.log(felinReco)
     }
     //选择下拉宠物
     _onChangePets = (e) => {

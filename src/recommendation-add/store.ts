@@ -25,8 +25,8 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       const { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
       const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate, optimal }
-      let _tempWeight =customerPet.weight.indexOf('\\')>-1?JSON.parse(JSON.parse(customerPet.weight)):JSON.parse(customerPet.weight)
-      let { measure = 0, measureUnit = '' } = customerPet.weight ? _tempWeight : {}
+      let _tempWeight = customerPet.weight?(customerPet.weight.indexOf('\\')>-1?JSON.parse(JSON.parse(customerPet.weight)):JSON.parse(customerPet.weight)):{}
+      let { measure = 0, measureUnit = '' } = _tempWeight
       
       customerPet.measure = measure;
       customerPet.measureUnit = measureUnit;

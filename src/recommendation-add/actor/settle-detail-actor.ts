@@ -84,7 +84,7 @@ export default class SettleDetailActor extends Actor {
 
   //product select
   @Action('product:productselect')
-  productselect(state: IMap, res) {
+  productselect(state, res) {
     return state.set('productselect', res);
   }
 

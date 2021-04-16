@@ -1689,6 +1689,7 @@ export default {
   "Order.Previous": "Previous",
   'Order.Next':'Next',
   'Order.DeleteTip':'Are you sure to delete this item?',
+  'Order.returnList':'Return list',
 
 
 
@@ -1873,7 +1874,7 @@ export default {
   'Subscription.noStart.EnjoyDiscount':'Enjoy discount',
   'Subscription.noStart.Amount':'Amount',
   'Subscription.noStart.ShipmentDate':'Shipment date',
-  'Subscription.AutoshipOrder':'Autoship order',
+  'Subscription.AutoshipOrder':'Subscription order',
   'Subscription.NoStart':'No start',
   'Subscription.Completed':'Completed',
   'Subscription.ColSpan.ubscriptionNumberS':'ubscription Number',
@@ -3522,7 +3523,10 @@ export default {
   'Setting.export':'Export',
   'Setting.SupportSubscription': 'Support Subscription',
   'Setting.maxAmount': 'Max amount',
-
+  'Setting.Onlinepayment': 'Online payment',
+  'Setting.Setinpaymentmethodmodel': 'Set in payment method model',
+  'Setting.Offlinepayment': 'Offline payment',
+  'Setting.COD': 'COD',
 
 
   /*-----------------------------  Fetch  ----------------------------------------*/
@@ -3537,11 +3541,41 @@ export default {
   /* -------- 已翻译 V1.0---------------*/
 
 
-
-
-
-
-
+  /*-------------------------------------Appointment-------------------------*/
+  'Appointment.list':'Appointment list',
+  'Appointment.No.':'Appointment no.',
+  'Appointment.PON':'Appointment Pet owner name',
+  'Appointment.Start time':'Appointment Start time',
+  'Appointment.Email':'Appointment email',
+  'Appointment.Status':'Appointment status',
+  'Appointment.All':'Appointment all',
+  'Appointment.Booked':'Appointment booked',
+  'Appointment.Arrived':'Appointment arrived',
+  'Appointment.Canceled':'Appointment canceled',
+  'Appointment.Search':'Appointment search',
+  'Appointment.Batch export':'Appointment batch export',
+  'Appointment.Add new':'Appointment add new',
+  'Appointment.STC':'Appointment scan the code',
+  'Appointment.Consumer phone':'Appointment consumer phone',
+  'Appointment.Consumer email':'Appointment consumer email',
+  'Appointment.Time':'Appointment time',
+  'Appointment.Pet OE':'Appointment pet owner email',
+  'Appointment.Phone number':'Appointment phone number',
+  'Appointment.Type':'Appointment type',
+  'Appointment.Operation':'Appointment operation',
+  'Appointment.Operatio':'Appointment operatio',
+  'Appointment.Online':'Appointment online',
+  'Appointment.Offline':'Appointment Offline',
+  'Appointment.Edit':'Appointment Edit',
+  'Appointment.Cancel':'Appointment cancel',
+  'Appointment.NRHF':'Appointment no record has found',
+  'Appointment.NAHBS':'Appointment no appointment has been selected',
+  'Appointment.CNFC':'Appointment can not find consumer, please try again',
+  'Appointment.Appointment':'Appointment appointment',
+  'Appointment.Update appointment':'Appointment update appointment',
+  'Appointment.ANA':'Appointment add new appointment',
+  'Appointment.SAType':'Appointment select appointment type',
+  'Appointment.SATime':'Appointment select appointment time',
 
 
   /*---------------------------------------------------------------------*/

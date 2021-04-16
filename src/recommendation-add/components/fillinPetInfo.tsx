@@ -43,10 +43,14 @@ export default class FillinPetInfo extends Component {
     }
 
     componentDidMount() {
+        const { felinReco, onChangePestsForm} = this.props.relaxProps;
         this.getDictAlllist('Lifestyle', 'lifeList');
         this.getDictAlllist('Activity', 'activityList');
         this.getDictAlllist('specialNeeds', 'specialNeedsList');
         this.getDictAlllist('CatBreed', 'petsBreedList')
+        if(!felinReco.fillDate){
+            onChangePestsForm({ ...felinReco, fillDate: moment().format('YYYY-MM-DD') }, 'felinReco')
+        }
     }
     /**
      * 获取数据字典
@@ -113,12 +117,9 @@ export default class FillinPetInfo extends Component {
                                     <Form.Item label="Date:">
                                         {getFieldDecorator('fillDate', {
                                             onChange: (e) => this._onChange(e, 'fillDate'),
-                                            initialValue: moment(felinReco?.fillDate ?? (new Date()), 'YYYY-MM-DD'),
-                                            rules: [{ required: true, message: 'Please select  date!' }],
-                                        })(<DatePicker style={{ width: '100%' }}
-                                            format="YYYY-MM-DD"
-
-                                        />)}
+                                            initialValue:moment(felinReco.fillDate,'YYYY-MM-DD'),
+                                            rules: [{ required: true, message: 'Please select  fillDate!' }],
+                                        })(<DatePicker style={{ width: '100%' }}/>)}
                                     </Form.Item>
                                 </Col>
                                 <Col span={8}>
@@ -167,7 +168,7 @@ export default class FillinPetInfo extends Component {
                                 <Col span={12}>
                                     <Form.Item label="Date of birth:">
                                         {getFieldDecorator('birthOfPets', {
-                                            initialValue: moment(customerPet?.birthOfPets ?? (new Date()), 'YYYY-MM-DD'),
+                                            initialValue:customerPet.birthOfPets&&moment(customerPet.birthOfPets, 'YYYY-MM-DD')||null,
                                             rules: [{ required: true, message: 'Please select Date of birth!' }],
                                             onChange: (e,) => this._onChange(e, 'birthOfPets')
 

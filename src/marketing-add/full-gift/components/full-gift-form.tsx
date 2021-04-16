@@ -378,9 +378,6 @@ class FullGiftForm extends React.Component<any, any> {
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
-    console.log(marketingBean.toJS(), 'marketingBean------------');
-    console.log(selectedRows.toJS(), 'selectedRows------------');
-    console.log(selectedGiftRows.toJS(), 'selectedGiftRows------------');
 
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
@@ -1096,7 +1093,7 @@ class FullGiftForm extends React.Component<any, any> {
             //   .then(({ res }) => {
             // if (res.code == Const.SUCCESS_CODE) {
 
-            submitFullGift(marketingBean.toJS())//.then((res) => this._responseThen(res));
+            submitFullGift(marketingBean.toJS()).then((res) => this._responseThen(res));
           }
         }
       }
@@ -1286,10 +1283,10 @@ class FullGiftForm extends React.Component<any, any> {
    * @private
    */
   _responseThen = (response) => {
-    if (response.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
-      history.push('/marketing-list');
-    }
+    // if (response.res.code == Const.SUCCESS_CODE) {
+    //   message.success('Operate successfully');
+    //   history.push('/marketing-list');
+    // }
     this.setState({ saveLoading: false });
   };
 }

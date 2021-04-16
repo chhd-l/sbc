@@ -119,6 +119,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
         targetGoodsIds.push({
           subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
           bundleNum: 1,
+          subStock: item.stock,
           stock: item.stock,
           saleableFlag: item.saleableFlag,
           marketPrice: item.marketPrice,
@@ -132,11 +133,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
       }
     );
     let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
-    console.log(minStock,123);
 
     targetGoodsList = [];
     let tempMinStock = Math.min.apply(Math, minStock)
-    console.log(tempMinStock,456);
 
     //sessionStorage.setItem('minStock',tempMinStock)
     targetGoodsList.push({
@@ -144,36 +143,35 @@ class ProductTooltipSKU extends React.Component<any, any> {
       targetGoodsIds: goodsIds,
       minStock: tempMinStock
     });
-    let id = goodsList.toJS()[0].id
     let marketPrice = goodsIds[0].marketPrice * goodsIds[0].bundleNum
     let subscriptionPrice = goodsIds[0].subscriptionPrice * goodsIds[0].bundleNum
     //let stock = Number(String(goodsIds[0].stock?goodsIds[0].stock:0 / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
-    goodsList.toJS().map(item=>{
-      if (item.id == this.props.id) {
-        editGoodsItem(this.props.id, 'stock', tempMinStock);
-      }
-    })
-    if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
-      editGoodsItem(id, 'marketPrice', marketPrice);
-      editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
-    }/*else if (targetGoodsList.length == 0){
-      editGoodsItem(id, 'marketPrice', 0);
-      editGoodsItem(id, 'subscriptionPrice', 0);
-    }*/else {
-      editGoodsItem(id, 'marketPrice', 0);
-      editGoodsItem(id, 'subscriptionPrice', 0);
-    }
+
+
     if (targetGoodsIds.length <= 10) {
       if (targetGoodsIds.length !== 0) {
-        onProductselectSku(targetGoodsList);
+        goodsList.toJS().map(item=>{
+          if (item.id == this.props.id) {
+            editGoodsItem(this.props.id, 'stock', tempMinStock);
+            if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
+              editGoodsItem(item.id, 'marketPrice', marketPrice);
+              editGoodsItem(item.id, 'subscriptionPrice', subscriptionPrice);
+            }else {
+              editGoodsItem(item.id, 'marketPrice', 0);
+              editGoodsItem(item.id, 'subscriptionPrice', 0);
+            }
+            editGoodsItem(item.id, 'goodsInfoBundleRels', goodsIds);
 
+          }
+        })
+        onProductselectSku(targetGoodsList);
       }
       targetGoodsIds = [];
       this.props.showModal({ type: 0 }, this.props.pid);
     } else {
       message.info('Maximum 10 products!');
     }
-    this.props.form.resetFields();
+    //this.props.form.resetFields();
     this.clearSearchForm()
   }
   clearSearchForm =()=>{

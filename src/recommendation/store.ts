@@ -32,14 +32,12 @@ export default class AppStore extends Store {
     this.dispatch('loading:start');
 
     webapi.fetchOrderList({  ...result, pageNum, pageSize }).then(({ res }) => {
-      console.log(res)
       if (res.code == Const.SUCCESS_CODE) {
         this.transaction(() => {
           this.dispatch('loading:end');
           this.dispatch('list:init', res.context.microPage);
           this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
           this.btnLoading = false;
-          // debugger
         });
       } else {
         this.dispatch('loading:end');

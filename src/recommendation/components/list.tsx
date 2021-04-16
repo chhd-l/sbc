@@ -237,7 +237,7 @@ class ListView extends React.Component<any, any> {
                         <span> {v.felinRecoId}</span>
                       </div>
                       <div style={{ width: 310, display: 'inline-block' }}>
-                        <span> Created Time: {moment(appointmentVO.createTime).format('YYYY-MM-DD')}</span>
+                        <span> Created Time: {moment(v.fillDate).format('YYYY-MM-DD')}</span>
                       </div>
                     </div>
                   </td>

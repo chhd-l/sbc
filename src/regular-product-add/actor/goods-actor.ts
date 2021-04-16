@@ -24,9 +24,7 @@ export default class GoodsActor extends Actor {
         // SPU编码
         goodsNo: '',
         internalGoodsNo: '',
-        promotions: 'autoship',
-        defaultPurchaseType: '',
-        defaultFrequencyId: '',
+        promotions: 'club',
         // 计量单位
         goodsUnit: '',
         // 上下架状态

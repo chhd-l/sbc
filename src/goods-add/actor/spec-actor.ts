@@ -26,8 +26,11 @@ export default class GoodsSpecActor extends Actor {
           addedFlag: 1,
           goodsInfoNo: this._randomGoodsInfoNo(),
           subscriptionStatus: 1,
-          promotions: 'autoship',
-          stock: 0
+          promotions: 'club',
+          marketPrice: 0,
+          subscriptionPrice: 0,
+          stock: 0,
+          goodsInfoBundleRels: []
         }
       ],
       stockChecked: false,
@@ -338,9 +341,6 @@ export default class GoodsSpecActor extends Actor {
    * 转换规格为数组
    */
   _convertSpev = (spec: IMap) => {
-    let a = spec.toJS()
-    console.log(a);
-    debugger
     return spec.get('specValues').map((item, index) => {
       const specId = 'specId-' + spec.get('specId');
       const specDetailId = 'specDetailId-' + spec.get('specId');
@@ -352,7 +352,11 @@ export default class GoodsSpecActor extends Actor {
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
         addedFlag: 1,
-        //subscriptionPrice: 0,
+        goodsInfoBundleRels: [],
+        stock: 0,
+        promotions: 'club',
+        marketPrice: 0,
+        subscriptionPrice: 0,
         //subscriptionStatus: spec.get('subscriptionStatus'),
         skuSvIds: [item.get('specDetailId')]
       });

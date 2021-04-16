@@ -18,7 +18,7 @@ export default class Headline extends React.PureComponent<any, any> {
       <div className={this.props.lineDisable ? 'headlinewithnoline' : 'headline'}>
         <h3>
           {this.props.title}
-          {this.props.number && <small>(<FormattedMessage id="Order.total" />{` ${this.props.number}`})</small>}
+          {(this.props.number || +this.props.number === 0 ) && <small>(<FormattedMessage id="Order.total" />{` ${+this.props.number}`})</small>}
           {this.props.smallTitle && <small>{this.props.smallTitle}</small>}
         </h3>
         {this.props.children}

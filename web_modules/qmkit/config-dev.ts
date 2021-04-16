@@ -12,6 +12,6 @@ export default {
 
   CDN_PATH: '/',
   ...Common,
-  VALET_ORDER_URL:'https://shopuat.466920.com/',
+  VALET_ORDER_URL:(country)=>`https://shopuat.466920.com/${country}/`,
   VALET_ORDER_NOMAL_URL:'https://shopstg.royalcanin.com/'
 };

@@ -31,7 +31,6 @@ class RecommendationAdd extends Component<any, any> {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         current++;
-        console.log(values)
         this.setState({ current });
       }
     });
@@ -67,7 +66,7 @@ class RecommendationAdd extends Component<any, any> {
     delete customerPet['__altered']
     delete appointmentVO['__altered']
     let p={ ...felinReco, goodsQuantity, appointmentVO, customerPet };
-   
+  
     this.store.fetchFelinSave(p)
   }
   render() {

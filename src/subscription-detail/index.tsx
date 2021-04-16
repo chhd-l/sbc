@@ -62,6 +62,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       taxFeePrice: '',
       discountsPrice: '',
       frequencyList: [],
+      frequencyClubList: [],
       promotionDesc: 'Promotion',
       noStartOrder: [],
       completedOrder: [],
@@ -306,6 +307,8 @@ class SubscriptionDetail extends React.Component<any, any> {
       this.querySysDictionary('city');
     }
     this.querySysDictionary('Frequency_day');
+    this.querySysDictionary('Frequency_day_club');
+
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -330,6 +333,15 @@ class SubscriptionDetail extends React.Component<any, any> {
               () => this.querySysDictionary('Frequency_week')
             );
           }
+          if (type === 'Frequency_day_club') {
+            let frequencyClubList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyClubList: frequencyClubList
+              },
+              () => this.querySysDictionary('Frequency_week_club')
+            );
+          }
           if (type === 'Frequency_week') {
             let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState(
@@ -339,10 +351,25 @@ class SubscriptionDetail extends React.Component<any, any> {
               () => this.querySysDictionary('Frequency_month')
             );
           }
+          if (type === 'Frequency_week_club') {
+            let frequencyClubList = [...this.state.frequencyClubList, ...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyClubList: frequencyClubList
+              },
+              () => this.querySysDictionary('Frequency_month_club')
+            );
+          }
           if (type === 'Frequency_month') {
             let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState({
               frequencyList: frequencyList
+            });
+          }
+          if (type === 'Frequency_month_club') {
+            let frequencyClubList = [...this.state.frequencyClubList, ...res.context.sysDictionaryVOS];
+            this.setState({
+              frequencyClubList: frequencyClubList
             });
           }
           // if (type === 'Frequency') {
@@ -437,7 +464,7 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   render() {
-    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, noStartOrder, completedOrder, deliveryCityName, billingCityName, currencySymbol } = this.state;
+    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, frequencyClubList, noStartOrder, completedOrder, deliveryCityName, billingCityName, currencySymbol } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>
@@ -526,7 +553,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <Select style={{ width: '70%' }} value={record.periodTypeId} disabled>
-              {frequencyList.map((item) => (
+              {(record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions === 'club' ? frequencyClubList : frequencyList).map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
                 </Option>

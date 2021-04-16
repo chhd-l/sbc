@@ -11,7 +11,7 @@ class MessageSetting extends Component<any, any> {
     super(props);
     this.state = {
       visible: false,
-      // (window as any).RCi18n({id:'Order.offline.consumerEmail'})
+      // RCi18n({id:'Order.offline.consumerEmail'})
 
       emailApiList: [
         // {
@@ -56,7 +56,7 @@ class MessageSetting extends Component<any, any> {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
     })
   }
 
@@ -73,7 +73,8 @@ class MessageSetting extends Component<any, any> {
         message.success(res.message)
         this.getSettingList()
         this.setState({
-          visible: false
+          visible: false,
+          senderList:[]
         },()=>{
           this.props.form.resetFields()
         })
@@ -88,7 +89,7 @@ class MessageSetting extends Component<any, any> {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
     })
   }
   openEditModal=(item)=>{
@@ -98,8 +99,13 @@ class MessageSetting extends Component<any, any> {
     webapi.getApiSenderList(item.emailType).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        console.log(res);
         let senderList = res.context.list
+        // senderList 去重; 重复邮件名会引发UI 框架bug
+        let senderListTemp = []
+        senderList.forEach(item => {
+          senderListTemp.push(item.senderEmail)
+        });
+        senderList = [...new Set(senderListTemp)]
         this.setState({
           settingForm:item,
           loading: false,
@@ -111,7 +117,7 @@ class MessageSetting extends Component<any, any> {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
     })
   }
 
@@ -132,7 +138,8 @@ class MessageSetting extends Component<any, any> {
 
   handleCancel = (e) => {
     this.setState({
-      visible: false
+      visible: false,
+      senderList:[]
     },()=>{
       this.props.form.resetFields()
     });
@@ -157,7 +164,7 @@ class MessageSetting extends Component<any, any> {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
     })
   }
 
@@ -201,11 +208,11 @@ class MessageSetting extends Component<any, any> {
 
                           <p style={{ fontWeight: 600 }}>{item.emailTypeName}</p>
                           <div style={styles.switchPositionStyle}>
-                            <Popconfirm title={(window as any).RCi18n({ id: 'Marketing.Message.editTips' })}
+                            <Popconfirm title={RCi18n({ id: 'Marketing.Message.editTips' })}
                               disabled={+item.status === 1}
                               onConfirm={() => this.changeSettingStatus(item.id)}
-                              okText={(window as any).RCi18n({ id: 'Marketing.Yes' })}
-                              cancelText={(window as any).RCi18n({ id: 'Marketing.No' })}>
+                              okText={RCi18n({ id: 'Marketing.Yes' })}
+                              cancelText={RCi18n({ id: 'Marketing.No' })}>
                               <Switch checked={+item.status === 1} disabled={+item.status === 1} size="small" />
                             </Popconfirm>
                           </div>
@@ -236,7 +243,7 @@ class MessageSetting extends Component<any, any> {
             >
               <Form layout="vertical">
                 <FormItem label={<FormattedMessage id="Marketing.Tips" />} style={styles.formItem}>
-                  <Alert message={(window as any).RCi18n({ id: 'Marketing.Message.settingTips' })} type="warning" />
+                  <Alert message={RCi18n({ id: 'Marketing.Message.settingTips' })} type="warning" />
                 </FormItem>
                 <FormItem label={<FormattedMessage id="Marketing.Sender" />} style={styles.formItem}>
                   {getFieldDecorator('fromEmail', {
@@ -253,7 +260,7 @@ class MessageSetting extends Component<any, any> {
                     >
                       {
                         senderList&&senderList.map((item,index)=>(
-                          <Option value={item.senderEmail} key={index}>{item.senderEmail}</Option>
+                          <Option value={item} key={index}>{item}</Option>
                         ))
                       }
                     </Select>

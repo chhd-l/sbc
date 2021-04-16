@@ -128,7 +128,7 @@ class CateList extends React.Component<any, any> {
 
     rowInfo = fromJS(rowInfo);
 
-    let hasAuth = checkAuth('f_goods_cate_1') || checkAuth('f_goods_cate_2');
+    let hasAuth = true;
 
     return (
       <div>
@@ -138,14 +138,14 @@ class CateList extends React.Component<any, any> {
           : hasAuth
           ? // 一级分类(非默认分类)可添加子分类
             [
-              rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
+              rowInfo.get('isDefault') != 1 && checkAuth('Edit SEO setting') && (
                 <Tooltip placement="top" title={<FormattedMessage id="Product.EditSEOSetting" />} key="item1">
                   <a style={styles.edit} onClick={this._editSEOSetting.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconicon">
                     {/*<FormattedMessage id="addSubcategory" />*/}
                   </a>
                 </Tooltip>
               ),
-              rowInfo.get('cateGrade') < 3 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
+              rowInfo.get('cateGrade') < 3 && rowInfo.get('isDefault') != 1 && checkAuth('Add sales category') && (
                 <Tooltip placement="top" title={<FormattedMessage id="Product.AddSubcategory" />} key="item2">
                   <a style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconbtn-addsubvisionsaddcategory">
                     {/*<FormattedMessage id="addSubcategory" />*/}
@@ -153,7 +153,7 @@ class CateList extends React.Component<any, any> {
                 </Tooltip>
               ),
               // 非默认分类可编辑
-              rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
+              rowInfo.get('isDefault') != 1 && checkAuth('Edit sales category') && (
                 <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />} key="item3">
                   <a style={styles.edit} onClick={this._showEditModal.bind(this, rowInfo)} className="iconfont iconEdit">
                     {/*<FormattedMessage id="edit" />*/}
@@ -161,7 +161,7 @@ class CateList extends React.Component<any, any> {
                 </Tooltip>
               ),
               // 非默认分类可删除
-              rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_2') && (
+              rowInfo.get('isDefault') != 1 && checkAuth('delete') && (
                 <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />} key="item4">
                   <a onClick={this._delete.bind(this, rowInfo.get('storeCateId'))} className="iconfont iconDelete">
                     {/*<FormattedMessage id="delete" />*/}

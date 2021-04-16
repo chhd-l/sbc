@@ -50,7 +50,7 @@ export default class GoodsModal extends React.Component<any, any> {
     super(props);
     this.state = {
       selectedSkuIds: props.selectedSkuIds ? props.selectedSkuIds : [],
-      selectedRows: props.selectedRows ? props.selectedRows : fromJS([])
+      selectedRows: props.selectedRows ? props.selectedRows : []
     };
   }
 
@@ -58,7 +58,7 @@ export default class GoodsModal extends React.Component<any, any> {
     this.setState({
       selectedRows: nextProps.selectedRows
         ? nextProps.selectedRows
-        : fromJS([]),
+        : [],
       selectedSkuIds: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
     });
   }
@@ -90,7 +90,7 @@ export default class GoodsModal extends React.Component<any, any> {
         width={1100}
         visible={visible}
         onOk={() => {
-          onProductselect(this.state.selectedRows.toJS());
+          onProductselect(this.state.selectedRows);
           this.props.showModal(false);
           /* if (application === 'saleType') {
                    // onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
@@ -122,7 +122,6 @@ export default class GoodsModal extends React.Component<any, any> {
     );
   }
   rowChangeBackFun = (selectedSkuIds, selectedRows) => {
-    console.log(selectedRows,'selectedRows')
     this.setState({
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows

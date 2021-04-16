@@ -1037,6 +1037,15 @@ export default class AppStore extends Store {
       return;
     }
 
+
+    let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
+    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
+      this.state().get('goods').get('promotions') == 'club' ) {
+      message.error('If the subscription type in SPU is club, at lease one subscription type of Sku is club');
+      valid = false;
+      return;
+    }
+
     return valid;
   }
 
@@ -1534,10 +1543,8 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
-      console.log(param.toJS(), 'edit param-----')
       result = await edit(param.toJS());
     } else {
-      console.log(param.toJS(), 'new param-----')
       result = await save(param.toJS());
     }
 

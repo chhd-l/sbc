@@ -936,6 +936,14 @@ export default class AppStore extends Store {
       return;
     }
 
+    let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
+    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
+      this.state().get('goods').get('promotions') == 'club' ) {
+      message.error('If the subscription type in SPU is club, at lease one subscription type of Sku is club');
+      valid = false;
+      return;
+    }
+
     return valid;
   }
 
@@ -993,11 +1001,49 @@ export default class AppStore extends Store {
 
     let addSkUProduct = this.state().toJS().addSkUProduct;
     if (goodsList) {
-      console.log(this.state().get('goods').get('subscriptionStatus'),123);
-      if (this.state().get('goods').get('subscriptionStatus') != 0) {
-        goodsList.forEach((item) => {
+      if (this.state().get('goods').get('saleableFlag') != 0 ) {
+        goodsList.forEach((item, i ) => {
+
+
+          if(i == 0) {
+            if ( item.get('goodsInfoBundleRels').length != 1 ) {
+              if (item.get('marketPrice') == 0) {
+                tip = 1;
+                valid = false;
+                return;
+              }else if (item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
+                tip = 2;
+                valid = false;
+                return;
+              }
+
+            }
+
+          }else {
+            if ( item.get('marketPrice') == 0 ) {
+              tip = 1;
+              valid = false;
+              return;
+            }else if (item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
+              tip = 2;
+              valid = false;
+              return;
+            }
+
+          }
+
+
+
+        });
+
+      }
+
+
+      /*if (this.state().get('goods').get('subscriptionStatus') != 0) {
+        goodsList.forEach((item, i ) => {
+          console.log(i,111);
           if (this.state().get('goods').get('saleableFlag') != 0 || this.state().get('goods').get('subscriptionStatus') !=0 ) {
-            if(item.get('marketPrice') == undefined && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
+            if(item.get('marketPrice') == 0 && (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) ) {
               if (addSkUProduct[0].targetGoodsIds[0].saleableFlag == 0) {
                 tip = 1;
                 valid = false;
@@ -1051,51 +1097,8 @@ export default class AppStore extends Store {
           }
 
 
-          /*if (this.state().get('goods').get('saleableFlag') != 0) {
-            if(item.get('marketPrice') != undefined) {
-              //console.log(item.get('marketPrice'),345 )
-              if ( item.get('marketPrice') == 0 ) {
-                tip = 1;
-                valid = false;
-                return;
-              }
-            }else {
-              //console.log(item.get('marketPrice'),678 )
-              if ( addSkUProduct && addSkUProduct.length == 0 ) {
-                //console.log(item.get('marketPrice'),890 )
-
-                tip = 1;
-                valid = false;
-                return;
-              }
-            }
-          }*/
-
-
-
-          /*if (this.state().get('goods').get('saleableFlag') != 0) {
-            if(item.get('subscriptionPrice') != undefined) {
-              if ( item.get('subscriptionPrice') == 0 ) {
-                tip = 1;
-                valid = false;
-                return;
-              }
-            }else {
-              if ( addSkUProduct && addSkUProduct.length == 0 ) {
-                tip = 1;
-                valid = false;
-                return;
-              }
-            }
-          }*/
-
-          /* if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
-             tip = 2;
-             valid = false;
-             return;
-           }*/
         });
-      }
+      }*/
 
     }
     if (tip === 1) {
@@ -1116,7 +1119,6 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
-
         if (reg.test(item.get('stock')) === false ) {
           flag = 1
           valid = false;

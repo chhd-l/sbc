@@ -32,7 +32,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   render() {
     const { selectedRows, deleteSelectedSku } = this.props;
     const { skuExists } = this.state;
-debugger
     return (
       <TableRow>
         <DataGrid

@@ -25,8 +25,6 @@ export default class GoodsActor extends Actor {
         goodsNo: '',
         internalGoodsNo: '',
         promotions: 'club',
-        defaultPurchaseType: '',
-        defaultFrequencyId: '',
         // 计量单位
         goodsUnit: '',
         // 上下架状态

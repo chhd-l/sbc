@@ -107,6 +107,18 @@ class SkuForm extends React.Component<any, any> {
     };
   }
 
+  componentDidMount() {
+    const fieldsValue = this.props.form.getFieldsValue();
+    // 同步库存/市场价
+    let values = {};
+    Object.getOwnPropertyNames(fieldsValue).forEach((field) => {
+      if (field.indexOf('promotions_') === 0) {
+        values[field] = 111;
+      }
+    });
+    console.log(values,221112);
+  }
+
   render() {
     const { goodsList, onProductselectSku, addSkUProduct, goodsId } = this.props.relaxProps;
 
@@ -532,7 +544,11 @@ class SkuForm extends React.Component<any, any> {
       ,
       key: 'promotions',
       render: (rowInfo) => {
-        console.log(rowInfo,221);
+        console.log(rowInfo,1211);
+        const {form}=this.props;
+        // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
+
+       // form.setFieldsValue({'address_show':'test'});
         return (
           <Row>
             <Col span={12}>
@@ -546,6 +562,7 @@ class SkuForm extends React.Component<any, any> {
                     <Option value='autoship'>Auto ship</Option>
                   </Select>
                 )}
+
               </FormItem>
             </Col>
           </Row>
@@ -653,7 +670,6 @@ class SkuForm extends React.Component<any, any> {
     if (key == "goodsInfoBundleRels") {
       let minStock = []
       for (let i = 0; i<e.length; i++) {
-        console.log(e[i]);
         minStock.push(e[i].subStock / e[i].bundleNum)
       }
 
@@ -684,7 +700,7 @@ class SkuForm extends React.Component<any, any> {
       }
     }
 
-    if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
+    if (key == 'promotions' || key == 'goodsInfoBundleRels' ) {
       // 是否同步库存
       if (checked) {
         // 修改store中的库存或市场价
@@ -776,11 +792,26 @@ class SkuForm extends React.Component<any, any> {
         c.push(i);
       }
     });
+    goodsList.toJS().map((item,i)=>{
+      if (i == 0) {
+        if(a.length == 1) {
+          console.log(a)
+          editGoodsItem(item.id, 'marketPrice', a[0].marketPrice);
+          editGoodsItem(item.id, 'subscriptionPrice', a[0].subscriptionPrice);
+        }else {
+          editGoodsItem(item.id, 'marketPrice', item.marketPrice);
+          editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
+        }
+      }else {
+        editGoodsItem(item.id, 'marketPrice', item.marketPrice);
+        editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
+      }
+    })
+
     editGoodsItem(id, 'stock', tempMinStock);
     editGoodsItem(id, 'goodsInfoBundleRels', a);
+
     let d = b.concat(c);
-    //this._editGoodsItem(id, 'goodsInfoBundleRels', a);
-    //this._editGoodsItem(id, 'stock', tempMinStock);
 
     let e = d.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
 

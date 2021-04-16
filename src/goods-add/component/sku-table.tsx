@@ -544,27 +544,36 @@ class SkuForm extends React.Component<any, any> {
       ,
       key: 'promotions',
       render: (rowInfo) => {
-        console.log(rowInfo,1211);
-        const {form}=this.props;
-        // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
-
-       // form.setFieldsValue({'address_show':'test'});
         return (
           <Row>
-            <Col span={12}>
+            <Col span={12} key={goods.get('promotions')}>
+              <FormItem style={styles.tableFormItem}>
+                <Select  onChange={ (e) => this._editGoodsItem(rowInfo.id, 'promotions', e)}
+                         style={{ width: 100 }}
+                         defaultValue={rowInfo.promotions}
+                         getPopupContainer={() => document.getElementById('page-content')}
+                         placeholder="please select type"
+                         disabled={goods.get('promotions') == 'autoship'} >
+                  <Option value='club'>Club</Option>
+                  <Option value='autoship'>Auto ship</Option>
+                </Select>
+
+              </FormItem>
+            </Col>
+            {/*<Col span={12} key={goods.get('promotions')}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('promotions' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'promotions', e),
-                  initialValue: rowInfo.promotions || "club"
+                  initialValue: rowInfo.promotions
                 })(
-                  <Select style={{ width: 100 }} getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={goods.get('promotions') == 'autoship'} >
+                  <Select style={{ width: 100 }}  getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={goods.get('promotions') == 'autoship'} >
                     <Option value='club'>Club</Option>
                     <Option value='autoship'>Auto ship</Option>
                   </Select>
                 )}
 
               </FormItem>
-            </Col>
+            </Col>*/}
           </Row>
         );
       }

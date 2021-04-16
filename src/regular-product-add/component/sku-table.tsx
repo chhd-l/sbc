@@ -427,7 +427,21 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         return (
           <Row>
-            <Col span={12}>
+            <Col span={12} key={goods.get('promotions')}>
+              <FormItem style={styles.tableFormItem}>
+                <Select  onChange={ (e) => this._editGoodsItem(rowInfo.id, 'promotions', e)}
+                         style={{ width: 100 }}
+                         defaultValue={rowInfo.promotions}
+                         getPopupContainer={() => document.getElementById('page-content')}
+                         placeholder="please select type"
+                         disabled={goods.get('promotions') == 'autoship'} >
+                  <Option value='club'>Club</Option>
+                  <Option value='autoship'>Auto ship</Option>
+                </Select>
+
+              </FormItem>
+            </Col>
+            {/*<Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('promotions' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'promotions', e),
@@ -439,7 +453,7 @@ class SkuForm extends React.Component<any, any> {
                   </Select>
                 )}
               </FormItem>
-            </Col>
+            </Col>*/}
           </Row>
         );
       }

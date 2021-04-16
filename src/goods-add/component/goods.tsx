@@ -850,7 +850,6 @@ class GoodsForm extends React.Component<any, any> {
   _editGoods = (key: string, e) => {
     const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm, goodsList } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
-    console.log(key,123);
 
 
     if (e && e.target) {
@@ -926,7 +925,7 @@ class GoodsForm extends React.Component<any, any> {
       setFieldsValue({ promotions: e });
       editGoods(goods);
       goodsList.toJS()&&goodsList.toJS().map(item=>{
-        editGoodsItem(item.id,'promotions',e);
+        editGoodsItem(item.id,'promotions',fromJS(e));
       })
     }
 

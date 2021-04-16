@@ -107,18 +107,6 @@ class SkuForm extends React.Component<any, any> {
     };
   }
 
-  componentDidMount() {
-    const fieldsValue = this.props.form.getFieldsValue();
-    // 同步库存/市场价
-    let values = {};
-    Object.getOwnPropertyNames(fieldsValue).forEach((field) => {
-      if (field.indexOf('promotions_') === 0) {
-        values[field] = 111;
-      }
-    });
-    console.log(values,221112);
-  }
-
   render() {
     const { goodsList, onProductselectSku, addSkUProduct, goodsId } = this.props.relaxProps;
 

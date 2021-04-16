@@ -1543,10 +1543,8 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
-      console.log(param.toJS(), 'edit param-----')
       result = await edit(param.toJS());
     } else {
-      console.log(param.toJS(), 'new param-----')
       result = await save(param.toJS());
     }
 

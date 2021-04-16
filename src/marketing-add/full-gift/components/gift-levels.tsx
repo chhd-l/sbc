@@ -93,7 +93,6 @@ class GiftLevels extends React.Component<any, any> {
     const { goodsModal } = this.state
     const { form } = this.props;
     const { getFieldDecorator } = form;
-    console.log(selectedRows.toJS(), 'selectedGiftRows-------');
     return (
       <div>
         {fullGiftLevelList &&

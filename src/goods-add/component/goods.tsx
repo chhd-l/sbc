@@ -999,7 +999,6 @@ class GoodsForm extends React.Component<any, any> {
       editGoods(goods);
     }
     if (key === 'subscriptionStatus' && e == 0) {
-      console.log(e);
 
       let goods = Map({
         subscriptionStatus: fromJS(0)

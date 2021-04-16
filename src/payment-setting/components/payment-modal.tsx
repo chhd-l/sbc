@@ -82,8 +82,7 @@ class PaymentModal extends React.Component<any, any> {
 
     const { key, onFormChange, visible, saveLoading } = this.props.relaxProps
     let paymentForm =  this.props.relaxProps.paymentForm.toJS()
-    console.log(key, 'key----------');
-    console.log(paymentForm, 'paymentForm----------');
+
     return (
       <Modal afterClose={this.afterClose} confirmLoading={saveLoading} maskClosable={false} title="Edit Payment Setting" visible={visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
         <Tabs defaultActiveKey={key ? key.toString() : null} onChange={this._handleClick}>
@@ -360,7 +359,6 @@ class PaymentModal extends React.Component<any, any> {
           })
         }
       }
-      console.log(params, 'params-----');
       if (!errs) {
         save(params)
       }

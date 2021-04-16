@@ -99,7 +99,6 @@ class MessageSetting extends Component<any, any> {
     webapi.getApiSenderList(item.emailType).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        console.log(res);
         let senderList = res.context.list
         // senderList 去重; 重复邮件名会引发UI 框架bug
         let senderListTemp = []

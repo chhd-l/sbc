@@ -52,7 +52,6 @@ export default class Bottom extends React.Component<any, any> {
     //     .filter((v) => v)
     //     .join('，');
     // }
-    console.log(currentGroup, 'currentGroup----------');
     return (
       <div>
         <GreyBg>

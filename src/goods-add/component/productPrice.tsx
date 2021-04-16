@@ -349,8 +349,6 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
-        console.log(addSkUProduct,6666666);
-        console.log(rowInfo,777777);
 
         let marketPrice = 0
         let subscriptionPrice = 0

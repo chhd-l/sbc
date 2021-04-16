@@ -378,9 +378,6 @@ class FullGiftForm extends React.Component<any, any> {
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
-    console.log(marketingBean.toJS(), 'marketingBean------------');
-    console.log(selectedRows.toJS(), 'selectedRows------------');
-    console.log(selectedGiftRows.toJS(), 'selectedGiftRows------------');
 
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>

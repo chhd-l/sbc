@@ -1003,8 +1003,7 @@ export default class AppStore extends Store {
     if (goodsList) {
       if (this.state().get('goods').get('saleableFlag') != 0 ) {
         goodsList.forEach((item, i ) => {
-          //console.log(i,111);
-          //console.log(item.toJS(),22222);
+
 
           if(i == 0) {
             if ( item.get('goodsInfoBundleRels').length != 1 ) {

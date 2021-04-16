@@ -55,7 +55,6 @@ export default class AppStore extends Store {
         level.customerLevelName = level.levelName;
       });
     }
-    console.log(this.state().toJS(), '--------state');
     this.dispatch('marketingActor:level', fromJS(levelList));
     this.dispatch('loading:end')
   };

@@ -344,6 +344,7 @@ class SkuForm extends React.Component<any, any> {
       key: 'marketPrice',
       render: (rowInfo) => {
         console.log(addSkUProduct,6666666);
+        console.log(rowInfo,777777);
         let marketPrice =  rowInfo.marketPrice ? rowInfo.marketPrice : 0
         let subscriptionPrice =  rowInfo.subscriptionPrice ? rowInfo.subscriptionPrice : 0
         if(goods.get('goodsId') == null) {
@@ -365,6 +366,10 @@ class SkuForm extends React.Component<any, any> {
               marketPrice = 0
               subscriptionPrice = 0
             }else if (addSkUProduct.length == 0 || addSkUProduct.length == undefined ){
+              marketPrice = 0
+              subscriptionPrice = 0
+            }else if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length > 0 ) {
+            console.log(88888)
               marketPrice = 0
               subscriptionPrice = 0
             }

@@ -431,11 +431,11 @@ class SkuForm extends React.Component<any, any> {
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('promotions' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'promotions', e),
-                  initialValue:  rowInfo.promotions || "autoship"
+                  initialValue:  rowInfo.promotions || "club"
                 })(
                   <Select style={{ width: 100 }} getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={goods.get('promotions') == 'autoship'} >
-                    <Option value='autoship'>Auto ship</Option>
                     <Option value='club'>Club</Option>
+                    <Option value='autoship'>Auto ship</Option>
                   </Select>
                 )}
               </FormItem>

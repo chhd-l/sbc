@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Radio, Row, Col } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper, cache, getOrderStatusValue, RCi18n } from 'qmkit';
-import { FormattedMessage,injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
@@ -13,9 +13,9 @@ const defaultImg = require('../../goods-list/img/none.png');
 type TList = List<any>;
 
 class RejectForm extends React.Component<any, any> {
-  props:{
+  props: {
     intl: any;
-  }
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -34,7 +34,7 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={(window as any).RCi18n({id:'Order.rejectionReasonTip'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={(window as any).RCi18n({ id: 'Order.rejectionReasonTip' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -80,7 +80,7 @@ class ListView extends React.Component<any, any> {
       onCheckedAll: Function;
       allChecked: boolean;
       onAudit: Function;
-      onValidateAudit:Function;
+      onValidateAudit: Function;
       init: Function;
       onRetrial: Function;
       onConfirm: Function;
@@ -198,27 +198,34 @@ class ListView extends React.Component<any, any> {
               }}
             />
           </Modal>
-          <Modal maskClosable={false} title={<FormattedMessage id="Order.previewThisOrder" />} visible={orderAuditModalVisible} okText={<FormattedMessage id="Order.OK" />} onOk={() => this._handleAuditOK()} onCancel={() => this._handleAuditCancel()}>
-            <h3><strong>{<FormattedMessage id="Order.confirmThisOrder" />}</strong></h3>
-            <p className="ant-form-item-required" style={{ margin: '20px 0' }}> <span></span> {<FormattedMessage id="Order.auditBasis" />}</p>
-            <Row>
-              <Col span={6}>{<FormattedMessage id="Order.selectType" />}</Col>
-              <Col span={12}>
-                <Radio.Group
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.setState({
-                      orderAduit: value
-                    });
-                  }}
-                  defaultValue={1}
-                >
-                  <Radio value={1}>{<FormattedMessage id="Order.auditPassed" />}</Radio>
-                  <Radio value={2}>{<FormattedMessage id="Order.auditFailed" />}</Radio>
-                </Radio.Group>
-              </Col>
-            </Row>
-          </Modal>
+          {orderAuditModalVisible ? (
+            <Modal maskClosable={false} title={<FormattedMessage id="Order.previewThisOrder" />} visible={orderAuditModalVisible} okText={<FormattedMessage id="Order.OK" />} onOk={() => this._handleAuditOK()} onCancel={() => this._handleAuditCancel()}>
+              <h3>
+                <strong>{<FormattedMessage id="Order.confirmThisOrder" />}</strong>
+              </h3>
+              <p className="ant-form-item-required" style={{ margin: '20px 0' }}>
+                {' '}
+                <span></span> {<FormattedMessage id="Order.auditBasis" />}
+              </p>
+              <Row>
+                <Col span={6}>{<FormattedMessage id="Order.selectType" />}</Col>
+                <Col span={12}>
+                  <Radio.Group
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.setState({
+                        orderAduit: value
+                      });
+                    }}
+                    defaultValue={1}
+                  >
+                    <Radio value={1}>{<FormattedMessage id="Order.auditPassed" />}</Radio>
+                    <Radio value={2}>{<FormattedMessage id="Order.auditFailed" />}</Radio>
+                  </Radio.Group>
+                </Col>
+              </Row>
+            </Modal>
+          ) : null}
         </div>
       </div>
     );
@@ -564,8 +571,8 @@ class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: (window as any).RCi18n({id:'Order.ConfirmReceipt'}),
-      content: (window as any).RCi18n({id:'Order.ConfirmThatAllProducts'}),
+      title: (window as any).RCi18n({ id: 'Order.ConfirmReceipt' }),
+      content: (window as any).RCi18n({ id: 'Order.ConfirmThatAllProducts' }),
       onOk() {
         onConfirm(tdId);
       },
@@ -600,10 +607,10 @@ class ListView extends React.Component<any, any> {
     hideRejectModal();
     this._rejectForm.setFieldsValue({ comment: '' });
   };
-  _handleAuditCancel=()=>{
+  _handleAuditCancel = () => {
     const { hideAuditModal } = this.props.relaxProps;
     hideAuditModal();
-  }
+  };
   isPrescriber = () => {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     let roleName = employee.roleName;
@@ -673,5 +680,4 @@ const styles = {
   }
 } as any;
 
-
-export default injectIntl(ListView)
+export default injectIntl(ListView);

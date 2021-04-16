@@ -85,15 +85,14 @@ class SearchHead extends Component<any, any> {
         { value: 'Cat_Dog', name: props.intl.formatMessage({ id: 'Order.Cat&Dog' }) },
         { value: 'SmartFeeder', name: props.intl.formatMessage({ id: 'Order.smartFeeder' }) }
       ],
-      subscriptionTypeList: [],
-      subscriptionTypeListClone: [
-        { value: 'ContractProduct', name: props.intl.formatMessage({ id: 'Order.contractProduct' }), isMixed: false },
-        { value: 'Club', name: props.intl.formatMessage({ id: 'Order.club' }), isMixed: false },
-        { value: 'Autoship', name: props.intl.formatMessage({ id: 'Order.autoship' }), isMixed: false },
-        { value: 'Autoship_Club', name: props.intl.formatMessage({ id: 'Order.Autoship&Club' }), isMixed: true },
-        { value: 'Autoship_SingePurchase', name: props.intl.formatMessage({ id: 'Order.Autoship&singePurchase' }), isMixed: true },
-        { value: 'Club_SingePurchase', name: props.intl.formatMessage({ id: 'Order.Club&singePurchase' }), isMixed: true },
-        { value: 'Autoship_Club_SingePurchase', name: props.intl.formatMessage({ id: 'Order.Autoship&Club&singePurchase' }), isMixed: true }
+      subscriptionTypeList: [
+        { value: 'ContractProduct', name: props.intl.formatMessage({ id: 'Order.contractProduct' }) },
+        { value: 'Club', name: props.intl.formatMessage({ id: 'Order.club' }) },
+        { value: 'Autoship', name: props.intl.formatMessage({ id: 'Order.autoship' }) },
+        { value: 'Autoship_Club', name: props.intl.formatMessage({ id: 'Order.Autoship&Club' }) }
+        // { value: 'Autoship_SingePurchase', name: props.intl.formatMessage({ id: 'Order.Autoship&singePurchase' }), isMixed: true },
+        // { value: 'Club_SingePurchase', name: props.intl.formatMessage({ id: 'Order.Club&singePurchase' }), isMixed: true },
+        // { value: 'Autoship_Club_SingePurchase', name: props.intl.formatMessage({ id: 'Order.Autoship&Club&singePurchase' }), isMixed: true }
       ],
 
       tradeState: {
@@ -223,7 +222,9 @@ class SearchHead extends Component<any, any> {
                             value={orderType}
                             getPopupContainer={(trigger: any) => trigger.parentNode}
                             onChange={(value) => {
-                              this.getSubscriptionType(value);
+                              this.setState({
+                                orderType: value
+                              });
                             }}
                           >
                             {orderTypeList &&
@@ -331,7 +332,7 @@ class SearchHead extends Component<any, any> {
                           dropdownMatchSelectWidth={false}
                           allowClear
                           value={subscriptionType}
-                          disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                          // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState(
@@ -393,7 +394,7 @@ class SearchHead extends Component<any, any> {
                           style={styles.wrapper}
                           allowClear
                           value={refillNumber}
-                          disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                          // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({
@@ -420,7 +421,7 @@ class SearchHead extends Component<any, any> {
                           style={styles.wrapper}
                           allowClear
                           value={subscriptionPlanType}
-                          disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                          // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({
@@ -752,32 +753,19 @@ class SearchHead extends Component<any, any> {
       </Select>
     );
   };
-  getSubscriptionType = (orderType) => {
-    const { subscriptionTypeListClone } = this.state;
-    this.setState({
-      orderType: orderType,
-      subscriptionType: '',
-      subscriptionPlanType: '',
-      refillNumber: ''
-    });
-    let newSubscriptionTypeList = [];
-    if (orderType === 'SUBSCRIPTION') {
-      newSubscriptionTypeList = subscriptionTypeListClone.filter((x) => x.isMixed === false);
-    }
-    if (orderType === 'MIXED_ORDER') {
-      newSubscriptionTypeList = subscriptionTypeListClone.filter((x) => x.isMixed === true);
-    }
-    this.setState({
-      subscriptionTypeList: newSubscriptionTypeList
-    });
-  };
   getSubsrciptionPlanType = (subsriptionType) => {
     const { subscriptionPlanTypeListClone } = this.state;
     let newSubscriptionPlanTypeList = [];
-    if (subsriptionType === 'ContractProduct') {
-      newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'SmartFeeder');
-    } else if (subsriptionType.indexOf('Club') >= 0) {
-      newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat');
+    if(subsriptionType) {
+      if (subsriptionType === 'ContractProduct') {
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'SmartFeeder');
+      } else if (subsriptionType.indexOf('Club') >= 0) {
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat');
+      }
+    } else {
+      this.setState({
+        subscriptionPlanType: ''
+      })
     }
     this.setState({
       subscriptionPlanTypeList: newSubscriptionPlanTypeList

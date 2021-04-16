@@ -1823,7 +1823,7 @@ export default {
   'Subscription.noStart.EnjoyDiscount':'Enjoy discount',
   'Subscription.noStart.Amount':'Amount',
   'Subscription.noStart.ShipmentDate':'Shipment date',
-  'Subscription.AutoshipOrder':'Autoship order',
+  'Subscription.AutoshipOrder':'Subscription order',
   'Subscription.NoStart':'No start',
   'Subscription.Completed':'Completed',
   'Subscription.ColSpan.ubscriptionNumberS':'ubscription Number',

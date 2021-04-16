@@ -82,19 +82,25 @@ export default class GoodsGrid extends React.Component<any, any> {
           rowSelection={{
             selectedRowKeys: selectedRowKeys,
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
-              let rows = [...selectedRows,...selectedTableRows]
+              let rows = selectedRows.concat(selectedTableRows) //[...selectedRows,...selectedTableRows]
               let _rowObj={}
               rows.map(item=>{
-                _rowObj[item.goodsInfoId]=item;
+                if(!_rowObj[item.goodsInfoId]){
+                  _rowObj[item.goodsInfoId]=item;
+                }
+                
               })
+              console.log(_rowObj,'selectedRows')
               let _newRow=selectedRowKeys.map(item=>{
-                  return {..._rowObj[item],quantity:1}
+
+                // debugger
+                  return {..._rowObj[item],quantity:_rowObj[item]?.quantity??1}
               })
               this.setState({
                 selectedRows: _newRow,
                 selectedRowKeys
               });
-              rowChangeBackFun(selectedRowKeys, fromJS(_newRow));
+              rowChangeBackFun(selectedRowKeys, _newRow);
             },
             getCheckboxProps: (record) => ({
               /* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..

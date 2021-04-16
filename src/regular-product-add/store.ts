@@ -1037,6 +1037,7 @@ export default class AppStore extends Store {
       return;
     }
 
+
     let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
       this.state().get('goods').get('promotions') == 'club' ) {

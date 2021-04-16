@@ -532,17 +532,18 @@ class SkuForm extends React.Component<any, any> {
       ,
       key: 'promotions',
       render: (rowInfo) => {
+        console.log(rowInfo,221);
         return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('promotions' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'promotions', e),
-                  initialValue: rowInfo.promotions || "autoship"
+                  initialValue: rowInfo.promotions || "club"
                 })(
                   <Select style={{ width: 100 }} getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={goods.get('promotions') == 'autoship'} >
-                    <Option value='autoship'>Auto ship</Option>
                     <Option value='club'>Club</Option>
+                    <Option value='autoship'>Auto ship</Option>
                   </Select>
                 )}
               </FormItem>
@@ -652,7 +653,8 @@ class SkuForm extends React.Component<any, any> {
     if (key == "goodsInfoBundleRels") {
       let minStock = []
       for (let i = 0; i<e.length; i++) {
-        minStock.push(e[i].stock / e[i].bundleNum)
+        console.log(e[i]);
+        minStock.push(e[i].subStock / e[i].bundleNum)
       }
 
       let tempMinStock = Math.min.apply(Math, minStock)
@@ -749,8 +751,6 @@ class SkuForm extends React.Component<any, any> {
     let c = [];
     let minStock = []
     let tempMinStock = 0
-    console.log(addSkUProduct,221);
-    console.log(goodsList.toJS(),112);
     addSkUProduct.map((i) => {
       if (i.pid == pid) {
         i.targetGoodsIds.map((o) => {
@@ -760,6 +760,7 @@ class SkuForm extends React.Component<any, any> {
           }
         });
         tempMinStock = Math.min.apply(Math, minStock)
+
         if (tempMinStock != 0) {
           tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
         }else {

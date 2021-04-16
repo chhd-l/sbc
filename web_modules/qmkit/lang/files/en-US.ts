@@ -1639,6 +1639,7 @@ export default {
   'Order.sendFailed':'send failed!',
   'Order.switchFailed':'switch failed!',
   'Order.exportedTip2':'Please select data to export',
+  'Order.returnList':'Return list',
 
 
 
@@ -3472,7 +3473,10 @@ export default {
   'Setting.export':'Export',
   'Setting.SupportSubscription': 'Support Subscription',
   'Setting.maxAmount': 'Max amount',
-
+  'Setting.Onlinepayment': 'Online payment',
+  'Setting.Setinpaymentmethodmodel': 'Set in payment method model',
+  'Setting.Offlinepayment': 'Offline payment',
+  'Setting.COD': 'COD',
 
 
   /*-----------------------------  Fetch  ----------------------------------------*/

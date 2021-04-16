@@ -102,7 +102,7 @@ class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="Order.refundList" />} />
+        <Headline title={<FormattedMessage id="Order.returnList" />} />
 
         <div>
           <Form className="filter-content" layout="inline">

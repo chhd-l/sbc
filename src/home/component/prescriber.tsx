@@ -177,19 +177,19 @@ class Prescriber extends React.Component<any, any> {
                       </span>
                     </div>
                   </div>
-                  <div className="line"></div>
-                  <div className="mode">
-                    <div className="mode-text">
-                      <FormattedMessage id="Home.Traffic" />
-                    </div>
-                    <div className="mode-num">{tradeCustomerView && tradeCustomerView.traffic != null ? <CountUp end={tradeCustomerView.traffic} {...countUpProps} /> : '--'}</div>
-                    <div className="mode-per">
-                      {tradeCustomerView && tradeCustomerView.trafficRate != null ? <img src={tradeCustomerView.trafficRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                      <span className={tradeCustomerView && tradeCustomerView.trafficRate != null ? (tradeCustomerView.trafficRate >= 0 ? 'green' : 'red') : ''}>
-                        {tradeCustomerView && tradeCustomerView.trafficRate != null ? <CountUp end={Math.abs(tradeCustomerView.trafficRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                      </span>
-                    </div>
-                  </div>
+                  {/*<div className="line"></div>*/}
+                  {/*<div className="mode">*/}
+                  {/*  <div className="mode-text">*/}
+                  {/*    <FormattedMessage id="Home.Traffic" />*/}
+                  {/*  </div>*/}
+                  {/*  <div className="mode-num">{tradeCustomerView && tradeCustomerView.traffic != null ? <CountUp end={tradeCustomerView.traffic} {...countUpProps} /> : '--'}</div>*/}
+                  {/*  <div className="mode-per">*/}
+                  {/*    {tradeCustomerView && tradeCustomerView.trafficRate != null ? <img src={tradeCustomerView.trafficRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}*/}
+                  {/*    <span className={tradeCustomerView && tradeCustomerView.trafficRate != null ? (tradeCustomerView.trafficRate >= 0 ? 'green' : 'red') : ''}>*/}
+                  {/*      {tradeCustomerView && tradeCustomerView.trafficRate != null ? <CountUp end={Math.abs(tradeCustomerView.trafficRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}*/}
+                  {/*    </span>*/}
+                  {/*  </div>*/}
+                  {/*</div>*/}
                 </div>
               </div>
               <div className="conversion space-between">

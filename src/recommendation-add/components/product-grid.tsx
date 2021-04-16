@@ -90,7 +90,6 @@ export default class GoodsGrid extends React.Component<any, any> {
                 }
                 
               })
-              console.log(_rowObj,'selectedRows')
               let _newRow=selectedRowKeys.map(item=>{
 
                 // debugger

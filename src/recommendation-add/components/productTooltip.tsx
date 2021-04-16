@@ -122,7 +122,6 @@ export default class GoodsModal extends React.Component<any, any> {
     );
   }
   rowChangeBackFun = (selectedSkuIds, selectedRows) => {
-    console.log(selectedRows,'selectedRows')
     this.setState({
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows

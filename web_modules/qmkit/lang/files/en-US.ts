@@ -1639,6 +1639,7 @@ export default {
   'Order.sendFailed':'send failed!',
   'Order.switchFailed':'switch failed!',
   'Order.exportedTip2':'Please select data to export',
+  'Order.returnList':'Return list',
 
 
 

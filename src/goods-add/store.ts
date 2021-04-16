@@ -1118,6 +1118,7 @@ export default class AppStore extends Store {
 
     if (goodsList) {
       goodsList.forEach((item) => {
+        console.log(item.toJS(),222222);
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
         if (reg.test(item.get('stock')) === false ) {
           flag = 1

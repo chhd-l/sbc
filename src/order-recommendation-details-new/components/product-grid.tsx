@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { cache, Const, DataGrid, SelectGroup } from 'qmkit';
+import { cache, Const, DataGrid, SelectGroup, RCi18n } from 'qmkit';
 
 //import SearchForm from './search-form';
 import * as webapi from '../webapi';
@@ -147,20 +147,20 @@ export default class GoodsGrid extends React.Component<any, any> {
             })
           }}
         >
-          <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
-          <Column title="SPU" dataIndex="goodsNo" key="goodsNo" />
-          <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
-          <Column title="Sales category" dataIndex="storeCateName" key="storeCateName" />
+          <Column title={RCi18n({id:'Order.Product Name'})} dataIndex="goodsInfoName" key="goodsInfoName" />
+          <Column title={RCi18n({id:'Order.SPU'})} dataIndex="goodsNo" key="goodsNo" />
+          <Column title={RCi18n({id:'Order.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" />
+          <Column title={RCi18n({id:'Order.Product category'})} dataIndex="goodsCateName" key="goodsCateName" />
+          <Column title={RCi18n({id:'Order.Sales category'})} dataIndex="storeCateName" key="storeCateName" />
           <Column
-            title="Weight"
+            title={RCi18n({id:'Order.Weight'})}
             dataIndex="goodsInfoWeight"
             key="goodsInfoWeight"
             render={(goodsInfoWeight) => {
               return goodsInfoWeight != null ? goodsInfoWeight : '--';
             }}
           />
-          <Column title="Price" dataIndex="marketPrice" key="marketPrice" render={(marketPrice) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + marketPrice}</span>} />
+          <Column title={RCi18n({id:'Order.Price'})} dataIndex="marketPrice" key="marketPrice" render={(marketPrice) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + marketPrice}</span>} />
 
           {/* <Column
             title="Quantity"

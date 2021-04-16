@@ -5,7 +5,7 @@ import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
-import { cache, history, noop, SelectGroup } from 'qmkit';
+import { cache, history, noop, SelectGroup, RCi18n } from 'qmkit';
 const Option = Select.Option;
 //import moment from 'moment';
 
@@ -79,9 +79,9 @@ export default class BillingDetails extends React.Component<any, any> {
         <div className="space-between" style={{ marginTop: 15, marginBottom: 10 }}>
           <div style={{ width: 150, margin: '0 auto' }}>
             {history.location.state ? (
-              <SelectGroup label="Prescriber" disabled={true} value={detailProductList.prescriberName} disabled={localStorage.getItem('enable') ? true : false}></SelectGroup>
+              <SelectGroup label={RCi18n({id:'Order.Prescriber'})} disabled={true} value={detailProductList.prescriberName} disabled={localStorage.getItem('enable') ? true : false}></SelectGroup>
             ) : (
-              <SelectGroup label="Prescriber" defaultValue={sharing.get('prescriberId') ? sharing.get('prescriberId') : employee.prescribers[0].id} disabled={localStorage.getItem('enable') ? true : false} onChange={(value, name) => this._prescriberChange(value, name)}>
+              <SelectGroup label={RCi18n({id:'Order.Prescriber'})} defaultValue={sharing.get('prescriberId') ? sharing.get('prescriberId') : employee.prescribers[0].id} disabled={localStorage.getItem('enable') ? true : false} onChange={(value, name) => this._prescriberChange(value, name)}>
                 {allPrescribers.map((item) => (
                   <Option value={item.id} key={item.id}>
                     {item.prescriberName}
@@ -90,7 +90,7 @@ export default class BillingDetails extends React.Component<any, any> {
               </SelectGroup>
             )}
           </div>
-          <div style={{ marginTop: 12, marginRight: 105 }}>{history.location.state ? <Switch checkedChildren=" Valid " unCheckedChildren=" Invalid " defaultChecked onClick={this.onValid} disabled={localStorage.getItem('enable') ? true : false} /> : null}</div>
+          <div style={{ marginTop: 12, marginRight: 105 }}>{history.location.state ? <Switch checkedChildren={RCi18n({id:'Order.Valid'})} unCheckedChildren={RCi18n({id:'Order.invalid'})} defaultChecked onClick={this.onValid} disabled={localStorage.getItem('enable') ? true : false} /> : null}</div>
         </div>
       </div>
     );

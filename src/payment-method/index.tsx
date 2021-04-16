@@ -6,6 +6,7 @@ import AppStore from './store';
 import PaymentList from '@/payment-method/components/payment-list';
 import './index.less';
 import {Form} from "antd";
+import { FormattedMessage } from 'react-intl';
 /**
  * 退单列表
  */
@@ -30,7 +31,7 @@ export default class OrderReturnList extends React.Component<any, any> {
     <div className="order-con">
       <BreadCrumb />
       <div className="container method-container">
-        <Headline title="Payment method" />
+        <Headline title={<FormattedMessage id="Setting.paymentMethod" />} />
         <PaymentList />
         {/*<WrappedForm ref={(form) => (this._form = form)} />*/}
       </div>

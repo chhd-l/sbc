@@ -69,7 +69,6 @@ class MarketingDes extends React.Component<any, any> {
 
   render() {
     const { marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel } = this.props.relaxProps;
-    console.log(marketingFreeShippingLevel, 'marketingFreeShippingLevel------------');
     return (
       <GreyBg>
         <Row>

@@ -3,7 +3,7 @@ import { Form, Button, Icon} from 'antd';
 const bg_login = require('./img/bg-notify.png');
 const img_review = require('./img/review.png');
 import { withOktaAuth } from '@okta/okta-react';
-import { cache, Const } from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
 export default withOktaAuth(class LoginNotify extends React.Component<any, any> {
@@ -21,12 +21,11 @@ export default withOktaAuth(class LoginNotify extends React.Component<any, any> 
             <img style={styles.reviewLogo} src={img_review} />
           </FormItem>
             <FormItem style={{ marginBottom: 30 }}>
-                <div style={styles.reviewWord}>Under Review</div>
+                <div style={styles.reviewWord}>{RCi18n({id:'Public.UnderReview'})}</div>
             </FormItem>
             <FormItem style={{ marginBottom: 40 }}>
                 <div style={styles.notifyWord}>
-                  Your application has been sent to the related prescriber and the user account is under audit.
-                  We will notify you of the result by email.
+                  {RCi18n({id:'Public.Yourapplication'})}
                 </div>
             </FormItem>
             <FormItem style={{ marginBottom: 30 }}>
@@ -36,7 +35,7 @@ export default withOktaAuth(class LoginNotify extends React.Component<any, any> 
                 style={styles.returnBtn}
                 onClick={(e) => this._handleReturn(e)}
               >
-                <Icon type="arrow-left" /> Return
+                <Icon type="arrow-left" /> {RCi18n({id:'Public.Return'})}
               </Button>
             </FormItem>
           </Form>

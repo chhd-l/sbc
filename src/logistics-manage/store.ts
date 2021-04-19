@@ -2,7 +2,7 @@ import { IOptions, Store } from 'plume2';
 import * as webapi from './webapi';
 import { message } from 'antd';
 import ExpActor from './actor/exp-actor';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -41,14 +41,14 @@ export default class AppStore extends Store {
     const checkedRelation = this.state().get('checkedRelation');
     if (checked) {
       if (checkedRelation.size >= 20) {
-        message.error('Up to 20 logistics companies can be set up');
+        message.error(RCi18n({id:'Public.logisticsCompanyTip'}));
       } else {
         const { res } = await webapi.addExpress(expressCompanyId);
         if (res.code == Const.SUCCESS_CODE) {
           this.dispatch('exp:afterChecked', res.context);
           this.dispatch('exp:checked', { index, checked });
         } else if (res.code == 'K-090903') {
-          message.error('The selected logistics company does not exist!');
+          message.error(RCi18n({id:'Public.logisticsCompanyErr'}));
           this.init();
         } else {
           this.init();

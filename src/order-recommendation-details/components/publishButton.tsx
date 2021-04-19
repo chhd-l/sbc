@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Button, message } from 'antd';
 import { Relax } from 'plume2';
-import { AuthWrapper, history, noop, util } from 'qmkit';
+import { AuthWrapper, history, noop, util, RCi18n } from 'qmkit';
 import '../style.less';
 import PublishTooltip from './publishTooltip';
 
@@ -50,7 +50,7 @@ export default class PublishButton extends React.Component<any, any> {
       });
       linkType++;
     } else {
-      message.error('Recommended product cannot be empty !');
+      message.error(RCi18n({id:'Order.RecommendedTip'}));
     }
   };
 
@@ -63,7 +63,7 @@ export default class PublishButton extends React.Component<any, any> {
           //href="/recomm-page"
           onClick={() => history.goBack()}
         >
-          Cancel
+          {RCi18n({id:'Order.btnCancel'})}
         </Button>
         {history.location.state ? null : (
           <Button
@@ -71,7 +71,7 @@ export default class PublishButton extends React.Component<any, any> {
             shape="round"
             onClick={() => this.showModal(true)}
           >
-            {this.state.linkType == true ? 'Create Link' : 'Sharing'}
+            {this.state.linkType == true ? RCi18n({id:'Order.CreateLink'}) : RCi18n({id:'Order.Sharing'})}
           </Button>
         )}
         <PublishTooltip

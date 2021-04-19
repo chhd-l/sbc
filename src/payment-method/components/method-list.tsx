@@ -220,7 +220,6 @@ export default class PaymentMethod extends React.Component<any, any> {
           <div className="flex-start-align">
             {queryByStoreId.List3 &&
               queryByStoreId.List3.map((item, index) => {
-                console.log(item,111111);
                 return (
                   /*<Form key={index}>
                     <Row>

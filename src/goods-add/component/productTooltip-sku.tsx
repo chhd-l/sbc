@@ -120,6 +120,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
           subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
           bundleNum: 1,
           subStock: item.stock,
+          stock: item.stock,
           saleableFlag: item.saleableFlag,
           marketPrice: item.marketPrice,
           subMarketPrice: item.subMarketPrice,
@@ -170,7 +171,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     } else {
       message.info('Maximum 10 products!');
     }
-    this.props.form.resetFields();
+    //this.props.form.resetFields();
     this.clearSearchForm()
   }
   clearSearchForm =()=>{

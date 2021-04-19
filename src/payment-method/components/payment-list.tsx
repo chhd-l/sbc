@@ -45,7 +45,6 @@ export default class PaymentList extends React.Component<any, any> {
 
   render() {
     const { storePaymentVOs, loading } = this.props.relaxProps;
-    console.log(storePaymentVOs, 'storePaymentVOs--------------');
     const nodata = (!storePaymentVOs.get('onlinePaymentMethodList') || storePaymentVOs.get('onlinePaymentMethodList').size ===0) &&
       (!storePaymentVOs.get('offlinePaymentMethodList') || storePaymentVOs.get('offlinePaymentMethodList').size ===0) &&
       (!storePaymentVOs.get('codPaymentMethodList') || storePaymentVOs.get('codPaymentMethodList').size ===0)

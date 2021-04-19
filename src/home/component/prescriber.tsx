@@ -195,28 +195,28 @@ class Prescriber extends React.Component<any, any> {
               <div className="conversion space-between">
                 <div className="item-top-l-btm-l">
                   <div className="top-text">
-                    <FormattedMessage id="Home.ConversionFunnel" />
+                    <FormattedMessage id="Home.Conversionfunnel" />
                   </div>
                   <div className="Funnel">
                     <Funnel data={conversionFunnelDashboardView && conversionFunnelDashboardView.dataList} />
                     <div className="Funnel-l">
                       <div className="Funnel-l-text">
-                        <p>Landing page</p>
+                        <p>{RCi18n({id:'Home.LandingPage'})}</p>
                         <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</p>
                         <p className="Funnel-l-dash1"></p>
                       </div>
                       <div className="Funnel-l-text">
-                        <p>Shopping cart</p>
+                        <p>{RCi18n({id:'Home.ShoppingCart'})}</p>
                         <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</p>
                         <p className="Funnel-l-dash2"></p>
                       </div>
                       <div className="Funnel-l-text">
-                        <p>Checkout</p>
+                        <p>{RCi18n({id:'Home.Checkout'})}</p>
                         <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</p>
                         <p className="Funnel-l-dash3"></p>
                       </div>
                       <div className="Funnel-l-text">
-                        <p>Payment</p>
+                        <p>{RCi18n({id:'Home.Payment'})}</p>
                         <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</p>
                         <p className="Funnel-l-dash4"></p>
                       </div>

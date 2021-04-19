@@ -32,7 +32,6 @@ export default class AppStore extends Store {
     this.dispatch('loading:start');
 
     webapi.fetchOrderList({  ...result, pageNum, pageSize }).then(({ res }) => {
-      console.log(res)
       if (res.code == Const.SUCCESS_CODE) {
         this.transaction(() => {
           this.dispatch('loading:end');

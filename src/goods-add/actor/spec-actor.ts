@@ -27,6 +27,8 @@ export default class GoodsSpecActor extends Actor {
           goodsInfoNo: this._randomGoodsInfoNo(),
           subscriptionStatus: 1,
           promotions: 'club',
+          marketPrice: 0,
+          subscriptionPrice: 0,
           stock: 0,
           goodsInfoBundleRels: []
         }
@@ -353,7 +355,8 @@ export default class GoodsSpecActor extends Actor {
         goodsInfoBundleRels: [],
         stock: 0,
         promotions: 'club',
-        //subscriptionPrice: 0,
+        marketPrice: 0,
+        subscriptionPrice: 0,
         //subscriptionStatus: spec.get('subscriptionStatus'),
         skuSvIds: [item.get('specDetailId')]
       });

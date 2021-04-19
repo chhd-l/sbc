@@ -60,7 +60,6 @@ export default class PaymentSetting extends React.Component<any, any> {
 
   render() {
     const paymentList  = this.store.state().get('paymentList') ? this.store.state().get('paymentList').toJS() : [];
-    console.log(paymentList, 'paymentList-----------');
     return (
       <div>
         <BreadCrumb />

@@ -124,7 +124,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore="Recommendation No"
+                    addonBefore={RCi18n({id:'Order.RecommendationNo'})}
                     onChange={(e) => {
                       this.setState({
                         recommendationId: (e.target as any).value
@@ -258,7 +258,7 @@ class SearchHead extends Component<any, any> {
                       }}
                     >
                       <span>
-                        <FormattedMessage id="Marketing.New" />
+                        <FormattedMessage id="Order.New" />
                       </span>
                     </Button>
                   ) : null}
@@ -284,7 +284,7 @@ class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="Marketing.search" />
+                      <FormattedMessage id="Order.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -324,20 +324,20 @@ class SearchHead extends Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        defaultValue="Recipient name"
+        defaultValue={RCi18n({id:'Order.RecipientName'})}
         onChange={(value, a) => {
           this.setState({
             buyerOptions: value
           });
         }}
-        value={this.state.buyerOptions}
+        // value={this.state.buyerOptions}
         style={styles.label}
       >
         <Option value="consumerName">
-          <FormattedMessage id="Marketing.RecipientName" />
+          <FormattedMessage id="Order.RecipientName" />
         </Option>
         <Option value="consumerEmail">
-          <FormattedMessage id="Marketing.RecipientMail" />
+          <FormattedMessage id="Order.RecipientMail" />
         </Option>
       </Select>
     );
@@ -351,15 +351,15 @@ class SearchHead extends Component<any, any> {
             goodsOptions: val
           });
         }}
-        defaultValue="Product name"
-        value={this.state.goodsOptions}
+        defaultValue={RCi18n({id:'Order.Product Name'})}
+        // value={this.state.goodsOptions}
         style={styles.label}
       >
         <Option value="goodsInfoName">
-          <FormattedMessage id="Marketing.ProductName" />
+          <FormattedMessage id="Order.Product Name" />
         </Option>
         <Option value="goodsInfoNo">
-          <FormattedMessage id="Marketing.ProductSKU" />
+          <FormattedMessage id="Order.ProductSKU" />
         </Option>
       </Select>
     );
@@ -377,10 +377,10 @@ class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option value="consigneeName">
-          <FormattedMessage id="Marketing.recipient" />
+          <FormattedMessage id="Order.recipient" />
         </Option>
         <Option value="consigneePhone">
-          <FormattedMessage id="Marketing.recipientPhone" />
+          <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
     );
@@ -399,10 +399,10 @@ class SearchHead extends Component<any, any> {
         disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
         <Option value="clinicsName">
-          <FormattedMessage id="Marketing.PrescriberName" />
+          <FormattedMessage id="Order.PrescriberName" />
         </Option>
         <Option value="clinicsIds">
-          <FormattedMessage id="Marketing.PrescriberId" />
+          <FormattedMessage id="Order.PrescriberId" />
         </Option>
       </Select>
     );
@@ -482,8 +482,8 @@ class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export filtered orders',
-      byIdsTitle: 'Export selected order',
+      byParamsTitle: RCi18n({id:'Order.exportFilterOrder'}),
+      byIdsTitle: RCi18n({id:'Order.exportSelectedOrder'}),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
-import { DataGrid, cache, noop, Const, history } from 'qmkit';
+import { DataGrid, cache, noop, Const, history, RCi18n } from 'qmkit';
 import { Table } from 'antd';
 const Column = Table.Column;
 import styled from 'styled-components';
@@ -69,13 +69,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             return <img src={text} alt="" width="20" height="25"/>
           }}/>*/}
 
-          <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
-          <Column title="SPU" dataIndex="goodsNo" key="goodsNo" />
-          <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
-          <Column title="Sales category" dataIndex="storeCateName" key="storeCateName" />
+          <Column title={RCi18n({id:'Order.Product Name'})} dataIndex="goodsInfoName" key="goodsInfoName" />
+          <Column title={RCi18n({id:'Order.SPU'})} dataIndex="goodsNo" key="goodsNo" />
+          <Column title={RCi18n({id:'Order.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" />
+          <Column title={RCi18n({id:'Order.Product category'})} dataIndex="goodsCateName" key="goodsCateName" />
+          <Column title={RCi18n({id:'Order.Sales category'})} dataIndex="storeCateName" key="storeCateName" />
           <Column
-            title="Price"
+            title={RCi18n({id:'Order.Price'})} 
             dataIndex="marketPrice"
             render={(value) => {
               if (value) {
@@ -86,7 +86,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }}
             key="marketPrice"
           />
-          <Column title="Quantity" key="recommendationNumber" dataIndex="recommendationNumber" />
+          <Column title={RCi18n({id:'Order.Quantity'})}  key="recommendationNumber" dataIndex="recommendationNumber" />
         </DataGrid>
       </TableRow>
     );

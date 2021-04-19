@@ -1,6 +1,7 @@
 import { Actor, Action } from 'plume2';
 import { Map, fromJS } from 'immutable';
 import { IMap } from 'typings/globalType';
+import moment from 'moment';
 
 interface IPageResponse {
   productReport: Array<any>;
@@ -22,8 +23,20 @@ export default class BrandActor extends Actor {
       current: 1,
       getDate: {},
       getForm: '',
-      loading: true
+      loading: true,
+      skuText: '',
+      beginDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days').format('YYYY-MM-DD'),
+      endDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').format('YYYY-MM-DD')
     };
+  }
+  @Action('report:field')
+  productFieldOnChange(state, {field, value}) {
+    return state.set(field, value);
+  }
+
+  @Action('report:productSkuText')
+  productSkuText(state, skuText) {
+    return state.set('skuText', skuText);
   }
 
   @Action('report:productStatistics')
@@ -33,9 +46,10 @@ export default class BrandActor extends Actor {
 
   @Action('report:productReportPage')
   productReportPage(state: IMap, res: IPageResponse) {
-    const { productReport, size, totalElements } = res;
+    debugger
+    const { productReport, pageSize, totalElements } = res;
     return state.withMutations((state) => {
-      state.set('total', totalElements).set('pageSize', size).set('productReportPage', fromJS(productReport));
+      state.set('total', totalElements).set('pageSize', pageSize).set('productReportPage', fromJS(productReport));
     });
   }
 

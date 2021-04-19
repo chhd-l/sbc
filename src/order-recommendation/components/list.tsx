@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, history } from 'qmkit';
+import { noop, Const, AuthWrapper, history, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
@@ -62,7 +62,7 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={RCi18n({id:'Order.enterTheReason'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -168,22 +168,22 @@ class ListView extends React.Component<any, any> {
                         <FormattedMessage id="Order.Product" />
                       </th>
                       <th style={{ width: '12%' }}>
-                        <FormattedMessage id="Marketing.RecipientName" />
+                        <FormattedMessage id="Order.RecipientName" />
                       </th>
                       <th style={{ width: '13.5%' }}>
-                        <FormattedMessage id="Marketing.RecipientMail" />
+                        <FormattedMessage id="Order.RecipientMail" />
                       </th>
                       <th style={{ width: '11%' }}>
-                        <FormattedMessage id="Marketing.Amount" />
+                        <FormattedMessage id="Order.amount" />
                       </th>
                       <th style={{ width: '10.5%' }}>
-                        <FormattedMessage id="Marketing.LinkStatus" />
+                        <FormattedMessage id="Order.LinkStatus" />
                       </th>
                       <th style={{ width: '12.5%' }}>
-                        <FormattedMessage id="Marketing.Perscriber" />
+                        <FormattedMessage id="Order.Perscriber" />
                       </th>
                       <th style={{ width: '7.1%' }}>
-                        <FormattedMessage id="Marketing.Operation" />
+                        <FormattedMessage id="Order.Operation" />
                       </th>
                     </tr>
                   </thead>
@@ -194,7 +194,7 @@ class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="Marketing.noData" />
+                    <FormattedMessage id="Order.noData" />
                   </span>
                 </div>
               ) : null}
@@ -273,7 +273,7 @@ class ListView extends React.Component<any, any> {
                       <div style={{ width: 310, display: 'inline-block' }}>
                         <span>
                           {' '}
-                          <FormattedMessage id="Marketing.CreatedTime" />: {moment(v.createTime).format('YYYY-MM-DD')}
+                          <FormattedMessage id="Order.CreatedTime" />: {moment(v.createTime).format('YYYY-MM-DD')}
                         </span>
                       </div>
                     </div>
@@ -323,7 +323,7 @@ class ListView extends React.Component<any, any> {
                         return a.toFixed(2);
                       }, 0)}
                   </td>
-                  <td style={{ width: '13%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td>
+                  <td style={{ width: '13%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? RCi18n({id:'Order.Valid'}) : RCi18n({id:'Order.invalid'})) : '--'}</td>
                   <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td>
                   <td
                     style={{
@@ -340,7 +340,7 @@ class ListView extends React.Component<any, any> {
                       })
                     }
                   >
-                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.SeeDetails" />}>
+                    <Tooltip placement="top" title={<FormattedMessage id="Order.detail" />}>
                       <span className="iconfont iconDetails"></span>
                     </Tooltip>
                   </td>

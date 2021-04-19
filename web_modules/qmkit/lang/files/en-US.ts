@@ -2979,6 +2979,16 @@ export default {
   'Prescriber.Create':'Create',
   'Prescriber.EditPrescriberType':'Edit Prescriber Type',
   'Prescriber.NewPrescriberType':'New Prescriber type',
+  'Prescriber.Enabled':'Enabled',
+  
+  
+  
+  
+  
+  
+  
+  
+  
   /* -------- 已翻译 V1.0---------------*/
 
 
@@ -3544,38 +3554,43 @@ export default {
   /*-------------------------------------Appointment-------------------------*/
   'Appointment.list':'Appointment list',
   'Appointment.No.':'Appointment no.',
-  'Appointment.PON':'Appointment Pet owner name',
+  'Appointment.PON':'Pet owner name',
   'Appointment.Start time':'Appointment Start time',
   'Appointment.Email':'Appointment email',
   'Appointment.Status':'Appointment status',
-  'Appointment.All':'Appointment all',
-  'Appointment.Booked':'Appointment booked',
-  'Appointment.Arrived':'Appointment arrived',
-  'Appointment.Canceled':'Appointment canceled',
-  'Appointment.Search':'Appointment search',
-  'Appointment.Batch export':'Appointment batch export',
-  'Appointment.Add new':'Appointment add new',
-  'Appointment.STC':'Appointment scan the code',
-  'Appointment.Consumer phone':'Appointment consumer phone',
-  'Appointment.Consumer email':'Appointment consumer email',
-  'Appointment.Time':'Appointment time',
-  'Appointment.Pet OE':'Appointment pet owner email',
-  'Appointment.Phone number':'Appointment phone number',
-  'Appointment.Type':'Appointment type',
-  'Appointment.Operation':'Appointment operation',
-  'Appointment.Operatio':'Appointment operatio',
-  'Appointment.Online':'Appointment online',
-  'Appointment.Offline':'Appointment Offline',
-  'Appointment.Edit':'Appointment Edit',
-  'Appointment.Cancel':'Appointment cancel',
-  'Appointment.NRHF':'Appointment no record has found',
-  'Appointment.NAHBS':'Appointment no appointment has been selected',
-  'Appointment.CNFC':'Appointment can not find consumer, please try again',
-  'Appointment.Appointment':'Appointment appointment',
-  'Appointment.Update appointment':'Appointment update appointment',
-  'Appointment.ANA':'Appointment add new appointment',
-  'Appointment.SAType':'Appointment select appointment type',
-  'Appointment.SATime':'Appointment select appointment time',
+  'Appointment.All':'All',
+  'Appointment.Booked':'Booked',
+  'Appointment.Arrived':'Arrived',
+  'Appointment.Canceled':'Canceled',
+  'Appointment.Search':'Search',
+  'Appointment.Batch export':'Batch export',
+  'Appointment.Add new':'Add new',
+  'Appointment.STC':'Scan the code',
+  'Appointment.Consumer phone':'Consumer phone',
+  'Appointment.Consumer email':'Consumer email',
+  'Appointment.Time':'Time',
+  'Appointment.Pet OE':'Pet owner email',
+  'Appointment.Phone number':'Phone number',
+  'Appointment.Type':'Type',
+  'Appointment.Operation':'Operation',
+  'Appointment.Operatio':'Operatio',
+  'Appointment.Online':'Online',
+  'Appointment.Offline':'Offline',
+  'Appointment.Edit':'Edit',
+  'Appointment.Cancel':'Cancel',
+  'Appointment.NRHF':'No record has found',
+  'Appointment.NAHBS':'No appointment has been selected',
+  'Appointment.CNFC':'Can not find consumer, please try again',
+  'Appointment.Appointment':'Appointment',
+  'Appointment.Update appointment':'Update appointment',
+  'Appointment.ANA':'Add new appointment',
+  'Appointment.SAType':'Select appointment type',
+  'Appointment.SATime':'Select appointment time',
+  'Appointment.Member':'Member',
+  'Appointment.Guest':'Guest',
+  'Appointment.Consumer information':'Consumer information',
+  'Appointment.Select member':'Select member',
+  'Appointment.Save':'Save',
 
 
   /*---------------------------------------------------------------------*/

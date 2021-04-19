@@ -194,17 +194,17 @@ export default class SortableTable extends React.Component {
           </div>
         )
       },
-      {
-        title: <FormattedMessage id="Product.Operation" />,
-        dataIndex: 'operation',
-        className: 'drag-visible',
-        render: (text, record) => (
-          <div>
-            <RelevancyProduct sortId={record.id} />
-            <DragHandle />
-          </div>
-        )
-      }
+      // {
+      //   title: <FormattedMessage id="Product.Operation" />,
+      //   dataIndex: 'operation',
+      //   className: 'drag-visible',
+      //   render: (text, record) => (
+      //     <div>
+      //       <RelevancyProduct sortId={record.id} />
+      //       <DragHandle />
+      //     </div>
+      //   )
+      // }
     ];
 
     const DraggableContainer = (props) => <SortableContainer useDragHandle helperClass="row-dragging" onSortEnd={this.onSortEnd} {...props} />;

@@ -385,6 +385,7 @@ class FullReductionForm extends React.Component<any, any> {
               <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
               <Radio value={1}><FormattedMessage id="Marketing.SubscriptionPromotion" /></Radio>
               <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+              <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
             </Radio.Group>
             {/*{marketingBean.get('promotionType') === 1 ? (*/}
             {/*  <Checkbox onChange={(e) => this.onBeanChange({*/}
@@ -537,7 +538,7 @@ class FullReductionForm extends React.Component<any, any> {
         </FormItem>
 
         <div className="bold-title"><FormattedMessage id="Reductiontype" />:</div>
-        {marketingBean.get('promotionType') === 0 && (
+        {(marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3)&& (
           <FormItem {...formItemLayout} labelAlign="left">
             {getFieldDecorator('subType', {
               rules: [
@@ -570,13 +571,13 @@ class FullReductionForm extends React.Component<any, any> {
             'rules',
             {}
           )(
-            marketingBean.get('promotionType') === 0 ? (
+            ( marketingBean.get('promotionType') === 0 ||  marketingBean.get('promotionType') === 3) ? (
               <ReductionLevels
                 form={this.props.form}
                 fullReductionLevelList={marketingBean.get('fullReductionLevelList') && marketingBean.get('fullReductionLevelList').toJS()}
                 onChangeBack={this.onRulesChange}
                 isFullCount={marketingBean.get('subType') % 2 }
-                isNormal={marketingBean.get('promotionType') === 0}
+                isNormal={marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3}
                 PromotionTypeValue={marketingBean.get('promotionType')}
               />
             ) : (
@@ -992,8 +993,12 @@ class FullReductionForm extends React.Component<any, any> {
     const { initReductionDefualtLevelList } = this.props.relaxProps
     this.onBeanChange({
       promotionType: e.target.value,
-      subType:  e.target.value === 0 ? 0 : 6
+      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6
     });
+    this.props.form.setFieldsValue({
+      promotionType: e.target.value,
+      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6
+    })
     initReductionDefualtLevelList()
   };
 

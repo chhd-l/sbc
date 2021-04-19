@@ -17,8 +17,7 @@ export default class ProductOverView extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      beginDate: '',
-      endDate: '',
+
       overview: {
         onShelfSkuValue: 130,
         onShelfSkuRate: -3.2,
@@ -37,9 +36,12 @@ export default class ProductOverView extends Component<any, any> {
     relaxProps?: {
       loading: boolean;
       productStatistics: any;
+      beginDate: '',
+      endDate: '',
       onProductStatistics: Function;
       onProductReportPage: Function;
       getDate: any;
+      fieldOnChange: Function;
     };
   };
 
@@ -48,13 +50,16 @@ export default class ProductOverView extends Component<any, any> {
     productStatistics: 'productStatistics',
     onProductStatistics: noop,
     onProductReportPage: noop,
-    getDate: 'getDate'
+    getDate: 'getDate',
+    beginDate: 'beginDate',
+    endDate: 'endDate',
+    fieldOnChange: noop,
   };
-  componentDidMount() {
-    this.setState({
-      beginDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days').format('YYYY-MM-DD'),
-      endDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').format('YYYY-MM-DD')
-    });
+    componentDidMount() {
+    //   this.setState({
+    //     beginDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days').format('YYYY-MM-DD'),
+    //   endDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').format('YYYY-MM-DD')
+    // });
   }
 
   getOverviewInfo(params = {}) {
@@ -63,16 +68,25 @@ export default class ProductOverView extends Component<any, any> {
     });
   }
   datePickerChange(e) {
+      const { fieldOnChange } = this.props.relaxProps
     let beginTime = '';
     let endTime = '';
     if (e.length > 0) {
       beginTime = e[0].format(Const.DAY_FORMAT);
       endTime = e[1].format(Const.DAY_FORMAT);
     }
-    this.setState({
-      beginDate: beginTime,
-      endDate: endTime
-    });
+    // this.setState({
+    //   beginDate: beginTime,
+    //   endDate: endTime
+    // });
+    fieldOnChange({
+      field: 'beginDate',
+      value: beginTime
+    })
+    fieldOnChange({
+      field: 'endDate',
+      value: endTime
+    })
   }
   dateCalculate = (n) => {
     let date = new Date(sessionStorage.getItem('defaultLocalDateTime'));
@@ -83,23 +97,23 @@ export default class ProductOverView extends Component<any, any> {
   }
   onSearch() {
     const { onProductStatistics, onProductReportPage } = this.props.relaxProps;
-    const { beginDate, endDate } = this.state;
-    const params1 = {
-      beginDate,
-      endDate
-    };
-    const params2 = {
-      beginDate,
-      endDate,
-      sortName: 'revenue',
-      pageSize: 10,
-      pageNum: 1
-    };
-    onProductStatistics(params1);
-    onProductReportPage(params2);
+    // const { beginDate, endDate } = this.state;
+    // const params1 = {
+    //   beginDate,
+    //   endDate
+    // };
+    // const params2 = {
+    //   beginDate,
+    //   endDate,
+    //   sortName: 'revenue',
+    //   pageSize: 10,
+    //   pageNum: 1
+    // };
+    onProductStatistics();
+    onProductReportPage();
   }
   render() {
-    const { productStatistics } = this.props.relaxProps;
+    const { productStatistics, beginDate } = this.props.relaxProps;
     let loadinga = false;
     return (
       <Spin spinning={loadinga} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>

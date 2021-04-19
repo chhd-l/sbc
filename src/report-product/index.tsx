@@ -36,22 +36,8 @@ export default class ProductReport extends Component<any, any> {
     };
   }
   componentDidMount() {
-    let beginDate = moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days').format('YYYY-MM-DD');
-    let endDate = moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').format('YYYY-MM-DD');
-    let data1 = {
-      beginDate: beginDate,
-      endDate: endDate
-    };
-    let data2 = {
-      beginDate: beginDate,
-      endDate: endDate,
-      //sortName: "revenue",
-      sortName: 'revenue',
-      pageSize: 10,
-      pageNum: 1
-    };
-    this.store.onProductStatistics(data1);
-    this.store.onProductReportPage(data2);
+    this.store.onProductStatistics();
+    this.store.onProductReportPage();
   }
   render() {
     //const { overview, bestSellers, highPraiseProducts } = this.state;

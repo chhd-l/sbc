@@ -522,6 +522,9 @@ export default class SubscriptionList extends Component<any, any> {
                 <Tabs.TabPane tab={<FormattedMessage id="Subscription.Inactive" />} key="2">
                   <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
                 </Tabs.TabPane>
+                <Tabs.TabPane tab={<FormattedMessage id="Subscription.Pause" />} key="1">
+                  <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
+                </Tabs.TabPane>
               </Tabs>
             </Spin>
           </div>

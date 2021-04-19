@@ -20,6 +20,12 @@ export default class AppStore extends Store {
 
   onProductStatistics = async (param?: any) => {
     this.dispatch('loading:start');
+    if(!param) {
+      param = {
+        beginDate: this.state().get('beginDate'),
+        endDate: this.state().get('endDate'),
+      }
+    }
     const { res } = await webapi.getProductStatistics(param);
     if (res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
@@ -33,6 +39,16 @@ export default class AppStore extends Store {
 
   onProductReportPage = async (param?: any) => {
     this.dispatch('loading:start');
+    if(!param) {
+      param = {
+        beginDate: this.state().get('beginDate'),
+        endDate: this.state().get('endDate'),
+        skuCode: this.state().get('skuText'),
+        pageNum: this.state().get('pageNum'),
+        pageSize: this.state().get('pageSize'),
+        sortName: 'revenue'
+      }
+    }
     const { res } = await webapi.getProductReportPage(param);
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
@@ -72,4 +88,12 @@ export default class AppStore extends Store {
       }, 500);
     });
   };
+
+  setProductSkuText = (value) => {
+    this.dispatch('report:productSkuText', value)
+  }
+
+  fieldOnChange = ({field, value}) => {
+    this.dispatch('report:field', {field, value})
+  }
 }

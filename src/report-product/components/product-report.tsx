@@ -35,7 +35,7 @@ export default class ProductReportList extends Component<any, any> {
     const { loading } = this.props.relaxProps;
     return (
       <div className="container statistics">
-        <ListSearchForm onSearch={(params) => this.onSearch(params)} />
+        <ListSearchForm  />
         <ReportList />
       </div>
     );

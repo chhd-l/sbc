@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Icon, Input, Button, Col, message, Checkbox, Row } from 'antd';
 const FormItem = Form.Item;
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { history, Const, login, cache, OktaLogout, getRoutType } from 'qmkit';
+import { history, Const, login, cache, OktaLogout, getRoutType, RCi18n } from 'qmkit';
 import * as webApi from '../webapi';
 const { Search } = Input;
 import { withOktaAuth } from '@okta/okta-react';
@@ -77,8 +77,8 @@ export default withOktaAuth(
             </FormItem>
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberId', {
-                rules: [{ required: true, message: 'Client ID cannot be empty' }]
-              })(<Search size="large" placeholder="Please Search Client ID First" onSearch={(value, e) => this.search(value, e)} />)}
+                rules: [{ required: true, message: RCi18n({id:'Public.ClientID Tip'}) }]
+              })(<Search size="large" placeholder={RCi18n({id:'Public.ClientID Input'})} onSearch={(value, e) => this.search(value, e)} />)}
             </FormItem>
             <label style={styles.labelClientName}>
               <span style={{ color: '#E1021A' }}>*</span> <FormattedMessage id="Public.YourclientID" />
@@ -86,7 +86,7 @@ export default withOktaAuth(
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberName', {
                 rules: [{ required: false }]
-              })(<Input size="large" disabled={true} placeholder="Client Name" />)}
+              })(<Input size="large" disabled={true} placeholder={RCi18n({id:'Public.ClientName'})} />)}
             </FormItem>
             <FormItem style={{ marginTop: 10 }}>
               <Checkbox.Group style={{ width: '100%', maxHeight: '200px', overflowY: 'auto' }} onChange={this.consentChange}>
@@ -164,7 +164,7 @@ export default withOktaAuth(
       const form = this.props.form as WrappedFormUtils;
       const ids = value.split('-');
       if (ids && ids.length < 2) {
-        message.error('No Prescriber');
+        message.error(RCi18n({id:'Public.NoPrescriber'}));
         form.setFieldsValue({ prescriberName: '' });
         return;
       }
@@ -176,7 +176,7 @@ export default withOktaAuth(
       if (res.code === Const.SUCCESS_CODE && res.context && res.context.prescriberName) {
         form.setFieldsValue({ prescriberName: res.context.prescriberName });
       } else {
-        message.error('No Prescriber');
+        message.error(RCi18n({id:'Public.NoPrescriber'}));
         form.setFieldsValue({ prescriberName: '' });
       }
       const { res: consentRes } = await webApi.getStoreOpenConsentList(param);
@@ -221,7 +221,7 @@ export default withOktaAuth(
         if (!errs && consentValid) {
           let ids = values.prescriberId.split('-');
           if (ids && ids.length < 2) {
-            message.error('No Prescriber');
+            message.error(RCi18n({id:'Public.NoPrescriber'}));
             this.setState({
               prcessLoadding: false
             });
@@ -245,7 +245,7 @@ export default withOktaAuth(
           let oktaToken = this.props.authState.accessToken;
           sessionStorage.setItem(cache.OKTA_TOKEN, oktaToken);
           if (!oktaToken) {
-            message.error('OKTA Token Expired');
+            message.error(RCi18n({id:'Public.Expired'}));
             this.setState({
               prcessLoadding: false
             });
@@ -273,7 +273,7 @@ export default withOktaAuth(
             if (res.context === 'needAudit') {
               history.push('/login-notify');
             } else if (res.context === 'alreadyRegister') {
-              message.info('Email already exists in store portal, please check.');
+              message.info(RCi18n({id:'Public.EmailTip'}));
             } else {
               let type = getRoutType(window.location.search);
               login(type, oktaToken);

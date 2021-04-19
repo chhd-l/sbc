@@ -147,17 +147,22 @@ export async function getCityList() {
   if (cityList && cityList.length > 0) {
     return cityList;
   } else {
-    return await querySysDictionary({ type: 'city' })
+    return await Fetch<TResult>('/system-city/queryPageView', {
+      method: 'POST',
+      body: JSON.stringify({
+        pageNum: 0,
+        pageSize: 99999
+      })
+    })
       .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          sessionStorage.setItem('dict-city', JSON.stringify(res.context.sysDictionaryVOS));
-          return res.context.sysDictionaryVOS;
+        if (data.res.code === Const.SUCCESS_CODE) {
+          sessionStorage.setItem('dict-city', JSON.stringify(data.res.context?.systemCitys?.content ?? []));
+          return data.res.context?.systemCitys?.content ?? [];
         } else {
           return [];
         }
       })
-      .catch((err) => {
+      .catch(() => {
         return [];
       });
   }

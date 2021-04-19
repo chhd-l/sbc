@@ -140,6 +140,15 @@ export default {
   'Public.Reminder100records':'Reminder: up to 100 records',
   "Public.GetDataFailed": 'Get Data Failed',
   /* -------- 已翻译 V2.0---------------*/
+  'Public.OperateSucc':'Operate successfully',
+  'Public.ClientID Tip':'Client ID cannot be empty',
+  'Public.ClientID Input':'Please Search Client ID First',
+  'Public.ClientName':'Client Name',
+  'Public.NoPrescriber':'No Prescriber',
+  'Public.EmailTip':'Email already exists in store portal, please check.',
+  'Public.Expired':'OKTA Token Expired',
+  'Public.logisticsCompanyErr':'The selected logistics company does not exist',
+  'Public.logisticsCompanyTip':'Up to 20 logistics companies can be set up',
 
 
 

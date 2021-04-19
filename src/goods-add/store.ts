@@ -362,6 +362,7 @@ export default class AppStore extends Store {
           minStock: item.stock
         };
       });
+      console.log(addSkUProduct,6666);
       this.dispatch('sku:addSkUProduct', addSkUProduct);
     }
 

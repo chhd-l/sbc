@@ -5,6 +5,7 @@ import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
+import { RCi18n } from 'qmkit';
 
 const { confirm } = Modal;
 const FormItem = Form.Item;
@@ -283,7 +284,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'enabled',
         key: 'enabled',
         width: '10%',
-        render: (text, record) => <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
+        render: (text, record) => <p>{record.enabled ? RCi18n({id:'Prescriber.Enabled'}) : 'Disabled'}</p>
       },
       {
         title: <FormattedMessage id="Prescriber.AuditAuthority" />,

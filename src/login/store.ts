@@ -1,7 +1,7 @@
 import { Store } from 'plume2';
 import { message } from 'antd';
 //import { fromJS } from 'immutable';
-import { cache, Const, history, util } from 'qmkit';
+import { cache, Const, history, util, RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import FormActor from './actor/form-actor';
 //import Item from 'antd/lib/list/Item';
@@ -58,7 +58,7 @@ export default class AppStore extends Store {
 
   messageByResult(res) {
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Public.OperateSucc'}));
     } else {
       //登录失败原因
     }

@@ -762,15 +762,17 @@ class SkuForm extends React.Component<any, any> {
     let c = [];
     let minStock = []
     let tempMinStock = 0
+    console.log(addSkUProduct,3333);
     addSkUProduct.map((i) => {
       if (i.pid == pid) {
         i.targetGoodsIds.map((o) => {
+          console.log(o,11111);
           if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
             a.push(o);
             minStock.push(o.subStock / o.bundleNum)
           }
         });
-
+        console.log(minStock,2222);
         if (minStock.length != 0) {
           tempMinStock = Math.min.apply(Math, minStock)
           tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
@@ -789,7 +791,7 @@ class SkuForm extends React.Component<any, any> {
     });
     goodsList.toJS().map((item,i)=>{
       if (i == 0) {
-        if(a.length == 1) {
+        if(goodsList.toJS().length == 1 && a.length == 1) {
           editGoodsItem(item.id, 'marketPrice', a[0].marketPrice);
           editGoodsItem(item.id, 'subscriptionPrice', a[0].subscriptionPrice);
         }else {
@@ -797,7 +799,6 @@ class SkuForm extends React.Component<any, any> {
           editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
         }
       }else {
-        console.log(item,8888);
         editGoodsItem(item.id, 'marketPrice', item.marketPrice);
         editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
       }

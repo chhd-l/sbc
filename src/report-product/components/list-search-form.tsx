@@ -12,59 +12,47 @@ export default class ListSearchForm extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      beginDate: '',
-      endDate: '',
-      skuText: ''
     };
   }
   props: {
     relaxProps?: {
       handleBatchExport: Function;
       getDate: any;
+      skuText: any;
+      onProductReportPage: Function;
+      onProductStatistics: Function;
+      fieldOnChange: Function;
     };
   };
 
   static relaxProps = {
     handleBatchExport: noop,
-    getDate: 'getDate'
+    getDate: 'getDate',
+    skuText: 'skuText',
+    onProductReportPage: noop,
+    onProductStatistics: noop,
+    fieldOnChange: noop
   };
 
   componentDidMount() {}
-  datePickerChange(e) {
-    let beginTime = '';
-    let endTime = '';
-    if (e.length > 0) {
-      beginTime = e[0].format(Const.DAY_FORMAT);
-      endTime = e[1].format(Const.DAY_FORMAT);
-    }
-    this.setState({
-      beginDate: beginTime,
-      endDate: endTime
-    });
-  }
+
   sukOnChange(e) {
     const value = e.target.value;
-    this.setState({
-      skuText: value
-    });
+    const { fieldOnChange } = this.props.relaxProps
+    fieldOnChange({
+      field: 'skuText',
+      value
+    })
   }
   onSearch() {
-    const { skuText } = this.state;
-    const { getDate } = this.props.relaxProps;
-    const params = {
-      beginDate: getDate.beginDate,
-      endDate: getDate.endDate,
-      skuCode: skuText || undefined,
-      pageNum: 1,
-      pageSize: 10,
-      sortName: 'revenue'
-    };
-    this.props.onSearch(params);
+    const {onProductReportPage, onProductStatistics } = this.props.relaxProps;
+    onProductStatistics();
+    onProductReportPage()
   }
 
   render() {
-    const { skuText } = this.state;
-    const { handleBatchExport, getDate } = this.props.relaxProps;
+    // const { skuText } = this.state;
+    const { handleBatchExport, getDate, skuText } = this.props.relaxProps;
     return (
       <div className="list-head-container">
         <h4>

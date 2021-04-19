@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
 import UserModal from './user-modal';
 import { QMMethod, ValidConst } from 'qmkit';
+import { RCi18n } from 'qmkit';
+
 const { confirm } = Modal;
 
 const FormItem = Form.Item;
@@ -63,7 +65,7 @@ class UserList extends Component<any, any> {
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(RCi18n({id:'Prescriber.Get data failed'}));
       });
   }
 
@@ -183,7 +185,7 @@ class UserList extends Component<any, any> {
     };
     const { res } = await webapi.sendEmail(paramter);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('send successful');
+      message.success(RCi18n({id:'send successful'}));
     }
   };
 
@@ -229,7 +231,7 @@ class UserList extends Component<any, any> {
 
   addUser = () => {
     if (!this.props.alreadyHasPrescriber) {
-      message.error('Please add prescriber first');
+      message.error(RCi18n({id:'PAPF'}));
       return;
     }
     this.setState({
@@ -249,63 +251,63 @@ class UserList extends Component<any, any> {
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     const columns = [
       {
-        title: 'User name',
+        title: RCi18n({id:'User name'}),
         dataIndex: 'employeeName',
         key: 'employeeName'
       },
       {
-        title: 'User email',
+        title: RCi18n({id:'User email'}),
         dataIndex: 'email',
         key: 'email'
       },
       {
-        title: 'User status',
+        title: RCi18n({id:'User status'}),
         dataIndex: 'accountState',
         key: 'accountState',
         render: (text, record) => {
           switch (text) {
             case 0:
-              return 'Enabled';
+              return RCi18n({id:'Enabled'});
             case 1:
-              return 'Disabled';
+              return RCi18n({id:'Disabled'});
             case 3:
-              return 'Inactivated';
+              return RCi18n({id:'Inactivated'});
             case 4:
-              return 'To be audit';
+              return RCi18n({id:'ToBeAudit'});
             default:
               return '';
           }
         }
       },
       {
-        title: 'Operation',
+        title: RCi18n({id:'Operation'}),
         dataIndex: 'operation',
         key: 'operation',
         render: (text, record) => {
           if (record.accountState === 0 || record.accountState === 1) {
             return (
               <span className="operation-box">
-                <Tooltip placement="top" title="Edit">
+                <Tooltip placement="top" title={"RCi18n({id:'Edit'})"}>
                   <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                 </Tooltip>
                 <Popconfirm
-                  title="Are you sure to remove the user?"
+                  title={"RCi18n({id:'AYSTRTU'})"}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText="OK"
-                  cancelText="Cancel"
+                  okText={"RCi18n({id:'OK'})"}
+                  cancelText={"RCi18n({id:'Cancel'})"}
                 >
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={"RCi18n({id:'Delete'})"}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 0 ? (
-                  <Tooltip placement="top" title="Disabled">
+                  <Tooltip placement="top" title={"RCi18n({id:'Disabled'})"}>
                     <a onClick={() => this.disabledUser(record)} className="iconfont iconbtn-disable"></a>
                   </Tooltip>
                 ) : (
-                  <Tooltip placement="top" title="Enabled">
+                  <Tooltip placement="top" title={"RCi18n({id:'Enabled'})"}>
                     <a onClick={() => this.enableUser(record)} className="iconfont iconEnabled"></a>
                   </Tooltip>
                 )}
@@ -317,28 +319,28 @@ class UserList extends Component<any, any> {
             return (
               <span className="operation-box">
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title="Edit">
+                  <Tooltip placement="top" title={"RCi18n({id:'Edit'})"}>
                     <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                   </Tooltip>
                 ) : null}
                 <Popconfirm
-                  title="Are you sure to remove the user?"
+                  title={"RCi18n({id:'AYSTRTU'})"}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText="OK"
-                  cancelText="Cancel"
+                  okText={"RCi18n({id:'OK'})"}
+                  cancelText={"RCi18n({id:'Cancel'})"}
                 >
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={"RCi18n({id:'Disabled'})"}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title="Send">
+                  <Tooltip placement="top" title={"RCi18n({id:'Send'})"}>
                     <a onClick={() => this.sendEmail(record)} className="iconfont iconemail"></a>
                   </Tooltip>
                 ) : prescriberId ? (
-                  <Tooltip placement="top" title="Audit">
+                  <Tooltip placement="top" title={"RCi18n({id:'Audit'})"}>
                     <a onClick={() => this.auditUser(record)} className="iconfont iconaudit"></a>
                   </Tooltip>
                 ) : null}
@@ -428,7 +430,7 @@ class UserList extends Component<any, any> {
               <Table rowKey={(record, index) => index} dataSource={this.state.userData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
             </div>
             <UserModal userForm={this.state.userForm} visible={this.state.userVisible} parent={this} prescriberKeyId={this.props.prescriberKeyId} reflash={() => this.getUsers()} />
-            <Modal maskClosable={false} title="Please input the reason for disabling" visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
+            <Modal maskClosable={false} title={"RCi18n({id:'PITRFD'})"} visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
               <Form>
                 <FormItem>
                   {getFieldDecorator('reason', {
@@ -456,7 +458,7 @@ class UserList extends Component<any, any> {
               maskClosable={false}
               visible={this.state.auditModalVisible}
               footer={null}
-              title="Agree or Reject?"
+              title={RCi18n({id:'AOR'})}
               onCancel={() =>
                 this.setState({
                   auditModalVisible: false
@@ -477,7 +479,7 @@ class UserList extends Component<any, any> {
             </Modal>
           </React.Fragment>
         ) : (
-          <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*No Prescriber Role</p>
+          <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*<FormattedMessage id="NoPrescriberRole" /></p>
         )}
       </div>
     );

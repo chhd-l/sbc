@@ -42,6 +42,7 @@ class SearchForm extends React.Component<any, any> {
       getGoodsCate: IList;
       sourceGoodCateList: IList;
     };
+    searchBackFun: Function
   };
 
   static relaxProps = {

@@ -66,7 +66,7 @@ class RecommendationAdd extends Component<any, any> {
     delete customerPet['__altered']
     delete appointmentVO['__altered']
     let weight={
-      measure:customerPet.measure,
+      measure:customerPet.measure||0,
       measureUnit:customerPet.measureUnit||'Kg',
       type:2
     }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
 import { Breadcrumb, Tabs, Form, Alert, Spin } from 'antd';
-import { Const, Headline, history, checkAuth, BreadCrumb, ErrorBoundary } from 'qmkit';
+import { Const, Headline, history, checkAuth, BreadCrumb, ErrorBoundary, RCi18n } from 'qmkit';
 import './index.less';
 import AppStore from './store';
 import Goods from './component/goods';
@@ -126,7 +126,7 @@ export default class Main extends React.Component<any, any> {
           <Breadcrumb.Item>{gid ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title={gid ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={<FormattedMessage id={`Product.${this._getState(gid)}`}/>} />
+          <Headline title={gid ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
         </div>
         <div className="container">
           <Tabs
@@ -246,7 +246,7 @@ export default class Main extends React.Component<any, any> {
       if (auditStatus == 0) {
         history.goBack();
       }
-      return Const.goodsState[auditStatus];
+      return Const.goodsState[auditStatus] && RCi18n({id:`Product.${Const.goodsState[auditStatus]}`});
     }
 
     return null;

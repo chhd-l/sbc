@@ -150,9 +150,9 @@ class NewAppointment extends React.Component<any, any> {
           <Breadcrumb.Item><FormattedMessage id="Appointment.Appointment" /></Breadcrumb.Item>
         </Breadcrumb>
         <div className="container">
-          <Headline title={this.props.match.params.id ? RCi18n({id:'Appointment Update appointment'}) : RCi18n({id:'Appointment ANA'})} />
+          <Headline title={this.props.match.params.id ? RCi18n({id:'Appointment.Update appointment'}) : RCi18n({id:'Appointment.ANA'})} />
           <Form wrapperCol={{ sm: { span: 16 } }} labelCol={{ sm: { span: 4 } }}>
-            <Form.Item label={RCi18n({id:'Appointment SAT'})}>
+            <Form.Item label={RCi18n({id:'Appointment.SAType'})}>
               {getFieldDecorator('type', {
                 initialValue: '1'
               })(
@@ -162,38 +162,38 @@ class NewAppointment extends React.Component<any, any> {
                 </Radio.Group>
               )}
             </Form.Item>
-            <Form.Item label="Select appointment time">
+            <Form.Item label={RCi18n({id:'Appointment.Update appointment'})}>
               {getFieldDecorator('apptDateTime', {
                 initialValue: [moment() < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') ? '2021-04-20' : moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
                 rules: [{ validator: this.validateDateTime }]
               })(<AppointmentDatePicker onFetching={(state) => this.setState({ loading: state })} />)}
             </Form.Item>
-            <Form.Item label="Consumer information">
+            <Form.Item label={RCi18n({id:'Appointment.Consumer information'})}>
               <Radio.Group value={this.state.memberType} onChange={this.onSelectMemberType}>
-                <Radio value="member">Member</Radio>
-                <Radio value="guest">Guest</Radio>
+                <Radio value="member"><FormattedMessage id="Appointment.Member" /></Radio>
+                <Radio value="guest"><FormattedMessage id="Appointment.Guest" /></Radio>
               </Radio.Group>
               <div style={{ margin: '10px 0' }}>
                 {this.state.memberType === 'member' && (
                   <Button type="primary" onClick={this.onOpenMemberModal}>
-                    Select member
+                  <FormattedMessage id="Appointment.Select member" />
                   </Button>
                 )}
               </div>
             </Form.Item>
-            <Form.Item label="Pet owner name ">
+            <Form.Item label={RCi18n({id:'Appointment.PON'})}>
               {getFieldDecorator('consumerName', {
                 initialValue: '',
                 rules: [{ required: true, message: 'Pet owner name  is required' }]
               })(<Input disabled={this.state.memberType === 'member'} />)}
             </Form.Item>
-            <Form.Item label="Phone number">
+            <Form.Item label={RCi18n({id:'Appointment.Phone number'})}>
               {getFieldDecorator('consumerPhone', {
                 initialValue: '',
                 rules: [{ required: true, message: 'Phone number is required' }]
               })(<Input />)}
             </Form.Item>
-            <Form.Item label="Consumer email">
+            <Form.Item label={RCi18n({id:'Appointment.Consumer email'})}>
               {getFieldDecorator('consumerEmail', {
                 initialValue: '',
                 rules: [{ required: true, message: 'email is required' }]
@@ -203,10 +203,10 @@ class NewAppointment extends React.Component<any, any> {
           <CustomerList visible={this.state.visible} onConfirm={this.onChooseMember} onClose={this.onCloseMemberModal} />
           <div className="bar-button">
             <Button type="primary" onClick={this.onSaveAppointment}>
-              Save
+            <FormattedMessage id="Appointment.Save" />
             </Button>
             <Button style={{ marginLeft: 20 }} onClick={() => history.go(-1)}>
-              Cancel
+            <FormattedMessage id="Appointment.Cancel" />
             </Button>
           </div>
         </div>

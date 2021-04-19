@@ -93,6 +93,7 @@ export default class FillinPetInfo extends Component {
         } else if (key === 'consumerName') {
             onChangePestsForm({ ...appointmentVO, [key]: e }, 'appointmentVO')
         } else {
+            console.log(key, e)
             onChangePestsForm({ ...customerPet, [key]: e }, 'customerPet')
         }
     }
@@ -201,10 +202,10 @@ export default class FillinPetInfo extends Component {
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item label="Sensitvities:">
-                                        {getFieldDecorator('sensitivity', {
-                                            initialValue: customerPet.sensitivity || '',
+                                        {getFieldDecorator('needs', {
+                                            initialValue: customerPet.needs || '',
                                             //  rules: [{ required: true, message: 'Please select Sensitvities!' }],
-                                            onChange: (e,) => this._onChange(e, 'sensitivity')
+                                            onChange: (e,) => this._onChange(e, 'needs')
 
                                         })(<Select
                                             disabled={petsList.length > 0 || funType}

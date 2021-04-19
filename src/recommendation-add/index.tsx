@@ -65,8 +65,13 @@ class RecommendationAdd extends Component<any, any> {
     delete felinReco['__altered']
     delete customerPet['__altered']
     delete appointmentVO['__altered']
+    let weight={
+      measure:customerPet.measure,
+      measureUnit:customerPet.measureUnit||'Kg',
+      type:2
+    }
+    customerPet.weight=JSON.stringify(weight);
     let p={ ...felinReco, goodsQuantity, appointmentVO, customerPet };
-  
     this.store.fetchFelinSave(p)
   }
   render() {

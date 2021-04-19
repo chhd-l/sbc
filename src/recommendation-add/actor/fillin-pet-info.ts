@@ -18,7 +18,10 @@ export default class FillInPetInfoActor extends Actor {
         fillDate: null
       },//基础
       appointmentVO: {},//扫码信息
-      customerPet: {},//宠物信息
+      customerPet: {
+        measure:0,
+        measureUnit:'Kg'
+      },//宠物信息
       funType: false,
       petsList: [],
       goodsInfoPage:[]

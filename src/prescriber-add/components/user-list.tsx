@@ -354,12 +354,12 @@ class UserList extends Component<any, any> {
       <div>
         {this.state.hasPrescriberRole ? (
           <React.Fragment>
-            <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*New added user still needs to register before logging in store portal</p>
+            <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*<FormattedMessage id="Prescriber.NAUSNTRBLISP" /></p>
             <div className="container-search">
               <Form layout="inline">
                 <FormItem>
                   <Input
-                    addonBefore="User name"
+                    addonBefore={RCi18n({id:'Prescriber.User name'})}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -367,13 +367,13 @@ class UserList extends Component<any, any> {
                         value
                       });
                     }}
-                    placeholder="Please input name"
+                    placeholder={RCi18n({id:'Prescriber.inputname'})}
                     style={{ width: 300 }}
                   />
                 </FormItem>
                 <FormItem>
                   <Input
-                    addonBefore="User email"
+                    addonBefore={RCi18n({id:'User email'})}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -381,14 +381,14 @@ class UserList extends Component<any, any> {
                         value
                       });
                     }}
-                    placeholder="Please input email"
+                    placeholder={RCi18n({id:'Prescriber.inputemail'})}
                     style={{ width: 300 }}
                   />
                 </FormItem>
                 <FormItem>
                   <SelectGroup
                     defaultValue="All"
-                    label="User status"
+                    label={RCi18n({id:'Prescriber.UserStatus'})}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -398,11 +398,11 @@ class UserList extends Component<any, any> {
                     }}
                     style={{ width: 80 }}
                   >
-                    <Option value="">All</Option>
-                    <Option value={'3'}>Inactivated</Option>
-                    <Option value={'4'}>To be audit</Option>
-                    <Option value={'0'}>Enabled</Option>
-                    <Option value={'1'}>Disabled</Option>
+                    <Option value=""><FormattedMessage id="Prescriber.All" /></Option>
+                    <Option value={'3'}><FormattedMessage id="Prescriber.All" /></Option>
+                    <Option value={'4'}><FormattedMessage id="Prescriber.ToBeAudit" /></Option>
+                    <Option value={'0'}><FormattedMessage id="Prescriber.Enabled"/></Option>
+                    <Option value={'1'}><FormattedMessage id="Prescriber.Disabled"/></Option>
                   </SelectGroup>
                 </FormItem>
                 <Form.Item>
@@ -423,7 +423,7 @@ class UserList extends Component<any, any> {
                 </Form.Item>
               </Form>
               <Button type="primary" htmlType="submit" onClick={this.addUser} style={{ marginBottom: '10px', marginTop: '10px' }}>
-                <FormattedMessage id="add" />
+                <FormattedMessage id={RCi18n({id:'Prescriber.add'})}/>
               </Button>
             </div>
             <div className="container">
@@ -443,7 +443,7 @@ class UserList extends Component<any, any> {
                     ]
                   })(
                     <Input.TextArea
-                      placeholder="Please input a reason for disabling"
+                      placeholder={RCi18n({id:'Prescriber.PIARFD'})}
                       onChange={(e: any) =>
                         this.setState({
                           disabledReason: e.target.value

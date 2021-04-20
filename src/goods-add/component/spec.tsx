@@ -306,7 +306,6 @@ class SpecForm extends React.Component<any, any> {
   _editSpecValue = (specId: number, value: string) => {
     const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
-
     // 找到原规格值列表
     const spec = goodsSpecs.find((spec) => spec.get('specId') == specId);
     const oldSpecValues = spec.get('specValues');

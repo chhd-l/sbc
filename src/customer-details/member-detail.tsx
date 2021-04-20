@@ -372,8 +372,8 @@ export default class CustomerDetails extends React.Component<any, any> {
             <div className="detail-container" id="pets-list">
               <Headline title="Pet information" />
               <Row gutter={16}>
-                {pets.map((pet) => (
-                  <Col span={8} style={{ margin: '10px 0' }}>
+                {pets.map((pet, idx) => (
+                  <Col key={idx} span={8} style={{ margin: '10px 0' }}>
                     <Card bodyStyle={{ padding: '10px 20px' }}>
                       <div className="text-align-right">
                         {/* <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">

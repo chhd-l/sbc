@@ -1,7 +1,7 @@
 import { IOptions, Store } from 'plume2';
 import { fromJS, Map } from 'immutable';
 import { message, Modal } from 'antd';
-import { Const, history, QMFloat } from 'qmkit';
+import { cache, Const, history, QMFloat, RCi18n } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import FormActor from './actor/form-actor';
 import TradeActor from './actor/trade-actor';
@@ -216,32 +216,36 @@ export default class AppStore extends Store {
     // 退款金额大于可退金额时
     if (remainPrice < rePrice) {
       // 在线支付要判断退款金额不能大于剩余退款金额
-      if (data.get('isOnLine')) {
+      // if (data.get('isOnLine')) {
+        let title = RCi18n({id: 'Order.refundableAmountTips'}) + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data.get('canApplyPrice').toFixed(2)
+        let content = RCi18n({id: 'Order.refundableAmountTips2'})
+        let okText=RCi18n({id: 'Order.btnConfirm'}) 
         Modal.warning({
-          title: `该订单剩余可退金额为：$${remainPrice.toFixed(2)}`,
-          content: '退款金额不可大于可退金额，请修改',
-          okText: '确定'
+          title: title,
+          content: content,
+          okText: okText,
         });
         return;
-      } else {
-        if (remainPrice < 0) {
-          remainPrice = 0;
-        }
+      // } 
+      // else {
+      //   if (remainPrice < 0) {
+      //     remainPrice = 0;
+      //   }
 
-        let onModify = this.onModify;
-        // 线下，给出提示
-        confirm({
-          title: `该订单剩余可退金额为：$${remainPrice.toFixed(2)}`,
-          content: '当前退款金额超出了可退金额，是否继续？',
-          onOk() {
-            return onModify(param);
-          },
-          onCancel() {},
-          okText: '继续',
-          cancelText: '关闭'
-        });
-        return;
-      }
+      //   let onModify = this.onModify;
+      //   // 线下，给出提示
+      //   confirm({
+      //     title: `该订单剩余可退金额为：$${remainPrice.toFixed(2)}`,
+      //     content: '当前退款金额超出了可退金额，是否继续？',
+      //     onOk() {
+      //       return onModify(param);
+      //     },
+      //     onCancel() {},
+      //     okText: '继续',
+      //     cancelText: '关闭'
+      //   });
+      //   return;
+      // }
     }
 
     return this.onModify(param);

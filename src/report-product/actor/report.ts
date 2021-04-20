@@ -5,7 +5,7 @@ import moment from 'moment';
 
 interface IPageResponse {
   productReport: Array<any>;
-  size: number;
+  pageSize: number;
   totalElements: number;
 }
 
@@ -46,7 +46,6 @@ export default class BrandActor extends Actor {
 
   @Action('report:productReportPage')
   productReportPage(state: IMap, res: IPageResponse) {
-    debugger
     const { productReport, pageSize, totalElements } = res;
     return state.withMutations((state) => {
       state.set('total', totalElements).set('pageSize', pageSize).set('productReportPage', fromJS(productReport));

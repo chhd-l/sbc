@@ -155,7 +155,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
   getRegionListByCity = (type: number, city: any) => {
     let cityId = 0;
     if (type === 1) {
-      cityId = (this.state.cityList.find((ci) => ci.name === city) || {})['id'] || 0;
+      cityId = (this.state.cityList.find((ci) => ci.cityName === city) || {})['id'] || 0;
     } else {
       cityId = (this.state.searchCityList.find((ci) => ci.cityName === city) || {})['id'] || 0;
     }
@@ -166,6 +166,9 @@ class DeliveryItem extends React.Component<Iprop, any> {
         });
       }
     });
+    if(this.props.form.getFieldValue('region')) {
+      this.props.form.setFieldsValue({region: ''});
+    }
   };
 
   backToCustomerDetail = () => {
@@ -280,8 +283,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
         return (
           <Select showSearch onChange={(val) => this.getRegionListByCity(1, val)}>
             {this.state.cityList.map((city, idx) => (
-              <Option value={city.name} key={idx}>
-                {city.name}
+              <Option value={city.cityName} key={idx}>
+                {city.cityName}
               </Option>
             ))}
           </Select>

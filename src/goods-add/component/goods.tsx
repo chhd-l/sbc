@@ -1000,10 +1000,9 @@ class GoodsForm extends React.Component<any, any> {
     }
     if (key === 'subscriptionStatus' && e == 0) {
 
-      let goods = Map({
-        subscriptionStatus: fromJS(0)
-      });
-      editGoodsItem(goods);
+      goodsList.toJS()&&goodsList.toJS().map(item=>{
+        editGoodsItem(item.id,'subscriptionStatus',0);
+      })
 
       this.props.form.setFieldsValue({
         defaultPurchaseType: null
@@ -1012,10 +1011,9 @@ class GoodsForm extends React.Component<any, any> {
         defaultFrequencyId: null
       });
     }else {
-      let goods = Map({
-        subscriptionStatus: fromJS(1)
-      });
-      editGoodsItem(goods);
+      goodsList.toJS()&&goodsList.toJS().map(item=>{
+        editGoodsItem(item.id,'subscriptionStatus',1);
+      })
     }
   };
 

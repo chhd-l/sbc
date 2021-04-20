@@ -530,6 +530,7 @@ class SkuForm extends React.Component<any, any> {
       ,
       key: 'promotions',
       render: (rowInfo) => {
+        console.log(rowInfo,112);
         return (
           <Row>
             <Col span={12} key={goods.get('promotions')}>
@@ -540,8 +541,8 @@ class SkuForm extends React.Component<any, any> {
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder="please select type"
                          disabled={goods.get('promotions') == 'autoship'} >
-                  <Option value='club'>Club</Option>
                   <Option value='autoship'>Auto ship</Option>
+                  <Option value='club'>Club</Option>
                 </Select>
 
               </FormItem>
@@ -762,17 +763,14 @@ class SkuForm extends React.Component<any, any> {
     let c = [];
     let minStock = []
     let tempMinStock = 0
-    console.log(addSkUProduct,3333);
     addSkUProduct.map((i) => {
       if (i.pid == pid) {
         i.targetGoodsIds.map((o) => {
-          console.log(o,11111);
           if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
             a.push(o);
             minStock.push(o.subStock / o.bundleNum)
           }
         });
-        console.log(minStock,2222);
         if (minStock.length != 0) {
           tempMinStock = Math.min.apply(Math, minStock)
           tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))

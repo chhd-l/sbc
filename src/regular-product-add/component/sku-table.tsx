@@ -435,8 +435,8 @@ class SkuForm extends React.Component<any, any> {
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder="please select type"
                          disabled={goods.get('promotions') == 'autoship'} >
-                  <Option value='club'>Club</Option>
                   <Option value='autoship'>Auto ship</Option>
+                  <Option value='club'>Club</Option>
                 </Select>
 
               </FormItem>

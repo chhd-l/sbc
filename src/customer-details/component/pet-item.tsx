@@ -459,39 +459,39 @@ class PetItem extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Divider />
-                {/* <Row gutter={16} type="flex" align="middle">
+                <Row gutter={16} type="flex" align="middle">
                   <Col span={16}>
                     <div style={{ fontSize: 16, color: '#666' }}>Life stage information</div>
                   </Col>
                   <Col span={8} style={{ textAlign: 'right' }}>
-                    <Button type="link" size="small" icon="sync">
+                    <Button type="link" size="small" icon="sync" onClick={this.getPet}>
                       Refresh
                     </Button>
                   </Col>
                 </Row>
                 <Row gutter={16}>
                   <Col span={12}>
-                    <Form.Item label="This stage name" required>
-                      <div></div>
+                    <Form.Item label="This stage name">
+                      {((pet.customerPetsPropRelations ?? []).find(x => x.propType === 'firstLifeStageName') ?? {}).propName ?? ''}
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Stage ending" required>
-                      <div></div>
+                    <Form.Item label="Stage ending">
+                      {((pet.customerPetsPropRelations ?? []).find(x => x.propType === 'firstLifeStageValue') ?? {}).propName ?? ''}
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Next stage name" required>
-                      <div></div>
+                    <Form.Item label="Next stage name">
+                      {((pet.customerPetsPropRelations ?? []).find(x => x.propType === 'secondLifeStageName') ?? {}).propName ?? ''}
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Stage ending" required>
-                      <div></div>
+                    <Form.Item label="Stage ending">
+                      {((pet.customerPetsPropRelations ?? []).find(x => x.propType === 'secondLifeStageValue') ?? {}).propName ?? ''}
                     </Form.Item>
                   </Col>
                 </Row>
-                <Divider /> */}
+                <Divider />
                 <div>
                   <a
                     style={{ fontSize: 16 }}

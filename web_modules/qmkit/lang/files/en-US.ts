@@ -1545,7 +1545,7 @@ export default {
   'Order.reviewRejected': 'Review rejected', 
   'Order.receiedRejected': 'Receied rejected', 
   'Order.refundRejected': 'Refund rejected',
-  'Order.Selectreturnproducts': 'Order.Select return products',
+  'Order.Selectreturnproducts': 'Select return products',
   'Order.Specification': 'Specification',
   'Order.Returnunitprice': 'Return unit price',
   'Order.Returnquantity': 'Return quantity',
@@ -1699,7 +1699,8 @@ export default {
   'Order.Next':'Next',
   'Order.DeleteTip':'Are you sure to delete this item?',
   'Order.returnList':'Return list',
-
+  'Order.refundableAmountTips':'The remaining refundable amount of this order is: ',
+  'Order.refundableAmountTips2':'The refund amount should not be greater than the refundable amount. Please modify it.',
 
 
   /*-----------------------------  Task  ----------------------------------------------*/
@@ -2989,9 +2990,6 @@ export default {
   'Prescriber.Create':'Create',
   'Prescriber.EditPrescriberType':'Edit Prescriber Type',
   'Prescriber.NewPrescriberType':'New Prescriber type',
-  'Prescriber.Enabled':'Enabled',
-  
-  
   
   
   

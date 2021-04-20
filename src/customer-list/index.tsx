@@ -1,6 +1,6 @@
 import React from 'react';
 import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip, TreeSelect } from 'antd';
-import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, TreeSelectGroup } from 'qmkit';
+import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, TreeSelectGroup, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -16,39 +16,40 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Pet owner account',
+          title: RCi18n({id:'PetOwner.ConsumerAccount'}),
           dataIndex: 'customerAccount',
           key: 'consumerAccount',
           width: '15%'
         },
         {
-          title: 'Pet owner name',
+          title: RCi18n({id:'PetOwner.ConsumerName'}),
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
           render: (text, record) => <p>{[record.firstName, record.lastName].join(' ')}</p>
         },
         {
-          title: 'Pet owner type',
-          dataIndex: 'customerLevelName',
+          title: RCi18n({id:'PetOwner.ConsumerType'}),
+          dataIndex: 'customerLevelId',
           key: 'consumerType',
-          width: '15%'
+          width: '15%',
+          render: text => this.state.customerTypeObj[text]
         },
         {
-          title: 'Email',
+          title: RCi18n({id:'PetOwner.Email'}),
           dataIndex: 'email',
           key: 'email',
           width: '15%'
         },
 
         {
-          title: 'Phone number',
+          title: RCi18n({id:'PetOwner.PhoneNumber'}),
           dataIndex: 'contactPhone',
           key: 'phoneNumber',
           width: '15%'
         },
         {
-          title: 'Default prescriber name',
+          title: RCi18n({id:'PetOwner.DefaultPrescriberName'}),
           dataIndex: 'defaultClinics',
           key: 'defaultClinics',
           width: '15%',
@@ -61,18 +62,18 @@ export default class Customer extends React.Component<any, any> {
         //   width: 200
         // },
         {
-          title: 'Operation',
+          title: RCi18n({id:'PetOwner.Operation'}),
           key: 'operation',
           width: '10%',
           render: (text, record) => (
             <span>
-              <Tooltip placement="top" title="Details">
+              <Tooltip placement="top" title={RCi18n({id:'PetOwner.Details'})}>
                 <Link to={record.customerLevelName === 'Member' ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
               </Tooltip>
               {record.customerLevelName === 'Member' ? (
                 <span>
                   <Divider type="vertical" />
-                  <Tooltip placement="top" title="Activity">
+                  <Tooltip placement="top" title={RCi18n({id:'PetOwner.Activity'})}>
                     <Link to={'/pet-owner-activity/' + record.customerId} className="iconfont iconhuanjie"></Link>
                   </Tooltip>
                 </span>
@@ -109,15 +110,19 @@ export default class Customer extends React.Component<any, any> {
       customerTypeArr: [
         {
           value: 'Member',
-          name: 'Member',
+          name: RCi18n({id:'PetOwner.Member'}),
           id: 234
         },
         {
           value: 'Guest',
-          name: 'Guest',
+          name: RCi18n({id:'PetOwner.Guest'}),
           id: 233
         }
       ],
+      customerTypeObj: {
+        234: RCi18n({id:'PetOwner.Member'}),
+        233: RCi18n({id:'PetOwner.Guest'})
+      },
       subscriptionTypeList: [],
       loading: false
     };
@@ -280,13 +285,13 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>客户列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title="Pet owner list" />
+            <Headline title={RCi18n({id:'PetOwner.PetownerList'})} />
             <Form className="filter-content" layout="inline">
               <Row>
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={styles.label}>Pet owner account</p>}
+                      addonBefore={<p style={styles.label}>{RCi18n({id:'PetOwner.ConsumerAccount'})}</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -300,7 +305,7 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={styles.label}>Pet owner name</p>}
+                      addonBefore={<p style={styles.label}>{RCi18n({id:'PetOwner.ConsumerName'})}</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -315,7 +320,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={styles.label}>Pet owner type</p>}
+                      label={<p style={styles.label}>{RCi18n({id:'PetOwner.ConsumerType'})}</p>}
                       style={{ width: 177 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -325,7 +330,7 @@ export default class Customer extends React.Component<any, any> {
                         });
                       }}
                     >
-                      <Option value="">All</Option>
+                      <Option value="">{RCi18n({id:'PetOwner.All'})}</Option>
                       {customerTypeArr.map((item) => (
                         <Option value={item.id} key={item.id}>
                           {item.name}
@@ -339,7 +344,7 @@ export default class Customer extends React.Component<any, any> {
                     <Input
                       addonBefore={
                         <p style={styles.label}>
-                          <FormattedMessage id="email" />
+                          <FormattedMessage id="PetOwner.Email" />
                         </p>
                       }
                       onChange={(e) => {
@@ -357,7 +362,7 @@ export default class Customer extends React.Component<any, any> {
                     <Input
                       addonBefore={
                         <p style={styles.label}>
-                          <FormattedMessage id="phoneNumber" />
+                          <FormattedMessage id="PetOwner.PhoneNumber" />
                         </p>
                       }
                       onChange={(e) => {
@@ -375,21 +380,21 @@ export default class Customer extends React.Component<any, any> {
                     <TreeSelectGroup
                       allowClear
                       getPopupContainer={() => document.getElementById('page-content')}
-                      label={<p style={styles.label}>Subscription type</p>}
+                      label={<p style={styles.label}>{RCi18n({id:'PetOwner.subscriptionType'})}</p>}
                       dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth: 200 }}
                       treeDefaultExpandAll
                       onChange={(value) => {
                         this.onFormChange({ field: 'subscriptionType', value });
                       }}
                     >
-                      <TreeNode value="club" title="Club" key="club">
-                        <TreeNode value="cat" title="Cat" key="cat" />
-                        <TreeNode value="dog" title="Dog" key="dog" />
+                      <TreeNode value="club" title={RCi18n({id:'PetOwner.Club'})} key="club">
+                        <TreeNode value="cat" title={RCi18n({id:'PetOwner.Cat'})} key="cat" />
+                        <TreeNode value="dog" title={RCi18n({id:'PetOwner.Dog'})} key="dog" />
                       </TreeNode>
-                      <TreeNode value="Product" title="Product" key="product">
-                        <TreeNode value="food dispenser" title="Food dispenser" key="food" />
+                      <TreeNode value="Product" title={RCi18n({id:'PetOwner.Product'})} key="product">
+                        <TreeNode value="food dispenser" title={RCi18n({id:'PetOwner.FoodDispenser'})} key="food" />
                       </TreeNode>
-                      <TreeNode value="autoship" title="Autoship" key="autoship" />
+                      <TreeNode value="autoship" title={RCi18n({id:'PetOwner.Autoship'})} key="autoship" />
                     </TreeSelectGroup>
                   </FormItem>
                 </Col>
@@ -406,7 +411,7 @@ export default class Customer extends React.Component<any, any> {
                       }}
                     >
                       <span>
-                        <FormattedMessage id="search" />
+                        <FormattedMessage id="PetOwner.search" />
                       </span>
                     </Button>
                   </FormItem>

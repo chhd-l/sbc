@@ -140,15 +140,6 @@ export default {
   'Public.Reminder100records':'Reminder: up to 100 records',
   "Public.GetDataFailed": 'Get Data Failed',
   /* -------- 已翻译 V2.0---------------*/
-  'Public.OperateSucc':'Operate successfully',
-  'Public.ClientID Tip':'Client ID cannot be empty',
-  'Public.ClientID Input':'Please Search Client ID First',
-  'Public.ClientName':'Client Name',
-  'Public.NoPrescriber':'No Prescriber',
-  'Public.EmailTip':'Email already exists in store portal, please check.',
-  'Public.Expired':'OKTA Token Expired',
-  'Public.logisticsCompanyErr':'The selected logistics company does not exist',
-  'Public.logisticsCompanyTip':'Up to 20 logistics companies can be set up',
 
 
 
@@ -2391,7 +2382,33 @@ export default {
   'PetOwner.levelBadge':'Type badge',
   'PetOwner.consumerLevel':'Pet owner type',
   /* -------- 已翻译 V1.0---------------*/
-
+  "PetOwner.Member": "Member",
+  "PetOwner.Guest": "Guest",
+  "PetOwner.PetownerList": "Pet owner list",
+  'PetOwner.subscriptionType':'Subscription type',
+  "PetOwner.Club": "Club",
+  "PetOwner.Cat": "Cat",
+  "PetOwner.Dog": "Dog",
+  "PetOwner.FoodDispenser": "Food dispenser",
+  "PetOwner.Autoship": "Autoship",
+  'PetOwner.PetOwneractivity':'Pet owner activity',
+  'PetOwner.createOrder': 'Create Order',
+  'PetOwner.PetOwnerOverview':'Pet Owner Overview',
+  "PetOwner.ViewAll": "View All",
+  "PetOwner.Account": "Account",
+  "PetOwner.Location": "Location",
+  "PetOwner.Phone": "Phone",
+  "PetOwner.Taggings": "Taggings",
+  "PetOwner.Pets": "Pets",
+  "PetOwner.ID": "ID",
+  "PetOwner.Task": "Task",
+  "PetOwner.Emails": "Emails",
+  "PetOwner.Activities": "Activities",
+  "PetOwner.AddComment": "Add Comment",
+  "PetOwner.AddTask": "Add Task",
+  "PetOwner.Keyword": "Keyword",
+  "PetOwner.TaskStatus": "Task Status",
+  "PetOwner.GoldenMoment": "GoldenMoment",
 
 
 
@@ -2850,7 +2867,6 @@ export default {
   'Marketing.Addgift': 'Add gift',
   'Marketing.greaterthan0andlessthan999': 'Value must only be integers greater than 0 and less than 999',
   'Marketing.PomotionCodehasexited.': 'Pomotion Code has exited.',
-  'Marketing.Singlepurchase': 'Single purchase',
 
 
 
@@ -2990,15 +3006,29 @@ export default {
   'Prescriber.Create':'Create',
   'Prescriber.EditPrescriberType':'Edit Prescriber Type',
   'Prescriber.NewPrescriberType':'New Prescriber type',
-  
-  
-  
-  
-  
-  
-  
   /* -------- 已翻译 V1.0---------------*/
-
+  'Prescriber.Get data failed':'Get data failed',
+  'Prescriber.send successful':'send successful',
+  'Prescriber.PAPF':'Please add prescriber first',
+  'Prescriber.User name':'User name',
+  'Prescriber.User email':'User email',
+  'Prescriber.User status':'User status',
+  'Prescriber.AYSTRTU':'Are you sure to remove the user',
+  'Prescriber.PITRFD':'"Please input the reason for disabling"',
+  'Prescriber.AOR':'title="Agree or Reject?"',
+  'Prescriber.NoPrescriberRole':'No Prescriber Role',
+  'Prescriber.PrescriberWebsite':'Prescriber website',
+  'Prescriber.Btolist':'Back To List"',
+  'Prescriber.PTSRR':'Proceed To Set Reward Rules',
+  'Prescriber.PASCTML':'Prescriber Address exceed the maximum length！',
+  'Prescriber.PNETML':'Prescriber name exceed the maximum length!',
+  'Prescriber.PIPN':'Please input Prescriber name!',
+  'Prescriber.PIPI':'Please input Prescriber id!',
+  'Prescriber.Rewardrate':'Reward rate',
+  'Prescriber.NAUSNTRBLISP':'New added user still needs to register before logging in store portal',
+  'Prescriber.inputname':'Please input name',
+  'Prescriber.inputemail':'Please input email',
+  'Prescriber.PIARFD':'  Please input a reason for disabling',
 
 
   /*-----------------------------  Analysis  ----------------------------------------*/

@@ -66,10 +66,10 @@ export default  {
                         无序列表: language['Public.editor.unordered'],
                         有序列表: language['Public.editor.ordered'],
                     },
-                },
+                }, 
                 panelMenus: {
                     emoticon: {
-                        默认: language['default'],
+                        默认: language['Public.editor.default'],
                         新浪: language['Public.editor.sina'],
                         emoji: language['Public.editor.emoji'],
                         手势: language['Public.editor.gesture'],
@@ -80,7 +80,7 @@ export default  {
                         网络图片: language['Public.editor.networkImage'],
                     },
                     link: {
-                        链接: language['link'],
+                        链接: language['Public.editor.link'],
                         链接文字: language['Public.editor.linkText'],
                         取消链接: language['Public.editor.unlink'],
                         查看链接: language['Public.editor.viewLinks'],
@@ -93,7 +93,7 @@ export default  {
                         行: language['Public.editor.rows'],
                         列: language['Public.editor.columns'],
                         的: ' ',
-                        表格: language['table'],
+                        表格: language['Public.editor.table'],
                         添加行: language['Public.editor.insertRow'],
                         删除行: language['Public.editor.deleteRow'],
                         添加列: language['Public.editor.insertColumn'],

@@ -25,7 +25,7 @@ export default class GoodsSpecActor extends Actor {
           index: 1,
           addedFlag: 1,
           subscriptionPrice: 0,
-          promotions: 'club',
+          promotions: 'autoship',
           stock: 0,
           goodsInfoNo: this._randomGoodsInfoNo()
         }
@@ -350,7 +350,7 @@ export default class GoodsSpecActor extends Actor {
         id: this._getRandom(),
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
-        promotions: 'club',
+        promotions: 'autoship',
         addedFlag: 1,
         skuSvIds: [item.get('specDetailId')]
       });

@@ -1005,7 +1005,6 @@ export default class AppStore extends Store {
       if (this.state().get('goods').get('saleableFlag') != 0 ) {
         goodsList.forEach((item, i ) => {
 
-
           if(i == 0) {
             if ( item.get('goodsInfoBundleRels').length != 1 ) {
               if (item.get('marketPrice') == 0) {
@@ -1021,6 +1020,7 @@ export default class AppStore extends Store {
             }
 
           }else {
+
             if ( item.get('marketPrice') == 0 ) {
               tip = 1;
               valid = false;

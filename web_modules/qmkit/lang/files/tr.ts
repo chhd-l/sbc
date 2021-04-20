@@ -719,7 +719,7 @@ export default {
   'Order.reviewRejected': 'Review rejected', 
   'Order.receiedRejected': 'Receied rejected', 
   'Order.refundRejected': 'Refund rejected',
-  'Order.Selectreturnproducts': 'Order.Select return products',
+  'Order.Selectreturnproducts': 'Select return products',
   'Order.Specification': 'Specification',
   'Order.Returnunitprice': 'Return unit price',
   'Order.Returnquantity': 'Return quantity',

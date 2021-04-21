@@ -148,6 +148,18 @@ class SubscriptionDetail extends React.Component<any, any> {
 
           let goodsInfo = subscriptionDetail.goodsInfo;
           let paymentInfo = subscriptionDetail.payPaymentInfo;
+
+          let initDeliveryPrice = 0;
+          let initDiscountPirce = 0;
+          let initTaxPrice = 0;
+          (subscriptionDetail.noStartTradeList ?? []).forEach(item => {
+            if (item.tradePrice) {
+              initDeliveryPrice += item.tradePrice.deliveryPrice ?? 0;
+              initDiscountPirce += item.tradePrice.discountsPrice ?? 0;
+              initTaxPrice += item.tradePrice.taxFeePrice ?? 0;
+            }
+          });
+
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -163,10 +175,13 @@ class SubscriptionDetail extends React.Component<any, any> {
               promotionCode: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
-              loading: false
+              loading: false,
+              deliveryPrice: +initDeliveryPrice.toFixed(2),
+              discountsPrice: +initDiscountPirce.toFixed(2),
+              taxFreePrice: +initTaxPrice.toFixed(2)
             },
             () => {
-              this.applyPromationCode(this.state.promotionCode);
+              // this.applyPromationCode(this.state.promotionCode);
             }
           );
         }
@@ -779,7 +794,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       }
     } as any;
 
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
 
     return (
       <div>

@@ -70,10 +70,10 @@ class TaskUpdate extends Component<any, any> {
       ],
       editable: !this.props.match.params.id,
       reminderTypes: [
-        { value: <FormattedMessage id="task.Days" />, name: 'Days' },
-        { value: <FormattedMessage id="task.Minutes" />, name: 'Minutes' },
-        { value: <FormattedMessage id="task.Hours" />, name: 'Hours' },
-        { value: <FormattedMessage id="task.Weeks" />, name: 'Weeks' }
+        { name: <FormattedMessage id="task.Days" />, value: 'Day' },
+        { name: <FormattedMessage id="task.Minutes" />, value: 'Minute' },
+        { name: <FormattedMessage id="task.Hours" />, value: 'Hour' },
+        { name: <FormattedMessage id="task.Weeks" />, value: 'Week' }
       ],
       associatedSubscriptionList: [],
       loading: false,

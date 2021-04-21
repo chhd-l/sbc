@@ -250,7 +250,8 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     }
-
+    debugger
+    console.log(goods.toJS(), '----goods');
     const taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {
@@ -850,8 +851,10 @@ class GoodsForm extends React.Component<any, any> {
   _editGoods = (key: string, e) => {
     const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm, goodsList } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
-    console.error(key, e);
 
+    if (e && e.target) {
+      e = e.target.value;
+    }
     // if (key === 'saleableFlag') {
     //   if (e.target.value == 0) {
     //     this.setState({
@@ -865,7 +868,7 @@ class GoodsForm extends React.Component<any, any> {
     // }
 
     if (key === 'addedFlag') {
-      if (e.target.value == 0) {
+      if (e == 0) {
         this.setState({
           saleableType: true
         });
@@ -886,8 +889,8 @@ class GoodsForm extends React.Component<any, any> {
       }
     }
 
-    if (key === 'displayFlag') {
-      if (e.target.value == 0) {
+    else if (key === 'displayFlag') {
+      if (e == 0) {
         let goods = Map({
           subscriptionStatus: fromJS(0)
         });
@@ -904,7 +907,7 @@ class GoodsForm extends React.Component<any, any> {
       }
     }
 
-    if (key === 'promotions') {
+    else if (key === 'promotions') {
       let goods = Map({
         promotions: fromJS(e)
       });
@@ -915,19 +918,25 @@ class GoodsForm extends React.Component<any, any> {
       })
     }
 
-    if (e && e.target) {
-      e = e.target.value;
-    }
-    if (key === 'cateId') {
+    else if (key === 'cateId') {
       this._onChange(e);
       if (e === '-1') {
         showCateModal();
       }
-    } else if (key === 'brandId' && e === '0') {
+      let goods = Map({
+        [key]: fromJS(e)
+      });
+      editGoods(goods);
+    }
+    else if (key === 'brandId' && e === '0') {
       showBrandModal();
+      let goods = Map({
+        [key]: fromJS(e)
+      });
+      editGoods(goods);
     }
 
-    if (key === 'saleType' && e == 0) {
+    else if (key === 'saleType' && e == 0) {
       if (!flashsaleGoods.isEmpty()) {
         message.error('This product is participating in a spike event, and the sales type cannot be changed!', 3, () => {
           let goods = Map({
@@ -979,18 +988,22 @@ class GoodsForm extends React.Component<any, any> {
           editGoods(goods);
         }
       }
-    } else {
+    }
+
+    else if (key === 'subscriptionStatus') {
+      if( e == 0) {
+        goodsList.toJS()&&goodsList.toJS().map(item=>{
+          editGoodsItem(item.id,'subscriptionStatus',0);
+        })
+      }else {
+        goodsList.toJS()&&goodsList.toJS().map(item=>{
+          editGoodsItem(item.id,'subscriptionStatus',1);
+        })
+      }
       let goods = Map({
         [key]: fromJS(e)
       });
-      updateGoodsForm(this.props.form);
       editGoods(goods);
-    }
-
-    if (key === 'subscriptionStatus' && e == 0) {
-      goodsList.toJS()&&goodsList.toJS().map(item=>{
-        editGoodsItem(item.id,'subscriptionStatus',0);
-      })
       this.props.form.setFieldsValue({
         defaultPurchaseType: null
       });
@@ -998,10 +1011,14 @@ class GoodsForm extends React.Component<any, any> {
         defaultFrequencyId: null
       });
 
-    }else {
-      goodsList.toJS()&&goodsList.toJS().map(item=>{
-        editGoodsItem(item.id,'subscriptionStatus',0);
-      })
+    }
+
+    else {
+      let goods = Map({
+        [key]: fromJS(e)
+      });
+      updateGoodsForm(this.props.form);
+      editGoods(goods);
     }
   };
 

@@ -56,7 +56,7 @@ export default class PaymentInformation extends React.Component<any, any> {
             {getFieldDecorator('suggest', {
              initialValue: felinReco.suggest || '',
               onChange: (e) => this._onChange(e, 'suggest'),
-            })(<Input placeholder="Input" />)}
+            })(<Input.TextArea rows={4} placeholder="Input" />)}
 
           </Form.Item>
           <Form.Item label="We recommend to you the following optimal nutrition">
@@ -64,7 +64,7 @@ export default class PaymentInformation extends React.Component<any, any> {
               initialValue: felinReco.optimal || '',
               onChange: (e) => this._onChange(e, 'optimal'),
 
-            })(<Input placeholder="Input" />)}
+            })(<Input.TextArea rows={4} placeholder="Input" />)}
 
           </Form.Item>
           <Form.Item label="Paris (Y/N)" {...formItemLayout}>

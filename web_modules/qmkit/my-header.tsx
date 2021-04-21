@@ -8,6 +8,7 @@ import copy from 'copy-to-clipboard';
 import OktaLogout from './okta/okta-logout';
 import { getHomeTaskListAndCount, getTaskRead, getHomeTaskTodoListTop5 } from '../../src/task/webapi';
 import { FormattedMessage } from 'react-intl';
+import msgImg from './images/icon/msg-icon.png'
 //import value from '*.json';
 const Option = Select.Option;
 const { TabPane } = Tabs;
@@ -383,7 +384,8 @@ export default class MyHeader extends React.Component {
                       content={this.content()}
                       trigger="click"
                     >
-                      <Icon type="bell" style={{ fontSize: 25 }} />
+                      {/*<Icon type="bell" style={{ fontSize: 25 }} />*/}
+                      <img src={msgImg} style={{ width: '2.5em', height: 'auto' }}/>
                     </Popover>
                   </Badge>
                 </AuthWrapper>

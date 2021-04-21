@@ -2869,6 +2869,7 @@ export default {
   'Marketing.PomotionCodehasexited.': 'Pomotion Code has exited.',
   'Marketing.Freeshipping': 'Free shipping',
   'Marketing.Singlepurchase': 'Single purchase',
+  'Marketing.Automationlist': 'Automation list',
 
 
 

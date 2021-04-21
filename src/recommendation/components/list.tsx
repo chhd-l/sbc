@@ -26,7 +26,7 @@ class RejectForm extends React.Component<any, any> {
               },
               {
                 max: 100,
-                message: 'Please input less than 100 characters'
+                message: <FormattedMessage id="Prescriber.lessthan100characters" />
               }
               // { validator: this.checkComment }
             ]

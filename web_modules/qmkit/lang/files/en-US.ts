@@ -3023,6 +3023,8 @@ export default {
   'Prescriber.Paris':'Paris',
   'Prescriber.Pick up':'Pick up',
   'Prescriber.Created Time':'Created Time:',
+  'Prescriber.lessthan100characters':'Please input less than 100 characters:',
+  'Prescriber.thereasonforrejection':'Please enter the reason for rejection:',
   /*-----------------------------  Analysis  ----------------------------------------*/
   'Analysis.ProductReport':'Product Report',
   'Analysis.Search':'Search',

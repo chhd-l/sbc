@@ -1,6 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Dropdown, Icon, message, Button, Select, Badge, Popover, Empty, Tabs, notification, Modal } from 'antd';
+import {
+  Layout,
+  Menu,
+  Dropdown,
+  Icon,
+  message,
+  Button,
+  Select,
+  Badge,
+  Popover,
+  Empty,
+  Tabs,
+  notification,
+  Modal,
+  Tooltip
+} from 'antd';
 const { Header } = Layout;
 import { history, cache, util, Const, AuthWrapper } from 'qmkit';
 import QRCode from 'qrcode';
@@ -385,7 +400,17 @@ export default class MyHeader extends React.Component {
                       trigger="click"
                     >
                       {/*<Icon type="bell" style={{ fontSize: 25 }} />*/}
-                      <img src={msgImg} style={{ width: '2.5em', height: 'auto' }}/>
+                      <span className="iconfont iconmessage" style={{ fontSize: 25 }} ></span>
+                      {/*<span className="iconfont iconmessage3" style={{ fontSize: 25, marginRight: 10 }} ></span>*/}
+
+                      {/*<span className="iconfont iconmessage2" style={{ fontSize: 25, marginRight: 10 }} ></span>*/}
+                      {/*<span className="iconfont iconLC_icon_message_fill_1" style={{ fontSize: 25, marginRight: 10 }} ></span>*/}
+
+                      {/*<span className="iconfont iconLC_icon_message_fill" style={{ fontSize: 25, marginRight: 10 }} ></span>*/}
+                      {/*<span className="iconfont iconmessage1" style={{ fontSize: 25, marginRight: 10 }} ></span>*/}
+
+                      {/*bell*/}
+                      {/*<img src={msgImg} style={{ width: '2.5em', height: 'auto' }}/>*/}
                     </Popover>
                   </Badge>
                 </AuthWrapper>

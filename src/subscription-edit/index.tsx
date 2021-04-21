@@ -1293,7 +1293,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </div>
       );
     }
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -1488,7 +1488,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Row>
 
             <Modal
-              style={{ width: '500px' }}
+              width={650}
               title={<FormattedMessage id="Subscription.Active.ChooseDeliveryAddress"/>}
               visible={this.state.visibleShipping}
               confirmLoading={this.state.addressLoading}
@@ -1501,7 +1501,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             >
               <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
                 <Col>
-                  <Checkbox
+                  {storeId === 123457907 || storeId === 123457910 ? null : <Checkbox
                     checked={this.state.sameFlag}
                     onChange={(e) => {
                       let value = e.target.checked;
@@ -1511,7 +1511,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     }}
                   >
                     <FormattedMessage id="Subscription.BillingAddressIs"/>
-                  </Checkbox>
+                  </Checkbox>}
                 </Col>
                 <Col>
                   <Button size="small" type="primary" onClick={() => this.onOpenAddressForm(NEW_ADDRESS_TEMPLATE, 'delivery')}>
@@ -1536,7 +1536,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               >
                 {this.state.isUnfoldedDelivery
                   ? deliveryList.map((item) => (
-                      <Card style={{ width: 472, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                      <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
@@ -1557,7 +1557,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     ))
                   : deliveryList.map((item, index) =>
                       index < 2 ? (
-                        <Card style={{ width: 472, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                        <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
@@ -1593,7 +1593,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
             <Modal
               title={<FormattedMessage id="Subscription.Active.ChooseBillingAddress"/>}
-              style={{ width: '500px' }}
+              width={650}
               visible={this.state.visibleBilling}
               onOk={() => this.billingOK()}
               onCancel={() => {
@@ -1619,7 +1619,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               >
                 {this.state.isUnfoldedBilling
                   ? billingList.map((item) => (
-                      <Card style={{ width: 472, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                      <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
@@ -1637,7 +1637,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     ))
                   : billingList.map((item, index) =>
                       index < 2 ? (
-                        <Card style={{ width: 472, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                        <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>

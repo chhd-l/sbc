@@ -794,7 +794,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       }
     } as any;
 
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
 
     return (
       <div>

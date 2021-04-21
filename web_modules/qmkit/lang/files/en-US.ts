@@ -873,6 +873,8 @@ export default {
 
 
   /*-----------------------------  Order  --------------------------------------------*/
+  'Order.number':'Order number',
+  'Order.subscriptionNumber':'Subscription number',
   'Order.AuditSetting':'Audit Setting',
   'Order.AutoAudit':'Auto audit',
   'Order.ManualAudit':'Manual audit',

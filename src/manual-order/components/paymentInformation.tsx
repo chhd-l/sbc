@@ -27,8 +27,8 @@ export default class PaymentInformation extends React.Component<any, any> {
       return <h2><FormattedMessage id="Order.failure" /> {customer.customerAccount}</h2>;
     } else {
       return <h2><FormattedMessage id="Order.successfully" /> {customer.customerAccount}
-        <p style={{marginTop:10}}>Order number: <a> {context?.tid??''}</a></p>
-        {context?.subscribeId&&<p style={{marginTop:10}}>Subscription number: <a>{context?.subscribeId??''}</a></p>}
+        <p style={{marginTop:10}}><FormattedMessage id="Order.number" />: <a> {context?.tid??''}</a></p>
+        {context?.subscribeId&&<p style={{marginTop:10}}><FormattedMessage id="Order.subscriptionNumber" />: <a>{context?.subscribeId??''}</a></p>}
       </h2>;
     }
   }

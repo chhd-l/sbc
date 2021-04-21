@@ -2867,6 +2867,7 @@ export default {
   'Marketing.Addgift': 'Add gift',
   'Marketing.greaterthan0andlessthan999': 'Value must only be integers greater than 0 and less than 999',
   'Marketing.PomotionCodehasexited.': 'Pomotion Code has exited.',
+  'Marketing.Freeshipping': 'Free shipping',
 
 
 

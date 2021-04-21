@@ -11,7 +11,7 @@ export default class PaymentInformation extends React.Component<any, any> {
     super(props);
   }
 
-  renderStatus(status, customer) {
+  renderStatus(status, customer,context) {
     if (status === 1) {
       return (
         <h2>
@@ -26,12 +26,15 @@ export default class PaymentInformation extends React.Component<any, any> {
     } else if (status === 2) {
       return <h2><FormattedMessage id="Order.failure" /> {customer.customerAccount}</h2>;
     } else {
-      return <h2><FormattedMessage id="Order.successfully" /> {customer.customerAccount}</h2>;
+      return <h2><FormattedMessage id="Order.successfully" /> {customer.customerAccount}
+        <p style={{marginTop:10}}><FormattedMessage id="Order.number" />: <a> {context?.tid??''}</a></p>
+        {context?.subscribeId&&<p style={{marginTop:10}}><FormattedMessage id="Order.subscriptionNumber" />: <a>{context?.subscribeId??''}</a></p>}
+      </h2>;
     }
   }
 
   render() {
-    const { stepName, noLanguageSelect, status, customer } = this.props;
+    const { stepName, noLanguageSelect, status, customer,context } = this.props;
     return (
       <div>
         <h3>
@@ -41,8 +44,9 @@ export default class PaymentInformation extends React.Component<any, any> {
           <FormattedMessage id={`Order.${stepName}`} />
           <span className="ant-form-item-required"></span>
         </h4>
-        <div className="interaction" style={{ textAlign: 'center', paddingTop: 20 }}>
-          {this.renderStatus(status, customer)}
+        <div className="interaction" style={{textAlign:'center', paddingTop: 20 }}>
+          <div>
+          {this.renderStatus(status, customer,context)}
           {status !== 1 && (
             <Button
               style={{ marginTop: 20 }}
@@ -54,6 +58,7 @@ export default class PaymentInformation extends React.Component<any, any> {
               <FormattedMessage id="Order.Back" />
             </Button>
           )}
+          </div>
         </div>
       </div>
     );

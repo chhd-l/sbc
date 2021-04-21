@@ -6,7 +6,7 @@ import GoodsActor from './actor/goods-actor';
 import FormActor from './actor/form-actor';
 import FreightActor from './actor/freight-actor';
 import { message } from 'antd';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getProductCategories, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight } from './webapi';
 import { intl  } from 'react-intl';
 
@@ -177,7 +177,7 @@ export default class AppStore extends Store {
    */
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Product.OperateSuccessfully'}));
     }
   };
   /**
@@ -232,7 +232,7 @@ export default class AppStore extends Store {
     };
     const { res, err } = (await updateFreight(param)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Product.OperateSuccessfully'}));
       this.setFeightVisible(false);
       this.setFreightTempId(null);
       this.dispatch('goodsActor:clearSelectedSpuKeys');

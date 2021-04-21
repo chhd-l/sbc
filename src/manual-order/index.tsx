@@ -21,6 +21,7 @@ class ManualOrder extends Component<any, any> {
       current: 0,
       status: 1,
       url:'',
+      context:null,
       customer: {
         customerId: '',
         customerName: '',
@@ -66,7 +67,8 @@ class ManualOrder extends Component<any, any> {
          }
          let status = d[typeof res.context];
          this.setState({
-           status
+           status,
+           context:status===3?res.context:null,
          });
         }else{
           this.setState({
@@ -133,7 +135,7 @@ class ManualOrder extends Component<any, any> {
     });
   };
   render() {
-    const { current, title, customer, storeId, status,url,prefix } = this.state;
+    const { current, title, customer, storeId, status,url,context } = this.state;
     const steps = [
       {
         title: 'Consumer information',
@@ -145,7 +147,7 @@ class ManualOrder extends Component<any, any> {
       },
       {
         title: 'Delivery & payment information',
-        controller: <PaymentInformation turnShowPage={this.getShopTokenJump} status={status} customer={customer} stepName={'Delivery & payment information'} />
+        controller: <PaymentInformation context={context} turnShowPage={this.getShopTokenJump} status={status} customer={customer} stepName={'Delivery & payment information'} />
       }
     ];
     // if (noLanguageSelect) {

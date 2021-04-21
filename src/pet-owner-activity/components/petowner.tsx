@@ -54,12 +54,12 @@ export default class petowner extends Component<any, any> {
                       placement="bottomLeft"
                       title={
                         <div>
-                          {petOwner.city} , {petOwner.country}
+                          {petOwner.city} {petOwner.country ? (', ' + petOwner.country) : ''}
                         </div>
                       }
                     >
                       <p style={styles.text}>
-                        {petOwner.city} , {petOwner.country}
+                        {petOwner.city} {petOwner.country ? (', ' + petOwner.country) : ''}
                       </p>
                     </Tooltip>
                   </span>

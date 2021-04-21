@@ -873,6 +873,8 @@ export default {
 
 
   /*-----------------------------  Order  --------------------------------------------*/
+  'Order.number':'Order number',
+  'Order.subscriptionNumber':'Subscription number',
   'Order.AuditSetting':'Audit Setting',
   'Order.AutoAudit':'Auto audit',
   'Order.ManualAudit':'Manual audit',
@@ -2810,7 +2812,7 @@ export default {
   'Marketing.Selectgroup': 'Select group',
   'Marketing.Byemail': 'By email',
   'Marketing.Pleaseselectgroup': 'Please select group.',
-  'Marketing.Pleaseenteremailsuffix.': 'Please enter email suffix.',
+  'Marketing.Pleaseenteremailsuffix': 'Please enter email suffix.',
   'Marketing.Addmulti-levelpromotions': 'Add multi-level promotions',
   'Marketing.upto5levels': 'up to 5 levels can be set',
   'Marketing.0-99999999.99': '0-99999999.99',
@@ -2867,6 +2869,8 @@ export default {
   'Marketing.Addgift': 'Add gift',
   'Marketing.greaterthan0andlessthan999': 'Value must only be integers greater than 0 and less than 999',
   'Marketing.PomotionCodehasexited.': 'Pomotion Code has exited.',
+  'Marketing.Freeshipping': 'Free shipping',
+  'Marketing.Singlepurchase': 'Single purchase',
 
 
 
@@ -3008,29 +3012,21 @@ export default {
   'Prescriber.NewPrescriberType':'New Prescriber type',
   /* -------- 已翻译 V1.0---------------*/
   'Prescriber.Get data failed':'Get data failed',
-  'Prescriber.send successful':'send successful',
-  'Prescriber.PAPF':'Please add prescriber first',
-  'Prescriber.User name':'User name',
-  'Prescriber.User email':'User email',
-  'Prescriber.User status':'User status',
-  'Prescriber.AYSTRTU':'Are you sure to remove the user',
-  'Prescriber.PITRFD':'"Please input the reason for disabling"',
-  'Prescriber.AOR':'title="Agree or Reject?"',
   'Prescriber.NoPrescriberRole':'No Prescriber Role',
   'Prescriber.PrescriberWebsite':'Prescriber website',
-  'Prescriber.Btolist':'Back To List"',
-  'Prescriber.PTSRR':'Proceed To Set Reward Rules',
-  'Prescriber.PASCTML':'Prescriber Address exceed the maximum length！',
-  'Prescriber.PNETML':'Prescriber name exceed the maximum length!',
-  'Prescriber.PIPN':'Please input Prescriber name!',
-  'Prescriber.PIPI':'Please input Prescriber id!',
   'Prescriber.Rewardrate':'Reward rate',
-  'Prescriber.NAUSNTRBLISP':'New added user still needs to register before logging in store portal',
   'Prescriber.inputname':'Please input name',
-  'Prescriber.inputemail':'Please input email',
-  'Prescriber.PIARFD':'  Please input a reason for disabling',
-
-
+  'Prescriber.inputreasonfordisabling':'Please input a reason for disabling',
+  'Prescriber.PO Name':'PO Name',
+  'Prescriber.PO E-mail':'PO E-mail',
+  'Prescriber.Amount':'Amount',
+  'Prescriber.Expert':'Expert',
+  'Prescriber.Link status':'Link status',
+  'Prescriber.Paris':'Paris',
+  'Prescriber.Pick up':'Pick up',
+  'Prescriber.Created Time':'Created Time:',
+  'Prescriber.lessthan100characters':'Please input less than 100 characters:',
+  'Prescriber.thereasonforrejection':'Please enter the reason for rejection:',
   /*-----------------------------  Analysis  ----------------------------------------*/
   'Analysis.ProductReport':'Product Report',
   'Analysis.Search':'Search',

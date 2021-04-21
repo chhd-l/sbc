@@ -568,7 +568,7 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
                 <FormItem label={RCi18n({id:'Prescriber.PrescriberID'})}>
                   {getFieldDecorator('prescriberId', {
-                    rules: [{ required: true, message:RCi18n({id:'Prescriber.PIPI'})}]
+                    rules: [{ required: true, message:RCi18n({id:'Prescriber.PleaseInputPrescriberId'})}]
                   })(
                     <Input
                       disabled={this.state.isEdit}
@@ -587,11 +587,11 @@ class ClinicForm extends React.Component<any, any> {
                     rules: [
                       {
                         required: true,
-                        message: RCi18n({id:'PIPN'})
+                        message: RCi18n({id:'PleaseInputPrescriberName'})
                       },
                       {
                         max: 200,
-                        message: RCi18n({id:'Prescriber.PNETML'})
+                        message: RCi18n({id:'Prescriber.theMaximumLength'})
                       }
                     ]
                   })(
@@ -781,7 +781,7 @@ class ClinicForm extends React.Component<any, any> {
                     rules: [
                       {
                         max: 200,
-                        message: RCi18n({id:'Prescriber.PASCTML'})
+                        message: RCi18n({id:'Prescriber.PrescriberAddressExceed'})
                       }
                     ]
                   })(
@@ -815,12 +815,12 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
                 <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                   <Button type="primary" htmlType="submit">
-                  <FormattedMessage id="Prescriber.PTSRR" />
+                  <FormattedMessage id="Prescriber.ProceedToSetRewardRules" />
                   </Button>
 
                   {!sessionStorage.getItem('PrescriberSelect') ? (
                     <Button style={{ marginLeft: '20px' }}>
-                      <Link to="/prescriber"><FormattedMessage id="Prescriber.Btolist" /></Link>
+                      <Link to="/prescriber"><FormattedMessage id="Prescriber.BackToList" /></Link>
                     </Button>
                   ) : null}
                 </FormItem>
@@ -997,7 +997,7 @@ class ClinicForm extends React.Component<any, any> {
               </Button>
               {!sessionStorage.getItem('PrescriberSelect') ? (
                 <Button style={{ marginLeft: '20px' }}>
-                  <Link to="/prescriber"> <FormattedMessage id="Prescriber.Btolist" /></Link>
+                  <Link to="/prescriber"> <FormattedMessage id="Prescriber.BackToList" /></Link>
                 </Button>
               ) : null}
 

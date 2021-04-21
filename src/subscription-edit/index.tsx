@@ -173,6 +173,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             promotionCode: subscriptionDetail.promotionCode
           };
 
+          let initDeliveryPrice = 0;
+          let initDiscountPirce = 0;
+          let initTaxPrice = 0;
+          (subscriptionDetail.noStartTradeList ?? []).forEach(item => {
+            if (item.tradePrice) {
+              initDeliveryPrice += item.tradePrice.deliveryPrice ?? 0;
+              initDiscountPirce += item.tradePrice.discountsPrice ?? 0;
+              initTaxPrice += item.tradePrice.taxFeePrice ?? 0;
+            }
+          });
+
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -189,14 +200,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               promotionCodeShow: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
-              loading: false
+              loading: false,
+              deliveryPrice: +initDeliveryPrice.toFixed(2),
+              discountsPrice: +initDiscountPirce.toFixed(2),
+              taxFreePrice: +initTaxPrice.toFixed(2)
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
                 let customerId = this.state.deliveryAddressInfo.customerId;
                 this.getAddressList(customerId, 'DELIVERY');
                 this.getAddressList(customerId, 'BILLING');
-                this.applyPromotionCode(this.state.promotionCodeShow);
+                // this.applyPromotionCode(this.state.promotionCodeShow);
               }
 
               // if(this.state.petsId){
@@ -549,21 +563,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       return item.deliveryAddressId === deliveryAddressId;
     });
     let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
-    //计算运费
+    //计算运费, 改为从后端getPromotionPirce接口获取
     this.setState({ addressLoading: true });
-    if (await webapi.getAddressInputTypeSetting() === 'AUTOMATICALLY') {
-      const feeRes = await webapi.calcShippingFee(deliveryAddressInfo.address1);
-      if (feeRes.res.code === Const.SUCCESS_CODE && feeRes.res.context.success) {
-        deliveryPrice = feeRes.res.context.tariffs[0]?.deliveryPrice ?? 0
-      } else {
-        message.error(<FormattedMessage id="Subscription.shippingArea"/>);
-        return;
-      }
-    }
+    // if (await webapi.getAddressInputTypeSetting() === 'AUTOMATICALLY') {
+    //   const feeRes = await webapi.calcShippingFee(deliveryAddressInfo.address1);
+    //   if (feeRes.res.code === Const.SUCCESS_CODE && feeRes.res.context.success) {
+    //     deliveryPrice = feeRes.res.context.tariffs[0]?.deliveryPrice ?? 0
+    //   } else {
+    //     message.error(<FormattedMessage id="Subscription.shippingArea"/>);
+    //     return;
+    //   }
+    // }   
+
     if (this.state.sameFlag) {
       this.setState({
         addressLoading: false,
-        deliveryPrice: deliveryPrice,
         deliveryAddressInfo: deliveryAddressInfo,
         billingAddressInfo: deliveryAddressInfo,
         deliveryList: addressList,
@@ -572,12 +586,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     } else {
       this.setState({
         addressLoading: false,
-        deliveryPrice: deliveryPrice,
         deliveryAddressInfo: deliveryAddressInfo,
         deliveryList: addressList,
         visibleShipping: false
       });
     }
+    this.applyPromotionCode();
   };
   billingOpen = () => {
     this.setState({
@@ -1515,7 +1529,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       deliveryAddressId: value
                     },
                     () => {
-                      this.applyPromotionCode();
+                      // this.applyPromotionCode();
                     }
                   );
                 }}

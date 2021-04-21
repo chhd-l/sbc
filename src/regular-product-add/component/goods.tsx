@@ -250,7 +250,8 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     }
-
+    debugger
+    console.log(goods.toJS(), '----goods');
     const taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {

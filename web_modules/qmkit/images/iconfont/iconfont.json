@@ -6,6 +6,55 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "586087",
+      "name": "message",
+      "font_class": "message1",
+      "unicode": "e6a6",
+      "unicode_decimal": 59046
+    },
+    {
+      "icon_id": "637640",
+      "name": "LC_icon_message_fill",
+      "font_class": "LC_icon_message_fill",
+      "unicode": "e6a8",
+      "unicode_decimal": 59048
+    },
+    {
+      "icon_id": "645866",
+      "name": "LC_icon_message_fill_1",
+      "font_class": "LC_icon_message_fill_1",
+      "unicode": "e6a9",
+      "unicode_decimal": 59049
+    },
+    {
+      "icon_id": "13519439",
+      "name": "message",
+      "font_class": "message2",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "16881003",
+      "name": "message",
+      "font_class": "message3",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "13874786",
+      "name": "message",
+      "font_class": "message",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "21134079",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    },
+    {
       "icon_id": "20666609",
       "name": "Appointment",
       "font_class": "Appointment",

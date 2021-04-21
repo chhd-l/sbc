@@ -993,7 +993,7 @@ class GoodsForm extends React.Component<any, any> {
       let goods = Map({
         [key]: fromJS(e)
       });
-      editGoodsItem(goods);
+      editGoods(goods);
       this.props.form.setFieldsValue({
         defaultPurchaseType: null
       });

@@ -242,6 +242,7 @@ class GoodsForm extends React.Component<any, any> {
     let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
 
+    console.log(goods.toJS(),11111111);
     if (storeCateIds) {
       storeCateIds.toJS().map((id) => {
         if (!parentIds.includes(id)) {
@@ -1007,7 +1008,7 @@ class GoodsForm extends React.Component<any, any> {
       let goods = Map({
         [key]: fromJS(e)
       });
-      editGoodsItem(goods);
+      editGoods(goods);
       this.props.form.setFieldsValue({
         defaultPurchaseType: null
       });

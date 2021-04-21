@@ -544,7 +544,7 @@ class ClinicForm extends React.Component<any, any> {
           <Row>
             <Col span={12}>
               <Form {...layout} onSubmit={this.handleSubmit}>
-                <FormItem label={RCi18n({id:'Prescriber.ParentPrescriber'})}>
+                <FormItem label={RCi18n({id:'Prescriber.ParentPrescriber'})} style={{display:(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de' ? 'none' : 'block'}}>
                   {getFieldDecorator(
                     'parentPrescriberId',
                     {}

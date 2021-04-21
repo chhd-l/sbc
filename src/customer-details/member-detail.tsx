@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { Headline, BreadCrumb, history, Const } from 'qmkit';
+import { Headline, BreadCrumb, history, Const, cache } from 'qmkit';
 import OrderInformation from './component/order-information';
 import SubscribInformation from './component/subscrib-information';
 import PrescribInformation from './component/prescrib-information';
@@ -435,9 +435,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <TabPane tab="Delivery information" key="delivery">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
-                <TabPane tab="Billing information" key="billing">
+                {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] !== 'ru' ? <TabPane tab="Billing information" key="billing">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
-                </TabPane>
+                </TabPane> : null}
                 <TabPane tab="Payment methods" key="payment">
                   <PaymentList customerId={this.state.customerId} />
                 </TabPane>

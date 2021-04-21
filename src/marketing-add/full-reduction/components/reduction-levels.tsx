@@ -211,7 +211,7 @@ class ReductionLevels extends React.Component<any, any> {
         {isNormal && isFullCount !== 2 ? (
           <div>
             <Button onClick={this.addLevels} disabled={fullReductionLevelList.length >= 5}>
-              <FormattedMessage id="Marketing.Marketing.Addmulti-levelpromotions" />
+              <FormattedMessage id="Marketing.Addmulti-levelpromotions" />
             </Button>
             &nbsp;&nbsp;<FormattedMessage id="Marketing.upto5levels" />
           </div>

@@ -2382,7 +2382,33 @@ export default {
   'PetOwner.levelBadge':'Type badge',
   'PetOwner.consumerLevel':'Pet owner type',
   /* -------- 已翻译 V1.0---------------*/
-
+  "PetOwner.Member": "Member",
+  "PetOwner.Guest": "Guest",
+  "PetOwner.PetownerList": "Pet owner list",
+  'PetOwner.subscriptionType':'Subscription type',
+  "PetOwner.Club": "Club",
+  "PetOwner.Cat": "Cat",
+  "PetOwner.Dog": "Dog",
+  "PetOwner.FoodDispenser": "Food dispenser",
+  "PetOwner.Autoship": "Autoship",
+  'PetOwner.PetOwneractivity':'Pet owner activity',
+  'PetOwner.createOrder': 'Create Order',
+  'PetOwner.PetOwnerOverview':'Pet Owner Overview',
+  "PetOwner.ViewAll": "View All",
+  "PetOwner.Account": "Account",
+  "PetOwner.Location": "Location",
+  "PetOwner.Phone": "Phone",
+  "PetOwner.Taggings": "Taggings",
+  "PetOwner.Pets": "Pets",
+  "PetOwner.ID": "ID",
+  "PetOwner.Task": "Task",
+  "PetOwner.Emails": "Emails",
+  "PetOwner.Activities": "Activities",
+  "PetOwner.AddComment": "Add Comment",
+  "PetOwner.AddTask": "Add Task",
+  "PetOwner.Keyword": "Keyword",
+  "PetOwner.TaskStatus": "Task Status",
+  "PetOwner.GoldenMoment": "GoldenMoment",
 
 
 
@@ -2784,7 +2810,7 @@ export default {
   'Marketing.Selectgroup': 'Select group',
   'Marketing.Byemail': 'By email',
   'Marketing.Pleaseselectgroup': 'Please select group.',
-  'Marketing.Pleaseenteremailsuffix.': 'Please enter email suffix.',
+  'Marketing.Pleaseenteremailsuffix': 'Please enter email suffix.',
   'Marketing.Addmulti-levelpromotions': 'Add multi-level promotions',
   'Marketing.upto5levels': 'up to 5 levels can be set',
   'Marketing.0-99999999.99': '0-99999999.99',
@@ -2841,6 +2867,8 @@ export default {
   'Marketing.Addgift': 'Add gift',
   'Marketing.greaterthan0andlessthan999': 'Value must only be integers greater than 0 and less than 999',
   'Marketing.PomotionCodehasexited.': 'Pomotion Code has exited.',
+  'Marketing.Freeshipping': 'Free shipping',
+  'Marketing.Singlepurchase': 'Single purchase',
 
 
 

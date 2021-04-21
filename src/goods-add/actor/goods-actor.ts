@@ -23,7 +23,7 @@ export default class GoodsActor extends Actor {
         goodsName: '',
         // SPU编码
         goodsNo: '',
-        promotions: 'club',
+        promotions: 'autoship',
         internalGoodsNo: '',
         // 计量单位
         goodsUnit: '',

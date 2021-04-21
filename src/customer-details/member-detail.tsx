@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm, Icon, Tooltip } from 'antd';
+import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Empty, Icon, Tooltip } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -414,13 +414,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     </Card>
                   </Col>
                 ))}
-                {pets.length === 0 && (
-                  <div style={{ textAlign: 'center', padding: '10px 0' }}>
-                    <span>
-                      <FormattedMessage id="noData" />
-                    </span>
-                  </div>
-                )}
+                {pets.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
               </Row>
             </div>
             <div className="container">

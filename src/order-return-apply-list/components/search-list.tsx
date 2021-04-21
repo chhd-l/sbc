@@ -106,6 +106,7 @@ export default class SearchList extends React.Component<any, any> {
     return orderList.map((v) => {
       const id = v.get('id');
       const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
+      const deliveryPrice = v.getIn(['deliveryPrice', 'totalPrice']) || 0;
       const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
       const num =
         v
@@ -195,7 +196,7 @@ export default class SearchList extends React.Component<any, any> {
                     {v.getIn(['consignee', 'phone'])}
                   </td>
                   <td style={{ width: '10%' }}>
-                    {tradePrice.toFixed(2)}
+                    {(tradePrice-deliveryPrice).toFixed(2)}
                     <br />( <FormattedMessage id="Order.total" /> {num})
                   </td>
                   {/*发货状态*/}

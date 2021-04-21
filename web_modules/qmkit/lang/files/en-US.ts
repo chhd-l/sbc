@@ -2810,7 +2810,7 @@ export default {
   'Marketing.Selectgroup': 'Select group',
   'Marketing.Byemail': 'By email',
   'Marketing.Pleaseselectgroup': 'Please select group.',
-  'Marketing.Pleaseenteremailsuffix.': 'Please enter email suffix.',
+  'Marketing.Pleaseenteremailsuffix': 'Please enter email suffix.',
   'Marketing.Addmulti-levelpromotions': 'Add multi-level promotions',
   'Marketing.upto5levels': 'up to 5 levels can be set',
   'Marketing.0-99999999.99': '0-99999999.99',
@@ -2868,6 +2868,7 @@ export default {
   'Marketing.greaterthan0andlessthan999': 'Value must only be integers greater than 0 and less than 999',
   'Marketing.PomotionCodehasexited.': 'Pomotion Code has exited.',
   'Marketing.Freeshipping': 'Free shipping',
+  'Marketing.Singlepurchase': 'Single purchase',
 
 
 

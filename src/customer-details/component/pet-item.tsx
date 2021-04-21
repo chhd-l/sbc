@@ -12,9 +12,8 @@ const dogImg = require('../img/dog.png');
 const catImg = require('../img/cat.png');
 
 interface Iprop extends FormComponentProps {
-  petId: string;
-  showCancel: boolean;
-  showTitle: boolean;
+  petId?: string;
+  petsInfo?: any;
 }
 
 const calcPetWeight = (jsonStr: string) => {
@@ -68,7 +67,8 @@ class PetItem extends React.Component<Iprop, any> {
 
   getPet = () => {
     this.setState({ loading: true });
-    petsById({ petsId: this.props.petId })
+    if(this.props.petId) {
+      petsById({ petsId: this.props.petId })
       .then((data) => {
         this.setState({
           pet: data.res.context.context,
@@ -81,6 +81,13 @@ class PetItem extends React.Component<Iprop, any> {
           loading: false
         });
       });
+    } else if(this.props.petsInfo) {
+      this.setState({
+        pet: this.props.petsInfo,
+        petImg: this.props.petsInfo ? this.props.petsInfo.petsImg : '',
+        loading: false
+      });
+    }
   };
 
   savePet = () => {
@@ -223,7 +230,7 @@ class PetItem extends React.Component<Iprop, any> {
     return (
       <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
         <div className="container petowner-noedit-form">
-          {this.props.showTitle === false ? null : <Headline title="Pet information" />}
+          {this.props.petsInfo ? null : <Headline title="Pet information" />}
           <Form {...formItemLayout}>
             <Row gutter={16}>
               <Col span={4} style={{ paddingLeft: '30px' }}>
@@ -236,7 +243,7 @@ class PetItem extends React.Component<Iprop, any> {
                 </div>
               </Col>
               <Col span={20}>
-                {this.props.showTitle === false ? null : (
+                {this.props.petsInfo ? null : (
                   <Row gutter={16}>
                     <Col span={24}>
                       <div style={{ fontSize: 16, color: '#666' }}>Basic information</div>
@@ -294,7 +301,7 @@ class PetItem extends React.Component<Iprop, any> {
                           </Select>
                         )
                       ) : (
-                        <span>{pet.petsSex == 0 ? 'male' : 'female'}</span>
+                        <span>{pet.petsSex ? pet.petsSex == 0 ? 'male' : 'female' : ''}</span>
                       )}
                     </Form.Item>
                   </Col>
@@ -351,7 +358,7 @@ class PetItem extends React.Component<Iprop, any> {
                           </Radio.Group>
                         )
                       ) : (
-                        <span>{pet.sterilized == 1 ? 'Yes' : 'No'}</span>
+                        <span>{pet.sterilized ? pet.sterilized == 1 ? 'Yes' : 'No' : ''}</span>
                       )}
                     </Form.Item>
                   </Col>
@@ -368,7 +375,7 @@ class PetItem extends React.Component<Iprop, any> {
                           </Radio.Group>
                         )
                       ) : (
-                        <span>{pet.isPurebred == 1 ? 'Yes' : 'No'}</span>
+                        <span>{pet.isPurebred ? pet.isPurebred == 1 ? 'Yes' : 'No' : ''}</span>
                       )}
                     </Form.Item>
                   </Col>
@@ -428,34 +435,38 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Pet tagging">
-                      {editable ? (
-                        getFieldDecorator('segmentIdList', {
-                          initialValue: pet.segmentList ? pet.segmentList.map((v) => v.id) : []
-                        })(
-                          <Select mode="multiple" getPopupContainer={(trigger: any) => trigger.parentNode}>
+                    {this.props.petsInfo ? (
+                      <Form.Item label="Pet tagging">{pet.segmentList && pet.segmentList.length > 0 ? pet.segmentList.map((v) => v.name).join(',') : null}</Form.Item>
+                    ) : (
+                      <Form.Item label="Pet tagging">
+                        {editable ? (
+                          getFieldDecorator('segmentIdList', {
+                            initialValue: pet.segmentList ? pet.segmentList.map((v) => v.id) : []
+                          })(
+                            <Select mode="multiple" getPopupContainer={(trigger: any) => trigger.parentNode}>
+                              {this.state.tagList
+                                .filter((t) => t.segmentType == 1)
+                                .map((v, idx) => (
+                                  <Option value={v.id} key={idx}>
+                                    {v.name}
+                                  </Option>
+                                ))}
+                            </Select>
+                          )
+                        ) : (
+                          // <span>{pet.segmentList ? pet.segmentList.map((v) => v.name).join(', ') : ''}</span>
+                          <Select mode="multiple" value={pet.segmentList ? pet.segmentList.map((v) => v.name) : []} onChange={this.onSelectPetTagging} getPopupContainer={(trigger: any) => trigger.parentNode}>
                             {this.state.tagList
                               .filter((t) => t.segmentType == 1)
                               .map((v, idx) => (
-                                <Option value={v.id} key={idx}>
+                                <Option value={v.name} key={idx}>
                                   {v.name}
                                 </Option>
                               ))}
                           </Select>
-                        )
-                      ) : (
-                        // <span>{pet.segmentList ? pet.segmentList.map((v) => v.name).join(', ') : ''}</span>
-                        <Select mode="multiple" value={pet.segmentList ? pet.segmentList.map((v) => v.name) : []} onChange={this.onSelectPetTagging} getPopupContainer={(trigger: any) => trigger.parentNode}>
-                          {this.state.tagList
-                            .filter((t) => t.segmentType == 1)
-                            .map((v, idx) => (
-                              <Option value={v.name} key={idx}>
-                                {v.name}
-                              </Option>
-                            ))}
-                        </Select>
-                      )}
-                    </Form.Item>
+                        )}
+                      </Form.Item>
+                    )}
                   </Col>
                 </Row>
                 <Divider />
@@ -647,7 +658,7 @@ class PetItem extends React.Component<Iprop, any> {
             </Row>
           </Form>
         </div>
-        {this.props.showCancel === false ? null : (
+        {this.props.petsInfo ? null : (
           <div className="bar-button">
             {editable && (
               <Button type="primary" onClick={this.savePet} style={{ marginRight: '20px' }}>

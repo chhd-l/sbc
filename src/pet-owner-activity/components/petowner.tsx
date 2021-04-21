@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { history, Const } from 'qmkit';
+import { history, Const, RCi18n } from 'qmkit';
 import { Card, Icon, Row, Col, message, Tooltip } from 'antd';
 import * as webapi from '../webapi';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -20,9 +20,9 @@ export default class petowner extends Component<any, any> {
           className="topCard"
           title={
             <div className="title">
-              <span>Pet Owner Overview</span>
+              <span>{RCi18n({id:'PetOwner.PetOwnerOverview'})}</span>
               <span className="viewAll" onClick={() => history.push(`/petowner-details/${petOwner.customerId}/${petOwner.customerAccount}`)}>
-                View All
+                {RCi18n({id:'PetOwner.ViewAll'})}
                 <Icon type="right" />
               </span>
             </div>
@@ -34,7 +34,7 @@ export default class petowner extends Component<any, any> {
                 <span className="contactName">{petOwner.customerName}</span>
               </div>
               <span className="ui-lighter">
-                <span>Account: {petOwner.customerAccount}</span>
+                <span>{RCi18n({id:'PetOwner.Account'})}: {petOwner.customerAccount}</span>
               </span>
             </div>
           </Row>
@@ -43,7 +43,7 @@ export default class petowner extends Component<any, any> {
             <div className="detail-content">
               <Row>
                 <Col span={6}>
-                  <span className="ui-lighter">Location</span>
+                  <span className="ui-lighter">{RCi18n({id:'PetOwner.Location'})}</span>
                 </Col>
                 <Col span={18}>
                   <span className="content">
@@ -73,7 +73,7 @@ export default class petowner extends Component<any, any> {
             <div className="detail-content">
               <Row>
                 <Col span={6}>
-                  <span className="ui-lighter">Email</span>
+                  <span className="ui-lighter">{RCi18n({id:'PetOwner.Email'})}</span>
                 </Col>
                 <Col span={18}>
                   <span className="content">
@@ -97,7 +97,7 @@ export default class petowner extends Component<any, any> {
             <div className="detail-content">
               <Row>
                 <Col span={6}>
-                  <span className="ui-lighter">Phone</span>
+                  <span className="ui-lighter">{RCi18n({id:'PetOwner.Phone'})}</span>
                 </Col>
                 <Col span={18}>
                   <span className="content">{petOwner.contactPhone}</span>
@@ -111,7 +111,7 @@ export default class petowner extends Component<any, any> {
             <div className="detail-content">
               <Row>
                 <Col span={6}>
-                  <span className="ui-lighter">Taggings</span>
+                  <span className="ui-lighter">{RCi18n({id:'PetOwner.Taggings'})}</span>
                 </Col>
                 <Col span={18}>
                   <div className="contactSegments">

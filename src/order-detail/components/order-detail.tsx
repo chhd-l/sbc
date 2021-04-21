@@ -104,11 +104,11 @@ class OrderDetailTab extends React.Component<any, any> {
   };
   state = {
     visiblePetDetails: false,
-    currentPetId: ''
+    currentPet: {}
   };
 
   render() {
-    const { currentPetId } = this.state;
+    const { currentPet } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
     //当前的订单号
     const tid = detail.get('id');
@@ -283,9 +283,9 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.petName" />,
-        dataIndex: 'petName',
-        key: 'petName',
-        render: (text, record) => <a onClick={() => this._openPetDetails(record.petsId)}>{text}</a>
+        dataIndex: 'petsName',
+        key: 'petsName',
+        render: (text, record) => <a onClick={() => this._openPetDetails(record.petsInfo)}>{text}</a>
       }
     ];
 
@@ -437,7 +437,7 @@ class OrderDetailTab extends React.Component<any, any> {
             }}
           >
             <Row>
-              <PetItem petId={currentPetId} showCancel={false} showTitle={false} />
+              <PetItem petsInfo={currentPet}/>
             </Row>
           </Modal>
 
@@ -933,10 +933,10 @@ class OrderDetailTab extends React.Component<any, any> {
       onCancel() {}
     });
   };
-  _openPetDetails = (petsId) => {
+  _openPetDetails = (petsInfo) => {
     this.setState({
       visiblePetDetails: true,
-      currentPetId: petsId
+      currentPet: petsInfo ? petsInfo : {}
     });
   };
 }

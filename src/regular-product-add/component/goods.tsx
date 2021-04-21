@@ -922,8 +922,17 @@ class GoodsForm extends React.Component<any, any> {
       if (e === '-1') {
         showCateModal();
       }
-    } else if (key === 'brandId' && e === '0') {
+      let goods = Map({
+        [key]: fromJS(e)
+      });
+      editGoods(goods);
+    }
+    else if (key === 'brandId' && e === '0') {
       showBrandModal();
+      let goods = Map({
+        [key]: fromJS(e)
+      });
+      editGoods(goods);
     }
 
     else if (key === 'saleType' && e == 0) {

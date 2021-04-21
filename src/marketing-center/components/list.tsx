@@ -339,7 +339,7 @@ export default class List extends React.Component<any, any> {
                     </span>
                     <div className="info">
                       <h5><FormattedMessage id="Marketing.Freeshipping" /></h5>
-                      <p><FormattedMessage id="Marketing.Freeshippingwhenorder" /></p>
+                      {/*<p><FormattedMessage id="Marketing.Freeshippingwhenorder" /></p>*/}
                     </div>
                   </a>
                 </Col>

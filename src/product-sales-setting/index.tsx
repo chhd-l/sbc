@@ -90,7 +90,11 @@ class ProductSearchSetting extends Component<any, any> {
       querySysDictionary({ type: 'Frequency_week_club' }),
       querySysDictionary({ type: 'Frequency_month_club' }),
       querySysDictionary({ type: 'language' }),
-      querySysDictionary({ type: 'purchase_type' })]);
+      querySysDictionary({ type: 'purchase_type' }),
+      querySysDictionary({ type: 'Frequency_day' }),
+      querySysDictionary({ type: 'Frequency_day_club' }),
+    
+    ]);
     let { defaultPurchaseType, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, languageId } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
@@ -98,8 +102,10 @@ class ProductSearchSetting extends Component<any, any> {
     let monthsClub = result[3].res?.context?.sysDictionaryVOS ?? [];
     let languageList = result[4].res?.context?.sysDictionaryVOS ?? [];
     let purchaseType = result[5].res?.context?.sysDictionaryVOS ?? [];
-    let options = [...months, ...weeks];
-    let optionsClub = [...monthsClub, ...weeksClub];
+    let day = result[6].res?.context?.sysDictionaryVOS ?? [];
+    let dayClub = result[7].res?.context?.sysDictionaryVOS ?? [];
+    let options = [...months, ...weeks,...day];
+    let optionsClub = [...monthsClub, ...weeksClub,...dayClub];
 
     let d = languageId.split(',');
     let language = languageList.filter((item) => {

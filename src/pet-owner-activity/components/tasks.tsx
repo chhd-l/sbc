@@ -159,7 +159,7 @@ export default class tasks extends Component<any, any> {
         {hasTaskRole ? (
           <Menu.Item key={2}>
             {' '}
-            <a onClick={() => history.push('/add-task', { petOwner: { contactId: this.props.petOwnerId, petOwnerName: petOwner.contactName, customerAccount: petOwner.customerAccount } })}>{RCi18n({id:'PetOwner.AddTask'})}</a>
+            <a onClick={() => history.push('/add-task', { petOwner: { contactId: this.props.petOwnerId, petOwnerName: petOwner.customerName, customerAccount: petOwner.customerAccount } })}>{RCi18n({id:'PetOwner.AddTask'})}</a>
           </Menu.Item>
         ) : null}
       </Menu>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {BreadCrumb, Const, Headline, cache, util, AuthWrapper} from 'qmkit';
-import {Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker, Icon, Dropdown, Menu} from 'antd';
+import {Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker, Icon, Dropdown, Menu, Modal} from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as webapi from './webapi';
@@ -9,6 +9,7 @@ import './index.less';
 
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
+const { confirm } = Modal;
 
 export default class ProductSearchList extends React.Component<any, any> {
   static propTypes = {};
@@ -21,7 +22,8 @@ export default class ProductSearchList extends React.Component<any, any> {
       allPagination: {
         current: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
+        visible: false
       },
       allSort: { order: 'descend' },
       allLoading: false,
@@ -115,21 +117,91 @@ export default class ProductSearchList extends React.Component<any, any> {
     );
   };
 
-  onRepair() {
+  onRepair= () => {
+    this.setState({
+      allLoading: true,
+      loading: false
+    });
+    webapi
+      .getRepair()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
 
+        } else {
+          this.setState({
+            allLoading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          allLoading: false,
+          loading: false
+        });
+      });
   }
 
-  onRebuild() {
+  onRebuild = () => {
+    this.setState({
+      allLoading: true,
+      loading: false
+    });
+    webapi
+      .getRebuild()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
 
+        } else {
+          this.setState({
+            allLoading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          allLoading: false,
+          loading: false
+        });
+      });
   }
 
+  showModal = (res) => {
+    let _this = this
+    confirm({
+      title: 'Are you sure to '+ res +' index, which may affect the normal operation of shop',
+      onOk() {
+        if(res == 'repair') {
+          _this.onRepair()
+        }else {
+          _this.onRebuild()
+        }
+      },
+      onCancel() {},
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
   _menu = () => {
     return (
       <Menu>
         <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              onClick={this.onRepair}
+              onClick={()=>this.showModal('repair')}
             >
               Repair index
             </a>
@@ -138,7 +210,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              onClick={this.onRebuild }
+              onClick={() => this.showModal('rebuild') }
             >
               Rebuild index
             </a>

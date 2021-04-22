@@ -537,38 +537,41 @@ class ClinicForm extends React.Component<any, any> {
   render() {
     const { cityArr, typeArr, prescriberForm, firstPrescriberForm, objectFetching } = this.state;
     const { getFieldDecorator } = this.props.form;
-
+    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     return (
       <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>
         <TabPane tab="Basic Information" key="basic">
           <Row>
             <Col span={12}>
               <Form {...layout} onSubmit={this.handleSubmit}>
-                <FormItem label={RCi18n({id:'Prescriber.ParentPrescriber'})} style={{display:(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de' ? 'none' : 'block'}}>
-                  {getFieldDecorator(
-                    'parentPrescriberId',
-                    {}
-                  )(
-                    <Select
-                      disabled={firstPrescriberForm && firstPrescriberForm.parentPrescriberId && this.state.isPrescriber}
-                      allowClear
-                      showSearch
-                      filterOption={this.filterOption}
-                      onChange={(value) => {
-                        value = value === '' ? null : value;
-                        this.onFormChange({
-                          field: 'parentPrescriberId',
-                          value
-                        });
-                      }}
-                    >
-                      {this._renderPerscirbersOption()}
-                    </Select>
-                  )}
-                </FormItem>
-                <FormItem label={RCi18n({id:'Prescriber.PrescriberID'})}>
+                {prescriberId ? null : (
+                  <FormItem label={RCi18n({ id: 'Prescriber.ParentPrescriber' })} style={{ display: (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de' ? 'none' : 'block' }}>
+                    {getFieldDecorator(
+                      'parentPrescriberId',
+                      {}
+                    )(
+                      <Select
+                        disabled={firstPrescriberForm && firstPrescriberForm.parentPrescriberId && this.state.isPrescriber}
+                        allowClear
+                        showSearch
+                        filterOption={this.filterOption}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'parentPrescriberId',
+                            value
+                          });
+                        }}
+                      >
+                        {this._renderPerscirbersOption()}
+                      </Select>
+                    )}
+                  </FormItem>
+                )}
+                <FormItem label={RCi18n({ id: 'Prescriber.PrescriberID' })}>
                   {getFieldDecorator('prescriberId', {
-                    rules: [{ required: true, message:RCi18n({id:'Prescriber.PleaseInputPrescriberId'})}]
+                    rules: [{ required: true, message: RCi18n({ id: 'Prescriber.PleaseInputPrescriberId' }) }]
                   })(
                     <Input
                       disabled={this.state.isEdit}
@@ -582,16 +585,16 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label={RCi18n({id:'Prescriber.PrescriberName'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.PrescriberName' })}>
                   {getFieldDecorator('prescriberName', {
                     rules: [
                       {
                         required: true,
-                        message: RCi18n({id:'PleaseInputPrescriberName'})
+                        message: RCi18n({ id: 'PleaseInputPrescriberName' })
                       },
                       {
                         max: 200,
-                        message: RCi18n({id:'Prescriber.theMaximumLength'})
+                        message: RCi18n({ id: 'Prescriber.theMaximumLength' })
                       }
                     ]
                   })(
@@ -633,9 +636,9 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
                  */}
 
-                {!this.state.isMapMode ? <FormItem label={RCi18n({id:'Prescriber.RecommendationCode'})}>{getFieldDecorator('prescriberCode', {})(<Input addonAfter={<Icon onClick={() => this.reloadCode()} type="reload" />} disabled />)}</FormItem> : null}
+                {!this.state.isMapMode ? <FormItem label={RCi18n({ id: 'Prescriber.RecommendationCode' })}>{getFieldDecorator('prescriberCode', {})(<Input addonAfter={<Icon onClick={() => this.reloadCode()} type="reload" />} disabled />)}</FormItem> : null}
 
-                <FormItem label={RCi18n({id:'Prescriber.PrescriberPhoneNumber'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.PrescriberPhoneNumber' })}>
                   {getFieldDecorator('phone', {
                     rules: [{ validator: this.comparePhone }]
                   })(
@@ -651,7 +654,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label={RCi18n({id:'Prescriber.PrescriberWebsite'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.PrescriberWebsite' })}>
                   {getFieldDecorator(
                     'website',
                     {}
@@ -668,14 +671,14 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label={RCi18n({id:'Prescriber.PrescriberCity'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.PrescriberCity' })}>
                   {getFieldDecorator(
                     'primaryCity',
                     {}
                   )(
                     <Select
                       // showSearch
-                      placeholder=''
+                      placeholder=""
                       notFoundContent={objectFetching ? <Spin size="small" /> : null}
                       // onSearch={_.debounce(this.getCityList, 500)}
                       filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -696,7 +699,7 @@ class ClinicForm extends React.Component<any, any> {
                     </Select>
                   )}
                 </FormItem>
-                <FormItem label={RCi18n({id:'Prescriber.PrescriberZip'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.PrescriberZip' })}>
                   {getFieldDecorator('primaryZip', {
                     rules: [{ validator: this.compareZip }]
                   })(
@@ -712,7 +715,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label={RCi18n({id:'Prescriber.PrescriberType'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.PrescriberType' })}>
                   {getFieldDecorator('prescriberType', {
                     rules: [
                       {
@@ -742,7 +745,7 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label={RCi18n({id:'Prescriber.Latitude'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.Latitude' })}>
                   {getFieldDecorator('latitude', {
                     rules: [{ validator: this.compareLatitude }]
                   })(
@@ -759,7 +762,7 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label={RCi18n({id:'Prescriber.Longitude'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.Longitude' })}>
                   {getFieldDecorator('longitude', {
                     rules: [{ validator: this.compareLongitude }]
                   })(
@@ -776,12 +779,12 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label={RCi18n({id:'Prescriber.PrescriberAddress'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.PrescriberAddress' })}>
                   {getFieldDecorator('location', {
                     rules: [
                       {
                         max: 200,
-                        message: RCi18n({id:'Prescriber.PrescriberAddressExceed'})
+                        message: RCi18n({ id: 'Prescriber.PrescriberAddressExceed' })
                       }
                     ]
                   })(
@@ -797,7 +800,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label={RCi18n({id:'Prescriber.AuditAuthority'})}>
+                <FormItem label={RCi18n({ id: 'Prescriber.AuditAuthority' })}>
                   {getFieldDecorator(
                     'auditAuthority',
                     {}
@@ -815,12 +818,14 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
                 <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                   <Button type="primary" htmlType="submit">
-                  <FormattedMessage id="Prescriber.ProceedToSetRewardRules" />
+                    <FormattedMessage id="Prescriber.ProceedToSetRewardRules" />
                   </Button>
 
                   {!sessionStorage.getItem('PrescriberSelect') ? (
                     <Button style={{ marginLeft: '20px' }}>
-                      <Link to="/prescriber"><FormattedMessage id="Prescriber.BackToList" /></Link>
+                      <Link to="/prescriber">
+                        <FormattedMessage id="Prescriber.BackToList" />
+                      </Link>
                     </Button>
                   ) : null}
                 </FormItem>
@@ -833,7 +838,7 @@ class ClinicForm extends React.Component<any, any> {
                   <div>
                     {this.newUrl(this.state.url)}
                     <Button style={{ marginLeft: '10px' }} onClick={() => this.handleCopy(this.newUrl(this.state.url))} size="small">
-                    <FormattedMessage id="Prescriber.copy" />
+                      <FormattedMessage id="Prescriber.copy" />
                     </Button>
                   </div>
                 ) : null}
@@ -864,16 +869,16 @@ class ClinicForm extends React.Component<any, any> {
               >
                 <FormattedMessage id="Prescriber.Period" />
               </label>
-                <FormattedMessage id="Prescriber.Every" />
+              <FormattedMessage id="Prescriber.Every" />
               <Select disabled={this.state.isPrescriber} value={this.state.timeZone} onChange={(value) => this.selectTimeZone(value)} style={{ minWidth: '200px', marginLeft: '10px' }}>
                 <Option value="Year" key="year">
-                <FormattedMessage id="Prescriber.Year" />
+                  <FormattedMessage id="Prescriber.Year" />
                 </Option>
                 <Option value="Month" key="month">
-                <FormattedMessage id="Prescriber.Month" />
+                  <FormattedMessage id="Prescriber.Month" />
                 </Option>
                 <Option value="Week" key="week">
-                <FormattedMessage id="Prescriber.Week" />
+                  <FormattedMessage id="Prescriber.Week" />
                 </Option>
               </Select>
             </Col>
@@ -896,7 +901,7 @@ class ClinicForm extends React.Component<any, any> {
                   fontWeight: 500
                 }}
               >
-               <FormattedMessage id="Prescriber.RewardMode" />
+                <FormattedMessage id="Prescriber.RewardMode" />
               </label>
               {/* <div style={{ marginTop: '20px' }}>
                 <Radio.Group
@@ -923,7 +928,7 @@ class ClinicForm extends React.Component<any, any> {
               <Divider type="horizontal" /> */}
               <Table style={{ paddingTop: '10px' }} pagination={false} rowKey="id" dataSource={this.state.sectionList}>
                 <Column
-                  title={RCi18n({id:'Prescriber.UniqueCustomerOrderType'})}
+                  title={RCi18n({ id: 'Prescriber.UniqueCustomerOrderType' })}
                   key="orderType"
                   width={180}
                   render={(rowInfo) => {
@@ -993,11 +998,14 @@ class ClinicForm extends React.Component<any, any> {
             </Col>
             <Col span={24} style={{ marginTop: '20px' }}>
               <Button type="primary" loading={this.state.saveLoading} onClick={() => this.savePrescriber()}>
-              <FormattedMessage id="Prescriber.Save" />
+                <FormattedMessage id="Prescriber.Save" />
               </Button>
               {!sessionStorage.getItem('PrescriberSelect') ? (
                 <Button style={{ marginLeft: '20px' }}>
-                  <Link to="/prescriber"> <FormattedMessage id="Prescriber.BackToList" /></Link>
+                  <Link to="/prescriber">
+                    {' '}
+                    <FormattedMessage id="Prescriber.BackToList" />
+                  </Link>
                 </Button>
               ) : null}
 

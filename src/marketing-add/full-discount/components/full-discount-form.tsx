@@ -375,7 +375,6 @@ class FullDiscountForm extends React.Component<any, any> {
     if (marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2) {
       settingRuleFrom = { ...largeformItemLayout };
     }
-debugger
     console.log(marketingBean.toJS(), 'marketingBean------------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>

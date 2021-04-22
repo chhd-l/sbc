@@ -92,7 +92,7 @@ export default class AppStore extends Store {
           this.dispatch('receive-record-actor:init', payRecordResult.context.payOrderResponses);
           this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context ? payRecordResult2.context : {});
           this.dispatch('detail-actor:setSellerRemarkVisible', true);
-          this.dispatch('logistics:init', logistics.context);
+          this.dispatch('logistics:init', logistics.context ? logistics.context : {});
           // this.dispatch('detail:setNeedAudit', needRes.context.audit);
           this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
           this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);

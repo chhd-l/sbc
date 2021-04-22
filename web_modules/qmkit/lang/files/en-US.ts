@@ -16,7 +16,7 @@ export default {
   'Public.R':'R',
   'Public.Storeportal':'Store portal',
   'Public.LoginAccount':'Login Account',
-  'Public.RoyalCaninSAS2020':'Royal Canin SAS 2020',
+  'Public.RoyalCaninSAS2020':'Royal Canin SAS 2021',
   'Public.Pleaseinputyour':'Please input your login account',
   'Public.Login':'Login',
   'Public.UnderReview':'Under Review',
@@ -140,9 +140,8 @@ export default {
   'Public.Reminder100records':'Reminder: up to 100 records',
   "Public.GetDataFailed": 'Get Data Failed',
   /* -------- 已翻译 V2.0---------------*/
-
-
-
+  'Public.ClientID Input': 'Please input StoreId-ClientId',
+  'Public.ClientName': 'Client Name',
   /*-----------------------------  Menu -----------------------------------------------*/
   'Menu.Home':'Home',
   'Menu.Product':'Product',
@@ -1694,6 +1693,7 @@ export default {
   'Order.returnList':'Return list',
   'Order.refundableAmountTips':'The remaining refundable amount of this order is: ',
   'Order.refundableAmountTips2':'The refund amount should not be greater than the refundable amount. Please modify it.',
+  'Order.tradeType': 'Trade Type',
 
 
   /*-----------------------------  Task  ----------------------------------------------*/
@@ -1735,7 +1735,7 @@ export default {
   'task.TaskDetails':'Task Details',
   'task.Pleaseinputname':'Please input name',
   'task.Pleaseinputemail':'Please input email',
-  'task.Pleaseinputemailorname': 'Please input email or name',
+  'task.Pleaseinputemailorname': 'Please input email or name',
   'task.Pleaseinputordercode':'Please input order code',
   'task.Pleaseselectstarttime': 'Please select start time',
   'task.Pleaseselectduetime': 'Please select due time',

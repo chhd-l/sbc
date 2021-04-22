@@ -327,16 +327,19 @@ export default class AppStore extends Store {
     param = param.set('returnItems', tradeItems);
 
     // 退款金额，退货是商品总额，退款是应付金额
+    console.log(data.get('isReturn'));
+    
     let totalPrice = data.get('isReturn')
       ? tradeItems
         .map((sku) => {
-          if (sku.get('num') < sku.get('canReturnNum')) {
-            //小于可退数量,直接单价乘以数量
-            return QMFloat.accMul(sku.get('price'), sku.get('num'));
-          } else {
-            //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
-            return QMFloat.accSubtr(sku.get('splitPrice'), QMFloat.accMul(sku.get('price'), QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))));
-          }
+          return QMFloat.accMul(sku.get('unitPrice'), sku.get('num'));
+          // if (sku.get('num') < sku.get('canReturnNum')) {
+          //   //小于可退数量,直接单价乘以数量
+          //   return QMFloat.accMul(sku.get('unitPrice'), sku.get('num'));
+          // } else {
+          //   //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
+          //   return QMFloat.accSubtr(sku.get('splitPrice'), QMFloat.accMul(sku.get('unitPrice'), QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))));
+          // }
         })
         .reduce((one, two) => QMFloat.accAdd(one, two))
       : data.getIn(['tradeDetail', 'tradePrice', 'totalPrice']);

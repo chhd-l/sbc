@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { noop, QMFloat } from 'qmkit';
+import { cache, noop, QMFloat } from 'qmkit';
 import { IMap } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
 
@@ -50,19 +50,20 @@ export default class Amount extends React.Component<any, any> {
       .get('tradeItems')
       .filter((sku) => sku.get('num') > 0)
       .map((sku) => {
-        if (sku.get('num') < sku.get('canReturnNum')) {
-          //小于可退数量,直接单价乘以数量
-          return QMFloat.accMul(sku.get('price'), sku.get('num'));
-        } else {
-          //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
-          return QMFloat.accSubtr(
-            sku.get('splitPrice'),
-            QMFloat.accMul(
-              sku.get('price'),
-              QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))
-            )
-          );
-        }
+        return QMFloat.accMul(sku.get('unitPrice'), sku.get('num'));
+        // if (sku.get('num') < sku.get('canReturnNum')) {
+        //   //小于可退数量,直接单价乘以数量
+        //   return QMFloat.accMul(sku.get('price'), sku.get('num'));
+        // } else {
+        //   //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
+        //   return QMFloat.accSubtr(
+        //     sku.get('splitPrice'),
+        //     QMFloat.accMul(
+        //       sku.get('price'),
+        //       QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))
+        //     )
+        //   );
+        // }
       })
       .reduce((one, two) => QMFloat.accAdd(one, two));
 
@@ -71,33 +72,33 @@ export default class Amount extends React.Component<any, any> {
       tradeDetail.getIn(['tradePrice', 'points']) == null
         ? 0
         : tradeDetail
-            .get('tradeItems')
-            .filter((sku) => sku.get('num') > 0)
-            .map((sku) => {
-              if (sku.get('num') < sku.get('canReturnNum')) {
-                // 小于可退数量,直接均摊积分乘以数量
-                return Math.floor(
-                  QMFloat.accMul(sku.get('skuPoint'), sku.get('num'))
-                );
-              } else {
-                // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
-                return Math.floor(
-                  QMFloat.accSubtr(
-                    sku.get('points'),
-                    Math.floor(
-                      QMFloat.accMul(
-                        sku.get('skuPoint'),
-                        QMFloat.accSubtr(
-                          sku.get('totalNum'),
-                          sku.get('canReturnNum')
-                        )
+          .get('tradeItems')
+          .filter((sku) => sku.get('num') > 0)
+          .map((sku) => {
+            if (sku.get('num') < sku.get('canReturnNum')) {
+              // 小于可退数量,直接均摊积分乘以数量
+              return Math.floor(
+                QMFloat.accMul(sku.get('skuPoint'), sku.get('num'))
+              );
+            } else {
+              // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
+              return Math.floor(
+                QMFloat.accSubtr(
+                  sku.get('points'),
+                  Math.floor(
+                    QMFloat.accMul(
+                      sku.get('skuPoint'),
+                      QMFloat.accSubtr(
+                        sku.get('totalNum'),
+                        sku.get('canReturnNum')
                       )
                     )
                   )
-                );
-              }
-            })
-            .reduce((one, two) => one + two) || 0;
+                )
+              );
+            }
+          })
+          .reduce((one, two) => one + two) || 0;
 
     return (
       <div style={{ marginBottom: 20 }}>
@@ -106,10 +107,10 @@ export default class Amount extends React.Component<any, any> {
           <div style={styles.priceBox}>
             <label style={styles.priceItem as any}>
               <span style={styles.name}>
-                 <FormattedMessage id="Order.Refundableamount" />:
+                <FormattedMessage id="Order.Refundableamount" />:
               </span>
               <strong>
-                $
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 {applyStatus
                   ? applyPrice.toFixed(2)
                   : QMFloat.addZero(shouldPrice)}

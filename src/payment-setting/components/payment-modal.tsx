@@ -239,21 +239,6 @@ class PaymentModal extends React.Component<any, any> {
                   <Form>
                     <Row>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
-                          {getFieldDecorator(item.id + 'isOpen', {
-                            initialValue: item.isOpen == 1
-                          })(<Switch defaultChecked={item.isOpen == 1} checked={item.isOpen == 1}
-                                     onChange={(value)=> {
-                                       onFormChange({
-                                         id: key,
-                                         field: 'isOpen',
-                                         value: value ? 1 : 0
-                                       })
-                                     }}
-                          />)}
-                        </FormItem>
-                      </Col>
-                      <Col span={24}>
                         <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.maxAmount" />}>
                           {getFieldDecorator(item.id + 'maxAmount', {
                             initialValue: item.maxAmount
@@ -266,6 +251,21 @@ class PaymentModal extends React.Component<any, any> {
                               })
                             }}/>
                           )}
+                        </FormItem>
+                      </Col>
+                      <Col span={24}>
+                        <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
+                          {getFieldDecorator(item.id + 'isOpen', {
+                            initialValue: item.isOpen == 1
+                          })(<Switch defaultChecked={item.isOpen == 1} checked={item.isOpen == 1}
+                                     onChange={(value)=> {
+                                       onFormChange({
+                                         id: key,
+                                         field: 'isOpen',
+                                         value: value ? 1 : 0
+                                       })
+                                     }}
+                          />)}
                         </FormItem>
                       </Col>
                     </Row>

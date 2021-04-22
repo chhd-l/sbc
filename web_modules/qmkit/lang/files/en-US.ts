@@ -1692,6 +1692,7 @@ export default {
   'Order.returnList':'Return list',
   'Order.refundableAmountTips':'The remaining refundable amount of this order is: ',
   'Order.refundableAmountTips2':'The refund amount should not be greater than the refundable amount. Please modify it.',
+  'Order.tradeType': 'Trade Type',
 
 
   /*-----------------------------  Task  ----------------------------------------------*/

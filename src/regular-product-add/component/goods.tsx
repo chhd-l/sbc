@@ -250,7 +250,8 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     }
-
+    debugger
+    console.log(goods.toJS(), '----goods');
     const taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {
@@ -874,6 +875,7 @@ class GoodsForm extends React.Component<any, any> {
         let goods = Map({
           [key]: fromJS(0)
         });
+        editGoods(goods);
         editGoodsItem(goods);
         setFieldsValue({ addedFlag: 0 });
       } else {
@@ -883,6 +885,7 @@ class GoodsForm extends React.Component<any, any> {
         let goods = Map({
           [key]: fromJS(1)
         });
+        editGoods(goods);
         editGoodsItem(goods);
         setFieldsValue({ addedFlag: 1 });
       }

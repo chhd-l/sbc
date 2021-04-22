@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, Headline, cache, util } from 'qmkit';
-import { Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker } from 'antd';
+import {BreadCrumb, Const, Headline, cache, util, AuthWrapper} from 'qmkit';
+import {Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker, Icon, Dropdown, Menu} from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as webapi from './webapi';
@@ -114,6 +114,40 @@ export default class ProductSearchList extends React.Component<any, any> {
       () => this.getAllSearchResult()
     );
   };
+
+  onRepair() {
+
+  }
+
+  onRebuild() {
+
+  }
+
+  _menu = () => {
+    return (
+      <Menu>
+        <Menu.Item>
+          <AuthWrapper functionName="f_goods_up_down">
+            <a
+              onClick={this.onRepair}
+            >
+              Repair index
+            </a>
+          </AuthWrapper>
+        </Menu.Item>
+        <Menu.Item>
+          <AuthWrapper functionName="f_goods_up_down">
+            <a
+              onClick={this.onRebuild }
+            >
+              Rebuild index
+            </a>
+          </AuthWrapper>
+        </Menu.Item>
+      </Menu>
+    );
+  };
+
   onAllSerch() {
     this.setState(
       {
@@ -477,16 +511,25 @@ export default class ProductSearchList extends React.Component<any, any> {
           </div>
           <div className="container">
             <div className="exportContainer">
-              <Button
-                className="exportBtn"
-                type="primary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.onExport();
-                }}
-              >
-                <FormattedMessage id="Product.Export" />
-              </Button>
+              <div className="flex-end">
+                <Button
+                  style={{marginRight:'20px'}}
+                  type="primary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.onExport();
+                  }}
+                >
+                  <FormattedMessage id="Product.Export" />
+                </Button>
+                <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
+                  <Button>
+                    Index operation
+                    <Icon type="down" />
+                  </Button>
+                </Dropdown>
+              </div>
+
             </div>
             <Tabs
               defaultActiveKey={tabKey}

@@ -1311,7 +1311,7 @@ export default class AppStore extends Store {
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
     goods = goods.set('goodsCubage', '1'); // for hide 物流表单
-
+debugger
     param = param.set('goods', goods);
 
     // -----商品相关图片-------

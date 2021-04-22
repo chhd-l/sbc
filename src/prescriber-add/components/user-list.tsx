@@ -185,7 +185,7 @@ class UserList extends Component<any, any> {
     };
     const { res } = await webapi.sendEmail(paramter);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success(RCi18n({id:'send successful'}));
+      message.success(RCi18n({id:'Prescriber.sendSuccessful'}));
     }
   };
 
@@ -231,7 +231,7 @@ class UserList extends Component<any, any> {
 
   addUser = () => {
     if (!this.props.alreadyHasPrescriber) {
-      message.error(RCi18n({id:'PAPF'}));
+      message.error(RCi18n({id:'Prescriber.PleaseAddPrescriberFirst'}));
       return;
     }
     this.setState({
@@ -251,63 +251,63 @@ class UserList extends Component<any, any> {
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     const columns = [
       {
-        title: RCi18n({id:'User name'}),
+        title: RCi18n({id:'Prescriber.UserName'}),
         dataIndex: 'employeeName',
         key: 'employeeName'
       },
       {
-        title: RCi18n({id:'User email'}),
+        title: RCi18n({id:'Prescriber.UserEmail'}),
         dataIndex: 'email',
         key: 'email'
       },
       {
-        title: RCi18n({id:'User status'}),
+        title: RCi18n({id:'Prescriber.UserStatus'}),
         dataIndex: 'accountState',
         key: 'accountState',
         render: (text, record) => {
           switch (text) {
             case 0:
-              return RCi18n({id:'Enabled'});
+              return RCi18n({id:'Prescriber.Enabled'});
             case 1:
-              return RCi18n({id:'Disabled'});
+              return RCi18n({id:'Prescriber.Disabled'});
             case 3:
-              return RCi18n({id:'Inactivated'});
+              return RCi18n({id:'Prescriber.Inactivated'});
             case 4:
-              return RCi18n({id:'ToBeAudit'});
+              return RCi18n({id:'Prescriber.ToBeAudit'});
             default:
               return '';
           }
         }
       },
       {
-        title: RCi18n({id:'Operation'}),
+        title: RCi18n({id:'Prescriber.operation'}),
         dataIndex: 'operation',
         key: 'operation',
         render: (text, record) => {
           if (record.accountState === 0 || record.accountState === 1) {
             return (
               <span className="operation-box">
-                <Tooltip placement="top" title={"RCi18n({id:'Edit'})"}>
+                <Tooltip placement="top" title={RCi18n({id:'Prescriber.Edit'})}>
                   <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                 </Tooltip>
                 <Popconfirm
-                  title={"RCi18n({id:'AYSTRTU'})"}
+                  title={RCi18n({id:'Prescriber.removeTheUser'})}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText={"RCi18n({id:'OK'})"}
-                  cancelText={"RCi18n({id:'Cancel'})"}
+                  okText={RCi18n({id:'Prescriber.OK'})}
+                  cancelText={RCi18n({id:'Prescriber.Cancel'})}
                 >
-                  <Tooltip placement="top" title={"RCi18n({id:'Delete'})"}>
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Delete'})}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 0 ? (
-                  <Tooltip placement="top" title={"RCi18n({id:'Disabled'})"}>
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Disabled'})}>
                     <a onClick={() => this.disabledUser(record)} className="iconfont iconbtn-disable"></a>
                   </Tooltip>
                 ) : (
-                  <Tooltip placement="top" title={"RCi18n({id:'Enabled'})"}>
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Enabled'})}>
                     <a onClick={() => this.enableUser(record)} className="iconfont iconEnabled"></a>
                   </Tooltip>
                 )}
@@ -319,28 +319,28 @@ class UserList extends Component<any, any> {
             return (
               <span className="operation-box">
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title={"RCi18n({id:'Edit'})"}>
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Edit'})}>
                     <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                   </Tooltip>
                 ) : null}
                 <Popconfirm
-                  title={"RCi18n({id:'AYSTRTU'})"}
+                  title={RCi18n({id:'Prescriber.removeTheUser'})}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText={"RCi18n({id:'OK'})"}
-                  cancelText={"RCi18n({id:'Cancel'})"}
+                  okText={RCi18n({id:'Prescriber.OK'})}
+                  cancelText={RCi18n({id:'Prescriber.Cancel'})}
                 >
-                  <Tooltip placement="top" title={"RCi18n({id:'Disabled'})"}>
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Disabled'})}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title={"RCi18n({id:'Send'})"}>
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Send'})}>
                     <a onClick={() => this.sendEmail(record)} className="iconfont iconemail"></a>
                   </Tooltip>
                 ) : prescriberId ? (
-                  <Tooltip placement="top" title={"RCi18n({id:'Audit'})"}>
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Audit'})}>
                     <a onClick={() => this.auditUser(record)} className="iconfont iconaudit"></a>
                   </Tooltip>
                 ) : null}
@@ -354,12 +354,12 @@ class UserList extends Component<any, any> {
       <div>
         {this.state.hasPrescriberRole ? (
           <React.Fragment>
-            <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*<FormattedMessage id="Prescriber.NAUSNTRBLISP" /></p>
+            <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*<FormattedMessage id="Prescriber.NewAdded" /></p>
             <div className="container-search">
               <Form layout="inline">
                 <FormItem>
                   <Input
-                    addonBefore={RCi18n({id:'Prescriber.User name'})}
+                    addonBefore={RCi18n({id:'Prescriber.UserName'})}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -373,7 +373,7 @@ class UserList extends Component<any, any> {
                 </FormItem>
                 <FormItem>
                   <Input
-                    addonBefore={RCi18n({id:'User email'})}
+                    addonBefore={RCi18n({id:'Prescriber.UserEmail'})}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -381,7 +381,7 @@ class UserList extends Component<any, any> {
                         value
                       });
                     }}
-                    placeholder={RCi18n({id:'Prescriber.inputemail'})}
+                    placeholder={RCi18n({id:'Prescriber.PleaseInputEmail'})}
                     style={{ width: 300 }}
                   />
                 </FormItem>
@@ -399,7 +399,7 @@ class UserList extends Component<any, any> {
                     style={{ width: 80 }}
                   >
                     <Option value=""><FormattedMessage id="Prescriber.All" /></Option>
-                    <Option value={'3'}><FormattedMessage id="Prescriber.All" /></Option>
+                    <Option value={'3'}><FormattedMessage id="Prescriber.Inactivated" /></Option>
                     <Option value={'4'}><FormattedMessage id="Prescriber.ToBeAudit" /></Option>
                     <Option value={'0'}><FormattedMessage id="Prescriber.Enabled"/></Option>
                     <Option value={'1'}><FormattedMessage id="Prescriber.Disabled"/></Option>
@@ -417,7 +417,7 @@ class UserList extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Prescriber.search" />
                     </span>
                   </Button>
                 </Form.Item>
@@ -430,7 +430,7 @@ class UserList extends Component<any, any> {
               <Table rowKey={(record, index) => index} dataSource={this.state.userData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
             </div>
             <UserModal userForm={this.state.userForm} visible={this.state.userVisible} parent={this} prescriberKeyId={this.props.prescriberKeyId} reflash={() => this.getUsers()} />
-            <Modal maskClosable={false} title={"RCi18n({id:'PITRFD'})"} visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
+            <Modal maskClosable={false} title={RCi18n({id:'Prescriber.theReasonForDisabling'})} visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
               <Form>
                 <FormItem>
                   {getFieldDecorator('reason', {
@@ -443,7 +443,7 @@ class UserList extends Component<any, any> {
                     ]
                   })(
                     <Input.TextArea
-                      placeholder={RCi18n({id:'Prescriber.PIARFD'})}
+                      placeholder={RCi18n({id:'Prescriber.inputreasonfordisabling'})}
                       onChange={(e: any) =>
                         this.setState({
                           disabledReason: e.target.value
@@ -458,7 +458,7 @@ class UserList extends Component<any, any> {
               maskClosable={false}
               visible={this.state.auditModalVisible}
               footer={null}
-              title={RCi18n({id:'AOR'})}
+              title={RCi18n({id:'Prescriber.AgreeOrReject'})}
               onCancel={() =>
                 this.setState({
                   auditModalVisible: false
@@ -479,7 +479,7 @@ class UserList extends Component<any, any> {
             </Modal>
           </React.Fragment>
         ) : (
-          <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*<FormattedMessage id="NoPrescriberRole" /></p>
+          <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*<FormattedMessage id="Prescriber.NoPrescriberRole" /></p>
         )}
       </div>
     );

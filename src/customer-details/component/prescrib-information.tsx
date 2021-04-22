@@ -63,7 +63,7 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
     const columns = [
       {
         title: 'Prescriber ID',
-        dataIndex: 'id',
+        dataIndex: 'prescriberId',
         key: 'id'
       },
       {

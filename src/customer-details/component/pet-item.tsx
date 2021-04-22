@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, Input, Select, Radio, Spin, DatePicker, Button, Popconfirm, Icon, message, Divider, Avatar } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Headline, history, AssetManagement } from 'qmkit';
+import { Headline, history, AssetManagement, cache } from 'qmkit';
 import moment from 'moment';
 import { querySysDictionary, petsById, editPets, delPets } from '../webapi';
 import { getTaggingList } from './webapi';
@@ -60,8 +60,8 @@ class PetItem extends React.Component<Iprop, any> {
 
   componentDidMount() {
     this.getPet();
-    this.getBreedListByType('dogBreed');
-    this.getBreedListByType('catBreed');
+    //this.getBreedListByType('dogBreed');
+    //this.getBreedListByType('catBreed');
     this.getTaggingList();
   }
 
@@ -163,7 +163,7 @@ class PetItem extends React.Component<Iprop, any> {
   getBreedListByType = (type: string) => {
     querySysDictionary({
       delFlag: 0,
-      storeId: 123456858,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '',
       type: type
     }).then((data) => {
       this.setState({

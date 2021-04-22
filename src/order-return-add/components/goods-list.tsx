@@ -2,7 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { Table, InputNumber, Form } from 'antd';
 import { IMap } from 'typings/globalType';
-import { noop, ValidConst, QMFloat } from 'qmkit';
+import { noop, ValidConst, QMFloat, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 import './goods-list-style.css';
@@ -107,14 +107,11 @@ export default class GoodsList extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.Returnunitprice" />,
+        dataIndex: 'unitPrice',
         key: 'price',
         width: 100,
-        render: (rowInfo) => {
-          return itemType == 1 ? (
-            <div>${rowInfo.price.toFixed(2)}</div>
-          ) : (
-            <div>${rowInfo.price}</div>
-          );
+        render: (text,rowInfo) => {
+          return <div>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + rowInfo.unitPrice.toFixed(2)}</div>
         }
       },
       {
@@ -169,11 +166,14 @@ export default class GoodsList extends React.Component<any, any> {
         key: 'total',
         width: 100,
         render: (rowInfo) => {
-          if (itemType == 1) {
-            return <div>${(rowInfo.price * rowInfo.num).toFixed(2)}</div>;
-          } else {
-            return this._getRowTotalPrice(rowInfo);
-          }
+          // if (itemType == 1) {
+          //   return <div>${(rowInfo.unitPrice * rowInfo.num).toFixed(2)}</div>;
+          // } 
+          // else {
+          //   return this._getRowTotalPrice(rowInfo);
+          // }
+
+          return <div> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {(rowInfo.unitPrice * rowInfo.num).toFixed(2)}</div>;
         }
       }
     ];
@@ -195,14 +195,14 @@ export default class GoodsList extends React.Component<any, any> {
     const num = rowInfo.num || 0;
     if (num < rowInfo.canReturnNum) {
       //小于可退数量,直接单价乘以数量
-      return QMFloat.addZero(QMFloat.accMul(rowInfo.price, num));
+      return QMFloat.addZero(QMFloat.accMul(rowInfo.unitPrice, num));
     } else {
       //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
       return QMFloat.addZero(
         QMFloat.accSubtr(
           rowInfo.splitPrice,
           QMFloat.accMul(
-            rowInfo.price,
+            rowInfo.unitPrice,
             QMFloat.accSubtr(rowInfo.totalNum, rowInfo.canReturnNum)
           )
         )

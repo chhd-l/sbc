@@ -147,7 +147,7 @@ export async function getCityList() {
   if (cityList && cityList.length > 0) {
     return cityList;
   } else {
-    return await Fetch<TResult>('/system-city/queryPageView', {
+    return await Fetch<TResult>('/system/city', {
       method: 'POST',
       body: JSON.stringify({
         pageNum: 0,

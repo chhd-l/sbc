@@ -25,7 +25,8 @@ export default class SubscriptionList extends Component<any, any> {
         recipientOption: 'Receiver',
         recipient: '',
         prescriberOption: 'Auditor Name',
-        prescriber: ''
+        prescriber: '',
+        frequencyOption: 'autoship'
       },
       subscriptionOption: ['Subscription Number', 'Order Number'],
 
@@ -33,7 +34,9 @@ export default class SubscriptionList extends Component<any, any> {
       productOption: ['Product Name', 'SKU Code'],
       recipientOption: ['Receiver', 'Receiver Phone'],
       prescriberOption: ['Auditor Name', 'Auditor ID'],
+      frequencyOption: ['autoship', 'club'],
       frequencyList: [],
+      frequencyListClub: [],
       activeKey: 'all',
       subscriptionList: [],
       searchParams: {},
@@ -66,6 +69,7 @@ export default class SubscriptionList extends Component<any, any> {
 
   componentDidMount() {
     this.querySysDictionary('Frequency_day');
+    this.querySysDictionary('Frequency_day_club');
     if (sessionStorage.getItem('s2b-supplier@employee')) {
       let employee = JSON.parse(sessionStorage.getItem('s2b-supplier@employee'));
       if (employee.roleName && employee.roleName.indexOf('Prescriber') !== -1) {
@@ -103,6 +107,9 @@ export default class SubscriptionList extends Component<any, any> {
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
     data[field] = value;
+    if (field === 'frequencyOption') {
+      data['frequency'] = '';
+    }
     this.setState({
       searchForm: data
     });
@@ -171,6 +178,15 @@ export default class SubscriptionList extends Component<any, any> {
               () => this.querySysDictionary('Frequency_week')
             );
           }
+          if (type === 'Frequency_day_club') {
+            let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyListClub: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_week_club')
+            );
+          }
           if (type === 'Frequency_week') {
             let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState(
@@ -180,10 +196,25 @@ export default class SubscriptionList extends Component<any, any> {
               () => this.querySysDictionary('Frequency_month')
             );
           }
+          if (type === 'Frequency_week_club') {
+            let frequencyList = [...this.state.frequencyListClub, ...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyListClub: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_month_club')
+            );
+          }
           if (type === 'Frequency_month') {
             let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState({
               frequencyList: frequencyList
+            });
+          }
+          if (type === 'Frequency_month_club') {
+            let frequencyList = [...this.state.frequencyListClub, ...res.context.sysDictionaryVOS];
+            this.setState({
+              frequencyListClub: frequencyList
             });
           }
         }
@@ -261,7 +292,7 @@ export default class SubscriptionList extends Component<any, any> {
 
   render() {
     const { searchForm, subscriptionOption, productOption, consumerOption,
-      recipientOption, frequencyList, activeKey,
+      recipientOption, frequencyOption, frequencyList, frequencyListClub, activeKey,
       prescriberOption, prescriberList, subscriptionType,
       subscriptionPlanType, subscriptionTypeList, subscriptionPlanTypeList } = this.state;
     const menu = (
@@ -356,7 +387,23 @@ export default class SubscriptionList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.leftLabel} title={RCi18n({ id: 'Subscription.Frequency' })} disabled defaultValue={RCi18n({ id: 'Subscription.Frequency' })} />
+                      <Select
+                        style={styles.label}
+                        defaultValue={searchForm.frequencyOption}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'frequencyOption',
+                            value
+                          });
+                        }}
+                      >
+                        {frequencyOption.map((item) => (
+                          <Option value={item} key={item}>
+                            {RCi18n({ id: 'Subscription.Frequency' })} ({RCi18n({ id: `Order.${item}` })})
+                          </Option>
+                        ))}
+                      </Select>
                       <Select
                         style={styles.newWrapper}
                         allowClear
@@ -370,12 +417,11 @@ export default class SubscriptionList extends Component<any, any> {
                           });
                         }}
                       >
-                        {frequencyList &&
-                          frequencyList.map((item, index) => (
-                            <Option value={item.id} key={index}>
+                        {(searchForm.frequencyOption === 'autoship' ? frequencyList : frequencyListClub).map((item, index) => (
+                          <Option value={item.id} key={index}>
                             {item.name}
                           </Option>
-                          ))}
+                        ))}
                       </Select>
                     </InputGroup>
                   </FormItem>

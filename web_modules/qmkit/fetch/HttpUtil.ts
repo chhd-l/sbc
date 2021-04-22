@@ -91,7 +91,13 @@ class HttpUtil {
                 reject(HttpUtil.handleFailedResult(er, httpCustomerOpertion))
             })
         })
-        return Promise.race([fetchPromise, HttpUtil.fetchTimeout(httpCustomerOpertion)])
+        // console.log(errorObj.fetchUrl.indexOf('esIndex/repair')>-1,'====')
+        let bool=(errorObj.fetchUrl.indexOf('esIndex/repair')>-1)||(errorObj.fetchUrl.indexOf('esIndex/rebuild')>-1)
+        if(!bool){
+            return Promise.race([fetchPromise, HttpUtil.fetchTimeout(httpCustomerOpertion)])
+        }else{
+            return Promise.race([fetchPromise])
+        }
     }
     /**
        * 统一处理后台返回的结果, 包括业务逻辑报错的结果

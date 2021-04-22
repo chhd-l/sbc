@@ -195,14 +195,14 @@ export default class FillinPetInfo extends Component {
                                             disabled={petsList.length > 0 || funType}
                                         >
                                             {
-                                                petsBreedList.map(((item, index) => (<Option key={item.id}  value={item.valueEn} label={item.valueEn}>{item.name}</Option>)))
+                                                petsBreedList.map(((item, index) => (<Option key={item.id}  value={item.valueEn} label={item.valueEn}>{item.valueEn}</Option>)))
                                             }
                                         </Select>)}
                                     </Form.Item>
 
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label={RCi18n({id:'Prescriber.Sensitvities'})}>
+                                    <Form.Item label="Special needs:">
                                         {getFieldDecorator('needs', {
                                             initialValue: customerPet.needs || '',
                                             //  rules: [{ required: true, message: 'Please select Sensitvities!' }],

@@ -127,11 +127,12 @@ export default class ProductSearchList extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-
+          message.success(res.message);
         } else {
           this.setState({
             allLoading: false
           });
+          message.success(res.message);
         }
       })
       .catch((err) => {
@@ -139,6 +140,7 @@ export default class ProductSearchList extends React.Component<any, any> {
           allLoading: false,
           loading: false
         });
+        message.success(res.message);
       });
   }
 
@@ -152,11 +154,12 @@ export default class ProductSearchList extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-
+          message.success(res.message);
         } else {
           this.setState({
             allLoading: false
           });
+          message.success(res.message);
         }
       })
       .catch((err) => {
@@ -164,6 +167,7 @@ export default class ProductSearchList extends React.Component<any, any> {
           allLoading: false,
           loading: false
         });
+        message.success(res.message);
       });
   }
 

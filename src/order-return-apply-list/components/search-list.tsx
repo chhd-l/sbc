@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import { Spin, Pagination, Tooltip } from 'antd';
 import moment from 'moment';
 import { IList } from 'typings/globalType';
-import { Const, getOrderStatusValue, noop } from 'qmkit';
+import { cache, Const, getOrderStatusValue, noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 const defaultImg = require('../img/none.png');
@@ -196,7 +196,7 @@ export default class SearchList extends React.Component<any, any> {
                     {v.getIn(['consignee', 'phone'])}
                   </td>
                   <td style={{ width: '10%' }}>
-                    {(tradePrice-deliveryPrice).toFixed(2)}
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (tradePrice-deliveryPrice).toFixed(2)}
                     <br />( <FormattedMessage id="Order.total" /> {num})
                   </td>
                   {/*发货状态*/}

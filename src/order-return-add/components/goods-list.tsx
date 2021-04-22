@@ -107,10 +107,11 @@ export default class GoodsList extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.Returnunitprice" />,
+        dataIndex: 'unitPrice',
         key: 'price',
         width: 100,
-        render: (rowInfo) => {
-          <div>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{rowInfo.unitPrice.toFixed(2)}</div>
+        render: (text,rowInfo) => {
+          return <div>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + rowInfo.unitPrice.toFixed(2)}</div>
         }
       },
       {

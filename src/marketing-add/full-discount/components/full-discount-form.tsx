@@ -375,6 +375,8 @@ class FullDiscountForm extends React.Component<any, any> {
     if (marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2) {
       settingRuleFrom = { ...largeformItemLayout };
     }
+debugger
+    console.log(marketingBean.toJS(), 'marketingBean------------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionType"/>} labelAlign="left">
@@ -383,6 +385,7 @@ class FullDiscountForm extends React.Component<any, any> {
               <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
               <Radio value={1}><FormattedMessage id="Marketing.SubscriptionPromotion" /></Radio>
               <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+              <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
             </Radio.Group>
           </div>
         </FormItem>
@@ -524,7 +527,7 @@ class FullDiscountForm extends React.Component<any, any> {
           )}
         </FormItem>
         <div className="bold-title"><FormattedMessage id="Marketing.DiscountType" />:</div>
-        {marketingBean.get('promotionType') === 0 && (
+        {(marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3) && (
           <FormItem {...formItemLayout} labelAlign="left">
             {getFieldDecorator('subType', {
               rules: [
@@ -551,23 +554,30 @@ class FullDiscountForm extends React.Component<any, any> {
             )}
           </FormItem>
         )}
+        {
+          (marketingBean.get('promotionType') == 0 || marketingBean.get('promotionType') == 3 )&& (
+            <FormItem {...discountFormLayout} required={true} labelAlign="left">
+              {getFieldDecorator(
+                'rules',
+                {}
+              )(
+                <DiscountLevels
+                  form={this.props.form}
+                  fullDiscountLevelList={marketingBean.get('fullDiscountLevelList') && marketingBean.get('fullDiscountLevelList').toJS()}
+                  onChangeBack={this.onRulesChange}
+                  isFullCount={marketingBean.get('subType') % 2}
+                  isNormal={marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3}
+                />
+              )}
+            </FormItem>
+          )
+        }
 
-        <FormItem {...discountFormLayout} label={marketingBean.get('promotionType') === 0 ? '': <FormattedMessage id="Marketing.Forthefirstsubscription" />} required={true} labelAlign="left">
-          {getFieldDecorator(
-            'rules',
-            {}
-          )(
-            marketingBean.get('promotionType') === 0 ? (
-              <DiscountLevels
-                form={this.props.form}
-                fullDiscountLevelList={marketingBean.get('fullDiscountLevelList') && marketingBean.get('fullDiscountLevelList').toJS()}
-                onChangeBack={this.onRulesChange}
-                isFullCount={marketingBean.get('subType') % 2}
-                isNormal={marketingBean.get('promotionType') === 0}
-              />
-            ) : (
+        {
+          (marketingBean.get('promotionType') == 1 || marketingBean.get('promotionType') == 2 )&& (
+            <FormItem {...settingRuleFrom} label={<FormattedMessage id="Marketing.Forthefirstsubscription" />} required={true} labelAlign="left" >
               <div style={{ display: 'flex' }}>
-                <FormItem labelAlign="left">
+                <FormItem>
                   <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount"/>&nbsp;&nbsp;</span>
                   {getFieldDecorator('firstSubscriptionOrderDiscount', {
                     rules: [
@@ -613,10 +623,10 @@ class FullDiscountForm extends React.Component<any, any> {
                   <span>&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
                 </FormItem>
               </div>
-            )
-          )}
-        </FormItem>
 
+            </FormItem>
+          )
+        }
         {(marketingBean.get('promotionType') == 1 || marketingBean.get('promotionType') == 2) && (
           <FormItem {...settingRuleFrom} label={<FormattedMessage id="Marketing.Fortherestsubscription" />} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
             <div style={{ display: 'flex' }}>
@@ -994,8 +1004,12 @@ class FullDiscountForm extends React.Component<any, any> {
     this.onBeanChange({
       // publicStatus: 1,
       promotionType: e.target.value,
-      subType: e.target.value === 0 ? 2 : 7
+      subType: e.target.value === 0 || e.target.value === 3? 2 : 7
     });
+    this.props.form.setFieldsValue({
+      promotionType: e.target.value,
+      subType:  e.target.value === 0 || e.target.value === 3? 2 : 7
+    })
     initDefualtLevelList()
   };
 

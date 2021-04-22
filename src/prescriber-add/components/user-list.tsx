@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
 import UserModal from './user-modal';
 import { QMMethod, ValidConst } from 'qmkit';
+import { RCi18n } from 'qmkit';
+
 const { confirm } = Modal;
 
 const FormItem = Form.Item;
@@ -63,7 +65,7 @@ class UserList extends Component<any, any> {
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(RCi18n({id:'Prescriber.Get data failed'}));
       });
   }
 
@@ -183,7 +185,7 @@ class UserList extends Component<any, any> {
     };
     const { res } = await webapi.sendEmail(paramter);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('send successful');
+      message.success(RCi18n({id:'Prescriber.sendSuccessful'}));
     }
   };
 
@@ -229,7 +231,7 @@ class UserList extends Component<any, any> {
 
   addUser = () => {
     if (!this.props.alreadyHasPrescriber) {
-      message.error('Please add prescriber first');
+      message.error(RCi18n({id:'Prescriber.PleaseAddPrescriberFirst'}));
       return;
     }
     this.setState({
@@ -249,63 +251,63 @@ class UserList extends Component<any, any> {
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     const columns = [
       {
-        title: 'User name',
+        title: RCi18n({id:'Prescriber.UserName'}),
         dataIndex: 'employeeName',
         key: 'employeeName'
       },
       {
-        title: 'User email',
+        title: RCi18n({id:'Prescriber.UserEmail'}),
         dataIndex: 'email',
         key: 'email'
       },
       {
-        title: 'User status',
+        title: RCi18n({id:'Prescriber.UserStatus'}),
         dataIndex: 'accountState',
         key: 'accountState',
         render: (text, record) => {
           switch (text) {
             case 0:
-              return 'Enabled';
+              return RCi18n({id:'Prescriber.Enabled'});
             case 1:
-              return 'Disabled';
+              return RCi18n({id:'Prescriber.Disabled'});
             case 3:
-              return 'Inactivated';
+              return RCi18n({id:'Prescriber.Inactivated'});
             case 4:
-              return 'To be audit';
+              return RCi18n({id:'Prescriber.ToBeAudit'});
             default:
               return '';
           }
         }
       },
       {
-        title: 'Operation',
+        title: RCi18n({id:'Prescriber.operation'}),
         dataIndex: 'operation',
         key: 'operation',
         render: (text, record) => {
           if (record.accountState === 0 || record.accountState === 1) {
             return (
               <span className="operation-box">
-                <Tooltip placement="top" title="Edit">
+                <Tooltip placement="top" title={RCi18n({id:'Prescriber.Edit'})}>
                   <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                 </Tooltip>
                 <Popconfirm
-                  title="Are you sure to remove the user?"
+                  title={RCi18n({id:'Prescriber.removeTheUser'})}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText="OK"
-                  cancelText="Cancel"
+                  okText={RCi18n({id:'Prescriber.OK'})}
+                  cancelText={RCi18n({id:'Prescriber.Cancel'})}
                 >
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Delete'})}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 0 ? (
-                  <Tooltip placement="top" title="Disabled">
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Disabled'})}>
                     <a onClick={() => this.disabledUser(record)} className="iconfont iconbtn-disable"></a>
                   </Tooltip>
                 ) : (
-                  <Tooltip placement="top" title="Enabled">
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Enabled'})}>
                     <a onClick={() => this.enableUser(record)} className="iconfont iconEnabled"></a>
                   </Tooltip>
                 )}
@@ -317,28 +319,28 @@ class UserList extends Component<any, any> {
             return (
               <span className="operation-box">
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title="Edit">
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Edit'})}>
                     <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                   </Tooltip>
                 ) : null}
                 <Popconfirm
-                  title="Are you sure to remove the user?"
+                  title={RCi18n({id:'Prescriber.removeTheUser'})}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText="OK"
-                  cancelText="Cancel"
+                  okText={RCi18n({id:'Prescriber.OK'})}
+                  cancelText={RCi18n({id:'Prescriber.Cancel'})}
                 >
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Disabled'})}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title="Send">
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Send'})}>
                     <a onClick={() => this.sendEmail(record)} className="iconfont iconemail"></a>
                   </Tooltip>
                 ) : prescriberId ? (
-                  <Tooltip placement="top" title="Audit">
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Audit'})}>
                     <a onClick={() => this.auditUser(record)} className="iconfont iconaudit"></a>
                   </Tooltip>
                 ) : null}
@@ -352,12 +354,12 @@ class UserList extends Component<any, any> {
       <div>
         {this.state.hasPrescriberRole ? (
           <React.Fragment>
-            <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*New added user still needs to register before logging in store portal</p>
+            <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*<FormattedMessage id="Prescriber.NewAdded" /></p>
             <div className="container-search">
               <Form layout="inline">
                 <FormItem>
                   <Input
-                    addonBefore="User name"
+                    addonBefore={RCi18n({id:'Prescriber.UserName'})}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -365,13 +367,13 @@ class UserList extends Component<any, any> {
                         value
                       });
                     }}
-                    placeholder="Please input name"
+                    placeholder={RCi18n({id:'Prescriber.inputname'})}
                     style={{ width: 300 }}
                   />
                 </FormItem>
                 <FormItem>
                   <Input
-                    addonBefore="User email"
+                    addonBefore={RCi18n({id:'Prescriber.UserEmail'})}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -379,14 +381,14 @@ class UserList extends Component<any, any> {
                         value
                       });
                     }}
-                    placeholder="Please input email"
+                    placeholder={RCi18n({id:'Prescriber.PleaseInputEmail'})}
                     style={{ width: 300 }}
                   />
                 </FormItem>
                 <FormItem>
                   <SelectGroup
                     defaultValue="All"
-                    label="User status"
+                    label={RCi18n({id:'Prescriber.UserStatus'})}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -396,11 +398,11 @@ class UserList extends Component<any, any> {
                     }}
                     style={{ width: 80 }}
                   >
-                    <Option value="">All</Option>
-                    <Option value={'3'}>Inactivated</Option>
-                    <Option value={'4'}>To be audit</Option>
-                    <Option value={'0'}>Enabled</Option>
-                    <Option value={'1'}>Disabled</Option>
+                    <Option value=""><FormattedMessage id="Prescriber.All" /></Option>
+                    <Option value={'3'}><FormattedMessage id="Prescriber.Inactivated" /></Option>
+                    <Option value={'4'}><FormattedMessage id="Prescriber.ToBeAudit" /></Option>
+                    <Option value={'0'}><FormattedMessage id="Prescriber.Enabled"/></Option>
+                    <Option value={'1'}><FormattedMessage id="Prescriber.Disabled"/></Option>
                   </SelectGroup>
                 </FormItem>
                 <Form.Item>
@@ -415,20 +417,20 @@ class UserList extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Prescriber.search" />
                     </span>
                   </Button>
                 </Form.Item>
               </Form>
               <Button type="primary" htmlType="submit" onClick={this.addUser} style={{ marginBottom: '10px', marginTop: '10px' }}>
-                <FormattedMessage id="add" />
+                <FormattedMessage id={RCi18n({id:'Prescriber.add'})}/>
               </Button>
             </div>
             <div className="container">
               <Table rowKey={(record, index) => index} dataSource={this.state.userData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
             </div>
             <UserModal userForm={this.state.userForm} visible={this.state.userVisible} parent={this} prescriberKeyId={this.props.prescriberKeyId} reflash={() => this.getUsers()} />
-            <Modal maskClosable={false} title="Please input the reason for disabling" visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
+            <Modal maskClosable={false} title={RCi18n({id:'Prescriber.theReasonForDisabling'})} visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
               <Form>
                 <FormItem>
                   {getFieldDecorator('reason', {
@@ -441,7 +443,7 @@ class UserList extends Component<any, any> {
                     ]
                   })(
                     <Input.TextArea
-                      placeholder="Please input a reason for disabling"
+                      placeholder={RCi18n({id:'Prescriber.inputreasonfordisabling'})}
                       onChange={(e: any) =>
                         this.setState({
                           disabledReason: e.target.value
@@ -456,7 +458,7 @@ class UserList extends Component<any, any> {
               maskClosable={false}
               visible={this.state.auditModalVisible}
               footer={null}
-              title="Agree or Reject?"
+              title={RCi18n({id:'Prescriber.AgreeOrReject'})}
               onCancel={() =>
                 this.setState({
                   auditModalVisible: false
@@ -477,7 +479,7 @@ class UserList extends Component<any, any> {
             </Modal>
           </React.Fragment>
         ) : (
-          <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*No Prescriber Role</p>
+          <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*<FormattedMessage id="Prescriber.NoPrescriberRole" /></p>
         )}
       </div>
     );

@@ -14,6 +14,7 @@ export default class SelectedProduct extends React.Component<any, any> {
       confirmLoading: false,
       dataSource: [],
       options: [],
+      clubOptions:[],
       loading: false,
       totalPrice: 0,
       goodsCount: {}//商品数量 map id：0对应
@@ -53,7 +54,7 @@ export default class SelectedProduct extends React.Component<any, any> {
     if (name === 'subscriptionStatus' && e === 0) {
       row['periodTypeId'] = 0;
     } else if (name === 'subscriptionStatus' && e === 1) {
-      row.periodTypeId = row.periodTypeId ? row.periodTypeId : options[0].id
+      row.periodTypeId = row.periodTypeId ? row.periodTypeId : row?.options[0]?.id
     }
     row[name] = e;
     this.setState({
@@ -87,6 +88,16 @@ export default class SelectedProduct extends React.Component<any, any> {
         ...goodsCount,
         [item.goodsInfoId]: item.buyCount
       }
+     
+      if(item.subscriptionStatus===1){
+        console.log(item.subscriptionStatus)
+          if(item.promotions==='club'){
+            item.options=this.state.clubOptions
+          }else{
+            item.options=this.state.options
+          }
+      }
+
       totalPrice += (+item.itemTotalAmount)
     })
     this.props.carts(goodsList);
@@ -104,13 +115,17 @@ export default class SelectedProduct extends React.Component<any, any> {
    */
   async querySysDictionary() {
     this.setState({ loading: true });
-    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' })]);
+    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }),querySysDictionary({ type: 'Frequency_week_club' }),querySysDictionary({ type: 'Frequency_month_club' })]);
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
+    let club_weeks = result[2].res?.context?.sysDictionaryVOS ?? [];
+    let club_months = result[3].res?.context?.sysDictionaryVOS ?? [];
     let options = [...months, ...weeks];
+    let clubOptions= [...club_months, ...club_weeks];
     this.setState(
       {
         options,
+        clubOptions
       }
     );
   }
@@ -194,8 +209,11 @@ export default class SelectedProduct extends React.Component<any, any> {
           // let value=record.goodsInfoFlag===1?(text?text:options[0].id):null
 
           return record.goodsInfoFlag === 1 ? (
-            <Select style={{ width: 100 }} value={text} getPopupContainer={(trigger: any) => trigger.parentNode} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
-              {options.map((item) => (
+            <Select style={{ width: 100 }} 
+            value={text} getPopupContainer={(trigger: any) => trigger.parentNode} 
+            placeholder="Select a person" optionFilterProp="children" 
+            onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
+              {record.options.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}
                 </Option>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Const, history, cache } from 'qmkit';
+import { Const, history, cache, RCi18n } from 'qmkit';
 import { Input, Icon, Row, Col, Select, message, Dropdown, Button, Menu, Timeline, Tooltip, Empty, Spin } from 'antd';
 import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
@@ -154,12 +154,12 @@ export default class tasks extends Component<any, any> {
       <Menu>
         <Menu.Item key={1}>
           {' '}
-          <a onClick={() => this.setState({ visible: true })}> Add Comment</a>
+          <a onClick={() => this.setState({ visible: true })}>{RCi18n({id:'PetOwner.AddComment'})}</a>
         </Menu.Item>
         {hasTaskRole ? (
           <Menu.Item key={2}>
             {' '}
-            <a onClick={() => history.push('/add-task', { petOwner: { contactId: this.props.petOwnerId, petOwnerName: petOwner.contactName, customerAccount: petOwner.customerAccount } })}>Add Task</a>
+            <a onClick={() => history.push('/add-task', { petOwner: { contactId: this.props.petOwnerId, petOwnerName: petOwner.customerName, customerAccount: petOwner.customerAccount } })}>{RCi18n({id:'PetOwner.AddTask'})}</a>
           </Menu.Item>
         ) : null}
       </Menu>
@@ -169,7 +169,7 @@ export default class tasks extends Component<any, any> {
         <Col span={7}>
           <Input
             className="searchInput"
-            placeholder="Keyword"
+            placeholder={RCi18n({id:'PetOwner.Keyword'})}
             onPressEnter={() => this.getPetOwnerTasks()}
             onChange={(e) => {
               const value = (e.target as any).value;
@@ -186,7 +186,7 @@ export default class tasks extends Component<any, any> {
         <Col span={17} className="activities-right" style={{ marginBottom: '20px' }}>
           <Select
             className="filter"
-            placeholder="Task Status"
+            placeholder={RCi18n({id:'PetOwner.TaskStatus'})}
             allowClear={true}
             dropdownMatchSelectWidth={false}
             maxTagCount={0}
@@ -207,7 +207,7 @@ export default class tasks extends Component<any, any> {
           </Select>
           <Select
             className="filter"
-            placeholder="GoldenMoment"
+            placeholder={RCi18n({id:'PetOwner.GoldenMoment'})}
             allowClear={true}
             dropdownMatchSelectWidth={false}
             maxTagCount={0}

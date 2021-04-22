@@ -185,7 +185,6 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'stock',
       render: (rowInfo,index) => {
-        console.log(rowInfo,1111);
         let a = null;
         let b = null;
         let c = 0;

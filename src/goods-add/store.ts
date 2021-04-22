@@ -362,6 +362,7 @@ export default class AppStore extends Store {
           minStock: item.stock
         };
       });
+      console.log(addSkUProduct,6666);
       this.dispatch('sku:addSkUProduct', addSkUProduct);
     }
 
@@ -1004,7 +1005,6 @@ export default class AppStore extends Store {
       if (this.state().get('goods').get('saleableFlag') != 0 ) {
         goodsList.forEach((item, i ) => {
 
-
           if(i == 0) {
             if ( item.get('goodsInfoBundleRels').length != 1 ) {
               if (item.get('marketPrice') == 0) {
@@ -1020,6 +1020,7 @@ export default class AppStore extends Store {
             }
 
           }else {
+
             if ( item.get('marketPrice') == 0 ) {
               tip = 1;
               valid = false;
@@ -1118,7 +1119,6 @@ export default class AppStore extends Store {
 
     if (goodsList) {
       goodsList.forEach((item) => {
-        console.log(item.toJS(),222222);
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
         if (reg.test(item.get('stock')) === false ) {
           flag = 1

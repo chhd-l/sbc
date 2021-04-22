@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Button, Form, Input, DatePicker, Select, Menu, Dropdown, Icon, Tabs, message, Spin, Row, Col } from 'antd';
 import './index.less';
-import { AuthWrapper, BreadCrumb, Headline, SelectGroup, Const } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Headline, SelectGroup, Const, RCi18n } from 'qmkit';
 import List from './components/list-new';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const InputGroup = Input.Group
 
 export default class SubscriptionList extends Component<any, any> {
   constructor(props) {
@@ -44,7 +45,22 @@ export default class SubscriptionList extends Component<any, any> {
       },
       isPrescriber: false,
       prescriberList: [],
-      prescriberIds: []
+      prescriberIds: [],
+      subscriptionType: '',
+      subscriptionPlanType: '',
+
+      subscriptionPlanTypeListClone: [
+        { value: 'Cat', name: RCi18n({ id: 'Order.cat' }) },
+        { value: 'Dog', name: RCi18n({ id: 'Order.dog' }) },
+        { value: 'Cat_Dog', name: RCi18n({ id: 'Order.Cat&Dog' }) },
+        { value: 'SmartFeeder', name: RCi18n({ id: 'Order.smartFeeder' }) }
+      ],
+      subscriptionTypeList: [
+        { value: 'ContractProduct', name: RCi18n({ id: 'Order.contractProduct' }) },
+        { value: 'Club', name: RCi18n({ id: 'Order.club' }) },
+        { value: 'Autoship', name: RCi18n({ id: 'Order.autoship' }) },
+        { value: 'Autoship_Club', name: RCi18n({ id: 'Order.Autoship&Club' }) }
+      ],
     };
   }
 
@@ -93,7 +109,7 @@ export default class SubscriptionList extends Component<any, any> {
   };
 
   onSearch = () => {
-    const { searchForm, activeKey } = this.state;
+    const { searchForm, activeKey,subscriptionType, subscriptionPlanType } = this.state;
     let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
     let param = {
       orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
@@ -105,13 +121,12 @@ export default class SubscriptionList extends Component<any, any> {
       recipient: searchForm.recipientOption === 'Recipient' ? searchForm.recipient : '',
       recipientPhone: searchForm.recipientOption === 'Recipient Phone' ? searchForm.recipient : '',
       prescriberId:
-        // searchForm.prescriberOption === 'Prescriber ID'
-        //   ? searchForm.prescriber
-        //   : '',
         JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? prescriberType : searchForm.prescriberOption === 'Auditor ID' ? searchForm.prescriber : '',
       prescriberName: searchForm.prescriberOption === 'Auditor Name' ? searchForm.prescriber : '',
       frequency: searchForm.frequency,
-      status: activeKey
+      status: activeKey,
+      subscriptionType,
+      subscriptionPlanType
     };
     this.setState(
       () => {
@@ -120,9 +135,6 @@ export default class SubscriptionList extends Component<any, any> {
             customerAccount: param.consumerAccount ? param.consumerAccount : '',
             customerName: param.consumerName ? param.consumerName : '',
             subscribeId: param.subscriptionNumber,
-            // subscribeIds: param.subscriptionNumber
-            //   ? [param.subscriptionNumber]
-            //   : [],
             cycleTypeId: param.frequency,
             subscribeStatus: param.status === 'all' ? '' : param.status,
             consigneeName: param.recipient ? param.recipient : '',
@@ -131,7 +143,9 @@ export default class SubscriptionList extends Component<any, any> {
             skuNo: param.skuCode ? param.skuCode : '',
             goodsName: param.productName ? param.productName : '',
             prescriberId: param.prescriberId ? param.prescriberId : '',
-            prescriberName: param.prescriberName ? param.prescriberName : ''
+            prescriberName: param.prescriberName ? param.prescriberName : '',
+            subscriptionType,
+            subscriptionPlanType
           }
         };
       },
@@ -174,10 +188,10 @@ export default class SubscriptionList extends Component<any, any> {
           }
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
   //todo
-  _handleBatchExport = () => {};
+  _handleBatchExport = () => { };
   onTabChange = (key) => {
     this.setState(
       {
@@ -226,8 +240,30 @@ export default class SubscriptionList extends Component<any, any> {
       });
   };
 
+  getSubsrciptionPlanType = (subsriptionType) => {
+    const { subscriptionPlanTypeListClone } = this.state;
+    let newSubscriptionPlanTypeList = [];
+    if (subsriptionType) {
+      if (subsriptionType === 'ContractProduct') {
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'SmartFeeder');
+      } else if (subsriptionType.indexOf('Club') >= 0) {
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat');
+      }
+    } else {
+      this.setState({
+        subscriptionPlanType: ''
+      })
+    }
+    this.setState({
+      subscriptionPlanTypeList: newSubscriptionPlanTypeList
+    });
+  };
+
   render() {
-    const { searchForm, subscriptionOption, productOption, consumerOption, recipientOption, frequencyList, activeKey, prescriberOption, prescriberList } = this.state;
+    const { searchForm, subscriptionOption, productOption, consumerOption,
+      recipientOption, frequencyList, activeKey,
+      prescriberOption, prescriberList, subscriptionType,
+      subscriptionPlanType, subscriptionTypeList, subscriptionPlanTypeList } = this.state;
     const menu = (
       <Menu>
         <Menu.Item>
@@ -256,7 +292,7 @@ export default class SubscriptionList extends Component<any, any> {
                     <Input
                       addonBefore={
                         <Select
-                          style={{ width: 170 }}
+                          style={styles.label}
                           defaultValue={searchForm.subscriptionOption}
                           onChange={(value) => {
                             value = value === '' ? null : value;
@@ -267,7 +303,7 @@ export default class SubscriptionList extends Component<any, any> {
                           }}
                         >
                           {subscriptionOption.map((item) => (
-                            <Option value={item} key={item}>                   
+                            <Option value={item} key={item}>
                               <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}
@@ -301,7 +337,7 @@ export default class SubscriptionList extends Component<any, any> {
                         >
                           {productOption.map((item) => (
                             <Option value={item} key={item}>
-                              <FormattedMessage id={`Subscription.${item}`}/>
+                              <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}
                         </Select>
@@ -316,11 +352,41 @@ export default class SubscriptionList extends Component<any, any> {
                     />
                   </FormItem>
                 </Col>
+                
                 <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.leftLabel} title={RCi18n({ id: 'Subscription.Frequency' })} disabled defaultValue={RCi18n({ id: 'Subscription.Frequency' })} />
+                      <Select
+                        style={styles.newWrapper}
+                        allowClear
+                        value={searchForm.frequency}
+                        // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
+                        onChange={(value) => {
+                          this.onFormChange({
+                            field: 'frequency',
+                            value
+                          });
+                        }}
+                      >
+                        {frequencyList &&
+                          frequencyList.map((item, index) => (
+                            <Option value={item.id} key={index}>
+                            {item.name}
+                          </Option>
+                          ))}
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+
+                
+                {/* <Col span={8}>
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={{ width: 110 }}><FormattedMessage id="Subscription.Frequency"/></p>}
+                      label={<p style={{ width: 110 }}><FormattedMessage id="Subscription.Frequency" /></p>}
                       style={{ width: 180 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -341,14 +407,14 @@ export default class SubscriptionList extends Component<any, any> {
                         ))}
                     </SelectGroup>
                   </FormItem>
-                </Col>
+                </Col> */}
 
                 <Col span={8}>
                   <FormItem>
                     <Input
                       addonBefore={
                         <Select
-                          style={{ width: 170 }}
+                          style={styles.label}
                           defaultValue={searchForm.consumerOption}
                           onChange={(value) => {
                             value = value === '' ? null : value;
@@ -383,7 +449,7 @@ export default class SubscriptionList extends Component<any, any> {
                         disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds ? true : false}
                         value={clinicsIds ? prescriberType : searchForm.prescriber}
                         // value={searchForm.prescriber}
-                        label={<p style={styles.label}><FormattedMessage id="Subscription.Prescriber"/></p>}
+                        label={<p style={styles.label}><FormattedMessage id="Subscription.Prescriber" /></p>}
                         onChange={(value) => {
                           value = value === '' ? null : value;
                           this.onFormChange({
@@ -392,7 +458,7 @@ export default class SubscriptionList extends Component<any, any> {
                           });
                         }}
                       >
-                        <Option value="all"><FormattedMessage id="Subscription.all"/></Option>
+                        <Option value="all"><FormattedMessage id="Subscription.all" /></Option>
                         {prescriberList &&
                           prescriberList.map((item, index) => (
                             <Option value={item.id} key={index}>
@@ -434,6 +500,66 @@ export default class SubscriptionList extends Component<any, any> {
                     </FormItem>
                   )}
                 </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.leftLabel} disabled defaultValue={RCi18n({ id: 'Order.subscriptionType' })} />
+                      <Select
+                        style={styles.newWrapper}
+                        dropdownMatchSelectWidth={false}
+                        allowClear
+                        value={subscriptionType}
+                        // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
+                        onChange={(value) => {
+                          this.setState(
+                            {
+                              subscriptionType: value
+                            },
+                            () => {
+                              this.getSubsrciptionPlanType(value);
+                            }
+                          );
+                        }}
+                      >
+                        {subscriptionTypeList &&
+                          subscriptionTypeList.map((item, index) => (
+                            <Option value={item.value} title={item.name} key={index}>
+                              {item.name}
+                            </Option>
+                          ))}
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.leftLabel} title={RCi18n({ id: 'Order.subscriptionPlanType' })} disabled defaultValue={RCi18n({ id: 'Order.subscriptionPlanType' })} />
+                      <Select
+                        style={styles.newWrapper}
+                        allowClear
+                        value={subscriptionPlanType}
+                        // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
+                        onChange={(value) => {
+                          this.setState({
+                            subscriptionPlanType: value
+                          });
+                        }}
+                      >
+                        {subscriptionPlanTypeList &&
+                          subscriptionPlanTypeList.map((item, index) => (
+                            <Option value={item.value} title={item.name} key={index}>
+                              {item.name}
+                            </Option>
+                          ))}
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+
                 <Col span={24} style={{ textAlign: 'center' }}>
                   <FormItem>
                     <Button
@@ -522,6 +648,9 @@ export default class SubscriptionList extends Component<any, any> {
                 <Tabs.TabPane tab={<FormattedMessage id="Subscription.Inactive" />} key="2">
                   <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
                 </Tabs.TabPane>
+                <Tabs.TabPane tab={<FormattedMessage id="Subscription.Pause" />} key="1">
+                  <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
+                </Tabs.TabPane>
               </Tabs>
             </Spin>
           </div>
@@ -530,12 +659,30 @@ export default class SubscriptionList extends Component<any, any> {
     );
   }
 }
+
+
 const styles = {
   label: {
-    width: 150,
-    textAlign: 'center'
+    width: 170,
   },
   wrapper: {
     width: 157
+  },
+  formItemStyle: {
+    width: 375
+  },
+
+  leftLabel: {
+    width: 170,
+    textAlign: 'left',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'default',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
+  },
+  newWrapper: {
+    width: 200
   }
 } as any;

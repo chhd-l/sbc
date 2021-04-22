@@ -26,7 +26,7 @@ class RejectForm extends React.Component<any, any> {
               },
               {
                 max: 100,
-                message: 'Please input less than 100 characters'
+                message: <FormattedMessage id="Prescriber.lessthan100characters" />
               }
               // { validator: this.checkComment }
             ]
@@ -124,14 +124,14 @@ class ListView extends React.Component<any, any> {
                       <th style={{ width: '11%' }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
-                      <th style={{ width: '12%' }}>PO Name</th>
-                      <th style={{ width: '13.5%' }}>PO E-mail</th>
-                      <th style={{ width: '11%' }}>Amount</th>
-                      <th style={{ width: '10.5%' }}>Link status</th>
-                      <th style={{ width: '12.5%' }}>Expert</th>
-                      <th style={{ width: '5.5%' }}>Paris</th>
-                      <th style={{ width: '10.5%' }}>Pick up</th>
-                      <th >Operation</th>
+                      <th style={{ width: '12%' }}><FormattedMessage id="Prescriber.PO Name"/></th>
+                      <th style={{ width: '13.5%' }}><FormattedMessage id="Prescriber.PO E-mail"/></th>
+                      <th style={{ width: '11%' }}><FormattedMessage id="Prescriber.Amount"/></th>
+                      <th style={{ width: '10.5%' }}><FormattedMessage id="Prescriber.Link status"/></th>
+                      <th style={{ width: '12.5%' }}><FormattedMessage id="Prescriber.Exper"/></th>
+                      <th style={{ width: '5.5%' }}><FormattedMessage id="Prescriber.Paris"/></th>
+                      <th style={{ width: '10.5%' }}><FormattedMessage id="Prescriber.Pick up"/></th>
+                      <th ><FormattedMessage id="Prescriber.operation"/></th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
@@ -237,7 +237,7 @@ class ListView extends React.Component<any, any> {
                         <span> {v.felinRecoId}</span>
                       </div>
                       <div style={{ width: 310, display: 'inline-block' }}>
-                        <span> Created Time: {moment(v.fillDate).format('YYYY-MM-DD')}</span>
+                        <span><FormattedMessage id="Prescriber.Created Time"/> {moment(v.fillDate).format('YYYY-MM-DD')}</span>
                       </div>
                     </div>
                   </td>

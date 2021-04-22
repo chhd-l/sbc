@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { history, Const } from 'qmkit';
+import { history, Const, RCi18n } from 'qmkit';
 import { Card, Icon, Row, Col, Pagination, message, Empty, Tooltip } from 'antd';
 const cat = require('../components/image/cat.png');
 const catFemale = require('../components/image/cat2.png');
@@ -121,9 +121,9 @@ export default class pets extends Component<any, any> {
           className="topCard"
           title={
             <div className="title">
-              <span>Pets</span>
+              <span>{RCi18n({id:'PetOwner.Pets'})}</span>
               <span className="viewAll" onClick={() => history.push({ pathname: `/petowner-details/${petOwnerId}/${customerAccount}`, query: { hash: 'pets-list' } })}>
-                View All
+                {RCi18n({id:'PetOwner.ViewAll'})}
                 <Icon type="right" />
               </span>
             </div>
@@ -142,7 +142,7 @@ export default class pets extends Component<any, any> {
                       <span className="contactName">{item.petsName}</span>
                     </div>
                     <span className="ui-lighter">
-                      ID:
+                      {RCi18n({id:'PetOwner.ID'})}:
                       <span className="content">
                         <Tooltip
                           overlayStyle={{
@@ -162,7 +162,7 @@ export default class pets extends Component<any, any> {
                   <div className="detail-content">
                     <Row>
                       <Col span={6}>
-                        <span className="ui-lighter">Age</span>
+                        <span className="ui-lighter">{RCi18n({id:'PetOwner.Age'})}</span>
                       </Col>
                       <Col span={18}>
                         <span className="content">{this.getPetAgeString(item)}</span>
@@ -176,7 +176,7 @@ export default class pets extends Component<any, any> {
                   <div className="detail-content">
                     <Row>
                       <Col span={6}>
-                        <span className="ui-lighter">Breed</span>
+                        <span className="ui-lighter">{RCi18n({id:'PetOwner.Breed'})}</span>
                       </Col>
                       <Col span={18}>
                         <span className="content">
@@ -200,7 +200,7 @@ export default class pets extends Component<any, any> {
                   <div className="detail-content">
                     <Row>
                       <Col span={6}>
-                        <span className="ui-lighter">Club</span>
+                        <span className="ui-lighter">{RCi18n({id:'PetOwner.Club'})}</span>
                       </Col>
                       <Col span={18}>
                         <span className="content">{item.clubStatu ? item.club : 'No Subscription'}</span>

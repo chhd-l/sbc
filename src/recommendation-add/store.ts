@@ -25,7 +25,7 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       const { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
       const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate, optimal }
-      let _tempWeight = customerPet.weight?(customerPet.weight.indexOf('\\')>-1?JSON.parse(JSON.parse(customerPet.weight)):JSON.parse(customerPet.weight)):{}
+      let _tempWeight = customerPet.weight?JSON.parse(customerPet.weight):{}
       let { measure = 0, measureUnit = '' } = _tempWeight
       
       customerPet.measure = measure;
@@ -91,9 +91,9 @@ export default class AppStore extends Store {
       const { settingVO, pets, felinReco } = res.context;
       let goodsQuantity = JSON.parse(felinReco?.goodsIds ?? '[]')
       let list = pets.map(item => {
-        let _tempWeight =item.weight.indexOf('\\')>-1?JSON.parse(JSON.parse(item.weight)):JSON.parse(item.weight)
-        item.measure = _tempWeight.measure;
-        item.measureUnit = _tempWeight.measureUnit;
+        let _tempWeight =item.weight?JSON.parse(item.weight):{}
+        item.measure = _tempWeight?.measure??0;
+        item.measureUnit = _tempWeight?.measureUnit??'Kg';
         return item
       })
       if(list.length>0){

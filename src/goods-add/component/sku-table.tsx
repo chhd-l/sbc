@@ -530,6 +530,7 @@ class SkuForm extends React.Component<any, any> {
       ,
       key: 'promotions',
       render: (rowInfo) => {
+        console.log(rowInfo,112);
         return (
           <Row>
             <Col span={12} key={goods.get('promotions')}>
@@ -540,8 +541,8 @@ class SkuForm extends React.Component<any, any> {
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder="please select type"
                          disabled={goods.get('promotions') == 'autoship'} >
-                  <Option value='club'>Club</Option>
                   <Option value='autoship'>Auto ship</Option>
+                  <Option value='club'>Club</Option>
                 </Select>
 
               </FormItem>
@@ -770,7 +771,6 @@ class SkuForm extends React.Component<any, any> {
             minStock.push(o.subStock / o.bundleNum)
           }
         });
-
         if (minStock.length != 0) {
           tempMinStock = Math.min.apply(Math, minStock)
           tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
@@ -789,7 +789,7 @@ class SkuForm extends React.Component<any, any> {
     });
     goodsList.toJS().map((item,i)=>{
       if (i == 0) {
-        if(a.length == 1) {
+        if(goodsList.toJS().length == 1 && a.length == 1) {
           editGoodsItem(item.id, 'marketPrice', a[0].marketPrice);
           editGoodsItem(item.id, 'subscriptionPrice', a[0].subscriptionPrice);
         }else {
@@ -797,7 +797,6 @@ class SkuForm extends React.Component<any, any> {
           editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
         }
       }else {
-        console.log(item,8888);
         editGoodsItem(item.id, 'marketPrice', item.marketPrice);
         editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
       }

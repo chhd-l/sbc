@@ -126,7 +126,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
-            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : <FormattedMessage id="Subscription.Inactive" />,
+            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : subscriptionDetail.subscribeStatus === '1' ? <FormattedMessage id="Subscription.Pause" /> : <FormattedMessage id="Subscription.Inactive" />,
             subscriptionNumber: subscriptionDetail.subscribeId,
             subscriptionTime: subscriptionDetail.createTime,
             presciberID: subscriptionDetail.prescriberId,
@@ -173,6 +173,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             promotionCode: subscriptionDetail.promotionCode
           };
 
+          let initDeliveryPrice = 0;
+          let initDiscountPirce = 0;
+          let initTaxPrice = 0;
+          (subscriptionDetail.noStartTradeList ?? []).forEach(item => {
+            if (item.tradePrice) {
+              initDeliveryPrice += item.tradePrice.deliveryPrice ?? 0;
+              initDiscountPirce += item.tradePrice.discountsPrice ?? 0;
+              initTaxPrice += item.tradePrice.taxFeePrice ?? 0;
+            }
+          });
+
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -189,14 +200,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               promotionCodeShow: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
-              loading: false
+              loading: false,
+              deliveryPrice: +initDeliveryPrice.toFixed(2),
+              discountsPrice: +initDiscountPirce.toFixed(2),
+              taxFreePrice: +initTaxPrice.toFixed(2)
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
                 let customerId = this.state.deliveryAddressInfo.customerId;
                 this.getAddressList(customerId, 'DELIVERY');
                 this.getAddressList(customerId, 'BILLING');
-                this.applyPromotionCode(this.state.promotionCodeShow);
+                // this.applyPromotionCode(this.state.promotionCodeShow);
               }
 
               // if(this.state.petsId){
@@ -549,21 +563,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       return item.deliveryAddressId === deliveryAddressId;
     });
     let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
-    //计算运费
+    //计算运费, 改为从后端getPromotionPirce接口获取
     this.setState({ addressLoading: true });
-    if (await webapi.getAddressInputTypeSetting() === 'AUTOMATICALLY') {
-      const feeRes = await webapi.calcShippingFee(deliveryAddressInfo.address1);
-      if (feeRes.res.code === Const.SUCCESS_CODE && feeRes.res.context.success) {
-        deliveryPrice = feeRes.res.context.tariffs[0]?.deliveryPrice ?? 0
-      } else {
-        message.error(<FormattedMessage id="Subscription.shippingArea"/>);
-        return;
-      }
-    }
+    // if (await webapi.getAddressInputTypeSetting() === 'AUTOMATICALLY') {
+    //   const feeRes = await webapi.calcShippingFee(deliveryAddressInfo.address1);
+    //   if (feeRes.res.code === Const.SUCCESS_CODE && feeRes.res.context.success) {
+    //     deliveryPrice = feeRes.res.context.tariffs[0]?.deliveryPrice ?? 0
+    //   } else {
+    //     message.error(<FormattedMessage id="Subscription.shippingArea"/>);
+    //     return;
+    //   }
+    // }   
+
     if (this.state.sameFlag) {
       this.setState({
         addressLoading: false,
-        deliveryPrice: deliveryPrice,
         deliveryAddressInfo: deliveryAddressInfo,
         billingAddressInfo: deliveryAddressInfo,
         deliveryList: addressList,
@@ -572,12 +586,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     } else {
       this.setState({
         addressLoading: false,
-        deliveryPrice: deliveryPrice,
         deliveryAddressInfo: deliveryAddressInfo,
         deliveryList: addressList,
         visibleShipping: false
       });
     }
+    this.applyPromotionCode();
   };
   billingOpen = () => {
     this.setState({
@@ -1279,7 +1293,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </div>
       );
     }
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -1474,7 +1488,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Row>
 
             <Modal
-              style={{ width: '500px' }}
+              width={650}
               title={<FormattedMessage id="Subscription.Active.ChooseDeliveryAddress"/>}
               visible={this.state.visibleShipping}
               confirmLoading={this.state.addressLoading}
@@ -1487,7 +1501,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             >
               <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
                 <Col>
-                  <Checkbox
+                  {storeId === 123457907 || storeId === 123457910 ? null : <Checkbox
                     checked={this.state.sameFlag}
                     onChange={(e) => {
                       let value = e.target.checked;
@@ -1497,7 +1511,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     }}
                   >
                     <FormattedMessage id="Subscription.BillingAddressIs"/>
-                  </Checkbox>
+                  </Checkbox>}
                 </Col>
                 <Col>
                   <Button size="small" type="primary" onClick={() => this.onOpenAddressForm(NEW_ADDRESS_TEMPLATE, 'delivery')}>
@@ -1515,14 +1529,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       deliveryAddressId: value
                     },
                     () => {
-                      this.applyPromotionCode();
+                      // this.applyPromotionCode();
                     }
                   );
                 }}
               >
                 {this.state.isUnfoldedDelivery
                   ? deliveryList.map((item) => (
-                      <Card style={{ width: 472, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                      <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
@@ -1543,7 +1557,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     ))
                   : deliveryList.map((item, index) =>
                       index < 2 ? (
-                        <Card style={{ width: 472, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                        <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
@@ -1579,7 +1593,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
             <Modal
               title={<FormattedMessage id="Subscription.Active.ChooseBillingAddress"/>}
-              style={{ width: '500px' }}
+              width={650}
               visible={this.state.visibleBilling}
               onOk={() => this.billingOK()}
               onCancel={() => {
@@ -1605,7 +1619,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               >
                 {this.state.isUnfoldedBilling
                   ? billingList.map((item) => (
-                      <Card style={{ width: 472, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                      <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
@@ -1623,7 +1637,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     ))
                   : billingList.map((item, index) =>
                       index < 2 ? (
-                        <Card style={{ width: 472, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                        <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>

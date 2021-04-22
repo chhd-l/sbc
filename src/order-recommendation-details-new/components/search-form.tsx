@@ -63,8 +63,8 @@ class SearchHead extends Component<any, any> {
         <Headline title={'Product list'} />
         <div>
           <Form className="filter-content" layout="inline">
-            <Row style={{ width: '100vh', margin: '0 auto' }}>
-              <div style={{ width: '100%', margin: '0 auto' }} className="space-around">
+            <Row>
+              <div className="space-around">
                 <Col>
                   <FormItem>
                     <Input

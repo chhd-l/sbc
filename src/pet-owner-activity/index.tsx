@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline, history, AuthWrapper, cache } from 'qmkit';
+import { BreadCrumb, SelectGroup, Const, Headline, history, AuthWrapper, cache, RCi18n } from 'qmkit';
 import { Row, Col, Tabs, Card, Breadcrumb, Button, message, Spin } from 'antd';
 import PetOwner from './components/petowner';
 import Pets from './components/pets';
@@ -21,7 +21,7 @@ export default class PetOwnerActivity extends Component<any, any> {
     this.state = {
       activityKey: '',
       id: this.props.match.params.id ? this.props.match.params.id : '',
-      title: 'Pet Owner activity',
+      title: RCi18n({id:'PetOwner.PetOwneractivity'}),
       petOwner: {},
       loading: false
     };
@@ -66,7 +66,7 @@ export default class PetOwnerActivity extends Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Pet Owner Activity</Breadcrumb.Item>
+          <Breadcrumb.Item>{RCi18n({id:'PetOwner.PetOwneractivity'})}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
           <Row>
@@ -88,7 +88,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               <AuthWrapper functionName="f_petowner_create_order_button">
                 {petOwner.customerName ? (
                   <Button type="primary" onClick={() => history.push({ pathname: '/order-add', query: { customerId: id, customerName: petOwner.customerName, customerAccount: petOwner.customerAccount } })}>
-                    Create order
+                    {RCi18n({id:'PetOwner.createOrder'})}
                   </Button>
                 ) : null}
               </AuthWrapper>
@@ -114,14 +114,14 @@ export default class PetOwnerActivity extends Component<any, any> {
                     }
                   >
                     {hasTaskRole ? (
-                      <TabPane tab="Task" key="1">
+                      <TabPane tab={RCi18n({id:'PetOwner.Task'})} key="1">
                         <Tasks petOwnerId={id} petOwner={petOwner} />
                       </TabPane>
                     ) : null}
-                    <TabPane tab="Emails" key="2">
+                    <TabPane tab={RCi18n({id:'PetOwner.Emails'})} key="2">
                       <Emails petOwnerId={id}  petOwner={petOwner}/>
                     </TabPane>
-                    <TabPane tab="Activities" key="3">
+                    <TabPane tab={RCi18n({id:'PetOwner.Activities'})} key="3">
                       {activityKey === '3' ? <Activities petOwnerId={id}  petOwner={petOwner}/> : null}
                     </TabPane>
                   </Tabs>

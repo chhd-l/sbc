@@ -1,11 +1,11 @@
 import React from 'react';
-import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm, Icon, Tooltip } from 'antd';
+import { Form, Card, Avatar, Input, InputNumber, DatePicker, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Empty, Icon, Tooltip } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { Headline, BreadCrumb, history, Const } from 'qmkit';
+import { Headline, BreadCrumb, history, Const, cache } from 'qmkit';
 import OrderInformation from './component/order-information';
 import SubscribInformation from './component/subscrib-information';
 import PrescribInformation from './component/prescrib-information';
@@ -372,8 +372,8 @@ export default class CustomerDetails extends React.Component<any, any> {
             <div className="detail-container" id="pets-list">
               <Headline title="Pet information" />
               <Row gutter={16}>
-                {pets.map((pet) => (
-                  <Col span={8} style={{ margin: '10px 0' }}>
+                {pets.map((pet, idx) => (
+                  <Col key={idx} span={8} style={{ margin: '10px 0' }}>
                     <Card bodyStyle={{ padding: '10px 20px' }}>
                       <div className="text-align-right">
                         {/* <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
@@ -414,13 +414,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     </Card>
                   </Col>
                 ))}
-                {pets.length === 0 && (
-                  <div style={{ textAlign: 'center', padding: '10px 0' }}>
-                    <span>
-                      <FormattedMessage id="noData" />
-                    </span>
-                  </div>
-                )}
+                {pets.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
               </Row>
             </div>
             <div className="container">
@@ -441,9 +435,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <TabPane tab="Delivery information" key="delivery">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
-                <TabPane tab="Billing information" key="billing">
+                {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] !== 'ru' ? <TabPane tab="Billing information" key="billing">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
-                </TabPane>
+                </TabPane> : null}
                 <TabPane tab="Payment methods" key="payment">
                   <PaymentList customerId={this.state.customerId} />
                 </TabPane>

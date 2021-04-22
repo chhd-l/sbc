@@ -5,6 +5,7 @@ import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
+import { RCi18n } from 'qmkit';
 
 const { confirm } = Modal;
 const FormItem = Form.Item;
@@ -283,7 +284,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'enabled',
         key: 'enabled',
         width: '10%',
-        render: (text, record) => <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
+        render: (text, record) => <p>{record.enabled ? RCi18n({id:'Prescriber.Enabled'}) :RCi18n({id:'Disabled'})}</p>
       },
       {
         title: <FormattedMessage id="Prescriber.AuditAuthority" />,
@@ -302,7 +303,7 @@ export default class ClinicList extends Component<any, any> {
               <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
             <Divider type="vertical" />
-            <Tooltip placement="top" title={record.enabled ? 'Disable' : 'Enable'}>
+            <Tooltip placement="top" title={record.enabled ? RCi18n({id:'Disable'}) : RCi18n({id:'Enable'})}>
               <a onClick={() => this.enableAndDisable(record.id)} className="iconfont iconbtn-disable">
                 {/*{record.enabled ? 'Disable' : 'Enable'}*/}
               </a>

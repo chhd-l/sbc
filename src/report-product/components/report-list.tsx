@@ -24,6 +24,8 @@ export default class ReportList extends Component<any, any> {
       current: number;
       productReportPage: any;
       loading: boolean;
+      getDate: any;
+      skuText: any;
     };
   };
 
@@ -33,13 +35,16 @@ export default class ReportList extends Component<any, any> {
     pageSize: 'pageSize',
     current: 'current',
     productReportPage: 'productReportPage',
-    loading: 'loading'
+    loading: 'loading',
+    getDate: 'getDate',
+    skuText: 'skuText'
   };
 
   componentDidMount() {}
 
   render() {
-    const { onProductReportPage, total, pageSize, current, productReportPage, loading } = this.props.relaxProps;
+    const { onProductReportPage, total, pageSize, current, getDate,productReportPage, loading, skuText } = this.props.relaxProps;
+    console.log(total, '----------total');
     return (
       <div>
         <DataGrid
@@ -58,7 +63,7 @@ export default class ReportList extends Component<any, any> {
             total,
             current: current - 1,
             onChange: (pageNum, pageSize) => {
-              onProductReportPage({ pageNum: pageNum, pageSize });
+              onProductReportPage({...getDate, ...{ pageNum: pageNum, pageSize, sortName: 'revenue', skuText }});
             }
           }}
           dataSource={productReportPage && productReportPage.toJS()}

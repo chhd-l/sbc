@@ -93,6 +93,7 @@ export default class FillinPetInfo extends Component {
         } else if (key === 'consumerName') {
             onChangePestsForm({ ...appointmentVO, [key]: e }, 'appointmentVO')
         } else {
+            console.log(key, e)
             onChangePestsForm({ ...customerPet, [key]: e }, 'customerPet')
         }
     }

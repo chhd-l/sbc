@@ -1,11 +1,16 @@
-import {FormattedMessage} from "react-intl";
-import React from "react";
-import { Breadcrumb, Button, Checkbox, Radio } from 'antd';
-
+import en_US_New from './en-US_New';
+let enUsNew = {};
+Object.keys(en_US_New).forEach(key => {
+  enUsNew = {
+    ...en_US_New[key],
+    ...enUsNew
+  }
+});
 /**
  * 多语言英文
  */
 export default {
+  ...enUsNew,
   /*-------------------------------- Public ---------------------------------------------*/
   'Public.Overview':'Overview',
   'Public.WelcometoROYALCANIN':'Welcome to ROYALCANIN',
@@ -873,8 +878,6 @@ export default {
 
 
   /*-----------------------------  Order  --------------------------------------------*/
-  'Order.number':'Order number',
-  'Order.subscriptionNumber':'Subscription number',
   'Order.AuditSetting':'Audit Setting',
   'Order.AutoAudit':'Auto audit',
   'Order.ManualAudit':'Manual audit',
@@ -1394,7 +1397,6 @@ export default {
   'Order.contractProduct':'Contract product',
   'Order.club':'Club',
   'Order.autoship':'Autoship',
-  'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
   'Order.felin':`L'Atelier Felin`,
   'Order.subscriptionType':'Subscription type',
@@ -1694,6 +1696,8 @@ export default {
   'Order.returnList':'Return list',
   'Order.refundableAmountTips':'The remaining refundable amount of this order is: ',
   'Order.refundableAmountTips2':'The refund amount should not be greater than the refundable amount. Please modify it.',
+  'Order.Cat&Dog':'Cat & Dog',
+  'Order.number':'Order number',
 
 
   /*-----------------------------  Task  ----------------------------------------------*/
@@ -2384,33 +2388,6 @@ export default {
   'PetOwner.levelBadge':'Type badge',
   'PetOwner.consumerLevel':'Pet owner type',
   /* -------- 已翻译 V1.0---------------*/
-  "PetOwner.Member": "Member",
-  "PetOwner.Guest": "Guest",
-  "PetOwner.PetownerList": "Pet owner list",
-  'PetOwner.subscriptionType':'Subscription type',
-  "PetOwner.Club": "Club",
-  "PetOwner.Cat": "Cat",
-  "PetOwner.Dog": "Dog",
-  "PetOwner.FoodDispenser": "Food dispenser",
-  "PetOwner.Autoship": "Autoship",
-  'PetOwner.PetOwneractivity':'Pet owner activity',
-  'PetOwner.createOrder': 'Create Order',
-  'PetOwner.PetOwnerOverview':'Pet Owner Overview',
-  "PetOwner.ViewAll": "View All",
-  "PetOwner.Account": "Account",
-  "PetOwner.Location": "Location",
-  "PetOwner.Phone": "Phone",
-  "PetOwner.Taggings": "Taggings",
-  "PetOwner.Pets": "Pets",
-  "PetOwner.ID": "ID",
-  "PetOwner.Task": "Task",
-  "PetOwner.Emails": "Emails",
-  "PetOwner.Activities": "Activities",
-  "PetOwner.AddComment": "Add Comment",
-  "PetOwner.AddTask": "Add Task",
-  "PetOwner.Keyword": "Keyword",
-  "PetOwner.TaskStatus": "Task Status",
-  "PetOwner.GoldenMoment": "GoldenMoment",
 
 
 

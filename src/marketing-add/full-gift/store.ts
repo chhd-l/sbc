@@ -52,7 +52,8 @@ export default class AppStore extends Store {
     const { res } = await commonWebapi.getAllGroups({
       pageNum: 0,
       pageSize: 1000000,
-      segmentType: 0
+      segmentType: 0,
+      isPublished: 1
     });
 
     if (res.code == Const.SUCCESS_CODE) {

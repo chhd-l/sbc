@@ -109,7 +109,7 @@ export default class PaymentList extends React.Component<any, any> {
                                 <img
                                   src={item.get('imgUrl')}
                                   style={{
-                                    width: '150px',
+                                    width: '80px',
                                     height: '80px',
                                     marginTop: '10px'
                                   }}
@@ -118,9 +118,9 @@ export default class PaymentList extends React.Component<any, any> {
                               <div className="bar">
                                 <div className="status">{item.get('name')}</div>
 
-                                {/*<div className={'flex-start-align'}>*/}
-                                {/*  <Switch style={{ marginRight: 15 }} />*/}
-                                {/*</div>*/}
+                                <div className={'flex-start-align'}>
+                                  <Switch style={{ marginRight: 15 }} />
+                                </div>
                               </div>
                             </Card>
                           </Col>
@@ -148,7 +148,7 @@ export default class PaymentList extends React.Component<any, any> {
                                 <img
                                   src={item.get('imgUrl')}
                                   style={{
-                                    width: '150px',
+                                    width: '100px',
                                     height: '80px',
                                     marginTop: '10px'
                                   }}

@@ -69,6 +69,7 @@ class ListView extends React.Component<any, any> {
     histroy?: Object;
     relaxProps?: {
       loading: boolean;
+      btnLoading: boolean;
       orderRejectModalVisible: boolean;
       orderAuditModalVisible: boolean;
       total: number;
@@ -95,6 +96,7 @@ class ListView extends React.Component<any, any> {
 
   static relaxProps = {
     loading: 'loading',
+    btnLoading: 'btnLoading',
     //当前的数据总数
     total: 'total',
     //当前的分页条数
@@ -123,7 +125,7 @@ class ListView extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible, orderAuditModalVisible } = this.props.relaxProps;
+    const { loading, btnLoading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible, orderAuditModalVisible } = this.props.relaxProps;
 
     return (
       <div>
@@ -199,7 +201,7 @@ class ListView extends React.Component<any, any> {
             />
           </Modal>
           {orderAuditModalVisible ? (
-            <Modal maskClosable={false} title={<FormattedMessage id="Order.previewThisOrder" />} visible={orderAuditModalVisible} okText={<FormattedMessage id="Order.OK" />} onOk={() => this._handleAuditOK()} onCancel={() => this._handleAuditCancel()}>
+            <Modal maskClosable={false} title={<FormattedMessage id="Order.previewThisOrder" />} visible={orderAuditModalVisible} okText={<FormattedMessage id="Order.OK" />} onOk={() => this._handleAuditOK()} okButtonProps={{ loading: btnLoading }} onCancel={() => this._handleAuditCancel()}>
               <h3>
                 <strong>{<FormattedMessage id="Order.confirmThisOrder" />}</strong>
               </h3>

@@ -5,6 +5,7 @@ const { Option } = Select;
 import { querySysDictionary } from '../webapi'
 import { Relax } from 'plume2';
 import moment from 'moment';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const { Search } = Input;
 @Relax
 export default class FillinPetInfo extends Component {
@@ -77,7 +78,7 @@ export default class FillinPetInfo extends Component {
     //扫描后返回的值
     findByApptNo = async (apptNo) => {
         if (!apptNo) {
-            message.error('scan error,apptNo was not find.')
+            message.error(RCi18n({id:'Prescriber.apptNowasnotfind'}))
             return
         }
         const { findByApptNo } = this.props.relaxProps;
@@ -115,23 +116,23 @@ export default class FillinPetInfo extends Component {
                         <Form >
                             <Row gutter={20}>
                                 <Col span={8}>
-                                    <Form.Item label="Date:">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Date'})}>
                                         {getFieldDecorator('fillDate', {
                                             onChange: (e) => this._onChange(e, 'fillDate'),
                                             initialValue:moment(felinReco.fillDate,'YYYY-MM-DD'),
-                                            rules: [{ required: true, message: 'Please select  fillDate!' }],
+                                            rules: [{ required: true, message: RCi18n({id:'selectfillDate'}) }],
                                         })(<DatePicker style={{ width: '100%' }}/>)}
                                     </Form.Item>
                                 </Col>
                                 <Col span={8}>
-                                    <Form.Item label="Expert name:">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Expert name'})}>
                                         {getFieldDecorator('expert', {
                                             initialValue: felinReco.expert,
                                         })(<Input disabled />)}
                                     </Form.Item>
                                 </Col>
                                 <Col span={8}>
-                                    <Form.Item label="pour:">
+                                    <Form.Item label={RCi18n({id:'Prescriber.pour'})}>
                                         {getFieldDecorator('consumerName', {
                                             onChange: (e) => this._onChange(e, 'consumerName'),
                                             initialValue: appointmentVO.consumerName || '',
@@ -141,67 +142,67 @@ export default class FillinPetInfo extends Component {
                             </Row>
                             <Row gutter={20} >
                                 <Form.Item label="">
-                                    <span className="ant-form-text">Information sur le chat:</span>
+                                    <span className="ant-form-text"><FormattedMessage id="Prescriber.Informationsurlechat" /></span>
                                 </Form.Item>
                                 <Col span={12}>
-                                    <Form.Item label="Name:">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Name：'})}>
                                         {getFieldDecorator('petsName', {
                                             defaultValue: '',
                                             initialValue: customerPet.petsName || '',
-                                            rules: [{ required: true, message: 'Please input pet Name' }],
+                                            rules: [{ required: true, message: RCi18n({id:'Prescriber.inputpetName'})}],
                                             onChange: (e) => this._onChange(e, 'petsName')
                                         })(<Input disabled={petsList.length > 0 || funType} />)}
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Gender:">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Gender'})}>
                                         {getFieldDecorator('petsSex', {
                                             initialValue: customerPet.petsSex,
-                                            rules: [{ required: true, message: 'Please select Gender!' }],
+                                            rules: [{ required: true, message: RCi18n({id:'Prescriber.selectGender'}) }],
                                             onChange: (e,) => this._onChange(e, 'petsSex')
 
                                         })(<Radio.Group disabled={petsList.length > 0 || funType}>
-                                            <Radio value={1}>Female</Radio>
-                                            <Radio value={0}>Male</Radio>
+                                            <Radio value={1}><FormattedMessage id="Prescriber.Female" /></Radio>
+                                            <Radio value={0}><FormattedMessage id="Prescriber.Male" /></Radio>
                                         </Radio.Group>)}
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Date of birth:">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Dateofbirth'})}>
                                         {getFieldDecorator('birthOfPets', {
                                             initialValue:customerPet.birthOfPets&&moment(customerPet.birthOfPets, 'YYYY-MM-DD')||null,
-                                            rules: [{ required: true, message: 'Please select Date of birth!' }],
+                                            rules: [{ required: true, message: RCi18n({id:'Prescriber.selectDateofbirth'})}],
                                             onChange: (e,) => this._onChange(e, 'birthOfPets')
 
                                         })(<DatePicker disabled={petsList.length > 0 || funType} style={{ width: '100%' }} />)}
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Breed:">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Breed'})}>
                                         {getFieldDecorator('petsBreed', {
                                             initialValue: customerPet.petsBreed || "",
-                                            rules: [{ required: true, message: 'Please select Breed' }],
+                                            rules: [{ required: true, message: RCi18n({id:'Prescriber.selectBreed'})}],
                                             onChange: (e,) => this._onChange(e, 'petsBreed')
 
                                         })(<Select
                                             showSearch
                                             getPopupContainer={(trigger: any) => trigger.parentNode}
                                             notFoundContent={fetching ? <Spin size="small" /> : null}
-                                            placeholder="Please input your Breed."
+                                            placeholder={RCi18n({id:'Prescriber.inputyourBreed'})}
                                             defaultActiveFirstOption={false}
                                             filterOption={false}
                                             onSearch={this.onSearch}
                                             disabled={petsList.length > 0 || funType}
                                         >
                                             {
-                                                petsBreedList.map(((item, index) => (<Option key={item.id}  value={item.valueEn} label={item.valueEn}>{item.name}</Option>)))
+                                                petsBreedList.map(((item, index) => (<Option key={item.id}  value={item.valueEn} label={item.valueEn}>{item.valueEn}</Option>)))
                                             }
                                         </Select>)}
                                     </Form.Item>
 
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Sensitvities:">
+                                    <Form.Item label="Special needs:">
                                         {getFieldDecorator('needs', {
                                             initialValue: customerPet.needs || '',
                                             //  rules: [{ required: true, message: 'Please select Sensitvities!' }],
@@ -221,7 +222,7 @@ export default class FillinPetInfo extends Component {
 
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Lifestyle">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Sensitvities'})}>
                                         {getFieldDecorator('lifestyle', {
                                             initialValue: customerPet.lifestyle || '',
                                             // rules: [{ required: true, message: 'Please select Lifestyle!' }],
@@ -239,7 +240,7 @@ export default class FillinPetInfo extends Component {
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Activity:">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Activity'})}>
                                         {getFieldDecorator('activity', {
                                             initialValue: customerPet.activity || '',
                                             // rules: [{ required: true, message: 'Please selectActivity!' }],
@@ -261,10 +262,10 @@ export default class FillinPetInfo extends Component {
                                     <Row gutter={20}>
 
                                         <Col span={12}>
-                                            <Form.Item label="Weight">
+                                            <Form.Item label={RCi18n({id:'Prescriber.Weight'})}>
                                                 {getFieldDecorator('measure', {
                                                     initialValue: customerPet.measure || 0,
-                                                    rules: [{ required: true, message: 'Please input Weight!' }],
+                                                    rules: [{ required: true, message: RCi18n({id:'Prescriber.inputWeight'}) }],
                                                     onChange: (e,) => this._onChange(e, 'measure')
                                                 })(<Input disabled={petsList.length > 0 || funType} />)}
                                             </Form.Item>
@@ -290,15 +291,15 @@ export default class FillinPetInfo extends Component {
 
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Sterilzed">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Sterilzed'})}>
                                         {getFieldDecorator('sterilized', {
                                             defaultValue: 0,
                                             initialValue: customerPet.sterilized,
-                                            rules: [{ required: true, message: 'Please select Sterilzed!' }],
+                                            rules: [{ required: true, message: RCi18n({id:'Prescriber.selectSterilzed'}) }],
                                             onChange: (e,) => this._onChange(e, 'sterilized')
                                         })(<Radio.Group disabled={petsList.length > 0 || funType}>
-                                            <Radio value={1}>Yes</Radio>
-                                            <Radio value={0}>No</Radio>
+                                            <Radio value={1}><FormattedMessage id="Prescriber.Yes" /></Radio>
+                                            <Radio value={0}><FormattedMessage id="Prescriber.No" /></Radio>
                                         </Radio.Group>)}
                                     </Form.Item>
                                 </Col>

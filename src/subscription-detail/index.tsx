@@ -129,7 +129,10 @@ class SubscriptionDetail extends React.Component<any, any> {
             frequency: subscriptionDetail.cycleTypeId,
             frequencyName: subscriptionDetail.frequency,
             nextDeliveryTime: moment(new Date(subscriptionDetail.nextDeliveryTime)).format('MMMM Do YYYY'),
-            promotionCode: subscriptionDetail.promotionCode
+            promotionCode: subscriptionDetail.promotionCode,
+            subscriptionType: subscriptionDetail.subscriptionType,
+            subscriptionPlanType: subscriptionDetail.subscriptionPlanType
+
           };
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
@@ -178,7 +181,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               loading: false,
               deliveryPrice: +initDeliveryPrice.toFixed(2),
               discountsPrice: +initDiscountPirce.toFixed(2),
-              taxFreePrice: +initTaxPrice.toFixed(2)
+              taxFeePrice: +initTaxPrice.toFixed(2)
             },
             () => {
               // this.applyPromationCode(this.state.promotionCode);
@@ -831,6 +834,12 @@ class SubscriptionDetail extends React.Component<any, any> {
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.AuditorName" /> : <span>{subscriptionInfo.presciberName}</span>
+                </p>
+                <p>
+                  <FormattedMessage id="Order.subscriptionType" /> : <span>{subscriptionInfo.subscriptionType}</span>
+                </p>
+                <p>
+                  <FormattedMessage id="Order.subscriptionPlanType" /> : <span>{subscriptionInfo.subscriptionPlanType}</span>
                 </p>
               </Col>
               <Col span={11} className="basic-info">

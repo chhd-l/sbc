@@ -77,7 +77,7 @@ export default withOktaAuth(
             </FormItem>
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberId', {
-                rules: [{ required: true, message: RCi18n({id:'Public.ClientID Tip'}) }]
+                rules: [{ required: true, message: RCi18n({id:'Public.ClientID Input'}) }]
               })(<Search size="large" placeholder={RCi18n({id:'Public.ClientID Input'})} onSearch={(value, e) => this.search(value, e)} />)}
             </FormItem>
             <label style={styles.labelClientName}>

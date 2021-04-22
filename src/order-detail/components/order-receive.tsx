@@ -60,50 +60,48 @@ export default class OrderReceive extends React.Component<any, any> {
   //收款列表
   receiveColumns = [
     {
-      title: <FormattedMessage id="Order.CollectionTime"/>,
+      title: <FormattedMessage id="Order.CollectionTime" />,
       dataIndex: 'createTime',
       key: 'createTime',
       render: (createTime) => createTime && moment(createTime).format(Const.TIME_FORMAT).toString()
     },
     {
-      title: <FormattedMessage id="Order.AmountReceived"/>,
-      dataIndex: 'practicalPrice',
-      key: 'practicalPrice',
+      title: <FormattedMessage id="Order.AmountReceived" />,
+      dataIndex: 'paymentAmount',
+      key: 'paymentAmount',
       render: (text, record) => (record.payOrderStatus == 1 ? '' : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (text || 0).toFixed(2))
     },
     {
-      title: <FormattedMessage id="Order.Status"/>,
-      dataIndex: 'tradeType',
-      key: 'tradeType',
-      // render: (status) => status ? payOrderStatusDic[status] : ''
+      title: <FormattedMessage id="Order.Status" />,
+      dataIndex: 'opStatus',
+      key: 'opStatus'
     },
-    ,
     {
-      title: <FormattedMessage id="Order.Remarks"/>,
-      dataIndex: 'comment',
-      key: 'comment',
-      render: (comment) => (
+      title: <FormattedMessage id="Order.tradeType" />,
+      dataIndex: 'tradeType',
+      key: 'tradeType'
+    },
+    {
+      title: <FormattedMessage id="Order.Remarks" />,
+      dataIndex: 'remark',
+      key: 'remark',
+      render: (remark) => (
         <span>
-          {comment ? (
-            <Tooltip title={this._renderComment(comment)} placement="top">
-              <a href="javascript:void(0);">{<FormattedMessage id="view" />}</a>
+          {remark ? (
+            <Tooltip title={remark} placement="top">
+              {remark}
             </Tooltip>
           ) : (
             '-'
           )}
         </span>
       )
-    },
-    {
-      title: <FormattedMessage id="Order.Operation"/>,
-      dataIndex: 'operate',
-      key: 'operate',
-      render: (_text, record) => this._renderOperator(record)
     }
   ];
 
   render() {
     const { detail, paymentInfo } = this.props.relaxProps;
+    var payLogs = paymentInfo && paymentInfo.get('payPaymentLogsVOList') ? paymentInfo.get('payPaymentLogsVOList') : [];
     const id = detail.get('id');
     // const toExternalOrderId = detail.get('toExternalOrderId');
     const totalPayCash = detail.getIn(['tradePrice', 'totalPrice']) || 0;
@@ -115,22 +113,31 @@ export default class OrderReceive extends React.Component<any, any> {
       <div style={styles.container}>
         <div style={styles.addReceive}>
           <div style={styles.orderInfo}>
-            <label style={styles.orderNum}>
-              {<FormattedMessage id="Order.orderNumber" />}:{id}
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              {<FormattedMessage id="Order.amountReceivable" />}:$
-              {(totalPayCash || 0).toFixed(2)}
-            </label>
+            <Row style={{ width: '100%' }}>
+              <Col span={18}>
+                <label style={styles.orderNum}>
+                  {<FormattedMessage id="Order.orderNumber" />}:{id}
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  {<FormattedMessage id="Order.amountReceivable" />}:$
+                  {(totalPayCash || 0).toFixed(2)}
+                </label>
+              </Col>
+              <Col span={6} style={{ textAlign: 'right' }}>
+                <label style={{ color: '#339966' }}>{paymentInfo.get('payStatus')}</label>
+              </Col>
+            </Row>
           </div>
         </div>
 
         <div>
-          <Table columns={this.receiveColumns} dataSource={ paymentInfo ? [paymentInfo.toJS()] : []} pagination={false} bordered rowKey={(_record, index) => index.toString()} />
+          <Table columns={this.receiveColumns} dataSource={payLogs} pagination={false} bordered rowKey={(_record, index) => index.toString()} />
         </div>
 
         <Row>
-          <Col span={12} className="headBox" style={{ height: 200, marginTop:10 }}>
-            <h4><FormattedMessage id="Order.paymentDetails" /></h4>
+          <Col span={12} className="headBox" style={{ height: 200, marginTop: 10 }}>
+            <h4>
+              <FormattedMessage id="Order.paymentDetails" />
+            </h4>
             <p>
               {<FormattedMessage id="Order.purchaseType" />}: {paymentInfo.get('holderName')}
             </p>
@@ -148,7 +155,7 @@ export default class OrderReceive extends React.Component<any, any> {
             </p>
             <p>
               {<FormattedMessage id="Order.phoneNumber" />}: {paymentInfo.get('phone')}
-            </p>  
+            </p>
           </Col>
         </Row>
       </div>
@@ -161,14 +168,6 @@ export default class OrderReceive extends React.Component<any, any> {
       strArr[1] = util.desensitizeStr(strArr[1]);
     }
     return strArr.join(' ');
-  }
-
-  _renderComment(comment) {
-    return <span>{comment}</span>;
-  }
-
-  _renderOperator(_payRecord) {
-    return '-';
   }
 
   _renderMenu = (id: string) => {

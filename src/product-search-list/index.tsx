@@ -115,14 +115,21 @@ export default class ProductSearchList extends React.Component<any, any> {
     );
   };
 
+  onRepair() {
+
+  }
+
+  onRebuild() {
+
+  }
+
   _menu = () => {
     return (
       <Menu>
         <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              onClick={() => {
-              }}
+              onClick={this.onRepair}
             >
               Repair index
             </a>
@@ -131,8 +138,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              onClick={() => {
-              }}
+              onClick={this.onRebuild }
             >
               Rebuild index
             </a>

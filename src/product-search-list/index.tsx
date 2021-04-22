@@ -128,6 +128,9 @@ export default class ProductSearchList extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message);
+          this.setState({
+            allLoading: false
+          });
         } else {
           this.setState({
             allLoading: false
@@ -154,6 +157,9 @@ export default class ProductSearchList extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message);
+          this.setState({
+            allLoading: false
+          });
         } else {
           this.setState({
             allLoading: false

@@ -3,7 +3,9 @@ import * as webapi from './webapi';
 import { message } from 'antd';
 import ExpActor from './actor/exp-actor';
 import { Const, RCi18n } from 'qmkit';
-
+import ListActor from './actor/list-actor'
+import LoadingActor from './actor/loading-actor'
+import FormActor from './actor/form-actor'
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -13,9 +15,71 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new ExpActor()];
+    return [new ExpActor(), new ListActor(), new LoadingActor(), new FormActor()];
   }
 
+  initList = async () => {
+    this.dispatch('loading:start')
+    const data = [
+      {
+        id: 1,
+        key: '1',
+        companyName: 'John Brown',
+        companyCode: 12312,
+        status: 1,
+      },
+      {
+        id: 2,
+        key: '2',
+        companyName: 'Jim Green',
+        companyCode: 12345,
+        status: 0,
+      },
+      {
+        id: 3,
+        key: '3',
+        companyName: 'Joe Black',
+        companyCode: 12567,
+        status: 1,
+      },
+    ];
+    this.dispatch('list:table', data)
+
+    this.dispatch('loading:end')
+  }
+  save = async (params) => {
+    this.dispatch('formActor:field', {field: 'saveLoading', value: true })
+
+    setTimeout(()=>{
+      this.dispatch('formActor:field', {field: 'saveLoading', value: false })
+      this.closeModal()
+    }, 3000)
+  }
+  onFormChange = ({field, value}) => {
+    this.dispatch('formActor:formField', {field, value })
+  }
+
+  afterClose = () => {
+    this.dispatch('formActor:form', {
+      status: 1
+    })
+  }
+
+  editRow = (record) => {
+    this.openModal()
+  }
+  addCompany = () => {
+    this.openModal()
+  }
+  close = () => {
+    this.closeModal()
+  }
+  openModal = () => {
+    this.dispatch('formActor:field', {field: 'modalVisible', value: true})
+  }
+  closeModal = () => {
+    this.dispatch('formActor:field', {field: 'modalVisible', value: false})
+  }
   init = async () => {
     const expressAll = await webapi.fetchAllExpress();
     if (expressAll.res.code == Const.SUCCESS_CODE) {

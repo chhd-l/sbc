@@ -3572,6 +3572,14 @@ export default {
   'Setting.Setinpaymentmethodmodel': 'Set in payment method model',
   'Setting.Offlinepayment': 'Offline payment',
   'Setting.COD': 'COD',
+  'Setting.Addnewcompany': 'Add new company',
+  'Setting.LogisticCompanyname': 'Logistic company name',
+  'Setting.LogisticCompanycode': 'Logistic company code',
+  'Setting.Editlogisticcompany': 'Edit logistic company',
+  'Setting.Addlogisticcompany': 'Add logistic company',
+  'Setting.Logisticcompanystatus': 'Logistic company status',
+  'Setting.Pleaseinputlogisticcompanyname': 'Please input logistic company name',
+  'Setting.Pleaseinputlogisticcompanycode': 'Please input logistic company code',
 
 
   /*-----------------------------  Fetch  ----------------------------------------*/

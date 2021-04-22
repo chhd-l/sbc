@@ -359,7 +359,7 @@ class UserList extends Component<any, any> {
               <Form layout="inline">
                 <FormItem>
                   <Input
-                    addonBefore={RCi18n({id:'Prescriber.Username'})}
+                    addonBefore={RCi18n({id:'Prescriber.UserName'})}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -373,7 +373,7 @@ class UserList extends Component<any, any> {
                 </FormItem>
                 <FormItem>
                   <Input
-                    addonBefore={RCi18n({id:'Prescriber.Useremail'})}
+                    addonBefore={RCi18n({id:'Prescriber.UserEmail'})}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -399,7 +399,7 @@ class UserList extends Component<any, any> {
                     style={{ width: 80 }}
                   >
                     <Option value=""><FormattedMessage id="Prescriber.All" /></Option>
-                    <Option value={'3'}><FormattedMessage id="Prescriber.All" /></Option>
+                    <Option value={'3'}><FormattedMessage id="Prescriber.Inactivated" /></Option>
                     <Option value={'4'}><FormattedMessage id="Prescriber.ToBeAudit" /></Option>
                     <Option value={'0'}><FormattedMessage id="Prescriber.Enabled"/></Option>
                     <Option value={'1'}><FormattedMessage id="Prescriber.Disabled"/></Option>

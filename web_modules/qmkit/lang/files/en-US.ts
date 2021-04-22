@@ -873,6 +873,8 @@ export default {
 
 
   /*-----------------------------  Order  --------------------------------------------*/
+  'Order.number':'Order number',
+  'Order.subscriptionNumber':'Subscription number',
   'Order.AuditSetting':'Audit Setting',
   'Order.AutoAudit':'Auto audit',
   'Order.ManualAudit':'Manual audit',
@@ -2869,6 +2871,7 @@ export default {
   'Marketing.PomotionCodehasexited.': 'Pomotion Code has exited.',
   'Marketing.Freeshipping': 'Free shipping',
   'Marketing.Singlepurchase': 'Single purchase',
+  'Marketing.Automationlist': 'Automation list',
 
 
 

@@ -14,7 +14,7 @@ import './index.css'
 const MAK_TYPE = {
   0: 'Full reduction ',
   1: 'Full discount ',
-  // 2: '满赠'
+  2: 'Gift ',
   3: 'Free shipping '
 };
 

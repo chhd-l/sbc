@@ -14,6 +14,10 @@ process.on('unhandledRejection', err => {
 // Ensure environment variables are read.
 require('../config/env');
 
+var os = require('os');
+
+console.log('可用内存大小(G)：', os.freemem() / 1024 / 1024 / 1024);
+
 
 const path = require('path');
 const chalk = require('react-dev-utils/chalk');

@@ -181,7 +181,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               loading: false,
               deliveryPrice: +initDeliveryPrice.toFixed(2),
               discountsPrice: +initDiscountPirce.toFixed(2),
-              taxFreePrice: +initTaxPrice.toFixed(2)
+              taxFeePrice: +initTaxPrice.toFixed(2)
             },
             () => {
               // this.applyPromationCode(this.state.promotionCode);

@@ -28,3 +28,15 @@ export function getNoResultsData(filterParams = {}) {
     })
   });
 }
+
+export function getRebuild(filterParams = {}) {
+  return Fetch<TResult>('/esIndex/rebuild', {
+    method: 'POST',
+  });
+}
+
+export function getRepair(filterParams = {}) {
+  return Fetch<TResult>('/esIndex/repair', {
+    method: 'POST',
+  });
+}

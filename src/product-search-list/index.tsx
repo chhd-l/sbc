@@ -140,7 +140,6 @@ export default class ProductSearchList extends React.Component<any, any> {
           allLoading: false,
           loading: false
         });
-        message.success(res.message);
       });
   }
 
@@ -167,7 +166,6 @@ export default class ProductSearchList extends React.Component<any, any> {
           allLoading: false,
           loading: false
         });
-        message.success(res.message);
       });
   }
 

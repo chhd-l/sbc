@@ -20,7 +20,7 @@ podTemplate(label: label, cloud: 'kubernetes',
             ttyEnabled: true,
             alwaysPullImage: true,
             resourceRequestCpu: '300m',
-            resourceRequestMemory: '2000Mi'
+            resourceRequestMemory: '4000Mi'
             )
     ],
     volumes: [

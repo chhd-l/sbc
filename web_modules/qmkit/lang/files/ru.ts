@@ -14,7 +14,7 @@ export default {
   'Public.R': 'R',
   'Public.Storeportal': 'Магазин',
   'Public.LoginAccount': 'Логин',
-  'Public.RoyalCaninSAS2020': 'Royal Canin SAS 2020',
+  'Public.RoyalCaninSAS2020': 'Royal Canin SAS 2021',
   'Public.Pleaseinputyour': 'Введите Логин',
   'Public.Login': 'Логин',
   'Public.UnderReview': 'В процессе рассмотрения',

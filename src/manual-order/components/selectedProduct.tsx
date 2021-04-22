@@ -54,7 +54,7 @@ export default class SelectedProduct extends React.Component<any, any> {
     if (name === 'subscriptionStatus' && e === 0) {
       row['periodTypeId'] = 0;
     } else if (name === 'subscriptionStatus' && e === 1) {
-      row.periodTypeId = row.periodTypeId ? row.periodTypeId : options[0].id
+      row.periodTypeId = row.periodTypeId ? row.periodTypeId : row?.options[0]?.id
     }
     row[name] = e;
     this.setState({
@@ -209,7 +209,10 @@ export default class SelectedProduct extends React.Component<any, any> {
           // let value=record.goodsInfoFlag===1?(text?text:options[0].id):null
 
           return record.goodsInfoFlag === 1 ? (
-            <Select style={{ width: 100 }} value={text} getPopupContainer={(trigger: any) => trigger.parentNode} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
+            <Select style={{ width: 100 }} 
+            value={text} getPopupContainer={(trigger: any) => trigger.parentNode} 
+            placeholder="Select a person" optionFilterProp="children" 
+            onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
               {record.options.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}

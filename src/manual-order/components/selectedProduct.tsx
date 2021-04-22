@@ -63,7 +63,7 @@ export default class SelectedProduct extends React.Component<any, any> {
     await updateGoodsInfoCarts(this.props.storeId, {
       periodTypeId: row.periodTypeId,
       subscriptionStatus: row.subscriptionStatus,
-      goodsInfoFlag: row.subscriptionStatus,
+      goodsInfoFlag: row.goodsInfoFlag,
       goodsNum: row.buyCount,
       goodsInfoId: row.goodsInfoId,
       customerId: customer.customerId,
@@ -192,7 +192,7 @@ export default class SelectedProduct extends React.Component<any, any> {
 
         render: (text, record, index) => {
           return (
-            <Select style={{ width: 100 }} value={record.goodsInfoFlag} getPopupContainer={(trigger: any) => trigger.parentNode} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
+            <Select style={{ width: 100 }} value={[1,2].includes(record.goodsInfoFlag)?1:0} getPopupContainer={(trigger: any) => trigger.parentNode} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
               { record.subscriptionStatus === 1 && (<Option value={1}>Y</Option>)}
               <Option value={0}>N</Option>
             </Select>

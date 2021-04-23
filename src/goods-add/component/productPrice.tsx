@@ -351,11 +351,11 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
-        console.log(rowInfo,666);
         let marketPrice = 0
         let subscriptionPrice = 0
-        if(goods.get('goodsId') == null && this.state.priceType == false) {
-          console.log(rowInfo.marketPrice,77777)
+        marketPrice = rowInfo.marketPrice
+        subscriptionPrice = rowInfo.subscriptionPrice
+        /*if(goods.get('goodsId') == null && this.state.priceType == false) {
 
           if (goodsList.toJS().length == 1 && rowInfo.goodsInfoBundleRels.length == 1) {
             marketPrice = rowInfo.marketPrice
@@ -367,7 +367,7 @@ class SkuForm extends React.Component<any, any> {
         }else {
           marketPrice = rowInfo.marketPrice
           subscriptionPrice = rowInfo.subscriptionPrice
-        }
+        }*/
 
         return (
           <Row>

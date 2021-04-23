@@ -5,6 +5,7 @@ import { InputNumber, Popconfirm, Table, Tooltip } from 'antd';
 const Column = Table.Column;
 import styled from 'styled-components';
 import { Relax } from 'plume2';
+import { RCi18n } from 'qmkit';
 declare type IList = List<any>;
 
 import moment from 'moment';
@@ -74,13 +75,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
       <TableRow>
         <DataGrid scroll={{ y: 500 }} size="small" rowKey="goodsInfoNo" dataSource={productselect instanceof Array ? productselect : []} pagination={false}>
 
-          <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
-          <Column title="SPU" dataIndex="goods.goodsNo" key="goods.goodsNo" />
-          <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title="Product category" dataIndex="goods.cateName" key="goods.cateName" />
-          <Column title="Sales category" dataIndex="goods.brandName" key="goods.brandName" />
+          <Column title={RCi18n({id:'Prescriber.Product Name'})} dataIndex="goodsInfoName" key="goodsInfoName" />
+          <Column title={RCi18n({id:'Prescriber.SPU'})} dataIndex="goods.goodsNo" key="goods.goodsNo" />
+          <Column title={RCi18n({id:'Prescriber.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" />
+          <Column title={RCi18n({id:'Prescriber.Product category'})} dataIndex="goods.cateName" key="goods.cateName" />
+          <Column title={RCi18n({id:'Prescriber.Sales category'})} dataIndex="goods.brandName" key="goods.brandName" />
           <Column
-            title="Price"
+            title={RCi18n({id:'Prescriber.Price'})}
             dataIndex="marketPrice"
             render={(value) => {
               if (value) {
@@ -91,9 +92,9 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }}
             key="marketPrice"
           />
-          <Column title='Weight (g)' dataIndex="goodsInfoWeight" key="goodsInfoWeight" 
+          <Column title={RCi18n({id:'Prescriber.Weight'})} dataIndex="goodsInfoWeight" key="goodsInfoWeight" 
           />
-          <Column title="Quantity" key="quantity" dataIndex="quantity"
+          <Column title={RCi18n({id:'Prescriber.Quantity'})} key="quantity" dataIndex="quantity"
             render={(value, row, index) => {
               return (<InputNumber
                 min={1}
@@ -107,13 +108,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
 
           />
           <Column
-            title="Operation"
+            title={RCi18n({id:'Prescriber.operation'})}
             dataIndex="Operation"
             key="Operation"
             render={(text, record, index) => {
               return (
-                <Popconfirm placement="topLeft" title="Are you sure you want to delete this product?" onConfirm={() => this.deleteCartsGood(index)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Delete">
+                <Popconfirm placement="topLeft" title={RCi18n({id:'Prescriber.deletethisproduct'})} onConfirm={() => this.deleteCartsGood(index)} okText="Confirm" cancelText="Cancel">
+                  <Tooltip placement="top" title={RCi18n({id:'Prescriber.Delete'})}>
                     <a>
                       <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 16 }} className="icon iconfont iconDelete"></span>
                     </a>

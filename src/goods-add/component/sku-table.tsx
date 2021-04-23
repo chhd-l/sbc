@@ -525,7 +525,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title:
         <div>
-          Subscription type
+         <FormattedMessage id="Product.subscriptionType"/>
         </div>
       ,
       key: 'promotions',
@@ -539,10 +539,10 @@ class SkuForm extends React.Component<any, any> {
                          style={{ width: 100 }}
                          defaultValue={rowInfo.promotions}
                          getPopupContainer={() => document.getElementById('page-content')}
-                         placeholder="please select type"
+                         placeholder={<FormattedMessage id="Product.selectType" />}
                          disabled={goods.get('promotions') == 'autoship'} >
-                  <Option value='autoship'>Auto ship</Option>
-                  <Option value='club'>Club</Option>
+                  <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
+                  <Option value='club'><FormattedMessage id="Product.Club" /></Option>
                 </Select>
 
               </FormItem>

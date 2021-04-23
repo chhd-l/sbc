@@ -908,7 +908,7 @@ export default {
   'Order.Select':'Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not',
   'Order.PaymentCategory':'Payment category',
   'Order.Cash':'Cash',
-  'Order.OrderExpirationTime':'OrdOrder expiration time',
+  'Order.OrderExpirationTime':'Order expiration time',
   'Order.AfterHours':'After hours, if the customer fails to pay overdue, the order will be automatically voided.',
   'Order.Automatically':'Automatically confirm receipt of order',
   'Order.AfterDays':'After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.',

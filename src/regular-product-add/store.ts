@@ -799,7 +799,8 @@ export default class AppStore extends Store {
    * 添加规格
    */
   addSpec = () => {
-    this.dispatch('goodsSpecActor: addSpec');
+    console.log(this.state().get('goods')&&this.state().get('goods').toJS(),112);
+    this.dispatch('goodsSpecActor: addSpec', this.state().get('goods'));
   };
 
   /**
@@ -1311,7 +1312,6 @@ export default class AppStore extends Store {
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
     goods = goods.set('goodsCubage', '1'); // for hide 物流表单
-debugger
     param = param.set('goods', goods);
 
     // -----商品相关图片-------

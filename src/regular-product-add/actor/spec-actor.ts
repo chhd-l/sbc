@@ -213,13 +213,14 @@ export default class GoodsSpecActor extends Actor {
    * 添加规格
    */
   @Action('goodsSpecActor: addSpec')
-  addSpec(state) {
+  addSpec(state, promotions) {
     let goodsSpecs = state.get('goodsSpecs');
     const random = this._getRandom();
     const spec = fromJS({
       specId: random,
       mockSpecId: random,
       isMock: true,
+      promotions,
       specName: 'specification' + (goodsSpecs.count() + 1),
       specValues: []
     });
@@ -292,7 +293,6 @@ export default class GoodsSpecActor extends Actor {
       const sku = goodsList.find((sku) => sku.get('skuSvIds') == skuSvIds);
       return sku ? o.mergeDeep(sku.set('index', o.get('index'))) : o;
     });
-
     return resultArray;
   };
 
@@ -341,16 +341,19 @@ export default class GoodsSpecActor extends Actor {
    */
   _convertSpev = (spec: IMap) => {
     return spec.get('specValues').map((item, index) => {
+      let b = spec.toJS()
+      const promotions  = spec.get('promotions');
       const specId = 'specId-' + spec.get('specId');
       const specDetailId = 'specDetailId-' + spec.get('specId');
       const goodsInfoNo = this._randomGoodsInfoNo();
+      //debugger
       return Map({
         [specId]: item.get('detailName'),
         [specDetailId]: item.get('specDetailId'),
         id: this._getRandom(),
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
-        promotions: 'autoship',
+        promotions: item.get('goodsPromotions') == 'club' ? 'club' : 'autoship',
         addedFlag: 1,
         skuSvIds: [item.get('specDetailId')]
       });

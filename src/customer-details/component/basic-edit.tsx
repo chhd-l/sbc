@@ -48,8 +48,8 @@ class BasicEdit extends React.Component<any, any> {
   }
   componentDidMount() {
     this.getBasicDetails();
-    this.getDict();
-    this.getClinicList();
+    // this.getDict();
+    // this.getClinicList();
   }
 
   getDict = async () => {
@@ -435,7 +435,7 @@ class BasicEdit extends React.Component<any, any> {
                         </Select>
                       )
                     ) : (
-                      <span>{customer.countryId && countryList.findIndex((c) => c.id === customer.countryId) > -1 ? countryList.find((c) => c.id === customer.countryId)['name'] : ''}</span>
+                      <span>{customer.country}</span>
                     )}
                   </FormItem>
                 </Col>

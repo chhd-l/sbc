@@ -39,7 +39,7 @@ export default class SelectedProduct extends React.Component<any, any> {
 
   componentDidMount() {
     this.querySysDictionary();
-    this.getGoodsInfoCartsList()
+  
   }
   /**
    * 
@@ -53,17 +53,24 @@ export default class SelectedProduct extends React.Component<any, any> {
     const { options } = this.state
     if (name === 'subscriptionStatus' && e === 0) {
       row['periodTypeId'] = 0;
+      row.goodsInfoFlag=0
     } else if (name === 'subscriptionStatus' && e === 1) {
       row.periodTypeId = row.periodTypeId ? row.periodTypeId : row?.options[0]?.id
+      if(row.promotions==='club'){
+        row.goodsInfoFlag=2
+      }else{
+        row.goodsInfoFlag=1
+      }
     }
     row[name] = e;
     this.setState({
       loading: true
     });
+   
     await updateGoodsInfoCarts(this.props.storeId, {
       periodTypeId: row.periodTypeId,
       subscriptionStatus: row.subscriptionStatus,
-      goodsInfoFlag: row.subscriptionStatus,
+      goodsInfoFlag: row.goodsInfoFlag,
       goodsNum: row.buyCount,
       goodsInfoId: row.goodsInfoId,
       customerId: customer.customerId,
@@ -122,12 +129,12 @@ export default class SelectedProduct extends React.Component<any, any> {
     let club_months = result[3].res?.context?.sysDictionaryVOS ?? [];
     let options = [...months, ...weeks];
     let clubOptions= [...club_months, ...club_weeks];
-    this.setState(
-      {
+    this.setState( {
         options,
         clubOptions
-      }
-    );
+      },()=>{
+        this.getGoodsInfoCartsList()
+      });
   }
   /**
    *
@@ -192,7 +199,7 @@ export default class SelectedProduct extends React.Component<any, any> {
 
         render: (text, record, index) => {
           return (
-            <Select style={{ width: 100 }} value={record.goodsInfoFlag} getPopupContainer={(trigger: any) => trigger.parentNode} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
+            <Select style={{ width: 100 }} value={[1,2].includes(record.goodsInfoFlag)?1:0} getPopupContainer={(trigger: any) => trigger.parentNode} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
               { record.subscriptionStatus === 1 && (<Option value={1}>Y</Option>)}
               <Option value={0}>N</Option>
             </Select>
@@ -205,10 +212,10 @@ export default class SelectedProduct extends React.Component<any, any> {
         key: 'periodTypeId',
 
         render: (text, record, index) => {
-
+          console.log(record,'========')
           // let value=record.goodsInfoFlag===1?(text?text:options[0].id):null
 
-          return record.goodsInfoFlag === 1 ? (
+          return [1,2].includes(record.goodsInfoFlag) ? (
             <Select style={{ width: 100 }} 
             value={text} getPopupContainer={(trigger: any) => trigger.parentNode} 
             placeholder="Select a person" optionFilterProp="children" 

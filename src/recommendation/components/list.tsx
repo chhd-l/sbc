@@ -9,6 +9,8 @@ import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
+import { RCi18n } from 'qmkit';
+
 type TList = List<any>;
 
 class RejectForm extends React.Component<any, any> {
@@ -26,11 +28,11 @@ class RejectForm extends React.Component<any, any> {
               },
               {
                 max: 100,
-                message: <FormattedMessage id="Prescriber.lessthan100characters" />
+                message: <FormattedMessage id="Prescriber.lessthan100characters"/>
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={RCi18n({id:'Prescriber.EnterTheReason'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -122,7 +124,7 @@ class ListView extends React.Component<any, any> {
                   <thead className="ant-table-thead">
                     <tr>
                       <th style={{ width: '11%' }}>
-                        <FormattedMessage id="productFirstLetterUpperCase" />
+                        <FormattedMessage id="Prescriber.Product" />
                       </th>
                       <th style={{ width: '12%' }}><FormattedMessage id="Prescriber.PO Name"/></th>
                       <th style={{ width: '13.5%' }}><FormattedMessage id="Prescriber.PO E-mail"/></th>
@@ -141,7 +143,7 @@ class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="Prescriber.No data" />
                   </span>
                 </div>
               ) : null}
@@ -158,7 +160,7 @@ class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
+          <Modal maskClosable={false} title={<FormattedMessage id="Prescriber.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;
@@ -182,11 +184,11 @@ class ListView extends React.Component<any, any> {
 
   handleCopy = (value) => {
     if(!value){
-      message.error('copylink failed.');
+      message.error(<FormattedMessage id="Prescriber.copylink failed"/>);
       return 
     }
     if (copy(value)) {
-      message.success('Operate successfully');
+      message.success(<FormattedMessage id="Prescriber.Operate successfully"/>);
     }
   }
   newUrl = (oldUrl) => {
@@ -297,7 +299,7 @@ class ListView extends React.Component<any, any> {
                       justifyContent: 'space-around',
                       alignItems: 'center'
                     }}>
-                    <Tooltip placement="top" title="edit" >
+                    <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Edit"/>}>
                       <Icon type="form" 
                        onClick={() =>
                         history.push({
@@ -307,13 +309,13 @@ class ListView extends React.Component<any, any> {
                       />
 
                     </Tooltip>
-                    <Tooltip placement="top" title="download pdf">
+                    <Tooltip placement="top" title={<FormattedMessage id="Prescriber.download pdf"/>}>
                      
                       <a href={`/api/felinReco/export/${v.felinRecoId}`} target="_blank">
                       <Icon type="cloud-download" />
                       </a>
                     </Tooltip>
-                    <Tooltip placement="top" title="copied link">
+                    <Tooltip placement="top" title={<FormattedMessage id="Prescriber.copied link"/>}>
                     <Icon type="link"  onClick={() => this.handleCopy(this.newUrl(v.linkAddr))} />
                     </Tooltip>
                     </div>
@@ -346,8 +348,8 @@ class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = (window as any).RCi18n({id:'order.review'});
-    const content = (window as any).RCi18n({id:'order.confirmReview'});
+    const title = (window as any).RCi18n({id:'Prescriber.review'});
+    const content = (window as any).RCi18n({id:'Prescriber.confirmReview'});
     confirm({
       title: title,
       content: content,
@@ -378,8 +380,8 @@ class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: 'Confirm receipt',
-      content: 'Confirm that all products have been received?',
+      title:<FormattedMessage id="Prescriber.Confirm receipt" />,
+      content:<FormattedMessage id="Prescriber.confirmReceivedAllProducts" />,
       onOk() {
         onConfirm(tdId);
       },

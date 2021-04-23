@@ -124,13 +124,13 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                         {k === 0 && (
                           <>
                             <td rowSpan={item.goodsInfo.length} style={{ width: '20%' }}>
-                              {item.petsInfo && item.petsInfo.petSourceId ? item.petsInfo.petSourceId : ''}
+                              {item.petsInfo && item.petsInfo.petsId ? item.petsInfo.petsId : ''}
                             </td>
                             <td rowSpan={item.goodsInfo.length} style={{ width: '10%' }}>
                               {item.petsInfo && item.petsInfo.petsName ? item.petsInfo.petsName : ''}
                             </td>
                             <td rowSpan={item.goodsInfo.length} style={{ width: '10%' }}>
-                              {item.subscribeStatus === '0' ? 'Active' : 'Inactive'}
+                              {item.subscribeStatus === '0' ? 'Active' : item.subscribeStatus === '1' ? 'Pause' : 'Inactive'}
                             </td>
                           </>
                         )}
@@ -143,9 +143,9 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                     <td style={{ width: '15%' }}></td>
                     <td style={{ width: '10%' }}></td>
                     <td style={{ width: '10%' }}></td>
-                    <td style={{ width: '20%' }}>{item.petsInfo && item.petsInfo.petSourceId ? item.petsInfo.petSourceId : ''}</td>
+                    <td style={{ width: '20%' }}>{item.petsInfo && item.petsInfo.petsId ? item.petsInfo.petsId : ''}</td>
                     <td style={{ width: '10%' }}>{item.petsInfo && item.petsInfo.petsName ? item.petsInfo.petsName : ''}</td>
-                    <td style={{ width: '10%' }}>{item.subscribeStatus === '0' ? 'Active' : 'Inactive'}</td>
+                    <td style={{ width: '10%' }}>{item.subscribeStatus === '0' ? 'Active' : item.subscribeStatus === '1' ? 'Pause' : 'Inactive'}</td>
                   </tr>
                 )}
               </tbody>

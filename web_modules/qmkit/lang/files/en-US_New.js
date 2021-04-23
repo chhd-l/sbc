@@ -4,7 +4,10 @@
 export default {
     Public: {},
     Home: {},
-    Product: {},
+    Product: {
+        'Product.Notification': 'Notification',
+        'Product.deleteTip': 'Are you sure to batch delete selected products?'
+    },
     Order: {
        'Order.tradeType': 'Trade Type'
     },

@@ -53,7 +53,8 @@ export default class AppointmentList extends React.Component<any, any> {
           pagination: {
             ...pagination,
             total: data.res.context.page.total
-          }
+          },
+          selectedRowKeys: []
         });
       })
       .catch(() => {

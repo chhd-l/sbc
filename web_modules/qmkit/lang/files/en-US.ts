@@ -1,11 +1,16 @@
-import {FormattedMessage} from "react-intl";
-import React from "react";
-import { Breadcrumb, Button, Checkbox, Radio } from 'antd';
-
+import en_US_New from './en-US_New';
+let enUsNew = {};
+Object.keys(en_US_New).forEach(key => {
+  enUsNew = {
+    ...en_US_New[key],
+    ...enUsNew
+  }
+});
 /**
  * 多语言英文
  */
 export default {
+  ...enUsNew,
   /*-------------------------------- Public ---------------------------------------------*/
   'Public.Overview':'Overview',
   'Public.WelcometoROYALCANIN':'Welcome to ROYALCANIN',
@@ -16,7 +21,7 @@ export default {
   'Public.R':'R',
   'Public.Storeportal':'Store portal',
   'Public.LoginAccount':'Login Account',
-  'Public.RoyalCaninSAS2020':'Royal Canin SAS 2021',
+  'Public.RoyalCaninSAS2020':'Royal Canin SAS 2020',
   'Public.Pleaseinputyour':'Please input your login account',
   'Public.Login':'Login',
   'Public.UnderReview':'Under Review',
@@ -140,8 +145,9 @@ export default {
   'Public.Reminder100records':'Reminder: up to 100 records',
   "Public.GetDataFailed": 'Get Data Failed',
   /* -------- 已翻译 V2.0---------------*/
-  'Public.ClientID Input': 'Please input StoreId-ClientId',
-  'Public.ClientName': 'Client Name',
+ 
+
+
   /*-----------------------------  Menu -----------------------------------------------*/
   'Menu.Home':'Home',
   'Menu.Product':'Product',
@@ -872,8 +878,6 @@ export default {
 
 
   /*-----------------------------  Order  --------------------------------------------*/
-  'Order.number':'Order number',
-  'Order.subscriptionNumber':'Subscription number',
   'Order.AuditSetting':'Audit Setting',
   'Order.AutoAudit':'Auto audit',
   'Order.ManualAudit':'Manual audit',
@@ -904,7 +908,7 @@ export default {
   'Order.Select':'Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not',
   'Order.PaymentCategory':'Payment category',
   'Order.Cash':'Cash',
-  'Order.OrderExpirationTime':'OrdOrder expiration time',
+  'Order.OrderExpirationTime':'Order expiration time',
   'Order.AfterHours':'After hours, if the customer fails to pay overdue, the order will be automatically voided.',
   'Order.Automatically':'Automatically confirm receipt of order',
   'Order.AfterDays':'After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.',
@@ -1393,7 +1397,6 @@ export default {
   'Order.contractProduct':'Contract product',
   'Order.club':'Club',
   'Order.autoship':'Autoship',
-  'Order.Cat&Dog':'Cat & Dog',
   'Order.fgs':'FGS',
   'Order.felin':`L'Atelier Felin`,
   'Order.subscriptionType':'Subscription type',
@@ -1693,7 +1696,8 @@ export default {
   'Order.returnList':'Return list',
   'Order.refundableAmountTips':'The remaining refundable amount of this order is: ',
   'Order.refundableAmountTips2':'The refund amount should not be greater than the refundable amount. Please modify it.',
-  'Order.tradeType': 'Trade Type',
+  'Order.Cat&Dog':'Cat & Dog',
+  'Order.number':'Order number',
 
 
   /*-----------------------------  Task  ----------------------------------------------*/
@@ -1735,7 +1739,7 @@ export default {
   'task.TaskDetails':'Task Details',
   'task.Pleaseinputname':'Please input name',
   'task.Pleaseinputemail':'Please input email',
-  'task.Pleaseinputemailorname': 'Please input email or name',
+  'task.Pleaseinputemailorname': 'Please input email or name',
   'task.Pleaseinputordercode':'Please input order code',
   'task.Pleaseselectstarttime': 'Please select start time',
   'task.Pleaseselectduetime': 'Please select due time',
@@ -2384,33 +2388,6 @@ export default {
   'PetOwner.levelBadge':'Type badge',
   'PetOwner.consumerLevel':'Pet owner type',
   /* -------- 已翻译 V1.0---------------*/
-  "PetOwner.Member": "Member",
-  "PetOwner.Guest": "Guest",
-  "PetOwner.PetownerList": "Pet owner list",
-  'PetOwner.subscriptionType':'Subscription type',
-  "PetOwner.Club": "Club",
-  "PetOwner.Cat": "Cat",
-  "PetOwner.Dog": "Dog",
-  "PetOwner.FoodDispenser": "Food dispenser",
-  "PetOwner.Autoship": "Autoship",
-  'PetOwner.PetOwneractivity':'Pet owner activity',
-  'PetOwner.createOrder': 'Create Order',
-  'PetOwner.PetOwnerOverview':'Pet Owner Overview',
-  "PetOwner.ViewAll": "View All",
-  "PetOwner.Account": "Account",
-  "PetOwner.Location": "Location",
-  "PetOwner.Phone": "Phone",
-  "PetOwner.Taggings": "Taggings",
-  "PetOwner.Pets": "Pets",
-  "PetOwner.ID": "ID",
-  "PetOwner.Task": "Task",
-  "PetOwner.Emails": "Emails",
-  "PetOwner.Activities": "Activities",
-  "PetOwner.AddComment": "Add Comment",
-  "PetOwner.AddTask": "Add Task",
-  "PetOwner.Keyword": "Keyword",
-  "PetOwner.TaskStatus": "Task Status",
-  "PetOwner.GoldenMoment": "GoldenMoment",
 
 
 
@@ -2871,7 +2848,6 @@ export default {
   'Marketing.PomotionCodehasexited.': 'Pomotion Code has exited.',
   'Marketing.Freeshipping': 'Free shipping',
   'Marketing.Singlepurchase': 'Single purchase',
-  'Marketing.Automationlist': 'Automation list',
 
 
 
@@ -3028,6 +3004,63 @@ export default {
   'Prescriber.Created Time':'Created Time:',
   'Prescriber.lessthan100characters':'Please input less than 100 characters:',
   'Prescriber.thereasonforrejection':'Please enter the reason for rejection:',
+  'Prescriber.Product':'Product',
+  'Prescriber.No data':'No data',
+  'Prescriber.rejectionReasonTip':'Please enter the reason for rejection',
+  'Prescriber.copylink failed':'copylink failed',
+  'Prescriber.Operate successfully':'Operate successfully',
+  'Prescriber.review':'Review',
+  'Prescriber.confirmReview':'Are you sure you want to return the selected order for reconsideration?',
+  'Prescriber.download pdf':'Download pdf',
+  'Prescriber.copied link':'Copied link',
+  'Prescriber.Confirm receipt':'Confirm receipt',
+  'Prescriber.confirmReceivedAllProducts':'Confirm that all products have been received?',
+  'Prescriber.EnterTheReason':'Please enter the reason for rejection',
+  'Prescriber.Recommendation No':'Recommendation No',
+  'Prescriber.Product name':'Product name',
+  'Prescriber.New':'New',
+  'Prescriber.needsToBeOperated':'Please select the order that needs to be operated',
+  'Prescriber.audit':'Audit',
+  'Prescriber.confirmAudit':'Confirm to review the selected order?',
+  'Prescriber.exportFilterOrder':'Export filtered orders',
+  'Prescriber.exportSelectedOrder':'Export selected order',
+  'Prescriber.New Prescription':'New Prescription',
+  'Prescriber.Chooseyourrole':'Choose your role',
+  'Prescriber.FillinPetInfo':'Fill in Pet Info',
+  'Prescriber.Choose Product':'Choose Product',
+  'Prescriber.Write Tips':'Write Tips',
+  'Prescriber.Previous':'Previous',
+  'Prescriber.Next':'Next',
+  'Prescriber.Done':'Done',
+  'Prescriber.Role':'Role',
+  'Prescriber.SelectRecommendedProduct':'Select Recommended Product',
+  'Prescriber.Add Product':'Add Product',
+  'Prescriber.apptNowasnotfind':'scan error,apptNo was not find.',
+  'Prescriber.Date':'Date:',
+  'Prescriber.selectfillDate':'Please select fillDate!',
+  'Prescriber.Expert name':'Expert name：',
+  'Prescriber.pour':'pour:',
+  'Prescriber.Informationsurlechat':'Information sur le chat:',
+  'Prescriber.Name：':'Name:',
+  'Prescriber.inputpetName':'Please input pet Name',
+  'Prescriber.Gender':'Gender!',
+  'Prescriber.selectGender':'Please select Gender!',
+  'Prescriber.Female':'Female',
+  'Prescriber.Male':'Male',
+  'Prescriber.Dateofbirth':'Date of birth:',
+  'Prescriber.selectDateofbirth:':'Please select Date of birth!',
+  'Prescriber.Breed':'Breed:',
+  'Prescriber.selectBreed':'Please select Breed',
+  'Prescriber.inputyourBreed':'Please input your Breed',
+  'Prescriber.Sensitvities':'Sensitvities:',
+  'Prescriber.Lifestyle':'Lifestyle',
+  'Prescriber.Activity':'Activity:',
+  'Prescriber.Weight':'Weight',
+  'Prescriber.inputWeight':'Please input Weight!',
+  'Prescriber.Sterilzed':'Sterilzed',
+  'Prescriber.selectSterilzed':'Please select Sterilzed!',
+  'Prescriber.Yes':'Yes',
+  'Prescriber.No':'No',
   /*-----------------------------  Analysis  ----------------------------------------*/
   'Analysis.ProductReport':'Product Report',
   'Analysis.Search':'Search',

@@ -2,6 +2,7 @@ import { Checkbox, Form, Input, Spin } from 'antd';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
 import React from 'react';
+import { RCi18n } from 'qmkit';
 
 @Relax
 export default class PaymentInformation extends React.Component<any, any> {
@@ -52,14 +53,14 @@ export default class PaymentInformation extends React.Component<any, any> {
       <div>
          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} >
         <Form >
-          <Form.Item label="What we suggest/ recommend for your cat">
+          <Form.Item label={RCi18n({id:'Prescriber.suggestforyourcat'})}>
             {getFieldDecorator('suggest', {
              initialValue: felinReco.suggest || '',
               onChange: (e) => this._onChange(e, 'suggest'),
             })(<Input.TextArea rows={4} placeholder="Input" />)}
 
           </Form.Item>
-          <Form.Item label="We recommend to you the following optimal nutrition">
+          <Form.Item label={RCi18n({id:'Prescriber.followingoptimalnutrition'})}>
             {getFieldDecorator('optimal', {
               initialValue: felinReco.optimal || '',
               onChange: (e) => this._onChange(e, 'optimal'),
@@ -67,7 +68,7 @@ export default class PaymentInformation extends React.Component<any, any> {
             })(<Input.TextArea rows={4} placeholder="Input" />)}
 
           </Form.Item>
-          <Form.Item label="Paris (Y/N)" {...formItemLayout}>
+          <Form.Item label={RCi18n({id:'Prescriber.Paris'})} {...formItemLayout}>
             {getFieldDecorator('paris', {
               initialValue: felinReco.paris,
               onChange: (e) => this._onChange(e, 'paris',true),
@@ -75,7 +76,7 @@ export default class PaymentInformation extends React.Component<any, any> {
             })(<Checkbox checked={felinReco.paris}/>)}
 
           </Form.Item>
-          <Form.Item label="Pick up (Y/N)"  {...formItemLayout}>
+          <Form.Item label={RCi18n({id:'Prescriber.Pick up'})}  {...formItemLayout}>
             {getFieldDecorator('pickup', {
               initialValue: felinReco.pickup,
               onChange: (e) => this._onChange(e, 'pickup',true),

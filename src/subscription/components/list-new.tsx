@@ -96,7 +96,7 @@ export default class ListView extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
+          message.success(<FormattedMessage id="Subscription.OperateSuccessfully" />);
           this.init();
         } else {
           this.setState({
@@ -114,24 +114,26 @@ export default class ListView extends React.Component<any, any> {
   modifySubStatus = (id: string, status: string) => {
     this.setState({ loading: true });
     const handler = status === '1' ? webapi.pauseSubscription : webapi.restartSubscription;
-    handler(id).then(data => {
-      if (data.res.code === Const.SUCCESS_CODE) {
-        const { dataList } = this.state;
-        dataList.forEach((item) => {
-          if (item.subscribeId === id) {
-            item.subscribeStatus = status;
-          }
-        });
-        this.setState({
-          loading: false,
-          dataList: dataList
-        });
-      } else {
+    handler(id)
+      .then((data) => {
+        if (data.res.code === Const.SUCCESS_CODE) {
+          const { dataList } = this.state;
+          dataList.forEach((item) => {
+            if (item.subscribeId === id) {
+              item.subscribeStatus = status;
+            }
+          });
+          this.setState({
+            loading: false,
+            dataList: dataList
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      })
+      .catch(() => {
         this.setState({ loading: false });
-      }
-    }).catch(() => {
-      this.setState({ loading: false });
-    });
+      });
   };
 
   render() {
@@ -160,9 +162,15 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th> */}
-                      <th style={{ width: '15%' }}><FormattedMessage id="Subscription.Product"/></th>
-                      <th style={{ width: '15%' }}><FormattedMessage id="Subscription.ProductName"/></th>
-                      <th style={{ width: '10%' }}><FormattedMessage id="Subscription.SubscriptionStatus"/></th>
+                      <th style={{ width: '15%' }}>
+                        <FormattedMessage id="Subscription.Product" />
+                      </th>
+                      <th style={{ width: '15%' }}>
+                        <FormattedMessage id="Subscription.ProductName" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="Subscription.SubscriptionStatus" />
+                      </th>
                       <th style={{ width: '10%' }}>
                         <FormattedMessage id="Subscription.consumerName" />
                       </th>
@@ -294,12 +302,14 @@ export default class ListView extends React.Component<any, any> {
                         ))}
                     </td>
                     {/*subscription status*/}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>
-                    {v.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : v.subscribeStatus === '1' ? <FormattedMessage id="Subscription.Pause" /> : <FormattedMessage id="Subscription.Inactive" />}
-                    </td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : v.subscribeStatus === '1' ? <FormattedMessage id="Subscription.Pause" /> : <FormattedMessage id="Subscription.Inactive" />}</td>
                     {/* consumerName */}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.customerName ? v.customerName : ''}</td>
-                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscriptionType ? v.subscriptionType : ''}</td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>
+                      <p style={styles.ellipsisName100} title={v.customerName ? v.customerName : ''}>
+                        {v.customerName ? v.customerName : ''}
+                      </p>
+                    </td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscriptionType ? v.subscriptionType.replace('_', ' & ') : ''}</td>
                     {/* Recipient */}
                     {/* <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.consignee ? v.consignee.consigneeName : ''}
@@ -314,21 +324,27 @@ export default class ListView extends React.Component<any, any> {
                     </td> */}
                     {/*Operation*/}
                     <td style={{ width: '15%' }} className="operation-td">
-                      <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
+                      <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail" />}>
                         <Button type="link" style={{ padding: '0 5px' }}>
                           <Link to={'/subscription-detail/' + v.subscribeId} className="iconfont iconDetails"></Link>
                         </Button>
                       </Tooltip>
                       {v.subscribeStatus === '0' ? (
-                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Edit"/>}>
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Edit" />}>
                           <Button type="link" style={{ padding: '0 5px' }}>
                             <Link to={'/subscription-edit/' + v.subscribeId} className="iconfont iconEdit"></Link>
                           </Button>
                         </Tooltip>
                       ) : null}
                       {v.subscribeStatus === '0' ? (
-                        <Popconfirm placement="topRight" title={<FormattedMessage id="Subscription.AreYouSureCancel"/>} onConfirm={() => this.cancelAll(v.subscribeId)} okText={<FormattedMessage id="Subscription.Confirm"/>}cancelText={<FormattedMessage id="Subscription.Cancel"/>}>
-                          <Tooltip placement="top" title={<FormattedMessage id="Subscription.CancelAll"/>}>
+                        <Popconfirm
+                          placement="topRight"
+                          title={<FormattedMessage id="Subscription.AreYouSureCancel" />}
+                          onConfirm={() => this.cancelAll(v.subscribeId)}
+                          okText={<FormattedMessage id="Subscription.Confirm" />}
+                          cancelText={<FormattedMessage id="Subscription.Cancel" />}
+                        >
+                          <Tooltip placement="top" title={<FormattedMessage id="Subscription.CancelAll" />}>
                             <a type="link" style={{ padding: '0 5px' }} className="iconfont iconbtn-cancelall">
                               {/*Cancel all*/}
                             </a>
@@ -336,14 +352,14 @@ export default class ListView extends React.Component<any, any> {
                         </Popconfirm>
                       ) : null}
                       {v.subscribeStatus === '0' ? (
-                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Pause"/>}>
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Pause" />}>
                           <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '1')}>
                             <i className="iconfont iconbtn-pause"></i>
                           </Button>
                         </Tooltip>
                       ) : null}
                       {v.subscribeStatus === '1' ? (
-                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Restart"/>}>
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Restart" />}>
                           <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '0')}>
                             <i className="iconfont iconbtn-open"></i>
                           </Button>
@@ -422,5 +438,11 @@ const styles = {
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     width: 150
+  },
+  ellipsisName100: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 100
   }
 } as any;

@@ -6,7 +6,21 @@ export default {
     Home: {},
     Product: {
         'Product.Notification': 'Notification',
-        'Product.deleteTip': 'Are you sure to batch delete selected products?'
+        'Product.deleteTip': 'Are you sure to batch delete selected products?',
+        'Product.subscriptionType': 'Subscription type',
+        'Product.selectType': 'please select type',
+        'Product.Auto ship': 'Auto ship',
+        'Product.Club': 'Club',
+        'Product.morethanwords': 'Please input product name，no more than 225 words',
+        'Product.Y': 'Y',
+        'Product.N': 'N',
+        'Product.selectthelastcategory': 'Please select the last category',
+        'Product.Nosalescategory': 'No sales category',
+        'Product.itemcardintro': 'Please input the item card intro., no more than 5000 words',
+        'Product.itemsubtitle': 'Please input the item subtitle, no more than 5000 words',
+        'Product.Displayonshop': 'Display on shop',
+        'Product.suretoswitch': 'The product is participating in corporate purchasing and distribution activities, switching to wholesale mode, will exit corporate purchasing and distribution activities, sure to switch?',
+        'Product.selectstatus': 'please select status',
     },
     Order: {
        'Order.tradeType': 'Trade Type'

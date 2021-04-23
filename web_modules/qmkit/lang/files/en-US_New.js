@@ -8,7 +8,9 @@ export default {
         'Product.Notification': 'Notification',
         'Product.deleteTip': 'Are you sure to batch delete selected products?'
     },
-    Order: {},
+    Order: {
+       'Order.tradeType': 'Trade Type'
+    },
     Subscription: {},
     Appointment: {},
     Prescriber: {},

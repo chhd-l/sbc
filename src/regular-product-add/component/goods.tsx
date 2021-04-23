@@ -412,7 +412,7 @@ class GoodsForm extends React.Component<any, any> {
                 // initialValue: 'Y'
                 initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') === 0 ? goods.get('subscriptionStatus') : 1
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} disabled={goods.get('displayFlag') == 0 ? true : false} placeholder={RCi18n({id:'Product.selectstatus'})}>
+                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder={RCi18n({id:'Product.selectstatus'})}>
                   <Option value={1}><FormattedMessage id="Product.Y"/></Option>
                   <Option value={0}><FormattedMessage id="Product.N"/></Option>
                 </Select>
@@ -896,16 +896,16 @@ class GoodsForm extends React.Component<any, any> {
         let goods = Map({
           subscriptionStatus: fromJS(0)
         });
-        editGoods(goods);
+        //editGoods(goods);
         editGoodsItem(goods);
-        setFieldsValue({ subscriptionStatus: 0 });
+        //setFieldsValue({ subscriptionStatus: 0 });
       } else {
         let goods = Map({
           subscriptionStatus: fromJS(1)
         });
-        editGoods(goods);
+        //editGoods(goods);
         editGoodsItem(goods);
-        setFieldsValue({ subscriptionStatus: 1 });
+        //setFieldsValue({ subscriptionStatus: 1 });
       }
     }
 

@@ -117,7 +117,9 @@ export default class ProductPrice extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.WrapperForm = Form.create({})(SkuForm);
-    this.state = {};
+    this.state = {
+      priceType: false
+    };
   }
   componentDidMount() {
     const { setDefaultBaseSpecId, getGoodsId } = this.props.relaxProps;
@@ -349,22 +351,23 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'marketPrice',
       render: (rowInfo) => {
-        console.log(rowInfo,666);
         let marketPrice = 0
         let subscriptionPrice = 0
-        if(goods.get('goodsId') == null) {
+        marketPrice = rowInfo.marketPrice
+        subscriptionPrice = rowInfo.subscriptionPrice
+        /*if(goods.get('goodsId') == null && this.state.priceType == false) {
+
           if (goodsList.toJS().length == 1 && rowInfo.goodsInfoBundleRels.length == 1) {
-            marketPrice = rowInfo.marketPrice * rowInfo.goodsInfoBundleRels[0].bundleNum
-            subscriptionPrice = rowInfo.subscriptionPrice * rowInfo.goodsInfoBundleRels[0].bundleNum
+            marketPrice = rowInfo.marketPrice
+            subscriptionPrice = rowInfo.subscriptionPrice
           }else {
             marketPrice = rowInfo.marketPrice
             subscriptionPrice = rowInfo.subscriptionPrice
           }
         }else {
-          console.log(rowInfo.marketPrice,77777)
           marketPrice = rowInfo.marketPrice
           subscriptionPrice = rowInfo.subscriptionPrice
-        }
+        }*/
 
         return (
           <Row>
@@ -621,6 +624,9 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
+    this.setState({
+      priceType:true
+    })
 
     editGoodsItem(id, key, e);
 

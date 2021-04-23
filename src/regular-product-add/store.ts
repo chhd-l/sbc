@@ -1100,7 +1100,7 @@ export default class AppStore extends Store {
     let valid = true;
     let tip = 0;
     let goodsList = this.state().get('goodsList');
-
+    console.log(goodsList,1234);
     if (goodsList) {
       goodsList.forEach((item) => {
         if (this.state().get('goods').get('saleableFlag') != 0) {

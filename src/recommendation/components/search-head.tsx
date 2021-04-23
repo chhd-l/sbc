@@ -5,6 +5,7 @@ import { noop, AuthWrapper, checkAuth, Headline, history, SelectGroup } from 'qm
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -123,7 +124,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore="Recommendation No"
+                    addonBefore={RCi18n({id:'Prescriber.Recommendation No'})}
                     onChange={(e) => {
                       this.setState({
                         felinRecoId: (e.target as any).value
@@ -150,7 +151,7 @@ class SearchHead extends Component<any, any> {
                 {/*商品名称、SKU编码*/}
                 <FormItem>
                   <Input
-                   addonBefore="Product name"
+                   addonBefore={RCi18n({id:'Prescriber.Product name'})}
                     onChange={(e) => {
                       this.setState({
                         goodsNames: (e.target as any).value
@@ -202,7 +203,7 @@ class SearchHead extends Component<any, any> {
                         history.push('/recommendation-add');
                       }}
                     >
-                      <span>New</span>
+                      <span><FormattedMessage id="Prescriber.New" /></span>
                     </Button>
                   {/* ) : null} */}
 
@@ -225,7 +226,7 @@ class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Prescriber.search" />
                     </span>
                   </Button>
                  
@@ -266,7 +267,7 @@ class SearchHead extends Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        defaultValue="PO name"
+        defaultValue={RCi18n({id:'Prescriber.PO Name'})}
         onChange={(value, a) => {
           this.setState({
             buyerOptions: value
@@ -275,8 +276,8 @@ class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="PO name">PO Name</Option>
-        <Option value="PO e-mail">PO E-mail</Option>
+        <Option value="PO name"> <FormattedMessage id="Prescriber.PO Name" /></Option>
+        <Option value="PO e-mail"><FormattedMessage id="Prescriber.PO E-mail" /></Option>
       </Select>
     );
   };
@@ -295,13 +296,13 @@ class SearchHead extends Component<any, any> {
       .toJS();
 
     if (checkedIds.length == 0) {
-      message.error('Please select the order that needs to be operated');
+      message.error(RCi18n({id:'Prescriber.needsToBeOperated'}));
       return;
     }
 
     const confirm = Modal.confirm;
-    const title = (window as any).RCi18n({id:'order.audit'});
-    const content = (window as any).RCi18n({id:'order.confirmAudit'});
+    const title = (window as any).RCi18n({id:'Prescriber.audit'});
+    const content = (window as any).RCi18n({id:'Prescriber.confirmAudit'});
     confirm({
       title: title,
       content: content,
@@ -316,8 +317,8 @@ class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export filtered orders',
-      byIdsTitle: 'Export selected order',
+      byParamsTitle: RCi18n({id:'exportFilterOrder'}),
+      byIdsTitle: RCi18n({id:'exportSelectedOrder'}),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

@@ -16,6 +16,7 @@ import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
 import { cache, history, noop, SelectGroup } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const Option = Select.Option;
 //import moment from 'moment';
 
@@ -121,7 +122,7 @@ export default class ChooseProducts extends React.Component<any, any> {
           {/* {history.location.state
             ? 'Recommended Product List'
             : ''} */}
-            Select Recommended Product
+           <FormattedMessage id="Prescriber.SelectRecommendedProduct" />
         </div>
         <div style={styles.btn}>
           {/* {history.location.state ? null : ( */}
@@ -132,7 +133,7 @@ export default class ChooseProducts extends React.Component<any, any> {
               icon="edit"
               onClick={() => this.showProduct(true)}
             >
-              Add Product
+               <FormattedMessage id="Prescriber.Add Product" />
             </Button>
           {/* )} */}
         </div>

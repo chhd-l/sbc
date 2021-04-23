@@ -77,7 +77,7 @@ export default class MemberBar extends React.Component<any, any> {
           <Col span={10} style={{fontWeight:'bold'}}><FormattedMessage id="Order.Email" />: {memberInfo.email}</Col>
           <Col span={10} style={{fontWeight:'bold'}}><FormattedMessage id="Order.offline.consumerName" />: {memberInfo.customerName}</Col>
           <Col span={10} style={{fontWeight:'bold'}}><FormattedMessage id="Order.offline.consumerPhone" />: {memberInfo.contactPhone}</Col>
-          <Col span={24} style={{fontSize:12}}>
+          <Col span={24} style={{fontSize:12, fontWeight:'bold',color:'#e2001a'}}>
             <FormattedMessage id="Setting.consent" />:
             <Checkbox.Group value={selectedConsents} onChange={onSelectConsent}>
               {consents.map((c, idx) => <div key={idx}><Checkbox value={c.id} disabled={c.required}><div className="offline-consent-line" dangerouslySetInnerHTML={{__html:c.consentTitle}}></div></Checkbox></div>)}

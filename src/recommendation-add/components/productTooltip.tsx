@@ -7,6 +7,7 @@ import ProductGrid from './product-grid';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 @Relax
 export default class GoodsModal extends React.Component<any, any> {
@@ -80,10 +81,10 @@ export default class GoodsModal extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div>
-            Choose goods&nbsp;
+           <FormattedMessage id="Prescriber.Choose goods"/>&nbsp;
             <small>
               <span style={{ color: 'red' }}>{selectedSkuIds.length}</span>{' '}
-              items have been selected
+            <FormattedMessage id="Prescriber.itemsselected"/>
             </small>
           </div>
         }
@@ -103,8 +104,8 @@ export default class GoodsModal extends React.Component<any, any> {
         onCancel={() => {
           onCancelBackFun();
         }}
-        okText="Confirm"
-        cancelText="Cancel"
+        okText={<FormattedMessage id="Prescriber.Confirm"/>}
+        cancelText={<FormattedMessage id="Prescriber.Cancel"/>}
       >
         {
           <ProductGrid

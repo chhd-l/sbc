@@ -1007,25 +1007,35 @@ export default class AppStore extends Store {
 
           if(i == 0) {
             if ( item.get('goodsInfoBundleRels').length != 1 ) {
-              if (item.get('marketPrice') == 0) {
+              if (item.get('marketPrice') == 0 || item.get('subscriptionPrice') == null) {
                 tip = 1;
                 valid = false;
                 return;
-              }else if (item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
+              }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0)  || item.get('subscriptionPrice') == null) {
                 tip = 2;
                 valid = false;
                 return;
               }
 
+            }else {
+              if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
+                tip = 1;
+                valid = false;
+                return;
+              }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
+                tip = 2;
+                valid = false;
+                return;
+              }
             }
 
           }else {
 
-            if ( item.get('marketPrice') == 0 ) {
+            if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
               tip = 1;
               valid = false;
               return;
-            }else if (item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
+            }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
               tip = 2;
               valid = false;
               return;

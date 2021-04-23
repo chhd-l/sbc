@@ -1,4 +1,5 @@
 import es_ES from './en-US';
+import translate from './translate';
 
 /**
  * 多语言俄语
@@ -824,5 +825,5 @@ export default {
   'Subscription.Active.UnfoldedAll': 'Раскрыть все Адреса Доставки',
   'Subscription.Active.ChooseBillingAddress': 'Выбрать из Сохранённых Адресов Оплаты',
   'Subscription.Active.UnfoldedAllDeliveryAddresses': 'Раскрыть все Адреса Доставки',
-
+  ...translate.Russian,
 };

@@ -241,8 +241,7 @@ class GoodsForm extends React.Component<any, any> {
     const storeCateIds = this.state.storeCateIds;
     let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
-
-    console.log(goods.toJS(),11111111);
+    console.log(goods.toJS(),111122);
     if (storeCateIds) {
       storeCateIds.toJS().map((id) => {
         if (!parentIds.includes(id)) {
@@ -416,7 +415,7 @@ class GoodsForm extends React.Component<any, any> {
                 // initialValue: 'Y'
                 initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') === 0 ? goods.get('subscriptionStatus') : 1
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} disabled={goods.get('displayFlag') == 0 ? true : false} placeholder="please select status">
+                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
                   <Option value={1}>Y</Option>
                   <Option value={0}>N</Option>
                 </Select>
@@ -882,42 +881,49 @@ class GoodsForm extends React.Component<any, any> {
     }
 
     else if (key === 'saleableFlag') {
+      console.log(e,123);
       if (e == 0) {
         this.setState({
           saleableType: true
+
         });
         let goods = Map({
-          [key]: fromJS(1)
+          [key]: fromJS(0),
+          subscriptionStatus: fromJS(0)
         });
         editGoods(goods);
-        setFieldsValue({ saleType: 1 });
+        setFieldsValue({ saleType: 0 });
+
       } else {
         this.setState({
           saleableType: false
         });
         let goods = Map({
-          [key]: fromJS(0)
+          [key]: fromJS(1),
+          subscriptionStatus: fromJS(1)
         });
         editGoods(goods);
-        setFieldsValue({ saleType: 0 });
+        setFieldsValue({ saleType: 1 });
       }
     }
 
     else if (key === 'displayFlag') {
       if (e == 0) {
         let goods = Map({
+          [key]: fromJS(1),
           subscriptionStatus: fromJS(0)
         });
-        editGoods(goods);
+        //editGoods(goods);
         editGoodsItem(goods);
-        setFieldsValue({ subscriptionStatus: 0 });
+        //setFieldsValue({ subscriptionStatus: 0 });
       } else {
         let goods = Map({
+          [key]: fromJS(1),
           subscriptionStatus: fromJS(1)
         });
-        editGoods(goods);
+        //editGoods(goods);
         editGoodsItem(goods);
-        setFieldsValue({ subscriptionStatus: 1 });
+        //setFieldsValue({ subscriptionStatus: 1 });
       }
     }
 

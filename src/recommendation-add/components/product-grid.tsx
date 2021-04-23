@@ -4,6 +4,7 @@ import { fromJS, Set } from 'immutable';
 import { Const, DataGrid } from 'qmkit';
 import { Select, Table } from 'antd';
 import { Relax } from 'plume2';
+import { RCi18n } from 'qmkit';
 
 const Column = Table.Column;
 
@@ -115,20 +116,20 @@ export default class GoodsGrid extends React.Component<any, any> {
           }}
         >
           <Column
-            title="Product Name"
+            title={RCi18n({id:'Prescriber.Product Name'})}
             dataIndex="goodsInfoName"
             key="goodsInfoName"
             width="15%"
           />
           <Column
-            title="SPU"
+            title={RCi18n({id:'Prescriber.SPU'})}
             dataIndex="goods.goodsNo"
             key="goods.goodsNo"
             width="20%"
             //ellipsis
           />
           <Column
-            title="SKU"
+            title={RCi18n({id:'Prescriber.SKU'})}
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="20%"
@@ -136,16 +137,16 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="Product category"
+            title={RCi18n({id:'Prescriber.Product category'})}
             dataIndex="goods.cateName"
             key="goods.cateName"
             width="20%"
             // ellipsis
            
           />
-          <Column title="Sales category" key="goods.brandName" dataIndex="goods.brandName" />
+          <Column title={RCi18n({id:'Prescriber.Sales category'})} key="goods.brandName" dataIndex="goods.brandName" />
 
-          <Column title="Price" key="marketPrice" dataIndex="marketPrice" />
+          <Column title={RCi18n({id:'Prescriber.Price'})} key="marketPrice" dataIndex="marketPrice" />
 
           
         </DataGrid>

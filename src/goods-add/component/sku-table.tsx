@@ -162,6 +162,7 @@ class SkuForm extends React.Component<any, any> {
     });
   };
 
+  edit = (e) => {z}
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, goodsList, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
@@ -438,22 +439,47 @@ class SkuForm extends React.Component<any, any> {
       key: 'goodsInfoUnit',
       render: (rowInfo) => {
         return (
-          <Row>
-            <Col span={6}>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
-                  initialValue: rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'
-                })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} >
-                    <Option value="kg">kg</Option>
-                    <Option value="g">g</Option>
-                    <Option value="lb">lb</Option>
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-          </Row>
+          // <Select onChange = {(e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e)}>
+          //   <Option value="kg">kg</Option>
+          //   <Option value="g">g</Option>
+          //   <Option value="lb">lb</Option>
+          // </Select>
+          <select className="ant-input" value={rowInfo.goodsInfoUnit}  onChange = {(e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e)}>
+            <option value="kg">kg</option>
+            <option value="g">g</option>
+            <option value="lb">lb</option>
+          </select>
+          //
+          // <Row>
+          //   <Col span={6}>
+          //     <Select defaultValue={rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'}
+          //             value={rowInfo.goodsInfoUnit}
+          //             onChange = {(e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e)}
+          //             getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} >
+          //       <Option value="kg">kg</Option>
+          //       <Option value="g">g</Option>
+          //       <Option value="lb">lb</Option>
+          //     </Select>
+          //
+          //
+          //   </Col>
+          // </Row>
+          // <Row>
+          //   <Col span={6}>
+          //     <FormItem style={styles.tableFormItem}>
+          //       {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
+          //         onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
+          //         initialValue: rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'
+          //       })(
+          //         <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} >
+          //           <Option value="kg">kg</Option>
+          //           <Option value="g">g</Option>
+          //           <Option value="lb">lb</Option>
+          //         </Select>
+          //       )}
+          //     </FormItem>
+          //   </Col>
+          // </Row>
         );
       }
     });
@@ -525,7 +551,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title:
         <div>
-          Subscription type
+         <FormattedMessage id="Product.subscriptionType"/>
         </div>
       ,
       key: 'promotions',
@@ -539,10 +565,10 @@ class SkuForm extends React.Component<any, any> {
                          style={{ width: 100 }}
                          defaultValue={rowInfo.promotions}
                          getPopupContainer={() => document.getElementById('page-content')}
-                         placeholder="please select type"
+                         placeholder={<FormattedMessage id="Product.selectType" />}
                          disabled={goods.get('promotions') == 'autoship'} >
-                  <Option value='autoship'>Auto ship</Option>
-                  <Option value='club'>Club</Option>
+                  <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
+                  <Option value='club'><FormattedMessage id="Product.Club" /></Option>
                 </Select>
 
               </FormItem>

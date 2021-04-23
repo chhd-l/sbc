@@ -3,6 +3,8 @@ import { Headline, SelectGroup, BreadCrumb, Const } from 'qmkit';
 import { Row, Spin, Table, Radio, Col, Switch, Button, message } from 'antd';
 import * as webapi from './webapi';
 import './style.less';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 export default class PrescriberSetting extends Component<any, any> {
   constructor(props: any) {
@@ -45,7 +47,7 @@ export default class PrescriberSetting extends Component<any, any> {
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(RCi18n({id:'Prescriber.Getdatafailed'}));
         this.setState({
           loading: false
         });
@@ -71,7 +73,7 @@ export default class PrescriberSetting extends Component<any, any> {
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error(RCi18n({id:'Prescriber.Getdatafailed'}));
         this.setState({
           loading: false
         });

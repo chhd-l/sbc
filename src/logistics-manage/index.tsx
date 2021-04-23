@@ -7,9 +7,11 @@ import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import AppStore from './store';
 import AddCompanyModal from './components/add-company-modal'
+import LogisticSettingModal from './components/ logistic-setting-modal'
 import CompanyChoose from './components/company-choose';
 import './index.less'
 import { fromJS } from 'immutable';
+import parcelLabImg from '../../web_modules/qmkit/images/icon/parcelLab-logo.png'
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class LogisticsManage extends React.Component<any, any> {
   store: AppStore;
@@ -37,50 +39,48 @@ export default class LogisticsManage extends React.Component<any, any> {
           <Alert message={<FormattedMessage id="Setting.Manage" />} type="info" showIcon />
           <AuthWrapper functionName="f_expressManage_1">
             {/*<CompanyChoose />*/}
-            <Row>
-              <Col span={8}>
-                <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
-                  <div className="methodItem">
-                    <img
-                      // src={item.imgUrl}
-                      style={{
-                        width: '150px',
-                        height: '80px',
-                        marginTop: '10px'
-                      }}
-                    />
-                  </div>
-                  <div className="bar">
-                    {/*<div className="status">{item.isOpen === 1 ? 'Enabled' : 'Disabled'}</div>*/}
-                    <Switch defaultChecked={true} checked={true}
-                            onChange={(value)=> {
-                              // onFormChange({
-                              //   field: 'status',
-                              //   value: value ? 1 : 0
-                              // })
-
-                            }}
-                    />
-                    <div>
-                      <Tooltip placement="top" title="Edit">
-                        <a
-                          style={{ color: 'red' }}
-                          type="link"
-                          onClick={() => {
+            <div className="tip"><FormattedMessage id="Setting.Updatelogisticinformation" /></div>
+            <Card style={{ width: 300, marginTop: 10, marginBottom: 10 }} bodyStyle={{ padding: 10 }}>
+              <div className="card-contanier">
+                <div className="methodItem">
+                  <img
+                    src={parcelLabImg}
+                    style={{
+                      width: '250px',
+                      height: '80px',
+                      marginTop: '10px'
+                    }}
+                  />
+                </div>
+                <div className="bar">
+                  {/*<div className="status">{item.isOpen === 1 ? 'Enabled' : 'Disabled'}</div>*/}
+                  <Switch defaultChecked={this.store.state().get('settingStatus') == 1} checked={this.store.state().get('settingStatus') == 1} size={'small'}
+                          onChange={(value)=> {
+                            this.store.onListFieldChange({
+                              field: 'settingStatus',
+                              value: value ? 1 : 0
+                            })
                           }}
-                          /* className="links"*/
-                          className="iconfont iconEdit"
-                        >
-                          {/* <FormattedMessage id="edit" />*/}
-                        </a>
-                      </Tooltip>
-                    </div>
+                  />
+                  <div>
+                    <Tooltip placement="top" title="Edit">
+                      <a
+                        style={{ color: 'red' }}
+                        type="link"
+                        onClick={() => {this.store.openSettingModal()}}
+                        /* className="links"*/
+                        className="iconfont iconEdit"
+                      >
+                        {/* <FormattedMessage id="edit" />*/}
+                      </a>
+                    </Tooltip>
                   </div>
-                </Card>
-              </Col>
-            </Row>
+                </div>
+              </div>
+            </Card>
             <CompanyList />
             <AddCompanyModal />
+            <LogisticSettingModal />
           </AuthWrapper>
         </div>
       </div>

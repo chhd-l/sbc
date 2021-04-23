@@ -55,16 +55,33 @@ export default class AppStore extends Store {
       this.closeModal()
     }, 3000)
   }
+  saveSetting = async (params) => {
+    this.dispatch('formActor:field', {field: 'saveSettingLoading', value: true })
+
+    setTimeout(()=>{
+      this.dispatch('formActor:field', {field: 'saveSettingLoading', value: false })
+      message.success('edit success!')
+      this.closeSettingModal()
+    }, 3000)
+  }
   onFormChange = ({field, value}) => {
     this.dispatch('formActor:formField', {field, value })
   }
 
+  onSettingFormChange = ({field, value}) => {
+    this.dispatch('formActor:settingFormField', {field, value })
+  }
+  onListFieldChange = ({ field, value }) => {
+    this.dispatch('list:field', { field, value })
+  }
   afterClose = () => {
     this.dispatch('formActor:form', {
       status: 1
     })
   }
-
+  deleteRow = (record) => {
+    message.success('delete success!')
+  }
   editRow = (record) => {
     this.openModal()
   }
@@ -80,6 +97,16 @@ export default class AppStore extends Store {
   closeModal = () => {
     this.dispatch('formActor:field', {field: 'modalVisible', value: false})
   }
+  openSettingModal = () => {
+    this.dispatch('formActor:field', {field: 'settingModalVisible', value: true})
+  }
+  closeSettingModal = () => {
+    this.dispatch('formActor:field', {field: 'settingModalVisible', value: false})
+  }
+  afterCloseSettingModal = () => {
+    this.dispatch('formActor:settingForm', {})
+  }
+
   init = async () => {
     const expressAll = await webapi.fetchAllExpress();
     if (expressAll.res.code == Const.SUCCESS_CODE) {

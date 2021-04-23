@@ -42,5 +42,7 @@ export default {
     Analysis: {},
     Marketing: {},
     Content: {},
-    Setting: {}
+    Setting: {
+
+    }
 }

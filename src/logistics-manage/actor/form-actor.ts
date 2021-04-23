@@ -17,11 +17,14 @@ export default class FormActor extends Actor {
     };
   }
 
+
   @Action('formActor:field')
   setFeild(state, { field, value }) {
     return state.set(field, value);
   }
 
+
+  //company-modal
   @Action('formActor:formField')
   changeField(state: IMap, { field, value }) {
     return state.setIn(['companyForm', field], value);
@@ -30,6 +33,13 @@ export default class FormActor extends Actor {
   @Action('formActor:form')
   companyForm(state: IMap, form) {
     return state.set('companyForm', fromJS(form));
+  }
+
+
+  //setting-modal
+  @Action('formActor:settingFormField')
+  settingFormField(state: IMap, { field, value }) {
+    return state.setIn(['settingForm', field], value);
   }
 
   @Action('formActor:settingForm')

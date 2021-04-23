@@ -31,10 +31,11 @@ class LogisticSettingModal extends React.Component<any, any> {
       settingForm: any;
       settingModalVisible: boolean;
       saveSettingLoading: boolean;
-      onFormChange: Function;
-      save: Function;
+      onSettingFormChange: Function;
+      saveSetting: Function;
       close: Function;
-      afterClose: Function;
+      afterCloseSettingModal: Function;
+      closeSettingModal: Function;
     };
   };
 
@@ -42,88 +43,139 @@ class LogisticSettingModal extends React.Component<any, any> {
     saveSettingLoading: 'saveSettingLoading',
     settingForm: 'settingForm',
     settingModalVisible: 'settingModalVisible',
-    onFormChange: noop,
-    save: noop,
-    afterClose: noop,
+    closeSettingModal: noop,
+    onSettingFormChange: noop,
+    saveSetting: noop,
+    afterCloseSettingModal: noop,
     close: noop
   };
 
   _save = () => {
-    const { save } = this.props.relaxProps
+    const { saveSetting } = this.props.relaxProps
     this.setState({
       count: 1
     })
     this.props.form.validateFields(null, async (errs, values) => {
       if (!errs) {
-        save()
+        saveSetting()
       }
     });
   }
   _cancel = () => {
-    const { close } = this.props.relaxProps
-    close()
+    const { closeSettingModal } = this.props.relaxProps
+    closeSettingModal()
   }
   _afterClose = () => {
-    const { afterClose } = this.props.relaxProps
+    const { afterCloseSettingModal } = this.props.relaxProps
     this.props.form.resetFields()
-    afterClose()
+    afterCloseSettingModal()
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
 
-    const { onFormChange,settingForm, settingModalVisible, saveSettingLoading, } = this.props.relaxProps
+    const { onSettingFormChange,settingForm, settingModalVisible, saveSettingLoading, } = this.props.relaxProps
     console.log(settingForm.toJS(), 'settingForm--------');
     return (
       <Modal afterClose={this._afterClose}
              confirmLoading={saveSettingLoading}
              maskClosable={false}
-             title={settingForm && settingForm.get('id') ? <FormattedMessage id="Setting.Editlogisticcompany"/>: <FormattedMessage id="Setting.Addlogisticcompany"/>}
+             title={<FormattedMessage id="Setting.Editlogisticsetting"/>}
              visible={settingModalVisible}
              onOk={this._save} onCancel={() => this._cancel()}>
         <Form>
-          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.LogisticCompanyname" />}>
-            {getFieldDecorator('companyName', {
+          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Headertoken" />}>
+            {getFieldDecorator('headerToken', {
               rules: [
                 {
                   required: true,
                   message: RCi18n({
-                    id: 'Setting.Pleaseinputlogisticcompanyname'
+                    id: 'Setting.PleaseinputHeadertoken'
                   }),
                 },
               ],
             })(
               <Input placeholder={
                 RCi18n({
-                  id: 'Setting.Pleaseinputlogisticcompanyname'
+                  id: 'Setting.PleaseinputHeadertoken'
                 })}
                      onChange={(e) => {
-                       onFormChange({
-                         field: 'companyName',
+                       onSettingFormChange({
+                         field: 'headerToken',
                          value: e.target.value
                        })
                      }}
               />
             )}
           </Form.Item>
-          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.LogisticCompanycode" />}>
-            {getFieldDecorator('companyCode', {
+          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Username" />}>
+            {getFieldDecorator('username', {
               rules: [
                 {
                   required: true,
                   message: RCi18n({
-                    id: 'Setting.Pleaseinputlogisticcompanycode'
+                    id: 'Setting.PleaseinputUsername'
                   }),
                 },
               ],
             })(
               <Input placeholder={
                 RCi18n({
-                  id: 'Setting.Pleaseinputlogisticcompanycode'
+                  id: 'Setting.PleaseinputUsername'
                 })
               }
                      onChange={(e)=>{
-                       onFormChange({
+                       onSettingFormChange({
+                         field: 'username',
+                         value: e.target.value
+                       })
+                     }}
+              />
+            )}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Lang" />}>
+            {getFieldDecorator('lang', {
+              rules: [
+                {
+                  required: true,
+                  message: RCi18n({
+                    id: 'Setting.PleaseinputLang'
+                  }),
+                },
+              ],
+            })(
+              <Input placeholder={
+                RCi18n({
+                  id: 'Setting.PleaseinputLang'
+                })
+              }
+                     onChange={(e)=>{
+                       onSettingFormChange({
+                         field: 'lang',
+                         value: e.target.value
+                       })
+                     }}
+              />
+            )}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Url" />}>
+            {getFieldDecorator('url', {
+              rules: [
+                {
+                  required: true,
+                  message: RCi18n({
+                    id: 'Setting.PleaseinputUrl'
+                  }),
+                },
+              ],
+            })(
+              <Input placeholder={
+                RCi18n({
+                  id: 'Setting.PleaseinputUrl'
+                })
+              }
+                     onChange={(e)=>{
+                       onSettingFormChange({
                          field: 'companyCode',
                          value: e.target.value
                        })
@@ -131,20 +183,6 @@ class LogisticSettingModal extends React.Component<any, any> {
               />
             )}
           </Form.Item>
-          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.Logisticcompanystatus" />}>
-            {getFieldDecorator('status', {
-              initialValue: true
-            })(
-              <Switch defaultChecked={settingForm.get('status') == 1} checked={settingForm.get('status')}
-                      onChange={(value)=> {
-                        onFormChange({
-                          field: 'status',
-                          value: value ? 1 : 0
-                        })
-
-                      }}
-              />)}
-          </FormItem>
 
         </Form>
       </Modal>

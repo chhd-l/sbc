@@ -17,46 +17,7 @@ const styles = {
   }
 } as any;
 
-const columns = [
-  {
-    title: RCi18n({id: 'Setting.LogisticCompanyname'}),
-    dataIndex: 'companyName',
-    key: 'companyName',
-  },
-  {
-    title: RCi18n({id: 'Setting.LogisticCompanycode'}),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-  },
-  {
-    title: RCi18n({id: 'Setting.Status'}),
-    key: 'status',
-    dataIndex: 'status',
-    render: (text) => (
-      <Switch defaultChecked={text == 1} checked={text == 1} disabled />
-    )
-  },
-  {
-    title: RCi18n({id: 'Setting.Operator'}),
-    key: 'operator',
-    render: (text, record) => (
-      <span>
-         <span
-           style={{ color: '#e2001a', paddingRight: 10, cursor: 'pointer' }}
-           onClick={() => this.editRow(record)}
-           className="iconfont iconEdit"
-         >
-         </span>
-         <span
-           style={{ color: '#e2001a', paddingRight: 10, cursor: 'pointer' }}
-           onClick={() => this.editRow(record)}
-           className="iconfont iconDelete"
-         >
-         </span>
-      </span>
-    ),
-  },
-];
+
 
 @Relax
 export default class CompanyList extends Component<any, any> {
@@ -64,12 +25,52 @@ export default class CompanyList extends Component<any, any> {
   state: {
     storeId: 0;
   };
-
+  columns = [
+    {
+      title: RCi18n({id: 'Setting.LogisticCompanyname'}),
+      dataIndex: 'companyName',
+      key: 'companyName',
+    },
+    {
+      title: RCi18n({id: 'Setting.LogisticCompanycode'}),
+      dataIndex: 'companyCode',
+      key: 'companyCode',
+    },
+    {
+      title: RCi18n({id: 'Setting.Status'}),
+      key: 'status',
+      dataIndex: 'status',
+      render: (text) => (
+        <Switch defaultChecked={text == 1} checked={text == 1}  />
+      )
+    },
+    {
+      title: RCi18n({id: 'Setting.Operator'}),
+      key: 'operator',
+      render: (text, record) => (
+        <span>
+         <span
+           style={{ color: '#e2001a', paddingRight: 10, cursor: 'pointer' }}
+           onClick={() => this._editRow(record)}
+           className="iconfont iconEdit"
+         >
+         </span>
+          <span
+            style={{ color: '#e2001a', paddingRight: 10, cursor: 'pointer' }}
+            onClick={() => this._deleteRow(record)}
+            className="iconfont iconDelete"
+          >
+          </span>
+      </span>
+      ),
+    },
+  ];
   props: {
     relaxProps?: {
       loading: boolean;
       tableDatas: TList;
       setModalVisible: Function;
+      editRow: Function;
       deleteRow: Function;
       resetForm: Function;
       addCompany: Function;
@@ -83,19 +84,22 @@ export default class CompanyList extends Component<any, any> {
     deleteRow: noop,
     getList: noop,
     resetForm: noop,
-    addCompany: noop
+    addCompany: noop,
+    editRow: noop
   };
   handleTableChange() {}
   componentDidMount() {
 
   }
-  deleteRow = ({ bannerId }) => {
+  _deleteRow = (record) => {
     const { deleteRow } = this.props.relaxProps;
-    deleteRow({ bannerId: bannerId });
+    deleteRow(record);
   }
 
-  editRow = () => {
-
+  _editRow = (record) => {
+    debugger
+    const { editRow } = this.props.relaxProps;
+    editRow(record);
   }
   render() {
     const { loading, tableDatas, setModalVisible, resetForm, addCompany } = this.props.relaxProps;
@@ -116,7 +120,7 @@ export default class CompanyList extends Component<any, any> {
           </Button>
           {
             !loading ? !nodata ?
-            <Table columns={columns} dataSource={tableDatas.toJS()} />:
+            <Table columns={this.columns} dataSource={tableDatas.toJS()} />:
               <div className="img-container"><img src={nodataImg} width="80" className="no-data-img" /></div> :
             <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />
           }

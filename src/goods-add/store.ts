@@ -1018,6 +1018,16 @@ export default class AppStore extends Store {
                 return;
               }
 
+            }else {
+              if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
+                tip = 1;
+                valid = false;
+                return;
+              }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
+                tip = 2;
+                valid = false;
+                return;
+              }
             }
 
           }else {

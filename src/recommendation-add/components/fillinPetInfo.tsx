@@ -202,7 +202,7 @@ export default class FillinPetInfo extends Component {
 
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Special needs:">
+                                    <Form.Item label={RCi18n({id:'Prescriber.Special needs'})}>
                                         {getFieldDecorator('needs', {
                                             initialValue: customerPet.needs || '',
                                             //  rules: [{ required: true, message: 'Please select Sensitvities!' }],

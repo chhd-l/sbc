@@ -5,7 +5,9 @@ export default {
     Public: {},
     Home: {},
     Product: {},
-    Order: {},
+    Order: {
+       'Order.tradeType': 'Trade Type'
+    },
     Subscription: {},
     Appointment: {},
     Prescriber: {},

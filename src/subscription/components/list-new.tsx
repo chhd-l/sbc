@@ -299,7 +299,7 @@ export default class ListView extends React.Component<any, any> {
                     </td>
                     {/* consumerName */}
                     <td style={{ width: '10%', paddingLeft: 20 }}>{v.customerName ? v.customerName : ''}</td>
-                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscriptionType ? v.subscriptionType : ''}</td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscriptionType ? v.subscriptionType.replace('_', ' & ') : ''}</td>
                     {/* Recipient */}
                     {/* <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.consignee ? v.consignee.consigneeName : ''}

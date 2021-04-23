@@ -1,5 +1,5 @@
 import es_ES from './en-US';
-
+import translate from './translate';
 /**
  * 多语言土耳其
  */
@@ -1181,4 +1181,5 @@ export default {
     'Subscription.Active.ChooseBillingAddress': 'Kaydedilen Fatura Adresinden Seçin',
     'Subscription.Active.UnfoldedAllDeliveryAddresses': 'Tüm teslimat adresleri açıldı',
     /* -------- 已翻译 V1.0---------------*/
+    ...translate.Turkish,
 };

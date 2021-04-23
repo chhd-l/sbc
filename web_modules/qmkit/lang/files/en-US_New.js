@@ -71,6 +71,7 @@ export default {
         'Setting.Pleaseinputlang': 'Please input lang',
         'Setting.Url': 'Url',
         'Setting.Pleaseinputurl': 'Please input url',
-        'Setting.Editlogisticsetting': 'Edit logistic setting'
+        'Setting.Editlogisticsetting': 'Edit logistic setting',
+        'Setting.Updatelogisticinformation': 'Update logistic information'
     }
 }

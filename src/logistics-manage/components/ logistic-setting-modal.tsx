@@ -90,14 +90,14 @@ class LogisticSettingModal extends React.Component<any, any> {
                 {
                   required: true,
                   message: RCi18n({
-                    id: 'Setting.PleaseinputHeadertoken'
+                    id: 'Setting.Pleaseinputheadertoken'
                   }),
                 },
               ],
             })(
               <Input placeholder={
                 RCi18n({
-                  id: 'Setting.PleaseinputHeadertoken'
+                  id: 'Setting.Pleaseinputheadertoken'
                 })}
                      onChange={(e) => {
                        onSettingFormChange({
@@ -114,14 +114,14 @@ class LogisticSettingModal extends React.Component<any, any> {
                 {
                   required: true,
                   message: RCi18n({
-                    id: 'Setting.PleaseinputUsername'
+                    id: 'Setting.Pleaseinputusername'
                   }),
                 },
               ],
             })(
               <Input placeholder={
                 RCi18n({
-                  id: 'Setting.PleaseinputUsername'
+                  id: 'Setting.Pleaseinputusername'
                 })
               }
                      onChange={(e)=>{
@@ -139,14 +139,14 @@ class LogisticSettingModal extends React.Component<any, any> {
                 {
                   required: true,
                   message: RCi18n({
-                    id: 'Setting.PleaseinputLang'
+                    id: 'Setting.Pleaseinputlang'
                   }),
                 },
               ],
             })(
               <Input placeholder={
                 RCi18n({
-                  id: 'Setting.PleaseinputLang'
+                  id: 'Setting.Pleaseinputlang'
                 })
               }
                      onChange={(e)=>{
@@ -164,14 +164,14 @@ class LogisticSettingModal extends React.Component<any, any> {
                 {
                   required: true,
                   message: RCi18n({
-                    id: 'Setting.PleaseinputUrl'
+                    id: 'Setting.Pleaseinputurl'
                   }),
                 },
               ],
             })(
               <Input placeholder={
                 RCi18n({
-                  id: 'Setting.PleaseinputUrl'
+                  id: 'Setting.Pleaseinputurl'
                 })
               }
                      onChange={(e)=>{

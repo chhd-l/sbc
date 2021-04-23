@@ -9,6 +9,9 @@ import WriteTips from './components/writeTips';
 import AppStore from './store';
 import { StoreProvider } from 'plume2';
 import moment from 'moment';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n } from 'qmkit';
+
 
 const { Step } = Steps;
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -18,7 +21,7 @@ class RecommendationAdd extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'New Prescription',
+      title: RCi18n({id:'Prescriber.New Prescription'}),
       current: 0,
       status: 1,
     };
@@ -78,19 +81,19 @@ class RecommendationAdd extends Component<any, any> {
     const { current, title } = this.state;
     const steps = [
       {
-        title: 'Choose your role',
+        title: RCi18n({id:'Prescriber.Chooseyourrole'}),
         controller: <ChooseYourRole form={this.props.form} />
       },
       {
-        title: 'Fill in Pet Info',
+        title: RCi18n({id:'Prescriber.FillinPetInfo'}),
         controller: <FillinPetInfo form={this.props.form} />
       },
       {
-        title: 'Choose Products',
+        title: RCi18n({id:'Prescriber.Choose Product'}),
         controller: <ChooseProducts />
       },
       {
-        title: 'Write Tips',
+        title: RCi18n({id:'Prescriber.Write Tips'}),
         controller: <WriteTips form={this.props.form} />
       }
     ];
@@ -114,17 +117,17 @@ class RecommendationAdd extends Component<any, any> {
 
             {current >= 1 && (
               <Button style={{ marginRight: 15 }} onClick={() => this.prev()}>
-                Previous
+                <FormattedMessage id="Prescriber.Previous" />
               </Button>
             )}
             {current < steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.next(e)}>
-                Next
+                 <FormattedMessage id="Prescriber.Next" />
               </Button>
             )}
             {current === steps.length - 1 && (
               <Button type="primary" onClick={(e) => this.done(e)}>
-                Done
+                <FormattedMessage id="Prescriber.Done" />
               </Button>
             )}
           </div>

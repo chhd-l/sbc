@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Form, Input, Select, Spin } from 'antd';
 import { noop, SelectGroup } from 'qmkit';
 import { Relax } from 'plume2';
+import { RCi18n } from 'qmkit';
 const { Option } = Select;
 
 @Relax
@@ -88,7 +89,7 @@ static relaxProps = {
               initialValue:felinReco.expert||"Marion Ruffié",
               onChange:(e)=>this._onChange(e)
             })(<SelectGroup
-              label="Role"
+              label={RCi18n({id:'Prescriber.Role'})}
               getPopupContainer={(trigger: any) => trigger.parentNode}
               style={{ width: 180 }}
             >

@@ -571,7 +571,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <Select style={{ width: '70%' }} value={record.periodTypeId} disabled>
-              {(record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions === 'club' ? frequencyClubList : frequencyList).map((item) => (
+              {((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
                 </Option>

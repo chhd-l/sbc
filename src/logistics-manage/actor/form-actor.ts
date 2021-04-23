@@ -4,12 +4,16 @@ import { fromJS } from 'immutable';
 export default class FormActor extends Actor {
   defaultState() {
     return {
-      modalVisible: false,
+      modalVisible: false,//company-modal
       isEdit: false,
       companyForm: {
         status: 1
       },
       saveLoading: false,
+
+      settingModalVisible: false, //setting-modal
+      settingForm: {},
+      saveSettingLoading: false,
     };
   }
 
@@ -17,12 +21,20 @@ export default class FormActor extends Actor {
   setFeild(state, { field, value }) {
     return state.set(field, value);
   }
+
   @Action('formActor:formField')
   changeField(state: IMap, { field, value }) {
     return state.setIn(['companyForm', field], value);
   }
+
   @Action('formActor:form')
-  changeImageForm(state: IMap, form) {
+  companyForm(state: IMap, form) {
     return state.set('companyForm', fromJS(form));
   }
+
+  @Action('formActor:settingForm')
+  settingForm(state: IMap, form) {
+    return state.set('settingForm', fromJS(form));
+  }
+
 }

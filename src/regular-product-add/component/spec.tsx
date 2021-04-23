@@ -25,12 +25,14 @@ export default class Spec extends React.Component<any, any> {
       setDefaultBaseSpecId: Function;
       editGoodsItem: Function;
       baseSpecId: any;
+      goods: any
     };
   };
 
   static relaxProps = {
     // 是否为单规格
     specSingleFlag: 'specSingleFlag',
+    goods: 'goods',
     // 修改是否为当单规格
     editSpecSingleFlag: noop,
     // 商品规格
@@ -304,9 +306,8 @@ class SpecForm extends React.Component<any, any> {
    * 修改规格值
    */
   _editSpecValue = (specId: number, value: string) => {
-    const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem } = this.props.relaxProps;
+    const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem, goods } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
-
     // 找到原规格值列表
     const spec = goodsSpecs.find((spec) => spec.get('specId') == specId);
     const oldSpecValues = spec.get('specValues');
@@ -316,6 +317,7 @@ class SpecForm extends React.Component<any, any> {
       const isMock = !ov || ov.get('isMock') === true;
       const valueId = ov ? ov.get('specDetailId') : this._getRandom();
       return Map({
+        goodsPromotions: goods.get('promotions'),
         isMock: isMock,
         specDetailId: valueId,
         detailName: item
@@ -331,12 +333,7 @@ class SpecForm extends React.Component<any, any> {
       editGoodsItem(goods);
       setFieldsValue({ subscriptionStatus: 1 })
       //setFieldsValue({ subscriptionStatus: 0 });
-    } /*else {
-      let goods = Map({
-        subscriptionStatus: fromJS(0)
-      });
-      editGoodsItem(goods);
-    }*/
+    }
   };
 
   /**

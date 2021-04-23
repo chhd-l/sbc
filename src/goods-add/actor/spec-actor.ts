@@ -354,7 +354,7 @@ export default class GoodsSpecActor extends Actor {
         addedFlag: 1,
         goodsInfoBundleRels: [],
         stock: 0,
-        promotions: 'autoship',
+        promotions: item.get('goodsPromotions') == 'club' ? 'club' : 'autoship',
         marketPrice: 0,
         subscriptionPrice: 0,
         //subscriptionStatus: spec.get('subscriptionStatus'),

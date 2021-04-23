@@ -13,8 +13,6 @@ export default class PriceActor extends Actor {
 
     @Action('priceActor: editPriceItem')
     editPriceItem(state, {key, value}: { key: string; value: any }) {
-        console.log(key);
-        debugger
         return state.set(key, value);
     }
 }

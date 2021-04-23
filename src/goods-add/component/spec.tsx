@@ -15,6 +15,7 @@ export default class Spec extends React.Component<any, any> {
   props: {
     relaxProps?: {
       specSingleFlag: boolean;
+      goods: any;
       editSpecSingleFlag: Function;
       goodsSpecs: IList;
       editSpecName: Function;
@@ -27,6 +28,7 @@ export default class Spec extends React.Component<any, any> {
   };
 
   static relaxProps = {
+    goods: 'goods',
     // 是否为单规格
     specSingleFlag: 'specSingleFlag',
     // 修改是否为当单规格
@@ -304,7 +306,7 @@ class SpecForm extends React.Component<any, any> {
    * 修改规格值
    */
   _editSpecValue = (specId: number, value: string) => {
-    const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem } = this.props.relaxProps;
+    const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem, goods } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
     // 找到原规格值列表
     const spec = goodsSpecs.find((spec) => spec.get('specId') == specId);
@@ -317,7 +319,8 @@ class SpecForm extends React.Component<any, any> {
       return Map({
         isMock: isMock,
         specDetailId: valueId,
-        detailName: item
+        detailName: item,
+        goodsPromotions: goods.get('promotions'),
       });
     });
     updateSpecForm(this.props.form);

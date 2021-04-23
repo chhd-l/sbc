@@ -285,7 +285,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.petName" />,
         dataIndex: 'petsName',
         key: 'petsName',
-        render: (text, record) => <a onClick={() => this._openPetDetails(record.petsInfo)}>{text}</a>
+        render: (text, record) => <a onClick={() => this._openPetDetails(record.petsInfo)}>{record.petsInfo ? record.petsInfo.petsName : ''}</a>
       }
     ];
 
@@ -437,7 +437,7 @@ class OrderDetailTab extends React.Component<any, any> {
             }}
           >
             <Row>
-              <PetItem petsInfo={currentPet}/>
+              <PetItem petsInfo={currentPet} />
             </Row>
           </Modal>
 
@@ -587,7 +587,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p>
-                    <FormattedMessage id="Order.country" />: {countryDict ? countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId : ''}
+                    <FormattedMessage id="Order.country" />: {countryDict ? (countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId) : ''}
                   </p>
                   <p>
                     <FormattedMessage id="Order.Entrance" />: {consignee.entrance}

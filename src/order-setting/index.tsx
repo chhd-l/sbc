@@ -16,7 +16,7 @@ class OrderSetting extends Component<any, any> {
       title: <FormattedMessage id="Order.Order" />,
       message: <FormattedMessage id="Order.OperationTips" />,
       paymentSequence: <FormattedMessage id="Order.PaymentBeforeDelivery" />,
-      paymentCategory: <FormattedMessage id="Order.OnlinePayment" />,
+      paymentCategory: 'Online payment',
       paymentOnlineForm: {
         orderExpirationTimeStatus: false,
         orderExpirationTimeValue: 1,

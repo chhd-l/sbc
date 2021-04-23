@@ -85,6 +85,7 @@ export default class OrderReceive extends React.Component<any, any> {
       title: <FormattedMessage id="Order.Remarks" />,
       dataIndex: 'remark',
       key: 'remark',
+      width: '20%',
       render: (remark) => (
         <span>
           {remark ? (

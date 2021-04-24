@@ -86,3 +86,13 @@ export function getRCJwtToken(oktaToken: string) {
   });
 }
 
+/**
+ * 查询店铺信息
+ *
+ * @export
+ * @returns
+ */
+ export function fetchStore() {
+  return Fetch('/store/storeInfo');
+}
+

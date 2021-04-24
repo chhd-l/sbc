@@ -35,5 +35,6 @@ export default {
   TAX_API_SETTINGS: 's2b-supplier@taxApiSettings',
   ADDRESS_API_SETTINGS: 's2b-supplier@addressApiSettings',
   TAX_SWITCH:'s2b-supplier@taxSwitch',
-  LANGUAGE:'language'
+  LANGUAGE:'language',
+  DOMAINNAME:'domainName'
 };

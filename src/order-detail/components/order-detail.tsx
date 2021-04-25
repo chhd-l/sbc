@@ -346,6 +346,9 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}
                   </p>
+                  <p>
+                    <FormattedMessage id="Order.paymentMethod" />: {detail.get('payWay')}
+                  </p>
                 </Col>
               </Row>
             </div>
@@ -378,7 +381,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   <FormattedMessage id="Order.Subscriptionumber" />: {detail.get('subscribeId')}
                 </p>
                 <p>
-                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery')}
+                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery') ? detail.get('subscriptionTypeQuery').replace('_', ' & '): '' }
                 </p>
                 <p>
                   <FormattedMessage id="Order.subscriptionPlanType" />: {detail.get('subscriptionPlanType')}

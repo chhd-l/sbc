@@ -1912,7 +1912,7 @@ export default {
   'Subscription.ColSpan.PaymentMethod.PaymentMethod':'Payment Method',
   'Subscription.ColSpan.PaymentMethod.CardNumber':'Card Number',
   'Subscription.operationLog':'Operation log',
-  'Subscription.back':'back',
+  'Subscription.back':'Back',
   'Subscription.Active':'Active',
   'Subscription.Inactive':'Inactive',
   'Subscription.RemindOfNewOrders':'Remind of new orders',

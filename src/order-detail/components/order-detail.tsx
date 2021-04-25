@@ -129,7 +129,7 @@ class OrderDetailTab extends React.Component<any, any> {
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
     gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
-    const tradePrice = detail.get('tradePrice').toJS() as any;
+    const tradePrice = detail.get('tradePrice') ? detail.get('tradePrice').toJS() as any : {};
 
     //收货人信息
     const consignee = detail.get('consignee')

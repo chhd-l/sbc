@@ -41,7 +41,7 @@ export default class AppStore extends Store {
   freightTemplateGoods = async () => {
     const { res } = (await webapi.freightTemplateGoods()) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      this.dispatch('freight: goods: init', fromJS(res.context));
+      this.dispatch('freight: goods: init', fromJS(res.context ?? []));
     } else {
     }
   };

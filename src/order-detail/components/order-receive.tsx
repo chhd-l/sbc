@@ -138,7 +138,7 @@ export default class OrderReceive extends React.Component<any, any> {
               {<FormattedMessage id="Order.PSP" />}: {paymentInfo.get('pspName')}
             </p>
             <p>
-              {<FormattedMessage id="paymentMethod" />}: {paymentInfo.get('paymentVendor')}
+              {<FormattedMessage id="Order.cardType" />}: {paymentInfo.get('paymentVendor')}
             </p>
             <p>
               {<FormattedMessage id="Order.cardLast4Digits" />}: {paymentInfo.get('lastFourDigits')}

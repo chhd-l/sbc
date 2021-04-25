@@ -347,7 +347,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.payWay2" />: {detail.get('payWay')}
+                    <FormattedMessage id="Order.paymentMethod" />: {detail.get('payWay')}
                   </p>
                 </Col>
               </Row>

@@ -25,7 +25,8 @@ export default {
     Order: {
        'Order.tradeType': 'Trade Type',
        'Order.cardHolderName': 'Card Holder Name',
-       'Order.payWay2': 'Pay Way'
+       'Order.payWay2': 'Pay Way',
+       'Order.cardType': 'Card Type'
     },
     Subscription: {},
     Appointment: {

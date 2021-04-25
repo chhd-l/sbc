@@ -23,7 +23,9 @@ export default {
         'Product.selectstatus': 'please select status',
     },
     Order: {
-       'Order.tradeType': 'Trade Type'
+       'Order.tradeType': 'Trade Type',
+       'Order.cardHolderName': 'Card Holder Name',
+       'Order.payWay2': 'Pay Way'
     },
     Subscription: {},
     Appointment: {

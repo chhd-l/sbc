@@ -118,7 +118,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       const settingConfigList = menusRes.res.context &&
         menusRes.res.context.systemTaxSettingResponse &&
         menusRes.res.context.systemTaxSettingResponse.configVOList
-      sessionStorage.setItem(cache.LANGUAGE, 'en-US');
+        sessionStorage.setItem(cache.LANGUAGE, 'en-US');
       if (settingConfigList) {
         let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');
         if (element) {
@@ -195,6 +195,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           // } else {
           //   message.error(config.res.message)
           // }
+          fetchStore();
           let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
             history.push('/');
@@ -227,6 +228,19 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
   }
 
 };
+
+ /**
+   * 查询店铺信息
+   *
+   * @memberof AppStore
+   */
+  async function fetchStore  () {
+    const { res } = (await webapi.fetchStore()) as any;
+    if (res.code == Const.SUCCESS_CODE) {
+      sessionStorage.setItem(cache.DOMAINNAME,res.context.domainName); //domain
+    }
+  };
+
 
 function _getChildren(list, dataList) {
   return list.map((data) => {

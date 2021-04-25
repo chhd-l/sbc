@@ -111,12 +111,8 @@ class ManualOrder extends Component<any, any> {
   }
 
   componentDidMount(){
-    let url ='',storeId=(window as any).countryEnum[this.state.storeId];
-    if(['fr','ru','tr'].includes(storeId)){
-      url=`${(Const as any).VALET_ORDER_URL(storeId)}`
-    }else{
-      url=`${(Const as any).VALET_ORDER_NOMAL_URL}${storeId}`
-    }
+
+    let url =sessionStorage.getItem(cache.DOMAINNAME);
     this.setState({
       url
     })

@@ -865,7 +865,7 @@ export default {
     'task.DueEndtime': 'Bitirme Tarihi',
     'task.AddNewTask': 'Yeni Görev Ekle',
     'task.AssociateSubscription': 'İlgili Abonelik',
-    'task.Taskcreation': 'Task creation',
+    'task.Taskcreation': 'Görev oluşturma',
     'task.Taskedition': 'Görev düzenleme',
     'task.Back': 'Geri',
     'task.Activity': 'Etkinlik',

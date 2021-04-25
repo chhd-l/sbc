@@ -401,6 +401,9 @@ export default {
     },
     Order: {
         'Order.tradeType': 'Trade Type',
+        'Order.cardHolderName': 'Card Holder Name',
+        'Order.payWay2': 'Pay Way',
+        'Order.cardType': 'Card Type',
         "Order.categoriesHave": "categories have been signed then maximum is 200 categories",
         "Order.OrderExpirationTime": "Order expiration time",
         "Order.Re-review": "Re-review",

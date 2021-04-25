@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Radio, Alert } from 'antd';
 import { noop } from 'qmkit';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import LevelPrice from './level-price';
 import AreaPrice from './area-price';
 
@@ -36,8 +36,7 @@ export default class Price extends React.Component<any, any> {
           message={
             <div>
               <p>
-                Please note that please select the price setting mode for this product first. Under the same SPU, all SKUs use the same price setting mode. Carry out batch setting of SPU, and the setting scheme will cover all SKUS (except skUS that open and keep independent
-                setting). Please operate carefully. For separate pricing for SKU, you can go to the SKU pricing page.
+              <FormattedMessage id="Product.notethatpleaseCarryoutbatch" />
               </p>
               {/* <p>请注意</p>
               <p>
@@ -63,9 +62,9 @@ export default class Price extends React.Component<any, any> {
           }}
         >
           <RadioGroup onChange={this._editPriceSetting} value={priceOpt}>
-            <Radio value={2}>Sell at market price&nbsp;&nbsp;</Radio>
-            <Radio value={0}>Sell at consumer price&nbsp;&nbsp;</Radio>
-            {saleType === 0 && <Radio value={1}>Set price for order quantity&nbsp;&nbsp;</Radio>}
+            <Radio value={2}><FormattedMessage id="Product.SellAtMarketPrice" />&nbsp;&nbsp;</Radio>
+            <Radio value={0}><FormattedMessage id="Product.SellAtConsumerPrice" />&nbsp;&nbsp;</Radio>
+            {saleType === 0 && <Radio value={1}><FormattedMessage id="Product.SetPriceForOrderQuantity" />&nbsp;&nbsp;</Radio>}
           </RadioGroup>
         </div>
 

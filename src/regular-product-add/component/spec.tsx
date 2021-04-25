@@ -5,6 +5,7 @@ import { noop, cache, ValidConst } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -107,7 +108,7 @@ class SpecForm extends React.Component<any, any> {
             {specSingleFlag ? null : (
               <Row>
                 <Col offset={0}>
-                  <p style={{ color: '#999', marginBottom: 5 }}>You can quickly add multiple specifications using the keyboard enter key</p>
+                  <p style={{ color: '#999', marginBottom: 5 }}><FormattedMessage id="Product.usingTheKeyboardEnterKey" /></p>
                 </Col>
               </Row>
             )}
@@ -145,7 +146,7 @@ class SpecForm extends React.Component<any, any> {
                                 {
                                   min: 1,
                                   max: 100,
-                                  message: 'No more than 100 characters'
+                                  message: <FormattedMessage id="Product.NoMoreThan100characters" />
                                 },
                                 {
                                   // 重复校验,
@@ -166,7 +167,7 @@ class SpecForm extends React.Component<any, any> {
                               ],
                               onChange: this._editSpecName.bind(this, item.get('specId')),
                               initialValue: item.get('specName')
-                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} />)}
+                            })(<Input placeholder={RCi18n({id:'Product.inputspecification'})} style={{ width: '90%' }} />)}
                           </FormItem>
                         </Col>
                         <Col span={9}>
@@ -218,7 +219,7 @@ class SpecForm extends React.Component<any, any> {
                                       });
 
                                       if (whitespace) {
-                                        callback(new Error('The specification value cannot be a space character'));
+                                        callback(new Error(RCi18n({id:'Product.specificationvaluecannot'})));
                                         return;
                                       }
                                       /*if (overLen) {
@@ -226,13 +227,13 @@ class SpecForm extends React.Component<any, any> {
                                         return;
                                       }*/
                                       if (duplicated) {
-                                        callback(new Error('Repeated specifications'));
+                                        callback(new Error(RCi18n({id:'Product.Repeatedspecifications'})));
                                         return;
                                       }
                                     }
 
                                     if (value.length > 20) {
-                                      callback(new Error('Support up to 20 specifications'));
+                                      callback(new Error(RCi18n({id:'Product.Supportupto20specifications'})));
                                       return;
                                     }
 
@@ -243,7 +244,7 @@ class SpecForm extends React.Component<any, any> {
                               onChange: this._editSpecValue.bind(this, item.get('specId')),
                               initialValue: specValues
                             })(
-                              <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
+                              <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder={RCi18n({id:'Product.inputspecificationValue'})} notFoundContent={RCi18n({id:'Product.Nospecificationvalue'})} tokenSeparators={[',']}>
                                 {this._getChildren(item.get('specValues'), item.get('specName'))}
                               </Select>
                             )}
@@ -342,7 +343,7 @@ class SpecForm extends React.Component<any, any> {
   _addSpec = () => {
     const { addSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() >= 5) {
-      message.error('Add up to 5 specifications');
+      message.error(RCi18n({id:'Product.AddUpo5Specifications'}));
       return;
     }
     updateSpecForm(this.props.form);
@@ -352,7 +353,7 @@ class SpecForm extends React.Component<any, any> {
   _deleteSpec = (specId: number) => {
     const { deleteSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() <= 1) {
-      message.error('Keep at least 1 specification item');
+      message.error(RCi18n({id:'Product.Keep1SpecificationItem'}));
       return;
     }
     updateSpecForm(this.props.form);

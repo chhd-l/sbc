@@ -7,6 +7,7 @@ import {AuthWrapper, cache, noop, ValidConst} from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltip from './productTooltip';
+import { RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -191,7 +192,7 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input SKU code'
+                      message: RCi18n({id:'Product.PleaseInputSKU'})
                     },
                     {
                       min: 1,
@@ -211,7 +212,7 @@ class SkuForm extends React.Component<any, any> {
 
     //External SKU
     columns = columns.push({
-      title: 'External SKU',
+      title: RCi18n({id:'Product.ExternalSKU'}),
       key: 'externalSku',
       render: (rowInfo) => {
         return (
@@ -241,7 +242,7 @@ class SkuForm extends React.Component<any, any> {
 
     //EAN
     columns = columns.push({
-      title: 'EAN',
+      title: RCi18n({id:'Product.EAN'}),
       key: 'goodsInfoBarcode',
       render: (rowInfo) => {
         return (
@@ -270,7 +271,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: 'Weight value',
+      title: RCi18n({id:'Product.Weightvalue'}),
       key: 'goodsInfoWeight',
       render: (rowInfo) => {
         return (
@@ -281,7 +282,7 @@ class SkuForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input weight value'
+                      message: RCi18n({id:'Product.Inputweightvalue'})
                     }
                     /*{
                       pattern: ValidConst.number,
@@ -299,7 +300,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: 'Weight unit',
+      title: RCi18n({id:'Product.Weightunit'}),
       key: 'goodsInfoUnit',
       render: (rowInfo) => {
         return (
@@ -382,7 +383,7 @@ class SkuForm extends React.Component<any, any> {
         <div style={{
           marginRight: '81px',
         }}>
-          Subscription
+          <FormattedMessage id="Product.Subscription" />
         </div>
       ),
       key: 'subscriptionStatus',
@@ -523,11 +524,11 @@ class SkuForm extends React.Component<any, any> {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('The file size must be less than 2M');
+        message.error(RCi18n({id:'Product.lessThan2M'}));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(RCi18n({id:'Product.FileFormatError'}));
       return false;
     }
   };

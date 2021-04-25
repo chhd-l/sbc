@@ -4,9 +4,8 @@ import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
-
+import { RCi18n } from 'qmkit';
 import UserPrice from './user-price';
-
 import styled from 'styled-components';
 
 const CustomerSPU = styled.div`
@@ -97,16 +96,16 @@ class LevelPriceForm extends React.Component<any, any> {
         <div style={styles.bar}>
           <Form className="login-form" layout="inline">
             <CustomerSPU>
-              <FormItem label="SPU unified market price">
+              <FormItem label={RCi18n({id:'Product.SPUunifiedmarketprice'})}>
                 {getFieldDecorator('marketPrice', {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input market price'
+                      message: RCi18n({id:'Product.inputMarketPrice'})
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: 'Please input the legal amount with two decimal places'
+                      message: RCi18n({id:'Product.inputthelegalamount'})
                     },
                     {
                       type: 'number',
@@ -212,7 +211,7 @@ class LevelPriceForm extends React.Component<any, any> {
                         rules: [
                           {
                             pattern: ValidConst.number,
-                            message: 'Please enter the correct value'
+                            message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
                           },
                           {
                             level: levelId,

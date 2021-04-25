@@ -21,6 +21,29 @@ export default {
         'Product.Displayonshop': 'Display on shop',
         'Product.suretoswitch': 'The product is participating in corporate purchasing and distribution activities, switching to wholesale mode, will exit corporate purchasing and distribution activities, sure to switch?',
         'Product.selectstatus': 'please select status',
+        'Product.specificationvaluecannot': 'The specification value cannot be a space character',
+        'Product.Repeatedspecifications': 'Repeated specifications',
+        'Product.Supportupto20specifications': 'Support up to 20 specifications',
+        'Product.inputspecification': 'Please input specification',
+        'Product.inputspecificationValue': 'Please input specification Value',
+        'Product.Nospecificationvalue': 'No specification value',
+        'Product.ExternalSKU': 'External SKU',
+        'Product.EAN': 'EAN',
+        'Product.Inputweightvalue': 'Please input weight value',
+        'Product.Aftercheckinguse': 'After checking, all SKUs use the same market price',
+        'Product.maximumvalue': 'The maximum value is 9999999.99',
+        'Product.Aftercheckingthesameinventory': 'After checking, all SKUs use the same inventory',
+        'Product.Next': 'Next',
+        'Product.Save': 'Save',
+        'Product.SPUunifiedmarketprice': 'SPU unified market price',
+        'Product.inputthelegalamount': 'Please input the legal amount with two decimal places',
+        'Product.inputlogisticsweight': 'Please input logistics weight',
+        'Product.Notlessthan0.001': 'Not less than 0.001',
+        'Product.enterthecontent': 'Please enter the content',
+        'Product.notethatpleaseCarryoutbatch': 'Please note that please select the price setting mode for this product first. Under the same SPU, all SKUs use the same price setting mode. Carry out batch setting of SPU, and the setting scheme will cover all SKUS (except skUS that open and keep independent setting).Please operate carefully. For separate pricing for SKU, you can go to the SKU pricing page.'
+            
+            
+
     },
     Order: {
        'Order.tradeType': 'Trade Type'

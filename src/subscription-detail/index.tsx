@@ -68,7 +68,8 @@ class SubscriptionDetail extends React.Component<any, any> {
       completedOrder: [],
       billingCityName: '',
       deliveryCityName: '',
-      currencySymbol: ''
+      currencySymbol: '',
+      isActive: false,
     };
   }
 
@@ -132,7 +133,6 @@ class SubscriptionDetail extends React.Component<any, any> {
             promotionCode: subscriptionDetail.promotionCode,
             subscriptionType: subscriptionDetail.subscriptionType,
             subscriptionPlanType: subscriptionDetail.subscriptionPlanType
-
           };
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
@@ -181,7 +181,8 @@ class SubscriptionDetail extends React.Component<any, any> {
               loading: false,
               deliveryPrice: +initDeliveryPrice.toFixed(2),
               discountsPrice: +initDiscountPirce.toFixed(2),
-              taxFeePrice: +initTaxPrice.toFixed(2)
+              taxFeePrice: +initTaxPrice.toFixed(2),
+              isActive: subscriptionDetail.subscribeStatus === "0"
             },
             () => {
               // this.applyPromationCode(this.state.promotionCode);
@@ -258,7 +259,7 @@ class SubscriptionDetail extends React.Component<any, any> {
           });
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
   addressById = (id: String, type: String) => {
     webapi.addressById(id).then((data) => {
@@ -397,7 +398,7 @@ class SubscriptionDetail extends React.Component<any, any> {
           // }
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   getDictValue = (list, id) => {
@@ -469,10 +470,10 @@ class SubscriptionDetail extends React.Component<any, any> {
           });
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
-  handleYearChange = (value) => {};
-  tabChange = (key) => {};
+  handleYearChange = (value) => { };
+  tabChange = (key) => { };
 
   getCurrencySymbol = () => {
     let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
@@ -482,7 +483,7 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   render() {
-    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, frequencyClubList, noStartOrder, completedOrder, deliveryCityName, billingCityName, currencySymbol } = this.state;
+    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>
@@ -1036,15 +1037,15 @@ class SubscriptionDetail extends React.Component<any, any> {
           <div className="container-search">
             <Headline
               title={<FormattedMessage id="Subscription.AutoshipOrder" />}
-              // extra={
-              //   <div>
-              //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
-              //       <Option value="2020">2020</Option>
-              //       <Option value="2019">2019</Option>
-              //       <Option value="2018">2018</Option>
-              //     </Select>
-              //   </div>
-              // }
+            // extra={
+            //   <div>
+            //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
+            //       <Option value="2020">2020</Option>
+            //       <Option value="2019">2019</Option>
+            //       <Option value="2018">2018</Option>
+            //     </Select>
+            //   </div>
+            // }
             />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
               <TabPane tab={<FormattedMessage id="Subscription.NoStart" />} key="noStart">
@@ -1081,6 +1082,13 @@ class SubscriptionDetail extends React.Component<any, any> {
           </AuthWrapper>
         </Spin>
         <div className="bar-button">
+          {isActive ? <Button type="primary" style={{marginRight:10}}>
+            <Link to={'/subscription-edit/' + this.state.subscriptionId}>
+              {<FormattedMessage id="Subscription.Edit" />}
+            </Link>
+          </Button> : null
+          }
+
           <Button onClick={() => (history as any).go(-1)}>{<FormattedMessage id="Subscription.back" />}</Button>
         </div>
       </div>

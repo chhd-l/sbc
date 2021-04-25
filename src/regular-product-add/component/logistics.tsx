@@ -5,6 +5,7 @@ import { noop, FindArea } from 'qmkit';
 import { IMap, IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+import { RCi18n } from 'qmkit';
 const FormItem = Form.Item;
 const { Option } = Select;
 const formItemLayout = {
@@ -106,7 +107,7 @@ class LogisticsForm extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please select shipping template'
+                            message: RCi18n({id:'Product.shippingTemplate'})
                           }
                         ],
                         onChange: this._editGoods.bind(this, 'freightTempId'),
@@ -116,7 +117,7 @@ class LogisticsForm extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please select shipping template'
+                            message: RCi18n({id:'Product.shippingTemplate'})
                           }
                         ],
                         onChange: this._editGoods.bind(this, 'freightTempId')
@@ -162,16 +163,16 @@ class LogisticsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input logistics weight'
+                    message: RCi18n({id:'Product.inputlogisticsweight'})
                   },
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,3})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,2})?$)/,
-                    message: 'Please input the legal number with three decimal places'
+                    message: RCi18n({id:'Product.threeDecimalPlaces'})
                   },
                   {
                     type: 'number',
                     min: 0.001,
-                    message: 'The minimum value is 0.001',
+                    message: RCi18n({id:'Product.minimum1'}),
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0.001 : parseFloat(value);
                     }
@@ -179,7 +180,7 @@ class LogisticsForm extends React.Component<any, any> {
                   {
                     type: 'number',
                     max: 9999.999,
-                    message: 'The maximum value is 9999.999',
+                    message: RCi18n({id:'Product.maximum9'}),
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0.001 : parseFloat(value);
                     }
@@ -187,7 +188,7 @@ class LogisticsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsWeight'),
                 initialValue: goods.get('goodsWeight') && goods.get('goodsWeight').toString()
-              })(<Input placeholder="Not less than 0.001" />)}
+              })(<Input placeholder={RCi18n({id:'Product.Notlessthan0.001'}) }/>)}
             </FormItem>
           </Col>
           <Col span={2}>
@@ -201,16 +202,16 @@ class LogisticsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input logistics volume'
+                    message: RCi18n({id:'Product.logisticsVolume'})
                   },
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,6})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,5})?$)/,
-                    message: 'Please input the legal number of six decimal places'
+                    message: RCi18n({id:'Product.sixDecimalPlaces'})
                   },
                   {
                     type: 'number',
                     min: 0.000001,
-                    message: 'The minimum value is 0.000001',
+                    message: RCi18n({id:'Product.minimum1'}),
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0.000001 : parseFloat(value);
                     }
@@ -218,7 +219,7 @@ class LogisticsForm extends React.Component<any, any> {
                   {
                     type: 'number',
                     max: 999.999999,
-                    message: 'The maximum value is 999.999999',
+                    message: RCi18n({id:'Product.maximum9'}),
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0.000001 : parseFloat(value);
                     }
@@ -226,7 +227,7 @@ class LogisticsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsCubage'),
                 initialValue: goods.get('goodsCubage') && goods.get('goodsCubage').toString()
-              })(<Input placeholder="Not less than 0.000001" />)}
+              })(<Input placeholder={RCi18n({id:'Product.Notlessthan0.001'}) }/>)} 
             </FormItem>
           </Col>
           <Col span={2}>

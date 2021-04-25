@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-
+import { RCi18n } from 'qmkit';
 import { fromJS } from 'immutable';
 import { noop, QMUpload, Const } from 'qmkit';
 import { Modal, Form, Input, message, Tree, Row, Col, Button, Checkbox, Pagination } from 'antd';
@@ -157,7 +157,7 @@ export default class PicModal extends React.Component<any, any> {
             <Col span={10}>
               <Form layout="inline">
                 <FormItem>
-                  <Input placeholder="Please enter the content" value={imageName} onChange={(e) => this._editSearchData(e)} />
+                  <Input placeholder={RCi18n({id:'Product.enterthecontent'})} value={imageName} onChange={(e) => this._editSearchData(e)} />
                 </FormItem>
                 <FormItem>
                   <Button

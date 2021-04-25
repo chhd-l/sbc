@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Select, Table, Input, Row, Col, Form, message, Checkbox, Tooltip, Icon, InputNumber } from 'antd';
 const { Option } = Select;
-
+import { RCi18n } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
 import { cache, noop, ValidConst } from 'qmkit';
@@ -176,10 +176,10 @@ class SkuForm extends React.Component<any, any> {
                   {
                     validator: (_rule, value, callback) => {
                       if (!value && value !== 0) {
-                        callback('Please input inventory.');
+                        callback(RCi18n({id:'Product.PleaseInputInventory'}));
                       }
                       if (!ValidConst.zeroNumber.test(value)) {
-                        callback('Please enter the correct value.');
+                        callback(RCi18n({id:'Product.PleaseEnterTheCorrect'}));
                       }
                       callback();
                     }
@@ -208,7 +208,7 @@ class SkuForm extends React.Component<any, any> {
                   // },
                   {
                     pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
+                    message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualInventory'),
@@ -232,7 +232,7 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input UOM'
+                      message: RCi18n({id:'Product.PleaseInputUOM'})
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsMeasureUnit'),
@@ -259,7 +259,7 @@ class SkuForm extends React.Component<any, any> {
                   // },
                   {
                     pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
+                    message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualAlert'),
@@ -297,11 +297,11 @@ class SkuForm extends React.Component<any, any> {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('The file size must be less than 2M');
+        message.error(RCi18n({id:'Product.lessThan2M'}));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(RCi18n({id:'Product.FileFormatError'}));
       return false;
     }
   };

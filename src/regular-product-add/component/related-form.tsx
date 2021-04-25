@@ -206,7 +206,7 @@ export default class SearchForm extends React.Component<any, any> {
                 <TreeSelectGroup
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
-                  label={<p style={styles.label}>Product category</p>}
+                  label={<p style={styles.label}><FormattedMessage id="Product.Productcategory" /></p>}
                   /* defaultValue="全部"*/
                   // style={styles.wrapper}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -226,7 +226,7 @@ export default class SearchForm extends React.Component<any, any> {
                 <TreeSelectGroup
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
-                  label={<p style={styles.label}>Sales category</p>}
+                  label={<p style={styles.label}><FormattedMessage id="Product.Salescategory" /></p>}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                   onChange={(value) => {

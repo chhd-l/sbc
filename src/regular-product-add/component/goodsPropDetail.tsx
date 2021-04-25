@@ -5,6 +5,7 @@ import { noop } from 'qmkit';
 import { Form, Row, Col, Select, Tree, TreeSelect } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import '../index.less'
+import { RCi18n } from 'qmkit';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -157,7 +158,7 @@ class AttributeForm extends React.Component<any, any> {
         treeCheckable={true}
         showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
         treeCheckStrictly={true}
-        placeholder="Select the property information"
+        placeholder={RCi18n({id:'Product.ThePropertyInformation'})}
         notFoundContent="No Data"
         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
         treeDefaultExpandAll

@@ -63,43 +63,43 @@ class Foot extends React.Component<any, any> {
         {this.props.tabType == 'main' ? (
           <AuthWrapper key="001" functionName={this.props.goodsFuncName}>
             <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Next
+            <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : this.props.tabType == 'price' ? (
           <AuthWrapper key="002" functionName={this.props.goodsFuncName}>
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Prev
+            <FormattedMessage id="Product.Prev" />
             </Button>
             <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Next
+            <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : this.props.tabType == 'inventory' ? (
           <AuthWrapper key="003" functionName={this.props.goodsFuncName}>
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Prev
+            <FormattedMessage id="Product.Prev" />
             </Button>
             <Button type="primary" onClick={() => this._savePrice()} style={{ marginRight: 10 }} loading={saveLoading}>
-              Next
+            <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : this.props.tabType == 'related' ? (
           <AuthWrapper key="004" functionName={this.props.priceFuncName}>
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Prev
+            <FormattedMessage id="Product.Prev" />
             </Button>
             <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Next
+            <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : (
           <AuthWrapper key="005" functionName={this.props.priceFuncName}>
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Prev
+            <FormattedMessage id="Product.Prev" />
             </Button>
             <Button type="primary" onClick={this._saveSeoSetting} style={{ marginRight: 10 }} loading={saveLoading}>
-              Save
+            <FormattedMessage id="Product.Save" />
             </Button>
           </AuthWrapper>
         )}

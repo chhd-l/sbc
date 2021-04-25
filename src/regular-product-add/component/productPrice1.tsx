@@ -6,6 +6,8 @@ import { fromJS, List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
+import { RCi18n } from 'qmkit';
+
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -180,7 +182,7 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input SKU code'
+                      message: RCi18n({id:'Product.PleaseInputSKU'}),
                     },
                     {
                       min: 1,
@@ -242,7 +244,7 @@ class SkuForm extends React.Component<any, any> {
           <Checkbox disabled={priceOpt === 0} checked={marketPriceChecked} onChange={(e) => this._synchValue(e, 'marketPrice')}>
             <FormattedMessage id="allTheSame" />
             &nbsp;
-            <Tooltip placement="top" title={'After checking, all SKUs use the same market price'}>
+            <Tooltip placement="top" title={RCi18n({id:'Product.Aftercheckinguse'})}>
               <a style={{ fontSize: 14 }}>
                 <Icon type="question-circle-o" />
               </a>
@@ -259,16 +261,16 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input market price'
+                    message: RCi18n({id:'Product.inputMarketPrice'}),
                   },
                   {
                     pattern: ValidConst.zeroPrice,
-                    message: 'Please input the legal amount with two decimal places'
+                    message: RCi18n({id:'Product.twoDecimalPlaces'}),
                   },
                   {
                     type: 'number',
                     max: 9999999.99,
-                    message: 'The maximum value is 9999999.99',
+                    message: RCi18n({id:'Product.maximumvalue'}),
                     transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
@@ -323,16 +325,16 @@ class SkuForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input market price'
+                      message: RCi18n({id:'Product.inputMarketPrice'}),
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: 'Please input the legal amount with two decimal places'
+                      message: RCi18n({id:'Product.twoDecimalPlaces'}),
                     },
                     {
                       type: 'number',
                       max: 9999999.99,
-                      message: 'The maximum value is 9999999.99',
+                      message: RCi18n({id:'Product.maximumvalue'}),
                       transform: function (value) {
                         return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                       }
@@ -350,7 +352,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          <FormattedMessage id="Base price" />
+          <FormattedMessage id="Product.Baseprice" />
           <Select value={baseSpecId || null} onChange={this._handleChange}>
             {goodsSpecs.map((item) => (
               <Option value={item.get('specId')}>{item.get('specName')}</Option>
@@ -368,7 +370,7 @@ class SkuForm extends React.Component<any, any> {
                   rules: [
                     {
                       pattern: ValidConst.number,
-                      message: 'Please enter the correct value'
+                      message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
@@ -441,7 +443,7 @@ class SkuForm extends React.Component<any, any> {
           <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
             <FormattedMessage id="allTheSame" />
             &nbsp;
-            <Tooltip placement="top" title={'After checking, all SKUs use the same inventory'}>
+            <Tooltip placement="top" title={RCi18n({id:'Product.Aftercheckingthesameinventory'})}>
               <a style={{ fontSize: 14 }}>
                 <Icon type="question-circle-o" />
               </a>
@@ -458,7 +460,7 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   {
                     pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
+                    message: RCi18n({id:'Product.twoDecimalPlaces'})
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
@@ -538,11 +540,11 @@ class SkuForm extends React.Component<any, any> {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('The file size must be less than 2M');
+        message.error(RCi18n({id:'Product.lessThan2M'}));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(RCi18n({id:'Product.FileFormatError'}));
       return false;
     }
   };

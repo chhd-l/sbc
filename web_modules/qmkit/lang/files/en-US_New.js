@@ -161,7 +161,7 @@ export default {
         'Prescriber.Paris':'Paris (Y/N)',
         'Prescriber.Pick up':'Pick up (Y/N)',
         'Prescriber.Getdatafailed':'Get data failed',
-    
+        'Prescriber.Recommendation.fillDate':'fillDate'
     },
     'Pet owner': {
         "PetOwner.Member": "Member",

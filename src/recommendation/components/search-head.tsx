@@ -54,6 +54,7 @@ class SearchHead extends Component<any, any> {
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
       linkStatus: 0,
+      fillDate: null,
       id: '',
       subscribeId: '',
       buyerOptionsValue: '',
@@ -124,7 +125,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={RCi18n({id:'Prescriber.Recommendation No'})}
+                    addonBefore={RCi18n({ id: 'Prescriber.Recommendation No' })}
                     onChange={(e) => {
                       this.setState({
                         felinRecoId: (e.target as any).value
@@ -151,7 +152,7 @@ class SearchHead extends Component<any, any> {
                 {/*商品名称、SKU编码*/}
                 <FormItem>
                   <Input
-                   addonBefore={RCi18n({id:'Prescriber.Product name'})}
+                    addonBefore={RCi18n({ id: 'Prescriber.Product name' })}
                     onChange={(e) => {
                       this.setState({
                         goodsNames: (e.target as any).value
@@ -160,51 +161,39 @@ class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
-
-              {/*<Col span={8}>
+              <Col span={8}>
+                {/*商品名称、SKU编码*/}
                 <FormItem>
-                  <SelectGroup
-                    label="Link status"
-                    defaultValue="All"
-                    style={{ width: 170 }}
-                    onChange={(value) => {
-                      this.setState({
-                        linkStatus: value
-                      });
-                    }}
-                  >
-                    <Option value="2">All</Option>
-                    <Option value="1">Invalid</Option>
-                    <Option value="0">Valid</Option>
-                  </SelectGroup>
-                  <Input
-                    addonBefore="Link status"
-                    type="number"
-                    onChange={(e) => {
-                      this.setState({
-                        linkStatus: (e.target as any).value
-                      });
-                    }}
-                  />
+                  <InputGroup compact>
+                    <Input style={{ width: '49%', textAlign: 'center' }} readOnly defaultValue="fillDate" />
+                    <DatePicker
+                      onChange={(date, dateString) => {
+                        this.setState({
+                          fillDate: dateString
+                        });
+                      }}
+                    />
+                  </InputGroup>
                 </FormItem>
-              </Col>*/}
+              </Col>
 
-            
+
+
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
                   {/* {sessionStorage.getItem('PrescriberType') != null ? ( */}
-                    <Button
-                      type="primary"
-                      icon="plus"
-                      htmlType="submit"
-                      shape="round"
-                      style={{ textAlign: 'center', marginRight: '20px' }}
-                      onClick={(e) => {
-                        history.push('/recommendation-add');
-                      }}
-                    >
-                      <span><FormattedMessage id="Prescriber.New" /></span>
-                    </Button>
+                  <Button
+                    type="primary"
+                    icon="plus"
+                    htmlType="submit"
+                    shape="round"
+                    style={{ textAlign: 'center', marginRight: '20px' }}
+                    onClick={(e) => {
+                      history.push('/recommendation-add');
+                    }}
+                  >
+                    <span><FormattedMessage id="Prescriber.New" /></span>
+                  </Button>
                   {/* ) : null} */}
 
 
@@ -216,11 +205,12 @@ class SearchHead extends Component<any, any> {
                     style={{ textAlign: 'center', marginTop: '20px' }}
                     onClick={(e) => {
                       e.preventDefault();
-                      const { felinRecoId, buyerOptions, goodsNames, buyerOptionsValue } = this.state;
+                      const { felinRecoId, buyerOptions, goodsNames, buyerOptionsValue, fillDate } = this.state;
                       const params = {
-                        felinRecoId:felinRecoId||null,
-                        [buyerOptions == 'PO name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue||null,
-                        goodsNames:goodsNames||null,
+                        felinRecoId: felinRecoId || null,
+                        [buyerOptions == 'PO name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue || null,
+                        goodsNames: goodsNames || null,
+                        fillDate: fillDate || null
                       };
                       onSearch(params);
                     }}
@@ -229,7 +219,7 @@ class SearchHead extends Component<any, any> {
                       <FormattedMessage id="Prescriber.search" />
                     </span>
                   </Button>
-                 
+
                 </FormItem>
               </Col>
             </Row>
@@ -267,7 +257,7 @@ class SearchHead extends Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        defaultValue={RCi18n({id:'Prescriber.PO Name'})}
+        defaultValue={RCi18n({ id: 'Prescriber.PO Name' })}
         onChange={(value, a) => {
           this.setState({
             buyerOptions: value
@@ -282,7 +272,7 @@ class SearchHead extends Component<any, any> {
     );
   };
 
- 
+
 
   /**
    * 批量审核确认提示
@@ -296,20 +286,20 @@ class SearchHead extends Component<any, any> {
       .toJS();
 
     if (checkedIds.length == 0) {
-      message.error(RCi18n({id:'Prescriber.needsToBeOperated'}));
+      message.error(RCi18n({ id: 'Prescriber.needsToBeOperated' }));
       return;
     }
 
     const confirm = Modal.confirm;
-    const title = (window as any).RCi18n({id:'Prescriber.audit'});
-    const content = (window as any).RCi18n({id:'Prescriber.confirmAudit'});
+    const title = (window as any).RCi18n({ id: 'Prescriber.audit' });
+    const content = (window as any).RCi18n({ id: 'Prescriber.confirmAudit' });
     confirm({
       title: title,
       content: content,
       onOk() {
         onBatchAudit();
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 
@@ -317,8 +307,8 @@ class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: RCi18n({id:'exportFilterOrder'}),
-      byIdsTitle: RCi18n({id:'exportSelectedOrder'}),
+      byParamsTitle: RCi18n({ id: 'exportFilterOrder' }),
+      byIdsTitle: RCi18n({ id: 'exportSelectedOrder' }),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

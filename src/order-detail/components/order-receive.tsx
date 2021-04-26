@@ -104,11 +104,6 @@ export default class OrderReceive extends React.Component<any, any> {
     const { detail, paymentInfo } = this.props.relaxProps;
     var payLogs = paymentInfo && paymentInfo.get('payPaymentLogsVOList') ? paymentInfo.get('payPaymentLogsVOList') : [];
     const id = detail.get('id');
-    // const toExternalOrderId = detail.get('toExternalOrderId');
-    const totalPayCash = detail.getIn(['tradePrice', 'totalPrice']) || 0;
-
-    //交易状态
-    const tradeState = detail.get('tradeState');
 
     return (
       <div style={styles.container}>
@@ -118,9 +113,6 @@ export default class OrderReceive extends React.Component<any, any> {
               <Col span={18}>
                 <label style={styles.orderNum}>
                   {<FormattedMessage id="Order.orderNumber" />}:{id}
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  {<FormattedMessage id="Order.amountReceivable" />}:$
-                  {(totalPayCash || 0).toFixed(2)}
                 </label>
               </Col>
               <Col span={6} style={{ textAlign: 'right' }}>
@@ -140,13 +132,13 @@ export default class OrderReceive extends React.Component<any, any> {
               <FormattedMessage id="Order.paymentDetails" />
             </h4>
             <p>
-              {<FormattedMessage id="Order.purchaseType" />}: {paymentInfo.get('holderName')}
+              {<FormattedMessage id="Order.cardHolderName" />}: {paymentInfo.get('holderName')}
             </p>
             <p>
               {<FormattedMessage id="Order.PSP" />}: {paymentInfo.get('pspName')}
             </p>
             <p>
-              {<FormattedMessage id="paymentMethod" />}: {paymentInfo.get('paymentVendor')}
+              {<FormattedMessage id="Order.cardType" />}: {paymentInfo.get('paymentVendor')}
             </p>
             <p>
               {<FormattedMessage id="Order.cardLast4Digits" />}: {paymentInfo.get('lastFourDigits')}

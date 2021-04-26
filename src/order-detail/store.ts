@@ -174,8 +174,10 @@ export default class AppStore extends Store {
    */
   deliver = async () => {
     const tid = this.state().getIn(['detail', 'id']);
+    this.dispatch('detail-actor:setIsFetchingLogistics', true);
     await this.fetchLogistics();
     const { res } = await webapi.deliverVerify(tid);
+    this.dispatch('detail-actor:setIsFetchingLogistics', false);
     if (res.code === Const.SUCCESS_CODE) {
       const tradeItems = this.state()
         .getIn(['detail', 'tradeItems'])
@@ -261,8 +263,9 @@ export default class AppStore extends Store {
     tradeDelivery = tradeDelivery.set('deliverNo', param.deliverNo);
     tradeDelivery = tradeDelivery.set('deliverId', param.deliverId);
     tradeDelivery = tradeDelivery.set('deliverTime', param.deliverTime);
-
+    this.dispatch('detail-actor:setIsSavingShipment', true);
     const { res } = await webapi.deliver(tid, tradeDelivery);
+    this.dispatch('detail-actor:setIsSavingShipment', false);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
       message.success(RCi18n({id:'Order.OperateSuccessfully'}));

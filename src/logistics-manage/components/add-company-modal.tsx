@@ -52,9 +52,7 @@ class AddCompanyModal extends React.Component<any, any> {
 
   _save = () => {
     const { save } = this.props.relaxProps
-    this.setState({
-      count: 1
-    })
+   
     this.props.form.validateFields(null, async (errs, values) => {
       if (!errs) {
         save()
@@ -75,17 +73,18 @@ class AddCompanyModal extends React.Component<any, any> {
     const { getFieldDecorator, } = this.props.form;
 
     const { onFormChange, companyForm, modalVisible, saveLoading, allCompanyList } = this.props.relaxProps
-    console.log(companyForm.toJS(), 'companyForm--------', allCompanyList);
+    // console.log(companyForm.toJS(), 'companyForm--------', allCompanyList);
     return (
       <Modal afterClose={this._afterClose}
         confirmLoading={saveLoading}
         maskClosable={false}
-        title={companyForm && companyForm.get('id') ? <FormattedMessage id="Setting.Editlogisticcompany" /> : <FormattedMessage id="Setting.Addlogisticcompany" />}
+        title={companyForm && companyForm.get('expressCompanyId') ? <FormattedMessage id="Setting.Editlogisticcompany" /> : <FormattedMessage id="Setting.Addlogisticcompany" />}
         visible={modalVisible}
         onOk={this._save} onCancel={() => this._cancel()}>
         <Form>
           <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.LogisticCompanyname" />}>
             {getFieldDecorator('expressCompanyId', {
+              initialValue:companyForm.get('expressCompanyId')||'',
               rules: [
                 {
                   required: true,
@@ -108,14 +107,15 @@ class AddCompanyModal extends React.Component<any, any> {
               >
                 {allCompanyList && allCompanyList.length > 0 &&
                   allCompanyList.map(item => {
-                    return <Option value={item.expressCompanyId}  >{item.expressName}</Option>
+                    return <Option value={item.expressCompanyId} key={item.expressCompanyId} >{item.expressName}</Option>
                   })
                 }
               </Select>
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.LogisticCompanycode" />}>
-            {getFieldDecorator('companyCode', {
+            {getFieldDecorator('storeCompanyCode', {
+               initialValue:companyForm.get('storeCompanyCode')||'',
               rules: [
                 {
                   required: true,
@@ -142,7 +142,7 @@ class AddCompanyModal extends React.Component<any, any> {
           </Form.Item>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.Logisticcompanystatus" />}>
             {getFieldDecorator('status', {
-              initialValue: true,
+              initialValue:companyForm.get('status')||'',
               onChange: (value) => {
                 onFormChange({
                   field: 'status',

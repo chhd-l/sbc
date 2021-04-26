@@ -28,16 +28,36 @@ export default class AppStore extends Store {
 
     this.dispatch('loading:end')
   }
-  //保存
-  save = async (params) => {
+  init = async () => {
+    const expressAll = await webapi.findStoreLogisticSettingByStoreId();
+    const {res:allCompany}=await webapi.fetchAllExpress()
+    this.dispatch('exp:allCompany',allCompany.context);
+    if (expressAll.res.code == Const.SUCCESS_CODE) {
+      this.dispatch('exp:init', expressAll.res.context);
+    } else {
+      message.error(expressAll.res.message);
+    }
+  };
+  //save company
+  save = async () => {
     let companyForm= this.state().get('companyForm');
     this.dispatch('formActor:field', {field: 'saveLoading', value: true })
-    const {res} = await webapi.updateStoreLogisticSetting(companyForm.toJS())
-
-    setTimeout(()=>{
-      this.dispatch('formActor:field', {field: 'saveLoading', value: false })
-      this.closeModal()
-    }, 3000)
+    let res=null
+    if(companyForm.get('id')){
+     res = await webapi.updateExpress(companyForm);
+    }else{
+     res = await webapi.addExpress(companyForm);
+    }
+    
+    if(res.res.code===Const.SUCCESS_CODE){
+      setTimeout(()=>{
+        message.success(res.message)
+        this.dispatch('formActor:field', {field: 'saveLoading', value: false })
+        this.closeModal()
+        this.initList()
+      }, 1000)
+    }
+   
   }
   //setting save
   saveSetting = async () => {
@@ -51,7 +71,7 @@ export default class AppStore extends Store {
         message.success(res.message)
         this.closeSettingModal()
         this.init()
-      }, 2000)
+      }, 1000)
     }
     
   }
@@ -66,6 +86,7 @@ export default class AppStore extends Store {
   onSwitchSettingChange = async(params) => {
    const {res}= await webapi.updateStoreLogisticSettingStatus(params);
     if(res.code===Const.SUCCESS_CODE){
+      message.success(res.message)
       this.init()
     }
 
@@ -74,6 +95,7 @@ export default class AppStore extends Store {
    onSwitchCompanyChange = async(params) => {
     const {res}= await webapi.updateStoreExpressCompanyRelaStatus(params);
      if(res.code===Const.SUCCESS_CODE){
+      message.success(res.message)
        this.initList()
      }
  
@@ -83,10 +105,24 @@ export default class AppStore extends Store {
       status: 1
     })
   }
-  deleteRow = (record) => {
-    message.success('delete success!')
+  /**
+   * 删除
+   * @param record 
+   */
+  deleteRow =async (record) => {
+    const {res}= await webapi.deleteExpress({id:record.id});
+    if(res.code===Const.SUCCESS_CODE){
+      message.success(res.message)
+      this.initList()
+    }
+   
   }
   editRow = (record) => {
+    const{id,storeCompanyCode,expressCompanyId,status}=record
+    let p={
+      id,storeCompanyCode,expressCompanyId,status
+    }
+    this.dispatch('formActor:form',p)
     this.openModal()
   }
   addCompany = () => {
@@ -112,48 +148,6 @@ export default class AppStore extends Store {
     this.dispatch('formActor:settingForm', {})
   }
 
-  init = async () => {
-    const expressAll = await webapi.findStoreLogisticSettingByStoreId();
-    const {res:allCompany}=await webapi.fetchAllExpress()
-    this.dispatch('exp:allCompany',allCompany.context);
-    if (expressAll.res.code == Const.SUCCESS_CODE) {
-      this.dispatch('exp:init', expressAll.res.context);
-    } else {
-      message.error(expressAll.res.message);
-    }
-  };
+ 
 
-  /**
-   * 选中一个或多个快递公司
-   *
-   */
-  onChecked = async (index: number, checked: boolean, expressCompanyId: Number) => {
-    const checkedRelation = this.state().get('checkedRelation');
-    if (checked) {
-      if (checkedRelation.size >= 20) {
-        message.error(RCi18n({id:'Public.logisticsCompanyTip'}));
-      } else {
-        const { res } = await webapi.addExpress(expressCompanyId);
-        if (res.code == Const.SUCCESS_CODE) {
-          this.dispatch('exp:afterChecked', res.context);
-          this.dispatch('exp:checked', { index, checked });
-        } else if (res.code == 'K-090903') {
-          message.error(RCi18n({id:'Public.logisticsCompanyErr'}));
-          this.init();
-        } else {
-          this.init();
-        }
-      }
-    } else {
-      if (checkedRelation.get(expressCompanyId.toString())) {
-        const { res } = await webapi.deleteExpress(checkedRelation.get(expressCompanyId.toString()), expressCompanyId.toString());
-        if (res.code == Const.SUCCESS_CODE) {
-          this.dispatch('exp:afterUnChecked', expressCompanyId.toString());
-          this.dispatch('exp:checked', { index, checked });
-        } else {
-          this.init();
-        }
-      }
-    }
-  };
 }

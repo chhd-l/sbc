@@ -58,12 +58,17 @@ export default class CompanyList extends Component<any, any> {
            className="iconfont iconEdit"
          >
          </span>
-          <span
+         <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this._deleteRow(record)} okText={(window as any).RCi18n({ id: 'Setting.Confirm' })} cancelText={(window as any).RCi18n({ id: 'Setting.Cancel' })}>
+                <Tooltip placement="top" title="Delete">
+                  <a type="link" className="iconfont iconDelete"></a>
+                </Tooltip>
+              </Popconfirm>
+          {/* <span
             style={{ color: '#e2001a', paddingRight: 10, cursor: 'pointer' }}
             onClick={() => this._deleteRow(record)}
             className="iconfont iconDelete"
           >
-          </span>
+          </span> */}
       </span>
       ),
     },

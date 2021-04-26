@@ -29,23 +29,33 @@ export const fetchCheckedExpress = () => {
  * @param id
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const deleteExpress = (id: any, expressCompanyId: any) => {
-  return Fetch<TResult>(`/store/expressCompany/${id}/${expressCompanyId}`, {
-    method: 'DELETE'
+export const deleteExpress = (params) => {
+  return Fetch<TResult>(`/store/expressCompany/deleteExpressCompanyRela`, {
+    method: 'POST',
+    body: JSON.stringify(params)
   });
 };
 
 /**
- * 添加商家绑定的物流接口
+ * 添加
  * @param expressId
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const addExpress = (expressId) => {
-  return Fetch<TResult>(`/store/expressCompany`, {
+export const addExpress = (params) => {
+  return Fetch<TResult>(`/store/expressCompany/saveExpressCompanyRela`, {
     method: 'POST',
-    body: JSON.stringify({
-      expressCompanyId: expressId
-    })
+    body: JSON.stringify(params)
+  });
+};
+/**
+ * 编辑
+ * @param expressId
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+ export const updateExpress = (params) => {
+  return Fetch<TResult>(`/store/expressCompany/updateExpressCompanyRela`, {
+    method: 'POST',
+    body: JSON.stringify(params)
   });
 };
 

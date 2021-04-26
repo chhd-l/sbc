@@ -1,12 +1,14 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
-import { Table, Button, InputNumber, Modal, Form, Spin, Row } from 'antd';
+import { Table, Button, InputNumber, Modal, Form, Spin, Row, Timeline, Icon } from 'antd';
 import { IMap, IList } from 'typings/globalType';
 import { noop, Const, AuthWrapper, Logistics } from 'qmkit';
 import DeliveryForm from './delivery-form';
 import Moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { debug } from 'console';
+import moment from 'moment';
 
 const DeliveryFormDetail = Form.create({})(DeliveryForm);
 
@@ -24,7 +26,7 @@ class OrderDelivery extends React.Component<any, any> {
   }
 
   props: {
-    intl?:any;
+    intl?: any;
     relaxProps?: {
       detail: IMap;
       deliver: Function;
@@ -40,6 +42,7 @@ class OrderDelivery extends React.Component<any, any> {
       onRefresh: Function;
       isFetchingLogistics: boolean;
       isSavingShipment: boolean;
+      logisticsLoading: boolean;
     };
   };
 
@@ -57,7 +60,8 @@ class OrderDelivery extends React.Component<any, any> {
     refresh: 'refresh',
     onRefresh: noop,
     isFetchingLogistics: 'isFetchingLogistics',
-    isSavingShipment: 'isSavingShipment'
+    isSavingShipment: 'isSavingShipment',
+    logisticsLoading:'logisticsLoading'
   };
 
   /*static getDerivedStateFromProps(nextProps, prevState) {
@@ -74,8 +78,10 @@ class OrderDelivery extends React.Component<any, any> {
   }*/
 
   render() {
-    const { detail, deliver, modalVisible, saveDelivery, refresh, onRefresh, isFetchingLogistics, isSavingShipment } = this.props.relaxProps;
-    const tradeDelivers = detail.get('tradeDelivers') as IList;
+    const { detail, deliver, modalVisible, saveDelivery, refresh, onRefresh, isFetchingLogistics, isSavingShipment, logisticsLoading } = this.props.relaxProps;
+
+    const refreshList = fromJS(refresh);
+    const tradeDelivers = refreshList && refreshList.toJS().length > 0 ? fromJS(refresh) : (detail.get('tradeDelivers') as IList);
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
@@ -99,7 +105,7 @@ class OrderDelivery extends React.Component<any, any> {
           }}
         >
           <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />
-          {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID') ? (
+          {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && payState === 'PAID' ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
                 <Button type="primary" loading={isFetchingLogistics} onClick={() => deliver()}>
@@ -109,74 +115,75 @@ class OrderDelivery extends React.Component<any, any> {
             </div>
           ) : null}
         </div>
-        {tradeDelivers.count() > 0
-          ? tradeDelivers &&
-            tradeDelivers.map((v, i) => {
-              const logistic = v.get('logistics');
-              const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
-              //处理赠品
-              const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `【赠品】${gift.get('itemName')}`));
-              return (
-                <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-                  <label style={styles.title}>{<FormattedMessage id="Order.DeliveryRecord" />}</label>
-                  <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryRecordColumns()} dataSource={v.get('shippingItems').concat(deliversGifts).toJS()} pagination={false} bordered />
+        <Spin spinning={logisticsLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          {tradeDelivers.count() > 0
+            ? tradeDelivers &&
+              tradeDelivers.map((v, i) => {
+                const logistic = v.get('logistics');
+                const tradeLogisticsDetails = v.get('tradeLogisticsDetails') ? v.get('tradeLogisticsDetails').toJS() : [];
+                const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
+                //处理赠品
+                const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `【赠品】${gift.get('itemName')}`));
+                return (
+                  <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={styles.title}>{<FormattedMessage id="Order.DeliveryRecord" />}</label>
+                    <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryRecordColumns()} dataSource={v.get('shippingItems').concat(deliversGifts).toJS()} pagination={false} bordered />
 
-                  <div style={styles.expressBox as any}>
-                    <div style={styles.stateBox}>
-                      {logistic ? (
-                        <label style={styles.information} className="flex-start-align">
-                          【<FormattedMessage id="Product.logisticsInformation" />】<FormattedMessage id="Order.deliveryDate" />：{deliverTime}
-                          &nbsp;&nbsp; <FormattedMessage id="Order.logisticsCompany" />：
-                          {logistic.get('logisticCompanyName')} &nbsp;&nbsp;<FormattedMessage id="Order.logisticsSingleNumber" />：
-                          {logistic.get('logisticNo')}&nbsp;&nbsp;
-                          <Logistics companyInfo={logistic} deliveryTime={deliverTime} />
-                          {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                    <div style={styles.expressBox as any}>
+                      <div style={styles.stateBox}>
+                        {logistic ? (
+                          <div>
+                            <label style={styles.information} className="flex-start-align">
+                              【<FormattedMessage id="Product.logisticsInformation" />】
+                              <FormattedMessage id="Order.deliveryDate" />：{deliverTime}
+                              &nbsp;&nbsp; <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
+                              <FormattedMessage id="Order.logisticsSingleNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
+                              {/* <Logistics companyInfo={logistic}  deliveryTime={deliverTime}/> */}
+                              {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
                             Refresh
                           </Button> */}
-                          {v.get('trackingUrl') ? (
-                            <Button type="primary" shape="round" style={{ marginLeft: 15 }} href={v.get('trackingUrl')} target="_blank" rel="noopener">
-                              <FormattedMessage id="Order.Trackdelivery" />
-                            </Button>
-                          ) : (
-                            <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
-                              <FormattedMessage id="Order.Refresh" />
-                            </Button>
-                          )}
-                        </label>
-                      ) : (
-                        ''
-                      )}
-                    </div>
-                    {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
+                              {v.get('trackingUrl') ? (
+                                <Button type="primary" shape="round" style={{ marginLeft: 15 }} href={v.get('trackingUrl')} target="_blank" rel="noopener">
+                                  <FormattedMessage id="Order.Trackdelivery" />
+                                </Button>
+                              ) : (
+                                <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                                  <FormattedMessage id="Order.Refresh" />
+                                </Button>
+                              )}
+                            </label>
+                            <div style={{ marginTop: 20 }}>
+                              <Timeline>
+                                {tradeLogisticsDetails.reverse().map((item, index) => {
+                                  let color = index === 0 ? 'red' : 'gray';
+                                  return (
+                                    <Timeline.Item color={color}>
+                                      <p>
+                                        {moment(item.timestamp).format('YYYY-MM-DD hh:mm')} {item.longDescription}
+                                      </p>
+                                    </Timeline.Item>
+                                  );
+                                })}
+                              </Timeline>
+                            </div>
+                          </div>
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                      {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
                       <AuthWrapper functionName="fOrderDetail002">
                         <a style={{ color: 'blue' }} href="#" onClick={() => this._showCancelConfirm(v.get('deliverId'))}>
                           Invalid
                         </a>
                       </AuthWrapper>
                     )}*/}
-                  </div>
-
-                  <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-                    <div style={{ marginTop: 0, marginBottom: 20, marginLeft: 15 }}>
-                      {refresh.length != 0
-                        ? refresh[i].syncLogisticsInfo &&
-                          refresh[i].syncLogisticsInfo.originInfo.trackInfo &&
-                          refresh[i].syncLogisticsInfo.originInfo.trackInfo.map((item, o) => {
-                            return (
-                              <div key={o} className="flex-start-align">
-                                <span>{item.date},</span>
-                                <span>{item.statusDescription},</span>
-                                <span>{item.details}</span>
-                              </div>
-                            );
-                          })
-                        : null}
                     </div>
-                  </Spin>
-                </div>
-              );
-            })
-          : null}
+                  </div>
+                );
+              })
+            : null}
+        </Spin>
 
         <div style={styles.expressBox as any}>
           <div style={styles.stateBox} />
@@ -189,7 +196,7 @@ class OrderDelivery extends React.Component<any, any> {
                     this._showConfirm();
                   }}
                 >
-                  <FormattedMessage id='Order.confirmReceipt' />
+                  <FormattedMessage id="Order.confirmReceipt" />
                 </Button>
               </AuthWrapper>
             ) : null}
@@ -198,7 +205,7 @@ class OrderDelivery extends React.Component<any, any> {
 
         <Modal
           maskClosable={false}
-          title={<FormattedMessage id="Order.DeliverGoods"/>}
+          title={<FormattedMessage id="Order.DeliverGoods" />}
           visible={modalVisible}
           confirmLoading={isSavingShipment}
           onCancel={this._hideDeliveryModal}
@@ -206,10 +213,10 @@ class OrderDelivery extends React.Component<any, any> {
             this['_receiveAdd'].validateFields(null, (errs, values) => {
               //如果校验通过
               if (!errs) {
-                if(values.deliverNo){
-                  values.deliverTime =  values.deliverTime.format(Const.DAY_FORMAT)
+                if (values.deliverNo) {
+                  values.deliverTime = values.deliverTime.format(Const.DAY_FORMAT);
                 } else {
-                  values.deliverNo = null
+                  values.deliverNo = null;
                 }
                 saveDelivery(values);
               }
@@ -332,8 +339,8 @@ class OrderDelivery extends React.Component<any, any> {
     const { obsoleteDeliver } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = (window as any).RCi18n({id:'Order.prompt'});
-    const content = (window as any).RCi18n({id:'Order.Whethertoinvalidate'});
+    const title = (window as any).RCi18n({ id: 'Order.prompt' });
+    const content = (window as any).RCi18n({ id: 'Order.Whethertoinvalidate' });
     confirm({
       title: title,
       content: content,
@@ -353,8 +360,8 @@ class OrderDelivery extends React.Component<any, any> {
     const { confirm, detail } = this.props.relaxProps;
     const tid = detail.get('id');
     const confirmModal = Modal.confirm;
-    const title = (window as any).RCi18n({id:'Order.confirmReceipt'});
-    const content = (window as any).RCi18n({id:'Order.Confirmreceiptofallitems'});
+    const title = (window as any).RCi18n({ id: 'Order.confirmReceipt' });
+    const content = (window as any).RCi18n({ id: 'Order.Confirmreceiptofallitems' });
     confirmModal({
       title: title,
       content: content,

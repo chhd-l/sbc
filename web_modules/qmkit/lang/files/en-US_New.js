@@ -26,7 +26,9 @@ export default {
        'Order.tradeType': 'Trade Type',
        'Order.cardHolderName': 'Card Holder Name',
        'Order.payWay2': 'Pay Way',
-       'Order.cardType': 'Card Type'
+       'Order.cardType': 'Card Type',
+       'Order.deliveryDate': 'Delivery Date',
+       'Order.logisticsDetails': 'Logistics details'
     },
     Subscription: {},
     Appointment: {

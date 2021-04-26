@@ -237,7 +237,7 @@ class comment extends Component<any, any> {
                             <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
                           </a>
                         </Tooltip>,
-                        <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.deleteThisComment"/>} onConfirm={() => this.deleteComment(item.id)} okText={<FormattedMessage id="Order.Confirm"/>} cancelText={<FormattedMessage id="Order.Cancel"/>}>
+                        <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.deleteThisComment"/>} onConfirm={() => this.deleteComment(item.id)} okText={<FormattedMessage id="Order.btnConfirm"/>} cancelText={<FormattedMessage id="Order.btnCancel"/>}>
                           <Tooltip placement="top" title={<FormattedMessage id="Order.Delete"/>}>
                             <a>
                               <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>

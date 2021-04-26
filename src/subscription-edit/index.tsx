@@ -88,6 +88,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryPrice: 0,
       taxFeePrice: 0,
       discountsPrice: '',
+      freeShippingFlag: false,
+      freeShippingDiscountPrice: 0,
 
       isPromotionCodeValid: false,
       promotionDesc: 'Promotion',
@@ -173,17 +175,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             promotionCode: subscriptionDetail.promotionCode
           };
 
-          let initDeliveryPrice = 0;
-          let initDiscountPirce = 0;
-          let initTaxPrice = 0;
-          (subscriptionDetail.noStartTradeList ?? []).forEach(item => {
-            if (item.tradePrice) {
-              initDeliveryPrice += item.tradePrice.deliveryPrice ?? 0;
-              initDiscountPirce += item.tradePrice.discountsPrice ?? 0;
-              initTaxPrice += item.tradePrice.taxFeePrice ?? 0;
-            }
-          });
-
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -200,17 +191,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               promotionCodeShow: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
-              loading: false,
-              deliveryPrice: +initDeliveryPrice.toFixed(2),
-              discountsPrice: +initDiscountPirce.toFixed(2),
-              taxFeePrice: +initTaxPrice.toFixed(2)
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
                 let customerId = this.state.deliveryAddressInfo.customerId;
                 this.getAddressList(customerId, 'DELIVERY');
                 this.getAddressList(customerId, 'BILLING');
-                // this.applyPromotionCode(this.state.promotionCodeShow);
+                this.applyPromotionCode(this.state.promotionCodeShow);
               }
 
               // if(this.state.petsId){
@@ -511,8 +498,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             deliveryList: addressList,
             customerAccount: customerAccount,
             customerId: customerId,
-            visibleShipping: showModal,
-            loading: false
+            visibleShipping: showModal
           });
         }
         if (type === 'BILLING') {
@@ -528,8 +514,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             billingList: addressList,
             customerAccount: customerAccount,
-            visibleBilling: showModal,
-            loading: false
+            visibleBilling: showModal
           });
         }
       }
@@ -702,6 +687,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0,
             isPromotionCodeValid: res.context.promotionFlag,
             promotionDesc: res.context.promotionDesc,
+            freeShippingFlag: res.context.freeShippingFlag ?? false,
+            freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
             loading: false
           });
         } else {
@@ -1367,6 +1354,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span><FormattedMessage id="Subscription.Shipping"/></span>
                   <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
+                {this.state.freeShippingFlag && <div className="flex-between">
+                  <span><FormattedMessage id="Order.shippingFeesDiscount"/></span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.freeShippingDiscountPrice ? this.state.freeShippingDiscountPrice : 0).toFixed(2)}</span>
+                </div>}
                 {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                   <div className="flex-between">
                     <span><FormattedMessage id="Subscription.Tax"/></span>
@@ -1377,7 +1368,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>
                     <span><FormattedMessage id="Subscription.Total"/></span> (<FormattedMessage id="Subscription.IVAInclude"/>):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.taxFeePrice + +this.state.deliveryPrice).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.taxFeePrice + +this.state.deliveryPrice - +this.state.freeShippingDiscountPrice).toFixed(2)}</span>
                 </div>
               </Col>
             </Row>

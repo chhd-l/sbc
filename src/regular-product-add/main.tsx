@@ -204,7 +204,7 @@ export default class Main extends React.Component<any, any> {
           </Tabs>
 
           {/*页脚*/}
-          <Foot goodsFuncName={goodsFuncName} isLeave={true} priceFuncName={priceFuncName} tabType={this.store.get('activeTabKey')} onNext={this.onNext} onPrev={this.onPrev} />
+          <Foot goodsFuncName={goodsFuncName} isLeave={true} priceFuncName={priceFuncName} tabType={this.store.get('activeTabKey')} onNext={this.onNext} onPrev={this.onPrev} loading={this.store.get('loading')} />
           {/*{this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}*/}
 
           {/*品牌*/}

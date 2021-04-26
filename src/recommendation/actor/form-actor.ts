@@ -13,6 +13,7 @@ export default class FormActor extends Actor {
 
   @Action('form:field')
   formFieldChange(state: IMap, params) {
+    console.log(params)
     return state.update('form', (form) => form.mergeDeep(params));
   }
 

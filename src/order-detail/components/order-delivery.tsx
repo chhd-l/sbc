@@ -10,6 +10,8 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { debug } from 'console';
 import moment from 'moment';
 
+const DeliveryFormDetail = Form.create({})(DeliveryForm);
+
 /**
  * 订单发货记录
  */
@@ -38,6 +40,8 @@ class OrderDelivery extends React.Component<any, any> {
       obsoleteDeliver: Function;
       refresh: IMap;
       onRefresh: Function;
+      isFetchingLogistics: boolean;
+      isSavingShipment: boolean;
       logisticsLoading: boolean;
     };
   };
@@ -55,6 +59,8 @@ class OrderDelivery extends React.Component<any, any> {
     obsoleteDeliver: noop,
     refresh: 'refresh',
     onRefresh: noop,
+    isFetchingLogistics: 'isFetchingLogistics',
+    isSavingShipment: 'isSavingShipment',
     logisticsLoading:'logisticsLoading'
   };
 
@@ -72,7 +78,8 @@ class OrderDelivery extends React.Component<any, any> {
   }*/
 
   render() {
-    const { detail, deliver, modalVisible, saveDelivery, refresh, onRefresh, logisticsLoading } = this.props.relaxProps;
+    const { detail, deliver, modalVisible, saveDelivery, refresh, onRefresh, isFetchingLogistics, isSavingShipment, logisticsLoading } = this.props.relaxProps;
+
     const refreshList = fromJS(refresh);
     const tradeDelivers = refreshList && refreshList.toJS().length > 0 ? fromJS(refresh) : (detail.get('tradeDelivers') as IList);
     const flowState = detail.getIn(['tradeState', 'flowState']);
@@ -87,7 +94,7 @@ class OrderDelivery extends React.Component<any, any> {
         .set('levelPrice', 0)
         .set('isGift', true)
     );
-    const DeliveryFormDetail = Form.create({})(DeliveryForm);
+    
     return (
       <div>
         <div
@@ -101,7 +108,7 @@ class OrderDelivery extends React.Component<any, any> {
           {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && payState === 'PAID' ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
-                <Button type="primary" onClick={() => deliver()}>
+                <Button type="primary" loading={isFetchingLogistics} onClick={() => deliver()}>
                   {<FormattedMessage id="Order.ship" />}
                 </Button>
               </AuthWrapper>
@@ -200,6 +207,7 @@ class OrderDelivery extends React.Component<any, any> {
           maskClosable={false}
           title={<FormattedMessage id="Order.DeliverGoods" />}
           visible={modalVisible}
+          confirmLoading={isSavingShipment}
           onCancel={this._hideDeliveryModal}
           onOk={() => {
             this['_receiveAdd'].validateFields(null, (errs, values) => {
@@ -215,7 +223,7 @@ class OrderDelivery extends React.Component<any, any> {
             });
           }}
         >
-          <DeliveryFormDetail ref={(_receiveAdd) => (this['_receiveAdd'] = _receiveAdd)} />
+          {modalVisible && <DeliveryFormDetail ref={(_receiveAdd) => (this['_receiveAdd'] = _receiveAdd)} />}
         </Modal>
       </div>
     );

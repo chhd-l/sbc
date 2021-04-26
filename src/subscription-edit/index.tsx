@@ -173,17 +173,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             promotionCode: subscriptionDetail.promotionCode
           };
 
-          let initDeliveryPrice = 0;
-          let initDiscountPirce = 0;
-          let initTaxPrice = 0;
-          (subscriptionDetail.noStartTradeList ?? []).forEach(item => {
-            if (item.tradePrice) {
-              initDeliveryPrice += item.tradePrice.deliveryPrice ?? 0;
-              initDiscountPirce += item.tradePrice.discountsPrice ?? 0;
-              initTaxPrice += item.tradePrice.taxFeePrice ?? 0;
-            }
-          });
-
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -200,17 +189,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               promotionCodeShow: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
-              loading: false,
-              deliveryPrice: +initDeliveryPrice.toFixed(2),
-              discountsPrice: +initDiscountPirce.toFixed(2),
-              taxFeePrice: +initTaxPrice.toFixed(2)
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
                 let customerId = this.state.deliveryAddressInfo.customerId;
                 this.getAddressList(customerId, 'DELIVERY');
                 this.getAddressList(customerId, 'BILLING');
-                // this.applyPromotionCode(this.state.promotionCodeShow);
+                this.applyPromotionCode(this.state.promotionCodeShow);
               }
 
               // if(this.state.petsId){
@@ -511,8 +496,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             deliveryList: addressList,
             customerAccount: customerAccount,
             customerId: customerId,
-            visibleShipping: showModal,
-            loading: false
+            visibleShipping: showModal
           });
         }
         if (type === 'BILLING') {
@@ -528,8 +512,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             billingList: addressList,
             customerAccount: customerAccount,
-            visibleBilling: showModal,
-            loading: false
+            visibleBilling: showModal
           });
         }
       }

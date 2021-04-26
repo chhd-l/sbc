@@ -152,17 +152,6 @@ class SubscriptionDetail extends React.Component<any, any> {
           let goodsInfo = subscriptionDetail.goodsInfo;
           let paymentInfo = subscriptionDetail.payPaymentInfo;
 
-          let initDeliveryPrice = 0;
-          let initDiscountPirce = 0;
-          let initTaxPrice = 0;
-          (subscriptionDetail.noStartTradeList ?? []).forEach(item => {
-            if (item.tradePrice) {
-              initDeliveryPrice += item.tradePrice.deliveryPrice ?? 0;
-              initDiscountPirce += item.tradePrice.discountsPrice ?? 0;
-              initTaxPrice += item.tradePrice.taxFeePrice ?? 0;
-            }
-          });
-
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -178,14 +167,10 @@ class SubscriptionDetail extends React.Component<any, any> {
               promotionCode: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
-              loading: false,
-              deliveryPrice: +initDeliveryPrice.toFixed(2),
-              discountsPrice: +initDiscountPirce.toFixed(2),
-              taxFeePrice: +initTaxPrice.toFixed(2),
               isActive: subscriptionDetail.subscribeStatus === "0"
             },
             () => {
-              // this.applyPromationCode(this.state.promotionCode);
+              this.applyPromationCode(this.state.promotionCode);
             }
           );
         }
@@ -456,6 +441,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       isAutoSub: true,
       deliveryAddressId: this.state.deliveryAddressId
     };
+    this.setState({ loading: true });
     webapi
       .getPromotionPrice(params)
       .then((data) => {
@@ -466,11 +452,16 @@ class SubscriptionDetail extends React.Component<any, any> {
             discountsPrice: res.context.discountsPrice,
             promotionCodeShow: res.context.promotionCode,
             promotionDesc: res.context.promotionDesc,
-            taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0
+            taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0,
+            loading: false
           });
+        } else {
+          this.setState({ loading: false });
         }
       })
-      .catch((err) => { });
+      .catch((err) => {
+        this.setState({ loading: false });
+      });
   };
   handleYearChange = (value) => { };
   tabChange = (key) => { };

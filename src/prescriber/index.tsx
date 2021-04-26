@@ -286,13 +286,13 @@ export default class ClinicList extends Component<any, any> {
         width: '10%',
         render: (text, record) => <p>{record.enabled ? RCi18n({id:'Prescriber.Enabled'}) :RCi18n({id:'Disabled'})}</p>
       },
-      {
-        title: <FormattedMessage id="Prescriber.AuditAuthority" />,
-        dataIndex: 'auditAuthority',
-        key: 'auditAuthority',
-        width: '10%',
-        render: (text, record) => <p>{record.auditAuthority ? 'Y' : 'N'}</p>
-      },
+      // {
+      //   title: <FormattedMessage id="Prescriber.AuditAuthority" />,
+      //   dataIndex: 'auditAuthority',
+      //   key: 'auditAuthority',
+      //   width: '10%',
+      //   render: (text, record) => <p>{record.auditAuthority ? 'Y' : 'N'}</p>
+      // },
       {
         title: <FormattedMessage id="Prescriber.Action" />,
         key: 'action',

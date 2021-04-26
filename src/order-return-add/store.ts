@@ -66,11 +66,11 @@ export default class AppStore extends Store {
 
       originTradeItems = fromJS(tradeDetail.res.context.tradeItems);
       // 只展示有可退商品的信息
-      tradeDetail.res.context.tradeItems = tradeDetail.res.context.tradeItems.filter((v) => v.canReturnNum > 0);
+      // tradeDetail.res.context.tradeItems = tradeDetail.res.context.tradeItems.filter((v) => v.canReturnNum > 0);
 
       if (tradeDetail.res.context.gifts) {
         // 只展示有可退数量的赠品信息
-        tradeDetail.res.context.gifts = tradeDetail.res.context.gifts.filter((v) => v.canReturnNum > 0);
+        // tradeDetail.res.context.gifts = tradeDetail.res.context.gifts.filter((v) => v.canReturnNum > 0);
         // 默认赠品退货数量为0
         tradeDetail.res.context.gifts.forEach((v) => {
           v.num = 0; //初始化默认的退货数量

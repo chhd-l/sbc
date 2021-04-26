@@ -21,6 +21,7 @@ class DictionaryForm extends Component<any, any> {
         name: '',
         type: '',
         description: '',
+        value: '',
         valueEn: '',
         enabled: 0,
         priority: 0,
@@ -54,6 +55,7 @@ class DictionaryForm extends Component<any, any> {
         name: response.name,
         type: response.type,
         description: response.description,
+        value: response.value,
         valueEn: response.valueEn,
         priority: response.priority,
         enabled: response.enabled,
@@ -72,6 +74,7 @@ class DictionaryForm extends Component<any, any> {
         name: response.name,
         type: response.type,
         description: response.description,
+        value: response.value,
         valueEn: response.valueEn,
         priority: response.priority,
         enabled: response.enabled === 0 ? true : false,
@@ -184,13 +187,27 @@ class DictionaryForm extends Component<any, any> {
           )}
         </FormItem>
         <FormItem label="Value">
-          {getFieldDecorator('valueEn', {
+          {getFieldDecorator('value', {
             rules: [
               {
                 required: true,
                 message: 'Please input Value!'
               }
             ]
+          })(
+            <Input
+              onChange={(e) => {
+                const value = (e.target as any).value;
+                this.onFormChange({
+                  field: 'value',
+                  value
+                });
+              }}
+            />
+          )}
+        </FormItem>
+        <FormItem label="Value EN">
+          {getFieldDecorator('valueEn', {
           })(
             <Input
               onChange={(e) => {

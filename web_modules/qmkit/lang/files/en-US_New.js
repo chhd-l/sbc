@@ -23,7 +23,10 @@ export default {
         'Product.selectstatus': 'please select status',
     },
     Order: {
-       'Order.tradeType': 'Trade Type'
+       'Order.tradeType': 'Trade Type',
+       'Order.cardHolderName': 'Card Holder Name',
+       'Order.payWay2': 'Pay Way',
+       'Order.cardType': 'Card Type'
     },
     Subscription: {},
     Appointment: {
@@ -82,7 +85,7 @@ export default {
         'Prescriber.Link status':'Link status',
         'Prescriber.Paris':'Paris',
         'Prescriber.Pick up':'Pick up',
-        'Prescriber.Created Time':'Created Time:',
+        'Prescriber.Created Time':'Created Date:',
         'Prescriber.lessthan100characters':'Please input less than 100 characters:',
         'Prescriber.thereasonforrejection':'Please enter the reason for rejection:',
         'Prescriber.Product':'Product',
@@ -158,7 +161,7 @@ export default {
         'Prescriber.Paris':'Paris (Y/N)',
         'Prescriber.Pick up':'Pick up (Y/N)',
         'Prescriber.Getdatafailed':'Get data failed',
-    
+        'Prescriber.Recommendation.fillDate':'fillDate'
     },
     'Pet owner': {
         "PetOwner.Member": "Member",

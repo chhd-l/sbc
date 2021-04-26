@@ -1512,12 +1512,16 @@ export default class AppStore extends Store {
         return false;
       }
     }
-
+    let detailsList=this.state().get('goodsDescriptionDetailList');
+    let _itemList=  detailsList.map(_item=>{
+          _item.content=this.functionTurnJson(_item.content);
+          return _item
+      })
     param = param.set('goodsIntervalPrices', areaPrice);
     param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
-    param = param.set('goodsDescriptionDetailList', this.state().get('goodsDescriptionDetailList'));
+    param = param.set('goodsDescriptionDetailList', _itemList);
     //console.log(this.state().get('productFilter'), 2222);
 
     //添加参数，是否允许独立设价
@@ -1575,7 +1579,14 @@ export default class AppStore extends Store {
       return false;
     }
   };
-
+  /**提取json代码 */
+  functionTurnJson = (content) => {
+    const reg = /\<[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
+    let _html = content.replace(reg, function () {
+      return arguments[1];
+    });
+    return _html;
+  };
   /**
    * 客户搜索
    */

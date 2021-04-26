@@ -295,6 +295,7 @@ class MessageDetails extends Component<any, any> {
           }
           this.setState({
             loading: false,
+            id:res.context.id,
             previewHtml: res.context.emailTemplateHtml
           });
         } else {

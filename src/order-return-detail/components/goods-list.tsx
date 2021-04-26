@@ -261,14 +261,14 @@ class GoodsList extends React.Component<any, any> {
             <label style={styles.inforItem}>
               <FormattedMessage id="Order.logisticsInformation" />
               : <p>{logisticInfo}</p> 
-              {returnLogisticInfo && (
+              {/* {returnLogisticInfo && (
                 <Logistics
                   companyInfo={fromJS(returnLogisticInfo)}
                   deliveryTime={moment(
                     returnLogistics.get('createTime')
                   ).format(Const.DAY_FORMAT)}
                 />
-              )}
+              )} */}
             </label>
           ) : null}
 

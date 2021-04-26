@@ -216,6 +216,14 @@ class DeliveryItem extends React.Component<Iprop, any> {
         handlerFunc({
           ...delivery,
           ...rFields,
+          ...(dadataAddress.unrestrictedValue ? {
+            country: dadataAddress.countryCode || '',
+            countryId: (this.state.countryList[0] ?? {}).id ?? '',
+            province: dadataAddress.province || '',
+            provinceId: null,
+            city: dadataAddress.city || '',
+            cityId: null
+          } : {}),
           customerId: this.props.customerId,
           consigneeName: rFields.firstName + ' ' + rFields.lastName,
           deliveryAddress: [rFields.address1, rFields.address2].join(''),

@@ -11,7 +11,7 @@ import * as webapi from './webapi';
 import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary, refresh } from './webapi';
 import { message } from 'antd';
 import LogisticActor from './actor/logistic-actor';
-import { Const, history, ValidConst } from 'qmkit';
+import { Const, history, RCi18n, ValidConst } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {

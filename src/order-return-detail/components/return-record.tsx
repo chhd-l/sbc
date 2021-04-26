@@ -52,12 +52,12 @@ export default class ReturnRecord extends React.Component<any, any> {
             )
           : '-'
     },
-    {
-      title:RCi18n({id:'Order.refundPoint'}),
-      dataIndex: 'returnPoints',
-      key: 'returnPoints',
-      render: (returnPoints) => <div>{returnPoints}</div>
-    },
+    // {
+    //   title:RCi18n({id:'Order.refundPoint'}),
+    //   dataIndex: 'returnPoints',
+    //   key: 'returnPoints',
+    //   render: (returnPoints) => <div>{returnPoints}</div>
+    // },
     {
       title: RCi18n({id:'Order.refundAmount'}),
       dataIndex: 'returnPrice',

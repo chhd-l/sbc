@@ -28,6 +28,7 @@ class AddCompanyModal extends React.Component<any, any> {
     visible: any;
     form: any;
     relaxProps?: {
+      allCompanyList: any
       companyForm: any;
       modalVisible: boolean;
       saveLoading: boolean;
@@ -39,6 +40,7 @@ class AddCompanyModal extends React.Component<any, any> {
   };
 
   static relaxProps = {
+    allCompanyList: 'allCompanyList',
     saveLoading: 'saveLoading',
     companyForm: 'companyForm',
     modalVisible: 'modalVisible',
@@ -49,7 +51,6 @@ class AddCompanyModal extends React.Component<any, any> {
   };
 
   _save = () => {
-    debugger
     const { save } = this.props.relaxProps
     this.setState({
       count: 1
@@ -71,83 +72,91 @@ class AddCompanyModal extends React.Component<any, any> {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, } = this.props.form;
 
-    const { onFormChange,companyForm, modalVisible, saveLoading, } = this.props.relaxProps
-    console.log(companyForm.toJS(), 'companyForm--------');
+    const { onFormChange, companyForm, modalVisible, saveLoading, allCompanyList } = this.props.relaxProps
+    console.log(companyForm.toJS(), 'companyForm--------', allCompanyList);
     return (
       <Modal afterClose={this._afterClose}
-             confirmLoading={saveLoading}
-             maskClosable={false}
-             title={companyForm && companyForm.get('id') ? <FormattedMessage id="Setting.Editlogisticcompany"/>: <FormattedMessage id="Setting.Addlogisticcompany"/>}
-             visible={modalVisible}
-             onOk={this._save} onCancel={() => this._cancel()}>
-          <Form>
-            <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.LogisticCompanyname" />}>
-              {getFieldDecorator('companyName', {
-                rules: [
-                  {
-                    required: true,
-                    message: RCi18n({
-                      id: 'Setting.Pleaseinputlogisticcompanyname'
-                    }),
-                  },
-                ],
-              })(
-                <Input placeholder={
-                  RCi18n({
+        confirmLoading={saveLoading}
+        maskClosable={false}
+        title={companyForm && companyForm.get('id') ? <FormattedMessage id="Setting.Editlogisticcompany" /> : <FormattedMessage id="Setting.Addlogisticcompany" />}
+        visible={modalVisible}
+        onOk={this._save} onCancel={() => this._cancel()}>
+        <Form>
+          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.LogisticCompanyname" />}>
+            {getFieldDecorator('expressCompanyId', {
+              rules: [
+                {
+                  required: true,
+                  message: RCi18n({
                     id: 'Setting.Pleaseinputlogisticcompanyname'
-                  })}
-                       onChange={(e) => {
-                         onFormChange({
-                           field: 'companyName',
-                           value: e.target.value
-                         })
-                       }}
-                />
-                )}
-            </Form.Item>
-            <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.LogisticCompanycode" />}>
-              {getFieldDecorator('companyCode', {
-                rules: [
-                  {
-                    required: true,
-                    message: RCi18n({
-                      id: 'Setting.Pleaseinputlogisticcompanycode'
-                    }),
-                  },
-                ],
-              })(
-                <Input placeholder={
-                  RCi18n({
-                    id: 'Setting.Pleaseinputlogisticcompanycode'
+                  }),
+                },
+              ],
+              onChange: (e) => {
+                onFormChange({
+                  field: 'expressCompanyId',
+                  value: e
+                })
+              }
+            })(
+              <Select placeholder={
+                RCi18n({
+                  id: 'Setting.Pleaseinputlogisticcompanyname'
+                })}
+              >
+                {allCompanyList && allCompanyList.length > 0 &&
+                  allCompanyList.map(item => {
+                    return <Option value={item.expressCompanyId}  >{item.expressName}</Option>
                   })
                 }
-                       onChange={(e)=>{
-                         onFormChange({
-                           field: 'companyCode',
-                           value: e.target.value
-                         })
-                       }}
-                />
-              )}
-            </Form.Item>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.Logisticcompanystatus" />}>
-              {getFieldDecorator('status', {
-                initialValue: true
-              })(
-                <Switch defaultChecked={companyForm.get('status') == 1} checked={companyForm.get('status')}
-                         onChange={(value)=> {
-                           onFormChange({
-                             field: 'status',
-                             value: value ? 1 : 0
-                           })
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.LogisticCompanycode" />}>
+            {getFieldDecorator('companyCode', {
+              rules: [
+                {
+                  required: true,
+                  message: RCi18n({
+                    id: 'Setting.Pleaseinputlogisticcompanycode'
+                  }),
+                },
+              ],
+              onChange: (e) => {
+                onFormChange({
+                  field: 'storeCompanyCode',
+                  value: e.target.value
+                })
+              }
+            })(
+              <Input placeholder={
+                RCi18n({
+                  id: 'Setting.Pleaseinputlogisticcompanycode'
+                })
+              }
 
-                         }}
+              />
+            )}
+          </Form.Item>
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.Logisticcompanystatus" />}>
+            {getFieldDecorator('status', {
+              initialValue: true,
+              onChange: (value) => {
+                onFormChange({
+                  field: 'status',
+                  value: value
+                })
+
+              }
+            })(
+              <Switch defaultChecked={companyForm.get('status')} checked={companyForm.get('status')}
+
               />)}
-            </FormItem>
+          </FormItem>
 
-          </Form>
+        </Form>
       </Modal>
     );
   }

@@ -20,49 +20,40 @@ export default class AppStore extends Store {
 
   initList = async () => {
     this.dispatch('loading:start')
-    const data = [
-      {
-        id: 1,
-        key: '1',
-        companyName: 'John Brown',
-        companyCode: 12312,
-        status: 1,
-      },
-      {
-        id: 2,
-        key: '2',
-        companyName: 'Jim Green',
-        companyCode: 12345,
-        status: 0,
-      },
-      {
-        id: 3,
-        key: '3',
-        companyName: 'Joe Black',
-        companyCode: 12567,
-        status: 1,
-      },
-    ];
-    this.dispatch('list:table', data)
+    const {res}=await webapi.fetchCheckedExpress()
+   
+    if(res.code===Const.SUCCESS_CODE){
+    this.dispatch('list:table', res.context)
+    }
 
     this.dispatch('loading:end')
   }
+  //保存
   save = async (params) => {
+    let companyForm= this.state().get('companyForm');
     this.dispatch('formActor:field', {field: 'saveLoading', value: true })
+    const {res} = await webapi.updateStoreLogisticSetting(companyForm.toJS())
 
     setTimeout(()=>{
       this.dispatch('formActor:field', {field: 'saveLoading', value: false })
       this.closeModal()
     }, 3000)
   }
-  saveSetting = async (params) => {
+  //setting save
+  saveSetting = async () => {
+   let settingForm= this.state().get('settingForm');
     this.dispatch('formActor:field', {field: 'saveSettingLoading', value: true })
+   const {res} = await webapi.updateStoreLogisticSetting(settingForm.toJS())
 
-    setTimeout(()=>{
-      this.dispatch('formActor:field', {field: 'saveSettingLoading', value: false })
-      message.success('edit success!')
-      this.closeSettingModal()
-    }, 3000)
+    if(res.code=Const.SUCCESS_CODE){
+      setTimeout(()=>{
+        this.dispatch('formActor:field', {field: 'saveSettingLoading', value: false })
+        message.success(res.message)
+        this.closeSettingModal()
+        this.init()
+      }, 2000)
+    }
+    
   }
   onFormChange = ({field, value}) => {
     this.dispatch('formActor:formField', {field, value })
@@ -71,9 +62,22 @@ export default class AppStore extends Store {
   onSettingFormChange = ({field, value}) => {
     this.dispatch('formActor:settingFormField', {field, value })
   }
-  onListFieldChange = ({ field, value }) => {
-    this.dispatch('list:field', { field, value })
+  //修改状态
+  onSwitchSettingChange = async(params) => {
+   const {res}= await webapi.updateStoreLogisticSettingStatus(params);
+    if(res.code===Const.SUCCESS_CODE){
+      this.init()
+    }
+
   }
+   //修改company状态
+   onSwitchCompanyChange = async(params) => {
+    const {res}= await webapi.updateStoreExpressCompanyRelaStatus(params);
+     if(res.code===Const.SUCCESS_CODE){
+       this.initList()
+     }
+ 
+   }
   afterClose = () => {
     this.dispatch('formActor:form', {
       status: 1
@@ -97,7 +101,8 @@ export default class AppStore extends Store {
   closeModal = () => {
     this.dispatch('formActor:field', {field: 'modalVisible', value: false})
   }
-  openSettingModal = () => {
+  openSettingModal = (item) => {
+    this.dispatch('formActor:settingForm', item)
     this.dispatch('formActor:field', {field: 'settingModalVisible', value: true})
   }
   closeSettingModal = () => {
@@ -108,17 +113,11 @@ export default class AppStore extends Store {
   }
 
   init = async () => {
-    const expressAll = await webapi.fetchAllExpress();
+    const expressAll = await webapi.findStoreLogisticSettingByStoreId();
+    const {res:allCompany}=await webapi.fetchAllExpress()
+    this.dispatch('exp:allCompany',allCompany.context);
     if (expressAll.res.code == Const.SUCCESS_CODE) {
-      const expressChecked = await webapi.fetchCheckedExpress();
-      if (expressChecked.res.code == Const.SUCCESS_CODE) {
-        this.dispatch('exp:init', {
-          all: expressAll.res.context,
-          checked: expressChecked.res.context
-        });
-      } else {
-        message.error(expressChecked.res.message);
-      }
+      this.dispatch('exp:init', expressAll.res.context);
     } else {
       message.error(expressAll.res.message);
     }

@@ -17,7 +17,7 @@ export default class LogisticsManage extends React.Component<any, any> {
   store: AppStore;
 
   componentDidMount() {
-    // this.store.init();
+    this.store.init();
     this.store.initList();
   }
 
@@ -26,6 +26,8 @@ export default class LogisticsManage extends React.Component<any, any> {
   }
 
   render() {
+    let allExpressList = this.store.state().get('allExpressList');
+    console.log(allExpressList)
     return [
       <BreadCrumb />,
       <div>
@@ -40,44 +42,48 @@ export default class LogisticsManage extends React.Component<any, any> {
           <AuthWrapper functionName="f_expressManage_1">
             {/*<CompanyChoose />*/}
             <div className="tip"><FormattedMessage id="Setting.Updatelogisticinformation" /></div>
-            <Card style={{ width: 300, marginTop: 10, marginBottom: 10 }} bodyStyle={{ padding: 10 }}>
-              <div className="card-contanier">
-                <div className="methodItem">
-                  <img
-                    src={parcelLabImg}
-                    style={{
-                      width: '250px',
-                      height: '80px',
-                      marginTop: '10px'
-                    }}
-                  />
-                </div>
-                <div className="bar">
-                  {/*<div className="status">{item.isOpen === 1 ? 'Enabled' : 'Disabled'}</div>*/}
-                  <Switch defaultChecked={this.store.state().get('settingStatus') == 1} checked={this.store.state().get('settingStatus') == 1} size={'small'}
-                          onChange={(value)=> {
-                            this.store.onListFieldChange({
-                              field: 'settingStatus',
-                              value: value ? 1 : 0
-                            })
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {allExpressList && allExpressList.length > 0
+                && allExpressList.map(item => {
+
+                  return <Card key={item.id} style={{ width: 300, marginTop: 10, marginBottom: 10,marginLeft:5 }} bodyStyle={{ padding: 10 }}>
+                    <div className="card-contanier">
+                      <div className="methodItem">
+                        <img
+                          src={parcelLabImg}
+                          style={{
+                            width: '250px',
+                            height: '80px',
+                            marginTop: '10px'
                           }}
-                  />
-                  <div>
-                    <Tooltip placement="top" title="Edit">
-                      <a
-                        style={{ color: 'red' }}
-                        type="link"
-                        onClick={() => {this.store.openSettingModal()}}
-                        /* className="links"*/
-                        className="iconfont iconEdit"
-                      >
-                        {/* <FormattedMessage id="edit" />*/}
-                      </a>
-                    </Tooltip>
-                  </div>
-                </div>
-              </div>
-            </Card>
+                        />
+                      </div>
+                      <div className="bar">
+                        {/*<div className="status">{item.isOpen === 1 ? 'Enabled' : 'Disabled'}</div>*/}
+                        <Switch defaultChecked={item.status} checked={item.status} size={'small'}
+                          onChange={(value) => {
+                            this.store.onSwitchSettingChange({"id":item.id,"status":value})
+                          }}
+                        />
+                        <div>
+                          <Tooltip placement="top" title="Edit">
+                            <a
+                              style={{ color: 'red' }}
+                              type="link"
+                              onClick={() => { this.store.openSettingModal(item) }}
+                              /* className="links"*/
+                              className="iconfont iconEdit"
+                            >
+                              {/* <FormattedMessage id="edit" />*/}
+                            </a>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                })
+              }
+            </div>
             <CompanyList />
             <AddCompanyModal />
             <LogisticSettingModal />

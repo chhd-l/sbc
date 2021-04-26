@@ -6,13 +6,11 @@ export default class FormActor extends Actor {
     return {
       modalVisible: false,//company-modal
       isEdit: false,
-      companyForm: {
-        status: 1
-      },
+      companyForm: {status:false},
       saveLoading: false,
 
       settingModalVisible: false, //setting-modal
-      settingForm: {},
+      settingForm: {"id":'',"headerToken":"","userName":"","outUrl":"","lang":""},
       saveSettingLoading: false,
     };
   }

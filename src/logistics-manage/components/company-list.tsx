@@ -28,20 +28,23 @@ export default class CompanyList extends Component<any, any> {
   columns = [
     {
       title: RCi18n({id: 'Setting.LogisticCompanyname'}),
-      dataIndex: 'companyName',
-      key: 'companyName',
+      dataIndex: 'expressCompany.expressName',
+      key: 'expressCompany.expressName',
     },
     {
       title: RCi18n({id: 'Setting.LogisticCompanycode'}),
-      dataIndex: 'companyCode',
-      key: 'companyCode',
+      dataIndex: 'storeCompanyCode',
+      key: 'storeCompanyCode',
     },
     {
       title: RCi18n({id: 'Setting.Status'}),
       key: 'status',
       dataIndex: 'status',
-      render: (text) => (
-        <Switch defaultChecked={text == 1} checked={text == 1}  />
+      render: (text,row) => (
+        <Switch defaultChecked={text} checked={text} onChange={(value)=>{
+          const {onSwitchCompanyChange}=this.props.relaxProps
+          onSwitchCompanyChange({id:row.id,status:value})
+        }} />
       )
     },
     {
@@ -70,6 +73,7 @@ export default class CompanyList extends Component<any, any> {
       loading: boolean;
       tableDatas: TList;
       setModalVisible: Function;
+      onSwitchCompanyChange:Function,
       editRow: Function;
       deleteRow: Function;
       resetForm: Function;
@@ -81,6 +85,7 @@ export default class CompanyList extends Component<any, any> {
     loading: 'loading',
     tableDatas: 'tableDatas',
     setModalVisible: noop,
+    onSwitchCompanyChange:noop,
     deleteRow: noop,
     getList: noop,
     resetForm: noop,
@@ -97,7 +102,7 @@ export default class CompanyList extends Component<any, any> {
   }
 
   _editRow = (record) => {
-    debugger
+    // debugger
     const { editRow } = this.props.relaxProps;
     editRow(record);
   }
@@ -120,7 +125,7 @@ export default class CompanyList extends Component<any, any> {
           </Button>
           {
             !loading ? !nodata ?
-            <Table columns={this.columns} dataSource={tableDatas.toJS()} />:
+            <Table rowKey="id" columns={this.columns} dataSource={tableDatas.toJS()} />:
               <div className="img-container"><img src={nodataImg} width="80" className="no-data-img" /></div> :
             <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />
           }

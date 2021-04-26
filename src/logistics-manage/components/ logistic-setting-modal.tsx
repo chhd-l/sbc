@@ -52,9 +52,6 @@ class LogisticSettingModal extends React.Component<any, any> {
 
   _save = () => {
     const { saveSetting } = this.props.relaxProps
-    this.setState({
-      count: 1
-    })
     this.props.form.validateFields(null, async (errs, values) => {
       if (!errs) {
         saveSetting()
@@ -75,7 +72,6 @@ class LogisticSettingModal extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
 
     const { onSettingFormChange,settingForm, settingModalVisible, saveSettingLoading, } = this.props.relaxProps
-    console.log(settingForm.toJS(), 'settingForm--------');
     return (
       <Modal afterClose={this._afterClose}
              confirmLoading={saveSettingLoading}
@@ -86,6 +82,7 @@ class LogisticSettingModal extends React.Component<any, any> {
         <Form>
           <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Headertoken" />}>
             {getFieldDecorator('headerToken', {
+              initialValue:settingForm.get('headerToken')||'',
               rules: [
                 {
                   required: true,
@@ -109,7 +106,8 @@ class LogisticSettingModal extends React.Component<any, any> {
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Username" />}>
-            {getFieldDecorator('username', {
+            {getFieldDecorator('userName', {
+              initialValue:settingForm.get('userName')||'',
               rules: [
                 {
                   required: true,
@@ -126,7 +124,7 @@ class LogisticSettingModal extends React.Component<any, any> {
               }
                      onChange={(e)=>{
                        onSettingFormChange({
-                         field: 'username',
+                         field: 'userName',
                          value: e.target.value
                        })
                      }}
@@ -135,6 +133,7 @@ class LogisticSettingModal extends React.Component<any, any> {
           </Form.Item>
           <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Lang" />}>
             {getFieldDecorator('lang', {
+               initialValue:settingForm.get('lang')||'',
               rules: [
                 {
                   required: true,
@@ -159,7 +158,8 @@ class LogisticSettingModal extends React.Component<any, any> {
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Url" />}>
-            {getFieldDecorator('url', {
+            {getFieldDecorator('outUrl', {
+               initialValue:settingForm.get('outUrl')||'',
               rules: [
                 {
                   required: true,
@@ -176,7 +176,7 @@ class LogisticSettingModal extends React.Component<any, any> {
               }
                      onChange={(e)=>{
                        onSettingFormChange({
-                         field: 'companyCode',
+                         field: 'outUrl',
                          value: e.target.value
                        })
                      }}

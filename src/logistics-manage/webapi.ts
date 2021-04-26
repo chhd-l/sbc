@@ -48,3 +48,43 @@ export const addExpress = (expressId) => {
     })
   });
 };
+
+/**
+ * 1、	查询所有商店物流配置，这里没有分页
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+ export const findStoreLogisticSettingByStoreId = () => {
+  return Fetch<TResult>('/store/storelogisticssetting/findStoreLogisticSettingByStoreId');
+};
+
+/**
+ * 1、	3、	修改商店物流配置
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+ export const updateStoreLogisticSetting = (params={}) => {
+  return Fetch<TResult>('/store/storelogisticssetting/updateStoreLogisticSetting',{
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+/**
+ * 1、4、	修改商店物流配置状态
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+ export const updateStoreLogisticSettingStatus = (params={}) => {
+  return Fetch<TResult>('/store/storelogisticssetting/updateStoreLogisticSettingStatus',{
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+/**
+ * 1	5、	修改物流公司配置状态
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+ export const updateStoreExpressCompanyRelaStatus = (params={}) => {
+  return Fetch<TResult>('/store/expressCompany/updateStoreExpressCompanyRelaStatus',{
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};

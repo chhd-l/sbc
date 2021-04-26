@@ -88,6 +88,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryPrice: 0,
       taxFeePrice: 0,
       discountsPrice: '',
+      freeShippingFlag: false,
+      freeShippingDiscountPrice: 0,
 
       isPromotionCodeValid: false,
       promotionDesc: 'Promotion',
@@ -685,6 +687,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0,
             isPromotionCodeValid: res.context.promotionFlag,
             promotionDesc: res.context.promotionDesc,
+            freeShippingFlag: res.context.freeShippingFlag ?? false,
+            freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
             loading: false
           });
         } else {
@@ -1350,6 +1354,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span><FormattedMessage id="Subscription.Shipping"/></span>
                   <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
+                {this.state.freeShippingFlag && <div className="flex-between">
+                  <span><FormattedMessage id="Order.shippingFeesDiscount"/></span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.freeShippingDiscountPrice ? this.state.freeShippingDiscountPrice : 0).toFixed(2)}</span>
+                </div>}
                 {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                   <div className="flex-between">
                     <span><FormattedMessage id="Subscription.Tax"/></span>
@@ -1360,7 +1368,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>
                     <span><FormattedMessage id="Subscription.Total"/></span> (<FormattedMessage id="Subscription.IVAInclude"/>):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.taxFeePrice + +this.state.deliveryPrice).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.taxFeePrice + +this.state.deliveryPrice - +this.state.freeShippingDiscountPrice).toFixed(2)}</span>
                 </div>
               </Col>
             </Row>

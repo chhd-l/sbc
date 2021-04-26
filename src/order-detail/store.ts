@@ -24,42 +24,6 @@ export default class AppStore extends Store {
   }
 
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
-  init2 = async (tid: string) => {
-    this.transaction(() => {
-      this.dispatch('loading:start');
-      this.dispatch('tid:init', tid);
-      this.dispatch('detail-actor:hideDelivery');
-    });
-
-    const { res } = (await fetchOrderDetail(tid)) as any;
-    let { code, context: orderInfo, message: errorInfo } = res;
-    if (code == Const.SUCCESS_CODE) {
-      const payRecordResult = (await payRecord(orderInfo.totalTid)) as any;
-      const { context: logistics } = (await fetchLogistics()) as any;
-
-      const { res: payRecordResult2 } = (await webapi.getPaymentInfo(orderInfo.totalTid)) as any;
-      const { res: cityDictRes } = (await webapi.queryCityById({
-        id: orderInfo.consignee ? [orderInfo.consignee.cityId] : undefined
-      })) as any;
-      const { res: countryDictRes } = (await queryDictionary({
-        type: 'country'
-      })) as any;
-      // const { res: refresh } = (await webapi.refresh(orderInfo.totalTid)) as any;
-      this.transaction(() => {
-        this.dispatch('loading:end');
-        this.dispatch('detail:init', orderInfo);
-        this.dispatch('receive-record-actor:init', payRecordResult.res.context.payOrderResponses);
-        this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context);
-        this.dispatch('detail-actor:setSellerRemarkVisible', true);
-        this.dispatch('logistics:init', logistics);
-        this.dispatch('dict:initCity', cityDictRes.context?.systemCityVO ?? []);
-        this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
-        this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
-      });
-    } else {
-      this.dispatch('loading:end');
-    }
-  };
   init = async (tid: string) => {
     this.transaction(() => {
       this.dispatch('loading:start');
@@ -95,7 +59,6 @@ export default class AppStore extends Store {
           this.dispatch('logistics:init', logistics.context ? logistics.context : {});
           // this.dispatch('detail:setNeedAudit', needRes.context.audit);
           this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
-          this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
         });
       });
     } else {
@@ -105,10 +68,14 @@ export default class AppStore extends Store {
 
   /* 刷新物流信息*/
   onRefresh = async (params) => {
+    this.dispatch('logisticsLoading:start');
     const tid = this.state().get('tid');
     const { res } = (await webapi.refresh(tid)) as any;
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('dict:refresh', res.context.tradeDelivers);
+      this.dispatch('logisticsLoading:end');
+    } else {
+      this.dispatch('logisticsLoading:end');
     }
   };
 

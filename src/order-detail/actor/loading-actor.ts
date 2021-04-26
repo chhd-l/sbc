@@ -3,7 +3,8 @@ import { Actor, Action, IMap } from 'plume2';
 export default class LoadingActor extends Actor {
   defaultState() {
     return {
-      loading: true
+      loading: true,
+      logisticsLoading: false
     };
   }
 
@@ -16,4 +17,16 @@ export default class LoadingActor extends Actor {
   end(state: IMap) {
     return state.set('loading', false);
   }
+
+  @Action('logisticsLoading:start')
+  startLogistics(state: IMap) {
+    return state.set('logisticsLoading', true);
+  }
+
+  @Action('logisticsLoading:end')
+  endLogistics(state: IMap) {
+    return state.set('logisticsLoading', false);
+  }
+
+  
 }

@@ -255,17 +255,17 @@ class SkuForm extends React.Component<any, any> {
                 {goods.get('subscriptionStatus') == 1 ? (
                   <div>
                     <p>
-                      <span>One off</span>
+                      <span><FormattedMessage id="Product.OneOff" /></span>
                     </p>
                     {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
                       <p>
-                        <span>Subscription</span>
+                        <span><FormattedMessage id="Product.Subscription" /></span>
                       </p>
                     ) : null}
                   </div>
                 ) : (
                   <p>
-                    <span>One off</span>
+                    <span><FormattedMessage id="Product.OneOff" /></span>
                   </p>
                 )}
               </div>
@@ -509,7 +509,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          Base price
+         <FormattedMessage id="Product.Baseprice" />
           {/*<Select value={selectedBasePrice} onChange={this._handleBasePriceChange}>
             {goodsSpecs.map((item) => (item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
             <Option value={'weightValue'}>Weight value</Option>
@@ -535,7 +535,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: 'Please enter the correct value'
+                        message: <FormattedMessage id="Product.PleaseEnterTheCorrect" />
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
@@ -557,7 +557,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: 'Please enter the correct value'
+                        message: <FormattedMessage id="Product.PleaseEnterTheCorrect" />
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
@@ -606,11 +606,11 @@ class SkuForm extends React.Component<any, any> {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('The file size must be less than 2M');
+        message.error(<FormattedMessage id="Product.lessThan2M" />);
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(<FormattedMessage id="Product.FileFormatError" />);
       return false;
     }
   };

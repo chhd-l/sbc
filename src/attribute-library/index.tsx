@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history, checkMenu, checkAuth } from 'qmkit';
 import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber, Tabs, Popconfirm } from 'antd';
-
+import { RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
@@ -14,7 +14,7 @@ class AttributeLibrary extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Attribute library',
+      title: RCi18n({id:'Product.AttributeLibrary'}),
       searchForm: {
         attributeName: '',
         attributeValue: ''
@@ -178,7 +178,7 @@ class AttributeLibrary extends Component<any, any> {
 
     this.setState(
       {
-        modalName: 'Add new attribute',
+        modalName: RCi18n({id:'Product.Addnewattribute'}),
         attributeValueList: [],
         visibleAttribute: true,
         attributeForm,
@@ -304,7 +304,7 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Product.OperateSuccessfully'}));
 
           this.setState(
             {
@@ -328,7 +328,7 @@ class AttributeLibrary extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getAttributes();
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Product.OperateSuccessfully'}));
         } else {
         }
       })
@@ -359,7 +359,7 @@ class AttributeLibrary extends Component<any, any> {
             loading: false
           });
           this.getAttributes();
-          message.success('Operate successfully');
+          message.success(RCi18n({id:'Product.OperateSuccessfully'}));
         } else {
         }
       })
@@ -437,12 +437,12 @@ class AttributeLibrary extends Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input attribute value.'
+                      message: RCi18n({id:'Product.PleaseInputAttributeValue'})
                     }
                   ]
                 })(
                   <Input
-                    placeholder="Attribute value"
+                    placeholder={RCi18n({id:'Product.Attributevalue'})}
                     disabled={!checkAuth('f_attribute_value_edit')}
                     style={{ marginRight: 8 }}
                     onChange={(e) => {
@@ -461,7 +461,7 @@ class AttributeLibrary extends Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input display value.'
+                      message: RCi18n({id:'Product.PleaseInputDisplayValue'})
                     }
                   ]
                 })(

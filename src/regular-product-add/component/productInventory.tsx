@@ -194,7 +194,7 @@ class SkuForm extends React.Component<any, any> {
       )
     });
     columns = columns.push({
-      title: 'Virtual inventory',
+      title: <FormattedMessage id="Product.Virtualinventory" />,
       key: 'virtualInventory',
       render: (rowInfo) => (
         <Row>
@@ -220,7 +220,7 @@ class SkuForm extends React.Component<any, any> {
       )
     });
     columns = columns.push({
-      title: 'UOM',
+      title: <FormattedMessage id="Product.UOM"/>,
       key: 'goodsMeasureUnit + stock',
       render: (rowInfo) => {
         return (
@@ -245,7 +245,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
     columns = columns.push({
-      title: <div>Inventory Alert</div>,
+      title: <div><FormattedMessage id="Product.Inventory Alert"/></div>,
       key: 'virtualAlert',
       render: (rowInfo) => (
         <Row>

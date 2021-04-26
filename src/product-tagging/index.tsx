@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AssetManagement } from 'qmkit';
 import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Spin, Tabs, Popconfirm } from 'antd';
-
+import { RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 
@@ -398,7 +398,7 @@ class AttributeLibrary extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore="Tagging name"
+                      addonBefore={RCi18n({id:'Product.Taggingname'})}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onSearchFormChange({
@@ -467,7 +467,7 @@ class AttributeLibrary extends Component<any, any> {
               ]}
             >
               <Form {...formItemLayout}>
-                <FormItem label="Tagging name">
+                <FormItem label={RCi18n({id:'Product.Taggingname'})}>
                   {getFieldDecorator('taggingName', {
                     rules: [
                       { required: true, message: <FormattedMessage id="Product.TaggingNameIsRequired" /> },

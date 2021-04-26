@@ -130,7 +130,7 @@ class ListView extends React.Component<any, any> {
                       <th style={{ width: '13.5%' }}><FormattedMessage id="Prescriber.PO E-mail"/></th>
                       <th style={{ width: '11%' }}><FormattedMessage id="Prescriber.Amount"/></th>
                       <th style={{ width: '10.5%' }}><FormattedMessage id="Prescriber.Link status"/></th>
-                      <th style={{ width: '12.5%' }}><FormattedMessage id="Prescriber.Exper"/></th>
+                      <th style={{ width: '12.5%' }}><FormattedMessage id="Prescriber.Expert"/></th>
                       <th style={{ width: '5.5%' }}><FormattedMessage id="Prescriber.Paris"/></th>
                       <th style={{ width: '10.5%' }}><FormattedMessage id="Prescriber.Pick up"/></th>
                       <th ><FormattedMessage id="Prescriber.operation"/></th>

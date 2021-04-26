@@ -9,6 +9,7 @@ import ModalActor from './actor/modal-actor';
 import SpecActor from './actor/spec-actor';
 import ImageActor from './actor/image-actor';
 import SeoActor from './actor/seo-actor';
+import { RCi18n } from 'qmkit';
 
 import { getSeo, editSeo, getCateList, getSignCateList, addCate, deleteCate, editCate, chkChild, chkGoods, dragSort, getCateIdsPropDetail, getImgCates, fetchImages } from './webapi';
 import { getDictionaryByType } from '@/shop/webapi';

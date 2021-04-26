@@ -190,12 +190,7 @@ export default class Main extends React.Component<any, any> {
               <AlertInfo
                 message={
                   <div>
-                    <p>You can delete these fields, including &#123; name &#125;-Royal Canin, &#123; name &#125;, &#123; subtitle &#125;, &#123; sales category &#125;, &#123; tagging &#125;, &#123; description &#125;, but can not edit the field</p>
-                    <p>1、&#123; name &#125; means the name of the product which enters in the product information tab page</p>
-                    <p>2、&#123;subtitle &#125; means the subtitle of the product which enters in the product information tab page</p>
-                    <p>3、&#123; sales category &#125; means the sales category of the product which was chosen in the product information tab page</p>
-                    <p>4、&#123; tagging &#125; means the sales category of the product which was chosen in the product information</p>
-                    <p>5、&#123;description &#125; means the description of the product which enters in the product information tab page</p>
+                    <p><FormattedMessage id="Product.SEOsettingalert" /></p>
                   </div>
                 }
               />

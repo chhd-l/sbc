@@ -21,7 +21,7 @@ export default class ReleaseProducts extends React.Component<any, any> {
         </div>
         <div className="container">
           <div className="release-box">
-            <h1>Choose a product characteristic</h1>
+            <h1><FormattedMessage id="Product.Chooseaproductcharacteristic" /></h1>
 
             <div className="release-content space-around">
               <AuthWrapper functionName="f_goods_add_1">

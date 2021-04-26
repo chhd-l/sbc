@@ -17,6 +17,7 @@ import PropActor from './actor/prop-actor';
 import FreightActor from './actor/freight-actor';
 import relatedActor from './actor/related';
 import LoadingActor from './actor/loading-actor';
+import { RCi18n } from 'qmkit';
 import {
   addAll,
   addBrand,
@@ -1025,7 +1026,7 @@ export default class AppStore extends Store {
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
       this.state().get('goods').get('subscriptionStatus') == 1 ) {
-      message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
+      message.error(RCi18n({id:'Product.subscriptionstatusinSPUisY'}));
       valid = false;
       return;
     }
@@ -1033,7 +1034,7 @@ export default class AppStore extends Store {
     let b = this.state().get('goodsList').filter((item)=>item.get('addedFlag') == 0)
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === b.toJS().length) &&
       (this.state().get('goods').get('addedFlag') == 1 || this.state().get('goods').get('addedFlag') == 2) ) {
-      message.error('If the shelves status in SPU is Y, at lease one shelves status of Sku is Y');
+      message.error(RCi18n({id:'Product.shelvesstatusinSPUisY'}));
       valid = false;
       return;
     }
@@ -1042,7 +1043,7 @@ export default class AppStore extends Store {
     let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
       this.state().get('goods').get('promotions') == 'club' ) {
-      message.error('If the subscription type in SPU is club, at lease one subscription type of Sku is club');
+      message.error(RCi18n({id:'Product.subscriptiontypeinSPUisclub'}));
       valid = false;
       return;
     }
@@ -1167,13 +1168,13 @@ export default class AppStore extends Store {
       });
     }
     if (tip === 1) {
-      message.error('Please input market price');
+      message.error(RCi18n({id:'Product.inputMarketPrice'}));
     } else if (tip === 2) {
-      message.error('Please input subscription price');
+      message.error(RCi18n({id:'Product.subscriptionPrice'}));
     } else if (tip === 3) {
-      message.error('Market price cannot be zero');
+      message.error(RCi18n({id:'Product.Marketpricecannotbezero'}));
     } else if (tip === 4) {
-      message.error('Subscription price cannot be zero');
+      message.error(RCi18n({id:'Product.Subscriptionpricecannotbezero'}));
     }
     return valid;
   }
@@ -1189,7 +1190,7 @@ export default class AppStore extends Store {
       });
     }
     if (!valid) {
-      message.error('Please input Inventory');
+      message.error(RCi18n({id:'Product.PleaseInputInventory'}));
     }
     return valid;
     /*let valid = true;
@@ -2274,7 +2275,7 @@ export default class AppStore extends Store {
             keywords = '{name}, {subtitle}, {sales category}, {tagging}';
             break;
           case 123456858: //墨西哥
-            title = 'TIENDA OFICIAL DE PRODUCTOS VETERINARIOS ROYAL CANIN MEXICO';
+            title = RCi18n({id:'Product.MEXICO'});
             description = null
             keywords = null
             break;

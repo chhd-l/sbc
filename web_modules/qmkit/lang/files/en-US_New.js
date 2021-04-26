@@ -395,9 +395,13 @@ export default {
         "Product.Synchronize": "Synchronize",
         "Product.exportStockPrice": "Batch export Stock&Price",
         "Product.No sale": "No sale",
-
-
-
+        "Product.subscriptionstatusinSPUisY": "'If the subscription status in SPU is Y, at lease one subscription status of Sku is Y'",
+        "Product.shelvesstatusinSPUisY": "If the shelves status in SPU is Y, at lease one shelves status of Sku is Y",
+        "Product.subscriptiontypeinSPUisclub": "If the subscription type in SPU is club, at lease one subscription type of Sku is club",
+        "Product.Marketpricecannotbezero": "Market price cannot be zero",
+        "Product.Subscriptionpricecannotbezero": "Subscription price cannot be zero",
+        "Product.enterthecorrectvalue": "Please enter the correct value.",
+        "Product.MEXICO": "TIENDA OFICIAL DE PRODUCTOS VETERINARIOS ROYAL CANIN MEXICO",
     },
     Order: {
         'Order.tradeType': 'Trade Type',

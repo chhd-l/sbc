@@ -589,7 +589,7 @@ class SearchList extends React.Component<any, any> {
     if (res.code === Const.SUCCESS_CODE) {
       this.props.relaxProps.onRejectModalChange({
         visible: true,
-        type: 'refusing refund',
+        type: 'Refusing refund',
         onOk: onRejectRefund,
         rid: rid
       });

@@ -46,7 +46,7 @@ class OrderStatusHead extends React.Component<any, any> {
       onRefundOnlineModalChange: Function;
       refundRecord: IMap;
       fetchRefundOrder: Function;
-      changeRefundPrice:Function;
+      changeRefundPrice: Function;
       onRealRefund: Function;
     };
   };
@@ -78,7 +78,7 @@ class OrderStatusHead extends React.Component<any, any> {
     onRefundOnlineModalChange: noop,
     refundRecord: 'refundRecord',
     fetchRefundOrder: noop,
-    changeRefundPrice:noop,
+    changeRefundPrice: noop,
     onRealRefund: noop
   };
 
@@ -131,7 +131,6 @@ class OrderStatusHead extends React.Component<any, any> {
     const enableReturn = (returnFlowState === 'RECEIVED' || (returnType == 'REFUND' && returnFlowState === 'AUDIT')) && refundRecord.get('refundStatus') != null && refundRecord.get('refundStatus') != 2 && refundRecord.get('refundStatus') != 3;
 
     const labelText = returnType == 'RETURN' ? Const.returnGoodsState[returnFlowState] : Const.returnMoneyState[returnFlowState] || '';
-
     return (
       <div>
         <div style={styles.container as any}>
@@ -143,92 +142,92 @@ class OrderStatusHead extends React.Component<any, any> {
             </div>
             <div style={styles.orderEnd}>
               {returnFlowState === 'PENDING_REVIEW' && (
-                          <AuthWrapper functionName="f_return_review">
+                <AuthWrapper functionName="f_return_review">
 
-                            <Tooltip placement="top" title={<FormattedMessage id="Order.Approve" />}>
-                              <a style={{ marginLeft: 20 }} onClick={
-                                () => {
-                                  this._showAudit(onAudit, rid);
-                                }
-                              }>
-                                <FormattedMessage id="Order.Approve" />
-                                </a>
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.Approve" />}>
+                    <a style={{ marginLeft: 20 }} onClick={
+                      () => {
+                        this._showAudit(onAudit, rid);
+                      }
+                    }>
+                      <FormattedMessage id="Order.Approve" />
+                    </a>
 
-                            </Tooltip>
+                  </Tooltip>
 
-                            <Tooltip placement="top" title={<FormattedMessage id="Order.Reject" />}>
-                              <a style={{ marginLeft: 20 }} onClick={
-                                () => {
-                                  this._showReject(onReject, rid);
-                                }
-                              }>
-                                <FormattedMessage id="Order.Reject" />
-                                </a>
-                            </Tooltip>
-                          </AuthWrapper>
-                        )}
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.Reject" />}>
+                    <a style={{ marginLeft: 20 }} onClick={
+                      () => {
+                        this._showReject(onReject, rid);
+                      }
+                    }>
+                      <FormattedMessage id="Order.Reject" />
+                    </a>
+                  </Tooltip>
+                </AuthWrapper>
+              )}
 
-                        {returnFlowState === 'TO_BE_DELIVERED' && (
-                          <AuthWrapper functionName="f_return_delivered">
-                            <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.skipLogisticsAlert" />} onConfirm={() => {
-                              this._showDeliver(onDeliver, rid, false)
-                            }} okText={<FormattedMessage id="Order.btnConfirm" />} cancelText={<FormattedMessage id="Order.cancel" />}>
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.skipLogistics" />}>
-                                <a style={{ marginLeft: 20 }}>
-                                <FormattedMessage id="Order.skipLogistics" />
-                                </a>
-                              </Tooltip>
-                            </Popconfirm>
-                            <Tooltip placement="top" title={<FormattedMessage id="Order.fillLogistics" />}>
-                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
-                              <FormattedMessage id="Order.fillLogistics" />
-                              </a>
-                            </Tooltip>
-                          </AuthWrapper>
-                        )}
+              {returnFlowState === 'TO_BE_DELIVERED' && (
+                <AuthWrapper functionName="f_return_delivered">
+                  <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.skipLogisticsAlert" />} onConfirm={() => {
+                    this._showDeliver(onDeliver, rid, false)
+                  }} okText={<FormattedMessage id="Order.btnConfirm" />} cancelText={<FormattedMessage id="Order.cancel" />}>
+                    <Tooltip placement="top" title={<FormattedMessage id="Order.skipLogistics" />}>
+                      <a style={{ marginLeft: 20 }}>
+                        <FormattedMessage id="Order.skipLogistics" />
+                      </a>
+                    </Tooltip>
+                  </Popconfirm>
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.fillLogistics" />}>
+                    <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
+                      <FormattedMessage id="Order.fillLogistics" />
+                    </a>
+                  </Tooltip>
+                </AuthWrapper>
+              )}
 
-                        {returnFlowState === 'TO_BE_RECEIVED' && (
-                          <AuthWrapper functionName="f_return_received">
-                            <Tooltip placement="top" title={<FormattedMessage id="Order.RecipientAccepted" />}>
-                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
-                                <FormattedMessage id="Order.RecipientAccepted" />
-                              </a>
-                            </Tooltip>
-                            <Tooltip placement="top" title={<FormattedMessage id="Order.RecipientRejected" />}>
-                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
-                                <FormattedMessage id="Order.RecipientRejected" />
-                              </a>
-                            </Tooltip>
+              {returnFlowState === 'TO_BE_RECEIVED' && (
+                <AuthWrapper functionName="f_return_received">
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.RecipientAccepted" />}>
+                    <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
+                      <FormattedMessage id="Order.RecipientAccepted" />
+                    </a>
+                  </Tooltip>
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.RecipientRejected" />}>
+                    <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
+                      <FormattedMessage id="Order.RecipientRejected" />
+                    </a>
+                  </Tooltip>
 
-                          </AuthWrapper>
-                        )}
-                        {returnFlowState === 'PENDING_REFUND' && (
-                          <AuthWrapper functionName="f_return_refund">
-                            <Tooltip placement="top" title={<FormattedMessage id="Order.refusedToRefund" />}>
-                              <a
-                                href="javascript:void(0)"
-                                style={{ marginLeft: 20 }}
-                                onClick={() => {
-                                  // console.log(onRejectRefund, 'onRejectRefund');
-                                  this._showRejectRefund(onRejectRefund, rid, 0 == payType);
-                                }}
-                              >
-                                <FormattedMessage id="Order.refusedToRefund" />
-                              </a>
-                            </Tooltip>
-                            <Tooltip placement="top" title={<FormattedMessage id="Order.RealRefund" />}>
-                              <a
-                                href="javascript:void(0)"
-                                style={{ marginLeft: 20 }}
-                                onClick={() => {
-                                  this._showRealRefund(onRealRefund, rid, applyPrice);
-                                }}
-                              >
-                                <FormattedMessage id="Order.RealRefund" />
-                              </a>
-                            </Tooltip>
-                          </AuthWrapper>
-                        )}
+                </AuthWrapper>
+              )}
+              {returnFlowState === 'PENDING_REFUND' && (
+                <AuthWrapper functionName="f_return_refund">
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.refusedToRefund" />}>
+                    <a
+                      href="javascript:void(0)"
+                      style={{ marginLeft: 20 }}
+                      onClick={() => {
+                        // console.log(onRejectRefund, 'onRejectRefund');
+                        this._showRejectRefund(onRejectRefund, rid, 0 == payType);
+                      }}
+                    >
+                      <FormattedMessage id="Order.refusedToRefund" />
+                    </a>
+                  </Tooltip>
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.RealRefund" />}>
+                    <a
+                      href="javascript:void(0)"
+                      style={{ marginLeft: 20 }}
+                      onClick={() => {
+                        this._showRealRefund(onRealRefund, rid, applyPrice);
+                      }}
+                    >
+                      <FormattedMessage id="Order.RealRefund" />
+                    </a>
+                  </Tooltip>
+                </AuthWrapper>
+              )}
             </div>
           </div>
           <Row>
@@ -253,7 +252,7 @@ class OrderStatusHead extends React.Component<any, any> {
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                <FormattedMessage id="Order.consumer" />：{detail.getIn(['buyer', 'name'])}
+                <FormattedMessage id="Order.Petownername" />：{detail.getIn(['buyer', 'name'])}
               </p>
               <p style={styles.darkText}>
                 <FormattedMessage id="Order.consumerAccount" />:{this._parsePhone(detail.getIn(['buyer', 'account']))}
@@ -278,16 +277,16 @@ class OrderStatusHead extends React.Component<any, any> {
 
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
-    const content = RCi18n({id:'Order.approveAlert'});
-    const title = RCi18n({id:'Order.Approve'});
+    const content = RCi18n({ id: 'Order.approveAlert' });
+    const title = RCi18n({ id: 'Order.Approve' });
     confirm({
       title: title,
       content: content,
-      okText: RCi18n({id:'Order.OK'}),
+      okText: RCi18n({ id: 'Order.OK' }),
       onOk() {
         return onAudit(rid);
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 
@@ -316,15 +315,15 @@ class OrderStatusHead extends React.Component<any, any> {
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
-    const content = RCi18n({id:'Order.receiptAlert'});
-    const title = RCi18n({id:'Order.ConfirmReceipt'});
+    const content = RCi18n({ id: 'Order.receiptAlert' });
+    const title = RCi18n({ id: 'Order.ConfirmReceipt' });
     confirm({
       title: title,
       content: content,
       onOk() {
         return onReceive(rid);
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 
@@ -394,9 +393,9 @@ class OrderStatusHead extends React.Component<any, any> {
     }
   }
   async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
-    const content = RCi18n({id:'Order.refundAlert1'});
-    const content1 = RCi18n({id:'Order.refundAlert2'});
-    const title = RCi18n({id:'Order.confirmRefund'});
+    const content = RCi18n({ id: 'Order.refundAlert1' });
+    const content1 = RCi18n({ id: 'Order.refundAlert2' });
+    const title = RCi18n({ id: 'Order.confirmRefund' });
     confirm({
       title: title,
       content: <div>
@@ -414,7 +413,7 @@ class OrderStatusHead extends React.Component<any, any> {
         />
       </div>,
       onOk() {
-        return onRealRefund(rid,applyPrice);
+        return onRealRefund(rid, applyPrice);
       },
       onCancel() {
         this.setState({
@@ -425,7 +424,7 @@ class OrderStatusHead extends React.Component<any, any> {
   }
   changeRealRefund = (value) => {
     this.props.relaxProps.changeRefundPrice({
-      refundPrice:value
+      refundPrice: value
     })
   }
 }

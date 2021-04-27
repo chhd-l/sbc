@@ -491,7 +491,7 @@ class OrderDetailTab extends React.Component<any, any> {
               {tradePrice.subscriptionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
-                    <FormattedMessage id="Order.autoshipDiscount" />:
+                    <FormattedMessage id="Order.subscriptionDiscount" />:
                   </span>
                   <strong>
                     -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}

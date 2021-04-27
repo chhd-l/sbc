@@ -1582,11 +1582,21 @@ export default class AppStore extends Store {
   };
   /**提取json代码 */
   functionTurnJson = (content) => {
-    const reg = /\<xmp[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
-    let _html = content.replace(reg, function () {
-      return arguments[1];
-    });
+    // const reg = /\<xmp[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
+    // let _html = content.replace(reg, function () {
+    //   return arguments[1];
+    // });
+    // return _html;
+    try {
+      let _contentArr= content.match(/<xmp>[\s\S]*?\<\/xmp\>/gmi)
+    let _html='';
+   _contentArr.map(item=>{
+     _html+= item.replace(/(<\/?xmp.*?>)/gmi,'')
+    })
     return _html;
+    } catch (error) {
+      return content;
+    }
   };
   /**
    * 客户搜索

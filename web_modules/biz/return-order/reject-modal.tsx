@@ -43,7 +43,8 @@ class RejectModal extends React.Component<any, any> {
         title={
           <span>
             <FormattedMessage id="Order.PleaseFillOutThe" />
-            {data.get('type')}
+            <FormattedMessage id={`Order.${data.get('type')}`} /> 
+            {' '}
             <FormattedMessage id="Order.reason" />
           </span>
         }

@@ -744,7 +744,7 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.WithinDaysCustomers" /></span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.applyRefunds" /></span>
                             </div>
                           </Col>
                         ) : null}
@@ -937,7 +937,7 @@ class OrderSetting extends Component<any, any> {
                               })
                             }
                           />
-                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.WithinDays" /></span>
+                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.applyRefunds" /></span>
                         </div>
                       </Col>
                     ) : null}

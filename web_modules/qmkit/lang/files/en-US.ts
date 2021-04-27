@@ -536,7 +536,7 @@ export default {
   "Product.Productmanagement": "Product management",
   "Product.operationInstruction": "Operation instruction",
   "Product.operationInstructionFirst": "Until filled all required fields, the product could be published. ",
-  "Product.operationInstructionSecond": " The product information tab, product price tab, product inventory tab must be filled before published.",
+  "Product.operationInstructionSecond": "The product information tab, product price tab, product inventory tab must be filled before published.",
   "Product.operationInstructionThird": "If you do not need to set the related product or SEO, you can click \'Next\' directly after editing the inventory information.",
   "Product.Next": "Next",
   "Product.Prev": "Prev",

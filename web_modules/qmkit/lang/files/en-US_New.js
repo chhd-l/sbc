@@ -32,6 +32,7 @@ export default {
        'Order.Received rejected':'Received rejected',
        'Order.Pending review':'Pending review',
        'Order.Refund reject':'Refund reject',
+       'Order.Review rejected':'Review rejected',
        'Order.applyRefunds':'Within days, customers are allowed to initiate a return and refund application.',
     },
     Subscription: {},

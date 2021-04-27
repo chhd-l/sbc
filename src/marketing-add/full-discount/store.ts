@@ -129,7 +129,6 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   submitFullDiscount = async (discountBean) => {
-    debugger
     let response;
     this.dispatch('loading:start');
     if (discountBean.marketingId) {

@@ -123,12 +123,12 @@ class GoodsList extends React.Component<any, any> {
         key: 'specDetails',
         render: (s) => <div>{s}</div>
       },
-      // {
-      //   title: <FormattedMessage id="returnUnitPrice" />,
-      //   dataIndex: 'price',
-      //   key: 'price',
-      //   render: (price) => <div>${price.toFixed(2)}</div>
-      // },
+      {
+        title: <FormattedMessage id="returnUnitPrice" />,
+        dataIndex: 'unitPrice',
+        key: 'unitPrice',
+        render: (unitPrice) => <div>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{unitPrice.toFixed(2)}</div>
+      },
       {
         title: <FormattedMessage id="Order.quantityReturned" />,
         dataIndex: 'num',
@@ -138,7 +138,7 @@ class GoodsList extends React.Component<any, any> {
         title: <FormattedMessage id="Order.Subtotalofreturnamount" />,
         dataIndex: 'price',
         key: 'price',
-        render: (price) => <div>${price.toFixed(2)}</div>
+        render: (price) => <div>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{price.toFixed(2)}</div>
       }
     ];
 

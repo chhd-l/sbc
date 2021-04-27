@@ -106,7 +106,7 @@ class ReactEditor extends Component<any, any> {
                 message.info('More than 1000 words, please delete some after retry')
                 return
             }
-            onContentChange(html, tabNanme);
+            onContentChange(html,text, tabNanme);
 
         }
         this.editor.create()

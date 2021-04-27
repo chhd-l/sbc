@@ -118,9 +118,10 @@ export default class AppStore extends Store {
    
   }
   editRow = (record) => {
-    const{id,storeCompanyCode,expressCompanyId,status}=record
+    debugger
+    const{id,storeCompanyCode,expressCompanyId,status,companyInfoId}=record
     let p={
-      id,storeCompanyCode,expressCompanyId,status
+      id,storeCompanyCode,expressCompanyId,status,companyInfoId
     }
     this.dispatch('formActor:form',p)
     this.openModal()

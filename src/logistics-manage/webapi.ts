@@ -29,7 +29,7 @@ export const fetchCheckedExpress = () => {
  * @param id
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const deleteExpress = (params) => {
+export const deleteExpress = (params:any) => {
   return Fetch<TResult>(`/store/expressCompany/deleteExpressCompanyRela`, {
     method: 'POST',
     body: JSON.stringify(params)

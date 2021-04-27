@@ -50,7 +50,7 @@ export default class LogisticsManage extends React.Component<any, any> {
                     <div className="card-contanier">
                       <div className="methodItem">
                         <img
-                          src={parcelLabImg}
+                          src={item.logisticLogo||parcelLabImg}
                           style={{
                             width: '250px',
                             height: '80px',

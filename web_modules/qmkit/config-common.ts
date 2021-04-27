@@ -30,7 +30,7 @@ const Common = {
     REFUND_FAILED: 'Refund failed',
     RECEIVED_REJECTED:'Received rejected',
     PENDING_REVIEW:'Pending review',
-    REFUND_REJECTED:'Refund reject',
+    REFUND_REJECTED:'Refund rejected',
     REVIEW_REJECTED:'Review rejected'
   },
   // 退款状态

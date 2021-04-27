@@ -31,7 +31,7 @@ export default {
        'Order.logisticsDetails': 'Logistics details',
        'Order.Received rejected':'Received rejected',
        'Order.Pending review':'Pending review',
-       'Order.Refund reject':'Refund reject',
+       'Order.Refund rejected':'Refund rejected',
        'Order.Review rejected':'Review rejected',
        'Order.applyRefunds':'Within days, customers are allowed to initiate a return and refund application.',
     },

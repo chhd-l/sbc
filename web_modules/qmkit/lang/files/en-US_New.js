@@ -28,7 +28,10 @@ export default {
        'Order.payWay2': 'Pay Way',
        'Order.cardType': 'Card Type',
        'Order.deliveryDate': 'Delivery Date',
-       'Order.logisticsDetails': 'Logistics details'
+       'Order.logisticsDetails': 'Logistics details',
+       'Order.Received rejected':'Received rejected',
+       'Order.Pending review':'Pending review',
+       'Order.Refund reject':'Refund reject'
     },
     Subscription: {},
     Appointment: {

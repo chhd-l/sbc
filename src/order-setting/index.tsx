@@ -1038,7 +1038,7 @@ class OrderSetting extends Component<any, any> {
           </Tabs>
         </div>
         <div className="bar-button">
-          <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateOrderSettingConfig()}>
+          <Button type="primary" style={{ marginRight: 10 }} onClick={() => this.updateOrderSettingConfig()}>
             {<FormattedMessage id="Order.save" />}
           </Button>
         </div>

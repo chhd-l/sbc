@@ -198,7 +198,7 @@ export default {
         "Product.Reviewoverview": "Review overview shows the summary of review data in the past 180 days  ",
         "Product.ReviewOverallrating": "Overview：Overall rating   -    Shopping rating   -    Purchase experience rating   -    Logistic rating   -",
         "Product.regular-product-shop": "regular-product-shop",
-        "Product.OperationDescription": "Operation Description",
+        "Product.OperationDescription": "Operation Description：",
         "Product.OperationDescription-1": "1、Please download the product import template first, and input the product data according to the requirements in the annotation. Failure to input the requirements will cause the product import to fail.",
         "Product.OperationDescription-2": "2、Please choose .xlsx or .xls file, the file size is ≤ 2M, only one file can be imported at a time, it is recommended that no more than 500 product data are imported at a time.",
         "Product.Productcategorydesc": "Product category is set by RC staff, you can associate attribute to product category.",
@@ -402,7 +402,22 @@ export default {
         "Product.Subscriptionpricecannotbezero": "Subscription price cannot be zero",
         "Product.enterthecorrectvalue": "Please enter the correct value.",
         "Product.MEXICO": "TIENDA OFICIAL DE PRODUCTOS VETERINARIOS ROYAL CANIN MEXICO",
+        "Product.Attributevalueisinput": "Attribute value' is input from other system, which can not be modified, but you can modify 'display name'. If you want to modify 'attribute value', you could contact us.",
+        "Product.Repair index": "Repair index",
+        "Product.Rebuild index": "Rebuild index",
+        "Product.Rebuild index": "Index operation",
+        "Product.Description name": "Description name",
+        "Product.Defaultautoshipfrequency": "Default autoship frequency",
+        "Product.deletethisfrequency": "Are you sure you want to delete this frequency?",
+        "Product.Defaultclubfrequency": "Default club frequency",
+        "Product.1-5000characters": "1-5000 characters",
+        "Product.thedistributionactivity": "The product is participating in the distribution activity, switch to wholesale mode, will withdraw from the distribution activity, sure to switch?",
+        "Product.corporatepurchaseactivity": "The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?",
+        "Product.On/Off shelves": "On/Off shelves",
+    
+    
     },
+    
     Order: {
         'Order.tradeType': 'Trade Type',
         'Order.cardHolderName': 'Card Holder Name',

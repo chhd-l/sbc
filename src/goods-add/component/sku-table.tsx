@@ -8,7 +8,7 @@ import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltipSKU from './productTooltip-sku';
 import * as _ from 'lodash';
-
+import { RCi18n } from 'qmkit';
 const FormItem = Form.Item;
 const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
@@ -253,12 +253,12 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input SKU code'
+                      message: RCi18n({id:'Product.PleaseInputSKU'})
                     },
                     {
                       min: 1,
                       max: 20,
-                      message: '1-20 characters'
+                      message: RCi18n({id:'Product.Characters'})
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
@@ -275,8 +275,8 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          <p>Sub-SKU</p>
-          <p style={{ fontSize: '12px', color: '#ccc' }}>Maximum 10 products</p>
+          <p><FormattedMessage id="Product.SubSKU" /></p>
+          <p style={{ fontSize: '12px', color: '#ccc' }}><FormattedMessage id="Product.MaximumProducts" /></p>
         </div>
       ),
       key: 'goodsInfoBundleRels',
@@ -291,11 +291,11 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input SKU code'
+                      message: RCi18n({id:'Product.PleaseInputSKU'})
                     },
                     {
                       pattern: ValidConst.number,
-                      message: 'Please enter a positive integer'
+                      message: RCi18n({id:'Product.positiveInteger'})
                     }
                   ]
                 })(
@@ -347,7 +347,7 @@ class SkuForm extends React.Component<any, any> {
 
     //External SKU
     columns = columns.push({
-      title: 'External SKU',
+      title: <FormattedMessage id="Product.ExternalSKU" />,
       key: 'externalSku',
       render: (rowInfo) => {
         return (
@@ -377,7 +377,7 @@ class SkuForm extends React.Component<any, any> {
 
     //EAN
     columns = columns.push({
-      title: 'EAN',
+      title: <FormattedMessage id="Product.EAN" />,
       key: 'goodsInfoBarcode',
       render: (rowInfo) => {
         return (
@@ -406,7 +406,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: 'Weight value',
+      title: <FormattedMessage id="Product.Weightvalue" />,
       key: 'goodsInfoWeight',
       render: (rowInfo) => {
         return (
@@ -417,7 +417,7 @@ class SkuForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input weight value'
+                      message: RCi18n({id:'Product.Inputweightvalue'})
                     }
                     /*{
                       pattern: ValidConst.noMinus,
@@ -435,7 +435,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: 'Weight unit',
+      title: <FormattedMessage id="Product.Weightunit" />,
       key: 'goodsInfoUnit',
       render: (rowInfo) => {
         return (
@@ -518,7 +518,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          Subscription
+         <FormattedMessage id="Product.Subscription" />
         </div>
       ),
       key: 'subscriptionStatus',
@@ -593,7 +593,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{marginRight: '81px'}}>On/Off shelves</div>
+        <div style={{marginRight: '81px'}}><FormattedMessage id="Product.On/Off shelves" /></div>
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
@@ -669,11 +669,11 @@ class SkuForm extends React.Component<any, any> {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('The file size must be less than 2M');
+        message.error(RCi18n({id:'Product.lessThan2M'}));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(RCi18n({id:'Product.FileFormatError'}));
       return false;
     }
   };

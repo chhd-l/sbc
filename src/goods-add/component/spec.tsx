@@ -5,7 +5,7 @@ import { noop, cache } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
 import { FormattedMessage } from 'react-intl';
-
+import { RCi18n } from 'qmkit';
 const Option = Select.Option;
 const FormItem = Form.Item;
 
@@ -243,7 +243,7 @@ class SpecForm extends React.Component<any, any> {
                               onChange: this._editSpecValue.bind(this, item.get('specId')),
                               initialValue: specValues
                             })(
-                              <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
+                              <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder={RCi18n({id:'Product.inputspecificationValue'})} notFoundContent={RCi18n({id:'Product.Nospecificationvalue'})} tokenSeparators={[',']}>
                                 {this._getChildren(item.get('specValues'), item.get('specName'))}
                               </Select>
                             )}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Breadcrumb, Button, Icon, message, Row, Spin, Steps, Upload } from 'antd';
 import { Const, Fetch, Headline, util, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-
+import { RCi18n } from 'qmkit';
 const Dragger = Upload.Dragger;
 const Step = Steps.Step;
 
@@ -73,7 +73,7 @@ export default class GoodsImport extends React.Component<any, any> {
         <div className="container-search">
           <Headline title={<FormattedMessage id="Product.productImport" />} />
           <Alert
-            message="Operation Description："
+            message={RCi18n({id:'Product.OperationDescription'})}
             description={
               <ul>
                 <li>1、{<FormattedMessage id="Product.importInfo1" />}</li>

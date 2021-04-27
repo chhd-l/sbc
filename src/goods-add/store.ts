@@ -2312,7 +2312,7 @@ export default class AppStore extends Store {
             keywords = '{name}, {subtitle}, {sales category}, {tagging}';
             break;
           case 123456858: //墨西哥
-            title = 'TIENDA OFICIAL DE PRODUCTOS VETERINARIOS ROYAL CANIN MEXICO';
+            title = RCi18n({id:'Product.MEXICO'});
             description = null
             keywords = null
             break;

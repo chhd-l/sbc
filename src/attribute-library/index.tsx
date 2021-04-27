@@ -178,7 +178,7 @@ class AttributeLibrary extends Component<any, any> {
 
     this.setState(
       {
-        modalName: RCi18n({id:'Product.Addnewattribute'}),
+        modalName: RCi18n({id:'Addnewattribute'}),
         attributeValueList: [],
         visibleAttribute: true,
         attributeForm,
@@ -418,8 +418,8 @@ class AttributeLibrary extends Component<any, any> {
                         {' '}
                         *
                       </span>
-                      Attribute value&nbsp;
-                      <Tooltip title="Attribute value' is input from other system, which can not be modified, but you can modify 'display name'. If you want to modify 'attribute value', you could contact us.">
+                      <FormattedMessage id="Product.AttributeValue" />&nbsp;
+                      <Tooltip title={RCi18n({id:'Order.modifiedErr'})}>
                         <Icon type="question-circle-o" />
                       </Tooltip>
                     </span>
@@ -466,7 +466,7 @@ class AttributeLibrary extends Component<any, any> {
                   ]
                 })(
                   <Input
-                    placeholder="Display value"
+                    placeholder={RCi18n({id:'Product.DisplayValue'})}
                     style={{ marginRight: 8 }}
                     disabled={!checkAuth('f_attribute_value_edit')}
                     onChange={(e) => {
@@ -515,8 +515,8 @@ class AttributeLibrary extends Component<any, any> {
         value={this.state.nameSelect}
         style={styles.label}
       >
-        <Option value="attributeName">Attribute name</Option>
-        <Option value="displayName">Display name</Option>
+        <Option value="attributeName"><FormattedMessage id="Product.Attributename" /></Option>
+        <Option value="displayName"><FormattedMessage id="Product.Displayname" /></Option>
       </Select>
     );
   };
@@ -532,8 +532,8 @@ class AttributeLibrary extends Component<any, any> {
         value={this.state.valueSelect}
         style={styles.label}
       >
-        <Option value="attributeValue">Attribute value</Option>
-        <Option value="displayValue">Display value</Option>
+        <Option value="attributeValue"><FormattedMessage id="Product.Attributevalue" /></Option>
+        <Option value="displayValue"><FormattedMessage id="Product.Displayvalue" /></Option>
       </Select>
     );
   };
@@ -545,31 +545,31 @@ class AttributeLibrary extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Attribute name',
+        title: RCi18n({id:'Product.Displayvalue'}),
         dataIndex: 'attributeName',
         key: 'attributeName'
       },
       {
-        title: 'Display name',
+        title: RCi18n({id:'Product.Displayname'}),
         dataIndex: 'attributeNameEn',
         key: 'attributeNameEn'
       },
       {
-        title: 'Attribute value',
+        title: RCi18n({id:'Product.Attributevalue'}),
         dataIndex: 'attributeValue',
         key: 'attributeValue',
         width: '20%',
         render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList, 'attrbuite') : ''}</p>
       },
       {
-        title: 'Display value',
+        title: RCi18n({id:'Product.Displayvalue'}),
         dataIndex: 'displayValue',
         key: 'displayValue',
         width: '20%',
         render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList, 'display') : ''}</p>
       },
       {
-        title: 'Status',
+        title: RCi18n({id:'Product.status'}),
         dataIndex: 'attributeStatus',
         key: 'attributeStatus',
         width: '10%',
@@ -580,16 +580,16 @@ class AttributeLibrary extends Component<any, any> {
         )
       },
       {
-        title: 'Operation',
+        title: RCi18n({id:'Product.operation'}),
         dataIndex: '',
         key: 'x',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
+            <Tooltip placement="top" title={RCi18n({id:'Product.Edit'})}>
               <a style={styles.edit} onClick={() => this.openEditPage(record)} className="iconfont iconEdit"></a>
             </Tooltip>
-            <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteAttributes(record.id)} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Delete">
+            <Popconfirm placement="topLeft" title={RCi18n({id:'Product.sureDeleteThisItem'})} onConfirm={() => this.deleteAttributes(record.id)} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title={RCi18n({id:'Product.Delete'})}>
                 <a className="iconfont iconDelete"></a>
               </Tooltip>
             </Popconfirm>
@@ -657,7 +657,7 @@ class AttributeLibrary extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Product.search" />
                     </span>
                   </Button>
                 </Col>
@@ -667,7 +667,7 @@ class AttributeLibrary extends Component<any, any> {
 
           <div className="container-search">
             <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-              <span>Add new attribute</span>
+              <span><FormattedMessage id="Product.Addnewattribute" />e</span>
             </Button>
             <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={attributeList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
           </div>
@@ -692,24 +692,24 @@ class AttributeLibrary extends Component<any, any> {
                   });
                 }}
               >
-                Close
+                <FormattedMessage id="Product.Close" />
               </Button>,
               <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-                Submit
+              <FormattedMessage id="Product.Submit" />
               </Button>
             ]}
           >
             <Form {...formItemLayout}>
-              <FormItem label="Attribute name">
+              <FormItem label={RCi18n({id:'Product.Attributename'})}>
                 {getFieldDecorator('attributeName', {
                   rules: [
                     {
                       required: true,
-                      message: 'Please enter attribute name'
+                      message: RCi18n({id:'Product.PleaseEnterAttributeName'})
                     },
                     {
                       max: 50,
-                      message: 'Exceed maximum length!'
+                      message: RCi18n({id:'Product.ExceedMaximumLength'})
                     }
                   ]
                 })(
@@ -725,16 +725,16 @@ class AttributeLibrary extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem label="Display name">
+              <FormItem label={RCi18n({id:'Product.Attributename'})}>
                 {getFieldDecorator('attributeNameEn', {
                   rules: [
                     {
                       required: true,
-                      message: 'Please enter display name'
+                      message: RCi18n({id:'Product.PleaseEnterDisplayName'})
                     },
                     {
                       max: 50,
-                      message: 'Exceed maximum length!'
+                      message: RCi18n({id:'Product.ExceedMaximumLength'})
                     }
                   ]
                 })(
@@ -750,7 +750,7 @@ class AttributeLibrary extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem label="Choose type">
+              <FormItem label={RCi18n({id:'Product.Choosetype'})}>
                 {getFieldDecorator('attributeType', {
                   rules: [{ required: true }]
                 })(
@@ -764,8 +764,8 @@ class AttributeLibrary extends Component<any, any> {
                     }}
                     style={{ width: '80%' }}
                   >
-                    <Radio value="Single choice">Single choice</Radio>
-                    <Radio value="Multiple choice">Multiple choice</Radio>
+                    <Radio value="Single choice"><FormattedMessage id="Product.Choosetype" /></Radio>
+                    <Radio value="Multiple choice"><FormattedMessage id="Product.Multiplechoice" /></Radio>
                   </Radio.Group>
                 )}
               </FormItem>

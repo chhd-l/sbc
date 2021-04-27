@@ -140,7 +140,7 @@ export default {
         'Prescriber.Informationsurlechat':'Information sur le chat:',
         'Prescriber.Name：':'Name:',
         'Prescriber.inputpetName':'Please input pet Name',
-        'Prescriber.Gender':'Gender!',
+        'Prescriber.Gender':'Gender',
         'Prescriber.selectGender':'Please select Gender!',
         'Prescriber.Female':'Female',
         'Prescriber.Male':'Male',
@@ -174,7 +174,8 @@ export default {
         'Prescriber.Paris':'Paris (Y/N)',
         'Prescriber.Pick up':'Pick up (Y/N)',
         'Prescriber.Getdatafailed':'Get data failed',
-        'Prescriber.Recommendation.fillDate':'fillDate'
+        'Prescriber.Recommendation.fillDate':'fillDate',
+        'Prescriber.No':'No',
     },
     'Pet owner': {
         "PetOwner.Member": "Member",

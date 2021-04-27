@@ -234,7 +234,7 @@ export default class AppointmentList extends React.Component<any, any> {
             {text === 0 && (
               <Tooltip title={RCi18n({id:'Appointment.Arrived'})}>
                 <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
-                  <i className="iconfont iconbtn-disable"></i>
+                  <i className="iconfont iconEnabled"></i>
                 </Button>
               </Tooltip>
             )}

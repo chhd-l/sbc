@@ -852,7 +852,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (refreshAddressList) {
       this.setState(
         {
-          loading: true,
           showAddressForm: false
         },
         () => {

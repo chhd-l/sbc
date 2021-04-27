@@ -195,7 +195,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
         const rFields = { ...fields, ...sugAddr };
-        if (addressInputType === 'AUTOMATICALLY') {
+        if (addressInputType === 'AUTOMATICALLY' && delivery.address1 !== fields.address1) {
           const validStatus = await validateAddressScope({
             regionFias: dadataAddress.provinceId || null,
             areaFias: dadataAddress.areaId || null,
@@ -210,6 +210,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
                 errors: [new Error('Please enter an address that is within the delivery areas of the online store')]
               }
             });
+            this.setState({ loading: false });
             return;
           }
         }

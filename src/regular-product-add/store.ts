@@ -1581,7 +1581,7 @@ export default class AppStore extends Store {
   };
   /**提取json代码 */
   functionTurnJson = (content) => {
-    const reg = /\<[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
+    const reg = /\<xmp[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
     let _html = content.replace(reg, function () {
       return arguments[1];
     });

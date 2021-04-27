@@ -123,12 +123,14 @@ class ProductSearchSetting extends Component<any, any> {
       purchaseType
     });
   }
-  async deleteDict(item){
+  async deleteDict(item,type){
   const {res}=  await delSysDictionary({id:item.id})
-  // let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+  this.querySysDictionary();
    message.success(res.message)
-   this.querySysDictionary();
-   
+   this.props.form.setFieldsValue({
+    [type]:null
+   })
+
   }
 
   render() {
@@ -182,7 +184,7 @@ class ProductSearchSetting extends Component<any, any> {
                 <Col span={6}>
                   <Form.Item>
                     {getFieldDecorator('defaultSubscriptionFrequencyId', {
-                      initialValue: defaultSubscriptionFrequencyId,
+                      initialValue: defaultSubscriptionFrequencyId||'',
                       rules: [
                         {
                           required: true,
@@ -199,7 +201,7 @@ class ProductSearchSetting extends Component<any, any> {
                             <span >{item.name}</span>
                            
                             <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
-                            <Popconfirm placement="topLeft" title={RCi18n({id:'Product.deletethisfrequency'})} onConfirm={(e) => this.deleteDict(item)} okText="Confirm" cancelText="Cancel">
+                            <Popconfirm placement="topLeft" title={RCi18n({id:'Product.deletethisfrequency'})} onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionFrequencyId')} okText="Confirm" cancelText="Cancel">
                               <Tooltip placement="top" title="Delete">
                                 <a>
                                   <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
@@ -237,7 +239,7 @@ class ProductSearchSetting extends Component<any, any> {
                   <Form.Item>
 
                     {getFieldDecorator('defaultSubscriptionClubFrequencyId', {
-                      initialValue: defaultSubscriptionClubFrequencyId,
+                      initialValue: defaultSubscriptionClubFrequencyId||'',
                       rules: [
                         {
                           required: true,
@@ -255,7 +257,8 @@ class ProductSearchSetting extends Component<any, any> {
                               <span >{item.name}</span>
   
                               <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
-                              <Popconfirm placement="topLeft" title={RCi18n({id:'Product.deletethisfrequency'})} onConfirm={(e) => this.deleteDict(item)} okText="Confirm" cancelText="Cancel">
+
+                              <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
                                   <a>
                                     <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>

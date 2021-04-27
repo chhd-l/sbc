@@ -138,10 +138,10 @@ export default class OrderDelivery extends React.Component<any, any> {
                           {logistic.get('logisticCompanyName')}{' '}
                           &nbsp;&nbsp;Logistics single number：
                           {logistic.get('logisticNo')}&nbsp;&nbsp;
-                          <Logistics
+                          {/* <Logistics
                             companyInfo={logistic}
                             deliveryTime={deliverTime}
-                          />
+                          /> */}
                         </label>
                       ) : (
                         'none'

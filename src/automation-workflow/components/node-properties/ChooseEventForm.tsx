@@ -68,7 +68,8 @@ export default class ChooseEventForm extends Component<any, any> {
           { title: '1-year subscription', value: '1YearSubscription', key: '0-1-3' },
           { title: 'Subscription program cancelation by PO', value: 'SubscriptionProgramCancelationByPO', key: '0-1-4' },
           { title: 'Food transition (new life-stage)', value: 'foodTransition', key: '0-1-5' },
-          { title: '3 days before next refill order', value: '3DaysBeforeNextRefillOrder', key: '0-1-6' }
+          { title: '3 days before next refill order', value: '3DaysBeforeNextRefillOrder', key: '0-1-6' },
+          { title: 'Create pet profile', value: 'createPetProfile', key: '0-1-7' }
         ]
       },
       {

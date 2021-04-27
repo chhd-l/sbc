@@ -408,6 +408,8 @@ export default {
         'Order.cardHolderName': 'Card Holder Name',
         'Order.payWay2': 'Pay Way',
         'Order.cardType': 'Card Type',
+        'Order.deliveryDate': 'Delivery Date',
+       'Order.logisticsDetails': 'Logistics details',
         "Order.categoriesHave": "categories have been signed then maximum is 200 categories",
         "Order.OrderExpirationTime": "Order expiration time",
         "Order.Re-review": "Re-review",
@@ -902,7 +904,7 @@ export default {
         'Prescriber.Paris': 'Paris (Y/N)',
         'Prescriber.Pick up': 'Pick up (Y/N)',
         'Prescriber.Getdatafailed': 'Get data failed',
-
+        'Prescriber.Recommendation.fillDate':'fillDate',
 
         "Prescriber.PrescriberID": "Prescriber ID",
         "Prescriber.PrescriberCity": "Prescriber city",

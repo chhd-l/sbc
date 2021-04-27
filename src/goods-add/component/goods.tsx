@@ -241,7 +241,6 @@ class GoodsForm extends React.Component<any, any> {
     const storeCateIds = this.state.storeCateIds;
     let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
-    console.log(goods.toJS(),111122);
     if (storeCateIds) {
       storeCateIds.toJS().map((id) => {
         if (!parentIds.includes(id)) {
@@ -881,7 +880,6 @@ class GoodsForm extends React.Component<any, any> {
     }
 
     else if (key === 'saleableFlag') {
-      console.log(e,123);
       if (e == 0) {
         this.setState({
           saleableType: true

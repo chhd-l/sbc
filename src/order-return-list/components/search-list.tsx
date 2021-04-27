@@ -221,7 +221,7 @@ class SearchList extends React.Component<any, any> {
       const applyStatus = v.getIn(['returnPrice', 'applyStatus']);
       // 应退金额，如果对退单做了改价，使用applyPrice，否则，使用总额totalPrice
       const payPrice = totalPrice;
-      const actualReturnPrice = applyStatus ? applyPrice : v.getIn(['returnPrice', 'actualReturnPrice']);
+      const actualReturnPrice = v.getIn(['returnPrice', 'actualReturnPrice']);
 
       const refundStatus = v.get('refundStatus');
 

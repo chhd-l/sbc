@@ -129,7 +129,7 @@ class OrderDetailTab extends React.Component<any, any> {
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
     gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
-    const tradePrice = detail.get('tradePrice').toJS() as any;
+    const tradePrice = detail.get('tradePrice') ? detail.get('tradePrice').toJS() as any : {};
 
     //收货人信息
     const consignee = detail.get('consignee')
@@ -346,6 +346,9 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}
                   </p>
+                  <p>
+                    <FormattedMessage id="Order.paymentMethod" />: {detail.get('payWay')}
+                  </p>
                 </Col>
               </Row>
             </div>
@@ -378,7 +381,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   <FormattedMessage id="Order.Subscriptionumber" />: {detail.get('subscribeId')}
                 </p>
                 <p>
-                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery')}
+                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery') ? detail.get('subscriptionTypeQuery').replace('_', ' & '): '' }
                 </p>
                 <p>
                   <FormattedMessage id="Order.subscriptionPlanType" />: {detail.get('subscriptionPlanType')}

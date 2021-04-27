@@ -80,13 +80,19 @@ class DeliveryItem extends React.Component<Iprop, any> {
     this.setState({ loading: true });
     const addressInputType = await getAddressInputTypeSetting();
     let fields = [];
+    let states = [];
+    let cities = [];
     let isAddressValidation = false;
     if (addressInputType) {
       fields = await getAddressFieldList(addressInputType);
     }
     const countries = await getCountryList();
-    const cities = await getCityList();
-    const states = await getStateList();
+    if (fields.find(ad => ad.fieldName === 'City' && ad.inputDropDownBoxFlag === 1)) {
+      cities = await getCityList();
+    }
+    if (fields.find(ad => ad.fieldName === 'State' && ad.inputDropDownBoxFlag === 1)) {
+      states = await getStateList();
+    }
     //MANUALLY类型的地址才去获取是否进行验证的配置
     if (addressInputType === 'MANUALLY') {
       isAddressValidation = await getIsAddressValidation();
@@ -189,7 +195,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
         const rFields = { ...fields, ...sugAddr };
-        if (addressInputType === 'AUTOMATICALLY') {
+        if (addressInputType === 'AUTOMATICALLY' && delivery.address1 !== fields.address1) {
           const validStatus = await validateAddressScope({
             regionFias: dadataAddress.provinceId || null,
             areaFias: dadataAddress.areaId || null,
@@ -204,12 +210,21 @@ class DeliveryItem extends React.Component<Iprop, any> {
                 errors: [new Error('Please enter an address that is within the delivery areas of the online store')]
               }
             });
+            this.setState({ loading: false });
             return;
           }
         }
         handlerFunc({
           ...delivery,
           ...rFields,
+          ...(dadataAddress.unrestrictedValue ? {
+            country: dadataAddress.countryCode || '',
+            countryId: (this.state.countryList[0] ?? {}).id ?? '',
+            province: dadataAddress.province || '',
+            provinceId: null,
+            city: dadataAddress.city || '',
+            cityId: null
+          } : {}),
           customerId: this.props.customerId,
           consigneeName: rFields.firstName + ' ' + rFields.lastName,
           deliveryAddress: [rFields.address1, rFields.address2].join(''),
@@ -229,7 +244,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
   };
 
   searchCity = (txt: string) => {
-    searchCity(txt).then((data) => {
+    txt.trim() !== '' && searchCity(txt).then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
           searchCityList: data.res.context.systemCityVO

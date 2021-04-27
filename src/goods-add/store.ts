@@ -362,7 +362,6 @@ export default class AppStore extends Store {
           minStock: item.stock
         };
       });
-      console.log(addSkUProduct,6666);
       this.dispatch('sku:addSkUProduct', addSkUProduct);
     }
 
@@ -1508,12 +1507,16 @@ export default class AppStore extends Store {
         return;
       }
     }
-
+    let detailsList=this.state().get('goodsDescriptionDetailList');
+    let _itemList=  detailsList.map(_item=>{
+       //   _item.content=this.functionTurnJson(_item.content);
+          return _item
+      })
     param = param.set('goodsIntervalPrices', areaPrice);
     param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
-    param = param.set('goodsDescriptionDetailList', this.state().get('goodsDescriptionDetailList'));
+    param = param.set('goodsDescriptionDetailList',_itemList);
 
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)
@@ -1524,6 +1527,7 @@ export default class AppStore extends Store {
     let result3: any;
     const i = this.state().get('checkFlag');
     const enterpriseFlag = this.state().get('enterpriseFlag');
+
     if (this.state().get('getGoodsId')) {
       if (goods.get('saleType') == 0) {
         const goodsId = goods.get('goodsId');
@@ -1540,6 +1544,9 @@ export default class AppStore extends Store {
       }
       result = await edit(param && param.toJS());
     } else {
+
+
+
       result = await save(param && param.toJS());
     }
 
@@ -1567,7 +1574,24 @@ export default class AppStore extends Store {
     } else {
     }
   };
-
+  /**提取json代码 */
+functionTurnJson = (content) => {
+    // const reg = /\<xmp[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
+    // let _html = content.replace(reg, function () {
+    //   return arguments[1];
+    // });
+    // return _html;
+   try {
+    let _contentArr= content.match(/<xmp>[\s\S]*?\<\/xmp\>/gmi)
+    let _html='';
+   _contentArr.map(item=>{
+     _html+= item.replace(/(<\/?xmp.*?>)/gmi,'')
+    })
+    return _html;
+   } catch (error) {
+    return content;
+   }
+  };
   /**
    * 客户搜索
    */

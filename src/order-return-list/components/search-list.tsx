@@ -221,7 +221,7 @@ class SearchList extends React.Component<any, any> {
       const applyStatus = v.getIn(['returnPrice', 'applyStatus']);
       // 应退金额，如果对退单做了改价，使用applyPrice，否则，使用总额totalPrice
       const payPrice = totalPrice;
-      const actualReturnPrice = applyStatus ? applyPrice : v.getIn(['returnPrice', 'actualReturnPrice']);
+      const actualReturnPrice = v.getIn(['returnPrice', 'actualReturnPrice']);
 
       const refundStatus = v.get('refundStatus');
 
@@ -452,19 +452,18 @@ class SearchList extends React.Component<any, any> {
         <p>{alert1}</p>
         <p>{alert2}</p>
 
-
+        {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
         <InputNumber
-          min={0}
+          min={0.01}
           max={applyPrice}
           defaultValue={applyPrice}
-          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${value}`}
-          parser={value => {
-            let currentSymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG).trim()
-            value = value.replace(currentSymbol, '');
-            value = value.replace(/\s?|(,*)/g, '');
-            return value;
-          }
-          }
+          // formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${value}`}
+          // parser={value => {
+          //   let currentSymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG).trim()
+          //   value = value.replace(currentSymbol, '');
+          //   value = value.replace(/\s?|(,*)/g, '');
+          //   return value;
+          // }}
           onChange={this.changeRealRefund}
         />
       </div>,
@@ -589,7 +588,7 @@ class SearchList extends React.Component<any, any> {
     if (res.code === Const.SUCCESS_CODE) {
       this.props.relaxProps.onRejectModalChange({
         visible: true,
-        type: 'refusing refund',
+        type: 'Refusing refund',
         onOk: onRejectRefund,
         rid: rid
       });

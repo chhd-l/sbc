@@ -11,7 +11,7 @@ import * as webapi from './webapi';
 import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary, refresh } from './webapi';
 import { message } from 'antd';
 import LogisticActor from './actor/logistic-actor';
-import { Const, history, ValidConst } from 'qmkit';
+import { Const, history, RCi18n, ValidConst } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
@@ -24,42 +24,6 @@ export default class AppStore extends Store {
   }
 
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
-  init2 = async (tid: string) => {
-    this.transaction(() => {
-      this.dispatch('loading:start');
-      this.dispatch('tid:init', tid);
-      this.dispatch('detail-actor:hideDelivery');
-    });
-
-    const { res } = (await fetchOrderDetail(tid)) as any;
-    let { code, context: orderInfo, message: errorInfo } = res;
-    if (code == Const.SUCCESS_CODE) {
-      const payRecordResult = (await payRecord(orderInfo.totalTid)) as any;
-      const { context: logistics } = (await fetchLogistics()) as any;
-
-      const { res: payRecordResult2 } = (await webapi.getPaymentInfo(orderInfo.totalTid)) as any;
-      const { res: cityDictRes } = (await webapi.queryCityById({
-        id: orderInfo.consignee ? [orderInfo.consignee.cityId] : undefined
-      })) as any;
-      const { res: countryDictRes } = (await queryDictionary({
-        type: 'country'
-      })) as any;
-      // const { res: refresh } = (await webapi.refresh(orderInfo.totalTid)) as any;
-      this.transaction(() => {
-        this.dispatch('loading:end');
-        this.dispatch('detail:init', orderInfo);
-        this.dispatch('receive-record-actor:init', payRecordResult.res.context.payOrderResponses);
-        this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context);
-        this.dispatch('detail-actor:setSellerRemarkVisible', true);
-        this.dispatch('logistics:init', logistics);
-        this.dispatch('dict:initCity', cityDictRes.context?.systemCityVO ?? []);
-        this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
-        this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
-      });
-    } else {
-      this.dispatch('loading:end');
-    }
-  };
   init = async (tid: string) => {
     this.transaction(() => {
       this.dispatch('loading:start');
@@ -95,7 +59,6 @@ export default class AppStore extends Store {
           this.dispatch('logistics:init', logistics.context ? logistics.context : {});
           // this.dispatch('detail:setNeedAudit', needRes.context.audit);
           this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
-          this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
         });
       });
     } else {
@@ -105,10 +68,14 @@ export default class AppStore extends Store {
 
   /* 刷新物流信息*/
   onRefresh = async (params) => {
+    this.dispatch('logisticsLoading:start');
     const tid = this.state().get('tid');
     const { res } = (await webapi.refresh(tid)) as any;
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('dict:refresh', res.context.tradeDelivers);
+      this.dispatch('logisticsLoading:end');
+    } else {
+      this.dispatch('logisticsLoading:end');
     }
   };
 
@@ -174,8 +141,10 @@ export default class AppStore extends Store {
    */
   deliver = async () => {
     const tid = this.state().getIn(['detail', 'id']);
+    this.dispatch('detail-actor:setIsFetchingLogistics', true);
     await this.fetchLogistics();
     const { res } = await webapi.deliverVerify(tid);
+    this.dispatch('detail-actor:setIsFetchingLogistics', false);
     if (res.code === Const.SUCCESS_CODE) {
       const tradeItems = this.state()
         .getIn(['detail', 'tradeItems'])
@@ -261,8 +230,9 @@ export default class AppStore extends Store {
     tradeDelivery = tradeDelivery.set('deliverNo', param.deliverNo);
     tradeDelivery = tradeDelivery.set('deliverId', param.deliverId);
     tradeDelivery = tradeDelivery.set('deliverTime', param.deliverTime);
-
+    this.dispatch('detail-actor:setIsSavingShipment', true);
     const { res } = await webapi.deliver(tid, tradeDelivery);
+    this.dispatch('detail-actor:setIsSavingShipment', false);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
       message.success(RCi18n({id:'Order.OperateSuccessfully'}));

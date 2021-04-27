@@ -29,6 +29,10 @@ export default class AlertInfo extends React.Component<any, any> {
                 3、
                 <FormattedMessage id="operationInstruction.third" />
               </p>
+              <p>
+                4、
+                <FormattedMessage id="Product.settheSalescategory" />
+              </p>
             </div>
           ) : (
             this.props.message

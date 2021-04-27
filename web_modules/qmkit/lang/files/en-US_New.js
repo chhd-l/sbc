@@ -21,9 +21,23 @@ export default {
         'Product.Displayonshop': 'Display on shop',
         'Product.suretoswitch': 'The product is participating in corporate purchasing and distribution activities, switching to wholesale mode, will exit corporate purchasing and distribution activities, sure to switch?',
         'Product.selectstatus': 'please select status',
+        'Product.settheSalescategory': 'Set the Sales category field to show product in the respective PLP.',
+
+
     },
     Order: {
-       'Order.tradeType': 'Trade Type'
+       'Order.tradeType': 'Trade Type',
+       'Order.cardHolderName': 'Card Holder Name',
+       'Order.payWay2': 'Pay Way',
+       'Order.cardType': 'Card Type',
+       'Order.deliveryDate': 'Delivery Date',
+       'Order.logisticsDetails': 'Logistics details',
+       'Order.Received rejected':'Received rejected',
+       'Order.Pending review':'Pending review',
+       'Order.Refund rejected':'Refund rejected',
+       'Order.Review rejected':'Review rejected',
+       'Order.applyRefunds':'Within days, customers are allowed to initiate a return and refund application.',
+       'Order.Refusing refund':'Refusing refund',
     },
     Subscription: {},
     Appointment: {
@@ -82,7 +96,7 @@ export default {
         'Prescriber.Link status':'Link status',
         'Prescriber.Paris':'Paris',
         'Prescriber.Pick up':'Pick up',
-        'Prescriber.Created Time':'Created Time:',
+        'Prescriber.Created Time':'Created Date:',
         'Prescriber.lessthan100characters':'Please input less than 100 characters:',
         'Prescriber.thereasonforrejection':'Please enter the reason for rejection:',
         'Prescriber.Product':'Product',
@@ -158,7 +172,7 @@ export default {
         'Prescriber.Paris':'Paris (Y/N)',
         'Prescriber.Pick up':'Pick up (Y/N)',
         'Prescriber.Getdatafailed':'Get data failed',
-    
+        'Prescriber.Recommendation.fillDate':'fillDate'
     },
     'Pet owner': {
         "PetOwner.Member": "Member",

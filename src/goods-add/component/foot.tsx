@@ -31,6 +31,7 @@ class Foot extends React.Component<any, any> {
       getGoodsId: string;
       goodsList: any;
     };
+    loading: any
   };
 
   static relaxProps = {
@@ -79,10 +80,10 @@ class Foot extends React.Component<any, any> {
           </AuthWrapper>
         ) : this.props.tabType == 'inventory' ? (
           <AuthWrapper key="003" functionName={this.props.goodsFuncName}>
-            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
+            <Button type="primary" disabled={this.props.loading} onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
               <FormattedMessage id="Product.Prev" />
             </Button>
-            <Button type="primary" onClick={() => this._savePrice()} style={{ marginRight: 10 }}>
+            <Button type="primary" disabled={this.props.loading} onClick={() => this._savePrice()} style={{ marginRight: 10 }}>
               <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>

@@ -43,7 +43,7 @@ class ClinicForm extends React.Component<any, any> {
         // auditStatus: '1',
         prescriberCode: '',
         partneredShop: '',
-        auditAuthority: false
+        //auditAuthority: false
       },
       firstPrescriberForm: {},
       cityArr: [],
@@ -221,7 +221,7 @@ class ClinicForm extends React.Component<any, any> {
         // auditStatus: res.context.auditStatus,
         prescriberCode: res.context.prescriberCode,
         parentPrescriberId: res.context.parentPrescriberId,
-        auditAuthority: res.context.auditAuthority,
+        // auditAuthority: res.context.auditAuthority,
         website: res.context.website
       });
       this.getClinicsReward(res.context.prescriberId);
@@ -800,7 +800,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label={RCi18n({ id: 'Prescriber.AuditAuthority' })}>
+                {/* <FormItem label={RCi18n({ id: 'Prescriber.AuditAuthority' })}>
                   {getFieldDecorator(
                     'auditAuthority',
                     {}
@@ -815,7 +815,7 @@ class ClinicForm extends React.Component<any, any> {
                       }
                     />
                   )}
-                </FormItem>
+                </FormItem> */}
                 <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                   <Button type="primary" htmlType="submit">
                     <FormattedMessage id="Prescriber.ProceedToSetRewardRules" />

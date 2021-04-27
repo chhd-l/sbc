@@ -136,9 +136,9 @@ class GoodsList extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.Subtotalofreturnamount" />,
-        dataIndex: 'splitPrice',
-        key: 'splitPriceTotal',
-        render: (splitPrice) => <div>${splitPrice.toFixed(2)}</div>
+        dataIndex: 'price',
+        key: 'price',
+        render: (price) => <div>${price.toFixed(2)}</div>
       }
     ];
 
@@ -261,14 +261,14 @@ class GoodsList extends React.Component<any, any> {
             <label style={styles.inforItem}>
               <FormattedMessage id="Order.logisticsInformation" />
               : <p>{logisticInfo}</p> 
-              {returnLogisticInfo && (
+              {/* {returnLogisticInfo && (
                 <Logistics
                   companyInfo={fromJS(returnLogisticInfo)}
                   deliveryTime={moment(
                     returnLogistics.get('createTime')
                   ).format(Const.DAY_FORMAT)}
                 />
-              )}
+              )} */}
             </label>
           ) : null}
 

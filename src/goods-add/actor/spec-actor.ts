@@ -30,7 +30,8 @@ export default class GoodsSpecActor extends Actor {
           marketPrice: 0,
           subscriptionPrice: 0,
           stock: 0,
-          goodsInfoBundleRels: []
+          goodsInfoBundleRels: [],
+          specType: false
         }
       ],
       stockChecked: false,

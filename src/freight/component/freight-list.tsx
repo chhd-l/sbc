@@ -20,7 +20,7 @@ export default class FreightList extends React.Component<any, any> {
           data={
             isStore
               ? [d]
-              : d.freightTemplateGoodsExpresses.map((f) => {
+              : (d.freightTemplateGoodsExpresses ?? []).map((f) => {
                   f.deliverWay = d.deliverWay;
                   return f;
                 })

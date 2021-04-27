@@ -19,30 +19,34 @@ const Common = {
 
   // 退货状态
   returnGoodsState: {
-    INIT: '待审核',
+    INIT: 'Init',
     AUDIT: 'Logistics information to be filled in',
-    DELIVERED: '待商家收货',
+    DELIVERED: 'Delivered',
     RECEIVED: 'Pending refund',
     COMPLETED: 'Finished',
-    REJECT_RECEIVE: '拒绝收货',
-    REJECT_REFUND: '拒绝退款',
+    REJECT_RECEIVE: 'Reject receive',
+    REJECT_REFUND: 'Reject refund',
     VOID: 'Invalid',
-    REFUND_FAILED: '退款失败'
+    REFUND_FAILED: 'Refund failed',
+    RECEIVED_REJECTED:'Received rejected',
+    PENDING_REVIEW:'Pending review',
+    REFUND_REJECTED:'Refund rejected',
+    REVIEW_REJECTED:'Review rejected'
   },
   // 退款状态
   returnMoneyState: {
-    INIT: '待审核',
+    INIT: 'Init',
     AUDIT: 'Pending refund',
     COMPLETED: 'Finished',
-    REJECT_REFUND: '拒绝退款',
+    REJECT_REFUND: 'Reject refund',
     VOID: 'Invalid',
-    REFUND_FAILED: '退款失败'
+    REFUND_FAILED: 'Refund failed'
   },
   // 退款单状态
   refundStatus: {
     0: 'Pending refund',
     3: 'Pending refund',
-    1: '拒绝退款',
+    1: 'Reject refund',
     2: 'Refund'
   },
   // 支付方式
@@ -138,8 +142,6 @@ const Common = {
   REACT_APP_RC_CLIENT_ID: "0oa6fb12ahvn5lAAL357",
   REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
   REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
-  VALET_ORDER_URL:(country)=>`https://stgwedding.royalcanin.com/${country}/shop/`,
-  VALET_ORDER_NOMAL_URL:'https://shopstg.royalcanin.com/',
 
   // PROD  Okta Config
   // REACT_APP_PRESCRIBER_CLIENT_ID: "0oa6ac06a7I03dDyY416",

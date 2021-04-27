@@ -71,11 +71,11 @@ export default class OrderReceive extends React.Component<any, any> {
       key: 'paymentAmount',
       render: (text, record) => (record.payOrderStatus == 1 ? '' : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (text || 0).toFixed(2))
     },
-    {
-      title: <FormattedMessage id="Order.Status" />,
-      dataIndex: 'opStatus',
-      key: 'opStatus'
-    },
+    // {
+    //   title: <FormattedMessage id="Order.Status" />,
+    //   dataIndex: 'opStatus',
+    //   key: 'opStatus'
+    // },
     {
       title: <FormattedMessage id="Order.tradeType" />,
       dataIndex: 'tradeType',

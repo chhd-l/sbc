@@ -21,6 +21,9 @@ export default {
         'Product.Displayonshop': 'Display on shop',
         'Product.suretoswitch': 'The product is participating in corporate purchasing and distribution activities, switching to wholesale mode, will exit corporate purchasing and distribution activities, sure to switch?',
         'Product.selectstatus': 'please select status',
+        'Product.settheSalescategory': 'Set the Sales category field to show product in the respective PLP.',
+
+
     },
     Order: {
        'Order.tradeType': 'Trade Type',
@@ -28,7 +31,13 @@ export default {
        'Order.payWay2': 'Pay Way',
        'Order.cardType': 'Card Type',
        'Order.deliveryDate': 'Delivery Date',
-       'Order.logisticsDetails': 'Logistics details'
+       'Order.logisticsDetails': 'Logistics details',
+       'Order.Received rejected':'Received rejected',
+       'Order.Pending review':'Pending review',
+       'Order.Refund rejected':'Refund rejected',
+       'Order.Review rejected':'Review rejected',
+       'Order.applyRefunds':'Within days, customers are allowed to initiate a return and refund application.',
+       'Order.Refusing refund':'Refusing refund',
     },
     Subscription: {},
     Appointment: {

@@ -136,9 +136,9 @@ class GoodsList extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.Subtotalofreturnamount" />,
-        dataIndex: 'splitPrice',
-        key: 'splitPriceTotal',
-        render: (splitPrice) => <div>${splitPrice.toFixed(2)}</div>
+        dataIndex: 'price',
+        key: 'price',
+        render: (price) => <div>${price.toFixed(2)}</div>
       }
     ];
 

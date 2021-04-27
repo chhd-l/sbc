@@ -34,6 +34,7 @@ export default {
        'Order.Refund rejected':'Refund rejected',
        'Order.Review rejected':'Review rejected',
        'Order.applyRefunds':'Within days, customers are allowed to initiate a return and refund application.',
+       'Order.Refusing refund':'Refusing refund',
     },
     Subscription: {},
     Appointment: {

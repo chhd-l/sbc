@@ -213,7 +213,7 @@ export default {
         "Product.Multiplechoice": "Multiple choice",
         "Product.FilterSortsettingdesc": "\n  1. Filter attributes can be chosen from attributes, which are associated with product category\n  2. The enabled filters will show in the ‘Filter’ section for customer to choose and filter out desired products.\n  3. The enabled sort conditions will show in the ‘Sort by’ section for customer to sort products in desired orders.",
         "Product.ConsumerType": "Pet Owner Type",
-        "Product.Next": "Next",
+        // "Product.Next": "Next",
         "Product.Prev": "Prev",
         "Product.BackToList": "Back to list",
         "Product.Prompt": "Prompt",
@@ -645,7 +645,7 @@ export default {
         "Order.modifiedErr": "The customer has been deleted and cannot be modified!",
         "Order.shippingFeesDiscount": "Shipping fee discount",
         "Order.purchaseType": "Purchase type",
-        "Order.cardHolderName": "Card Holder Name",
+        // "Order.cardHolderName": "Card Holder Name",
         "Order.PSP": "PSP",
         "Order.cardLast4Digits": "Card Last 4 Digits",
         "Order.paymentDetails": "Payment Details",
@@ -1771,6 +1771,10 @@ export default {
         "Setting.maxAmount": "Max amount",
         "Setting.Setinpaymentmethodmodel": "Set in payment method model",
         "Setting.COD": "COD",
+        "Setting.Dictionary": "Dictionary",
+        "SeSetting.Edittting.Keyword": "Keyword",
+        "Setting.Edit": "Edit",
+        "Setting.Delete": "Delete"
     },
     Menu: {
         "Menu.Appointment": "Appointment",

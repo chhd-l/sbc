@@ -429,7 +429,7 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder={<FormattedMessage id="Product.selectType" />} disabled={Number(goods.get('subscriptionStatus')) === 0} >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
-                  <Option value='club'><FormattedMessage id="Product.Auto ship" /></Option>
+                  <Option value='club'><FormattedMessage id="Product.Club" /></Option>
                 </Select>
               )}
             </FormItem>

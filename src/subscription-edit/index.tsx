@@ -656,7 +656,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     );
   };
   applyPromotionCode = (promotionCode?: String) => {
-    const { goodsInfo, promotionCodeInput } = this.state;
+    const { goodsInfo, promotionCodeInput, subscriptionInfo } = this.state;
     this.setState({
       loading: true
     });
@@ -675,6 +675,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode ? promotionCode : promotionCodeInput,
       deliveryAddressId: this.state.deliveryAddressId,
+      subscribeId: subscriptionInfo.subscriptionNumber,
       isAutoSub: true
     };
     webapi

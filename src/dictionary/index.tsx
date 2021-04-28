@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb, Const } from 'qmkit';
+import { Headline, SelectGroup, BreadCrumb, Const, RCi18n } from 'qmkit';
 import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Spin } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
@@ -44,14 +44,13 @@ class DitionaryList extends Component<any, any> {
           key: 'operation',
           render: (text, record) => (
             <span>
-              <Tooltip placement="top" title="Edit">
+              <Tooltip placement="top" title={`${RCi18n({id: 'Setting.Edit'})}`}>
                 <Link to={'/dictionary-edit/' + record.id} className="iconfont iconEdit"></Link>
               </Tooltip>
 
               <Divider type="vertical" />
-
-              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteDictionary(record.id)} okText={(window as any).RCi18n({ id: 'Setting.Confirm' })} cancelText={(window as any).RCi18n({ id: 'Setting.Cancel' })}>
-                <Tooltip placement="top" title="Delete">
+              <Popconfirm placement="topLeft" title={`${RCi18n({id: 'Setting.Areyousuretodelete'})}`} onConfirm={() => this.deleteDictionary(record.id)} okText={(window as any).RCi18n({ id: 'Setting.Confirm' })} cancelText={(window as any).RCi18n({ id: 'Setting.Cancel' })}>
+                <Tooltip placement="top" title={`${RCi18n({id: 'Setting.Delete'})}`}>
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
               </Popconfirm>
@@ -145,11 +144,11 @@ class DitionaryList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
-          <Headline title="Dictionary" />
+          <Headline title={`${RCi18n({id: 'Setting.Dictionary'})}`}/>
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore="Keyword"
+                addonBefore={`${RCi18n({id: 'Setting.Keyword'})}`}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({

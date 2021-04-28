@@ -675,7 +675,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode ? promotionCode : promotionCodeInput,
       deliveryAddressId: this.state.deliveryAddressId,
-      subscribeId: subscriptionInfo.subscriptionNumber,
+      customerAccount: subscriptionInfo.consumerAccount,
       isAutoSub: true
     };
     webapi

@@ -444,7 +444,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       promotionCode: promotionCode,
       isAutoSub: true,
       deliveryAddressId: this.state.deliveryAddressId,
-      subscribeId: subscriptionInfo.subscriptionNumber
+      customerAccount: subscriptionInfo.consumerAccount,
     };
     this.setState({ loading: true });
     webapi

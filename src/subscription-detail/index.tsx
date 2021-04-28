@@ -883,7 +883,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 {this.state.promotionVOList.map((pvo, idx) => (
                   <div key={idx} className="flex-between">
                     <span>{pvo.marketingName}</span>
-                    <span style={styles.priceStyle}>{currencySymbol + ' ' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
+                    <span style={styles.priceStyle}>{currencySymbol + ' -' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
                   </div>
                 ))}
 

@@ -131,7 +131,6 @@ class OrderStatusHead extends React.Component<any, any> {
     const enableReturn = (returnFlowState === 'RECEIVED' || (returnType == 'REFUND' && returnFlowState === 'AUDIT')) && refundRecord.get('refundStatus') != null && refundRecord.get('refundStatus') != 2 && refundRecord.get('refundStatus') != 3;
 
     const labelText = returnType == 'RETURN' ? Const.returnGoodsState[returnFlowState] : Const.returnMoneyState[returnFlowState] || '';
-    debugger
     return (
       <div>
         <div style={styles.container as any}>

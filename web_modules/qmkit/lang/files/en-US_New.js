@@ -1828,7 +1828,7 @@ export default {
         'Setting.Url': 'Url',
         'Setting.Pleaseinputurl': 'Please input url',
         'Setting.Editlogisticsetting': 'Edit logistic setting',
-        'Setting.Updatelogisticinformation': 'Update logistic information'
+        'Setting.Updatelogisticinformation': 'Update logistic information',
         "Setting.SupportSubscription": "Support Subscription",
         "Setting.maxAmount": "Max amount",
         "Setting.Setinpaymentmethodmodel": "Set in payment method model",

@@ -56,11 +56,18 @@ export default class Detail extends React.Component<any, any> {
     this.sortDetailTab();
   };
   functionTurnJson = (content) => {
-    const reg = /\<[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
-    let _html = content.replace(reg, function () {
-      return arguments[1];
-    });
-    return _html;
+    try {
+      let _html='';
+      let _contentArr= content.match(/<xmp>[\s\S]*?\<\/xmp\>/gmi)
+     
+     _contentArr.map(item=>{
+       _html+= item.replace(/(<\/?xmp.*?>)/gmi,'')
+      })
+      return _html;
+    } catch (error) {
+      return content;
+    }
+   
   };
   sortDetailTab = () => {
     const { editEditorContent } = this.props.relaxProps;

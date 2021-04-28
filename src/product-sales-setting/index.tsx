@@ -3,7 +3,7 @@ import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
 import { Form, Input, Select, Modal, Button, Radio, message, Col, Row, Popconfirm, Tooltip } from 'antd';
 import ModalForm from './conponents/modal-form';
 import ModalFormClub from './conponents/modal-form-club';
-
+import { RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { querySysDictionary,delSysDictionary, defaultProductSetting, translateAddBatch, addSysDictionary } from './webapi';
 const { Option } = Select;
@@ -123,12 +123,14 @@ class ProductSearchSetting extends Component<any, any> {
       purchaseType
     });
   }
-  async deleteDict(item){
+  async deleteDict(item,type){
   const {res}=  await delSysDictionary({id:item.id})
-  // let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+  this.querySysDictionary();
    message.success(res.message)
-   this.querySysDictionary();
-   
+   this.props.form.setFieldsValue({
+    [type]:null
+   })
+
   }
 
   render() {
@@ -142,13 +144,13 @@ class ProductSearchSetting extends Component<any, any> {
           <Form name="complex" onSubmit={this.onFinish} labelAlign="left" labelCol={{ span: 4 }} wrapperCol={{ span: 15 }}>
 
 
-            <Form.Item label={<span style={{ color: '#666' }}>Default purchase type</span>}>
+            <Form.Item label={<span style={{ color: '#666' }}><FormattedMessage id="Product.Defaultpurchasetype" /></span>}>
               {getFieldDecorator('defaultPurchaseType', {
                 initialValue: defaultPurchaseType,
                 rules: [
                   {
                     required: true,
-                    message: 'Please select purchase type!'
+                    message: RCi18n({id:'Product.PleaseSelectPurchaseType'})
                   }
                 ]
               })(
@@ -173,7 +175,7 @@ class ProductSearchSetting extends Component<any, any> {
             <Form.Item
               label={
                 <span className="ant-form-item-required" style={{ color: '#666' }}>
-                  Default autoship frequency
+                 <FormattedMessage id="Product.Defaultautoshipfrequency" />
                 </span>
               }
               style={{ marginBottom: 0 }}
@@ -182,24 +184,24 @@ class ProductSearchSetting extends Component<any, any> {
                 <Col span={6}>
                   <Form.Item>
                     {getFieldDecorator('defaultSubscriptionFrequencyId', {
-                      initialValue: defaultSubscriptionFrequencyId,
+                      initialValue: defaultSubscriptionFrequencyId||'',
                       rules: [
                         {
                           required: true,
-                          message: 'Please select subscription frequency !'
+                          message: RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})
                         }
                       ]
                     })(
                       <Select disabled={disabled}  
                       optionLabelProp="label" 
-                      placeholder="Please select subscription frequency !" style={{ width: 180 }}>
+                      placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 180 }}>
                         {options.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
                           <div style={{ display: 'flex', justifyContent: 'space-between' ,position:'relative'}} >
                             <span >{item.name}</span>
                            
                             <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
-                            <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item)} okText="Confirm" cancelText="Cancel">
+                            <Popconfirm placement="topLeft" title={RCi18n({id:'Product.deletethisfrequency'})} onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionFrequencyId')} okText="Confirm" cancelText="Cancel">
                               <Tooltip placement="top" title="Delete">
                                 <a>
                                   <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
@@ -217,7 +219,7 @@ class ProductSearchSetting extends Component<any, any> {
                 </Col>
                 <Col span={4}>
                   <Button type="danger" size="default" onClick={this.showModal} disabled={disabled}>
-                    Add new frequency
+                  <FormattedMessage id="Product.Addnewfrequency" />
                 </Button>
                 </Col>
               </Row>
@@ -227,7 +229,7 @@ class ProductSearchSetting extends Component<any, any> {
             <Form.Item
               label={
                 <span className="ant-form-item-required" style={{ color: '#666' }}>
-                  Default club frequency
+                 <FormattedMessage id="Product.Defaultclubfrequency" />
                 </span>
               }
               style={{ marginBottom: 0 }}
@@ -237,25 +239,26 @@ class ProductSearchSetting extends Component<any, any> {
                   <Form.Item>
 
                     {getFieldDecorator('defaultSubscriptionClubFrequencyId', {
-                      initialValue: defaultSubscriptionClubFrequencyId,
+                      initialValue: defaultSubscriptionClubFrequencyId||'',
                       rules: [
                         {
                           required: true,
-                          message: 'Please select subscription frequency !'
+                          message: RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})
                         }
                       ],
                      
                     })(
                       <Select disabled={disabled}
                         optionLabelProp="label"
-                        placeholder="Please select subscription frequency !" style={{ width: 180 }}>
+                        placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 180 }}>
                         {optionsClub.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
                             <div style={{ display: 'flex', justifyContent: 'space-between',position:'relative' }} >
                               <span >{item.name}</span>
   
                               <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
-                              <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item)} okText="Confirm" cancelText="Cancel">
+
+                              <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
                                   <a>
                                     <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
@@ -272,7 +275,7 @@ class ProductSearchSetting extends Component<any, any> {
                   </Form.Item></Col>
                 <Col span={4}>
                   <Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
-                    Add new frequency
+                  <FormattedMessage id="Product.Addnewfrequency" />
                 </Button>
                 </Col>
               </Row>
@@ -282,7 +285,7 @@ class ProductSearchSetting extends Component<any, any> {
 
             <div className="bar-button" style={{ marginLeft: -40 }}>
               <Button type="primary" htmlType="submit">
-                Save
+              <FormattedMessage id="Product.Save" />
               </Button>
             </div>
           </Form>

@@ -6,7 +6,7 @@ import moment from 'moment';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
-
+import { RCi18n } from 'qmkit';
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const { confirm } = Modal;
@@ -17,7 +17,7 @@ export default class ProductSearchList extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Search',
+      title: <FormattedMessage id="Product.search" />,
       allSerchResults: [],
       allPagination: {
         current: 1,
@@ -211,7 +211,7 @@ export default class ProductSearchList extends React.Component<any, any> {
             <a
               onClick={()=>this.showModal('repair')}
             >
-              Repair index
+             <FormattedMessage id="Product.Repair index" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -220,7 +220,7 @@ export default class ProductSearchList extends React.Component<any, any> {
             <a
               onClick={() => this.showModal('rebuild') }
             >
-              Rebuild index
+              <FormattedMessage id="Product.Rebuild index" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -414,7 +414,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         width: '8%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Details">
+            <Tooltip placement="top" title={RCi18n({id:'Product.Details'})}>
               <Link to={{ pathname: '/product-search-details', state: { type: 'all', searchTerm: record.searchTerm, startDate: dateRange[0], endDate: dateRange[1] } }} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
@@ -604,7 +604,7 @@ export default class ProductSearchList extends React.Component<any, any> {
                 </Button>
                 <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
                   <Button>
-                    Index operation
+                  <FormattedMessage id="Product.Rebuild index" />
                     <Icon type="down" />
                   </Button>
                 </Dropdown>

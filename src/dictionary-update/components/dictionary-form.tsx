@@ -187,27 +187,13 @@ class DictionaryForm extends Component<any, any> {
           )}
         </FormItem>
         <FormItem label="Value">
-          {getFieldDecorator('value', {
+          {getFieldDecorator('valueEn', {
             rules: [
               {
                 required: true,
                 message: 'Please input Value!'
               }
             ]
-          })(
-            <Input
-              onChange={(e) => {
-                const value = (e.target as any).value;
-                this.onFormChange({
-                  field: 'value',
-                  value
-                });
-              }}
-            />
-          )}
-        </FormItem>
-        <FormItem label="Value EN">
-          {getFieldDecorator('valueEn', {
           })(
             <Input
               onChange={(e) => {

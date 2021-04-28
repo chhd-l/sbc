@@ -8,7 +8,7 @@ import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltipSKU from './productTooltip-sku';
 import * as _ from 'lodash';
-
+import { RCi18n } from 'qmkit';
 const FormItem = Form.Item;
 const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
@@ -22,7 +22,9 @@ export default class SkuTable extends React.Component<any, any> {
     this.WrapperForm = Form.create({})(SkuForm);
     this.state = {
       visible: false,
-      EANList: []
+      EANList: [],
+      goodsInfoNo: [],
+      specType: false,
     };
   }
 
@@ -107,10 +109,31 @@ class SkuForm extends React.Component<any, any> {
     };
   }
 
+  /*static getDerivedStateFromProps(nextProps, prevState) {
+    const { goodsList } = nextProps.relaxProps;
+    // 当传入的type发生变化的时候，更新state
+    goodsList.toJS().map((item,)=>{
+
+      if (item.goodsInfoNo !== prevState.goodsInfoNo) {
+        console.log(item.goodsInfoNo,1111);
+
+        return {
+
+
+        };
+      }
+    })
+
+
+    // 否则，对于state不进行任何操作
+    return null;
+  }*/
+
+
   render() {
     const { goodsList, onProductselectSku, addSkUProduct, goodsId } = this.props.relaxProps;
 
-    if (goodsId == undefined) {
+    if (goodsId == undefined && this.state.specType == false) {
       if ( goodsList.toJS().length == 0 ) {
         let a = []
         onProductselectSku(a)
@@ -162,7 +185,7 @@ class SkuForm extends React.Component<any, any> {
     });
   };
 
-  edit = (e) => {z}
+  edit = (e) => {}
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, goodsList, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
@@ -253,12 +276,12 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input SKU code'
+                      message: RCi18n({id:'Product.PleaseInputSKU'})
                     },
                     {
                       min: 1,
                       max: 20,
-                      message: '1-20 characters'
+                      message: RCi18n({id:'Product.Characters'})
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
@@ -275,8 +298,8 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          <p>Sub-SKU</p>
-          <p style={{ fontSize: '12px', color: '#ccc' }}>Maximum 10 products</p>
+          <p><FormattedMessage id="Product.SubSKU" /></p>
+          <p style={{ fontSize: '12px', color: '#ccc' }}><FormattedMessage id="Product.MaximumProducts" /></p>
         </div>
       ),
       key: 'goodsInfoBundleRels',
@@ -291,11 +314,11 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input SKU code'
+                      message: RCi18n({id:'Product.PleaseInputSKU'})
                     },
                     {
                       pattern: ValidConst.number,
-                      message: 'Please enter a positive integer'
+                      message: RCi18n({id:'Product.positiveInteger'})
                     }
                   ]
                 })(
@@ -328,6 +351,8 @@ class SkuForm extends React.Component<any, any> {
                                       this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
                                     }
                                   }}
+                                  onFocus={() => this.onfocus()}
+                                  onBlur={() => this.onblur()}
                                 />
                                 <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id)}></a>
                               </div>
@@ -347,7 +372,7 @@ class SkuForm extends React.Component<any, any> {
 
     //External SKU
     columns = columns.push({
-      title: 'External SKU',
+      title: <FormattedMessage id="Product.ExternalSKU" />,
       key: 'externalSku',
       render: (rowInfo) => {
         return (
@@ -367,7 +392,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
                   initialValue: rowInfo.externalSku
-                })(<Input style={{ width: '116px' }} maxLength={45} />)}
+                })(<Input style={{ width: '116px' }} maxLength={45} onFocus={() => this.onfocus()} onBlur={() => this.onblur()} />)}
               </FormItem>
             </Col>
           </Row>
@@ -377,7 +402,7 @@ class SkuForm extends React.Component<any, any> {
 
     //EAN
     columns = columns.push({
-      title: 'EAN',
+      title: <FormattedMessage id="Product.EAN" />,
       key: 'goodsInfoBarcode',
       render: (rowInfo) => {
         return (
@@ -397,7 +422,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
                   initialValue: rowInfo.goodsInfoBarcode
-                })(<Input style={{ width: '116px' }} />)}
+                })(<Input style={{ width: '116px' }} onFocus={() => this.onfocus()} onBlur={() => this.onblur()} />)}
               </FormItem>
             </Col>
           </Row>
@@ -406,7 +431,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: 'Weight value',
+      title: <FormattedMessage id="Product.Weightvalue" />,
       key: 'goodsInfoWeight',
       render: (rowInfo) => {
         return (
@@ -417,7 +442,7 @@ class SkuForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input weight value'
+                      message: RCi18n({id:'Product.Inputweightvalue'})
                     }
                     /*{
                       pattern: ValidConst.noMinus,
@@ -426,7 +451,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
+                })(<Input type="number" style={{ width: '121px' }} min={0} onFocus={() => this.onfocus()} onBlur={() => this.onblur()} onKeyUp={(e) => this.noMinus(e)} />)}
               </FormItem>
             </Col>
           </Row>
@@ -435,7 +460,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: 'Weight unit',
+      title: <FormattedMessage id="Product.Weightunit" />,
       key: 'goodsInfoUnit',
       render: (rowInfo) => {
         return (
@@ -444,42 +469,43 @@ class SkuForm extends React.Component<any, any> {
           //   <Option value="g">g</Option>
           //   <Option value="lb">lb</Option>
           // </Select>
-          <select className="ant-input" value={rowInfo.goodsInfoUnit}  onChange = {(e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e)}>
+         /* <select className="ant-input" value={rowInfo.goodsInfoUnit}  onChange = {(e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e)}>
             <option value="kg">kg</option>
             <option value="g">g</option>
             <option value="lb">lb</option>
-          </select>
-          //
-          // <Row>
-          //   <Col span={6}>
-          //     <Select defaultValue={rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'}
-          //             value={rowInfo.goodsInfoUnit}
-          //             onChange = {(e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e)}
-          //             getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} >
-          //       <Option value="kg">kg</Option>
-          //       <Option value="g">g</Option>
-          //       <Option value="lb">lb</Option>
-          //     </Select>
-          //
-          //
-          //   </Col>
-          // </Row>
-          // <Row>
-          //   <Col span={6}>
-          //     <FormItem style={styles.tableFormItem}>
-          //       {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
-          //         onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
-          //         initialValue: rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'
-          //       })(
-          //         <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} >
-          //           <Option value="kg">kg</Option>
-          //           <Option value="g">g</Option>
-          //           <Option value="lb">lb</Option>
-          //         </Select>
-          //       )}
-          //     </FormItem>
-          //   </Col>
-          // </Row>
+          </select>*/
+
+         /* <Row>
+            <Col span={6}>
+              <Select defaultValue={rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'}
+                      value={rowInfo.goodsInfoUnit}
+                      onChange = {(e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e)}
+                      getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} >
+                <Option value="kg">kg</Option>
+                <Option value="g">g</Option>
+                <Option value="lb">lb</Option>
+              </Select>
+
+
+            </Col>
+          </Row>*/
+          <Row>
+            <Col span={6}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
+                  initialValue: rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'
+                })(
+                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }}
+                  onFocus={() => this.onfocus()} onBlur={() => this.onblur()}>
+                    <Option value="kg">kg</Option>
+                    <Option value="g">g</Option>
+                    <Option value="lb">lb</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
         );
       }
     });
@@ -518,7 +544,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          Subscription
+         <FormattedMessage id="Product.Subscription" />
         </div>
       ),
       key: 'subscriptionStatus',
@@ -535,7 +561,13 @@ class SkuForm extends React.Component<any, any> {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0' : '1'
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false || goodsList.toJS().length == 1? true : false } getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
+                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false || goodsList.toJS().length == 1? true : false }
+                          getPopupContainer={() => document.getElementById('page-content')}
+                          style={{ width: '81px' }}
+                          placeholder="please select status"
+                          onFocus={() => this.onfocus()}
+                          onBlur={() => this.onblur()}
+                  >
                     <Option value="1">Y</Option>
                     <Option value="0">N</Option>
                   </Select>
@@ -565,7 +597,10 @@ class SkuForm extends React.Component<any, any> {
                          defaultValue={rowInfo.promotions}
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder={<FormattedMessage id="Product.selectType" />}
-                         disabled={goods.get('promotions') == 'autoship'} >
+                         disabled={goods.get('promotions') == 'autoship'}
+                         onFocus={() => this.onfocus()}
+                         onBlur={() => this.onblur()}
+                >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
                 </Select>
@@ -593,7 +628,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{marginRight: '81px'}}>On/Off shelves</div>
+        <div style={{marginRight: '81px'}}><FormattedMessage id="Product.On/Off shelves" /></div>
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
@@ -669,11 +704,11 @@ class SkuForm extends React.Component<any, any> {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('The file size must be less than 2M');
+        message.error(RCi18n({id:'Product.lessThan2M'}));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(RCi18n({id:'Product.FileFormatError'}));
       return false;
     }
   };
@@ -687,6 +722,7 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
+
 
     if (key == "goodsInfoBundleRels") {
       let minStock = []
@@ -852,6 +888,26 @@ class SkuForm extends React.Component<any, any> {
     }
     e.target.value = val.replace(/[^\d^\.]+/g, '');
   };
+
+
+  getArrDifference = (arr1, arr2) => {
+    return arr1.concat(arr2).filter(function(v, i, arr) {
+      return arr.indexOf(v) === arr.lastIndexOf(v);
+    });
+  }
+
+  onfocus = () => {
+    this.setState({
+      specType: true
+    })
+  }
+
+  onblur = () => {
+    this.setState({
+      specType: false
+    })
+  }
+
 }
 
 const styles = {

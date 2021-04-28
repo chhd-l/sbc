@@ -12,7 +12,9 @@ export default class DetailActor extends Actor {
       // 卖家备注修改
       remedySellerRemark: '',
       //拒绝订单
-      orderRejectModalVisible: false
+      orderRejectModalVisible: false,
+      isFetchingLogistics: false,
+      isSavingShipment: false
     };
   }
 
@@ -90,4 +92,27 @@ export default class DetailActor extends Actor {
   remedySellerRemark(state: IMap, param: boolean) {
     return state.set('remedySellerRemark', param);
   }
+
+  /**
+   * 加载物流方式
+   * @param state 
+   * @param isFetching 
+   * @returns 
+   */
+  @Action('detail-actor:setIsFetchingLogistics')
+  setIsFetchingLogistics(state: IMap, isFetching: boolean) {
+    return state.set('isFetchingLogistics', isFetching);
+  }
+
+  /**
+   * 保存物流设置
+   * @param state 
+   * @param isSaving 
+   * @returns 
+   */
+  @Action('detail-actor:setIsSavingShipment')
+  setIsSavingShipment(state: IMap, isSaving: boolean) {
+    return state.set('isSavingShipment', isSaving);
+  }
 }
+

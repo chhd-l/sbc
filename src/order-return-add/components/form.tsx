@@ -281,9 +281,6 @@ class ReturnOrderForm extends React.Component<any, any> {
         }
         onChange={this._editInfo.bind(this, 'selectedReturnReason')}
       >
-        <Option key={'key'} value={''}>
-          <FormattedMessage id="Order.Pleaseselectchargebackreason" />
-        </Option>
         {returnReasonList && returnReasonList.map((item) => {
           const map: IMap = item.toMap();
           const key = map.keySeq().first();
@@ -318,10 +315,7 @@ class ReturnOrderForm extends React.Component<any, any> {
         }
         onChange={this._editInfo.bind(this, 'selectedReturnWay')}
       >
-        <Option key={'key'} value={''}>
-          <FormattedMessage id="Order.Pleaseselectreturnmethod" />
-        </Option>
-        {returnWayList.map((item) => {
+        {returnWayList&&returnWayList.map((item) => {
           const map: IMap = item.toMap();
           const key = map.keySeq().first();
           const value = map.valueSeq().first();

@@ -61,6 +61,10 @@ class SubscriptionDetail extends React.Component<any, any> {
       deliveryPrice: '',
       taxFeePrice: '',
       discountsPrice: '',
+      freeShippingFlag: false,
+      freeShippingDiscountPrice: 0,
+      subscriptionDiscountPrice: 0,
+      promotionVOList: [],
       frequencyList: [],
       frequencyClubList: [],
       promotionDesc: 'Promotion',
@@ -152,17 +156,6 @@ class SubscriptionDetail extends React.Component<any, any> {
           let goodsInfo = subscriptionDetail.goodsInfo;
           let paymentInfo = subscriptionDetail.payPaymentInfo;
 
-          let initDeliveryPrice = 0;
-          let initDiscountPirce = 0;
-          let initTaxPrice = 0;
-          (subscriptionDetail.noStartTradeList ?? []).forEach(item => {
-            if (item.tradePrice) {
-              initDeliveryPrice += item.tradePrice.deliveryPrice ?? 0;
-              initDiscountPirce += item.tradePrice.discountsPrice ?? 0;
-              initTaxPrice += item.tradePrice.taxFeePrice ?? 0;
-            }
-          });
-
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -178,14 +171,10 @@ class SubscriptionDetail extends React.Component<any, any> {
               promotionCode: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
-              loading: false,
-              deliveryPrice: +initDeliveryPrice.toFixed(2),
-              discountsPrice: +initDiscountPirce.toFixed(2),
-              taxFeePrice: +initTaxPrice.toFixed(2),
               isActive: subscriptionDetail.subscribeStatus === "0"
             },
             () => {
-              // this.applyPromationCode(this.state.promotionCode);
+              this.applyPromationCode(this.state.promotionCode);
             }
           );
         }
@@ -456,6 +445,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       isAutoSub: true,
       deliveryAddressId: this.state.deliveryAddressId
     };
+    this.setState({ loading: true });
     webapi
       .getPromotionPrice(params)
       .then((data) => {
@@ -466,11 +456,20 @@ class SubscriptionDetail extends React.Component<any, any> {
             discountsPrice: res.context.discountsPrice,
             promotionCodeShow: res.context.promotionCode,
             promotionDesc: res.context.promotionDesc,
-            taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0
+            taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0,
+            freeShippingFlag: res.context.freeShippingFlag ?? false,
+            freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
+            subscriptionDiscountPrice: res.context.subscriptionDiscountPrice ?? 0,
+            promotionVOList: res.context.promotionVOList ?? [],
+            loading: false
           });
+        } else {
+          this.setState({ loading: false });
         }
       })
-      .catch((err) => { });
+      .catch((err) => {
+        this.setState({ loading: false });
+      });
   };
   handleYearChange = (value) => { };
   tabChange = (key) => { };
@@ -875,10 +874,17 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <div className="flex-between">
                   {/* <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span> */}
                   <span>
-                    <FormattedMessage id="Subscription.ColSpan.Promotion" />
+                    <FormattedMessage id="Order.subscriptionDiscount" />
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + '  -' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + '  -' + (this.state.subscriptionDiscountPrice ? this.state.subscriptionDiscountPrice : 0).toFixed(2)}</span>
                 </div>
+
+                {this.state.promotionVOList.map((pvo, idx) => (
+                  <div key={idx} className="flex-between">
+                    <span>{pvo.marketingName}</span>
+                    <span style={styles.priceStyle}>{currencySymbol + ' ' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
+                  </div>
+                ))}
 
                 <div className="flex-between">
                   <span>
@@ -886,6 +892,10 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </span>
                   <span style={styles.priceStyle}>{currencySymbol + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
+                {this.state.freeShippingFlag && <div className="flex-between">
+                  <span><FormattedMessage id="Order.shippingFeesDiscount"/></span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.freeShippingDiscountPrice ? this.state.freeShippingDiscountPrice : 0).toFixed(2)}</span>
+                </div>}
                 {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                   <div className="flex-between">
                     <span>
@@ -903,7 +913,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                     (<FormattedMessage id="Subscription.IVAInclude" />
                     ):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice - +this.state.freeShippingDiscountPrice).toFixed(2)}</span>
                 </div>
               </Col>
             </Row>

@@ -4,7 +4,7 @@ import { Const } from 'qmkit';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import { string } from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
+import { RCi18n } from 'qmkit';
 const Option = Select.Option;
 
 import { addDescriptionItem, updateDescriptionItem } from '../webapi';
@@ -148,7 +148,7 @@ class CreateForm extends Component<Iprop, Istate> {
         ]}
       >
         <Form {...formItemLayout}>
-          <FormItem key="descName" label="Description name">
+          <FormItem key="descName" label={RCi18n({id:'Product.Description name'})}>
             {getFieldDecorator('descName', {
               rules: [{ required: true, message: <FormattedMessage id="Product.DescriptionNameIsRequired" /> }],
               initialValue: descriptionName

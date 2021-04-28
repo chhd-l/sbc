@@ -7,7 +7,7 @@ const defaultImg = require('../img/none.png');
 import Moment from 'moment';
 import { deleteGoodsById } from '../webapi';
 import { FormattedMessage, injectIntl } from 'react-intl';
-
+import { RCi18n } from 'qmkit';
 declare type IList = List<any>;
 import { message, Modal, Table, Tooltip } from 'antd';
 import AppStore from '../store';
@@ -188,13 +188,13 @@ class CustomerList extends React.Component<any, any> {
             return (
               <div className="operation-th">
                 <AuthWrapper functionName={'f_coupon_detail'}>
-                  <Tooltip placement="top" title="View">
+                  <Tooltip placement="top" title={RCi18n({id:'Product.View'})}>
                     <span style={styles.see} onClick={() => goodsEvaluateDetail(evaluateId, true)}>
                       <span className="icon iconfont iconView" style={{ fontSize: 20 }}></span>
                       {/* <FormattedMessage id="view" /> */}
                     </span>
                   </Tooltip>
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={RCi18n({id:'Product.delete'})}>
                     <span style={styles.see} onClick={() => this.deleteEvaluate(evaluateId)} title="Delete">
                       <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
                       {/* <FormattedMessage id="delete" /> */}

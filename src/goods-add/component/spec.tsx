@@ -5,7 +5,7 @@ import { noop, cache } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
 import { FormattedMessage } from 'react-intl';
-
+import { RCi18n } from 'qmkit';
 const Option = Select.Option;
 const FormItem = Form.Item;
 
@@ -15,8 +15,11 @@ export default class Spec extends React.Component<any, any> {
   props: {
     relaxProps?: {
       specSingleFlag: boolean;
+      addSkUProduct: any;
       goods: any;
       editSpecSingleFlag: Function;
+      goodsList: any;
+      goodsId: any;
       goodsSpecs: IList;
       editSpecName: Function;
       editSpecValues: Function;
@@ -24,13 +27,17 @@ export default class Spec extends React.Component<any, any> {
       deleteSpec: Function;
       updateSpecForm: Function;
       editGoodsItem: Function;
+      onProductselectSku: Function;
     };
   };
 
   static relaxProps = {
     goods: 'goods',
+    addSkUProduct: 'addSkUProduct',
+    goodsList: 'goodsList',
     // 是否为单规格
     specSingleFlag: 'specSingleFlag',
+    goodsId: 'goodsId',
     // 修改是否为当单规格
     editSpecSingleFlag: noop,
     // 商品规格
@@ -44,6 +51,7 @@ export default class Spec extends React.Component<any, any> {
     deleteSpec: noop,
     updateSpecForm: noop,
     editGoodsItem: noop,
+    onProductselectSku: noop,
   };
 
   constructor(props) {
@@ -243,7 +251,7 @@ class SpecForm extends React.Component<any, any> {
                               onChange: this._editSpecValue.bind(this, item.get('specId')),
                               initialValue: specValues
                             })(
-                              <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
+                              <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder={RCi18n({id:'Product.inputspecificationValue'})} notFoundContent={RCi18n({id:'Product.Nospecificationvalue'})} tokenSeparators={[',']}>
                                 {this._getChildren(item.get('specValues'), item.get('specName'))}
                               </Select>
                             )}
@@ -306,8 +314,26 @@ class SpecForm extends React.Component<any, any> {
    * 修改规格值
    */
   _editSpecValue = (specId: number, value: string) => {
-    const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem, goods } = this.props.relaxProps;
+    const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem, goods, goodsId, goodsList, onProductselectSku, addSkUProduct } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
+
+
+    /* console.log(goodsId,5555)
+     console.log(goodsList.toJS(),6666);
+     console.log(specId,77777);
+     if (goodsId == undefined) {
+       if ( goodsList.toJS().length == 0 ) {
+         let a = []
+         onProductselectSku(a)
+       }else {
+         if (addSkUProduct.length>0) {
+           console.log()
+           //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
+           let b = addSkUProduct.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
+           onProductselectSku(b)
+         }
+       }
+     }*/
     // 找到原规格值列表
     const spec = goodsSpecs.find((spec) => spec.get('specId') == specId);
     const oldSpecValues = spec.get('specValues');
@@ -325,10 +351,9 @@ class SpecForm extends React.Component<any, any> {
     });
     updateSpecForm(this.props.form);
     editSpecValues({ specId, specValues });
-
     if (value.length == 1) {
       let goods = Map({
-        subscriptionStatus: fromJS(1)
+        subscriptionStatus: fromJS(1),
       });
       editGoodsItem(goods);
       setFieldsValue({ subscriptionStatus: 1 })
@@ -355,10 +380,22 @@ class SpecForm extends React.Component<any, any> {
   };
 
   _deleteSpec = (specId: number) => {
-    const { deleteSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
+    const { deleteSpec, goodsSpecs, updateSpecForm, goodsId, goodsList, addSkUProduct, onProductselectSku } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() <= 1) {
       message.error(<FormattedMessage id="Product.Keep1SpecificationItem" />);
       return;
+    }
+    if (goodsId == undefined) {
+      if ( goodsList.toJS().length == 0 ) {
+        let a = []
+        onProductselectSku(a)
+      }else {
+        if (addSkUProduct.length>0) {
+          //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
+          let b = addSkUProduct.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
+          onProductselectSku(b)
+        }
+      }
     }
     updateSpecForm(this.props.form);
     deleteSpec(specId);

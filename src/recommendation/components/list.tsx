@@ -65,6 +65,7 @@ class ListView extends React.Component<any, any> {
   props: {
     histroy?: Object;
     relaxProps?: {
+      form:any,
       loading: boolean;
       orderRejectModalVisible: boolean;
       total: number;
@@ -96,6 +97,7 @@ class ListView extends React.Component<any, any> {
     //当前的客户列表
     dataList: 'dataList',
 
+    form:'form',
     onChecked: noop,
     onCheckedAll: noop,
     allChecked: allCheckedQL,
@@ -112,8 +114,8 @@ class ListView extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, total, pageSize, dataList,  init, currentPage, orderRejectModalVisible, onFindById } = this.props.relaxProps;
-
+    const { loading, total, pageSize,form, dataList,  init, currentPage, orderRejectModalVisible, onFindById } = this.props.relaxProps;
+ 
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -155,7 +157,13 @@ class ListView extends React.Component<any, any> {
               total={total}
               pageSize={pageSize}
               onChange={(pageNum, pageSize) => {
-                init({ pageNum: pageNum - 1, pageSize });
+                init({ pageNum: pageNum - 1, pageSize,
+                  felinRecoId:form.get('felinRecoId'),
+                  fillDate:form.get('fillDate'),
+                  goodsNames:form.get('goodsNames'),
+                 [form.get('consumerName')?'consumerName':'consumerEmail']:form.get('consumerName')?form.get('consumerName'):form.get('consumerEmail')
+                  
+              });
               }}
             />
           ) : null}

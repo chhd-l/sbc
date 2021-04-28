@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Input, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
-
+import { RCi18n } from 'qmkit';
 type Iprop = {
   descName: string;
   onChangeDescName: (value: string) => void;
@@ -15,7 +15,7 @@ export default function SearchForm(props: Iprop) {
         <Col span={10}>
           <Form.Item>
             <Input
-              addonBefore="Description name"
+              addonBefore={RCi18n({id:'Product.Description name'})}
               defaultValue={props.descName}
               onChange={(e) => {
                 const value = (e.target as any).value;

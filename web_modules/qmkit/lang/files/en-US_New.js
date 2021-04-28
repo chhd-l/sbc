@@ -1023,6 +1023,9 @@ export default {
         "Prescriber.Create": "Create",
         "Prescriber.EditPrescriberType": "Edit Prescriber Type",
         "Prescriber.NewPrescriberType": "New Prescriber type",
+        "Prescriber.Prescriber Setting":"Prescriber Setting",
+        "Prescriber.Please select the product": "Please select the product category to be reviewed.",
+        "Prescriber.Category": "Category"
 
     },
     'Pet owner': {

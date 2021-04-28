@@ -36,7 +36,7 @@ export const ReturnOrderStatus = [
   { langKey: 'Order.reviewRejected', name: 'Review rejected', value: 'REVIEW_REJECTED', listShow: true },
   { langKey: 'Order.toBeReceived', name: 'To be received', value: 'TO_BE_RECEIVED', listShow: true },
   { langKey: 'Order.pendingRefund', name: 'Pending refund', value: 'PENDING_REFUND', listShow: true },
-  { langKey: 'Order.receiedRejected', name: 'Receied rejected', value: 'RECEIVED_REJECTED', listShow: true },
+  { langKey: 'Order.receivedRejected', name: 'Received rejected', value: 'RECEIVED_REJECTED', listShow: true },
   { langKey: 'Order.Completed', name: 'Completed', value: 'COMPLETED', listShow: true },
   { langKey: 'Order.refundRejected', name: 'Refund rejected', value: 'REFUND_REJECTED', listShow: true },
   { langKey: 'Order.refundFailed', name: 'Refund failed', value: 'REFUND_FAILED', listShow: true }

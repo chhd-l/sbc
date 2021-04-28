@@ -90,6 +90,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       discountsPrice: '',
       freeShippingFlag: false,
       freeShippingDiscountPrice: 0,
+      subscriptionDiscountPrice: 0,
+      promotionVOList: [],
 
       isPromotionCodeValid: false,
       promotionDesc: 'Promotion',
@@ -689,6 +691,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             promotionDesc: res.context.promotionDesc,
             freeShippingFlag: res.context.freeShippingFlag ?? false,
             freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
+            subscriptionDiscountPrice: res.context.subscriptionDiscountPrice ?? 0,
+            promotionVOList: res.context.promotionVOList ?? [],
             loading: false
           });
         } else {
@@ -1335,9 +1339,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span style={styles.priceStyle}>{currencySymbol + ' ' + this.subTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex-between">
-                  <span><FormattedMessage id="Subscription.Promotion"/></span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
+                  <span><FormattedMessage id="Order.subscriptionDiscount"/></span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.subscriptionDiscountPrice ? this.state.subscriptionDiscountPrice : 0).toFixed(2)}</span>
                 </div>
+                {this.state.promotionVOList.map((pvo, idx) => (
+                  <div key={idx} className="flex-between">
+                    <span>{pvo.marketingName}</span>
+                    <span style={styles.priceStyle}>{currencySymbol + ' ' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
+                  </div>
+                ))}
                 {/* <div className="flex-between">
                       <span>Promotion Code</span>
                       {promotionCodeShow ? (

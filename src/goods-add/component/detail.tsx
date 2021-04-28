@@ -48,7 +48,7 @@ export default class Detail extends React.Component<any, any> {
   };
 
 
-  onContentChange = (html: string,text, name: string) => {
+  onContentChange = (html: string, name: string) => {
     console.log()
     if (goodsDetailTabObj[name].contentType.toUpperCase() === 'JSON') {
       goodsDetailTabObj[name].content = this.functionTurnJson(html);
@@ -58,11 +58,6 @@ export default class Detail extends React.Component<any, any> {
     this.sortDetailTab();
   };
   functionTurnJson = (content) => {
-    // const reg = /\<[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
-    // let _html = content.replace(reg, function () {
-    //   return arguments[1];
-    // });
-    // return _html;
   try {
     let _contentArr= content.match(/<xmp>[\s\S]*?\<\/xmp\>/gmi)
     let _html='';

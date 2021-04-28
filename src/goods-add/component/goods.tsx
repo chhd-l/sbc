@@ -33,6 +33,7 @@ const formItemLayout = {
 const tProps = {
   treeCheckable: 'true'
 };
+export const errorMsg = <h1>Hello, world</h1>;
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const confirm = Modal.confirm;

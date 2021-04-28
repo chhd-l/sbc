@@ -1319,7 +1319,7 @@ export default {
   'Order.DeliverDate': 'Deliver Date',
   'Order.inputDeliverDate': 'Please input deliver date',
   'Order.operationLog': 'Operation log',
-  'Order.LogisticsSingleNumber': 'Logistics single number',
+  'Order.LogisticsSingleNumber': 'Logistics number',
   'Order.DeliverGoods': 'Deliver goods',
   'Order.Prompt': 'Prompt',
   'Order.WhetherToInvalidate': 'Whether to invalidate this delivery record',
@@ -1442,7 +1442,7 @@ export default {
   'Order.activity':'Activity',
   'Order.sterilized':'Sterilized',
   'Order.logisticsCompany':'Logistics company',
-  'Order.logisticsSingleNumber':'Logistics single number',
+  'Order.logisticsSingleNumber':'Logistics number',
   'Order.prompt':'Prompt',
   'Order.Approve':'Approve',
   'Order.RecipientAccepted':'Recipient accepted',
@@ -3453,13 +3453,7 @@ export default {
   'Setting.SiteSEO': 'Site SEO',
   'Setting.PageSEO': 'Page SEO',
   /* -------- 已翻译 V1.0---------------*/
-  'Setting.export':'Export',
-  'Setting.SupportSubscription': 'Support Subscription',
-  'Setting.maxAmount': 'Max amount',
-  'Setting.Onlinepayment': 'Online payment',
-  'Setting.Setinpaymentmethodmodel': 'Set in payment method model',
-  'Setting.Offlinepayment': 'Offline payment',
-  'Setting.COD': 'COD',
+
 
 
   /*-----------------------------  Fetch  ----------------------------------------*/

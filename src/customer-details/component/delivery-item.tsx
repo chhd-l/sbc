@@ -215,10 +215,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
           }
         }
         handlerFunc({
-          ...{
-            country: (this.state.countryList[0] ?? {}).value ?? '',
-            countryId: (this.state.countryList[0] ?? {}).id ?? ''
-          },
           ...delivery,
           ...rFields,
           ...(dadataAddress.unrestrictedValue ? {
@@ -228,7 +224,10 @@ class DeliveryItem extends React.Component<Iprop, any> {
             provinceId: null,
             city: dadataAddress.city || '',
             cityId: null
-          } : {}),
+          } : {
+            country: (this.state.countryList[0] ?? {}).value ?? '',
+            countryId: (this.state.countryList[0] ?? {}).id ?? ''
+          }),
           customerId: this.props.customerId,
           consigneeName: rFields.firstName + ' ' + rFields.lastName,
           deliveryAddress: [rFields.address1, rFields.address2].join(''),

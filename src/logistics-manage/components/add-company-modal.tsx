@@ -52,7 +52,9 @@ class AddCompanyModal extends React.Component<any, any> {
 
   _save = () => {
     const { save } = this.props.relaxProps
-   
+   this.setState({
+     count: 1
+   })
     this.props.form.validateFields(null, async (errs, values) => {
       if (!errs) {
         save()

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Button, Modal } from 'antd';
+import { Button, message, Modal } from 'antd';
 import { noop, history, AuthWrapper, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import errorMsg from '@/goods-add/component/goods';
 const confirm = Modal.confirm;
 @Relax
 class Foot extends React.Component<any, any> {
@@ -157,6 +158,8 @@ class Foot extends React.Component<any, any> {
   };
 
   _next = (res) => {
+    // const errorMsg = <div>test <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span></div>
+    // message.error(errorMsg);
     this.props.onNext(res);
     // const { activeTabKey, onNext} = this.props.relaxProps;
     /*const result = validMain();

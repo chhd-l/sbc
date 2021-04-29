@@ -226,7 +226,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
             cityId: null
           } : {
             country: (this.state.countryList[0] ?? {}).value ?? '',
-            countryId: (this.state.countryList[0] ?? {}).id ?? ''
+            countryId: (this.state.countryList[0] ?? {}).id ?? '',
+            provinceId: rFields.province ? (this.state.stateList.find(st => st.name === rFields.province) ?? {})['id'] : null
           }),
           customerId: this.props.customerId,
           consigneeName: rFields.firstName + ' ' + rFields.lastName,

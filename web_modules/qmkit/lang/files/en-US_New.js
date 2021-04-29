@@ -178,6 +178,7 @@ export default {
         'Prescriber.Getdatafailed':'Get data failed',
         'Prescriber.Recommendation.fillDate':'fillDate',
         'Prescriber.No':'No',
+        'Prescriber.Recommendation.optimal':"Associer des aliments humides avec les croquettes permet à votre chat de profiter des bienfaits des deux types d’aliments,  respecte le comportement alimentaire naturel du chat et l'aide par ailleurs à maintenir le poids idéal à condition de respecter la quantité d'aliment recommandée."
     },
     'Pet owner': {
         "PetOwner.Member": "Member",

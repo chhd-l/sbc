@@ -3,7 +3,7 @@ import E from 'wangeditor'
 import Const from '../config';
 import lang from './lang/index.js'
 import i18next from 'i18next'
-import { message, Spin } from 'antd';
+import { Input, message, Spin } from 'antd';
 import { cache } from 'qmkit'
 import _ from 'lodash';
 import './index.less'
@@ -31,7 +31,8 @@ class ReactEditor extends Component<any, any> {
 
     }
     state = {
-        loading: false
+        loading: false,
+        value:''
     }
     static defaultProps = {
         toolbars: [
@@ -75,8 +76,12 @@ class ReactEditor extends Component<any, any> {
     };
 
     componentDidMount() {
-        if (this.props.id) {
+        if (this.props.id&&this.props.contentType.toUpperCase() !== 'JSON') {
             this.initEditor()
+        }else{
+            this.setState({
+                value:this.props.content
+            })
         }
     };
     /**
@@ -84,6 +89,7 @@ class ReactEditor extends Component<any, any> {
      */
     initEditor() {
         const { id, tabNanme, disabled, onContentChange,count, toolbars,contentType, fontNames, content } = this.props
+      
         const elemMenu = ".editorElem-menu-" + id;
         const elemBody = ".editorElem-body-" + id;
         this.editor = new E(elemBody)
@@ -111,7 +117,7 @@ class ReactEditor extends Component<any, any> {
         }
         this.editor.create()
 
-        this.editor.txt.html(content===''?'<p>&nbsp;</p>':content)
+        this.editor.txt.html(content)
         disabled && this.editor.disable()
     }
     uploadImage = () => {
@@ -173,24 +179,31 @@ class ReactEditor extends Component<any, any> {
             this.editor = null
         }, 1000)
     }
+    changeText=(value)=>{
+        const { tabNanme, onContentChange,} = this.props
+
+        this.setState({
+            value:value.target.value,
+        },()=>{
+            onContentChange(this.state.value,tabNanme)
+        })
+    }
     render() {
+        const {  height,contentType,disabled } = this.props
+        const {value,loading}=this.state;
         return (
-            <div className="shop">
-                <div className="text-area" >
-                    <div ref="editorElemMenu"
-                        style={{ backgroundColor: '#f1f1f1', border: "1px solid #ccc" }}
-                        className={"editorElem-menu-" + this.props.id}>
-
-                    </div>
-                    <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-                        <div
-
+            <div className="react-editor-cunstorm">
+                    <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+                       {contentType.toUpperCase() === 'JSON'?(
+                            <Input.TextArea value={value} disabled={disabled} placeholder="Please enter the JSON format"  onChange={this.changeText} style={{height:height}}/>
+                        ):(<div className="text-area" ><div
                             ref="editorElemBody" className={'editorElem-body-' + this.props.id}>
+                        </div> </div>)
+                        }
 
-                        </div>
                     </Spin>
                 </div>
-            </div>
+           
         );
     }
 }

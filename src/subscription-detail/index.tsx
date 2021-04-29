@@ -429,7 +429,7 @@ class SubscriptionDetail extends React.Component<any, any> {
     return sum;
   };
   applyPromationCode = (promotionCode?: String) => {
-    const { goodsInfo } = this.state;
+    const { goodsInfo, subscriptionInfo } = this.state;
     let goodsInfoList = [];
     for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
       let goods = {
@@ -443,7 +443,8 @@ class SubscriptionDetail extends React.Component<any, any> {
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode,
       isAutoSub: true,
-      deliveryAddressId: this.state.deliveryAddressId
+      deliveryAddressId: this.state.deliveryAddressId,
+      customerAccount: subscriptionInfo.consumerAccount,
     };
     this.setState({ loading: true });
     webapi
@@ -882,7 +883,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 {this.state.promotionVOList.map((pvo, idx) => (
                   <div key={idx} className="flex-between">
                     <span>{pvo.marketingName}</span>
-                    <span style={styles.priceStyle}>{currencySymbol + ' ' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
+                    <span style={styles.priceStyle}>{currencySymbol + ' -' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
                   </div>
                 ))}
 

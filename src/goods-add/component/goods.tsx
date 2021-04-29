@@ -33,6 +33,7 @@ const formItemLayout = {
 const tProps = {
   treeCheckable: 'true'
 };
+export const errorMsg = <h1>Hello, world</h1>;
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const confirm = Modal.confirm;
@@ -887,10 +888,9 @@ class GoodsForm extends React.Component<any, any> {
         });
         let goods = Map({
           [key]: fromJS(0),
-          subscriptionStatus: fromJS(0)
         });
         editGoods(goods);
-        setFieldsValue({ saleType: 0 });
+        setFieldsValue({ saleableType: 0 });
 
       } else {
         this.setState({
@@ -898,30 +898,27 @@ class GoodsForm extends React.Component<any, any> {
         });
         let goods = Map({
           [key]: fromJS(1),
-          subscriptionStatus: fromJS(1)
         });
         editGoods(goods);
-        setFieldsValue({ saleType: 1 });
+        setFieldsValue({ saleableType: 1 });
       }
     }
 
     else if (key === 'displayFlag') {
       if (e == 0) {
         let goods = Map({
-          [key]: fromJS(1),
-          subscriptionStatus: fromJS(0)
+          [key]: fromJS(0),
         });
-        //editGoods(goods);
+        editGoods(goods);
         editGoodsItem(goods);
-        //setFieldsValue({ subscriptionStatus: 0 });
+        setFieldsValue({ displayFlag: 0 });
       } else {
         let goods = Map({
           [key]: fromJS(1),
-          subscriptionStatus: fromJS(1)
         });
-        //editGoods(goods);
+        editGoods(goods);
         editGoodsItem(goods);
-        //setFieldsValue({ subscriptionStatus: 1 });
+        setFieldsValue({ displayFlag: 1 });
       }
     }
 

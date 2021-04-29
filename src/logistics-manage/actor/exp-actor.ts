@@ -10,7 +10,8 @@ export default class ExpActor extends Actor {
       checkedList: [],
       allExpressList: [],
       checkedRelation: {},
-      allCompanyList:[]
+      allCompanyList:[],
+      cardLoading: false
     };
   }
 
@@ -49,5 +50,10 @@ export default class ExpActor extends Actor {
   @Action('exp:afterUnChecked')
   afterUnChecked(state: IMap, expressCompanyId) {
     return state.removeIn(['checkedRelation', expressCompanyId]);
+  }
+
+  @Action('exp:cardLoading')
+  cardLoading(state, loading: boolean) {
+    return state.set('cardLoading', loading)
   }
 }

@@ -1447,6 +1447,16 @@ export default {
         "Marketing.greaterthan0andlessthan999": "Value must only be integers greater than 0 and less than 999",
         "Marketing.PomotionCodehasexited.": "Pomotion Code has exited.",
         "Marketing.Freeshipping": "Free shipping",
+        "Marketing.EmailTaskId": "Email Task ID",
+        "Marketing.AreYouSureToDeleteThisItem":'Are you sure to delete this item',
+        "Marketing.PetOwnerAccount": "Pet Owner Account",
+        "Marketing.PetOwnerName": "Pet Owner Name",
+        "Marketing.Email": "Email",
+        "Marketing.RelatedPet": "Related Pet",
+        "Marketing.PleaseSelectPetOwnerAccountFirst": "Please select Pet owner account first",
+        "Marketing.IfYouHaveMultiple": "If you have multiple mailboxes, use a semicolon to separate them",
+        "Marketing.CCList": "CC List",
+        "Marketing.Preview": "Preview"
     },
     Content: {
         "Content.Prompt": "Prompt",

@@ -232,52 +232,52 @@ export default class ClinicList extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Email Task ID',
+        title: <FormattedMessage id="Marketing.EmailTaskID" />,
         dataIndex: 'taskId',
         key: 'taskId',
         width: '10%'
       },
       {
-        title: 'Object Type',
+        title: <FormattedMessage id="Marketing.ObjectType" />,
         dataIndex: 'objectType',
         key: 'objectType',
         width: '10%',
         ellipsis: true
       },
       {
-        title: 'Object No',
+        title: <FormattedMessage id="Marketing.ObjectNo" />,
         dataIndex: 'objectNo',
         key: 'objectNo',
         width: '10%'
       },
       {
-        title: 'Email Template',
+        title: <FormattedMessage id="Marketing.EmailTemplate" />,
         dataIndex: 'emailTemplate',
         key: 'emailTemplate',
         width: '10%'
       },
       {
-        title: 'Category',
+        title: <FormattedMessage id="Marketing.Category" />,
         dataIndex: 'category',
         key: 'category',
         width: '10%'
       },
       {
-        title: 'Recipient',
+        title: <FormattedMessage id="Marketing.Recipient" />,
         dataIndex: 'recipient',
         key: 'recipient',
         width: '10%',
         render: (text, record) => <span>{record.detailsResponse.email}</span>
       },
       {
-        title: 'Status',
+        title: <FormattedMessage id="Marketing.Status" />,
         dataIndex: 'status',
         key: 'status',
         width: '5%',
         render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'To do' : +text === 2 ? 'Finish' : ''}</span>
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Marketing.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
@@ -299,13 +299,13 @@ export default class ClinicList extends Component<any, any> {
             ) : null}
             {+record.status === 1 ? (
               <div>
-                <Tooltip placement="top" title="Details">
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
 
                 <Divider type="vertical" />
 
-                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+                <Popconfirm placement="topLeft" title={`${<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />}?`} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
                   <Tooltip placement="top" title="Delete">
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
@@ -314,7 +314,7 @@ export default class ClinicList extends Component<any, any> {
             ) : null}
             {+record.status === 2 ? (
               <div>
-                <Tooltip placement="top" title="Details">
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
               </div>
@@ -329,7 +329,7 @@ export default class ClinicList extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline
-            title={title}
+            title={<FormattedMessage id="Marketing.EmailTaskList" />}
             extra={
               <div>
                 <Button
@@ -341,7 +341,9 @@ export default class ClinicList extends Component<any, any> {
                     borderColor: '#e2001a'
                   }}
                 >
-                  <p style={{ color: '#e2001a' }}>Overview</p>
+                  <p style={{ color: '#e2001a' }}>
+                    <FormattedMessage id="Marketing.Overview" />
+                  </p>
                 </Button>
                 <Button
                   onClick={() => {
@@ -351,7 +353,9 @@ export default class ClinicList extends Component<any, any> {
                     borderColor: '#e2001a'
                   }}
                 >
-                  <p style={{ color: '#e2001a' }}>Quick Send</p>
+                  <p style={{ color: '#e2001a' }}>
+                    <FormattedMessage id="Marketing.QuickSend" />
+                  </p>
                 </Button>
               </div>
             }
@@ -359,7 +363,7 @@ export default class ClinicList extends Component<any, any> {
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
-                <FormItem>
+                <FormItem> 
                   <InputGroup compact style={styles.formItemStyle}>
                     <Input style={styles.label} disabled defaultValue="Email Task ID" />
                     <Input

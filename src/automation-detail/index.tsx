@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, history, RCi18n } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, Tag, Tabs, Descriptions, Empty, Modal } from 'antd';
 

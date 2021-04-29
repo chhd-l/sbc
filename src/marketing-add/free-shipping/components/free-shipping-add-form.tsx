@@ -172,7 +172,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <div className="bold-title">Basic Setting</div>
-        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />} labelAlign="left">
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />} labelAlign="left"  className="gift-item">
           {getFieldDecorator('marketingName', {
             rules: [
               {
@@ -205,7 +205,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
             id: 'Marketing.nomorethan40words',
           })} style={{ width: 350 }} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />} labelAlign="left">
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />} labelAlign="left" className="gift-item">
           {getFieldDecorator('time', {
             rules: [
               {

@@ -656,7 +656,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     );
   };
   applyPromotionCode = (promotionCode?: String) => {
-    const { goodsInfo, promotionCodeInput } = this.state;
+    const { goodsInfo, promotionCodeInput, subscriptionInfo } = this.state;
     this.setState({
       loading: true
     });
@@ -675,6 +675,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode ? promotionCode : promotionCodeInput,
       deliveryAddressId: this.state.deliveryAddressId,
+      customerAccount: subscriptionInfo.consumerAccount,
       isAutoSub: true
     };
     webapi
@@ -1345,7 +1346,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 {this.state.promotionVOList.map((pvo, idx) => (
                   <div key={idx} className="flex-between">
                     <span>{pvo.marketingName}</span>
-                    <span style={styles.priceStyle}>{currencySymbol + ' ' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
+                    <span style={styles.priceStyle}>{currencySymbol + ' -' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
                   </div>
                 ))}
                 {/* <div className="flex-between">

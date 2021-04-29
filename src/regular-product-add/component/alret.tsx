@@ -15,19 +15,23 @@ export default class AlertInfo extends React.Component<any, any> {
           !this.props.message ? (
             <div>
               <p>
-                <FormattedMessage id="operationInstruction" />：
+                <FormattedMessage id="Product.operationInstruction" />：
               </p>
               <p>
                 1、
-                <FormattedMessage id="operationInstruction.first" />
+                <FormattedMessage id="Product.operationInstructionFirst" />
               </p>
               <p>
                 2、
-                <FormattedMessage id="operationInstruction.second" />
+                <FormattedMessage id="Product.operationInstructionSecond" />
               </p>
               <p>
                 3、
-                <FormattedMessage id="operationInstruction.third" />
+                <FormattedMessage id="Product.operationInstructionThird" />
+              </p>
+              <p>
+                4、
+                <FormattedMessage id="Product.settheSalescategory" />
               </p>
             </div>
           ) : (

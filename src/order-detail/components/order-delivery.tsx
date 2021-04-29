@@ -61,7 +61,7 @@ class OrderDelivery extends React.Component<any, any> {
     onRefresh: noop,
     isFetchingLogistics: 'isFetchingLogistics',
     isSavingShipment: 'isSavingShipment',
-    logisticsLoading:'logisticsLoading'
+    logisticsLoading: 'logisticsLoading'
   };
 
   /*static getDerivedStateFromProps(nextProps, prevState) {
@@ -94,7 +94,7 @@ class OrderDelivery extends React.Component<any, any> {
         .set('levelPrice', 0)
         .set('isGift', true)
     );
-    
+
     return (
       <div>
         <div
@@ -120,7 +120,12 @@ class OrderDelivery extends React.Component<any, any> {
             ? tradeDelivers &&
               tradeDelivers.map((v, i) => {
                 const logistic = v.get('logistics');
-                const tradeLogisticsDetails = v.get('tradeLogisticsDetails') ? v.get('tradeLogisticsDetails').toJS() : [];
+                const tradeLogisticsData = v.get('tradeLogisticsDetails') ? v.get('tradeLogisticsDetails').toJS() : [];
+                const tradeLogisticsDetails = tradeLogisticsData
+                  .filter((x) => x.shown)
+                  .sort((a, b) => {
+                    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+                  });
                 const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
                 //处理赠品
                 const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `【赠品】${gift.get('itemName')}`));
@@ -154,7 +159,7 @@ class OrderDelivery extends React.Component<any, any> {
                             </label>
                             <div style={{ marginTop: 20 }}>
                               <Timeline>
-                                {tradeLogisticsDetails.reverse().map((item, index) => {
+                                {tradeLogisticsDetails.map((item, index) => {
                                   let color = index === 0 ? 'red' : 'gray';
                                   return (
                                     <Timeline.Item color={color}>

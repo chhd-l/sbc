@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb, Const } from 'qmkit';
+import { Headline, SelectGroup, BreadCrumb, Const, RCi18n } from 'qmkit';
 import { Row, Spin, Table, Radio, Col, Switch, Button, message } from 'antd';
 import * as webapi from './webapi';
 import './style.less';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { RCi18n } from 'qmkit';
 
 export default class PrescriberSetting extends Component<any, any> {
   constructor(props: any) {
@@ -161,7 +160,7 @@ export default class PrescriberSetting extends Component<any, any> {
     const { listSystemConfig, selectType, ifPrescriberMandatory, buttonLoadding, showConfig } = this.state;
     let columns = [
       {
-        title: 'Category',
+        title: RCi18n({id:'Prescriber.Category'}),
         dataIndex: 'cateName',
         key: 'cateName'
       },
@@ -185,8 +184,8 @@ export default class PrescriberSetting extends Component<any, any> {
       <div>
         <BreadCrumb />
         <div className="container-search" id="prescrberSetting">
-          <Headline title="Prescriber Setting" />
-          <Row className="tipBox">Please select the product category to be reviewed.</Row>
+          <Headline title={RCi18n({id:'Prescriber.Prescriber Setting'})} />
+          <Row className="tipBox">{RCi18n({id:'Prescriber.Please select the product'})}</Row>
           <Row>
             <span className="ant-form-item-required">Sigase category 4 categories have been signed then maximum is 20 categories</span>
           </Row>

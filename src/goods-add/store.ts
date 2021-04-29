@@ -16,7 +16,7 @@ import PropActor from './actor/prop-actor';
 import FreightActor from './actor/freight-actor';
 import relatedActor from './actor/related';
 import LoadingActor from './actor/loading-actor';
-
+import { RCi18n } from 'qmkit';
 import {
   getPreEditProductResource,
   getEditProductResource,
@@ -923,7 +923,7 @@ export default class AppStore extends Store {
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
       this.state().get('goods').get('subscriptionStatus') == 1 ) {
-      message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is Y');
+      message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is on shelves.');
       valid = false;
       return;
     }
@@ -931,7 +931,7 @@ export default class AppStore extends Store {
     let b = this.state().get('goodsList').filter((item)=>item.get('addedFlag') == 0)
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === b.toJS().length) &&
       (this.state().get('goods').get('addedFlag') == 1 || this.state().get('goods').get('addedFlag') == 2) ) {
-      message.error('If the shelves status in SPU is Y, at lease one shelves status of Sku is Y');
+      message.error('If the shelves status in SPU is Y, at lease one shelves status of Sku is on shelves.');
       valid = false;
       return;
     }
@@ -1508,15 +1508,11 @@ export default class AppStore extends Store {
       }
     }
     let detailsList=this.state().get('goodsDescriptionDetailList');
-    let _itemList=  detailsList.map(_item=>{
-          _item.content=this.functionTurnJson(_item.content);
-          return _item
-      })
     param = param.set('goodsIntervalPrices', areaPrice);
     param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
-    param = param.set('goodsDescriptionDetailList',_itemList);
+    param = param.set('goodsDescriptionDetailList',detailsList);
 
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)
@@ -1573,14 +1569,6 @@ export default class AppStore extends Store {
       //history.push('/goods-list');
     } else {
     }
-  };
-  /**提取json代码 */
-functionTurnJson = (content) => {
-    const reg = /\<xmp[^>]*\>(([^xmp<])*)/gi; ///[^><]+(?=<\/xmp>)/gi;
-    let _html = content.replace(reg, function () {
-      return arguments[1];
-    });
-    return _html;
   };
   /**
    * 客户搜索
@@ -2326,7 +2314,7 @@ functionTurnJson = (content) => {
             keywords = '{name}, {subtitle}, {sales category}, {tagging}';
             break;
           case 123456858: //墨西哥
-            title = 'TIENDA OFICIAL DE PRODUCTOS VETERINARIOS ROYAL CANIN MEXICO';
+            title = RCi18n({id:'Product.MEXICO'});
             description = null
             keywords = null
             break;

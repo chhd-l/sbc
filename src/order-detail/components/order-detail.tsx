@@ -347,7 +347,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.paymentMethod" />: {detail.get('payWay')}
+                    <FormattedMessage id="Order.paymentMethod" />: {detail.get('paymentMethodNickName')}
                   </p>
                 </Col>
               </Row>
@@ -491,7 +491,7 @@ class OrderDetailTab extends React.Component<any, any> {
               {tradePrice.subscriptionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
-                    <FormattedMessage id="Order.autoshipDiscount" />:
+                    <FormattedMessage id="Order.subscriptionDiscount" />:
                   </span>
                   <strong>
                     -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}

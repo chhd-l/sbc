@@ -63,6 +63,8 @@ class SubscriptionDetail extends React.Component<any, any> {
       discountsPrice: '',
       freeShippingFlag: false,
       freeShippingDiscountPrice: 0,
+      subscriptionDiscountPrice: 0,
+      promotionVOList: [],
       frequencyList: [],
       frequencyClubList: [],
       promotionDesc: 'Promotion',
@@ -427,7 +429,7 @@ class SubscriptionDetail extends React.Component<any, any> {
     return sum;
   };
   applyPromationCode = (promotionCode?: String) => {
-    const { goodsInfo } = this.state;
+    const { goodsInfo, subscriptionInfo } = this.state;
     let goodsInfoList = [];
     for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
       let goods = {
@@ -441,7 +443,8 @@ class SubscriptionDetail extends React.Component<any, any> {
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode,
       isAutoSub: true,
-      deliveryAddressId: this.state.deliveryAddressId
+      deliveryAddressId: this.state.deliveryAddressId,
+      customerAccount: subscriptionInfo.consumerAccount,
     };
     this.setState({ loading: true });
     webapi
@@ -457,6 +460,8 @@ class SubscriptionDetail extends React.Component<any, any> {
             taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0,
             freeShippingFlag: res.context.freeShippingFlag ?? false,
             freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
+            subscriptionDiscountPrice: res.context.subscriptionDiscountPrice ?? 0,
+            promotionVOList: res.context.promotionVOList ?? [],
             loading: false
           });
         } else {
@@ -870,10 +875,17 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <div className="flex-between">
                   {/* <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span> */}
                   <span>
-                    <FormattedMessage id="Subscription.ColSpan.Promotion" />
+                    <FormattedMessage id="Order.subscriptionDiscount" />
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + '  -' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + '  -' + (this.state.subscriptionDiscountPrice ? this.state.subscriptionDiscountPrice : 0).toFixed(2)}</span>
                 </div>
+
+                {this.state.promotionVOList.map((pvo, idx) => (
+                  <div key={idx} className="flex-between">
+                    <span>{pvo.marketingName}</span>
+                    <span style={styles.priceStyle}>{currencySymbol + ' -' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
+                  </div>
+                ))}
 
                 <div className="flex-between">
                   <span>

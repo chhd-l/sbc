@@ -18,6 +18,7 @@ export default class AppStore extends Store {
     return [new ExpActor(), new ListActor(), new LoadingActor(), new FormActor()];
   }
 
+  //列表
   initList = async () => {
     this.dispatch('loading:start')
     const {res}=await webapi.fetchCheckedExpress()
@@ -28,16 +29,21 @@ export default class AppStore extends Store {
 
     this.dispatch('loading:end')
   }
+
+  //card
   init = async () => {
     const expressAll = await webapi.findStoreLogisticSettingByStoreId();
-    const {res:allCompany}=await webapi.fetchAllExpress()
-    this.dispatch('exp:allCompany',allCompany.context);
     if (expressAll.res.code == Const.SUCCESS_CODE) {
       this.dispatch('exp:init', expressAll.res.context);
     } else {
       message.error(expressAll.res.message);
     }
   };
+
+  fetchAllExpress = async () =>{
+    const {res:allCompany}=await webapi.fetchAllExpress()
+    this.dispatch('exp:allCompany',allCompany.context);
+  }
   //save company
   save = async () => {
     let companyForm= this.state().get('companyForm');
@@ -84,11 +90,17 @@ export default class AppStore extends Store {
   }
   //修改状态
   onSwitchSettingChange = async(params) => {
+    this.dispatch('loading:start')
+    // this.dispatch('exp:cardLoading', true)
    const {res}= await webapi.updateStoreLogisticSettingStatus(params);
-    if(res.code===Const.SUCCESS_CODE){
-      message.success(res.message)
-      this.init()
-    }
+    setTimeout(()=>{
+      if(res.code===Const.SUCCESS_CODE){
+        message.success(res.message)
+        this.init()
+      }
+      this.dispatch('loading:end')
+    }, 1500)
+    // this.dispatch('exp:cardLoading', false)
 
   }
    //修改company状态
@@ -118,7 +130,6 @@ export default class AppStore extends Store {
    
   }
   editRow = (record) => {
-    debugger
     const{id,storeCompanyCode,expressCompanyId,status,companyInfoId}=record
     let p={
       id,storeCompanyCode,expressCompanyId,status,companyInfoId

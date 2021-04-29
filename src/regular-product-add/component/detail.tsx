@@ -48,27 +48,14 @@ export default class Detail extends React.Component<any, any> {
   };
 
   onContentChange = (html: string, name: string) => {
-    if (goodsDetailTabObj[name].contentType.toUpperCase() === 'JSON') {
-      goodsDetailTabObj[name].content = this.functionTurnJson(html);
-    } else {
+    // if (goodsDetailTabObj[name].contentType.toUpperCase() === 'JSON') {
+    //   goodsDetailTabObj[name].content = this.functionTurnJson(html);
+    // } else {
       goodsDetailTabObj[name].content = html;
-    }
+    // }
     this.sortDetailTab();
   };
-  functionTurnJson = (content) => {
-    try {
-      let _html='';
-      let _contentArr= content.match(/<xmp>[\s\S]*?\<\/xmp\>/gmi)
-     
-     _contentArr.map(item=>{
-       _html+= item.replace(/(<\/?xmp.*?>)/gmi,'')
-      })
-      return _html;
-    } catch (error) {
-      return content;
-    }
-   
-  };
+ 
   sortDetailTab = () => {
     const { editEditorContent } = this.props.relaxProps;
     let arr = [];
@@ -115,10 +102,10 @@ export default class Detail extends React.Component<any, any> {
               }
               item.content = item?.content ?? '';
               item.contentType=item?.contentType??'text'
-              if (item.contentType && item.contentType.toUpperCase() === 'JSON') {
-                item.content = this.functionTurnJson(item.content);
-                item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content || '{tip:"Please enter the JSON format"}'}</xmp></code></pre>`;
-              }
+              // if (item.contentType && item.contentType.toUpperCase() === 'JSON') {
+              //   item.content = this.functionTurnJson(item.content);
+              //   item.content = `<pre type="${item.contentType.toUpperCase()}"><code><xmp>${item.content || '{tip:"Please enter the JSON format"}'}</xmp></code></pre>`;
+              // }
               return (
                 <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
                   <div style={{paddingBottom:10,position:'absolute',right:0,zIndex:99,top:10}}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
 import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin } from 'antd';
 
 import * as webapi from './webapi';
@@ -23,7 +23,7 @@ class MessageDetails extends Component<any, any> {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: this.props.location.pathname === '/message-quick-send' ? 'Quick Send' : 'Message Details',
+      title: this.props.location.pathname === '/message-quick-send' ? RCi18n({id:'Marketing.QuickSend'}) : RCi18n({id:'Marketing.MessageDetails'}),
       isDetail: this.props.location.pathname.indexOf('/message-detail') !== -1 ? true : false,
       isEdit: this.props.location.pathname.indexOf('/message-edit') !== -1 ? true : false,
       isAdd: this.props.location.pathname === '/message-quick-send' ? true : false,
@@ -579,7 +579,7 @@ class MessageDetails extends Component<any, any> {
 
             <div>
               <div style={styles.title}>
-                <span style={styles.titleText}>Basic Information</span>
+                <span style={styles.titleText}><FormattedMessage id="Marketing.BasicInformation" /></span>
                 {emailStatus === 'Draft' ? <Tag>{emailStatus}</Tag> : null}
                 {emailStatus === 'Finish' ? <Tag color="#87d068">{emailStatus}</Tag> : null}
                 {emailStatus === 'To do' ? <Tag color="#108ee9">{emailStatus}</Tag> : null}
@@ -625,7 +625,7 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Email Template">
+                    <FormItem label={<FormattedMessage id="Marketing.EmailTemplate" />}>
                       {getFieldDecorator('templateId', {
                         rules: [
                           {
@@ -709,7 +709,7 @@ class MessageDetails extends Component<any, any> {
                         <Select
                           disabled={basicForm.objectNoDisable || this.state.isDetail}
                           showSearch
-                          placeholder="Select a Object No"
+                          placeholder={RCi18n({id:'Marketing.SelectAObjectNo'})}
                           optionFilterProp="children"
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
@@ -769,7 +769,7 @@ class MessageDetails extends Component<any, any> {
                             showTime
                             disabledDate={this.disabledDate}
                             disabledTime={this.disabledDateTime}
-                            placeholder="Select Time"
+                            placeholder={RCi18n({id:'Marketing.SelectTime'})}
                             style={{ width: '100%' }}
                             disabled={this.state.isDetail}
                             onChange={(value, dateString) => {
@@ -834,7 +834,7 @@ class MessageDetails extends Component<any, any> {
                           disabled={detailForm.consumerType !== 'Member' || this.state.isDetail}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           showSearch
-                          placeholder="Select a consumer"
+                          placeholder={RCi18n({id:'Marketing.SelectAConsumer'})}
                           optionFilterProp="children"
                           onChange={(value, option: any) => {
                             let consumer = option.props['data-consumer'];
@@ -944,7 +944,7 @@ class MessageDetails extends Component<any, any> {
                       )(
                         <Select
                           disabled={detailForm.consumerAccount === '' || this.state.isDetail}
-                          placeholder="Please select pet"
+                          placeholder={RCi18n({id:'Marketing.PleaseSelectPet'})}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value, option: any) => {
                             let name = option.props.children;

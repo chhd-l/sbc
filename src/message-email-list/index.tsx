@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, RCi18n } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -284,14 +284,14 @@ export default class ClinicList extends Component<any, any> {
           <div>
             {+record.status === 0 ? (
               <div>
-                <Tooltip placement="top" title="Edit">
+                <Tooltip placement="top" title={RCi18n({id:'edit'})}>
                   <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
                 </Tooltip>
 
                 <Divider type="vertical" />
 
-                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Delete">
+                <Popconfirm placement="topLeft" title={`${<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />}?`} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+                  <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
@@ -306,7 +306,7 @@ export default class ClinicList extends Component<any, any> {
                 <Divider type="vertical" />
 
                 <Popconfirm placement="topLeft" title={`${<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />}?`} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
@@ -365,7 +365,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem> 
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Email Task ID" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTaskID'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -382,7 +382,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Object Type" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.ObjectType'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -411,7 +411,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Object No" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.ObjectNo'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -428,7 +428,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Email Template" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTemplate'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -457,7 +457,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Category" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Category'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -486,7 +486,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Status" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Status'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -515,7 +515,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Recipient" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Recipient'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {

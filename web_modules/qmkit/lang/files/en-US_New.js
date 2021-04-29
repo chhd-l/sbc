@@ -1,3 +1,6 @@
+import { FormattedMessage } from 'react-intl';
+import React from 'react';
+
 /**
  * 多语言英文---新增
  */
@@ -1477,7 +1480,7 @@ export default {
         "Marketing.greaterthan0andlessthan999": "Value must only be integers greater than 0 and less than 999",
         "Marketing.PomotionCodehasexited.": "Pomotion Code has exited.",
         "Marketing.Freeshipping": "Free shipping",
-        "Marketing.EmailTaskId": "Email Task ID",
+        "Marketing.EmailTaskID": "Email Task ID",
         "Marketing.AreYouSureToDeleteThisItem":'Are you sure to delete this item',
         "Marketing.PetOwnerAccount": "Pet Owner Account",
         "Marketing.PetOwnerName": "Pet Owner Name",
@@ -1487,8 +1490,40 @@ export default {
         "Marketing.IfYouHaveMultiple": "If you have multiple mailboxes, use a semicolon to separate them",
         "Marketing.CCList": "CC List",
         "Marketing.Preview": "Preview",
-        'Marketing.Singlepurchase': 'Single purchase',
-        'Marketing.Automationlist': 'Automation list',
+        "Marketing.Singlepurchase": "Single purchase",
+        "Marketing.Automationlist": "Automation list",
+        "Marketing.OperationFailure": "Operation failure",
+        "Marketing.OperationSuccessful": "Operation successful",
+        "Marketing.AutomationName": "Automation name",
+        "Marketing.AutomationCategory": "Automation category",
+        "Marketing.AutomationStatus": "Automation status",
+        "Marketing.TestStatus": "Test status",
+        "Marketing.BasicInformation": "Basic Information",
+        "Marketing.SelectAObjectNo": "Select a Object No",
+        "Marketing.PleaseSelectPet": "Please select pet",
+        "Marketing.AutomationPeriod": "Automation period",
+        "Marketing.AutomationEdit": "Automation Edit",
+        "Marketing.NewAutomation": "New Automation",
+        "Marketing.SaveEditWorkflow": "Save & Edit Workflow",
+        "Marketing.SaveNewWorkflow": "Save & New Workflow",
+        "Marketing.TSTNLTEST": "'Tracking start time' not later than 'Event start time'",
+        "Marketing.TETNLTEET": "'Tracking end time' not later than 'Event end time'",
+        "Marketing.ENTNLTEST": "'Event end time' not later than 'Event start time'",
+        "Marketing.TETNLTTST": "'Tracking end time' not later than 'Tracking start time'",
+        "Marketing.PleaseEnterAutomationName": "Please enter automation name",
+        "Marketing.PleaseInputAutomationDescription": "Please input automation description",
+        "Marketing.AutomationDescription": "Automation description",
+        "Marketing.AutomationType": "Automation type",
+        "Marketing.AutomationGoal": "Automation goal",
+        "Marketing.EventStartTime": "Event start time",
+        "Marketing.EventEndTime": "Event end time",
+        "Marketing.PleaseSelectEventStartTime": "Please select event start time",
+        "Marketing.PleaseSelectEventEndTime": "Please select event end time",
+        "Marketing.TrackingStartTime": "Tracking start time",
+        "Marketing.PleaseSelectTrackingStartTime": "Please select tracking start time",
+        "Marketing.TrackingEndTime": "Tracking end time",
+        "Marketing.PleaseSelectTrackingEndTime": "Please select tracking end time",
+        "Marketing.CommunicationChannel": "Communication channel"
     },
     Content: {
         "Content.Prompt": "Prompt",

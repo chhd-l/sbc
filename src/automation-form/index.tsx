@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, history, RCi18n } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, DatePicker } from 'antd';
 
@@ -16,8 +16,8 @@ class AutomationForm extends Component<any, any> {
     super(props);
     this.state = {
       automationId: this.props.match.params.id ? this.props.match.params.id : '',
-      title: this.props.match.params.id ? 'Automation Edit' : 'New Automation',
-      saveButtonText: this.props.match.params.id ? 'Save & Edit Workflow ' : 'Save & New Workflow',
+      title: this.props.match.params.id ? <FormattedMessage id="Marketing.AutomationEdit" /> : <FormattedMessage id="Marketing.NewAutomation" />,
+      saveButtonText: this.props.match.params.id ? <FormattedMessage id="Marketing.SaveEditWorkflow" /> : <FormattedMessage id="Marketing.SaveNewWorkflow" />,
       loading: false,
       automationForm: {
         automationName: '',
@@ -95,16 +95,16 @@ class AutomationForm extends Component<any, any> {
           workflow: automationForm.workflow
         };
         if(new Date(params.eventStartTime) > new Date(params.trackingStartTime)){
-          return message.error("'Tracking start time' not later than 'Event start time'")
+          return message.error(RCi18n({id:'Marketing.TSTNLTEST'}))
         }
         if(new Date(params.eventEndTime) > new Date(params.trackingEndTime)){
-          return message.error("'Tracking end time' not later than 'Event end time'")
+          return message.error(RCi18n({id:'Marketing.TETNLTEET'}))
         }
         if(new Date(params.eventStartTime)>new Date(params.eventEndTime)){
-          return message.error("'Event end time' not later than 'Event start time'")
+          return message.error(RCi18n({id:'Marketing.ENTNLTEST'}))
         }
         if(new Date(params.trackingStartTime)>new Date(params.trackingEndTime)){
-          return message.error("'Tracking end time' not later than 'Tracking start time'")
+          return message.error(RCi18n({id:'Marketing.TETNLTTST'}))
         }
         if (automationId) {
           params = Object.assign(params, {
@@ -127,7 +127,7 @@ class AutomationForm extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || RCi18n({id:'Marketing.OperationSuccessful'}));
           history.push('/automation-workflow/' + res.context.id, { name: res.context.name });
         } else {
           this.setState({
@@ -151,7 +151,7 @@ class AutomationForm extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || RCi18n({id:'Marketing.OperationSuccessful'}));
           history.push('/automation-workflow/' + res.context.id, { name: res.context.name });
           this.setState({
             loading: false
@@ -257,12 +257,12 @@ class AutomationForm extends Component<any, any> {
               <Form {...formItemLayout}>
                 <Row gutter={16}>
                   <Col span={12}>
-                    <FormItem label="Automation name">
+                    <FormItem label={<FormattedMessage id="Marketing.AutomationName" />}>
                       {getFieldDecorator('automationName', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please enter automation name!'
+                            message: RCi18n({id:'Marketing.PleaseEnterAutomationName'})+'!'
                           }
                         ],
                         initialValue: automationForm.automationName
@@ -282,7 +282,7 @@ class AutomationForm extends Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <FormItem label="Automation category">
+                    <FormItem label={<FormattedMessage id="Marketing.AutomationCategory" />} >
                       {getFieldDecorator('automationCategory', {
                         initialValue: automationForm.automationCategory
                       })(
@@ -310,13 +310,13 @@ class AutomationForm extends Component<any, any> {
                 </Row>
                 <Row>
                   <Col span={12}>
-                    <FormItem label="Automation description">
+                    <FormItem label={<FormattedMessage id="Marketing.AutomationDescription" />} >
                       {getFieldDecorator('automationDescription', {
                         initialValue: automationForm.automationDescription
                       })(
                         <TextArea
                           style={{ width: '80%' }}
-                          placeholder="Please input automation description"
+                          placeholder={RCi18n({id:'Marketing.PleaseInputAutomationDescription'})}
                           autoSize={{ minRows: 4, maxRows: 4 }}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -331,7 +331,7 @@ class AutomationForm extends Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <FormItem label="Automation type">
+                    <FormItem label={<FormattedMessage id="Marketing.AutomationType" />} >
                       {getFieldDecorator('automationType', {
                         initialValue: automationForm.automationType
                       })(
@@ -355,7 +355,7 @@ class AutomationForm extends Component<any, any> {
                         </Select>
                       )}
                     </FormItem>
-                    <FormItem label="Automation goal">
+                    <FormItem label={<FormattedMessage id="Marketing.AutomationGoal" />} >
                       {getFieldDecorator('automationGoal', {
                         initialValue: automationForm.automationGoal
                       })(
@@ -382,9 +382,9 @@ class AutomationForm extends Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <FormItem label="Event start time">
+                    <FormItem label={<FormattedMessage id="Marketing.EventStartTime" />} >
                       {getFieldDecorator('eventStartTime', {
-                        rules: [{ required: true, message: 'Please select event start time!' }],
+                        rules: [{ required: true, message: RCi18n({id:'Marketing.PleaseSelectEventStartTime'})+'!' }],
                         initialValue: automationForm.eventStartTime ? moment(new Date(automationForm.eventStartTime), 'YYYY-MM-DD HH:mm:ss') : null
                       })(
                         <DatePicker
@@ -408,9 +408,9 @@ class AutomationForm extends Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <FormItem label="Event end time">
+                    <FormItem label={<FormattedMessage id="Marketing.EventEndTime" />} >
                       {getFieldDecorator('eventEndTime', {
-                        rules: [{ required: true, message: 'Please select event end time!' }],
+                        rules: [{ required: true, message: RCi18n({id:'Marketing.PleaseSelectEventEndTime'})+'!' }],
                         initialValue: automationForm.eventEndTime ? moment(new Date(automationForm.eventEndTime), 'YYYY-MM-DD HH:mm:ss') : null
                       })(
                         <DatePicker
@@ -437,9 +437,9 @@ class AutomationForm extends Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <FormItem label="Tracking start time">
+                    <FormItem label={<FormattedMessage id="Marketing.TrackingStartTime" />}>
                       {getFieldDecorator('trackingStartTime', {
-                        rules: [{ required: true, message: 'Please select tracking start time!' }],
+                        rules: [{ required: true, message: RCi18n({id:'Marketing.PleaseSelectTrackingStartTime'})+'!' }],
                         initialValue: automationForm.trackingStartTime ? moment(new Date(automationForm.trackingStartTime), 'YYYY-MM-DD HH:mm:ss') : null
                       })(
                         <DatePicker
@@ -459,9 +459,9 @@ class AutomationForm extends Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <FormItem label="Tracking end time">
+                    <FormItem label={<FormattedMessage id="Marketing.TrackingEndTime" />} >
                       {getFieldDecorator('trackingEndTime', {
-                        rules: [{ required: true, message: 'Please select tracking end time!' }],
+                        rules: [{ required: true, message: RCi18n({id:'Marketing.PleaseSelectTrackingEndTime'})+'!' }],
                         initialValue: automationForm.trackingEndTime ? moment(new Date(automationForm.trackingEndTime), 'YYYY-MM-DD HH:mm:ss') : null
                       })(
                         <DatePicker
@@ -481,7 +481,7 @@ class AutomationForm extends Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <FormItem label="Communication channel">
+                    <FormItem label={<FormattedMessage id="Marketing.CommunicationChannel" />}>
                       {getFieldDecorator('communicationChannel', {
                         initialValue: automationForm.communicationChannel ? automationForm.communicationChannel : []
                       })(

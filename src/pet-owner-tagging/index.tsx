@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, RCi18n } from 'qmkit';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Radio, Modal } from 'antd';
 
 import * as webapi from './webapi';
@@ -13,7 +13,7 @@ class PetOwnerTagging extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Pet owner tagging',
+      title: RCi18n({id:'PetOwner.PetOwnerTagging'}),
       searchForm: {
         taggingName: '',
         taggingType: null
@@ -306,19 +306,19 @@ class PetOwnerTagging extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Tagging name',
+        title: RCi18n({id:'PetOwner.TaggingName'}),
         dataIndex: 'name',
         key: 'name',
         width: '15%'
       },
       {
-        title: 'Tagging description',
+        title: RCi18n({id:'PetOwner.TaggingDescription'}),
         dataIndex: 'description',
         key: 'description',
         width: '15%'
       },
       {
-        title: 'Tagging type',
+        title: RCi18n({id:'PetOwner.TaggingType'}),
         dataIndex: 'segmentType',
         key: 'segmentType',
         width: '15%',
@@ -326,14 +326,14 @@ class PetOwnerTagging extends Component<any, any> {
       },
 
       {
-        title: 'Count',
+        title: RCi18n({id:'PetOwner.Count'}),
         dataIndex: 'customerNum',
         key: 'customerNum',
         width: '10%'
       },
 
       {
-        title: 'Tagging Status',
+        title: RCi18n({id:'PetOwner.TaggingStatus'}),
         dataIndex: 'isPublished',
         key: 'isPublished',
         width: '15%',
@@ -341,18 +341,18 @@ class PetOwnerTagging extends Component<any, any> {
       },
 
       {
-        title: 'Operation',
+        title: RCi18n({id:'PetOwner.Operation'}),
         dataIndex: '',
         key: 'x',
         width: '10%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
+            <Tooltip placement="top" title={RCi18n({id:'PetOwner.Edit'})}>
               <a onClick={() => this.openEditPage(record)} className="iconfont iconEdit" style={{ paddingRight: 10 }}></a>
             </Tooltip>
 
-            <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTagging(record.id)} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Delete">
+            <Popconfirm placement="topLeft" title={RCi18n({id:'PetOwner.AreYouSureToDelete'})} onConfirm={() => this.deleteTagging(record.id)} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title={RCi18n({id:'PetOwner.Delete'})}>
                 <a className="iconfont iconDelete"></a>
               </Tooltip>
             </Popconfirm>
@@ -375,7 +375,7 @@ class PetOwnerTagging extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Tagging name" />
+                        <Input style={styles.label} disabled defaultValue={RCi18n({id:'PetOwner.TaggingNameLabel'})} />
                         <Input
                           style={styles.wrapper}
                           onChange={(e) => {
@@ -393,7 +393,7 @@ class PetOwnerTagging extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Tagging type" />
+                        <Input style={styles.label} disabled defaultValue={RCi18n({id:'PetOwner.TaggingTypeLabel'})} />
                         <Select
                           style={styles.wrapper}
                           onChange={(value) => {
@@ -404,9 +404,9 @@ class PetOwnerTagging extends Component<any, any> {
                             });
                           }}
                         >
-                          <Option value={null}>All</Option>
-                          <Option value={0}>Pet owner</Option>
-                          <Option value={1}>Pet</Option>
+                          <Option value={null}>{RCi18n({id:'PetOwner.All'})}</Option>
+                          <Option value={0}>{RCi18n({id:'PetOwner.PetOwner'})}</Option>
+                          <Option value={1}>{RCi18n({id:'PetOwner.Pet'})}</Option>
                         </Select>
                       </InputGroup>
                     </FormItem>
@@ -424,7 +424,7 @@ class PetOwnerTagging extends Component<any, any> {
                           this.onSearch();
                         }}
                       >
-                        <span>Search</span>
+                        <span>{RCi18n({id:'PetOwner.Search'})}</span>
                       </Button>
                     </FormItem>
                   </Col>
@@ -433,7 +433,7 @@ class PetOwnerTagging extends Component<any, any> {
             </div>
             <div className="container-search">
               <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-                <span>Add new tagging</span>
+                <span>{RCi18n({id:'PetOwner.AddNewTagging'})}</span>
               </Button>
 
               <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={taggingList} pagination={pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
@@ -457,13 +457,13 @@ class PetOwnerTagging extends Component<any, any> {
               ]}
             >
               <Form {...formItemLayout}>
-                <FormItem label="Tagging name">
+                <FormItem label={RCi18n({id:'PetOwner.TaggingNameLabel'})}>
                   {getFieldDecorator('taggingName', {
                     rules: [
-                      { required: true, message: 'Tagging name is required' },
+                      { required: true, message: RCi18n({id:'PetOwner.TaggingNameIsRequired'}) },
                       {
                         max: 50,
-                        message: 'Exceed maximum length!'
+                        message: RCi18n({id:'PetOwner.ExceedMaximumLength'})
                       }
                     ],
                     initialValue: taggingForm.taggingName
@@ -480,10 +480,10 @@ class PetOwnerTagging extends Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Tagging description">
+                <FormItem label={RCi18n({id:'PetOwner.TaggingDescription'})}>
                   {getFieldDecorator('taggingDescription', {
                     initialValue: taggingForm.taggingDescription,
-                    rules: [{ required: true, message: 'Please input tagging description' }]
+                    rules: [{ required: true, message: RCi18n({id:'PetOwner.PleaseInputTaggingDescription'}) }]
                   })(
                     <TextArea
                       style={{ width: '80%' }}
@@ -499,7 +499,7 @@ class PetOwnerTagging extends Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label="Tagging type">
+                <FormItem label={RCi18n({id:'PetOwner.TaggingType'})}>
                   {getFieldDecorator('taggingType', {
                     initialValue: +taggingForm.taggingType
                   })(
@@ -518,7 +518,7 @@ class PetOwnerTagging extends Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label="Tagging status">
+                <FormItem label={RCi18n({id:'PetOwner.TaggingStatus'})}>
                   {getFieldDecorator('taggingStatus', {
                     initialValue: +taggingForm.taggingStatus
                   })(

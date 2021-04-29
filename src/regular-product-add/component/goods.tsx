@@ -877,7 +877,7 @@ class GoodsForm extends React.Component<any, any> {
         });
         editGoods(goods);
         editGoodsItem(goods);
-        setFieldsValue({ addedFlag: 0 });
+        setFieldsValue({ saleableType: 0 });
       } else {
         this.setState({
           saleableType: false
@@ -887,25 +887,25 @@ class GoodsForm extends React.Component<any, any> {
         });
         editGoods(goods);
         editGoodsItem(goods);
-        setFieldsValue({ addedFlag: 1 });
+        setFieldsValue({ saleableType: 1 });
       }
     }
 
     else if (key === 'displayFlag') {
       if (e == 0) {
         let goods = Map({
-          subscriptionStatus: fromJS(0)
+          displayFlag: fromJS(0)
         });
-        //editGoods(goods);
+        editGoods(goods);
         editGoodsItem(goods);
-        //setFieldsValue({ subscriptionStatus: 0 });
+        setFieldsValue({ displayFlag: 0 });
       } else {
         let goods = Map({
-          subscriptionStatus: fromJS(1)
+          displayFlag: fromJS(1)
         });
-        //editGoods(goods);
+        editGoods(goods);
         editGoodsItem(goods);
-        //setFieldsValue({ subscriptionStatus: 1 });
+        setFieldsValue({ displayFlag: 0 });
       }
     }
 

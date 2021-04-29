@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, history, RCi18n } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon } from 'antd';
 
@@ -93,7 +93,7 @@ class AutomationList extends Component<any, any> {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(err.toString() || RCi18n({id:'Marketing.OperationFailure'}));
       });
   };
   handleTableChange = (pagination: any) => {
@@ -113,7 +113,7 @@ class AutomationList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || RCi18n({id:'Marketing.OperationSuccessful'}));
           this.getAutomationList();
         } else {
           this.setState({
@@ -125,7 +125,7 @@ class AutomationList extends Component<any, any> {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(err.toString() || RCi18n({id:'Marketing.OperationFailure'}));
       });
   };
 
@@ -162,25 +162,25 @@ class AutomationList extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Automation name',
+        title: <FormattedMessage id="Marketing.AutomationName" />,
         dataIndex: 'name',
         key: 'name',
         width: '15%'
       },
       {
-        title: 'Automation category',
+        title: <FormattedMessage id="Marketing.AutomationCategory" />,
         dataIndex: 'category',
         key: 'category',
         width: '15%'
       },
       {
-        title: 'Automation status',
+        title: <FormattedMessage id="Marketing.AutomationStatus" />,
         dataIndex: 'status',
         key: 'status',
         width: '10%'
       },
       {
-        title: 'Test status',
+        title: <FormattedMessage id="Marketing.TestStatus" />,
         dataIndex: 'testStatus',
         key: 'testStatus',
         width: '10%',
@@ -188,14 +188,14 @@ class AutomationList extends Component<any, any> {
       },
 
       {
-        title: 'Start time',
+        title: <FormattedMessage id="Marketing.StartTime" />,
         dataIndex: 'trackingStartTime',
         key: 'trackingStartTime',
         width: '10%',
         render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
       },
       {
-        title: 'End time',
+        title: <FormattedMessage id="Marketing.EndTime" />,
         dataIndex: 'trackingEndTime',
         key: 'trackingEndTime',
         width: '10%',
@@ -203,23 +203,23 @@ class AutomationList extends Component<any, any> {
       },
 
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Marketing.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
           <div>
             {record.status === 'Published' || record.status ==='Executing' ? null : (
-              <Tooltip placement="top" title="Edit">
+              <Tooltip placement="top" title={RCi18n({id:'edit'})}>
                 <Link to={`/automation-edit/${record.id}`} className="iconfont iconEdit" style={{ margin: "0 5px" }}></Link>
               </Tooltip>
             )}
 
-            <Tooltip placement="top" title="Detail">
+            <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
               <Link to={`/automation-detail/${record.id}`} className="iconfont iconDetails" style={{ margin: "0 5px" }}></Link>
             </Tooltip>
             {record.status === 'Published' || record.status ==='Executing' ? null :(
             <Popconfirm placement="topLeft" title="Are you sure to do this?" onConfirm={() => this.deleteAutomation(record.id)} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Delete">
+              <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                 <a className="iconfont iconDelete" style={{ margin: "0 5px" }}></a>
               </Tooltip>
             </Popconfirm>
@@ -242,7 +242,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue="Automation name" />
+                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.AutomationName'})} />
                           <Input
                             style={styles.wrapper}
                             onChange={(e) => {
@@ -260,7 +260,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue="Automation category" />
+                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.AutomationCategory'})} />
                           <Select
                             style={styles.wrapper}
                             onChange={(value) => {
@@ -285,7 +285,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue="Automation status" />
+                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.AutomationStatus'})} />
                           <Select
                             style={styles.wrapper}
                             onChange={(value) => {
@@ -310,7 +310,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue="Test status" />
+                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.TestStatus'})} />
                           <Select
                             defaultValue=""
                             style={styles.wrapper}
@@ -336,7 +336,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue="Automation period" />
+                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.AutomationPeriod'})} />
                           <Select
                             defaultValue=""
                             style={styles.wrapper}
@@ -382,7 +382,7 @@ class AutomationList extends Component<any, any> {
             </div>
             <div className="container">
               <Button type="primary" style={{ margin: '10px 10px 10px 0' }}>
-                <Link to={'/automation-add'}>Add</Link>
+                <Link to={'/automation-add'}><FormattedMessage id="add" /></Link>
               </Button>
 
               <Table rowKey="id" columns={columns} dataSource={automationList} pagination={pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />

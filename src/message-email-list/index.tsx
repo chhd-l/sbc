@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, RCi18n } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -232,66 +232,66 @@ export default class ClinicList extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Email Task ID',
+        title: <FormattedMessage id="Marketing.EmailTaskID" />,
         dataIndex: 'taskId',
         key: 'taskId',
         width: '10%'
       },
       {
-        title: 'Object Type',
+        title: <FormattedMessage id="Marketing.ObjectType" />,
         dataIndex: 'objectType',
         key: 'objectType',
         width: '10%',
         ellipsis: true
       },
       {
-        title: 'Object No',
+        title: <FormattedMessage id="Marketing.ObjectNo" />,
         dataIndex: 'objectNo',
         key: 'objectNo',
         width: '10%'
       },
       {
-        title: 'Email Template',
+        title: <FormattedMessage id="Marketing.EmailTemplate" />,
         dataIndex: 'emailTemplate',
         key: 'emailTemplate',
         width: '10%'
       },
       {
-        title: 'Category',
+        title: <FormattedMessage id="Marketing.Category" />,
         dataIndex: 'category',
         key: 'category',
         width: '10%'
       },
       {
-        title: 'Recipient',
+        title: <FormattedMessage id="Marketing.Recipient" />,
         dataIndex: 'recipient',
         key: 'recipient',
         width: '10%',
         render: (text, record) => <span>{record.detailsResponse.email}</span>
       },
       {
-        title: 'Status',
+        title: <FormattedMessage id="Marketing.Status" />,
         dataIndex: 'status',
         key: 'status',
         width: '5%',
         render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'To do' : +text === 2 ? 'Finish' : ''}</span>
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Marketing.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
           <div>
             {+record.status === 0 ? (
               <div>
-                <Tooltip placement="top" title="Edit">
+                <Tooltip placement="top" title={RCi18n({id:'edit'})}>
                   <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
                 </Tooltip>
 
                 <Divider type="vertical" />
 
-                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Delete">
+                <Popconfirm placement="topLeft" title={`${<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />}?`} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+                  <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
@@ -299,14 +299,14 @@ export default class ClinicList extends Component<any, any> {
             ) : null}
             {+record.status === 1 ? (
               <div>
-                <Tooltip placement="top" title="Details">
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
 
                 <Divider type="vertical" />
 
-                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Delete">
+                <Popconfirm placement="topLeft" title={`${<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />}?`} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+                  <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
@@ -314,7 +314,7 @@ export default class ClinicList extends Component<any, any> {
             ) : null}
             {+record.status === 2 ? (
               <div>
-                <Tooltip placement="top" title="Details">
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
               </div>
@@ -329,7 +329,7 @@ export default class ClinicList extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline
-            title={title}
+            title={<FormattedMessage id="Marketing.EmailTaskList" />}
             extra={
               <div>
                 <Button
@@ -341,7 +341,9 @@ export default class ClinicList extends Component<any, any> {
                     borderColor: '#e2001a'
                   }}
                 >
-                  <p style={{ color: '#e2001a' }}>Overview</p>
+                  <p style={{ color: '#e2001a' }}>
+                    <FormattedMessage id="Marketing.Overview" />
+                  </p>
                 </Button>
                 <Button
                   onClick={() => {
@@ -351,7 +353,9 @@ export default class ClinicList extends Component<any, any> {
                     borderColor: '#e2001a'
                   }}
                 >
-                  <p style={{ color: '#e2001a' }}>Quick Send</p>
+                  <p style={{ color: '#e2001a' }}>
+                    <FormattedMessage id="Marketing.QuickSend" />
+                  </p>
                 </Button>
               </div>
             }
@@ -359,9 +363,9 @@ export default class ClinicList extends Component<any, any> {
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
-                <FormItem>
+                <FormItem> 
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Email Task ID" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTaskID'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -378,7 +382,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Object Type" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.ObjectType'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -407,7 +411,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Object No" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.ObjectNo'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -424,7 +428,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Email Template" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTemplate'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -453,7 +457,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Category" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Category'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -482,7 +486,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Status" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Status'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -511,7 +515,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Recipient" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Recipient'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {

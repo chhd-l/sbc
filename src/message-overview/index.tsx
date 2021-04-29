@@ -219,17 +219,19 @@ class Overview extends Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Overview</Breadcrumb.Item>
+          <Breadcrumb.Item><FormattedMessage id="Marketing.Overview" /></Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
         <div className="container-search">
-          <Headline title={title} />
+          <Headline title={<FormattedMessage id="Marketing.EmailTaskOverview" />} />
         </div>
         <div className="container">
           <Row style={{ paddingTop: 20 }}>
             <Col span={4}>
               <div className="overview-item-border">
-                <p className="overview-item-name">REQUESTS</p>
+                <p className="overview-item-name">
+                  <FormattedMessage id="Marketing.REQUESTS" />
+                </p>
                 <p className="overview-item-value" style={{ color: '#246201' }}>
                   {overviewTotal.requestsCount}
                 </p>
@@ -237,7 +239,9 @@ class Overview extends Component<any, any> {
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
-                <p className="overview-item-name">DELIVERED</p>
+                <p className="overview-item-name">
+                  <FormattedMessage id="Marketing.DELIVERED" />
+                </p>
                 <p className="overview-item-value" style={{ color: '#bcd514' }}>
                   {overviewTotal.deliveredRate}
                 </p>
@@ -245,7 +249,9 @@ class Overview extends Component<any, any> {
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
-                <p className="overview-item-name">OPENED</p>
+                <p className="overview-item-name">
+                  <FormattedMessage id="Marketing.OPENED" />
+                </p>
                 <p className="overview-item-value" style={{ color: '#028690' }}>
                   {overviewTotal.opensRate}
                 </p>
@@ -253,7 +259,9 @@ class Overview extends Component<any, any> {
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
-                <p className="overview-item-name">CLICKED</p>
+                <p className="overview-item-name">
+                  <FormattedMessage id="Marketing.CLICKED" />
+                </p>
                 <p className="overview-item-value" style={{ color: '#59c1ca' }}>
                   {overviewTotal.clicksRate}
                 </p>
@@ -261,7 +269,9 @@ class Overview extends Component<any, any> {
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
-                <p className="overview-item-name">BOUNCES</p>
+                <p className="overview-item-name">
+                  <FormattedMessage id="Marketing.BOUNCES" />
+                </p>
                 <p className="overview-item-value" style={{ color: '#c042be' }}>
                   {overviewTotal.bounceRate}
                 </p>
@@ -269,7 +279,9 @@ class Overview extends Component<any, any> {
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
-                <p className="overview-item-name">SPAM REPORTS</p>
+                <p className="overview-item-name">
+                  <FormattedMessage id="Marketing.SPAMREPORTS" />
+                </p>
                 <p className="overview-item-value" style={{ color: '#e04427' }}>
                   {overviewTotal.spamReportRate}
                 </p>

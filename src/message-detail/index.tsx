@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
 import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin } from 'antd';
 
 import * as webapi from './webapi';
@@ -23,7 +23,7 @@ class MessageDetails extends Component<any, any> {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: this.props.location.pathname === '/message-quick-send' ? 'Quick Send' : 'Message Details',
+      title: this.props.location.pathname === '/message-quick-send' ? RCi18n({id:'Marketing.QuickSend'}) : RCi18n({id:'Marketing.MessageDetails'}),
       isDetail: this.props.location.pathname.indexOf('/message-detail') !== -1 ? true : false,
       isEdit: this.props.location.pathname.indexOf('/message-edit') !== -1 ? true : false,
       isAdd: this.props.location.pathname === '/message-quick-send' ? true : false,
@@ -568,7 +568,9 @@ class MessageDetails extends Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Message Details</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="Marketing.MessageDetails" />
+          </Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -577,7 +579,7 @@ class MessageDetails extends Component<any, any> {
 
             <div>
               <div style={styles.title}>
-                <span style={styles.titleText}>Basic Information</span>
+                <span style={styles.titleText}><FormattedMessage id="Marketing.BasicInformation" /></span>
                 {emailStatus === 'Draft' ? <Tag>{emailStatus}</Tag> : null}
                 {emailStatus === 'Finish' ? <Tag color="#87d068">{emailStatus}</Tag> : null}
                 {emailStatus === 'To do' ? <Tag color="#108ee9">{emailStatus}</Tag> : null}
@@ -585,19 +587,19 @@ class MessageDetails extends Component<any, any> {
               <Form layout="horizontal" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} labelAlign="right">
                 <Row style={{ marginTop: 20 }}>
                   <Col span={8}>
-                    <FormItem label="Task ID">
+                    <FormItem label={<FormattedMessage id="Marketing.TaskID" />}>
                       {getFieldDecorator('taskId', {
                         rules: [{ required: true }]
                       })(<Input disabled />)}
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Email Category">
+                    <FormItem label={<FormattedMessage id="Marketing.EmailCategory" />}>
                       {getFieldDecorator('emailCategory', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Email Category!'
+                            message: `${<FormattedMessage id="Marketing.PleaseInputEmailCategory" />}!`
                           }
                         ]
                       })(
@@ -623,12 +625,12 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Email Template">
+                    <FormItem label={<FormattedMessage id="Marketing.EmailTemplate" />}>
                       {getFieldDecorator('templateId', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please select Email Template!'
+                            message: `${<FormattedMessage id="Marketing.PleaseSelectEmailTemplate" />}!`
                           }
                         ]
                       })(
@@ -660,12 +662,12 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Object Type">
+                    <FormItem label={<FormattedMessage id="Marketing.ObjectType" />}>
                       {getFieldDecorator('objectType', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please Select Object Type!'
+                            message: `${<FormattedMessage id="Marketing.PleaseSelectObjectType" />}!`
                           }
                         ]
                       })(
@@ -691,23 +693,23 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Object No">
+                    <FormItem label={<FormattedMessage id="Marketing.ObjectNo" />}>
                       {getFieldDecorator('objectNo', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please Select Object No!'
+                            message: `${<FormattedMessage id="Marketing.PleaseSelectObjectNo" />}!`
                           },
                           {
                             max: 50,
-                            message: 'Object No exceed the maximum length!'
+                            message: `${<FormattedMessage id="Marketing.theMaximumLength" />}!`
                           }
                         ]
                       })(
                         <Select
                           disabled={basicForm.objectNoDisable || this.state.isDetail}
                           showSearch
-                          placeholder="Select a Object No"
+                          placeholder={RCi18n({id:'Marketing.SelectAObjectNo'})}
                           optionFilterProp="children"
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
@@ -732,12 +734,12 @@ class MessageDetails extends Component<any, any> {
                   </Col>
 
                   <Col span={8}>
-                    <FormItem label="Send Time">
+                    <FormItem label={<FormattedMessage id="Marketing.SendTime" />}>
                       {getFieldDecorator('sendType', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please select Send Time!'
+                            message: `${<FormattedMessage id="Marketing.PleaseSelectSendTime" />}!`
                           }
                         ]
                       })(
@@ -751,23 +753,23 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                         >
-                          <Radio value="Immediately">Immediately</Radio>
-                          <Radio value="Timing">Timing</Radio>
+                          <Radio value="Immediately"><FormattedMessage id="Marketing.Immediately" /></Radio>
+                          <Radio value="Timing"><FormattedMessage id="Marketing.Timing" /></Radio>
                         </Radio.Group>
                       )}
                     </FormItem>
                   </Col>
                   {basicForm.sendType === 'Timing' ? (
                     <Col span={8}>
-                      <FormItem label="Select Time">
+                      <FormItem label={<FormattedMessage id="Marketing.SelectTime" />}>
                         {getFieldDecorator('sendTime', {
-                          rules: [{ required: true, message: 'Please select Time!' }]
+                          rules: [{ required: true, message:`${<FormattedMessage id="Marketing.PleaseSelectTime" />}!` }]
                         })(
                           <DatePicker
                             showTime
                             disabledDate={this.disabledDate}
                             disabledTime={this.disabledDateTime}
-                            placeholder="Select Time"
+                            placeholder={RCi18n({id:'Marketing.SelectTime'})}
                             style={{ width: '100%' }}
                             disabled={this.state.isDetail}
                             onChange={(value, dateString) => {
@@ -787,18 +789,18 @@ class MessageDetails extends Component<any, any> {
 
             <div>
               <div style={styles.title}>
-                <span style={styles.titleText}>Recipient details</span>
+                <span style={styles.titleText}><FormattedMessage id="Marketing.RecipientDetails" /></span>
               </div>
 
               <Form layout="horizontal" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} labelAlign="right">
                 <Row style={{ marginTop: 20 }}>
                   <Col span={8}>
-                    <FormItem label="Pet Owner Type">
+                    <FormItem label={<FormattedMessage id="Marketing.ConsumerType" />}>
                       {getFieldDecorator('consumerType', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Pet Owner Type!'
+                            message: `${<FormattedMessage id="Marketing.PleaseInputConsumerType" />}`
                           }
                         ]
                       })(
@@ -823,7 +825,7 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Pet Owner Account">
+                    <FormItem label={<FormattedMessage id="Marketing.PetOwnerAccount" />}>
                       {getFieldDecorator(
                         'consumerAccount',
                         {}
@@ -832,7 +834,7 @@ class MessageDetails extends Component<any, any> {
                           disabled={detailForm.consumerType !== 'Member' || this.state.isDetail}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           showSearch
-                          placeholder="Select a consumer"
+                          placeholder={RCi18n({id:'Marketing.SelectAConsumer'})}
                           optionFilterProp="children"
                           onChange={(value, option: any) => {
                             let consumer = option.props['data-consumer'];
@@ -871,16 +873,16 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Pet Owner Name">
+                    <FormItem label={<FormattedMessage id="Marketing.PetOwnerName" />}>
                       {getFieldDecorator('consumerName', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Pet owner name!'
+                            message: `${<FormattedMessage id="Marketing.PleaseInputConsumerName" />}!`
                           },
                           {
                             max: 50,
-                            message: 'Pet owner name exceed the maximum length!'
+                            message: `${<FormattedMessage id="Marketing.ConsumerNameMaximumLength" />}!`
                           }
                         ]
                       })(
@@ -899,13 +901,14 @@ class MessageDetails extends Component<any, any> {
                   </Col>
 
                   <Col span={8}>
-                    <FormItem label="Email">
+                    <FormItem label={<FormattedMessage id="Marketing.Email"/>}>
                       {getFieldDecorator('email', {
                         rules: [
-                          { required: true, message: 'Please input Email!' },
+                          { required: true, 
+                            message: `${<FormattedMessage id="Marketing.PleaseInputEmail"/>}!`},
                           {
                             max: 50,
-                            message: 'Email exceed the maximum length!'
+                            message: `${<FormattedMessage id="Marketing.EmailExceedTheMaximumLength"/>}!`
                           }
                         ]
                       })(
@@ -927,8 +930,9 @@ class MessageDetails extends Component<any, any> {
                     <FormItem
                       label={
                         <span>
-                          Related Pet&nbsp;
-                          <Tooltip title="Please select Pet owner account first!">
+                          <FormattedMessage id="Marketing.RelatedPet"/>
+                          &nbsp;
+                          <Tooltip title={`${<FormattedMessage id="Marketing.PleaseSelectPetOwnerAccountFirst"/>}!`}>
                             <Icon type="question-circle-o" />
                           </Tooltip>
                         </span>
@@ -940,7 +944,7 @@ class MessageDetails extends Component<any, any> {
                       )(
                         <Select
                           disabled={detailForm.consumerAccount === '' || this.state.isDetail}
-                          placeholder="Please select pet"
+                          placeholder={RCi18n({id:'Marketing.PleaseSelectPet'})}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value, option: any) => {
                             let name = option.props.children;
@@ -975,8 +979,9 @@ class MessageDetails extends Component<any, any> {
                     <FormItem
                       label={
                         <span>
-                          CC List&nbsp;
-                          <Tooltip title="If you have multiple mailboxes, use a semicolon to separate them!">
+                          <FormattedMessage id="Marketing.CCList"/>
+                          &nbsp;
+                          <Tooltip title={`${<FormattedMessage id="Marketing.IfYouHaveMultiple"/>}!`}>
                             <Icon type="question-circle-o" />
                           </Tooltip>
                         </span>
@@ -1007,7 +1012,7 @@ class MessageDetails extends Component<any, any> {
             {previewHtml ? (
               <div>
                 <div style={styles.title}>
-                  <span style={styles.titleText}>Preview</span>
+                  <span style={styles.titleText}><FormattedMessage id="Marketing.Preview"/>Preview</span>
                 </div>
                 <div dangerouslySetInnerHTML={{ __html: previewHtml }}></div>
               </div>
@@ -1018,7 +1023,7 @@ class MessageDetails extends Component<any, any> {
         <div className="bar-button">
           {!this.state.isDetail ? (
             <Button type="primary" onClick={() => this.submit()} style={{ marginRight: 10 }}>
-              Submit
+              {<FormattedMessage id="Marketing.Submit" />}
             </Button>
           ) : null}
           {!this.state.isDetail ? (

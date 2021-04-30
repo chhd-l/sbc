@@ -41,7 +41,8 @@ export default {
        'Order.Pending refund':'Pending refund',
        'Order.Reject receive':'Reject recipient',
        'Order.subscriptionDiscount':'Subscription discount',
-       'Order.Pending refund':'Pending refund'
+       'Order.Pending refund':'Pending refund',
+       'Order.Ship date':'Ship date',
     },
     Subscription: {},
     Appointment: {

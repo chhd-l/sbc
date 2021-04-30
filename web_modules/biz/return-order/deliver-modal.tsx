@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button, DatePicker, Form, Input, Modal } from 'antd';
+import { FormattedMessage } from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
 
@@ -112,12 +114,12 @@ class DeliverForm extends React.Component<any, any> {
             ]
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Refund Date" hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Ship date" />} hasFeedback>
           {getFieldDecorator('date', {
             rules: [
               {
                 required: true,
-                message: '请填写退货日期'
+                message: RCi18n({id:'Order.fillreturndate'})
               }
             ]
           })(<DatePicker />)}

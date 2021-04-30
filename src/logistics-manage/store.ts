@@ -62,8 +62,16 @@ export default class AppStore extends Store {
         this.closeModal()
         this.initList()
       }, 1000)
+    } else if(res.res.code === 'K-000072'){
+      message.error(res.res.message || RCi18n({id: 'Setting.Logisticcompanynamecannotrepeat'}))
+      this.dispatch('formActor:field', {field: 'saveLoading', value: false })
+    } else if (res.res.code === 'K-000073'){
+      message.error(res.res.message || RCi18n({id: 'Setting.Logisticcompanycodecannotrepeat'}))
+      this.dispatch('formActor:field', {field: 'saveLoading', value: false })
     }
-   
+    else {
+      this.dispatch('formActor:field', {field: 'saveLoading', value: false })
+    }
   }
   //setting save
   saveSetting = async () => {
@@ -78,6 +86,8 @@ export default class AppStore extends Store {
         this.closeSettingModal()
         this.init()
       }, 1000)
+    } else {
+      this.dispatch('formActor:field', {field: 'saveSettingLoading', value: false })
     }
     
   }

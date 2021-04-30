@@ -351,7 +351,7 @@ export default class AppStore extends Store {
   fetchLogistics = async () => {
     const { res: logistics } = (await webapi.fetchLogistics()) as any;
 
-    this.dispatch('logistics:init', logistics.context);
+    this.dispatch('logistics:init', logistics.context ? logistics.context: []);
   };
 
   /**

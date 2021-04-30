@@ -34,7 +34,7 @@ const FORM_FIELD_MAP = {
   'First name': 'firstName',
   'Last name': 'lastName',
   Country: 'countryId',
-  Region: 'region',
+  Region: 'area',
   State: 'province',
   City: 'city',
   Address1: 'address1',
@@ -82,6 +82,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
     let fields = [];
     let states = [];
     let cities = [];
+    let regions = [];
     let isAddressValidation = false;
     if (addressInputType) {
       fields = await getAddressFieldList(addressInputType);
@@ -89,6 +90,12 @@ class DeliveryItem extends React.Component<Iprop, any> {
     const countries = await getCountryList();
     if (fields.find(ad => ad.fieldName === 'City' && ad.inputDropDownBoxFlag === 1)) {
       cities = await getCityList();
+      if (fields.find(ad => ad.fieldName === 'Region' && ad.inputDropDownBoxFlag === 1) && this.props.delivery.city) {
+        const regionRes = await getRegionListByCityId((cities.find((ci) => ci.cityName === this.props.delivery.city) || {})['id'] || 0);
+        if (regionRes.res.code === Const.SUCCESS_CODE) {
+          regions = regionRes.res.context.systemRegions.map((r) => ({ id: r.id, name: r.regionName }));
+        }
+      }
     }
     if (fields.find(ad => ad.fieldName === 'State' && ad.inputDropDownBoxFlag === 1)) {
       states = await getStateList();
@@ -104,6 +111,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       countryList: countries,
       stateList: states.map((t) => ({ id: t.id, name: t.stateName })),
       cityList: cities,
+      regionList: regions,
       isAddressValidation: isAddressValidation
     });
   };
@@ -378,8 +386,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
                         rules: [
                           { required: field.requiredFlag === 1, message: `${field.fieldName} is required` },
                           field.fieldName != 'Country' ? { max: field.maxLength, message: 'Exceed maximum length' } : undefined,
-                          { validator: field.fieldName === 'Phone number' ? this.comparePhone : (rule, value, callback) => callback() },
-                          { validator: field.fieldName === 'Postal code' ? this.compareZip : (rule, value, callback) => callback() }
+                          { validator: field.fieldName === 'Phone number' && field.requiredFlag === 1 ? this.comparePhone : (rule, value, callback) => callback() },
+                          { validator: field.fieldName === 'Postal code' && field.requiredFlag === 1 ? this.compareZip : (rule, value, callback) => callback() }
                         ].filter((r) => !!r)
                       })(this.renderField(field))}
                     </Form.Item>

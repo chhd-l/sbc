@@ -43,6 +43,7 @@ export default {
        'Order.subscriptionDiscount':'Subscription discount',
        'Order.Pending refund':'Pending refund',
        'Order.Ship date':'Ship date',
+       'Order.totalReturnableNumber':'Total returnable number'
     },
     Subscription: {},
     Appointment: {

@@ -300,8 +300,8 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.Recommenderid" />,
-        dataIndex: 'recommendationId',
-        key: 'recommendationId',
+        dataIndex: 'recommendationBusinessId',
+        key: 'recommendationBusinessId',
         width: '12%'
       },
       {

@@ -229,9 +229,37 @@ export default class CustomerDetails extends React.Component<any, any> {
 
   render() {
     const { displayPage, basic, pets, delivery, addressType, startDate, endDate } = this.state;
+
+    if (displayPage === 'delivery') {
+      return (
+        <div>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <a href="/customer-list">Pet owner</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="/customer-list">Pet owner list</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.backToDetail();
+                }}
+              >
+                Pet owner detail
+              </a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
+          </Breadcrumb>
+          <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
+        </div>
+      );
+    }
+
     return (
       <>
-        <div style={{ display: displayPage === 'detail' ? 'block' : 'none' }}>
+        <div>
           <Breadcrumb>
             <Breadcrumb.Item>
               <a href="/customer-list">Pet owner</a>
@@ -420,7 +448,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             <div className="container">
               <Headline
                 title="Other information"
-                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} defaultValue={[moment().subtract(3, 'months'), moment()]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
+                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
@@ -444,28 +472,6 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Tabs>
             </div>
           </Spin>
-        </div>
-        <div style={{ display: displayPage === 'delivery' ? 'block' : 'none' }}>
-          <Breadcrumb>
-            <Breadcrumb.Item>
-              <a href="/customer-list">Pet owner</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="/customer-list">Pet owner list</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.backToDetail();
-                }}
-              >
-                Pet owner detail
-              </a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
-          </Breadcrumb>
-          <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
         </div>
       </>
     );

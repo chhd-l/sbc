@@ -151,7 +151,7 @@ class DeliverForm extends React.Component<any, any> {
             ]
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Refund date" />} hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Ship date" />} hasFeedback>
           {getFieldDecorator('date', {
             rules: [
               {

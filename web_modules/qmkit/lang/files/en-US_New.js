@@ -41,7 +41,9 @@ export default {
        'Order.Pending refund':'Pending refund',
        'Order.Reject receive':'Reject recipient',
        'Order.subscriptionDiscount':'Subscription discount',
-       'Order.Pending refund':'Pending refund'
+       'Order.Pending refund':'Pending refund',
+       'Order.Ship date':'Ship date',
+       'Order.totalReturnableNumber':'Total returnable number'
     },
     Subscription: {},
     Appointment: {
@@ -178,6 +180,7 @@ export default {
         'Prescriber.Getdatafailed':'Get data failed',
         'Prescriber.Recommendation.fillDate':'fillDate',
         'Prescriber.No':'No',
+        'Prescriber.Recommendation.optimal':"Associer des aliments humides avec les croquettes permet à votre chat de profiter des bienfaits des deux types d’aliments,  respecte le comportement alimentaire naturel du chat et l'aide par ailleurs à maintenir le poids idéal à condition de respecter la quantité d'aliment recommandée."
     },
     'Pet owner': {
         "PetOwner.Member": "Member",
@@ -311,6 +314,8 @@ export default {
         'Setting.Url': 'Url',
         'Setting.Pleaseinputurl': 'Please input url',
         'Setting.Editlogisticsetting': 'Edit logistic setting',
-        'Setting.Updatelogisticinformation': 'Update logistic information'
+        'Setting.Updatelogisticinformation': 'Update logistic information',
+        'Setting.Logisticcompanynamecannotrepeat': 'Logistic company name can not repeat.',
+        'Setting.Logisticcompanycodecannotrepeat': 'Logistic company code can not repeat.'
     }
 }

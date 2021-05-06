@@ -11,13 +11,15 @@ export default class PaymentInformation extends React.Component<any, any> {
     relaxProps?: {
       felinReco: any
       onChangePestsForm: Function,
-      loading:boolean
+      loading:boolean,
+      funType:boolean
     };
   }
   static relaxProps = {
     felinReco: 'felinReco',
     onChangePestsForm: noop,
-    loading:'loading'
+    loading:'loading',
+    funType:'funType'
   };
   constructor(props) {
     super(props);
@@ -38,7 +40,7 @@ export default class PaymentInformation extends React.Component<any, any> {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { felinReco,loading } = this.props.relaxProps;
+    const { felinReco,loading ,funType} = this.props.relaxProps;
 
     const formItemLayout = {
       labelCol: {
@@ -62,7 +64,7 @@ export default class PaymentInformation extends React.Component<any, any> {
           </Form.Item>
           <Form.Item label={RCi18n({id:'Prescriber.followingoptimalnutrition'})}>
             {getFieldDecorator('optimal', {
-              initialValue: felinReco.optimal || '',
+              initialValue: ((!funType&&RCi18n({id:'Prescriber.Recommendation.optimal'}))||'')+(felinReco.optimal || ''),
               onChange: (e) => this._onChange(e, 'optimal'),
 
             })(<Input.TextArea rows={4} placeholder="Input" />)}

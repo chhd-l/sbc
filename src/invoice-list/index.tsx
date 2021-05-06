@@ -511,11 +511,11 @@ class InvoiceList extends Component<any, any> {
                     {/* <Tooltip placement="top" title="Details">
                   <Link to={'/invoice-details/' + record.id} className="iconfont iconxiangqing" style={{ marginRight: 10 }}></Link>
                 </Tooltip> */}
-                    <Popconfirm placement="topLeft" title={<FormattedMessage id="Finance.disableThisItem" />} onConfirm={() => this.disableInvoice(record.orderInvoiceId)} okText={<FormattedMessage id="Finance.Confirm" />} cancelText={<FormattedMessage id="Finance.Cancel" />}>
+                    {/* <Popconfirm placement="topLeft" title={<FormattedMessage id="Finance.disableThisItem" />} onConfirm={() => this.disableInvoice(record.orderInvoiceId)} okText={<FormattedMessage id="Finance.Confirm" />} cancelText={<FormattedMessage id="Finance.Cancel" />}>
                       <Tooltip placement="top" title="Disable">
                         <a className="iconfont iconjinyong" style={{ marginRight: 10 }}></a>
                       </Tooltip>
-                    </Popconfirm>
+                    </Popconfirm> */}
                     <Tooltip placement="top" title={<FormattedMessage id="Finance.Download" />}>
                       <Icon type="download" style={{ color: '#e2001a', fontSize: 16 }} onClick={() => this.downloadInvoice(record.orderInvoiceId)} />
                     </Tooltip>
@@ -697,9 +697,9 @@ class InvoiceList extends Component<any, any> {
           </Form>
         </div>
         <div className="container">
-          <Button type="primary" style={{ margin: '10px 10px 10px 0' }} onClick={() => this.openAddPage()}>
+          {/* <Button type="primary" style={{ margin: '10px 10px 10px 0' }} onClick={() => this.openAddPage()}>
             <span><FormattedMessage id="Finance.AddNew" /></span>
-          </Button>
+          </Button> */}
           <Dropdown overlay={menu} placement="bottomCenter">
             <Button>
               <span className="icon iconfont iconBatchInvoicing" style={{ marginRight: 5 }}></span> <FormattedMessage id="Finance.BatchOperation" />

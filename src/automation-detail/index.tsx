@@ -159,7 +159,7 @@ class AutomationDetail extends Component<any, any> {
             visibleTest: false
           });
           this.getAutomationDetail(automationId);
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || <FormattedMessage id="Marketing.OperationSuccessful" />);
         } else {
           this.setState({
             loading: false
@@ -180,7 +180,7 @@ class AutomationDetail extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getAutomationDetail(automationId);
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || <FormattedMessage id="Marketing.OperationSuccessful" />);
         } else {
           this.setState({
             loading: false
@@ -201,7 +201,7 @@ class AutomationDetail extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getAutomationDetail(automationId);
-          message.success(res.message || 'Operation successful');
+          message.success(res.message || <FormattedMessage id="Marketing.OperationSuccessful" />);
         } else {
           this.setState({
             loading: false
@@ -325,62 +325,61 @@ class AutomationDetail extends Component<any, any> {
               extra={
                 <ButtonGroup>
                   <Button disabled={!(automationDetail.automationStatus === 'Draft')} onClick={this.openTestModal}>
-                    Test
+                    <FormattedMessage id="Marketing.Test" />
                   </Button>
-
-                  <Popconfirm placement="topLeft" title="This campaign will be terminated." onConfirm={this.terminateAutomation} okText="Confirm" cancelText="Cancel">
+                  <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.ThisCampaignWillBeTerminated" />} onConfirm={this.terminateAutomation} okText="Confirm" cancelText="Cancel">
                     <Button disabled={automationDetail.automationStatus === 'Terminated' || automationDetail.automationStatus === 'Draft'}>Terminate</Button>
                   </Popconfirm>
-                  <Popconfirm placement="topLeft" title="This campaign will be published." onConfirm={this.publishAutomation} okText="Confirm" cancelText="Cancel">
+                  <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.ThisCampaignWillBePublished" />} onConfirm={this.publishAutomation} okText="Confirm" cancelText="Cancel">
                     <Button disabled={automationDetail.automationStatus === 'Published' || automationDetail.automationStatus === 'Executing'}>Publish</Button>
                   </Popconfirm>
                 </ButtonGroup>
               }
             >
               <Tabs defaultActiveKey="1">
-                <TabPane tab="Basic information" key="1">
-                  <Descriptions title={'Automation information'}>
-                    <Descriptions.Item label="Automation name" span={1}>
+                <TabPane tab={<FormattedMessage id="Marketing.BasicInformation" />} key="1">
+                  <Descriptions title={<FormattedMessage id="Marketing.AutomationInformation" />}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.AutomationName" />} span={1}>
                       {automationDetail.automationName}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Automation status" span={1}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.AutomationStatus" />} span={1}>
                       {automationDetail.automationStatus}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Test status" span={1}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.TestStatus" />} span={1}>
                       {testStautsObject ? testStautsObject.name : ''}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Automation category" span={1}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.AutomationCategory" />} span={1}>
                       {automationDetail.automationCategory}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Automation type" span={1}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.AutomationType" />} span={1}>
                       {automationDetail.automationType}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Automation goal" span={1}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.AutomationGoal" />} span={1}>
                       {automationDetail.automationGoal}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Automation description" span={3}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.AutomationDescription" />} span={3}>
                       {automationDetail.automationDescription}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Communication channel" span={1.5}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.CommunicationChannel" />} span={1.5}>
                       {automationDetail.communicationChannel}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Automation owner" span={1.5}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.AutomationOwner" />} span={1.5}>
                       {automationDetail.automationOwner}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Event start time" span={1.5}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.EventStartTime" />} span={1.5}>
                       {automationDetail.eventStartTime ? moment(automationDetail.eventStartTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Event end time" span={1.5}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.EventEndTime" />} span={1.5}>
                       {automationDetail.eventEndTime ? moment(automationDetail.eventEndTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Tracking start time" span={1.5}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.TrackingStartTime" />} span={1.5}>
                       {automationDetail.trackingStartTime ? moment(automationDetail.trackingStartTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Tracking end time" span={1.5}>
+                    <Descriptions.Item label={<FormattedMessage id="Marketing.TrackingEndTime" />} span={1.5}>
                       {automationDetail.trackingEndTime ? moment(automationDetail.trackingEndTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </Descriptions.Item>
                   </Descriptions>
-                  <Card title={'Workflow'} headStyle={{ padding: 0, fontWeight: 'bold' }} bordered={false}>
+                  <Card title={<FormattedMessage id="Marketing.Workflow" />} headStyle={{ padding: 0, fontWeight: 'bold' }} bordered={false}>
                     {this.state.automationDetail.workflow ? (
                       <GGEditor>
                         <Flow
@@ -408,14 +407,14 @@ class AutomationDetail extends Component<any, any> {
                     )}
                   </Card>
                 </TabPane>
-                <TabPane tab="Executing & Tracking" key="2">
-                  <Card title={'Activity Chart'} headStyle={{ padding: 0 }} bordered={false}>
+                <TabPane tab={<FormattedMessage id="Marketing.ExecutingTracking" />} key="2">
+                  <Card title={<FormattedMessage id="Marketing.ActivityChart" />} headStyle={{ padding: 0 }} bordered={false}>
                     <Overview automationId={automationId}></Overview>
                   </Card>
                   <AutomationExecution automationId={automationId} />
                   <PetOwnerCommunication automationId={automationId} />
                 </TabPane>
-                <TabPane tab="Audit Log" key="3">
+                <TabPane tab={<FormattedMessage id="Marketing.AuditLog" />} key="3">
                   <AuditLog automationId={automationId} />
                 </TabPane>
               </Tabs>
@@ -423,7 +422,7 @@ class AutomationDetail extends Component<any, any> {
           </Spin>
         </div>
         <Modal
-          title={'Test automation'}
+          title={<FormattedMessage id="Marketing.TestAutomation" />}
           maskClosable={false}
           width={600}
           visible={visibleTest}
@@ -435,10 +434,10 @@ class AutomationDetail extends Component<any, any> {
                 this.handleClose();
               }}
             >
-              Cancel
+              {<FormattedMessage id="cancel" />}
             </Button>,
             <Button key="submit" type="primary" onClick={this.testAutomation}>
-              Comfirm
+              {<FormattedMessage id="Marketing.Comfirm" />}
             </Button>
           ]}
         >
@@ -465,11 +464,11 @@ class AutomationDetail extends Component<any, any> {
                   fontWeight: 500
                 }}
               >
-                {isOrderEvent ? 'Select Order:' : 'Select Subscription'}
+                {isOrderEvent ? <FormattedMessage id="Marketing.SelectOrder" /> : <FormattedMessage id="Marketing.SelectSubscription" />}
               </label>
               <Select
                 showSearch
-                placeholder={isOrderEvent ? 'Select a Order No' : 'Select a Subscription No'}
+                placeholder={isOrderEvent ? <FormattedMessage id="Marketing.SelectAOrderNo" /> : <FormattedMessage id="Marketing.SelectASubscriptionNo" />}
                 style={{ minWidth: '300px', marginLeft: 10, marginBottom: 10 }}
                 optionFilterProp="children"
                 value={selectedObjectNo}
@@ -492,7 +491,7 @@ class AutomationDetail extends Component<any, any> {
               </Select>
               {
                 showTestTip?<p style={{marginLeft: '125px',marginTop:'-10px',color:'#e2001a'}}>
-                  {isOrderEvent ? 'Please select order':'Please select subscription'}</p>:null
+                  {isOrderEvent ? <FormattedMessage id="Marketing.PleaseSelectOrder" /> : <FormattedMessage id="Marketing.PleaseSelectSubscription" />}</p>:null
               }
               
             </div>

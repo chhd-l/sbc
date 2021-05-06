@@ -290,7 +290,7 @@ export default class ClinicList extends Component<any, any> {
 
                 <Divider type="vertical" />
 
-                <Popconfirm placement="topLeft" title={`${<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />}?`} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+                <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
                   <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
@@ -305,7 +305,7 @@ export default class ClinicList extends Component<any, any> {
 
                 <Divider type="vertical" />
 
-                <Popconfirm placement="topLeft" title={`${<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />}?`} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+                <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
                   <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>

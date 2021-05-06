@@ -599,7 +599,7 @@ class MessageDetails extends Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: `${<FormattedMessage id="Marketing.PleaseInputEmailCategory" />}!`
+                            message: <FormattedMessage id="Marketing.PleaseInputEmailCategory" />
                           }
                         ]
                       })(
@@ -630,7 +630,7 @@ class MessageDetails extends Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: `${<FormattedMessage id="Marketing.PleaseSelectEmailTemplate" />}!`
+                            message: <FormattedMessage id="Marketing.PleaseSelectEmailTemplate" />
                           }
                         ]
                       })(
@@ -667,7 +667,7 @@ class MessageDetails extends Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: `${<FormattedMessage id="Marketing.PleaseSelectObjectType" />}!`
+                            message: <FormattedMessage id="Marketing.PleaseSelectObjectType" />
                           }
                         ]
                       })(
@@ -698,11 +698,11 @@ class MessageDetails extends Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: `${<FormattedMessage id="Marketing.PleaseSelectObjectNo" />}!`
+                            message: <FormattedMessage id="Marketing.PleaseSelectObjectNo" />
                           },
                           {
                             max: 50,
-                            message: `${<FormattedMessage id="Marketing.theMaximumLength" />}!`
+                            message: <FormattedMessage id="Marketing.theMaximumLength" />
                           }
                         ]
                       })(
@@ -739,7 +739,7 @@ class MessageDetails extends Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: `${<FormattedMessage id="Marketing.PleaseSelectSendTime" />}!`
+                            message: <FormattedMessage id="Marketing.PleaseSelectSendTime" />
                           }
                         ]
                       })(
@@ -763,7 +763,7 @@ class MessageDetails extends Component<any, any> {
                     <Col span={8}>
                       <FormItem label={<FormattedMessage id="Marketing.SelectTime" />}>
                         {getFieldDecorator('sendTime', {
-                          rules: [{ required: true, message:`${<FormattedMessage id="Marketing.PleaseSelectTime" />}!` }]
+                          rules: [{ required: true, message:<FormattedMessage id="Marketing.PleaseSelectTime" /> }]
                         })(
                           <DatePicker
                             showTime
@@ -800,7 +800,7 @@ class MessageDetails extends Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: `${<FormattedMessage id="Marketing.PleaseInputConsumerType" />}`
+                            message: <FormattedMessage id="Marketing.PleaseInputConsumerType" />
                           }
                         ]
                       })(
@@ -878,11 +878,11 @@ class MessageDetails extends Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: `${<FormattedMessage id="Marketing.PleaseInputConsumerName" />}!`
+                            message: <FormattedMessage id="Marketing.PleaseInputConsumerName" />
                           },
                           {
                             max: 50,
-                            message: `${<FormattedMessage id="Marketing.ConsumerNameMaximumLength" />}!`
+                            message: <FormattedMessage id="Marketing.ConsumerNameMaximumLength" />
                           }
                         ]
                       })(
@@ -905,10 +905,11 @@ class MessageDetails extends Component<any, any> {
                       {getFieldDecorator('email', {
                         rules: [
                           { required: true, 
-                            message: `${<FormattedMessage id="Marketing.PleaseInputEmail"/>}!`},
+                            message: <FormattedMessage id="Marketing.PleaseInputEmail"/>
+                          },
                           {
                             max: 50,
-                            message: `${<FormattedMessage id="Marketing.EmailExceedTheMaximumLength"/>}!`
+                            message: <FormattedMessage id="Marketing.EmailExceedTheMaximumLength"/>
                           }
                         ]
                       })(
@@ -932,7 +933,7 @@ class MessageDetails extends Component<any, any> {
                         <span>
                           <FormattedMessage id="Marketing.RelatedPet"/>
                           &nbsp;
-                          <Tooltip title={`${<FormattedMessage id="Marketing.PleaseSelectPetOwnerAccountFirst"/>}!`}>
+                          <Tooltip title={<FormattedMessage id="Marketing.PleaseSelectPetOwnerAccountFirst"/>}>
                             <Icon type="question-circle-o" />
                           </Tooltip>
                         </span>
@@ -981,7 +982,7 @@ class MessageDetails extends Component<any, any> {
                         <span>
                           <FormattedMessage id="Marketing.CCList"/>
                           &nbsp;
-                          <Tooltip title={`${<FormattedMessage id="Marketing.IfYouHaveMultiple"/>}!`}>
+                          <Tooltip title={<FormattedMessage id="Marketing.IfYouHaveMultiple"/>}>
                             <Icon type="question-circle-o" />
                           </Tooltip>
                         </span>

@@ -173,7 +173,7 @@ class Tool extends React.Component<any, any> {
       return;
     }
     let title = (window as any).RCi18n({ id: 'Product.Prompt' })
-    let content = (window as any).RCi18n({ id: 'Product.putProductsOnShelves' })
+    let content = (window as any).RCi18n({ id: 'Product.putProductsOffShelves' })
     confirm({
       title: title,
       content: content,

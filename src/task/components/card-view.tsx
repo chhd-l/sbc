@@ -47,7 +47,7 @@ export default class CardView extends Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
         }
       })
       .catch(() => {
@@ -112,14 +112,14 @@ export default class CardView extends Component<any, any> {
             }
           );
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || <FormattedMessage id="Public.GetDataFailed"/>);
+        message.error(err || <FormattedMessage id="Public.GetDataFailed" />);
         this.setState({
           loading: false
         });
@@ -180,25 +180,49 @@ export default class CardView extends Component<any, any> {
       <div className="cardViewList">
         <Row gutter={20} className="taskStatusList">
           <Col span={6} className="todo">
-            <span className="stick"></span>
-            <h3><FormattedMessage id="task.ToDo" /></h3>
-            <span> {taskCardLength.toDoLength} </span>
+            <Row>
+              <Col span={16}>
+                <span className="stick"></span>
+                <h3>
+                  <FormattedMessage id="task.ToDo" />
+                </h3>
+                <span> {taskCardLength.toDoLength} </span>
+              </Col>
+              <Col span={8} style={{ textAlign: 'right' }}>
+                <span className="taskMore" onClick={() => this.props.clickTaskMore('To Do')}>
+                  <FormattedMessage id="task.More" /> <Icon type="right" />
+                </span>
+              </Col>
+            </Row>
           </Col>
           <Col span={6} className="onGoing">
-            <span className="stick"></span>
-            <h3><FormattedMessage id="task.On-going" /></h3>
-            <span> {taskCardLength.onGoingLength} </span>
+            <Row>
+              <Col span={16}>
+                <span className="stick"></span>
+                <h3>
+                  <FormattedMessage id="task.On-going" />
+                </h3>
+                <span> {taskCardLength.onGoingLength} </span>
+              </Col>
+              <Col span={8} style={{ textAlign: 'right' }}>
+                <span className="taskMore" onClick={() => this.props.clickTaskMore('On-going')}>
+                  <FormattedMessage id="task.More" /> <Icon type="right" />
+                </span>
+              </Col>
+            </Row>
           </Col>
           <Col span={6} className="completed">
             <Row>
               <Col span={16}>
                 <span className="stick"></span>
-                <h3><FormattedMessage id="task.Completed" /></h3>
+                <h3>
+                  <FormattedMessage id="task.Completed" />
+                </h3>
                 <span> {taskCardLength.completedLength} </span>
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
                 <span className="taskMore" onClick={() => this.props.clickTaskMore('Completed')}>
-                 <FormattedMessage id="task.More" /> <Icon type="right" />
+                  <FormattedMessage id="task.More" /> <Icon type="right" />
                 </span>
               </Col>
             </Row>
@@ -207,12 +231,14 @@ export default class CardView extends Component<any, any> {
             <Row>
               <Col span={16}>
                 <span className="stick"></span>
-                <h3><FormattedMessage id="task.Cancelled" /></h3>
+                <h3>
+                  <FormattedMessage id="task.Cancelled" />
+                </h3>
                 <span> {taskCardLength.cancelledLength} </span>
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
                 <span className="taskMore" onClick={() => this.props.clickTaskMore('Cancelled')}>
-                <FormattedMessage id="task.More" /> <Icon type="right" />
+                  <FormattedMessage id="task.More" /> <Icon type="right" />
                 </span>
               </Col>
             </Row>

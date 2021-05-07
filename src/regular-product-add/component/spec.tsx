@@ -320,20 +320,21 @@ class SpecForm extends React.Component<any, any> {
         goodsPromotions: goods.get('promotions'),
         isMock: isMock,
         specDetailId: valueId,
-        detailName: item
+        detailName: item,
+        subscriptionStatus: goods.get('subscriptionStatus'),
       });
     });
     updateSpecForm(this.props.form);
     editSpecValues({ specId, specValues });
 
-    if (value.length == 1) {
+    /*if (value.length == 1) {
       let goods = Map({
         subscriptionStatus: fromJS(1)
       });
       editGoodsItem(goods);
       setFieldsValue({ subscriptionStatus: 1 })
       //setFieldsValue({ subscriptionStatus: 0 });
-    }
+    }*/
   };
 
   /**

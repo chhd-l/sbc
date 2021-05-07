@@ -1278,7 +1278,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <FormattedMessage id="Subscription.SubscriptionList" />
               </a>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>\3
+            <Breadcrumb.Item>
               <a
                 onClick={(e) => {
                   e.preventDefault();

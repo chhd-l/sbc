@@ -226,6 +226,7 @@ class SearchForm extends React.Component<any, any> {
               {getFieldDecorator('salesCategory')(
                 <TreeSelectGroup
                   allowClear
+                  className="tree-group"
                   getPopupContainer={() => document.getElementById('page-content')}
                   label={
                     <p style={styles.label}>

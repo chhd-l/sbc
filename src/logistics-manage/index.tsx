@@ -47,41 +47,44 @@ export default class LogisticsManage extends React.Component<any, any> {
               {allExpressList && allExpressList.length > 0
                 && allExpressList.map(item => {
 
-                  return <Card key={item.id} style={{ width: 300, marginTop: 10, marginBottom: 10,marginLeft:5 }} bodyStyle={{ padding: 10 }} loading={this.store.state().get('cardLoading')}>
-                    <div className="card-contanier">
-                      <div className="methodItem">
-                        <img
-                          src={item.logisticLogo||parcelLabImg}
-                          style={{
-                            width: '250px',
-                            height: '80px',
-                            marginTop: '10px'
-                          }}
-                        />
-                      </div>
-                      <div className="bar">
-                        {/*<div className="status">{item.isOpen === 1 ? 'Enabled' : 'Disabled'}</div>*/}
-                        <Switch defaultChecked={item.status} checked={item.status} size={'small'}
-                          onChange={(value) => {
-                            this.store.onSwitchSettingChange({"id":item.id,"status":value})
-                          }}
-                        />
-                        <div>
-                          <Tooltip placement="top" title="Edit">
-                            <a
-                              style={{ color: 'red' }}
-                              type="link"
-                              onClick={() => { this.store.openSettingModal(item) }}
-                              /* className="links"*/
-                              className="iconfont iconEdit"
-                            >
-                              {/* <FormattedMessage id="edit" />*/}
-                            </a>
-                          </Tooltip>
+                  return (
+                    <Card key={item.id} style={{ width: 300, marginTop: 10, marginBottom: 10,marginLeft:5 }} bodyStyle={{ padding: 10 }} loading={this.store.state().get('cardLoading')}>
+                      <div className="card-contanier">
+                        <div className="bar">
+                          <Switch defaultChecked={item.status} checked={item.status} size={'small'}
+                                  onChange={(value) => {
+                                    this.store.onSwitchSettingChange({"id":item.id,"status":value})
+                                  }}
+                          />
+                        </div>
+                        <div className="methodItem">
+                          <img
+                            src={item.logisticLogo||parcelLabImg}
+                            style={{
+                              width: '250px',
+                              height: '80px',
+                              marginTop: '10px'
+                            }}
+                          />
+                        </div>
+                        <div className="bar">
+                          <div>
+                            <Tooltip placement="top" title="Edit">
+                              <a
+                                style={{ color: 'red' }}
+                                type="link"
+                                onClick={() => { this.store.openSettingModal(item) }}
+                                /* className="links"*/
+                                className="iconfont iconEdit"
+                              >
+                                {/* <FormattedMessage id="edit" />*/}
+                              </a>
+                            </Tooltip>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Card>
+                    </Card>
+                  )
                 })
               }
             </div>

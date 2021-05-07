@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, DatePicker, Form, Input, message, Modal, Select, Table } from 'antd';
-import { AuthWrapper, Const, DataGrid, SelectGroup, cache } from 'qmkit';
+import { AuthWrapper, Const, DataGrid, SelectGroup, cache, RCi18n } from 'qmkit';
 import moment from 'moment';
 import * as webapi from './webapi';
 import '../index.less';
@@ -251,7 +251,7 @@ export default class CouponsModal extends React.Component<any, any> {
   _onOk = () => {
     const selectedRows = this.state.selectedRows;
     if (selectedRows.length > 10) {
-      message.error('最多可选10张优惠券');
+      message.error(RCi18n({id: 'Marketing.Youcanchooseupto10coupons'}));
     } else {
       this.props.onOk(selectedRows);
     }

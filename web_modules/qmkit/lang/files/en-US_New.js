@@ -44,7 +44,14 @@ export default {
        'Order.subscriptionDiscount':'Subscription discount',
        'Order.Pending refund':'Pending refund',
        'Order.Ship date':'Ship date',
-       'Order.totalReturnableNumber':'Total returnable number'
+       'Order.totalReturnableNumber':'Total returnable number',
+       'Order.eventType':'Event type',
+       'Order.pspReference':'Psp reference',
+       'Order.eventCode':'Event code',
+       'Order.result':'Result',
+       'Order.payload':'Payload',
+       'Order.request':'Request',
+       'Order.response':'Response',
     },
     Subscription: {},
     Appointment: {
@@ -288,6 +295,7 @@ export default {
         'Marketing.Freeshipping': 'Free shipping',
         'Marketing.Singlepurchase': 'Single purchase',
         'Marketing.Automationlist': 'Automation list',
+        'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons'
     },
     Content: {},
     Setting: {

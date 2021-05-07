@@ -294,6 +294,7 @@ export default {
         'Marketing.Freeshipping': 'Free shipping',
         'Marketing.Singlepurchase': 'Single purchase',
         'Marketing.Automationlist': 'Automation list',
+        'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons'
     },
     Content: {},
     Setting: {

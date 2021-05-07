@@ -1045,13 +1045,18 @@ export default class AppStore extends Store {
 
 
         // });
-        let subscriptionPriceCheck = goodsList.toJS().some(goodsItem => {
-          return goodsItem.subscriptionStatus === 1 ? goodsItem.subscriptionPrice : true;
+        let subscriptionPriceCheck = goodsList.toJS().every(goodsItem => {
+          return goodsItem.subscriptionStatus === 1 ? goodsItem.subscriptionPrice > 0 : true;
         });
-        let marketPriceCheck = goodsList.toJS().some(goodsItem => {
-          return goodsItem.marketPrice;
+        if(!subscriptionPriceCheck) {
+          tip = 2;
+        }
+        let marketPriceCheck = goodsList.toJS().every(goodsItem => {
+          return goodsItem.marketPrice > 0;
         });
-        
+        if(!marketPriceCheck) {
+          tip = 1;
+        }
         valid = subscriptionPriceCheck && marketPriceCheck;
 
       }
@@ -1119,13 +1124,10 @@ export default class AppStore extends Store {
       }*/
 
     }
-    // if (tip === 1) {
-    //   message.error('Please input market price');
-    // } else if (tip === 2) {
-    //   message.error('Please input subscription price');
-    // }
-    if(!valid) {
+    if (tip === 1) {
       message.error('Please input market price');
+    } else if (tip === 2) {
+      message.error('Please input subscription price');
     }
     return valid;
 

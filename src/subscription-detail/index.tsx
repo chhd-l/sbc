@@ -730,8 +730,8 @@ class SubscriptionDetail extends React.Component<any, any> {
           <div>
             {!record.id ? (
               'Autoship skiped'
-            ) : record.tradeItems && record.tradeItems[0].flowState ? (
-              <FormattedMessage id={getOrderStatusValue('OrderStatus', record.tradeItems[0].flowState)} />
+            ) : record.tradeState && record.tradeState.flowState ? (
+              <FormattedMessage id={getOrderStatusValue('OrderStatus', record.tradeState.flowState)} />
             ) : (
               // deliverStatus(record.tradeItems[0].deliverStatus)
               '-'

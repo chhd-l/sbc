@@ -347,23 +347,25 @@ class SpecForm extends React.Component<any, any> {
         specDetailId: valueId,
         detailName: item,
         goodsPromotions: goods.get('promotions'),
+        subscriptionStatus: goods.get('subscriptionStatus'),
       });
     });
     updateSpecForm(this.props.form);
     editSpecValues({ specId, specValues });
-    // if (value.length == 1) {
-    //   let goods = Map({
-    //     subscriptionStatus: fromJS(1),
-    //   });
-    //   editGoodsItem(goods);
-    //   setFieldsValue({ subscriptionStatus: 1 })
-    //   //setFieldsValue({ subscriptionStatus: 0 });
-    // }
-     /*else {
+    /*if (value.length == 1) {
       let goods = Map({
-        subscriptionStatus: fromJS(0)
+        subscriptionStatus: fromJS(1),
       });
       editGoodsItem(goods);
+      setFieldsValue({ subscriptionStatus: 1 })
+      //setFieldsValue({ subscriptionStatus: 0 });
+    }
+     else {
+      let goods1 = Map({
+        subscriptionStatus: 111
+      });
+      editGoodsItem(goods1);
+      setFieldsValue({ subscriptionStatus: 1 })
     }*/
   };
 

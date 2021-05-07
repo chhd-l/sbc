@@ -355,6 +355,7 @@ export default class GoodsSpecActor extends Actor {
         goodsInfoNo: goodsInfoNo,
         promotions: item.get('goodsPromotions') == 'club' ? 'club' : 'autoship',
         addedFlag: 1,
+        subscriptionStatus: item.get('subscriptionStatus'),
         skuSvIds: [item.get('specDetailId')]
       });
     });

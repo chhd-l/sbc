@@ -891,7 +891,7 @@ class CouponInfoForm extends Component<any, any> {
             )}
           </FormItem>
         </Form>
-        <div className="bar-button">
+        <div>
           <Button disabled={btnDisabled} type="primary" onClick={() => this.saveCoupon()} style={{ marginRight: 10 }}>
             <FormattedMessage id="Marketing.Save" />
           </Button>

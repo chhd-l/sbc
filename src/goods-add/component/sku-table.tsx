@@ -303,7 +303,7 @@ class SkuForm extends React.Component<any, any> {
         </div>
       ),
       key: 'goodsInfoBundleRels',
-      render: (rowInfo) => {
+      render: (rowInfo, record, rowIndex) => {
         const { addSkUProduct } = this.props.relaxProps;
         return (
           <Row>
@@ -348,13 +348,13 @@ class SkuForm extends React.Component<any, any> {
                                         target['bundleNum'] = e;
                                       }
                                       let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
-                                      this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
+                                      this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res, rowIndex);
                                     }
                                   }}
                                   onFocus={() => this.onfocus()}
                                   onBlur={() => this.onblur()}
                                 />
-                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id)}></a>
+                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id, rowIndex)}></a>
                               </div>
                             );
                           })
@@ -716,7 +716,8 @@ class SkuForm extends React.Component<any, any> {
   /**
    * 修改商品属性
    */
-  _editGoodsItem = (id: string, key: string, e: any) => {
+  _editGoodsItem = (id: string, key: string, e: any, rowIndex?: number) => {
+    console.log(rowIndex, "=======rowIndex======");
     const { editGoodsItem, synchValue, editGoods, goodsList, addSkUProduct } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
@@ -733,15 +734,21 @@ class SkuForm extends React.Component<any, any> {
       let tempMinStock = Math.min.apply(Math, minStock)
       tempMinStock = Number(String(tempMinStock).replace(/\.\d+/g, ''))
 
-      if (goodsList.toJS().length == 1 && addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
-        let id = goodsList.toJS()[0].id
+      // if (goodsList.toJS().length == 1 && addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+      //   let id = goodsList.toJS()[0].id
 
-        let marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
-        let subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
+      //   let marketPrice = addSkUProduct[0].targetGoodsIds[0].marketPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
+      //   let subscriptionPrice = addSkUProduct[0].targetGoodsIds[0].subscriptionPrice * addSkUProduct[0].targetGoodsIds[0].bundleNum
+      //   editGoodsItem(id, key, e);
+      //   editGoodsItem(id, 'marketPrice', marketPrice);
+      //   editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
+      // }
+
+      if(rowIndex !== undefined) {
+        this._calculatePrice(goodsList.toJS()[rowIndex]);
         editGoodsItem(id, key, e);
-        editGoodsItem(id, 'marketPrice', marketPrice);
-        editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
       }
+
       editGoodsItem(id, 'stock', tempMinStock);
     }else {
       editGoodsItem(id, key, e);
@@ -775,6 +782,27 @@ class SkuForm extends React.Component<any, any> {
         this.props.form.setFieldsValue(values);
       }
     }
+  };
+
+  /**
+   * 修改某一行商品Sub-SKU个数及其bundle数量时，计算 marketPrice
+   * @param rowIndex
+   */
+
+  _calculatePrice = (row) => {
+    let {editGoodsItem} = this.props.relaxProps;
+    let id = row.id
+    let subGoods = row.goodsInfoBundleRels;
+    if(row.userChangeMP) {
+      return;
+    }
+    let subscriptionPrice = 0;
+    let marketPrice = subGoods.reduce((sum, item) => {
+      subscriptionPrice += item.subscriptionPrice * item.bundleNum;
+      return sum + item.marketPrice * item.bundleNum;
+    }, 0);
+    editGoodsItem(id, 'marketPrice', marketPrice);
+    editGoodsItem(id, 'subscriptionPrice', subscriptionPrice);
   };
 
   _editSubSkuItem = (id: string, key: string, e: any) => {
@@ -817,7 +845,7 @@ class SkuForm extends React.Component<any, any> {
     }
   };
 
-  onDel = (item, pid, id) => {
+  onDel = (item, pid, id, rowIndex) => {
     const { addSkUProduct, onProductselectSku, goodsList, editGoodsItem } = this.props.relaxProps;
     let a = [];
     let b = [];
@@ -848,20 +876,26 @@ class SkuForm extends React.Component<any, any> {
         c.push(i);
       }
     });
-    goodsList.toJS().map((item,i)=>{
-      if (i == 0) {
-        if(goodsList.toJS().length == 1 && a.length == 1) {
-          editGoodsItem(item.id, 'marketPrice', a[0].marketPrice);
-          editGoodsItem(item.id, 'subscriptionPrice', a[0].subscriptionPrice);
-        }else {
-          editGoodsItem(item.id, 'marketPrice', item.marketPrice);
-          editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
-        }
-      }else {
-        editGoodsItem(item.id, 'marketPrice', item.marketPrice);
-        editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
-      }
-    })
+    // goodsList.toJS().map((item,i)=>{
+    //   if (i == 0) {
+    //     if(goodsList.toJS().length == 1 && a.length == 1) {
+    //       editGoodsItem(item.id, 'marketPrice', a[0].marketPrice);
+    //       editGoodsItem(item.id, 'subscriptionPrice', a[0].subscriptionPrice);
+    //     }else {
+    //       editGoodsItem(item.id, 'marketPrice', item.marketPrice);
+    //       editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
+    //     }
+    //   }else {
+    //     editGoodsItem(item.id, 'marketPrice', item.marketPrice);
+    //     editGoodsItem(item.id, 'subscriptionPrice', item.subscriptionPrice);
+    //   }
+    // })
+
+    let rowItem = goodsList.toJS()[rowIndex];
+
+    rowItem.goodsInfoBundleRels = rowItem.goodsInfoBundleRels.filter(subItem => subItem.goodsInfoNo !== item.goodsInfoNo);
+
+    this._calculatePrice(rowItem);
 
     editGoodsItem(id, 'stock', tempMinStock);
     editGoodsItem(id, 'goodsInfoBundleRels', a);

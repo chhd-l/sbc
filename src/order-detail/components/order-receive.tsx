@@ -1,11 +1,12 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
-import { Table, Tooltip, Menu, Popover, Row, Col, Card } from 'antd';
-import { noop, Const, util } from 'qmkit';
+import { Table, Tooltip, Menu, Popover, Row, Col, Card, Button } from 'antd';
+import { noop, Const, util, getOrderStatusValue } from 'qmkit';
 import { IList } from 'typings/globalType';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { cache } from 'qmkit';
+import PaymentRemark from './payment-remark-modal';
 const payTypeDic = {
   0: 'Online Payment',
   1: 'Offline Payment'
@@ -35,15 +36,17 @@ export default class OrderReceive extends React.Component<any, any> {
     };
   };
 
-  /*state: {
-    addReceiverVisible: boolean;
-  }*/
+  state: {
+    showRemark: boolean;
+    idx: number;
+  }
 
   constructor(props) {
     super(props);
-    /*this.state = {
-      addReceiverVisible: false
-    }*/
+    this.state = {
+      showRemark: false,
+      idx: 0
+    }
   }
 
   static relaxProps = {
@@ -60,6 +63,16 @@ export default class OrderReceive extends React.Component<any, any> {
   //收款列表
   receiveColumns = [
     {
+      title: <FormattedMessage id="Order.eventType" />,
+      dataIndex: 'eventType',
+      key: 'eventType'
+    },
+    {
+      title: <FormattedMessage id="Order.pspReference" />,
+      dataIndex: 'pspReference',
+      key: 'pspReference'
+    },
+    {
       title: <FormattedMessage id="Order.CollectionTime" />,
       dataIndex: 'createTime',
       key: 'createTime',
@@ -67,19 +80,19 @@ export default class OrderReceive extends React.Component<any, any> {
     },
     {
       title: <FormattedMessage id="Order.AmountReceived" />,
-      dataIndex: 'paymentAmount',
-      key: 'paymentAmount',
+      dataIndex: 'amount',
+      key: 'amount',
       render: (text, record) => (record.payOrderStatus == 1 ? '' : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (text || 0).toFixed(2))
     },
-    // {
-    //   title: <FormattedMessage id="Order.Status" />,
-    //   dataIndex: 'opStatus',
-    //   key: 'opStatus'
-    // },
     {
-      title: <FormattedMessage id="Order.tradeType" />,
-      dataIndex: 'tradeType',
-      key: 'tradeType'
+      title: <FormattedMessage id="Order.eventCode" />,
+      dataIndex: 'eventCode',
+      key: 'eventCode'
+    },
+    {
+      title: <FormattedMessage id="Order.result" />,
+      dataIndex: 'result',
+      key: 'result'
     },
     {
       title: <FormattedMessage id="Order.Remarks" />,
@@ -97,11 +110,33 @@ export default class OrderReceive extends React.Component<any, any> {
           )}
         </span>
       )
+    },
+    {
+      title: <FormattedMessage id="Order.Operation" />,
+      dataIndex: 'remark',
+      key: 'operation',
+      render: (text, record, index) => (
+        <Button style={{marginLeft: 5}} size="small" onClick={() => this.showPaymentRemark(index)}><FormattedMessage id="Order.more" /></Button>
+      )
     }
   ];
 
+  showPaymentRemark = (index: number) => {
+    this.setState({
+      showRemark: true,
+      idx: index
+    });
+  };
+
+  closePaymnetRemark = () => {
+    this.setState({
+      showRemark: false
+    });
+  };
+
   render() {
     const { detail, paymentInfo } = this.props.relaxProps;
+    const { showRemark, idx } = this.state;
     var payLogs = paymentInfo && paymentInfo.get('payPaymentLogsVOList') ? paymentInfo.get('payPaymentLogsVOList') : [];
     const id = detail.get('id');
 
@@ -116,7 +151,7 @@ export default class OrderReceive extends React.Component<any, any> {
                 </label>
               </Col>
               <Col span={6} style={{ textAlign: 'right' }}>
-                <label style={{ color: '#339966' }}>{paymentInfo.get('payStatus')}</label>
+                <label style={{ color: '#339966' }}><FormattedMessage id={getOrderStatusValue('PaymentStatus', detail.getIn(['tradeState', 'payState']))} /></label>
               </Col>
             </Row>
           </div>
@@ -125,6 +160,13 @@ export default class OrderReceive extends React.Component<any, any> {
         <div>
           <Table columns={this.receiveColumns} dataSource={payLogs} pagination={false} bordered rowKey={(_record, index) => index.toString()} />
         </div>
+
+        <PaymentRemark
+          visible={showRemark}
+          requestPayload={payLogs[idx] ? payLogs[idx]['requestPayload'] : null}
+          responsePayload={payLogs[idx] ? payLogs[idx]['responsePayload'] : null}
+          onClose={this.closePaymnetRemark}
+        />
 
         <Row>
           <Col span={12} className="headBox" style={{ height: 200, marginTop: 10 }}>

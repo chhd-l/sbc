@@ -19,6 +19,7 @@ export default class LogisticsManage extends React.Component<any, any> {
   componentDidMount() {
     this.store.init();
     this.store.initList();
+    this.store.fetchAllExpress()
   }
 
   constructor(props) {
@@ -46,7 +47,7 @@ export default class LogisticsManage extends React.Component<any, any> {
               {allExpressList && allExpressList.length > 0
                 && allExpressList.map(item => {
 
-                  return <Card key={item.id} style={{ width: 300, marginTop: 10, marginBottom: 10,marginLeft:5 }} bodyStyle={{ padding: 10 }}>
+                  return <Card key={item.id} style={{ width: 300, marginTop: 10, marginBottom: 10,marginLeft:5 }} bodyStyle={{ padding: 10 }} loading={this.store.state().get('cardLoading')}>
                     <div className="card-contanier">
                       <div className="methodItem">
                         <img

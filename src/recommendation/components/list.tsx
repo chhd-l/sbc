@@ -28,11 +28,11 @@ class RejectForm extends React.Component<any, any> {
               },
               {
                 max: 100,
-                message: <FormattedMessage id="Prescriber.lessthan100characters"/>
+                message: <FormattedMessage id="Prescriber.lessthan100characters" />
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={RCi18n({id:'Prescriber.EnterTheReason'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={RCi18n({ id: 'Prescriber.EnterTheReason' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -65,7 +65,7 @@ class ListView extends React.Component<any, any> {
   props: {
     histroy?: Object;
     relaxProps?: {
-      form:any,
+      form: any,
       loading: boolean;
       orderRejectModalVisible: boolean;
       total: number;
@@ -97,7 +97,7 @@ class ListView extends React.Component<any, any> {
     //当前的客户列表
     dataList: 'dataList',
 
-    form:'form',
+    form: 'form',
     onChecked: noop,
     onCheckedAll: noop,
     allChecked: allCheckedQL,
@@ -114,8 +114,8 @@ class ListView extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, total, pageSize,form, dataList,  init, currentPage, orderRejectModalVisible, onFindById } = this.props.relaxProps;
- 
+    const { loading, total, pageSize, form, dataList, init, currentPage, orderRejectModalVisible, onFindById } = this.props.relaxProps;
+
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -128,14 +128,14 @@ class ListView extends React.Component<any, any> {
                       <th style={{ width: '11%' }}>
                         <FormattedMessage id="Prescriber.Product" />
                       </th>
-                      <th style={{ width: '12%' }}><FormattedMessage id="Prescriber.PO Name"/></th>
-                      <th style={{ width: '13.5%' }}><FormattedMessage id="Prescriber.PO E-mail"/></th>
-                      <th style={{ width: '11%' }}><FormattedMessage id="Prescriber.Amount"/></th>
-                      <th style={{ width: '10.5%' }}><FormattedMessage id="Prescriber.Link status"/></th>
-                      <th style={{ width: '12.5%' }}><FormattedMessage id="Prescriber.Expert"/></th>
-                      <th style={{ width: '5.5%' }}><FormattedMessage id="Prescriber.Paris"/></th>
-                      <th style={{ width: '10.5%' }}><FormattedMessage id="Prescriber.Pick up"/></th>
-                      <th ><FormattedMessage id="Prescriber.operation"/></th>
+                      <th style={{ width: '12%' }}><FormattedMessage id="Prescriber.PO Name" /></th>
+                      <th style={{ width: '13.5%' }}><FormattedMessage id="Prescriber.PO E-mail" /></th>
+                      <th style={{ width: '11%' }}><FormattedMessage id="Prescriber.Amount" /></th>
+                      <th style={{ width: '10.5%' }}><FormattedMessage id="Prescriber.Link status" /></th>
+                      <th style={{ width: '12.5%' }}><FormattedMessage id="Prescriber.Expert" /></th>
+                      <th style={{ width: '5.5%' }}><FormattedMessage id="Prescriber.Paris" /></th>
+                      <th style={{ width: '10.5%' }}><FormattedMessage id="Prescriber.Pick up" /></th>
+                      <th ><FormattedMessage id="Prescriber.operation" /></th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
@@ -157,13 +157,14 @@ class ListView extends React.Component<any, any> {
               total={total}
               pageSize={pageSize}
               onChange={(pageNum, pageSize) => {
-                init({ pageNum: pageNum - 1, pageSize,
-                  felinRecoId:form.get('felinRecoId'),
-                  fillDate:form.get('fillDate'),
-                  goodsNames:form.get('goodsNames'),
-                 [form.get('consumerName')?'consumerName':'consumerEmail']:form.get('consumerName')?form.get('consumerName'):form.get('consumerEmail')
-                  
-              });
+                init({
+                  pageNum: pageNum - 1, pageSize,
+                  felinRecoId: form.get('felinRecoId'),
+                  fillDate: form.get('fillDate'),
+                  goodsNames: form.get('goodsNames'),
+                  [form.get('consumerName') ? 'consumerName' : 'consumerEmail']: form.get('consumerName') ? form.get('consumerName') : form.get('consumerEmail')
+
+                });
               }}
             />
           ) : null}
@@ -191,16 +192,16 @@ class ListView extends React.Component<any, any> {
   }
 
   handleCopy = (value) => {
-    if(!value){
-      message.error(<FormattedMessage id="Prescriber.copylink failed"/>);
-      return 
+    if (!value) {
+      message.error(RCi18n({ id: 'Prescriber.copylink failed' }));
+      return
     }
     if (copy(value)) {
-      message.success(<FormattedMessage id="Prescriber.Operate successfully"/>);
+      message.success(RCi18n({ id: 'Prescriber.Operate successfully' }));
     }
   }
   newUrl = (oldUrl) => {
-    if(!oldUrl){
+    if (!oldUrl) {
       return false
     }
     let tempArr = oldUrl.split('?');
@@ -210,12 +211,12 @@ class ListView extends React.Component<any, any> {
     } else return oldUrl;
   };
 
-  timeDiffSaven(item){
-    if(!item.linkStatus)return '--';
-    let _now=moment();
-    let _temp=moment(item.linkStatus);
+  timeDiffSaven(item) {
+    if (!item.linkStatus) return '--';
+    let _now = moment();
+    let _temp = moment(item.linkStatus);
 
-    let c= (_now.diff(_temp,'day'))>7?'Invalid':'Valid';
+    let c = (_now.diff(_temp, 'day')) > 7 ? 'Invalid' : 'Valid';
     return c
   }
 
@@ -226,7 +227,7 @@ class ListView extends React.Component<any, any> {
     let list = dataList.toJS();
     return list.map((v, index) => {
       const img = v.goodsNames ? v.goodsNames.split(',') : [];
-     const appointmentVO=v.appointmentVO
+      const appointmentVO = v.appointmentVO
       return (
         <tr className="ant-table-row  ant-table-row-level-0" key={v.felinRecoId}>
           <td colSpan={9} style={{ padding: 0 }}>
@@ -247,7 +248,7 @@ class ListView extends React.Component<any, any> {
                         <span> {v.felinRecoId}</span>
                       </div>
                       <div style={{ width: 310, display: 'inline-block' }}>
-                        <span><FormattedMessage id="Prescriber.Created Time"/> {moment(v.fillDate).format('YYYY-MM-DD')}</span>
+                        <span><FormattedMessage id="Prescriber.Created Time" /> {moment(v.fillDate).format('YYYY-MM-DD')}</span>
                       </div>
                     </div>
                   </td>
@@ -284,12 +285,12 @@ class ListView extends React.Component<any, any> {
                       })
                       : '--'}
                   </td>
-                  <td style={{ width: '12%' }}>{appointmentVO?.consumerName??'--'}</td>
-                  <td style={{ width: '13.5%' }}>{appointmentVO?.consumerEmail??'--'}</td>
-                  <td style={{ width: '11%' }}>{v?.price??'--'}</td>
+                  <td style={{ width: '12%' }}>{appointmentVO?.consumerName ?? '--'}</td>
+                  <td style={{ width: '13.5%' }}>{appointmentVO?.consumerEmail ?? '--'}</td>
+                  <td style={{ width: '11%' }}>{v?.price ?? '--'}</td>
                   <td style={{ width: '12.5%' }}>{this.timeDiffSaven(v)}</td>
                   {/* <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td> */}
-                  <th style={{ width: '12.5%' }}>{v?.expert??'--'}</th>
+                  <th style={{ width: '12.5%' }}>{v?.expert ?? '--'}</th>
                   <td style={{ width: '5.5%' }}>{v.paris ? 'Y' : 'N'}</td>
                   <td style={{ width: '10.5%' }}>{v.pickup ? 'Y' : 'N'}</td>
                   <td
@@ -307,25 +308,25 @@ class ListView extends React.Component<any, any> {
                       justifyContent: 'space-around',
                       alignItems: 'center'
                     }}>
-                    <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Edit"/>}>
-                      <Icon type="form" 
-                       onClick={() =>
-                        history.push({
-                          pathname: `/recommendation-edit/${v.felinRecoId}`,
-                        })
-                      }
-                      />
+                      <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Edit" />}>
+                        <Icon type="form"
+                          onClick={() =>
+                            history.push({
+                              pathname: `/recommendation-edit/${v.felinRecoId}`,
+                            })
+                          }
+                        />
 
-                    </Tooltip>
-                    <Tooltip placement="top" title={<FormattedMessage id="Prescriber.download pdf"/>}>
-                     
-                      <a href={`/api/felinReco/export/${v.felinRecoId}`} target="_blank">
-                      <Icon type="cloud-download" />
-                      </a>
-                    </Tooltip>
-                    <Tooltip placement="top" title={<FormattedMessage id="Prescriber.copied link"/>}>
-                    <Icon type="link"  onClick={() => this.handleCopy(this.newUrl(v.linkAddr))} />
-                    </Tooltip>
+                      </Tooltip>
+                      <Tooltip placement="top" title={<FormattedMessage id="Prescriber.download pdf" />}>
+
+                        <a href={`/api/felinReco/export/${v.felinRecoId}`} target="_blank">
+                          <Icon type="cloud-download" />
+                        </a>
+                      </Tooltip>
+                      <Tooltip placement="top" title={<FormattedMessage id="Prescriber.copied link" />}>
+                        <Icon type="link" onClick={() => this.handleCopy(this.newUrl(v.linkAddr))} />
+                      </Tooltip>
                     </div>
 
                   </td>
@@ -356,8 +357,8 @@ class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = (window as any).RCi18n({id:'Prescriber.review'});
-    const content = (window as any).RCi18n({id:'Prescriber.confirmReview'});
+    const title = (window as any).RCi18n({ id: 'Prescriber.review' });
+    const content = (window as any).RCi18n({ id: 'Prescriber.confirmReview' });
     confirm({
       title: title,
       content: content,
@@ -388,8 +389,8 @@ class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title:<FormattedMessage id="Prescriber.Confirm receipt" />,
-      content:<FormattedMessage id="Prescriber.confirmReceivedAllProducts" />,
+      title: <FormattedMessage id="Prescriber.Confirm receipt" />,
+      content: <FormattedMessage id="Prescriber.confirmReceivedAllProducts" />,
       onOk() {
         onConfirm(tdId);
       },

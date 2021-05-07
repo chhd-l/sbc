@@ -123,7 +123,7 @@ export const retrial = (tid: string) => {
 };
 
 export function fetchLogistics() {
-  return Fetch<TResult>('/store/expressCompany');
+  return Fetch<TResult>('/store/expressCompany/findExpressCompanys');
 }
 
 /**

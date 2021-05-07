@@ -164,7 +164,7 @@ class OrderDelivery extends React.Component<any, any> {
                                   return (
                                     <Timeline.Item color={color}>
                                       <p>
-                                        {moment(item.timestamp).format('YYYY-MM-DD hh:mm')} {item.longDescription}
+                                        {moment(item.timestamp).format('YYYY-MM-DD HH:mm')} {item.longDescription}
                                       </p>
                                     </Timeline.Item>
                                   );

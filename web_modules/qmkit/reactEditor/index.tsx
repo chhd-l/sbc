@@ -76,7 +76,8 @@ class ReactEditor extends Component<any, any> {
     };
 
     componentDidMount() {
-        if (this.props.id&&this.props.contentType.toUpperCase() !== 'JSON') {
+        let contentType=this.props?.contentType??'text';
+        if (this.props.id&&contentType.toUpperCase() !== 'JSON') {
             this.initEditor()
         }else{
             this.setState({
@@ -190,11 +191,12 @@ class ReactEditor extends Component<any, any> {
     }
     render() {
         const {  height,contentType,disabled } = this.props
+        let _contentType=contentType||'text'
         const {value,loading}=this.state;
         return (
             <div className="react-editor-cunstorm">
                     <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-                       {contentType.toUpperCase() === 'JSON'?(
+                       {_contentType.toUpperCase() === 'JSON'?(
                             <Input.TextArea value={value} disabled={disabled} placeholder="Please enter the JSON format"  onChange={this.changeText} style={{height:height}}/>
                         ):(<div className="text-area" ><div
                             ref="editorElemBody" className={'editorElem-body-' + this.props.id}>

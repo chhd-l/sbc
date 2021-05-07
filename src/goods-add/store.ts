@@ -943,7 +943,7 @@ export default class AppStore extends Store {
       valid = false;
       return;
     }
-
+    
     return valid;
   }
 
@@ -1002,49 +1002,57 @@ export default class AppStore extends Store {
     let addSkUProduct = this.state().toJS().addSkUProduct;
     if (goodsList) {
       if (this.state().get('goods').get('saleableFlag') != 0 ) {
-        goodsList.forEach((item, i ) => {
+        // goodsList.forEach((item, i ) => {
 
-          if(i == 0) {
-            if ( item.get('goodsInfoBundleRels').length != 1 ) {
-              if (item.get('marketPrice') == 0 || item.get('subscriptionPrice') == null) {
-                tip = 1;
-                valid = false;
-                return;
-              }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0)  || item.get('subscriptionPrice') == null) {
-                tip = 2;
-                valid = false;
-                return;
-              }
+        //   if(i == 0) {
+        //     if ( item.get('goodsInfoBundleRels').length != 1 ) {
+        //       if (item.get('marketPrice') == 0 || item.get('subscriptionPrice') == null) {
+        //         tip = 1;
+        //         valid = false;
+        //         return;
+        //       }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0)  || item.get('subscriptionPrice') == null) {
+        //         tip = 2;
+        //         valid = false;
+        //         return;
+        //       }
 
-            }else {
-              if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
-                tip = 1;
-                valid = false;
-                return;
-              }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
-                tip = 2;
-                valid = false;
-                return;
-              }
-            }
+        //     }else {
+        //       if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
+        //         tip = 1;
+        //         valid = false;
+        //         return;
+        //       }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
+        //         tip = 2;
+        //         valid = false;
+        //         return;
+        //       }
+        //     }
 
-          }else {
+        //   }else {
 
-            if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
-              tip = 1;
-              valid = false;
-              return;
-            }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
-              tip = 2;
-              valid = false;
-              return;
-            }
+        //     if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
+        //       tip = 1;
+        //       valid = false;
+        //       return;
+        //     }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
+        //       tip = 2;
+        //       valid = false;
+        //       return;
+        //     }
 
-          }
+        //   }
 
 
 
+        // });
+        let subscriptionPriceCheck = goodsList.toJS().some(goodsItem => {
+          return goodsItem.subscriptionStatus === 1 ? goodsItem.subscriptionPrice : true;
         });
+        let marketPriceCheck = goodsList.toJS().some(goodsItem => {
+          return goodsItem.marketPrice;
+        });
+        
+        valid = subscriptionPriceCheck && marketPriceCheck;
 
       }
 
@@ -1111,10 +1119,13 @@ export default class AppStore extends Store {
       }*/
 
     }
-    if (tip === 1) {
+    // if (tip === 1) {
+    //   message.error('Please input market price');
+    // } else if (tip === 2) {
+    //   message.error('Please input subscription price');
+    // }
+    if(!valid) {
       message.error('Please input market price');
-    } else if (tip === 2) {
-      message.error('Please input subscription price');
     }
     return valid;
 

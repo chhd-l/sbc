@@ -31,7 +31,8 @@ export default class GoodsSpecActor extends Actor {
           subscriptionPrice: 0,
           stock: 0,
           goodsInfoBundleRels: [],
-          specType: false
+          specType: false,
+          userChangeMP: false
         }
       ],
       stockChecked: false,
@@ -358,7 +359,7 @@ export default class GoodsSpecActor extends Actor {
         promotions: item.get('goodsPromotions') == 'club' ? 'club' : 'autoship',
         marketPrice: 0,
         subscriptionPrice: 0,
-        //subscriptionStatus: spec.get('subscriptionStatus'),
+        subscriptionStatus: item.get('subscriptionStatus'),
         skuSvIds: [item.get('specDetailId')]
       });
     });

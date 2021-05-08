@@ -150,20 +150,36 @@ class ProductTooltipSKU extends React.Component<any, any> {
 
     if (targetGoodsIds.length <= 10) {
       if (targetGoodsIds.length !== 0) {
-        goodsList.toJS().map(item=>{
-          if (item.id == this.props.id) {
-            editGoodsItem(this.props.id, 'stock', tempMinStock);
-            if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
-              editGoodsItem(item.id, 'marketPrice', marketPrice);
-              editGoodsItem(item.id, 'subscriptionPrice', subscriptionPrice);
-            }else {
-              editGoodsItem(item.id, 'marketPrice', 0);
-              editGoodsItem(item.id, 'subscriptionPrice', 0);
-            }
-            editGoodsItem(item.id, 'goodsInfoBundleRels', goodsIds);
 
-          }
-        })
+        // goodsList.toJS().map(item=>{
+        //   if (item.id == this.props.id) {
+        //     editGoodsItem(this.props.id, 'stock', tempMinStock);
+        //     if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
+        //       editGoodsItem(item.id, 'marketPrice', marketPrice);
+        //       editGoodsItem(item.id, 'subscriptionPrice', subscriptionPrice);
+        //     }else {
+        //       editGoodsItem(item.id, 'marketPrice', 0);
+        //       editGoodsItem(item.id, 'subscriptionPrice', 0);
+        //     }
+        //     editGoodsItem(item.id, 'goodsInfoBundleRels', goodsIds);
+
+        //   }
+        // })
+
+        // 设置Market Price
+        let curGoodsItem = goodsList.toJS().filter(item => item.id === this.props.id)[0]
+        if(curGoodsItem) {
+          let subscriptionPrice = 0;
+          let marketPrice = goodsIds.reduce((sum, item) => {
+            subscriptionPrice += item.subscriptionPrice * item.bundleNum;
+            return sum + item.marketPrice * item.bundleNum;
+          }, 0);
+          editGoodsItem(curGoodsItem.id, 'marketPrice', marketPrice);
+          editGoodsItem(curGoodsItem.id, 'subscriptionPrice', subscriptionPrice);
+          editGoodsItem(curGoodsItem.id, 'stock', tempMinStock);
+          editGoodsItem(curGoodsItem.id, 'goodsInfoBundleRels', goodsIds);
+        }
+
         onProductselectSku(targetGoodsList);
       }
       targetGoodsIds = [];

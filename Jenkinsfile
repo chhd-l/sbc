@@ -42,7 +42,7 @@ podTemplate(label: label, cloud: 'kubernetes',
                     sh "node --version"
                     sh "npm --version"
                     sh "npm install"
-                    sh "npm run build:${TARGET_BUILD}"
+                    sh "npm run build"
                 }
         }
 

@@ -224,6 +224,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               {getFieldDecorator('salesCategory')(
                 <TreeSelectGroup
+                  className="tree-group"
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
                   label={<p style={styles.label}><FormattedMessage id="Product.Salescategory" /></p>}

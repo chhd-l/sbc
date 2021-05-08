@@ -1240,8 +1240,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
         width: '10%',
-        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].flowState ? 
-        <FormattedMessage id={getOrderStatusValue('OrderStatus',record.tradeItems[0].flowState)} />
+        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeState && record.tradeState.flowState ? 
+        <FormattedMessage id={getOrderStatusValue('OrderStatus',record.tradeState.flowState)} />
         // deliverStatus(record.tradeItems[0].deliverStatus) 
         : '-'}</div>
       },
@@ -1267,7 +1267,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (this.state.showAddressForm) {
       return (
         <div>
-          <BreadCrumb thirdLevel={true}>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <a href="/subscription-list">
+                <FormattedMessage id="Subscription.Subscription" />
+              </a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="/subscription-list">
+                <FormattedMessage id="Subscription.SubscriptionList" />
+              </a>
+            </Breadcrumb.Item>
             <Breadcrumb.Item>
               <a
                 onClick={(e) => {
@@ -1279,7 +1289,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>{this.state.addressType === 'delivery' ? <FormattedMessage id="Subscription.Delivery information" /> : <FormattedMessage id="Subscription.Billing information" />}</Breadcrumb.Item>
-          </BreadCrumb>
+          </Breadcrumb>
           <DeliveryItem customerId={this.state.customerId} delivery={this.state.addressItem} addressType={this.state.addressType} backToDetail={this.backToSubscriptionEdit} />
         </div>
       );
@@ -1287,9 +1297,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
     return (
       <div>
-        <BreadCrumb thirdLevel={true}>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <a href="/subscription-list">
+              <FormattedMessage id="Subscription.Subscription" />
+            </a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="/subscription-list">
+              <FormattedMessage id="Subscription.SubscriptionList" />
+            </a>
+          </Breadcrumb.Item>
           <Breadcrumb.Item>{<FormattedMessage id="Subscription.edit" />}</Breadcrumb.Item>
-        </BreadCrumb>
+        </Breadcrumb>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           {' '}
           <div className="container-search">

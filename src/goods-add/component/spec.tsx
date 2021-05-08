@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { Checkbox, Input, Select, Button, Row, Col, Icon, Form, message } from 'antd';
-import { noop, cache } from 'qmkit';
+import { noop, cache, RCi18n } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
 import { FormattedMessage } from 'react-intl';
-import { RCi18n } from 'qmkit';
 const Option = Select.Option;
 const FormItem = Form.Item;
 
@@ -347,22 +346,25 @@ class SpecForm extends React.Component<any, any> {
         specDetailId: valueId,
         detailName: item,
         goodsPromotions: goods.get('promotions'),
+        subscriptionStatus: goods.get('subscriptionStatus'),
       });
     });
     updateSpecForm(this.props.form);
     editSpecValues({ specId, specValues });
-    if (value.length == 1) {
+    /*if (value.length == 1) {
       let goods = Map({
         subscriptionStatus: fromJS(1),
       });
       editGoodsItem(goods);
       setFieldsValue({ subscriptionStatus: 1 })
       //setFieldsValue({ subscriptionStatus: 0 });
-    } /*else {
-      let goods = Map({
-        subscriptionStatus: fromJS(0)
+    }
+     else {
+      let goods1 = Map({
+        subscriptionStatus: 111
       });
-      editGoodsItem(goods);
+      editGoodsItem(goods1);
+      setFieldsValue({ subscriptionStatus: 1 })
     }*/
   };
 
@@ -372,7 +374,7 @@ class SpecForm extends React.Component<any, any> {
   _addSpec = () => {
     const { addSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() >= 5) {
-      message.error(<FormattedMessage id="Product.AddUpo5Specifications" />);
+      message.error(RCi18n({id:"Product.AddUpo5Specifications"}));
       return;
     }
     updateSpecForm(this.props.form);
@@ -382,7 +384,7 @@ class SpecForm extends React.Component<any, any> {
   _deleteSpec = (specId: number) => {
     const { deleteSpec, goodsSpecs, updateSpecForm, goodsId, goodsList, addSkUProduct, onProductselectSku } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() <= 1) {
-      message.error(<FormattedMessage id="Product.Keep1SpecificationItem" />);
+      message.error(RCi18n({id:"Product.Keep1SpecificationItem"}));
       return;
     }
     if (goodsId == undefined) {

@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 
 const Reg = require('./image/Reg.png');
 const Bur = require('./image/Bur.png');
-
 export default class ReleaseProducts extends React.Component<any, any> {
   render() {
     return (

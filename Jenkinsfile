@@ -85,6 +85,7 @@ podTemplate(label: label, cloud: 'kubernetes',
                                                   .replaceAll("#APP_REPLICAS","${KUBERNETES_APP_REPLICAS}")
                                                   .replaceAll("#APP_IMAGE_NAME","${dockerImageName}")
                                                   .replaceAll("#APP_PORT","${APP_PORT}")
+                                                  .replaceAll("#SECRET","${SECRET}")
                                                   .replaceAll("#APP_UUID",(new Random().nextInt(100000)).toString())
                     // 生成新的 Kubernetes 部署文件，内容为 deployfile 变量中的文本，文件名称为 "deploy.yaml"
                     writeFile encoding: 'UTF-8', file: './deploy.yaml', text: "${deployfile}"

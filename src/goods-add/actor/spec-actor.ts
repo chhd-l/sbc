@@ -291,7 +291,14 @@ export default class GoodsSpecActor extends Actor {
         .sort((a, b) => a - b)
         .join();
 
-      const sku = goodsList.find((sku) => sku.get('skuSvIds') == skuSvIds);
+      const sku = goodsList.find((sku) => {
+        let curSkuSvIds = sku.get('skuSvIds');
+        if(!curSkuSvIds) {
+          return false
+        } else {
+          return curSkuSvIds.sort((a, b) => a - b).join() == skuSvIds;
+        }
+      });
       return sku ? o.mergeDeep(sku.set('index', o.get('index'))) : o;
     });
 

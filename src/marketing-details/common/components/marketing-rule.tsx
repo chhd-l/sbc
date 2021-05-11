@@ -75,7 +75,7 @@ export default class MarketingRule extends React.Component<any, any> {
                         {level.firstSubscriptionOrderReduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                       </div>
                       <div>
-                        <FormattedMessage id="Marketing.SubscriptionOrderReduction" />
+                        <FormattedMessage id="Marketing.Fortherestsubscriptionorderreduction" />
                         {level.restSubscriptionOrderReduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                       </div>
                     </div>
@@ -86,7 +86,7 @@ export default class MarketingRule extends React.Component<any, any> {
                         {level.firstSubscriptionOrderDiscount * 10} <FormattedMessage id="Marketing.discount" />
                       </div>
                       <div>
-                        <FormattedMessage id="Marketing.theFirstSubscriptionOrder" /> {level.restSubscriptionOrderDiscount * 10} <FormattedMessage id="Marketing.discount" />
+                        <FormattedMessage id="Marketing.Fortherestsubscriptionorder" /> {level.restSubscriptionOrderDiscount * 10} <FormattedMessage id="Marketing.discount" />
                       </div>
                     </div>
                   ) : null}

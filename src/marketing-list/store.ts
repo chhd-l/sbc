@@ -123,12 +123,14 @@ export default class AppStore extends Store {
     message.success('download successful');
   };
   onStart = async (marketingId) => {
-    const { res } = await webapi.start(marketingId);
     this.dispatch('loading:start');
-    if (res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
-    }
-    this.dispatch('loading:end');
-    this.init();
+    const { res } = await webapi.start(marketingId);
+    setTimeout(()=>{
+      if (res.code == Const.SUCCESS_CODE) {
+        message.success('Operate successfully');
+      }
+      this.dispatch('loading:end');
+      this.init();
+    }, 1000)
   };
 }

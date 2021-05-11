@@ -36,10 +36,6 @@ class comment extends Component<any, any> {
     this.editComment = this.editComment.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
-
-  props: {
-    intl: any;
-  };
   componentDidMount() {
     this.searchComment('');
   }

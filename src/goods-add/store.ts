@@ -1564,6 +1564,15 @@ export default class AppStore extends Store {
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor:getGoodsId', result.res.context);
       this.dispatch('goodsActor:goodsId', result.res.context);
+      // 将goodsId注入到每一行，以便判断行是否为保存状态
+      data.get('goodsList').map((item) => {
+        this.dispatch('goodsSpecActor: editGoodsItem', {
+          id: item.get('id'),
+          key: 'goodsId',
+          value: result.res.context
+        });
+      });
+      
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
           return false;

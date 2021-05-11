@@ -286,11 +286,11 @@ export default class TransactionReport extends Component<any, any> {
             value: context.averageBasket,
             rate: context.averageBasketQoQ
           },
-          {
-            name: 'Sales per visitor',
-            value: context.salesPerVisitor,
-            rate: context.salesPerVisitorQoQ
-          }
+          // {
+          //   name: 'Sales per visitor',
+          //   value: context.salesPerVisitor,
+          //   rate: context.salesPerVisitorQoQ
+          // }
         ];
         let subscriptionList = [
           {

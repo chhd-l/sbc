@@ -70,7 +70,7 @@ export default class emails extends Component<any, any> {
             emailLoading: false
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             emailLoading: false
           });
@@ -121,43 +121,45 @@ export default class emails extends Component<any, any> {
           </Dropdown>
         </Col>
         <Col span={24}>
-          {emailList && emailList.length > 0 ? (
-            <Spin spinning={emailLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-              <Timeline>
-                {emailList.map((item, index) => (
-                  <Timeline.Item key={index}>
-                    <Row className="activities-timeline">
-                      <Col span={19}>
-                        <div className="activity-name">{replaceLink(item.activityName, item)}</div>
-                        <div className="activity-type">{item.activityType}</div>
-                      </Col>
-                      <Col span={5}>
-                        <div>
-                          By
-                          <span className="jump-link" style={{ marginLeft: '5px' }}>
-                            {item.createdByUser}
-                          </span>
-                        </div>
-                        <div style={{ marginBottom: '10px' }} className="activity-type">
-                          {item.dateAdded}
-                        </div>
-                      </Col>
-                      <Col span={24}>
-                        <TemplateConponent avtivity={item.emailTaskMessage} />
-                      </Col>
-                    </Row>
-                  </Timeline.Item>
-                ))}
-              </Timeline>
-              <div style={{ textAlign: 'center' }}>
-                <Button type="link" className="jump-link" onClick={() => this.setState({ isRecent: false }, () => this.getEmails())}>
-                  <span>{isRecent ? 'View More' : ''}</span>
-                </Button>
+          <Spin spinning={emailLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            {emailList && emailList.length > 0 ? (
+              <div>
+                <Timeline>
+                  {emailList.map((item, index) => (
+                    <Timeline.Item key={index}>
+                      <Row className="activities-timeline">
+                        <Col span={19}>
+                          <div className="activity-name">{replaceLink(item.activityName, item)}</div>
+                          <div className="activity-type">{item.activityType}</div>
+                        </Col>
+                        <Col span={5}>
+                          <div>
+                            By
+                            <span className="jump-link" style={{ marginLeft: '5px' }}>
+                              {item.createdByUser}
+                            </span>
+                          </div>
+                          <div style={{ marginBottom: '10px' }} className="activity-type">
+                            {item.dateAdded}
+                          </div>
+                        </Col>
+                        <Col span={24}>
+                          <TemplateConponent avtivity={item.emailTaskMessage} />
+                        </Col>
+                      </Row>
+                    </Timeline.Item>
+                  ))}
+                </Timeline>
+                <div style={{ textAlign: 'center' }}>
+                  <Button type="link" className="jump-link" onClick={() => this.setState({ isRecent: false }, () => this.getEmails())}>
+                    <span>{isRecent ? 'View More' : ''}</span>
+                  </Button>
+                </div>
               </div>
-            </Spin>
-          ) : (
-            <Empty />
-          )}
+            ) : (
+              <Empty />
+            )}
+          </Spin>
         </Col>
         {visible ? <AddComment visible={visible} getActivities={() => {}} petOwnerId={this.props.petOwnerId} closeModel={() => this.setState({ visible: false })} /> : null}
       </Row>

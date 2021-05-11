@@ -647,8 +647,7 @@ class SkuForm extends React.Component<any, any> {
         // update
         this.props.form.setFieldsValue(values);
       }
-      // 给用户编辑过Market Price的行打标记
-      editGoodsItem(id, 'userChangeMP', true);
+      
     }
 
     updateBasePrice(id, key, e);

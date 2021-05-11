@@ -92,7 +92,10 @@ export default class AppStore extends Store {
     } else {
       this.dispatch('loading:end');
     }
-    this.init();
+    this.init({
+      pageNum: this.state().get('currentPage') - 1,
+      pageSize: 10
+    });
   };
 
   onPause = async (marketingId) => {
@@ -102,7 +105,10 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
     }
     this.dispatch('loading:end');
-    this.init();
+    this.init({
+      pageNum: this.state().get('currentPage') - 1,
+      pageSize: 10
+    });
   };
 
   close = async (marketingId) => {
@@ -112,7 +118,10 @@ export default class AppStore extends Store {
       message.success('close successful');
     }
     this.dispatch('loading:end');
-    this.init();
+    this.init({
+      pageNum: this.state().get('currentPage') - 1,
+      pageSize: 10
+    });
   };
 
   download = async (marketingId) => {
@@ -121,6 +130,10 @@ export default class AppStore extends Store {
     //   message.success('download successful');
     // }
     message.success('download successful');
+    // this.init({
+    //   pageNum: this.state().get('currentPage') - 1,
+    //   pageSize: 10
+    // });
   };
   onStart = async (marketingId) => {
     this.dispatch('loading:start');
@@ -130,7 +143,14 @@ export default class AppStore extends Store {
         message.success('Operate successfully');
       }
       this.dispatch('loading:end');
-      this.init();
+      this.init({
+        pageNum: this.state().get('currentPage') - 1,
+        pageSize: 10
+      });
     }, 1000)
   };
+
+  onPageChange = (pageNum = 1) => {
+    this.dispatch('list:currentPage', pageNum);
+  }
 }

@@ -119,7 +119,7 @@ export default class Activities extends Component<any, any> {
             activityLoading: false
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             activityLoading: false
           });
@@ -193,44 +193,46 @@ export default class Activities extends Component<any, any> {
           </Dropdown>
         </Col>
         <Col span={24}>
-          {activityList && activityList.length > 0 ? (
-            <Spin spinning={activityLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-              <Timeline>
-                {activityList.map((item, index) => (
-                  <Timeline.Item key={index}>
-                    <Row className="activities-timeline">
-                      <Col span={19}>
-                        <div className="activity-name">{replaceLink(item.activityName, item)}</div>
-                        <div className="activity-type">{item.activityType}</div>
-                      </Col>
-                      <Col span={5}>
-                        <div>
-                          By
-                          <span className="jump-link" style={{ marginLeft: '5px' }}>
-                            {item.createdByUser}
-                          </span>
-                        </div>
-                        <div style={{ marginBottom: '10px' }} className="activity-type">
-                          {item.dateAdded}
-                        </div>
-                      </Col>
-                      <Col span={24}>{/* <template-conponent
+          <Spin spinning={activityLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            {activityList && activityList.length > 0 ? (
+              <div>
+                <Timeline>
+                  {activityList.map((item, index) => (
+                    <Timeline.Item key={index}>
+                      <Row className="activities-timeline">
+                        <Col span={19}>
+                          <div className="activity-name">{replaceLink(item.activityName, item)}</div>
+                          <div className="activity-type">{item.activityType}</div>
+                        </Col>
+                        <Col span={5}>
+                          <div>
+                            By
+                            <span className="jump-link" style={{ marginLeft: '5px' }}>
+                              {item.createdByUser}
+                            </span>
+                          </div>
+                          <div style={{ marginBottom: '10px' }} className="activity-type">
+                            {item.dateAdded}
+                          </div>
+                        </Col>
+                        <Col span={24}>{/* <template-conponent
                   templateType="email"
                   width="95%"
                 ></template-conponent> */}</Col>
-                    </Row>
-                  </Timeline.Item>
-                ))}
-              </Timeline>
-              <div style={{ textAlign: 'center' }}>
-                <Button type="link" className="jump-link" onClick={() => this.setState({ isRecent: false }, () => this.getActivities())}>
-                  <span>{isRecent ? 'View More' : ''}</span>
-                </Button>
+                      </Row>
+                    </Timeline.Item>
+                  ))}
+                </Timeline>
+                <div style={{ textAlign: 'center' }}>
+                  <Button type="link" className="jump-link" onClick={() => this.setState({ isRecent: false }, () => this.getActivities())}>
+                    <span>{isRecent ? 'View More' : ''}</span>
+                  </Button>
+                </div>
               </div>
-            </Spin>
-          ) : (
-            <Empty />
-          )}
+            ) : (
+              <Empty />
+            )}
+          </Spin>
         </Col>
         {visible ? (
           <AddComment

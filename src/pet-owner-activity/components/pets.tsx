@@ -7,6 +7,7 @@ const dog = require('../components/image/dog.png');
 const dogFemale = require('../components/image/dog2.png');
 import * as webapi from '../webapi';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { parseInt } from 'lodash';
 
 export default class pets extends Component<any, any> {
   constructor(props) {
@@ -30,20 +31,22 @@ export default class pets extends Component<any, any> {
 
   getPetAgeString(item) {
     let ageString = '';
-    if (item.petAgeYear < 1 && item.petAgeMonth <= 1) {
-      ageString = item.petAgeMonth + ' Month';
-    } else if (item.petAgeYear < 1 && item.petAgeMonth > 1) {
-      ageString = item.petAgeMonth + ' Months';
-    } else if (item.petAgeYear === 1 && item.petAgeMonth < 1) {
-      ageString = item.petAgeYear + ' Year';
-    } else if (item.petAgeYear > 1 && item.petAgeMonth < 1) {
-      ageString = item.petAgeYear + ' Years';
-    } else if (item.petAgeYear === 1 && item.petAgeMonth === 1) {
-      ageString = item.petAgeYear + ' Year ' + item.petAgeMonth + ' Month';
-    } else if (item.petAgeYear === 1 && item.petAgeMonth > 1) {
-      ageString = item.petAgeYear + ' Year ' + item.petAgeMonth + ' Months';
-    } else if (item.petAgeYear > 1 && item.petAgeMonth > 1) {
-      ageString = item.petAgeYear + ' Years ' + item.petAgeMonth + ' Months';
+    let petAgeYear = item.petAgeYear ? parseInt(item.petAgeYear) : 0
+    let petAgeMonth = item.petAgeMonth ? parseInt(item.petAgeMonth) : 0
+    if (petAgeYear < 1 && petAgeMonth <= 1) {
+      ageString = petAgeMonth + ' Month';
+    } else if (petAgeYear < 1 && petAgeMonth > 1) {
+      ageString = petAgeMonth + ' Months';
+    } else if (petAgeYear === 1 && petAgeMonth < 1) {
+      ageString = petAgeYear + ' Year';
+    } else if (petAgeYear > 1 && petAgeMonth < 1) {
+      ageString = petAgeYear + ' Years';
+    } else if (petAgeYear === 1 && petAgeMonth === 1) {
+      ageString = petAgeYear + ' Year ' + petAgeMonth + ' Month';
+    } else if (petAgeYear === 1 && petAgeMonth > 1) {
+      ageString = petAgeYear + ' Year ' + petAgeMonth + ' Months';
+    } else if (petAgeYear > 1 && petAgeMonth > 1) {
+      ageString = petAgeYear + ' Years ' + petAgeMonth + ' Months';
     }
     return ageString;
   }

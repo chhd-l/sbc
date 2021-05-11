@@ -132,7 +132,7 @@ class ModalForm extends Component<Props, any> {
               ]
             })(<Input type="number" placeholder="Please input  frequency value!" />)}
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             label={
               <span className="ant-form-item-required">
                 <FormattedMessage id="Product.DisplayName" />
@@ -153,7 +153,7 @@ class ModalForm extends Component<Props, any> {
                   })(<Input placeholder={item.name} />)}
                 </Form.Item>
               ))}
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       </Modal>
     );

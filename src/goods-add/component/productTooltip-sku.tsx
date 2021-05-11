@@ -168,7 +168,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
 
         // 设置Market Price
         let curGoodsItem = goodsList.toJS().filter(item => item.id === this.props.id)[0]
-        if(curGoodsItem) {
+        if(curGoodsItem && !curGoodsItem.goodsId) {
           let subscriptionPrice = 0;
           let marketPrice = goodsIds.reduce((sum, item) => {
             subscriptionPrice += item.subscriptionPrice * item.bundleNum;

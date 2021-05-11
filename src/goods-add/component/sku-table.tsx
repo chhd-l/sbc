@@ -792,7 +792,7 @@ class SkuForm extends React.Component<any, any> {
     let {editGoodsItem} = this.props.relaxProps;
     let id = row.id
     let subGoods = row.goodsInfoBundleRels;
-    if(row.userChangeMP || row.goodsId) {
+    if(row.goodsId) {
       return;
     }
     let subscriptionPrice = 0;

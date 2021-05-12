@@ -69,6 +69,13 @@ export default class Main extends React.Component<any, any> {
   }
 
   handlePathMatched = (path) => {
+   let recommendation_params= JSON.parse(sessionStorage.getItem('recommendation_params')||'[]')
+
+   if(recommendation_params.length===2){
+    recommendation_params.shift()
+   }
+   recommendation_params.push(path)
+   sessionStorage.setItem('recommendation_params',JSON.stringify(recommendation_params))
     this.setState({
       matchedPath: path
     });

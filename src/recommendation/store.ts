@@ -28,10 +28,22 @@ export default class AppStore extends Store {
    * @param pageNum
    * @param pageSize
    */
-  init = async ({ pageNum, pageSize,...result } = { pageNum: 0, pageSize: 10 }) => {
+  init = async ({ pageNum, pageSize, ...result } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
+    let recommendation_params= JSON.parse(sessionStorage.getItem('recommendation_params')||'[]')
+   
+   let loop=  recommendation_params.every(item=>item.indexOf('recommendation')>-1);
+    let params={  ...result, pageNum, pageSize }
+    if(loop){
+     params= JSON.parse(sessionStorage.getItem('search_params')||'{}')
+     this.dispatch('form:clear');
+      this.dispatch('form:field', params);
+    }else{
+      sessionStorage.removeItem('search_params');
+    }
 
-    webapi.fetchOrderList({  ...result, pageNum, pageSize }).then(({ res }) => {
+  //  debugger
+    webapi.fetchOrderList(params).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
         this.transaction(() => {
           this.dispatch('loading:end');
@@ -76,6 +88,7 @@ export default class AppStore extends Store {
     this.dispatch('form:clear');
     this.dispatch('form:field', params);
     this.init({ pageNum: 0, pageSize: 10,...params });
+   sessionStorage.setItem('search_params',JSON.stringify({  ...params, pageNum: 0, pageSize: 10 }))
   };
 
   /**

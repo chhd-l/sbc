@@ -77,11 +77,7 @@ class SearchHead extends Component<any, any> {
       subscriptionPlanType: '',
       codeSelect: 'promotionCode',
       codeSelectValue: '',
-      planTypeList: [
-        { value: 'Cat ', name: props.intl.formatMessage({id:'Order.cat'}), rel: 'club' },
-        { value: 'Dog', name: props.intl.formatMessage({id:'Order.dog'}), rel: 'club' },
-        { value: 'SmartFeeder', name: props.intl.formatMessage({id:'Order.smartFeeder'}), rel: 'contractProduct' }
-      ]
+      planTypeList: []
     };
   }
 
@@ -395,7 +391,7 @@ class SearchHead extends Component<any, any> {
                       style={styles.wrapper}
                       allowClear
                       value={subscriptionPlanType}
-                      disabled={orderType === 'SINGLE_PURCHASE'}
+                      disabled={planTypeList.length<1}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         this.setState({

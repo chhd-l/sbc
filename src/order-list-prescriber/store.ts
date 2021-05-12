@@ -260,7 +260,7 @@ export default class AppStore extends Store {
         let base64 = new util.Base64();
         const token = (window as any).token;
         if (token) {
-          let result = JSON.stringify({ ...params, token: token });
+          let result = JSON.stringify({ ...params, from: 'prescriber', token: token });
           let encrypted = base64.urlEncode(result);
 
           // 新窗口下载

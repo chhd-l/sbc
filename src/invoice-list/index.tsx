@@ -501,11 +501,13 @@ class InvoiceList extends Component<any, any> {
             {+record.delFlag === 1 ? null : (
               <div>
                 {record.invoiceState === 0 ? (
-                  <Popconfirm placement="topLeft" title={<FormattedMessage id="Finance.doThis" />} onConfirm={() => this.invoice(record.orderInvoiceId)} okText={<FormattedMessage id="Finance.Confirm" />} cancelText={<FormattedMessage id="Finance.Cancel" />}>
+                  <>
+                  {/* <Popconfirm placement="topLeft" title={<FormattedMessage id="Finance.doThis" />} onConfirm={() => this.invoice(record.orderInvoiceId)} okText={<FormattedMessage id="Finance.Confirm" />} cancelText={<FormattedMessage id="Finance.Cancel" />}>
                     <Tooltip placement="top" title={<FormattedMessage id="Finance.Invoice" />}>
                       <a className="iconfont iconkaipiao"></a>
                     </Tooltip>
-                  </Popconfirm>
+                </Popconfirm> */}
+                  </>
                 ) : (
                   <>
                     {/* <Tooltip placement="top" title="Details">
@@ -544,11 +546,11 @@ class InvoiceList extends Component<any, any> {
     };
     const menu = (
       <Menu>
-        <Menu.Item>
+        {/* <Menu.Item>
           <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchInvoice()}>
             <FormattedMessage id="Finance.BatchInvoice" />
           </a>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item>
           <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchDownload()}>
             <FormattedMessage id="Finance.BatchDownload" />

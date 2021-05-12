@@ -17,7 +17,7 @@ export default class ListActor extends Actor {
       dataList: [],
       selected: [],
       // 当前页数，从1开始
-      currentPage: 1,
+      currentPage: 0,
       // 导出对话框 modal状态
       exportModalData: {}
     };

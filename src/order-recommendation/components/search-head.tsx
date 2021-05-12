@@ -278,7 +278,7 @@ class SearchHead extends Component<any, any> {
                         [goodsOptions == 'Product name' ? 'goodsInfoName' : 'goodsInfoNo']: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
                         [clinicSelect == 'clinicsName' ? 'prescriberName' : 'prescriberId']: clinicSelectValue,
-                        linkStatus
+                        //linkStatus
                       };
                       onSearch(params);
                     }}

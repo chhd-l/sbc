@@ -24,7 +24,7 @@ export default class AppStore extends Store {
     const {res}=await webapi.fetchCheckedExpress()
    
     if(res.code===Const.SUCCESS_CODE){
-    this.dispatch('list:table', res.context)
+    this.dispatch('list:table', res.context ? res.context : [])
     }
 
     this.dispatch('loading:end')

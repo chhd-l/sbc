@@ -417,7 +417,7 @@ class SearchHead extends Component<any, any> {
                           style={styles.wrapper}
                           allowClear
                           value={subscriptionPlanType}
-                          // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                          disabled={subscriptionPlanTypeList.length<1}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({

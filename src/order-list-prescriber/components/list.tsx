@@ -3,44 +3,12 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, cache, RCi18n } from 'qmkit';
+import { noop, Const, AuthWrapper, cache, getOrderStatusValue, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
 const defaultImg = require('../../goods-list/img/none.png');
-
-const deliverStatus = (status) => {
-  if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="Order.notShipped" />;
-  } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="Order.allShipments" />;
-  } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="Order.partialShipment" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="Order.invalid" />;
-  } else {
-    return <FormattedMessage id="Order.unknown" />;
-  }
-};
-
-const payStatus = (status) => {
-  if (status == 'NOT_PAID') {
-    return <FormattedMessage id="Order.unpaid" />;
-  } else if (status == 'UNCONFIRMED') {
-    return <FormattedMessage id="Order.toBeConfirmed" />;
-  } else if (status == 'PAID') {
-    return <FormattedMessage id="Order.paid" />;
-  } else if (status == 'REFUND') {
-    return <FormattedMessage id="Order.Refund" />;
-  } else if (status == 'PAYING') {
-    return <FormattedMessage id="Order.Paying" />;
-  } else {
-    return <FormattedMessage id="Order.unknown" />;
-  }
-};
-
-
 type TList = List<any>;
 
 class RejectForm extends React.Component<any, any> {
@@ -63,7 +31,7 @@ class RejectForm extends React.Component<any, any> {
             ]
           })(
             <div>
-              <Input.TextArea placeholder={(window as any).RCi18n({id:'Order.Comment'})} autosize={{ minRows: 4, maxRows: 4 }} />
+              <Input.TextArea placeholder={(window as any).RCi18n({ id: 'Order.Comment' })} autosize={{ minRows: 4, maxRows: 4 }} />
               <p>
                 <span
                   style={{
@@ -110,7 +78,7 @@ class ListView extends React.Component<any, any> {
 
   props: {
     histroy?: Object;
-    intl?:any;
+    intl?: any;
     relaxProps?: {
       loading: boolean;
       orderRejectModalVisible: boolean;
@@ -338,7 +306,11 @@ class ListView extends React.Component<any, any> {
                                 <FormattedMessage id="Order.fightTogether" />
                               </span>
                             )}
-                            {v.get('isAutoSub') && <span style={styles.platform}><FormattedMessage id="Order.subscription" /></span>}
+                            {v.get('isAutoSub') && (
+                              <span style={styles.platform}>
+                                <FormattedMessage id="Order.subscription" />
+                              </span>
+                            )}
                             {v.get('isAutoSub') ? (
                               <span
                                 style={{
@@ -417,15 +389,17 @@ class ListView extends React.Component<any, any> {
                               </AuthWrapper>
                             )}
                           {/*部分发货状态显示*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') && (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') && v.getIn(['tradeState', 'payState']) === 'PAID' && (
-                            <AuthWrapper functionName="fOrderDetail002">
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
-                                <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
-                                  {/*<FormattedMessage id="order.ship" />*/}
-                                </a>
-                              </Tooltip>
-                            </AuthWrapper>
-                          )}
+                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&
+                            (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') &&
+                            v.getIn(['tradeState', 'payState']) === 'PAID' && (
+                              <AuthWrapper functionName="fOrderDetail002">
+                                <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                                  <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
+                                    {/*<FormattedMessage id="order.ship" />*/}
+                                  </a>
+                                </Tooltip>
+                              </AuthWrapper>
+                            )}
                           {/*待收货状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'DELIVERED' && (
                             <AuthWrapper functionName="fOrderList003">
@@ -441,9 +415,9 @@ class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
-                          <AuthWrapper functionName="fOrderDetail001">
+                          <AuthWrapper functionName="fOrderDetail001_prescriber">
                             <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
-                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails">
+                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail-prescriber/${id}`} className="iconfont iconDetails">
                                 {/*<FormattedMessage id="order.seeDetails" />*/}
                               </Link>
                             </Tooltip>
@@ -525,12 +499,15 @@ class ListView extends React.Component<any, any> {
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '10%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
+                    <td style={{ width: '10%' }}>
+                      {' '}
+                      <FormattedMessage id={getOrderStatusValue('ShippStatus', v.getIn(['tradeState', 'deliverStatus']))} />
+                    </td>
                     {/*订单状态*/}
                     <td style={{ width: '10%' }}>{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>
                     {/*支付状态*/}
                     <td style={{ width: '10%', paddingRight: 22 }} className="operation-td">
-                      {payStatus(v.getIn(['tradeState', 'payState']))}
+                      <FormattedMessage id={getOrderStatusValue('PaymentStatus', v.getIn(['tradeState', 'payState']))} />
                     </td>
                   </tr>
                 </tbody>
@@ -560,8 +537,8 @@ class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = (window as any).RCi18n({id:'Order.review'});
-    const content = (window as any).RCi18n({id:'Order.confirmReview'});
+    const title = (window as any).RCi18n({ id: 'Order.review' });
+    const content = (window as any).RCi18n({ id: 'Order.confirmReview' });
     confirm({
       title: title,
       content: content,
@@ -590,7 +567,7 @@ class ListView extends React.Component<any, any> {
     const { onAudit } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
-    const content = (window as any).RCi18n({id:'Order.Doyouconfirmthat'});
+    const content = (window as any).RCi18n({ id: 'Order.Doyouconfirmthat' });
     confirmModal({
       content: content,
       onOk() {
@@ -609,8 +586,8 @@ class ListView extends React.Component<any, any> {
     const { onConfirm } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
-    const title = (window as any).RCi18n({id:'Order.ConfirmReceipt'});
-    const content = (window as any).RCi18n({id:'Order.confirmReceivedAllProducts'});
+    const title = (window as any).RCi18n({ id: 'Order.ConfirmReceipt' });
+    const content = (window as any).RCi18n({ id: 'Order.confirmReceivedAllProducts' });
     confirm({
       title: title,
       content: content,

@@ -23,7 +23,7 @@ export default class DepartTree extends React.Component<any, any> {
     const { departTree, defaultExpandedKeys, click } = this.props.relaxProps;
     return (
       <div id="organization">
-        <Tree disabled={click}  defaultExpandedKeys={defaultExpandedKeys} style={{ padding: 6, fontWeight: 100 }} onSelect={this.onChange}>
+        <Tree disabled={click}  defaultExpandAll style={{ padding: 6, fontWeight: 100 }} onSelect={this.onChange}>
           {this._loop(departTree)}
         </Tree>
       </div>

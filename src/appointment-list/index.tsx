@@ -15,12 +15,17 @@ export default class AppointmentList extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
+    let lastParams = { current: 1 };
+    if(sessionStorage.getItem('remember-appointment-list-params')) {
+      lastParams = JSON.parse(sessionStorage.getItem('appointment-list-params') || '{\"current\": 1 }');
+    }
+    const { current, ...rest } = lastParams;
     this.state = {
       loading: false,
       list: [],
-      searchForm: {},
+      searchForm: rest,
       pagination: {
-        current: 1,
+        current: current,
         pageSize: 10,
         total: 0
       },
@@ -40,6 +45,11 @@ export default class AppointmentList extends React.Component<any, any> {
 
   componentDidMount() {
     this.getAppointmentList();
+  }
+
+  componentWillUnmount() {
+    //删掉需要记住筛选参数的标记
+    sessionStorage.removeItem('remember-appointment-list-params');
   }
 
   getAppointmentList = () => {
@@ -63,7 +73,8 @@ export default class AppointmentList extends React.Component<any, any> {
   };
 
   onSearch = () => {
-    const { pagination } = this.state;
+    const { pagination, searchForm } = this.state;
+    sessionStorage.setItem('appointment-list-params', JSON.stringify({ ...searchForm, current: 1 }));
     this.onTableChange({
       ...pagination,
       current: 1
@@ -71,6 +82,8 @@ export default class AppointmentList extends React.Component<any, any> {
   };
 
   onTableChange = (pagination) => {
+    const { searchForm } = this.state;
+    sessionStorage.setItem('appointment-list-params', JSON.stringify({ ...searchForm, current: pagination.current }));
     this.setState(
       {
         pagination: pagination
@@ -253,7 +266,7 @@ export default class AppointmentList extends React.Component<any, any> {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectedRowKeys
     };
-    const { loading, list, pagination } = this.state;
+    const { loading, list, pagination, searchForm } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -265,6 +278,7 @@ export default class AppointmentList extends React.Component<any, any> {
                 <FormItem>
                   <Input
                     addonBefore={<p style={styles.label}>{<FormattedMessage id="Appointment.No." />}</p>}
+                    defaultValue={searchForm.apptNo}
                     onChange={(e) => {
                       const value = (e.target as any).value || undefined;
                       this.onSearchFormFieldChange('apptNo', value);
@@ -285,13 +299,14 @@ export default class AppointmentList extends React.Component<any, any> {
               </Col>
               <Col span={8}>
                 <FormItem>
-                  <DatePicker format="YYYYMMDD" placeholder={RCi18n({id:'Appointment.Start time'})} onChange={(date, dateStr) => this.onSearchFormFieldChange('apptDate', dateStr || undefined)} />
+                  <DatePicker format="YYYYMMDD" defaultValue={searchForm.apptDate ? moment(searchForm.apptDate, 'YYYYMMDD') : null} placeholder={RCi18n({id:'Appointment.Start time'})} onChange={(date, dateStr) => this.onSearchFormFieldChange('apptDate', dateStr || undefined)} />
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem>
                   <Input
                     addonBefore={<p style={styles.label}>{<FormattedMessage id="Appointment.Email" />}</p>}
+                    defaultValue={searchForm.consumerEmail}
                     onChange={(e) => {
                       const value = (e.target as any).value || undefined;
                       this.onSearchFormFieldChange('consumerEmail', value);
@@ -302,7 +317,7 @@ export default class AppointmentList extends React.Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <SelectGroup
-                    defaultValue=""
+                    defaultValue={searchForm.status}
                     label={<p style={styles.label}>{<FormattedMessage id="Appointment.Status" />}</p>}
                     style={{ width: 80 }}
                     onChange={(value) => {

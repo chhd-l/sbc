@@ -381,17 +381,22 @@ class TodoItems extends React.Component<any, any> {
                         </div>
                       </div>
                     </div>
+
+                    {/**
+                      * 不展示Retention rate
+                      * @author weili
+                      */}
                     <div className="transaction-l space-around">
-                      <div className="text"><FormattedMessage id="Home.Retentionrate"/></div>
-                      <div className="num">
-                        <div className="num-l">{tradeCustomerView && tradeCustomerView.retentionRate != null ? <CountUp end={tradeCustomerView.retentionRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</div>
-                        <div className="num-r">
-                          {tradeCustomerView && tradeCustomerView.retentionRateRate != null ? <img src={tradeCustomerView.retentionRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                          <span className={tradeCustomerView && tradeCustomerView.retentionRateRate != null ? (tradeCustomerView.retentionRateRate >= 0 ? 'green' : 'red') : ''}>
-                            {tradeCustomerView && tradeCustomerView.retentionRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.retentionRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                          </span>
-                        </div>
-                      </div>
+                      {/*<div className="text"><FormattedMessage id="Home.Retentionrate"/></div>*/}
+                      {/*<div className="num">*/}
+                      {/*  <div className="num-l">{tradeCustomerView && tradeCustomerView.retentionRate != null ? <CountUp end={tradeCustomerView.retentionRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</div>*/}
+                      {/*  <div className="num-r">*/}
+                      {/*    {tradeCustomerView && tradeCustomerView.retentionRateRate != null ? <img src={tradeCustomerView.retentionRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}*/}
+                      {/*    <span className={tradeCustomerView && tradeCustomerView.retentionRateRate != null ? (tradeCustomerView.retentionRateRate >= 0 ? 'green' : 'red') : ''}>*/}
+                      {/*      {tradeCustomerView && tradeCustomerView.retentionRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.retentionRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}*/}
+                      {/*    </span>*/}
+                      {/*  </div>*/}
+                      {/*</div>*/}
                     </div>
                   </div>
                 </div>

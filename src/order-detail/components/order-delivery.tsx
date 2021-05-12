@@ -85,7 +85,6 @@ class OrderDelivery extends React.Component<any, any> {
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
-    const paymentOrder = detail.get('paymentOrder');
 
     //处理赠品
     const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map((gift) =>
@@ -105,7 +104,7 @@ class OrderDelivery extends React.Component<any, any> {
           }}
         >
           <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />
-          {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && payState === 'PAID' ? (
+          {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID' || payState === 'AUTHORIZED') ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
                 <Button type="primary" loading={isFetchingLogistics} onClick={() => deliver()}>

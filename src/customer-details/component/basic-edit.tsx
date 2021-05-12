@@ -137,6 +137,7 @@ class BasicEdit extends React.Component<any, any> {
           customerDetailId: customer.customerDetailId,
           communicationEmail: fieldsValue['preferredMethods'].indexOf('communicationEmail') > -1 ? 1 : 0,
           communicationPhone: fieldsValue['preferredMethods'].indexOf('communicationPhone') > -1 ? 1 : 0,
+          communicationPrint: fieldsValue['preferredMethods'].indexOf('communicationPrint') > -1 ? 1 : 0,
           preferredMethods: undefined,
           createTime: undefined
         };
@@ -175,7 +176,8 @@ class BasicEdit extends React.Component<any, any> {
       postalCode: basicForm.postalCode,
       reference: basicForm.reference,
       communicationPhone: JSON.stringify(basicForm.preferredMethods).indexOf('Phone') > -1 ? 1 : 0,
-      communicationEmail: JSON.stringify(basicForm.preferredMethods).indexOf('Email') > -1 ? 1 : 0
+      communicationEmail: JSON.stringify(basicForm.preferredMethods).indexOf('Email') > -1 ? 1 : 0,
+      communicationPrint: JSON.stringify(basicForm.preferredMethods).indexOf('Print') > -1 ? 1 : 0,
     };
 
     webapi.basicDetailsUpdate(params).then((data) => {
@@ -283,6 +285,10 @@ class BasicEdit extends React.Component<any, any> {
       {
         label: 'Email',
         value: 'communicationEmail'
+      },
+      {
+        label: 'Message',
+        value: 'communicationPrint'
       }
     ];
     const formItemLayout = {
@@ -517,7 +523,7 @@ class BasicEdit extends React.Component<any, any> {
                             message: 'Please Select Preferred methods of communication!'
                           }
                         ],
-                        initialValue: ['communicationPhone', 'communicationEmail'].reduce((prev, curr) => {
+                        initialValue: ['communicationPhone', 'communicationEmail', 'communicationPrint'].reduce((prev, curr) => {
                           if (+customer[curr]) {
                             prev.push(curr);
                           }
@@ -526,10 +532,10 @@ class BasicEdit extends React.Component<any, any> {
                       })(<Checkbox.Group options={options} />)
                     ) : (
                       <span>
-                        {['Email', 'Phone']
+                        {['Email', 'Phone', 'Print']
                           .reduce((prev, curr) => {
                             if (+customer[`communication${curr}`]) {
-                              prev.push(curr);
+                              prev.push(curr === 'Print' ? 'Message' : curr);
                             }
                             return prev;
                           }, [])

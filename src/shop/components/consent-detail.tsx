@@ -379,7 +379,8 @@ class StepConsentDetail extends Component<any, any> {
                       toolbars={[
                         // 'fontName', // 字体
                         'foreColor', // 文字颜色
-                        'link' // 插入链接
+                        'link', // 插入链接
+                        'fullScreen'
                       ]}
                       onContentChange={this.handleEditorChange}
                       content={editor}
@@ -452,7 +453,8 @@ class StepConsentDetail extends Component<any, any> {
                             toolbars={[
                               // 'fontName', // 字体
                               'foreColor', // 文字颜色
-                              'link' // 插入链接
+                              'link', // 插入链接
+                              'fullScreen'
                             ]}
                             content={item.contentBody}
                             height={300}

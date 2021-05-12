@@ -31,8 +31,7 @@ export default class GoodsSpecActor extends Actor {
           subscriptionPrice: 0,
           stock: 0,
           goodsInfoBundleRels: [],
-          specType: false,
-          userChangeMP: false
+          specType: false
         }
       ],
       stockChecked: false,
@@ -230,6 +229,20 @@ export default class GoodsSpecActor extends Actor {
   }
 
   /**
+   * 更新规格里specValues里的属性值
+   * @param state 
+   * @param {specId, key, value} 
+   * @returns 
+   */
+  @Action('goodsSpecActor: updateSpecValues')
+  updateSpecValues(state, { specId, key, value }) {
+    return state.update('goodsSpecs', (goodsSpecs) => {
+      const index = goodsSpecs.findIndex((item) => item.get('specId') == specId);
+      return goodsSpecs.update(index, (item) => item.set(key, value));
+    });
+  }
+
+  /**
    * 添加规格
    */
   @Action('goodsSpecActor: deleteSpec')
@@ -292,7 +305,14 @@ export default class GoodsSpecActor extends Actor {
         .sort((a, b) => a - b)
         .join();
 
-      const sku = goodsList.find((sku) => sku.get('skuSvIds') == skuSvIds);
+      const sku = goodsList.find((sku) => {
+        let curSkuSvIds = sku.get('skuSvIds');
+        if(!curSkuSvIds) {
+          return false
+        } else {
+          return curSkuSvIds.sort((a, b) => a - b).join() == skuSvIds;
+        }
+      });
       return sku ? o.mergeDeep(sku.set('index', o.get('index'))) : o;
     });
 

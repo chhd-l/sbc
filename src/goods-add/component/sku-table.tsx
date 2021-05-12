@@ -717,7 +717,6 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any, rowIndex?: number) => {
-    console.log(rowIndex, "=======rowIndex======");
     const { editGoodsItem, synchValue, editGoods, goodsList, addSkUProduct } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
@@ -786,14 +785,14 @@ class SkuForm extends React.Component<any, any> {
 
   /**
    * 修改某一行商品Sub-SKU个数及其bundle数量时，计算 marketPrice
-   * @param rowIndex
+   * @param row
    */
 
   _calculatePrice = (row) => {
     let {editGoodsItem} = this.props.relaxProps;
     let id = row.id
     let subGoods = row.goodsInfoBundleRels;
-    if(row.userChangeMP) {
+    if(row.goodsId) {
       return;
     }
     let subscriptionPrice = 0;

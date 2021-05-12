@@ -1337,6 +1337,8 @@ export default {
         'Marketing.Singlepurchase': 'Single purchase',
         'Marketing.Automationlist': 'Automation list',
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
+        'Marketing.Fortherestsubscriptionorder': 'For the rest subscription order, discount ',
+        'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',
         
         "Marketing.PromotionType": "Promotion type",
         "Marketing.NormalPromotion": "Normal promotion",

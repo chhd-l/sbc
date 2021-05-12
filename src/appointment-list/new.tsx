@@ -27,6 +27,8 @@ class NewAppointment extends React.Component<any, any> {
   }
 
   componentDidMount() {
+    //标记返回appointment list时需要记住筛选参数
+    sessionStorage.setItem('remember-appointment-list-params', '1');
     if (this.props.match.params.id) {
       this.getAppointmentById(this.props.match.params.id);
     }

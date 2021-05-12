@@ -1239,7 +1239,8 @@ class FullReductionForm extends React.Component<any, any> {
         }),
         onOk() {
           for (let i = 0; i < marketingBean.get(levelType).size; i++) {
-            _thisRef.props.form.resetFields(`level_${i}`);
+            // _thisRef.props.form.resetFields(`level_${i}`);
+            _thisRef.props.form.resetFields()
           }
           let beanObject = {
             // [levelType]: fromJS([]),

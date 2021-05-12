@@ -21,7 +21,7 @@ export default class PetOwnerActivity extends Component<any, any> {
     this.state = {
       activityKey: '',
       id: this.props.match.params.id ? this.props.match.params.id : '',
-      title: RCi18n({id:'PetOwner.PetOwneractivity'}),
+      title: RCi18n({ id: 'PetOwner.PetOwneractivity' }),
       petOwner: {},
       loading: false
     };
@@ -66,7 +66,7 @@ export default class PetOwnerActivity extends Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{RCi18n({id:'PetOwner.PetOwneractivity'})}</Breadcrumb.Item>
+          <Breadcrumb.Item>{RCi18n({ id: 'PetOwner.PetOwneractivity' })}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
           <Row>
@@ -88,7 +88,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               <AuthWrapper functionName="f_petowner_create_order_button">
                 {petOwner.customerName ? (
                   <Button type="primary" onClick={() => history.push({ pathname: '/order-add', query: { customerId: id, customerName: petOwner.customerName, customerAccount: petOwner.customerAccount } })}>
-                    {RCi18n({id:'PetOwner.createOrder'})}
+                    {RCi18n({ id: 'PetOwner.createOrder' })}
                   </Button>
                 ) : null}
               </AuthWrapper>
@@ -96,46 +96,46 @@ export default class PetOwnerActivity extends Component<any, any> {
           </Row>
         </div>
         <div className="container petOwnerActivity">
-          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-            <Row gutter={10} style={{ marginBottom: '20px' }}>
-              <Col span={6}>
+          <Row gutter={10} style={{ marginBottom: '20px' }}>
+            <Col span={6}>
+              <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
                 <PetOwner petOwner={petOwner} />
                 <div style={{ marginTop: '20px' }}></div>
                 <Pets petOwnerId={id} customerAccount={petOwner.customerAccount} />
-              </Col>
-              <Col span={10} id="middle">
-                <Card>
-                  <Tabs
-                    defaultActiveKey={hasTaskRole ? '1' : '2'}
-                    onChange={(key) =>
-                      this.setState({
-                        activityKey: key
-                      })
-                    }
-                  >
-                    {hasTaskRole ? (
-                      <TabPane tab={RCi18n({id:'PetOwner.Task'})} key="1">
-                        <Tasks petOwnerId={id} petOwner={petOwner} />
-                      </TabPane>
-                    ) : null}
-                    <TabPane tab={RCi18n({id:'PetOwner.Emails'})} key="2">
-                      <Emails petOwnerId={id}  petOwner={petOwner}/>
+              </Spin>
+            </Col>
+            <Col span={10} id="middle">
+              <Card>
+                <Tabs
+                  defaultActiveKey={hasTaskRole ? '1' : '2'}
+                  onChange={(key) =>
+                    this.setState({
+                      activityKey: key
+                    })
+                  }
+                >
+                  {hasTaskRole ? (
+                    <TabPane tab={RCi18n({ id: 'PetOwner.Task' })} key="1">
+                      <Tasks petOwnerId={id} petOwner={petOwner} />
                     </TabPane>
-                    <TabPane tab={RCi18n({id:'PetOwner.Activities'})} key="3">
-                      {activityKey === '3' ? <Activities petOwnerId={id}  petOwner={petOwner}/> : null}
-                    </TabPane>
-                  </Tabs>
-                </Card>
+                  ) : null}
+                  <TabPane tab={RCi18n({ id: 'PetOwner.Emails' })} key="2">
+                    <Emails petOwnerId={id} petOwner={petOwner} />
+                  </TabPane>
+                  <TabPane tab={RCi18n({ id: 'PetOwner.Activities' })} key="3">
+                    {activityKey === '3' ? <Activities petOwnerId={id} petOwner={petOwner} /> : null}
+                  </TabPane>
+                </Tabs>
+              </Card>
+            </Col>
+            {petOwner.email ? (
+              <Col span={8}>
+                <Orders petOwnerId={id} />
+                <div style={{ marginTop: '20px' }}></div>
+                <Bookings customerAccount={petOwner.customerAccount} />
               </Col>
-              {petOwner.email ? (
-                <Col span={8}>
-                  <Orders petOwnerId={id} />
-                  <div style={{ marginTop: '20px' }}></div>
-                  <Bookings customerAccount={petOwner.customerAccount} />
-                </Col>
-              ) : null}
-            </Row>
-          </Spin>
+            ) : null}
+          </Row>
         </div>
       </div>
     );

@@ -59,6 +59,7 @@ class MarketingList extends React.Component<any, any> {
       onStart: Function;
       close: Function;
       download: Function;
+      onPageChange: Function;
     };
   };
 
@@ -75,11 +76,12 @@ class MarketingList extends React.Component<any, any> {
     customerLevels: ['customerLevels'],
     onStart: noop,
     close: noop,
-    download: noop
+    download: noop,
+    onPageChange: noop
   };
 
   render() {
-    const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart, download } = this.props.relaxProps;
+    const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart, download, onPageChange } = this.props.relaxProps;
     return (
       <DataGrid
         loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
@@ -91,6 +93,7 @@ class MarketingList extends React.Component<any, any> {
           pageSize: pageSize,
           total: total,
           onChange: (pageNum, pageSize) => {
+            onPageChange(pageNum)
             init({ pageNum: pageNum - 1, pageSize });
           }
         }}

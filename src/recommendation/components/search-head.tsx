@@ -6,6 +6,7 @@ import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { RCi18n } from 'qmkit';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -27,6 +28,7 @@ class SearchHead extends Component<any, any> {
       onExportModalChange: Function;
       onExportModalHide: Function;
       exportModalData: IMap;
+      form:any
     };
   };
 
@@ -34,6 +36,7 @@ class SearchHead extends Component<any, any> {
     onSearch: noop,
     onBatchAudit: noop,
     tab: 'tab',
+    form:'form',
     dataList: 'dataList',
     onExportByParams: noop,
     onExportByIds: noop,
@@ -47,33 +50,33 @@ class SearchHead extends Component<any, any> {
 
     this.state = {
       felinRecoId: '',
-      goodsOptions: 'Product name',
-      receiverSelect: 'consigneeName',
-      clinicSelect: 'clinicsName',
       buyerOptions: 'PO name',
-      numberSelect: 'orderNumber',
-      statusSelect: 'paymentStatus',
-      linkStatus: 0,
       fillDate: null,
-      id: '',
-      subscribeId: '',
       buyerOptionsValue: '',
       goodsNames: '',
-      receiverSelectValue: '',
-      clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName : '',
-      numberSelectValue: '',
-      tradeState: {
-        deliverStatus: '',
-        payState: '',
-        orderSource: ''
-      }
     };
+  }
+  static getDerivedStateFromProps({relaxProps}, prevState) {
+    let form =relaxProps.form.toJS();
+    // Store prevId in state so we can compare when props change.
+    // Clear out previously-loaded data (so we don't render stale stuff).
+    if (form.felinRecoId !== prevState.felinRecoId) {
+      return {
+        felinRecoId: form.felinRecoId,
+        fillDate: form.fillDate?moment(form.fillDate,'YYYY-MM-DD'):null,
+        buyerOptions: form.consumerEmail?('PO e-mail'):('PO name'),
+        buyerOptionsValue:form.consumerEmail?form.consumerEmail:form.consumerName
+
+      };
+    }
+
+    // No state update necessary
+    return null;
   }
 
   render() {
-    const { onSearch, tab, exportModalData, onExportModalHide } = this.props.relaxProps;
-
-    const { tradeState } = this.state;
+    const { onSearch, tab, form, onExportModalHide } = this.props.relaxProps;
+    const { felinRecoId,goodsNames ,fillDate,buyerOptionsValue} = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
@@ -125,6 +128,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
+                    value={felinRecoId}
                     addonBefore={RCi18n({ id: 'Prescriber.Recommendation No' })}
                     onChange={(e) => {
                       this.setState({
@@ -139,6 +143,7 @@ class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     addonBefore={this._renderBuyerOptionSelect()}
+                    value={buyerOptionsValue}
                     onChange={(e) => {
                       this.setState({
                         buyerOptionsValue: (e.target as any).value
@@ -152,6 +157,7 @@ class SearchHead extends Component<any, any> {
                 {/*商品名称、SKU编码*/}
                 <FormItem>
                   <Input
+                  value={goodsNames}
                     addonBefore={RCi18n({ id: 'Prescriber.Product name' })}
                     onChange={(e) => {
                       this.setState({
@@ -165,13 +171,13 @@ class SearchHead extends Component<any, any> {
                 {/*商品名称、SKU编码*/}
                 <FormItem>
                   <InputGroup compact>
-                    <Input style={{width: '49%', textAlign: 'center' }} readOnly defaultValue='Created date' />
+                    <Input  style={{width: '49%', textAlign: 'center' }} readOnly defaultValue='Created date' />
                     <DatePicker
-                   
-                    style={{ width: '50%' }}
+                    value={fillDate}
+                      style={{ width: '50%' }}
                       onChange={(date, dateString) => {
                         this.setState({
-                          fillDate: dateString
+                          fillDate: date
                         });
                       }}
                     />
@@ -212,7 +218,7 @@ class SearchHead extends Component<any, any> {
                         felinRecoId: felinRecoId || null,
                         [buyerOptions == 'PO name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue || null,
                         goodsNames: goodsNames || null,
-                        fillDate: fillDate || null
+                        fillDate: (fillDate&&moment(fillDate).format('YYYY-MM-DD')) || null
                       };
                       onSearch(params);
                     }}

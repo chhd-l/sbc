@@ -502,7 +502,7 @@ export default class AppStore extends Store {
             }
           });
           item = item.set('id', item.get('goodsInfoId'));
-          item = item.set('skuSvIds', mockSpecDetailIds.join());
+          item = item.set('skuSvIds', mockSpecDetailIds);
           item = item.set('index', index + 1);
           return item;
         });
@@ -1572,7 +1572,7 @@ export default class AppStore extends Store {
           value: result.res.context
         });
       });
-      
+
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
           return false;

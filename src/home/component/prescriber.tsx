@@ -192,172 +192,9 @@ class Prescriber extends React.Component<any, any> {
                   {/*</div>*/}
                 </div>
               </div>
-              <div className="conversion space-between">
-                <div className="item-top-l-btm-l">
-                  <div className="top-text">
-                    <FormattedMessage id="Home.Conversionfunnel" />
-                  </div>
-                  <div className="Funnel">
-                    <Funnel data={conversionFunnelDashboardView && conversionFunnelDashboardView.dataList} />
-                    <div className="Funnel-l">
-                      <div className="Funnel-l-text">
-                        <p>{RCi18n({id:'Home.LandingPage'})}</p>
-                        <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</p>
-                        <p className="Funnel-l-dash1"></p>
-                      </div>
-                      <div className="Funnel-l-text">
-                        <p>{RCi18n({id:'Home.ShoppingCart'})}</p>
-                        <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</p>
-                        <p className="Funnel-l-dash2"></p>
-                      </div>
-                      <div className="Funnel-l-text">
-                        <p>{RCi18n({id:'Home.Checkout'})}</p>
-                        <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</p>
-                        <p className="Funnel-l-dash3"></p>
-                      </div>
-                      <div className="Funnel-l-text">
-                        <p>{RCi18n({id:'Home.Payment'})}</p>
-                        <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</p>
-                        <p className="Funnel-l-dash4"></p>
-                      </div>
-                    </div>
-                    <div className="Funnel-r">
-                      <div className="Funnel-r-top"></div>
-                      <div className="Funnel-r-mid">
-                        <div className="text1">
-                          <FormattedMessage id="Home.Conversionrate" />
-                        </div>
-                        <div className="text2">
-                          {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} decimals={2} {...countUpProps} /> : '--'}
-                          <i>%</i>
-                        </div>
-                        <div className="text3">
-                          {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? <img src={conversionFunnelDashboardView.payLoginRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                          <span className={conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? (conversionFunnelDashboardView.payLoginRateRate >= 0 ? 'green' : 'red') : ''}>
-                            {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? <CountUp end={Math.abs(conversionFunnelDashboardView.payLoginRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="Funnel-r-btm"></div>
-                    </div>
-                    <div className="Funnel-per1 flex-start-align">
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
-                      <p>%</p>
-                    </div>
-                    <div className="Funnel-per2 flex-start-align">
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
-                      <p>%</p>
-                    </div>
-                    <div className="Funnel-per3 flex-start-align">
-                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
-                      <p>%</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="item-top-l-btm-r">
-                  <div className="top-text">
-                    <FormattedMessage id="Home.Subscription" />
-                  </div>
-                  <div className="subscription flex-content">
-                    <div className="subscription-top">
-                      <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />
-                    </div>
-                    <div className="subscription-btm">
-                      <div className="consumer-top flex-start">
-                        <div className="mode">
-                          <div className="mode-text">
-                            <FormattedMessage id="Home.OrderNumber" />
-                          </div>
-                          <div className="mode-num">
-                            <span>{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</span>
-                          </div>
-                          <div className="mode-per">
-                            {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                            <span className={tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (tradeCustomerView.subscriptionNumberRate >= 0 ? 'green' : 'red') : ''}>
-                              {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="mode">
-                          <div className="mode-text">
-                            <FormattedMessage id="Home.Salesvolume" />
-                          </div>
-                          <div className="mode-num">
-                            <span>{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</span>
-                          </div>
-                          <div className="mode-per">
-                            {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                            <span className={tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (tradeCustomerView.subscriptionRevenueRate >= 0 ? 'green' : 'red') : ''}>
-                              {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionRevenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div className="item-top-r flex-content">
-              <div className="item-top-r-btm">
-                <div className="top-text space-between">
-                  <span>
-                    <FormattedMessage id="Home.Traffic" />
-                  </span>
-                  {/*<span>more ></span>*/}
-                </div>
-                <div className="traffic space-between">
-                  <div className="traffic-r flex-content">
-                    <div className="traffic-r-top flex-start">
-                      <div className="mode">
-                        <div className="mode-text">
-                          <FormattedMessage id="Home.Pageview" />
-                        </div>
-                        <div className="mode-num">
-                          <span>{trafficDashboardView && trafficDashboardView.pageView != null ? <CountUp end={trafficDashboardView.pageView} {...countUpProps} /> : '--'}</span>
-                        </div>
-                        <div className="mode-per">
-                          {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <img src={trafficDashboardView.pageViewRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                          <span className={trafficDashboardView && trafficDashboardView.pageViewRate ? (trafficDashboardView.pageViewRate >= 0 ? 'green' : 'red') : ''}>
-                            {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <CountUp end={Math.abs(trafficDashboardView.pageViewRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="mode">
-                        {/*<div className="mode-text">Bounce rate</div>
-                      <div className="mode-num">
-                        <span> {trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
-                      </div>
-                      <div className="mode-per">
-                        {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <img src={trafficDashboardView.bounceRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                        <span className={trafficDashboardView && trafficDashboardView.bounceRateRate != null ? (trafficDashboardView.bounceRateRate >= 0 ? 'green' : 'red') : ''}>
-                          {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <CountUp end={Math.abs(trafficDashboardView.bounceRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                        </span>
-                      </div>*/}
-                      </div>
-                    </div>
-                    <div className="traffic-r-btm flex-content">
-                      <div className="mode">
-                        <div className="mode-text">
-                          <FormattedMessage id="Home.VETtraffic" />
-                        </div>
-                        <div className="mode-num">
-                          <span> {trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
-                        </div>
-                      </div>
-                      <div className="mode">
-                        <div className="mode-text">
-                          <FormattedMessage id="Home.VETtrafficrate" />
-                        </div>
-                        <div className="mode-num num">
-                          <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div className="item-top-r-top">
                 <div className="top-text">
                   <FormattedMessage id="Home.Consumer" />
@@ -410,33 +247,45 @@ class Prescriber extends React.Component<any, any> {
           <div className="item-btm space-between">
             <div className="item-btm-l">
               <div className="top-text">
-                <div className="top-text space-between">
-                  <span>
-                    <FormattedMessage id="Home.TrafficTrend" />
-                  </span>
-                  {/*<span>more ></span>*/}
+                <FormattedMessage id="Home.Subscription" />
+              </div>
+              <div className="subscription flex-content">
+                <div className="subscription-top">
+                  <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />
+                </div>
+                <div className="subscription-btm">
+                  <div className="consumer-top flex-start">
+                    <div className="mode">
+                      <div className="mode-text">
+                        <FormattedMessage id="Home.OrderNumber" />
+                      </div>
+                      <div className="mode-num">
+                        <span>{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</span>
+                      </div>
+                      <div className="mode-per">
+                        {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                        <span className={tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (tradeCustomerView.subscriptionNumberRate >= 0 ? 'green' : 'red') : ''}>
+                          {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="mode">
+                      <div className="mode-text">
+                        <FormattedMessage id="Home.Salesvolume" />
+                      </div>
+                      <div className="mode-num">
+                        <span>{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</span>
+                      </div>
+                      <div className="mode-per">
+                        {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                        <span className={tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (tradeCustomerView.subscriptionRevenueRate >= 0 ? 'green' : 'red') : ''}>
+                          {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionRevenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              {!trafficTrendDashboardView || (trafficTrendDashboardView.weekNumList.length === 0 && trafficTrendDashboardView.totalPVList.length === 0 && trafficTrendDashboardView.conversionRateList.length === 0) ? (
-                <div className="data-img">
-                  <img src={nodataImg} className="no-data-img" />
-                </div>
-              ) : (
-                <div className="line">
-                  {trafficTrendDashboardView && (
-                    <BarLine
-                      yName={{ y1: (window as any).RCi18n({ id: 'Home.Traffic' }), y2: (window as any).RCi18n({ id: 'Home.Conversionrate' }) }}
-                      nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
-                      unit={{ unit1: '', unit2: '%' }}
-                      data={{
-                        x: trafficTrendDashboardView.weekNumList,
-                        y1: trafficTrendDashboardView.totalPVList,
-                        y2: trafficTrendDashboardView.conversionRateList
-                      }}
-                    />
-                  )}
-                </div>
-              )}
             </div>
             <div className="item-btm-r">
               <div className="top-text space-between">

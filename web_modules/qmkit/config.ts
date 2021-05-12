@@ -6,6 +6,8 @@ export default {
   /* stg */
   HOST: 'https://storestg.royalcanin.com/api',
 
+  //HOST: 'https://storesit.royalcanin.com/api',
+
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',
 

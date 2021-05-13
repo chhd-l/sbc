@@ -36,34 +36,70 @@ export default class AppStore extends Store {
     }
   ) => {
     this.dispatch('info:setLoading', true);
-    const { res, err } = (await goodsList({
+    await Promise.all([
+      goodsList({
       pageNum,
       pageSize,
       auditStatus: this.state().get('auditStatus')
-    })) as any;
-    if (!err && res.code === Const.SUCCESS_CODE) {
-      res.context.goodsPage.content.forEach((v, i) => {
-        v.key = i;
-      });
-      this.dispatch('info:setLoading', false);
-      this.dispatch('goodsActor: init', fromJS(res.context));
-      this.dispatch('form:field', { key: 'pageNum', value: pageNum });
-    } else {
-      this.dispatch('info:setLoading', false);
-    }
-
-    const cates: any = await getCateList();
-    const productCates: any = await getProductCategories();
-    const brands: any = await getBrandList();
-    this.transaction(() => {
-      this.dispatch('cateActor: init', fromJS(cates.res.context));
-      this.dispatch('goodsActor:getGoodsCate', fromJS(productCates.res.context));
-      this.dispatch('brandActor: init', fromJS(brands.res.context));
-    });
-
-    if (flushSelected) {
-      this.dispatch('goodsActor:clearSelectedSpuKeys');
-    }
+    }),
+      getCateList(),
+      getProductCategories(),
+      getBrandList()]).then(results => {
+      const res1: any  = results[0].res
+      const res2: any = results[1].res
+      const res3: any  = results[2].res
+      const res4: any  = results[3].res
+      if (res2 && res2.code === Const.SUCCESS_CODE) {
+        this.dispatch('cateActor: init', fromJS(res2.context ? res2.context : []));
+      }
+      if (res3 && res3.code === Const.SUCCESS_CODE) {
+        this.dispatch('goodsActor:getGoodsCate', fromJS(res3.context ? res3.context : []));
+      }
+      if (res4 && res4.code === Const.SUCCESS_CODE) {
+        this.dispatch('brandActor: init', fromJS(res4.context? res4.context: []));
+      }
+      if (res1.code === Const.SUCCESS_CODE) {
+        res1.context.goodsPage.content.forEach((v, i) => {
+          v.key = i;
+        });
+        this.dispatch('info:setLoading', false);
+        this.dispatch('goodsActor: init', fromJS(res1.context));
+        this.dispatch('form:field', { key: 'pageNum', value: pageNum });
+      } else {
+        this.dispatch('info:setLoading', false);
+      }
+      if (flushSelected) {
+        this.dispatch('goodsActor:clearSelectedSpuKeys');
+      }
+    })
+    // const { res, err } = (await goodsList({
+    //   pageNum,
+    //   pageSize,
+    //   auditStatus: this.state().get('auditStatus')
+    // })) as any;
+    // if (!err && res.code === Const.SUCCESS_CODE) {
+    //   res.context.goodsPage.content.forEach((v, i) => {
+    //     v.key = i;
+    //   });
+    //   this.dispatch('info:setLoading', false);
+    //   this.dispatch('goodsActor: init', fromJS(res.context));
+    //   this.dispatch('form:field', { key: 'pageNum', value: pageNum });
+    // } else {
+    //   this.dispatch('info:setLoading', false);
+    // }
+    //
+    // const cates: any = await getCateList();
+    // const productCates: any = await getProductCategories();
+    // const brands: any = await getBrandList();
+    // this.transaction(() => {
+    //   this.dispatch('cateActor: init', fromJS(cates.res.context));
+    //   this.dispatch('goodsActor:getGoodsCate', fromJS(productCates.res.context));
+    //   this.dispatch('brandActor: init', fromJS(brands.res.context));
+    // });
+    //
+    // if (flushSelected) {
+    //   this.dispatch('goodsActor:clearSelectedSpuKeys');
+    // }
   };
 
   /**

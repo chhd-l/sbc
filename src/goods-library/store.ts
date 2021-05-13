@@ -32,7 +32,7 @@ export default class AppStore extends Store {
     }
   ) => {
     const { res, err } = (await goodsList({ pageNum, pageSize })) as any;
-debugger
+
     if (!err && res.code === Const.SUCCESS_CODE) {
       res.context.standardGoodsPage.content.forEach((v, i) => {
         v.key = i;
@@ -41,13 +41,13 @@ debugger
       this.dispatch('form:field', { key: 'pageNum', value: pageNum });
     } else {
     }
-    // const cates: any = await getCateList();
-    // const brands: any = await getBrandList();
-    //
-    // this.transaction(() => {
-    //   this.dispatch('cateActor: init', fromJS(cates.res.context));
-    //   this.dispatch('brandActor: init', fromJS(brands.res.context));
-    // });
+    const cates: any = await getCateList();
+    const brands: any = await getBrandList();
+
+    this.transaction(() => {
+      this.dispatch('cateActor: init', fromJS(cates.res.context));
+      this.dispatch('brandActor: init', fromJS(brands.res.context));
+    });
 
     if (flushSelected) {
       this.dispatch('goodsActor:clearSelectedSpuKeys');

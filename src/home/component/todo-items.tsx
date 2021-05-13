@@ -338,7 +338,7 @@ class TodoItems extends React.Component<any, any> {
                 <div className="top-text space-between">
                   <span><FormattedMessage id="Home.Transaction"/></span>
                   <span>
-                    <Link to="/report-transaction"><FormattedMessage id="Home.more"/> &gt;</Link>
+                    <AuthWrapper functionName="f_home_transaction_more"><Link to="/report-transaction"><FormattedMessage id="Home.more"/> &gt;</Link></AuthWrapper>
                   </span>
                 </div>
                 <div className="m-content flex-content">
@@ -466,7 +466,7 @@ class TodoItems extends React.Component<any, any> {
                 <div className="top-text space-between">
                   <span><FormattedMessage id="Home.Bestseller"/></span>
                   <span>
-                    <Link to="/report-product"><FormattedMessage id="Home.more"/> &gt;</Link>
+                    <AuthWrapper functionName="f_home_bestseller_more"><Link to="/report-product"><FormattedMessage id="Home.more"/> &gt;</Link></AuthWrapper>
                   </span>
                 </div>
               </div>
@@ -524,7 +524,7 @@ class TodoItems extends React.Component<any, any> {
               <div className="top-text space-between">
                 <span><FormattedMessage id="Home.TransactionTrend"/></span>
                 <span>
-                  <Link to="/report-transaction"><FormattedMessage id="Home.more"/> &gt;</Link>
+                  <AuthWrapper functionName="f_home_transactiontrend_more"><Link to="/report-transaction"><FormattedMessage id="Home.more"/> &gt;</Link></AuthWrapper>
                 </span>
               </div>
               {!transactionTrendView ||

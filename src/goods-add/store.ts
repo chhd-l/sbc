@@ -694,6 +694,10 @@ export default class AppStore extends Store {
     this.dispatch('goodsSpecActor: addSpec');
   };
 
+  updateSpecValues = (specId, key, value) => {
+    this.dispatch('goodsSpecActor: updateSpecValues', { specId, key, value });
+  };
+
   /**
    * 添加规格
    */

@@ -229,6 +229,20 @@ export default class GoodsSpecActor extends Actor {
   }
 
   /**
+   * 更新规格里specValues里的属性值
+   * @param state 
+   * @param {specId, key, value} 
+   * @returns 
+   */
+  @Action('goodsSpecActor: updateSpecValues')
+  updateSpecValues(state, { specId, key, value }) {
+    return state.update('goodsSpecs', (goodsSpecs) => {
+      const index = goodsSpecs.findIndex((item) => item.get('specId') == specId);
+      return goodsSpecs.update(index, (item) => item.set(key, value));
+    });
+  }
+
+  /**
    * 添加规格
    */
   @Action('goodsSpecActor: deleteSpec')

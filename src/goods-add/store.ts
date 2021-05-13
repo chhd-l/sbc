@@ -941,7 +941,7 @@ export default class AppStore extends Store {
     }
 
     let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
-    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
+    if ( this.state().get('goodsList').toJS().length>0 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
       this.state().get('goods').get('promotions') == 'club' ) {
       message.error('If the subscription type in SPU is club, at lease one subscription type of Sku is club');
       valid = false;

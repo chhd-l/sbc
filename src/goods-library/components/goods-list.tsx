@@ -62,8 +62,8 @@ export default class GoodsList extends React.Component<any, any> {
         rowKey={(record) => record.goodsId}
         dataSource={goodsPageContent.toJS()}
         expandedRowRender={this._expandedRowRender}
-        expandedRowKeys={expandedRowKeys.toJS()}
-        onExpandedRowsChange={(record) => this._showSkuByIcon(record)}
+        // expandedRowKeys={expandedRowKeys.toJS()}
+        // onExpandedRowsChange={(record) => {this._showSkuByIcon(record) }}
         rowSelection={{
           getCheckboxProps: (record) => ({
             disabled: record.addStatus
@@ -211,8 +211,8 @@ export default class GoodsList extends React.Component<any, any> {
       index.forEach((value, key) => {
         goodsIds = goodsIds.set(key, value);
       });
+      onShowSku(goodsIds);
     }
-    onShowSku(goodsIds);
   };
 
   _getData = (pageNum, pageSize) => {

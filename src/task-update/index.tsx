@@ -548,8 +548,8 @@ class TaskUpdate extends Component<any, any> {
                               }
                             >
                               {goldenMomentList.map((item) => (
-                                <Option value={item.value} key={item.id}>
-                                  {item.value}
+                                <Option value={item.valueEn} key={item.id}>
+                                  {item.valueEn}
                                 </Option>
                               ))}
                             </Select>

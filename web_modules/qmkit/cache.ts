@@ -36,5 +36,9 @@ export default {
   ADDRESS_API_SETTINGS: 's2b-supplier@addressApiSettings',
   TAX_SWITCH:'s2b-supplier@taxSwitch',
   LANGUAGE:'language',
-  DOMAINNAME:'domainName'
+  DOMAINNAME:'domainName',
+  TASKSHOWSEARCH: 'TaskShowSearch',
+  TASKVIEWTYPE: 'TaskViewType',
+  TASKQueryType: 'TaskQueryType',
+  TASKFROMDATA: 'TaskFormData'
 };

@@ -1,5 +1,5 @@
 import React, { Component, LegacyRef } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
+import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
 import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse, Breadcrumb, Icon } from 'antd';
 import * as webapi from './webapi';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -7,6 +7,7 @@ import ListView from './components/list-view';
 import CardView from './components/card-view';
 import { Link } from 'react-router-dom';
 import './style.less';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -21,7 +22,7 @@ export default class Task extends React.Component<any, any> {
     super(props);
     this.state = {
       title: <FormattedMessage id="task.TaskBoard" />,
-      isCardView: true,
+      isCardView: sessionStorage.getItem(cache.TASKVIEWTYPE) === 'False' ? false : true,
       goldenMomentList: [],
       taskStatus: [
         { name: <FormattedMessage id="task.ToDo" />, value: 'To Do' },
@@ -34,11 +35,9 @@ export default class Task extends React.Component<any, any> {
         { name: <FormattedMessage id="task.Medium" />, value: 'Medium' },
         { name: <FormattedMessage id="task.High" />, value: 'High' }
       ],
-      taskForm: {
-        status: ''
-      },
-      queryType: '1',
-      showAdvanceSearch: false
+      taskForm: sessionStorage.getItem(cache.TASKFROMDATA) ? JSON.parse(sessionStorage.getItem(cache.TASKFROMDATA)) : { status: '' },
+      queryType: sessionStorage.getItem(cache.TASKQueryType) ? sessionStorage.getItem(cache.TASKQueryType) : '0',
+      showAdvanceSearch: sessionStorage.getItem(cache.TASKSHOWSEARCH) === 'True' ? true : false
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.clickTaskMore = this.clickTaskMore.bind(this);
@@ -101,7 +100,13 @@ export default class Task extends React.Component<any, any> {
               <Headline title={title} />
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <span className="advanceSearch" onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
+              <span
+                className="advanceSearch"
+                onClick={() => {
+                  this.setState({ showAdvanceSearch: !showAdvanceSearch });
+                  sessionStorage.setItem(cache.TASKSHOWSEARCH, !showAdvanceSearch ? 'True' : 'False');
+                }}
+              >
                 <FormattedMessage id="task.AdvanceSearch" /> <Icon type={showAdvanceSearch ? 'up' : 'down'} />
               </span>
             </Col>
@@ -124,6 +129,7 @@ export default class Task extends React.Component<any, any> {
                           value
                         });
                       }}
+                      value={taskForm.name}
                     />
                   </FormItem>
                 </Col>
@@ -138,7 +144,7 @@ export default class Task extends React.Component<any, any> {
                           <FormattedMessage id="task.GoldenMoment" />
                         </p>
                       }
-                      style={{ width: 195 }}
+                      style={{ width: 197, maxWidth: 197 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -146,14 +152,15 @@ export default class Task extends React.Component<any, any> {
                           value
                         });
                       }}
+                      value={taskForm.goldenMoment}
                     >
                       <Option value="">
                         <FormattedMessage id="Order.All" />
                       </Option>
                       {goldenMomentList &&
                         goldenMomentList.map((item) => (
-                          <Option value={item.value} key={item.id}>
-                            {item.value}
+                          <Option value={item.valueEn} key={item.id}>
+                            {item.valueEn}
                           </Option>
                         ))}
                     </SelectGroup>
@@ -208,6 +215,7 @@ export default class Task extends React.Component<any, any> {
                           value
                         });
                       }}
+                      value={taskForm.priority}
                     >
                       <Option value="">
                         <FormattedMessage id="Order.All" />
@@ -245,6 +253,7 @@ export default class Task extends React.Component<any, any> {
                           value
                         });
                       }}
+                      value={taskForm.assistantName}
                     />
                   </FormItem>
                 </Col>
@@ -271,6 +280,7 @@ export default class Task extends React.Component<any, any> {
                           value
                         });
                       }}
+                      value={taskForm.petOwnerName}
                     />
                   </FormItem>
                 </Col>
@@ -290,6 +300,7 @@ export default class Task extends React.Component<any, any> {
                         value: dateString[1] ? dateString[1] + ' 00:00:00' : null
                       });
                     }}
+                    value={taskForm.dueTimeStart && taskForm.dueTimeEnd ? [moment(taskForm.dueTimeStart), moment(taskForm.dueTimeEnd)] : null}
                   />
                 </Col>
               </Row>
@@ -308,6 +319,7 @@ export default class Task extends React.Component<any, any> {
                         } else {
                           this.listViewRef.current.getTaskList(queryType);
                         }
+                        sessionStorage.setItem(cache.TASKFROMDATA, JSON.stringify(taskForm));
                       }}
                     >
                       <span>
@@ -330,7 +342,7 @@ export default class Task extends React.Component<any, any> {
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               <Select
-                defaultValue={'1'}
+                defaultValue={queryType}
                 style={{ width: '120px', marginRight: '20px' }}
                 onChange={(value) => {
                   this.setState({
@@ -341,6 +353,7 @@ export default class Task extends React.Component<any, any> {
                   } else {
                     this.listViewRef.current.getTaskList(value);
                   }
+                  sessionStorage.setItem(cache.TASKQueryType, value);
                 }}
                 dropdownMatchSelectWidth={false}
               >
@@ -354,11 +367,12 @@ export default class Task extends React.Component<any, any> {
               <Select
                 value={isCardView ? 0 : 1}
                 style={{ width: '120px' }}
-                onChange={(value) =>
+                onChange={(value) => {
                   this.setState({
                     isCardView: value === 0
-                  })
-                }
+                  });
+                  sessionStorage.setItem(cache.TASKVIEWTYPE, value === 0 ? 'True' : 'False');
+                }}
                 dropdownMatchSelectWidth={false}
               >
                 <Option value={0}>

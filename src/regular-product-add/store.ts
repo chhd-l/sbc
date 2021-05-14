@@ -480,7 +480,7 @@ export default class AppStore extends Store {
           // 规格值列表，按照id升序排列
           const specValues = goodsSpecDetails
             .filter((detailItem) => detailItem.get('specId') == item.get('specId'))
-            .map((detailItem) => detailItem.set('isMock', false))
+            .map((detailItem) => detailItem.set('isMock', false).set('goodsPromotions', goods.get('promotions') || 'autoship'))
             .sort((o1, o2) => {
               return o1.get('specDetailId') - o2.get('specDetailId');
             });
@@ -520,7 +520,7 @@ export default class AppStore extends Store {
             }
           });
           item = item.set('id', item.get('goodsInfoId'));
-          item = item.set('skuSvIds', mockSpecDetailIds.join());
+          item = item.set('skuSvIds', mockSpecDetailIds);
           item = item.set('index', index + 1);
           return item;
         });
@@ -802,6 +802,10 @@ export default class AppStore extends Store {
     console.log(this.state().get('goods')&&this.state().get('goods').toJS(),112);
     this.dispatch('goodsSpecActor: addSpec', this.state().get('goods'));
   };
+  
+  updateSpecValues = (specId, key, value) => {
+    this.dispatch('goodsSpecActor: updateSpecValues', { specId, key, value });
+  };
 
   /**
    * 添加规格
@@ -1040,7 +1044,7 @@ export default class AppStore extends Store {
 
 
     let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
-    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
+    if ( this.state().get('goodsList').toJS().length>0 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
       this.state().get('goods').get('promotions') == 'club' ) {
       message.error('If the subscription type in SPU is club, at lease one subscription type of Sku is club');
       valid = false;

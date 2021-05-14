@@ -378,6 +378,7 @@ class StepConsentDetail extends Component<any, any> {
                       id={'name-wrapper'}
                       toolbars={[
                         // 'fontName', // 字体
+                        'html',
                         'foreColor', // 文字颜色
                         'link', // 插入链接
                         'fullScreen'
@@ -452,6 +453,7 @@ class StepConsentDetail extends Component<any, any> {
                             }}
                             toolbars={[
                               // 'fontName', // 字体
+                              'html',
                               'foreColor', // 文字颜色
                               'link', // 插入链接
                               'fullScreen'

@@ -198,11 +198,11 @@ export default class CouponsModal extends React.Component<any, any> {
           render={(row) => {
             return (
               <div>
-                <AuthWrapper functionName={'f_coupon_detail'}>
-                  <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">
-                    {<FormattedMessage id="Marketing.Details" />}
-                  </a>
-                </AuthWrapper>
+                {/*<AuthWrapper functionName={'f_coupon_detail'}>*/}
+                {/*  <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">*/}
+                {/*    {<FormattedMessage id="Marketing.Details" />}*/}
+                {/*  </a>*/}
+                {/*</AuthWrapper>*/}
               </div>
             );
           }}

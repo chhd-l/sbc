@@ -36,7 +36,7 @@ class ReactEditor extends Component<any, any> {
     }
     static defaultProps = {
         toolbars: [
-           
+            'html',
             'head',  // 标题
             'bold',  // 粗体
             'fontSize',  // 字号
@@ -56,7 +56,8 @@ class ReactEditor extends Component<any, any> {
             // 'video',  // 插入视频
             // 'code',  // 插入代码
             'undo',  // 撤销
-            'redo'  // 重复
+            'redo', // 重复
+            'fullScreen'
         ],
         fontNames: [
             // '黑体',
@@ -97,9 +98,9 @@ class ReactEditor extends Component<any, any> {
         const menuKey = "html"
         this.editor.menus.extend(menuKey, HtmlMenu)
         this.editor.config.focus = false
-        this.editor.config.menus =contentType==='json'?[...toolbars]:['html',...toolbars]
+        this.editor.config.menus =toolbars
         this.editor.config.fontNames = fontNames
-        this.editor.config.showFullScreen = true
+        this.editor.config.showFullScreen =toolbars.includes('fullScreen')
         this.editor.config.zIndex = 90
         this.editor.config.onchangeTimeout = 500
         this.uploadImage();

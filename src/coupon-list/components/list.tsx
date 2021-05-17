@@ -107,6 +107,9 @@ export default class List extends React.Component<any, any> {
                       </span>
                     )}
 
+                  </AuthWrapper>
+
+                  <AuthWrapper functionName={'f_coupon_copy'}>
                     <span
                       className="link"
                       onClick={() => {
@@ -115,7 +118,9 @@ export default class List extends React.Component<any, any> {
                     >
                       <FormattedMessage id="Marketing.Copy" />
                     </span>
+                  </AuthWrapper>
 
+                  <AuthWrapper functionName={'f_delete_coupon'}>
                     {text == 1 && (
                       <Popconfirm title={<FormattedMessage id="Marketing.deleteThisCoupon" />} onConfirm={() => deleteCoupon((record as any).couponId)} okText="Yes" cancelText="Cancel">
                         <span className="link">

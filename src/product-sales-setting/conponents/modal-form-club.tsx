@@ -126,7 +126,7 @@ class ModalFormClub extends Component<Props, any> {
               ]
             })(<Input type="number" placeholder="Please input  frequency value!" />)}
           </Form.Item>
-          <Form.Item label={<span className="ant-form-item-required">Display name</span>} style={{ marginBottom: 0 }}>
+          {/* <Form.Item label={<span className="ant-form-item-required">Display name</span>} style={{ marginBottom: 0 }}>
             {languageList &&
               languageList.map((item, i) => (
                 <Form.Item key={item.id}>
@@ -140,7 +140,7 @@ class ModalFormClub extends Component<Props, any> {
                   })(<Input placeholder={item.name} />)}
                 </Form.Item>
               ))}
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       </Modal>
     );

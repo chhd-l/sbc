@@ -120,12 +120,12 @@ export default class ChooseCoupons extends React.Component<any, any> {
               render={(row) => {
                 return (
                   <div>
-                    <AuthWrapper functionName={'f_coupon_detail'}>
-                      <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">
-                        <FormattedMessage id="Marketing.Detail" />
-                      </a>
-                    </AuthWrapper>
-                    &nbsp;&nbsp;
+                    {/*<AuthWrapper functionName={'f_coupon_detail'}>*/}
+                    {/*  <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">*/}
+                    {/*    <FormattedMessage id="Marketing.Detail" />*/}
+                    {/*  </a>*/}
+                    {/*</AuthWrapper>*/}
+                    {/*&nbsp;&nbsp;*/}
                     <a onClick={() => this.props.onDelCoupon(row.couponId)}>
                       <FormattedMessage id="Marketing.Delete" />
                     </a>

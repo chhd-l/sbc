@@ -407,7 +407,7 @@ class ListView extends React.Component<any, any> {
                           {/*部分发货状态显示*/}
                           {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&
                             (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') &&
-                            v.getIn(['tradeState', 'payState']) === 'PAID' && (
+                            (v.getIn(['tradeState', 'payState']) === 'PAID' || v.getIn(['tradeState', 'payState']) === 'AUTHORIZED') && (
                               <AuthWrapper functionName="fOrderDetail002">
                                 <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
                                   <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">

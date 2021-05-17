@@ -12,6 +12,25 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const { TextArea } = Input;
+const limitDecimals = (value: string | number): string => {
+
+  const reg = /^(\-)*(\d+)\.(\d\d\d\d).*$/;
+  if(typeof value === 'string') {
+    if (!isNaN(Number(value))) {
+      //value = Number(value).toFixed(2)
+      return value.replace(reg, '$1$2.$3')
+    } else {
+      return ""
+    }
+    
+  } else if (typeof value === 'number') {
+    let a = !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
+    return !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
+
+  } else {
+    return ''
+  }
+};
 @Relax
 export default class SkuTable extends React.Component<any, any> {
   WrapperForm: any;
@@ -290,7 +309,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<Input type="number" style={{ width: '116px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
+                })(<InputNumber formatter={limitDecimals} parser={limitDecimals} style={{ width: '116px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
               </FormItem>
             </Col>
           </Row>

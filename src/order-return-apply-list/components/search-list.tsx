@@ -67,16 +67,17 @@ export default class SearchList extends React.Component<any, any> {
                     <th style={{ width: '10%', textAlign: 'right' }}>{<FormattedMessage id="Order.paymentStatus" />}</th>
                   </tr>
                 </thead>
-                {total == 0 ? (
+                 <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList, apply)}</tbody>
+                 
+              </table>
+              {!loading && total == 0 ? (
                   <div className="ant-table-placeholder">
                     <span>
                       <i className="anticon anticon-frown-o" />
-                      {<FormattedMessage id="Order.noData" />}
+                      <FormattedMessage id="Order.noData" />
                     </span>
                   </div>
-                ) : <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList, apply)}</tbody>}
-
-              </table>
+                ) : null}
             </div>
 
 
@@ -99,7 +100,7 @@ export default class SearchList extends React.Component<any, any> {
   _renderLoading() {
     return (
       <tr style={styles.loading}>
-        <td colSpan={7}>
+        <td colSpan={8}>
           <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
         </td>
       </tr>
@@ -107,6 +108,7 @@ export default class SearchList extends React.Component<any, any> {
   }
 
   _renderContent(orderList, apply) {
+
     return orderList.map((v) => {
       const id = v.get('id');
       const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;

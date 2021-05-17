@@ -142,10 +142,13 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 { required: true, message: <FormattedMessage id="Marketing.PleaseSelectTheDeliveryTime" /> },
                 {
                   validator: (_rule, value, callback) => {
+                    debugger
                     if (value && moment().add(-5, 'minutes').second(0).unix() > moment(value).unix()) {
                       callback(<FormattedMessage id="Marketing.TheDeliveryTime" />);
                     } else if (value && moment().add('months', 3).unix() < moment(value).minute(0).second(0).unix()) {
                       callback(<FormattedMessage id="Marketing.TheDeliveryTimeLater" />);
+                    } else if(moment().add(-5, 'minutes').second(0).unix() >= moment(value[0]).unix()){
+                      callback('The selected time must be later than the current time');
                     } else {
                       callback();
                     }
@@ -280,12 +283,10 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     // if (!activity.activityId) {
     form.resetFields(['time']);
     //强制校验创建时间
+    let errorObj= {}
     if (moment().add(-5, 'minutes').second(0).unix() >= moment(activity.get('startTime')).unix()) {
-      form.setFields({
-        ['startTime']: {
-          errors: [new Error('The selected time must be later than the current time')]
-        }
-      });
+      errorObj['startTime'] = { errors: [new Error('The selected time must be later than the current time')] }
+      form.setFields(errorObj);
       message.error(<FormattedMessage id="Marketing.TheSelected" />);
       errors = true;
     }

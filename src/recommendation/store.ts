@@ -35,8 +35,9 @@ export default class AppStore extends Store {
    let loop=  recommendation_params.every(item=>item.indexOf('recommendation')>-1);
     let params={  ...result, pageNum, pageSize }
     if(loop){
-     params= JSON.parse(sessionStorage.getItem('search_params')||'{}')
-     this.dispatch('form:clear');
+   let  _params= JSON.parse(sessionStorage.getItem('search_params')||'{}')
+   params={..._params,...params}
+      this.dispatch('form:clear');
       this.dispatch('form:field', params);
     }else{
       sessionStorage.removeItem('search_params');

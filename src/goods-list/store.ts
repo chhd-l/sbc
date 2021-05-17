@@ -45,10 +45,8 @@ export default class AppStore extends Store {
       getCateList(),
       getProductCategories(),
       getBrandList()]).then(results => {
-      const res1: any  = results[0].res
-      const res2: any = results[1].res
-      const res3: any  = results[2].res
-      const res4: any  = results[3].res
+      const [res1,res2,res3,res4]: Array<any> = [results[0].res,results[1].res,results[2].res,results[3].res]
+
       if (res2 && res2.code === Const.SUCCESS_CODE) {
         this.dispatch('cateActor: init', fromJS(res2.context ? res2.context : []));
       }

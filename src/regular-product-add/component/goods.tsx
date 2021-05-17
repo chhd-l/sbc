@@ -151,6 +151,7 @@ export default class Info extends React.Component<any, any> {
     const relaxProps = this.props.relaxProps;
     return (
       <div>
+        {/* Basic information */}
         <div
           style={{
             fontSize: 16,
@@ -161,6 +162,7 @@ export default class Info extends React.Component<any, any> {
         >
           <FormattedMessage id="product.basicInformation" />
         </div>
+        {/* BInfo Form */}
         <div>
           <WrapperForm
             ref={(form) => (this['_form'] = form)}
@@ -241,6 +243,7 @@ class GoodsForm extends React.Component<any, any> {
       filterList
     });
   }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter, purchaseTypeList, frequencyList } = this.props.relaxProps;
@@ -299,8 +302,10 @@ class GoodsForm extends React.Component<any, any> {
 
     return (
       <Form>
+        {/* The first line */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* SPU */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.SPU" />}>
               {getFieldDecorator('goodsNo', {
                 rules: [
@@ -326,6 +331,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
+            {/* InternalSPU */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.InternalSPU" />}>
               {getFieldDecorator('internalGoodsNo', {
                 rules: [
@@ -351,8 +357,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+        {/* The second line */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* productName */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
               {getFieldDecorator('goodsName', {
                 rules: [
@@ -378,6 +386,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
+            {/* onOrOffShelves */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.onOrOffShelves" />}>
               {getFieldDecorator('addedFlag', {
                 rules: [
@@ -406,8 +415,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+        {/* The third line */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* subscriptionStatus */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.subscriptionStatus" />}>
               {getFieldDecorator('subscriptionStatus', {
                 rules: [],
@@ -423,6 +434,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
+            {/* subscriptionType */}
             <FormItem {...formItemLayout} label={RCi18n({id:'Product.subscriptionType'})}>
               {getFieldDecorator('promotions', {
                 rules: [],
@@ -440,8 +452,10 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
 
         {/*修改*/}
+        {/* The fourth row */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* defaultPurchaseType */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
               {getFieldDecorator('defaultPurchaseType', {
                 rules: [],
@@ -460,6 +474,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
+            {/* defaultFrequency */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
               {getFieldDecorator('defaultFrequencyId', {
                 // rules: [
@@ -482,8 +497,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+        {/* 5 */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* Productcategory */}
             <FormItem {...formItemLayout} label={RCi18n({id:'Product.Productcategory'})}>
               {getFieldDecorator('cateId', {
                 rules: [
@@ -531,6 +548,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
+            {/* SalesCategory */}
             <FormItem {...formItemLayout} label={RCi18n({id:'Product.SalesCategory'})}>
               {getFieldDecorator('storeCateIds', {
                 rules: [
@@ -571,8 +589,10 @@ class GoodsForm extends React.Component<any, any> {
             </a>
           </Col> */}
         </Row>
+        {/* 6 */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* brand */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.brand" />}>
               {getFieldDecorator(
                 'brandId',
@@ -590,6 +610,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
+            {/* Producttagging */}
             <FormItem {...formItemLayout} label={RCi18n({id:'Product.Producttagging'})}>
               {getFieldDecorator('tagging', {
                 rules: [
@@ -633,8 +654,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>*/}
         </Row>
+        {/* 7 */}
         <Row>
           <Col span={16}>
+            {/* Productcardintro */}
             <FormItem
               // {...formItemLayout}
               labelCol={{
@@ -668,8 +691,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+        {/* 8 */}
         <Row>
           <Col span={16}>
+            {/* productSubtitle */}
             <FormItem
               // {...formItemLayout}
               labelCol={{
@@ -733,9 +758,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>*/}
-
+        {/* 9 */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* Salesstatus */}
             <FormItem {...formItemLayout} label={RCi18n({id:'Product.Salesstatus'})}>
               {getFieldDecorator('saleableFlag', {
                 rules: [
@@ -760,6 +786,7 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
           {goods.get('saleableFlag') == 0 ? (
             <Col span={12}>
+              {/* Displayonshop */}
               <FormItem {...formItemLayout} label={RCi18n({id:'Product.Displayonshop'})}>
                 {getFieldDecorator('displayFlag', {
                   rules: [
@@ -808,8 +835,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row> */}
+        {/* 10 */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* productImage */}
             <FormItem
               {...formItemLayout}
               label={
@@ -825,8 +854,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+        {/* 11 */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* productVideo */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
               <div style={{ width: 550 }}>
                 <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />

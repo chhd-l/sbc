@@ -96,7 +96,9 @@ class CateList extends React.Component<any, any> {
         }}
         pagination={{ total, current: pageNum + 1, onChange: this._getData }}
       >
+        {/* Image */}
         <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        {/* Product name */}
         <Column
           // title="商品名称"
           title={<FormattedMessage id="Product.productName" />}
@@ -118,6 +120,7 @@ class CateList extends React.Component<any, any> {
             );
           }}
         />
+        {/* SPU */}
         <Column title={<FormattedMessage id="Product.SPU" />} dataIndex="goodsNo" key="goodsNo" />
         {/* <Column
           title="销售类型"
@@ -133,6 +136,7 @@ class CateList extends React.Component<any, any> {
             );
           }}
         /> */}
+        {/* Market price */}
         <Column
           title={
             <span>
@@ -153,6 +157,7 @@ class CateList extends React.Component<any, any> {
             );
           }}
         />
+        {/* Sales category */}
         <Column
           // title="店铺分类"
           title={<FormattedMessage id="Product.SalesCategory" />}
@@ -160,6 +165,7 @@ class CateList extends React.Component<any, any> {
           key="goodsStoreCateNames" 
           //render={this._renderStoreCateList}
         />
+        {/* Product category */}
         <Column
           // title="店铺分类"
           title={<FormattedMessage id="Product.ProductCategory" />}
@@ -167,6 +173,7 @@ class CateList extends React.Component<any, any> {
           key="productCategoryNames"
           //render={this._renderProductCateList}
         />
+        {/* Brand */}
         <Column
           // title="品牌"
           title={<FormattedMessage id="Product.brand" />}
@@ -183,6 +190,7 @@ class CateList extends React.Component<any, any> {
             );*/
           }}
         />
+        {/* On/off shelves */}
         <Column
           title={<FormattedMessage id="Product.onOrOffShelves" />}
           dataIndex="addedFlag"
@@ -197,6 +205,7 @@ class CateList extends React.Component<any, any> {
             return <FormattedMessage id="Product.onShelves" />;
           }}
         />
+        {/* Operation */}
         <Column
           align="center"
           title={<FormattedMessage id="Product.operation" />}

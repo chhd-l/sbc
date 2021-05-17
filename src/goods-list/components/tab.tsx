@@ -27,9 +27,11 @@ export default class Tab extends React.Component<any, any> {
     const { addedFlag, onStateTabChange } = this.props.relaxProps;
     return (
       <Tabs defaultActiveKey={addedFlag} tabBarExtraContent={<Tool></Tool>} onChange={(key) => onStateTabChange(key)}>
+        {/* all */}
         <TabPane tab={<FormattedMessage id="Product.all" />} key="-1">
           <GoodsList />
         </TabPane>
+        {/* On shelves */}
         <TabPane tab={<FormattedMessage id="Product.onShelves" />} key="1">
           <GoodsList />
         </TabPane>
@@ -39,6 +41,7 @@ export default class Tab extends React.Component<any, any> {
         >
           <GoodsList />
         </TabPane> */}
+        {/* Off shelves */}
         <TabPane tab={<FormattedMessage id="Product.offShelves" />} key="0">
           <GoodsList />
         </TabPane>

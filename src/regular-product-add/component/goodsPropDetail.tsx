@@ -76,6 +76,7 @@ class AttributeForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
+        {/* attributeInformation title */}
         <div
           style={{
             fontSize: 16,
@@ -89,6 +90,7 @@ class AttributeForm extends React.Component<any, any> {
             <FormattedMessage id="product.attributeInformationDetail" />
           </span>
         </div>
+        {/* attributeForm */}
         <div>
           <Form id="attributeForm">
             {propList.size>0 &&

@@ -275,11 +275,14 @@ const routes = [
   { path: '/goods-add', asyncComponent: () => import('./goods-add') },
   { path: '/goods-main', asyncComponent: () => import('./goods-add/main') },
   { path: '/regular-product-add', asyncComponent: () => import('./regular-product-add/main') },
-  // 审核通过的商品编辑
+  
+  // goods-regular-edit > 审核通过的商品编辑
   {
     path: '/goods-regular-edit/:gid',
     asyncComponent: () => import('./regular-product-add/main')
   },
+  
+  // goods-bundle-edit
   {
     path: '/goods-bundle-edit/:gid',
     asyncComponent: () => import('./goods-add/main')
@@ -314,8 +317,10 @@ const routes = [
     path: '/goods-sku-detail/:pid',
     asyncComponent: () => import('./goods-sku-detail')
   },
-  // 商品列表
+
+  // Product list - 商品列表
   { path: '/goods-list', asyncComponent: () => import('./goods-list') },
+
   // 待审核商品列表
   {
     path: '/goods-check',

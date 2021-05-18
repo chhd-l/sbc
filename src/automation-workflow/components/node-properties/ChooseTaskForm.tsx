@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Const } from 'qmkit';
 import { Form, Input, Col, Row, Select, message, InputNumber } from 'antd';
 import * as webapi from '@/automation-workflow/webapi';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

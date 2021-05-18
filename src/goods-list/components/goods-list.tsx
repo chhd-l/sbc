@@ -318,7 +318,7 @@ class CateList extends React.Component<any, any> {
           <AuthWrapper functionName="f_goods_up_down">
             <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.OffshelvesConfirmTip" />} onConfirm={() => spuOffSale([rowInfo.goodsId])} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
               <Tooltip placement="top" title={<FormattedMessage id="Product.Offshelves" />}>
-                <a>
+                <a style={{ marginRight: 5 }}>
                   <span className="icon iconfont iconOffShelves" style={{ fontSize: 20 }}></span>
                 </a>
               </Tooltip>

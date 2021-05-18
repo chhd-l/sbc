@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Row, Icon, Select, Card, Modal, message, Button } from 'antd';
 import * as webapi from '@/automation-workflow/webapi';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const { Option } = Select;

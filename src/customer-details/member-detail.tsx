@@ -336,10 +336,10 @@ export default class CustomerDetails extends React.Component<any, any> {
                     Prefer channel
                   </Col>
                   <Col span={6} className="text-highlight">
-                    {['Email', 'Phone']
+                    {['Email', 'Phone', 'Print']
                       .reduce((prev, curr) => {
                         if (+basic[`communication${curr}`]) {
-                          prev.push(curr);
+                          prev.push(curr === 'Print' ? 'Message' : curr);
                         }
                         return prev;
                       }, [])

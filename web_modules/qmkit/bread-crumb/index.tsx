@@ -18,11 +18,11 @@ export default class BreadCrumb extends React.Component<any, any> {
 
   render() {
     //选中的一级菜单索引
-    const firstIndex = sessionStorage.getItem(cache.FIRST_ACTIVE);
+    const firstIndex = sessionStorage.getItem(cache.FIRST_ACTIVE) || '0';
     //选中的二级菜单索引
-    const secondIndex = sessionStorage.getItem(cache.SECOND_ACTIVE);
+    const secondIndex = sessionStorage.getItem(cache.SECOND_ACTIVE) || '0';
     //选中的三级菜单索引
-    const thirdIndex = sessionStorage.getItem(cache.THIRD_ACTIVE);
+    const thirdIndex = sessionStorage.getItem(cache.THIRD_ACTIVE) || '0';
     //所有菜单
     const allGradeMenus = fromJS(JSON.parse(sessionStorage.getItem(cache.LOGIN_MENUS)));
     let first = allGradeMenus.get(firstIndex).get('title') || '';

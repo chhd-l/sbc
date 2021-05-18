@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb, history, Const } from 'qmkit';
+import { Headline, BreadCrumb, history, Const, RCi18n } from 'qmkit';
 import { Breadcrumb, message, Steps, Button, Icon, Form } from 'antd';
 import './index.less';
 import NavigationLanguage from './components/navigationLanguage';
@@ -84,7 +84,7 @@ class NavigationUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === Const.SUCCESS_CODE) {
-                message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
+                message.success(RCi18n({id:"Content.OperateSuccessfully"}));
                 history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
               }
             })
@@ -96,7 +96,7 @@ class NavigationUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === Const.SUCCESS_CODE) {
-                message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
+                message.success(RCi18n({id:"Content.OperateSuccessfully"}));
                 history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
               }
             })

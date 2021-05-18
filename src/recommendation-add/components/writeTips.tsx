@@ -1,6 +1,6 @@
 import { Checkbox, Form, Input, Spin } from 'antd';
 import { Relax } from 'plume2';
-import { noop } from 'qmkit';
+import { noop, ReactEditor } from 'qmkit';
 import React from 'react';
 import { RCi18n } from 'qmkit';
 
@@ -57,17 +57,47 @@ export default class PaymentInformation extends React.Component<any, any> {
         <Form >
           <Form.Item label={RCi18n({id:'Prescriber.suggestforyourcat'})}>
             {getFieldDecorator('suggest', {
-             initialValue: felinReco.suggest || '',
-              onChange: (e) => this._onChange(e, 'suggest'),
-            })(<Input.TextArea rows={4} placeholder="Input" />)}
+            //  initialValue: felinReco.suggest || '',
+              // onChange: (e) => this._onChange({target:{value:e}}, 'suggest'),
+            })(
+            // <Input.TextArea rows={4} placeholder="Input" />
+            
+                    <ReactEditor
+                    
+                      id={'name-wrapper-suggest'}
+                      toolbars={[
+                        // 'fontName', // 字体
+                       // 'foreColor', // 文字颜色
+                       // 'link' // 插入链接
+                      ]}
+                      onContentChange={(e)=>this._onChange({target:{value:e}}, 'suggest')}
+                      content={felinReco.suggest || ''}
+                      height={300}
+                    />
+            
+            
+            )}
 
           </Form.Item>
           <Form.Item label={RCi18n({id:'Prescriber.followingoptimalnutrition'})}>
             {getFieldDecorator('optimal', {
-              initialValue: ((!funType&&RCi18n({id:'Prescriber.Recommendation.optimal'}))||'')+(felinReco.optimal || ''),
-              onChange: (e) => this._onChange(e, 'optimal'),
-
-            })(<Input.TextArea rows={4} placeholder="Input" />)}
+             // initialValue: ((!funType&&RCi18n({id:'Prescriber.Recommendation.optimal'}))||'')+(felinReco.optimal || ''),
+            //  onChange: (e) => this._onChange(e, 'optimal'),
+            })(
+            // <Input.TextArea rows={4} placeholder="Input" />
+            <ReactEditor
+           
+            id={'name-wrapper-optimal'}
+            toolbars={[
+              // 'fontName', // 字体
+              // 'foreColor', // 文字颜色
+              // 'link' // 插入链接
+            ]}
+            onContentChange={(e)=>this._onChange({target:{value:e}}, 'optimal')}
+            content={((!funType&&RCi18n({id:'Prescriber.Recommendation.optimal'}))||'')+(felinReco.optimal || '')}
+            height={300}
+          />
+            )}
 
           </Form.Item>
           <Form.Item label={RCi18n({id:'Prescriber.Paris'})} {...formItemLayout}>

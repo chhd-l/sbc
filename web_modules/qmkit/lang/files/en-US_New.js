@@ -763,6 +763,7 @@ export default {
         "Order.refundableAmountTips": "The remaining refundable amount of this order is: ",
         "Order.refundableAmountTips2": "The refund amount should not be greater than the refundable amount. Please modify it.",
         "Order.Cat&Dog": "Cat & Dog",
+
     },
     Subscription: {
         "Subscription.AutoshipOrder": "Subscription order",

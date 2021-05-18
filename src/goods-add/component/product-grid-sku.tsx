@@ -98,9 +98,9 @@ export default class ProductGridSKU extends React.Component<any, any> {
   arrayFilter = (arrKey, arrList) => {
     let tempList = [];
     arrKey.map((item) => {
-      tempList.push(arrList.find((el) => el.goodsInfoNo === item));
+      tempList.push(arrList.find((el) => el && el.goodsInfoNo === item));
     });
-    return tempList;
+    return tempList.filter(val => val);
   };
 
   render() {
@@ -132,7 +132,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
             onChange: (selectedRowKeys, selectedTableRows) => {
               let tempSelectedRowKeys = [...new Set(selectedRowKeys)];
               let { selectedRows } = this.state;
-              selectedRows = selectedRows.concat(selectedTableRows);
+              selectedRows = selectedRows.concat(selectedTableRows).filter(val => val);
               selectedRows = this.arrayFilter(tempSelectedRowKeys, selectedRows);
               this.setState({
                 selectedRows: selectedRows,

@@ -284,19 +284,19 @@ class SkuForm extends React.Component<any, any> {
               <div>
                 {goods.get('subscriptionStatus') == 1 ? (
                   <div>
-                    <p>
+                    <div>
                       <span><FormattedMessage id='Product.OneOff' /></span>
-                    </p>
+                    </div>
                     {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
-                      <p>
+                      <div>
                         <span><FormattedMessage id='Product.Subscription' /></span>
-                      </p>
+                      </div>
                     ) : null}
                   </div>
                 ) : (
-                  <p>
+                  <div>
                     <span><FormattedMessage id='Product.OneOff' /></span>
-                  </p>
+                  </div>
                 )}
               </div>
             </FormItem>
@@ -579,7 +579,7 @@ class SkuForm extends React.Component<any, any> {
                         <p>{rowInfo.subscriptionBasePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.subscriptionBasePrice : ''}</p>
                       </div>
                     ) : (
-                      <p></p>
+                      <p/>
                     )
                   )}
                 </FormItem>

@@ -61,6 +61,7 @@ export default class Info extends React.Component<any, any> {
       video: IMap;
       maxCount: number;
       goodsList: any;
+      goodsSpecs: any;
       editImages: Function;
       showGoodsPropDetail: Function;
       changeStoreCategory: Function;
@@ -135,7 +136,9 @@ export default class Info extends React.Component<any, any> {
     productFilter: 'productFilter',
     sourceGoodCateList: 'sourceGoodCateList',
     purchaseTypeList: 'purchaseTypeList',
-    frequencyList: 'frequencyList'
+    frequencyList: 'frequencyList',
+    goodsSpecs: 'goodsSpecs',
+    updateSpecValues: noop
   };
 
   constructor(props) {
@@ -857,7 +860,7 @@ class GoodsForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm, goodsList } = this.props.relaxProps;
+    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm, goodsList,goodsSpecs,updateSpecValues } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
 
     if (e && e.target) {
@@ -926,6 +929,15 @@ class GoodsForm extends React.Component<any, any> {
       editGoods(goods);
       goodsList.toJS()&&goodsList.toJS().map(item=>{
         editGoodsItem(item.id,'promotions',e);
+      })
+      goodsSpecs.toJS() && goodsSpecs.toJS().forEach(item => {
+        let newItem = item.specValues.map(specValuesItem => {
+          return {
+            ...specValuesItem,
+            goodsPromotions: e
+          }
+        })
+        updateSpecValues(item.specId, 'specValues', fromJS(newItem))
       })
     }
 

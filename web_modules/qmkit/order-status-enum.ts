@@ -9,7 +9,7 @@ export const OrderStatus = [
   { langKey: 'Order.delivered', name: 'Delivered', value: 'DELIVERED', listShow: true },
   { langKey: 'Order.Completed', name: 'Completed', value: 'COMPLETED', listShow: true },
   { langKey: 'Order.cancelled', name: 'Cancelled', value: 'VOID', listShow: true },
-  { langKey: 'Order.rejected', name: 'Rejected', value: 'REJECTED', listShow: true }
+  { langKey: 'Order.rejected', name: 'Rejected', value: 'REJECTED', listShow: true } // listShow not work
 ];
 
 export const ShippStatus = [

@@ -452,7 +452,7 @@ class GoodsForm extends React.Component<any, any> {
                 // initialValue: 'Y'
                 initialValue: goods.get('defaultPurchaseType')
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultPurchaseType')} placeholder="please select Default purchase type" disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default purchase type" disabled={Number(goods.get('subscriptionStatus')) === 0}>
                   {purchaseTypeList&&purchaseTypeList.map((option) => (
                     <Option value={option.id} key={option.id}>
                       {option.name}
@@ -474,7 +474,7 @@ class GoodsForm extends React.Component<any, any> {
                 initialValue: goods.get('defaultFrequencyId'),
                 onChange: this._editGoods.bind(this, 'defaultFrequencyId')
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder="please select Default frequency" disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select Default frequency" disabled={Number(goods.get('subscriptionStatus')) === 0}>
                   {getFrequencyList&&getFrequencyList.map((option) => (
                     <Option value={option.id} key={option.id}>
                       {option.name}

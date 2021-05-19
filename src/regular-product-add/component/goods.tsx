@@ -61,6 +61,7 @@ export default class Info extends React.Component<any, any> {
       video: IMap;
       maxCount: number;
       goodsList: any;
+      goodsSpecs: any;
       editImages: Function;
       showGoodsPropDetail: Function;
       changeStoreCategory: Function;
@@ -135,7 +136,9 @@ export default class Info extends React.Component<any, any> {
     productFilter: 'productFilter',
     sourceGoodCateList: 'sourceGoodCateList',
     purchaseTypeList: 'purchaseTypeList',
-    frequencyList: 'frequencyList'
+    frequencyList: 'frequencyList',
+    goodsSpecs: 'goodsSpecs',
+    updateSpecValues: noop
   };
 
   constructor(props) {
@@ -441,12 +444,16 @@ class GoodsForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
               {getFieldDecorator('defaultPurchaseType', {
-                rules: [],
+                // rules: [],
                 onChange: this._editGoods.bind(this, 'defaultPurchaseType'),
                 // initialValue: 'Y'
                 initialValue: goods.get('defaultPurchaseType')
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultPurchaseType')} placeholder={RCi18n({id:'Product.DefaultPurchaseType'})} disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                <Select
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  // value={goods.get('defaultPurchaseType')}
+                  placeholder={RCi18n({id:'Product.DefaultPurchaseType'})}
+                  disabled={Number(goods.get('subscriptionStatus')) === 0}>
                   {purchaseTypeList&&purchaseTypeList.map((option) => (
                     <Option value={option.id} key={option.id}>
                       {option.name}
@@ -468,7 +475,11 @@ class GoodsForm extends React.Component<any, any> {
                 initialValue: goods.get('defaultFrequencyId'),
                 onChange: this._editGoods.bind(this, 'defaultFrequencyId')
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} value={goods.get('defaultFrequencyId')} placeholder={RCi18n({id:'Product.DefaultFrequency'})} disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                <Select
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  // value={goods.get('defaultFrequencyId')}
+                  placeholder={RCi18n({id:'Product.DefaultFrequency'})}
+                  disabled={Number(goods.get('subscriptionStatus')) === 0}>
                   {getFrequencyList&&getFrequencyList.map((option) => (
                     <Option value={option.id} key={option.id}>
                       {option.name}
@@ -849,7 +860,7 @@ class GoodsForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm, goodsList } = this.props.relaxProps;
+    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm, goodsList,goodsSpecs,updateSpecValues } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
 
     if (e && e.target) {
@@ -918,6 +929,15 @@ class GoodsForm extends React.Component<any, any> {
       editGoods(goods);
       goodsList.toJS()&&goodsList.toJS().map(item=>{
         editGoodsItem(item.id,'promotions',e);
+      })
+      goodsSpecs.toJS() && goodsSpecs.toJS().forEach(item => {
+        let newItem = item.specValues.map(specValuesItem => {
+          return {
+            ...specValuesItem,
+            goodsPromotions: e
+          }
+        })
+        updateSpecValues(item.specId, 'specValues', fromJS(newItem))
       })
     }
 

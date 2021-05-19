@@ -222,9 +222,9 @@ class SkuForm extends React.Component<any, any> {
               <div>
                 {goods.get('subscriptionStatus') == 1 ? (
                   <div>
-                    <p>
-                      <span><FormattedMessage id="Product.OneOff" /></span>
-                    </p>
+                      <span>
+                        <FormattedMessage id="Product.OneOff" />
+                      </span>
                     {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
                       <p>
                         <span><FormattedMessage id="Product.Subscription" /></span>
@@ -232,9 +232,9 @@ class SkuForm extends React.Component<any, any> {
                     ) : null}
                   </div>
                 ) : (
-                  <p>
+                  <div>
                     <span><FormattedMessage id="Product.OneOff" /></span>
-                  </p>
+                  </div>
                 )}
               </div>
             </FormItem>
@@ -253,7 +253,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
-            <p className="flex-start-align">
+            <div className="flex-start-align">
               <span style={{paddingRight:'3px'}}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('linePrice_' + rowInfo.id, {
@@ -270,7 +270,7 @@ class SkuForm extends React.Component<any, any> {
                                 //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                 />)}
               </FormItem>
-            </p>
+            </div>
           </Col>
         </Row>
       )
@@ -329,7 +329,7 @@ class SkuForm extends React.Component<any, any> {
             <Col span={12}>
               {goods.get('subscriptionStatus') == 1 ? (
                 <div>
-                  <p className="flex-start-align">
+                  <div className="flex-start-align">
                     <span style={{paddingRight:'3px'}}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
                     <FormItem style={styles.tableFormItem}>
                       {getFieldDecorator('marketPrice_' + rowInfo.id, {
@@ -353,9 +353,9 @@ class SkuForm extends React.Component<any, any> {
                         />
                       )}
                     </FormItem>
-                  </p>
+                  </div>
                   {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
-                    <p className="flex-start-align">
+                    <div className="flex-start-align">
                       <span style={{paddingRight:'3px'}}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
                       <FormItem style={styles.tableFormItem}>
                         {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
@@ -390,11 +390,11 @@ class SkuForm extends React.Component<any, any> {
                           />
                         )}
                       </FormItem>
-                    </p>
+                    </div>
                   ) : null}
                 </div>
               ) : (
-                <p className="flex-start-align">
+                <div className="flex-start-align">
                   <span style={{paddingRight:'3px'}}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
                   <FormItem style={styles.tableFormItem}>
                     {getFieldDecorator('marketPrice_' + rowInfo.id, {
@@ -418,7 +418,7 @@ class SkuForm extends React.Component<any, any> {
                       />
                     )}
                   </FormItem>
-                </p>
+                </div>
               )}
             </Col>
           </Row>
@@ -472,7 +472,7 @@ class SkuForm extends React.Component<any, any> {
                         <p>{rowInfo.subscriptionBasePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.subscriptionBasePrice : ''}</p>
                       </div>
                     ) : (
-                      <p></p>
+                      <p/>
                     )
                   )}
                 </FormItem>

@@ -118,6 +118,13 @@ class DitionaryList extends Component<any, any> {
     }
   };
   onSearch = () => {
+    const { pagination } = this.state;
+    this.setState({
+      pagination: {
+        ...pagination,
+        current: 1
+      }
+    });
     this.getDictionary({ pageNum: 0, pageSize: 10 });
   };
   handleTableChange(pagination: any) {

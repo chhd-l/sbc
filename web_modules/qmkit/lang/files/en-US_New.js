@@ -298,6 +298,7 @@ export default {
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
         'Marketing.Fortherestsubscriptionorder': 'For the rest subscription order, discount ',
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',
+        'Marketing.EamilApiSetting':'Email Api Setting'
     },
     Content: {},
     Setting: {

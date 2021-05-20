@@ -7,7 +7,7 @@ import { RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { querySysDictionary,delSysDictionary, defaultProductSetting, translateAddBatch, addSysDictionary } from './webapi';
 const { Option } = Select;
-
+const { confirm } = Modal;
 class ProductSearchSetting extends Component<any, any> {
   state = {
     visible: false,
@@ -132,7 +132,16 @@ class ProductSearchSetting extends Component<any, any> {
    })
 
   }
-
+   showConfirm(item,type) {
+     const _this=this;
+    confirm({
+      content: 'Are you sure you want to delete this frequency?',
+      onOk(){
+        _this.deleteDict(item,type);
+      },
+      onCancel() {},
+    });
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const { disabled, defaultPurchaseType, visible, visibleClub, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, options, optionsClub, language, purchaseType } = this.state;
@@ -201,13 +210,16 @@ class ProductSearchSetting extends Component<any, any> {
                             <span >{item.name}</span>
                            
                             <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
-                            <Popconfirm placement="topLeft" title={RCi18n({id:'Product.deletethisfrequency'})} onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionFrequencyId')} okText="Confirm" cancelText="Cancel">
+                            {/* <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionFrequencyId')} okText="Confirm" cancelText="Cancel">
                               <Tooltip placement="top" title="Delete">
                                 <a>
                                   <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                 </a>
                               </Tooltip>
-                            </Popconfirm>
+                            </Popconfirm> */}
+                            <a onClick={(e) => this.showConfirm(item,'defaultSubscriptionFrequencyId')}>
+                                  <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
+                                </a>
                          </div>
 
                           </div>
@@ -256,15 +268,17 @@ class ProductSearchSetting extends Component<any, any> {
                             <div style={{ display: 'flex', justifyContent: 'space-between',position:'relative' }} >
                               <span >{item.name}</span>
   
-                              <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
-
-                              <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
+                              <div onClick={e=>e.stopPropagation()} style={{background:'#fff',padding:'5px 12px', position:'absolute',right:-10,top:-5}}>
+                              {/* <Popconfirm placement="right" style={{zIndex:9999999}} title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
                                   <a>
                                     <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                   </a>
                                 </Tooltip>
-                              </Popconfirm>
+                              </Popconfirm> */}
+                               <a onClick={(e) => this.showConfirm(item,'defaultSubscriptionClubFrequencyId')}>
+                                  <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
+                                </a>
                           </div>
 
                             </div>

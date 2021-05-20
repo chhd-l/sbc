@@ -7,6 +7,7 @@ import RelatedForm from './related-form';
 import * as webapi from '../webapi';
 import { Select, Table } from 'antd';
 import { Relax } from 'plume2';
+import { IList } from 'typings/globalType';
 
 //const { Option } = Select;
 
@@ -41,11 +42,22 @@ export default class ProductGridSKU extends React.Component<any, any> {
     pid: String;
     relaxProps?: {
       addSkUProduct: any;
+      likeGoodsName: string;
+      likeGoodsNo: string;
+      storeCategoryIds: IList;
+      goodsCateId: string;
     };
   };
 
   static relaxProps = {
-    addSkUProduct: 'addSkUProduct'
+    addSkUProduct: 'addSkUProduct',
+    // 模糊条件-商品名称
+    likeGoodsName: 'likeGoodsName',
+    // 模糊条件-SPU编码
+    likeGoodsNo: 'likeGoodsNo',
+    // 商品分类
+    storeCategoryIds: 'storeCategoryIds',
+    goodsCateId: 'goodsCateId',
   };
 
   componentDidMount() {
@@ -86,9 +98,9 @@ export default class ProductGridSKU extends React.Component<any, any> {
   arrayFilter = (arrKey, arrList) => {
     let tempList = [];
     arrKey.map((item) => {
-      tempList.push(arrList.find((el) => el.goodsInfoNo === item));
+      tempList.push(arrList.find((el) => el && el.goodsInfoNo === item));
     });
-    return tempList;
+    return tempList.filter(val => val);
   };
 
   render() {
@@ -120,7 +132,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
             onChange: (selectedRowKeys, selectedTableRows) => {
               let tempSelectedRowKeys = [...new Set(selectedRowKeys)];
               let { selectedRows } = this.state;
-              selectedRows = selectedRows.concat(selectedTableRows);
+              selectedRows = selectedRows.concat(selectedTableRows).filter(val => val);
               selectedRows = this.arrayFilter(tempSelectedRowKeys, selectedRows);
               this.setState({
                 selectedRows: selectedRows,
@@ -177,8 +189,15 @@ export default class ProductGridSKU extends React.Component<any, any> {
   }
 
   _pageSearch = ({ pageNum, pageSize }) => {
-    const params = this.state.searchParams;
-    this.init({ ...params, pageNum, pageSize });
+    const { likeGoodsName, likeGoodsNo, storeCategoryIds, goodsCateId } = this.props.relaxProps;
+    let from = {
+      goodsName: likeGoodsName,
+      goodsInfoNo: likeGoodsNo,
+      storeCateIds: storeCategoryIds,
+      goodsCateId: goodsCateId
+    };
+    // const params = this.state.searchParams;
+    this.init({ ...from, pageNum, pageSize });
     this.setState({
       pageNum,
       pageSize,

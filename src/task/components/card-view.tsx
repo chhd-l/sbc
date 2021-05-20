@@ -84,6 +84,7 @@ export default class CardView extends Component<any, any> {
           let onGoingList = res.context.onGoingList ? res.context.onGoingList : [];
           let completedList = res.context.completedList ? res.context.completedList : [];
           let cancelledList = res.context.cancelledList ? res.context.cancelledList : [];
+          let statistics = res.context.statistics;
           this.setState(
             {
               toDoList: toDoList,
@@ -91,10 +92,10 @@ export default class CardView extends Component<any, any> {
               completedList: completedList,
               cancelledList: cancelledList,
               taskCardLength: {
-                toDoLength: toDoList.length,
-                onGoingLength: onGoingList.length,
-                completedLength: completedList.length,
-                cancelledLength: cancelledList.length
+                toDoLength: statistics && statistics.toDoCount,
+                onGoingLength: statistics && statistics.onGoingCount,
+                completedLength: statistics && statistics.completedCount,
+                cancelledLength: statistics && statistics.cancelledCount
               },
               loading: false
             },

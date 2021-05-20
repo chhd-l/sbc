@@ -1,6 +1,7 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
 import { BreadCrumb } from 'qmkit';
+import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import PetItem from './component/pet-item';
 
@@ -14,13 +15,13 @@ export default function EditPetItem(props: any) {
     <div>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <a href="/customer-list">Pet owner</a>
+          <Link to="/customer-list">Pet owner</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/customer-list">Pet owner list</a>
+          <Link to="/customer-list">Pet owner list</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</a>
+          <Link to={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Pet information</Breadcrumb.Item>
       </Breadcrumb>

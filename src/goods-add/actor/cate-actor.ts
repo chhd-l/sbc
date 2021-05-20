@@ -1,7 +1,7 @@
 import { Actor, Action } from 'plume2';
 import { Map, fromJS } from 'immutable';
 import { IMap, IList } from 'typings/globalType';
-
+import { treeNesting } from '../../../web_modules/qmkit/utils/utils'
 export default class CateActor extends Actor {
   defaultState() {
     return {
@@ -28,25 +28,7 @@ export default class CateActor extends Actor {
   @Action('cateActor: init')
   init(state, cateList: IList) {
     // 改变数据形态，变为层级结构
-    const newDataList = cateList
-      .filter((item) => item.get('cateParentId') == 0)
-      .map((data) => {
-        const children = cateList
-          .filter((item) => item.get('cateParentId') == data.get('cateId'))
-          .map((childrenData) => {
-            const lastChildren = cateList.filter((item) => item.get('cateParentId') == childrenData.get('cateId'));
-            if (!lastChildren.isEmpty()) {
-              childrenData = childrenData.set('children', lastChildren);
-            }
-            return childrenData;
-          });
-
-        if (!children.isEmpty()) {
-          data = data.set('children', children);
-        }
-        return data;
-      });
-
+    const newDataList = treeNesting(cateList,'cateParentId','cateId')
     return state.set('resCateList', newDataList).set('resCateAllList', cateList);
   }
 

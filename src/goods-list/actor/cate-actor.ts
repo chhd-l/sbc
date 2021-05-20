@@ -1,6 +1,6 @@
 import { Actor, Action } from 'plume2';
 import { List } from 'immutable';
-
+import { treeNesting } from '../../../web_modules/qmkit/utils/utils'
 declare type IList = List<any>;
 
 export default class CateActor extends Actor {
@@ -16,47 +16,13 @@ export default class CateActor extends Actor {
 
   @Action('cateActor: init')
   init(state, cateList: IList) {
-    const newDataList = cateList
-    .filter((item) => item.get('cateParentId') == 0)
-    .map((data) => {
-      const children = cateList
-        .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
-        .map((childrenData) => {
-          const lastChildren = cateList.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
-          if (!lastChildren.isEmpty()) {
-            childrenData = childrenData.set('children', lastChildren);
-          }
-          return childrenData;
-        });
-
-      if (!children.isEmpty()) {
-        data = data.set('children', children);
-      }
-      return data;
-    });
+    const newDataList = treeNesting(cateList,'cateParentId','cateId')
     return state.set('cateList', newDataList).set('allCateList', cateList);
   }
 
   @Action('goodsActor:getGoodsCate')
   getGoodsCate(state, dataList) {
-    const newDataList = dataList
-      .filter((item) => item.get('cateParentId') == 0)
-      .map((data) => {
-        const children = dataList
-          .filter((item) => item.get('cateParentId') == data.get('cateId'))
-          .map((childrenData) => {
-            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('cateId'));
-            if (!lastChildren.isEmpty()) {
-              childrenData = childrenData.set('children', lastChildren);
-            }
-            return childrenData;
-          });
-
-        if (!children.isEmpty()) {
-          data = data.set('children', children);
-        }
-        return data;
-      });
+    const newDataList = treeNesting(dataList,'cateParentId','cateId')
     return state.set('productCateList', newDataList).set('sourceGoodCateList', dataList);
   }
 }

@@ -191,8 +191,10 @@ class ListView extends React.Component<any, any> {
     );
   }
 
-  handleCopy = (value) => {
-    if (!value) {
+  handleCopy = (v,value) => {
+   const isTrue= this.timeDiffSaven(v);
+
+    if (!value||isTrue==='Invalid') {
       message.error(RCi18n({ id: 'Prescriber.copylink failed' }));
       return
     }
@@ -325,7 +327,7 @@ class ListView extends React.Component<any, any> {
                         </a>
                       </Tooltip>
                       <Tooltip placement="top" title={<FormattedMessage id="Prescriber.copied link" />}>
-                        <Icon type="link" onClick={() => this.handleCopy(this.newUrl(v.linkAddr))} />
+                        <Icon type="link" onClick={() => this.handleCopy(v,this.newUrl(v.linkAddr))} />
                       </Tooltip>
                     </div>
 

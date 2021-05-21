@@ -227,7 +227,7 @@ class MessageSetting extends Component<any, any> {
             </div>
             <Modal
               width="450px"
-              title={<FormattedMessage id="Marketing.SendGridApiSetting" />}
+              title={<FormattedMessage id="Marketing.EmailApiSetting" />}
               visible={this.state.visible}
               maskClosable={false}
               // onOk={this.handleOk}

@@ -122,12 +122,15 @@ export default class Main extends React.Component<any, any> {
 
     return (
       <div>
+        {/* BreadCrumb */}
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{gid ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
         </BreadCrumb>
+        {/* Headline */}
         <div className="container-search">
           <Headline title={gid ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
         </div>
+        {/* Tabs */}
         <div className="container">
           <Tabs
             activeKey={this.store.get('activeTabKey')}
@@ -138,15 +141,17 @@ export default class Main extends React.Component<any, any> {
             }}
             onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
+            {/* Product information */}
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
               <Tabs.TabPane tab={<FormattedMessage id="Product.Productinformation" />} key="main">
                 <AlertInfo />
-                {/*商品基本信息*/}
+                {/* Basic information 》商品基本信息 */}
                 <Goods />
-                {/*商品属性信息*/}
-                <GoodsPropDetail />
 
-                {/*商品规格信息*/}
+                {/* Attribute information 》商品属性信息 */}
+                <GoodsPropDetail />
+                
+                {/* Specification setting 》商品规格信息 */}
                 <Spec />
 
                 {/*商品表格*/}
@@ -162,17 +167,19 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
+            {/* Product price */}
             <Tabs.TabPane tab={<FormattedMessage id="Product.Productprice" />} key="price">
               <AlertInfo />
 
               <ProductPrice />
             </Tabs.TabPane>
+            {/* Product inventory */}
             <Tabs.TabPane tab={<FormattedMessage id="Product.Productinventory" />}key="inventory">
               <AlertInfo />
 
               <ProductInventory />
             </Tabs.TabPane>
-
+            {/* Related product */}
             <Tabs.TabPane
               tab={<FormattedMessage id="Product.Relatedproduct" />}
               key="related"
@@ -182,6 +189,7 @@ export default class Main extends React.Component<any, any> {
 
               <Related />
             </Tabs.TabPane>
+            {/* SEO setting */}
             <Tabs.TabPane
               tab={<FormattedMessage id="Product.SEOsetting" />}
               key="seo"

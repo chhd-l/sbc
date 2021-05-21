@@ -469,7 +469,7 @@ export default class AppStore extends Store {
             });
           return item.set('specValues', specValues);
         });
-        debugger
+        
         // 商品列表
         let basePriceType;
 

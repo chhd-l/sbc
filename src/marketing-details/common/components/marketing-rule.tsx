@@ -62,11 +62,11 @@ export default class MarketingRule extends React.Component<any, any> {
                     </span>
                   ) : subType === 2 ? ( //full amount discount
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {level.discount * 10} discount
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {level.discount * 100 / 10} discount
                     </span>
                   ) : subType === 3 ? ( //full quantity discount
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items discount {level.discount * 10} discount
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items discount {level.discount * 100 / 10} discount
                     </span>
                   ) : subType === 6 ? ( // subsctiption reduction
                     <div className="rule-span">

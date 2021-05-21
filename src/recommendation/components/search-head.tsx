@@ -171,10 +171,10 @@ class SearchHead extends Component<any, any> {
                 {/*商品名称、SKU编码*/}
                 <FormItem>
                   <InputGroup compact>
-                    <Input  style={{width: '49%', textAlign: 'center' }} readOnly defaultValue='Created date' />
+                    <Input  style={{width: '47%', textAlign: 'center' }} readOnly defaultValue='Created date' />
                     <DatePicker
                     value={fillDate}
-                      style={{ width: '50%' }}
+                      style={{ width: '53%' }}
                       onChange={(date, dateString) => {
                         this.setState({
                           fillDate: date

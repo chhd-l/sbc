@@ -32,7 +32,9 @@ const Common = {
     PENDING_REVIEW:'Pending review',
     REFUND_REJECTED:'Refund rejected',
     REVIEW_REJECTED:'Review rejected',
-    PENDING_REFUND:'Pending refund'
+    PENDING_REFUND:'Pending refund',
+    TO_BE_DELIVERED:'toBeDelivered',
+    TO_BE_RECEIVED:'toBeReceived'
   },
   // 退款状态
   returnMoneyState: {

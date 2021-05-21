@@ -250,7 +250,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
   arrayFilter = (arrKey, arrList) => {
     let tempList = [];
     arrKey.map((item) => {
-      tempList.push(arrList.find((el) => el.goodsInfoNo === item));
+      tempList.push(arrList.find((el) => el && el.goodsInfoNo === item));
     });
     return tempList;
   };

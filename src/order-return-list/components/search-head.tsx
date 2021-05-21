@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Relax } from 'plume2';
 import { Button, Dropdown, Form, Icon, Input, Menu, Modal, Select, DatePicker, message, Row, Col } from 'antd';
-import { ExportModal, Headline, noop, Const, AuthWrapper, checkAuth } from 'qmkit';
+import { ExportModal, Headline, noop, Const, AuthWrapper, checkAuth, RCi18n } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
@@ -341,10 +341,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={{ width: '176px' }}
       >
-        <Option value="buyerName">
+        <Option value="buyerName" title={RCi18n({id: 'Order.consumerName'})}>
           <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option value="buyerAccount">
+        <Option value="buyerAccount" title={RCi18n({id: 'Order.consumerAccount'})}>
           <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>

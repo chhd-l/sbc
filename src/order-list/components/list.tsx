@@ -305,7 +305,8 @@ class ListView extends React.Component<any, any> {
                               marginLeft: 20,
                               color: '#000',
                               display: 'inline-block',
-                              position: 'relative'
+                              position: 'relative',
+                              width: 600
                             }}
                           >
                             {id}{' '}

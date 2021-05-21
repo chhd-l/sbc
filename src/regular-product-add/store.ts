@@ -437,6 +437,8 @@ export default class AppStore extends Store {
           name: index,
           size: 1,
           status: 'done',
+          imageId: image.get('imageId'),
+          imageType: image.get('imageType'),
           artworkUrl: image.get('artworkUrl')
         });
       });
@@ -1319,10 +1321,14 @@ export default class AppStore extends Store {
     param = param.set('goods', goods);
 
     // -----商品相关图片-------
-    const images = data.get('images').map((item) =>
-      Map({
-        artworkUrl: item.get('artworkUrl')
-      })
+    const images = data.get('images').map((item) => {
+        return Map({
+          artworkUrl: item.get('artworkUrl'),
+          imageId: item.get('imageId'),
+          imageType: item.get('imageType'),
+        })
+    }
+
     );
 
     param = param.set('images', images);

@@ -1,5 +1,6 @@
 import { Action, Actor } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
+import { treeNesting } from '../../../web_modules/qmkit/utils/utils';
 
 export default class GoodsActor extends Actor {
   defaultState() {
@@ -89,24 +90,7 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initCateList')
   initCateList(state, dataList: IList) {
     // 改变数据形态，变为层级结构
-    const newDataList = dataList
-      .filter((item) => item.get('cateParentId') == 0)
-      .map((data) => {
-        const children = dataList
-          .filter((item) => item.get('cateParentId') == data.get('cateId'))
-          .map((childrenData) => {
-            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('cateId'));
-            if (!lastChildren.isEmpty()) {
-              childrenData = childrenData.set('children', lastChildren);
-            }
-            return childrenData;
-          });
-
-        if (!children.isEmpty()) {
-          data = data.set('children', children);
-        }
-        return data;
-      });
+    const newDataList = treeNesting(dataList,'cateParentId','cateId')
     return state.set('cateList', newDataList).set('sourceCateList', dataList);
   }
 
@@ -118,24 +102,7 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initStoreCateList')
   initStoreCateList(state, dataList: IList) {
     // 改变数据形态，变为层级结构
-    const newDataList = dataList
-      .filter((item) => item.get('cateParentId') == 0)
-      .map((data) => {
-        const children = dataList
-          .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
-          .map((childrenData) => {
-            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
-            if (!lastChildren.isEmpty()) {
-              childrenData = childrenData.set('children', lastChildren);
-            }
-            return childrenData;
-          });
-
-        if (!children.isEmpty()) {
-          data = data.set('children', children);
-        }
-        return data;
-      });
+    const newDataList = treeNesting(dataList,'cateParentId','cateId')
     return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
   }
 
@@ -177,30 +144,7 @@ export default class GoodsActor extends Actor {
 
   @Action('goodsActor:getGoodsCate')
   getGoodsCate(state, getGoodsCate) {
-    const newDataList = getGoodsCate
-      .filter((item) => item.get('cateParentId') == 0)
-      .map((data) => {
-        const children = getGoodsCate
-          .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
-          .map((childrenData) => {
-            const lastChildren = getGoodsCate.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
-            if (!lastChildren.isEmpty()) {
-              const sum = lastChildren.reduce(function (prev, cur) {
-                return cur.get('productNo') + prev;
-              }, 0);
-              childrenData = childrenData.set('children', lastChildren).set('productNo', sum);
-            }
-            return childrenData;
-          });
-
-        if (!children.isEmpty()) {
-          const sum = children.reduce(function (prev, cur) {
-            return cur.get('productNo') + prev;
-          }, 0);
-          data = data.set('children', children).set('productNo', sum);
-        }
-        return data;
-      });
+    const newDataList = treeNesting(getGoodsCate,'cateParentId','cateId')
     return state.set('getGoodsCate', newDataList).set('sourceGoodCateList', getGoodsCate);
   }
 

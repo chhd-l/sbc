@@ -161,14 +161,16 @@ class SearchForm extends React.Component<any, any> {
         <Row>
           <Col span={8}>
             <FormItem>
-              {getFieldDecorator('likeGoodsName')(
+              {getFieldDecorator('likeGoodsName',{
+                initialValue: likeGoodsName
+              })(
                 <Input
                   addonBefore={
                     <p style={styles.label}>
                       <FormattedMessage id="Product.ProductName" />
                     </p>
                   }
-                  value={likeGoodsName}
+                  // value={likeGoodsName}
                   style={{ width: 300 }}
                   onChange={(e: any) => {
                     onFormFieldChange({
@@ -182,10 +184,12 @@ class SearchForm extends React.Component<any, any> {
           </Col>
           <Col span={8}>
             <FormItem>
-              {getFieldDecorator('likeGoodsNo')(
+              {getFieldDecorator('likeGoodsNo',{
+                initialValue: likeGoodsNo
+              })(
                 <Input
                   addonBefore={<p style={styles.label}>{this.props.sku ? <FormattedMessage id="Product.SKU" /> : <FormattedMessage id="Product.SPU" />}</p>}
-                  value={likeGoodsNo}
+                  // value={likeGoodsNo}
                   style={{ width: 300 }}
                   onChange={(e: any) => {
                     onFormFieldChange({
@@ -247,7 +251,9 @@ class SearchForm extends React.Component<any, any> {
 
           <Col span={8}>
             <FormItem>
-              {getFieldDecorator('brandId')(
+              {getFieldDecorator('brandId',{
+                initialValue: ''
+              })(
                 <SelectGroup
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
@@ -257,7 +263,7 @@ class SearchForm extends React.Component<any, any> {
                       <FormattedMessage id="Product.brand" />
                     </p>
                   }
-                  defaultValue="All"
+                  // defaultValue="All"
                   showSearch
                   optionFilterProp="children"
                   onChange={(value) => {

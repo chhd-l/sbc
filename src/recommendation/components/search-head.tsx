@@ -186,7 +186,6 @@ class SearchHead extends Component<any, any> {
               </Col>
 
 
-
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
                   {/* {sessionStorage.getItem('PrescriberType') != null ? ( */}

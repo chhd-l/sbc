@@ -539,38 +539,36 @@ class ClinicForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
-    const isRolePrescriber = (JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA) || '{}').roleName ?? '').indexOf('Prescriber') > -1;
     const isCountryGermany = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de';
+    console.log('xxxxx:', firstPrescriberForm);
     return (
       <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>
         <TabPane tab="Basic Information" key="basic">
           <Row>
             <Col span={12}>
               <Form {...layout} onSubmit={this.handleSubmit}>
-                {prescriberId ? null : (
-                  <FormItem label={RCi18n({ id: 'Prescriber.ParentPrescriber' })}>
-                    {getFieldDecorator(
-                      'parentPrescriberId',
-                      {}
-                    )(
-                      <Select
-                        disabled={(firstPrescriberForm && firstPrescriberForm.parentPrescriberId && this.state.isPrescriber) || (isCountryGermany || isRolePrescriber)}
-                        allowClear
-                        showSearch
-                        filterOption={this.filterOption}
-                        onChange={(value) => {
-                          value = value === '' ? null : value;
-                          this.onFormChange({
-                            field: 'parentPrescriberId',
-                            value
-                          });
-                        }}
-                      >
-                        {this._renderPerscirbersOption()}
-                      </Select>
-                    )}
-                  </FormItem>
-                )}
+                <FormItem label={RCi18n({ id: 'Prescriber.ParentPrescriber' })}>
+                  {getFieldDecorator(
+                    'parentPrescriberId',
+                    {}
+                  )(
+                    <Select
+                      disabled={(firstPrescriberForm && firstPrescriberForm.parentPrescriberId && this.state.isPrescriber) || (isCountryGermany && prescriberId)}
+                      allowClear
+                      showSearch
+                      filterOption={this.filterOption}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'parentPrescriberId',
+                          value
+                        });
+                      }}
+                    >
+                      {this._renderPerscirbersOption()}
+                    </Select>
+                  )}
+                </FormItem>
                 <FormItem label={RCi18n({ id: 'Prescriber.PrescriberID' })}>
                   {getFieldDecorator('prescriberId', {
                     rules: [{ required: true, message: RCi18n({ id: 'Prescriber.PleaseInputPrescriberId' }) }]
@@ -681,7 +679,7 @@ class ClinicForm extends React.Component<any, any> {
                     <Select
                       // showSearch
                       placeholder=""
-                      disabled={isCountryGermany && isRolePrescriber}
+                      disabled={isCountryGermany && prescriberId}
                       notFoundContent={objectFetching ? <Spin size="small" /> : null}
                       // onSearch={_.debounce(this.getCityList, 500)}
                       filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}

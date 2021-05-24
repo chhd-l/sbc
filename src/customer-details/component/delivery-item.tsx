@@ -231,7 +231,12 @@ class DeliveryItem extends React.Component<Iprop, any> {
             province: dadataAddress.province || '',
             provinceId: null,
             city: dadataAddress.city || '',
-            cityId: null
+            cityId: null,
+            area: dadataAddress.area || '',
+            housing: dadataAddress.block || '',
+            house: dadataAddress.house || '',
+            settlement: dadataAddress.settlement || '',
+            street: dadataAddress.street || ''
           } : {
             country: (this.state.countryList[0] ?? {}).value ?? '',
             countryId: (this.state.countryList[0] ?? {}).id ?? '',
@@ -282,7 +287,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       this.setState({
         dadataAddress: address
       });
-      this.props.form.setFieldsValue({ postCode: address.postCode || '' });
+      this.props.form.setFieldsValue({ postCode: address.postCode || '', entrance: address.entrance || '', apartment: address.flat || '' });
     } else {
       this.props.form.setFieldsValue({ address1: this.props.delivery.address1 });
     }

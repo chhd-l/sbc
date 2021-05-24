@@ -182,7 +182,9 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
             defaultPurchaseType: parseInt((configResponse as any).storeVO?.defaultPurchaseType ?? -1),
             defaultSubscriptionFrequencyId: (configResponse as any).storeVO?.defaultSubscriptionFrequencyId ?? '',
             defaultSubscriptionClubFrequencyId:(configResponse as any).storeVO?.defaultSubscriptionClubFrequencyId ?? '',
-            languageId: (configResponse as any).storeVO?.languageId ?? ''
+            languageId: (configResponse as any).storeVO?.languageId ?? '',
+            base_price_pdp_showed_flag:(configResponse as any).storeVO?.base_price_pdp_showed_flag ?? 0,
+            price_display_method:(configResponse as any).storeVO?.price_display_method ?? 0
           }
           sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (configResponse as any).currency.valueEn); //货币符号
           sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (configResponse as any).currency.name); //货币名称

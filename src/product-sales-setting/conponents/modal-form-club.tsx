@@ -52,7 +52,7 @@ class ModalFormClub extends Component<Props, any> {
       });
       resolve(d);
     }).then(async (translateList) => {
-      await translateAddBatch({ translateList });
+   //   await translateAddBatch({ translateList });
       await addSysDictionary({
         type: values.type,
         name: values.name,

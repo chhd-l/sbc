@@ -729,6 +729,6 @@ const styles = {
     overflow: 'hidden'
   },
   newWrapper: {
-    width: 200
+    width: 185
   }
 } as any;

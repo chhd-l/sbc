@@ -540,7 +540,6 @@ class ClinicForm extends React.Component<any, any> {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     const isCountryGermany = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de';
-    console.log('xxxxx:', firstPrescriberForm);
     return (
       <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>
         <TabPane tab="Basic Information" key="basic">

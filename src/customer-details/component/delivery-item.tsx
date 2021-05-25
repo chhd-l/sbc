@@ -203,6 +203,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
         const rFields = { ...fields, ...sugAddr };
+        //俄罗斯地址修改了才去调是否在配送范围的验证
         if (addressInputType === 'AUTOMATICALLY' && delivery.address1 !== fields.address1) {
           const validStatus = await validateAddressScope({
             regionFias: dadataAddress.provinceId || null,
@@ -221,6 +222,24 @@ class DeliveryItem extends React.Component<Iprop, any> {
             this.setState({ loading: false });
             return;
           }
+        }
+        //俄罗斯地址验证地址是否齐全
+        if (addressInputType === 'AUTOMATICALLY' && delivery.address1 === fields.address1 && (!delivery.street || !delivery.postCode || !delivery.house || !delivery.city)) {
+          const errTip = !delivery.street 
+            ? new Error(RCi18n({id:'PetOwner.AddressStreetTip'})) 
+            : !delivery.postCode 
+            ? new Error(RCi18n({id:'PetOwner.AddressPostCodeTip'})) 
+            : !delivery.house 
+            ? new Error(RCi18n({id:'PetOwner.AddressHouseTip'})) 
+            : new Error(RCi18n({id:'PetOwner.AddressCityTip'}));
+          this.props.form.setFields({
+            address1: {
+              value: fields['address1'],
+              errors: [errTip]
+            }
+          });
+          this.setState({ loading: false });
+          return;
         }
         handlerFunc({
           ...delivery,

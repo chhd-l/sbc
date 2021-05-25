@@ -1558,7 +1558,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 {this.state.isUnfoldedDelivery
                   ? deliveryList.map((item) => (
                       <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                        <Radio value={item.deliveryAddressId}>
+                        <Radio
+                          value={item.deliveryAddressId}
+                          disabled={(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru' && (!item.street || !item.postCode || !item.house || !item.city)}
+                        >
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
                             <p>{item.city}</p>
@@ -1567,6 +1570,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             <p>{this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
+                            {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru' && (!item.street || !item.postCode || !item.house || !item.city) ? 
+                            <p style={{color:'#e2001a'}}><FormattedMessage id="Subscription.AddressNeedEdit"/></p> : null}
                           </div>
                         </Radio>
                         <div>
@@ -1579,7 +1584,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   : deliveryList.map((item, index) =>
                       index < 2 ? (
                         <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                          <Radio value={item.deliveryAddressId}>
+                          <Radio
+                            value={item.deliveryAddressId}
+                            disabled={(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru' && (!item.street || !item.postCode || !item.house || !item.city)}
+                          >
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
                               <p>{item.city}</p>
@@ -1587,6 +1595,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               <p>{this.getDictValue(countryArr, item.countryId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
+                              {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru' && (!item.street || !item.postCode || !item.house || !item.city) ? 
+                              <p style={{color:'#e2001a'}}><FormattedMessage id="Subscription.AddressNeedEdit"/></p> : null}
                             </div>
                           </Radio>
                           <div>

@@ -41,7 +41,12 @@ export default class orders extends Component<any, any> {
     data[field] = value;
     this.setState(
       {
-        formData: data
+        formData: data,
+        pagination: {
+          current: 1,
+          pageSize: 4,
+          total: 0
+        }
       },
       () => this.getOrderList()
     );
@@ -161,7 +166,6 @@ export default class orders extends Component<any, any> {
             <Input
               className="searchInput"
               placeholder="Order Number"
-              onPressEnter={() => this.getOrderList()}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 this.onFormChange({

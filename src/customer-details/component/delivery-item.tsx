@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete, Modal, Alert, Radio } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Headline, cache, Const } from 'qmkit';
+import { Headline, cache, Const, RCi18n } from 'qmkit';
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress, getRegionListByCityId, getAddressListByDadata, validateAddressScope } from './webapi';
 import { updateAddress, addAddress } from '../webapi';
 import _ from 'lodash';
@@ -280,15 +280,20 @@ class DeliveryItem extends React.Component<Iprop, any> {
     });
   };
 
-  onSelectRuAddress = () => {
-    const address1 = this.props.form.getFieldValue('address1');
-    const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === address1);
+  onSelectRuAddress = (val: string) => {
+    const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === val);
     if (address) {
       this.setState({
         dadataAddress: address
       });
       this.props.form.setFieldsValue({ postCode: address.postCode || '', entrance: address.entrance || '', apartment: address.flat || '' });
-    } else {
+    }
+  };
+
+  onCheckRuAddress = () => {
+    const address1 = this.props.form.getFieldValue('address1');
+    const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === address1);
+    if (!address) {
       this.props.form.setFieldsValue({ address1: this.props.delivery.address1 });
     }
   };
@@ -297,7 +302,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
     if (field.fieldName === 'Address1') {
       if (field.inputSearchBoxFlag === 1) {
         return (
-          <AutoComplete dataSource={this.state.searchAddressList.map(addr => addr.unrestrictedValue)} onSearch={this.searchAddress} onBlur={this.onSelectRuAddress} />
+          <AutoComplete dataSource={this.state.searchAddressList.map(addr => addr.unrestrictedValue)} onSearch={this.searchAddress} onSelect={this.onSelectRuAddress} onBlur={this.onCheckRuAddress} />
           // <Select showSearch filterOption={false} onSearch={this.searchAddress} onChange={this.onSelectRuAddress}>
           //   {this.state.searchAddressList.map((item, idx) => (
           //     <Option value={item.unrestrictedValue} key={idx}>
@@ -372,6 +377,22 @@ class DeliveryItem extends React.Component<Iprop, any> {
     }
   };
 
+  //俄罗斯address1校验
+  ruAddress1Validator = (rule, value, callback) => {
+    const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === value);
+    if (address && !address.street) {
+      callback(RCi18n({id:'PetOwner.AddressStreetTip'}));
+    } else if (address && !address.postCode) {
+      callback(RCi18n({id:'PetOwner.AddressPostCodeTip'}));
+    } else if (address && !address.house) {
+      callback(RCi18n({id:'PetOwner.AddressHouseTip'}));
+    } else if (address && !address.city) {
+      callback(RCi18n({id:'PetOwner.AddressCityTip'}));
+    } else {
+      callback();
+    }
+  };
+
   render() {
     const { delivery, addressType } = this.props;
     const { fields, suggestionAddress, checkedAddress, validationSuccess } = this.state;
@@ -402,7 +423,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
                           { required: field.requiredFlag === 1, message: `${field.fieldName} is required` },
                           field.fieldName != 'Country' ? { max: field.maxLength, message: 'Exceed maximum length' } : undefined,
                           { validator: field.fieldName === 'Phone number' && field.requiredFlag === 1 ? this.comparePhone : (rule, value, callback) => callback() },
-                          { validator: field.fieldName === 'Postal code' && field.requiredFlag === 1 ? this.compareZip : (rule, value, callback) => callback() }
+                          { validator: field.fieldName === 'Postal code' && field.requiredFlag === 1 ? this.compareZip : (rule, value, callback) => callback() },
+                          { validator: field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1 ? this.ruAddress1Validator : (rule, value, callback) => callback() }
                         ].filter((r) => !!r)
                       })(this.renderField(field))}
                     </Form.Item>

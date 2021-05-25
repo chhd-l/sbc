@@ -24,7 +24,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
       createLink: any;
       getGoodsId: any;
       addSkUProduct: any;
-      onFormFieldChange:Function;
+      onFormFieldChange: Function;
       editGoodsItem: Function;
       goodsList: IList;
 
@@ -58,7 +58,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     initCateList: 'initCateList',
     addSkUProduct: 'addSkUProduct',
     goodsList: 'goodsList',
-    onFormFieldChange:noop,
+    onFormFieldChange: noop,
     editGoodsItem: noop,
 
   };
@@ -75,114 +75,55 @@ class ProductTooltipSKU extends React.Component<any, any> {
   };
 
   init = () => {
-    const { addSkUProduct } = this.props.relaxProps;
+    const { goodsList } = this.props.relaxProps;
 
-    let obj = addSkUProduct;
-    if (Array.isArray(obj) &&obj.length>0) {
-      let currentObj = obj.find(item=>item.pid === this.props.pid)
-      if(currentObj){
-        let tempArr = currentObj.targetGoodsIds
-        if(Array.isArray(tempArr)&& tempArr.length>0){
-          let selectedRows = [];
-          let selectedRowKeys = [];
-          for (let i = 0; i < tempArr.length; i++) {
-            const element = tempArr[i];
-            selectedRows.push(element);
-            selectedRowKeys.push(element.subGoodsInfoNo);
-          }
-          this.setState({ selectedRows, selectedRowKeys });
-        }
-      }
-
-
-    }
+    let curGoodsItem = goodsList.toJS().find(item => item.id === this.props.id);
+    let goodsInfoBundleRels = curGoodsItem.goodsInfoBundleRels || [];
+    let selectedRowKeys = goodsInfoBundleRels.map(item => item.subGoodsInfoNo);
+    this.setState({ selectedRows: goodsInfoBundleRels, selectedRowKeys });
   };
 
-  handleOK=()=>{
-    const {selectedRowKeys,selectedRows, addSkUProduct, } = this.state
+  handleOK = () => {
+    const { selectedRowKeys, selectedRows, addSkUProduct, } = this.state
     const { onProductselectSku, goodsList, editGoodsItem } = this.props.relaxProps;
-    // let a = [];
-    let minStock = []
-    // selectedRowKeys.map((item) => {
-    //   a.push({
-    //     goodsInfoNo: item
-    //   });
-    // });
 
-    selectedRows && selectedRows.map((item) => {
-        /*if(item.stock){
-          minStock.push(item.stock)
-        }else if(sessionStorage.getItem('minStock')){
-          minStock.push(sessionStorage.getItem('minStock'))
-        }*/
-      minStock.push(item.stock)
-        targetGoodsIds.push({
-          subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
-          bundleNum: 1,
-          subStock: item.stock,
-          stock: item.stock,
-          saleableFlag: item.saleableFlag,
-          marketPrice: item.marketPrice,
-          subMarketPrice: item.subMarketPrice,
-          subScriptionPrice: item.subScriptionPrice,
-          subscriptionPrice: item.subscriptionPrice,
-          goodsInfoNo: item.goodsInfoNo,
-          subGoodsInfoNo: item.goodsInfoNo,
-
-        })
-      }
-    );
-    let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
-
-    targetGoodsList = [];
-    let tempMinStock = Math.min.apply(Math, minStock)
-
-    //sessionStorage.setItem('minStock',tempMinStock)
-    targetGoodsList.push({
-      pid: this.props.pid,
-      targetGoodsIds: goodsIds,
-      minStock: tempMinStock
+    let goodsInfoBundleRels = selectedRows && selectedRows.map((item) => {
+      let newItem = {
+        subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
+        bundleNum: 1,
+        subStock: item.stock,
+        stock: item.stock,
+        saleableFlag: item.saleableFlag,
+        marketPrice: item.marketPrice,
+        subMarketPrice: item.subMarketPrice,
+        subScriptionPrice: item.subScriptionPrice,
+        subscriptionPrice: item.subscriptionPrice,
+        goodsInfoNo: item.goodsInfoNo,
+        subGoodsInfoNo: item.goodsInfoNo
+      };
+      return newItem
     });
-    let marketPrice = goodsIds[0].marketPrice * goodsIds[0].bundleNum
-    let subscriptionPrice = goodsIds[0].subscriptionPrice * goodsIds[0].bundleNum
-    //let stock = Number(String(goodsIds[0].stock?goodsIds[0].stock:0 / goodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+    goodsInfoBundleRels = _.uniqBy(goodsInfoBundleRels, 'subGoodsInfoNo');
 
-
-    if (targetGoodsIds.length <= 10) {
-      if (targetGoodsIds.length !== 0) {
-
-        // goodsList.toJS().map(item=>{
-        //   if (item.id == this.props.id) {
-        //     editGoodsItem(this.props.id, 'stock', tempMinStock);
-        //     if (goodsList.toJS().length == 1 && goodsIds.length == 1) {
-        //       editGoodsItem(item.id, 'marketPrice', marketPrice);
-        //       editGoodsItem(item.id, 'subscriptionPrice', subscriptionPrice);
-        //     }else {
-        //       editGoodsItem(item.id, 'marketPrice', 0);
-        //       editGoodsItem(item.id, 'subscriptionPrice', 0);
-        //     }
-        //     editGoodsItem(item.id, 'goodsInfoBundleRels', goodsIds);
-
-        //   }
-        // })
-
+    let curGoodsItem = goodsList.toJS().filter(item => item.id === this.props.id)[0];
+    editGoodsItem(curGoodsItem.id, 'goodsInfoBundleRels', goodsInfoBundleRels);
+    if (goodsInfoBundleRels.length <= 10) {
+      if (goodsInfoBundleRels.length !== 0) {
         // 设置Market Price
-        let curGoodsItem = goodsList.toJS().filter(item => item.id === this.props.id)[0]
-        if(curGoodsItem && !curGoodsItem.goodsId) {
-          let subscriptionPrice = 0;
-          let marketPrice = goodsIds.reduce((sum, item) => {
-            subscriptionPrice += item.subscriptionPrice * item.bundleNum;
-            return sum + item.marketPrice * item.bundleNum;
-          }, 0);
+        let subscriptionPrice = 0;
+        let stockArr = [];
+        let marketPrice = goodsInfoBundleRels.reduce((sum, item) => {
+          subscriptionPrice += item.subscriptionPrice * item.bundleNum;
+          stockArr.push(Math.round(item.subStock / item.bundleNum));
+          return sum + item.marketPrice * item.bundleNum;
+        }, 0);
+        if (curGoodsItem && !curGoodsItem.goodsId) {
           editGoodsItem(curGoodsItem.id, 'marketPrice', marketPrice);
           editGoodsItem(curGoodsItem.id, 'subscriptionPrice', subscriptionPrice);
-          editGoodsItem(curGoodsItem.id, 'stock', tempMinStock);
-          editGoodsItem(curGoodsItem.id, 'goodsInfoBundleRels', goodsIds);
-        }
 
-        onProductselectSku(targetGoodsList);
+        }
+        editGoodsItem(curGoodsItem.id, 'stock', Math.min(...stockArr));
       }
-      targetGoodsIds = [];
       this.props.showModal({ type: 0 }, this.props.pid);
     } else {
       message.info('Maximum 10 products!');
@@ -190,13 +131,13 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //this.props.form.resetFields();
     this.clearSearchForm()
   }
-  clearSearchForm =()=>{
-    const{onFormFieldChange} = this.props.relaxProps
-    onFormFieldChange({key: 'likeGoodsName',value: ''});
-    onFormFieldChange({key: 'likeGoodsNo',value: ''});
-    onFormFieldChange({key: 'goodsCateId',value: ''});
-    onFormFieldChange({key: 'storeCategoryIds',value: null});
-    onFormFieldChange({key: 'brandId',value: ''});
+  clearSearchForm = () => {
+    const { onFormFieldChange } = this.props.relaxProps
+    onFormFieldChange({ key: 'likeGoodsName', value: '' });
+    onFormFieldChange({ key: 'likeGoodsNo', value: '' });
+    onFormFieldChange({ key: 'goodsCateId', value: '' });
+    onFormFieldChange({ key: 'storeCategoryIds', value: null });
+    onFormFieldChange({ key: 'brandId', value: '' });
   }
 
   render() {

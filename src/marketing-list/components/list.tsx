@@ -4,7 +4,7 @@ import { List } from 'immutable';
 import { Popconfirm, Tooltip } from 'antd';
 import moment from 'moment';
 import { withRouter } from 'react-router';
-import { DataGrid, noop, history, AuthWrapper, Const } from 'qmkit';
+import { DataGrid, noop, history, AuthWrapper, Const, RCi18n } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import { Table } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -25,9 +25,10 @@ const SUB_TYPE = {
   // 5: '满数量赠'
 };
 const PROMOTION_TYPE = {
-  0: 'Normal promotion',
-  1: 'Subscription promotion',
-  2: 'Club promotion'
+  0: RCi18n({id: 'Marketing.NormalPromotion'}),
+  1: RCi18n({id: 'Marketing.SubscriptionPromotion'}),
+  2: RCi18n({id: 'Marketing.Clubpromotion'}),
+  3: RCi18n({id: 'Marketing.Singlepurchase'})
 };
 
 //默认每页展示的数量

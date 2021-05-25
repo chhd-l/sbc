@@ -496,10 +496,10 @@ class SearchHead extends Component<any, any> {
           </Form>
 
           {hasMenu && (
-            <div className="handle-bar">
+            <div className="handle-bar ant-form-inline filter-content">
               <Dropdown overlay={menu} placement="bottomLeft" getPopupContainer={() => document.getElementById('page-content')}>
                 <Button>
-                  <FormattedMessage id="Order.bulkOperations" /> <Icon type="down" />
+                  <FormattedMessage id="Order.bulkOperations"/> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>

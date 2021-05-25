@@ -220,8 +220,7 @@ class ProductSearchSetting extends Component<any, any> {
                             <a onClick={(e) => this.showConfirm(item,'defaultSubscriptionFrequencyId')}>
                                   <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                 </a>
-                         </div>
-
+                           </div>
                           </div>
                         </Option>
                         ))}
@@ -280,7 +279,6 @@ class ProductSearchSetting extends Component<any, any> {
                                   <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                 </a>
                           </div>
-
                             </div>
                           </Option>
                         ))}

@@ -42,16 +42,16 @@ export default class Main extends React.Component<any, any> {
     this.store.init(gid);
     this.store.setFreightList();
     //初始化素材
-    this.store.initImg({
-      pageNum: 0,
-      cateId: -1,
-      successCount: 0
-    });
-    this.store.initVideo({
-      pageNum: 0,
-      cateId: -1,
-      successCount: 0
-    }); //传入-1时,则会去初始化第一个分类的信息
+    // this.store.initImg({
+    //   pageNum: 0,
+    //   cateId: -1,
+    //   successCount: 0
+    // });
+    // this.store.initVideo({
+    //   pageNum: 0,
+    //   cateId: -1,
+    //   successCount: 0
+    // }); //传入-1时,则会去初始化第一个分类的信息
     if (this.props.location.state != undefined) {
       this.store.onMainTabChange(this.props.location.state.tab, false);
     }

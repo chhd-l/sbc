@@ -30,16 +30,10 @@ const FormItem = Form.Item;
 
 const formItemLayout = {
   labelCol: {
-    sm: { span: 5 },
-    lg: { span: 4 },
-    xl: { span: 3 },
-    xxl: { span: 2 }
+    span: 3
   },
   wrapperCol: {
-    sm: { span: 18 },
-    lg: { span: 19 },
-    xl: { span: 20 },
-    xxl: { span: 21 }
+    span: 10
   }
 };
 
@@ -70,7 +64,9 @@ const columns = [
     width: '20%'
   }
 ];
-
+const style = {
+  marginLeft: 20
+}
 @Relax
 export default class CouponBasicInfo extends Component<any, any> {
   props: {
@@ -103,7 +99,7 @@ export default class CouponBasicInfo extends Component<any, any> {
       <FormDiv>
         <Form>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.CouponName" />}>
-            {couponName}
+            <div style={style}>{couponName}</div>
           </FormItem>
           {/* <FormItem {...formItemLayout} label="Coupon classify">
             <div className="bubbleBox">
@@ -113,20 +109,23 @@ export default class CouponBasicInfo extends Component<any, any> {
             </div>
           </FormItem> */}
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />}>
-            {this._buildRangeDayType(rangeDayType, startTime, endTime, effectiveDays)}
+            <div style={style}>{this._buildRangeDayType(rangeDayType, startTime, endTime, effectiveDays)}</div>
           </FormItem>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Coupon" />}>
-            {`${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${denomination}`}
+            <div style={style}>{`${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${denomination}`}</div>
           </FormItem>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />}>
-            {this._buildFullBuyType(fullBuyType, fullBuyPrice)}
+            <div style={style}>{this._buildFullBuyType(fullBuyType, fullBuyPrice)}</div>
+
           </FormItem>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
-            {this._buildSkus(scopeType, skuBrands, skuCates, skus)}
+            <div style={style}>
+              {this._buildSkus(scopeType, skuBrands, skuCates, skus)}
+            </div>
           </FormItem>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.InstructionsForUse" />}>
             <div
-              style={{ wordBreak: 'break-all' }}
+              style={{ wordBreak: 'break-all', marginLeft: 20}}
               dangerouslySetInnerHTML={{
                 __html: couponDesc ? couponDesc.replace(/\n/g, '<br/>') : ''
               }}

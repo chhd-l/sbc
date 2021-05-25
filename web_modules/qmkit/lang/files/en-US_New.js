@@ -23,6 +23,8 @@ export default {
         'Product.selectstatus': 'please select status',
         'Product.settheSalescategory': 'Set the Sales category field to show product in the respective PLP.',
         "Product.putProductsOffShelves": "Are you sure you want to put these products off shelves?",
+        "Product.SynchronizeText": "Synchronize text",
+        "Product.SynchronizeImage": "Synchronize image",
 
 
     },

@@ -301,7 +301,7 @@ class PetItem extends React.Component<Iprop, any> {
                           </Select>
                         )
                       ) : (
-                        <span>{pet.petsSex ? pet.petsSex == 0 ? 'male' : 'female' : ''}</span>
+                        <span>{pet.petsSex == 0 ? 'male' : pet.petsSex == 1 ? 'female' : ''}</span>
                       )}
                     </Form.Item>
                   </Col>
@@ -358,7 +358,7 @@ class PetItem extends React.Component<Iprop, any> {
                           </Radio.Group>
                         )
                       ) : (
-                        <span>{pet.sterilized ? pet.sterilized == 1 ? 'Yes' : 'No' : ''}</span>
+                        <span>{pet.sterilized == 1 ? 'Yes' : pet.sterilized == 0 ? 'No' : ''}</span>
                       )}
                     </Form.Item>
                   </Col>
@@ -375,7 +375,7 @@ class PetItem extends React.Component<Iprop, any> {
                           </Radio.Group>
                         )
                       ) : (
-                        <span>{pet.isPurebred ? pet.isPurebred == 1 ? 'Yes' : 'No' : ''}</span>
+                        <span>{pet.isPurebred == 1 ? 'Yes' : pet.isPurebred == 0 ? 'No' : ''}</span>
                       )}
                     </Form.Item>
                   </Col>

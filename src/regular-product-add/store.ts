@@ -1806,7 +1806,6 @@ export default class AppStore extends Store {
   // };
 
   modalVisible = async (maxCount: number, imgType: number, skuId: string) => {
-    debugger
     if (this.state().get('visible')) {
       this.initImg({
         pageNum: 0,

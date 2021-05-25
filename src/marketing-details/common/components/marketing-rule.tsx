@@ -42,7 +42,6 @@ export default class MarketingRule extends React.Component<any, any> {
   render() {
     const { fullReductionLevelList, fullDiscountLevelList, subType, marketingType } = this.props.relaxProps;
     const list = marketingType == 1 ? fullDiscountLevelList : fullReductionLevelList;
-    debugger
 
     return (
       <div>

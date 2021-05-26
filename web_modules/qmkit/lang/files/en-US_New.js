@@ -55,9 +55,7 @@ export default {
        'Order.request':'Request',
        'Order.response':'Response',
     },
-    Subscription: {
-        "Subscription.AddressNeedEdit": "Please edit this address",
-    },
+    Subscription: {},
     Appointment: {
         'Appointment.list':'Appointment list',
         'Appointment.No.':'Appointment no.',

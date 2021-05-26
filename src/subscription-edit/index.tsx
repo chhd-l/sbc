@@ -1528,6 +1528,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               onOk={() => this.deliveryOK()}
               onCancel={() => {
                 this.setState({
+                  deliveryAddressId: this.state.originalParams.deliveryAddressId,
                   visibleShipping: false
                 });
               }}
@@ -1631,6 +1632,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               onOk={() => this.billingOK()}
               onCancel={() => {
                 this.setState({
+                  billingAddressId: this.state.originalParams.billingAddressId,
                   visibleBilling: false
                 });
               }}

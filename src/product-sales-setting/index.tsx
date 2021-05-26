@@ -20,8 +20,8 @@ class ProductSearchSetting extends Component<any, any> {
     defaultSubscriptionClubFrequencyId: '',
     language: [],
     purchaseType: [],
-    price_display_method:0,
-    base_price_pdp_showed_flag:0
+    priceDisplayMethod:0,
+    basePricePDPShowedFlag:0
   };
   onFinish = (e: any) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ class ProductSearchSetting extends Component<any, any> {
 
     this.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        values.base_price_pdp_showed_flag=values.base_price_pdp_showed_flag?1:0;
+        values.basePricePDPShowedFlag=values.basePricePDPShowedFlag?1:0;
         const res: any = await defaultProductSetting(values);
         if (res.res.code === Const.SUCCESS_CODE) {
           message.success(res.res.message);
@@ -98,7 +98,7 @@ class ProductSearchSetting extends Component<any, any> {
       querySysDictionary({ type: 'Frequency_day_club' }),
     
     ]);
-    let { defaultPurchaseType, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, languageId ,price_display_method,base_price_pdp_showed_flag} = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+    let { defaultPurchaseType, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, languageId ,priceDisplayMethod,basePricePDPShowedFlag} = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let weeksClub = result[2].res?.context?.sysDictionaryVOS ?? [];
@@ -124,7 +124,7 @@ class ProductSearchSetting extends Component<any, any> {
       defaultSubscriptionClubFrequencyId,
       language,
       purchaseType,
-      price_display_method,base_price_pdp_showed_flag
+      basePricePDPShowedFlag,priceDisplayMethod
     });
   }
   async deleteDict(item,type){
@@ -148,7 +148,7 @@ class ProductSearchSetting extends Component<any, any> {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { disabled, defaultPurchaseType, visible, visibleClub, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, options, optionsClub, language, purchaseType, price_display_method,base_price_pdp_showed_flag } = this.state;
+    const { disabled, defaultPurchaseType, visible, visibleClub, defaultSubscriptionFrequencyId, defaultSubscriptionClubFrequencyId, options, optionsClub, language, purchaseType, basePricePDPShowedFlag,priceDisplayMethod } = this.state;
 
     return (
       <div style={styles.container}>
@@ -303,8 +303,8 @@ class ProductSearchSetting extends Component<any, any> {
             </Form.Item>
 
             <Form.Item label={<span style={{ color: '#666' }}>Price display method</span>}>
-                {getFieldDecorator('price_display_method', {
-                      initialValue: price_display_method||0,
+                {getFieldDecorator('priceDisplayMethod', {
+                      initialValue: priceDisplayMethod||0,
                       rules: [
                         {
                           required: true,
@@ -319,11 +319,12 @@ class ProductSearchSetting extends Component<any, any> {
                       ))}
                     </Select>)}
               </Form.Item>
+              
 
               <Form.Item label={<span style={{ color: '#666' }}>Base price showed in PDP</span>}>
-                {getFieldDecorator('base_price_pdp_showed_flag', {
+                {getFieldDecorator('basePricePDPShowedFlag', {
                   valuePropName: 'checked',
-                      initialValue: base_price_pdp_showed_flag===0?false:true,
+                      initialValue: basePricePDPShowedFlag===0?false:true,
                       rules: [
                         {
                           required: true,

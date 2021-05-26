@@ -30,16 +30,10 @@ const FormItem = Form.Item;
 
 const formItemLayout = {
   labelCol: {
-    sm: { span: 5 },
-    lg: { span: 4 },
-    xl: { span: 3 },
-    xxl: { span: 2 }
+    span: 3
   },
   wrapperCol: {
-    sm: { span: 18 },
-    lg: { span: 19 },
-    xl: { span: 20 },
-    xxl: { span: 21 }
+    span: 10
   }
 };
 

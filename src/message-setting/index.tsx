@@ -29,6 +29,7 @@ class MessageSetting extends Component<any, any> {
       settingForm:{
         fromEmail:''
       },
+      currentSend:'',
       currentSettingForm: {
       }
     };
@@ -94,7 +95,8 @@ class MessageSetting extends Component<any, any> {
   }
   openEditModal=(item)=>{
     this.setState({
-      loading: true
+      loading: true,
+      currentSend:item.emailTypeName
     })
     webapi.getApiSenderList(item.emailType).then(data => {
       const { res } = data
@@ -171,7 +173,7 @@ class MessageSetting extends Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
 
-    const { emailApiList, settingForm, loading,senderList } = this.state;
+    const { emailApiList, settingForm, loading,senderList,currentSend } = this.state;
     return (
       <AuthWrapper functionName="f_message_setting">
         <div>
@@ -243,7 +245,9 @@ class MessageSetting extends Component<any, any> {
             >
               <Form layout="vertical">
                 <FormItem label={<FormattedMessage id="Marketing.Tips" />} style={styles.formItem}>
-                  <Alert message={RCi18n({ id: 'Marketing.Message.settingTips' })} type="warning" />
+                  <Alert message={currentSend ==='SendGrid' ? 
+                  RCi18n({ id: 'Marketing.Message.settingTips' })
+                  :RCi18n({ id: 'Marketing.sendsayTip' })} type="warning" />
                 </FormItem>
                 <FormItem label={<FormattedMessage id="Marketing.Sender" />} style={styles.formItem}>
                   {getFieldDecorator('fromEmail', {

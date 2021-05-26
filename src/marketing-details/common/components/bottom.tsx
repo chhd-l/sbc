@@ -56,10 +56,12 @@ export default class Bottom extends React.Component<any, any> {
       <div>
         <GreyBg>
           <Row>
-            <Col span={24}>
+            <Col span={4}>
               <span >
                 <FormattedMessage id="Marketing.TargetConsumer" />:
               </span>
+            </Col>
+            <Col span={18}>
               {
                 joinLevel == -1 ?
                   <span className="left-span"><FormattedMessage id="Marketing.all" /></span> : joinLevel == -3 ?

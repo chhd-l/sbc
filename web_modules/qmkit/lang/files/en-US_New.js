@@ -220,6 +220,10 @@ export default {
         "PetOwner.Keyword": "Keyword",
         "PetOwner.TaskStatus": "Task Status",
         "PetOwner.GoldenMoment": "GoldenMoment",
+        "PetOwner.AddressStreetTip": "Пожалуйста, укажите: Улица",
+        "PetOwner.AddressPostCodeTip": "Пожалуйста, укажите: Индекс",
+        "PetOwner.AddressHouseTip": "Пожалуйста, укажите: Дом",
+        "PetOwner.AddressCityTip": "Пожалуйста, укажите: Город",
     },
     Finance: {},
     Analysis: {},
@@ -300,7 +304,8 @@ export default {
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
         'Marketing.Fortherestsubscriptionorder': 'For the rest subscription order, discount ',
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',
-        'Marketing.EamilApiSetting':'Email Api Setting'
+        'Marketing.EmailApiSetting':'Email Api Setting',
+        'Marketing.sendsayTip':'Please go to Sendsay to activate Email,and set up your AccessKeyId and AccessKeySecret in the Sendsay.'
     },
     Content: {},
     Setting: {

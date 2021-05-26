@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid } from 'qmkit';
+import { Const, DataGrid, noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import RelatedForm from './related-form';
 import * as webapi from '../webapi';
@@ -40,6 +40,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
     visible: Boolean;
     searchParams: Object;
     pid: String;
+    selectedRows: [];
     relaxProps?: {
       addSkUProduct: any;
       likeGoodsName: string;
@@ -57,7 +58,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
     likeGoodsNo: 'likeGoodsNo',
     // 商品分类
     storeCategoryIds: 'storeCategoryIds',
-    goodsCateId: 'goodsCateId',
+    goodsCateId: 'goodsCateId'
   };
 
   componentDidMount() {
@@ -66,7 +67,8 @@ export default class ProductGridSKU extends React.Component<any, any> {
     this.init(searchParams ? searchParams : {});
     let pid = addSkUProduct.filter((item) => item.pid == this.props.pid);
     this.setState({
-      goodsNo: pid
+      goodsNo: pid,
+      selectedRows: this.props.selectedRows
     });
   }
   static getDerivedStateFromProps(props, state) {
@@ -97,10 +99,16 @@ export default class ProductGridSKU extends React.Component<any, any> {
 
   arrayFilter = (arrKey, arrList) => {
     let tempList = [];
-    arrKey.map((item) => {
-      tempList.push(arrList.find((el) => el && el.goodsInfoNo === item));
+    // arrKey.map((item) => {
+    //   tempList.push(arrList.find((el) => el && el.goodsInfoNo === item));
+    // });
+    arrKey.forEach(key => {
+      const obj = arrList.find((el) => el && el.goodsInfoId === key || el.subGoodsInfoId === key);
+      if(obj) {
+        tempList.push(obj)
+      }
     });
-    return tempList.filter(val => val);
+    return tempList;
   };
 
   render() {
@@ -112,7 +120,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
         <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} sku={true} />
         <DataGrid
           loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
-          rowKey={(record, index) => record.goodsInfoNo}
+          rowKey='goodsInfoId'
           dataSource={goodsInfoPage.content && goodsInfoPage.content}
           isScroll={false}
           pagination={{
@@ -130,38 +138,37 @@ export default class ProductGridSKU extends React.Component<any, any> {
           rowSelection={{
             selectedRowKeys: selectedRowKeys,
             onChange: (selectedRowKeys, selectedTableRows) => {
-              let tempSelectedRowKeys = [...new Set(selectedRowKeys)];
               let { selectedRows } = this.state;
-              selectedRows = selectedRows.concat(selectedTableRows).filter(val => val);
-              selectedRows = this.arrayFilter(tempSelectedRowKeys, selectedRows);
+              selectedRows = selectedRows.concat(selectedTableRows);
+              selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);
               this.setState({
-                selectedRows: selectedRows,
-                selectedRowKeys: tempSelectedRowKeys
+                selectedRows,
+                selectedRowKeys
               });
 
               rowChangeBackFun(selectedRowKeys, selectedRows);
             },
-            getCheckboxProps(record) {
-              let a = [];
-              let b = null;
-              goodsNo.map((item) => {
-                return item.targetGoodsIds.map((i) => {
-                  return a.push(i);
-                });
-              });
-              a.map((o) => {
-                if (o.subGoodsInfoNo == record.goodsInfoNo) {
-                  if (o.subGoodsInfoNo) {
-                    if (record.goodsInfoNo == o.subGoodsInfoNo) {
-                      b = 'checked';
-                    }
-                  }
-                }
-              });
-              return {
-                defaultChecked: b // 配置默认勾选的列
-              };
-            }
+            // getCheckboxProps(record) {
+            //   let a = [];
+            //   let b = null;
+            //   goodsNo.map((item) => {
+            //     return item.targetGoodsIds.map((i) => {
+            //       return a.push(i);
+            //     });
+            //   });
+            //   a.map((o) => {
+            //     if (o.subGoodsInfoNo == record.goodsInfoNo) {
+            //       if (o.subGoodsInfoNo) {
+            //         if (record.goodsInfoNo == o.subGoodsInfoNo) {
+            //           b = 'checked';
+            //         }
+            //       }
+            //     }
+            //   });
+            //   return {
+            //     defaultChecked: b // 配置默认勾选的列
+            //   };
+            // }
           }}
         >
           <Column
@@ -220,19 +227,19 @@ export default class ProductGridSKU extends React.Component<any, any> {
 
     if ((res as any).code == Const.SUCCESS_CODE) {
       res = (res as any).context.goodsInfos;
-      let arr = res.content;
-      let a = arr;
-      let b = this.state.selectedRows;
+      // let arr = res.content;
+      // let a = arr;
+      // let b = this.state.selectedRows;
 
-      b.reduce((pre, cur) => {
-        let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
-        if (target) {
-          Object.assign(target, cur);
-        } else {
-          pre.concat(arr);
-        }
-        return pre;
-      }, a);
+      // b.reduce((pre, cur) => {
+      //   let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
+      //   if (target) {
+      //     Object.assign(target, cur);
+      //   } else {
+      //     pre.concat(arr);
+      //   }
+      //   return pre;
+      // }, a);
 
       this.setState({
         goodsInfoPage: res,

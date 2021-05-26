@@ -58,7 +58,6 @@ export default class SkuTable extends React.Component<any, any> {
       priceOpt: number;
       initStoreCateList: any;
       goodsInfos: any;
-      addSkUProduct: any;
       goodsId: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
@@ -87,7 +86,6 @@ export default class SkuTable extends React.Component<any, any> {
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
-    addSkUProduct: 'addSkUProduct',
     initStoreCateList: 'initStoreCateList',
     goodsInfos: 'goodsInfos',
     goodsId: 'goodsId',
@@ -150,30 +148,8 @@ class SkuForm extends React.Component<any, any> {
 
 
   render() {
-    const { goodsList, onProductselectSku, addSkUProduct, goodsId } = this.props.relaxProps;
-
-    if (goodsId == undefined && this.state.specType == false) {
-      if ( goodsList.toJS().length == 0 ) {
-        let a = []
-        onProductselectSku(a)
-      }else {
-        if (addSkUProduct.length>0) {
-          //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
-          let b = addSkUProduct.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
-          onProductselectSku(b)
-        }
-      }
-    }
-
-
-    // const {  } = this.state
+    const { goodsList } = this.props.relaxProps;
     const columns = this._getColumns();
-    // if(this.state.count < 100) {
-    //   let count = this.state.count + 1
-    //   this.setState({count: count})
-    // }else {
-    //   return false
-    // }
     return (
       <div style={{ marginBottom: 20 }}>
         {this.state.visible && <ProductTooltipSKU id={this.state.id} pid={this.state.pid} visible={this.state.visible} showModal={this.showProduct} />}
@@ -276,16 +252,6 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'goodsInfoNo',
       render: (rowInfo) => {
-        const { addSkUProduct } = this.props.relaxProps;
-
-        let a = '';
-
-        if (rowInfo.goodsInfoNo == '') {
-          a = addSkUProduct[rowInfo.index - 1] ? addSkUProduct[rowInfo.index - 1].pid : '';
-        } else {
-          a = rowInfo.goodsInfoNo;
-        }
-
         return (
           <Row>
             <Col span={12}>
@@ -304,7 +270,7 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
-                  initialValue: a
+                  initialValue: rowInfo.goodsInfoNo
                 })(<Input style={{ width: '115px' }} />)}
               </FormItem>
             </Col>
@@ -323,7 +289,6 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'goodsInfoBundleRels',
       render: (rowInfo, record, rowIndex) => {
-        const { addSkUProduct } = this.props.relaxProps;
         return (
           <Row>
             <Col span={16}>
@@ -347,38 +312,6 @@ class SkuForm extends React.Component<any, any> {
                       <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo, rowInfo.id )} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
-                      {/* {addSkUProduct &&
-                      addSkUProduct.map((i, index) => {
-                        return (
-                          i.pid == rowInfo.goodsInfoNo &&
-                          i.targetGoodsIds.map((item, index) => {
-                            return (
-                              <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
-                                <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
-                                <InputNumber
-                                  style={{ width: '60px', height: '28px', textAlign: 'center' }}
-                                  defaultValue={item.bundleNum}
-                                  key={item.subGoodsInfoNo}
-                                  min={1}
-                                  onChange={(e) => {
-                                    if (i.pid == rowInfo.goodsInfoNo) {
-                                      const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoNo)[0];
-                                      if (target) {
-                                        target['bundleNum'] = e;
-                                      }
-                                      let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
-                                      this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res, rowIndex);
-                                    }
-                                  }}
-                                  onFocus={() => this.onfocus()}
-                                  onBlur={() => this.onblur()}
-                                />
-                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id, rowIndex)}></a>
-                              </div>
-                            );
-                          })
-                        );
-                      })} */}
                       {record.goodsInfoBundleRels &&
                       record.goodsInfoBundleRels.map((item, index) => {
                         return (
@@ -722,15 +655,6 @@ class SkuForm extends React.Component<any, any> {
     deleteGoodsInfo(id);
   };
 
-  _getSubSkulist = (id: string) => {
-    const { addSkUProduct } = this.props.relaxProps;
-    if (addSkUProduct) {
-      addSkUProduct.map((item) => {
-        return <div>{item.goodsInfoNo}</div>;
-      });
-    }
-  };
-
   /**
    * 检查文件格式
    */
@@ -754,7 +678,7 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any, rowIndex?: number, subGoodsInfoNo?: any) => {
-    const { editGoodsItem, synchValue, editGoods, goodsList, addSkUProduct } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, editGoods, goodsList } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;

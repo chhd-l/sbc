@@ -1435,7 +1435,7 @@ export default class AppStore extends Store {
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice'),
-          goodsInfoBundleRels: b,
+          goodsInfoBundleRels: item.get('goodsInfoBundleRels'),
           promotions: item.get('promotions'),
           addedFlag: item.get('addedFlag'),
           subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,

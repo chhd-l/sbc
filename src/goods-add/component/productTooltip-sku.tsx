@@ -23,7 +23,6 @@ class ProductTooltipSKU extends React.Component<any, any> {
       loading: boolean;
       createLink: any;
       getGoodsId: any;
-      addSkUProduct: any;
       onFormFieldChange: Function;
       editGoodsItem: Function;
       goodsList: IList;
@@ -56,10 +55,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
     createLink: 'createLink',
     getGoodsId: 'getGoodsId',
     initCateList: 'initCateList',
-    addSkUProduct: 'addSkUProduct',
     goodsList: 'goodsList',
     onFormFieldChange: noop,
-    editGoodsItem: noop,
+    editGoodsItem: noop
 
   };
   constructor(props) {
@@ -79,30 +77,36 @@ class ProductTooltipSKU extends React.Component<any, any> {
 
     let curGoodsItem = goodsList.toJS().find(item => item.id === this.props.id);
     let goodsInfoBundleRels = curGoodsItem.goodsInfoBundleRels || [];
-    let selectedRowKeys = goodsInfoBundleRels.map(item => item.subGoodsInfoNo);
+    let selectedRowKeys = goodsInfoBundleRels.map(item => item.subGoodsInfoId);
     this.setState({ selectedRows: goodsInfoBundleRels, selectedRowKeys });
   };
 
-  handleOK = () => {
-    const { selectedRowKeys, selectedRows, addSkUProduct, } = this.state
-    const { onProductselectSku, goodsList, editGoodsItem } = this.props.relaxProps;
+  row2Bundle = (selectedRows) => {
+    if (Array.isArray(selectedRows)) {
+      return selectedRows.map((item) => {
+        return {
+          subGoodsInfoId: item.subGoodsInfoId || item.goodsInfoId,
+          bundleNum: item.bundleNum || 1,
+          subStock: item.subStock || item.stock,
+          stock: item.stock,
+          saleableFlag: item.saleableFlag,
+          marketPrice: item.marketPrice,
+          subMarketPrice: item.subMarketPrice,
+          subScriptionPrice: item.subScriptionPrice,
+          goodsInfoNo: item.goodsInfoNo,
+          subGoodsInfoNo: item.subGoodsInfoNo || item.goodsInfoNo
+        };
+      })
+    } else {
+      return [];
+    }
+  }
 
-    let goodsInfoBundleRels = selectedRows && selectedRows.map((item) => {
-      let newItem = {
-        subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
-        bundleNum: 1,
-        subStock: item.stock,
-        stock: item.stock,
-        saleableFlag: item.saleableFlag,
-        marketPrice: item.marketPrice,
-        subMarketPrice: item.subMarketPrice,
-        subScriptionPrice: item.subScriptionPrice,
-        subscriptionPrice: item.subscriptionPrice,
-        goodsInfoNo: item.goodsInfoNo,
-        subGoodsInfoNo: item.goodsInfoNo
-      };
-      return newItem
-    });
+  handleOK = () => {
+    const { selectedRows } = this.state
+    const { goodsList, editGoodsItem } = this.props.relaxProps;
+
+    let goodsInfoBundleRels = this.row2Bundle(selectedRows);
     goodsInfoBundleRels = _.uniqBy(goodsInfoBundleRels, 'subGoodsInfoNo');
 
     let curGoodsItem = goodsList.toJS().filter(item => item.id === this.props.id)[0];
@@ -113,7 +117,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
         let subscriptionPrice = 0;
         let stockArr = [];
         let marketPrice = goodsInfoBundleRels.reduce((sum, item) => {
-          subscriptionPrice += item.subscriptionPrice * item.bundleNum;
+          subscriptionPrice += item.subScriptionPrice * item.bundleNum;
           stockArr.push(Math.round(item.subStock / item.bundleNum));
           return sum + item.marketPrice * item.bundleNum;
         }, 0);
@@ -196,13 +200,10 @@ class ProductTooltipSKU extends React.Component<any, any> {
     return tempList;
   };
 
-  rowChangeBackFun = (selectedRowKeys, selectedRow) => {
-    let { selectedRows } = this.state;
-    selectedRows = selectedRows.concat(selectedRow);
-    selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);
+  rowChangeBackFun = (selectedRowKeys, selectedRows) => {
     this.setState({
-      selectedRowKeys: selectedRowKeys,
-      selectedRows: selectedRows
+      selectedRowKeys,
+      selectedRows
     });
   };
 }

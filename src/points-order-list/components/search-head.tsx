@@ -162,7 +162,7 @@ export default class SearchHead extends Component<any, any> {
                 }
                 defaultValue=""
                 label="Delivery status"
-                style={{width: 130}}
+                style={{width: 190}}
                 onChange={(value) => {
                   this.setState({
                     tradeState: {
@@ -179,8 +179,10 @@ export default class SearchHead extends Component<any, any> {
                 <Option value="SHIPPED">All shipped</Option>
               </SelectGroup>
             </FormItem>
+           
             <FormItem>
               <RangePicker
+                style={{width: 295}}
                 getCalendarContainer={() =>
                   document.getElementById('page-content')
                 }
@@ -195,8 +197,10 @@ export default class SearchHead extends Component<any, any> {
                 }}
               />
             </FormItem>
+            <br></br>
             <FormItem>
-              <Button
+             <p style={{ textAlign: 'center' }}> <Button
+                
                 type="primary"
                 htmlType="submit"
                 shape="round"
@@ -244,11 +248,13 @@ export default class SearchHead extends Component<any, any> {
               >
                 Research
               </Button>
+              </p>
             </FormItem>
           </Form>
 
           {hasMenu && (
-            <div className="handle-bar">
+            <div style={{ paddingBottom: '16px' }} 
+             className="ant-form-inline filter-content">
               <Dropdown
                 overlay={menu}
                 placement="bottomLeft"

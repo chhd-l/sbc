@@ -281,7 +281,7 @@ export default class SearchForm extends React.Component<any, any> {
 
 const styles = {
   label: {
-    width: 150,
+    width: 151,
     textAlign: 'center'
   },
   wrapper: {

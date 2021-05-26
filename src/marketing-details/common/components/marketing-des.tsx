@@ -88,28 +88,34 @@ class MarketingDes extends React.Component<any, any> {
     return (
       <GreyBg>
         <Row>
-          <Col span={24}>
+          <Col span={4}>
             <span>
               <FormattedMessage id="Marketing.PromotionType" />:
             </span>
+          </Col>
+          <Col span={18}>
             {
               PROMOTION_TYPE[promotionType]
             }
           </Col>
         </Row>
         <Row>
-          <Col span={24}>
+          <Col span={4}>
             <span>
               <FormattedMessage id="Marketing.PromotionName" />:
             </span>
+          </Col>
+          <Col span={18}>
             {marketingName}
           </Col>
         </Row>
         <Row>
-          <Col span={24}>
+          <Col span={4}>
             <span>
               <FormattedMessage id="Marketing.PromotionCode" />:
             </span>
+          </Col>
+          <Col span={18}>
             {promotionCode}
             <Checkbox className="publicBox" style={{ marginLeft: 20 }} checked={publicStatus === '1'} disabled={true}>
               <FormattedMessage id="Marketing.Public" />
@@ -117,20 +123,24 @@ class MarketingDes extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-          <Col span={24}>
+          <Col span={4}>
             <span>
               <FormattedMessage id="Marketing.StartAndEndTime" />:
             </span>
+          </Col>
+          <Col span={18}>
             {moment(beginTime).format(Const.TIME_FORMAT).toString()} ~ {moment(endTime).format(Const.TIME_FORMAT).toString()}
           </Col>
         </Row>
         {subType === 6 || subType === 7 ? null : (
           <Row>
-            <Col span={24}>
+            <Col span={4}>
               <span>
                 {MAK_TYPE[marketingType]}
                 <FormattedMessage id="Marketing.Type" />:
               </span>
+            </Col>
+            <Col span={18}>
               {SUB_TYPE[subType]}&nbsp;&nbsp;
               {marketingType === 3 && marketingFreeShippingLevel  ?
                 <>

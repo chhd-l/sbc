@@ -567,7 +567,7 @@ export default class ClinicList extends Component<any, any> {
 }
 const styles = {
   formItemStyle: {
-    width: 335
+    width: 295
   },
   label: {
     width: 135,
@@ -577,6 +577,6 @@ const styles = {
     cursor: 'text'
   },
   wrapper: {
-    width: 200
+    width: 160
   }
 } as any;

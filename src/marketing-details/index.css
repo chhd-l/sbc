@@ -36,3 +36,7 @@
 .container-search {
   padding-bottom: 16px!important;
 }
+
+.goods-table .ant-table-column-title {
+  text-align: center;
+}

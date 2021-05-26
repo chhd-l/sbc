@@ -23,8 +23,9 @@ export default class AppStore extends Store {
    */
   init = async () => {
     const cateList: any = await getCateList();
+    let cate = cateList.res.context.storeResourceCateVOList
     this.transaction(() => {
-      this.dispatch('cateActor: init', fromJS(cateList.res));
+      this.dispatch('cateActor: init', fromJS(cate));
       this.dispatch('cateActor: closeModal');
     });
   };

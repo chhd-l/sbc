@@ -50,13 +50,13 @@ export default class EmployeeList extends React.Component<any, any> {
           </div>
           <div className="container">
             <Row>
-              <Col span={3} className="userDepartTree" style={{ paddingTop: 15, fontSize: 16, color: '#666666', fontWeight: 'bold' }}>
+              <Col span={4} className="userDepartTree" style={{ paddingTop: 15, fontSize: 16, color: '#666666', fontWeight: 'bold' }}>
                 <p style={Object.assign({ cursor: 'pointer' }, this.state.click ? { color: '#F56C1D' } : {})} onClick={() => this._showAll()}>
                   <FormattedMessage id="allDepartment" /> {`${totolEmployeeNum}`}
                 </p>
                 {this.store.state().get('departTree').size > 0 && this.store.state().get('defaultExpandedKeys').length > 0 && <DepartTree />}
               </Col>
-              <Col span={21}>
+              <Col span={20}>
                 <List />
               </Col>
             </Row>

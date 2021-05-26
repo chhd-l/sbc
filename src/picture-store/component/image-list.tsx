@@ -74,7 +74,7 @@ class ImageList extends React.Component<any, any> {
               <div style={styles.boxItem} key={item.get('resourceId')}>
                 <Checkbox checked={item.get('checked')} onChange={this._onchangeChecked.bind(this, index)} />
                 <img src={item.get('artworkUrl')} alt="" width="120" height="120" />
-                <Input
+                <Input style={{width:'100%',marginTop:8,overflow:"Hidden",textOverflow: "ellipsis"}}
                   defaultValue={item.get('resourceName')}
                   onBlur={(e) => {
                     this._updateImage(e, item.get('resourceName'), item.get('resourceId'));

@@ -412,7 +412,7 @@ class PetOwnerTagging extends Component<any, any> {
                     </FormItem>
                   </Col>
 
-                  <Col span={8} style={{ textAlign: 'center', marginTop: 10 }}>
+                  <Col span={8} style={{ textAlign: 'center', marginTop: 0 }}>
                     <FormItem>
                       <Button
                         type="primary"

@@ -237,7 +237,7 @@ class AutomationList extends Component<any, any> {
             <div className="container-search">
               <div className="container-search">
                 <Headline title={title} />
-                <Form className="filter-content" layout="inline">
+                <Form className="filter-content" layout="inline" style={{padding:'0px'}}>
                   <Row>
                     <Col span={8}>
                       <FormItem>
@@ -307,7 +307,7 @@ class AutomationList extends Component<any, any> {
                       </FormItem>
                     </Col>
 
-                    <Col span={8}>
+                    <Col span={8} >
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
                           <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.TestStatus'})} />
@@ -396,18 +396,19 @@ class AutomationList extends Component<any, any> {
 
 const styles = {
   formItemStyle: {
-    width: 355
+    width:310
   },
   label: {
-    width: 155,
+    width: '52%',
     textAlign: 'center',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',
     cursor: 'text'
   },
   wrapper: {
-    width: 180
+    width: "42%" 
   }
+  
 } as any;
 
 export default Form.create()(AutomationList);

@@ -51,10 +51,10 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '17%', paddingLeft: 10 }}>
                         <FormattedMessage id="Setting.operatorAccount" />
                       </th>
-                      <th style={{ width: '17%', paddingLeft: 10 }}>
+                      <th style={{ width: '14%', paddingLeft: 10 }}>
                         <FormattedMessage id="Setting.operatorName" />
                       </th>
-                      <th style={{ width: '10%', paddingLeft: 10 }}>
+                      <th style={{ width: '13%', paddingLeft: 10 }}>
                         <FormattedMessage id="Setting.operatorIP" />
                       </th>
                       <th style={{ width: '17%', paddingLeft: 10 }}>
@@ -135,15 +135,15 @@ export default class ListView extends React.Component<any, any> {
               <table className="ant-table-self">
                 <tbody>
                   <tr>
-                    <td style={{ width: '17%' }}>
+                    <td style={{ width: '17%'}}>
                       {/*操作人账号*/}
                       {v.get('opAccount') || '-'}
                     </td>
-                    <td style={{ width: '17%' }}>
+                    <td style={{ width: '14%' }}>
                       {/*操作人姓名*/}
                       {v.get('opName') || '-'}
                     </td>
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '13%' }}>
                       {/*操作人Ip*/}
                       {v.get('opIp') || '-'}
                     </td>
@@ -151,7 +151,7 @@ export default class ListView extends React.Component<any, any> {
                       {/*操作时间*/}
                       {opTime ? moment(opTime).format(Const.TIME_FORMAT).toString() : '-'}
                     </td>
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '10%'}}>
                       {/*一级菜单*/}
                       {v.get('opModule') || '-'}
                     </td>
@@ -159,7 +159,7 @@ export default class ListView extends React.Component<any, any> {
                       {/*操作类型*/}
                       {v.get('opCode') || '-'}
                     </td>
-                    <td style={{ maxWidth: '200px', width: '200px' }}>
+                    <td style={{ maxWidth: '200px', width:'19%'}}>
                       {/*操作内容*/}
                       {v.get('opContext').length > 20 ? (
                         <Tooltip title={v.get('opContext')}>

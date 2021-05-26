@@ -57,7 +57,7 @@ export default class AppStore extends Store {
     
     if(res.res.code===Const.SUCCESS_CODE){
       setTimeout(()=>{
-        message.success(res.message)
+        message.success(RCi18n({id: 'Setting.Operatesuccessfully'}))
         this.dispatch('formActor:field', {field: 'saveLoading', value: false })
         this.closeModal()
         this.initList()
@@ -82,10 +82,10 @@ export default class AppStore extends Store {
     if(res.code=Const.SUCCESS_CODE){
       setTimeout(()=>{
         this.dispatch('formActor:field', {field: 'saveSettingLoading', value: false })
-        message.success(res.message)
+        message.success(RCi18n({id: 'Setting.Operatesuccessfully'}))
         this.closeSettingModal()
         this.init()
-      }, 1000)
+      }, 2000)
     } else {
       this.dispatch('formActor:field', {field: 'saveSettingLoading', value: false })
     }
@@ -105,7 +105,7 @@ export default class AppStore extends Store {
    const {res}= await webapi.updateStoreLogisticSettingStatus(params);
     setTimeout(()=>{
       if(res.code===Const.SUCCESS_CODE){
-        message.success(res.message)
+        message.success(RCi18n({id: 'Setting.Operatesuccessfully'}))
         this.init()
       }
       this.dispatch('loading:end')
@@ -117,7 +117,7 @@ export default class AppStore extends Store {
    onSwitchCompanyChange = async(params) => {
     const {res}= await webapi.updateStoreExpressCompanyRelaStatus(params);
      if(res.code===Const.SUCCESS_CODE){
-      message.success(res.message)
+       message.success(RCi18n({id: 'Setting.Operatesuccessfully'}))
        this.initList()
      }
  
@@ -134,7 +134,7 @@ export default class AppStore extends Store {
   deleteRow =async (record) => {
     const {res}= await webapi.deleteExpress({id:record.id});
     if(res.code===Const.SUCCESS_CODE){
-      message.success(res.message)
+      message.success(RCi18n({id: 'Setting.Operatesuccessfully'}))
       this.initList()
     }
    

@@ -10,6 +10,7 @@ export default class MarketingActor extends Actor {
       marketingName: '',
       beginTime: '',
       endTime: '',
+      promotionType: null,
       marketingType: '',
       promotionCode: '',
       publicStatus: '',

@@ -129,7 +129,7 @@ class OrderDetailTab extends React.Component<any, any> {
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
     gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
-    const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
+    const tradePrice = detail.get('tradePrice') ? detail.get('tradePrice').toJS() as any : {};
 
     //收货人信息
     const consignee = detail.get('consignee')
@@ -204,47 +204,39 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.SKUcode" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
-        render: (text) => text,
-        width: '10%'
+        render: (text) => text
       },
       {
         title: <FormattedMessage id="Order.Productname" />,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '10%',
-        render: (text) => {
-          return (
-            <Tooltip
-              overlayStyle={{
-                overflowY: 'auto'
-              }}
-              placement="bottomLeft"
-              title={<div>{text}</div>}
-            >
-              <p className="overFlowtext" style={{ width: 100 }}>
-                {text}
-              </p>
-            </Tooltip>
-          );
-        }
+        width: '20%'
       },
       {
         title: <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
-        key: 'specDetails',
-        width: '8%'
+        key: 'specDetails'
       },
+      // {
+      //   title: 'Price',
+      //   dataIndex: 'levelPrice',
+      //   key: 'levelPrice',
+      //   render: (levelPrice) => (
+      //     <span>
+      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+      //       {levelPrice && levelPrice.toFixed(2)}
+      //     </span>
+      //   )
+      // },
       {
         title: <FormattedMessage id="Order.Quantity" />,
         dataIndex: 'num',
-        key: 'num',
-        width: '8%'
+        key: 'num'
       },
       {
         title: <FormattedMessage id="Order.Price" />,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
-        width: '10%',
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
             <div>
@@ -266,7 +258,6 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.Subtotal" />,
-        width: '10%',
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -279,7 +270,6 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.purchaseType" />,
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
-        width: '10%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -295,35 +285,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.petName" />,
         dataIndex: 'petsName',
         key: 'petsName',
-        width: '10%',
         render: (text, record) => <a onClick={() => this._openPetDetails(record.petsInfo)}>{record.petsInfo ? record.petsInfo.petsName : ''}</a>
-      },
-      {
-        title: <FormattedMessage id="Order.Recommenderid" />,
-        dataIndex: 'recommendationBusinessId',
-        key: 'recommendationBusinessId',
-        width: '12%'
-      },
-      {
-        title: <FormattedMessage id="Order.Recommendername" />,
-        dataIndex: 'recommendationName',
-        key: 'recommendationName',
-        width: '12%',
-        render: (text) => {
-          return (
-            <Tooltip
-              overlayStyle={{
-                overflowY: 'auto'
-              }}
-              placement="bottomLeft"
-              title={<div>{text}</div>}
-            >
-              <p className="overFlowtext" style={{ width: 100 }}>
-                {text}
-              </p>
-            </Tooltip>
-          );
-        }
       }
     ];
 
@@ -419,10 +381,10 @@ class OrderDetailTab extends React.Component<any, any> {
                   <FormattedMessage id="Order.Subscriptionumber" />: {detail.get('subscribeId')}
                 </p>
                 <p>
-                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery') ? detail.get('subscriptionTypeQuery').replace('_', ' & ') : ''}
+                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery') ? detail.get('subscriptionTypeQuery').replace('_', ' & '): '' }
                 </p>
                 <p>
-                  <FormattedMessage id="Order.subscriptionPlanType" />: {detail.get('subscriptionPlanType') ? detail.get('subscriptionPlanType').replace('_', ' & ') : ''}
+                  <FormattedMessage id="Order.subscriptionPlanType" />: {detail.get('subscriptionPlanType')}
                 </p>
               </div>
             </Col>
@@ -430,7 +392,7 @@ class OrderDetailTab extends React.Component<any, any> {
 
           {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
             <Col span={12}>
-              <div className="headBox" style={{ height: 100 }}>
+              <div className="headBox">
                 <h4>
                   <FormattedMessage id="Order.partner" />
                 </h4>
@@ -439,6 +401,12 @@ class OrderDetailTab extends React.Component<any, any> {
                 </p>
                 <p>
                   <FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}
+                </p>
+                <p>
+                  <FormattedMessage id="Order.Recommenderid" />: {firstTradeItems.recommendationId}
+                </p>
+                <p>
+                  <FormattedMessage id="Order.Recommendername" />: {firstTradeItems.recommendationName}
                 </p>
               </div>
             </Col>
@@ -454,9 +422,8 @@ class OrderDetailTab extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Row id="tradeItemsTable">
-            <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
-          </Row>
+          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
+
           <Modal
             title={<FormattedMessage id="PetOwner.PetInformation" />}
             width={1100}

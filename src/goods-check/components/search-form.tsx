@@ -94,7 +94,7 @@ export default class SearchForm extends React.Component<any, any> {
                   </p>
                 }
                 value={likeGoodsName}
-                style={{ width: 300 }}
+                style={{ width: 351 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsName',
@@ -113,7 +113,7 @@ export default class SearchForm extends React.Component<any, any> {
                   </p>
                 }
                 value={likeGoodsNo}
-                style={{ width: 300 }}
+                style={{ width: 351 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsNo',
@@ -132,7 +132,7 @@ export default class SearchForm extends React.Component<any, any> {
                   </p>
                 }
                 value={likeGoodsInfoNo}
-                style={{ width: 300 }}
+                style={{ width: 351 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsInfoNo',
@@ -226,10 +226,10 @@ export default class SearchForm extends React.Component<any, any> {
 
 const styles = {
   label: {
-    width: 100,
+    width: 150,
     textAlign: 'center'
   },
   wrapper: {
-    width: 177
+    width: 177,
   }
 } as any;

@@ -5,7 +5,7 @@ const { Option } = Select;
 
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { cache, noop, ValidConst } from 'qmkit';
+import { cache, noop, ValidConst, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -245,7 +245,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
     columns = columns.push({
-      title: <div>Inventory Alert</div>,
+      title: RCi18n({id: 'Product.Inventory Alert'}),
       key: 'virtualAlert',
       render: (rowInfo) => (
         <Row>

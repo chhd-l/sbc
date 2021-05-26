@@ -72,20 +72,22 @@ export default class GoodsList extends React.Component<any, any> {
       <div>
         <GreyBg>
           <Row>
-            <Col span={24}>
+            <Col span={4}>
               <span>
                 <FormattedMessage id="Marketing.SelectedGoods" />:
               </span>
+            </Col>
+            <Col  span={20}>
               {
                 scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
                   scopeType === 1 ?
-                    <Table dataSource={dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId">
-                      <Column width="15%" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />
-                      <Column width="30%" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" dataIndex="goodsInfoName" />
-                      <Column width="15%" title={<FormattedMessage id="Marketing.Specification" />} key="specText" dataIndex="specText" />
-                      <Column width="15%" title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
-                      <Column width="15%" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" dataIndex="brandName" />
-                      <Column width="20%" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
+                    <Table dataSource={dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId" className="goods-table">
+                      <Column  align="center" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" dataIndex="goodsInfoName" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.Specification" />} key="specText" dataIndex="specText" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" dataIndex="brandName" />
+                      <Column  align="center" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
                     </Table> :  scopeType === 2 ?
                     currentCategary && currentCategary.map(item=> (
                       <span className="more-left-span" key={item.storeCateId}>{item.get('cateName')}</span>

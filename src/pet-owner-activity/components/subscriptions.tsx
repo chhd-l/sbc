@@ -36,11 +36,16 @@ export default class bookings extends Component<any, any> {
   };
   onFormChange = (value) => {
     let data = this.state.formData;
-    data['startTime'] = value[0] ? value[0] + ' 00:00:00' : null;
-    data['endTime'] = value[1] ? value[1] + ' 23:59:59' : null;
+    data['startTime'] = value[0] ? value[0] : null;
+    data['endTime'] = value[1] ? value[1] : null;
     this.setState(
       {
-        formData: data
+        formData: data,
+        pagination: {
+          current: 1,
+          pageSize: 4,
+          total: 0
+        }
       },
       () => this.getSubscriptionList()
     );

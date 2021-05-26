@@ -40,6 +40,9 @@ class ModalForm extends Component<Props, any> {
       loading: true
     });
     let data = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '');
+    console.log(values,languageList,data);
+    
+    // return 
     new Promise((resolve) => {
       let d = languageList.map((item) => {
         for (let it in values) {
@@ -54,7 +57,7 @@ class ModalForm extends Component<Props, any> {
       });
       resolve(d);
     }).then(async (translateList) => {
-      await translateAddBatch({ translateList });
+    //  await translateAddBatch({ translateList });
       await addSysDictionary({
         type: values.type,
         name: values.name,

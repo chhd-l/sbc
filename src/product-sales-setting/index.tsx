@@ -245,7 +245,7 @@ class ProductSearchSetting extends Component<any, any> {
               }
               style={{ marginBottom: 0 }}
             >
-              <Row>
+              <Row gutter={20}>
                 <Col span={6}>
                   <Form.Item>
 
@@ -286,7 +286,7 @@ class ProductSearchSetting extends Component<any, any> {
                     )}
                   </Form.Item></Col>
                 <Col span={4}>
-                &nbsp;<Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
+                <Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
                   <FormattedMessage id="Product.Addnewfrequency" />
                 </Button>
                 </Col>

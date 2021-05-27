@@ -21,7 +21,7 @@ import {
 } from 'qmkit';
 import { IList } from 'typings/globalType';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -326,7 +326,7 @@ export default class SearchHead extends Component<any, any> {
           })
         }
         value={this.state.receiverSelect}
-        style={{ width: 100 }}
+        style={{ width: 110 }}
       >
         <Option value="consigneeName">Recipient</Option>
         <Option value="consigneePhone">Recipient's cell</Option>

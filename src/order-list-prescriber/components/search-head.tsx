@@ -812,7 +812,7 @@ export default injectIntl(SearchHead);
 
 const styles = {
   formItemStyle: {
-    width: 335
+    width: 334
   },
   label: {
     width: 135,

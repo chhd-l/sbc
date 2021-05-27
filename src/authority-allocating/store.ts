@@ -6,7 +6,7 @@ import BossMenuActor from './actor/boss-menu-actor';
 import { message } from 'antd';
 import VisibleActor from './actor/visible-actor';
 import EditActor from './actor/edit-actor';
-import { Const } from 'qmkit';
+import { Const, history } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
@@ -91,6 +91,9 @@ export default class AppStore extends Store {
         functionIdList
       })) as any;
       this.messageByResult(res);
+      if (res.code === Const.SUCCESS_CODE) {
+        history.push('/role-list');
+      }
     }
   };
 

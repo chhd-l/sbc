@@ -299,7 +299,6 @@ class GoodsForm extends React.Component<any, any> {
         getFrequencyList = [...frequencyList.club.dayClubList, ...frequencyList.club.weekClubList, ...frequencyList.club.monthClubList]
       }
     }
-
     return (
       <Form>
         {/* The first line */}

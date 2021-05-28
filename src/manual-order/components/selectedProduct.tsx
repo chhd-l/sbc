@@ -14,7 +14,7 @@ export default class SelectedProduct extends React.Component<any, any> {
       confirmLoading: false,
       dataSource: [],
       options: [],
-      clubOptions:[],
+      clubOptions: [],
       loading: false,
       totalPrice: 0,
       goodsCount: {}//商品数量 map id：0对应
@@ -39,7 +39,7 @@ export default class SelectedProduct extends React.Component<any, any> {
 
   componentDidMount() {
     this.querySysDictionary();
-  
+
   }
   /**
    * 
@@ -53,20 +53,20 @@ export default class SelectedProduct extends React.Component<any, any> {
     const { options } = this.state
     if (name === 'subscriptionStatus' && e === 0) {
       row['periodTypeId'] = 0;
-      row.goodsInfoFlag=0
+      row.goodsInfoFlag = 0
     } else if (name === 'subscriptionStatus' && e === 1) {
       row.periodTypeId = row.periodTypeId ? row.periodTypeId : row?.options[0]?.id
-      if(row.promotions==='club'){
-        row.goodsInfoFlag=2
-      }else{
-        row.goodsInfoFlag=1
+      if (row.promotions === 'club') {
+        row.goodsInfoFlag = 2
+      } else {
+        row.goodsInfoFlag = 1
       }
     }
     row[name] = e;
     this.setState({
       loading: true
     });
-   
+
     await updateGoodsInfoCarts(this.props.storeId, {
       periodTypeId: row.periodTypeId,
       subscriptionStatus: row.subscriptionStatus,
@@ -95,14 +95,14 @@ export default class SelectedProduct extends React.Component<any, any> {
         ...goodsCount,
         [item.goodsInfoId]: item.buyCount
       }
-     
-      if(item.subscriptionStatus===1){
+
+      if (item.subscriptionStatus === 1) {
         console.log(item.subscriptionStatus)
-          if(item.promotions==='club'){
-            item.options=this.state.clubOptions
-          }else{
-            item.options=this.state.options
-          }
+        if (item.promotions === 'club') {
+          item.options = this.state.clubOptions
+        } else {
+          item.options = this.state.options
+        }
       }
 
       totalPrice += (+item.itemTotalAmount)
@@ -113,7 +113,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         dataSource: goodsList,
         loading: false,
         goodsCount: goodsCount,
-        totalPrice:totalPrice.toFixed(2)
+        totalPrice: totalPrice.toFixed(2)
       }
     );
   }
@@ -122,19 +122,19 @@ export default class SelectedProduct extends React.Component<any, any> {
    */
   async querySysDictionary() {
     this.setState({ loading: true });
-    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }),querySysDictionary({ type: 'Frequency_week_club' }),querySysDictionary({ type: 'Frequency_month_club' })]);
+    const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), querySysDictionary({ type: 'Frequency_week_club' }), querySysDictionary({ type: 'Frequency_month_club' })]);
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let club_weeks = result[2].res?.context?.sysDictionaryVOS ?? [];
     let club_months = result[3].res?.context?.sysDictionaryVOS ?? [];
     let options = [...months, ...weeks];
-    let clubOptions= [...club_months, ...club_weeks];
-    this.setState( {
-        options,
-        clubOptions
-      },()=>{
-        this.getGoodsInfoCartsList()
-      });
+    let clubOptions = [...club_months, ...club_weeks];
+    this.setState({
+      options,
+      clubOptions
+    }, () => {
+      this.getGoodsInfoCartsList()
+    });
   }
   /**
    *
@@ -154,7 +154,7 @@ export default class SelectedProduct extends React.Component<any, any> {
   render() {
     // const { getFieldDecorator } = this.props.form;
     const { options, dataSource, loading, totalPrice, goodsCount, visible } = this.state;
-    const { storeId, customer,url } = this.props;
+    const { storeId, customer, url } = this.props;
     const columns = [
       {
         title: 'Image',
@@ -199,7 +199,12 @@ export default class SelectedProduct extends React.Component<any, any> {
 
         render: (text, record, index) => {
           return (
-            <Select style={{ width: 100 }} value={[1,2].includes(record.goodsInfoFlag)?1:0} getPopupContainer={(trigger: any) => trigger.parentNode} placeholder="Select a person" optionFilterProp="children" onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
+            <Select
+              style={{ width: 100 }}
+              value={[1, 2].includes(record.goodsInfoFlag) ? 1 : 0}
+              getPopupContainer={(trigger: any) => trigger.parentNode}
+              placeholder="Select a person" optionFilterProp="children"
+              onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
               { record.subscriptionStatus === 1 && (<Option value={1}>Y</Option>)}
               <Option value={0}>N</Option>
             </Select>
@@ -212,14 +217,14 @@ export default class SelectedProduct extends React.Component<any, any> {
         key: 'periodTypeId',
 
         render: (text, record, index) => {
-          console.log(record,'========')
+          console.log(record, '========')
           // let value=record.goodsInfoFlag===1?(text?text:options[0].id):null
 
-          return [1,2].includes(record.goodsInfoFlag) ? (
-            <Select style={{ width: 100 }} 
-            value={text} getPopupContainer={(trigger: any) => trigger.parentNode} 
-            placeholder="Select a person" optionFilterProp="children" 
-            onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
+          return [1, 2].includes(record.goodsInfoFlag) ? (
+            <Select style={{ width: 100 }}
+              value={text} getPopupContainer={(trigger: any) => trigger.parentNode}
+              placeholder="Select a person" optionFilterProp="children"
+              onChange={(e) => this.onSelectChange(e, index, record, 'periodTypeId')}>
               {record.options.map((item) => (
                 <Option key={item.id} value={item.id}>
                   {item.name}
@@ -257,7 +262,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         key: 'Operation',
         render: (text, record) => {
           return (
-            <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.deleteproduct" />}  onConfirm={() => this.deleteCartsGood(record)} okText={<FormattedMessage id="Order.confirm" />} cancelText={<FormattedMessage id="Order.btnCancel" />}>
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.deleteproduct" />} onConfirm={() => this.deleteCartsGood(record)} okText={<FormattedMessage id="Order.confirm" />} cancelText={<FormattedMessage id="Order.btnCancel" />}>
               <Tooltip placement="top" title="Delete">
                 <a>
                   <span style={{ color: 'red', paddingRight: 10, cursor: 'pointer', fontSize: 16 }} className="icon iconfont iconDelete"></span>
@@ -291,8 +296,8 @@ export default class SelectedProduct extends React.Component<any, any> {
             columns={columns}
           />
           <div style={{ textAlign: 'right', padding: '20px 0' }}>
-          <FormattedMessage id="Order.Product amount" /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
-          {visible && <AddProductModal url={url}  storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
+            <FormattedMessage id="Order.Product amount" /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
+          {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
       </div>
     );

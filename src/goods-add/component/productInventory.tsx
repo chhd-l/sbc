@@ -3,10 +3,9 @@ import { Relax } from 'plume2';
 import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { cache, noop, ValidConst } from 'qmkit';
+import { cache, noop, RCi18n, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { any } from 'prop-types';
-import { RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -336,7 +335,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: <div><FormattedMessage id="Product.Inventory Alert" /></div>,
+      title: RCi18n({id: 'Product.Inventory Alert'}),
       key: 'virtualAlert',
       render: (rowInfo) => (
         <Row>

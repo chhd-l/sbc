@@ -55,7 +55,7 @@ export default class ProductOverView extends Component<any, any> {
     endDate: 'endDate',
     fieldOnChange: noop,
   };
-    componentDidMount() {
+  componentDidMount() {
     //   this.setState({
     //     beginDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days').format('YYYY-MM-DD'),
     //   endDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').format('YYYY-MM-DD')
@@ -68,7 +68,7 @@ export default class ProductOverView extends Component<any, any> {
     });
   }
   datePickerChange(e) {
-      const { fieldOnChange } = this.props.relaxProps
+    const { fieldOnChange } = this.props.relaxProps
     let beginTime = '';
     let endTime = '';
     if (e.length > 0) {
@@ -223,7 +223,7 @@ export default class ProductOverView extends Component<any, any> {
                             <FormattedMessage id="Analysis.TOP" />
                             {item.topNum}
                           </span>
-                          <span className="goodsName line-clamp">{item.skuName}</span>
+                          <p className="goodsName" title={item.skuName} style={styles.ellipsis}>{item.skuName}</p>
                           <span className="price">
                             {item.marketPrice ? item.marketPrice : '--'} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                           </span>
@@ -250,7 +250,7 @@ export default class ProductOverView extends Component<any, any> {
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">
                           <span className="rank">TOP{item.topNum}</span>
-                          <span className="goodsName line-clamp">{item.skuName}</span>
+                          <span className="goodsName" title={item.skuName} style={styles.ellipsis}>{item.skuName}</span>
                           <span className="price">
                             {item.marketPrice} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                           </span>
@@ -275,4 +275,11 @@ export default class ProductOverView extends Component<any, any> {
     );
   }
 }
-const styles = {} as any;
+const styles = {
+  ellipsis: {
+    overflow: 'hidden', //超出的文本隐藏
+    textOverflow: 'ellipsis',//溢出用省略号显示
+    whiteSpace: 'nowrap', //溢出不换行
+    width:80,
+  }
+} as any;

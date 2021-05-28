@@ -13,7 +13,7 @@ export default class ImageActor extends Actor {
     return state.set(
       'images',
       images.map((i, index) => {
-        i = i.set('imageId', index);
+        // i = i.set('imageId', index);
         return i;
       })
     );

@@ -117,4 +117,17 @@ const syncProduct = () => {
   });
 };
 
-export { goodsList, spuOnSale, spuOffSale, spuDelete, getBrandList, getCateList, getProductCategories, freightList, goodsFreight, goodsFreightExpress, updateFreight, syncProduct };
+/**
+ * 同步产品图片
+ * @param params
+ * @returns 
+ */
+const syncProductImage = (params: { goodsIds: string[] }) => {
+  const request = {
+    method: 'POST',
+    body: JSON.stringify(params)
+  };
+  return Fetch('/product/syncImage', request);
+};
+
+export { goodsList, spuOnSale, spuOffSale, spuDelete, getBrandList, getCateList, getProductCategories, freightList, goodsFreight, goodsFreightExpress, updateFreight, syncProduct, syncProductImage };

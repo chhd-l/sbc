@@ -7,7 +7,7 @@ import FormActor from './actor/form-actor';
 import FreightActor from './actor/freight-actor';
 import { message } from 'antd';
 import { Const, RCi18n } from 'qmkit';
-import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getProductCategories, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight } from './webapi';
+import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getProductCategories, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight, syncProductImage } from './webapi';
 import { intl  } from 'react-intl';
 
 import { IList } from 'typings/globalType';
@@ -205,6 +205,16 @@ export default class AppStore extends Store {
     this.message(data);
     this.onSearch();
   };
+
+  spuSyncImage = async (ids: string[]) => {
+    if (!ids) {
+      const selectedSpuKeys: IList = this.state().get('selectedSpuKeys');
+      ids = selectedSpuKeys.toJS();
+    }
+
+    const data: any = await syncProductImage({ goodsIds: ids });
+    this.message(data);
+  }
 
   /**
    * tip

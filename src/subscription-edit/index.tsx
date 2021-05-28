@@ -3,7 +3,7 @@ import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, 
 import { StoreProvider } from 'plume2';
 import FeedBack from '../subscription-detail/component/feedback';
 import DeliveryItem from '../customer-details/component/delivery-item';
-import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue } from 'qmkit';
+import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
@@ -549,6 +549,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let deliveryAddressInfo = deliveryList.find((item) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
+    //俄罗斯地址验证是否完整
+    if ((window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru' && (!deliveryAddressInfo.street || !deliveryAddressInfo.postCode || !deliveryAddressInfo.house || !deliveryAddressInfo.city)) {
+      const errMsg = !deliveryAddressInfo.street 
+        ? RCi18n({id:'PetOwner.AddressStreetTip'}) 
+        : !deliveryAddressInfo.postCode 
+        ? RCi18n({id:'PetOwner.AddressPostCodeTip'}) 
+        : !deliveryAddressInfo.house 
+        ? RCi18n({id:'PetOwner.AddressHouseTip'}) 
+        : RCi18n({id:'PetOwner.AddressCityTip'});
+      message.error(errMsg);
+      return;
+    }
     let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
     //计算运费, 改为从后端getPromotionPirce接口获取
     this.setState({ addressLoading: true });
@@ -1516,6 +1528,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               onOk={() => this.deliveryOK()}
               onCancel={() => {
                 this.setState({
+                  deliveryAddressId: this.state.originalParams.deliveryAddressId,
                   visibleShipping: false
                 });
               }}
@@ -1619,6 +1632,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               onOk={() => this.billingOK()}
               onCancel={() => {
                 this.setState({
+                  billingAddressId: this.state.originalParams.billingAddressId,
                   visibleBilling: false
                 });
               }}

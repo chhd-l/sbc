@@ -54,7 +54,7 @@ export default class SyncButton extends React.Component<any, any> {
     const { loading, count } = this.state;
     return (
       <Button type="primary" disabled={loading} onClick={this.onSync}>
-        <FormattedMessage id="Product.Synchronize" />{loading ? `(${count})` : ''}
+        <FormattedMessage id="Product.SynchronizeText" />{loading ? `(${count})` : ''}
       </Button>
     );
   }

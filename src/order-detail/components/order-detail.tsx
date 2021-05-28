@@ -198,6 +198,7 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     });
     let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
+    const installmentPrice= tradePrice.installmentPrice;
 
     const columns = [
       {
@@ -531,6 +532,9 @@ class OrderDetailTab extends React.Component<any, any> {
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.totalPrice || 0).toFixed(2)}
+                  {installmentPrice && installmentPrice.additionalFee ? 
+                   ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (installmentPrice.additionalFee || 0).toFixed(2) + ')'
+                  : null}
                 </strong>
               </label>
             </div>

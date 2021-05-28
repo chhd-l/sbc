@@ -17,6 +17,7 @@ class Tool extends React.Component<any, any> {
       spuDelete: Function;
       spuOnSale: Function;
       spuOffSale: Function;
+      spuSyncImage: Function;
       selectedSpuKeys: IList;
       setFeightVisible: Function;
       likeGoodsName: string;
@@ -32,6 +33,7 @@ class Tool extends React.Component<any, any> {
     spuDelete: noop,
     spuOnSale: noop,
     spuOffSale: noop,
+    spuSyncImage: noop,
     selectedSpuKeys: 'selectedSpuKeys',
     field: 'field',
     setFeightVisible: noop,
@@ -119,6 +121,17 @@ class Tool extends React.Component<any, any> {
             </a>
           </AuthWrapper>
         </Menu.Item>
+        <Menu.Item>
+          <AuthWrapper functionName="f_goods_sync">
+            <a
+              onClick={() => {
+                this._syncImage();
+              }}
+            >
+              <FormattedMessage id="Product.SynchronizeImage" />
+            </a>
+          </AuthWrapper>
+        </Menu.Item>
         {/* <Menu.Item>
           <AuthWrapper functionName="f_goods_temp_set">
             <a
@@ -199,6 +212,15 @@ class Tool extends React.Component<any, any> {
         spuDelete();
       }
     });
+  };
+
+  _syncImage = () => {
+    const { spuSyncImage, selectedSpuKeys } = this.props.relaxProps;
+    if (selectedSpuKeys.count() < 1) {
+      message.error((window as any).RCi18n({ id: 'Product.atLeastOneItem' }));
+      return;
+    }
+    spuSyncImage();
   };
 
 
